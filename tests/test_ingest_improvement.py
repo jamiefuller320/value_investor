@@ -1182,6 +1182,103 @@ def test_ticker_deadline_budget_uses_tighter_cap():
     ) == (320.0, "per_ticker_budget")
 
 
+@patch("value_investor.research.ingest_improvement.fetch_filings_ir_allowlist", return_value=[])
+@patch("value_investor.research.filings.refetch_investegate_filing_bodies")
+@patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
+@patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
+@patch("value_investor.research.ingest_improvement._intensive_gap_closure_body_refetch")
+@patch("value_investor.research.ingest_improvement.ingest_research_sources")
+@patch("value_investor.research.ingest_improvement.sanitize_filings_index")
+@patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
+def test_intensive_gap_closure_prefetches_bodies_before_ingest(
+    mock_bootstrap,
+    mock_sanitize,
+    mock_ingest_sources,
+    mock_prefetch,
+    mock_alternate,
+    mock_deepen,
+    mock_investegate_top_up,
+    mock_ir_rows,
+    tmp_path: Path,
+):
+    """eng-20261016-03: pinned gap-closure must refetch before slow source ingest."""
+    import time
+
+    call_order: list[str] = []
+
+    output_dir = tmp_path / "output"
+    sources = output_dir / "research" / "KGF.L" / "sources" / "filings"
+    sources.mkdir(parents=True)
+    (sources / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 2, "with_body": 1, "annual": 1, "interim": 1},
+                "filings": [
+                    {
+                        "id": "ceo",
+                        "source": "investegate_direct",
+                        "headline": "Kingfisher Appoints New CEO",
+                        "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/kingfisher-appoints-new-ceo/9819911",
+                        "period": "other",
+                        "has_body": False,
+                    },
+                    {
+                        "id": "fy",
+                        "source": "investegate_direct",
+                        "headline": "Final Results",
+                        "period": "annual",
+                        "has_body": True,
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def _prefetch(**kwargs):  # noqa: ARG001
+        call_order.append("prefetch")
+        return {
+            "ch_refetch": {"attempted": 0, "fetched": 0},
+            "investegate_refetch": {"attempted": 1, "fetched": 1},
+            "ticker_rns_refetch": {},
+            "indexed_refetch": {
+                "investegate": {"attempted": 1, "fetched": 1},
+                "attempted": 1,
+                "fetched": 1,
+            },
+            "residual_refetch": {},
+            "ir_refetch": {"attempted": 0, "fetched": 0},
+            "euro_primary": {},
+        }
+
+    def _slow_ingest(**kwargs):  # noqa: ARG001
+        call_order.append("ingest")
+        time.sleep(0.05)
+        return {"filings_summary": {"with_body": 1}}
+
+    mock_prefetch.side_effect = _prefetch
+    mock_ingest_sources.side_effect = _slow_ingest
+    mock_investegate_top_up.return_value = {"attempted": 0, "fetched": 0}
+    mock_alternate.return_value = {"fetched": 0}
+    mock_deepen.return_value = {"skipped": True, "reason": "sufficient_bodies"}
+
+    summary = run_ingest_improvement_pass(
+        reports=[_report("KGF.L", "Kingfisher plc", signal="buy")],
+        output_dir=output_dir,
+        max_targets=1,
+        suggestions_path=tmp_path / "missing.json",
+        intensive_gap_closure=True,
+        pin_tickers=["KGF.L"],
+        require_outstanding_gaps=True,
+        discovery_scan=False,
+        backlog_path=tmp_path / "ingest_backlog.json",
+    )
+
+    assert call_order == ["prefetch", "ingest"]
+    assert summary.results[0]["investegate_refetch"]["attempted"] == 1
+    mock_prefetch.assert_called_once()
+
+
 @patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
 @patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
 @patch("value_investor.research.ingest_improvement.ingest_research_sources")

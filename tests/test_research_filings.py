@@ -2486,6 +2486,77 @@ def test_is_statutory_results_headline_excludes_q1_trading_update():
     assert _is_statutory_results_headline("ITV Plc 2025 FY Results Presentation") is False
 
 
+def test_refetch_investegate_prioritises_kgf_ceo_before_own_shares(tmp_path: Path, monkeypatch):
+    """eng-20261016-03: KGF.L CEO RNS ranks above routine own-share stubs when refetch is capped."""
+    from value_investor.research.filings import refetch_investegate_filing_bodies
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    fetch_order: list[str] = []
+
+    def fake_fetch(url):
+        fetch_order.append(url)
+        return (
+            "Kingfisher plc announces Thierry Garnier will become Chief Executive Officer. "
+            + ("Board and strategy commentary. " * 40),
+            None,
+        )
+
+    index = {
+        "ticker": "KGF.L",
+        "company_name": "Kingfisher plc",
+        "filings": [
+            {
+                "id": "own_shares",
+                "source": "investegate_direct",
+                "headline": "Transaction in Own Shares",
+                "published_at": "2026-10-13T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/transaction-in-own-shares/9819087",
+                "period": "other",
+                "has_body": False,
+                "priority": -50,
+            },
+            {
+                "id": "ceo",
+                "source": "investegate_direct",
+                "headline": "Kingfisher Appoints New CEO",
+                "published_at": "2026-10-13T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/kingfisher-appoints-new-ceo/9819911",
+                "period": "other",
+                "has_body": False,
+                "priority": 0,
+            },
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.filter_misattributed_filings",
+        lambda rows, **kwargs: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        lambda url: fake_fetch(url),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="KGF.L",
+        company_name="Kingfisher plc",
+        max_bodies=1,
+    )
+    assert result["fetched"] == 1
+    assert fetch_order == [
+        "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/kingfisher-appoints-new-ceo/9819911",
+    ]
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    by_id = {row["id"]: row for row in saved["filings"]}
+    assert by_id["ceo"]["has_body"] is True
+    assert by_id["own_shares"]["has_body"] is False
+
+
 def test_refetch_investegate_prioritises_itv_sky_before_consent(tmp_path: Path, monkeypatch):
     """eng-20260918-14: refetch budget fetches Sky sale before notes consent when capped."""
     filings_dir = tmp_path / "filings"

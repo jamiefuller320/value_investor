@@ -1136,8 +1136,15 @@ _BUYBACK_PROGRAMME_PATTERNS = (
     r"\b(?:buyback|repurchase) programme\b",
 )
 
+_LEADERSHIP_RNS_PATTERNS = (
+    r"\bappoints new ceo\b",
+    r"\bappointment of (?:a )?(?:new )?(?:chief executive|ceo)\b",
+    r"\bceo appointment\b",
+)
+
 _NON_RESULTS_RNS_PATTERNS = (
     r"\bdirectorate change\b",
+    *_LEADERSHIP_RNS_PATTERNS,
     r"\bholding\(s\)? in company\b",
     r"\btotal voting rights\b",
     r"\bblock listing\b",
@@ -2304,6 +2311,8 @@ def _material_other_rns_refetch_priority(row: dict[str, Any]) -> int:
     if _is_material_corporate_action_row(row):
         return 130
     headline = _headline_blob(row)
+    if any(re.search(pat, headline) for pat in _LEADERSHIP_RNS_PATTERNS):
+        return 108
     if any(re.search(pat, headline) for pat in _MATERIAL_FINANCING_PATTERNS):
         return 125
     if _is_material_financing_or_programme_row(row):

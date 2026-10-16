@@ -869,20 +869,124 @@ def _pop_ingest_sigterm_handler() -> None:
         signal.signal(signal.SIGTERM, previous)
 
 
+def _merge_refetch_counter_blocks(
+    base: dict[str, Any] | None,
+    extra: dict[str, Any] | None,
+) -> dict[str, Any]:
+    """Sum attempted/fetched across sequential refetch passes on one ticker."""
+    if not extra:
+        return dict(base or {})
+    if not base:
+        return dict(extra)
+    merged = dict(base)
+    for key in (
+        "attempted",
+        "fetched",
+        "google_news_rejected",
+        "misattributed_pruned",
+        "body_rejected",
+        "html_fallbacks",
+        "lse_html_fallbacks",
+    ):
+        if key in extra or key in merged:
+            merged[key] = int(merged.get(key) or 0) + int(extra.get(key) or 0)
+    if extra.get("with_body_after") is not None:
+        merged["with_body_after"] = extra["with_body_after"]
+    if merged.get("with_body_before") is None and extra.get("with_body_before") is not None:
+        merged["with_body_before"] = extra["with_body_before"]
+    return merged
+
+
+def _intensive_gap_closure_body_refetch(
+    *,
+    sources_dir: Path,
+    target: IngestImprovementTarget,
+    market: str | None,
+    target_max_bodies: int,
+    prune_failed_residual_fetches: bool,
+) -> dict[str, Any]:
+    """
+    Primary UK/Euro + IR allowlist refetch before heavy ``ingest_research_sources``.
+
+    Gap-closure pins (e.g. KGF.L CEO RNS) must not lose the refetch budget to Yahoo/news
+    when the per-ticker SIGALRM fires mid-ingest (0/0 refetch, gaps remain).
+    """
+    blocks: dict[str, Any] = {
+        "ch_refetch": {},
+        "investegate_refetch": {},
+        "ticker_rns_refetch": {},
+        "indexed_refetch": {},
+        "residual_refetch": {},
+        "ir_refetch": {},
+        "euro_primary": {},
+    }
+    if _is_uk_listed(market=market, ticker=target.ticker):
+        primary_refetch = _invoke_with_transient_fetch_retry(
+            refetch_uk_primary_filing_bodies,
+            sources_dir / "filings",
+            ticker=target.ticker,
+            company_name=target.name,
+            max_bodies=target_max_bodies,
+        )
+        blocks["ch_refetch"] = dict(primary_refetch.get("companies_house") or {})
+        blocks["indexed_refetch"] = dict(primary_refetch.get("rns") or {})
+        blocks["investegate_refetch"] = dict(blocks["indexed_refetch"].get("investegate") or {})
+        blocks["ticker_rns_refetch"] = dict(blocks["indexed_refetch"].get("ticker_rns") or {})
+        blocks["residual_refetch"] = dict(primary_refetch.get("residual") or {})
+    else:
+        euro_primary = _invoke_with_transient_fetch_retry(
+            refetch_euro_filings_primary_bodies,
+            sources_dir / "filings",
+            ticker=target.ticker,
+            company_name=target.name,
+            max_bodies=target_max_bodies,
+            prune_unfetchable_after_attempt=prune_failed_residual_fetches,
+        )
+        blocks["euro_primary"] = euro_primary
+        blocks["residual_refetch"] = dict(euro_primary.get("residual") or {})
+    ir_allowlist_rows = fetch_filings_ir_allowlist(target.ticker)
+    if ir_allowlist_rows:
+        if _is_uk_listed(market=market, ticker=target.ticker):
+            ir_refetch = _invoke_with_transient_fetch_retry(
+                refetch_ir_allowlist_filing_bodies,
+                sources_dir / "filings",
+                target.ticker,
+                company_name=target.name,
+                max_bodies=target_max_bodies,
+            )
+        else:
+            ir_refetch = dict(blocks["euro_primary"].get("ir_allowlist") or {})
+            if int(ir_refetch.get("fetched") or 0) <= 0:
+                ir_refetch = _invoke_with_transient_fetch_retry(
+                    refetch_ir_allowlist_filing_bodies,
+                    sources_dir / "filings",
+                    target.ticker,
+                    company_name=target.name,
+                    max_bodies=target_max_bodies,
+                )
+        ir_refetch["mandatory"] = True
+        ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
+        blocks["ir_refetch"] = ir_refetch
+    return blocks
+
+
 def _record_ticker_budget_hit(
     summary: IngestImprovementSummary,
     target: IngestImprovementTarget,
     reason: str,
+    *,
+    refetch_snapshot: dict[str, Any] | None = None,
 ) -> None:
-    summary.results.append(
-        {
-            "ticker": target.ticker,
-            "name": target.name,
-            "improved": False,
-            "ticker_budget_hit": True,
-            "cutoff_reason": reason,
-        }
-    )
+    row: dict[str, Any] = {
+        "ticker": target.ticker,
+        "name": target.name,
+        "improved": False,
+        "ticker_budget_hit": True,
+        "cutoff_reason": reason,
+    }
+    if refetch_snapshot:
+        row.update(refetch_snapshot)
+    summary.results.append(row)
     summary.errors.append(f"{target.ticker}: ticker deadline ({reason})")
     logger.warning(
         "Ingest ticker %s aborted (%s); keeping bodies already written",
@@ -1092,6 +1196,12 @@ def _execute_ingest_improvement_pass(
     started = slot_started
 
     for target in targets:
+        ch_refetch: dict[str, Any] = {}
+        investegate_refetch: dict[str, Any] = {}
+        ticker_rns_refetch: dict[str, Any] = {}
+        indexed_refetch: dict[str, Any] = {}
+        residual_refetch: dict[str, Any] = {}
+        ir_refetch: dict[str, Any] = {}
         should_cutoff, cutoff_reason = _ingest_pass_should_cutoff(
             started,
             max_runtime_seconds=max_runtime_seconds,
@@ -1146,6 +1256,30 @@ def _execute_ingest_improvement_pass(
                 company_name=target.name,
                 ticker=target.ticker,
             )
+            ch_refetch: dict[str, Any] = {}
+            ch_annual_year_in_numbers: dict[str, Any] = {}
+            investegate_refetch: dict[str, Any] = {}
+            ticker_rns_refetch: dict[str, Any] = {}
+            indexed_refetch: dict[str, Any] = {}
+            residual_refetch: dict[str, Any] = {}
+            euro_primary: dict[str, Any] = {}
+            ir_refetch: dict[str, Any] = {}
+            ir_presentation_metrics: dict[str, Any] = {}
+            if intensive_gap_closure:
+                prefetch = _intensive_gap_closure_body_refetch(
+                    sources_dir=sources_dir,
+                    target=target,
+                    market=market,
+                    target_max_bodies=target_max_bodies,
+                    prune_failed_residual_fetches=prune_failed_residual_fetches,
+                )
+                ch_refetch = dict(prefetch.get("ch_refetch") or {})
+                investegate_refetch = dict(prefetch.get("investegate_refetch") or {})
+                ticker_rns_refetch = dict(prefetch.get("ticker_rns_refetch") or {})
+                indexed_refetch = dict(prefetch.get("indexed_refetch") or {})
+                residual_refetch = dict(prefetch.get("residual_refetch") or {})
+                euro_primary = dict(prefetch.get("euro_primary") or {})
+                ir_refetch = dict(prefetch.get("ir_refetch") or {})
             source_meta = ingest_research_sources(
                 ticker=target.ticker,
                 company_name=target.name,
@@ -1153,7 +1287,7 @@ def _execute_ingest_improvement_pass(
                 sources_dir=sources_dir,
                 since=None,
                 market=market,
-                deepen_history=True,
+                deepen_history=not intensive_gap_closure,
             )
             inventory = inspect_local_sources(sources_dir)
             ingest_suggestions = suggestions_by_ticker.get(target.ticker.upper(), [])
@@ -1162,14 +1296,7 @@ def _execute_ingest_improvement_pass(
                 or inventory.get("filings_indexed_bodies")
                 or 0
             )
-            ch_refetch: dict[str, Any] = {}
-            ch_annual_year_in_numbers: dict[str, Any] = {}
-            investegate_refetch: dict[str, Any] = {}
-            ticker_rns_refetch: dict[str, Any] = {}
-            indexed_refetch: dict[str, Any] = {}
-            residual_refetch: dict[str, Any] = {}
-            euro_primary: dict[str, Any] = {}
-            if _is_uk_listed(market=market, ticker=target.ticker):
+            if not intensive_gap_closure and _is_uk_listed(market=market, ticker=target.ticker):
                 primary_refetch = _invoke_with_transient_fetch_retry(
                     refetch_uk_primary_filing_bodies,
                     sources_dir / "filings",
@@ -1217,7 +1344,7 @@ def _execute_ingest_improvement_pass(
                             )
                     except (OSError, ValueError, TypeError):
                         pass
-            else:
+            elif not intensive_gap_closure:
                 euro_primary = _invoke_with_transient_fetch_retry(
                     refetch_euro_filings_primary_bodies,
                     sources_dir / "filings",
@@ -1234,6 +1361,38 @@ def _execute_ingest_improvement_pass(
                         or inventory.get("filings_indexed_bodies")
                         or before
                     )
+            elif intensive_gap_closure and _is_uk_listed(market=market, ticker=target.ticker):
+                from value_investor.research.filings import refetch_investegate_filing_bodies
+
+                top_up = _invoke_with_transient_fetch_retry(
+                    refetch_investegate_filing_bodies,
+                    sources_dir / "filings",
+                    ticker=target.ticker,
+                    company_name=target.name,
+                    max_bodies=target_max_bodies,
+                )
+                investegate_refetch = _merge_refetch_counter_blocks(
+                    investegate_refetch,
+                    top_up,
+                )
+                indexed_investegate = dict(indexed_refetch.get("investegate") or {})
+                indexed_refetch["investegate"] = _merge_refetch_counter_blocks(
+                    indexed_investegate,
+                    top_up,
+                )
+                indexed_refetch["attempted"] = int(indexed_refetch.get("attempted") or 0) + int(
+                    top_up.get("attempted") or 0
+                )
+                indexed_refetch["fetched"] = int(indexed_refetch.get("fetched") or 0) + int(
+                    top_up.get("fetched") or 0
+                )
+                if int(top_up.get("fetched") or 0) > 0:
+                    inventory = inspect_local_sources(sources_dir)
+                    before = int(
+                        (inventory.get("filings_summary") or {}).get("with_body")
+                        or inventory.get("filings_indexed_bodies")
+                        or before
+                    )
             planned = _planned_sources_for_ticker(
                 ticker=target.ticker,
                 market=market,
@@ -1241,10 +1400,8 @@ def _execute_ingest_improvement_pass(
                 ingest_suggestions=ingest_suggestions,
                 filings_with_body=before,
             )
-            ir_refetch: dict[str, Any] = {}
-            ir_presentation_metrics: dict[str, Any] = {}
             ir_allowlist_rows = fetch_filings_ir_allowlist(target.ticker)
-            if ir_allowlist_rows:
+            if ir_allowlist_rows and not intensive_gap_closure:
                 if _is_uk_listed(market=market, ticker=target.ticker):
                     ir_refetch = _invoke_with_transient_fetch_retry(
                         refetch_ir_allowlist_filing_bodies,
@@ -1265,6 +1422,7 @@ def _execute_ingest_improvement_pass(
                         )
                 ir_refetch["mandatory"] = True
                 ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
+            if ir_allowlist_rows:
                 from value_investor.research.filings import extract_ir_presentation_metrics
 
                 ir_presentation_metrics = extract_ir_presentation_metrics(
@@ -1401,7 +1559,26 @@ def _execute_ingest_improvement_pass(
             if exc.reason == "per_ticker_budget":
                 # Count the ticker done so the same chain does not start it again.
                 # Bodies written before the alarm stay on disk.
-                _record_ticker_budget_hit(summary, target, exc.reason)
+                refetch_snapshot = None
+                if intensive_gap_closure and (
+                    int(investegate_refetch.get("attempted") or 0) > 0
+                    or int(ir_refetch.get("attempted") or 0) > 0
+                    or int(ch_refetch.get("attempted") or 0) > 0
+                ):
+                    refetch_snapshot = {
+                        "ch_refetch": ch_refetch,
+                        "investegate_refetch": investegate_refetch,
+                        "ticker_rns_refetch": ticker_rns_refetch,
+                        "indexed_refetch": indexed_refetch,
+                        "residual_refetch": residual_refetch,
+                        "ir_refetch": ir_refetch,
+                    }
+                _record_ticker_budget_hit(
+                    summary,
+                    target,
+                    exc.reason,
+                    refetch_snapshot=refetch_snapshot,
+                )
             else:
                 # Slot exhausted mid-ticker: leave it off results so the backlog
                 # prepends it for the next chain.
