@@ -8976,6 +8976,26 @@ function renderDailyHubLaneBlock(hub, lane) {
     <ul class="list-plain daily-lane-list">${lis}</ul>`;
 }
 
+function renderDailyHubLaterBlock(hub) {
+  const rows =
+    (hub && hub.later_suggestions) ||
+    (hub && hub.push_suggestions && hub.push_suggestions.later_suggestions) ||
+    [];
+  const badge = '<span class="badge badge-watch">later · not Push</span>';
+  if (!rows.length) {
+    return "";
+  }
+  const lis = rows
+    .map((row) => {
+      return `<li><strong>${esc(row.title || "")}</strong> ${badge}
+        <div class="small">Outstanding: ${esc(row.gap || "")}</div>
+        <div class="small muted">Already done: ${esc(row.done || "")}</div></li>`;
+    })
+    .join("");
+  return `<h4 class="small" style="margin:0.75rem 0 0.35rem">Later <span class="badge badge-watch">gap only</span></h4>
+    <ul class="list-plain daily-lane-list">${lis}</ul>`;
+}
+
 function renderDailyHubPanel(data) {
   const hub = (data && data.daily_focus) || null;
   if (!hub) {
@@ -9015,7 +9035,7 @@ function renderDailyHubPanel(data) {
   const openTasks = (hub.tasks || []).filter((t) => !t.closed);
   // Push/Explore already rendered in lane blocks — keep triage/human/reconcile here.
   const triageTasks = openTasks.filter(
-    (t) => t.sort_bucket !== "push" && t.sort_bucket !== "explore"
+    (t) => t.sort_bucket !== "push" && t.sort_bucket !== "explore" && t.sort_bucket !== "later"
   );
   const cards = triageTasks.map(renderDailyHubTaskCard).join("");
   const counts = hub.counts || {};
@@ -9031,6 +9051,7 @@ function renderDailyHubPanel(data) {
       · ${renderUiReconcileBadge(data)}
       · open ${esc(String(hub.open_task_count ?? openTasks.length))}
       · push ${esc(String(counts.push || 0))} /
+        later ${esc(String(counts.later || 0))} /
         explore ${esc(String(counts.explore || 0))} /
         warn ${esc(String(counts.market_warnings || 0))} /
         new ${esc(String(counts.human_new_info || 0))} /
@@ -9050,6 +9071,7 @@ function renderDailyHubPanel(data) {
           : '<p class="muted">No focus lines — sync Project notes Today bullets into project_daily_seed.json.</p>'
       }
       ${renderDailyHubLaneBlock(hub, "push")}
+      ${renderDailyHubLaterBlock(hub)}
       ${renderDailyHubLaneBlock(hub, "explore")}
       <h4 class="small" style="margin:0.75rem 0 0.35rem">Prioritized tasks</h4>
       ${cards || '<p class="muted">No open daily tasks.</p>'}

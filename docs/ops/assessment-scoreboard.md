@@ -105,3 +105,8 @@ other knob, including `max_positions` 3 and the AI gates, matches the primary.
 - Under B3, do not enlarge the live 3-name book mid-flight; do not back-label
   its NAV as evidence for N210 / matched-30; do not crown those shadows as
   assessment primary until volume gates.
+- While `policy_changes.evidentiary_demotion_ai_judgment_fair_v1` is present
+  and `primary_track` is still `ai_judgment_fair`, this warn stays observe-only
+  and is **not a Push card**. The hub may show one Later chip: crown a new
+  assessment primary only after the shadow volume gates. The warn itself is
+  not deleted.

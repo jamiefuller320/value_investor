@@ -1368,6 +1368,95 @@ def _append_push_explore_tasks(
     return priority
 
 
+def _append_later_tasks(
+    tasks: list[dict[str, Any]],
+    recommendations: list[dict[str, Any]],
+    *,
+    later_rows: list[dict[str, Any]],
+    closed_ids: set[str],
+    generated_at: str,
+    priority_start: int,
+) -> int:
+    """Gap chips for partial work. Later is not Push and not today's job."""
+    priority = priority_start
+    for sug in later_rows:
+        if not isinstance(sug, dict):
+            continue
+        task_ref = str(sug.get("id") or "")
+        if not task_ref or task_ref in closed_ids:
+            continue
+        rid = f"rec-{_stable_id('later', task_ref)}"
+        gap = str(sug.get("gap") or "")
+        done = str(sug.get("done") or "")
+        title = str(sug.get("title") or task_ref)
+        rec = {
+            "id": rid,
+            "task_id": task_ref,
+            "summary": title,
+            "rationale": gap,
+            "accept_action": {
+                "kind": "focus-ack",
+                "payload": {"focus_id": task_ref, "decision": "accept", "lane": "later"},
+            },
+            "discuss_prompt": (
+                f"Discuss daily recommendation `{rid}` (later `{task_ref}`):\n"
+                f"{title}\nOutstanding: {gap}\nAlready done: {done}\n"
+                "Later is not today's Push — do not crown or enlarge from this chip."
+            ),
+            "priority": priority,
+            "options": [
+                {
+                    "id": "accept",
+                    "label": "Accept — noted for later (not today's Push)",
+                    "action": {
+                        "kind": "focus-ack",
+                        "payload": {"focus_id": task_ref, "decision": "accept"},
+                    },
+                },
+            ],
+            "lane": "later",
+            "label": "later",
+            "work_class": "surface",
+            "task_family": "daily-later",
+        }
+        recommendations.append(rec)
+        tasks.append(
+            {
+                "task_ref": task_ref,
+                "source": "daily_later",
+                "work_class": "surface",
+                "task_family": "daily-later",
+                "priority": priority,
+                "title": title,
+                "summary": gap,
+                "sort_bucket": "later",
+                "lane": "later",
+                "timing": "later",
+                "label": "later",
+                "closeable": True,
+                "close_action": "daily-focus-ack",
+                "close_payload": {"focus_id": task_ref, "decision": "accept"},
+                "href": sug.get("href") or "#automation/daily",
+                "recommendation_id": rid,
+                "status": {
+                    "state": "waiting",
+                    "label": "Later",
+                    "next_steps": ["Not today's Push — revisit when the gap's gate is met"],
+                    "waiting_on": ["volume gates"],
+                    "ready": False,
+                    "ready_reason": None,
+                    "blocked_reason": "tagged later",
+                    "updated_at": generated_at,
+                    "updated_by": "morning_builder",
+                },
+                "closed": False,
+                "later": sug,
+            }
+        )
+        priority += 1
+    return priority
+
+
 def build_daily_focus(
     *,
     data_dir: Path | None = None,
@@ -1684,6 +1773,7 @@ def build_daily_focus(
 
     # Attention lanes (locked D3 / D7 A) — before assessment attach so cards get prose.
     from value_investor.daily_hub_attention import (
+        apply_hub_task_relevance,
         build_daily_explore_suggestions,
         build_daily_push_suggestions,
         build_daily_status_report,
@@ -1706,6 +1796,48 @@ def build_daily_focus(
         generated_at=generated_at,
         priority_start=priority,
     )
+    later_rows = [
+        row for row in (push_block.get("later_suggestions") or []) if isinstance(row, dict)
+    ]
+    priority = _append_later_tasks(
+        tasks,
+        recommendations,
+        later_rows=later_rows,
+        closed_ids=closed_ids,
+        generated_at=generated_at,
+        priority_start=priority,
+    )
+    disposed_checklists: set[str] = set()
+    for row in push_block.get("non_actionable_observes") or []:
+        if not isinstance(row, dict):
+            continue
+        reason = str(row.get("reason") or "")
+        if reason == "b3_anti_c_no_enlarge":
+            disposed_checklists.add("sunday-saturated-knobs-judgment")
+        if reason == "b3_evidentiary_demotion":
+            disposed_checklists.add("sunday-assessment-scoreboard")
+    for sug in push_block.get("suggestions") or []:
+        if isinstance(sug, dict) and sug.get("gap_tracks") and sug.get("checklist_task_id"):
+            disposed_checklists.add(str(sug.get("checklist_task_id")))
+    for sug in later_rows:
+        checklist_id = str(sug.get("checklist_task_id") or "")
+        if checklist_id:
+            disposed_checklists.add(checklist_id)
+    tasks, dropped_tasks = apply_hub_task_relevance(
+        tasks,
+        data_dir=data_dir,
+        disposed_checklist_ids=disposed_checklists,
+    )
+    dropped_refs = {str(row.get("task_ref") or "") for row in dropped_tasks}
+    dropped_human_ids = {
+        ref.split("human:", 1)[1] for ref in dropped_refs if ref.startswith("human:")
+    }
+    recommendations = [
+        rec
+        for rec in recommendations
+        if str(rec.get("task_id") or "") not in dropped_refs
+        and str(rec.get("task_id") or "") not in dropped_human_ids
+    ]
 
     # Stale when wall-clock operator date ≠ artifact local_date (always false at
     # a correct morning write; clients recompute against wall clock too).
@@ -1798,6 +1930,8 @@ def build_daily_focus(
         "status_report": status_report,
         "push_suggestions": push_block,
         "explore_suggestions": explore_block,
+        "later_suggestions": later_rows,
+        "relevance_dropped": dropped_tasks,
         "tasks": tasks,
         "open_task_count": len(open_tasks),
         "recommendations": recommendations,
@@ -1814,6 +1948,7 @@ def build_daily_focus(
             "reconcile": sum(1 for t in open_tasks if t.get("source") == "ui_reconcile"),
             "push": sum(1 for t in open_tasks if t.get("sort_bucket") == "push"),
             "explore": sum(1 for t in open_tasks if t.get("sort_bucket") == "explore"),
+            "later": sum(1 for t in open_tasks if t.get("sort_bucket") == "later"),
         },
         "project_sync": {
             "notes_fingerprint": notes_fp,

@@ -177,7 +177,11 @@ fixed-knob lab (calibration/exclusion shadow, cohort lab such as the control
 `buy_tier_level`, or churn-policy twin). The finding is a warn,
 `auto_fixable=False`) — the driver is outside the knob's reach (for example the
 3% stress cost model or rank-flip churn), so the fix is a policy change or a new
-cold-start epoch, not another knob step.
+cold-start epoch, not another knob step. When the only saturated book is
+evidentiary-demoted `ai_judgment_fair` (`evidentiary_demotion_ai_judgment_fair_v1`,
+anti-C), the warn stays observe-only and is not a Push card — that enlarge
+decision is already locked. If another tunable book is saturated in the same
+finding, Push keeps one now-card for that book only.
 
 Track-sync floors are clamp bounds too. Paper-auto track sync holds
 `graduated_allocation` at `max_positions` ≥ `GRADUATED_ALLOCATION_MIN_POSITIONS`

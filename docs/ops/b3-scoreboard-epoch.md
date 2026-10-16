@@ -58,7 +58,7 @@ Idempotent per policy id / freeze / spawn / N210 refresh.
 - `adhoc-assessment-model-change` — still the freeze/switch path
 - `adhoc-n210-volume-gate-review` — judgment observe volume
 - `sunday-matched30-twins` — matched pair NAV (not vs full buy-tier as skill)
-- `sunday-assessment-scoreboard` — demoted 3-name primary wording
+- `sunday-assessment-scoreboard` — demoted 3-name primary wording. The trail warn is not Push while the demotion stamp is present; outstanding crown waits on volume gates (Later chip).
 
 ## Related
 
