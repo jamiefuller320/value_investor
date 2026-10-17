@@ -96,8 +96,9 @@ Those notes are the source. Do not treat this handover as a new pass over the fi
 - `ROSE.L` stores `dividend_yield_raw` 1.0 and displays 100.0%. Raw 1.0 is not above 1. The displayed figure is 100 times the raw figure. There is no statement.
 - `SPI.L` stores `dividend_yield_raw` 0.61 and displays 61.0%. There is no statement.
 - `VLX.L` stores `dividend_yield_raw` 0.7 and displays 70.0%. There is no statement.
+- `ATYM.L` stores `dividend_yield_raw` 0.96 and displays 96.0%. The cash dividend is 10.1 million, which is 0.67% of the cap if the dividend is pounds and 0.56% if it is euros. The AIM metrics yield is the fraction 1.0.
 
-**What to change.** Store yield as a decimal fraction, and format percent only at display. Do not treat “raw > 1” as the only rescale. Recompute the screen yield from the dividend line actually present (`Common Stock Dividend Paid`, else `Cash Dividends Paid`) and a market cap in the same currency. If the currency is missing, leave the yield unchecked instead of printing a percent.
+**What to change.** Store yield as a decimal fraction, and format percent only at display. Do not treat “raw > 1” as the only rescale. Recompute the screen yield from the dividend line actually present (`Common Stock Dividend Paid`, else `Cash Dividends Paid`) and a market cap in the same currency. If the currency is missing, leave the yield unchecked instead of printing a percent. For `ATYM.L`, do not invent a corrected screen yield.
 
 ## 4. Screen free cash flow is not the filing line
 
@@ -275,11 +276,13 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 15. Bellway’s 2025 statement does not cover a full set of accounts
 
-**What is wrong.** `BWY.L`’s 2025 income statement has only EPS and share counts. The balance sheet and the cash flow stop at 2024. The screen P/E uses the 2025 EPS. The screen free cash flow is the 2024 line.
+**What is wrong.** `BWY.L`’s 2025 income statement has only EPS and share counts. The balance sheet and the cash flow stop at 2024. The screen P/E uses the 2025 EPS. The screen free cash flow is the 2024 line. `GNS.L` is the same shape. The 2026 income statement has only diluted EPS, basic EPS, and the two share-count lines. Revenue, net income, and operating income are missing on that year. The balance sheet and the cash flow stop at 2025. The screen free cash flow is the 2025 line.
 
 **Where.** `docs/data/research/BWY.L`. The 2025 income-statement key has diluted EPS 1.318, basic EPS 1.328, diluted average shares 119,533,715, and basic average shares 118,644,063. Revenue, net income, and operating income are missing on that year. The balance sheet and the cash flow have no 2025 key. Their latest year is 2024. Price £19.48 over the 2025 diluted EPS of 1.318 is 14.8, and the screen P/E is 14.8. The 2024 free-cash-flow line is −66.9 million, and that is the displayed screen free cash flow. The memo’s £337m operating cash and £158m net cash are not on the statement. That memo gap is also listed in section 13.
 
-**What to change.** Do not pair a 2025 EPS with a 2024 cash-flow line and present both as one year’s screen. Leave revenue, net income, and operating income missing on 2025 until those lines exist. Do not treat the 2024 free-cash-flow line as a 2025 or FY26 figure.
+`docs/data/research/GNS.L`. The 2026 income-statement key has diluted EPS 4.251, basic EPS 4.316, and the two share-count lines. Revenue, net income, and operating income are missing on that year. The balance sheet and the cash flow stop at 2025. The screen free cash flow is the 2025 line of 48.6 million.
+
+**What to change.** Do not pair a 2025 EPS with a 2024 cash-flow line and present both as one year’s screen. Leave revenue, net income, and operating income missing on 2025 until those lines exist. Do not treat the 2024 free-cash-flow line as a 2025 or FY26 figure. For `GNS.L`, do not pair the 2026 EPS with the 2025 free-cash-flow line of 48.6 million. Leave revenue, net income, and operating income missing on 2026. Do not invent a 2026 revenue or profit figure. Do not add a cause.
 
 ## 16. Inchcape stores leverage figures that disagree
 
