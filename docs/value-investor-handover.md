@@ -673,3 +673,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** On `ATYM.L` the screen labels free cash flow EUR. The chart labels the price GBP. There is no quote file. On `TRST.L` the screen labels free cash flow USD. The chart labels the price GBP. There is no quote file. On `HIK.L` the screen free-cash-flow currency is USD. The chart labels the price GBP. There is no quote file.
 
 **What to change.** Do not fold `ATYM.L`, `TRST.L`, or `HIK.L` into section 53 or section 57. Do not invent a quote, a cap, or a corrected figure.
+
+## 61. The screen free-cash-flow object can store no figure beside a statement line
+
+**What is wrong.** The screen free-cash-flow object stores no figure beside a statement free-cash-flow line. `CMCX.L` stores that statement line and no screen figure. `ICG.L` is the earlier example: operating cash flow is stored and the screen has no free-cash-flow figure. Section 37 covers a stored free-cash-flow figure while the operating-cash-flow line is missing. It does not cover this.
+
+**Where.** On `CMCX.L` the statement free cash flow is 35,980,000. The screen free-cash-flow object stores no figure. On `ICG.L` operating cash flow is 846.1 million. The screen stores no free-cash-flow figure.
+
+**What to change.** Do not fold `CMCX.L` or `ICG.L` into section 37. Leave `ICG.L` in section 29. Do not invent a figure.
