@@ -45,6 +45,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-growth-batch-2.md` (second pass on pound-cap ranks 11–20)
 - `docs/ftse350-growth-batch-7.md` (second pass on pound-cap ranks 61–70)
 - `docs/ftse350-growth-batch-8.md` (second pass on pound-cap ranks 71–80)
+- `docs/ftse350-growth-batch-9.md` (second pass on pound-cap ranks 81–90)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -297,11 +298,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 17. Berkeley has no capital-expenditure line
 
-**What is wrong.** `BKG.L` has no capital-expenditure line. Free cash flow equals operating cash flow. Purchase of PPE is 0.
+**What is wrong.** `BKG.L` has no capital-expenditure line. Free cash flow equals operating cash flow. Purchase of PPE is 0. `GCP.L` is the same shape. Capital expenditure is missing, and free cash flow equals operating cash flow.
 
-**Where.** `docs/data/research/BKG.L`. Filing free cash flow 260.3 million equals the screen canonical figure and equals operating cash flow. Purchase of PPE is 0. The capital-expenditure line is missing.
+**Where.** `docs/data/research/BKG.L`. Filing free cash flow 260.3 million equals the screen canonical figure and equals operating cash flow. Purchase of PPE is 0. The capital-expenditure line is missing. `GCP.L`: capital expenditure is missing, and free cash flow equals operating cash flow of 123.7 million. The cash-flow line Gain Loss On Investment Securities is 120.4 million in 2025.
 
-**What to change.** Do not treat free cash flow as operating cash flow minus capital expenditure when the capital-expenditure line is absent. Store that the line is missing, and do not read Purchase of PPE of 0 as a researched capex figure unless the filing says so.
+**What to change.** Do not treat free cash flow as operating cash flow minus capital expenditure when the capital-expenditure line is absent. Store that the line is missing, and do not read Purchase of PPE of 0 as a researched capex figure unless the filing says so. For `GCP.L`, do not invent a capital-expenditure figure.
 
 ## 18. B&M’s screen yield is a per-share dividend, not the cash-dividend line
 
@@ -523,9 +524,9 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 **What is wrong.** On `JUP.L` in 2023 the unusual-item fields do not match. Section 9 records one-off items that distort the multiples the screen shows. It does not cover fields that disagree with each other.
 
-**Where.** In 2023 the field named Total Unusual Items is 1.9 million, Total Unusual Items Excluding Goodwill is −74.3 million, and Special Income Charges is −78.4 million. Normalized income that year is 123.5 million beside net income of −12.9 million. In 2024 the two unusual-item fields match at 4.7 million. In 2025 they match at 8.3 million. On `MOON.L` in 2025 the field named Total Unusual Items is 0, Total Unusual Items Excluding Goodwill is −56.7 million, and Special Income Charges is −56.7 million. Normalized income is 88.9 million beside net income of −11.1 million. In 2026 total unusual items are zero and normalized income equals net income.
+**Where.** In 2023 the field named Total Unusual Items is 1.9 million, Total Unusual Items Excluding Goodwill is −74.3 million, and Special Income Charges is −78.4 million. Normalized income that year is 123.5 million beside net income of −12.9 million. In 2024 the two unusual-item fields match at 4.7 million. In 2025 they match at 8.3 million. On `MOON.L` in 2025 the field named Total Unusual Items is 0, Total Unusual Items Excluding Goodwill is −56.7 million, and Special Income Charges is −56.7 million. Normalized income is 88.9 million beside net income of −11.1 million. In 2026 total unusual items are zero and normalized income equals net income. On `GEN.L` in 2024 the field named Total Unusual Items is −7.2 million, Total Unusual Items Excluding Goodwill is −19.6 million, and Special Income Charges is −19.6 million. In 2025 the two unusual-item fields match at −9.2 million. On `HFD.L` in 2025 the field named Total Unusual Items is −20.5 million, Total Unusual Items Excluding Goodwill is −68.4 million, and Special Income Charges is −68.4 million. Normalized income that year is 65.6 million beside net income of −33.6 million. In 2026 total unusual items are −2.2 million and normalized income is 34.5 million.
 
-**What to change.** Do not fold `JUP.L` or `MOON.L` into section 9. Do not invent which field the normalized income used, and do not invent a corrected unusual-items figure.
+**What to change.** Do not fold `JUP.L`, `MOON.L`, `GEN.L`, or `HFD.L` into section 9. Do not invent which field the normalized income used, and do not invent a corrected unusual-items figure.
 
 ## 46. A zero screen yield can sit beside a statement dividend
 
