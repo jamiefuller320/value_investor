@@ -339,6 +339,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://s202.q4cdn.com/886546970/files/doc_downloads/2026/03/6-KPN-Integrated-Annual-Report-2025.pdf",
         "https://s202.q4cdn.com/886546970/files/doc_financials/2025/q2/KPN-Interim-Financial-Statements-2025.pdf",
     ],
+    # aex parked leftover — eng-20261017-10: MT.AS unfetchable_iwb; corporate.arcelormittal.com is
+    # Cloudflare-gated and cdn.arcelormittal.com PDFs 403 with ingest UA; SEC FY2025 20-F + H1 2026 6-K.
+    "MT.AS": [
+        "https://www.sec.gov/Archives/edgar/data/1243429/000124342926000020/mt-20251231.htm",
+        "https://www.sec.gov/Archives/edgar/data/1243429/000124342926000072/arcelormittalform6-kjuly30.htm",
+    ],
     "POST.VI": [
         "https://assets.post.at/-/media/Dokumente/En/Investor-Relations/Geschaefts--und-Nachhaltigkeitsberichte/AustrianPost_Annual_Report_2025.pdf",
     ],
@@ -1056,6 +1062,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "ABI": ("Anheuser-Busch InBev", "Anheuser Busch InBev"),
     "RAND": ("Randstad", "Randstad N.V."),
     "NOVN": ("Novartis", "Novartis AG"),
+    # aex MT.AS — mt-* SEC slugs lack issuer tokens for _ir_body_title_tokens_match.
+    "MT": ("ArcelorMittal",),
     "RO": ("Roche Holding AG", "Roche"),
     "PGHN": ("Partners Group", "Partners Group Holding AG"),
     "NTR": ("Nutrien", "Nutrien Ltd."),
@@ -5618,6 +5626,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.jdplc.com/wp-content/uploads/2026/09/HY27-Results-Statement.pdf": "interim",
     # eng-20261010-02: Tenaris TEN.MI Q1 2026 FS 6-K slug (f6k_*fs.htm) has no interim token.
     "https://www.sec.gov/Archives/edgar/data/1190723/000117184326003164/f6k_050626fs.htm": "interim",
+    # eng-20261017-10: MT.AS Jul-2026 half-year 6-K exhibit slug has no interim token.
+    "https://www.sec.gov/Archives/edgar/data/1243429/000124342926000072/arcelormittalform6-kjuly30.htm": "interim",
     # eng-20261015-01: PRX.AS hy2026 condensed FS slug has no half-year token (would classify other).
     "https://www.prosus.com/~/media/Files/P/prosus-corp-v2/results-reports-and-events-archive/latest-results/hy2026/hy2026-summary-consolidated-financial-statements.pdf": "interim",
     # eng-20261013-08: PEBB.L — Concrete5 IR filenames (AR_Interactive / ARA_2024 / HY_26) lack annual/interim tokens.

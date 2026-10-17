@@ -7167,6 +7167,37 @@ def test_parked_source_hunter_kpn_as_aex_has_fetchable_ir():
     assert valid, reason
 
 
+def test_fetch_filings_ir_allowlist_aex_mt_as_builtins_eng_20261017_10(tmp_path: Path):
+    """eng-20261017-10: MT.AS unfetchable_iwb — SEC FY2025 20-F + H1 2026 half-year 6-K exhibit."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("MT.AS", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any(url.endswith("mt-20251231.htm") for url in urls)
+    assert any("arcelormittalform6-kjuly30.htm" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
+def test_parked_source_hunter_mt_as_aex_has_fetchable_ir():
+    """eng-20261017-10: MT.AS has live SEC FY2025 20-F and H1 2026 half-year 6-K bodies."""
+    assert "MT.AS" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("MT.AS")
+    annual = next(
+        row for row in rows if row["period"] == "annual" and row["url"].endswith("mt-20251231.htm")
+    )
+    body = _live_fetch_filing_body(annual["url"])
+    if not body:
+        pytest.skip("SEC.gov body fetch unavailable (rate-limit / network) — retry later")
+    assert len(body) > 5000
+    assert "form 20-f" in body.lower() or "annual report" in body.lower()
+    valid, reason = _validate_ir_allowlist_body_content(annual, body, ticker="MT.AS")
+    assert valid, reason
+
+
 def test_fetch_filings_ir_allowlist_ftse_mib_unmeasured_builtins_eng_20260926_01(
     tmp_path: Path,
 ):
