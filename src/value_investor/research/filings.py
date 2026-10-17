@@ -513,6 +513,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "FCT.MI": [
         "https://dam.fincantieri.com/adobe/assets/urn:aaid:aem:70e649ee-1812-4049-8a98-704bad03f385/renditions/original/as/FINCANTIERI%20Annual%20report%202025%20(English%20translation%20-%20non%20ESEF).pdf",
     ],
+    # ftse_mib parked leftover — eng-20261017-06: INW.MI awaiting_periodic_report; ESEF annual
+    # only (thin, no interim); inwit.it wp-content statutory integrated + semestrale PDFs.
+    "INW.MI": [
+        "https://www.inwit.it/wp-content/uploads/2026/04/inwit-integrated-report-2025.pdf",
+        "https://www.inwit.it/wp-content/uploads/2025/08/INWIT_relazione_finanziaria_semestrale_30_giugno_2025.pdf",
+        "https://www.inwit.it/wp-content/uploads/2025/11/INWIT-resoconto-intermedio-di-gestione-al-30-settembre-2025.pdf",
+    ],
     # ftse_mib buy-tier deepen — eng-20261005-01 / eng-20261010-02: TEN.MI unmeasured — Yahoo base
     # TEN collides with Tsakos on SEC; pin Tenaris S.A. FY2025 20-F + Q1 2026 FS 6-K (CIK 1190723).
     "TEN.MI": [
@@ -5600,6 +5607,10 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.thepebblegroup.com/application/files/1717/8880/8359/The_Pebble_Group_-_HY_26_Results_Statement_-_07.09.2026.pdf": "interim",
     # eng-20261013-04: YNGN.L — HY26-Interim-Accounts slug contains accounts token (would classify annual).
     "https://www.youngs.co.uk/wp-content/uploads/2026/04/HY26-Interim-Accounts.pdf": "interim",
+    # eng-20261017-06: INW.MI — Italian integrated/semestrale/resoconto slugs lack annual/interim tokens.
+    "https://www.inwit.it/wp-content/uploads/2026/04/inwit-integrated-report-2025.pdf": "annual",
+    "https://www.inwit.it/wp-content/uploads/2025/08/INWIT_relazione_finanziaria_semestrale_30_giugno_2025.pdf": "interim",
+    "https://www.inwit.it/wp-content/uploads/2025/11/INWIT-resoconto-intermedio-di-gestione-al-30-settembre-2025.pdf": "interim",
 }
 
 
