@@ -54,6 +54,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-growth-batch-15.md` (second pass from pound-cap rank 149 through rank 160)
 - `docs/ftse350-growth-batch-16.md` (second pass from pound-cap rank 161 through rank 173)
 - `docs/ftse350-growth-batch-17.md` (second pass from pound-cap rank 174 through rank 190)
+- `docs/ftse350-growth-batch-19.md` (second pass from pound-cap rank 201 through rank 210)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -559,9 +560,9 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 47. A positive diluted EPS can be stored while the screen has no P/E key
 
-**What is wrong.** `VCT.L`, `MGAM.L`, `EWG.L`, and `VTY.L` store a positive diluted EPS. The screen has no P/E key on each.
+**What is wrong.** `VCT.L`, `MGAM.L`, `EWG.L`, `VTY.L`, and `HWG.L` store a positive diluted EPS. The screen has no P/E key on each.
 
-**Where.** `VCT.L` diluted EPS is 0.318, and the pound price over it is 29.6. `MGAM.L` diluted EPS is 0.075, and the pound price over it is 38.7. `EWG.L` diluted EPS is 0.0029, and the pound price over it is 351. `VTY.L` diluted EPS is 0.42, and the pound price over it is 5.2.
+**Where.** `VCT.L` diluted EPS is 0.318, and the pound price over it is 29.6. `MGAM.L` diluted EPS is 0.075, and the pound price over it is 38.7. `EWG.L` diluted EPS is 0.0029, and the pound price over it is 351. `VTY.L` diluted EPS is 0.42, and the pound price over it is 5.2. `HWG.L` diluted EPS is 0.028.
 
 **What to change.** Do not invent a screen P/E.
 
@@ -599,8 +600,24 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 52. A positive screen P/E can sit beside a negative diluted EPS
 
-**What is wrong.** Section 47 is a positive diluted EPS while the screen has no P/E key. `HBR.L` and `ELM.L` store a positive screen P/E beside a negative diluted EPS.
+**What is wrong.** Section 47 is a positive diluted EPS while the screen has no P/E key. `HBR.L`, `ELM.L`, and `ICGT.L` store a positive screen P/E beside a negative diluted EPS.
 
-**Where.** `HBR.L` screen P/E is 23.4 beside diluted EPS of −0.16. `ELM.L` screen P/E is 20.2 beside diluted EPS of −0.078.
+**Where.** `HBR.L` screen P/E is 23.4 beside diluted EPS of −0.16. `ELM.L` screen P/E is 20.2 beside diluted EPS of −0.078. `ICGT.L` screen P/E is 20.4 beside diluted EPS of −0.1335.
 
-**What to change.** Do not fold `HBR.L` or `ELM.L` into section 47. Do not invent a corrected multiple.
+**What to change.** Do not fold `HBR.L`, `ELM.L`, or `ICGT.L` into section 47. Do not invent a corrected multiple.
+
+## 53. The quote currency can be USD while the chart labels the price GBP
+
+**What is wrong.** On `IHG.L` the quote currency is USD and the chart labels the same price GBP. Section 33 records that the history file does not name the unit as pence. It does not record this quote-and-chart pair. Section 51 is a magnitude gap. Section 52 is a positive screen P/E beside a negative diluted EPS.
+
+**Where.** The history price and the chart price are 159.05. The quote currency is USD. The heading cap is $23,953.8M.
+
+**What to change.** Do not fold `IHG.L` into section 33, section 51, or section 52. Do not invent a conversion or a corrected cap.
+
+## 54. Net income and normalized income in the same year can have opposite signs
+
+**What is wrong.** `HTG.L` and `IHP.L` store net income and normalized income for the same year with opposite signs. Section 51 records those two figures at different magnitudes. It does not cover opposite signs. Section 52 is a positive screen P/E beside a negative diluted EPS.
+
+**Where.** On `HTG.L` in 2024, net income is −28,000,000 beside normalized income of 163,537,313.43. On `IHP.L` in 2025, net income is 51,300,000 beside normalized income of −1,981,350,000.
+
+**What to change.** Do not convert either number. Do not fold `HTG.L` or `IHP.L` into section 51 or section 52. Do not invent a corrected figure.
