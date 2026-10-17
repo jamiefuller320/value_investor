@@ -11,6 +11,7 @@ from value_investor.ftse_gap_scan import (
     HOW_TO_ADD_A_CHECK,
     RosterName,
     ScreenRow,
+    _income_sign_gaps,
     _net_normalized_gaps,
     _statement_shares,
     hits_for,
@@ -474,6 +475,78 @@ def test_hbr_and_elm_positive_pe_beside_negative_diluted_eps():
         _row(pe_display="0", diluted_eps=-0.16)
     )
     assert "positive_screen_pe_beside_negative_diluted_eps" not in _ids(_row(pe_display="23.4"))
+
+
+def test_ihg_chart_gbp_beside_usd_quote():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    ihg = rows["IHG.L"]
+    chart = json.loads((ROOT / "docs/data/charts/IHG.L.json").read_text())
+    quote = json.loads((ROOT / "docs/data/research/IHG.L/sources/price_quote.json").read_text())
+    assert chart["currency"] == "GBP"
+    assert quote["quote_currency"] == "USD"
+    assert ihg.chart_currency == "GBP"
+    assert ihg.price_quote_currency == "USD"
+    assert ihg.history_price == pytest.approx(159.05)
+    assert "chart_gbp_quote_usd" in _ids(ihg)
+    assert "chart_gbp_quote_usd" not in _ids(
+        _row(chart_currency="GBP", price_quote_currency="GBp", history_price=159.05)
+    )
+    assert "chart_gbp_quote_usd" not in _ids(
+        _row(chart_currency="USD", price_quote_currency="USD", history_price=159.05)
+    )
+
+
+def test_hwg_positive_eps_has_no_screen_pe_key():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    hwg = rows["HWG.L"]
+    assert hwg.diluted_eps == pytest.approx(0.028)
+    assert "P/E" not in hwg.key_metric_names
+    assert "positive_diluted_eps_without_screen_pe" in _ids(hwg)
+    assert "positive_diluted_eps_without_screen_pe" not in _ids(
+        _row(diluted_eps=0.028, key_metric_names=frozenset({"P/E"}))
+    )
+    assert "positive_diluted_eps_without_screen_pe" not in _ids(
+        _row(diluted_eps=-0.16, key_metric_names=frozenset())
+    )
+    assert "positive_diluted_eps_without_screen_pe" not in _ids(
+        _row(diluted_eps=0.0, key_metric_names=frozenset())
+    )
+
+
+def test_htg_and_ihp_income_signs_differ_without_changing_ten_times():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    htg_net, htg_norm = _income_pair("HTG.L", "2024")
+    assert htg_net == pytest.approx(-28_000_000)
+    assert htg_norm == pytest.approx(163_537_313.43)
+    htg_signs = {year: (net, norm) for year, net, norm in rows["HTG.L"].income_sign_gaps}
+    assert htg_signs["2024"][0] == pytest.approx(htg_net)
+    assert htg_signs["2024"][1] == pytest.approx(htg_norm)
+    assert "net_income_normalized_opposite_signs" in _ids(rows["HTG.L"])
+    assert "2024" not in {year for year, _, _ in rows["HTG.L"].net_normalized_gaps}
+
+    ihp_net, ihp_norm = _income_pair("IHP.L", "2025")
+    assert ihp_net == pytest.approx(51_300_000)
+    assert ihp_norm == pytest.approx(-1_981_350_000)
+    ihp_signs = {year: (net, norm) for year, net, norm in rows["IHP.L"].income_sign_gaps}
+    assert ihp_signs["2025"][0] == pytest.approx(ihp_net)
+    assert ihp_signs["2025"][1] == pytest.approx(ihp_norm)
+    assert "net_income_normalized_opposite_signs" in _ids(rows["IHP.L"])
+    assert "2025" in {year for year, _, _ in rows["IHP.L"].net_normalized_gaps}
+
+    assert (
+        _income_sign_gaps(
+            {"2024": {"Net Income": -28_000_000, "Normalized Income": 163_537_313.43}}
+        )[0][0]
+        == "2024"
+    )
+    assert _income_sign_gaps({"2024": {"Net Income": -28_000_000, "Normalized Income": -1.0}}) == ()
+    assert _income_sign_gaps({"2024": {"Net Income": 0, "Normalized Income": -1.0}}) == ()
+    assert (
+        _net_normalized_gaps(
+            {"2024": {"Net Income": -28_000_000, "Normalized Income": 163_537_313.43}}
+        )
+        == ()
+    )
 
 
 def test_stored_fcf_figures_stay_distinct():

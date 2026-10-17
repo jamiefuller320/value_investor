@@ -84,6 +84,8 @@ class ScreenRow:
     discount_display: str | None = None
     premium_display: str | None = None
     net_normalized_gaps: tuple[tuple[str, float, float], ...] = ()
+    income_sign_gaps: tuple[tuple[str, float, float], ...] = ()
+    chart_currency: str | None = None
 
 
 @dataclass(frozen=True)
@@ -212,6 +214,7 @@ def _statement_facts(path: Path | None) -> dict[str, Any]:
         "statement_fcf": None,
         "statement_revenue": None,
         "net_normalized_gaps": (),
+        "income_sign_gaps": (),
     }
     if path is None:
         return facts
@@ -288,6 +291,7 @@ def _statement_facts(path: Path | None) -> dict[str, Any]:
             facts["stockholders_equity"] = equity
             break
     facts["net_normalized_gaps"] = _net_normalized_gaps(income)
+    facts["income_sign_gaps"] = _income_sign_gaps(income)
     return facts
 
 
@@ -317,6 +321,31 @@ def _net_normalized_gaps(income: Any) -> tuple[tuple[str, float, float], ...]:
     return tuple(gaps)
 
 
+def _income_sign_gaps(income: Any) -> tuple[tuple[str, float, float], ...]:
+    """Years where net income and normalized income are both nonzero and have opposite signs.
+
+    The stored numbers are compared as stored. Neither figure is rescaled.
+    """
+
+    if not isinstance(income, dict):
+        return ()
+    gaps: list[tuple[str, float, float]] = []
+    for year in sorted(income):
+        row = income[year]
+        if not isinstance(row, dict):
+            continue
+        if "Net Income" not in row or "Normalized Income" not in row:
+            continue
+        net = _optional_float(row.get("Net Income"))
+        normalized = _optional_float(row.get("Normalized Income"))
+        if net is None or normalized is None or net == 0 or normalized == 0:
+            continue
+        if (net > 0) == (normalized > 0):
+            continue
+        gaps.append((str(year), net, normalized))
+    return tuple(gaps)
+
+
 def _price_quote_currency(root: Path, ticker: str) -> str | None:
     path = resolve_json_path(root / "docs/data/research" / ticker / "sources" / "price_quote.json")
     if path is None:
@@ -326,6 +355,20 @@ def _price_quote_currency(root: Path, ticker: str) -> str | None:
     except (OSError, json.JSONDecodeError):
         return None
     value = payload.get("quote_currency") if isinstance(payload, dict) else None
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    return None
+
+
+def _chart_currency(root: Path, ticker: str) -> str | None:
+    path = resolve_json_path(root / "docs/data/charts" / f"{ticker}.json")
+    if path is None:
+        return None
+    try:
+        payload = _load_json(path)
+    except (OSError, json.JSONDecodeError):
+        return None
+    value = payload.get("currency") if isinstance(payload, dict) else None
     if isinstance(value, str) and value.strip():
         return value.strip()
     return None
@@ -452,6 +495,7 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
                     screen_roe=_screen_roe_fraction(key_metrics.get("ROE")),
                     unusual_items=facts["unusual_items"],
                     price_quote_currency=_price_quote_currency(root, ticker),
+                    chart_currency=_chart_currency(root, ticker),
                     statement_currency=facts["statement_currency"],
                     statement_fcf=facts["statement_fcf"],
                     fcf_divergence_flagged=(
@@ -463,6 +507,7 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
                     discount_display=_metric_text(key_metrics, "Discount"),
                     premium_display=_metric_text(key_metrics, "Premium"),
                     net_normalized_gaps=facts["net_normalized_gaps"],
+                    income_sign_gaps=facts["income_sign_gaps"],
                 )
             )
     return rows
@@ -687,6 +732,40 @@ def check_net_income_ten_times_normalized(row: ScreenRow) -> str | None:
     return "; ".join(parts)
 
 
+def check_chart_gbp_quote_usd(row: ScreenRow) -> str | None:
+    """Chart file labels the price GBP while the quote file says USD."""
+
+    if row.chart_currency != "GBP" or row.price_quote_currency != "USD":
+        return None
+    if row.history_price is None:
+        return "chart currency GBP and quote currency USD"
+    return (
+        f"chart currency GBP and quote currency USD; "
+        f"{SCREEN_PRICE_RUN_PREFIX} price {_num(row.history_price)}"
+    )
+
+
+def check_positive_diluted_eps_without_screen_pe(row: ScreenRow) -> str | None:
+    """Latest diluted EPS is positive and the screen key metrics have no P/E key."""
+
+    eps = row.diluted_eps
+    if eps is None or not eps > 0 or "P/E" in row.key_metric_names:
+        return None
+    return f"diluted EPS {_num(eps)} and the screen key metrics have no P/E key"
+
+
+def check_net_income_normalized_opposite_signs(row: ScreenRow) -> str | None:
+    """A year where net income and normalized income are nonzero and have opposite signs."""
+
+    if not row.income_sign_gaps:
+        return None
+    parts = [
+        f"{year} net income {_num(net)} beside normalized income {_num(normalized)}"
+        for year, net, normalized in row.income_sign_gaps
+    ]
+    return "; ".join(parts)
+
+
 def check_positive_screen_pe_beside_negative_diluted_eps(row: ScreenRow) -> str | None:
     """A positive screen P/E beside a negative diluted EPS. Neither figure is rescaled."""
 
@@ -833,6 +912,21 @@ CHECKS: tuple[Check, ...] = (
         "positive_screen_pe_beside_negative_diluted_eps",
         "a positive screen P/E beside a negative diluted EPS",
         check_positive_screen_pe_beside_negative_diluted_eps,
+    ),
+    Check(
+        "chart_gbp_quote_usd",
+        "a chart that labels the price GBP while the quote currency is USD",
+        check_chart_gbp_quote_usd,
+    ),
+    Check(
+        "positive_diluted_eps_without_screen_pe",
+        "a positive diluted EPS while the screen key metrics have no P/E key",
+        check_positive_diluted_eps_without_screen_pe,
+    ),
+    Check(
+        "net_income_normalized_opposite_signs",
+        "a year where net income and normalized income have opposite signs",
+        check_net_income_normalized_opposite_signs,
     ),
 )
 
