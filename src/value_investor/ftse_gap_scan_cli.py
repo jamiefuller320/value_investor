@@ -127,6 +127,14 @@ def _cmd_stamp(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_fx(args: argparse.Namespace) -> int:
+    from value_investor.ftse_fx_pairs import fetch_sek_hkd
+
+    path, missing = fetch_sek_hkd(Path(args.root))
+    print(f"written={path or ''} missing={','.join(missing)}")
+    return 0 if not missing else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ftse-gap-scan",
@@ -205,6 +213,18 @@ def build_parser() -> argparse.ArgumentParser:
     )
     stamp.add_argument("--root", type=Path, default=repo_root_from_here())
     stamp.set_defaults(func=_cmd_stamp)
+
+    fx = sub.add_parser(
+        "fx-sek-hkd",
+        help="Store SEK and HKD when the existing FX fetch returns a close",
+        description=(
+            "Ask the macro snapshot's Yahoo close fetch for SEKUSD=X and HKDUSD=X. "
+            "A positive close is written beside the pinned snapshot. A missing close "
+            "is not invented."
+        ),
+    )
+    fx.add_argument("--root", type=Path, default=repo_root_from_here())
+    fx.set_defaults(func=_cmd_fx)
     return parser
 
 
