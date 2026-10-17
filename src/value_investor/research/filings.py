@@ -623,6 +623,10 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "DTE.DE": [
         "https://report.telekom.com/annual-report-2025/_assets/downloads/entire-dtag-ar25.pdf",
     ],
+    # dax leftover DHL.DE — eng-20261017-04: parked awaiting_periodic_report; FY2025 annual PDF.
+    "DHL.DE": [
+        "https://reporting-hub.group.dhl.com/ecomaXL/files/DHL-Group-2025-Annual-Report.pdf",
+    ],
     # asx200 buy-tier deepen — unmeasured EBO.AX (Markit latest-five feed is capital-change only).
     "EBO.AX": [
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-02984095-2A1616605",

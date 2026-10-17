@@ -8055,6 +8055,19 @@ def test_fetch_filings_ir_allowlist_euro_depth_dte_de_builtins(tmp_path: Path):
     assert "entire-dtag-ar25.pdf" in rows[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_dax_dhl_de_builtins(tmp_path: Path):
+    """Regression: DHL.DE awaiting_periodic_report — reporting-hub.group.dhl.com FY2025 annual PDF."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("DHL.DE", path=allowlist_path)
+    assert len(rows) == 1
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert rows[0]["period"] == "annual"
+    assert "reporting-hub.group.dhl.com" in rows[0]["url"]
+    assert "DHL-Group-2025-Annual-Report.pdf" in rows[0]["url"]
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_jmt_ls_builtins(tmp_path: Path):
     """Regression: JMT.LS awaiting_periodic_report — reports.jeronimomartins.com FY2025 annual PDF."""
     allowlist_path = tmp_path / "ir.json"
@@ -8185,6 +8198,7 @@ def test_fetch_filings_ir_allowlist_euro_depth_periphery_builtins(tmp_path: Path
         "HNR1.DE": "eqs-news.com",
         "HEN3.DE": "eqs.com",
         "VOW3.DE": "volkswagen-group.com",
+        "DHL.DE": "reporting-hub.group.dhl.com",
     }
     for ticker, host_fragment in cases.items():
         rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
@@ -11749,6 +11763,20 @@ def test_parked_source_hunter_dte_de_euro_depth_has_fetchable_ir():
     assert rows[0]["period"] == "annual"
     assert "report.telekom.com" in rows[0]["url"]
     assert "entire-dtag-ar25.pdf" in rows[0]["url"]
+
+
+def test_parked_source_hunter_dhl_de_dax_has_fetchable_ir():
+    """eng-20261017-04: DHL.DE reporting-hub FY2025 annual report PDF fetches and validates."""
+    assert "DHL.DE" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("DHL.DE")
+    annual = [row for row in rows if row["period"] == "annual"]
+    assert len(annual) == 1
+    assert "DHL-Group-2025-Annual-Report.pdf" in annual[0]["url"]
+    body = fetch_filing_body(annual[0]["url"])
+    assert body
+    assert len(body) >= 50000
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], body, ticker="DHL.DE")
+    assert valid, reason
 
 
 def test_parked_source_hunter_jmt_ls_euro_depth_has_fetchable_ir():
