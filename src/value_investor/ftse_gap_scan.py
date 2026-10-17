@@ -83,6 +83,7 @@ class ScreenRow:
     statement_revenue: float | None = None
     discount_display: str | None = None
     premium_display: str | None = None
+    net_normalized_gaps: tuple[tuple[str, float, float], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -210,6 +211,7 @@ def _statement_facts(path: Path | None) -> dict[str, Any]:
         "statement_currency": None,
         "statement_fcf": None,
         "statement_revenue": None,
+        "net_normalized_gaps": (),
     }
     if path is None:
         return facts
@@ -285,7 +287,34 @@ def _statement_facts(path: Path | None) -> dict[str, Any]:
             facts["net_income"] = net_income
             facts["stockholders_equity"] = equity
             break
+    facts["net_normalized_gaps"] = _net_normalized_gaps(income)
     return facts
+
+
+def _net_normalized_gaps(income: Any) -> tuple[tuple[str, float, float], ...]:
+    """Years where both income figures are nonzero and one is more than ten times the other.
+
+    The stored numbers are compared as stored. Neither figure is rescaled.
+    """
+
+    if not isinstance(income, dict):
+        return ()
+    gaps: list[tuple[str, float, float]] = []
+    for year in sorted(income):
+        row = income[year]
+        if not isinstance(row, dict):
+            continue
+        if "Net Income" not in row or "Normalized Income" not in row:
+            continue
+        net = _optional_float(row.get("Net Income"))
+        normalized = _optional_float(row.get("Normalized Income"))
+        if net is None or normalized is None or net == 0 or normalized == 0:
+            continue
+        larger = max(abs(net), abs(normalized))
+        smaller = min(abs(net), abs(normalized))
+        if larger > 10 * smaller:
+            gaps.append((str(year), net, normalized))
+    return tuple(gaps)
 
 
 def _price_quote_currency(root: Path, ticker: str) -> str | None:
@@ -433,6 +462,7 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
                     statement_revenue=facts["statement_revenue"],
                     discount_display=_metric_text(key_metrics, "Discount"),
                     premium_display=_metric_text(key_metrics, "Premium"),
+                    net_normalized_gaps=facts["net_normalized_gaps"],
                 )
             )
     return rows
@@ -645,6 +675,28 @@ def check_unusual_items_disagree(row: ScreenRow) -> str | None:
     return "; ".join(f"{name} {_num(value)}" for name, value in row.unusual_items)
 
 
+def check_net_income_ten_times_normalized(row: ScreenRow) -> str | None:
+    """A year where both income figures are nonzero and one is more than ten times the other."""
+
+    if not row.net_normalized_gaps:
+        return None
+    parts = [
+        f"{year} net income {_num(net)} beside normalized income {_num(normalized)}"
+        for year, net, normalized in row.net_normalized_gaps
+    ]
+    return "; ".join(parts)
+
+
+def check_positive_screen_pe_beside_negative_diluted_eps(row: ScreenRow) -> str | None:
+    """A positive screen P/E beside a negative diluted EPS. Neither figure is rescaled."""
+
+    pe = _optional_float(row.pe_display)
+    eps = row.diluted_eps
+    if pe is None or eps is None or not pe > 0 or not eps < 0:
+        return None
+    return f"screen P/E {row.pe_display} beside diluted EPS {_num(eps)}"
+
+
 def check_screen_pe_against_price_over_diluted_eps(row: ScreenRow) -> str | None:
     pe = _optional_float(row.pe_display)
     if pe is None or row.history_price is None or row.diluted_eps is None:
@@ -771,6 +823,16 @@ CHECKS: tuple[Check, ...] = (
         "screen_pe_against_price_over_diluted_eps",
         "screen P/E against price over diluted earnings when the currency is known",
         check_screen_pe_against_price_over_diluted_eps,
+    ),
+    Check(
+        "net_income_ten_times_normalized",
+        "a year where net income and normalized income are both nonzero and one is more than ten times the other",
+        check_net_income_ten_times_normalized,
+    ),
+    Check(
+        "positive_screen_pe_beside_negative_diluted_eps",
+        "a positive screen P/E beside a negative diluted EPS",
+        check_positive_screen_pe_beside_negative_diluted_eps,
     ),
 )
 

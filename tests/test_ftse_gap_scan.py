@@ -11,6 +11,7 @@ from value_investor.ftse_gap_scan import (
     HOW_TO_ADD_A_CHECK,
     RosterName,
     ScreenRow,
+    _net_normalized_gaps,
     _statement_shares,
     hits_for,
     load_screen_rows,
@@ -401,6 +402,78 @@ def test_emg_premium_counts_on_the_trust_revenue_check():
         if hit.rule_id == "trust_revenue_discount_without_fcf_or_price"
     )
     assert "premium 213.7%" in detail
+
+
+def _income_pair(ticker: str, year: str) -> tuple[float, float]:
+    path = ROOT / "docs/data/research" / ticker / "sources" / "financials_annual.json"
+    row = json.loads(path.read_text())["income_statement"][year]
+    return float(row["Net Income"]), float(row["Normalized Income"])
+
+
+def test_ten_times_compares_stored_income_without_rescaling():
+    assert _net_normalized_gaps({"2026": {"Net Income": 110, "Normalized Income": 10}}) == (
+        ("2026", 110.0, 10.0),
+    )
+    assert _net_normalized_gaps({"2026": {"Net Income": 100, "Normalized Income": 10}}) == ()
+    assert _net_normalized_gaps({"2026": {"Net Income": 0, "Normalized Income": 10}}) == ()
+    assert _net_normalized_gaps({"2026": {"Net Income": -110, "Normalized Income": 10}}) == (
+        ("2026", -110.0, 10.0),
+    )
+    assert _net_normalized_gaps({"2026": {"Normalized Income": 10}}) == ()
+    assert "net_income_ten_times_normalized" in _ids(
+        _row(net_normalized_gaps=(("2026", 55_454_000.0, 4_768_754.870575),))
+    )
+    assert "net_income_ten_times_normalized" not in _ids(_row())
+
+
+def test_fras_gdwn_and_has_2026_income_pairs():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    fras_net, fras_norm = _income_pair("FRAS.L", "2026")
+    assert fras_net == pytest.approx(375_000_000)
+    assert fras_norm == pytest.approx(192_273_600)
+    assert "net_income_ten_times_normalized" not in _ids(rows["FRAS.L"])
+
+    gdwn_net, gdwn_norm = _income_pair("GDWN.L", "2026")
+    assert gdwn_net == pytest.approx(55_454_000)
+    assert gdwn_norm == pytest.approx(4_768_754.87)
+    gdwn_gaps = rows["GDWN.L"].net_normalized_gaps
+    assert len(gdwn_gaps) == 1
+    assert gdwn_gaps[0][0] == "2026"
+    assert gdwn_gaps[0][1] == pytest.approx(gdwn_net)
+    assert gdwn_gaps[0][2] == pytest.approx(gdwn_norm)
+    detail = next(
+        hit.detail
+        for hit in hits_for(rows["GDWN.L"])
+        if hit.rule_id == "net_income_ten_times_normalized"
+    )
+    assert "2026 net income 55454000 beside normalized income 4768754.870575" in detail
+
+    has_net, has_norm = _income_pair("HAS.L", "2026")
+    assert has_net == pytest.approx(-58_200_000)
+    assert has_norm == pytest.approx(-21_150_000)
+    assert "net_income_ten_times_normalized" not in _ids(rows["HAS.L"])
+
+
+def test_hbr_and_elm_positive_pe_beside_negative_diluted_eps():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    hbr = rows["HBR.L"]
+    assert hbr.pe_display == "23.4"
+    assert hbr.diluted_eps == pytest.approx(-0.16)
+    assert "positive_screen_pe_beside_negative_diluted_eps" in _ids(hbr)
+    elm = rows["ELM.L"]
+    assert elm.pe_display == "20.2"
+    assert elm.diluted_eps == pytest.approx(-0.078)
+    assert "positive_screen_pe_beside_negative_diluted_eps" in _ids(elm)
+    assert "positive_screen_pe_beside_negative_diluted_eps" not in _ids(
+        _row(pe_display="23.4", diluted_eps=0.16)
+    )
+    assert "positive_screen_pe_beside_negative_diluted_eps" not in _ids(
+        _row(pe_display="-23.4", diluted_eps=-0.16)
+    )
+    assert "positive_screen_pe_beside_negative_diluted_eps" not in _ids(
+        _row(pe_display="0", diluted_eps=-0.16)
+    )
+    assert "positive_screen_pe_beside_negative_diluted_eps" not in _ids(_row(pe_display="23.4"))
 
 
 def test_stored_fcf_figures_stay_distinct():
