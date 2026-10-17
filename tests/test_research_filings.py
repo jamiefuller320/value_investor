@@ -7254,6 +7254,26 @@ def test_fetch_filings_ir_allowlist_ftse_mib_uni_mi_builtins_eng_20261017_08(
     assert "semestrale-consolidata-al-30-6-2025_en.pdf" in interim[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_ftse_mib_ltmc_mi_builtins_eng_20261017_09(
+    tmp_path: Path,
+):
+    """eng-20261017-09: LTMC.MI awaiting_periodic_report — lottomaticagroup.com FY2025 + H1 PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("LTMC.MI", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert {row["period"] for row in rows} == {"annual", "interim"}
+    annual = [row for row in rows if row["period"] == "annual"]
+    assert len(annual) == 1
+    assert "lottomaticagroup.com" in annual[0]["url"]
+    assert "Lottomatica-Annual-Report-2025-ENG.pdf" in annual[0]["url"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(interim) == 1
+    assert "Q2-2025-Results-presentation" in interim[0]["url"]
+
+
 def test_fetch_filings_ir_allowlist_ftse_mib_fct_mi_builtins_eng_20261017_05(
     tmp_path: Path,
 ):
@@ -11918,6 +11938,29 @@ def test_parked_source_hunter_uni_mi_ftse_mib_has_fetchable_ir():
     assert body_i
     assert len(body_i) >= 40000
     valid_i, reason_i = _validate_ir_allowlist_body_content(interim[0], body_i, ticker="UNI.MI")
+    assert valid_i, reason_i
+
+
+def test_parked_source_hunter_ltmc_mi_ftse_mib_has_fetchable_ir():
+    """eng-20261017-09: LTMC.MI lottomaticagroup.com FY2025 annual + H1 results PDFs fetch and validate."""
+    assert "LTMC.MI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("LTMC.MI")
+    assert len(rows) == 2
+    annual = [row for row in rows if row["period"] == "annual"]
+    assert len(annual) == 1
+    assert "lottomaticagroup.com" in annual[0]["url"]
+    assert "Lottomatica-Annual-Report-2025-ENG.pdf" in annual[0]["url"]
+    body = fetch_filing_body(annual[0]["url"])
+    assert body
+    assert len(body) >= 50000
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], body, ticker="LTMC.MI")
+    assert valid, reason
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(interim) == 1
+    body_i = fetch_filing_body(interim[0]["url"])
+    assert body_i
+    assert len(body_i) >= 25000
+    valid_i, reason_i = _validate_ir_allowlist_body_content(interim[0], body_i, ticker="LTMC.MI")
     assert valid_i, reason_i
 
 
