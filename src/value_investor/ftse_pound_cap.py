@@ -343,16 +343,27 @@ def _cap_for_ticker(
 ) -> tuple[float | None, str, str]:
     price = prices.get(ticker)
     own = financials.get(ticker)
-    if price is not None and own is not None:
-        cap = _gbp_from_price(price, own.shares, "GBp", usd_per_unit)
-        if cap is not None:
-            return (
-                cap,
-                "price_x_financials_shares",
-                f"pence {SCREEN_PRICE_RUN_PREFIX} × {own.field} {own.year} from {own.path} / 100",
-            )
-
     extra = sourced.get(ticker)
+    if price is not None and own is not None:
+        # Statement files do not carry the screen quote currency. A sourced
+        # label (USD or EUR for Compass, IHG, Baltic, Metlen) keeps the price
+        # unit. Names with no label stay pence.
+        currency = "GBp"
+        if extra is not None and extra.get("quote_currency"):
+            currency = str(extra["quote_currency"])
+        cap = _gbp_from_price(price, own.shares, currency, usd_per_unit)
+        if cap is not None:
+            if currency == "GBp":
+                detail = (
+                    f"pence {SCREEN_PRICE_RUN_PREFIX} × {own.field} {own.year} "
+                    f"from {own.path} / 100"
+                )
+            else:
+                detail = (
+                    f"{currency} {SCREEN_PRICE_RUN_PREFIX} × {own.field} {own.year} "
+                    f"from {own.path}"
+                )
+            return cap, "price_x_financials_shares", detail
     if price is not None and extra is not None:
         currency = str(extra.get("quote_currency") or "")
         cap = _gbp_from_price(price, float(extra["ordinary_shares"]), currency, usd_per_unit)
