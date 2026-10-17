@@ -1,9 +1,9 @@
 """Scan stored FTSE 350 files for handover gaps that already have a rule.
 
-The scanner reads ``docs/data/latest.json``, the 11 Oct 2026 history run,
-``docs/data/research/*/sources/financials_annual.json``, and
-``docs/data/ftse350_ordinary_shares.json``. It does not fetch, and it does not
-invent a figure the file does not contain.
+The scanner reads ``docs/data/latest.json``, the 11 Oct 2026 history run, and
+``docs/data/research/*/sources/financials_annual.json``. An ordinary share
+count is a positive number on that statement. A blank or null share field is
+not a count. It does not fetch, and it does not invent a figure.
 
 A new handover question becomes one check. Add a function that takes a
 ``ScreenRow`` and returns a detail string, or None. Register it in ``CHECKS``
@@ -22,7 +22,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from value_investor.ftse_pound_cap import SCREEN_PRICE_RUN_PREFIX, SOURCED_SHARES
+from value_investor.ftse_pound_cap import SCREEN_PRICE_RUN_PREFIX
 from value_investor.storage import resolve_json_path
 
 # Same ordinary-share fields the pound-cap reader uses.
@@ -135,6 +135,21 @@ def _statement_path(root: Path, ticker: str) -> Path | None:
     )
 
 
+def _positive_share(value: Any) -> float | None:
+    """A stored ordinary-share count. Blank, null, and zero are not a count."""
+
+    if value is None or isinstance(value, bool):
+        return None
+    if isinstance(value, str) and not value.strip():
+        return None
+    if isinstance(value, str) and value.strip().lower() in {"null", "none", "nan"}:
+        return None
+    number = _optional_float(value)
+    if number is None or number <= 0:
+        return None
+    return number
+
+
 def _statement_shares(path: Path) -> float | None:
     try:
         payload = _load_json(path)
@@ -148,8 +163,8 @@ def _statement_shares(path: Path) -> float | None:
         if not isinstance(row, dict):
             continue
         for field in _SHARE_FIELDS:
-            number = _optional_float(row.get(field))
-            if number is not None and number > 0:
+            number = _positive_share(row.get(field))
+            if number is not None:
                 return number
     return None
 
@@ -176,22 +191,6 @@ def _history_prices(root: Path) -> dict[str, float]:
     return out
 
 
-def _sourced_shares(root: Path) -> dict[str, float]:
-    path = root / SOURCED_SHARES
-    if not path.exists():
-        return {}
-    payload = _load_json(path)
-    tickers = payload.get("tickers") or {}
-    out: dict[str, float] = {}
-    for ticker, row in tickers.items():
-        if not isinstance(row, dict):
-            continue
-        number = _optional_float(row.get("ordinary_shares"))
-        if number is not None and number > 0:
-            out[str(ticker)] = number
-    return out
-
-
 def _fcf_figure(fcf: dict[str, Any], key_metrics: dict[str, Any]) -> tuple[float | None, bool]:
     """Return the displayed free-cash-flow figure and whether any figure is stored."""
 
@@ -213,7 +212,6 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
     root = Path(root or repo_root_from_here())
     latest = _load_json(root / "docs/data/latest.json")
     prices = _history_prices(root)
-    sourced = _sourced_shares(root)
     rows: list[ScreenRow] = []
     for bucket, is_trust in (("reports", False), ("trust_reports", True)):
         for raw in latest.get(bucket) or []:
@@ -232,8 +230,8 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
             fcf_obj = fcf if isinstance(fcf, dict) else {}
             displayed, has_figure = _fcf_figure(fcf_obj, key_metrics)
             statement = _statement_path(root, ticker)
-            own_shares = _statement_shares(statement) if statement is not None else None
-            shares = own_shares if own_shares is not None else sourced.get(ticker)
+            # Quote-summary share files are not the statement's ordinary share count.
+            shares = _statement_shares(statement) if statement is not None else None
             rows.append(
                 ScreenRow(
                     ticker=ticker,

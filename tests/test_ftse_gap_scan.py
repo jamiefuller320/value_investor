@@ -11,6 +11,7 @@ from value_investor.ftse_gap_scan import (
     HOW_TO_ADD_A_CHECK,
     RosterName,
     ScreenRow,
+    _statement_shares,
     hits_for,
     load_screen_rows,
     render_roster_split,
@@ -85,6 +86,38 @@ def test_known_examples_when_files_contain_them():
     assert bhmg.pe_display == "419.0"
     assert bhmg.history_price == pytest.approx(419.0)
     assert "screen_pe_equals_pence_price" in _ids(bhmg)
+
+
+def test_ba_and_zig_have_a_price_and_no_ordinary_share_count():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    ba = rows["BA.L"]
+    assert ba.history_price == pytest.approx(1860.0)
+    assert ba.ordinary_shares is None
+    assert "price_without_ordinary_share_count" in _ids(ba)
+    zig = rows["ZIG.L"]
+    assert zig.history_price == pytest.approx(439.5)
+    assert zig.ordinary_shares is None
+    assert "price_without_ordinary_share_count" in _ids(zig)
+
+
+def test_blank_or_null_share_field_is_not_a_count(tmp_path):
+    path = tmp_path / "financials_annual.json"
+    path.write_text(
+        json.dumps(
+            {
+                "balance_sheet": {
+                    "2025": {
+                        "Ordinary Shares Number": None,
+                        "Share Issued": "",
+                        "Basic Average Shares": "  ",
+                    },
+                    "2024": {"Ordinary Shares Number": "null"},
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert _statement_shares(path) is None
 
 
 def test_rules_do_not_flag_a_clean_row():
