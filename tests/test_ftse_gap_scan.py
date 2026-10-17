@@ -94,16 +94,20 @@ def test_known_examples_when_files_contain_them():
     assert "screen_pe_equals_pence_price" in _ids(bhmg)
 
 
-def test_ba_and_zig_have_a_price_and_no_ordinary_share_count():
+def test_ba_and_zig_share_counts_come_from_the_statement():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
     ba = rows["BA.L"]
     assert ba.history_price == pytest.approx(1860.0)
-    assert ba.ordinary_shares is None
-    assert "price_without_ordinary_share_count" in _ids(ba)
+    assert ba.has_annual_statement
+    assert ba.ordinary_shares == pytest.approx(2927288632.0)
+    assert "price_without_ordinary_share_count" not in _ids(ba)
     zig = rows["ZIG.L"]
     assert zig.history_price == pytest.approx(439.5)
-    assert zig.ordinary_shares is None
-    assert "price_without_ordinary_share_count" in _ids(zig)
+    assert zig.has_annual_statement
+    assert zig.ordinary_shares == pytest.approx(224362270.0)
+    assert "price_without_ordinary_share_count" not in _ids(zig)
+    missing = _row(history_price=1860.0, ordinary_shares=None, has_annual_statement=False)
+    assert "price_without_ordinary_share_count" in _ids(missing)
 
 
 def test_blank_or_null_share_field_is_not_a_count(tmp_path):
