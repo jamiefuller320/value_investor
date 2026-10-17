@@ -53,6 +53,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-growth-batch-14.md` (second pass from pound-cap rank 131 through rank 148)
 - `docs/ftse350-growth-batch-15.md` (second pass from pound-cap rank 149 through rank 160)
 - `docs/ftse350-growth-batch-16.md` (second pass from pound-cap rank 161 through rank 173)
+- `docs/ftse350-growth-batch-17.md` (second pass from pound-cap rank 174 through rank 190)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -96,7 +97,7 @@ Those notes are the source. Do not treat this handover as a new pass over the fi
 - Close but not the filing ratio: `HLN.L` cash dividends 612 million are 1.97% of the cap, screen yield 2.1%, and `Common Stock Dividend Paid` is missing. `GSK.L` pound dividend/cap 3.65% vs screen 3.9%. `BT-A.L` 4.25% vs raw 4.32, displayed 4.3%. `CNA.L` 3.56% if pounds vs raw 3.85, displayed 3.9%. `SGE.L` 2.02% vs raw 2.1.
 - `Common Stock Dividend Paid` is missing, and only `Cash Dividends Paid` is present, for `FRES.L`, `HLN.L`, and `EDV.L`.
 - `IAG.L` has no filing dividend. Screen raw 2.05 displays as 2.0%, and the Madrid metrics yield is the fraction 0.02.
-- `HAS.L` stores `dividend_yield_raw` 0.68 and displays 68.0%. There is no statement.
+- `HAS.L` stores `dividend_yield_raw` 0.68 and displays 68.0%. The statement dividend is 7.0 million.
 - `HLMA.L` stores `dividend_yield_raw` 0.7 and displays 70.0%. There is no statement.
 - `HTWS.L` stores `dividend_yield_raw` 0.56 and displays 56.0%. There is no statement.
 - `HWG.L` stores `dividend_yield_raw` 0.98 and displays 98.0%. There is no statement.
@@ -114,7 +115,7 @@ Those notes are the source. Do not treat this handover as a new pass over the fi
 - `BAB.L` stores `dividend_yield_raw` 0.82 and displays 82.0%. There is no statement, so there is no cash-dividend figure.
 - `DPLM.L` stores `dividend_yield_raw` 0.81 and displays 81.0%. The statement dividend is 80.7 million.
 
-**What to change.** Store yield as a decimal fraction, and format percent only at display. Do not treat “raw > 1” as the only rescale. Recompute the screen yield from the dividend line actually present (`Common Stock Dividend Paid`, else `Cash Dividends Paid`) and a market cap in the same currency. If the currency is missing, leave the yield unchecked instead of printing a percent. For `ATYM.L`, `CVSG.L`, `ALFA.L`, `AAL.L`, `AVON.L`, `BAB.L`, and `DPLM.L`, do not invent a corrected screen yield. For `AAL.L`, `AVON.L`, and `BAB.L`, do not invent a cash-dividend figure.
+**What to change.** Store yield as a decimal fraction, and format percent only at display. Do not treat “raw > 1” as the only rescale. Recompute the screen yield from the dividend line actually present (`Common Stock Dividend Paid`, else `Cash Dividends Paid`) and a market cap in the same currency. If the currency is missing, leave the yield unchecked instead of printing a percent. For `ATYM.L`, `CVSG.L`, `ALFA.L`, `AAL.L`, `AVON.L`, `BAB.L`, `DPLM.L`, and `HAS.L`, do not invent a corrected screen yield. For `AAL.L`, `AVON.L`, and `BAB.L`, do not invent a cash-dividend figure.
 
 ## 4. Screen free cash flow is not the filing line
 
@@ -587,3 +588,19 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** `BYG.L`. Discount is 39.7%, P/B is 0.60, yield is 5.8%, and P/E is 12.7. Metrics present are 11 of 11. There is no ROE key and no free-cash-flow figure. There is no quote file and no 11 Oct price. Revenue is stored, from 188.8 million to 209.1 million. `DLN.L`. Discount is 43.8%, P/B is 0.56, yield is 4.7%, and P/E is 41.0. Metrics present are 11 of 11. There is no ROE key and no free-cash-flow figure. There is no quote file and no 11 Oct price. Revenue is stored, from 249.3 million to 388.7 million. `EMG.L`. Premium is 213.7%, P/B is 3.14, yield is 3.7%, and P/E is 16.2. Metrics present are 11 of 11. There is no free-cash-flow figure, no quote file, and no 11 Oct price. Revenue is stored: 1,732.0 million, 1,168.0 million, 1,434.0 million, and 1,405.0 million.
 
 **What to change.** Do not treat these rows as a trust screen with no statement. Do not invent a free-cash-flow figure or an 11 Oct price. Do not fold `BYG.L`, `DLN.L`, or `EMG.L` into section 35, section 41, or section 49. Do not invent a cause.
+
+## 51. Net income and normalized income in the same year can be stored at different magnitudes
+
+**What is wrong.** `FRAS.L`, `GDWN.L`, and `HAS.L` store net income and normalized income for the same year at different magnitudes. Section 45 records unusual-item fields that disagree with each other. It does not cover these pairs.
+
+**Where.** On `FRAS.L` in 2026, net income is 375.0 million and normalized income is 192,273,600. Total Unusual Items and Total Unusual Items Excluding Goodwill are 223.7 million, and Special Income Charges is −51.0 million. On `GDWN.L` in 2026, net income is 55,454,000 and normalized income is 4,768,754.87. Total Unusual Items and Total Unusual Items Excluding Goodwill are 993,000. Special income charges are missing. On `HAS.L` in 2026, net income is −58.2 million and normalized income is −21,150,000.
+
+**What to change.** Do not convert either number. Do not fold `FRAS.L`, `GDWN.L`, or `HAS.L` into section 45. Do not invent a cause.
+
+## 52. A positive screen P/E can sit beside a negative diluted EPS
+
+**What is wrong.** Section 47 is a positive diluted EPS while the screen has no P/E key. `HBR.L` and `ELM.L` store a positive screen P/E beside a negative diluted EPS.
+
+**Where.** `HBR.L` screen P/E is 23.4 beside diluted EPS of −0.16. `ELM.L` screen P/E is 20.2 beside diluted EPS of −0.078.
+
+**What to change.** Do not fold `HBR.L` or `ELM.L` into section 47. Do not invent a corrected multiple.
