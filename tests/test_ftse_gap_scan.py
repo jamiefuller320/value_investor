@@ -246,6 +246,73 @@ def test_default_fetcher_is_fetch_annual_financials(monkeypatch):
     assert result.written is None
 
 
+def test_unflagged_filing_aligned_can_match_the_other_screen_figures():
+    quiet = _row(
+        displayed_fcf=27_800_000.0,
+        filing_aligned=27_800_000.0,
+        company_adjusted=27_800_000.0,
+        screen_ttm=27_800_000.0,
+        statement_fcf=31_900_000.0,
+        fcf_divergence_flagged=True,
+    )
+    assert "filing_aligned_differs_from_statement_fcf" not in _ids(quiet)
+    assert "fcf_figures_disagree" not in _ids(quiet)
+    same_line = _row(
+        displayed_fcf=31_900_000.0,
+        filing_aligned=31_900_000.0,
+        screen_ttm=31_900_000.0,
+        statement_fcf=31_900_000.0,
+        fcf_divergence_flagged=False,
+    )
+    assert "filing_aligned_differs_from_statement_fcf" not in _ids(same_line)
+    untagged = _row(
+        displayed_fcf=10.0,
+        filing_aligned=12.0,
+        statement_fcf=31.0,
+        fcf_divergence_flagged=False,
+    )
+    assert "filing_aligned_differs_from_statement_fcf" not in _ids(untagged)
+    missing_flag = _row(
+        displayed_fcf=27_800_000.0,
+        filing_aligned=27_800_000.0,
+        screen_ttm=27_800_000.0,
+        statement_fcf=31_900_000.0,
+    )
+    assert "filing_aligned_differs_from_statement_fcf" not in _ids(missing_flag)
+    hit = _row(
+        displayed_fcf=27_800_000.0,
+        filing_aligned=27_800_000.0,
+        company_adjusted=27_800_000.0,
+        screen_ttm=27_800_000.0,
+        statement_fcf=31_900_000.0,
+        fcf_divergence_flagged=False,
+    )
+    detail = next(
+        item.detail
+        for item in hits_for(hit)
+        if item.rule_id == "filing_aligned_differs_from_statement_fcf"
+    )
+    assert "filing_aligned 27800000" in detail
+    assert "statement free cash flow 31900000" in detail
+    assert "fcf_figures_disagree" not in _ids(hit)
+
+
+def test_bmy_and_cch_filing_aligned_differ_from_the_statement_line():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    bmy = rows["BMY.L"]
+    assert bmy.displayed_fcf == pytest.approx(27_800_000.0)
+    assert bmy.filing_aligned == pytest.approx(27_800_000.0)
+    assert bmy.statement_fcf == pytest.approx(31_900_000.0)
+    assert bmy.fcf_divergence_flagged is False
+    assert "filing_aligned_differs_from_statement_fcf" in _ids(bmy)
+    cch = rows["CCH.L"]
+    assert cch.displayed_fcf == pytest.approx(1_593_175_040.0)
+    assert cch.filing_aligned == pytest.approx(1_593_175_040.0)
+    assert cch.statement_fcf == pytest.approx(760_900_000.0)
+    assert cch.fcf_divergence_flagged is False
+    assert "filing_aligned_differs_from_statement_fcf" in _ids(cch)
+
+
 def test_stored_fcf_figures_stay_distinct():
     same = _row(filing_aligned=10.0, company_adjusted=10.0, screen_ttm=10.0)
     assert "fcf_figures_disagree" not in _ids(same)

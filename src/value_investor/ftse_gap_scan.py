@@ -78,6 +78,8 @@ class ScreenRow:
     unusual_items: tuple[tuple[str, float], ...] = ()
     price_quote_currency: str | None = None
     statement_currency: str | None = None
+    statement_fcf: float | None = None
+    fcf_divergence_flagged: bool | None = None
 
 
 @dataclass(frozen=True)
@@ -203,6 +205,7 @@ def _statement_facts(path: Path | None) -> dict[str, Any]:
         "stockholders_equity": None,
         "unusual_items": (),
         "statement_currency": None,
+        "statement_fcf": None,
     }
     if path is None:
         return facts
@@ -228,6 +231,8 @@ def _statement_facts(path: Path | None) -> dict[str, Any]:
                 break
         if "Repurchase Of Capital Stock" in cash_flow:
             facts["repurchase"] = _optional_float(cash_flow.get("Repurchase Of Capital Stock"))
+        if "Free Cash Flow" in cash_flow:
+            facts["statement_fcf"] = _optional_float(cash_flow.get("Free Cash Flow"))
     income = payload.get("income_statement") or {}
     balance = payload.get("balance_sheet") or {}
     latest_income = _latest_statement_row(income)
@@ -400,6 +405,12 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
                     unusual_items=facts["unusual_items"],
                     price_quote_currency=_price_quote_currency(root, ticker),
                     statement_currency=facts["statement_currency"],
+                    statement_fcf=facts["statement_fcf"],
+                    fcf_divergence_flagged=(
+                        fcf_obj.get("fcf_divergence_flagged")
+                        if isinstance(fcf_obj.get("fcf_divergence_flagged"), bool)
+                        else None
+                    ),
                 )
             )
     return rows
@@ -483,6 +494,26 @@ def check_missing_annual_statement(row: ScreenRow) -> str | None:
     if row.has_annual_statement:
         return None
     return f"no docs/data/research/{row.ticker}/sources/financials_annual.json"
+
+
+def check_filing_aligned_differs_from_statement_fcf(row: ScreenRow) -> str | None:
+    """Displayed filing_aligned figure differs from the statement line, and the flag is false.
+
+    The screen figures may still equal one another. A missing flag is not false.
+    """
+
+    if (
+        row.statement_fcf is None
+        or row.filing_aligned is None
+        or row.displayed_fcf != row.filing_aligned
+        or row.fcf_divergence_flagged is not False
+        or row.filing_aligned == row.statement_fcf
+    ):
+        return None
+    return (
+        f"filing_aligned {_num(row.filing_aligned)} differs from statement free cash flow "
+        f"{_num(row.statement_fcf)} and fcf_divergence_flagged is false"
+    )
 
 
 def check_fcf_figures_disagree(row: ScreenRow) -> str | None:
@@ -649,6 +680,11 @@ CHECKS: tuple[Check, ...] = (
         "price_without_ordinary_share_count",
         "a stored price with no ordinary-share count",
         check_price_without_ordinary_share_count,
+    ),
+    Check(
+        "filing_aligned_differs_from_statement_fcf",
+        "filing_aligned display differs from the statement free-cash-flow line while unflagged",
+        check_filing_aligned_differs_from_statement_fcf,
     ),
     Check(
         "fcf_figures_disagree",
