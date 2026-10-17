@@ -55,6 +55,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-growth-batch-16.md` (second pass from pound-cap rank 161 through rank 173)
 - `docs/ftse350-growth-batch-17.md` (second pass from pound-cap rank 174 through rank 190)
 - `docs/ftse350-growth-batch-19.md` (second pass from pound-cap rank 201 through rank 210)
+- `docs/ftse350-growth-batch-22.md` (second pass from pound-cap rank 231 through rank 240)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -621,3 +622,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** On `HTG.L` in 2024, net income is −28,000,000 beside normalized income of 163,537,313.43. On `IHP.L` in 2025, net income is 51,300,000 beside normalized income of −1,981,350,000.
 
 **What to change.** Do not convert either number. Do not fold `HTG.L` or `IHP.L` into section 51 or section 52. Do not invent a corrected figure.
+
+## 55. A screen P/E can be stored when the latest income year has no diluted EPS line
+
+**What is wrong.** `LRE.L` and `LWDB.L` store a screen P/E when the latest income year has revenue and net income and no diluted EPS line. Section 47 is a positive diluted EPS while the screen has no P/E key. Section 52 is a positive screen P/E beside a negative diluted EPS.
+
+**Where.** On `LRE.L` the 2025 income statement has revenue and net income and no diluted EPS line. The screen P/E is 6.7. On `LWDB.L` the 2025 income statement has revenue and net income and no diluted EPS line. The screen P/E is 5.3.
+
+**What to change.** Do not invent a diluted EPS for that year. Do not invent a corrected P/E. Do not fold `LRE.L` or `LWDB.L` into section 47 or section 52.
