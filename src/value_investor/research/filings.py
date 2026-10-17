@@ -533,6 +533,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.unipol.com/sites/default/files/documents/2026-03/unipol_bilancio-consolidato_2025_en.pdf",
         "https://www.unipol.com/sites/default/files/documents/2025-08/unipol_relazione-finanziaria-semestrale-consolidata-al-30-6-2025_en.pdf",
     ],
+    # ftse_mib parked leftover — eng-20261017-09: LTMC.MI awaiting_periodic_report; ESEF thin;
+    # lottomaticagroup.com FY2025 statutory annual + Jul-2025 H1 results presentation PDFs.
+    "LTMC.MI": [
+        "https://lottomaticagroup.com/Lottomaticagroup.com/media/library1_folder/Lottomatica-Annual-Report-2025-ENG.pdf",
+        "https://lottomaticagroup.com/Lottomaticagroup.com/media/library_documents/Investors/2025-07-31-Lottomatica-Group-Q2-2025-Results-presentation_vF_1.pdf",
+    ],
     # ftse_mib buy-tier deepen — eng-20261005-01 / eng-20261010-02: TEN.MI unmeasured — Yahoo base
     # TEN collides with Tsakos on SEC; pin Tenaris S.A. FY2025 20-F + Q1 2026 FS 6-K (CIK 1190723).
     "TEN.MI": [
