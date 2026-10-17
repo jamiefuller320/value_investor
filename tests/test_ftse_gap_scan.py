@@ -477,6 +477,40 @@ def test_hbr_and_elm_positive_pe_beside_negative_diluted_eps():
     assert "positive_screen_pe_beside_negative_diluted_eps" not in _ids(_row(pe_display="23.4"))
 
 
+def test_jemi_and_fcss_have_a_pe_and_neither_discount_nor_premium():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    for ticker, pe in (("JEMI.L", "5.0"), ("FCSS.L", "8.5")):
+        row = rows[ticker]
+        assert row.trust is True
+        assert row.pe_display == pe
+        assert "P/E" in row.key_metric_names
+        assert "Discount" not in row.key_metric_names
+        assert "Premium" not in row.key_metric_names
+        assert row.discount_display is None
+        assert row.premium_display is None
+        assert "trust_pe_without_discount_or_premium" in _ids(row)
+        assert "trust_revenue_discount_without_fcf_or_price" not in _ids(row)
+    wider = _row(
+        trust=True,
+        pe_display="12.0",
+        key_metric_names=frozenset({"P/E", "Yield"}),
+    )
+    assert "trust_pe_without_discount_or_premium" in _ids(wider)
+    assert "trust_row_pe_only" not in _ids(wider)
+    assert "trust_pe_without_discount_or_premium" not in _ids(
+        _row(trust=True, pe_display="39.7%", key_metric_names=frozenset({"P/E", "Discount"}))
+    )
+    assert "trust_pe_without_discount_or_premium" not in _ids(
+        _row(trust=True, pe_display="16.2", key_metric_names=frozenset({"P/E", "Premium"}))
+    )
+    assert "trust_pe_without_discount_or_premium" not in _ids(
+        _row(trust=True, key_metric_names=frozenset({"Yield"}))
+    )
+    assert "trust_pe_without_discount_or_premium" not in _ids(
+        _row(trust=False, pe_display="5.0", key_metric_names=frozenset({"P/E"}))
+    )
+
+
 def test_ihg_chart_gbp_beside_usd_quote():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
     ihg = rows["IHG.L"]

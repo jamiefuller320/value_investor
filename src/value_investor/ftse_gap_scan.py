@@ -594,6 +594,20 @@ def check_trust_row_pe_only(row: ScreenRow) -> str | None:
     return "trust key metrics are a P/E only"
 
 
+def check_trust_pe_without_discount_or_premium(row: ScreenRow) -> str | None:
+    """Trust row whose key metrics include a P/E and include neither a discount nor a premium."""
+
+    if (
+        not row.trust
+        or "P/E" not in row.key_metric_names
+        or "Discount" in row.key_metric_names
+        or "Premium" in row.key_metric_names
+    ):
+        return None
+    shown = row.pe_display if row.pe_display is not None else "present"
+    return f"trust key metrics include P/E {shown} and include neither a discount nor a premium"
+
+
 def check_trust_revenue_discount_without_fcf_or_price(row: ScreenRow) -> str | None:
     """Trust row with statement revenue, a discount or premium, no free-cash-flow figure, and no 11 Oct price."""
 
@@ -852,6 +866,11 @@ CHECKS: tuple[Check, ...] = (
         "trust_row_pe_only",
         "a trust row that is only a P/E",
         check_trust_row_pe_only,
+    ),
+    Check(
+        "trust_pe_without_discount_or_premium",
+        "a trust row whose key metrics include a P/E and include neither a discount nor a premium",
+        check_trust_pe_without_discount_or_premium,
     ),
     Check(
         "trust_revenue_discount_without_fcf_or_price",
