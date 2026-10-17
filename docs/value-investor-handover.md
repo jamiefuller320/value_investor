@@ -56,6 +56,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-growth-batch-17.md` (second pass from pound-cap rank 174 through rank 190)
 - `docs/ftse350-growth-batch-19.md` (second pass from pound-cap rank 201 through rank 210)
 - `docs/ftse350-growth-batch-22.md` (second pass from pound-cap rank 231 through rank 240)
+- `docs/ftse350-growth-batch-25.md` (second pass from pound-cap rank 261 through rank 270)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -630,3 +631,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** On `LRE.L` the 2025 income statement has revenue and net income and no diluted EPS line. The screen P/E is 6.7. On `LWDB.L` the 2025 income statement has revenue and net income and no diluted EPS line. The screen P/E is 5.3. On `INPP.L` the 2025 income statement has revenue and net income and no diluted EPS line. The screen P/E is 10.4. On `JEDT.L` the 2026 income statement has revenue and net income and no diluted EPS line. The screen P/E is 5.3.
 
 **What to change.** Do not invent a diluted EPS for that year. Do not invent a corrected P/E. Do not invent any other figure. Do not fold `LRE.L`, `LWDB.L`, `INPP.L`, or `JEDT.L` into section 47 or section 52.
+
+## 56. One diluted-EPS year can sit on a different scale from the other stored years
+
+**What is wrong.** On `OCI.L` and `OXB.L` one diluted-EPS year is on a different scale from the other stored years, while net income stays on one scale. Section 51 records net income and normalized income at different magnitudes. It does not cover this EPS scale.
+
+**Where.** On `OCI.L` the 2023 diluted EPS is 0.0027 beside 1.26, 0.15 and 0.34. The 2023 net income is 47,488,000. On `OXB.L` the 2024 diluted EPS is −41.75 beside −0.4129, −1.6311 and −0.2692. The 2024 net income is −43,190,000.
+
+**What to change.** Do not fold `OCI.L` or `OXB.L` into section 51. Do not invent a corrected earnings figure.
