@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-17T04:17:08+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-16T11:07:08+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -371,6 +371,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L557 | **ESAP (EU single access point) adapter for euro regulated filings** | ESMA's European Single Access Point will expose Transparency Directive filings (annual, half-year, inside information) for all EU issuers through one API, replacing per-country OAM adapters for DE/ES/IT/AT/NL. | ESMA announces a public ESAP API covering Transparency Directive filings |
 | L563 | **Investor withholding and wrapper drag in multi-market yield** | A value book's edge is often the dividend. Cross-market rankings use gross yield. Withholding tax, UK dividend tax outside an ISA, and ETF fee drag change which foreign name is cheap to this investor. Net it into expected return before a non-UK book is judged on total return or any live capital is allocated. | A non-UK shard is scored on total return, or stage 6 capital allocation is designed |
 | L594 | **Cold-store option value for multi-strand / per-strand buy tiers** | Under two-pillar + F9, independent Investment strands likely define different buy-now shortlists from a shared named-stock store; quiet universe filing cold store (L499 writers / archive_lane_gate) gains option value as substrate for threshold-eligible bodies beyond the current live FTSE buy-tier. Not a second live crawler or fourth equal sprint; capacity still P1 D1 first. (Side-branch cursor/defer-cold-store-option-caa4 proposed this as L587, but main already allocated L587 to freeze-extras ops note — folded here as L594.) | A second sealed strand needs a shortlist materially outside the live FTSE buy-tier (e.g. N201), OR several quiet L499 apply nights show isolation_ok and F3 repairs request non-buy-tier names |
+| L613 | **Pound caps for FTSE 350 names with no stored London price** | 100 FTSE 350 names, mostly investment trusts and REITs on the trust screen, have no 11 Oct 2026 history price and no GBP, USD, EUR, AUD or CAD library cap. A share count alone cannot produce a pound cap for them. | When docs/data/history stores a London price for these tickers, or the same issuer has a library market cap in GBP, USD, EUR, AUD or CAD. |
 
 ### Research & portfolio product
 
@@ -641,7 +642,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L598 | **N200 per-lever episode drilldown UI** | Dashboard shows cohort entry/exit verdicts; optional episode-level lever win/lose table can wait. | Cohort per-lever strip is in use and humans ask for episode drilldown. |
 | L599 | **Preserve cancelled eng tasks across library-ladder queue rewrites** | eng-20261004-06 was cancelled via #965 then resurrected to parked when chore: run offline library ladder rewrote docs/data/engineering_tasks.json (a9d7a9bf87). Queue writers should not flip cancelled→parked unless explicitly re-opened. | Next eng cancel is overwritten by a non-cancel queue commit, or when hardening engineering_tasks merge/write helpers |
 | L612 | **Refresh cold-store Ops badge from the live fat-slot bit** | The Automation Ops cold-store card copies the last pack_run gate. After head_needs_fat_slot goes false, that card can keep saying suspend until the next 22:00 pack even though archive_lane_gate would allow. Do not treat the card as the live stop, and do not let the archive run while the bit is true. | head_needs_fat_slot is false and the Ops cold-store card still shows gate suspend with focus_fat_slot_sprint_active from an older pack_run |
-| L613 | **Publish FTSE pound caps observe-only after 1104** | PR 1104 adds compute_ftse350_pound_caps and 150 sourced share counts so 250 of 350 caps are computable. The function is not called by the screen, memos, paper fund, or N200–N210. After it is on main, publish the caps as an observe-only ops finding. Leave historical paper NAV and observe episode marks as they were. | When pull request 1104 is merged to main. |
+| L614 | **Publish FTSE pound caps observe-only after 1104** | PR 1104 adds compute_ftse350_pound_caps and 150 sourced share counts so 250 of 350 caps are computable. The function is not called by the screen, memos, paper fund, or N200–N210. After it is on main, publish the caps as an observe-only ops finding. Leave historical paper NAV and observe episode marks as they were. | When pull request 1104 is merged to main. |
 
 ---
 
