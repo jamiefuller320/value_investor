@@ -113,6 +113,20 @@ def _cmd_fetch_missing(args: argparse.Namespace) -> int:
     return 0 if counts["error"] == 0 else 1
 
 
+def _cmd_stamp(args: argparse.Namespace) -> int:
+    from value_investor.ftse_statement_stamps import stamp_stored_statements
+
+    results = stamp_stored_statements(Path(args.root))
+    shares = sum(1 for item in results if item.ordinary_shares is not None)
+    currency = sum(1 for item in results if item.reporting_currency is not None)
+    quote = sum(1 for item in results if item.price_quote is not None)
+    print(
+        f"statements={len(results)} ordinary_shares={shares} "
+        f"reporting_currency={currency} price_quote={quote}"
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ftse-gap-scan",
@@ -179,6 +193,18 @@ def build_parser() -> argparse.ArgumentParser:
     )
     missing.add_argument("--root", type=Path, default=repo_root_from_here())
     missing.set_defaults(func=_cmd_fetch_missing)
+
+    stamp = sub.add_parser(
+        "stamp",
+        help="Stamp share count, reporting currency, and price quote currency",
+        description=(
+            "Copy a reporting currency or a positive ordinary-share count from a "
+            "stored statement. Copy a price quote currency only when the history "
+            "price or ftse350_ordinary_shares.json already names it."
+        ),
+    )
+    stamp.add_argument("--root", type=Path, default=repo_root_from_here())
+    stamp.set_defaults(func=_cmd_stamp)
     return parser
 
 

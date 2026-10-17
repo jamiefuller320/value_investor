@@ -150,11 +150,9 @@ def _positive_share(value: Any) -> float | None:
     return number
 
 
-def _statement_shares(path: Path) -> float | None:
-    try:
-        payload = _load_json(path)
-    except (OSError, json.JSONDecodeError):
-        return None
+def share_count_from_balance(payload: dict[str, Any]) -> dict[str, Any] | None:
+    """Positive ordinary-share count already on a statement. Blank and null are skipped."""
+
     balance = payload.get("balance_sheet") or {}
     if not isinstance(balance, dict):
         return None
@@ -165,8 +163,19 @@ def _statement_shares(path: Path) -> float | None:
         for field in _SHARE_FIELDS:
             number = _positive_share(row.get(field))
             if number is not None:
-                return number
+                return {"field": field, "year": str(year), "ordinary_shares": number}
     return None
+
+
+def _statement_shares(path: Path) -> float | None:
+    try:
+        payload = _load_json(path)
+    except (OSError, json.JSONDecodeError):
+        return None
+    stamp = share_count_from_balance(payload if isinstance(payload, dict) else {})
+    if stamp is None:
+        return None
+    return float(stamp["ordinary_shares"])
 
 
 def _history_prices(root: Path) -> dict[str, float]:
