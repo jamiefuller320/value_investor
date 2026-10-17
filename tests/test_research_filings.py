@@ -7214,6 +7214,26 @@ def test_fetch_filings_ir_allowlist_ftse_mib_inw_mi_builtins_eng_20261017_06(
     assert any("30-settembre-2025" in row["url"] for row in interim)
 
 
+def test_fetch_filings_ir_allowlist_ftse_mib_monc_mi_builtins_eng_20261017_07(
+    tmp_path: Path,
+):
+    """eng-20261017-07: MONC.MI awaiting_periodic_report — Contentstack FY2025 + H1/Q1-2025 PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("MONC.MI", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert {row["period"] for row in rows} == {"annual", "interim"}
+    annual = [row for row in rows if row["period"] == "annual"]
+    assert len(annual) == 1
+    assert "Press-Release-FY-2025" in annual[0]["url"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(interim) == 2
+    assert any("h1-2025" in row["url"] for row in interim)
+    assert any("q1-2025" in row["url"] for row in interim)
+
+
 def test_fetch_filings_ir_allowlist_ftse_mib_fct_mi_builtins_eng_20261017_05(
     tmp_path: Path,
 ):
@@ -11834,6 +11854,29 @@ def test_parked_source_hunter_inw_mi_ftse_mib_has_fetchable_ir():
     assert len(body_i) >= 40000
     valid_i, reason_i = _validate_ir_allowlist_body_content(interim[0], body_i, ticker="INW.MI")
     assert valid_i, reason_i
+
+
+def test_parked_source_hunter_monc_mi_ftse_mib_has_fetchable_ir():
+    """eng-20261017-07: MONC.MI Contentstack FY2025 + H1-2025 press-release PDFs fetch and validate."""
+    assert "MONC.MI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("MONC.MI")
+    assert len(rows) == 3
+    annual = [row for row in rows if row["period"] == "annual"]
+    assert len(annual) == 1
+    assert "contentstack.com" in annual[0]["url"]
+    body = fetch_filing_body(annual[0]["url"])
+    assert body
+    assert len(body) >= 40000
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], body, ticker="MONC.MI")
+    assert valid, reason
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(interim) == 2
+    h1 = next(row for row in interim if "h1-2025" in row["url"])
+    body_h1 = fetch_filing_body(h1["url"])
+    assert body_h1
+    assert len(body_h1) >= 25000
+    valid_h1, reason_h1 = _validate_ir_allowlist_body_content(h1, body_h1, ticker="MONC.MI")
+    assert valid_h1, reason_h1
 
 
 def test_parked_source_hunter_fct_mi_ftse_mib_has_fetchable_ir():
