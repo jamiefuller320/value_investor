@@ -651,8 +651,8 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 58. screen_ttm can differ from filing_aligned while the divergence flag is false
 
-**What is wrong.** On `FRES.L` and `CCC.L`, `screen_ttm` differs from `filing_aligned`, `fcf_divergence_flagged` is false, and `filing_aligned` equals the statement line. Section 12 is the arm where `filing_aligned` equals the screen TTM and differs from the statement. `REL.L` is that arm.
+**What is wrong.** On `FRES.L`, `CCC.L`, `PAF.L`, and `KLR.L`, `screen_ttm` differs from `filing_aligned`, `fcf_divergence_flagged` is false, and `filing_aligned` equals the statement line. Section 12 is the arm where `filing_aligned` equals the screen TTM and differs from the statement. `REL.L` is that arm.
 
-**Where.** On `FRES.L`, `screen_ttm` is 1,999,836,928 beside `filing_aligned` of 1,889,566,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line. On `CCC.L`, `screen_ttm` is 287,937,504 beside `filing_aligned` of 257,600,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line.
+**Where.** On `FRES.L`, `screen_ttm` is 1,999,836,928 beside `filing_aligned` of 1,889,566,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line. On `CCC.L`, `screen_ttm` is 287,937,504 beside `filing_aligned` of 257,600,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line. On `PAF.L`, `screen_ttm` is 327,180,512 beside `filing_aligned` of 340,848,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line. On `KLR.L`, `screen_ttm` is 189,575,008 beside `filing_aligned` of 168,000,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line.
 
-**What to change.** Do not fold `FRES.L` or `CCC.L` into section 12. Leave `REL.L` in that arm. Do not invent a corrected free-cash-flow figure.
+**What to change.** Do not fold `FRES.L`, `CCC.L`, `PAF.L`, or `KLR.L` into section 12. Leave `REL.L` in that arm. Do not invent a corrected free-cash-flow figure.
