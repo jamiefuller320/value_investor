@@ -42,6 +42,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-33.md` (FTSE ranks 321–330)
 - `docs/ftse350-batch-34.md` (FTSE ranks 331–340)
 - `docs/ftse350-batch-35.md` (FTSE ranks 341–350)
+- `docs/ftse350-growth-batch-2.md` (second pass on pound-cap ranks 11–20)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -502,3 +503,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** There is no `docs/data/research/UKW.L` folder. There is no `UKW.L` price in the 25 history runs. Discount is 15.8%, P/B is 0.84, and yield is 9.3%. The screen P/E is the string `inf`. Metrics present are 11 of 11. There is no free-cash-flow object.
 
 **What to change.** Do not treat `inf` as a checked multiple. Do not invent a number for `inf`. Do not fold `UKW.L` into section 40.
+
+## 44. A diluted EPS can be stored as positive in a year when net income is negative
+
+**What is wrong.** `EDV.L` stores a positive diluted EPS in years when net income is negative. Section 9 records total unusual items of −419,400,000 against 2025 net income of 679,200,000. It does not record the EPS sign. It does not cover these years.
+
+**Where.** Diluted EPS is 0.940815 in 2023 beside net income −208,900,000. Diluted EPS is 0.932555 in 2024 beside net income −300,200,000. The 2025 diluted EPS is 2.74 and matches that year’s net income of 679,200,000.
+
+**What to change.** Do not fold these years into section 9. Do not invent a share count. Do not treat the 2023 and 2024 EPS figures as the prior points of an earnings series.
