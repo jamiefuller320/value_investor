@@ -399,7 +399,7 @@ def ops_finding_from_bottleneck_review(
         }
 
     outcome = str(payload.get("outcome") or "")
-    # Suspend / quiet_only while euro fat is expected — no warn spam.
+    # Suspend / quiet_only are expected gate outcomes — no warn spam.
     if outcome in {"suspend", "quiet_only"}:
         return None
 

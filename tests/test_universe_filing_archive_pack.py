@@ -48,7 +48,7 @@ def test_week_first_then_backward_order() -> None:
     assert by_week[0]["market_count"] == 3
 
 
-def test_gated_run_suspends_under_fat_sprint_and_writes_bottleneck(tmp_path: Path) -> None:
+def test_gated_run_suspends_on_body_stall_not_fat_slot(tmp_path: Path) -> None:
     dispatch = tmp_path / "dispatch.json"
     status = tmp_path / "market_status.json"
     policy = tmp_path / "policy.json"
@@ -60,7 +60,8 @@ def test_gated_run_suspends_under_fat_sprint_and_writes_bottleneck(tmp_path: Pat
                 "mode": "sprint",
                 "ingest_sprint_complete": False,
                 "focus_market": "euro_depth",
-                "filing_health": {},
+                "ingest_cascade": {"head_needs_fat_slot": True},
+                "filing_health": {"unmeasured_buy_tier": 1},
             }
         ),
         encoding="utf-8",
@@ -71,7 +72,7 @@ def test_gated_run_suspends_under_fat_sprint_and_writes_bottleneck(tmp_path: Pat
     )
     policy.write_text(json.dumps({"focus_market": "euro_depth"}), encoding="utf-8")
 
-    # Quiet weekday night — still suspends on fat sprint.
+    # Quiet weekday night — body stall still suspends; the fat slot does not.
     result = run_universe_filing_archive_pack(
         now=datetime(2026, 10, 1, 22, 0, tzinfo=UTC),
         dry_run=True,
@@ -86,6 +87,11 @@ def test_gated_run_suspends_under_fat_sprint_and_writes_bottleneck(tmp_path: Pat
     pack_run = result["pack_run"]
     review = result["bottleneck_review"]
     assert pack_run["outcome"] == "suspend"
+    assert "focus_fat_slot_sprint_active" not in pack_run["gate"]["focus_pressure_reasons"]
+    assert any(
+        str(reason).startswith("focus_unmeasured")
+        for reason in pack_run["gate"]["focus_pressure_reasons"]
+    )
     assert pack_run["pack_order"] == PACK_ORDER_ID
     assert pack_run["fourth_equal_sprint_stream"] is False
     assert review["outcome"] == "suspend"
@@ -102,7 +108,7 @@ def test_gated_run_suspends_under_fat_sprint_and_writes_bottleneck(tmp_path: Pat
     ]
     assert pack_run_path.exists()
     assert bottleneck_path.exists()
-    # Suspend must not raise ops finding (expected under euro fat).
+    # A real focus-pressure suspend must not raise an ops finding.
     # Pin now to the run clock so the 36h stale threshold is not a calendar flake.
     assert (
         ops_finding_from_bottleneck_review(
@@ -111,6 +117,44 @@ def test_gated_run_suspends_under_fat_sprint_and_writes_bottleneck(tmp_path: Pat
         )
         is None
     )
+
+
+def test_gated_run_allows_while_fat_slot_occupied(tmp_path: Path) -> None:
+    dispatch = tmp_path / "dispatch.json"
+    status = tmp_path / "market_status.json"
+    policy = tmp_path / "policy.json"
+    dispatch.write_text(
+        json.dumps(
+            {
+                "mode": "sprint",
+                "ingest_sprint_complete": False,
+                "focus_market": "euro_depth",
+                "ingest_cascade": {"head_needs_fat_slot": True},
+                "filing_health": {"unmeasured_buy_tier": 0, "zero_body_buy_tier": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+    status.write_text(json.dumps({"admitted_markets": ["euro_depth"]}), encoding="utf-8")
+    policy.write_text(json.dumps({"focus_market": "euro_depth"}), encoding="utf-8")
+
+    result = run_universe_filing_archive_pack(
+        now=datetime(2026, 10, 1, 22, 0, tzinfo=UTC),
+        dry_run=True,
+        lookback_weeks=1,
+        dispatch_path=dispatch,
+        market_status_path=status,
+        policy_path=policy,
+        pack_run_path=tmp_path / "pack_run.json",
+        bottleneck_path=tmp_path / "bottleneck.json",
+        persist=False,
+    )
+    pack_run = result["pack_run"]
+    assert pack_run["outcome"] == "dry_complete"
+    assert pack_run["gate"]["allowed"] is True
+    assert pack_run["gate"]["focus_pressure_reasons"] == []
+    assert pack_run["fourth_equal_sprint_stream"] is False
+    assert pack_run["plan_unit_count"] > 0
 
 
 def test_gated_dry_complete_when_allowed(tmp_path: Path) -> None:
@@ -169,7 +213,7 @@ def test_ops_finding_stale_and_bottleneck_check(tmp_path: Path) -> None:
         gate={
             "decision": "suspend",
             "allowed": False,
-            "focus_pressure_reasons": ["focus_fat_slot_sprint_active"],
+            "focus_pressure_reasons": ["focus_unmeasured_buy_tier=1"],
         },
         plan={},
         stages=[{"id": "gate", "elapsed_ms": 1, "status": "ok", "detail": {}}],

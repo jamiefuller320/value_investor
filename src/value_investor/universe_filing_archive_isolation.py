@@ -109,7 +109,11 @@ def focus_pressure_reasons(
     dispatch: dict[str, Any] | None = None,
     market_status: dict[str, Any] | None = None,
 ) -> list[str]:
-    """Reasons the archive lane must auto-suspend (focus head under pressure)."""
+    """Reasons the archive lane must auto-suspend (focus head under pressure).
+
+    ``head_needs_fat_slot`` sizes the ingest head. It is not a suspend reason,
+    including the legacy ``mode=sprint`` stand-in used when the bit is absent.
+    """
     reasons: list[str] = []
     dispatch = dispatch or {}
     health = _as_dict(dispatch.get("filing_health"))
@@ -119,17 +123,6 @@ def focus_pressure_reasons(
         reasons.append(f"focus_unmeasured_buy_tier={unmeasured}")
     if zero_body > 0:
         reasons.append(f"focus_zero_body_buy_tier={zero_body}")
-
-    cascade = _as_dict(dispatch.get("ingest_cascade"))
-    if "head_needs_fat_slot" in cascade:
-        # Occupancy bit, not the market-status sprint badge or a stale mode.
-        if bool(cascade.get("head_needs_fat_slot")):
-            reasons.append("focus_fat_slot_sprint_active")
-    else:
-        mode = str(dispatch.get("mode") or "").strip()
-        sprint_complete = bool(dispatch.get("ingest_sprint_complete"))
-        if mode == "sprint" and not sprint_complete:
-            reasons.append("focus_fat_slot_sprint_active")
 
     status = market_status or {}
     markets = _as_dict(status.get("markets")) or _as_dict(status.get("by_market"))
@@ -222,7 +215,8 @@ def archive_lane_gate(
         "ingest_sprint_complete": bool((dispatch_payload or {}).get("ingest_sprint_complete")),
         "note": (
             "Gate only — no crawler. Separate budget IDs + preemptible + quiet window "
-            "are required before any archive poll; focus pressure always suspends."
+            "are required before any archive poll; unmeasured, zero-body, and stuck-flag "
+            "pressure suspend. head_needs_fat_slot does not."
         ),
     }
 

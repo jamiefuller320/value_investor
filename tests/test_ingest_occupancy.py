@@ -64,7 +64,7 @@ def _row(*, badge: str, bit: bool) -> dict:
             "generated_at": "2026-10-16T00:04:29+00:00",
             "gate": {
                 "evaluated_at": "2026-10-16T00:04:29+00:00",
-                "focus_pressure_reasons": ["focus_fat_slot_sprint_active"],
+                "focus_pressure_reasons": ["focus_unmeasured_buy_tier=1"],
             },
         },
         tasks={"tasks": [{"status": "open"}, {"status": "done"}]},

@@ -29,11 +29,11 @@ A separate archival engine (possibly a separate repo) that:
 
 | Decision | Rationale |
 |----------|-----------|
-| Useful as **cold archive**, not a second live ingest | Must not compete with the euro priority slot / P2 focus head (`euro_depth` or successor) while the priority slot is active; once it is released, quiet offline collection is in-scope |
+| Useful as **cold archive**, not a second live ingest | Separate budgets and a preemptible runner so the lane does not delay the priority slot. `head_needs_fat_slot` sizes that slot; it does not suspend this lane |
 | Prefer **offline lane in-repo** before a separate repo | Non-interfering collation; separate repo only if size/ops evidence demands it |
 | Prefer **raw originals + zstd + normalized text** first | Proprietary compact format only after size/retrieval evidence |
 | **Do not** gate writers on miss-rate ≥50% | Collect-while-easy: elevated miss-rate means it is already too late for those flips; keep miss-rate observe-only |
-| Gate writers on isolation + fat release + thin pilot | Quiet window, `archive_lane_gate`, separate budgets, no fourth equal sprint (**N180**), no eng-spray (**N181**) |
+| Gate writers on isolation + quiet window + thin pilot | `archive_lane_gate`, separate budgets, no fourth equal sprint (**N180**), no eng-spray (**N181**). The priority slot is not a writer gate |
 
 ### Conditional benefit
 
@@ -50,7 +50,7 @@ Best-effort “low priority” without those controls is not sufficient.
 
 | Concern | Practical answer |
 |---------|------------------|
-| Runner conflict | Quiet band **21:00–05:00 UTC** weekdays + weekends; primary cron **Mon–Fri 22:00 UTC**; preemptible `cancel-in-progress`; max-concurrency 1; auto-suspend when focus is warn/stuck / priority slot held |
+| Runner conflict | Quiet band **21:00–05:00 UTC** weekdays + weekends; primary cron **Mon–Fri 22:00 UTC**; preemptible `cancel-in-progress`; max-concurrency 1; auto-suspend on unmeasured/zero-body counts and stuck flags. `head_needs_fat_slot` does not suspend |
 | Source conflict | **Separate identity/budget** + incremental as-published polls (not full-universe crawls) |
 | Eng surface | Keep thin (poll → fetch → normalize → zstd → cold store); no scoring/memos/daily-hub |
 | Completeness | Archive is **best-effort accelerator**. On hydrate, use pack if present; gaps fall through to live deepen. Never block active regime on pack holes |
@@ -70,7 +70,7 @@ This order must **not** drive `euro-ingest-loop` / sprint streams.
 | Piece | Role |
 |-------|------|
 | Workflow | `.github/workflows/universe-filing-archive-pack.yml` — cron `0 22 * * 1-5` |
-| Gate | `archive_lane_gate` — suspend on focus fat / stuck; `quiet_only` outside band; fail-open exit 0 |
+| Gate | `archive_lane_gate` — suspend on unmeasured/zero-body and stuck flags; `quiet_only` outside band; `head_needs_fat_slot` does not suspend; fail-open exit 0 |
 | Runner | `ftse-universe-archive-pack --apply --max-units 4 --max-http-fetches 16` |
 | Writers | `universe_filing_archive_writer` → cold root `docs/data/archive/universe_filings/` (gitignored) |
 | Last run | `docs/data/universe_filing_archive_pack_run.json` (includes `capacity_isolation`) |
@@ -78,7 +78,7 @@ This order must **not** drive `euro-ingest-loop` / sprint streams.
 | Status panel | `docs/data/universe_filing_archive_status.json` — thin Ops card (outcome, clash flags, next widen); Automation → Ops |
 | Ops-monitor | `check_universe_filing_archive_pack_bottleneck` — stale review warn; suspend outcomes do **not** warn; refreshes status panel |
 
-While `mode=sprint` ∧ ¬`ingest_sprint_complete`, the 22:00 UTC job **runs and no-ops** with `outcome=suspend`, still refreshing the bottleneck review.
+The 22:00 UTC job runs under `archive_lane_gate`. `head_needs_fat_slot` and a sprint-mode dispatch do not no-op it. A quiet-window miss, the archive’s own caps, or remaining focus pressure (unmeasured, zero-body, stuck flags) still no-ops with `outcome=suspend` or `quiet_only`, and still refreshes the bottleneck review.
 
 Apply caps (stage 1): `max_units=4`, ≤2 tickers/unit, ≤1 body/ticker, ≤16 HTTP fetches/run, archive budget IDs only (`universe_filing_archive:*`), preemptible, `fourth_equal_sprint_stream=false`. Prior pilot was 2/8.
 
@@ -108,8 +108,8 @@ Apply caps (stage 1): `max_units=4`, ≤2 tickers/unit, ≤1 body/ticker, ≤16 
 
 | Required | Role |
 |----------|------|
-| Focus priority slot released (`head_needs_fat_slot` false; legacy dispatch without the bit still uses `mode=sprint` and not `sprint_ingest_complete`) | No steal of the P2 ingest head — occupancy is the priority-slot bit, not the market-status sprint badge |
-| `archive_lane_gate` allow | Quiet band + no focus-pressure suspend |
+| Priority slot does not pause this lane | `head_needs_fat_slot` (and the legacy `mode=sprint` stand-in) is not an `archive_lane_gate` suspend. The slot still sizes the ingest head |
+| `archive_lane_gate` allow | Quiet band + no unmeasured, zero-body, or stuck-flag suspend |
 | Capacity isolation | Archive budget IDs + hard HTTP fetch cap; recorded on each `pack_run` as `capacity_isolation` |
 | Thin writer pilot → stage 1 | **Shipped** — quiet apply; stage-1 caps 4/16 |
 | **N180** | No second live crawler / fourth equal sprint stream |
