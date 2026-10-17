@@ -58,6 +58,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-growth-batch-22.md` (second pass from pound-cap rank 231 through rank 240)
 - `docs/ftse350-growth-batch-25.md` (second pass from pound-cap rank 261 through rank 270)
 - `docs/ftse350-closer-look-batch-1.md` (repeat closer-look read of the first ten: GSK.L, REL.L, HLN.L, FRES.L, SGE.L, SN.L, RTO.L, CCC.L, ABDN.L, BBY.L)
+- `docs/ftse350-closer-look-batch-3.md` (repeat closer-look read of the next ten, starting at PFD.L: PFD.L, RAT.L, CURY.L, ATYM.L, BREE.L, GAMA.L, TRST.L, JUP.L, MOON.L, DSCV.L)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -651,8 +652,24 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 58. screen_ttm can differ from filing_aligned while the divergence flag is false
 
-**What is wrong.** On `FRES.L`, `CCC.L`, `PAF.L`, and `KLR.L`, `screen_ttm` differs from `filing_aligned`, `fcf_divergence_flagged` is false, and `filing_aligned` equals the statement line. Section 12 is the arm where `filing_aligned` equals the screen TTM and differs from the statement. `REL.L` is that arm.
+**What is wrong.** On `FRES.L`, `CCC.L`, `PAF.L`, `KLR.L`, `CURY.L`, and `DSCV.L`, `screen_ttm` differs from `filing_aligned`, `fcf_divergence_flagged` is false, and `filing_aligned` equals the statement line. Section 12 is the arm where `filing_aligned` equals the screen TTM and differs from the statement. `REL.L` is that arm.
 
-**Where.** On `FRES.L`, `screen_ttm` is 1,999,836,928 beside `filing_aligned` of 1,889,566,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line. On `CCC.L`, `screen_ttm` is 287,937,504 beside `filing_aligned` of 257,600,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line. On `PAF.L`, `screen_ttm` is 327,180,512 beside `filing_aligned` of 340,848,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line. On `KLR.L`, `screen_ttm` is 189,575,008 beside `filing_aligned` of 168,000,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line.
+**Where.** On `FRES.L`, `screen_ttm` is 1,999,836,928 beside `filing_aligned` of 1,889,566,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line. On `CCC.L`, `screen_ttm` is 287,937,504 beside `filing_aligned` of 257,600,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line. On `PAF.L`, `screen_ttm` is 327,180,512 beside `filing_aligned` of 340,848,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line. On `KLR.L`, `screen_ttm` is 189,575,008 beside `filing_aligned` of 168,000,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line. On `CURY.L`, `screen_ttm` is 321,249,984 beside `filing_aligned` of 346 million. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line. On `DSCV.L`, `screen_ttm` is 39,337,500 beside `filing_aligned` of 38.7 million. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line.
 
-**What to change.** Do not fold `FRES.L`, `CCC.L`, `PAF.L`, or `KLR.L` into section 12. Leave `REL.L` in that arm. Do not invent a corrected free-cash-flow figure.
+**What to change.** Do not fold `FRES.L`, `CCC.L`, `PAF.L`, `KLR.L`, `CURY.L`, or `DSCV.L` into section 12. Leave `REL.L` in that arm. Do not invent a corrected free-cash-flow figure.
+
+## 59. Cash-flow metrics can store no free-cash-flow TTM beside an annual line
+
+**What is wrong.** On `ATYM.L` and `GRG.L` the cash-flow metrics store no free-cash-flow TTM beside an annual free-cash-flow line. Section 19 records that Greggs has no statement TTM and the screen still stores one. Section 22 records that Atalaya has no statement TTM and an empty quarterly file. Neither records this cash-flow-metrics gap.
+
+**Where.** On `ATYM.L` the cash-flow metrics store no free-cash-flow TTM. The latest annual free-cash-flow line is 110,835,000. On `GRG.L` the cash-flow metrics store no free-cash-flow TTM beside an annual free-cash-flow line.
+
+**What to change.** Do not fold `ATYM.L` into section 22 or `GRG.L` into section 19. Do not invent a corrected free-cash-flow figure.
+
+## 60. The screen free-cash-flow currency can be other than sterling while the chart labels the price GBP
+
+**What is wrong.** On `ATYM.L`, `TRST.L`, and `HIK.L` the screen free-cash-flow currency is not GBP, the chart labels the price GBP, and there is no quote file. Section 53 records a quote currency other than sterling and assumes a quote file exists. Section 57 records a missing quote file and a missing heading cap. It does not record the free-cash-flow currency.
+
+**Where.** On `ATYM.L` the screen labels free cash flow EUR. The chart labels the price GBP. There is no quote file. On `TRST.L` the screen labels free cash flow USD. The chart labels the price GBP. There is no quote file. On `HIK.L` the screen free-cash-flow currency is USD. The chart labels the price GBP. There is no quote file.
+
+**What to change.** Do not fold `ATYM.L`, `TRST.L`, or `HIK.L` into section 53 or section 57. Do not invent a quote, a cap, or a corrected figure.
