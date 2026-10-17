@@ -625,8 +625,8 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 55. A screen P/E can be stored when the latest income year has no diluted EPS line
 
-**What is wrong.** `LRE.L` and `LWDB.L` store a screen P/E when the latest income year has revenue and net income and no diluted EPS line. Section 47 is a positive diluted EPS while the screen has no P/E key. Section 52 is a positive screen P/E beside a negative diluted EPS.
+**What is wrong.** `LRE.L`, `LWDB.L`, `INPP.L`, and `JEDT.L` store a screen P/E when the latest income year has revenue and net income and no diluted EPS line. Section 47 is a positive diluted EPS while the screen has no P/E key. Section 52 is a positive screen P/E beside a negative diluted EPS.
 
-**Where.** On `LRE.L` the 2025 income statement has revenue and net income and no diluted EPS line. The screen P/E is 6.7. On `LWDB.L` the 2025 income statement has revenue and net income and no diluted EPS line. The screen P/E is 5.3.
+**Where.** On `LRE.L` the 2025 income statement has revenue and net income and no diluted EPS line. The screen P/E is 6.7. On `LWDB.L` the 2025 income statement has revenue and net income and no diluted EPS line. The screen P/E is 5.3. On `INPP.L` the 2025 income statement has revenue and net income and no diluted EPS line. The screen P/E is 10.4. On `JEDT.L` the 2026 income statement has revenue and net income and no diluted EPS line. The screen P/E is 5.3.
 
-**What to change.** Do not invent a diluted EPS for that year. Do not invent a corrected P/E. Do not fold `LRE.L` or `LWDB.L` into section 47 or section 52.
+**What to change.** Do not invent a diluted EPS for that year. Do not invent a corrected P/E. Do not invent any other figure. Do not fold `LRE.L`, `LWDB.L`, `INPP.L`, or `JEDT.L` into section 47 or section 52.
