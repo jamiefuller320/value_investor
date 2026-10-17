@@ -47,6 +47,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-growth-batch-8.md` (second pass on pound-cap ranks 71–80)
 - `docs/ftse350-growth-batch-9.md` (second pass on pound-cap ranks 81–90)
 - `docs/ftse350-growth-batch-10.md` (second pass on pound-cap ranks 91–100)
+- `docs/ftse350-growth-batch-11.md` (second pass on pound-cap ranks 101–110)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -103,8 +104,9 @@ Those notes are the source. Do not treat this handover as a new pass over the fi
 - `ATYM.L` stores `dividend_yield_raw` 0.96 and displays 96.0%. The cash dividend is 10.1 million, which is 0.67% of the cap if the dividend is pounds and 0.56% if it is euros. The AIM metrics yield is the fraction 1.0.
 - `CVSG.L` stores `dividend_yield_raw` 0.77 and displays 77.0%. There is no statement. The AIM dividend yield is the fraction 0.73.
 - `ALFA.L` stores `dividend_yield_raw` 0.93 and displays 93.0%. The cash dividend is 26.0 million, which is 5.46% of the cap. The review’s ordinary dividend of 1.5p plus special dividend of 3.1p is 4.6p, which is 2.86% of the 160.8 pence price. The review states a screening snapshot yield of 89%.
+- `AAL.L` stores `dividend_yield_raw` 0.69 and displays 69.0%. There is no statement, so there is no cash-dividend figure.
 
-**What to change.** Store yield as a decimal fraction, and format percent only at display. Do not treat “raw > 1” as the only rescale. Recompute the screen yield from the dividend line actually present (`Common Stock Dividend Paid`, else `Cash Dividends Paid`) and a market cap in the same currency. If the currency is missing, leave the yield unchecked instead of printing a percent. For `ATYM.L`, `CVSG.L`, and `ALFA.L`, do not invent a corrected screen yield.
+**What to change.** Store yield as a decimal fraction, and format percent only at display. Do not treat “raw > 1” as the only rescale. Recompute the screen yield from the dividend line actually present (`Common Stock Dividend Paid`, else `Cash Dividends Paid`) and a market cap in the same currency. If the currency is missing, leave the yield unchecked instead of printing a percent. For `ATYM.L`, `CVSG.L`, `ALFA.L`, and `AAL.L`, do not invent a corrected screen yield. For `AAL.L`, do not invent a cash-dividend figure.
 
 ## 4. Screen free cash flow is not the filing line
 
@@ -460,11 +462,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 37. Free cash flow can be stored while operating cash flow is missing
 
-**What is wrong.** `III.L` stores a displayed free-cash-flow figure while operating cash flow is missing. There is no filing. Both verification flags are false.
+**What is wrong.** `III.L` stores a displayed free-cash-flow figure while operating cash flow is missing. There is no filing. Both verification flags are false. `3IN.L` stores a canonical free-cash-flow figure while operating cash flow is missing. There is no filing.
 
-**Where.** There is no `docs/data/research/III.L` folder. The displayed free cash flow is 3,390,374,912, stored as `filing_aligned`, and there is no filing. Operating cash flow is missing. The screen stores `screen_ttm_unverified` false and `ttm_suppressed_screen_filing_mismatch` false.
+**Where.** There is no `docs/data/research/III.L` folder. The displayed free cash flow is 3,390,374,912, stored as `filing_aligned`, and there is no filing. Operating cash flow is missing. The screen stores `screen_ttm_unverified` false and `ttm_suppressed_screen_filing_mismatch` false. There is no `docs/data/research/3IN.L` folder. The canonical free cash flow is 221,250,000, tagged `auto_fallback_screen_ttm`, labeled GBP, and also stored as `filing_aligned`. There is no filing. Operating cash flow is missing. The screen TTM is 221,250,000. `screen_ttm_unverified`, `ttm_suppressed_screen_filing_mismatch`, and `fcf_divergence_flagged` are false.
 
-**What to change.** Do not compare 3,390,374,912 with operating cash flow while that field is missing. Do not round 3,390,374,912.
+**What to change.** Do not compare 3,390,374,912 with operating cash flow while that field is missing. Do not round 3,390,374,912. Do not compare 221,250,000 with operating cash flow while that field is missing. Do not invent a share count for `3IN.L`.
 
 ## 38. An unchecked screen P/B can be negative
 
@@ -545,3 +547,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** `VCT.L` diluted EPS is 0.318, and the pound price over it is 29.6. `MGAM.L` diluted EPS is 0.075, and the pound price over it is 38.7. `EWG.L` diluted EPS is 0.0029, and the pound price over it is 351. `VTY.L` diluted EPS is 0.42, and the pound price over it is 5.2.
 
 **What to change.** Do not invent a screen P/E.
+
+## 48. Free cash flow can be more negative than operating cash flow, and there is no filing
+
+**What is wrong.** Section 32 covers a displayed free cash flow larger than the screen operating cash flow. It does not cover a displayed free cash flow that is more negative than that operating cash flow. `ADM.L` and `AMRQ.L` each store that more-negative pair as `filing_aligned`. There is no filing.
+
+**Where.** There is no `docs/data/research/ADM.L` folder. The displayed free cash flow is −4,439,737,344 beside screen operating cash flow of 436,500,000. The canonical figure is tagged `auto_fallback_screen_ttm`, labeled GBP, and also stored as `filing_aligned`. There is no filing. The screen TTM equals that free-cash-flow figure. `screen_ttm_unverified`, `ttm_suppressed_screen_filing_mismatch`, and `fcf_divergence_flagged` are false. There is no `docs/data/research/AMRQ.L` folder. The displayed free cash flow is −78,940,464 beside screen operating cash flow of −6,025,383. The canonical figure is tagged `auto_fallback_screen_ttm`, labeled GBP, and also stored as `filing_aligned`. There is no filing. The screen TTM equals that free-cash-flow figure. `screen_ttm_unverified`, `ttm_suppressed_screen_filing_mismatch`, and `fcf_divergence_flagged` are false.
+
+**What to change.** Do not fold `ADM.L` or `AMRQ.L` into section 32. Do not present −4,439,737,344 or −78,940,464 as free cash flow while each is more negative than its screen operating cash flow and no filing exists. Leave the pairs unchecked. Do not invent why the two cash figures differ.
