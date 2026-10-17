@@ -800,6 +800,69 @@ def test_screen_ttm_differs_while_filing_aligned_matches_the_statement():
     )
 
 
+def test_atym_and_grg_cashflow_metrics_have_no_fcf_ttm():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    atym = rows["ATYM.L"]
+    assert atym.cashflow_annual_fcf == pytest.approx(110_835_000)
+    assert atym.cashflow_fcf_ttm is None
+    assert "cashflow_metrics_annual_fcf_without_ttm" in _ids(atym)
+    grg = rows["GRG.L"]
+    assert grg.cashflow_annual_fcf == pytest.approx(51_600_000)
+    assert grg.cashflow_fcf_ttm is None
+    assert "cashflow_metrics_annual_fcf_without_ttm" in _ids(grg)
+    hik = rows["HIK.L"]
+    assert hik.cashflow_fcf_ttm == pytest.approx(191_000_000)
+    assert "cashflow_metrics_annual_fcf_without_ttm" not in _ids(hik)
+    assert "cashflow_metrics_annual_fcf_without_ttm" in _ids(
+        _row(cashflow_annual_fcf=110_835_000.0, cashflow_fcf_ttm=None)
+    )
+    assert "cashflow_metrics_annual_fcf_without_ttm" not in _ids(
+        _row(cashflow_annual_fcf=110_835_000.0, cashflow_fcf_ttm=191_000_000.0)
+    )
+    assert "cashflow_metrics_annual_fcf_without_ttm" not in _ids(
+        _row(cashflow_annual_fcf=None, cashflow_fcf_ttm=None)
+    )
+
+
+def test_non_gbp_fcf_currency_with_gbp_chart_and_no_quote_file():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    expected = {"ATYM.L": "EUR", "TRST.L": "USD", "HIK.L": "USD"}
+    for ticker, currency in expected.items():
+        row = rows[ticker]
+        quote_path = ROOT / "docs/data/research" / ticker / "sources" / "price_quote.json"
+        chart = json.loads((ROOT / "docs/data/charts" / f"{ticker}.json").read_text())
+        assert chart["currency"] == "GBP"
+        assert not quote_path.exists()
+        assert row.chart_currency == "GBP"
+        assert row.has_price_quote_file is False
+        assert row.price_quote_currency is None
+        assert row.fcf_currency == currency
+        assert "fcf_currency_not_gbp_chart_without_quote_file" in _ids(row)
+        detail = next(
+            hit.detail
+            for hit in hits_for(row)
+            if hit.rule_id == "fcf_currency_not_gbp_chart_without_quote_file"
+        )
+        assert f"screen free-cash-flow currency {currency}" in detail
+        assert "quote currency" not in detail
+    assert "fcf_currency_not_gbp_chart_without_quote_file" not in _ids(
+        _row(
+            fcf_currency="GBP",
+            chart_currency="GBP",
+            has_price_quote_file=False,
+        )
+    )
+    assert "fcf_currency_not_gbp_chart_without_quote_file" not in _ids(
+        _row(fcf_currency=None, chart_currency="GBP", has_price_quote_file=False)
+    )
+    assert "fcf_currency_not_gbp_chart_without_quote_file" not in _ids(
+        _row(fcf_currency="EUR", chart_currency="USD", has_price_quote_file=False)
+    )
+    assert "fcf_currency_not_gbp_chart_without_quote_file" not in _ids(
+        _row(fcf_currency="EUR", chart_currency="GBP", has_price_quote_file=True)
+    )
+
+
 def test_hwg_positive_eps_has_no_screen_pe_key():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
     hwg = rows["HWG.L"]

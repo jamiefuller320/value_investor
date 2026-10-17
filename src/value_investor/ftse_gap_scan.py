@@ -89,6 +89,9 @@ class ScreenRow:
     revenue_year_without_eps: tuple[str, float, float] | None = None
     eps_scale_pairs: tuple[tuple[str, float, float, str, float, float], ...] = ()
     has_price_quote_file: bool = True
+    cashflow_annual_fcf: float | None = None
+    cashflow_fcf_ttm: float | None = None
+    fcf_currency: str | None = None
 
 
 @dataclass(frozen=True)
@@ -220,6 +223,8 @@ def _statement_facts(path: Path | None) -> dict[str, Any]:
         "income_sign_gaps": (),
         "revenue_year_without_eps": None,
         "eps_scale_pairs": (),
+        "cashflow_annual_fcf": None,
+        "cashflow_fcf_ttm": None,
     }
     if path is None:
         return facts
@@ -295,6 +300,12 @@ def _statement_facts(path: Path | None) -> dict[str, Any]:
             facts["net_income"] = net_income
             facts["stockholders_equity"] = equity
             break
+    metrics = payload.get("cashflow_metrics")
+    if isinstance(metrics, dict):
+        if "free_cashflow" in metrics:
+            facts["cashflow_annual_fcf"] = _optional_float(metrics.get("free_cashflow"))
+        if "free_cashflow_ttm" in metrics:
+            facts["cashflow_fcf_ttm"] = _optional_float(metrics.get("free_cashflow_ttm"))
     facts["net_normalized_gaps"] = _net_normalized_gaps(income)
     facts["income_sign_gaps"] = _income_sign_gaps(income)
     facts["revenue_year_without_eps"] = _revenue_year_without_eps(income)
@@ -590,6 +601,9 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
                     income_sign_gaps=facts["income_sign_gaps"],
                     revenue_year_without_eps=facts["revenue_year_without_eps"],
                     eps_scale_pairs=facts["eps_scale_pairs"],
+                    cashflow_annual_fcf=facts["cashflow_annual_fcf"],
+                    cashflow_fcf_ttm=facts["cashflow_fcf_ttm"],
+                    fcf_currency=_stored_text(fcf_obj.get("currency")),
                 )
             )
     return rows
@@ -826,6 +840,35 @@ def check_net_income_ten_times_normalized(row: ScreenRow) -> str | None:
         for year, net, normalized in row.net_normalized_gaps
     ]
     return "; ".join(parts)
+
+
+def _stored_text(value: Any) -> str | None:
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    return None
+
+
+def check_cashflow_metrics_annual_fcf_without_ttm(row: ScreenRow) -> str | None:
+    """Cash-flow metrics store an annual free-cash-flow line and no free-cash-flow TTM."""
+
+    if row.cashflow_annual_fcf is None or row.cashflow_fcf_ttm is not None:
+        return None
+    return (
+        f"cashflow metrics free cash flow {_num(row.cashflow_annual_fcf)} "
+        "with no free-cash-flow TTM"
+    )
+
+
+def check_fcf_currency_not_gbp_chart_without_quote_file(row: ScreenRow) -> str | None:
+    """Screen free-cash-flow currency is not GBP, the chart is GBP, and price_quote.json is absent.
+
+    A missing quote file is not a currency. This check does not invent one.
+    """
+
+    currency = row.fcf_currency
+    if not currency or currency == "GBP" or row.chart_currency != "GBP" or row.has_price_quote_file:
+        return None
+    return f"screen free-cash-flow currency {currency}; chart currency GBP; no price_quote.json"
 
 
 def check_chart_gbp_price_without_quote_file(row: ScreenRow) -> str | None:
@@ -1096,6 +1139,16 @@ CHECKS: tuple[Check, ...] = (
         "chart_gbp_price_without_quote_file",
         "an 11 Oct price and a chart labeled GBP, with no price_quote.json",
         check_chart_gbp_price_without_quote_file,
+    ),
+    Check(
+        "cashflow_metrics_annual_fcf_without_ttm",
+        "cash-flow metrics with an annual free-cash-flow line and no free-cash-flow TTM",
+        check_cashflow_metrics_annual_fcf_without_ttm,
+    ),
+    Check(
+        "fcf_currency_not_gbp_chart_without_quote_file",
+        "a screen free-cash-flow currency other than GBP, a chart labeled GBP, and no price_quote.json",
+        check_fcf_currency_not_gbp_chart_without_quote_file,
     ),
     Check(
         "positive_diluted_eps_without_screen_pe",
