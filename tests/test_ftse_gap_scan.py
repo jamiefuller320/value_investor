@@ -13,6 +13,7 @@ from value_investor.ftse_gap_scan import (
     ScreenRow,
     _income_sign_gaps,
     _net_normalized_gaps,
+    _revenue_year_without_eps,
     _statement_shares,
     hits_for,
     load_screen_rows,
@@ -508,6 +509,56 @@ def test_jemi_and_fcss_have_a_pe_and_neither_discount_nor_premium():
     )
     assert "trust_pe_without_discount_or_premium" not in _ids(
         _row(trust=False, pe_display="5.0", key_metric_names=frozenset({"P/E"}))
+    )
+
+
+def test_screen_pe_beside_a_revenue_year_with_no_eps_line():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    expected = {
+        "LRE.L": ("6.7", "2025", 1_883_400_000.0, 293_400_000.0),
+        "LWDB.L": ("5.3", "2025", 366_003_000.0, 304_670_000.0),
+        "INPP.L": ("10.4", "2025", 267_760_000.0, 263_704_000.0),
+        "JEDT.L": ("5.3", "2026", 114_629_000.0, 112_129_000.0),
+    }
+    for ticker, (pe, year, revenue, net) in expected.items():
+        row = rows[ticker]
+        assert row.pe_display == pe
+        assert "P/E" in row.key_metric_names
+        assert row.diluted_eps is None
+        assert row.revenue_year_without_eps is not None
+        stored_year, stored_revenue, stored_net = row.revenue_year_without_eps
+        assert stored_year == year
+        assert stored_revenue == pytest.approx(revenue)
+        assert stored_net == pytest.approx(net)
+        assert "screen_pe_without_diluted_eps_line" in _ids(row)
+        detail = next(
+            hit.detail
+            for hit in hits_for(row)
+            if hit.rule_id == "screen_pe_without_diluted_eps_line"
+        )
+        assert f"screen P/E {pe}" in detail
+        assert "no diluted EPS line" in detail
+    assert _revenue_year_without_eps(
+        {
+            "2025": {"Total Revenue": 10, "Net Income": 2},
+            "2024": {"Total Revenue": 9, "Net Income": 1, "Diluted EPS": 0.1},
+        }
+    ) == ("2025", 10.0, 2.0)
+    assert (
+        _revenue_year_without_eps(
+            {"2025": {"Total Revenue": 10, "Net Income": 2, "Diluted EPS": 0.1}}
+        )
+        is None
+    )
+    assert "screen_pe_without_diluted_eps_line" not in _ids(
+        _row(revenue_year_without_eps=("2025", 10.0, 2.0), key_metric_names=frozenset())
+    )
+    assert "screen_pe_without_diluted_eps_line" in _ids(
+        _row(
+            pe_display="6.7",
+            key_metric_names=frozenset({"P/E"}),
+            revenue_year_without_eps=("2025", 10.0, 2.0),
+        )
     )
 
 

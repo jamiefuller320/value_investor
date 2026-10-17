@@ -86,6 +86,7 @@ class ScreenRow:
     net_normalized_gaps: tuple[tuple[str, float, float], ...] = ()
     income_sign_gaps: tuple[tuple[str, float, float], ...] = ()
     chart_currency: str | None = None
+    revenue_year_without_eps: tuple[str, float, float] | None = None
 
 
 @dataclass(frozen=True)
@@ -215,6 +216,7 @@ def _statement_facts(path: Path | None) -> dict[str, Any]:
         "statement_revenue": None,
         "net_normalized_gaps": (),
         "income_sign_gaps": (),
+        "revenue_year_without_eps": None,
     }
     if path is None:
         return facts
@@ -292,7 +294,42 @@ def _statement_facts(path: Path | None) -> dict[str, Any]:
             break
     facts["net_normalized_gaps"] = _net_normalized_gaps(income)
     facts["income_sign_gaps"] = _income_sign_gaps(income)
+    facts["revenue_year_without_eps"] = _revenue_year_without_eps(income)
     return facts
+
+
+def _stored_revenue(row: dict[str, Any]) -> float | None:
+    for field in ("Total Revenue", "Operating Revenue"):
+        if field not in row:
+            continue
+        number = _optional_float(row.get(field))
+        if number is not None:
+            return number
+    return None
+
+
+def _revenue_year_without_eps(income: Any) -> tuple[str, float, float] | None:
+    """Latest year with revenue and net income, when that year has no diluted-EPS line.
+
+    An earlier diluted-EPS line is not copied forward. No earnings figure is calculated.
+    """
+
+    if not isinstance(income, dict):
+        return None
+    for year in sorted(income, reverse=True):
+        row = income[year]
+        if not isinstance(row, dict):
+            continue
+        revenue = _stored_revenue(row)
+        if "Net Income" not in row:
+            continue
+        net = _optional_float(row.get("Net Income"))
+        if revenue is None or net is None:
+            continue
+        if "Diluted EPS" in row:
+            return None
+        return (str(year), revenue, net)
+    return None
 
 
 def _net_normalized_gaps(income: Any) -> tuple[tuple[str, float, float], ...]:
@@ -508,6 +545,7 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
                     premium_display=_metric_text(key_metrics, "Premium"),
                     net_normalized_gaps=facts["net_normalized_gaps"],
                     income_sign_gaps=facts["income_sign_gaps"],
+                    revenue_year_without_eps=facts["revenue_year_without_eps"],
                 )
             )
     return rows
@@ -759,6 +797,21 @@ def check_chart_gbp_quote_usd(row: ScreenRow) -> str | None:
     )
 
 
+def check_screen_pe_without_diluted_eps_line(row: ScreenRow) -> str | None:
+    """Screen P/E beside the latest revenue-and-income year that has no diluted-EPS line."""
+
+    if "P/E" not in row.key_metric_names or not row.pe_display:
+        return None
+    gap = row.revenue_year_without_eps
+    if gap is None:
+        return None
+    year, revenue, net = gap
+    return (
+        f"screen P/E {row.pe_display}; {year} revenue {_num(revenue)} "
+        f"net income {_num(net)}; no diluted EPS line"
+    )
+
+
 def check_positive_diluted_eps_without_screen_pe(row: ScreenRow) -> str | None:
     """Latest diluted EPS is positive and the screen key metrics have no P/E key."""
 
@@ -941,6 +994,11 @@ CHECKS: tuple[Check, ...] = (
         "positive_diluted_eps_without_screen_pe",
         "a positive diluted EPS while the screen key metrics have no P/E key",
         check_positive_diluted_eps_without_screen_pe,
+    ),
+    Check(
+        "screen_pe_without_diluted_eps_line",
+        "a stored screen P/E whose latest revenue and net-income year has no diluted EPS line",
+        check_screen_pe_without_diluted_eps_line,
     ),
     Check(
         "net_income_normalized_opposite_signs",
