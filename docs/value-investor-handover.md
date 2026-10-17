@@ -43,6 +43,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-34.md` (FTSE ranks 331–340)
 - `docs/ftse350-batch-35.md` (FTSE ranks 341–350)
 - `docs/ftse350-growth-batch-2.md` (second pass on pound-cap ranks 11–20)
+- `docs/ftse350-growth-batch-7.md` (second pass on pound-cap ranks 61–70)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -464,9 +465,9 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 **What is wrong.** When there is no statement, the screen P/B is unchecked, and on these names that P/B is negative.
 
-**Where.** `IWG.L`: screen P/B is −5.7. There is no statement. `IHG.L`: screen P/B is −8.0. There is no statement. `SDLF.L`: screen P/B is −39.1. There is no statement and no P/E key.
+**Where.** `IWG.L`: screen P/B is −5.7. There is no statement. `IHG.L`: screen P/B is −8.0. There is no statement. `SDLF.L`: screen P/B is −39.1. There is no statement and no P/E key. `TRST.L`: equity is −6.73 million. The screen P/B is −197.5. Price over that equity is −145 if the equity is pounds and −193 if it is dollars. The screen has no P/E key.
 
-**What to change.** Do not treat a negative unchecked screen P/B as a multiple. Do not invent an equity figure.
+**What to change.** Do not treat a negative unchecked screen P/B as a multiple. Do not invent an equity figure. For `TRST.L`, do not invent a book-value figure.
 
 ## 39. A London history print can be a euro quote
 
@@ -515,3 +516,19 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** Diluted EPS is 0.940815 in 2023 beside net income −208,900,000. Diluted EPS is 0.932555 in 2024 beside net income −300,200,000. The 2025 diluted EPS is 2.74 and matches that year’s net income of 679,200,000.
 
 **What to change.** Do not fold these years into section 9. Do not invent a share count. Do not treat the 2023 and 2024 EPS figures as the prior points of an earnings series.
+
+## 45. Unusual-item fields on one year can disagree
+
+**What is wrong.** On `JUP.L` in 2023 the unusual-item fields do not match. Section 9 records one-off items that distort the multiples the screen shows. It does not cover fields that disagree with each other.
+
+**Where.** In 2023 the field named Total Unusual Items is 1.9 million, Total Unusual Items Excluding Goodwill is −74.3 million, and Special Income Charges is −78.4 million. Normalized income that year is 123.5 million beside net income of −12.9 million. In 2024 the two unusual-item fields match at 4.7 million. In 2025 they match at 8.3 million.
+
+**What to change.** Do not fold `JUP.L` into section 9. Do not invent which field the normalized income used, and do not invent a corrected unusual-items figure.
+
+## 46. A zero screen yield can sit beside a statement dividend
+
+**What is wrong.** A raw yield of 0.0 displayed as 0.0% is still not the scale bug in section 3. On `PTEC.L` the screen stores that zero beside a statement dividend.
+
+**Where.** `PTEC.L` stores `dividend_yield_raw` 0.0 and displays 0.0% beside a statement dividend of 1,766.2 million. That dividend is 172% of the cap if it is pounds. The review states a special dividend of about €1.8bn. Filing free cash flow is −52.9 million.
+
+**What to change.** Do not fold `PTEC.L` into section 3. Do not invent a yield. Do not decide that the zero excludes the special dividend unless the file says so.
