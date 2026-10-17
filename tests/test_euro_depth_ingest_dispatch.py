@@ -121,7 +121,11 @@ def test_evaluate_dispatch_sprint_when_filing_gaps_remain():
     assert result["current_phase"] == 2
     assert result["next_phase"] == 2
     assert result["max_daily_successes"] == 4
-    assert result["max_targets"] == 24
+    # Three unfilled names: width 3, not the old cap 24 or the workflow fallback 12.
+    assert result["max_targets"] == 3
+    assert result["priority_slot_width"] == 3
+    assert result["priority_slot_ceiling"] == 24
+    assert result["ingest_cascade"]["head_needs_fat_slot"] is True
     # Admitted ASX/S&P stay on the shared maintenance loop even while euro sprints
     # and even if a later screen reopens buy-tier filing gaps.
     assert "asx200" in result["maintenance_markets"]
@@ -204,6 +208,40 @@ def test_evaluate_dispatch_sprint_when_phase3_ready_but_gaps_remain():
     assert result["should_run_ingest"] is True
 
 
+def test_head_width_zero_keeps_release_bit_while_raw_gaps_remain():
+    phase = {"phase3_ready": False, "blockers": []}
+    health = {
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 2,
+        "indexed_without_body": 0,
+        "effective_thin_body_buy_tier": 0,
+        "effective_indexed_without_body": 0,
+    }
+    policy = {"focus_market": "euro_depth"}
+    with (
+        patch(
+            "value_investor.library_ingest_dispatch.evaluate_market_phase",
+            return_value=phase,
+        ),
+        patch(
+            "value_investor.library_ingest_dispatch.snapshot_library_buy_tier_filing_health",
+            return_value=health,
+        ),
+        patch(
+            "value_investor.library_ingest_dispatch.load_policy",
+            return_value=policy,
+        ),
+    ):
+        result = evaluate_euro_ingest_dispatch()
+    assert result["mode"] == MODE_SPRINT
+    assert result["max_targets"] == 0
+    assert result["priority_slot_width"] == 0
+    assert result["should_run_sprint_ingest"] is True
+    assert result["ingest_sprint_complete"] is False
+    assert result["ingest_cascade"]["head_needs_fat_slot"] is True
+
+
 def test_evaluate_dispatch_maintenance_when_parity_met():
     phase = {"phase3_ready": True, "blockers": []}
     health = {
@@ -230,6 +268,8 @@ def test_evaluate_dispatch_maintenance_when_parity_met():
     assert result["should_run_ingest"] is False
     assert result["max_daily_successes"] == 8
     assert result["max_targets"] == 62
+    assert result["priority_slot_width"] == 0
+    assert result["ingest_cascade"]["head_needs_fat_slot"] is False
     assert MODE_IDLE == MODE_MAINTENANCE
     assert cron_enabled_for_dispatch(result) == {
         "morning": False,

@@ -82,6 +82,15 @@ def test_select_library_ingest_targets_prioritizes_unmeasured(tmp_path: Path):
     )
     assert targets[0].ticker == "AAA.DE"
     assert targets[0].reason == "unmeasured"
+    assert (
+        select_library_ingest_targets(
+            reports,
+            library_root=root,
+            market_id=market,
+            max_targets=0,
+        )
+        == []
+    )
 
 
 def test_select_library_ingest_targets_unmeasured_beats_high_iwb(tmp_path: Path):

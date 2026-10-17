@@ -9,7 +9,7 @@ before any fetch.
 Hard isolation requirements (from ``docs/ops/universe-filing-archive-pack.md``):
 
 1. Separate per-source rate-limit **budget IDs** (critical path never shares quota)
-2. Preemptible / separate runner class (never delay fat-slot / ingest-loop / gap-closure)
+2. Preemptible / separate runner class (never delay the priority slot / ingest-loop / gap-closure)
 3. Cold storage off the live publish path
 4. Auto-suspend when focus has unmeasured/zero-body stalls, 429s, or timeout pressure
 5. Quiet-window preference (weekend / post-close) — necessary but not sufficient

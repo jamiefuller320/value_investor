@@ -2,9 +2,9 @@
 
 Spare width comes from ``dynamic_ingest_width`` (unfilled names, host budget
 left, time left). While ``head_needs_fat_slot`` is true the head's unfilled
-names are reserved from the host budget first. Leftover minutes still boost a
-spare clock that is shorter than the head's unused time. Spare streams pass
-live workflow busyness in from GHA.
+names are reserved from the host budget first — one name each, not the unused
+job ceiling. Leftover minutes still boost a spare clock that is shorter than
+the head's unused time. Spare streams pass live workflow busyness in from GHA.
 """
 
 from __future__ import annotations
@@ -276,7 +276,7 @@ def evaluate_scheduler(
             reason = "No markets with filing gaps."
         else:
             code = "head_released"
-            reason = "Head released the fat slot — spare streams run at full caps."
+            reason = "Head released the priority slot — spare streams run at full caps."
         return IngestSchedulerDecision(
             action=action,
             stream=stream,

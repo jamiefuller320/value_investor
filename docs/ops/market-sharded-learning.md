@@ -82,15 +82,15 @@ Independence answers *how books are kept apart*. **Gates + capacity** answer *wh
 | **Promote / apply knobs** | Forward marks, N26 floors, cost-aware review | — |
 | **Replay below-threshold names** | Layer B snapshots (can start the same week as the book) | A 12-week wait *before* the first fill |
 
-**Cascade intent (serialize, then equalize).** The spare slot is not a permanent second class. One market at a time holds the fat sprint until it reaches the **maintenance ingest threshold**: unmeasured and zero-body are gone, leftover thin/IWB names are parked (`ingest_exhaustion.json` / hunter / next periodic report), and a solid usable set remains. That is `sprint_ingest_complete` — raw `ingest_parity_met` (all four counts zero) or exhaustion. Then:
+**Cascade intent (serialize, then equalize).** The spare slot is not a permanent second class. One market at a time holds the priority slot until it reaches the **maintenance ingest threshold**: unmeasured and zero-body are gone, leftover thin/IWB names are parked (`ingest_exhaustion.json` / hunter / next periodic report), and a solid usable set remains. That is `sprint_ingest_complete` — raw `ingest_parity_met` (all four counts zero) or exhaustion. Then:
 
-1. Sprint vacates; the next queue market gets the fat slot.
+1. Sprint vacates; the next queue market gets the priority slot.
 2. The graduated market joins **steady-state maintenance** at FTSE volume on unparked names (`library-ingest-maintenance.yml`).
 3. It is **admitted** to the learning set and should receive **equivalent resource** — same maintenance ingest, screen cadence, paper instrument, and buy-tier rememo as every other admitted market (L321 / L322).
 
-While `head_needs_fat_slot` is true the head keeps host priority: each spare's width is its unfilled names, capped by host budget left and time left in the job (filing body, daily price, or memo). A strand with nothing to fetch has width 0. Fixed 50%/25% cuts are not applied, and they are not reapplied once the bit is false. The fat slot is an ingest-head rule for that bit, not a boss over non-ingest strands.
+While `head_needs_fat_slot` is true the head keeps host priority. Head and spare width are min(unfilled names, host budget left, time left) for that kind (filing body, daily price, or memo). The head job's dispatched `max_targets` is that width, capped by the job ceiling. One unfilled name reserves one name; the unused part of the old fixed cap is not reserved. A strand with nothing to fetch has width 0, and `head_needs_fat_slot` stays the release bit (false at parity). Spares subtract `head_unfilled` only. Fixed 50%/25% cuts are not applied, and they are not reapplied once the bit is false. The priority slot is an ingest-head rule for that bit, not a boss over non-ingest strands.
 
-**Straggler soft-park (do not demote the head).** If the fat-slot head briefly hits `sprint_ingest_complete` / maintenance and then a few names resurface as thin/IWB leftovers — or if peer deepen keeps resetting the market-wide 0-improve streak while one IR-exhausted straggler never moves — **soft-park** those leftovers (`awaiting_periodic_report` when fully bodied thin; `unfetchable_iwb` when IWB) so fat can release. Do **not** demote the market from cascade head policy, open a fourth equal sprint stream, or burn disproportionate deepen for limited gain.
+**Straggler soft-park (do not demote the head).** If the priority-slot head briefly hits `sprint_ingest_complete` / maintenance and then a few names resurface as thin/IWB leftovers — or if peer deepen keeps resetting the market-wide 0-improve streak while one IR-exhausted straggler never moves — **soft-park** those leftovers (`awaiting_periodic_report` when fully bodied thin; `unfetchable_iwb` when IWB) so the priority slot can release. Do **not** demote the market from cascade head policy, open a fourth equal sprint stream, or burn disproportionate deepen for limited gain.
 
 | Gate | Rule |
 |------|------|
@@ -98,7 +98,7 @@ While `head_needs_fat_slot` is true the head keeps host priority: each spare's w
 | Small leftover | Unparked thin∪IWB count ≤ **3** (`DEFAULT_STRAGGLER_MAX_LEFTOVERS`) |
 | Per-ticker streak | Ticker stayed in *effective* leftover across ≥ **2** complete deepen runs (`DEFAULT_STRAGGLER_ZERO_RUNS`) without that ticker in `improved_tickers` — peer improves do **not** reset |
 | Reason | Same as market-wide exhaustion: thin fully-bodied → `awaiting_periodic_report`; IWB → `unfetchable_iwb` |
-| Effect | `ingest_exhausted` / `sprint_ingest_complete` → fat slot releases; market stays on maintenance + admitted package |
+| Effect | `ingest_exhausted` / `sprint_ingest_complete` → priority slot releases; market stays on maintenance + admitted package |
 
 Wired in `library_ingest_exhaustion.refresh_library_ingest_exhaustion` (`park_via=straggler_soft_park`). Market-wide 3× complete 0-improve parking is unchanged.
 
@@ -106,7 +106,7 @@ Wired in `library_ingest_exhaustion.refresh_library_ingest_exhaustion` (`park_vi
 
 **Equal treatment after admission.** Compare only admitted markets that have the same package (N103). Do **not** spray leftover plan credit across 21 thin markets (N96). Residual skew you cannot policy away: filing *yield* (ESEF vs EDGAR vs ASX IR), session timezone, and buy-tier width. Spare-slot fractions on a *pre-threshold* market are expected; leaving a *post-threshold* market on observe-sim only is a treatment bug.
 
-**Equal-support is the on-ramp to future per-market AI / autopsy (data only).** L321 / L322 already guarantee every *admitted* market the same opportunity to accumulate the ingredients later shard AI eligibility and **L370** freeze snapshots will need: weekday epoch-0 marks, near-miss watch (buy-not-now / hold-near-buy), buy-tier rememo eligibility, Layer B archives, and FTSE-volume filing maintenance. Keep that *accumulation* balanced across the admitted set. Deliberate *opening* / cascade skews are not permission to starve another admitted book’s data path: euro fat-sprint volume (serialize to threshold), P1 Investment-demanded live depth, capacity-1 weekly paper (**N94**), and shared rememo daily caps. Parallel Phase C attribution and shard AI-judgment stay serial (**N122**); parallel equal-support *data* stays on. Outcome counts will still differ by jurisdiction yield and buy-tier width — that is residual, not unequal wiring.
+**Equal-support is the on-ramp to future per-market AI / autopsy (data only).** L321 / L322 already guarantee every *admitted* market the same opportunity to accumulate the ingredients later shard AI eligibility and **L370** freeze snapshots will need: weekday epoch-0 marks, near-miss watch (buy-not-now / hold-near-buy), buy-tier rememo eligibility, Layer B archives, and FTSE-volume filing maintenance. Keep that *accumulation* balanced across the admitted set. Deliberate *opening* / cascade skews are not permission to starve another admitted book’s data path: euro priority-slot volume (serialize to threshold), P1 Investment-demanded live depth, capacity-1 weekly paper (**N94**), and shared rememo daily caps. Parallel Phase C attribution and shard AI-judgment stay serial (**N122**); parallel equal-support *data* stays on. Outcome counts will still differ by jurisdiction yield and buy-tier width — that is residual, not unequal wiring.
 
 **What still waits.** Shard AI-judgment and knob apply wait on the epoch-0 + near-miss watch. Phase 2 weekly AI paper stays on `euro_depth` only. P1 Data spend stays on Investment-demanded sets (holdings ∪ running sealed units ∪ F3; see [data-pillar-priorities.md](data-pillar-priorities.md)) — FTSE strand A is today's running unit, not a buy-tier-only spray target. Equal decision-freeze fields on admitted epoch-0 rows (**L370**) wait on a proven FTSE freeze schema — that thickens data for later AI timing; it is not opening AI.
 
@@ -119,7 +119,7 @@ Wired in `library_ingest_exhaustion.refresh_library_ingest_exhaustion` (`park_vi
 - **Equal-support package** (`ftse-library equal-support`): market-aware timing stamp, buy-tier rememo eligibility at the same body-lag rule, and per-market exclusion-universe + exit-timing archives under `markets/<id>/screen/`
 - **Weekday rememo** (`ftse-library rememo`, after library ingest maintenance): same 3/day body-lag cap (catch-up 5 when that market’s backlog exceeds 15) as FTSE. Once per weekday. Not a Sunday dump and not `research_all_graduated` / 21-market spray.
 
-It does **not** start a shard AI-judgment track or `decision-review --apply`. Watch epoch-0 and the near-miss groups first. P1 live ingest / paper-auto still serve Investment-demanded FTSE holdings and sealed units first. Euro keeps the fat sprint until its own maintenance threshold.
+It does **not** start a shard AI-judgment track or `decision-review --apply`. Watch epoch-0 and the near-miss groups first. P1 live ingest / paper-auto still serve Investment-demanded FTSE holdings and sealed units first. Euro keeps the priority slot until its own maintenance threshold.
 
 ### Progressive epoch-0 admission
 
@@ -127,7 +127,7 @@ It does **not** start a shard AI-judgment track or `decision-review --apply`. Wa
 
 **Progressive ≠ simultaneous.** Do not bulk-add all graduated markets to `ladder.admitted_learning_markets` or expect epoch-0 crons for ~21 slices at once (**N96**; shared ingest runners). Admission is **serialized**:
 
-1. A market runs **sprint deepen** (focus fat slot and/or `ingest_parallel_sprint` / `_2` while on `market_queue`).
+1. A market runs **sprint deepen** (focus priority slot and/or `ingest_parallel_sprint` / `_2` while on `market_queue`).
 2. It reaches **`sprint_ingest_complete`** (raw filing parity **or** leftover thin/IWB parked as exhausted).
 3. **`admit_market_to_learning`** (L322) flips equal-support; epoch-0 weekday crons register on first admit.
 4. Auto-advance + **`reseed_empty_parallel_sprint_slots`** promote the next **`market_queue`** name that still has gaps into the freed spare stream.
@@ -194,8 +194,8 @@ ftse-library epoch0-weekday --force    # tests only; production uses session gat
 
 | Approach | Use when | Do not use when |
 |----------|----------|-----------------|
-| **Stagger** | One market still holds the fat sprint. Existing +30/+60 min stream offsets, maintenance at `:30`, spare wait-on-head, and session timezones (AU / EU / US weekday paper) | As a substitute for admitting a post-threshold market |
-| **Parallel pipelines** | Graduated markets on **maintenance** (FTSE-volume, unparked names) plus one fat **sprint** head. Shared `library-ingest-maintenance` crons stay on whenever `maintenance_markets` is nonempty — euro sprint mode does not disable them. | A fourth equal sprint stream while a head is unfinished |
+| **Stagger** | One market still holds the priority slot. Existing +30/+60 min stream offsets, maintenance at `:30`, spare wait-on-head, and session timezones (AU / EU / US weekday paper) | As a substitute for admitting a post-threshold market |
+| **Parallel pipelines** | Graduated markets on **maintenance** (FTSE-volume, unparked names) plus one priority-slot **sprint** head. Shared `library-ingest-maintenance` crons stay on whenever `maintenance_markets` is nonempty — euro sprint mode does not disable them. | A fourth equal sprint stream while a head is unfinished |
 | **One maintenance job, many markets** | Two markets fit; width defaults to **2** when crowded (L454) | Width 3+ without capacity-review green samples — job now rotates a bounded set per slot (L323) instead of clipping the tail |
 
 **Spare auto-advance is correct.** When a spare stream hits `sprint_ingest_complete`, promote the next `market_queue` name into that slot (`tsx60` / `ftse_smallcap` today). Do not pause that rotation to “save capacity.” Shared `library-ingest-maintenance` with three-plus books serves **up to two markets per cron** at full FTSE volume by default (`maintenance_capacity.json` + `maintenance_slot_cursor.json`; L323/L454). `ftse-library maintenance-capacity-review --apply` steps width 1–3 from slot samples or proposes matrix (flag only). Still watch job finish: `timeout-minutes: 120`, spare_wait, ESEF/EDGAR/IR/Yahoo rate limits. Do not add a fourth equal sprint stream. The per-market **62-name** deepen cap is usually not binding on maintenance books.
@@ -256,7 +256,7 @@ Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The
 
 **What runs:** Full track set (rules, AI judgment, grace, technical), exit-shadow and exit-timing cohorts, churn health — **Sunday batch only** after ladder, using library screen → reports adapter. No weekday settle stepping yet; no `--apply` on knobs.
 
-**Policy:** `ladder.weekly_paper_shard_after_screen`, `ladder.weekly_paper_shard_markets`, `ladder.weekly_paper_shard_capacity` (depth-first: capacity **1**, markets `["euro_depth"]`). Ingest effort follows the same cascade (P2 in [`AGENTS.md`](../AGENTS.md)): fat slot on the current learning-phase candidate, spare on the next queue markets, no fourth equal sprint stream.
+**Policy:** `ladder.weekly_paper_shard_after_screen`, `ladder.weekly_paper_shard_markets`, `ladder.weekly_paper_shard_capacity` (depth-first: capacity **1**, markets `["euro_depth"]`). Ingest effort follows the same cascade (P2 in [`AGENTS.md`](../AGENTS.md)): priority slot on the current learning-phase candidate, spare on the next queue markets, no fourth equal sprint stream.
 
 **Orchestration:** After observe sim in `ftse-library ladder`, `run_weekly_paper_shards_for_screened_markets` runs for markets that passed Phase 1 and were screened this run. Phase rollup refreshes to `docs/data/library/shard_phases.json`.
 

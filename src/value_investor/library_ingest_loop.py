@@ -459,7 +459,7 @@ def select_library_ingest_targets(
             row.ticker,
         )
     )
-    return scored[: max(1, int(max_targets))] if scored else []
+    return scored[: max(0, int(max_targets))] if scored else []
 
 
 def load_library_ingest_pins(

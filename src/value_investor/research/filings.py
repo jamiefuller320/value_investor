@@ -280,7 +280,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     ],
     # euro_depth zero_body stuck — HM-B.ST indexed bogus google_news (HM Prison /
     # Parliament) with 0 bodies; ESEF miss on Finance-AB LEI. Seed hmgroup.com
-    # statutory PDFs so the next euro pin clears zero_body without fat-slot divert.
+    # statutory PDFs so the next euro pin clears zero_body without a priority-slot divert.
     "HM-B.ST": [
         "https://hmgroup.com/wp-content/uploads/2026/03/HM-Group-Annual-and-sustainability-report-2025.pdf",
         "https://hmgroup.com/wp-content/uploads/2026/01/H-M-Hennes-Mauritz-AB-Full-year-report-2025.pdf",
@@ -357,7 +357,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     ],
     # dax spare unmeasured stuck — G1A.DE (GEA Group): ESEF/news discovery
     # repeatedly 0-improve with empty IR allowlist. Seed gea.com CDN statutory PDFs
-    # on the spare factory path only (do not divert euro_depth fat slot).
+    # on the spare factory path only (do not divert the euro_depth priority slot).
     "G1A.DE": [
         "https://cdn.gea.com/-/media/investors/annual-report/2025/annual-report-2025-en.pdf",
         "https://cdn.gea.com/-/media/investors/annual-report/2025/consolidated-financial-statements-2025-en.pdf",

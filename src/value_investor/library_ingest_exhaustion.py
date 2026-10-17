@@ -342,7 +342,7 @@ def count_trailing_ticker_leftover_no_improve_runs(
 
     Other tickers improving on the same run do **not** reset this streak. Used to
     soft-park IR-exhausted stragglers when the market-wide 0-improve counter is
-    starved by peer progress (cascade fat-slot release).
+    starved by peer progress (cascade priority-slot release).
     """
     name = str(ticker or "").strip()
     if not name:
@@ -447,7 +447,7 @@ def refresh_library_ingest_exhaustion(
     ``straggler_max_leftovers``) and a ticker stayed leftover across
     ``straggler_zero_runs`` complete deepen runs without *that* ticker
     improving, park it even if peer tickers still improve on the same runs.
-    This releases the cascade fat slot after a sensible threshold without
+    This releases the cascade priority slot after a sensible threshold without
     demoting the market from head policy.
     """
     from value_investor.library_ingest_escalation import resolve_library_ingest_health_log_path

@@ -32,7 +32,7 @@ Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full 
 1. **Primary learning track (hands-off):** AI quasi-human paper decisions using research available at the time → confirm by **outperformance after costs vs the market** (and vs a rules control book). See [`docs/ops/primary-learning-track.md`](ops/primary-learning-track.md).
 2. **Keep decision-review learning running** — weekday paper-auto + `ftse-decision-review` on both tracks until knobs can apply.
 3. **Optional human packs** — still useful for live capital verification; not the primary improvement loop.
-4. **Grow data libraries in the background (P2, cascaded)** — fat slot on one market until maintenance-threshold exhaustion; then **L322 admit** each market to the same epoch-0 standard (maintenance + frozen `buy_tier_level` + near-miss watch + weekday equal-support). That admission is **progressive** (one `market_queue` name at a time through spare sprint streams), not a single flip for every graduated slice. Do not fork shard AI or apply knobs until admitted books have marks. Do **not** add a fourth equal sprint stream. Do not change the live screen. See [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md#progressive-epoch-0-admission).
+4. **Grow data libraries in the background (P2, cascaded)** — priority slot on one market until maintenance-threshold exhaustion; then **L322 admit** each market to the same epoch-0 standard (maintenance + frozen `buy_tier_level` + near-miss watch + weekday equal-support). That admission is **progressive** (one `market_queue` name at a time through spare sprint streams), not a single flip for every graduated slice. Do not fork shard AI or apply knobs until admitted books have marks. Do **not** add a fourth equal sprint stream. Do not change the live screen. See [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md#progressive-epoch-0-admission).
 5. **Only then** expand live coverage and tighten automation.
 
 ### Machinery spend (P1 / P2)
@@ -40,7 +40,7 @@ Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full 
 Agent and engineering time, in order (also in [`AGENTS.md`](../AGENTS.md)):
 
 1. **P1 — Investment-demanded input quality (absolute availability).** Raise filings bodies, FCF basis, overlay bind, and memo recency for names Investment actually uses, in serve order: live holdings → already-running sealed units (today: FTSE buy-tier for strand A + N200 `raw_buy_tier`) → accepted F3 repairs on those sets → launch-queue head → waiters. Green inventory on the active set is success — do not invent rememo/ingest spray. Extra FTSE ingest on a green set, new paper tracks, and live breadth are factory, not foundation. See [`ops/data-pillar-priorities.md`](ops/data-pillar-priorities.md).
-2. **P2 — Offline ingest cascade.** After P1, maximum effort on the highest-priority market not yet in the learning phase; spare capacity on the next queue names; shift the fat slot when that phase transition completes. Equal extra sprint streams can starve the head target — do not add them.
+2. **P2 — Offline ingest cascade.** After P1, maximum effort on the highest-priority market not yet in the learning phase; spare capacity on the next queue names; shift the priority slot when that phase transition completes. Equal extra sprint streams can starve the head target — do not add them.
 
 ---
 
