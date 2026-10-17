@@ -67,6 +67,17 @@ class ScreenRow:
     has_annual_statement: bool
     history_price: float | None
     ordinary_shares: float | None
+    company_adjusted: float | None = None
+    screen_ttm: float | None = None
+    cash_dividend: float | None = None
+    repurchase: float | None = None
+    diluted_eps: float | None = None
+    net_income: float | None = None
+    stockholders_equity: float | None = None
+    screen_roe: float | None = None
+    unusual_items: tuple[tuple[str, float], ...] = ()
+    price_quote_currency: str | None = None
+    statement_currency: str | None = None
 
 
 @dataclass(frozen=True)
@@ -168,14 +179,131 @@ def share_count_from_balance(payload: dict[str, Any]) -> dict[str, Any] | None:
 
 
 def _statement_shares(path: Path) -> float | None:
+    facts = _statement_facts(path)
+    shares = facts.get("ordinary_shares")
+    return None if shares is None else float(shares)
+
+
+def _latest_statement_row(block: Any) -> dict[str, Any] | None:
+    if not isinstance(block, dict) or not block:
+        return None
+    row = block[sorted(block, reverse=True)[0]]
+    return row if isinstance(row, dict) else None
+
+
+def _statement_facts(path: Path | None) -> dict[str, Any]:
+    """Figures already stored on one annual statement. Missing lines stay missing."""
+
+    facts: dict[str, Any] = {
+        "ordinary_shares": None,
+        "cash_dividend": None,
+        "repurchase": None,
+        "diluted_eps": None,
+        "net_income": None,
+        "stockholders_equity": None,
+        "unusual_items": (),
+        "statement_currency": None,
+    }
+    if path is None:
+        return facts
+    try:
+        payload = _load_json(path)
+    except (OSError, json.JSONDecodeError):
+        return facts
+    if not isinstance(payload, dict):
+        return facts
+    stamp = share_count_from_balance(payload)
+    if stamp is not None:
+        facts["ordinary_shares"] = stamp["ordinary_shares"]
+    for key in ("reporting_currency", "financialCurrency", "currency"):
+        value = payload.get(key)
+        if isinstance(value, str) and value.strip():
+            facts["statement_currency"] = value.strip()
+            break
+    cash_flow = _latest_statement_row(payload.get("cash_flow"))
+    if cash_flow is not None:
+        for field in ("Common Stock Dividend Paid", "Cash Dividends Paid"):
+            if field in cash_flow:
+                facts["cash_dividend"] = _optional_float(cash_flow.get(field))
+                break
+        if "Repurchase Of Capital Stock" in cash_flow:
+            facts["repurchase"] = _optional_float(cash_flow.get("Repurchase Of Capital Stock"))
+    income = payload.get("income_statement") or {}
+    balance = payload.get("balance_sheet") or {}
+    latest_income = _latest_statement_row(income)
+    if latest_income is not None:
+        if "Diluted EPS" in latest_income:
+            facts["diluted_eps"] = _optional_float(latest_income.get("Diluted EPS"))
+        unusual: list[tuple[str, float]] = []
+        for field in (
+            "Total Unusual Items",
+            "Total Unusual Items Excluding Goodwill",
+            "Special Income Charges",
+        ):
+            if field not in latest_income:
+                continue
+            number = _optional_float(latest_income.get(field))
+            if number is not None:
+                unusual.append((field, number))
+        facts["unusual_items"] = tuple(unusual)
+    if isinstance(income, dict) and isinstance(balance, dict):
+        for year in sorted(set(income) & set(balance), reverse=True):
+            inc_row = income[year]
+            bal_row = balance[year]
+            if not isinstance(inc_row, dict) or not isinstance(bal_row, dict):
+                continue
+            net_income = _optional_float(inc_row.get("Net Income"))
+            equity = _optional_float(bal_row.get("Stockholders Equity"))
+            if equity is None:
+                equity = _optional_float(bal_row.get("Common Stock Equity"))
+            if net_income is None or equity is None or equity == 0:
+                continue
+            facts["net_income"] = net_income
+            facts["stockholders_equity"] = equity
+            break
+    return facts
+
+
+def _price_quote_currency(root: Path, ticker: str) -> str | None:
+    path = resolve_json_path(root / "docs/data/research" / ticker / "sources" / "price_quote.json")
+    if path is None:
+        return None
     try:
         payload = _load_json(path)
     except (OSError, json.JSONDecodeError):
         return None
-    stamp = share_count_from_balance(payload if isinstance(payload, dict) else {})
-    if stamp is None:
+    value = payload.get("quote_currency") if isinstance(payload, dict) else None
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    return None
+
+
+def _screen_roe_fraction(display: Any) -> float | None:
+    """Screen ROE stored as a percent string, such as ``33.7%``."""
+
+    if not isinstance(display, str) or not display.strip().endswith("%"):
         return None
-    return float(stamp["ordinary_shares"])
+    number = _optional_float(display)
+    if number is None:
+        return None
+    return number / 100.0
+
+
+def _price_in_statement_currency(row: ScreenRow) -> float | None:
+    """Scale a price only when both currencies are stored and the unit is pence or pounds."""
+
+    price = row.history_price
+    quote = row.price_quote_currency
+    statement = row.statement_currency
+    if price is None or not quote or not statement:
+        return None
+    if quote == statement:
+        return price
+    if quote == "GBp" and statement == "GBP":
+        return price / 100.0
+    if quote == "GBP" and statement == "GBp":
+        return price * 100.0
+    return None
 
 
 def _history_prices(root: Path) -> dict[str, float]:
@@ -239,8 +367,7 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
             fcf_obj = fcf if isinstance(fcf, dict) else {}
             displayed, has_figure = _fcf_figure(fcf_obj, key_metrics)
             statement = _statement_path(root, ticker)
-            # Quote-summary share files are not the statement's ordinary share count.
-            shares = _statement_shares(statement) if statement is not None else None
+            facts = _statement_facts(statement)
             rows.append(
                 ScreenRow(
                     ticker=ticker,
@@ -261,7 +388,18 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
                     fcf_has_figure=has_figure,
                     has_annual_statement=statement is not None,
                     history_price=prices.get(ticker),
-                    ordinary_shares=shares,
+                    ordinary_shares=facts["ordinary_shares"],
+                    company_adjusted=_optional_float(fcf_obj.get("company_adjusted")),
+                    screen_ttm=_optional_float(fcf_obj.get("screen_ttm")),
+                    cash_dividend=facts["cash_dividend"],
+                    repurchase=facts["repurchase"],
+                    diluted_eps=facts["diluted_eps"],
+                    net_income=facts["net_income"],
+                    stockholders_equity=facts["stockholders_equity"],
+                    screen_roe=_screen_roe_fraction(key_metrics.get("ROE")),
+                    unusual_items=facts["unusual_items"],
+                    price_quote_currency=_price_quote_currency(root, ticker),
+                    statement_currency=facts["statement_currency"],
                 )
             )
     return rows
@@ -347,6 +485,106 @@ def check_missing_annual_statement(row: ScreenRow) -> str | None:
     return f"no docs/data/research/{row.ticker}/sources/financials_annual.json"
 
 
+def check_fcf_figures_disagree(row: ScreenRow) -> str | None:
+    """Keep filing, company-adjusted, and screen free cash flow as separate stored figures."""
+
+    stored = {
+        "filing_aligned": row.filing_aligned,
+        "company_adjusted": row.company_adjusted,
+        "screen_ttm": row.screen_ttm,
+    }
+    present = {name: value for name, value in stored.items() if value is not None}
+    if len(present) < 2 or len(set(present.values())) < 2:
+        return None
+    return "; ".join(f"{name} {_num(value)}" for name, value in present.items())
+
+
+def check_dividend_plus_repurchase_against_filing_fcf(row: ScreenRow) -> str | None:
+    if row.cash_dividend is None or row.repurchase is None or row.filing_aligned is None:
+        return None
+    returned = abs(row.cash_dividend) + abs(row.repurchase)
+    if not returned > row.filing_aligned:
+        return None
+    return (
+        f"dividend {_num(row.cash_dividend)} plus repurchase {_num(row.repurchase)} "
+        f"is {_num(returned)} against filing free cash flow {_num(row.filing_aligned)}"
+    )
+
+
+def check_cash_dividend_over_cap_against_yield(row: ScreenRow) -> str | None:
+    if (
+        row.cash_dividend is None
+        or row.yield_display is None
+        or row.history_price is None
+        or row.ordinary_shares is None
+    ):
+        return None
+    shown = _optional_float(row.yield_display)
+    price = _price_in_statement_currency(row)
+    if price is None or shown is None or row.ordinary_shares <= 0:
+        quote = row.price_quote_currency or "unknown"
+        statement = row.statement_currency or "unknown"
+        return (
+            f"cash dividend {_num(row.cash_dividend)}; price {row.history_price} quote {quote}; "
+            f"ordinary shares {_num(row.ordinary_shares)}; statement currency {statement}; "
+            f"displayed yield {row.yield_display}; readings left side by side"
+        )
+    cap = price * row.ordinary_shares
+    if cap <= 0:
+        return None
+    cash_yield = abs(row.cash_dividend) / cap * 100.0
+    if round(cash_yield, 1) == round(shown, 1):
+        return None
+    return (
+        f"cash dividend {_num(row.cash_dividend)} over cap {_num(cap)} is "
+        f"{cash_yield} percent; displayed yield {row.yield_display}"
+    )
+
+
+def check_screen_roe_against_net_income_over_equity(row: ScreenRow) -> str | None:
+    if row.screen_roe is None or row.net_income is None or row.stockholders_equity is None:
+        return None
+    if row.stockholders_equity == 0:
+        return None
+    ratio = row.net_income / row.stockholders_equity
+    if round(row.screen_roe * 100.0, 1) == round(ratio * 100.0, 1):
+        return None
+    return (
+        f"screen ROE {row.screen_roe * 100.0} percent; net income {_num(row.net_income)} "
+        f"over equity {_num(row.stockholders_equity)} is {ratio * 100.0} percent"
+    )
+
+
+def check_unusual_items_disagree(row: ScreenRow) -> str | None:
+    if len(row.unusual_items) < 2:
+        return None
+    if len({value for _name, value in row.unusual_items}) < 2:
+        return None
+    return "; ".join(f"{name} {_num(value)}" for name, value in row.unusual_items)
+
+
+def check_screen_pe_against_price_over_diluted_eps(row: ScreenRow) -> str | None:
+    pe = _optional_float(row.pe_display)
+    if pe is None or row.history_price is None or row.diluted_eps is None:
+        return None
+    price = _price_in_statement_currency(row)
+    if price is None or row.diluted_eps == 0:
+        quote = row.price_quote_currency or "unknown"
+        statement = row.statement_currency or "unknown"
+        return (
+            f"screen P/E {row.pe_display}; price {row.history_price} quote {quote}; "
+            f"diluted EPS {_num(row.diluted_eps)}; statement currency {statement}; "
+            "readings left side by side"
+        )
+    ratio = price / row.diluted_eps
+    if round(ratio, 1) == round(pe, 1):
+        return None
+    return (
+        f"screen P/E {row.pe_display}; price {price} {row.statement_currency} "
+        f"over diluted EPS {_num(row.diluted_eps)} is {ratio}"
+    )
+
+
 def check_price_without_ordinary_share_count(row: ScreenRow) -> str | None:
     if row.history_price is None or row.ordinary_shares is not None:
         return None
@@ -411,6 +649,36 @@ CHECKS: tuple[Check, ...] = (
         "price_without_ordinary_share_count",
         "a stored price with no ordinary-share count",
         check_price_without_ordinary_share_count,
+    ),
+    Check(
+        "fcf_figures_disagree",
+        "filing, company-adjusted, and screen free cash flow that differ",
+        check_fcf_figures_disagree,
+    ),
+    Check(
+        "dividend_plus_repurchase_against_filing_fcf",
+        "dividend plus repurchase against filing free cash flow",
+        check_dividend_plus_repurchase_against_filing_fcf,
+    ),
+    Check(
+        "cash_dividend_over_cap_against_yield",
+        "cash dividend over cap against the displayed yield",
+        check_cash_dividend_over_cap_against_yield,
+    ),
+    Check(
+        "screen_roe_against_net_income_over_equity",
+        "screen return on equity against net income over equity",
+        check_screen_roe_against_net_income_over_equity,
+    ),
+    Check(
+        "unusual_items_disagree",
+        "unusual-item fields that disagree",
+        check_unusual_items_disagree,
+    ),
+    Check(
+        "screen_pe_against_price_over_diluted_eps",
+        "screen P/E against price over diluted earnings when the currency is known",
+        check_screen_pe_against_price_over_diluted_eps,
     ),
 )
 

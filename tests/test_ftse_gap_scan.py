@@ -246,6 +246,123 @@ def test_default_fetcher_is_fetch_annual_financials(monkeypatch):
     assert result.written is None
 
 
+def test_stored_fcf_figures_stay_distinct():
+    same = _row(filing_aligned=10.0, company_adjusted=10.0, screen_ttm=10.0)
+    assert "fcf_figures_disagree" not in _ids(same)
+    one = _row(filing_aligned=10.0)
+    assert "fcf_figures_disagree" not in _ids(one)
+    split = _row(filing_aligned=10.0, company_adjusted=4.0, screen_ttm=10.0)
+    detail = next(hit.detail for hit in hits_for(split) if hit.rule_id == "fcf_figures_disagree")
+    assert "filing_aligned 10" in detail
+    assert "company_adjusted 4" in detail
+    assert "screen_ttm 10" in detail
+
+
+def test_dividend_plus_repurchase_uses_only_stored_lines():
+    covered = _row(cash_dividend=-5.0, repurchase=-1.0, filing_aligned=10.0)
+    assert "dividend_plus_repurchase_against_filing_fcf" not in _ids(covered)
+    missing_line = _row(cash_dividend=-5.0, filing_aligned=1.0)
+    assert "dividend_plus_repurchase_against_filing_fcf" not in _ids(missing_line)
+    over = _row(cash_dividend=-8.0, repurchase=-4.0, filing_aligned=10.0)
+    detail = next(
+        hit.detail
+        for hit in hits_for(over)
+        if hit.rule_id == "dividend_plus_repurchase_against_filing_fcf"
+    )
+    assert "is 12 against filing free cash flow 10" in detail
+
+
+def test_unknown_currency_leaves_yield_and_pe_side_by_side():
+    row = _row(
+        cash_dividend=-10.0,
+        yield_display="2.0%",
+        history_price=200.0,
+        ordinary_shares=100.0,
+        price_quote_currency="GBp",
+        pe_display="12.0",
+        diluted_eps=0.5,
+    )
+    yield_detail = next(
+        hit.detail for hit in hits_for(row) if hit.rule_id == "cash_dividend_over_cap_against_yield"
+    )
+    pe_detail = next(
+        hit.detail
+        for hit in hits_for(row)
+        if hit.rule_id == "screen_pe_against_price_over_diluted_eps"
+    )
+    assert "readings left side by side" in yield_detail
+    assert "readings left side by side" in pe_detail
+    assert "percent" not in yield_detail
+    assert "over diluted EPS" not in pe_detail
+
+
+def test_known_currency_compares_yield_and_pe_without_replacing_either():
+    match = _row(
+        cash_dividend=-2.0,
+        yield_display="2.0%",
+        history_price=100.0,
+        ordinary_shares=1.0,
+        price_quote_currency="GBP",
+        statement_currency="GBP",
+        pe_display="10.0",
+        diluted_eps=10.0,
+    )
+    assert "cash_dividend_over_cap_against_yield" not in _ids(match)
+    assert "screen_pe_against_price_over_diluted_eps" not in _ids(match)
+    differ = _row(
+        cash_dividend=-4.0,
+        yield_display="2.0%",
+        history_price=100.0,
+        ordinary_shares=1.0,
+        price_quote_currency="GBp",
+        statement_currency="GBP",
+        pe_display="10.0",
+        diluted_eps=0.05,
+    )
+    texts = {hit.rule_id: hit.detail for hit in hits_for(differ)}
+    assert "displayed yield 2.0%" in texts["cash_dividend_over_cap_against_yield"]
+    assert "screen P/E 10.0" in texts["screen_pe_against_price_over_diluted_eps"]
+    assert "over diluted EPS" in texts["screen_pe_against_price_over_diluted_eps"]
+
+
+def test_screen_roe_and_unusual_items_use_stored_figures():
+    agree = _row(screen_roe=0.10, net_income=10.0, stockholders_equity=100.0)
+    assert "screen_roe_against_net_income_over_equity" not in _ids(agree)
+    disagree = _row(screen_roe=0.337, net_income=10.0, stockholders_equity=100.0)
+    detail = next(
+        hit.detail
+        for hit in hits_for(disagree)
+        if hit.rule_id == "screen_roe_against_net_income_over_equity"
+    )
+    assert "screen ROE" in detail
+    assert "net income 10" in detail
+    same_items = _row(unusual_items=(("Total Unusual Items", 1.0), ("Special Income Charges", 1.0)))
+    assert "unusual_items_disagree" not in _ids(same_items)
+    items = _row(
+        unusual_items=(
+            ("Total Unusual Items", 2108000.0),
+            ("Special Income Charges", 1787000.0),
+        )
+    )
+    item_detail = next(
+        hit.detail for hit in hits_for(items) if hit.rule_id == "unusual_items_disagree"
+    )
+    assert "2108000" in item_detail
+    assert "1787000" in item_detail
+
+
+def test_megp_unusual_items_and_fgp_fcf_figures_when_files_contain_them():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    megp = rows["MEGP.L"]
+    assert any(value == 2108000.0 for _name, value in megp.unusual_items)
+    assert "unusual_items_disagree" in _ids(megp)
+    fgp = rows["FGP.L"]
+    assert fgp.filing_aligned == pytest.approx(362600000.0)
+    assert fgp.company_adjusted == pytest.approx(73800000.0)
+    assert fgp.screen_ttm == pytest.approx(302812512.0)
+    assert "fcf_figures_disagree" in _ids(fgp)
+
+
 def test_fetch_refuses_to_walk_the_list():
     with pytest.raises(ValueError, match="does not walk"):
         fetch_one_annual_statement("  ")
