@@ -607,9 +607,19 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sanofi.com/assets/dotcom/content-app/publications/half-year-financial-reports/Half-year-financial-report-2025.pdf",
         "https://www.sanofi.com/assets/dotcom/content-app/publications/annual-report-on-form-20-f/2024-01-01-form-20-f-2024-en.pdf",
     ],
+    # dax leftover VOW3.DE — eng-20261017-03: annual-report-2025-1886 hub 404; FY2025 PDF + H1/9M interim.
     "VOW.DE": [
         "https://www.volkswagen-group.com/en/press-releases/volkswagen-group-strengthens-financial-resilience-in-2025-strong-fourth-quarter-in-a-challenging-environment-20202/download?disposition=attachment",
-        "https://www.volkswagen-group.com/en/publications/more/annual-report-2025-1886",
+        "https://www.volkswagen-group.com/en/publications/more/annual-report-2025-3212/download?disposition=attachment",
+        "https://www.volkswagen-group.com/en/publications/more/half-yearly-financial-report-2025-3077/download?disposition=attachment",
+        "https://www.volkswagen-group.com/en/publications/more/interim-report-january-september-2025-3129/download?disposition=attachment",
+    ],
+    # Preferred-share DAX line — do not inherit VOW.DE (research_ir_urls.json still lists 404 annual hub).
+    "VOW3.DE": [
+        "https://www.volkswagen-group.com/en/press-releases/volkswagen-group-strengthens-financial-resilience-in-2025-strong-fourth-quarter-in-a-challenging-environment-20202/download?disposition=attachment",
+        "https://www.volkswagen-group.com/en/publications/more/annual-report-2025-3212/download?disposition=attachment",
+        "https://www.volkswagen-group.com/en/publications/more/half-yearly-financial-report-2025-3077/download?disposition=attachment",
+        "https://www.volkswagen-group.com/en/publications/more/interim-report-january-september-2025-3129/download?disposition=attachment",
     ],
     # euro_depth IWB blocker — DTE.DE parked awaiting_periodic_report; FY2025 entire annual report PDF.
     "DTE.DE": [
@@ -967,7 +977,6 @@ _SEC_ENTITY_NAME_FALLBACK: dict[int, str] = {
 # Cross-listing inheritance for manual IR allowlist URLs (e.g. Amsterdam vs LSE Shell).
 _IR_ALLOWLIST_TICKER_ALIASES: dict[str, tuple[str, ...]] = {
     "SHELL.AS": ("SHEL.L",),
-    "VOW3.DE": ("VOW.DE",),
     "VOW3": ("VOW.DE", "VOW"),
 }
 
@@ -1005,7 +1014,9 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "AZE": ("Azelis", "Azelis Group"),
     "AGS": ("ageas", "Ageas SA/NV"),
     "UCB": ("UCB", "UCB SA"),
-    "VOW": ("Volkswagen", "Volkswagen AG"),
+    "VOW": ("Volkswagen", "Volkswagen AG", "Volkswagen Group"),
+    # dax VOW3.DE preferred share — base symbol VOW3 needs issuer tokens for IR title gate.
+    "VOW3": ("Volkswagen", "Volkswagen AG", "Volkswagen Group"),
     "DTE": ("Deutsche Telekom", "Deutsche Telekom AG"),
     "BAS": ("BASF", "BASF SE"),
     "TTE": ("TotalEnergies", "TotalEnergies SE"),

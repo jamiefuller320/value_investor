@@ -7353,9 +7353,10 @@ def test_fetch_filings_ir_allowlist_dax_unmeasured_builtins_eng_20260922_05(tmp_
         assert any(row["period"] == "annual" for row in rows)
 
     vow3 = fetch_filings_ir_allowlist("VOW3.DE", path=allowlist_path)
-    assert len(vow3) == 2
+    assert len(vow3) == 4
     assert all(row["source"] == "ir_allowlist" for row in vow3)
     assert any("volkswagen-group.com" in row["url"] for row in vow3)
+    assert sum(1 for row in vow3 if row["period"] == "interim") >= 1
 
 
 def test_merge_ir_allowlist_filings_bootstraps_empty_hei_de_index(tmp_path: Path):
@@ -11721,6 +11722,23 @@ def test_parked_source_hunter_essity_b_st_euro_depth_has_fetchable_ir():
     assert rows[0]["period"] == "annual"
     assert "essity.com" in rows[0]["url"]
     assert "Annual-Report-2025" in rows[0]["url"]
+
+
+def test_parked_source_hunter_vow3_de_dax_has_fetchable_ir():
+    """eng-20261017-03: VOW3.DE inherits VOW.DE volkswagen-group.com FY2025 + H1/9M interim PDFs."""
+    assert "VOW3.DE" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("VOW3.DE")
+    assert len(rows) == 4
+    annual = [row for row in rows if row["period"] == "annual"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(annual) == 1
+    assert len(interim) == 2
+    assert "annual-report-2025-3212" in annual[0]["url"]
+    body = fetch_filing_body(annual[0]["url"])
+    assert body
+    assert len(body) >= 50000
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], body, ticker="VOW3.DE")
+    assert valid, reason
 
 
 def test_parked_source_hunter_dte_de_euro_depth_has_fetchable_ir():
