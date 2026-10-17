@@ -57,6 +57,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-growth-batch-19.md` (second pass from pound-cap rank 201 through rank 210)
 - `docs/ftse350-growth-batch-22.md` (second pass from pound-cap rank 231 through rank 240)
 - `docs/ftse350-growth-batch-25.md` (second pass from pound-cap rank 261 through rank 270)
+- `docs/ftse350-closer-look-batch-1.md` (repeat closer-look read of the first ten: GSK.L, REL.L, HLN.L, FRES.L, SGE.L, SN.L, RTO.L, CCC.L, ABDN.L, BBY.L)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -639,3 +640,19 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** On `OCI.L` the 2023 diluted EPS is 0.0027 beside 1.26, 0.15 and 0.34. The 2023 net income is 47,488,000. On `OXB.L` the 2024 diluted EPS is −41.75 beside −0.4129, −1.6311 and −0.2692. The 2024 net income is −43,190,000.
 
 **What to change.** Do not fold `OCI.L` or `OXB.L` into section 51. Do not invent a corrected earnings figure.
+
+## 57. An 11 Oct history price and a chart labeled GBP can have no quote file
+
+**What is wrong.** `GSK.L`, `REL.L`, `HLN.L`, `FRES.L`, `SGE.L`, `SN.L`, `RTO.L`, `CCC.L`, `ABDN.L`, and `BBY.L` each have an 11 Oct history price and a chart labeled GBP. None of the ten has a `price_quote.json`, so the heading cap is missing. Section 53 records a quote currency other than sterling beside a chart labeled GBP. That section assumes a quote file exists.
+
+**Where.** The closer-look note for those ten names. Each stores an 11 Oct history price. The chart labels that price GBP. There is no quote file. The heading cap is missing.
+
+**What to change.** Do not fold these ten into section 53. Do not invent a quote or a cap.
+
+## 58. screen_ttm can differ from filing_aligned while the divergence flag is false
+
+**What is wrong.** On `FRES.L` and `CCC.L`, `screen_ttm` differs from `filing_aligned`, `fcf_divergence_flagged` is false, and `filing_aligned` equals the statement line. Section 12 is the arm where `filing_aligned` equals the screen TTM and differs from the statement. `REL.L` is that arm.
+
+**Where.** On `FRES.L`, `screen_ttm` is 1,999,836,928 beside `filing_aligned` of 1,889,566,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line. On `CCC.L`, `screen_ttm` is 287,937,504 beside `filing_aligned` of 257,600,000. `fcf_divergence_flagged` is false. `filing_aligned` equals the statement line.
+
+**What to change.** Do not fold `FRES.L` or `CCC.L` into section 12. Leave `REL.L` in that arm. Do not invent a corrected free-cash-flow figure.
