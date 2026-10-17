@@ -1,21 +1,12 @@
 {
-  "run_at": "2026-10-16T07:22:39.341509+00:00",
+  "run_at": "2026-10-17T02:31:50.264187+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "10 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across asx200, euro_depth, hang_seng, nasdaq100, sp500, tsx60: asx200/BWP.AX (no_memo, 295.38h since flip), hang_seng/0001.HK (no_memo, 103.38h since flip), nasdaq100/NVDA (no_memo, 79.38h since flip), asx200/GMD.AX (no_key_bodies, 55.38h since flip), sp500/NUE (no_memo, 55.38h since flip), tsx60/ABX.TO (no_key_bodies, 55.38h since flip), tsx60/SAP.TO (no_key_bodies, 55.38h since flip), tsx60/TECK-B.TO (no_key_bodies, 55.38h since flip), euro_depth/MT.AS (no_memo, 31.38h since flip), nasdaq100/AMAT (no_memo, 31.38h since flip). Blocking: no_key_bodies=4, no_memo=6.",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "ingest",
-      "title": "Universe archive body-miss rate elevated",
-      "summary": "Archive body-miss proxy 51% of 289 recent buy-tier flips; 12 still open without key bodies (sample: euro_depth/NBA.LS, tsx60/SAP.TO, tsx60/PPL.TO, tsx60/TECK-B.TO, euro_stoxx50/ADYEN.AS, aim/MPE.L). Observe-only outcome signal — not a cold-store start gate; do not eng-spray or add a second live crawler / fourth sprint stream (N180/N181).",
+      "summary": "12 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, ftse_smallcap, hang_seng, nasdaq100 (+2 more): asx200/BWP.AX (no_memo, 314.6h since flip), ftse_smallcap/ENQ.L (no_key_bodies, 290.6h since flip), hang_seng/0001.HK (no_memo, 122.6h since flip), aex/PRX.AS (no_memo, 74.6h since flip), asx200/GMD.AX (no_key_bodies, 74.6h since flip), euro_depth/PRX.AS (no_key_bodies, 74.6h since flip), sp500/NUE (no_memo, 74.6h since flip), tsx60/ABX.TO (no_key_bodies, 74.6h since flip), tsx60/SAP.TO (no_key_bodies, 74.6h since flip), tsx60/TECK-B.TO (no_key_bodies, 74.6h since flip) (+2 more). Blocking: no_key_bodies=6, no_memo=6.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -24,7 +15,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Price-only excess misstates track performance",
-      "summary": "Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_fair: published -16.3% vs total-return -10.2% (clean epoch, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.",
+      "summary": "Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_fair: published -17.4% vs total-return -10.1% (clean epoch, dividends £0.00); buy_tier_level: published -0.1% vs total-return +0.5% (lifetime, dividends £3.30). Cite the total-return view for performance. See docs/ops/total-return-view.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -33,7 +24,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Longer holds beat live exit buffer in replay",
-      "summary": "Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: ai_judgment_fair: exit_confirm_screens 10 vs live 2 +7.4% over 27 passes (17 vs 25 trades; realised median hold 5.0d); buy_tier_level: exit_confirm_screens 20 vs live 2 +1.4% over 27 passes (63 vs 115 trades; realised median hold 16.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.",
+      "summary": "Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: ai_judgment_fair: exit_confirm_screens 10 vs live 2 +7.5% over 28 passes (17 vs 26 trades; realised median hold 5.0d); buy_tier_level: exit_confirm_screens 20 vs live 2 +1.6% over 28 passes (63 vs 115 trades; realised median hold 16.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -69,7 +60,7 @@
       "severity": "info",
       "category": "research",
       "title": "N201 value-mom observe refreshed",
-      "summary": "strand-c-short-horizon-value-mom-v0: 112 completed episodes over 12 weeks; entries/week=9.333; smooth_ret_cohort_median=0.017314 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.002695; stress_3pct_report_only=-0.041579; skipped_missing_entry_fields=62962. Observe-only — launch-queue waiter; no live writes (F8).",
+      "summary": "strand-c-short-horizon-value-mom-v0: 114 completed episodes over 12 weeks; entries/week=9.5; smooth_ret_cohort_median=0.022167 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.007548; stress_3pct_report_only=-0.041579; skipped_missing_entry_fields=64925. Observe-only — launch-queue waiter; no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -93,10 +84,37 @@
       "action_taken": null
     },
     {
+      "severity": "info",
+      "category": "research",
+      "title": "N206 plain-EY observe refreshed",
+      "summary": "strand-d-plain-ey-identity-v0: 191 completed episodes over 12 weeks; entries/week=15.917; smooth_ret_cohort_median=0.012977 (fair costs primary; fixed-stake %; independent of fund NAV); cash_excess_report_only=0.012977; stress_3pct_report_only=-0.042502; skipped_missing_entry_fields=0. Observe-only — influences_live false; alone-first; no filing ingest sprint; no live writes (F8).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "N206 volume gate ready for review",
+      "summary": "Volume gate met (episodes>=48 and weeks>=8). Human may review the alone path; no auto-promote and no assessment-primary crown.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "paper",
+      "title": "Two-lot retention beats full exit in replay",
+      "summary": "buy_tier_level: core_kept beats full exit by +1.2% over 28 passes (2026-09-07 to 2026-10-16; core value £837.65, rank exits 21 vs full exit). Observe-only. Do not edit buy_tier_level. See docs/ops/two-lot-replay.md.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
       "severity": "warn",
       "category": "research",
       "title": "SEC filed FCF diverges from Yahoo basis on US buy-tier",
-      "summary": "12 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (13 of 214 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); GM (sp500) FY2025 SEC 17,564M vs Yahoo 1,771M (90%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.",
+      "summary": "12 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (13 of 215 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); GM (sp500) FY2025 SEC 17,564M vs Yahoo 1,771M (90%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -114,7 +132,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Primary book trails its control on total return",
-      "summary": "ai_judgment_fair total return -10.0% vs buy_tier_level +0.1% since 2026-09-07 (-10.2%). The primary's filter is costing return against the unfiltered buy tier. Observe-only: do not change the primary from this alone. See docs/ops/assessment-scoreboard.md.",
+      "summary": "ai_judgment_fair total return -9.0% vs buy_tier_level +0.9% since 2026-09-07 (-9.9%). The primary's filter is costing return against the unfiltered buy tier. Observe-only: do not change the primary from this alone. See docs/ops/assessment-scoreboard.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -132,7 +150,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Paper book would halt on drawdown or concentration",
-      "summary": "Observe-only. Books were not frozen or flattened. rules: drawdown 42% ≥ 20% | ai_judgment: drawdown 39% ≥ 20% | ai_judgment_calibrated: drawdown 27% ≥ 20% | ai_judgment_calibrated_r2: drawdown 24% ≥ 20% | ai_judgment_calibrated_r3: drawdown 24% ≥ 20% | ai_judgment_exclusion_u4: drawdown 25% ≥ 20% | ai_judgment_fair: drawdown 20% ≥ 20%. See docs/ops/paper-halt.md.",
+      "summary": "Observe-only. Books were not frozen or flattened. rules: drawdown 42% ≥ 20% | ai_judgment: drawdown 39% ≥ 20% | ai_judgment_calibrated: drawdown 27% ≥ 20% | ai_judgment_calibrated_r2: drawdown 24% ≥ 20% | ai_judgment_calibrated_r3: drawdown 24% ≥ 20% | ai_judgment_exclusion_u4: drawdown 25% ≥ 20%. See docs/ops/paper-halt.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -145,9 +163,22 @@
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "engineering",
+      "title": "Parked engineering tasks need manual review",
+      "summary": "1 parked task(s): eng-20261017-01",
+      "auto_fixable": false,
+      "fixed": true,
+      "action_taken": "cancel_superseded_gap_closure eng-20261017-01: tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20260922-03 (of eng-20260922-03)"
     }
   ],
   "auto_fixes": [
+    {
+      "action": "housekeep_parked_task",
+      "detail": "cancel_superseded_gap_closure eng-20261017-01: tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20260922-03 (of eng-20260922-03)"
+    },
     {
       "action": "market_eng_gap_burndown",
       "detail": "parked_hunter for us_adr_asia → "
@@ -158,12 +189,12 @@
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-10-16T07:05:25+00:00",
-      "last_success_run_id": 38865012452,
-      "age_hours": 0.3,
+      "last_success_at": "2026-10-17T01:03:22+00:00",
+      "last_success_run_id": 38989186860,
+      "age_hours": 1.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -174,9 +205,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-15T15:39:51+00:00",
-      "last_success_run_id": 38762306870,
-      "age_hours": 15.8,
+      "last_success_at": "2026-10-16T15:25:12+00:00",
+      "last_success_run_id": 38923778495,
+      "age_hours": 11.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -184,12 +215,12 @@
     {
       "workflow": "engineering-queue.yml",
       "name": "FTSE Engineering Queue",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 26,
-      "last_success_at": "2026-10-16T07:15:28+00:00",
-      "last_success_run_id": 38866064174,
-      "age_hours": 0.2,
+      "last_success_at": "2026-10-17T01:10:42+00:00",
+      "last_success_run_id": 38989732338,
+      "age_hours": 1.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -200,8 +231,8 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-10-16T07:20:42+00:00",
-      "last_success_run_id": 38866610892,
+      "last_success_at": "2026-10-17T02:30:55+00:00",
+      "last_success_run_id": 38995220063,
       "age_hours": 0.1,
       "stale": false,
       "recent_failures_24h": 0,
@@ -213,9 +244,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-15T12:44:29+00:00",
-      "last_success_run_id": 38736961527,
-      "age_hours": 18.7,
+      "last_success_at": "2026-10-16T12:36:23+00:00",
+      "last_success_run_id": 38901697839,
+      "age_hours": 14.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -228,7 +259,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T14:58:24+00:00",
       "last_success_run_id": 38149345226,
-      "age_hours": 112.4,
+      "age_hours": 131.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -239,9 +270,9 @@
       "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-10-15T06:51:45+00:00",
-      "last_success_run_id": 38694986805,
-      "age_hours": 24.6,
+      "last_success_at": "2026-10-16T06:51:48+00:00",
+      "last_success_run_id": 38863627294,
+      "age_hours": 19.8,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -254,7 +285,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T07:27:28+00:00",
       "last_success_run_id": 38121428588,
-      "age_hours": 120.0,
+      "age_hours": 139.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -267,7 +298,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T07:27:30+00:00",
       "last_success_run_id": 38121429962,
-      "age_hours": 120.0,
+      "age_hours": 139.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -280,7 +311,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T17:43:12+00:00",
       "last_success_run_id": 38160816599,
-      "age_hours": 109.7,
+      "age_hours": 128.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -288,12 +319,12 @@
     {
       "workflow": "paper-auto.yml",
       "name": "FTSE Paper Automation",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-15T08:34:58+00:00",
-      "last_success_run_id": 38706694985,
-      "age_hours": 22.8,
+      "last_success_at": "2026-10-16T08:26:30+00:00",
+      "last_success_run_id": 38873704310,
+      "age_hours": 18.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -304,9 +335,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-16T02:30:46+00:00",
-      "last_success_run_id": 38840805573,
-      "age_hours": 4.9,
+      "last_success_at": "2026-10-16T17:22:42+00:00",
+      "last_success_run_id": 38939215005,
+      "age_hours": 9.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
