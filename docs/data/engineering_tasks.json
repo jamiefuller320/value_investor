@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-16T20:19:11.529164+00:00",
+  "compiled_at": "2026-10-17T05:36:34.420940+00:00",
   "run_at": null,
-  "task_count": 174,
+  "task_count": 177,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2250,6 +2250,90 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/657",
       "pr_number": 657,
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
+    },
+    {
+      "id": "eng-20261017-01",
+      "area": "ingest",
+      "title": "Close stubborn ingest gaps for KGF.L (chain 1/3: 0/0 bodies, run igc-20261017-01)",
+      "summary": "Ingest gap-closure run igc-20261017-01 (chain root igc-20261017-01, round 1) targeted KGF.L with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20261017-01",
+        "trial_id": "igc-20261017-01",
+        "chain_root_id": "igc-20261017-01",
+        "chain_round": 1,
+        "tickers": [
+          "KGF.L"
+        ],
+        "ticker": "KGF.L",
+        "market_id": null,
+        "library_market": null,
+        "universe": "ftse350",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": false,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "KGF.L"
+          ]
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "KGF.L"
+          ]
+        },
+        "compile_reason": "gaps_remain_without_refetch"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for KGF.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "cancelled",
+      "parked_reason": "preflight blocked PR open — preflight failed",
+      "parked_policy": "duplicate",
+      "parked_at": "2026-10-17T01:36:57.108556+00:00",
+      "duplicate_of": "eng-20260922-03",
+      "cancelled_at": "2026-10-17T02:36:15.720741+00:00",
+      "cancelled_reason": "tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20260922-03",
+      "cancelled_policy": "superseded_gap_closure"
     },
     {
       "id": "eng-20261016-04",
@@ -9923,6 +10007,113 @@
       "merged_at": "2026-10-02T10:55:17.370432+00:00"
     },
     {
+      "id": "eng-20261017-03",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked dax leftover VOW3.DE",
+      "summary": "Library market dax (DAX) parked VOW3.DE after ingest avenues were exhausted (awaiting_periodic_report). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: Next statutory annual or interim re",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "dax",
+        "library_market": "dax",
+        "hunter_market_id": "dax",
+        "hunter_ticker": "VOW3.DE",
+        "parked_reason": "awaiting_periodic_report",
+        "parked_revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for VOW3.DE only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "pr_open",
+      "result_path": "output/engineering_result_eng-20261017-03.md",
+      "branch_name": "cursor/eng-20261017-03-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-10-17T05:53:52.529652+00:00"
+    },
+    {
+      "id": "eng-20261017-02",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked us_adr_asia leftover PDD",
+      "summary": "Library market us_adr_asia (US ADR Asia (curated)) parked PDD after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equi",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "us_adr_asia",
+        "library_market": "us_adr_asia",
+        "hunter_market_id": "us_adr_asia",
+        "hunter_ticker": "PDD",
+        "parked_reason": "unfetchable_iwb",
+        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "merge_class": "parked_hunter"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for PDD only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "result_path": "output/engineering_result_eng-20261017-02.md",
+      "branch_name": "cursor/eng-20261017-02-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-10-17T04:43:52.377433+00:00",
+      "merge_class": "parked_hunter",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1106",
+      "pr_number": 1106,
+      "merged_at": "2026-10-17T05:36:27.735180+00:00"
+    },
+    {
       "id": "eng-20260918-16",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked nasdaq100 leftover PDD",
@@ -11487,7 +11678,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-10-16T16:52:49.163696+00:00",
+    "evaluated_at": "2026-10-17T07:09:57.739992+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -11540,7 +11731,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-10-16T20:21:22.207226+00:00",
+    "evaluated_at": "2026-10-17T07:09:55.751689+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -11549,8 +11740,8 @@
     "resumed_at": "2026-10-14T07:12:50.922751+00:00"
   },
   "micro_compile_source": "parked_source_hunter",
-  "library_market_id": "nasdaq100",
-  "hunter_ticker": "PDD",
+  "library_market_id": "dax",
+  "hunter_ticker": "VOW3.DE",
   "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
   "queue_block_notify": {
     "last_fingerprint": "clash_blocked|no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
@@ -11570,7 +11761,7 @@
   },
   "reprioritized_at": "2026-10-14T11:31:13.966870+00:00",
   "reprioritized_after_task": "eng-20261013-07",
-  "source_gap_closure_run_id": "igc-20261016-03",
-  "source_trial_id": "igc-20261016-03",
-  "source_chain_root_id": "igc-20261016-03"
+  "source_gap_closure_run_id": "igc-20261017-01",
+  "source_trial_id": "igc-20261017-01",
+  "source_chain_root_id": "igc-20261017-01"
 }

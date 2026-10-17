@@ -11479,6 +11479,23 @@ def test_parked_source_hunter_skip_jd_us_adr_asia():
     assert fetch_filing_body(board_meeting_6k) is None
 
 
+def test_parked_source_hunter_skip_pdd_us_adr_asia():
+    """eng-20261017-02: PDD leftover IWB is AGM/proxy 6-K cover HTML, not missing 20-F/results."""
+    assert "PDD" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["PDD"]
+    assert "6-K" in reason
+    assert "substantiveness" in reason
+    assert "EX-99" in reason
+    assert "20-F" in reason
+    assert "sec_edgar" in reason
+    assert "403" in reason
+    assert fetch_filings_ir_allowlist("PDD") == []
+    agm_proxy_6k = (
+        "https://www.sec.gov/Archives/edgar/data/1737806/000110465925113965/tm2531576d1_6k.htm"
+    )
+    assert fetch_filing_body(agm_proxy_6k) is None
+
+
 def test_parked_source_hunter_skip_ldos_sp500():
     """eng-20260907-06: LDOS leftover IWB is acquisition-closing 8-K primary, not missing 10-K/10-Q."""
     assert "LDOS" in PARKED_SOURCE_HUNTER_SKIP
