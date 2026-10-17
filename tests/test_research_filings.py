@@ -7194,6 +7194,21 @@ def test_fetch_filings_ir_allowlist_ftse_mib_unmeasured_builtins_eng_20260926_01
     )
 
 
+def test_fetch_filings_ir_allowlist_ftse_mib_fct_mi_builtins_eng_20261017_05(
+    tmp_path: Path,
+):
+    """eng-20261017-05: FCT.MI awaiting_periodic_report — dam.fincantieri.com FY2025 annual PDF."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("FCT.MI", path=allowlist_path)
+    assert len(rows) == 1
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert rows[0]["period"] == "annual"
+    assert "dam.fincantieri.com" in rows[0]["url"]
+    assert "Annual%20report%202025" in rows[0]["url"]
+
+
 def test_merge_ir_allowlist_filings_bootstraps_empty_bzu_mi_index(tmp_path: Path):
     """Empty BZU.MI filings_index.json must gain IR rows for library ftse_mib measurability."""
     from value_investor.research.filings import merge_ir_allowlist_filings
@@ -11776,6 +11791,21 @@ def test_parked_source_hunter_dhl_de_dax_has_fetchable_ir():
     assert body
     assert len(body) >= 50000
     valid, reason = _validate_ir_allowlist_body_content(annual[0], body, ticker="DHL.DE")
+    assert valid, reason
+
+
+def test_parked_source_hunter_fct_mi_ftse_mib_has_fetchable_ir():
+    """eng-20261017-05: FCT.MI dam.fincantieri.com FY2025 annual PDF fetches and validates."""
+    assert "FCT.MI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("FCT.MI")
+    annual = [row for row in rows if row["period"] == "annual"]
+    assert len(annual) == 1
+    assert "dam.fincantieri.com" in annual[0]["url"]
+    assert "Annual%20report%202025" in annual[0]["url"]
+    body = fetch_filing_body(annual[0]["url"])
+    assert body
+    assert len(body) >= 50000
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], body, ticker="FCT.MI")
     assert valid, reason
 
 
