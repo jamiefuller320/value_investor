@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-16T10:34:17.928697+00:00",
+  "run_at": "2026-10-17T07:40:49.320669+00:00",
   "market_id": "sti",
   "targets": [],
   "target_details": [],
@@ -9,13 +9,13 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-16T10:34:08.648198+00:00",
+    "snapshot_at": "2026-10-17T07:40:46.225043+00:00",
     "market_id": "sti",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 2,
-    "indexed_without_body": 8,
+    "indexed_without_body": 10,
     "bodies_min": 1,
     "bodies_median": 3.0,
     "bodies_max": 7,
@@ -35,7 +35,7 @@
     "indexed_without_body_by_ticker": {
       "J36.SI": 3,
       "BS6.SI": 3,
-      "N2IU.SI": 2
+      "N2IU.SI": 4
     },
     "parked_tickers": [
       "BS6.SI",
@@ -50,7 +50,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-16T10:34:12.244513+00:00",
+    "snapshot_at": "2026-10-17T07:40:49.305713+00:00",
     "market_id": "sti",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
@@ -99,7 +99,7 @@
   "discovery_scan": {
     "scanned": 6,
     "hits": 5,
-    "new_rows_total": 3,
+    "new_rows_total": 0,
     "curiosity_total": 5,
     "errors": 0,
     "prioritization_weights": {
@@ -112,9 +112,9 @@
     "forced_by_critical_path": false,
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
+      "N2IU.SI",
       "BS6.SI",
-      "J36.SI",
-      "N2IU.SI"
+      "J36.SI"
     ],
     "runtime_cutoff": false
   },
@@ -127,10 +127,16 @@
   },
   "critical_path": {
     "market_id": "sti",
-    "assessed_at": "2026-10-16T10:34:09.160354+00:00",
+    "assessed_at": "2026-10-17T07:40:46.726052+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
+      {
+        "ticker": "N2IU.SI",
+        "indexed_without_body": 4,
+        "filings_total": 10,
+        "filings_with_body": 5
+      },
       {
         "ticker": "BS6.SI",
         "indexed_without_body": 3,
@@ -142,12 +148,6 @@
         "indexed_without_body": 3,
         "filings_total": 4,
         "filings_with_body": 1
-      },
-      {
-        "ticker": "N2IU.SI",
-        "indexed_without_body": 2,
-        "filings_total": 7,
-        "filings_with_body": 5
       }
     ],
     "thin_need_discovery": [],
@@ -158,26 +158,26 @@
     "primary_blocker": "indexed_without_body",
     "force_discovery_scan": true,
     "auto_pin_tickers": [
+      "N2IU.SI",
       "BS6.SI",
-      "J36.SI",
-      "N2IU.SI"
+      "J36.SI"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (3 tickers, top: BS6.SI(3), J36.SI(3), N2IU.SI(2))",
+      "Prefer indexed-without-body body refetch (3 tickers, top: N2IU.SI(4), BS6.SI(3), J36.SI(3))",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 3,
-      "indexed_without_body_rows": 8,
+      "indexed_without_body_rows": 10,
       "thin_need_discovery": 0,
       "thin_need_bodies": 2
     }
   },
-  "used_seconds": 2.5804287870000167,
+  "used_seconds": 2.0962253860000146,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3597.419571213,
+  "leftover_seconds": 3597.903774614,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -185,9 +185,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sti",
-    "updated_at": "2026-10-16T10:34:12.247540+00:00",
+    "updated_at": "2026-10-17T07:40:49.308593+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 3,
+    "complete_zero_improve_runs": 4,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -271,15 +271,7 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "task_ids": [],
-    "task_count": 173,
-    "market_id": "nasdaq100",
-    "hunter_ticker": "PDD",
-    "hunter_tickers": [
-      "PDD"
-    ],
-    "priority_score": 12.0,
-    "wait_behind_task_id": "",
-    "leftover_key_bodies": false
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20261017-03"
   }
 }
