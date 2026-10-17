@@ -508,6 +508,11 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.posteitaliane.it/files/1476646637138/Annual-Report-2025.pdf",
         "https://www.posteitaliane.it/files/1476642553365/Interim-Report-at-30-June-2025.pdf",
     ],
+    # ftse_mib parked leftover — eng-20261017-05: FCT.MI awaiting_periodic_report; ESEF 2024
+    # folder still maps to FY2023 xhtml; dam.fincantieri.com FY2025 English statutory PDF.
+    "FCT.MI": [
+        "https://dam.fincantieri.com/adobe/assets/urn:aaid:aem:70e649ee-1812-4049-8a98-704bad03f385/renditions/original/as/FINCANTIERI%20Annual%20report%202025%20(English%20translation%20-%20non%20ESEF).pdf",
+    ],
     # ftse_mib buy-tier deepen — eng-20261005-01 / eng-20261010-02: TEN.MI unmeasured — Yahoo base
     # TEN collides with Tsakos on SEC; pin Tenaris S.A. FY2025 20-F + Q1 2026 FS 6-K (CIK 1190723).
     "TEN.MI": [
