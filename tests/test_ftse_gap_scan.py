@@ -11,6 +11,7 @@ from value_investor.ftse_gap_scan import (
     HOW_TO_ADD_A_CHECK,
     RosterName,
     ScreenRow,
+    _eps_scale_pairs,
     _income_sign_gaps,
     _net_normalized_gaps,
     _revenue_year_without_eps,
@@ -559,6 +560,86 @@ def test_screen_pe_beside_a_revenue_year_with_no_eps_line():
             key_metric_names=frozenset({"P/E"}),
             revenue_year_without_eps=("2025", 10.0, 2.0),
         )
+    )
+
+
+def _eps_and_income(ticker: str) -> dict[str, tuple[float, float]]:
+    path = ROOT / "docs/data/research" / ticker / "sources" / "financials_annual.json"
+    income = json.loads(path.read_text())["income_statement"]
+    stored: dict[str, tuple[float, float]] = {}
+    for year, row in income.items():
+        if not isinstance(row, dict):
+            continue
+        if "Diluted EPS" not in row or "Net Income" not in row:
+            continue
+        stored[str(year)] = (float(row["Diluted EPS"]), float(row["Net Income"]))
+    return stored
+
+
+def test_oci_and_oxb_eps_years_differ_while_net_income_stays_close():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    oci = _eps_and_income("OCI.L")
+    assert oci["2023"][0] == pytest.approx(0.0027)
+    assert oci["2023"][1] == pytest.approx(47_488_000)
+    assert oci["2022"][0] == pytest.approx(1.26)
+    assert oci["2024"][0] == pytest.approx(0.15)
+    assert oci["2025"][0] == pytest.approx(0.34)
+    assert "diluted_eps_ten_times_while_net_income_within_ten" in _ids(rows["OCI.L"])
+    oci_detail = next(
+        hit.detail
+        for hit in hits_for(rows["OCI.L"])
+        if hit.rule_id == "diluted_eps_ten_times_while_net_income_within_ten"
+    )
+    assert "2023 diluted EPS 0.0027" in oci_detail
+    assert "2022 diluted EPS 1.26" in oci_detail
+    assert "2024 diluted EPS 0.15" in oci_detail
+    assert "2025 diluted EPS 0.34" in oci_detail
+
+    oxb = _eps_and_income("OXB.L")
+    assert oxb["2024"][0] == pytest.approx(-41.75)
+    assert oxb["2024"][1] == pytest.approx(-43_190_000)
+    assert oxb["2022"][0] == pytest.approx(-0.4129)
+    assert oxb["2023"][0] == pytest.approx(-1.6311)
+    assert oxb["2025"][0] == pytest.approx(-0.2692)
+    assert "diluted_eps_ten_times_while_net_income_within_ten" in _ids(rows["OXB.L"])
+    oxb_detail = next(
+        hit.detail
+        for hit in hits_for(rows["OXB.L"])
+        if hit.rule_id == "diluted_eps_ten_times_while_net_income_within_ten"
+    )
+    assert "2024 diluted EPS -41.75" in oxb_detail
+
+    within = {
+        "2023": {"Diluted EPS": 0.0027, "Net Income": 47_488_000},
+        "2022": {"Diluted EPS": 1.26, "Net Income": 222_960_000},
+    }
+    assert len(_eps_scale_pairs(within)) == 1
+    assert (
+        _eps_scale_pairs(
+            {
+                "2024": {"Diluted EPS": 10, "Net Income": 1},
+                "2025": {"Diluted EPS": 1, "Net Income": 1},
+            }
+        )
+        == ()
+    )
+    assert (
+        _eps_scale_pairs(
+            {
+                "2024": {"Diluted EPS": 12, "Net Income": 100},
+                "2025": {"Diluted EPS": 1, "Net Income": 1},
+            }
+        )
+        == ()
+    )
+    assert (
+        _eps_scale_pairs(
+            {
+                "2024": {"Diluted EPS": 0, "Net Income": 10},
+                "2025": {"Diluted EPS": 1, "Net Income": 10},
+            }
+        )
+        == ()
     )
 
 

@@ -87,6 +87,7 @@ class ScreenRow:
     income_sign_gaps: tuple[tuple[str, float, float], ...] = ()
     chart_currency: str | None = None
     revenue_year_without_eps: tuple[str, float, float] | None = None
+    eps_scale_pairs: tuple[tuple[str, float, float, str, float, float], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -217,6 +218,7 @@ def _statement_facts(path: Path | None) -> dict[str, Any]:
         "net_normalized_gaps": (),
         "income_sign_gaps": (),
         "revenue_year_without_eps": None,
+        "eps_scale_pairs": (),
     }
     if path is None:
         return facts
@@ -295,6 +297,7 @@ def _statement_facts(path: Path | None) -> dict[str, Any]:
     facts["net_normalized_gaps"] = _net_normalized_gaps(income)
     facts["income_sign_gaps"] = _income_sign_gaps(income)
     facts["revenue_year_without_eps"] = _revenue_year_without_eps(income)
+    facts["eps_scale_pairs"] = _eps_scale_pairs(income)
     return facts
 
 
@@ -330,6 +333,40 @@ def _revenue_year_without_eps(income: Any) -> tuple[str, float, float] | None:
             return None
         return (str(year), revenue, net)
     return None
+
+
+def _eps_scale_pairs(
+    income: Any,
+) -> tuple[tuple[str, float, float, str, float, float], ...]:
+    """Year pairs where diluted EPS differs by more than ten times and net income does not.
+
+    Both figures are compared as stored. Neither is rescaled. A zero is not a ratio.
+    """
+
+    if not isinstance(income, dict):
+        return ()
+    points: list[tuple[str, float, float]] = []
+    for year in sorted(income):
+        row = income[year]
+        if not isinstance(row, dict):
+            continue
+        if "Diluted EPS" not in row or "Net Income" not in row:
+            continue
+        eps = _optional_float(row.get("Diluted EPS"))
+        net = _optional_float(row.get("Net Income"))
+        if eps is None or net is None or eps == 0 or net == 0:
+            continue
+        points.append((str(year), eps, net))
+    pairs: list[tuple[str, float, float, str, float, float]] = []
+    for index, left in enumerate(points):
+        year_left, eps_left, net_left = left
+        for year_right, eps_right, net_right in points[index + 1 :]:
+            if max(abs(eps_left), abs(eps_right)) <= 10 * min(abs(eps_left), abs(eps_right)):
+                continue
+            if max(abs(net_left), abs(net_right)) > 10 * min(abs(net_left), abs(net_right)):
+                continue
+            pairs.append((year_left, eps_left, net_left, year_right, eps_right, net_right))
+    return tuple(pairs)
 
 
 def _net_normalized_gaps(income: Any) -> tuple[tuple[str, float, float], ...]:
@@ -546,6 +583,7 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
                     net_normalized_gaps=facts["net_normalized_gaps"],
                     income_sign_gaps=facts["income_sign_gaps"],
                     revenue_year_without_eps=facts["revenue_year_without_eps"],
+                    eps_scale_pairs=facts["eps_scale_pairs"],
                 )
             )
     return rows
@@ -798,6 +836,21 @@ def check_chart_gbp_quote_not_pound(row: ScreenRow) -> str | None:
     )
 
 
+def check_diluted_eps_ten_times_while_net_income_within_ten(row: ScreenRow) -> str | None:
+    """One stored diluted EPS is more than ten times another, while net income stays within ten."""
+
+    if not row.eps_scale_pairs:
+        return None
+    parts = [
+        (
+            f"{year_left} diluted EPS {_num(eps_left)} beside {year_right} diluted EPS "
+            f"{_num(eps_right)}; net income {_num(net_left)} beside {_num(net_right)}"
+        )
+        for year_left, eps_left, net_left, year_right, eps_right, net_right in row.eps_scale_pairs
+    ]
+    return "; ".join(parts)
+
+
 def check_screen_pe_without_diluted_eps_line(row: ScreenRow) -> str | None:
     """Screen P/E beside the latest revenue-and-income year that has no diluted-EPS line."""
 
@@ -1000,6 +1053,11 @@ CHECKS: tuple[Check, ...] = (
         "screen_pe_without_diluted_eps_line",
         "a stored screen P/E whose latest revenue and net-income year has no diluted EPS line",
         check_screen_pe_without_diluted_eps_line,
+    ),
+    Check(
+        "diluted_eps_ten_times_while_net_income_within_ten",
+        "one stored diluted EPS more than ten times another while net income in those years stays within ten times",
+        check_diluted_eps_ten_times_while_net_income_within_ten,
     ),
     Check(
         "net_income_normalized_opposite_signs",
