@@ -92,6 +92,49 @@ def _cmd_fetch(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_fetch_missing(args: argparse.Namespace) -> int:
+    from value_investor.ftse_statement_fetch import persist_missing_annual_statements
+
+    root = Path(args.root)
+    hits = scan_ftse_gaps(root)
+    seen: list[str] = []
+    for hit in hits:
+        if hit.rule_id == "missing_annual_statement" and hit.ticker not in seen:
+            seen.append(hit.ticker)
+    results = persist_missing_annual_statements(seen, root=root)
+    counts = {"written": 0, "empty": 0, "error": 0, "skipped_present": 0, "skipped_empty": 0}
+    for result in results:
+        counts[result.outcome] = counts.get(result.outcome, 0) + 1
+        print(f"ticker={result.ticker} outcome={result.outcome} path={result.path or ''}")
+    print(
+        "written={written} empty={empty} error={error} "
+        "skipped_present={skipped_present} skipped_empty={skipped_empty}".format(**counts)
+    )
+    return 0 if counts["error"] == 0 else 1
+
+
+def _cmd_stamp(args: argparse.Namespace) -> int:
+    from value_investor.ftse_statement_stamps import stamp_stored_statements
+
+    results = stamp_stored_statements(Path(args.root))
+    shares = sum(1 for item in results if item.ordinary_shares is not None)
+    currency = sum(1 for item in results if item.reporting_currency is not None)
+    quote = sum(1 for item in results if item.price_quote is not None)
+    print(
+        f"statements={len(results)} ordinary_shares={shares} "
+        f"reporting_currency={currency} price_quote={quote}"
+    )
+    return 0
+
+
+def _cmd_fx(args: argparse.Namespace) -> int:
+    from value_investor.ftse_fx_pairs import fetch_sek_hkd
+
+    path, missing = fetch_sek_hkd(Path(args.root))
+    print(f"written={path or ''} missing={','.join(missing)}")
+    return 0 if not missing else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ftse-gap-scan",
@@ -146,6 +189,42 @@ def build_parser() -> argparse.ArgumentParser:
         help="Write financials_annual.json here. Omit to keep the dry run.",
     )
     fetch.set_defaults(func=_cmd_fetch)
+
+    missing = sub.add_parser(
+        "fetch-missing",
+        help="Persist annual statements the scan marks as missing",
+        description=(
+            "Fetch names whose stored screen row has no financials_annual.json. "
+            "Bloomsbury is first. A payload with no annual year is recorded once "
+            "and is not fetched again. Names that already have a statement are skipped."
+        ),
+    )
+    missing.add_argument("--root", type=Path, default=repo_root_from_here())
+    missing.set_defaults(func=_cmd_fetch_missing)
+
+    stamp = sub.add_parser(
+        "stamp",
+        help="Stamp share count, reporting currency, and price quote currency",
+        description=(
+            "Copy a reporting currency or a positive ordinary-share count from a "
+            "stored statement. Copy a price quote currency only when the history "
+            "price or ftse350_ordinary_shares.json already names it."
+        ),
+    )
+    stamp.add_argument("--root", type=Path, default=repo_root_from_here())
+    stamp.set_defaults(func=_cmd_stamp)
+
+    fx = sub.add_parser(
+        "fx-sek-hkd",
+        help="Store SEK and HKD when the existing FX fetch returns a close",
+        description=(
+            "Ask the macro snapshot's Yahoo close fetch for SEKUSD=X and HKDUSD=X. "
+            "A positive close is written beside the pinned snapshot. A missing close "
+            "is not invented."
+        ),
+    )
+    fx.add_argument("--root", type=Path, default=repo_root_from_here())
+    fx.set_defaults(func=_cmd_fx)
     return parser
 
 

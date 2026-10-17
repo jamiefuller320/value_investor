@@ -67,6 +67,27 @@ class ScreenRow:
     has_annual_statement: bool
     history_price: float | None
     ordinary_shares: float | None
+    company_adjusted: float | None = None
+    screen_ttm: float | None = None
+    cash_dividend: float | None = None
+    repurchase: float | None = None
+    diluted_eps: float | None = None
+    net_income: float | None = None
+    stockholders_equity: float | None = None
+    screen_roe: float | None = None
+    unusual_items: tuple[tuple[str, float], ...] = ()
+    price_quote_currency: str | None = None
+    statement_currency: str | None = None
+    statement_fcf: float | None = None
+    fcf_divergence_flagged: bool | None = None
+    statement_revenue: float | None = None
+    discount_display: str | None = None
+    premium_display: str | None = None
+    net_normalized_gaps: tuple[tuple[str, float, float], ...] = ()
+    income_sign_gaps: tuple[tuple[str, float, float], ...] = ()
+    chart_currency: str | None = None
+    revenue_year_without_eps: tuple[str, float, float] | None = None
+    eps_scale_pairs: tuple[tuple[str, float, float, str, float, float], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -150,11 +171,9 @@ def _positive_share(value: Any) -> float | None:
     return number
 
 
-def _statement_shares(path: Path) -> float | None:
-    try:
-        payload = _load_json(path)
-    except (OSError, json.JSONDecodeError):
-        return None
+def share_count_from_balance(payload: dict[str, Any]) -> dict[str, Any] | None:
+    """Positive ordinary-share count already on a statement. Blank and null are skipped."""
+
     balance = payload.get("balance_sheet") or {}
     if not isinstance(balance, dict):
         return None
@@ -165,7 +184,295 @@ def _statement_shares(path: Path) -> float | None:
         for field in _SHARE_FIELDS:
             number = _positive_share(row.get(field))
             if number is not None:
-                return number
+                return {"field": field, "year": str(year), "ordinary_shares": number}
+    return None
+
+
+def _statement_shares(path: Path) -> float | None:
+    facts = _statement_facts(path)
+    shares = facts.get("ordinary_shares")
+    return None if shares is None else float(shares)
+
+
+def _latest_statement_row(block: Any) -> dict[str, Any] | None:
+    if not isinstance(block, dict) or not block:
+        return None
+    row = block[sorted(block, reverse=True)[0]]
+    return row if isinstance(row, dict) else None
+
+
+def _statement_facts(path: Path | None) -> dict[str, Any]:
+    """Figures already stored on one annual statement. Missing lines stay missing."""
+
+    facts: dict[str, Any] = {
+        "ordinary_shares": None,
+        "cash_dividend": None,
+        "repurchase": None,
+        "diluted_eps": None,
+        "net_income": None,
+        "stockholders_equity": None,
+        "unusual_items": (),
+        "statement_currency": None,
+        "statement_fcf": None,
+        "statement_revenue": None,
+        "net_normalized_gaps": (),
+        "income_sign_gaps": (),
+        "revenue_year_without_eps": None,
+        "eps_scale_pairs": (),
+    }
+    if path is None:
+        return facts
+    try:
+        payload = _load_json(path)
+    except (OSError, json.JSONDecodeError):
+        return facts
+    if not isinstance(payload, dict):
+        return facts
+    stamp = share_count_from_balance(payload)
+    if stamp is not None:
+        facts["ordinary_shares"] = stamp["ordinary_shares"]
+    for key in ("reporting_currency", "financialCurrency", "currency"):
+        value = payload.get(key)
+        if isinstance(value, str) and value.strip():
+            facts["statement_currency"] = value.strip()
+            break
+    cash_flow = _latest_statement_row(payload.get("cash_flow"))
+    if cash_flow is not None:
+        for field in ("Common Stock Dividend Paid", "Cash Dividends Paid"):
+            if field in cash_flow:
+                facts["cash_dividend"] = _optional_float(cash_flow.get(field))
+                break
+        if "Repurchase Of Capital Stock" in cash_flow:
+            facts["repurchase"] = _optional_float(cash_flow.get("Repurchase Of Capital Stock"))
+        if "Free Cash Flow" in cash_flow:
+            facts["statement_fcf"] = _optional_float(cash_flow.get("Free Cash Flow"))
+    income = payload.get("income_statement") or {}
+    balance = payload.get("balance_sheet") or {}
+    latest_income = _latest_statement_row(income)
+    if latest_income is not None:
+        if "Diluted EPS" in latest_income:
+            facts["diluted_eps"] = _optional_float(latest_income.get("Diluted EPS"))
+        unusual: list[tuple[str, float]] = []
+        for field in (
+            "Total Unusual Items",
+            "Total Unusual Items Excluding Goodwill",
+            "Special Income Charges",
+        ):
+            if field not in latest_income:
+                continue
+            number = _optional_float(latest_income.get(field))
+            if number is not None:
+                unusual.append((field, number))
+        facts["unusual_items"] = tuple(unusual)
+    if isinstance(income, dict):
+        for year in sorted(income, reverse=True):
+            inc_row = income[year]
+            if not isinstance(inc_row, dict):
+                continue
+            revenue = None
+            for field in ("Total Revenue", "Operating Revenue"):
+                if field not in inc_row:
+                    continue
+                revenue = _optional_float(inc_row.get(field))
+                if revenue is not None:
+                    break
+            if revenue is not None:
+                facts["statement_revenue"] = revenue
+                break
+    if isinstance(income, dict) and isinstance(balance, dict):
+        for year in sorted(set(income) & set(balance), reverse=True):
+            inc_row = income[year]
+            bal_row = balance[year]
+            if not isinstance(inc_row, dict) or not isinstance(bal_row, dict):
+                continue
+            net_income = _optional_float(inc_row.get("Net Income"))
+            equity = _optional_float(bal_row.get("Stockholders Equity"))
+            if equity is None:
+                equity = _optional_float(bal_row.get("Common Stock Equity"))
+            if net_income is None or equity is None or equity == 0:
+                continue
+            facts["net_income"] = net_income
+            facts["stockholders_equity"] = equity
+            break
+    facts["net_normalized_gaps"] = _net_normalized_gaps(income)
+    facts["income_sign_gaps"] = _income_sign_gaps(income)
+    facts["revenue_year_without_eps"] = _revenue_year_without_eps(income)
+    facts["eps_scale_pairs"] = _eps_scale_pairs(income)
+    return facts
+
+
+def _stored_revenue(row: dict[str, Any]) -> float | None:
+    for field in ("Total Revenue", "Operating Revenue"):
+        if field not in row:
+            continue
+        number = _optional_float(row.get(field))
+        if number is not None:
+            return number
+    return None
+
+
+def _revenue_year_without_eps(income: Any) -> tuple[str, float, float] | None:
+    """Latest year with revenue and net income, when that year has no diluted-EPS line.
+
+    An earlier diluted-EPS line is not copied forward. No earnings figure is calculated.
+    """
+
+    if not isinstance(income, dict):
+        return None
+    for year in sorted(income, reverse=True):
+        row = income[year]
+        if not isinstance(row, dict):
+            continue
+        revenue = _stored_revenue(row)
+        if "Net Income" not in row:
+            continue
+        net = _optional_float(row.get("Net Income"))
+        if revenue is None or net is None:
+            continue
+        if "Diluted EPS" in row:
+            return None
+        return (str(year), revenue, net)
+    return None
+
+
+def _eps_scale_pairs(
+    income: Any,
+) -> tuple[tuple[str, float, float, str, float, float], ...]:
+    """Year pairs where diluted EPS differs by more than ten times and net income does not.
+
+    Both figures are compared as stored. Neither is rescaled. A zero is not a ratio.
+    """
+
+    if not isinstance(income, dict):
+        return ()
+    points: list[tuple[str, float, float]] = []
+    for year in sorted(income):
+        row = income[year]
+        if not isinstance(row, dict):
+            continue
+        if "Diluted EPS" not in row or "Net Income" not in row:
+            continue
+        eps = _optional_float(row.get("Diluted EPS"))
+        net = _optional_float(row.get("Net Income"))
+        if eps is None or net is None or eps == 0 or net == 0:
+            continue
+        points.append((str(year), eps, net))
+    pairs: list[tuple[str, float, float, str, float, float]] = []
+    for index, left in enumerate(points):
+        year_left, eps_left, net_left = left
+        for year_right, eps_right, net_right in points[index + 1 :]:
+            if max(abs(eps_left), abs(eps_right)) <= 10 * min(abs(eps_left), abs(eps_right)):
+                continue
+            if max(abs(net_left), abs(net_right)) > 10 * min(abs(net_left), abs(net_right)):
+                continue
+            pairs.append((year_left, eps_left, net_left, year_right, eps_right, net_right))
+    return tuple(pairs)
+
+
+def _net_normalized_gaps(income: Any) -> tuple[tuple[str, float, float], ...]:
+    """Years where both income figures are nonzero and one is more than ten times the other.
+
+    The stored numbers are compared as stored. Neither figure is rescaled.
+    """
+
+    if not isinstance(income, dict):
+        return ()
+    gaps: list[tuple[str, float, float]] = []
+    for year in sorted(income):
+        row = income[year]
+        if not isinstance(row, dict):
+            continue
+        if "Net Income" not in row or "Normalized Income" not in row:
+            continue
+        net = _optional_float(row.get("Net Income"))
+        normalized = _optional_float(row.get("Normalized Income"))
+        if net is None or normalized is None or net == 0 or normalized == 0:
+            continue
+        larger = max(abs(net), abs(normalized))
+        smaller = min(abs(net), abs(normalized))
+        if larger > 10 * smaller:
+            gaps.append((str(year), net, normalized))
+    return tuple(gaps)
+
+
+def _income_sign_gaps(income: Any) -> tuple[tuple[str, float, float], ...]:
+    """Years where net income and normalized income are both nonzero and have opposite signs.
+
+    The stored numbers are compared as stored. Neither figure is rescaled.
+    """
+
+    if not isinstance(income, dict):
+        return ()
+    gaps: list[tuple[str, float, float]] = []
+    for year in sorted(income):
+        row = income[year]
+        if not isinstance(row, dict):
+            continue
+        if "Net Income" not in row or "Normalized Income" not in row:
+            continue
+        net = _optional_float(row.get("Net Income"))
+        normalized = _optional_float(row.get("Normalized Income"))
+        if net is None or normalized is None or net == 0 or normalized == 0:
+            continue
+        if (net > 0) == (normalized > 0):
+            continue
+        gaps.append((str(year), net, normalized))
+    return tuple(gaps)
+
+
+def _price_quote_currency(root: Path, ticker: str) -> str | None:
+    path = resolve_json_path(root / "docs/data/research" / ticker / "sources" / "price_quote.json")
+    if path is None:
+        return None
+    try:
+        payload = _load_json(path)
+    except (OSError, json.JSONDecodeError):
+        return None
+    value = payload.get("quote_currency") if isinstance(payload, dict) else None
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    return None
+
+
+def _chart_currency(root: Path, ticker: str) -> str | None:
+    path = resolve_json_path(root / "docs/data/charts" / f"{ticker}.json")
+    if path is None:
+        return None
+    try:
+        payload = _load_json(path)
+    except (OSError, json.JSONDecodeError):
+        return None
+    value = payload.get("currency") if isinstance(payload, dict) else None
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    return None
+
+
+def _screen_roe_fraction(display: Any) -> float | None:
+    """Screen ROE stored as a percent string, such as ``33.7%``."""
+
+    if not isinstance(display, str) or not display.strip().endswith("%"):
+        return None
+    number = _optional_float(display)
+    if number is None:
+        return None
+    return number / 100.0
+
+
+def _price_in_statement_currency(row: ScreenRow) -> float | None:
+    """Scale a price only when both currencies are stored and the unit is pence or pounds."""
+
+    price = row.history_price
+    quote = row.price_quote_currency
+    statement = row.statement_currency
+    if price is None or not quote or not statement:
+        return None
+    if quote == statement:
+        return price
+    if quote == "GBp" and statement == "GBP":
+        return price / 100.0
+    if quote == "GBP" and statement == "GBp":
+        return price * 100.0
     return None
 
 
@@ -230,8 +537,7 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
             fcf_obj = fcf if isinstance(fcf, dict) else {}
             displayed, has_figure = _fcf_figure(fcf_obj, key_metrics)
             statement = _statement_path(root, ticker)
-            # Quote-summary share files are not the statement's ordinary share count.
-            shares = _statement_shares(statement) if statement is not None else None
+            facts = _statement_facts(statement)
             rows.append(
                 ScreenRow(
                     ticker=ticker,
@@ -252,10 +558,42 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
                     fcf_has_figure=has_figure,
                     has_annual_statement=statement is not None,
                     history_price=prices.get(ticker),
-                    ordinary_shares=shares,
+                    ordinary_shares=facts["ordinary_shares"],
+                    company_adjusted=_optional_float(fcf_obj.get("company_adjusted")),
+                    screen_ttm=_optional_float(fcf_obj.get("screen_ttm")),
+                    cash_dividend=facts["cash_dividend"],
+                    repurchase=facts["repurchase"],
+                    diluted_eps=facts["diluted_eps"],
+                    net_income=facts["net_income"],
+                    stockholders_equity=facts["stockholders_equity"],
+                    screen_roe=_screen_roe_fraction(key_metrics.get("ROE")),
+                    unusual_items=facts["unusual_items"],
+                    price_quote_currency=_price_quote_currency(root, ticker),
+                    chart_currency=_chart_currency(root, ticker),
+                    statement_currency=facts["statement_currency"],
+                    statement_fcf=facts["statement_fcf"],
+                    fcf_divergence_flagged=(
+                        fcf_obj.get("fcf_divergence_flagged")
+                        if isinstance(fcf_obj.get("fcf_divergence_flagged"), bool)
+                        else None
+                    ),
+                    statement_revenue=facts["statement_revenue"],
+                    discount_display=_metric_text(key_metrics, "Discount"),
+                    premium_display=_metric_text(key_metrics, "Premium"),
+                    net_normalized_gaps=facts["net_normalized_gaps"],
+                    income_sign_gaps=facts["income_sign_gaps"],
+                    revenue_year_without_eps=facts["revenue_year_without_eps"],
+                    eps_scale_pairs=facts["eps_scale_pairs"],
                 )
             )
     return rows
+
+
+def _metric_text(key_metrics: dict[str, Any], name: str) -> str | None:
+    value = key_metrics.get(name)
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    return None
 
 
 def check_raw_yield_below_one_displayed_as_percent(row: ScreenRow) -> str | None:
@@ -332,10 +670,253 @@ def check_trust_row_pe_only(row: ScreenRow) -> str | None:
     return "trust key metrics are a P/E only"
 
 
+def check_trust_pe_without_discount_or_premium(row: ScreenRow) -> str | None:
+    """Trust row whose key metrics include a P/E and include neither a discount nor a premium."""
+
+    if (
+        not row.trust
+        or "P/E" not in row.key_metric_names
+        or "Discount" in row.key_metric_names
+        or "Premium" in row.key_metric_names
+    ):
+        return None
+    shown = row.pe_display if row.pe_display is not None else "present"
+    return f"trust key metrics include P/E {shown} and include neither a discount nor a premium"
+
+
+def check_trust_revenue_discount_without_fcf_or_price(row: ScreenRow) -> str | None:
+    """Trust row with statement revenue, a discount or premium, no free-cash-flow figure, and no 11 Oct price."""
+
+    if (
+        not row.trust
+        or row.statement_revenue is None
+        or (row.discount_display is None and row.premium_display is None)
+        or row.fcf_has_figure
+        or row.history_price is not None
+    ):
+        return None
+    labels: list[str] = []
+    if row.discount_display is not None:
+        labels.append(f"discount {row.discount_display}")
+    if row.premium_display is not None:
+        labels.append(f"premium {row.premium_display}")
+    return (
+        f"trust {'; '.join(labels)}; statement revenue {_num(row.statement_revenue)}; "
+        f"no free-cash-flow figure; no {SCREEN_PRICE_RUN_PREFIX} price"
+    )
+
+
 def check_missing_annual_statement(row: ScreenRow) -> str | None:
     if row.has_annual_statement:
         return None
     return f"no docs/data/research/{row.ticker}/sources/financials_annual.json"
+
+
+def check_filing_aligned_differs_from_statement_fcf(row: ScreenRow) -> str | None:
+    """Displayed filing_aligned figure differs from the statement line, and the flag is false.
+
+    The screen figures may still equal one another. A missing flag is not false.
+    """
+
+    if (
+        row.statement_fcf is None
+        or row.filing_aligned is None
+        or row.displayed_fcf != row.filing_aligned
+        or row.fcf_divergence_flagged is not False
+        or row.filing_aligned == row.statement_fcf
+    ):
+        return None
+    return (
+        f"filing_aligned {_num(row.filing_aligned)} differs from statement free cash flow "
+        f"{_num(row.statement_fcf)} and fcf_divergence_flagged is false"
+    )
+
+
+def check_fcf_figures_disagree(row: ScreenRow) -> str | None:
+    """Keep filing, company-adjusted, and screen free cash flow as separate stored figures."""
+
+    stored = {
+        "filing_aligned": row.filing_aligned,
+        "company_adjusted": row.company_adjusted,
+        "screen_ttm": row.screen_ttm,
+    }
+    present = {name: value for name, value in stored.items() if value is not None}
+    if len(present) < 2 or len(set(present.values())) < 2:
+        return None
+    return "; ".join(f"{name} {_num(value)}" for name, value in present.items())
+
+
+def check_dividend_plus_repurchase_against_filing_fcf(row: ScreenRow) -> str | None:
+    if row.cash_dividend is None or row.repurchase is None or row.filing_aligned is None:
+        return None
+    returned = abs(row.cash_dividend) + abs(row.repurchase)
+    if not returned > row.filing_aligned:
+        return None
+    return (
+        f"dividend {_num(row.cash_dividend)} plus repurchase {_num(row.repurchase)} "
+        f"is {_num(returned)} against filing free cash flow {_num(row.filing_aligned)}"
+    )
+
+
+def check_cash_dividend_over_cap_against_yield(row: ScreenRow) -> str | None:
+    if (
+        row.cash_dividend is None
+        or row.yield_display is None
+        or row.history_price is None
+        or row.ordinary_shares is None
+    ):
+        return None
+    shown = _optional_float(row.yield_display)
+    price = _price_in_statement_currency(row)
+    if price is None or shown is None or row.ordinary_shares <= 0:
+        quote = row.price_quote_currency or "unknown"
+        statement = row.statement_currency or "unknown"
+        return (
+            f"cash dividend {_num(row.cash_dividend)}; price {row.history_price} quote {quote}; "
+            f"ordinary shares {_num(row.ordinary_shares)}; statement currency {statement}; "
+            f"displayed yield {row.yield_display}; readings left side by side"
+        )
+    cap = price * row.ordinary_shares
+    if cap <= 0:
+        return None
+    cash_yield = abs(row.cash_dividend) / cap * 100.0
+    if round(cash_yield, 1) == round(shown, 1):
+        return None
+    return (
+        f"cash dividend {_num(row.cash_dividend)} over cap {_num(cap)} is "
+        f"{cash_yield} percent; displayed yield {row.yield_display}"
+    )
+
+
+def check_screen_roe_against_net_income_over_equity(row: ScreenRow) -> str | None:
+    if row.screen_roe is None or row.net_income is None or row.stockholders_equity is None:
+        return None
+    if row.stockholders_equity == 0:
+        return None
+    ratio = row.net_income / row.stockholders_equity
+    if round(row.screen_roe * 100.0, 1) == round(ratio * 100.0, 1):
+        return None
+    return (
+        f"screen ROE {row.screen_roe * 100.0} percent; net income {_num(row.net_income)} "
+        f"over equity {_num(row.stockholders_equity)} is {ratio * 100.0} percent"
+    )
+
+
+def check_unusual_items_disagree(row: ScreenRow) -> str | None:
+    if len(row.unusual_items) < 2:
+        return None
+    if len({value for _name, value in row.unusual_items}) < 2:
+        return None
+    return "; ".join(f"{name} {_num(value)}" for name, value in row.unusual_items)
+
+
+def check_net_income_ten_times_normalized(row: ScreenRow) -> str | None:
+    """A year where both income figures are nonzero and one is more than ten times the other."""
+
+    if not row.net_normalized_gaps:
+        return None
+    parts = [
+        f"{year} net income {_num(net)} beside normalized income {_num(normalized)}"
+        for year, net, normalized in row.net_normalized_gaps
+    ]
+    return "; ".join(parts)
+
+
+def check_chart_gbp_quote_not_pound(row: ScreenRow) -> str | None:
+    """Chart file labels the price GBP while the quote currency is neither GBP nor GBp."""
+
+    quote = row.price_quote_currency
+    if row.chart_currency != "GBP" or not quote or quote in {"GBP", "GBp"}:
+        return None
+    if row.history_price is None:
+        return f"chart currency GBP and quote currency {quote}"
+    return (
+        f"chart currency GBP and quote currency {quote}; "
+        f"{SCREEN_PRICE_RUN_PREFIX} price {_num(row.history_price)}"
+    )
+
+
+def check_diluted_eps_ten_times_while_net_income_within_ten(row: ScreenRow) -> str | None:
+    """One stored diluted EPS is more than ten times another, while net income stays within ten."""
+
+    if not row.eps_scale_pairs:
+        return None
+    parts = [
+        (
+            f"{year_left} diluted EPS {_num(eps_left)} beside {year_right} diluted EPS "
+            f"{_num(eps_right)}; net income {_num(net_left)} beside {_num(net_right)}"
+        )
+        for year_left, eps_left, net_left, year_right, eps_right, net_right in row.eps_scale_pairs
+    ]
+    return "; ".join(parts)
+
+
+def check_screen_pe_without_diluted_eps_line(row: ScreenRow) -> str | None:
+    """Screen P/E beside the latest revenue-and-income year that has no diluted-EPS line."""
+
+    if "P/E" not in row.key_metric_names or not row.pe_display:
+        return None
+    gap = row.revenue_year_without_eps
+    if gap is None:
+        return None
+    year, revenue, net = gap
+    return (
+        f"screen P/E {row.pe_display}; {year} revenue {_num(revenue)} "
+        f"net income {_num(net)}; no diluted EPS line"
+    )
+
+
+def check_positive_diluted_eps_without_screen_pe(row: ScreenRow) -> str | None:
+    """Latest diluted EPS is positive and the screen key metrics have no P/E key."""
+
+    eps = row.diluted_eps
+    if eps is None or not eps > 0 or "P/E" in row.key_metric_names:
+        return None
+    return f"diluted EPS {_num(eps)} and the screen key metrics have no P/E key"
+
+
+def check_net_income_normalized_opposite_signs(row: ScreenRow) -> str | None:
+    """A year where net income and normalized income are nonzero and have opposite signs."""
+
+    if not row.income_sign_gaps:
+        return None
+    parts = [
+        f"{year} net income {_num(net)} beside normalized income {_num(normalized)}"
+        for year, net, normalized in row.income_sign_gaps
+    ]
+    return "; ".join(parts)
+
+
+def check_positive_screen_pe_beside_negative_diluted_eps(row: ScreenRow) -> str | None:
+    """A positive screen P/E beside a negative diluted EPS. Neither figure is rescaled."""
+
+    pe = _optional_float(row.pe_display)
+    eps = row.diluted_eps
+    if pe is None or eps is None or not pe > 0 or not eps < 0:
+        return None
+    return f"screen P/E {row.pe_display} beside diluted EPS {_num(eps)}"
+
+
+def check_screen_pe_against_price_over_diluted_eps(row: ScreenRow) -> str | None:
+    pe = _optional_float(row.pe_display)
+    if pe is None or row.history_price is None or row.diluted_eps is None:
+        return None
+    price = _price_in_statement_currency(row)
+    if price is None or row.diluted_eps == 0:
+        quote = row.price_quote_currency or "unknown"
+        statement = row.statement_currency or "unknown"
+        return (
+            f"screen P/E {row.pe_display}; price {row.history_price} quote {quote}; "
+            f"diluted EPS {_num(row.diluted_eps)}; statement currency {statement}; "
+            "readings left side by side"
+        )
+    ratio = price / row.diluted_eps
+    if round(ratio, 1) == round(pe, 1):
+        return None
+    return (
+        f"screen P/E {row.pe_display}; price {price} {row.statement_currency} "
+        f"over diluted EPS {_num(row.diluted_eps)} is {ratio}"
+    )
 
 
 def check_price_without_ordinary_share_count(row: ScreenRow) -> str | None:
@@ -394,6 +975,16 @@ CHECKS: tuple[Check, ...] = (
         check_trust_row_pe_only,
     ),
     Check(
+        "trust_pe_without_discount_or_premium",
+        "a trust row whose key metrics include a P/E and include neither a discount nor a premium",
+        check_trust_pe_without_discount_or_premium,
+    ),
+    Check(
+        "trust_revenue_discount_without_fcf_or_price",
+        "a trust row with statement revenue, a discount or premium, no free-cash-flow figure, and no 11 Oct price",
+        check_trust_revenue_discount_without_fcf_or_price,
+    ),
+    Check(
         "missing_annual_statement",
         "a missing annual statement",
         check_missing_annual_statement,
@@ -402,6 +993,76 @@ CHECKS: tuple[Check, ...] = (
         "price_without_ordinary_share_count",
         "a stored price with no ordinary-share count",
         check_price_without_ordinary_share_count,
+    ),
+    Check(
+        "filing_aligned_differs_from_statement_fcf",
+        "filing_aligned display differs from the statement free-cash-flow line while unflagged",
+        check_filing_aligned_differs_from_statement_fcf,
+    ),
+    Check(
+        "fcf_figures_disagree",
+        "filing, company-adjusted, and screen free cash flow that differ",
+        check_fcf_figures_disagree,
+    ),
+    Check(
+        "dividend_plus_repurchase_against_filing_fcf",
+        "dividend plus repurchase against filing free cash flow",
+        check_dividend_plus_repurchase_against_filing_fcf,
+    ),
+    Check(
+        "cash_dividend_over_cap_against_yield",
+        "cash dividend over cap against the displayed yield",
+        check_cash_dividend_over_cap_against_yield,
+    ),
+    Check(
+        "screen_roe_against_net_income_over_equity",
+        "screen return on equity against net income over equity",
+        check_screen_roe_against_net_income_over_equity,
+    ),
+    Check(
+        "unusual_items_disagree",
+        "unusual-item fields that disagree",
+        check_unusual_items_disagree,
+    ),
+    Check(
+        "screen_pe_against_price_over_diluted_eps",
+        "screen P/E against price over diluted earnings when the currency is known",
+        check_screen_pe_against_price_over_diluted_eps,
+    ),
+    Check(
+        "net_income_ten_times_normalized",
+        "a year where net income and normalized income are both nonzero and one is more than ten times the other",
+        check_net_income_ten_times_normalized,
+    ),
+    Check(
+        "positive_screen_pe_beside_negative_diluted_eps",
+        "a positive screen P/E beside a negative diluted EPS",
+        check_positive_screen_pe_beside_negative_diluted_eps,
+    ),
+    Check(
+        "chart_gbp_quote_not_pound",
+        "a chart that labels the price GBP while the quote currency is neither GBP nor GBp",
+        check_chart_gbp_quote_not_pound,
+    ),
+    Check(
+        "positive_diluted_eps_without_screen_pe",
+        "a positive diluted EPS while the screen key metrics have no P/E key",
+        check_positive_diluted_eps_without_screen_pe,
+    ),
+    Check(
+        "screen_pe_without_diluted_eps_line",
+        "a stored screen P/E whose latest revenue and net-income year has no diluted EPS line",
+        check_screen_pe_without_diluted_eps_line,
+    ),
+    Check(
+        "diluted_eps_ten_times_while_net_income_within_ten",
+        "one stored diluted EPS more than ten times another while net income in those years stays within ten times",
+        check_diluted_eps_ten_times_while_net_income_within_ten,
+    ),
+    Check(
+        "net_income_normalized_opposite_signs",
+        "a year where net income and normalized income have opposite signs",
+        check_net_income_normalized_opposite_signs,
     ),
 )
 
