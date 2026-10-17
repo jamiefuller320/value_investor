@@ -311,7 +311,7 @@ def build_bottleneck_review(
         "errors": list(errors or []),
         "note": (
             "Post-run bottleneck review for archive pack tuning. Observe/report "
-            "only — does not auto-rewrite live deepen or steal the fat slot."
+            "only — does not auto-rewrite live deepen or steal the priority slot."
         ),
     }
 

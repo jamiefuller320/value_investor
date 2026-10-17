@@ -1,6 +1,6 @@
 """Observe-only ingest occupancy row.
 
-The fat slot is occupied only while ``head_needs_fat_slot`` is true. This row
+The priority slot is occupied only while ``head_needs_fat_slot`` is true. This row
 records dispatch, the euro market-status badge, and whether those disagree.
 It does not start a sprint, clear a park, or widen a stream.
 """
@@ -140,7 +140,7 @@ def build_ingest_occupancy(
         "eng_open_count": _eng_open_count(tasks_row),
         "auto_fixable": False,
         "note": (
-            "Fat slot is occupied only while head_needs_fat_slot is true. "
+            "Priority slot is occupied only while head_needs_fat_slot is true. "
             "Badge/bit mismatch is observe-only."
         ),
     }

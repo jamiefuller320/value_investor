@@ -7,7 +7,9 @@ name: Euro library ingest loop
 # Sunday after the quiet bundle). Skips Sunday morning to avoid ladder/email contention.
 #
 # Completion gate: ftse-library euro-ingest-dispatch throttles sprint when filing
-# parity is met (see library_ingest_dispatch.py). Sprint: ≤4×/day × 24 targets.
+# parity is met (see library_ingest_dispatch.py). Sprint: ≤4×/day. Dispatched
+# max_targets is the priority-slot width (job ceiling 24). The 12 below is only
+# a missing-output fallback, not a reserved width.
 on:
   schedule:
     - cron: "15 7 * * 1-6"
@@ -98,6 +100,7 @@ jobs:
               f"mode={data.get('mode', '')}\n"
               f"max_daily_successes={data.get('max_daily_successes', 0)}\n"
               f"max_targets={data.get('max_targets', 12)}\n"
+              # 12 is the missing-field fallback only. A present 0 is width 0.
               f"should_run_sprint_ingest={'true' if data.get('should_run_sprint_ingest') else 'false'}\n"
               f"should_run_ingest={'true' if data.get('should_run_ingest') else 'false'}\n"
               f"dispatch_reason={data.get('reason', '')}\n",

@@ -1,11 +1,14 @@
-"""P2 ingest effort cascade: fat slot on the learning-phase head, spare on the tail.
+"""P2 ingest effort cascade: priority slot on the learning-phase head, spare on the tail.
 
 Doctrine: while ``head_needs_fat_slot`` is true the focus market still has
-priority on the shared filing host. Spare width is not a fixed 50%/25% cut.
-Each strand's width is ``min(unfilled names, host budget left, names that fit
-in the time left)``. Kind matters (filing body, daily price, memo). A strand
-with nothing to fetch gets width 0. When the head bit is false, spares are not
-held to those fractions. The fat slot is an ingest-head rule, not a boss over
+priority on the shared filing host. The priority slot uses the same width rule
+as a spare: ``min(unfilled names, host budget left, names that fit in the time
+left)`` for that kind, then the existing job ceiling. One unfilled name
+reserves one name. The unused part of the old fixed sprint cap is not reserved.
+Nothing unfilled means width 0. ``head_needs_fat_slot`` stays the release bit
+(false at parity). Spare width is not a fixed 50%/25% cut, and spares subtract
+``head_unfilled`` only. When the head bit is false, spares are not held to
+those fractions. The priority slot is an ingest-head rule, not a boss over
 non-ingest strands.
 
 Runtime wait / leftover / fill-down lives in ``library_ingest_scheduler``.
@@ -80,10 +83,14 @@ def default_ingest_effort_cascade_policy() -> dict[str, Any]:
         "scheduler_enabled": True,
         "note": (
             "While head_needs_fat_slot is true the head keeps host priority. "
-            "Spare width is min(unfilled names, host budget left, time left) "
-            "for that strand's kind — not a fixed 50%/25% cut. A strand with "
-            "nothing to fetch has width 0. Fractions below are legacy and unused. "
-            "head_release_when=ingest_parity (default) or phase2_ready."
+            "Priority-slot width is min(unfilled names, host budget left, time "
+            "left) for that kind, then the job ceiling. One unfilled name "
+            "reserves one name; the unused part of the old fixed cap is not "
+            "reserved. Nothing unfilled means width 0. The release bit stays "
+            "head_needs_fat_slot (false at parity). Spares subtract "
+            "head_unfilled only — not a fixed 50%/25% cut. Fractions below are "
+            "legacy and unused. head_release_when=ingest_parity (default) or "
+            "phase2_ready."
         ),
     }
 
@@ -168,7 +175,11 @@ def head_needs_fat_slot(
     config: IngestCascadeConfig,
     phase2_ready: bool = False,
 ) -> bool:
-    """True while the focus market still holds the fat ingest slot."""
+    """True while the focus market still holds the priority slot.
+
+    This is the release bit. It is false at ingest parity (or phase-2 release).
+    A width of 0 does not flip it.
+    """
     if not config.enabled:
         return False
     if config.head_release_when == HEAD_RELEASE_PHASE2:
@@ -212,6 +223,33 @@ def dynamic_ingest_width(
     return min(count, host, names_that_fit(time_left_seconds, kind))
 
 
+def priority_slot_width(
+    *,
+    unfilled: int,
+    host_budget_left: int,
+    time_left_seconds: float,
+    kind: str = KIND_FILING_BODY,
+    job_ceiling: int,
+) -> int:
+    """Names the head priority slot may fetch this run.
+
+    Same rule as a spare, then the job ceiling so one strand cannot take an
+    unbounded run. One unfilled name reserves one name. A ceiling of 24, or a
+    workflow fallback of 12, is not a reservation of the unused names. Nothing
+    unfilled returns 0. The release bit stays ``head_needs_fat_slot``.
+    """
+    width = dynamic_ingest_width(
+        unfilled=unfilled,
+        host_budget_left=host_budget_left,
+        time_left_seconds=time_left_seconds,
+        kind=kind,
+    )
+    ceiling = max(0, int(job_ceiling))
+    if ceiling <= 0:
+        return 0
+    return min(width, ceiling)
+
+
 def filing_names_unfilled(health: dict[str, Any] | None) -> int:
     """Unparked filing names still to fetch (unmeasured, zero-body, thin, IWB)."""
     row = health or {}
@@ -240,11 +278,12 @@ def scale_spare_budget(
 ) -> tuple[int, float, str]:
     """Return (targets, runtime, mode) for a parallel sprint stream.
 
-    ``config`` fractions are ignored. While the head needs the fat slot and
+    ``config`` fractions are ignored. While the head needs the priority slot and
     ``head_unfilled`` is set, those names are reserved from the host budget
-    first. When the head does not need the slot, the spare is not cut to
-    50%/25%. ``unfilled is None`` means the caller did not declare a count, so
-    the job cap is the demand. An explicit 0 is an empty strand.
+    first — one unfilled name, not the unused part of the head's job ceiling.
+    When the head does not need the slot, the spare is not cut to 50%/25%.
+    ``unfilled is None`` means the caller did not declare a count, so the job
+    cap is the demand. An explicit 0 is an empty strand.
     """
     del config  # fractions are legacy; signature kept for callers
     cap = max(0, int(max_targets))
@@ -290,7 +329,7 @@ def should_skip_spare_stream(
     config: IngestCascadeConfig,
     head_needs_fat: bool,
 ) -> bool:
-    """Stream 2 skips peak hours that overlap the head fat slot."""
+    """Stream 2 skips peak hours that overlap the head priority slot."""
     if not head_needs_fat or stream != 2:
         return False
     return int(hour_utc) in set(config.stream_2_yield_hours_utc)
@@ -352,12 +391,12 @@ def evaluate_ingest_cascade(
     elif not needs_fat:
         reason = (
             f"Head {head} is at ingest parity — spare streams return to full caps "
-            "(fat slot may shift on the next focus advance)."
+            "(priority slot may shift on the next focus advance)."
         )
     elif skip_stream_2:
         reason = (
             f"Head {head} still has filing gaps; stream 2 yields hour {hour:02d}:00 UTC "
-            f"to the fat slot."
+            f"to the priority slot."
         )
     else:
         reason = (
@@ -405,6 +444,7 @@ __all__ = [
     "kind_seconds",
     "load_cascade_config",
     "names_that_fit",
+    "priority_slot_width",
     "scale_spare_budget",
     "should_skip_spare_stream",
 ]

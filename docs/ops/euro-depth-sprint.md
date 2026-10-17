@@ -78,13 +78,13 @@ When focus reaches parity, `ingest_parity_markets` is updated and focus may adva
 
 **Effort cascade (doctrine):** serialize one market to the maintenance ingest
 threshold (raw parity or leftover thin/IWB parked), then give that market
-equivalent resource and move the fat slot — see
+equivalent resource and move the priority slot — see
 [`AGENTS.md`](../../AGENTS.md) and
 [`market-sharded-learning.md`](market-sharded-learning.md#what-enter-learning-means).
 **Straggler soft-park:** when a few IR-exhausted leftovers resurface after the
 head already hit the threshold (or peer deepen starves the market-wide
 0-improve streak), park them (`awaiting_periodic_report` /
-`unfetchable_iwb`) so fat releases — do not demote the head from cascade
+`unfetchable_iwb`) so the priority slot releases — do not demote the head from cascade
 policy. Spare streams only front-start the next queue names. Stagger slots and run
 **parallel maintenance** for graduated markets; do **not** add a fourth equal
 sprint workflow (`library-ingest-sprint-3.yml` or similar) that can starve the
@@ -93,11 +93,14 @@ weekday epoch-0 / equal-support admit on ``sprint_ingest_complete``; the
 capacity-1 weekly paper slot stays on ``euro_depth`` under N94.
 
 **Scheduler (wired):** while `head_needs_fat_slot` is true the head still has
-priority on the shared filing host. Spare width is `min(unfilled names for that
-strand, host budget left, names that fit in the time left)` — kind is filing
-body, daily price, or memo. A strand with nothing to fetch has width 0. Fixed
-50%/25% cuts are not applied. When the bit is false, spares are not held to
-those fractions. The fat slot is this ingest head only; it is not the boss of
+priority on the shared filing host. Head and spare width are both `min(unfilled
+names, host budget left, names that fit in the time left)` for that kind (filing
+body, daily price, or memo), and the head is then capped by the job ceiling.
+One unfilled name reserves one name; the unused part of the old fixed cap is
+not reserved. Nothing unfilled means width 0, and the release bit stays
+`head_needs_fat_slot` (false at parity). Spares subtract `head_unfilled` only.
+Fixed 50%/25% cuts are not applied. When the bit is false, spares are not held
+to those fractions. The priority slot is this ingest head only; it is not the boss of
 replay, sealed observe, or the shadow judge. Spare workflows **wait** on a live
 euro (and stream-1) run, then
 spend leftover minutes if the head finished early — leftover only **boosts**

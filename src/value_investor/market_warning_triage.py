@@ -10,7 +10,7 @@ Policy highlights (encoded, not optional):
   parkable — they block ``sprint_ingest_complete``.
 * Do **not** ritual-clear bare ``health=warn`` badges on sprint books; those
   are expected while filing gaps remain.
-* Do **not** divert the euro fat-slot head to a spare (DAX/AEX) stall.
+* Do **not** divert the euro priority-slot head to a spare (DAX/AEX) stall.
 * Fat-slot / rate-limit sensitive deepen calls prefer **Discuss**; park /
   observe-ack paths prefer **Accept** (focus-ack). Auto-dismiss of ingest
   deviations is Phase B (deferred).
@@ -38,7 +38,7 @@ TRIAGE_FLAG_IDS = frozenset(
     }
 )
 
-# Soft / expected flags — park (do not eng-spray or divert fat slot).
+# Soft / expected flags — park (do not eng-spray or divert priority slot).
 PARK_FLAG_IDS = frozenset(
     {
         "stale_buy_tier_screen",
@@ -269,7 +269,7 @@ def propose_triage(flag: dict[str, Any]) -> dict[str, Any]:
                 "accept_kind": "focus-ack",
                 "rationale": (
                     f"Signal triage says dismiss{(' — ' + reason) if reason else ''}. "
-                    "Do not intensive-pin or divert the euro fat slot. "
+                    "Do not intensive-pin or divert the euro priority slot. "
                     f"Observe-safe Accept records the triage; run `{cli}` manually "
                     "(Phase B may automate dismiss later)."
                     if cli
@@ -278,7 +278,7 @@ def propose_triage(flag: dict[str, Any]) -> dict[str, Any]:
                 "cli_hint": cli or None,
                 "href": "#automation",
             }
-        # Pin / deepen path — judgment + fat-slot sensitive.
+        # Pin / deepen path — judgment + priority-slot sensitive.
         return {
             "action": "deepen",
             "dismissable": False,
@@ -287,7 +287,7 @@ def propose_triage(flag: dict[str, Any]) -> dict[str, Any]:
             "accept_kind": "focus-ack",
             "rationale": (
                 f"Open deviation on {market_id}{ticker_bit} may need deepen/pin — "
-                "Discuss before touching the fat slot or rate-limited sources. "
+                "Discuss before touching the priority slot or rate-limited sources. "
                 "Do not rubber-stamp Accept as an intensive pin."
             ),
             "cli_hint": (f"ftse-library ingest-deviations approve {dev_id}" if dev_id else None),
@@ -313,11 +313,11 @@ def propose_triage(flag: dict[str, Any]) -> dict[str, Any]:
     # --- Zero-body / unmeasured (cannot park or dismiss) -------------------
     if flag_id in NON_PARKABLE_FLAG_IDS:
         slot_note = (
-            "This is the P2 fat-slot head — deepen on the existing euro sprint path; "
+            "This is the P2 priority-slot head — deepen on the existing euro sprint path; "
             "do not divert capacity to a spare stall."
             if is_focus
             else (
-                "Spare-stream factory path — leave on spare deepen; do not steal the euro fat slot."
+                "Spare-stream factory path — leave on spare deepen; do not steal the euro priority slot."
                 if is_spare
                 else "Deepen via the market's normal ingest path."
             )
@@ -382,7 +382,7 @@ def propose_triage(flag: dict[str, Any]) -> dict[str, Any]:
                 "accept_kind": "focus-ack",
                 "rationale": (
                     f"Spare/non-focus stall on {market_id}{ticker_bit}: park the worry — "
-                    "leave spare-stream factory / exhaustion; do not divert euro fat slot "
+                    "leave spare-stream factory / exhaustion; do not divert euro priority slot "
                     "or mint intensive pins from this flag alone."
                 ),
                 "cli_hint": None,
@@ -396,7 +396,7 @@ def propose_triage(flag: dict[str, Any]) -> dict[str, Any]:
             "accept_kind": "focus-ack",
             "rationale": (
                 f"Focus-market zero_improve_stall on {market_id}{ticker_bit} — "
-                "Discuss before changing fat-slot targeting or rate-limited sources."
+                "Discuss before changing priority-slot targeting or rate-limited sources."
             ),
             "cli_hint": None,
             "href": "#overview",
@@ -413,7 +413,7 @@ def propose_triage(flag: dict[str, Any]) -> dict[str, Any]:
                 "accept_kind": "focus-ack",
                 "rationale": (
                     f"{flag_id} on focus market {market_id}{ticker_bit}: "
-                    "Discuss — fat-slot / rate-limit sensitive. Do not ritual-clear."
+                    "Discuss — priority-slot / rate-limit sensitive. Do not ritual-clear."
                 ),
                 "cli_hint": None,
                 "href": "#overview",
@@ -426,7 +426,7 @@ def propose_triage(flag: dict[str, Any]) -> dict[str, Any]:
             "accept_kind": "focus-ack",
             "rationale": (
                 f"{flag_id} on {market_id}{ticker_bit} (non-focus): park / watch spare "
-                "factory — do not starve the euro fat slot."
+                "factory — do not starve the euro priority slot."
             ),
             "cli_hint": None,
             "href": "#overview",
@@ -475,7 +475,7 @@ def _recommendation_for_flag(
     options: list[str]
     if prefer_discuss:
         options = [
-            "Discuss — judgment / fat-slot / rate-limit call",
+            "Discuss — judgment / priority-slot / rate-limit call",
             "Accept — observe-only record of deepen intent (does not dismiss or park)",
             "Do not ritual-clear the badge or divert euro capacity",
         ]
@@ -489,7 +489,7 @@ def _recommendation_for_flag(
         options = [
             "Accept — park / observe-ack for today",
             "Discuss — only if this should become deepen",
-            "Do not ritual-clear badges or starve euro fat slot",
+            "Do not ritual-clear badges or starve euro priority slot",
         ]
 
     discuss_lines = [
@@ -596,7 +596,7 @@ def build_market_warning_triage_items(
         if tickers:
             summary = f"{summary} · {tickers}" if summary else tickers
         next_steps = (
-            ["Discuss in Project chat — fat-slot / rate-limit judgment"]
+            ["Discuss in Project chat — priority-slot / rate-limit judgment"]
             if prefer_discuss
             else (
                 ["Accept park/dismiss triage for today"]
@@ -610,7 +610,7 @@ def build_market_warning_triage_items(
                 {
                     "kind": "human",
                     "ref": "discuss",
-                    "detail": "judgment call — Discuss before deepening fat slot",
+                    "detail": "judgment call — Discuss before deepening priority slot",
                 }
             )
         if not triage.get("dismissable") and action == "deepen":

@@ -9,7 +9,12 @@ from typing import Any
 
 from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT
-from value_investor.library_ingest_cascade import evaluate_ingest_cascade
+from value_investor.library_ingest_cascade import (
+    KIND_FILING_BODY,
+    evaluate_ingest_cascade,
+    filing_names_unfilled,
+    priority_slot_width,
+)
 from value_investor.library_ingest_escalation import (
     library_ingest_filing_gaps,
     snapshot_library_buy_tier_filing_health,
@@ -40,8 +45,13 @@ FTSE_MAINTENANCE_MAX_BODIES = 40
 FTSE_MAINTENANCE_MAX_RUNTIME_SECONDS = 3600.0
 FTSE_MAINTENANCE_MAX_DAILY_SUCCESSES = 8
 
+# Head job clock for names-that-fit. Matches euro-ingest-loop.yml schedule default.
+HEAD_SPRINT_RUNTIME_SECONDS = 2700.0
+
 SPRINT_CONFIG: dict[str, Any] = {
     "max_daily_successes": 4,
+    # Job ceiling for one head strand. Not a reserved width: dispatch sizes
+    # max_targets to the priority slot (unused names are not held).
     "max_targets": 24,
     "cron_morning": True,
     "cron_afternoon": True,
@@ -222,6 +232,24 @@ def evaluate_library_ingest_dispatch(
         )
         config = SPRINT_CONFIG
 
+    focus_id = str(policy.get("focus_market") or "").strip()
+    is_head = bool(focus_id) and market_id == focus_id
+    unfilled = filing_names_unfilled(health)
+    ceiling = int(SPRINT_CONFIG["max_targets"])
+    # Head sees the full name pool (the job ceiling). Spares subtract
+    # head_unfilled later; this width does not hold the unused ceiling or the
+    # workflow's missing-output fallback of 12.
+    slot_width = priority_slot_width(
+        unfilled=unfilled,
+        host_budget_left=ceiling,
+        time_left_seconds=HEAD_SPRINT_RUNTIME_SECONDS,
+        kind=KIND_FILING_BODY,
+        job_ceiling=ceiling,
+    )
+    reported_targets = int(config["max_targets"])
+    if mode == MODE_SPRINT and is_head:
+        reported_targets = slot_width
+
     return {
         "market_id": market_id,
         "focus_market": str(policy.get("focus_market") or market_id),
@@ -238,7 +266,10 @@ def evaluate_library_ingest_dispatch(
         "filing_health": health,
         "filing_gaps": gaps,
         "max_daily_successes": int(config["max_daily_successes"]),
-        "max_targets": int(config["max_targets"]),
+        "max_targets": reported_targets,
+        "priority_slot_width": slot_width if is_head else None,
+        "priority_slot_unfilled": unfilled if is_head else None,
+        "priority_slot_ceiling": ceiling if is_head else None,
         "cron_morning": bool(config["cron_morning"]),
         "cron_afternoon": bool(config["cron_afternoon"]),
         "cron_midafternoon": bool(config["cron_midafternoon"]),

@@ -29,7 +29,7 @@ A separate archival engine (possibly a separate repo) that:
 
 | Decision | Rationale |
 |----------|-----------|
-| Useful as **cold archive**, not a second live ingest | Must not compete with euro fat-slot / P2 focus head (`euro_depth` or successor) while fat is active; once fat is released, quiet offline collection is in-scope |
+| Useful as **cold archive**, not a second live ingest | Must not compete with the euro priority slot / P2 focus head (`euro_depth` or successor) while the priority slot is active; once it is released, quiet offline collection is in-scope |
 | Prefer **offline lane in-repo** before a separate repo | Non-interfering collation; separate repo only if size/ops evidence demands it |
 | Prefer **raw originals + zstd + normalized text** first | Proprietary compact format only after size/retrieval evidence |
 | **Do not** gate writers on miss-rate ≥50% | Collect-while-easy: elevated miss-rate means it is already too late for those flips; keep miss-rate observe-only |
@@ -40,7 +40,7 @@ A separate archival engine (possibly a separate repo) that:
 **Would it help if it could run without impacting higher priority?** Yes — when hard isolation holds:
 
 - Separate per-source rate-limit budgets (critical-path never shares quota with archive)
-- Preemptible / separate runner class (never delay fat-slot, ingest-loop, or gap-closure)
+- Preemptible / separate runner class (never delay the priority slot, ingest-loop, or gap-closure)
 - Cold storage off the live publish path
 - Auto-suspend when focus has unmeasured/zero-body stalls, 429s, or timeout pressure
 
@@ -50,7 +50,7 @@ Best-effort “low priority” without those controls is not sufficient.
 
 | Concern | Practical answer |
 |---------|------------------|
-| Runner conflict | Quiet band **21:00–05:00 UTC** weekdays + weekends; primary cron **Mon–Fri 22:00 UTC**; preemptible `cancel-in-progress`; max-concurrency 1; auto-suspend when focus is warn/stuck / fat sprint |
+| Runner conflict | Quiet band **21:00–05:00 UTC** weekdays + weekends; primary cron **Mon–Fri 22:00 UTC**; preemptible `cancel-in-progress`; max-concurrency 1; auto-suspend when focus is warn/stuck / priority slot held |
 | Source conflict | **Separate identity/budget** + incremental as-published polls (not full-universe crawls) |
 | Eng surface | Keep thin (poll → fetch → normalize → zstd → cold store); no scoring/memos/daily-hub |
 | Completeness | Archive is **best-effort accelerator**. On hydrate, use pack if present; gaps fall through to live deepen. Never block active regime on pack holes |
@@ -108,7 +108,7 @@ Apply caps (stage 1): `max_units=4`, ≤2 tickers/unit, ≤1 body/ticker, ≤16 
 
 | Required | Role |
 |----------|------|
-| Focus fat released (`head_needs_fat_slot` false; legacy dispatch without the bit still uses `mode=sprint` and not `sprint_ingest_complete`) | No steal of the P2 ingest head — occupancy is the fat-slot bit, not the market-status sprint badge |
+| Focus priority slot released (`head_needs_fat_slot` false; legacy dispatch without the bit still uses `mode=sprint` and not `sprint_ingest_complete`) | No steal of the P2 ingest head — occupancy is the priority-slot bit, not the market-status sprint badge |
 | `archive_lane_gate` allow | Quiet band + no focus-pressure suspend |
 | Capacity isolation | Archive budget IDs + hard HTTP fetch cap; recorded on each `pack_run` as `capacity_isolation` |
 | Thin writer pilot → stage 1 | **Shipped** — quiet apply; stage-1 caps 4/16 |

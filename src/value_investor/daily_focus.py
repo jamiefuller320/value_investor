@@ -1071,7 +1071,7 @@ def _observe_for_market_warn(task: dict[str, Any]) -> dict[str, Any]:
     flag_id = _blank(mw.get("flag_id")) or "flag"
     role_bits = []
     if mw.get("is_focus"):
-        role_bits.append("focus/fat-slot head")
+        role_bits.append("focus/priority-slot head")
     elif mw.get("is_spare"):
         role_bits.append("spare sprint")
     else:
@@ -1099,7 +1099,7 @@ def _observe_for_market_warn(task: dict[str, Any]) -> dict[str, Any]:
             how = f"Review {action} path against market_status / ingest_deviations."
     if not waiting:
         if task.get("prefer_discuss"):
-            waiting = "human judgment on fat-slot / rate-limit deepen"
+            waiting = "human judgment on priority-slot / rate-limit deepen"
         elif action in {"park", "dismiss"}:
             waiting = "operator Accept on observe-safe triage"
         else:

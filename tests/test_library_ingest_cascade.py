@@ -1,4 +1,4 @@
-"""P2 ingest effort cascade (spare streams yield to the focus fat slot)."""
+"""P2 ingest effort cascade (spare streams yield to the focus priority slot)."""
 
 from __future__ import annotations
 
@@ -81,6 +81,61 @@ def test_empty_strand_width_is_zero():
             unfilled=0,
         )
         assert (targets, runtime, mode) == (0, 0.0, "empty")
+
+
+def test_spare_subtracts_head_unfilled_not_the_unused_ceiling():
+    cfg = load_cascade_config({})
+    targets, _runtime, mode = scale_spare_budget(
+        1,
+        24,
+        2100.0,
+        config=cfg,
+        head_needs_fat=True,
+        unfilled=24,
+        head_unfilled=1,
+    )
+    assert mode == "spare"
+    assert targets == 23
+
+
+def test_priority_slot_width_matches_spare_rule_then_job_ceiling():
+    from value_investor.library_ingest_cascade import priority_slot_width
+
+    one = priority_slot_width(
+        unfilled=1,
+        host_budget_left=24,
+        time_left_seconds=2700.0,
+        job_ceiling=24,
+    )
+    empty = priority_slot_width(
+        unfilled=0,
+        host_budget_left=24,
+        time_left_seconds=2700.0,
+        job_ceiling=24,
+    )
+    capped = priority_slot_width(
+        unfilled=400,
+        host_budget_left=24,
+        time_left_seconds=2700.0,
+        job_ceiling=24,
+    )
+    short = priority_slot_width(
+        unfilled=40,
+        host_budget_left=40,
+        time_left_seconds=100.0,
+        job_ceiling=24,
+    )
+    host_bound = priority_slot_width(
+        unfilled=10,
+        host_budget_left=2,
+        time_left_seconds=2700.0,
+        job_ceiling=24,
+    )
+    assert one == 1
+    assert empty == 0
+    assert capped == 24
+    assert short == 1
+    assert host_bound == 2
 
 
 def test_kind_changes_names_that_fit_in_the_job():

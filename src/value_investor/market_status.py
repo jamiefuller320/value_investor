@@ -665,7 +665,7 @@ def build_learning_gate_indicator(
             ),
             "timeframe": (
                 "Sprint until exhaustion or raw parity. Extra jobs do not create "
-                "unique weeks. Fat slot serializes one head at a time."
+                "unique weeks. The priority slot serializes one head at a time."
             ),
         }
     elif current_id == GATE_ADMIT:
