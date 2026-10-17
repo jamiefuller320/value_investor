@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-16T11:07:08+00:00",
+  "updated_at": "2026-10-17T04:17:08+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -14465,6 +14465,38 @@
       "status": "open",
       "source": "bc-d9d26ded-164e-5f36-b08d-f540eff7cd3e",
       "added_at": "2026-10-16T16:32:44+00:00"
+    },
+    {
+      "id": "L613",
+      "category": "later",
+      "section": "ops",
+      "title": "Publish FTSE pound caps observe-only after 1104",
+      "summary": "PR 1104 adds compute_ftse350_pound_caps and 150 sourced share counts so 250 of 350 caps are computable. The function is not called by the screen, memos, paper fund, or N200\u2013N210. After it is on main, publish the caps as an observe-only ops finding. Leave historical paper NAV and observe episode marks as they were.",
+      "revisit_when": "When pull request 1104 is merged to main.",
+      "tags": [
+        "ftse350",
+        "market-cap",
+        "observe"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-29a6081e-a72b-5dff-b13c-4882a31ef5e7",
+      "added_at": "2026-10-17T04:17:08+00:00"
+    },
+    {
+      "id": "N212",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Label BCG Compass IHG and Metlen history units before technicals",
+      "summary": "BCG.L history in the 2 Aug\u201311 Oct 2026 archive changes scale (199.0 and 213.8, then 2.43 and 2.352). The 11 Oct screen stores price_vs_sma200_pct -0.9857 and timing_signal accumulate while the signal is hold. Compass and IHG are USD quotes and Metlen is EUR. Leave those series out of technical brackets until each print has a unit.",
+      "revisit_when": "When the FTSE history archive stores a price unit on BCG.L, CPG.L, IHG.L, and MTLN.L.",
+      "tags": [
+        "ftse350",
+        "price-unit",
+        "technicals"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-29a6081e-a72b-5dff-b13c-4882a31ef5e7",
+      "added_at": "2026-10-17T04:17:08+00:00"
     }
   ],
   "fragments": [
