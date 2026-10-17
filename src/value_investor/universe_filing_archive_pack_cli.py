@@ -34,7 +34,7 @@ def main(argv: list[str] | None = None) -> int:
         description=(
             "Universe filing archive pack lane: gate → week-first plan → "
             "dry or thin apply assemble → bottleneck review. Fail-open suspend "
-            "under focus fat."
+            "on focus pressure. head_needs_fat_slot does not suspend."
         )
     )
     parser.add_argument(

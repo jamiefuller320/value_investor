@@ -141,7 +141,7 @@ def test_status_suspend_waits_gate() -> None:
             "gate": {
                 "decision": "suspend",
                 "allowed": False,
-                "focus_pressure_reasons": ["focus_fat_slot_sprint_active"],
+                "focus_pressure_reasons": ["focus_unmeasured_buy_tier=1"],
             },
         },
         bottleneck={"errors": []},

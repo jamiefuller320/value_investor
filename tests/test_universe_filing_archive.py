@@ -48,16 +48,17 @@ def test_quiet_window_weekend_and_weekday_band() -> None:
     assert in_quiet_window(weekday_early) is True
 
 
-def test_focus_pressure_suspends_while_fat_slot_sprint_active() -> None:
+def test_focus_pressure_ignores_fat_slot_and_keeps_body_stalls() -> None:
     reasons = focus_pressure_reasons(
         dispatch={
             "mode": "sprint",
             "ingest_sprint_complete": False,
             "focus_market": "euro_depth",
+            "ingest_cascade": {"head_needs_fat_slot": True},
             "filing_health": {"unmeasured_buy_tier": 2, "zero_body_buy_tier": 1},
         }
     )
-    assert "focus_fat_slot_sprint_active" in reasons
+    assert "focus_fat_slot_sprint_active" not in reasons
     assert any(r.startswith("focus_unmeasured") for r in reasons)
     assert any(r.startswith("focus_zero_body") for r in reasons)
 
@@ -67,38 +68,54 @@ def test_focus_pressure_suspends_while_fat_slot_sprint_active() -> None:
             "mode": "sprint",
             "ingest_sprint_complete": False,
             "focus_market": "euro_depth",
+            "ingest_cascade": {"head_needs_fat_slot": True},
             "filing_health": {},
         },
         market_status={},
     )
-    assert gate["allowed"] is False
-    assert gate["decision"] == "suspend"
+    assert gate["allowed"] is True
+    assert gate["decision"] == "allow"
+    assert gate["focus_pressure_reasons"] == []
     assert gate["preemptible"] is True
     assert gate["fourth_equal_sprint_stream"] is False
 
 
-def test_cold_store_uses_fat_slot_bit_not_stale_sprint_mode() -> None:
-    released = focus_pressure_reasons(
+def test_fat_slot_bit_and_legacy_sprint_mode_do_not_suspend() -> None:
+    for bit in (True, False):
+        reasons = focus_pressure_reasons(
+            dispatch={
+                "mode": "sprint",
+                "ingest_sprint_complete": False,
+                "focus_market": "euro_depth",
+                "ingest_cascade": {"head_needs_fat_slot": bit},
+                "filing_health": {},
+            }
+        )
+        assert "focus_fat_slot_sprint_active" not in reasons
+        assert reasons == []
+
+    legacy = focus_pressure_reasons(
         dispatch={
             "mode": "sprint",
             "ingest_sprint_complete": False,
             "focus_market": "euro_depth",
-            "ingest_cascade": {"head_needs_fat_slot": False},
             "filing_health": {},
         }
     )
-    assert "focus_fat_slot_sprint_active" not in released
+    assert "focus_fat_slot_sprint_active" not in legacy
+    assert legacy == []
 
-    occupied = focus_pressure_reasons(
+    stuck = focus_pressure_reasons(
         dispatch={
             "mode": "exhausted",
             "ingest_sprint_complete": True,
             "focus_market": "euro_depth",
             "ingest_cascade": {"head_needs_fat_slot": True},
             "filing_health": {},
-        }
+        },
+        market_status={"markets": {"euro_depth": {"flags": ["unmeasured_stuck"]}}},
     )
-    assert "focus_fat_slot_sprint_active" in occupied
+    assert stuck == ["market_status_flag=unmeasured_stuck"]
 
 
 def test_archive_lane_allows_only_when_quiet_and_no_pressure() -> None:

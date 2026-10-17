@@ -105,7 +105,8 @@ WORKFLOW_SCHEDULES = {
         "cadence": (
             "Mon–Fri 22:00 UTC quiet-window cold archive lane under "
             "archive_lane_gate (week-first then backward pack plan). "
-            "Preemptible; suspends while focus fat sprint active. "
+            "Preemptible. head_needs_fat_slot does not suspend this lane. "
+            "Suspends on unmeasured, zero-body, and stuck-flag pressure. "
             "Writes bottleneck review (observe-only). "
             "docs/ops/universe-filing-archive-pack.md."
         ),
