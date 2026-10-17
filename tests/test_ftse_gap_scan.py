@@ -562,22 +562,39 @@ def test_screen_pe_beside_a_revenue_year_with_no_eps_line():
     )
 
 
-def test_ihg_chart_gbp_beside_usd_quote():
+def test_chart_gbp_matches_a_quote_currency_other_than_pounds():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
     ihg = rows["IHG.L"]
-    chart = json.loads((ROOT / "docs/data/charts/IHG.L.json").read_text())
-    quote = json.loads((ROOT / "docs/data/research/IHG.L/sources/price_quote.json").read_text())
-    assert chart["currency"] == "GBP"
-    assert quote["quote_currency"] == "USD"
+    ihg_chart = json.loads((ROOT / "docs/data/charts/IHG.L.json").read_text())
+    ihg_quote = json.loads((ROOT / "docs/data/research/IHG.L/sources/price_quote.json").read_text())
+    assert ihg_chart["currency"] == "GBP"
+    assert ihg_quote["quote_currency"] == "USD"
     assert ihg.chart_currency == "GBP"
     assert ihg.price_quote_currency == "USD"
     assert ihg.history_price == pytest.approx(159.05)
-    assert "chart_gbp_quote_usd" in _ids(ihg)
-    assert "chart_gbp_quote_usd" not in _ids(
+    assert "chart_gbp_quote_not_pound" in _ids(ihg)
+
+    mtln = rows["MTLN.L"]
+    mtln_quote = json.loads(
+        (ROOT / "docs/data/research/MTLN.L/sources/price_quote.json").read_text()
+    )
+    assert mtln.chart_currency == "GBP"
+    assert mtln_quote["quote_currency"] == "EUR"
+    assert mtln.price_quote_currency == "EUR"
+    assert mtln.history_price == pytest.approx(48.76)
+    assert "chart_gbp_quote_not_pound" in _ids(mtln)
+
+    assert "chart_gbp_quote_not_pound" not in _ids(
         _row(chart_currency="GBP", price_quote_currency="GBp", history_price=159.05)
     )
-    assert "chart_gbp_quote_usd" not in _ids(
-        _row(chart_currency="USD", price_quote_currency="USD", history_price=159.05)
+    assert "chart_gbp_quote_not_pound" not in _ids(
+        _row(chart_currency="GBP", price_quote_currency="GBP", history_price=48.76)
+    )
+    assert "chart_gbp_quote_not_pound" not in _ids(
+        _row(chart_currency="USD", price_quote_currency="EUR", history_price=48.76)
+    )
+    assert "chart_gbp_quote_not_pound" in _ids(
+        _row(chart_currency="GBP", price_quote_currency="EUR", history_price=48.76)
     )
 
 

@@ -784,15 +784,16 @@ def check_net_income_ten_times_normalized(row: ScreenRow) -> str | None:
     return "; ".join(parts)
 
 
-def check_chart_gbp_quote_usd(row: ScreenRow) -> str | None:
-    """Chart file labels the price GBP while the quote file says USD."""
+def check_chart_gbp_quote_not_pound(row: ScreenRow) -> str | None:
+    """Chart file labels the price GBP while the quote currency is neither GBP nor GBp."""
 
-    if row.chart_currency != "GBP" or row.price_quote_currency != "USD":
+    quote = row.price_quote_currency
+    if row.chart_currency != "GBP" or not quote or quote in {"GBP", "GBp"}:
         return None
     if row.history_price is None:
-        return "chart currency GBP and quote currency USD"
+        return f"chart currency GBP and quote currency {quote}"
     return (
-        f"chart currency GBP and quote currency USD; "
+        f"chart currency GBP and quote currency {quote}; "
         f"{SCREEN_PRICE_RUN_PREFIX} price {_num(row.history_price)}"
     )
 
@@ -986,9 +987,9 @@ CHECKS: tuple[Check, ...] = (
         check_positive_screen_pe_beside_negative_diluted_eps,
     ),
     Check(
-        "chart_gbp_quote_usd",
-        "a chart that labels the price GBP while the quote currency is USD",
-        check_chart_gbp_quote_usd,
+        "chart_gbp_quote_not_pound",
+        "a chart that labels the price GBP while the quote currency is neither GBP nor GBp",
+        check_chart_gbp_quote_not_pound,
     ),
     Check(
         "positive_diluted_eps_without_screen_pe",
