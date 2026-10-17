@@ -607,13 +607,13 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 **What to change.** Do not fold `HBR.L`, `ELM.L`, or `ICGT.L` into section 47. Do not invent a corrected multiple.
 
-## 53. The quote currency can be USD while the chart labels the price GBP
+## 53. A quote currency other than sterling can sit beside a chart labeled GBP
 
-**What is wrong.** On `IHG.L` the quote currency is USD and the chart labels the same price GBP. Section 33 records that the history file does not name the unit as pence. It does not record this quote-and-chart pair. Section 51 is a magnitude gap. Section 52 is a positive screen P/E beside a negative diluted EPS.
+**What is wrong.** On `IHG.L` the quote currency is USD and the chart labels the same price GBP. The same shape exists for EUR. On `MTLN.L` the quote currency is EUR and the chart labels the price GBP. The rule is a quote currency other than sterling. Section 33 records that the IHG history file does not name the unit as pence. Section 39 records that the Metlen history file does not name the unit as pence. Neither records this quote-and-chart pair.
 
-**Where.** The history price and the chart price are 159.05. The quote currency is USD. The heading cap is $23,953.8M.
+**Where.** `IHG.L`. The history price and the chart price are 159.05. The quote currency is USD. The heading cap is $23,953.8M. `MTLN.L`. The 11 Oct price is 48.76. The quote currency is EUR. The chart labels that price GBP. The heading cap is €6,973.8M.
 
-**What to change.** Do not fold `IHG.L` into section 33, section 51, or section 52. Do not invent a conversion or a corrected cap.
+**What to change.** Do not fold `IHG.L` into section 33. Do not fold `MTLN.L` into section 39. Do not invent a converted price or cap.
 
 ## 54. Net income and normalized income in the same year can have opposite signs
 
