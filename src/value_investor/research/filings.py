@@ -1906,6 +1906,19 @@ def _is_routine_own_share_or_pdmr_row(row: dict[str, Any]) -> bool:
     return "transaction in own shares" in headline or "director/pdmr" in headline
 
 
+_CEO_SUCCESSION_RNS_PATTERNS = (
+    r"\bappoints new ceo\b",
+    r"\bappointment of (?:a )?(?:new )?chief executive\b",
+    r"\bnew chief executive officer\b",
+)
+
+
+def _is_ceo_succession_rns_row(row: dict[str, Any]) -> bool:
+    """CEO appointment RNS — governance news, not a statutory filing gap (KGF.L)."""
+    headline = _headline_blob(row)
+    return any(re.search(pat, headline) for pat in _CEO_SUCCESSION_RNS_PATTERNS)
+
+
 def _is_holding_disclosure_row(row: dict[str, Any]) -> bool:
     """Form 8.3/8.5 and major-holding RNS — indexed for audit, not ingest ROI."""
     if str(row.get("entity_type") or "") == "holding_disclosure":
@@ -1929,6 +1942,8 @@ def filing_lacks_material_body(row: dict[str, Any]) -> bool:
         return False
     if _is_routine_own_share_or_pdmr_row(row):
         return False
+    if _is_ceo_succession_rns_row(row):
+        return False
     if _is_holding_disclosure_row(row):
         return False
     if str(row.get("period") or "") == "other" and _is_material_corporate_action_row(row):
@@ -1947,6 +1962,8 @@ def filing_counts_toward_body_penetration(row: dict[str, Any]) -> bool:
     if _is_index_noise_row(row):
         return False
     if _is_routine_own_share_or_pdmr_row(row):
+        return False
+    if _is_ceo_succession_rns_row(row):
         return False
     if _is_holding_disclosure_row(row):
         return False
@@ -2303,6 +2320,8 @@ def _material_other_rns_refetch_priority(row: dict[str, Any]) -> int:
     """Rank non-results RNS for Investegate refetch (ITV Sky sale, consent, buyback, TU)."""
     if _is_material_corporate_action_row(row):
         return 130
+    if _is_ceo_succession_rns_row(row):
+        return 105
     headline = _headline_blob(row)
     if any(re.search(pat, headline) for pat in _MATERIAL_FINANCING_PATTERNS):
         return 125

@@ -568,6 +568,66 @@ def test_filing_coverage_kgf_missing_interim_listing_flags_gap(tmp_path: Path):
     assert _has_outstanding_ingest_gap(coverage, ticker="KGF.L")
 
 
+def test_filing_coverage_kgf_ceo_succession_rns_does_not_false_gap(tmp_path: Path):
+    """eng-20261017-01: bodied statutory pack + CEO RNS stub must not read as ingest gap."""
+    from value_investor.research.ingest_improvement import (
+        _filing_coverage,
+        _has_outstanding_ingest_gap,
+    )
+    from value_investor.research.store import ResearchStore
+
+    output_dir = tmp_path / "output"
+    filings_dir = output_dir / "research" / "KGF.L" / "sources" / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {
+                    "total": 4,
+                    "annual": 1,
+                    "interim": 1,
+                    "with_body": 2,
+                    "period_coverage": {
+                        "annual": {"total": 1, "with_body": 1},
+                        "interim": {"total": 1, "with_body": 1},
+                    },
+                },
+                "filings": [
+                    {
+                        "id": "fy",
+                        "source": "investegate_direct",
+                        "headline": "Final Results",
+                        "period": "annual",
+                        "has_body": True,
+                    },
+                    {
+                        "id": "h1",
+                        "source": "investegate_direct",
+                        "headline": "Half Year Results",
+                        "period": "interim",
+                        "has_body": True,
+                    },
+                    {
+                        "id": "ceo",
+                        "source": "investegate_direct",
+                        "headline": "Kingfisher Appoints New CEO",
+                        "period": "other",
+                        "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/kingfisher-appoints-new-ceo/9819911",
+                        "has_body": False,
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    store = ResearchStore(output_dir)
+    coverage = _filing_coverage(store, "KGF.L", output_dir)
+    assert coverage["indexed_without_body"] == 0
+    assert coverage["annual_with_body"] == 1
+    assert coverage["interim_with_body"] == 1
+    assert not _has_outstanding_ingest_gap(coverage, ticker="KGF.L")
+
+
 def test_select_ingest_improvement_targets_prioritises_thin_filings(tmp_path: Path):
     output_dir = tmp_path / "output"
     suggestions_path = tmp_path / "suggestions.json"
