@@ -609,11 +609,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 53. A quote currency other than sterling can sit beside a chart labeled GBP
 
-**What is wrong.** On `IHG.L` the quote currency is USD and the chart labels the same price GBP. The same shape exists for EUR. On `MTLN.L` the quote currency is EUR and the chart labels the price GBP. The rule is a quote currency other than sterling. Section 33 records that the IHG history file does not name the unit as pence. Section 39 records that the Metlen history file does not name the unit as pence. Neither records this quote-and-chart pair.
+**What is wrong.** On `IHG.L` the quote currency is USD and the chart labels the same price GBP. The same shape exists for EUR. On `MTLN.L` and `BCG.L` the quote currency is EUR and the chart labels the price GBP. On `CPG.L` the quote currency is USD and the chart labels the price GBP. The rule is a quote currency other than sterling. Section 33 records that the IHG history file does not name the unit as pence. Section 39 records that the Metlen history file does not name the unit as pence. Neither records this quote-and-chart pair.
 
-**Where.** `IHG.L`. The history price and the chart price are 159.05. The quote currency is USD. The heading cap is $23,953.8M. `MTLN.L`. The 11 Oct price is 48.76. The quote currency is EUR. The chart labels that price GBP. The heading cap is €6,973.8M.
+**Where.** `IHG.L`. The history price and the chart price are 159.05. The quote currency is USD. The heading cap is $23,953.8M. `MTLN.L`. The 11 Oct price is 48.76. The quote currency is EUR. The chart labels that price GBP. The heading cap is €6,973.8M. `BCG.L`. The stored 11 Oct price is 2.3519999980926514. The quote currency is EUR. The chart labels that price GBP. `CPG.L`. The stored 11 Oct price is 31.200000762939453. The quote currency is USD. The chart labels that price GBP.
 
-**What to change.** Do not fold `IHG.L` into section 33. Do not fold `MTLN.L` into section 39. Do not invent a converted price or cap.
+**What to change.** Do not fold `IHG.L` or `CPG.L` into section 33. Do not fold `MTLN.L` into section 39. Do not fold `BCG.L` into section 31. Do not tidy 2.3519999980926514 or 31.200000762939453 into a different number. Do not invent a converted price or cap.
 
 ## 54. Net income and normalized income in the same year can have opposite signs
 
