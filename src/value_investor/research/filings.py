@@ -616,9 +616,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     ],
     # Preferred-share DAX line — do not inherit VOW.DE (research_ir_urls.json still lists 404 annual hub).
     "VOW3.DE": [
-        "https://www.volkswagen-group.com/en/press-releases/volkswagen-group-strengthens-financial-resilience-in-2025-strong-fourth-quarter-in-a-challenging-environment-20202/download?disposition=attachment",
         "https://www.volkswagen-group.com/en/publications/more/annual-report-2025-3212/download?disposition=attachment",
-        "https://www.volkswagen-group.com/en/publications/more/half-yearly-financial-report-2025-3077/download?disposition=attachment",
         "https://www.volkswagen-group.com/en/publications/more/interim-report-january-september-2025-3129/download?disposition=attachment",
     ],
     # euro_depth IWB blocker — DTE.DE parked awaiting_periodic_report; FY2025 entire annual report PDF.
