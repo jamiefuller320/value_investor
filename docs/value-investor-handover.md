@@ -684,8 +684,8 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 62. A later income year can store no revenue line
 
-**What is wrong.** On `FAN.L` and `KIE.L` a later income year stores no revenue line. Section 15 records a later year that has only EPS and share counts for `BWY.L` and `GNS.L`.
+**What is wrong.** On `FAN.L`, `KIE.L`, and `SMIN.L` a later income year stores no revenue line. Section 15 records a later year that has only EPS and share counts for `BWY.L` and `GNS.L`.
 
-**Where.** `docs/data/research/FAN.L/sources/financials_annual.json`. The 2025 income year stores diluted average shares and no revenue line. The 2024 income year stores Total Revenue. `docs/data/research/KIE.L/sources/financials_annual.json`. The 2025 income year stores diluted EPS of 0.121 and no revenue line. The 2026 income year stores diluted EPS of 0.135 and no revenue line. The 2024 income year stores Total Revenue.
+**Where.** `docs/data/research/FAN.L/sources/financials_annual.json`. The 2025 income year stores diluted average shares and no revenue line. The 2024 income year stores Total Revenue. `docs/data/research/KIE.L/sources/financials_annual.json`. The 2025 income year stores diluted EPS of 0.121 and no revenue line. The 2026 income year stores diluted EPS of 0.135 and no revenue line. The 2024 income year stores Total Revenue. `docs/data/research/SMIN.L/sources/financials_annual.json`. The 2025 and 2026 income years each store diluted average shares, basic average shares, diluted EPS, and basic EPS, and no revenue line. The 2024 income year stores Total Revenue.
 
-**What to change.** Do not fold `FAN.L` or `KIE.L` into section 15. Do not invent a revenue figure for 2025 or 2026.
+**What to change.** Do not fold `FAN.L`, `KIE.L`, or `SMIN.L` into section 15. Do not invent a revenue figure for those later years.
