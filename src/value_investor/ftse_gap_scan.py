@@ -82,6 +82,7 @@ class ScreenRow:
     fcf_divergence_flagged: bool | None = None
     statement_revenue: float | None = None
     discount_display: str | None = None
+    premium_display: str | None = None
 
 
 @dataclass(frozen=True)
@@ -430,15 +431,18 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
                         else None
                     ),
                     statement_revenue=facts["statement_revenue"],
-                    discount_display=(
-                        str(key_metrics["Discount"]).strip()
-                        if isinstance(key_metrics.get("Discount"), str)
-                        and str(key_metrics["Discount"]).strip()
-                        else None
-                    ),
+                    discount_display=_metric_text(key_metrics, "Discount"),
+                    premium_display=_metric_text(key_metrics, "Premium"),
                 )
             )
     return rows
+
+
+def _metric_text(key_metrics: dict[str, Any], name: str) -> str | None:
+    value = key_metrics.get(name)
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    return None
 
 
 def check_raw_yield_below_one_displayed_as_percent(row: ScreenRow) -> str | None:
@@ -516,18 +520,23 @@ def check_trust_row_pe_only(row: ScreenRow) -> str | None:
 
 
 def check_trust_revenue_discount_without_fcf_or_price(row: ScreenRow) -> str | None:
-    """Trust row with statement revenue, a discount, no free-cash-flow figure, and no 11 Oct price."""
+    """Trust row with statement revenue, a discount or premium, no free-cash-flow figure, and no 11 Oct price."""
 
     if (
         not row.trust
         or row.statement_revenue is None
-        or row.discount_display is None
+        or (row.discount_display is None and row.premium_display is None)
         or row.fcf_has_figure
         or row.history_price is not None
     ):
         return None
+    labels: list[str] = []
+    if row.discount_display is not None:
+        labels.append(f"discount {row.discount_display}")
+    if row.premium_display is not None:
+        labels.append(f"premium {row.premium_display}")
     return (
-        f"trust discount {row.discount_display}; statement revenue {_num(row.statement_revenue)}; "
+        f"trust {'; '.join(labels)}; statement revenue {_num(row.statement_revenue)}; "
         f"no free-cash-flow figure; no {SCREEN_PRICE_RUN_PREFIX} price"
     )
 
@@ -715,7 +724,7 @@ CHECKS: tuple[Check, ...] = (
     ),
     Check(
         "trust_revenue_discount_without_fcf_or_price",
-        "a trust row with statement revenue, a discount, no free-cash-flow figure, and no 11 Oct price",
+        "a trust row with statement revenue, a discount or premium, no free-cash-flow figure, and no 11 Oct price",
         check_trust_revenue_discount_without_fcf_or_price,
     ),
     Check(

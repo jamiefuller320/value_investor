@@ -367,6 +367,40 @@ def test_trust_revenue_check_needs_each_stored_gap():
             history_price=100.0,
         )
     )
+    premium = _row(
+        trust=True,
+        statement_revenue=1_405_000_000.0,
+        premium_display="213.7%",
+        pe_display="16.2",
+        yield_display="3.7%",
+        key_metric_names=frozenset({"Premium", "P/B", "Yield", "P/E"}),
+        fcf_has_figure=False,
+        history_price=None,
+    )
+    assert "trust_revenue_discount_without_fcf_or_price" in _ids(premium)
+
+
+def test_emg_premium_counts_on_the_trust_revenue_check():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    emg = rows["EMG.L"]
+    latest = json.loads((ROOT / "docs/data/latest.json").read_text())
+    stored = next(raw for raw in latest["trust_reports"] if raw.get("ticker") == "EMG.L")
+    assert stored["key_metrics"]["P/B"] == "3.14"
+    assert emg.trust is True
+    assert emg.premium_display == "213.7%"
+    assert emg.discount_display is None
+    assert emg.pe_display == "16.2"
+    assert emg.yield_display == "3.7%"
+    assert "P/B" in emg.key_metric_names
+    assert emg.fcf_has_figure is False
+    assert emg.history_price is None
+    assert emg.statement_revenue is not None
+    detail = next(
+        hit.detail
+        for hit in hits_for(emg)
+        if hit.rule_id == "trust_revenue_discount_without_fcf_or_price"
+    )
+    assert "premium 213.7%" in detail
 
 
 def test_stored_fcf_figures_stay_distinct():
