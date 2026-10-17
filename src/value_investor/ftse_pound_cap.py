@@ -360,8 +360,7 @@ def _cap_for_ticker(
                 )
             else:
                 detail = (
-                    f"{currency} {SCREEN_PRICE_RUN_PREFIX} × {own.field} {own.year} "
-                    f"from {own.path}"
+                    f"{currency} {SCREEN_PRICE_RUN_PREFIX} × {own.field} {own.year} from {own.path}"
                 )
             return cap, "price_x_financials_shares", detail
     if price is not None and extra is not None:
