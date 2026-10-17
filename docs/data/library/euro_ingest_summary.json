@@ -1,15 +1,179 @@
 {
-  "run_at": "2026-10-16T15:13:13.447377+00:00",
+  "run_at": "2026-10-17T07:22:55.205562+00:00",
   "market_id": "euro_depth",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "PRX.AS",
+    "SHELL.AS"
+  ],
+  "target_details": [
+    {
+      "ticker": "PRX.AS",
+      "priority_score": 17.4476,
+      "filings_total": 5,
+      "filings_with_body": 2,
+      "indexed_without_body": 3,
+      "reason": "indexed_without_body"
+    },
+    {
+      "ticker": "SHELL.AS",
+      "priority_score": 15.2875,
+      "filings_total": 46,
+      "filings_with_body": 44,
+      "indexed_without_body": 2,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "PRX.AS",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 5,
+        "filings_with_body": 2,
+        "indexed_without_body": 3
+      },
+      "after": {
+        "filings_total": 5,
+        "filings_with_body": 5,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 5,
+        "annual": 2,
+        "interim": 1,
+        "trading_update": 0,
+        "other": 2,
+        "with_body": 5,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 1,
+            "with_body": 1
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 2,
+            "with_body": 2
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 5,
+        "with_body_after": 5,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 3,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    },
+    {
+      "ticker": "SHELL.AS",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 46,
+        "filings_with_body": 44,
+        "indexed_without_body": 2
+      },
+      "after": {
+        "filings_total": 44,
+        "filings_with_body": 44,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 44,
+        "annual": 3,
+        "interim": 41,
+        "trading_update": 0,
+        "other": 0,
+        "with_body": 44,
+        "period_coverage": {
+          "annual": {
+            "total": 3,
+            "with_body": 3
+          },
+          "interim": {
+            "total": 40,
+            "with_body": 40
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 0,
+            "with_body": 0
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 2,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 44,
+        "with_body_after": 44,
+        "retries_used": 0,
+        "retry_log": [
+          {
+            "filing_id": "ir_b4957d1e0b6ee417",
+            "url": "https://www.sec.gov/Archives/edgar/data/1306965/000130696525000007/shel-20241231.htm",
+            "attempt": 1,
+            "outcome": "fetched_pdf",
+            "source": "pdf"
+          },
+          {
+            "filing_id": "ir_d12a1392839b5a3f",
+            "url": "https://www.sec.gov/Archives/edgar/data/1306965/000130696524000026/shel-20231231.htm",
+            "attempt": 1,
+            "outcome": "fetched_pdf",
+            "source": "pdf"
+          }
+        ],
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 4,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "mandatory": true,
+        "note": "refetch_ir_allowlist_filing_bodies"
+      }
+    }
+  ],
+  "improved": [
+    "PRX.AS",
+    "SHELL.AS"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-16T15:13:01.987350+00:00",
+    "snapshot_at": "2026-10-17T07:18:05.623466+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 47,
     "unmeasured_buy_tier": 0,
@@ -18,66 +182,7 @@
     "indexed_without_body": 18,
     "bodies_min": 1,
     "bodies_median": 4,
-    "bodies_max": 126,
-    "coverage_scope": "canonical_plus_shards",
-    "ftse_equivalent": false,
-    "unmeasured_tickers": [],
-    "zero_body_tickers": [],
-    "thin_body_tickers": [
-      "UCB.BR",
-      "EVN.VI",
-      "APAM.AS",
-      "ACKB.BR",
-      "MUV2.DE",
-      "BAS.DE",
-      "WIE.VI",
-      "PRX.AS",
-      "DQ7A.IR"
-    ],
-    "indexed_without_body_tickers": [
-      "UCB.BR",
-      "EVN.VI",
-      "ABI.BR",
-      "WIE.VI",
-      "PRX.AS"
-    ],
-    "indexed_without_body_by_ticker": {
-      "UCB.BR": 1,
-      "EVN.VI": 1,
-      "ABI.BR": 12,
-      "WIE.VI": 1,
-      "PRX.AS": 3
-    },
-    "parked_tickers": [
-      "ABI.BR",
-      "ACKB.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "DQ7A.IR",
-      "EVN.VI",
-      "MUV2.DE",
-      "PRX.AS",
-      "UCB.BR",
-      "WIE.VI"
-    ],
-    "parked_count": 10,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
-  },
-  "health_after": {
-    "snapshot_at": "2026-10-16T15:13:08.503802+00:00",
-    "market_id": "euro_depth",
-    "buy_tier_count": 47,
-    "unmeasured_buy_tier": 0,
-    "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 9,
-    "indexed_without_body": 18,
-    "bodies_min": 1,
-    "bodies_median": 4,
-    "bodies_max": 126,
+    "bodies_max": 125,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -129,19 +234,106 @@
     ],
     "ingest_exhausted": false
   },
+  "health_after": {
+    "snapshot_at": "2026-10-17T07:22:55.165498+00:00",
+    "market_id": "euro_depth",
+    "buy_tier_count": 47,
+    "unmeasured_buy_tier": 0,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 8,
+    "indexed_without_body": 15,
+    "bodies_min": 1,
+    "bodies_median": 4,
+    "bodies_max": 125,
+    "coverage_scope": "canonical_plus_shards",
+    "ftse_equivalent": false,
+    "unmeasured_tickers": [],
+    "zero_body_tickers": [],
+    "thin_body_tickers": [
+      "UCB.BR",
+      "EVN.VI",
+      "APAM.AS",
+      "ACKB.BR",
+      "MUV2.DE",
+      "BAS.DE",
+      "WIE.VI",
+      "DQ7A.IR"
+    ],
+    "indexed_without_body_tickers": [
+      "UCB.BR",
+      "EVN.VI",
+      "ABI.BR",
+      "WIE.VI"
+    ],
+    "indexed_without_body_by_ticker": {
+      "UCB.BR": 1,
+      "EVN.VI": 1,
+      "ABI.BR": 12,
+      "WIE.VI": 1
+    },
+    "parked_tickers": [
+      "ABI.BR",
+      "ACKB.BR",
+      "APAM.AS",
+      "BAS.DE",
+      "DQ7A.IR",
+      "EVN.VI",
+      "MUV2.DE",
+      "UCB.BR",
+      "WIE.VI"
+    ],
+    "parked_count": 9,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
+  },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
+  "discovery_scan": {
+    "scanned": 47,
+    "hits": 40,
+    "new_rows_total": 1,
+    "curiosity_total": 43,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": true,
+    "max_runtime_seconds": 675.0,
+    "prefer_tickers": [
+      "UCB.BR",
+      "APAM.AS",
+      "ACKB.BR",
+      "MUV2.DE",
+      "BAS.DE",
+      "DQ7A.IR",
+      "ABI.BR",
+      "PRX.AS",
+      "EVN.VI",
+      "WIE.VI"
+    ],
+    "runtime_cutoff": false
+  },
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "euro_depth"
+  },
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-10-16T15:13:05.148942+00:00",
+    "assessed_at": "2026-10-17T07:18:07.822122+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -213,21 +405,19 @@
       "thin_need_bodies": 4
     }
   },
-  "used_seconds": 0.004395148000014615,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2099.995604852,
+  "used_seconds": 285.088973105,
+  "budget_seconds": 2700.0,
+  "leftover_seconds": 2414.911026895,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "PRX.AS"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_depth",
-    "updated_at": "2026-10-16T15:13:08.514561+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-10-17T07:22:55.174453+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -342,32 +532,45 @@
       "DQ7A.IR",
       "EVN.VI",
       "MUV2.DE",
-      "PRX.AS",
       "UCB.BR",
       "WIE.VI"
     ],
-    "unparked_leftover": [
-      "PRX.AS"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/euro_depth/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "euro_depth"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "euro_depth",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "task_ids": [],
-    "task_count": 173,
-    "market_id": "nasdaq100",
-    "hunter_ticker": "PDD",
-    "hunter_tickers": [
-      "PDD"
-    ],
-    "priority_score": 12.0,
-    "wait_behind_task_id": "",
-    "leftover_key_bodies": false
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20261017-03"
   }
 }
