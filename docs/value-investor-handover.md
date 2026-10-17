@@ -44,6 +44,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-35.md` (FTSE ranks 341–350)
 - `docs/ftse350-growth-batch-2.md` (second pass on pound-cap ranks 11–20)
 - `docs/ftse350-growth-batch-7.md` (second pass on pound-cap ranks 61–70)
+- `docs/ftse350-growth-batch-8.md` (second pass on pound-cap ranks 71–80)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -98,8 +99,9 @@ Those notes are the source. Do not treat this handover as a new pass over the fi
 - `SPI.L` stores `dividend_yield_raw` 0.61 and displays 61.0%. There is no statement.
 - `VLX.L` stores `dividend_yield_raw` 0.7 and displays 70.0%. There is no statement.
 - `ATYM.L` stores `dividend_yield_raw` 0.96 and displays 96.0%. The cash dividend is 10.1 million, which is 0.67% of the cap if the dividend is pounds and 0.56% if it is euros. The AIM metrics yield is the fraction 1.0.
+- `CVSG.L` stores `dividend_yield_raw` 0.77 and displays 77.0%. There is no statement. The AIM dividend yield is the fraction 0.73.
 
-**What to change.** Store yield as a decimal fraction, and format percent only at display. Do not treat “raw > 1” as the only rescale. Recompute the screen yield from the dividend line actually present (`Common Stock Dividend Paid`, else `Cash Dividends Paid`) and a market cap in the same currency. If the currency is missing, leave the yield unchecked instead of printing a percent. For `ATYM.L`, do not invent a corrected screen yield.
+**What to change.** Store yield as a decimal fraction, and format percent only at display. Do not treat “raw > 1” as the only rescale. Recompute the screen yield from the dividend line actually present (`Common Stock Dividend Paid`, else `Cash Dividends Paid`) and a market cap in the same currency. If the currency is missing, leave the yield unchecked instead of printing a percent. For `ATYM.L` and `CVSG.L`, do not invent a corrected screen yield.
 
 ## 4. Screen free cash flow is not the filing line
 
@@ -465,9 +467,9 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 **What is wrong.** When there is no statement, the screen P/B is unchecked, and on these names that P/B is negative.
 
-**Where.** `IWG.L`: screen P/B is −5.7. There is no statement. `IHG.L`: screen P/B is −8.0. There is no statement. `SDLF.L`: screen P/B is −39.1. There is no statement and no P/E key. `TRST.L`: equity is −6.73 million. The screen P/B is −197.5. Price over that equity is −145 if the equity is pounds and −193 if it is dollars. The screen has no P/E key.
+**Where.** `IWG.L`: screen P/B is −5.7. There is no statement. `IHG.L`: screen P/B is −8.0. There is no statement. `SDLF.L`: screen P/B is −39.1. There is no statement and no P/E key. `TRST.L`: equity is −6.73 million. The screen P/B is −197.5. Price over that equity is −145 if the equity is pounds and −193 if it is dollars. The screen has no P/E key. `DOM.L`: stockholders’ equity is −88.3 million. The screen P/B is −10.5. Price over that equity is −9.8. `MOON.L`: stockholders’ equity is −54.2 million. The screen P/B is −15.9. Price over that equity is −15.8.
 
-**What to change.** Do not treat a negative unchecked screen P/B as a multiple. Do not invent an equity figure. For `TRST.L`, do not invent a book-value figure.
+**What to change.** Do not treat a negative unchecked screen P/B as a multiple. Do not invent an equity figure. For `TRST.L`, `DOM.L`, and `MOON.L`, do not invent a book-value figure.
 
 ## 39. A London history print can be a euro quote
 
@@ -521,14 +523,22 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 **What is wrong.** On `JUP.L` in 2023 the unusual-item fields do not match. Section 9 records one-off items that distort the multiples the screen shows. It does not cover fields that disagree with each other.
 
-**Where.** In 2023 the field named Total Unusual Items is 1.9 million, Total Unusual Items Excluding Goodwill is −74.3 million, and Special Income Charges is −78.4 million. Normalized income that year is 123.5 million beside net income of −12.9 million. In 2024 the two unusual-item fields match at 4.7 million. In 2025 they match at 8.3 million.
+**Where.** In 2023 the field named Total Unusual Items is 1.9 million, Total Unusual Items Excluding Goodwill is −74.3 million, and Special Income Charges is −78.4 million. Normalized income that year is 123.5 million beside net income of −12.9 million. In 2024 the two unusual-item fields match at 4.7 million. In 2025 they match at 8.3 million. On `MOON.L` in 2025 the field named Total Unusual Items is 0, Total Unusual Items Excluding Goodwill is −56.7 million, and Special Income Charges is −56.7 million. Normalized income is 88.9 million beside net income of −11.1 million. In 2026 total unusual items are zero and normalized income equals net income.
 
-**What to change.** Do not fold `JUP.L` into section 9. Do not invent which field the normalized income used, and do not invent a corrected unusual-items figure.
+**What to change.** Do not fold `JUP.L` or `MOON.L` into section 9. Do not invent which field the normalized income used, and do not invent a corrected unusual-items figure.
 
 ## 46. A zero screen yield can sit beside a statement dividend
 
 **What is wrong.** A raw yield of 0.0 displayed as 0.0% is still not the scale bug in section 3. On `PTEC.L` the screen stores that zero beside a statement dividend.
 
-**Where.** `PTEC.L` stores `dividend_yield_raw` 0.0 and displays 0.0% beside a statement dividend of 1,766.2 million. That dividend is 172% of the cap if it is pounds. The review states a special dividend of about €1.8bn. Filing free cash flow is −52.9 million.
+**Where.** `PTEC.L` stores `dividend_yield_raw` 0.0 and displays 0.0% beside a statement dividend of 1,766.2 million. That dividend is 172% of the cap if it is pounds. The review states a special dividend of about €1.8bn. Filing free cash flow is −52.9 million. `EWG.L` displays 0.0% beside a dividend of 24.3 million. That dividend is 3.44% of the cap if it is pounds and 2.90% if it is euros.
 
-**What to change.** Do not fold `PTEC.L` into section 3. Do not invent a yield. Do not decide that the zero excludes the special dividend unless the file says so.
+**What to change.** Do not fold `PTEC.L` or `EWG.L` into section 3. Do not invent a yield. Do not decide that the zero excludes the special dividend unless the file says so.
+
+## 47. A positive diluted EPS can be stored while the screen has no P/E key
+
+**What is wrong.** `VCT.L`, `MGAM.L`, `EWG.L`, and `VTY.L` store a positive diluted EPS. The screen has no P/E key on each.
+
+**Where.** `VCT.L` diluted EPS is 0.318, and the pound price over it is 29.6. `MGAM.L` diluted EPS is 0.075, and the pound price over it is 38.7. `EWG.L` diluted EPS is 0.0029, and the pound price over it is 351. `VTY.L` diluted EPS is 0.42, and the pound price over it is 5.2.
+
+**What to change.** Do not invent a screen P/E.
