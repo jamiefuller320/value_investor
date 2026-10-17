@@ -845,6 +845,13 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "same notice stubs and are not the indexed URLs; quarterly/interim results 6-Ks "
         "and 20-F are already bodied via sec_edgar; ir.jd.com is bot-gated (403)."
     ),
+    "PDD": (
+        "us_adr_asia leftover IWB: single SEC 6-K cover HTML primary is an AGM/proxy "
+        "exhibit-index stub below the substantiveness/financial gate; linked EX-99.x "
+        "exhibits are notice/proxy HTML that fetch but are not the indexed URL; "
+        "interim results 6-Ks and 20-F are already bodied via sec_edgar; "
+        "investor.pddholdings.com is bot-gated (403)."
+    ),
     "LDOS": (
         "Leftover indexed-without-body row is Item 2.01/7.01/9.01 acquisition-closing 8-K "
         "primary below the substantiveness gate; EX-99.1 press release fetches but is not the "
