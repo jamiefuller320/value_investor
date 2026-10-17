@@ -313,6 +313,62 @@ def test_bmy_and_cch_filing_aligned_differ_from_the_statement_line():
     assert "filing_aligned_differs_from_statement_fcf" in _ids(cch)
 
 
+def test_byg_and_dln_are_trust_rows_with_revenue_and_no_price():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    byg = rows["BYG.L"]
+    assert byg.trust is True
+    assert byg.statement_revenue == pytest.approx(209_084_000.0)
+    assert byg.discount_display == "39.7%"
+    assert byg.fcf_has_figure is False
+    assert byg.history_price is None
+    assert "trust_revenue_discount_without_fcf_or_price" in _ids(byg)
+    dln = rows["DLN.L"]
+    assert dln.trust is True
+    assert dln.statement_revenue == pytest.approx(388_700_000.0)
+    assert dln.discount_display == "43.8%"
+    assert dln.fcf_has_figure is False
+    assert dln.history_price is None
+    assert "trust_revenue_discount_without_fcf_or_price" in _ids(dln)
+
+
+def test_trust_revenue_check_needs_each_stored_gap():
+    hit = _row(
+        trust=True,
+        statement_revenue=209_084_000.0,
+        discount_display="39.7%",
+        fcf_has_figure=False,
+        history_price=None,
+        has_annual_statement=True,
+    )
+    assert "trust_revenue_discount_without_fcf_or_price" in _ids(hit)
+    assert "trust_revenue_discount_without_fcf_or_price" not in _ids(
+        _row(**{**hit.__dict__, "trust": False})
+    )
+    assert "trust_revenue_discount_without_fcf_or_price" not in _ids(
+        _row(trust=True, discount_display="39.7%", fcf_has_figure=False)
+    )
+    assert "trust_revenue_discount_without_fcf_or_price" not in _ids(
+        _row(trust=True, statement_revenue=1.0, fcf_has_figure=False)
+    )
+    assert "trust_revenue_discount_without_fcf_or_price" not in _ids(
+        _row(
+            trust=True,
+            statement_revenue=1.0,
+            discount_display="39.7%",
+            fcf_has_figure=True,
+            displayed_fcf=1.0,
+        )
+    )
+    assert "trust_revenue_discount_without_fcf_or_price" not in _ids(
+        _row(
+            trust=True,
+            statement_revenue=1.0,
+            discount_display="39.7%",
+            history_price=100.0,
+        )
+    )
+
+
 def test_stored_fcf_figures_stay_distinct():
     same = _row(filing_aligned=10.0, company_adjusted=10.0, screen_ttm=10.0)
     assert "fcf_figures_disagree" not in _ids(same)

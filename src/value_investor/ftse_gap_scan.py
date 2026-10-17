@@ -80,6 +80,8 @@ class ScreenRow:
     statement_currency: str | None = None
     statement_fcf: float | None = None
     fcf_divergence_flagged: bool | None = None
+    statement_revenue: float | None = None
+    discount_display: str | None = None
 
 
 @dataclass(frozen=True)
@@ -206,6 +208,7 @@ def _statement_facts(path: Path | None) -> dict[str, Any]:
         "unusual_items": (),
         "statement_currency": None,
         "statement_fcf": None,
+        "statement_revenue": None,
     }
     if path is None:
         return facts
@@ -251,6 +254,21 @@ def _statement_facts(path: Path | None) -> dict[str, Any]:
             if number is not None:
                 unusual.append((field, number))
         facts["unusual_items"] = tuple(unusual)
+    if isinstance(income, dict):
+        for year in sorted(income, reverse=True):
+            inc_row = income[year]
+            if not isinstance(inc_row, dict):
+                continue
+            revenue = None
+            for field in ("Total Revenue", "Operating Revenue"):
+                if field not in inc_row:
+                    continue
+                revenue = _optional_float(inc_row.get(field))
+                if revenue is not None:
+                    break
+            if revenue is not None:
+                facts["statement_revenue"] = revenue
+                break
     if isinstance(income, dict) and isinstance(balance, dict):
         for year in sorted(set(income) & set(balance), reverse=True):
             inc_row = income[year]
@@ -411,6 +429,13 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
                         if isinstance(fcf_obj.get("fcf_divergence_flagged"), bool)
                         else None
                     ),
+                    statement_revenue=facts["statement_revenue"],
+                    discount_display=(
+                        str(key_metrics["Discount"]).strip()
+                        if isinstance(key_metrics.get("Discount"), str)
+                        and str(key_metrics["Discount"]).strip()
+                        else None
+                    ),
                 )
             )
     return rows
@@ -488,6 +513,23 @@ def check_trust_row_pe_only(row: ScreenRow) -> str | None:
     if not row.trust or row.key_metric_names != frozenset({"P/E"}):
         return None
     return "trust key metrics are a P/E only"
+
+
+def check_trust_revenue_discount_without_fcf_or_price(row: ScreenRow) -> str | None:
+    """Trust row with statement revenue, a discount, no free-cash-flow figure, and no 11 Oct price."""
+
+    if (
+        not row.trust
+        or row.statement_revenue is None
+        or row.discount_display is None
+        or row.fcf_has_figure
+        or row.history_price is not None
+    ):
+        return None
+    return (
+        f"trust discount {row.discount_display}; statement revenue {_num(row.statement_revenue)}; "
+        f"no free-cash-flow figure; no {SCREEN_PRICE_RUN_PREFIX} price"
+    )
 
 
 def check_missing_annual_statement(row: ScreenRow) -> str | None:
@@ -670,6 +712,11 @@ CHECKS: tuple[Check, ...] = (
         "trust_row_pe_only",
         "a trust row that is only a P/E",
         check_trust_row_pe_only,
+    ),
+    Check(
+        "trust_revenue_discount_without_fcf_or_price",
+        "a trust row with statement revenue, a discount, no free-cash-flow figure, and no 11 Oct price",
+        check_trust_revenue_discount_without_fcf_or_price,
     ),
     Check(
         "missing_annual_statement",
