@@ -18,7 +18,13 @@ from value_investor.ftse_gap_scan import (
     scan_ftse_gaps,
 )
 from value_investor.ftse_gap_scan_cli import build_parser
-from value_investor.ftse_statement_fetch import fetch_one_annual_statement
+from value_investor.ftse_statement_fetch import (
+    EMPTY_RECORD_NAME,
+    STATEMENT_NAME,
+    fetch_one_annual_statement,
+    persist_missing_annual_statements,
+    write_fetched_statement,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -239,3 +245,84 @@ def test_default_fetcher_is_fetch_annual_financials(monkeypatch):
 def test_fetch_refuses_to_walk_the_list():
     with pytest.raises(ValueError, match="does not walk"):
         fetch_one_annual_statement("  ")
+
+
+def test_bmy_written_file_matches_the_dry_run(tmp_path):
+    calls: list[str] = []
+    payload = {
+        "ticker": "BMY.L",
+        "fetched_at": "2026-10-17T00:00:00+00:00",
+        "income_statement": {"2025": {"Net Income": 10.0}},
+        "balance_sheet": {"2025": {"Ordinary Shares Number": 80.0}},
+        "cash_flow": {"2025": {"Free Cash Flow": 4.0}},
+    }
+
+    def fake(ticker: str, **_kwargs: object) -> dict:
+        calls.append(ticker)
+        return json.loads(json.dumps(payload))
+
+    dry = fetch_one_annual_statement("BMY.L", fetcher=fake)
+    written = write_fetched_statement(dry, tmp_path)
+    assert calls == ["BMY.L"]
+    assert dry.dry_run is True
+    assert json.loads(written.read_text(encoding="utf-8")) == dry.payload
+
+
+def test_missing_statements_start_with_bloomsbury_and_skip_empties(tmp_path):
+    calls: list[str] = []
+    pauses: list[float] = []
+
+    def fake(ticker: str, **_kwargs: object) -> dict:
+        calls.append(ticker)
+        if ticker == "NONE.L":
+            return {
+                "ticker": ticker,
+                "fetched_at": "2026-10-17T00:00:00+00:00",
+                "income_statement": {},
+                "balance_sheet": {},
+                "cash_flow": {},
+            }
+        return {
+            "ticker": ticker,
+            "income_statement": {"2025": {"Net Income": 1.0}},
+            "balance_sheet": {"2025": {}},
+            "cash_flow": {"2025": {}},
+        }
+
+    first = persist_missing_annual_statements(
+        ["ZZ.L", "NONE.L", "BMY.L"],
+        root=tmp_path,
+        fetcher=fake,
+        sleeper=pauses.append,
+        pause_seconds=2.0,
+        attempts=1,
+    )
+    assert [item.ticker for item in first] == ["BMY.L", "ZZ.L", "NONE.L"]
+    assert [item.outcome for item in first] == ["written", "written", "empty"]
+    assert calls == ["BMY.L", "ZZ.L", "NONE.L"]
+    assert pauses == [2.0, 2.0]
+    bmy_path = tmp_path / "docs/data/research/BMY.L/sources" / STATEMENT_NAME
+    assert json.loads(bmy_path.read_text(encoding="utf-8"))["ticker"] == "BMY.L"
+    empty_path = tmp_path / "docs/data/research/NONE.L/sources" / EMPTY_RECORD_NAME
+    assert json.loads(empty_path.read_text(encoding="utf-8"))["reason"] == "empty"
+    assert not (tmp_path / "docs/data/research/NONE.L/sources" / STATEMENT_NAME).exists()
+
+    present = tmp_path / "docs/data/research/KEEP.L/sources"
+    present.mkdir(parents=True)
+    (present / STATEMENT_NAME).write_text("{}", encoding="utf-8")
+    second = persist_missing_annual_statements(
+        ["KEEP.L", "NONE.L", "BMY.L"],
+        root=tmp_path,
+        fetcher=fake,
+        sleeper=pauses.append,
+        pause_seconds=2.0,
+        attempts=1,
+    )
+    assert [item.ticker for item in second] == ["BMY.L", "KEEP.L", "NONE.L"]
+    assert [item.outcome for item in second] == [
+        "skipped_present",
+        "skipped_present",
+        "skipped_empty",
+    ]
+    assert calls == ["BMY.L", "ZZ.L", "NONE.L"]
+    assert pauses == [2.0, 2.0]

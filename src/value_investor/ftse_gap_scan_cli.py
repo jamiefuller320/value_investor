@@ -92,6 +92,27 @@ def _cmd_fetch(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_fetch_missing(args: argparse.Namespace) -> int:
+    from value_investor.ftse_statement_fetch import persist_missing_annual_statements
+
+    root = Path(args.root)
+    hits = scan_ftse_gaps(root)
+    seen: list[str] = []
+    for hit in hits:
+        if hit.rule_id == "missing_annual_statement" and hit.ticker not in seen:
+            seen.append(hit.ticker)
+    results = persist_missing_annual_statements(seen, root=root)
+    counts = {"written": 0, "empty": 0, "error": 0, "skipped_present": 0, "skipped_empty": 0}
+    for result in results:
+        counts[result.outcome] = counts.get(result.outcome, 0) + 1
+        print(f"ticker={result.ticker} outcome={result.outcome} path={result.path or ''}")
+    print(
+        "written={written} empty={empty} error={error} "
+        "skipped_present={skipped_present} skipped_empty={skipped_empty}".format(**counts)
+    )
+    return 0 if counts["error"] == 0 else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ftse-gap-scan",
@@ -146,6 +167,18 @@ def build_parser() -> argparse.ArgumentParser:
         help="Write financials_annual.json here. Omit to keep the dry run.",
     )
     fetch.set_defaults(func=_cmd_fetch)
+
+    missing = sub.add_parser(
+        "fetch-missing",
+        help="Persist annual statements the scan marks as missing",
+        description=(
+            "Fetch names whose stored screen row has no financials_annual.json. "
+            "Bloomsbury is first. A payload with no annual year is recorded once "
+            "and is not fetched again. Names that already have a statement are skipped."
+        ),
+    )
+    missing.add_argument("--root", type=Path, default=repo_root_from_here())
+    missing.set_defaults(func=_cmd_fetch_missing)
     return parser
 
 
