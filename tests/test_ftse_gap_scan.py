@@ -679,6 +679,127 @@ def test_chart_gbp_matches_a_quote_currency_other_than_pounds():
     )
 
 
+def test_chart_gbp_with_price_and_no_quote_file():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    expected = {
+        "GSK.L": 1750.0,
+        "REL.L": 2720.0,
+        "HLN.L": 349.20001220703125,
+        "FRES.L": 2756.0,
+        "SGE.L": 1071.5,
+        "SN.L": 1020.5,
+        "RTO.L": 303.0,
+        "CCC.L": 5550.0,
+        "ABDN.L": 243.0,
+        "BBY.L": 876.0,
+    }
+    for ticker, price in expected.items():
+        row = rows[ticker]
+        quote_path = ROOT / "docs/data/research" / ticker / "sources" / "price_quote.json"
+        chart = json.loads((ROOT / "docs/data/charts" / f"{ticker}.json").read_text())
+        assert chart["currency"] == "GBP"
+        assert not quote_path.exists()
+        assert row.chart_currency == "GBP"
+        assert row.has_price_quote_file is False
+        assert row.price_quote_currency is None
+        assert row.history_price == pytest.approx(price)
+        assert "chart_gbp_price_without_quote_file" in _ids(row)
+        assert "chart_gbp_quote_not_pound" not in _ids(row)
+
+    assert "chart_gbp_price_without_quote_file" not in _ids(
+        _row(chart_currency="GBP", history_price=1750.0, has_price_quote_file=True)
+    )
+    assert "chart_gbp_price_without_quote_file" not in _ids(
+        _row(chart_currency="USD", history_price=1750.0, has_price_quote_file=False)
+    )
+    assert "chart_gbp_price_without_quote_file" not in _ids(
+        _row(chart_currency="GBP", history_price=None, has_price_quote_file=False)
+    )
+    bare = _row(chart_currency="GBP", history_price=1750.0, has_price_quote_file=False)
+    detail = next(
+        hit.detail for hit in hits_for(bare) if hit.rule_id == "chart_gbp_price_without_quote_file"
+    )
+    assert "no price_quote.json" in detail
+    assert "quote currency" not in detail
+
+
+def test_screen_ttm_differs_while_filing_aligned_matches_the_statement():
+    rows = {row.ticker: row for row in load_screen_rows(ROOT)}
+    fres = rows["FRES.L"]
+    assert fres.screen_ttm == pytest.approx(1_999_836_928)
+    assert fres.filing_aligned == pytest.approx(1_889_566_000)
+    assert fres.statement_fcf == pytest.approx(1_889_566_000)
+    assert fres.fcf_divergence_flagged is False
+    assert "screen_ttm_differs_filing_aligned_matches_statement" in _ids(fres)
+    assert "filing_aligned_differs_from_statement_fcf" not in _ids(fres)
+    fres_detail = next(
+        hit.detail
+        for hit in hits_for(fres)
+        if hit.rule_id == "screen_ttm_differs_filing_aligned_matches_statement"
+    )
+    assert "screen_ttm 1999836928" in fres_detail
+    assert "filing_aligned 1889566000" in fres_detail
+
+    ccc = rows["CCC.L"]
+    assert ccc.screen_ttm == pytest.approx(287_937_504)
+    assert ccc.filing_aligned == pytest.approx(257_600_000)
+    assert ccc.statement_fcf == pytest.approx(257_600_000)
+    assert ccc.fcf_divergence_flagged is False
+    assert "screen_ttm_differs_filing_aligned_matches_statement" in _ids(ccc)
+    assert "filing_aligned_differs_from_statement_fcf" not in _ids(ccc)
+
+    flagged = rows["GSK.L"]
+    assert flagged.fcf_divergence_flagged is True
+    assert "screen_ttm_differs_filing_aligned_matches_statement" not in _ids(flagged)
+
+    rel = rows["REL.L"]
+    assert rel.screen_ttm == rel.filing_aligned
+    assert "screen_ttm_differs_filing_aligned_matches_statement" not in _ids(rel)
+
+    same_screen = _row(
+        displayed_fcf=1_889_566_000.0,
+        filing_aligned=1_889_566_000.0,
+        screen_ttm=1_999_836_928.0,
+        statement_fcf=1_889_566_000.0,
+        fcf_divergence_flagged=False,
+    )
+    assert "screen_ttm_differs_filing_aligned_matches_statement" in _ids(same_screen)
+    assert "filing_aligned_differs_from_statement_fcf" not in _ids(same_screen)
+    still_old = _row(
+        displayed_fcf=27_800_000.0,
+        filing_aligned=27_800_000.0,
+        screen_ttm=27_800_000.0,
+        statement_fcf=31_900_000.0,
+        fcf_divergence_flagged=False,
+    )
+    assert "filing_aligned_differs_from_statement_fcf" in _ids(still_old)
+    assert "screen_ttm_differs_filing_aligned_matches_statement" not in _ids(still_old)
+    assert "screen_ttm_differs_filing_aligned_matches_statement" not in _ids(
+        _row(
+            screen_ttm=1_999_836_928.0,
+            filing_aligned=1_889_566_000.0,
+            statement_fcf=1_889_566_000.0,
+            fcf_divergence_flagged=True,
+        )
+    )
+    assert "screen_ttm_differs_filing_aligned_matches_statement" not in _ids(
+        _row(
+            screen_ttm=1_889_566_000.0,
+            filing_aligned=1_889_566_000.0,
+            statement_fcf=1_889_566_000.0,
+            fcf_divergence_flagged=False,
+        )
+    )
+    assert "screen_ttm_differs_filing_aligned_matches_statement" not in _ids(
+        _row(
+            screen_ttm=1_999_836_928.0,
+            filing_aligned=1_889_566_000.0,
+            statement_fcf=31_900_000.0,
+            fcf_divergence_flagged=False,
+        )
+    )
+
+
 def test_hwg_positive_eps_has_no_screen_pe_key():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
     hwg = rows["HWG.L"]

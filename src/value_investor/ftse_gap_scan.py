@@ -88,6 +88,7 @@ class ScreenRow:
     chart_currency: str | None = None
     revenue_year_without_eps: tuple[str, float, float] | None = None
     eps_scale_pairs: tuple[tuple[str, float, float, str, float, float], ...] = ()
+    has_price_quote_file: bool = True
 
 
 @dataclass(frozen=True)
@@ -420,8 +421,12 @@ def _income_sign_gaps(income: Any) -> tuple[tuple[str, float, float], ...]:
     return tuple(gaps)
 
 
+def _price_quote_path(root: Path, ticker: str) -> Path | None:
+    return resolve_json_path(root / "docs/data/research" / ticker / "sources" / "price_quote.json")
+
+
 def _price_quote_currency(root: Path, ticker: str) -> str | None:
-    path = resolve_json_path(root / "docs/data/research" / ticker / "sources" / "price_quote.json")
+    path = _price_quote_path(root, ticker)
     if path is None:
         return None
     try:
@@ -569,6 +574,7 @@ def load_screen_rows(root: Path | None = None) -> list[ScreenRow]:
                     screen_roe=_screen_roe_fraction(key_metrics.get("ROE")),
                     unusual_items=facts["unusual_items"],
                     price_quote_currency=_price_quote_currency(root, ticker),
+                    has_price_quote_file=_price_quote_path(root, ticker) is not None,
                     chart_currency=_chart_currency(root, ticker),
                     statement_currency=facts["statement_currency"],
                     statement_fcf=facts["statement_fcf"],
@@ -822,6 +828,43 @@ def check_net_income_ten_times_normalized(row: ScreenRow) -> str | None:
     return "; ".join(parts)
 
 
+def check_chart_gbp_price_without_quote_file(row: ScreenRow) -> str | None:
+    """An 11 Oct price and a chart labeled GBP, with no price_quote.json.
+
+    Absence of the quote file is not a currency. This check does not invent one.
+    """
+
+    if row.history_price is None or row.chart_currency != "GBP" or row.has_price_quote_file:
+        return None
+    return (
+        f"chart currency GBP; {SCREEN_PRICE_RUN_PREFIX} price {_num(row.history_price)}; "
+        "no price_quote.json"
+    )
+
+
+def check_screen_ttm_differs_filing_aligned_matches_statement(row: ScreenRow) -> str | None:
+    """screen_ttm differs from filing_aligned, the flag is false, and filing_aligned equals the statement line.
+
+    Separate from the check where the displayed figure equals filing_aligned and
+    that figure differs from the statement. A missing flag is not false.
+    """
+
+    if (
+        row.screen_ttm is None
+        or row.filing_aligned is None
+        or row.statement_fcf is None
+        or row.fcf_divergence_flagged is not False
+        or row.screen_ttm == row.filing_aligned
+        or row.filing_aligned != row.statement_fcf
+    ):
+        return None
+    return (
+        f"screen_ttm {_num(row.screen_ttm)} differs from filing_aligned "
+        f"{_num(row.filing_aligned)}, which equals statement free cash flow "
+        f"{_num(row.statement_fcf)}, and fcf_divergence_flagged is false"
+    )
+
+
 def check_chart_gbp_quote_not_pound(row: ScreenRow) -> str | None:
     """Chart file labels the price GBP while the quote currency is neither GBP nor GBp."""
 
@@ -1000,6 +1043,11 @@ CHECKS: tuple[Check, ...] = (
         check_filing_aligned_differs_from_statement_fcf,
     ),
     Check(
+        "screen_ttm_differs_filing_aligned_matches_statement",
+        "screen TTM differs from filing_aligned while that figure equals the statement line and the flag is false",
+        check_screen_ttm_differs_filing_aligned_matches_statement,
+    ),
+    Check(
         "fcf_figures_disagree",
         "filing, company-adjusted, and screen free cash flow that differ",
         check_fcf_figures_disagree,
@@ -1043,6 +1091,11 @@ CHECKS: tuple[Check, ...] = (
         "chart_gbp_quote_not_pound",
         "a chart that labels the price GBP while the quote currency is neither GBP nor GBp",
         check_chart_gbp_quote_not_pound,
+    ),
+    Check(
+        "chart_gbp_price_without_quote_file",
+        "an 11 Oct price and a chart labeled GBP, with no price_quote.json",
+        check_chart_gbp_price_without_quote_file,
     ),
     Check(
         "positive_diluted_eps_without_screen_pe",
