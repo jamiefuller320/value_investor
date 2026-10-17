@@ -527,6 +527,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://azure-eu-assets.contentstack.com/v3/assets/blt61bda6b71f29a239/bltce845f477399bb12/68d3ad29f9b53a6fe4b7df32/moncler-group-press-release-h1-2025.pdf",
         "https://azure-eu-assets.contentstack.com/v3/assets/blt61bda6b71f29a239/blt5e5cf046226f8afc/68d4ff1e34ecced40e036350/moncler-group-press-release-q1-2025_(3).pdf",
     ],
+    # ftse_mib parked leftover — eng-20261017-08: UNI.MI awaiting_periodic_report; ESEF annual
+    # only (thin, no interim); unipol.com statutory consolidated annual + H1-2025 PDFs.
+    "UNI.MI": [
+        "https://www.unipol.com/sites/default/files/documents/2026-03/unipol_bilancio-consolidato_2025_en.pdf",
+        "https://www.unipol.com/sites/default/files/documents/2025-08/unipol_relazione-finanziaria-semestrale-consolidata-al-30-6-2025_en.pdf",
+    ],
     # ftse_mib buy-tier deepen — eng-20261005-01 / eng-20261010-02: TEN.MI unmeasured — Yahoo base
     # TEN collides with Tsakos on SEC; pin Tenaris S.A. FY2025 20-F + Q1 2026 FS 6-K (CIK 1190723).
     "TEN.MI": [
@@ -5618,6 +5624,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.inwit.it/wp-content/uploads/2026/04/inwit-integrated-report-2025.pdf": "annual",
     "https://www.inwit.it/wp-content/uploads/2025/08/INWIT_relazione_finanziaria_semestrale_30_giugno_2025.pdf": "interim",
     "https://www.inwit.it/wp-content/uploads/2025/11/INWIT-resoconto-intermedio-di-gestione-al-30-settembre-2025.pdf": "interim",
+    "https://www.unipol.com/sites/default/files/documents/2026-03/unipol_bilancio-consolidato_2025_en.pdf": "annual",
+    "https://www.unipol.com/sites/default/files/documents/2025-08/unipol_relazione-finanziaria-semestrale-consolidata-al-30-6-2025_en.pdf": "interim",
 }
 
 
