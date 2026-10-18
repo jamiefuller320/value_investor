@@ -972,6 +972,11 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "Thomson Reuters); thomsonreuters.com IR paths 404; FY2025 40-F, interim "
         "SEC packs, and interim-report HTML are already bodied via sec_edgar."
     ),
+    "0968.HK": (
+        "hang_seng leftover IWB: indexed-without-body row is google_news_asia "
+        "TipRanks company-announcement HTML (403 bot-gate); hkex_direct annual/"
+        "interim HKEX PDFs including FY2025 annual report are already bodied."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.

@@ -7845,6 +7845,21 @@ def test_parked_source_hunter_n2iu_si_sti_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_parked_source_hunter_skip_0968_hk_hang_seng():
+    """eng-20261017-11: 0968.HK leftover IWB is bot-gated TipRanks news, not missing HKEX filings."""
+    assert "0968.HK" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["0968.HK"]
+    assert "TipRanks" in reason
+    assert "google_news_asia" in reason
+    assert "hkex_direct" in reason
+    assert fetch_filings_ir_allowlist("0968.HK") == []
+    tipranks = (
+        "https://www.tipranks.com/news/company-announcements/"
+        "xinyi-solar-sets-board-meeting-to-approve-interim-results-and-consider-dividend"
+    )
+    assert fetch_filing_body(tipranks) is None
+
+
 def test_ir_allowlist_period_classifies_n2iu_si_2qfy_sgxnet_slugs():
     """eng-20261016-02: 2QFY* SGXNet slugs must map to interim (not annual fy token)."""
     assert (
