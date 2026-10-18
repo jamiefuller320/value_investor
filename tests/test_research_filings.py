@@ -7888,6 +7888,56 @@ def test_parked_source_hunter_skip_2331_hk_hang_seng():
     assert fetch_filing_body("https://simplywall.st/stock/sehk/2331") is None
 
 
+def test_fetch_filings_ir_allowlist_1109_hk_builtins_eng_20261018_05(tmp_path: Path):
+    """eng-20261018-05: hang_seng parked 1109.HK — HKEX annual/interim statutory PDF seeds."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("1109.HK", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 2
+    urls = [row["url"] for row in rows]
+    assert all("hkexnews.hk" in url for url in urls)
+    assert any("2026042800937.pdf" in url for url in urls)
+    assert any("2026092400694.pdf" in url for url in urls)
+    assert any("2025092601132.pdf" in url for url in urls)
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_1109_hk_index(tmp_path: Path):
+    """Empty 1109.HK filings_index.json must gain IR rows for library hang_seng measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("1109.HK", filings_dir)
+    assert meta["added"] == 3
+    assert meta["total_allowlist"] == 3
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) == 3
+    assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_parked_source_hunter_1109_hk_hang_seng_has_fetchable_ir():
+    """eng-20261018-05: 1109.HK (China Resources Land) has live-fetchable HKEX statutory PDFs."""
+    assert "1109.HK" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("1109.HK")
+    assert len(rows) == 3
+    annual_url = next(row["url"] for row in rows if row["period"] == "annual")
+    body = _live_fetch_filing_body(annual_url)
+    if not body:
+        pytest.skip("HKEX PDF body fetch unavailable (network) — retry later")
+    assert len(body) >= 50000
+    assert fetch_filing_body("https://simplywall.st/stock/sehk/1109") is None
+
+
 def test_ir_allowlist_period_classifies_n2iu_si_2qfy_sgxnet_slugs():
     """eng-20261016-02: 2QFY* SGXNet slugs must map to interim (not annual fy token)."""
     assert (

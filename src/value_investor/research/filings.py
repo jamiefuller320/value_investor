@@ -829,6 +829,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "0291.HK": [
         "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0423/2026042300830.pdf",
     ],
+    # hang_seng parked leftover — eng-20261018-05: 1109.HK unfetchable_iwb / no_key_bodies;
+    # hkex_direct indexes statutory PDFs but deepen budget leaves annual/interim without bodies;
+    # seed HKEX annual/interim reports for mandatory IR refetch and empty-index bootstrap.
+    "1109.HK": [
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0428/2026042800937.pdf",
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0924/2026092400694.pdf",
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0926/2025092601132.pdf",
+    ],
     # sti buy-tier deepen — eng-20261002-14: BUOU.SI unmeasured — asia_filings Google News
     # misses statutory results; seed SGX links.sgx.com PDFs (flct.frasersproperty.com is WAF-gated).
     "BUOU.SI": [
@@ -5631,6 +5639,10 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0813/2026081300236.pdf": "interim",
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0326/2026032600824.pdf": "annual",
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0423/2026042300830.pdf": "annual",
+    # eng-20261018-05: 1109.HK — opaque HKEX China Resources Land statutory report slugs.
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0428/2026042800937.pdf": "annual",
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0924/2026092400694.pdf": "interim",
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0926/2025092601132.pdf": "interim",
     # eng-20261002-14: BUOU.SI — 2HFY25 slug reads interim but is full-year condensed FS.
     "https://links.sgx.com/1.0.0/corporate-announcements/WKFS34K5F6T83U1G/866254_FLCT%20-%202HFY25%20Condensed%20Interim%20FS.pdf": "annual",
     # eng-20261012-01: J36.SI — opaque SGX JMH.pdf slugs (half-year vs preliminary full-year).
