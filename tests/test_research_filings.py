@@ -9631,6 +9631,88 @@ def test_filing_lacks_material_body_excludes_routine_own_shares():
     )
 
 
+def test_filing_lacks_material_body_excludes_kgf_ceo_appointment():
+    """eng-20261018-02: KGF.L CEO appointment RNS must not mint stubborn IWB gaps."""
+    from value_investor.research.filings import (
+        _rns_row_needs_body_refetch,
+        filing_lacks_material_body,
+    )
+
+    row = {
+        "headline": "Kingfisher Appoints New CEO",
+        "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/kingfisher-appoints-new-ceo/9819911",
+        "source": "investegate_direct",
+        "period": "other",
+        "has_body": False,
+    }
+    assert filing_lacks_material_body(row) is False
+    assert _rns_row_needs_body_refetch(row, Path("unused")) is False
+
+
+def test_kgf_l_filing_coverage_no_outstanding_gap_after_directorate_exclusion(tmp_path: Path):
+    """eng-20261018-02: pinned KGF.L gap-closure must clear when only CEO RNS lacks body."""
+    from value_investor.research.ingest_improvement import (
+        _filing_coverage,
+        _has_outstanding_ingest_gap,
+    )
+    from value_investor.research.store import ResearchStore
+
+    output_dir = tmp_path / "output"
+    filings_dir = output_dir / "research" / "KGF.L" / "sources" / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {
+                    "total": 4,
+                    "annual": 1,
+                    "interim": 1,
+                    "with_body": 3,
+                    "period_coverage": {
+                        "annual": {"total": 1, "with_body": 1},
+                        "interim": {"total": 1, "with_body": 1},
+                    },
+                },
+                "filings": [
+                    {
+                        "id": "fy",
+                        "period": "annual",
+                        "has_body": True,
+                        "headline": "Final Results",
+                    },
+                    {
+                        "id": "hy",
+                        "period": "interim",
+                        "has_body": True,
+                        "headline": "Half Year Results",
+                    },
+                    {
+                        "id": "ceo",
+                        "source": "investegate_direct",
+                        "period": "other",
+                        "has_body": False,
+                        "headline": "Kingfisher Appoints New CEO",
+                        "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/kingfisher-appoints-new-ceo/9819911",
+                    },
+                    {
+                        "id": "pdmr",
+                        "source": "investegate_direct",
+                        "period": "other",
+                        "has_body": False,
+                        "headline": "Director/PDMR Shareholding",
+                        "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/director-pdmr-shareholding/9827276",
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    store = ResearchStore(output_dir)
+    coverage = _filing_coverage(store, "KGF.L", output_dir)
+    assert coverage["indexed_without_body"] == 0
+    assert not _has_outstanding_ingest_gap(coverage, ticker="KGF.L")
+
+
 def test_filing_counts_toward_body_penetration_excludes_rathbones_form_83():
     """eng-20260923-02: RAT.L Form 8.3 stubs must not inflate low-penetration scoring."""
     from value_investor.research.filings import filing_counts_toward_body_penetration

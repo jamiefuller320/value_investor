@@ -1976,6 +1976,20 @@ def _is_routine_own_share_or_pdmr_row(row: dict[str, Any]) -> bool:
     return "transaction in own shares" in headline or "director/pdmr" in headline
 
 
+def _is_routine_directorate_announcement_row(row: dict[str, Any]) -> bool:
+    """Board/executive appointment RNS — governance noise, not a filings-first gap."""
+    headline = _headline_blob(row)
+    if re.search(r"\bdirectorate change\b", headline):
+        return True
+    if re.search(r"\bappoints new\b", headline):
+        return True
+    if "appointment of" in headline and re.search(
+        r"\b(?:chief executive|group chief|ceo|cfo|chief financial)\b", headline
+    ):
+        return True
+    return False
+
+
 def _is_holding_disclosure_row(row: dict[str, Any]) -> bool:
     """Form 8.3/8.5 and major-holding RNS — indexed for audit, not ingest ROI."""
     if str(row.get("entity_type") or "") == "holding_disclosure":
@@ -1999,6 +2013,8 @@ def filing_lacks_material_body(row: dict[str, Any]) -> bool:
         return False
     if _is_routine_own_share_or_pdmr_row(row):
         return False
+    if _is_routine_directorate_announcement_row(row):
+        return False
     if _is_holding_disclosure_row(row):
         return False
     if str(row.get("period") or "") == "other" and _is_material_corporate_action_row(row):
@@ -2017,6 +2033,8 @@ def filing_counts_toward_body_penetration(row: dict[str, Any]) -> bool:
     if _is_index_noise_row(row):
         return False
     if _is_routine_own_share_or_pdmr_row(row):
+        return False
+    if _is_routine_directorate_announcement_row(row):
         return False
     if _is_holding_disclosure_row(row):
         return False
@@ -2337,7 +2355,7 @@ def _rns_row_needs_body_refetch(row: dict[str, Any], filings_dir: Path) -> bool:
     if not _is_rns_body_fetch_candidate(row):
         return False
     if not row.get("has_body"):
-        return True
+        return filing_lacks_material_body(row)
     snippet = _body_snippet_for_row(row, filings_dir)
     return bool(snippet and _is_investegate_ai_summary_body(snippet))
 
