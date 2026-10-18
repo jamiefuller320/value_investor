@@ -59,6 +59,7 @@ MARKET_CURRENCY = {
     "aim": "GBP",
     "sp500": "USD",
     "nasdaq100": "USD",
+    "sp400": "USD",
     "us_adr_asia": "USD",
     "euro_stoxx50": "EUR",
     "euro_depth": "EUR",

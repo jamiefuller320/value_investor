@@ -36,7 +36,7 @@ DEFAULT_MAX_AGE_DAYS = 30
 DEFAULT_BACKFILL_MAX_TICKERS = 40
 # SEC fair access allows 10 requests/second; stay well under it.
 REQUEST_SLEEP_S = 0.2
-US_SEC_MARKETS = ("sp500", "nasdaq100", "us_adr_asia")
+US_SEC_MARKETS = ("sp500", "nasdaq100", "sp400", "us_adr_asia")
 
 ANNUAL_FORMS = frozenset({"10-K", "10-K/A", "10-KT", "20-F", "20-F/A", "40-F", "40-F/A"})
 # Annual duration window; excludes the 3-month Q4 facts that 10-Ks also carry.

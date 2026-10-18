@@ -278,7 +278,7 @@ def resolve_yahoo_ticker_for_market(ticker: str, market: str | None = None) -> s
     if not raw:
         return raw
     market_id = (market or "").strip().lower()
-    if market_id in {"sp500", "nasdaq100", "us", "us_adr_asia"}:
+    if market_id in {"sp500", "nasdaq100", "sp400", "us", "us_adr_asia"}:
         return raw.replace(".", "-").upper() if not raw.endswith(".L") else to_lse_ticker(raw)
     if market_id in {"asx200", "asx"}:
         base = raw.upper()

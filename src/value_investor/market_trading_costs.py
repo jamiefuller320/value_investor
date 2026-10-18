@@ -146,6 +146,14 @@ MARKET_TRADING_COSTS: dict[str, MarketTradingCosts] = {
         stamp_duty_on_buy=False,
         notes="Same shape as S&P 500 for GBP-funded T212 Invest.",
     ),
+    "sp400": _build(
+        "sp400",
+        label="S&P MidCap 400 (US)",
+        currency="USD",
+        fx_applies=True,
+        stamp_duty_on_buy=False,
+        notes="Same shape as other US cash indexes for a GBP-funded book.",
+    ),
     "euro_stoxx50": _build(
         "euro_stoxx50",
         label="EURO STOXX 50",

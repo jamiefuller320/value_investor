@@ -37,6 +37,7 @@ UK_DIVIDEND_ORDINARY_RATE = 0.0875
 MARKET_COUNTRY: dict[str, str] = {
     "sp500": "US",
     "nasdaq100": "US",
+    "sp400": "US",
     "asx200": "AU",
     "tsx60": "CA",
     "dax": "DE",

@@ -66,6 +66,12 @@ MARKET_SESSION_DEFAULTS: dict[str, dict[str, Any]] = {
         "settle_minutes_after_open": 30,
         "weekdays_only": False,
     },
+    "sp400": {
+        "timezone": "America/New_York",
+        "market_open": "09:30",
+        "settle_minutes_after_open": 30,
+        "weekdays_only": False,
+    },
     "tsx60": {
         # TSX cash open aligns with US Eastern; share US EDT/EST epoch-0 slots.
         "timezone": "America/Toronto",

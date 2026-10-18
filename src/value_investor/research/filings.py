@@ -3298,7 +3298,7 @@ def resolve_filings_regime(market: str | None, ticker: str) -> str:
     Explicit market ids win; otherwise infer from Yahoo-style suffixes.
     """
     m = (market or "").strip().lower()
-    if m in {"sp500", "nasdaq100", "us", "nyse", "nasdaq", "us_adr_asia"}:
+    if m in {"sp500", "nasdaq100", "sp400", "us", "nyse", "nasdaq", "us_adr_asia"}:
         return "sec_edgar"
     if m in {"ftse350", "ftse_smallcap", "aim", "uk", "lse"}:
         return "uk_rns"

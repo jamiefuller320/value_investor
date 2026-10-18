@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 MARKET_BENCHMARKS: dict[str, str] = {
     "sp500": "^GSPC",
     "nasdaq100": "^NDX",
+    "sp400": "^MID",  # Yahoo S&P MidCap 400 (verified 2026-10-18; ^SP400 is the same index)
     "euro_stoxx50": "^STOXX50E",
     "euro_depth": "^STOXX50E",
     "asx200": "^AXJO",

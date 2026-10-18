@@ -320,6 +320,15 @@ def fetch_nasdaq100_constituents() -> pd.DataFrame:
     )
 
 
+def fetch_sp400_constituents() -> pd.DataFrame:
+    """S&P MidCap 400 — offline library slice, same Wikipedia shape as the S&P 500."""
+    tables = _wiki_tables("https://en.wikipedia.org/wiki/List_of_S%26P_400_companies")
+    table = _pick_constituent_table(tables)
+    return _normalize_wiki_constituents(
+        table, market_id="sp400", yahoo_suffix="", index_label="S&P MidCap 400"
+    )
+
+
 def fetch_dax_constituents() -> pd.DataFrame:
     tables = _wiki_tables("https://en.wikipedia.org/wiki/DAX")
     table = _pick_constituent_table(tables)
@@ -980,6 +989,15 @@ MARKET_REGISTRY: dict[str, MarketSpec] = {
         yahoo_suffix=".IR",
         constituent_source="wikipedia",
     ),
+    # Offline library only. Queued on the ingest cascade tail — not the head.
+    "sp400": MarketSpec(
+        market_id="sp400",
+        label="S&P MidCap 400",
+        exchange="US",
+        currency="USD",
+        yahoo_suffix="",
+        constituent_source="wikipedia",
+    ),
 }
 
 CONSTITUENT_FETCHERS: dict[str, Callable[[], pd.DataFrame]] = {
@@ -1006,6 +1024,7 @@ CONSTITUENT_FETCHERS: dict[str, Callable[[], pd.DataFrame]] = {
     "smi": fetch_smi_constituents,
     "omxs30": fetch_omxs30_constituents,
     "iseq20": fetch_iseq20_constituents,
+    "sp400": fetch_sp400_constituents,
 }
 
 
