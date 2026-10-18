@@ -11,6 +11,7 @@ MARKET_NEWS_LOCALE: dict[str, dict[str, str]] = {
     "aim": {"hl": "en-GB", "gl": "GB", "ceid": "GB:en", "query_tail": "stock UK"},
     "sp500": {"hl": "en-US", "gl": "US", "ceid": "US:en", "query_tail": "stock"},
     "nasdaq100": {"hl": "en-US", "gl": "US", "ceid": "US:en", "query_tail": "stock"},
+    "sp400": {"hl": "en-US", "gl": "US", "ceid": "US:en", "query_tail": "stock"},
     "us_adr_asia": {"hl": "en-US", "gl": "US", "ceid": "US:en", "query_tail": "stock"},
     "asx200": {"hl": "en-AU", "gl": "AU", "ceid": "AU:en", "query_tail": "ASX stock"},
     "tsx60": {"hl": "en-CA", "gl": "CA", "ceid": "CA:en", "query_tail": "TSX stock"},

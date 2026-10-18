@@ -77,6 +77,8 @@ DEFAULT_MARKET_QUEUE = [
     "smi",
     "omxs30",
     "iseq20",
+    # US mid-cap. Tail of the cascade — not focus and not a new sprint stream.
+    "sp400",
 ]
 
 

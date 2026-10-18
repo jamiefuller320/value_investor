@@ -174,7 +174,7 @@ def _market_bucket(market: str | None, ticker: str) -> str:
     mid = (market or "").lower()
     if mid.startswith("ftse") or mid in {"aim"} or ticker.upper().endswith(".L"):
         return "uk"
-    if mid in {"sp500", "nasdaq100", "us_adr_asia"} or "." not in ticker:
+    if mid in {"sp500", "nasdaq100", "sp400", "us_adr_asia"} or "." not in ticker:
         return "us"
     if mid in {
         "euro_stoxx50",

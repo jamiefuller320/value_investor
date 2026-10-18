@@ -1,6 +1,6 @@
 # SEC companyfacts for US memos (L544)
 
-US memo names (`sp500`, `nasdaq100`, `us_adr_asia`) get a structured
+US memo names (`sp500`, `nasdaq100`, `sp400`, `us_adr_asia`) get a structured
 primary-filing source next to the 10-K/10-Q bodies:
 `sources/sec_companyfacts.json`. It is the US analogue of Companies House
 iXBRL accounts for the memo FCF basis.

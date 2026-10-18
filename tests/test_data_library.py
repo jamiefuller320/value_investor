@@ -309,6 +309,71 @@ def test_t212_venue_gap_markets_registered():
         assert mid in DEFAULT_MARKET_QUEUE
 
 
+def test_sp400_midcap_on_markets_list_not_ingest_head():
+    """S&P MidCap 400 is an offline library market, queued behind the cascade head."""
+    from value_investor.agent_model_policy import DEFAULT_MARKET_QUEUE, DEFAULT_POLICY_PATH, load_policy
+    from value_investor.constituents import VALID_UNIVERSES
+    from value_investor.data_library import list_markets
+    from value_investor.fetch import normalize_yahoo_ticker
+    from value_investor.fx import MARKET_CURRENCY
+    from value_investor.investor_yield import MARKET_COUNTRY
+    from value_investor.library_sim import benchmark_for_market
+    from value_investor.macro_context import domain_for_market
+    from value_investor.market_paper_shard import session_defaults_for_market
+    from value_investor.market_trading_costs import costs_for_market
+    from value_investor.research.filings import resolve_filings_regime
+    from value_investor.research.gap_fill_sources import _market_bucket
+    from value_investor.research.news_locale import MARKET_NEWS_LOCALE
+    from value_investor.research.sec_companyfacts import US_SEC_MARKETS
+
+    spec = MARKET_REGISTRY["sp400"]
+    assert spec.label == "S&P MidCap 400"
+    assert spec.exchange == "US"
+    assert spec.currency == "USD"
+    assert spec.yahoo_suffix == ""
+    assert "sp400" in CONSTITUENT_FETCHERS
+    listed = {row["market_id"]: row for row in list_markets()}
+    assert listed["sp400"]["label"] == "S&P MidCap 400"
+
+    assert DEFAULT_MARKET_QUEUE[-1] == "sp400"
+    assert DEFAULT_MARKET_QUEUE.index("iseq20") < DEFAULT_MARKET_QUEUE.index("sp400")
+    policy = load_policy(DEFAULT_POLICY_PATH)
+    assert policy["focus_market"] == "euro_depth"
+    assert policy["market_queue"][-1] == "sp400"
+    assert "sp400" not in (policy.get("ingest_parallel_sprint") or [])
+    assert "sp400" not in (policy.get("ingest_parallel_sprint_2") or [])
+    assert "sp400" not in (policy.get("ftse_equivalent_markets") or [])
+    assert "sp400" not in ((policy.get("ladder") or {}).get("admitted_learning_markets") or [])
+    assert "sp400" not in VALID_UNIVERSES
+
+    table = pd.DataFrame(
+        {
+            "Symbol": ["BRK.B", "MMM"],
+            "Security": ["Berkshire", "3M"],
+            "GICS Sector": ["Financials", "Industrials"],
+        }
+    )
+    frame = _normalize_wiki_constituents(
+        table, market_id="sp400", yahoo_suffix="", index_label="S&P MidCap 400"
+    )
+    assert list(frame["ticker"]) == ["BRK-B", "MMM"]
+    assert normalize_yahoo_ticker("BRK.B", "sp400") == "BRK-B"
+    assert resolve_filings_regime("sp400", "MMM") == "sec_edgar"
+    assert _market_bucket("sp400", "MMM") == "us"
+    assert "sp400" in US_SEC_MARKETS
+    assert MARKET_CURRENCY["sp400"] == "USD"
+    assert MARKET_COUNTRY["sp400"] == "US"
+    assert domain_for_market("sp400") == "us"
+    assert MARKET_NEWS_LOCALE["sp400"]["gl"] == "US"
+    assert benchmark_for_market("sp400") == "^MID"
+    costs = costs_for_market("sp400")
+    assert costs.currency == "USD"
+    assert costs.fx_applies is True
+    session = session_defaults_for_market("sp400")
+    assert session["timezone"] == "America/New_York"
+    assert session["market_open"] == "09:30"
+
+
 def test_atx_curated_and_suffix_helpers():
     from value_investor.data_library import (
         ATX_SEED,

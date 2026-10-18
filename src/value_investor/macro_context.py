@@ -50,6 +50,7 @@ DOMAIN_SERIES: dict[str, dict[str, str]] = {
 MARKET_TO_DOMAIN: dict[str, str] = {
     "sp500": "us",
     "nasdaq100": "us",
+    "sp400": "us",
     "us_adr_asia": "us",
     "ftse350": "uk",
     "ftse_smallcap": "uk",
