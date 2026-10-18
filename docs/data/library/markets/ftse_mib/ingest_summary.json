@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-17T13:56:07.378114+00:00",
+  "run_at": "2026-10-18T18:55:39.691715+00:00",
   "market_id": "ftse_mib",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-17T13:55:38.872366+00:00",
+    "snapshot_at": "2026-10-18T18:54:56.835818+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 10,
     "unmeasured_buy_tier": 0,
@@ -26,11 +26,11 @@
     "thin_body_tickers": [
       "MONC.MI",
       "UNI.MI",
+      "PST.MI",
       "LTMC.MI",
-      "FCT.MI",
-      "INW.MI",
       "TEN.MI",
-      "PST.MI"
+      "INW.MI",
+      "FCT.MI"
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
@@ -51,13 +51,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-17T13:56:07.350424+00:00",
+    "snapshot_at": "2026-10-18T18:55:39.658944+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 10,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 7,
-    "indexed_without_body": 0,
+    "indexed_without_body": 11,
     "bodies_min": 1,
     "bodies_median": 2.0,
     "bodies_max": 53,
@@ -68,14 +68,26 @@
     "thin_body_tickers": [
       "MONC.MI",
       "UNI.MI",
+      "PST.MI",
       "LTMC.MI",
-      "FCT.MI",
-      "INW.MI",
       "TEN.MI",
-      "PST.MI"
+      "INW.MI",
+      "FCT.MI"
     ],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
+    "indexed_without_body_tickers": [
+      "MONC.MI",
+      "UNI.MI",
+      "LTMC.MI",
+      "INW.MI",
+      "FCT.MI"
+    ],
+    "indexed_without_body_by_ticker": {
+      "MONC.MI": 3,
+      "UNI.MI": 2,
+      "LTMC.MI": 2,
+      "INW.MI": 3,
+      "FCT.MI": 1
+    },
     "parked_tickers": [
       "FCT.MI",
       "INW.MI",
@@ -100,9 +112,9 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 10,
-    "hits": 3,
-    "new_rows_total": 0,
-    "curiosity_total": 3,
+    "hits": 8,
+    "new_rows_total": 11,
+    "curiosity_total": 8,
     "errors": 0,
     "prioritization_weights": {
       "new_index_rows": 8.0,
@@ -116,11 +128,11 @@
     "prefer_tickers": [
       "MONC.MI",
       "UNI.MI",
+      "PST.MI",
       "LTMC.MI",
-      "FCT.MI",
-      "INW.MI",
       "TEN.MI",
-      "PST.MI"
+      "INW.MI",
+      "FCT.MI"
     ],
     "runtime_cutoff": false
   },
@@ -133,18 +145,18 @@
   },
   "critical_path": {
     "market_id": "ftse_mib",
-    "assessed_at": "2026-10-17T13:55:39.525419+00:00",
+    "assessed_at": "2026-10-18T18:54:57.546597+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
     "thin_need_discovery": [
       "MONC.MI",
       "UNI.MI",
+      "PST.MI",
       "LTMC.MI",
-      "FCT.MI",
-      "INW.MI",
       "TEN.MI",
-      "PST.MI"
+      "INW.MI",
+      "FCT.MI"
     ],
     "thin_need_bodies": [],
     "primary_blocker": "thin_need_discovery",
@@ -163,9 +175,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 27.168037529000003,
+  "used_seconds": 41.40268357399998,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3572.831962471,
+  "leftover_seconds": 3558.597316426,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -173,44 +185,11 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_mib",
-    "updated_at": "2026-10-17T13:56:07.356386+00:00",
+    "updated_at": "2026-10-18T18:55:39.665153+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 8,
+    "complete_zero_improve_runs": 9,
     "min_zero_runs": 3,
     "parked": [
-      {
-        "ticker": "FCT.MI",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-09-27T20:12:58.751368+00:00",
-        "filings_total": 1,
-        "filings_with_body": 1,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings"
-      },
-      {
-        "ticker": "INW.MI",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-09-27T20:12:58.751368+00:00",
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings"
-      },
-      {
-        "ticker": "MONC.MI",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-09-27T20:12:58.751368+00:00",
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings"
-      },
       {
         "ticker": "PST.MI",
         "reason": "awaiting_periodic_report",
@@ -218,17 +197,6 @@
         "parked_at": "2026-09-27T20:12:58.751368+00:00",
         "filings_total": 2,
         "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings"
-      },
-      {
-        "ticker": "UNI.MI",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-09-27T20:12:58.751368+00:00",
-        "filings_total": 1,
-        "filings_with_body": 1,
         "indexed_without_body": 0,
         "thin": true,
         "source_surface": "euro_filings"
@@ -246,14 +214,62 @@
         "source_surface": "euro_filings"
       },
       {
-        "ticker": "LTMC.MI",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-10-12T17:18:52.415559+00:00",
-        "park_via": "straggler_soft_park",
+        "ticker": "FCT.MI",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-18T18:55:39.665153+00:00",
+        "park_via": "market_wide_zero_improve",
         "filings_total": 2,
+        "filings_with_body": 1,
+        "indexed_without_body": 1,
+        "thin": true,
+        "source_surface": "euro_filings"
+      },
+      {
+        "ticker": "INW.MI",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-18T18:55:39.665153+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 5,
         "filings_with_body": 2,
-        "indexed_without_body": 0,
+        "indexed_without_body": 3,
+        "thin": true,
+        "source_surface": "euro_filings"
+      },
+      {
+        "ticker": "LTMC.MI",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-18T18:55:39.665153+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 4,
+        "filings_with_body": 2,
+        "indexed_without_body": 2,
+        "thin": true,
+        "source_surface": "euro_filings"
+      },
+      {
+        "ticker": "MONC.MI",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-18T18:55:39.665153+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 5,
+        "filings_with_body": 2,
+        "indexed_without_body": 3,
+        "thin": true,
+        "source_surface": "euro_filings"
+      },
+      {
+        "ticker": "UNI.MI",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-18T18:55:39.665153+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 3,
+        "filings_with_body": 1,
+        "indexed_without_body": 2,
         "thin": true,
         "source_surface": "euro_filings"
       }
@@ -307,6 +323,6 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261017-04"
+    "task_id": "eng-20261018-05"
   }
 }
