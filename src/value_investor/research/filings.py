@@ -473,6 +473,18 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://downloads.ctfassets.net/o6mf177wvfka/KuRHStfskhn2PLR18lgoi/efc6b1dcba3a29dab7da646009b0a2b1/Ageas-AR-ENG-FULL-25.pdf",
         "https://live.euronext.com/sites/default/files/company_press_releases/attachments/2026/02/25/cpr01_notified_EN_Results_FY25_003_25022026.pdf",
     ],
+    # bel20 unmeasured stuck — eng-20261018-04: SOLB.BR indexed_without_body; ESEF/news discovery
+    # repeatedly 0-improve with empty IR allowlist (igc-20260929-06). Seed solvay.com statutory PDFs.
+    "SOLB.BR": [
+        "https://www.solvay.com/sites/g/files/srpend616/files/2026-03/Solvay_Annual%20Integrated%20Report_2025_0.pdf",
+        "https://www.solvay.com/sites/solvay_solvay/files/2026-07/2026Q2_Financialreport_EN_0.pdf",
+        "https://www.solvay.com/sites/solvay_solvay/files/2026-05/2026Q1_Financialreport_EN.pdf",
+    ],
+    "SOLB": [
+        "https://www.solvay.com/sites/g/files/srpend616/files/2026-03/Solvay_Annual%20Integrated%20Report_2025_0.pdf",
+        "https://www.solvay.com/sites/solvay_solvay/files/2026-07/2026Q2_Financialreport_EN_0.pdf",
+        "https://www.solvay.com/sites/solvay_solvay/files/2026-05/2026Q1_Financialreport_EN.pdf",
+    ],
     # euro_depth critical-path unmeasured — BN.PA / EL.PA (system_gaps thin_memo_counted_as_coverage).
     "BN.PA": [
         "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2026/registrationdocuments/danoneurdaccessible.pdf",
