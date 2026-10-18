@@ -7860,6 +7860,17 @@ def test_parked_source_hunter_skip_0968_hk_hang_seng():
     assert fetch_filing_body(tipranks) is None
 
 
+def test_parked_source_hunter_skip_2331_hk_hang_seng():
+    """eng-20261018-01: 2331.HK leftover IWB is Simply Wall Street shells, not missing HKEX filings."""
+    assert "2331.HK" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["2331.HK"]
+    assert "Simply Wall Street" in reason
+    assert "google_news_asia" in reason
+    assert "hkex_direct" in reason
+    assert fetch_filings_ir_allowlist("2331.HK") == []
+    assert fetch_filing_body("https://simplywall.st/stock/sehk/2331") is None
+
+
 def test_ir_allowlist_period_classifies_n2iu_si_2qfy_sgxnet_slugs():
     """eng-20261016-02: 2QFY* SGXNet slugs must map to interim (not annual fy token)."""
     assert (
