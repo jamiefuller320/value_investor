@@ -20112,19 +20112,1328 @@
           "parent_spec_id": "heuristic.v1"
         }
       ]
+    },
+    {
+      "logged_at": "2026-10-18T08:59:00.171872+02:00",
+      "verdict_counts": {
+        "agree": 4,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 4,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "cards": [
+        {
+          "ticker": "MELE.BR",
+          "name": "Melexis NV",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "rebuy_skip is driven by algo_reason insufficient cash after higher-conviction fills, not a thesis exit",
+            "still_buyish true with screen_signal strong_buy, rank_drop 0, and entry_rank equal to conviction_rank \u2014 no leave-buy-cohort signal",
+            "research_verdict accumulate and overlay_bound support staying in thesis; skipping rebuy is capacity prioritization, not disagreeing with hold"
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 34
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 34
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T08:59:00.171872+02:00",
+          "proposal_id": "buy_tier_level:MELE.BR:rebuy_skip:2026-10-18T08:59:00.171872+02:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "KRX.IR",
+          "name": "Kingspan Group plc",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Explicit rebuy block from insufficient cash per algo_reason; no sell or forced exit",
+            "still_buyish true, rank_drop 0, and ranks unchanged \u2014 insufficient rank_drop for any sell veto pattern",
+            "screen_signal buy with neutral research_verdict; skip rebuy aligns with cash gate while name remains buyish"
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 37
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 37
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "neutral"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T08:59:00.171872+02:00",
+          "proposal_id": "buy_tier_level:KRX.IR:rebuy_skip:2026-10-18T08:59:00.171872+02:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "neutral",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "MT.AS",
+          "name": "ArcelorMittal S.A.",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Cash-constrained rebuy_skip per algo_reason; not a sell proposal",
+            "still_buyish false and screen_signal hold \u2014 no capacity-bump sell veto case (still_buyish with thin rank_drop)",
+            "rank_drop 0 does not indicate deterioration; skipping rebuy is consistent with non-buyish screen state"
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 38
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 38
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T08:59:00.171872+02:00",
+          "proposal_id": "buy_tier_level:MT.AS:rebuy_skip:2026-10-18T08:59:00.171872+02:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": false,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "IFX.DE",
+          "name": "Infineon Technologies AG",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "rebuy_skip due to insufficient cash; operational constraint not thesis reversal",
+            "still_buyish false, screen_signal hold, research_verdict caution \u2014 rebuy deferral is consistent with weaker cohort",
+            "rank_drop 0; no decisive leave-buy-cohort that would veto a skip on a still-buyish name"
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T08:59:00.171872+02:00",
+          "proposal_id": "buy_tier_level:IFX.DE:rebuy_skip:2026-10-18T08:59:00.171872+02:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
+    },
+    {
+      "logged_at": "2026-10-18T09:08:31.441158+02:00",
+      "verdict_counts": {
+        "agree": 3,
+        "veto": 1,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 2,
+          "veto": 0,
+          "abstain": 0
+        },
+        "sell": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 0,
+          "veto": 1,
+          "abstain": 0
+        }
+      },
+      "cards": [
+        {
+          "ticker": "MT.AS",
+          "name": "ArcelorMittal S.A.",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Explicit rebuy_skip due to insufficient cash after higher-conviction fills is a portfolio constraint, not a discretionary churn sell.",
+            "still_buyish is false and effective screen_signal is hold, so deferring rebuy is consistent with no longer being in the buy cohort.",
+            "rank_drop is 0 versus entry but leave-cohort status dominates rebuy priority here."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 38
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 38
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T09:08:31.441158+02:00",
+          "proposal_id": "buy_tier_level:MT.AS:rebuy_skip:2026-10-18T09:08:31.441158+02:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": false,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "IFX.DE",
+          "name": "Infineon Technologies AG",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Insufficient cash after higher-conviction fills explains rebuy_skip without contradicting hold/low-churn intent.",
+            "still_buyish is false with hold screen_signal; skipping rebuy aligns with not being buyish.",
+            "research_verdict caution with overlay_bound true adds qualitative support to deprioritize rebuy despite rank_drop 0."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T09:08:31.441158+02:00",
+          "proposal_id": "buy_tier_level:IFX.DE:rebuy_skip:2026-10-18T09:08:31.441158+02:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "HEIA.AS",
+          "name": "Heineken N.V.",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Automated exit for left target set matches still_buyish false \u2014 leave-buy-cohort looks decisive for a sell.",
+            "Effective screen_signal is hold, not buy/strong_buy, so sell is not a capacity-bump veto case (still_buyish is false).",
+            "Research accumulate with overlay_bound does not override still_buyish false on the decision screen."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T09:08:31.441158+02:00",
+          "proposal_id": "buy_tier_level:HEIA.AS:sell:2026-10-18T09:08:31.441158+02:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "PRX.AS",
+          "name": "Prosus N.V.",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "veto",
+          "reasons": [
+            "Automated buy conflicts with still_buyish false and effective screen_signal hold \u2014 not evidence-backed as a buy cohort entry.",
+            "No rank_drop or buyish signal cited to justify overriding hold/non-buyish state.",
+            "Evidence is sufficient to disagree; not a thin-evidence abstain case."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 30
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.4544
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T09:08:31.441158+02:00",
+          "proposal_id": "buy_tier_level:PRX.AS:buy:2026-10-18T09:08:31.441158+02:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": false,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "abstain",
+              "reasons": [
+                "Buy while not buyish \u2014 abstain."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
+    },
+    {
+      "logged_at": "2026-10-18T09:12:21.995577+02:00",
+      "verdict_counts": {
+        "agree": 7,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 7,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "cards": [
+        {
+          "ticker": "VOW.DE",
+          "name": "Volkswagen AG",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Rebuy_skip is driven by explicit insufficient cash after higher-conviction fills, not by a deterioration signal.",
+            "Screen remains strong_buy with still_buyish true, entry_rank equals conviction_rank and rank_drop 0, so hold-gate logic does not argue for forced churn.",
+            "Research overlay is bound with accumulate verdict; skipping rebuy under cash constraint preserves higher-conviction priority without contradicting buyish screen state."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 20
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 20
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T09:12:21.995577+02:00",
+          "proposal_id": "buy_tier_level:VOW.DE:rebuy_skip:2026-10-18T09:12:21.995577+02:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "DTE.DE",
+          "name": "Deutsche Telekom AG",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Algo cites insufficient cash after higher-conviction fills as the rebuy block.",
+            "Effective signal is buy, still_buyish true, and rank_drop 0 versus entry_rank, so there is no rank-drop-based case to override the cash skip.",
+            "Overlay_bound accumulate aligns with maintaining sleeve without mandating rebuy when cash is exhausted."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 23
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 23
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T09:12:21.995577+02:00",
+          "proposal_id": "buy_tier_level:DTE.DE:rebuy_skip:2026-10-18T09:12:21.995577+02:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "PRX.AS",
+          "name": "Prosus N.V.",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Rebuy_skip follows explicit cash constraint after higher-conviction fills.",
+            "Effective screen_signal is hold and still_buyish is false, so deferring rebuy is consistent with no longer being in the buy cohort.",
+            "rank_drop 0 shows stable rank versus entry but does not override hold/non-buyish screen state for rebuy urgency."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 30
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 30
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T09:12:21.995577+02:00",
+          "proposal_id": "buy_tier_level:PRX.AS:rebuy_skip:2026-10-18T09:12:21.995577+02:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": false,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "MELE.BR",
+          "name": "Melexis NV",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Insufficient cash after higher-conviction fills is the stated rebuy_skip reason.",
+            "Still_buyish true with strong_buy signal and rank_drop 0; skip reflects portfolio cash priority rather than a sell or leave-cohort trigger.",
+            "Research accumulate with overlay_bound supports holding thesis while accepting mechanical rebuy deferral."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T09:12:21.995577+02:00",
+          "proposal_id": "buy_tier_level:MELE.BR:rebuy_skip:2026-10-18T09:12:21.995577+02:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "KRX.IR",
+          "name": "Kingspan Group plc",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Cash exhaustion after higher-conviction fills explains rebuy_skip.",
+            "Buy signal with still_buyish true and rank_drop 0 does not meet prefer-veto-on-sell thresholds; this is rebuy deferral not a sell proposal.",
+            "Research verdict neutral does not contradict cash-gated skip given overlay remains bound on adjusted signal."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "neutral"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T09:12:21.995577+02:00",
+          "proposal_id": "buy_tier_level:KRX.IR:rebuy_skip:2026-10-18T09:12:21.995577+02:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "neutral",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "MT.AS",
+          "name": "ArcelorMittal S.A.",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Algo_reason is insufficient cash; rebuy_skip is operationally forced not signal-driven.",
+            "hold screen_signal with still_buyish false indicates leaving buy cohort; skipping rebuy aligns with low-churn hold meaning.",
+            "rank_drop 0 alone does not require rebuy when screen is hold and overlay is not bound."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": false
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T09:12:21.995577+02:00",
+          "proposal_id": "buy_tier_level:MT.AS:rebuy_skip:2026-10-18T09:12:21.995577+02:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": false,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "IFX.DE",
+          "name": "Infineon Technologies AG",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Explicit insufficient cash after higher-conviction fills supports rebuy_skip.",
+            "hold signal, still_buyish false, and research_verdict caution together favor deferring rebuy over capacity-bump into a non-buyish name.",
+            "rank_drop 0 does not outweigh decisive leave-buy-cohort screen state for rebuy urgency."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-18T09:12:21.995577+02:00",
+          "proposal_id": "buy_tier_level:IFX.DE:rebuy_skip:2026-10-18T09:12:21.995577+02:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
     }
   ],
   "observe_only": true,
   "influences_live": false,
   "track_id": "buy_tier_level",
   "last_pass": {
-    "logged_at": "2026-10-16T09:30:34.102006+02:00",
-    "card_count": 14,
+    "logged_at": "2026-10-18T09:12:21.995577+02:00",
+    "card_count": 7,
     "verdict_counts": {
-      "agree": 14,
+      "agree": 7,
       "veto": 0,
       "abstain": 0
     }
   },
-  "updated_at": "2026-10-16T07:30:48.740068+00:00"
+  "updated_at": "2026-10-18T07:12:41.136840+00:00"
 }

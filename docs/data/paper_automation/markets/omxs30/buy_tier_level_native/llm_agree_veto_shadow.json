@@ -978,13 +978,87 @@
           "parent_spec_id": "heuristic.v1"
         }
       ]
+    },
+    {
+      "logged_at": "2026-10-18T08:10:45.074268+01:00",
+      "verdict_counts": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "sell": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "cards": [
+        {
+          "ticker": "NIBE-B.ST",
+          "name": "NIBE Industrier AB (publ)",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Automated exit \u2014 left target set aligns with cohort exit logic.",
+            "still_buyish is false: name is not buy/strong_buy on the decision screen, so leaving the buy cohort supports sell rather than a capacity-bump veto."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-10-18T08:10:45.074268+01:00",
+          "proposal_id": "buy_tier_level_native:NIBE-B.ST:sell:2026-10-18T08:10:45.074268+01:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
     }
   ],
   "observe_only": true,
   "influences_live": false,
   "track_id": "buy_tier_level_native",
   "last_pass": {
-    "logged_at": "2026-10-16T08:29:15.836321+01:00",
+    "logged_at": "2026-10-18T08:10:45.074268+01:00",
     "card_count": 1,
     "verdict_counts": {
       "agree": 1,
@@ -992,5 +1066,5 @@
       "abstain": 0
     }
   },
-  "updated_at": "2026-10-16T07:29:18.940429+00:00"
+  "updated_at": "2026-10-18T07:10:47.800082+00:00"
 }

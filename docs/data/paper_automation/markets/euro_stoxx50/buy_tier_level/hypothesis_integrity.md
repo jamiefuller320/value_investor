@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-16T07:27:34.766172+00:00
+Track: `buy_tier_level` · updated 2026-10-18T07:08:59.292136+00:00
 
 ## Portfolio loser feedback
 
@@ -13,7 +13,7 @@ Track: `buy_tier_level` · updated 2026-10-16T07:27:34.766172+00:00
 
 ## Holding reviews
 
-### VOW.DE — intact / hold_tolerate (-12.9%)
+### VOW.DE — intact / hold_tolerate (-10.1%)
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
@@ -21,14 +21,14 @@ Track: `buy_tier_level` · updated 2026-10-16T07:27:34.766172+00:00
 - data_quality 1.00
 - conviction 51%
 
-### DTE.DE — intact / hold_tolerate (-4.6%)
+### DTE.DE — intact / hold_tolerate (-3.5%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 58%
+- conviction 59%
 
-### DG.PA — intact / hold_tolerate (-2.4%)
+### DG.PA — intact / hold_tolerate (-2.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
@@ -42,49 +42,49 @@ Track: `buy_tier_level` · updated 2026-10-16T07:27:34.766172+00:00
 - data_quality 1.00
 - conviction 72%
 
-### AD.AS — intact / hold_tolerate (+1.0%)
-- still strong_buy
+### AD.AS — intact / hold_tolerate (+1.5%)
+- still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 47%
 
-### SAN.PA — intact / hold_tolerate (+1.9%)
+### SAN.PA — intact / hold_tolerate (+1.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 64%
 
-### DHL.DE — intact / hold_tolerate (+3.0%)
+### DHL.DE — intact / hold_tolerate (+4.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 74%
 
-### MC.PA — intact / hold_tolerate (+5.2%)
+### MC.PA — intact / hold_tolerate (+4.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 53%
 
-### ABI.BR — intact / hold_tolerate (+7.1%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 49%
-
-### TTE.PA — intact / hold_tolerate (+7.7%)
+### TTE.PA — intact / hold_tolerate (+8.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 82%
 
-### WKL.AS — intact / hold_tolerate (+19.1%)
+### ABI.BR — intact / hold_tolerate (+8.6%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 49%
+
+### WKL.AS — intact / hold_tolerate (+19.3%)
 - still buy
 - research accumulate
 - cheapness family still passes

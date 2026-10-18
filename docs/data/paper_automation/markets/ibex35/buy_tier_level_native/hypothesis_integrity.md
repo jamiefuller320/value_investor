@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-16T07:28:17.324584+00:00
+Track: `buy_tier_level_native` · updated 2026-10-18T07:09:42.095065+00:00
 
 ## Portfolio loser feedback
 
@@ -10,11 +10,6 @@ Track: `buy_tier_level_native` · updated 2026-10-16T07:28:17.324584+00:00
 
 ## Holding reviews
 
-### SCYR.MC — weakening / watch_review (-0.9%)
-- research verdict caution
-- still buy
-- cheapness family still passes
-
 ### AENA.MC — intact / hold_tolerate (+0.4%)
 - still buy
 - research accumulate
@@ -22,19 +17,24 @@ Track: `buy_tier_level_native` · updated 2026-10-16T07:28:17.324584+00:00
 - data_quality 1.00
 - conviction 63%
 
-### NTGY.MC — weakening / watch_review (+2.9%)
-- research verdict neutral
-- still buy
-- cheapness family still passes
-
-### REP.MC — weakening / watch_review (+3.5%)
+### SCYR.MC — weakening / watch_review (+1.2%)
 - research verdict caution
 - still buy
 - cheapness family still passes
 
-### GRF.MC — intact / hold_tolerate (+5.2%)
+### NTGY.MC — weakening / watch_review (+3.8%)
+- research verdict neutral
+- still buy
+- cheapness family still passes
+
+### REP.MC — weakening / watch_review (+4.0%)
+- research verdict caution
+- still buy
+- cheapness family still passes
+
+### GRF.MC — intact / hold_tolerate (+6.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 54%
+- conviction 61%

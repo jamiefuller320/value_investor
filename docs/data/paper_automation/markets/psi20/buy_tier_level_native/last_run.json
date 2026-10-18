@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-16T08:29:01.704585+01:00",
+    "local_time": "2026-10-18T08:10:32.254299+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-16T08:00:00+01:00",
-    "settle_at": "2026-10-16T09:15:00+01:00",
+    "market_open_at": "2026-10-18T08:00:00+01:00",
+    "settle_at": "2026-10-18T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 984.87,
+    "nav": 999.6,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -36,44 +36,35 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 984.87,
-    "targets": [
+    "target_sleeve_value": 0.0,
+    "targets": [],
+    "anticipated_exits": [
       {
+        "action": "sell",
         "ticker": "COR.LS",
         "name": "Corticeira Amorim, S.G.P.S., S.A.",
-        "signal": "buy",
-        "conviction_score": 0.323,
-        "price": 6.69
+        "reason": "No longer in the top conviction target set",
+        "shares": 147.21588,
+        "price": 6.79,
+        "value": 999.6
       }
     ],
-    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
-    "anticipated_holds": [
-      {
-        "action": "hold",
-        "ticker": "COR.LS",
-        "name": "Corticeira Amorim, S.G.P.S., S.A.",
-        "reason": "Already near equal-weight target",
-        "value": 984.87,
-        "target_value": 984.87,
-        "conviction_score": 0.323,
-        "signal": "buy"
-      }
-    ],
+    "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 1 equal-weight sleeve(s); leave 1 near-target holding(s)."
+    "summary": "No eligible buy-tier targets right now \u2014 the next rebalance would stay in cash / existing names that still qualify."
   },
   "alerts": [
     {
       "ticker": "COR.LS",
       "name": "Corticeira Amorim, S.G.P.S., S.A.",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 6.69,
+      "severity": "watch",
+      "message": "Screen signal is now hold",
+      "mark": 6.79,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -515,11 +506,29 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-18T08:10:32.254299+01:00",
+        "portfolio_value": 999.6,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 1,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance (no targets)"
       }
     ],
-    "last_mark_at": "2026-10-16T08:29:01.704585+01:00",
+    "last_mark_at": "2026-10-18T08:10:32.254299+01:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "COR.LS": 1
+      },
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
@@ -530,7 +539,7 @@
     "schema_version": 2,
     "market_id": "psi20",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-16T07:29:01.707977+00:00",
+    "generated_at": "2026-10-18T07:10:32.257681+00:00",
     "observe_only": true,
     "open_count": 2,
     "closed_count": 0,
@@ -609,7 +618,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-16T07:29:01.708737+00:00",
+    "generated_at": "2026-10-18T07:10:32.258467+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -714,8 +723,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-10-16T07:29:01.709608+00:00",
-    "as_of": "2026-10-16T08:29:01.704585+01:00",
+    "updated_at": "2026-10-18T07:10:32.259327+00:00",
+    "as_of": "2026-10-18T08:10:32.254299+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -756,7 +765,7 @@
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
         "quality": 1.0,
-        "dividend": 0.0,
+        "dividend": 1.0,
         "garp": 1.0,
         "risk": 0.0
       },
@@ -772,37 +781,38 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0155,
-        "mark": 6.69,
+        "unrealized_pct": -0.0008,
+        "mark": 6.79,
         "avg_cost": 6.7955,
-        "signal": "buy",
+        "signal": "hold",
         "timing_signal": "neutral",
-        "conviction_score": 0.323,
+        "conviction_score": 0.1283,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
-          "dividend",
           "risk"
         ],
         "failed_families": [
           "quality",
+          "dividend",
           "garp"
         ],
         "research_verdict": "caution",
         "reasons": [
+          "left buy tier (hold)",
           "research verdict caution",
-          "conviction 32% below intact floor",
-          "still buy",
-          "cheapness family still passes"
+          "conviction 13% below intact floor",
+          "cheapness family still passes",
+          "data_quality 0.95"
         ],
         "intact_reasons": [
-          "still buy",
           "cheapness family still passes",
           "data_quality 0.95"
         ],
         "weaken_reasons": [
+          "left buy tier (hold)",
           "research verdict caution",
-          "conviction 32% below intact floor"
+          "conviction 13% below intact floor"
         ],
         "broken_reasons": []
       }
@@ -814,7 +824,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-16T07:29:01.710774+00:00",
+    "generated_at": "2026-10-18T07:10:32.260476+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -889,7 +899,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-10-16T07:29:01.712555+00:00",
+    "generated_at": "2026-10-18T07:10:32.262214+00:00",
     "open_count": 1,
     "closed_count": 1,
     "scored_count": 1,
@@ -955,7 +965,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-16T08:29:01.704585+01:00",
+    "generated_at": "2026-10-18T08:10:32.254299+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1012,7 +1022,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-16T08:29:01.704585+01:00",
+    "generated_at": "2026-10-18T08:10:32.254299+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1039,7 +1049,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-10-16T08:29:01.704585+01:00",
+      "generated_at": "2026-10-18T08:10:32.254299+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
@@ -1068,7 +1078,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-16T07:29:01.715174+00:00",
+  "generated_at": "2026-10-18T07:10:32.264804+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,
