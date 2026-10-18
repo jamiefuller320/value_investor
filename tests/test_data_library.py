@@ -311,7 +311,11 @@ def test_t212_venue_gap_markets_registered():
 
 def test_sp400_midcap_on_markets_list_not_ingest_head():
     """S&P MidCap 400 is an offline library market, queued behind the cascade head."""
-    from value_investor.agent_model_policy import DEFAULT_MARKET_QUEUE, DEFAULT_POLICY_PATH, load_policy
+    from value_investor.agent_model_policy import (
+        DEFAULT_MARKET_QUEUE,
+        DEFAULT_POLICY_PATH,
+        load_policy,
+    )
     from value_investor.constituents import VALID_UNIVERSES
     from value_investor.data_library import list_markets
     from value_investor.fetch import normalize_yahoo_ticker
