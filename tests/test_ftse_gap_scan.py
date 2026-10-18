@@ -77,8 +77,8 @@ def test_known_examples_when_files_contain_them():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
 
     bab = rows["BAB.L"]
-    assert bab.dividend_yield_raw == pytest.approx(0.82)
-    assert bab.yield_display == "82.0%"
+    assert bab.dividend_yield_raw == pytest.approx(0.78)
+    assert bab.yield_display == "78.0%"
     assert "raw_yield_below_one_displayed_as_percent" in _ids(bab)
 
     blnd = rows["BLND.L"]
@@ -87,15 +87,20 @@ def test_known_examples_when_files_contain_them():
     assert "fcf_stored_operating_cashflow_missing" in _ids(blnd)
 
     barc = rows["BARC.L"]
-    assert barc.operating_cashflow is not None
+    assert barc.operating_cashflow == pytest.approx(18_739_000_000.0)
     assert barc.fcf_is_object
-    assert barc.fcf_has_figure is False
-    assert "empty_fcf_object_with_operating_cashflow" in _ids(barc)
+    assert barc.displayed_fcf == pytest.approx(16_880_000_000.0)
+    assert barc.fcf_has_figure is True
+    assert "empty_fcf_object_with_operating_cashflow" not in _ids(barc)
+    empty_fcf = _row(fcf_is_object=True, fcf_has_figure=False, operating_cashflow=1.0)
+    assert "empty_fcf_object_with_operating_cashflow" in _ids(empty_fcf)
 
     bhmg = rows["BHMG.L"]
-    assert bhmg.pe_display == "419.0"
+    assert bhmg.pe_display == "435.0"
     assert bhmg.history_price == pytest.approx(419.0)
-    assert "screen_pe_equals_pence_price" in _ids(bhmg)
+    assert "screen_pe_equals_pence_price" not in _ids(bhmg)
+    matched_price = _row(pe_display="419.0", history_price=419.0)
+    assert "screen_pe_equals_pence_price" in _ids(matched_price)
 
 
 def test_ba_and_zig_share_counts_come_from_the_statement():
@@ -301,20 +306,30 @@ def test_unflagged_filing_aligned_can_match_the_other_screen_figures():
     assert "fcf_figures_disagree" not in _ids(hit)
 
 
-def test_bmy_and_cch_filing_aligned_differ_from_the_statement_line():
+def test_bmy_and_cch_filing_aligned_match_the_statement_line():
+    """Stored screen now puts filing_aligned on the statement line.
+
+    BMY's previous filing figure remains as screen_ttm, so the TTM check fires.
+    CCH's flag is true, so neither unflagged disagreement check fires. Constructed
+    rows above still cover filing_aligned differing from the statement.
+    """
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
     bmy = rows["BMY.L"]
-    assert bmy.displayed_fcf == pytest.approx(27_800_000.0)
-    assert bmy.filing_aligned == pytest.approx(27_800_000.0)
+    assert bmy.displayed_fcf == pytest.approx(31_900_000.0)
+    assert bmy.filing_aligned == pytest.approx(31_900_000.0)
     assert bmy.statement_fcf == pytest.approx(31_900_000.0)
+    assert bmy.screen_ttm == pytest.approx(27_800_000.0)
     assert bmy.fcf_divergence_flagged is False
-    assert "filing_aligned_differs_from_statement_fcf" in _ids(bmy)
+    assert "filing_aligned_differs_from_statement_fcf" not in _ids(bmy)
+    assert "screen_ttm_differs_filing_aligned_matches_statement" in _ids(bmy)
     cch = rows["CCH.L"]
-    assert cch.displayed_fcf == pytest.approx(1_593_175_040.0)
-    assert cch.filing_aligned == pytest.approx(1_593_175_040.0)
+    assert cch.displayed_fcf == pytest.approx(760_900_000.0)
+    assert cch.filing_aligned == pytest.approx(760_900_000.0)
     assert cch.statement_fcf == pytest.approx(760_900_000.0)
-    assert cch.fcf_divergence_flagged is False
-    assert "filing_aligned_differs_from_statement_fcf" in _ids(cch)
+    assert cch.screen_ttm == pytest.approx(1_593_175_040.0)
+    assert cch.fcf_divergence_flagged is True
+    assert "filing_aligned_differs_from_statement_fcf" not in _ids(cch)
+    assert "screen_ttm_differs_filing_aligned_matches_statement" not in _ids(cch)
 
 
 def test_byg_and_dln_are_trust_rows_with_revenue_and_no_price():
@@ -322,14 +337,14 @@ def test_byg_and_dln_are_trust_rows_with_revenue_and_no_price():
     byg = rows["BYG.L"]
     assert byg.trust is True
     assert byg.statement_revenue == pytest.approx(209_084_000.0)
-    assert byg.discount_display == "39.7%"
+    assert byg.discount_display == "32.0%"
     assert byg.fcf_has_figure is False
     assert byg.history_price is None
     assert "trust_revenue_discount_without_fcf_or_price" in _ids(byg)
     dln = rows["DLN.L"]
     assert dln.trust is True
     assert dln.statement_revenue == pytest.approx(388_700_000.0)
-    assert dln.discount_display == "43.8%"
+    assert dln.discount_display == "40.3%"
     assert dln.fcf_has_figure is False
     assert dln.history_price is None
     assert "trust_revenue_discount_without_fcf_or_price" in _ids(dln)
@@ -389,9 +404,9 @@ def test_emg_premium_counts_on_the_trust_revenue_check():
     emg = rows["EMG.L"]
     latest = json.loads((ROOT / "docs/data/latest.json").read_text())
     stored = next(raw for raw in latest["trust_reports"] if raw.get("ticker") == "EMG.L")
-    assert stored["key_metrics"]["P/B"] == "3.14"
+    assert stored["key_metrics"]["P/B"] == "3.17"
     assert emg.trust is True
-    assert emg.premium_display == "213.7%"
+    assert emg.premium_display == "216.9%"
     assert emg.discount_display is None
     assert emg.pe_display == "16.2"
     assert emg.yield_display == "3.7%"
@@ -404,7 +419,7 @@ def test_emg_premium_counts_on_the_trust_revenue_check():
         for hit in hits_for(emg)
         if hit.rule_id == "trust_revenue_discount_without_fcf_or_price"
     )
-    assert "premium 213.7%" in detail
+    assert "premium 216.9%" in detail
 
 
 def _income_pair(ticker: str, year: str) -> tuple[float, float]:
@@ -460,11 +475,11 @@ def test_fras_gdwn_and_has_2026_income_pairs():
 def test_hbr_and_elm_positive_pe_beside_negative_diluted_eps():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
     hbr = rows["HBR.L"]
-    assert hbr.pe_display == "23.4"
+    assert hbr.pe_display == "24.5"
     assert hbr.diluted_eps == pytest.approx(-0.16)
     assert "positive_screen_pe_beside_negative_diluted_eps" in _ids(hbr)
     elm = rows["ELM.L"]
-    assert elm.pe_display == "20.2"
+    assert elm.pe_display == "20.6"
     assert elm.diluted_eps == pytest.approx(-0.078)
     assert "positive_screen_pe_beside_negative_diluted_eps" in _ids(elm)
     assert "positive_screen_pe_beside_negative_diluted_eps" not in _ids(
@@ -481,7 +496,7 @@ def test_hbr_and_elm_positive_pe_beside_negative_diluted_eps():
 
 def test_jemi_and_fcss_have_a_pe_and_neither_discount_nor_premium():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
-    for ticker, pe in (("JEMI.L", "5.0"), ("FCSS.L", "8.5")):
+    for ticker, pe in (("JEMI.L", "4.7"), ("FCSS.L", "8.0")):
         row = rows[ticker]
         assert row.trust is True
         assert row.pe_display == pe
@@ -516,10 +531,10 @@ def test_jemi_and_fcss_have_a_pe_and_neither_discount_nor_premium():
 def test_screen_pe_beside_a_revenue_year_with_no_eps_line():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
     expected = {
-        "LRE.L": ("6.7", "2025", 1_883_400_000.0, 293_400_000.0),
-        "LWDB.L": ("5.3", "2025", 366_003_000.0, 304_670_000.0),
-        "INPP.L": ("10.4", "2025", 267_760_000.0, 263_704_000.0),
-        "JEDT.L": ("5.3", "2026", 114_629_000.0, 112_129_000.0),
+        "LRE.L": ("7.2", "2025", 1_883_400_000.0, 293_400_000.0),
+        "LWDB.L": ("16.3", "2025", 366_003_000.0, 304_670_000.0),
+        "INPP.L": ("10.6", "2025", 267_760_000.0, 263_704_000.0),
+        "JEDT.L": ("5.4", "2026", 114_629_000.0, 112_129_000.0),
     }
     for ticker, (pe, year, revenue, net) in expected.items():
         row = rows[ticker]
@@ -753,8 +768,16 @@ def test_screen_ttm_differs_while_filing_aligned_matches_the_statement():
     assert "screen_ttm_differs_filing_aligned_matches_statement" not in _ids(flagged)
 
     rel = rows["REL.L"]
-    assert rel.screen_ttm == rel.filing_aligned
-    assert "screen_ttm_differs_filing_aligned_matches_statement" not in _ids(rel)
+    assert rel.screen_ttm == pytest.approx(2_232_375_040.0)
+    assert rel.filing_aligned == pytest.approx(2_311_000_000.0)
+    assert rel.statement_fcf == pytest.approx(2_311_000_000.0)
+    assert rel.fcf_divergence_flagged is False
+    assert "screen_ttm_differs_filing_aligned_matches_statement" in _ids(rel)
+    barc = rows["BARC.L"]
+    assert barc.screen_ttm == pytest.approx(16_880_000_000.0)
+    assert barc.filing_aligned == barc.screen_ttm
+    assert barc.statement_fcf == barc.screen_ttm
+    assert "screen_ttm_differs_filing_aligned_matches_statement" not in _ids(barc)
 
     same_screen = _row(
         displayed_fcf=1_889_566_000.0,
