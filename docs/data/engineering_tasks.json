@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-17T23:44:56.613560+00:00",
+  "compiled_at": "2026-10-18T00:43:29.173067+00:00",
   "run_at": null,
-  "task_count": 185,
+  "task_count": 186,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -10007,6 +10007,53 @@
       "merged_at": "2026-10-02T10:55:17.370432+00:00"
     },
     {
+      "id": "eng-20261018-01",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked hang_seng leftover 2331.HK",
+      "summary": "Library market hang_seng (Hang Seng) parked 2331.HK after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent sta",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "hang_seng",
+        "library_market": "hang_seng",
+        "hunter_market_id": "hang_seng",
+        "hunter_ticker": "2331.HK",
+        "parked_reason": "unfetchable_iwb",
+        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for 2331.HK only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20261017-11",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked hang_seng leftover 0968.HK",
@@ -10022,7 +10069,8 @@
         "parked_reason": "unfetchable_iwb",
         "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
         "universe": "library",
-        "doc": "docs/ops/library-ingest-escalation.md"
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "merge_class": "parked_hunter"
       },
       "acceptance_criteria": [
         "Inspect IR / exchange sources for 0968.HK only — do not invent URLs",
@@ -10051,11 +10099,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20261017-11.md",
       "branch_name": "cursor/eng-20261017-11-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-10-18T00:01:53.636689+00:00"
+      "completed_at": "2026-10-18T00:01:53.636689+00:00",
+      "merge_class": "parked_hunter",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1123",
+      "pr_number": 1123,
+      "merged_at": "2026-10-18T00:43:18.388276+00:00"
     },
     {
       "id": "eng-20261017-10",
@@ -12185,7 +12237,7 @@
   },
   "micro_compile_source": "parked_source_hunter",
   "library_market_id": "hang_seng",
-  "hunter_ticker": "0968.HK",
+  "hunter_ticker": "2331.HK",
   "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
   "queue_block_notify": {
     "last_fingerprint": "clash_blocked|no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
