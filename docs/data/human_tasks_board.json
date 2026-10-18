@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-18T07:26:44.755234+00:00",
+  "generated_at": "2026-10-18T09:38:31.731310+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-10-15",
   "counts": {
-    "new_info": 2,
+    "new_info": 3,
     "unacked": 2,
-    "acked": 37,
+    "acked": 36,
     "automated": 20,
     "human": 41
   },
@@ -50,6 +50,48 @@
         "acked_at": "2026-10-09T15:43:43.187966+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "782b2addb6782b0b"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "sunday-shard-epoch0-watch",
+      "title": "Watch shard epoch-0 and near-miss before forking AI",
+      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Admitted shard epoch-0 watch · 22",
+        "updated_at": "2026-10-18T07:17:09.173864+00:00",
+        "fingerprint": "fccb53ad0e233669",
+        "bullets": [
+          "euro_depth: phase=3 ai=False knob=False holdings=37",
+          "aex: phase=0 ai=False knob=False holdings=7",
+          "us_adr_asia: phase=0 ai=False knob=False holdings=3",
+          "aim: phase=0 ai=False knob=False holdings=16",
+          "atx: phase=0 ai=False knob=False holdings=2",
+          "bel20: phase=0 ai=False knob=False holdings=2",
+          "cac40: phase=1 ai=False knob=False holdings=13",
+          "dax: phase=1 ai=False knob=False holdings=1"
+        ],
+        "source_keys": [
+          "market_status"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-10-15T22:52:45.495707+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "445acb0f9a3f9032"
       },
       "sort_bucket": "new_info",
       "auto_ackable": false,
@@ -157,6 +199,48 @@
       "sort_bucket": "unacked",
       "auto_ackable": false,
       "ack_sufficient": false
+    },
+    {
+      "id": "weekday-engineering-parked-backlog-clear",
+      "title": "Clear engineering parked backlog when dispatch pauses",
+      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
+      "automated": false,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/ops-monitor.md",
+      "doc_anchor": "engineering-parked-backlog-clearing",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "0 attention-parked eng tasks · quiet (auto-ackable)",
+        "updated_at": "2026-10-18T03:58:01.272637+00:00",
+        "fingerprint": "463c1c358411298f",
+        "bullets": [
+          "Quiet after recover-queue — observe Acknowledge is sufficient (no list-parked triage).",
+          "Parked tasks: 1 (attention ~0)",
+          "Queue-clearing pause active: False — evaluated 2026-10-18T03:58:01.272637+00:00",
+          "Traffic pause active: False",
+          "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)"
+        ],
+        "source_keys": [
+          "engineering_tasks"
+        ],
+        "ack_sufficient": true,
+        "auto_ackable": true,
+        "ack_reason": "quiet_zero_attention_no_pause"
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-10-18T09:38:31.713290+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "463c1c358411298f"
+      },
+      "sort_bucket": "acked",
+      "auto_ackable": true,
+      "ack_sufficient": true
     },
     {
       "id": "adhoc-n210-volume-gate-review",
@@ -312,89 +396,6 @@
       "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
-    },
-    {
-      "id": "sunday-shard-epoch0-watch",
-      "title": "Watch shard epoch-0 and near-miss before forking AI",
-      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/market-sharded-learning.md",
-      "doc_anchor": "what-enter-learning-means",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-10-17T18:57:00.690662+00:00",
-        "fingerprint": "445acb0f9a3f9032",
-        "bullets": [
-          "euro_depth: phase=3 ai=False knob=False holdings=37",
-          "aex: phase=0 ai=False knob=False holdings=5",
-          "aim: phase=0 ai=False knob=False holdings=15",
-          "atx: phase=0 ai=False knob=False holdings=2",
-          "bel20: phase=0 ai=False knob=False holdings=2",
-          "cac40: phase=1 ai=False knob=False holdings=14",
-          "dax: phase=1 ai=False knob=False holdings=1",
-          "euro_stoxx50: phase=1 ai=False knob=False holdings=11"
-        ],
-        "source_keys": [
-          "market_status"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-10-15T22:52:45.495707+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "445acb0f9a3f9032"
-      },
-      "sort_bucket": "acked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "weekday-engineering-parked-backlog-clear",
-      "title": "Clear engineering parked backlog when dispatch pauses",
-      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
-      "automated": false,
-      "cadence": "weekday",
-      "section_id": "weekday",
-      "section_title": "Weekday (Mon–Fri)",
-      "doc_path": "docs/ops/ops-monitor.md",
-      "doc_anchor": "engineering-parked-backlog-clearing",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "0 attention-parked eng tasks · quiet (auto-ackable)",
-        "updated_at": "2026-10-18T07:26:11.060429+00:00",
-        "fingerprint": "c0c3ee56f97eb146",
-        "bullets": [
-          "Quiet after recover-queue — observe Acknowledge is sufficient (no list-parked triage).",
-          "Parked tasks: 0 (attention ~0)",
-          "Queue-clearing pause active: False — evaluated 2026-10-18T07:26:11.060429+00:00",
-          "Traffic pause active: False"
-        ],
-        "source_keys": [
-          "engineering_tasks"
-        ],
-        "ack_sufficient": true,
-        "auto_ackable": true,
-        "ack_reason": "quiet_zero_attention_no_pause"
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-10-15T22:52:45.468939+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "c0c3ee56f97eb146"
-      },
-      "sort_bucket": "acked",
-      "auto_ackable": true,
-      "ack_sufficient": true
     },
     {
       "id": "adhoc-post-hsr-alternate-strand",
@@ -2098,5 +2099,6 @@
       "auto_ackable": false,
       "ack_sufficient": false
     }
-  ]
+  ],
+  "path": "docs/data/human_tasks_board.json"
 }

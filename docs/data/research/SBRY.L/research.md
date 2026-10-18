@@ -1,6 +1,6 @@
 # J Sainsbury plc (SBRY.L) — Research memo
 
-_Version 3 · Updated 2026-09-23T13:06:45.345294+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-10-18T09:09:07.108896+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.67
-Rationale: Filings still support cheapness and cash return, but thin news and unchanged FCF, leverage and Argos risks leave research neutral on whether hold should give way to adds.
+Confidence: 0.66
+Rationale: No new SBRY filings; peer and governance commentary adds competitive noise but leaves research neutral on whether the screen hold should stay or shift.
 RiskTags: competitive, regulatory, leverage, pension, accounting, cyclical, governance
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Thesis, FY2027 guidance, and known risks (Argos exit, leverage, restatements) ar
 No new annual or interim filings since the 15 September refresh.  
 News is commentary-only (Forbes how-to-buy, Zacks undervalued, 15 Sep); one routine RNS major-holders notice (18 Sep).  
 Thesis, FY2027 guidance, and known risks (Argos, leverage, FCF definitions, restatements) are unchanged.
+
+### 2026-10-18T09:09:07.108896+00:00
+No new annual or interim filings since the 23 September refresh.  
+One routine RNS (Total Voting Rights, 1 Oct); news is commentary-only (Tesco peer comparison, shelf-price cooling, chair succession, merger-talk coverage).  
+Thesis, FY2027 guidance, and known risks (Argos exit, leverage, FCF definitions, restatements) are unchanged.

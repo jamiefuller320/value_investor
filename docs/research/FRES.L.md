@@ -1,6 +1,6 @@
 # Fresnillo plc (FRES.L) — Research memo
 
-_Version 4 · Updated 2026-10-07T10:42:52.092329+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-18T08:30:37.490532+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Persistent buy screen on valuation and quality, but H1 volume pressure and unchanged statutory vs filing EPS warnings keep research at accumulate rather than full buy confirmation.
+Rationale: Buy screen still supported on cheapness and quality, but unchanged statutory-vs-filing EPS warnings and thin news since H1 keep research at accumulate, not full buy confirmation.
 RiskTags: cyclical, regulatory, governance, key_person, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ News since 15 Sep is thin (dividend-payment commentary only); H1 2026 interim re
 Buy signal persists (20 weeks, ~56% composite); timing neutral (RSI ~38, marginally below 200-day MA); screen still flags statutory vs filing EPS divergence.  
 No new indexed RNS since the 14 Sep planned CFO succession; H1 2026 interim remains the latest results anchor.  
 News since 21 Sep is commentary only (miner rally, interim dividend vs lower output, CFO transition headlines).
+
+### 2026-10-18T08:30:37.490532+00:00
+Buy signal persists (22 weeks, ~57% composite); timing neutral (RSI ~45, marginally below 200-day MA); screen still flags statutory vs filing EPS divergence.  
+No new indexed RNS since the 14 Sep planned CFO succession; H1 2026 interim remains the latest results anchor.  
+News since 7 Oct is thin (generic quote pages only).

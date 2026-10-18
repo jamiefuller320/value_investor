@@ -1,6 +1,6 @@
 # Currys plc (CURY.L) — Research memo
 
-_Version 5 · Updated 2026-10-04T07:49:06.559738+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-10-18T08:40:32.201960+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,9 +8,9 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Filing-backed cheapness and the 10 Sep trading update support the strong-buy screen, but no new RNS and unchanged cyclical, pension and execution risks keep research at accumulate.
-RiskTags: cyclical, competitive, pension, leverage, key_person, regulatory, liquidity, accounting, other
+Confidence: 0.71
+Rationale: Filing-backed cheapness and the 10 Sep trading update still support the strong-buy screen, but stale data, a disclosed CFO sale and unchanged cyclical, pension and execution risks keep research at accumulate.
+RiskTags: cyclical, competitive, pension, leverage, key_person, liquidity, accounting, other
 
 ## Weekly updates
 
@@ -33,3 +33,8 @@ Cyclical, pension, leverage, CEO execution and liquidity risks are unchanged.
 Quantitative screen is now **strong buy** (~74% composite, improving; first week at that signal on 4 Oct).  
 No new trading update, accounts or material RNS since 21 Sep—only routine buyback/voting-rights notices and Oct **Total Voting Rights**.  
 News is Kalkine/Yahoo-style commentary only; the case still rests on the 10 Sep update and 28 Aug annual report.
+
+### 2026-10-18T08:40:32.201960+00:00
+Strong buy screen persists (~77% composite, fourth week); no new trading statement or accounts since the 10 Sep update and 28 Aug annual report.  
+Since 4 Oct: routine buyback RNS, 7 Oct investor-meet scheduling (interims due 17 Dec), and 16 Oct CFO sale of 500k shares (property funding; holdings still above policy).  
+Press is commentary (valuation, insider headlines); prior cyclical, pension and execution risks unchanged.

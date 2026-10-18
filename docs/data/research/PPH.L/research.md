@@ -1,6 +1,6 @@
 # PPHE Hotel Group Limited (PPH.L) — Research memo
 
-_Version 10 · Updated 2026-10-11T07:50:48.642646+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-10-18T08:37:41.673741+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: With no fresh disclosures, research still supports the buy screen on cheapness and H1 momentum, but blockholder governance, leverage, liquidity and statutory EPS weakness keep conviction moderated.
+Rationale: Research still confirms the buy screen on cheapness and improved accumulate timing, but without new filings, governance, leverage, liquidity and statutory EPS weakness keep conviction moderated.
 RiskTags: governance, leverage, cyclical, regulatory, accounting, competitive, liquidity, key_person
 
 ## Weekly updates
@@ -57,4 +57,9 @@ No change to the H1 2026 interim anchor or prior governance, leverage, liquidity
 ### 2026-10-11T07:50:48.642646+00:00
 No new RNS or company filings since the 7 October refresh; the 11 October batch is US ticker PPH options noise and retrospective third-party commentary on the ended sale process.  
 The buy screen is now fifteen weeks persistent (9/22 models, neutral timing, stable); headline valuation metrics are broadly unchanged.  
+No change to the H1 2026 interim anchor or prior governance, leverage, liquidity and earnings-basis concerns.
+
+### 2026-10-18T08:37:41.673741+00:00
+No new RNS or company filings since the 11 October refresh; the 18 October batch is US-ticker options noise, a Pepkor (JSE:PPH) collision, and third-party London/art’otel commentary.  
+The buy screen is now sixteen weeks persistent (7/22 models, stable); timing is accumulate with favourable entry versus prior neutral timing.  
 No change to the H1 2026 interim anchor or prior governance, leverage, liquidity and earnings-basis concerns.

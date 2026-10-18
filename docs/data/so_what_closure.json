@@ -1,17 +1,65 @@
 {
   "schema_version": "so_what_closure.v1",
-  "generated_at": "2026-10-11T08:31:32Z",
+  "generated_at": "2026-10-18T09:47:05Z",
   "dry_run": false,
   "counts": {
-    "findings": 0,
+    "findings": 2,
     "auto_queue": 0,
-    "human_gate": 0,
-    "observe": 0,
+    "human_gate": 1,
+    "observe": 1,
     "tasks_created": 0,
     "tasks_skipped": 0
   },
-  "findings": [],
+  "findings": [
+    {
+      "finding_id": "system_gap:research_skipped_already_done",
+      "kind": "system_gap_research_skipped_already_done",
+      "ticker": "research_skipped_already_done",
+      "severity": "high",
+      "so_what": "Last ladder executed 0 memos and skipped 479 as already researched. That is not proof the overlay or rememo path is fed.",
+      "recommended_closure": "human_gate",
+      "evidence": {
+        "system_gap_flag": "research_skipped_already_done",
+        "layer": "produce",
+        "title": "Research skipped as already-done while the learning path may still be hungry"
+      },
+      "engineering_area": null,
+      "engineering_title": null,
+      "engineering_summary": null,
+      "human_action": "Judgment call on produce-layer gap — promote via `ftse-analysis-review promote` when ready; prefer ingest/rememo over prompt churn.",
+      "human_doc_path": "docs/ops/analysis-review.md"
+    },
+    {
+      "finding_id": "system_gap:unused_budget_zero_research",
+      "kind": "system_gap_unused_budget_zero_research",
+      "ticker": "unused_budget_zero_research",
+      "severity": "medium",
+      "so_what": "$52.50 remains on weekly_ops and last research executed=0. Unused budget is not evidence that learning needs are met.",
+      "recommended_closure": "observe",
+      "evidence": {
+        "system_gap_flag": "unused_budget_zero_research",
+        "layer": "produce",
+        "title": "Weekly ops budget is unused while research executed nothing"
+      },
+      "engineering_area": null,
+      "engineering_title": null,
+      "engineering_summary": null,
+      "human_action": "Judgment call on produce-layer gap — promote via `ftse-analysis-review promote` when ready; prefer ingest/rememo over prompt churn.",
+      "human_doc_path": "docs/ops/analysis-review.md"
+    }
+  ],
   "created_tasks": [],
   "skipped_tasks": [],
-  "human_gates": []
+  "human_gates": [
+    {
+      "finding_id": "system_gap:research_skipped_already_done",
+      "kind": "system_gap_research_skipped_already_done",
+      "ticker": "research_skipped_already_done",
+      "severity": "high",
+      "so_what": "Last ladder executed 0 memos and skipped 479 as already researched. That is not proof the overlay or rememo path is fed.",
+      "recommended_closure": "human_gate",
+      "human_action": "Judgment call on produce-layer gap — promote via `ftse-analysis-review promote` when ready; prefer ingest/rememo over prompt churn.",
+      "human_doc_path": "docs/ops/analysis-review.md"
+    }
+  ]
 }

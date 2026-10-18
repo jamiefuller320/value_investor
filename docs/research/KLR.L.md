@@ -1,6 +1,6 @@
 # Keller Group plc (KLR.L) — Research memo
 
-_Version 10 · Updated 2026-10-11T07:49:46.180418+00:00 · Mode: structured_verdict_update_
+_Version 11 · Updated 2026-10-18T08:36:45.609369+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.75
-Rationale: Research confirms the buy screen on unchanged H1 fundamentals; no new RNS since the routine 6 October buyback; CMD on 14 October is the next catalyst; cyclical and timing caveats unchanged.
+Confidence: 0.76
+Rationale: CMD RNS reaffirms trading in line with H1 and sets medium-term targets, supporting the buy screen; cyclical and execution risks on forward-looking goals are unchanged.
 RiskTags: cyclical, competitive, liquidity, leverage, pension, regulatory, governance, key_person, litigation, accounting
 
 ## Weekly updates
@@ -58,3 +58,8 @@ Buy screen is eleven weeks and stable; RSI ~57, wait-for-pullback timing; Capita
 No trading update or results since the 4 August H1 interim results.  
 Since 7 October: no new RNS (last indexed flow was the 6 October buyback); news is one Kalkine expectations piece only.  
 Buy screen is twelve weeks and stable; RSI ~56, neutral timing; Capital Markets Day remains 14 October 2026.
+
+### 2026-10-18T08:36:45.609369+00:00
+14 October RNS: Capital Markets Day with new medium-term targets (5–7% organic revenue CAGR, c.7% margin, >30% ROCE, c.£800m FCF 2026–2030); trading stated in line with 4 August interim expectations.  
+Routine 13 October buyback and 15 October holding notification; no trading update or results since H1.  
+Buy screen 13 weeks and stable; RSI ~40, neutral timing; news is CMD and fair-value commentary.
