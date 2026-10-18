@@ -6902,6 +6902,23 @@ def test_fetch_filings_ir_allowlist_euro_depth_aed_br_builtins(tmp_path: Path):
     assert all(row["period"] == "annual" for row in rows)
 
 
+def test_fetch_filings_ir_allowlist_solb_br_eng_20261018_04(tmp_path: Path):
+    """eng-20261018-04: SOLB.BR bel20 unmeasured — empty IR allowlist blocked refetch (igc-20260929-06)."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("SOLB.BR", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("Solvay_Annual%20Integrated%20Report_2025" in url for url in urls)
+    assert any("2026Q2_Financialreport_EN" in url for url in urls)
+    assert any("2026Q1_Financialreport_EN" in url for url in urls)
+    periods = {row["period"] for row in rows}
+    assert periods == {"annual", "interim"}
+    assert len(fetch_filings_ir_allowlist("SOLB", path=allowlist_path)) == 3
+
+
 def test_fetch_filings_ir_allowlist_aed_br_resolves_on_base_symbol(tmp_path: Path):
     """Builtin IR URLs keyed as AED.BR must resolve when lookup uses base symbol AED."""
     allowlist_path = tmp_path / "ir.json"
