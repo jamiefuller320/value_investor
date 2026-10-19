@@ -10825,13 +10825,21 @@ function lifecycleExperimentChips(experiments) {
   return `${chipParts.join("")}${planned}`;
 }
 
+function lifecyclePnlText(card) {
+  if (!card) return "";
+  if (card.realized_exit_pnl_pct != null && card.realized_exit_pnl_pct !== "") {
+    return `exit P&L ${(Number(card.realized_exit_pnl_pct) * 100).toFixed(1)}%`;
+  }
+  if (card.unrealized_pnl_pct != null && card.unrealized_pnl_pct !== "") {
+    return `P&L ${(Number(card.unrealized_pnl_pct) * 100).toFixed(1)}%`;
+  }
+  return "";
+}
+
 function lifecycleTickerCard(card) {
   const conv =
     card.conviction_score != null ? `${Math.round(Number(card.conviction_score) * 100)}%` : "";
-  const pnl =
-    card.unrealized_pnl_pct != null
-      ? `${(Number(card.unrealized_pnl_pct) * 100).toFixed(1)}%`
-      : "";
+  const pnl = lifecyclePnlText(card);
   const band = card.tenure_band ? ` tenure-${esc(card.tenure_band)}` : "";
   const days =
     card.days_in_column != null
@@ -10849,7 +10857,7 @@ function lifecycleTickerCard(card) {
     <div class="small muted">${esc(card.name || "")}</div>
     <div class="small">${esc(card.column_reason || card.lifecycle_phase || "")}${
       conv ? ` · conv ${esc(conv)}` : ""
-    }${pnl ? ` · P&amp;L ${esc(pnl)}` : ""}</div>
+    }${pnl ? ` · ${esc(pnl)}` : ""}</div>
   </button>`;
 }
 
@@ -10920,10 +10928,7 @@ function renderLifecycleTickerCard(ticker) {
   const conviction =
     report.conviction_score != null ? report.conviction_score : card.conviction_score;
   const columnLabel = found && found.column ? found.column.label || found.column.id : "";
-  const pnl =
-    card.unrealized_pnl_pct != null
-      ? `${(Number(card.unrealized_pnl_pct) * 100).toFixed(1)}%`
-      : "";
+  const pnl = lifecyclePnlText(card);
   const tenure =
     card.days_in_column != null
       ? `${card.days_in_column}d in stage${card.tenure_band ? ` (${card.tenure_band})` : ""}`
@@ -10932,7 +10937,7 @@ function renderLifecycleTickerCard(ticker) {
     columnLabel,
     card.column_reason || card.lifecycle_phase || "",
     tenure,
-    pnl ? `P&L ${pnl}` : "",
+    pnl,
     card.opened_at ? `opened ${(card.opened_at || "").slice(0, 10)}` : "",
     card.sold_at ? `sold ${(card.sold_at || "").slice(0, 10)}` : "",
   ].filter(Boolean);
@@ -11012,6 +11017,7 @@ function openLifecycleTickerCard(ticker) {
       opened_at: card.opened_at,
       sold_at: card.sold_at,
       exit_price: card.exit_price,
+      close_in: card.close_in,
     });
   }
 }

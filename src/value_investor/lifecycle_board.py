@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import csv
 import logging
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -182,6 +182,53 @@ def _days_since(value: str | None, now: datetime) -> float | None:
     if parsed is None:
         return None
     return (now - parsed).total_seconds() / 86400.0
+
+
+def close_in_window(
+    opened_at: str | None,
+    sold_at: str | None,
+    *,
+    before_days: int = JUST_BOUGHT_DAYS,
+    after_days: int = JUST_SOLD_DAYS,
+) -> dict[str, Any] | None:
+    """Current sleeve padded by the just-bought / just-sold assessment windows.
+
+    ``days_before`` is ``JUST_BOUGHT_DAYS`` and ``days_after`` is
+    ``JUST_SOLD_DAYS`` — the same column clocks, not a second horizon.
+    ``end`` is set only once the name has sold (``sold_at`` + ``days_after``),
+    including when that date is still ahead of the latest close. An open
+    sleeve omits ``end`` so later prices stay on the same view.
+    """
+    opened = _parse_dt(opened_at)
+    sold = _parse_dt(sold_at)
+    if opened is None and sold is None:
+        return None
+    window: dict[str, Any] = {
+        "days_before": int(before_days),
+        "days_after": int(after_days),
+    }
+    if opened is not None:
+        window["start"] = (opened - timedelta(days=int(before_days))).date().isoformat()
+    if sold is not None:
+        window["end"] = (sold + timedelta(days=int(after_days))).date().isoformat()
+    return window
+
+
+def realized_exit_pnl_pct(exit_price: float | None, avg_cost: float | None) -> float | None:
+    """Single realized exit return ``(exit_price - avg_cost) / avg_cost``.
+
+    One figure for a sold sleeve. Not a rolling series of exit P&Ls.
+    """
+    if exit_price is None or avg_cost is None:
+        return None
+    try:
+        exit_value = float(exit_price)
+        cost = float(avg_cost)
+    except (TypeError, ValueError):
+        return None
+    if cost <= 0:
+        return None
+    return round((exit_value - cost) / cost, 4)
 
 
 def _signal(row: dict[str, Any]) -> str:
@@ -423,6 +470,9 @@ def _slim_card(
     pnl_pct = None
     if avg_cost and avg_cost > 0 and mark and mark > 0:
         pnl_pct = round((mark - avg_cost) / avg_cost, 4)
+    exit_pnl = None
+    if column_id in SOLD_TENURE_COLUMNS:
+        exit_pnl = realized_exit_pnl_pct(exit_price, avg_cost)
     card = {
         "ticker": ticker,
         "name": str(src.get("name") or hold.get("name") or ticker),
@@ -448,6 +498,11 @@ def _slim_card(
         card["exit_price"] = round(float(exit_price), 4)
     if pnl_pct is not None:
         card["unrealized_pnl_pct"] = pnl_pct
+    if exit_pnl is not None:
+        card["realized_exit_pnl_pct"] = exit_pnl
+    close_in = close_in_window(opened_at, sold_at)
+    if close_in:
+        card["close_in"] = close_in
     days_in_column: float | None = None
     tenure_basis: str | None = None
     if column_id in HELD_TENURE_COLUMNS:
@@ -1471,6 +1526,8 @@ __all__ = [
     "TENURE_LONG_DAYS",
     "build_lifecycle_board",
     "classify_board_column",
+    "close_in_window",
+    "realized_exit_pnl_pct",
     "lifecycle_board_age_hours",
     "merge_track_columns",
     "maybe_refresh_lifecycle_board",
