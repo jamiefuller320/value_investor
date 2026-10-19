@@ -224,11 +224,15 @@ def test_held_name_is_not_also_on_the_screen_funnel(tmp_path: Path):
     assert sold_card["opened_at"][:10] == (NOW - timedelta(days=20)).date().isoformat()
     assert sold_card["sold_at"][:10] == (NOW - timedelta(days=4)).date().isoformat()
     hold_open = date.fromisoformat(hold_card["opened_at"][:10])
-    assert hold_card["close_in"]["start"] == (hold_open - timedelta(days=JUST_BOUGHT_DAYS)).isoformat()
+    assert (
+        hold_card["close_in"]["start"] == (hold_open - timedelta(days=JUST_BOUGHT_DAYS)).isoformat()
+    )
     assert "end" not in hold_card["close_in"]
     sold_open = date.fromisoformat(sold_card["opened_at"][:10])
     sold_on = date.fromisoformat(sold_card["sold_at"][:10])
-    assert sold_card["close_in"]["start"] == (sold_open - timedelta(days=JUST_BOUGHT_DAYS)).isoformat()
+    assert (
+        sold_card["close_in"]["start"] == (sold_open - timedelta(days=JUST_BOUGHT_DAYS)).isoformat()
+    )
     assert sold_card["close_in"]["end"] == (sold_on + timedelta(days=JUST_SOLD_DAYS)).isoformat()
     assert sold_on + timedelta(days=JUST_SOLD_DAYS) > NOW.date()
     wait_card = next(card for card in columns["not_now"]["shown"] if card["ticker"] == "WAIT.L")
