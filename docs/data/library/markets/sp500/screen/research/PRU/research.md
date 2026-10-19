@@ -1,13 +1,13 @@
 # Prudential Financial, Inc. (PRU) — Research memo
 
-_Version 1 · Updated 2026-09-16T07:38:29.503052+00:00 · Mode: structured_verdict_
+_Version 1 · Updated 2026-10-19T07:42:07.295084+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: neutral
 Risk: medium
-Confidence: 0.68
-Rationale: SEC filings show higher segment adjusted operating income and PGIM growth, but Japan remediation, extended sales suspension, and legacy-block erosion partly offset the quantitative strong-buy case.
-RiskTags: regulatory, governance, cyclical, accounting, leverage
+Confidence: 0.64
+Rationale: FY2025 10-K (filed 2026-02-12) shows higher segment adjusted operating income and SEC OCF (~$6.3bn) covers common dividends (~$1.9bn) at ~3.3×, but statutory OCF fell vs FY2024 and Japan new-sales suspension poses a 2026 headwind; Yahoo...
+RiskTags: regulatory, cyclical, leverage, pension
