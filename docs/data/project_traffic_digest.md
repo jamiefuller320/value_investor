@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-19T17:32:21.752427+00:00`
+Generated: `2026-10-19T18:49:17.589458+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,7 +33,8 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- _(none merged today)_
+- `ingest_narrow`/verified PR #1130 `eng-20261019-01` — Seed IR allowlist for unmeasured/zero-body ICG.L — empty allowlist after 0-improve pin (igc-20261019-03)
+- `parked_hunter`/verified PR #1127 `eng-20261018-05` — Hunt fetchable IR source for parked hang_seng leftover 1109.HK
 
 ## PR fix occasions — common failure reasons
 - Occasion count: 224
