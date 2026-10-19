@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-18T07:08:59.359944+00:00
+Track: `buy_tier_level_native` · updated 2026-10-19T07:27:58.521520+00:00
 
 ## Portfolio loser feedback
 
@@ -50,7 +50,7 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:59.359944+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 47%
+- conviction 55%
 
 ### DHL.DE — intact / hold_tolerate (+3.0%)
 - still buy

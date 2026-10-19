@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-18T07:09:31.570778+00:00
+Track: `buy_tier_level` · updated 2026-10-19T07:28:32.092729+00:00
 
 ## Portfolio loser feedback
 
@@ -23,10 +23,13 @@ Track: `buy_tier_level` · updated 2026-10-18T07:09:31.570778+00:00
 - still buy
 - cheapness family still passes
 
-### CAML.L — weakening / watch_review (-13.3%)
-- conviction 31% below intact floor
+### CAML.L — intact / hold_tolerate (-13.3%)
+- price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 37%
 
 ### PEBB.L — intact / hold_tolerate (-10.7%)
 - price drawdown alone does not invalidate value thesis
@@ -71,10 +74,12 @@ Track: `buy_tier_level` · updated 2026-10-18T07:09:31.570778+00:00
 - data_quality 1.00
 - conviction 60%
 
-### PAF.L — weakening / watch_review (+0.0%)
-- conviction 34% below intact floor
+### PAF.L — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 39%
 
 ### IGR.L — weakening / watch_review (+0.5%)
 - research verdict caution

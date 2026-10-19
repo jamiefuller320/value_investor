@@ -1,14 +1,17 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-18T07:07:54.926078+00:00
+Track: `buy_tier_level` · updated 2026-10-19T07:27:12.938377+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **28** / 120 (23% count, 21% NAV)
+- Losers: **27** / 120 (22% count, 21% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
+
+### JBHT — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### GEN — intact / watch_review (-21.2%)
 - deep drawdown (-21.2%) — re-check facts; thesis still intact
@@ -199,11 +202,6 @@ Track: `buy_tier_level` · updated 2026-10-18T07:07:54.926078+00:00
 - data_quality 1.00
 - conviction 88%
 
-### HPE — weakening / watch_review (-6.0%)
-- conviction 30% below intact floor
-- still buy
-- research accumulate
-
 ### UDR — intact / hold_tolerate (-5.8%)
 - price drawdown alone does not invalidate value thesis
 - still buy
@@ -310,7 +308,7 @@ Track: `buy_tier_level` · updated 2026-10-18T07:07:54.926078+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 84%
+- conviction 85%
 
 ### GL — intact / hold_tolerate (-3.2%)
 - still strong_buy
@@ -338,7 +336,7 @@ Track: `buy_tier_level` · updated 2026-10-18T07:07:54.926078+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 40%
+- conviction 47%
 
 ### REG — intact / hold_tolerate (-2.7%)
 - still buy
@@ -445,7 +443,7 @@ Track: `buy_tier_level` · updated 2026-10-18T07:07:54.926078+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 46%
+- conviction 52%
 
 ### DECK — intact / hold_tolerate (+0.0%)
 - still buy
@@ -454,18 +452,12 @@ Track: `buy_tier_level` · updated 2026-10-18T07:07:54.926078+00:00
 - data_quality 1.00
 - conviction 43%
 
-### JBHT — weakening / watch_review (+0.0%)
-- research verdict caution
-- cheapness family no longer passes
-- still buy
-- data_quality 1.00
-
 ### WYNN — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 42%
+- conviction 43%
 
 ### CPRT — intact / hold_tolerate (+0.0%)
 - still buy
@@ -473,6 +465,25 @@ Track: `buy_tier_level` · updated 2026-10-18T07:07:54.926078+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 42%
+
+### ACGL — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 45%
+
+### JBL — weakening / watch_review (+0.0%)
+- research verdict caution
+- still buy
+- cheapness family still passes
+
+### MCD — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.90
+- conviction 39%
 
 ### CINF — intact / hold_tolerate (+0.1%)
 - still strong_buy
@@ -655,7 +666,7 @@ Track: `buy_tier_level` · updated 2026-10-18T07:07:54.926078+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 66%
+- conviction 74%
 
 ### GDDY — intact / hold_tolerate (+2.5%)
 - still buy
@@ -697,12 +708,6 @@ Track: `buy_tier_level` · updated 2026-10-18T07:07:54.926078+00:00
 - data_quality 1.00
 - conviction 39%
 
-### ADP — weakening / watch_review (+4.1%)
-- left buy tier (hold)
-- conviction 32% below intact floor
-- research accumulate
-- cheapness family still passes
-
 ### ZTS — intact / hold_tolerate (+4.7%)
 - still buy
 - research accumulate
@@ -720,7 +725,7 @@ Track: `buy_tier_level` · updated 2026-10-18T07:07:54.926078+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 57%
+- conviction 56%
 
 ### AIG — intact / hold_tolerate (+5.9%)
 - still strong_buy
@@ -735,13 +740,6 @@ Track: `buy_tier_level` · updated 2026-10-18T07:07:54.926078+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 70%
-
-### OXY — intact / hold_tolerate (+6.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 39%
 
 ### LDOS — intact / hold_tolerate (+6.0%)
 - still strong_buy

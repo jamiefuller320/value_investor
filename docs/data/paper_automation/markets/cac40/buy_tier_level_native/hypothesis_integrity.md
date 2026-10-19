@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-18T07:09:23.690325+00:00
+Track: `buy_tier_level_native` · updated 2026-10-19T07:28:24.460180+00:00
 
 ## Portfolio loser feedback
 
@@ -10,7 +10,7 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:09:23.690325+00:00
 
 ## Holding reviews
 
-### DG.PA — intact / hold_tolerate (-1.2%)
+### DG.PA — intact / hold_tolerate (-0.9%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

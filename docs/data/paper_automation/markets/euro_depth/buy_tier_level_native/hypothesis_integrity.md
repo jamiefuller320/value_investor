@@ -1,16 +1,22 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-18T07:08:38.252348+00:00
+Track: `buy_tier_level_native` · updated 2026-10-19T07:27:34.541092+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **2** / 40 (5% count, 4% NAV)
+- Losers: **1** / 39 (3% count, 2% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 - Selection feedback:
-  - cheapness fails more often among losers (50% vs 0%)
+  - garp fails more often among losers (100% vs 55%)
 
 ## Holding reviews
+
+### IFX.DE — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### KRX.IR — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### MELE.BR — intact / hold_tolerate (-13.4%)
 - price drawdown alone does not invalidate value thesis
@@ -18,21 +24,14 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:38.252348+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 40%
-
-### IFX.DE — weakening / watch_review (-5.3%)
-- research verdict caution
-- cheapness family no longer passes
-- conviction 19% below intact floor
-- still buy
-- data_quality 1.00
+- conviction 47%
 
 ### RAND.AS — intact / hold_tolerate (-4.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 49%
+- conviction 58%
 
 ### SKA-B.ST — intact / hold_tolerate (-3.2%)
 - still buy
@@ -46,7 +45,7 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:38.252348+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 47%
+- conviction 54%
 
 ### OIZ.IR — intact / hold_tolerate (-2.5%)
 - still buy
@@ -81,7 +80,7 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:38.252348+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 40%
+- conviction 47%
 
 ### DG.PA — intact / hold_tolerate (-2.2%)
 - still strong_buy
@@ -99,7 +98,6 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:38.252348+00:00
 
 ### COR.LS — weakening / watch_review (-1.9%)
 - research verdict caution
-- conviction 24% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -115,7 +113,7 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:38.252348+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 53%
+- conviction 60%
 
 ### TTE.PA — intact / hold_tolerate (-0.4%)
 - still strong_buy
@@ -144,11 +142,6 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:38.252348+00:00
 - data_quality 1.00
 - conviction 45%
 
-### KRX.IR — weakening / watch_review (+0.0%)
-- research verdict neutral
-- still buy
-- cheapness family still passes
-
 ### OMV.VI — intact / hold_tolerate (+0.5%)
 - still buy
 - research accumulate
@@ -164,7 +157,7 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:38.252348+00:00
 - conviction 44%
 
 ### MT.AS — weakening / watch_review (+1.0%)
-- conviction 28% below intact floor
+- conviction 34% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -208,7 +201,7 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:38.252348+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 48%
+- conviction 57%
 
 ### MC.PA — intact / hold_tolerate (+3.3%)
 - still buy
@@ -222,7 +215,7 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:38.252348+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 41%
+- conviction 48%
 
 ### AKZA.AS — intact / hold_tolerate (+4.5%)
 - still buy
@@ -258,11 +251,6 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:38.252348+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 53%
-
-### HEIA.AS — weakening / watch_review (+6.9%)
-- left buy tier (hold)
-- research accumulate
-- cheapness family still passes
 
 ### PHIA.AS — intact / hold_tolerate (+7.9%)
 - still strong_buy

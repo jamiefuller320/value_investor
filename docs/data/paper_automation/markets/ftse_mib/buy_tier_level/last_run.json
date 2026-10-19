@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-18T08:09:46.794463+01:00",
+    "local_time": "2026-10-19T08:28:53.796899+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-18T08:00:00+01:00",
-    "settle_at": "2026-10-18T09:15:00+01:00",
+    "market_open_at": "2026-10-19T08:00:00+01:00",
+    "settle_at": "2026-10-19T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
@@ -1009,9 +1009,26 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-19T08:28:53.796899+01:00",
+        "portfolio_value": 874.67,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.8417
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-18T08:09:46.794463+01:00",
+    "last_mark_at": "2026-10-19T08:28:53.796899+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -1024,7 +1041,7 @@
     "schema_version": 2,
     "market_id": "ftse_mib",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-18T07:09:46.829702+00:00",
+    "generated_at": "2026-10-19T07:28:53.885971+00:00",
     "observe_only": true,
     "open_count": 3,
     "closed_count": 0,
@@ -1103,7 +1120,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-18T07:09:46.830804+00:00",
+    "generated_at": "2026-10-19T07:28:53.886962+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1200,7 +1217,7 @@
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -1208,8 +1225,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-18T07:09:46.832344+00:00",
-    "as_of": "2026-10-18T08:09:46.794463+01:00",
+    "updated_at": "2026-10-19T07:28:53.888224+00:00",
+    "as_of": "2026-10-19T08:28:53.796899+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1388,7 +1405,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-18T07:09:46.834237+00:00",
+    "generated_at": "2026-10-19T07:28:53.889879+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1463,73 +1480,73 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-18T07:09:46.837351+00:00",
-    "open_count": 3,
-    "closed_count": 3,
-    "scored_count": 3,
-    "scored_count_all": 3,
+    "generated_at": "2026-10-19T07:28:53.893213+00:00",
+    "open_count": 1,
+    "closed_count": 5,
+    "scored_count": 5,
+    "scored_count_all": 5,
     "recommit_scored_count": 0,
     "entry_kind_counts": {
-      "first_entry": 3,
+      "first_entry": 5,
       "recommit": 0
     },
-    "any_de_risk_count": 0,
+    "any_de_risk_count": 1,
     "winning_cadence_counts": {
-      "dca_2x_weekly": 3
+      "dca_2x_weekly": 5
     },
     "cadence_stats": {
       "dca_2x_weekly": {
         "label": "50/50 over 1 week",
-        "scored_episodes": 3,
-        "mean_end_value_delta": -1.6,
-        "mean_de_risk_gbp": -1.3967,
-        "de_risk_rate": 0.0,
-        "win_count": 3
+        "scored_episodes": 5,
+        "mean_end_value_delta": -0.812,
+        "mean_de_risk_gbp": -0.568,
+        "de_risk_rate": 0.2,
+        "win_count": 5
       },
       "dca_4x_weekly": {
         "label": "25% weekly \u00d7 4",
-        "scored_episodes": 3,
-        "mean_end_value_delta": -6.3033,
-        "mean_de_risk_gbp": -3.7933,
-        "de_risk_rate": 0.0,
+        "scored_episodes": 5,
+        "mean_end_value_delta": -5.862,
+        "mean_de_risk_gbp": -4.03,
+        "de_risk_rate": 0.2,
         "win_count": 0
       },
       "dca_2x_biweekly": {
         "label": "50/50 over 2 weeks",
-        "scored_episodes": 3,
-        "mean_end_value_delta": -6.76,
-        "mean_de_risk_gbp": -6.19,
-        "de_risk_rate": 0.0,
+        "scored_episodes": 5,
+        "mean_end_value_delta": -5.732,
+        "mean_de_risk_gbp": -5.16,
+        "de_risk_rate": 0.2,
         "win_count": 0
       },
       "dca_5x_weekday": {
         "label": "20% over 5 weekday marks",
-        "scored_episodes": 3,
-        "mean_end_value_delta": -4.81,
-        "mean_de_risk_gbp": -4.25,
-        "de_risk_rate": 0.0,
+        "scored_episodes": 5,
+        "mean_end_value_delta": -3.7,
+        "mean_de_risk_gbp": -3.13,
+        "de_risk_rate": 0.2,
         "win_count": 0
       }
     },
     "readiness": {
       "ready_for_cadence_analysis": false,
-      "closed_episodes": 3,
+      "closed_episodes": 5,
       "closed_target": 12,
       "tracks_with_closed": 1,
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
-      "first_entry_scored": 3,
+      "first_entry_scored": 5,
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
     "marked_this_pass": 3,
-    "closed_this_pass": 0
+    "closed_this_pass": 2
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-18T08:09:46.794463+01:00",
+    "generated_at": "2026-10-19T08:28:53.796899+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1586,7 +1603,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-18T08:09:46.794463+01:00",
+    "generated_at": "2026-10-19T08:28:53.796899+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1613,7 +1630,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-18T08:09:46.794463+01:00",
+      "generated_at": "2026-10-19T08:28:53.796899+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
@@ -1642,7 +1659,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-18T07:09:46.841841+00:00",
+  "generated_at": "2026-10-19T07:28:53.897086+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

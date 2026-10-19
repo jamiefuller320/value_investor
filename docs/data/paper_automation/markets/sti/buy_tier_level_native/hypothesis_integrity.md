@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-18T07:10:31.199101+00:00
+Track: `buy_tier_level_native` · updated 2026-10-19T07:29:21.610769+00:00
 
 ## Portfolio loser feedback
 
@@ -10,7 +10,7 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:10:31.199101+00:00
 
 ## Holding reviews
 
-### U14.SI — weakening / watch_review (-3.5%)
+### U14.SI — weakening / watch_review (-2.5%)
 - research verdict caution
 - still buy
 - cheapness family still passes
@@ -22,7 +22,7 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:10:31.199101+00:00
 - data_quality 1.00
 - conviction 82%
 
-### BUOU.SI — weakening / watch_review (+0.7%)
+### BUOU.SI — weakening / watch_review (+1.3%)
 - research verdict caution
 - still buy
 - cheapness family still passes

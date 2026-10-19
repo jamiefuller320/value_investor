@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-18T07:09:54.208239+00:00
+Track: `buy_tier_level_native` · updated 2026-10-19T07:28:54.492436+00:00
 
 ## Portfolio loser feedback
 
@@ -9,6 +9,12 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:09:54.208239+00:00
 - Balancing hint: `maintain`
 
 ## Holding reviews
+
+### ASM.AS — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### ASML.AS — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### RAND.AS — intact / hold_tolerate (-4.0%)
 - still buy
@@ -22,18 +28,6 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:09:54.208239+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 52%
-
-### ASM.AS — intact / hold_tolerate (+0.0%)
-- still buy
-- cheapness family still passes
-- data_quality 1.00
-- conviction 36%
-
-### ASML.AS — weakening / watch_review (+0.0%)
-- research verdict neutral
-- conviction 35% below intact floor
-- still buy
-- cheapness family still passes
 
 ### AD.AS — intact / hold_tolerate (+1.3%)
 - still strong_buy

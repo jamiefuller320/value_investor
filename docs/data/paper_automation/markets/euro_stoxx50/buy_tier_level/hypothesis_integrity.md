@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-18T07:08:59.292136+00:00
+Track: `buy_tier_level` · updated 2026-10-19T07:27:58.468891+00:00
 
 ## Portfolio loser feedback
 
@@ -47,7 +47,7 @@ Track: `buy_tier_level` · updated 2026-10-18T07:08:59.292136+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 47%
+- conviction 55%
 
 ### SAN.PA — intact / hold_tolerate (+1.6%)
 - still strong_buy
