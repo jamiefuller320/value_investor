@@ -127,13 +127,14 @@ starter-size knobs from this overlay.
 
 ## Dashboard board
 
-The dashboard **Lifecycle** tab has two sub-pages (same `paper-subnav` pattern
+The dashboard **Lifecycle** tab has three sub-pages (same `paper-subnav` pattern
 as Portfolio / Performance):
 
 | Sub-page | Hash | Contents |
 |----------|------|----------|
 | **Positions** (default) | `#lifecycle` · `#lifecycle/{market}` · `#lifecycle/{market}/{track}` | Per-market funnel of individual names + catalog experiment chips |
 | **Maturity mix** | `#lifecycle/maturity` | L463 observe twin — early-share trajectory, freshness, UW-by-stage / column shares (prefer Better/Worse over raw mix %). Separate store from `observe_utilization`, `beat_market`, and exit_shadow |
+| **Sealed models** | `#lifecycle/sealed/{n200\|n201\|n206\|n210}` | One page per sealed observe book. One-line chips (ticker, days in phase, episode %). Display only — `influences_live` stays false. See [ops-monitor](ops-monitor.md#sealed-observe-lifecycle-pages) |
 
 Legacy `#lifecycle/{market}/{track}` bookmarks still open **Positions**.
 

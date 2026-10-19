@@ -512,6 +512,12 @@ def _find_exit_index(
     return None, None
 
 
+def _sealed_lifecycle_rows(episodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    from value_investor.sealed_lifecycle import slim_lifecycle_episodes
+
+    return slim_lifecycle_episodes(episodes)
+
+
 def build_n210_observe(
     snapshots: list[RunSnapshot],
     *,
@@ -827,6 +833,7 @@ def build_n210_observe(
         "change_markers": markers,
         "episodes_sample": episodes[:25],
         "open_episodes_sample": open_episodes[:25],
+        "lifecycle_episodes": _sealed_lifecycle_rows([*episodes, *open_episodes]),
         "soft_gaps": [
             (
                 "AI overlay fields (adjusted_signal / research_verdict / "
@@ -884,6 +891,9 @@ def refresh_n210_ai_judgment_observe(
         store.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
         reg_path.parent.mkdir(parents=True, exist_ok=True)
         reg_path.write_text(json.dumps(registration, indent=2) + "\n", encoding="utf-8")
+        from value_investor.sealed_lifecycle import publish_sealed_lifecycle_projection
+
+        publish_sealed_lifecycle_projection(store.parent)
         payload["store_path"] = str(store)
         payload["registration_path"] = str(reg_path)
     return payload

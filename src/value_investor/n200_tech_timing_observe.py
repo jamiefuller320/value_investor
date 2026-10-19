@@ -498,6 +498,12 @@ def build_per_lever_rollup(
     }
 
 
+def _sealed_lifecycle_rows(episodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    from value_investor.sealed_lifecycle import slim_lifecycle_episodes
+
+    return slim_lifecycle_episodes(episodes)
+
+
 def build_n200_observe(
     snapshots: list[RunSnapshot],
     *,
@@ -512,6 +518,7 @@ def build_n200_observe(
     stress_pct = float(cfg.stress_trade_cost_pct)
     cost_fields = cfg.primary_cost_fields()
     episodes: list[dict[str, Any]] = []
+    open_lifecycle: list[dict[str, Any]] = []
     skipped_ineligible = 0
     cell_returns: dict[str, list[float]] = {_cell_key(e, x): [] for e in offsets for x in offsets}
     stress_control_returns: list[float] = []
@@ -535,6 +542,14 @@ def build_n200_observe(
                     exit_idx = j
                     break
             if exit_idx is None:
+                open_lifecycle.append(
+                    {
+                        "ticker": ticker,
+                        "entry_run_at": snap.run_at,
+                        "status": "open",
+                        "influences_live": False,
+                    }
+                )
                 continue  # still open — not scored for primary
             episode_cells: dict[str, float | None] = {}
             episode_entry_lever: dict[int, float] = {}
@@ -763,6 +778,7 @@ def build_n200_observe(
         "per_lever_scoreboards": per_lever,
         "change_markers": markers,
         "episodes_sample": episodes[:25],
+        "lifecycle_episodes": _sealed_lifecycle_rows([*episodes, *open_lifecycle]),
         "ops_doc": str(DEFAULT_OPS_DOC),
     }
 
@@ -807,6 +823,9 @@ def refresh_n200_tech_timing_observe(
         store.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
         reg_path.parent.mkdir(parents=True, exist_ok=True)
         reg_path.write_text(json.dumps(registration, indent=2) + "\n", encoding="utf-8")
+        from value_investor.sealed_lifecycle import publish_sealed_lifecycle_projection
+
+        publish_sealed_lifecycle_projection(store.parent)
     return payload
 
 

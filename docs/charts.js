@@ -617,6 +617,66 @@ function renderChartBody(payload, report, source, overlays, rangeMode) {
   `;
 }
 
+const priceChartCache = new Map();
+
+function cachedPriceChart(ticker) {
+  if (!ticker) return null;
+  const hit = priceChartCache.get(String(ticker));
+  if (!hit || !Array.isArray(hit.dates) || !hit.dates.length) return null;
+  return hit;
+}
+
+function rememberPriceChart(ticker, payload) {
+  if (!ticker || !payload || !Array.isArray(payload.dates) || !payload.dates.length) return;
+  priceChartCache.set(String(ticker), payload);
+}
+
+function paintPriceChart(body) {
+  const state = body && body._chartState;
+  if (!state) return;
+  body.innerHTML = renderChartBody(
+    state.payload,
+    state.report || {},
+    state.levelSource,
+    state.overlays || {},
+    state.rangeMode
+  );
+}
+
+function bindPriceChartBody(body) {
+  if (!body || body.dataset.levelToggleBound) return;
+  body.dataset.levelToggleBound = "1";
+  body.addEventListener("click", (event) => {
+    const state = body._chartState;
+    if (!state) return;
+    const levelButton = event.target.closest("[data-level-source]");
+    if (levelButton && !levelButton.disabled && body.contains(levelButton)) {
+      event.preventDefault();
+      state.levelSource = levelButton.dataset.levelSource || "current";
+      paintPriceChart(body);
+      return;
+    }
+    const rangeButton = event.target.closest("[data-chart-range]");
+    if (!rangeButton || rangeButton.disabled || !body.contains(rangeButton)) return;
+    event.preventDefault();
+    state.rangeMode = rangeButton.dataset.chartRange || "full";
+    paintPriceChart(body);
+  });
+}
+
+function showPriceChart(body, payload, report, overlays, rangeMode) {
+  if (!body) return;
+  body._chartState = {
+    payload,
+    report: report || {},
+    overlays: overlays || {},
+    levelSource: "current",
+    rangeMode: rangeMode || "full",
+  };
+  bindPriceChartBody(body);
+  paintPriceChart(body);
+}
+
 async function mountPriceChart(body, report, overlays) {
   if (!body) return;
   const path = chartPathForReport(report);
@@ -630,40 +690,26 @@ async function mountPriceChart(body, report, overlays) {
     const response = await fetch(path);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();
-    let levelSource = "current";
-    let rangeMode = "full";
-    const render = () => {
-      body.innerHTML = renderChartBody(
-        payload,
-        report || {},
-        levelSource,
-        overlays || {},
-        rangeMode
-      );
-    };
-    if (!body.dataset.levelToggleBound) {
-      body.dataset.levelToggleBound = "1";
-      body.addEventListener("click", (event) => {
-        const levelButton = event.target.closest("[data-level-source]");
-        if (levelButton && !levelButton.disabled && body.contains(levelButton)) {
-          event.preventDefault();
-          levelSource = levelButton.dataset.levelSource || "current";
-          render();
-          return;
-        }
-        const rangeButton = event.target.closest("[data-chart-range]");
-        if (!rangeButton || rangeButton.disabled || !body.contains(rangeButton)) return;
-        event.preventDefault();
-        rangeMode = rangeButton.dataset.chartRange || "full";
-        render();
-      });
-    }
-    render();
+    rememberPriceChart(report && report.ticker, payload);
+    showPriceChart(body, payload, report, overlays, "full");
   } catch (err) {
     body.innerHTML = `
       <p class="muted">Could not load price chart (${esc(err.message)}).</p>
       <p class="small muted">Charts are published for live-screen and lifecycle board names on dashboard update.</p>`;
   }
+}
+
+function openCachedPriceChart(ticker, overlays) {
+  const payload = cachedPriceChart(ticker);
+  if (!payload) return false;
+  const dialog = ensureChartDialog();
+  const title = document.getElementById("chart-title");
+  const body = document.getElementById("chart-body");
+  if (!dialog || !title || !body) return false;
+  title.textContent = String(ticker || "");
+  dialog.showModal();
+  showPriceChart(body, payload, { ticker }, overlays || {}, "close_in");
+  return true;
 }
 
 async function openPriceChart(report) {

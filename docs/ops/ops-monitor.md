@@ -489,11 +489,24 @@ L462 WoW NAV twin, N153 FX bookkeeping, or decision-review knob apply.
 | Store | `docs/data/lifecycle_maturity_trajectory.json` (ops-monitor optional commit + dashboard-bridge; email-report excludes) |
 | Board | `docs/data/lifecycle_board.json` — light weekday refresh (**L468**) before maturity collect when age ≥18h; also email-report / local `/api/refresh` / lifecycle experiment start\|ack |
 | Trigger | `collect_ops_findings` → `check_lifecycle_maturity_trajectory` (board light-refresh then twin); also queue-health |
-| Dashboard | Lifecycle → **Maturity mix** (`#lifecycle/maturity`) — trajectory badges + freshness (prefer over raw counts); Positions board stays on `#lifecycle` / `#lifecycle/{market}` |
+| Dashboard | Lifecycle → **Maturity mix** (`#lifecycle/maturity`) — trajectory badges + freshness (prefer over raw counts); Positions board stays on `#lifecycle` / `#lifecycle/{market}`; **Sealed models** (`#lifecycle/sealed/n200` and n201 / n206 / n210) is a separate display of the four observe books |
 | Finding | **Lifecycle maturity mix trajectory stalled** when missing/stale (`auto_fixable=False`) |
 | CLI (optional) | `ftse-dashboard-bridge refresh-lifecycle-maturity`; `ftse-dashboard-bridge refresh-lifecycle-board` |
 
 Young / focus books looking early-heavy is expected — headline context, not a heal cue.
+
+### Sealed observe lifecycle pages
+
+The four `sealed_observe_only` refreshes (`check_n200_tech_timing_observe`,
+`check_n201_value_mom_observe`, `check_n206_plain_ey_observe`,
+`check_n210_ai_judgment_observe`) also write
+`docs/data/sealed_lifecycle.json`. Each model page groups one-line chips
+(ticker, days in the current column, episode fair-cost % or a stored open
+mark) under just bought / holding / just sold / post sale, using
+`JUST_BOUGHT_DAYS` and `JUST_SOLD_DAYS` (both 14). The chip percent is not
+the cohort median and not the sample-mean strip. `influences_live` stays
+false. No extra cron and no human gate. Dashboard: Lifecycle → **Sealed
+models** (`#lifecycle/sealed/n200`).
 
 ### Weekday light lifecycle_board refresh (L468)
 
