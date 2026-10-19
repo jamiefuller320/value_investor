@@ -8330,7 +8330,10 @@ def test_fetch_filings_ir_allowlist_euro_depth_krx_ir_builtins(tmp_path: Path):
     assert len(rows) == 2
     assert all(row["source"] == "ir_allowlist" for row in rows)
     urls = [row["url"] for row in rows]
-    assert any("annual-report.kingspan.com" in url and "KS_AR25_Web.pdf" in url for url in urls)
+    assert any(
+        "annual-report.kingspan.com" in url and "KS_AR25_Financial_Statements.pdf" in url
+        for url in urls
+    )
     assert any("kgr-interim-statement-hy-2026.pdf" in url for url in urls)
     assert sum(1 for row in rows if row["period"] == "annual") == 1
     assert sum(1 for row in rows if row["period"] == "interim") == 1
@@ -12162,9 +12165,11 @@ def test_parked_source_hunter_krx_ir_euro_depth_has_fetchable_ir():
     interim = [row for row in rows if row["period"] == "interim"]
     assert len(annual) == 1
     assert len(interim) == 1
-    body = fetch_filing_body(annual[0]["url"])
-    assert body
+    body, source = _fetch_ir_allowlist_body(annual[0], ticker="KRX.IR")
+    assert body and source
     assert len(body) >= 50000
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], body, ticker="KRX.IR")
+    assert valid, reason
 
 
 def test_parked_source_hunter_jmt_ls_euro_depth_has_fetchable_ir():
