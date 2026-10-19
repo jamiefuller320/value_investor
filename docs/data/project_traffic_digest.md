@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-18T07:26:44.996610+00:00`
+Generated: `2026-10-19T02:38:01.691221+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -25,20 +25,18 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
-- [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=fail at 2026-10-18T02:31:44.831817+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Queue health overall=idle; headline=Queue and hunter idle. _(source: docs/data/queue_health.json)_
+- [ok] Ops monitor overall=warn at 2026-10-18T07:19:31.471617+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `ingest_narrow`/verified PR #1125 `eng-20261018-04` — Seed IR allowlist for unmeasured/zero-body SOLB.BR (bel20) — empty allowlist after 0-improve pin (igc-20260929-06)
-- `parked_hunter`/verified PR #1124 `eng-20261018-01` — Hunt fetchable IR source for parked hang_seng leftover 2331.HK
-- `parked_hunter`/verified PR #1123 `eng-20261017-11` — Hunt fetchable IR source for parked hang_seng leftover 0968.HK
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 221
+- Occasion count: 224
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 4×
@@ -50,8 +48,11 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 
 ## Ops-monitor email handoff
 - Email subject: `FTSE Ops Monitor — WARN`
-- Findings: 10 (open=10, resolved=0)
+- Findings: 13 (open=12, resolved=1)
 - [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN FTSE decision-input utilization gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Universe archive body-miss rate elevated — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Universe archive pack bottleneck review stale — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN Price-only excess misstates track performance — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN Two-lot retention beats full exit in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
@@ -60,7 +61,6 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [open] WARN Decision-review knobs saturated at bounds — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN Paper book would halt on drawdown or concentration — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN Deferred idea triggers name frozen books — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**

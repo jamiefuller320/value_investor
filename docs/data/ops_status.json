@@ -1,12 +1,39 @@
 {
-  "run_at": "2026-10-18T07:19:31.471617+00:00",
+  "run_at": "2026-10-19T02:31:47.216944+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "12 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, ftse_smallcap, hang_seng, nasdaq100 (+2 more): asx200/BWP.AX (no_memo, 343.33h since flip), ftse_smallcap/ENQ.L (no_key_bodies, 319.33h since flip), hang_seng/0001.HK (no_memo, 151.33h since flip), aex/PRX.AS (no_memo, 103.33h since flip), asx200/GMD.AX (no_key_bodies, 103.33h since flip), euro_depth/PRX.AS (no_memo, 103.33h since flip), sp500/NUE (no_memo, 103.33h since flip), tsx60/ABX.TO (no_key_bodies, 103.33h since flip), tsx60/SAP.TO (no_key_bodies, 103.33h since flip), tsx60/TECK-B.TO (no_key_bodies, 103.33h since flip) (+2 more). Blocking: no_key_bodies=5, no_memo=7.",
+      "summary": "22 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, ftse350, ftse_smallcap, hang_seng (+4 more): asx200/BWP.AX (no_memo, 362.53h since flip), ftse_smallcap/ENQ.L (no_key_bodies, 338.53h since flip), hang_seng/0001.HK (no_memo, 170.53h since flip), aex/MT.AS (no_memo, 122.53h since flip), aex/PRX.AS (no_memo, 122.53h since flip), asx200/GMD.AX (no_key_bodies, 122.53h since flip), euro_depth/PRX.AS (no_memo, 122.53h since flip), sp500/NUE (no_memo, 122.53h since flip), tsx60/ABX.TO (no_key_bodies, 122.53h since flip), tsx60/SAP.TO (no_key_bodies, 122.53h since flip) (+12 more). Blocking: no_index=8, no_key_bodies=5, no_memo=9.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "ingest",
+      "title": "FTSE decision-input utilization gap",
+      "summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `memo_recent` missing on 9/67 names (e.g. EZJ.L, HBR.L, HTG.L, LRE.L, MAB.L, PRU.L, RKT.L, GSK.L, JSG.L). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "ingest",
+      "title": "Universe archive body-miss rate elevated",
+      "summary": "Archive body-miss proxy 51% of 319 recent buy-tier flips; 21 still open without key bodies (sample: euro_depth/NBA.LS, tsx60/SAP.TO, tsx60/PPL.TO, tsx60/TECK-B.TO, euro_stoxx50/ADYEN.AS, aim/MPE.L). Observe-only outcome signal — not a cold-store start gate; do not eng-spray or add a second live crawler / fourth sprint stream (N180/N181).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "ingest",
+      "title": "Universe archive pack bottleneck review stale",
+      "summary": "Archive pack bottleneck review age 50.4h exceeds 36h (expected weekday 22:00 UTC refresh).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -42,7 +69,7 @@
       "severity": "info",
       "category": "research",
       "title": "N200 tech-timing observe refreshed",
-      "summary": "strand-b-plain-value-tech-timing-v0: 101 completed episodes over 9 weeks; entries/week=11.222; control smooth_ret_cohort_median=-0.0055 (fair costs primary); entry_lever=win; exit_lever=lose (independent of path P&L); stress_3pct_report_only=-0.06. Observe-only — no live writes (F8).",
+      "summary": "strand-b-plain-value-tech-timing-v0: 106 completed episodes over 10 weeks; entries/week=10.6; control smooth_ret_cohort_median=-0.0055 (fair costs primary); entry_lever=win; exit_lever=lose (independent of path P&L); stress_3pct_report_only=-0.06. Observe-only — no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -60,7 +87,7 @@
       "severity": "info",
       "category": "research",
       "title": "N201 value-mom observe refreshed",
-      "summary": "strand-c-short-horizon-value-mom-v0: 114 completed episodes over 12 weeks; entries/week=9.5; smooth_ret_cohort_median=0.022167 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.007548; stress_3pct_report_only=-0.041579; skipped_missing_entry_fields=64925. Observe-only — launch-queue waiter; no live writes (F8).",
+      "summary": "strand-c-short-horizon-value-mom-v0: 114 completed episodes over 13 weeks; entries/week=8.769; smooth_ret_cohort_median=0.022167 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.007548; stress_3pct_report_only=-0.041579; skipped_missing_entry_fields=66587. Observe-only — launch-queue waiter; no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -78,7 +105,7 @@
       "severity": "info",
       "category": "research",
       "title": "N210 AI-judgment observe refreshed",
-      "summary": "N210 (strand-e-ai-judgment-fixed-stake-v0) refreshed; pipeline=episode_walker_active; episodes=0 (open=3); weeks=9; volume_gate_met=False. Observe-only; influences_live=false; matched-30 untouched.",
+      "summary": "N210 (strand-e-ai-judgment-fixed-stake-v0) refreshed; pipeline=episode_walker_active; episodes=3 (open=1); weeks=10; volume_gate_met=False. Observe-only; influences_live=false; matched-30 untouched.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -87,7 +114,7 @@
       "severity": "info",
       "category": "research",
       "title": "N206 plain-EY observe refreshed",
-      "summary": "strand-d-plain-ey-identity-v0: 191 completed episodes over 12 weeks; entries/week=15.917; smooth_ret_cohort_median=0.012977 (fair costs primary; fixed-stake %; independent of fund NAV); cash_excess_report_only=0.012977; stress_3pct_report_only=-0.042502; skipped_missing_entry_fields=0. Observe-only — influences_live false; alone-first; no filing ingest sprint; no live writes (F8).",
+      "summary": "strand-d-plain-ey-identity-v0: 192 completed episodes over 13 weeks; entries/week=14.769; smooth_ret_cohort_median=0.01313 (fair costs primary; fixed-stake %; independent of fund NAV); cash_excess_report_only=0.01313; stress_3pct_report_only=-0.041513; skipped_missing_entry_fields=0. Observe-only — influences_live false; alone-first; no filing ingest sprint; no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -166,42 +193,26 @@
     },
     {
       "severity": "warn",
-      "category": "workflows",
-      "title": "Recent workflow failure: FTSE Ops Monitor",
-      "summary": "1 unresolved failure(s) since last success (runs: 39090347272).",
-      "auto_fixable": false,
-      "fixed": true,
-      "action_taken": "Recovery run in flight (#39107168681); suppressed from alert"
-    },
-    {
-      "severity": "warn",
       "category": "engineering",
-      "title": "Parked engineering tasks need manual review",
-      "summary": "1 parked task(s): eng-20261018-03",
-      "auto_fixable": false,
+      "title": "Orphaned pr_open engineering tasks",
+      "summary": "Tasks without matching open PR: eng-20261018-05",
+      "auto_fixable": true,
       "fixed": false,
       "action_taken": null
     }
   ],
-  "auto_fixes": [
-    {
-      "action": "market_eng_gap_burndown",
-      "detail": "gap_closure_compile for bel20 → eng-20261018-05"
-    }
-  ],
-  "drafted_task_ids": [
-    "eng-20261018-05"
-  ],
+  "auto_fixes": [],
+  "drafted_task_ids": [],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": false,
+      "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 30,
       "last_success_at": "2026-10-18T00:56:41+00:00",
       "last_success_run_id": 39084636610,
-      "age_hours": 6.4,
+      "age_hours": 25.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -212,9 +223,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-17T09:36:03+00:00",
-      "last_success_run_id": 39021749855,
-      "age_hours": 21.8,
+      "last_success_at": "2026-10-18T15:54:54+00:00",
+      "last_success_run_id": 39142616518,
+      "age_hours": 10.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -222,12 +233,12 @@
     {
       "workflow": "engineering-queue.yml",
       "name": "FTSE Engineering Queue",
-      "expected_today": false,
+      "expected_today": true,
       "past_email_ready": false,
-      "max_age_hours": 26,
-      "last_success_at": "2026-10-18T03:51:51+00:00",
-      "last_success_run_id": 39095103074,
-      "age_hours": 3.5,
+      "max_age_hours": 3,
+      "last_success_at": "2026-10-19T02:15:27+00:00",
+      "last_success_run_id": 39189109811,
+      "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -238,9 +249,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-10-18T07:20:36+00:00",
-      "last_success_run_id": 39107302424,
-      "age_hours": 0.0,
+      "last_success_at": "2026-10-19T02:30:56+00:00",
+      "last_success_run_id": 39190325240,
+      "age_hours": 0.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -251,9 +262,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-17T11:41:22+00:00",
-      "last_success_run_id": 39029657246,
-      "age_hours": 19.7,
+      "last_success_at": "2026-10-18T07:30:53+00:00",
+      "last_success_run_id": 39107948262,
+      "age_hours": 19.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -261,12 +272,12 @@
     {
       "workflow": "analysis-review.yml",
       "name": "Modelling analysis review",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-10-11T14:58:24+00:00",
-      "last_success_run_id": 38149345226,
-      "age_hours": 160.4,
+      "last_success_at": "2026-10-18T12:40:17+00:00",
+      "last_success_run_id": 39128255461,
+      "age_hours": 13.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -274,12 +285,12 @@
     {
       "workflow": "library-grow.yml",
       "name": "FTSE Library Ladder",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-10-16T06:51:48+00:00",
-      "last_success_run_id": 38863627294,
-      "age_hours": 48.5,
+      "last_success_at": "2026-10-18T06:21:32+00:00",
+      "last_success_run_id": 39103751078,
+      "age_hours": 20.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -287,12 +298,12 @@
     {
       "workflow": "library-model-review.yml",
       "name": "Library model review",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-10-11T07:27:28+00:00",
-      "last_success_run_id": 38121428588,
-      "age_hours": 167.9,
+      "last_success_at": "2026-10-18T07:56:58+00:00",
+      "last_success_run_id": 39109566475,
+      "age_hours": 18.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -300,12 +311,12 @@
     {
       "workflow": "email-report.yml",
       "name": "Email report",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-10-11T07:27:30+00:00",
-      "last_success_run_id": 38121429962,
-      "age_hours": 167.9,
+      "last_success_at": "2026-10-18T07:56:59+00:00",
+      "last_success_run_id": 39109567319,
+      "age_hours": 18.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -313,12 +324,12 @@
     {
       "workflow": "data-backup.yml",
       "name": "FTSE Data Backup",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-10-11T17:43:12+00:00",
-      "last_success_run_id": 38160816599,
-      "age_hours": 157.6,
+      "last_success_at": "2026-10-18T16:00:26+00:00",
+      "last_success_run_id": 39143024097,
+      "age_hours": 10.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -326,12 +337,12 @@
     {
       "workflow": "paper-auto.yml",
       "name": "FTSE Paper Automation",
-      "expected_today": false,
+      "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
       "last_success_at": "2026-10-16T08:26:30+00:00",
       "last_success_run_id": 38873704310,
-      "age_hours": 46.9,
+      "age_hours": 66.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -342,28 +353,28 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-17T16:22:48+00:00",
-      "last_success_run_id": 39049145848,
-      "age_hours": 15.0,
+      "last_success_at": "2026-10-18T16:30:16+00:00",
+      "last_success_run_id": 39145291347,
+      "age_hours": 10.1,
       "stale": false,
-      "recent_failures_24h": 1,
-      "unresolved_failures_12h": 1
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
     }
   ],
   "queue_status": {
     "open_count": 0,
-    "pr_open_count": 0,
+    "pr_open_count": 1,
     "parked_count": 1,
     "merged_count": 148,
     "failed_count": 0,
     "next_task_id": null,
     "in_flight_branch": null,
-    "in_flight_pr": null,
+    "in_flight_pr": 1127,
     "spend_since_checkpoint_usd": 10.4,
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": true,
+  "should_dispatch_engineering": false,
   "email_deferred": false,
   "email_defer_reasons": []
 }
