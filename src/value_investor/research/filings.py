@@ -107,6 +107,15 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.jdplc.com/wp-content/uploads/2026/08/20260820-2026_27-Q2-trading-statement_RNS_vF.pdf",
         "https://www.jdplc.com/wp-content/uploads/2026/07/20260121-2025_26-Q4-trading-update_RNS.pdf",
     ],
+    # eng-20261019-01: ftse350 ICG.L gap-closure had 0/0 refetch (empty IR allowlist); icgam.com PDFs.
+    "ICG.L": [
+        "https://www.icgam.com/wp-content/uploads/2026/06/7jjrt92iiq5v-ICG-Annual-Report-and-Accounts-2026.pdf",
+        "https://www.icgam.com/wp-content/uploads/2026/05/9w84jioef96t-ICG-FY26-RNS-1.pdf",
+        "https://www.icgam.com/wp-content/uploads/2026/05/ki66dv27jijt-ICG-FY26-results-presentation.pdf",
+        "https://www.icgam.com/wp-content/uploads/2025/11/ICG_H1-FY26-RNS.pdf",
+        "https://www.icgam.com/wp-content/uploads/2025/11/ICG-H1-FY26-results-presentation_vF.pdf",
+        "https://www.icgam.com/wp-content/uploads/2026/07/j6J3er5HwjJ1-RNS-Q1_FY27-Trading-Statement_vF.pdf",
+    ],
     # eng-20261008-02: ftse350 IGG.L gap-closure had 0/0 refetch (empty IR allowlist); iggroup.com PDFs.
     "IGG.L": [
         "https://www.iggroup.com/~/media/Files/I/IG-Group/documents/investors/financial-results/results-reports-and-presentations/2026/annual-report-31-December-2025.pdf",
@@ -5680,6 +5689,10 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.inwit.it/wp-content/uploads/2025/11/INWIT-resoconto-intermedio-di-gestione-al-30-settembre-2025.pdf": "interim",
     "https://www.unipol.com/sites/default/files/documents/2026-03/unipol_bilancio-consolidato_2025_en.pdf": "annual",
     "https://www.unipol.com/sites/default/files/documents/2025-08/unipol_relazione-finanziaria-semestrale-consolidata-al-30-6-2025_en.pdf": "interim",
+    # eng-20261019-01: ICG.L H1-FY26 / Q1-FY27 icgam slugs contain fy token (would classify annual).
+    "https://www.icgam.com/wp-content/uploads/2025/11/ICG_H1-FY26-RNS.pdf": "interim",
+    "https://www.icgam.com/wp-content/uploads/2025/11/ICG-H1-FY26-results-presentation_vF.pdf": "interim",
+    "https://www.icgam.com/wp-content/uploads/2026/07/j6J3er5HwjJ1-RNS-Q1_FY27-Trading-Statement_vF.pdf": "trading_update",
 }
 
 

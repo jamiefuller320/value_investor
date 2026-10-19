@@ -6476,6 +6476,25 @@ def test_builtin_ir_allowlist_includes_jd_l():
     assert "trading_update" in periods
 
 
+def test_builtin_ir_allowlist_includes_icg_l():
+    """eng-20261019-01: ftse350 ICG.L intensive pin had empty IR allowlist (0 refetch)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("ICG.L") or []
+    assert any("ICG-Annual-Report-and-Accounts-2026.pdf" in url for url in urls)
+    assert any("ICG-FY26-results-presentation.pdf" in url for url in urls)
+    assert any("ICG-H1-FY26-results-presentation" in url for url in urls)
+    assert any("Q1_FY27-Trading-Statement" in url for url in urls)
+    assert all("icgam.com" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("ICG.L")
+    assert len(rows) >= 5
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    periods = {row.get("period") for row in rows}
+    assert "annual" in periods
+    assert "interim" in periods
+    assert "trading_update" in periods
+
+
 def test_builtin_ir_allowlist_includes_igg_l():
     """eng-20261008-02: ftse350 IGG.L intensive pin had empty IR allowlist (0 refetch)."""
     from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
