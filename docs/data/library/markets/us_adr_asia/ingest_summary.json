@@ -1,89 +1,15 @@
 {
-  "run_at": "2026-10-18T19:30:05.230161+00:00",
+  "run_at": "2026-10-19T16:36:21.676158+00:00",
   "market_id": "us_adr_asia",
-  "targets": [
-    "UMC"
-  ],
-  "target_details": [
-    {
-      "ticker": "UMC",
-      "priority_score": 20.3687,
-      "filings_total": 51,
-      "filings_with_body": 34,
-      "indexed_without_body": 17,
-      "reason": "indexed_without_body"
-    }
-  ],
-  "results": [
-    {
-      "ticker": "UMC",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 51,
-        "filings_with_body": 34,
-        "indexed_without_body": 17
-      },
-      "after": {
-        "filings_total": 51,
-        "filings_with_body": 34,
-        "indexed_without_body": 17
-      },
-      "improved": false,
-      "regime": "sec_edgar",
-      "filings_summary": {
-        "total": 51,
-        "annual": 1,
-        "interim": 50,
-        "trading_update": 0,
-        "other": 0,
-        "with_body": 34,
-        "period_coverage": {
-          "annual": {
-            "total": 1,
-            "with_body": 1
-          },
-          "interim": {
-            "total": 50,
-            "with_body": 33
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 0,
-            "with_body": 0
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 34,
-        "with_body_after": 34,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    }
-  ],
+  "targets": [],
+  "target_details": [],
+  "results": [],
   "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-18T19:28:51.505158+00:00",
+    "snapshot_at": "2026-10-19T16:36:20.177884+00:00",
     "market_id": "us_adr_asia",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
@@ -113,19 +39,18 @@
     "parked_tickers": [
       "JD",
       "PDD",
-      "TME"
-    ],
-    "parked_count": 3,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 17,
-    "effective_indexed_without_body_tickers": [
+      "TME",
       "UMC"
     ],
-    "ingest_exhausted": false
+    "parked_count": 4,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-18T19:29:11.547009+00:00",
+    "snapshot_at": "2026-10-19T16:36:21.663900+00:00",
     "market_id": "us_adr_asia",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
@@ -171,48 +96,39 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 6,
+    "hits": 0,
+    "new_rows_total": 0,
+    "curiosity_total": 0,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "UMC",
+      "TME",
+      "JD",
+      "PDD"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "advanced": true,
-    "parallel_stream": 2,
-    "from_market": "us_adr_asia",
-    "to_market": "iseq20",
-    "stream_markets_after": [
-      "iseq20"
-    ],
-    "parity_event": {
-      "recorded": false,
-      "reason": "ingest_exhausted_leftover_gaps",
-      "market_id": "us_adr_asia",
-      "ingest_exhausted": true,
-      "exhausted_maintenance_recorded": true,
-      "parked_tickers": [
-        "JD",
-        "PDD",
-        "TME",
-        "UMC"
-      ],
-      "learning_admitted_changed": false,
-      "learning_admitted": true
-    },
-    "screen_refresh": {
-      "refreshed": true,
-      "market_id": "iseq20",
-      "forced": true,
-      "prior_screen_at": "2026-10-18T06:22:27.233166+00:00",
-      "prior_age_days": 0,
-      "run_at": "2026-10-18T19:30:05.046929+00:00",
-      "shortlist_count": 3,
-      "ticker_count": 20
-    },
-    "at": "2026-10-18T19:29:26.082050+00:00",
-    "ingest_parity_recorded": false
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "us_adr_asia"
   },
   "critical_path": {
     "market_id": "us_adr_asia",
-    "assessed_at": "2026-10-18T19:28:51.726411+00:00",
+    "assessed_at": "2026-10-19T16:36:20.492195+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -263,9 +179,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 19.60204261700001,
-  "budget_seconds": 1487.5,
-  "leftover_seconds": 1467.897957383,
+  "used_seconds": 0.8721913749999999,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3599.127808625,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -273,9 +189,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "us_adr_asia",
-    "updated_at": "2026-10-18T19:29:11.548645+00:00",
+    "updated_at": "2026-10-19T16:36:21.666318+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 2,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -358,6 +274,7 @@
       "ftse_smallcap",
       "hang_seng",
       "ibex35",
+      "iseq20",
       "nasdaq100",
       "omxs30",
       "psi20",

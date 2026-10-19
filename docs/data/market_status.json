@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-19T15:42:49.729302+00:00",
+  "generated_at": "2026-10-19T16:42:07.542521+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -31,18 +31,19 @@
     "market_count": 24,
     "ingest_counts": {
       "live": 1,
-      "sprint": 1,
-      "maintenance": 21,
+      "sprint": 2,
+      "maintenance": 20,
       "queued": 1
     },
     "role_counts": {
       "live": 1,
       "focus": 1,
-      "admitted": 21,
+      "sprint": 1,
+      "admitted": 20,
       "queue": 1
     },
-    "sprint_count": 1,
-    "maintenance_count": 21,
+    "sprint_count": 2,
+    "maintenance_count": 20,
     "live_count": 1,
     "admitted_count": 22,
     "should_run_library_maintenance": true,
@@ -69,8 +70,10 @@
       "tsx60",
       "us_adr_asia"
     ],
-    "spare_sprint": {},
-    "equal_support_generated_at": "2026-10-19T15:16:41.547384+00:00"
+    "spare_sprint": {
+      "1": "aex"
+    },
+    "equal_support_generated_at": "2026-10-19T15:53:08.297921+00:00"
   },
   "markets": [
     {
@@ -1272,17 +1275,17 @@
       "label": "AEX",
       "exchange": "Euronext Amsterdam",
       "currency": "EUR",
-      "role": "admitted",
+      "role": "sprint",
       "is_live": false,
       "is_focus": false,
       "is_graduated": true,
       "is_queue": true,
       "is_admitted": true,
       "is_ftse_equivalent": false,
-      "ingest": "maintenance",
-      "ingest_stream": null,
-      "ingest_reason": null,
-      "ingest_parity_met": null,
+      "ingest": "sprint",
+      "ingest_stream": 1,
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=1, indexed_without_body=5)",
+      "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": 12,
       "shared_maintenance": true,
@@ -1295,7 +1298,7 @@
       "failed_fetch_count": 0,
       "last_metrics_refresh": "2026-10-19T07:13:07.122149+00:00",
       "last_constituents_refresh": "2026-10-19T07:12:53.267680+00:00",
-      "last_screen_at": "2026-10-19T06:52:48.713096+00:00",
+      "last_screen_at": "2026-10-19T16:38:55.310381+00:00",
       "signal_counts": {
         "hold": 13,
         "buy": 5,
@@ -1318,21 +1321,41 @@
         "phase2_ready": false,
         "phase3_ready": false,
         "weekly_paper_enabled": false,
-        "weekday_paper_enabled": true,
+        "weekday_paper_enabled": false,
         "blockers": [
           "no benchmark configured for aex"
         ],
         "phase1": {
-          "screen_archives": 30,
+          "screen_archives": 0,
           "observe_snapshot_count": 0
         },
         "phase2": {
           "weekly_batch_count": 0,
-          "min_weekly_batches": 4
+          "min_weekly_batches": 0
         }
       },
-      "filing_health": null,
-      "filing_gaps": null,
+      "filing_health": {
+        "buy_tier_count": 9,
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 1,
+        "indexed_without_body": 5,
+        "bodies_median": 5.0,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
+        "ingest_exhausted": false,
+        "parked_count": 2,
+        "zero_body_tickers": [],
+        "thin_body_tickers": [
+          "ASM.AS"
+        ],
+        "unmeasured_tickers": [],
+        "parked_tickers": [
+          "ASM.AS",
+          "ASML.AS"
+        ]
+      },
+      "filing_gaps": 0,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -1386,7 +1409,58 @@
           "UNA.AS"
         ]
       },
-      "sprint_progress": null,
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 6,
+        "targets": 8,
+        "improved": 3,
+        "improved_tickers": [
+          "ASM.AS",
+          "MT.AS",
+          "SHELL.AS"
+        ],
+        "last_run_at": "2026-10-19T16:38:38.402563+00:00",
+        "runtime_cutoff_runs": 0,
+        "error_runs": 0,
+        "gaps_before": {
+          "unmeasured": 1,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 2,
+          "filing_gaps": 1
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 1,
+          "indexed_without_body": 5,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": -1,
+          "zero_body": 0,
+          "thin": 1,
+          "indexed_without_body": 3,
+          "filing_gaps": -1
+        },
+        "remaining": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 1,
+          "indexed_without_body": 5,
+          "filing_gaps": 0
+        },
+        "admission_ready": true,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [
+          {
+            "id": "no_observe_benchmark",
+            "severity": "warn",
+            "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock"
+          }
+        ],
+        "sprint_entered_at": "2026-10-19T16:38:55.310368+00:00"
+      },
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
@@ -1701,7 +1775,7 @@
         "filing_ready": true,
         "span_weeks": null,
         "unique_days": null,
-        "leftover": 0,
+        "leftover": 6,
         "steps": [
           {
             "id": "start",
