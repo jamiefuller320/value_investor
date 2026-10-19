@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-16T11:07:08+00:00",
+  "updated_at": "2026-10-19T09:09:45+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -14513,6 +14513,98 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-29a6081e-a72b-5dff-b13c-4882a31ef5e7",
       "added_at": "2026-10-17T04:17:08+00:00"
+    },
+    {
+      "id": "L615",
+      "category": "later",
+      "section": "learning",
+      "title": "Lifecycle tiles: exit P&L and buy\u2013sell \u00b12 week chart",
+      "summary": "Lifecycle chips print unrealized P&L from the latest listed mark when avg_cost is present. Sold cards already store exit_price and avg_cost, and the name dialog mounts the full screener chart plus chart-outcome since recommendation. They do not print realized exit P&L on the sold chip, and they do not clip the chart to two weeks before the buy through two weeks after the sell. That window displays the episode. It is not a timing rule, a live veto, or a new book. When built, add the field on the existing lifecycle board (email-report publish and weekday L468 refresh) so the dashboard already picks it up. No new human gate.",
+      "revisit_when": "buy_tier_level exit_shadow closed_count is at least 15, so the fortnight after the sell is observable. Then show realized (exit_price \u2212 avg_cost) / avg_cost on just_sold and post_sale chips and clip the existing lifecycle chart to opened_at\u221214d through sold_at+14d.",
+      "tags": [
+        "lifecycle",
+        "chart",
+        "pnl",
+        "observe"
+      ],
+      "status": "open",
+      "source": "week-of-2026-10-19",
+      "added_at": "2026-10-19T09:09:45+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/paper_automation/buy_tier_level/exit_shadow_review.json",
+            "path": "closed_count",
+            "op": ">=",
+            "value": 15
+          }
+        ]
+      }
+    },
+    {
+      "id": "N213",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not expand analysis from the WIX.L channel sell",
+      "summary": "WIX.L on buy_tier_level is one screen-rotation path: the sell missed three short-term highs and left before a later rally inside a channel. That anecdote mixes identification, exit timing, and DCA or capital-path realism. N200 already scores entry and exit levers on a \u00b114 day observe book (exit lever lose; fair-cost median about \u22120.55%; do not promote). Control post-sell is 29 screen-rotation closes and exit-shadow closed_count is 0. Do not open a large analysis program, a hard veto, or a live timing or DCA override from this name. DCA execute stays on the entry_dca_overlay observe plan. A later PIT autopsy is L368, and a post-close sleeve archive is L491.",
+      "revisit_when": "P1 FTSE decision-input inventory has zero names with any gap, and buy_tier_level exit_shadow closed_count is at least 15. Revisit only to ask whether the existing post-sell digest shows early in-channel exits. Still no live timing or DCA override, and no new analysis program.",
+      "tags": [
+        "wix",
+        "timing",
+        "dca",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "week-of-2026-10-19",
+      "added_at": "2026-10-19T09:09:45+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/decision_input_inventory.json",
+            "path": "summary.names_with_any_gap",
+            "op": "==",
+            "value": 0
+          },
+          {
+            "file": "docs/data/paper_automation/buy_tier_level/exit_shadow_review.json",
+            "path": "closed_count",
+            "op": ">=",
+            "value": 15
+          }
+        ]
+      }
+    },
+    {
+      "id": "L616",
+      "category": "later",
+      "section": "learning",
+      "title": "Observe-only factors for well-timed vs terrible chart outcomes",
+      "summary": "On 2026-10-18 chart_outcome_review the verdict is has_terrible: 230 well_timed, 59 terrible, 5 giveback, among 1101 charts. The labels already publish on the Analysis charts panel and on the lifecycle name card. Do not retune stops, targets, or decision-review from that mix (N58), and do not start an entry-timing experiment from it (N59). Citing giveback versus well-timed in analysis-review is already L243. A later observe-only table can test which pre-entry fields (frozen initial levels, drawdown, conviction, filing body, FCF bind) separate well_timed from terrible, written into the existing Sunday ftse-chart-outcomes artifact and the Analysis panel. No live influence.",
+      "revisit_when": "FTSE decision-input inventory names_with_any_gap is 0 and chart_outcome_review counts.terrible stays at least 30. Then add the association table to the existing chart-outcome rollup. Do not apply knobs.",
+      "tags": [
+        "chart-outcomes",
+        "factors",
+        "observe"
+      ],
+      "status": "open",
+      "source": "week-of-2026-10-19",
+      "added_at": "2026-10-19T09:09:45+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/decision_input_inventory.json",
+            "path": "summary.names_with_any_gap",
+            "op": "==",
+            "value": 0
+          },
+          {
+            "file": "docs/data/chart_outcome_review.json",
+            "path": "counts.terrible",
+            "op": ">=",
+            "value": 30
+          }
+        ]
+      }
     }
   ],
   "fragments": [
