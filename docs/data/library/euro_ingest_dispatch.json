@@ -26,7 +26,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-10-19T13:52:26.323503+00:00",
+    "snapshot_at": "2026-10-19T15:01:33.857543+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 49,
     "unmeasured_buy_tier": 0,
@@ -103,7 +103,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-10-19T13:52:26.328298+00:00",
+  "evaluated_at": "2026-10-19T15:01:33.862264+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -173,7 +173,7 @@
         "no benchmark configured for aex"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-19T13:53:01.496333+00:00",
+        "snapshot_at": "2026-10-19T15:02:06.651132+00:00",
         "market_id": "aex",
         "buy_tier_count": 9,
         "unmeasured_buy_tier": 0,
@@ -226,15 +226,94 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-19T13:53:01.497416+00:00",
+      "evaluated_at": "2026-10-19T15:02:06.652123+00:00",
       "should_run_parallel_ingest": true
     }
   ],
-  "parallel_sprint_2_markets": [],
-  "parallel_sprint_2_status": [],
+  "parallel_sprint_2_markets": [
+    "nasdaq100"
+  ],
+  "parallel_sprint_2_status": [
+    {
+      "market_id": "nasdaq100",
+      "focus_market": "euro_depth",
+      "mode": "sprint",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=10)",
+      "ingest_parity_met": false,
+      "ingest_exhausted": false,
+      "ingest_sprint_complete": false,
+      "parked_tickers": [
+        "PDD",
+        "TRI"
+      ],
+      "phase3_ready": false,
+      "current_phase": 1,
+      "next_phase": 1,
+      "phase_blockers": [
+        "nasdaq100 not in ladder.weekly_paper_shard_markets"
+      ],
+      "filing_health": {
+        "snapshot_at": "2026-10-19T15:02:08.826255+00:00",
+        "market_id": "nasdaq100",
+        "buy_tier_count": 39,
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 10,
+        "bodies_min": 17,
+        "bodies_median": 21,
+        "bodies_max": 126,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
+        "unmeasured_tickers": [],
+        "zero_body_tickers": [],
+        "thin_body_tickers": [],
+        "indexed_without_body_tickers": [
+          "TRI",
+          "CCEP",
+          "PDD"
+        ],
+        "indexed_without_body_by_ticker": {
+          "TRI": 8,
+          "CCEP": 1,
+          "PDD": 1
+        },
+        "parked_tickers": [
+          "PDD",
+          "TRI"
+        ],
+        "parked_count": 2,
+        "effective_thin_body_buy_tier": 0,
+        "effective_thin_body_tickers": [],
+        "effective_indexed_without_body": 1,
+        "effective_indexed_without_body_tickers": [
+          "CCEP"
+        ],
+        "ingest_exhausted": false
+      },
+      "filing_gaps": 0,
+      "max_daily_successes": 4,
+      "max_targets": 24,
+      "priority_slot_width": null,
+      "priority_slot_unfilled": null,
+      "priority_slot_ceiling": null,
+      "cron_morning": true,
+      "cron_afternoon": true,
+      "cron_midafternoon": true,
+      "cron_evening": true,
+      "cron_ladder_weekday": true,
+      "cron_maintenance": false,
+      "should_run_sprint_ingest": true,
+      "should_run_maintenance_ingest": false,
+      "should_run_ingest": true,
+      "evaluated_at": "2026-10-19T15:02:08.827555+00:00",
+      "should_run_parallel_ingest": true
+    }
+  ],
   "sprint_markets": [
     "euro_depth",
-    "aex"
+    "aex",
+    "nasdaq100"
   ],
   "market_queue": [
     "sp500",
@@ -265,7 +344,7 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 13,
+    "hour_utc": 15,
     "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",
@@ -290,6 +369,8 @@
   "scheduler_stream_1_markets": [
     "aex"
   ],
-  "scheduler_stream_2_markets": [],
+  "scheduler_stream_2_markets": [
+    "nasdaq100"
+  ],
   "should_run_library_maintenance": true
 }
