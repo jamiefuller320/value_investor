@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-18T07:09:19.994798+00:00
+Track: `buy_tier_level` · updated 2026-10-19T07:28:19.223290+00:00
 
 ## Portfolio loser feedback
 
@@ -10,19 +10,19 @@ Track: `buy_tier_level` · updated 2026-10-18T07:09:19.994798+00:00
 
 ## Holding reviews
 
-### DG.PA — intact / hold_tolerate (-1.9%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 77%
-
 ### SAN.PA — intact / hold_tolerate (-1.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 66%
+
+### DG.PA — intact / hold_tolerate (-1.6%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 77%
 
 ### ORA.PA — weakening / watch_review (-1.1%)
 - research verdict caution

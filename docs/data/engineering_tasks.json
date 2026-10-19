@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-18T13:34:40.448820+00:00",
+  "compiled_at": "2026-10-19T13:45:31.711792+00:00",
   "run_at": null,
-  "task_count": 190,
+  "task_count": 191,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -1086,9 +1086,11 @@
       ],
       "auto_merge": false,
       "status": "parked",
-      "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_at": "2026-10-18T04:11:55.264354+00:00",
-      "parked_policy": "preflight_clash"
+      "no_diff_count": 2,
+      "last_no_diff_at": "2026-10-19T01:26:37.820282+00:00",
+      "parked_reason": "agent produced no code changes 2 time(s) (cap 2) — manual review",
+      "parked_at": "2026-10-19T01:26:37.820282+00:00",
+      "parked_policy": "no_diff_cap"
     },
     {
       "id": "eng-20261011-02",
@@ -2449,6 +2451,83 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/657",
       "pr_number": 657,
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
+    },
+    {
+      "id": "eng-20261019-01",
+      "area": "ingest",
+      "title": "Seed IR allowlist for unmeasured/zero-body ICG.L — empty allowlist after 0-improve pin (igc-20261019-03)",
+      "summary": "Gap-closure run igc-20261019-03 targeted ICG.L with outstanding coverage holes but zero IR allowlist URLs (refetch never attempted). Seed `_BUILTIN_IR_URLS` / issuer PDFs or fix discovery; do not keep re-pinning empty intensify. Add a regression test; verify with a pinned library ingest gap-closure / ingest-loop pass.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20261019-03",
+        "trial_id": "igc-20261019-03",
+        "chain_root_id": "igc-20261019-03",
+        "chain_round": 1,
+        "tickers": [
+          "ICG.L"
+        ],
+        "ticker": "ICG.L",
+        "market_id": null,
+        "library_market": null,
+        "universe": "ftse350",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": false,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "ICG.L"
+          ]
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "ICG.L"
+          ]
+        },
+        "compile_reason": "gaps_remain_without_allowlist"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for ICG.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20261017-01",
@@ -10206,6 +10285,62 @@
       "merged_at": "2026-10-02T10:55:17.370432+00:00"
     },
     {
+      "id": "eng-20261002-13",
+      "area": "ingest",
+      "title": "Repair dead hunter allowlist URL for ADYEN.AS",
+      "summary": "Monitor detected live-fetch failure for https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download (ADYEN.AS, euro_depth). Inspect whether the URL rot is fixable via a known canonical replacement, a fresh allowlist entry, or a PARKED_SOURCE_HUNTER_SKIP update. Do not invent URLs.",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "hunter_url_repair",
+      "evidence": {
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "hunter_market_id": "euro_depth",
+        "hunter_ticker": "ADYEN.AS",
+        "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
+        "monitor_reason": "live-fetch failed or body too short for https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
+        "parent_task_id": "eng-20260930-01",
+        "parent_merged_at": "2026-10-02T06:41:46.662799+00:00",
+        "universe": "library",
+        "doc": "docs/ops/ops-monitor.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for ADYEN.AS only — do not invent URLs",
+        "Repair or replace the dead URL recorded for ADYEN.AS",
+        "Add/adjust regression coverage in tests/test_research_filings.py",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "result_path": "output/engineering_result_eng-20261002-13.md",
+      "branch_name": "cursor/eng-20261002-13-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/944",
+      "pr_number": 944,
+      "completed_at": "2026-10-02T09:24:15.090277+00:00",
+      "merged_at": "2026-10-02T09:54:55.076376+00:00",
+      "no_diff_count": 0
+    },
+    {
       "id": "eng-20261018-05",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked hang_seng leftover 1109.HK",
@@ -10250,7 +10385,11 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "open"
+      "status": "pr_open",
+      "result_path": "output/engineering_result_eng-20261018-05.md",
+      "branch_name": "cursor/eng-20261018-05-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-10-18T13:48:10.312547+00:00"
     },
     {
       "id": "eng-20261017-11",
@@ -10910,62 +11049,6 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1097",
       "pr_number": 1097,
       "merged_at": "2026-10-16T03:53:36.666654+00:00"
-    },
-    {
-      "id": "eng-20261002-13",
-      "area": "ingest",
-      "title": "Repair dead hunter allowlist URL for ADYEN.AS",
-      "summary": "Monitor detected live-fetch failure for https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download (ADYEN.AS, euro_depth). Inspect whether the URL rot is fixable via a known canonical replacement, a fresh allowlist entry, or a PARKED_SOURCE_HUNTER_SKIP update. Do not invent URLs.",
-      "priority": "low",
-      "priority_score": 12.0,
-      "source": "hunter_url_repair",
-      "evidence": {
-        "market_id": "euro_depth",
-        "library_market": "euro_depth",
-        "hunter_market_id": "euro_depth",
-        "hunter_ticker": "ADYEN.AS",
-        "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
-        "monitor_reason": "live-fetch failed or body too short for https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
-        "parent_task_id": "eng-20260930-01",
-        "parent_merged_at": "2026-10-02T06:41:46.662799+00:00",
-        "universe": "library",
-        "doc": "docs/ops/ops-monitor.md"
-      },
-      "acceptance_criteria": [
-        "Inspect IR / exchange sources for ADYEN.AS only — do not invent URLs",
-        "Repair or replace the dead URL recorded for ADYEN.AS",
-        "Add/adjust regression coverage in tests/test_research_filings.py",
-        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "merged",
-      "result_path": "output/engineering_result_eng-20261002-13.md",
-      "branch_name": "cursor/eng-20261002-13-1de3",
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/944",
-      "pr_number": 944,
-      "completed_at": "2026-10-02T09:24:15.090277+00:00",
-      "merged_at": "2026-10-02T09:54:55.076376+00:00",
-      "no_diff_count": 0
     },
     {
       "id": "eng-20261015-02",
@@ -12373,7 +12456,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-10-18T02:42:49.495798+00:00",
+    "evaluated_at": "2026-10-19T12:32:32.692625+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -12426,7 +12509,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-10-18T03:58:01.272637+00:00",
+    "evaluated_at": "2026-10-19T16:21:34.716240+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -12434,7 +12517,16 @@
     },
     "resumed_at": "2026-10-14T07:12:50.922751+00:00"
   },
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "ingest_gap_closure",
   "library_market_id": "hang_seng",
-  "hunter_ticker": "1109.HK"
+  "hunter_ticker": "ADYEN.AS",
+  "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
+  "source_gap_closure_run_id": "igc-20261019-03",
+  "source_trial_id": "igc-20261019-03",
+  "source_chain_root_id": "igc-20261019-03",
+  "queue_block_notify": {
+    "last_fingerprint": "clash_blocked|no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
+    "last_sent_at": "2026-10-19T14:05:17.564406+00:00",
+    "cooldown_hours": 12.0
+  }
 }

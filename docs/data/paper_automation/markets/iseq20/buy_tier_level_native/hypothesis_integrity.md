@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-18T07:10:52.033460+00:00
+Track: `buy_tier_level_native` · updated 2026-10-19T07:29:43.254412+00:00
 
 ## Portfolio loser feedback
 
@@ -13,7 +13,6 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:10:52.033460+00:00
 ### KRX.IR — weakening / watch_review (+0.0%)
 - research verdict neutral
 - cheapness family no longer passes
-- conviction 28% below intact floor
 - still buy
 - data_quality 1.00
 

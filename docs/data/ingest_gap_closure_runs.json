@@ -20577,8 +20577,591 @@
       },
       "trigger": "stall_slowdown",
       "engineering_task_id": "eng-20261016-04"
+    },
+    {
+      "id": "igc-20261018-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "ASM.AS",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "ASM.AS",
+          "MT.AS"
+        ],
+        "market_id": "aex",
+        "universe": "library",
+        "critical_path_blocker": "unmeasured"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261018-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-10-18T13:41:47.199242+00:00",
+      "completed_at": "2026-10-18T13:43:24.070118+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "ASM.AS"
+        ],
+        "results": [
+          {
+            "ticker": "ASM.AS",
+            "reason": "unmeasured",
+            "before": {
+              "filings_total": 0,
+              "filings_with_body": 0,
+              "indexed_without_body": 0
+            },
+            "after": {
+              "filings_total": 2,
+              "filings_with_body": 2,
+              "indexed_without_body": 0
+            },
+            "improved": true,
+            "regime": "euro_filings",
+            "filings_summary": {
+              "total": 2,
+              "annual": 0,
+              "interim": 0,
+              "trading_update": 0,
+              "other": 2,
+              "with_body": 2,
+              "period_coverage": {
+                "annual": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "interim": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 2,
+                  "with_body": 2
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 2,
+              "with_body_after": 2,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "ASM.AS",
+            "with_body_before": 0,
+            "with_body_after": 2,
+            "improved": true
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20261018-02",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "MT.AS",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "KRX.IR"
+        ],
+        "market_id": "euro_depth",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261018-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-10-18T16:28:44.651614+00:00",
+      "completed_at": "2026-10-18T16:29:38.622099+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "KRX.IR"
+        ],
+        "results": [
+          {
+            "ticker": "KRX.IR",
+            "reason": "thin_bodies",
+            "before": {
+              "filings_total": 1,
+              "filings_with_body": 1,
+              "indexed_without_body": 0
+            },
+            "after": {
+              "filings_total": 1,
+              "filings_with_body": 1,
+              "indexed_without_body": 0
+            },
+            "improved": false,
+            "regime": "euro_filings",
+            "filings_summary": {
+              "total": 1,
+              "annual": 1,
+              "interim": 0,
+              "trading_update": 0,
+              "other": 0,
+              "with_body": 1,
+              "period_coverage": {
+                "annual": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "interim": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 0,
+                  "with_body": 0
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 1,
+              "with_body_after": 1,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "KRX.IR",
+            "with_body_before": 1,
+            "with_body_after": 1,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20261018-03",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "UMC",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "UMC"
+        ],
+        "market_id": "us_adr_asia",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261018-03",
+      "chain_attempt": 1,
+      "recorded_at": "2026-10-18T17:29:26.522986+00:00",
+      "completed_at": "2026-10-18T17:30:46.172015+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "UMC"
+        ],
+        "results": [
+          {
+            "ticker": "UMC",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 51,
+              "filings_with_body": 34,
+              "indexed_without_body": 17
+            },
+            "after": {
+              "filings_total": 51,
+              "filings_with_body": 34,
+              "indexed_without_body": 17
+            },
+            "improved": false,
+            "regime": "sec_edgar",
+            "filings_summary": {
+              "total": 51,
+              "annual": 1,
+              "interim": 50,
+              "trading_update": 0,
+              "other": 0,
+              "with_body": 34,
+              "period_coverage": {
+                "annual": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "interim": {
+                  "total": 50,
+                  "with_body": 33
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 0,
+                  "with_body": 0
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 34,
+              "with_body_after": 34,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "UMC",
+            "with_body_before": 34,
+            "with_body_after": 34,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20261019-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "MT.AS",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2700.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "MT.AS"
+        ],
+        "market_id": "euro_depth",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261019-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-10-19T09:52:31.085395+00:00",
+      "completed_at": "2026-10-19T09:53:56.780020+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "MT.AS"
+        ],
+        "results": [
+          {
+            "ticker": "MT.AS",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 40,
+              "filings_with_body": 39,
+              "indexed_without_body": 1
+            },
+            "after": {
+              "filings_total": 40,
+              "filings_with_body": 39,
+              "indexed_without_body": 1
+            },
+            "improved": false,
+            "regime": "euro_filings",
+            "filings_summary": {
+              "total": 40,
+              "annual": 1,
+              "interim": 38,
+              "trading_update": 0,
+              "other": 1,
+              "with_body": 39,
+              "period_coverage": {
+                "annual": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "interim": {
+                  "total": 38,
+                  "with_body": 37
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 1,
+                  "with_body": 1
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 39,
+              "with_body_after": 39,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 2,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "MT.AS",
+            "with_body_before": 39,
+            "with_body_after": 39,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "manual"
+    },
+    {
+      "id": "igc-20261019-02",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "MT.AS",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "MT.AS"
+        ],
+        "market_id": "aex",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261019-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-10-19T10:02:38.447486+00:00",
+      "completed_at": "2026-10-19T10:04:01.213822+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "MT.AS"
+        ],
+        "results": [
+          {
+            "ticker": "MT.AS",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 40,
+              "filings_with_body": 39,
+              "indexed_without_body": 1
+            },
+            "after": {
+              "filings_total": 40,
+              "filings_with_body": 39,
+              "indexed_without_body": 1
+            },
+            "improved": false,
+            "regime": "euro_filings",
+            "filings_summary": {
+              "total": 40,
+              "annual": 1,
+              "interim": 38,
+              "trading_update": 0,
+              "other": 1,
+              "with_body": 39,
+              "period_coverage": {
+                "annual": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "interim": {
+                  "total": 38,
+                  "with_body": 37
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 1,
+                  "with_body": 1
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 39,
+              "with_body_after": 39,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 2,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "MT.AS",
+            "with_body_before": 39,
+            "with_body_after": 39,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20261019-03",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "CCEP",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "CCEP"
+        ],
+        "market_id": "nasdaq100",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261019-03",
+      "chain_attempt": 1,
+      "recorded_at": "2026-10-19T13:49:38.492309+00:00",
+      "completed_at": "2026-10-19T13:51:21.910325+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [],
+        "results": [],
+        "per_ticker": []
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-10-16T15:15:06.211467+00:00",
+  "updated_at": "2026-10-19T13:51:21.910336+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }

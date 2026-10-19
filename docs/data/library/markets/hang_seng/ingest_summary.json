@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-17T16:37:03.842548+00:00",
+  "run_at": "2026-10-19T10:37:14.603607+00:00",
   "market_id": "hang_seng",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-17T16:33:40.235337+00:00",
+    "snapshot_at": "2026-10-19T10:33:58.489016+00:00",
     "market_id": "hang_seng",
     "buy_tier_count": 26,
     "unmeasured_buy_tier": 0,
@@ -67,7 +67,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-17T16:37:03.814937+00:00",
+    "snapshot_at": "2026-10-19T10:37:14.573851+00:00",
     "market_id": "hang_seng",
     "buy_tier_count": 26,
     "unmeasured_buy_tier": 0,
@@ -132,8 +132,8 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 26,
-    "hits": 4,
-    "new_rows_total": 0,
+    "hits": 5,
+    "new_rows_total": 1,
     "curiosity_total": 4,
     "errors": 0,
     "prioritization_weights": {
@@ -167,7 +167,7 @@
   },
   "critical_path": {
     "market_id": "hang_seng",
-    "assessed_at": "2026-10-17T16:33:41.918492+00:00",
+    "assessed_at": "2026-10-19T10:34:00.166246+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -255,9 +255,9 @@
       "thin_need_bodies": 1
     }
   },
-  "used_seconds": 200.240662615,
+  "used_seconds": 192.676349913,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3399.759337385,
+  "leftover_seconds": 3407.323650087,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -265,9 +265,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "hang_seng",
-    "updated_at": "2026-10-17T16:37:03.821728+00:00",
+    "updated_at": "2026-10-19T10:37:14.580823+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 9,
+    "complete_zero_improve_runs": 10,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -319,18 +319,6 @@
         "source_surface": "asia_filings+hkex_direct"
       },
       {
-        "ticker": "0288.HK",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-10-07T17:19:04.827510+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 16,
-        "filings_with_body": 12,
-        "indexed_without_body": 2,
-        "thin": false,
-        "source_surface": "asia_filings+hkex_direct"
-      },
-      {
         "ticker": "2331.HK",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
@@ -377,6 +365,18 @@
         "indexed_without_body": 2,
         "thin": false,
         "source_surface": "asia_filings+hkex_direct"
+      },
+      {
+        "ticker": "0288.HK",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-19T10:37:14.580823+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 17,
+        "filings_with_body": 12,
+        "indexed_without_body": 2,
+        "thin": false,
+        "source_surface": "asia_filings+hkex_direct"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -415,6 +415,7 @@
       "ftse_smallcap",
       "hang_seng",
       "ibex35",
+      "iseq20",
       "nasdaq100",
       "omxs30",
       "psi20",
@@ -430,6 +431,6 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261017-05"
+    "task_id": "eng-20261018-05"
   }
 }

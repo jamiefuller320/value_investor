@@ -1,31 +1,29 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-18T08:09:23.675579+01:00",
+    "local_time": "2026-10-19T08:28:24.450457+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-18T08:00:00+01:00",
-    "settle_at": "2026-10-18T09:15:00+01:00",
+    "market_open_at": "2026-10-19T08:00:00+01:00",
+    "settle_at": "2026-10-19T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
   "trades": [
     {
-      "id": "85315bcf-9c5e-4cd2-b817-307236101b0e",
+      "id": "a75015b9-b777-4923-956f-ffc443bea0fe",
       "fund_id": "3dac62e6-d20e-4e03-9467-f9858b18e921",
-      "acted_at": "2026-10-18T08:09:23.675579+01:00",
-      "ticker": "PUB.PA",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 0.188223,
-      "price": 102.45,
+      "acted_at": "2026-10-19T08:28:24.450457+01:00",
+      "ticker": "DG.PA",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.178391,
+      "price": 108.05,
       "gross": 19.28,
       "cost": 0.0,
-      "net_cash": 19.28,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Publicis Groupe S.A.",
-      "avg_cost_at_exit": 99.0623,
-      "position_closed": true
+      "net_cash": -19.28,
+      "note": "Automated buy",
+      "name": "Vinci SA"
     }
   ],
   "plan": {
@@ -42,7 +40,7 @@
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
     "nav": 1020.09,
-    "cash": 19.28,
+    "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -54,7 +52,7 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 78.47,
+    "target_sleeve_value": 102.0,
     "targets": [
       {
         "ticker": "DG.PA",
@@ -99,13 +97,6 @@
         "price": 41.51
       },
       {
-        "ticker": "CAP.PA",
-        "name": "Capgemini SE",
-        "signal": "strong_buy",
-        "conviction_score": 0.6267,
-        "price": 121.35
-      },
-      {
         "ticker": "SGO.PA",
         "name": "Compagnie de Saint-Gobain S.A.",
         "signal": "buy",
@@ -120,13 +111,6 @@
         "price": 397.0
       },
       {
-        "ticker": "VIE.PA",
-        "name": "Veolia Environnement SA",
-        "signal": "buy",
-        "conviction_score": 0.5073,
-        "price": 32.4
-      },
-      {
         "ticker": "ORA.PA",
         "name": "Orange S.A.",
         "signal": "strong_buy",
@@ -139,124 +123,177 @@
         "signal": "strong_buy",
         "conviction_score": 0.495,
         "price": 16.61
-      },
-      {
-        "ticker": "RI.PA",
-        "name": "Pernod Ricard SA",
-        "signal": "buy",
-        "conviction_score": 0.32198,
-        "price": 68.22
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "CAP.PA",
+        "name": "Capgemini SE",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.683219,
+        "price": 121.35,
+        "value": 82.91
+      },
+      {
+        "action": "sell",
+        "ticker": "VIE.PA",
+        "name": "Veolia Environnement SA",
+        "reason": "No longer in the top conviction target set",
+        "shares": 2.421171,
+        "price": 32.4,
+        "value": 78.45
+      },
+      {
+        "action": "sell",
+        "ticker": "RI.PA",
+        "name": "Pernod Ricard SA",
+        "reason": "No longer in the top conviction target set",
+        "shares": 1.084821,
+        "price": 68.22,
+        "value": 74.01
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "URW.PA",
+        "name": "Unibail-Rodamco-Westfield SE",
+        "reason": "Top-up to equal weight",
+        "value": 25.64,
+        "price": 89.82,
+        "target_value": 102.0,
+        "conviction_score": 0.7339,
+        "signal": "buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
+        "reason": "Top-up to equal weight",
+        "value": 21.37,
+        "price": 80.71,
+        "target_value": 102.0,
+        "conviction_score": 0.7331000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "FGR.PA",
+        "name": "Eiffage SA",
+        "reason": "Top-up to equal weight",
+        "value": 30.23,
+        "price": 100.95,
+        "target_value": 102.0,
+        "conviction_score": 0.7279,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "SAN.PA",
+        "name": "Sanofi",
+        "reason": "Top-up to equal weight",
+        "value": 26.42,
+        "price": 71.94,
+        "target_value": 102.0,
+        "conviction_score": 0.6633,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "EN.PA",
+        "name": "Bouygues SA",
+        "reason": "Top-up to equal weight",
+        "value": 26.12,
+        "price": 41.51,
+        "target_value": 102.0,
+        "conviction_score": 0.6291,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "SGO.PA",
+        "name": "Compagnie de Saint-Gobain S.A.",
+        "reason": "Top-up to equal weight",
+        "value": 28.22,
+        "price": 66.54,
+        "target_value": 102.0,
+        "conviction_score": 0.5970000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "MC.PA",
+        "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
+        "reason": "Top-up to equal weight",
+        "value": 23.97,
+        "price": 397.0,
+        "target_value": 102.0,
+        "conviction_score": 0.5467,
+        "signal": "buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "ORA.PA",
+        "name": "Orange S.A.",
+        "reason": "Top-up to equal weight",
+        "value": 24.5,
+        "price": 14.565,
+        "target_value": 102.0,
+        "conviction_score": 0.5066849999999999,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "CA.PA",
+        "name": "Carrefour SA",
+        "reason": "Top-up to equal weight",
+        "value": 21.36,
+        "price": 16.61,
+        "target_value": 102.0,
+        "conviction_score": 0.495,
+        "signal": "strong_buy"
+      }
+    ],
     "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "DG.PA",
         "name": "Vinci SA",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 75.26,
-        "target_value": 78.47,
+        "value": 94.54,
+        "target_value": 102.0,
         "conviction_score": 0.769,
         "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "URW.PA",
-        "name": "Unibail-Rodamco-Westfield SE",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 76.36,
-        "target_value": 78.47,
-        "conviction_score": 0.7339,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "FGR.PA",
-        "name": "Eiffage SA",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 71.78,
-        "target_value": 78.47,
-        "conviction_score": 0.7279,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "SAN.PA",
-        "name": "Sanofi",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 75.58,
-        "target_value": 78.47,
-        "conviction_score": 0.6633,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "EN.PA",
-        "name": "Bouygues SA",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 75.88,
-        "target_value": 78.47,
-        "conviction_score": 0.6291,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "SGO.PA",
-        "name": "Compagnie de Saint-Gobain S.A.",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 73.78,
-        "target_value": 78.47,
-        "conviction_score": 0.5970000000000001,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "MC.PA",
-        "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
-        "reason": "Already near equal-weight target",
-        "value": 78.03,
-        "target_value": 78.47,
-        "conviction_score": 0.5467,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "VIE.PA",
-        "name": "Veolia Environnement SA",
-        "reason": "Already near equal-weight target",
-        "value": 78.45,
-        "target_value": 78.47,
-        "conviction_score": 0.5073,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "ORA.PA",
-        "name": "Orange S.A.",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 77.5,
-        "target_value": 78.47,
-        "conviction_score": 0.5066849999999999,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "RI.PA",
-        "name": "Pernod Ricard SA",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 74.01,
-        "target_value": 78.47,
-        "conviction_score": 0.32198,
-        "signal": "buy"
       }
     ],
     "skipped": [],
-    "waitlisted": [],
-    "summary": "Next rebalance would target 13 equal-weight sleeve(s); leave 10 near-target holding(s)."
+    "waitlisted": [
+      {
+        "ticker": "CAP.PA",
+        "name": "Capgemini SE",
+        "signal": "strong_buy",
+        "conviction_score": 0.6267,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      },
+      {
+        "ticker": "VIE.PA",
+        "name": "Veolia Environnement SA",
+        "signal": "buy",
+        "conviction_score": 0.5073,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      },
+      {
+        "ticker": "RI.PA",
+        "name": "Pernod Ricard SA",
+        "signal": "buy",
+        "conviction_score": 0.32198,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      }
+    ],
+    "summary": "Next rebalance would target 10 equal-weight sleeve(s); sell 3 name(s) that left the set; deploy cash into 9 buy(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -307,12 +344,12 @@
       "ticker": "CAP.PA",
       "name": "Capgemini SE",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
       "mark": 121.35,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "wait"
     },
     {
       "ticker": "URW.PA",
@@ -351,12 +388,12 @@
       "ticker": "VIE.PA",
       "name": "Veolia Environnement SA",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
       "mark": 32.4,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "wait"
     },
     {
       "ticker": "EN.PA",
@@ -373,12 +410,12 @@
       "ticker": "RI.PA",
       "name": "Pernod Ricard SA",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
       "mark": 68.22,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "wait"
     },
     {
       "ticker": "CA.PA",
@@ -400,7 +437,7 @@
       "mark": 100.95,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     }
   ],
   "fund": {
@@ -418,7 +455,7 @@
       "id": "3dac62e6-d20e-4e03-9467-f9858b18e921",
       "created_at": "2026-09-25T07:28:44.365633+00:00"
     },
-    "cash": 19.28,
+    "cash": 0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -435,8 +472,8 @@
       },
       "DG.PA": {
         "ticker": "DG.PA",
-        "shares": 0.696549,
-        "avg_cost": 109.3514,
+        "shares": 0.87494,
+        "avg_cost": 109.0861,
         "name": "Vinci SA",
         "sector": "Industrials",
         "currency": "EUR",
@@ -1292,6 +1329,21 @@
         "name": "Publicis Groupe S.A.",
         "avg_cost_at_exit": 99.0623,
         "position_closed": true
+      },
+      {
+        "id": "a75015b9-b777-4923-956f-ffc443bea0fe",
+        "fund_id": "3dac62e6-d20e-4e03-9467-f9858b18e921",
+        "acted_at": "2026-10-19T08:28:24.450457+01:00",
+        "ticker": "DG.PA",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.178391,
+        "price": 108.05,
+        "gross": 19.28,
+        "cost": 0.0,
+        "net_cash": -19.28,
+        "note": "Automated buy",
+        "name": "Vinci SA"
       }
     ],
     "equity_curve": [
@@ -1654,14 +1706,32 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-19T08:28:24.450457+01:00",
+        "portfolio_value": 1020.09,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 13,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-18T08:09:23.675579+01:00",
+    "last_mark_at": "2026-10-19T08:28:24.450457+01:00",
     "rebalance_state": {
-      "exit_streak": {},
-      "reentry_cooldown": {
-        "PUB.PA": 1
-      }
+      "exit_streak": {
+        "CAP.PA": 1,
+        "VIE.PA": 1,
+        "RI.PA": 1
+      },
+      "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
@@ -1671,7 +1741,7 @@
     "schema_version": 2,
     "market_id": "cac40",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-18T07:09:23.687611+00:00",
+    "generated_at": "2026-10-19T07:28:24.457791+00:00",
     "observe_only": true,
     "open_count": 4,
     "closed_count": 0,
@@ -1744,13 +1814,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
-    "checkpoints_added_this_pass": 1
+    "ingested_this_pass": 0,
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-18T07:09:23.688704+00:00",
+    "generated_at": "2026-10-19T07:28:24.458808+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1806,7 +1876,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 3,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 10,
+      "hold_with_data_quality_count": 12,
       "gaps": [
         "hold_recovery closed episodes=3 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -1815,10 +1885,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 8,
-        "recovered_to_breakeven": 5,
+        "count": 10,
+        "recovered_to_breakeven": 7,
         "close_reasons": {
-          "open": 8
+          "open": 10
         }
       },
       "closed": {
@@ -1843,12 +1913,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 2,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     }
   },
   "hypothesis_integrity": {
@@ -1856,8 +1926,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-10-18T07:09:23.690325+00:00",
-    "as_of": "2026-10-18T08:09:23.675579+01:00",
+    "updated_at": "2026-10-19T07:28:24.460180+00:00",
+    "as_of": "2026-10-19T08:28:24.450457+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1914,9 +1984,9 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0119,
+        "unrealized_pct": -0.0095,
         "mark": 108.05,
-        "avg_cost": 109.3514,
+        "avg_cost": 109.0861,
         "signal": "strong_buy",
         "timing_signal": "neutral",
         "conviction_score": 0.769,
@@ -2120,7 +2190,7 @@
         "mark": 100.95,
         "avg_cost": 98.72,
         "signal": "strong_buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.7279,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2282,7 +2352,7 @@
         "mark": 32.4,
         "avg_cost": 30.73,
         "signal": "buy",
-        "timing_signal": "neutral",
+        "timing_signal": "wait",
         "conviction_score": 0.5073,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2363,7 +2433,7 @@
         "mark": 121.35,
         "avg_cost": 108.9,
         "signal": "strong_buy",
-        "timing_signal": "neutral",
+        "timing_signal": "wait",
         "conviction_score": 0.6267,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2403,7 +2473,7 @@
         "mark": 68.22,
         "avg_cost": 58.62,
         "signal": "buy",
-        "timing_signal": "neutral",
+        "timing_signal": "wait",
         "conviction_score": 0.322,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2441,7 +2511,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-18T07:09:23.692550+00:00",
+    "generated_at": "2026-10-19T07:28:24.462151+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2449,7 +2519,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 3,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 8,
+      "open_with_thesis": 10,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -2516,7 +2586,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-10-18T07:09:23.696786+00:00",
+    "generated_at": "2026-10-19T07:28:24.465468+00:00",
     "open_count": 1,
     "closed_count": 7,
     "scored_count": 7,
@@ -2578,13 +2648,13 @@
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
-    "marked_this_pass": 2,
-    "closed_this_pass": 1
+    "marked_this_pass": 1,
+    "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-18T08:09:23.675579+01:00",
+    "generated_at": "2026-10-19T08:28:24.450457+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2635,13 +2705,13 @@
       "opened": 0,
       "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 1
+      "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-18T08:09:23.675579+01:00",
+    "generated_at": "2026-10-19T08:28:24.450457+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -2657,7 +2727,7 @@
       "abstain": 0
     },
     "by_algo_action": {
-      "sell": {
+      "buy": {
         "agree": 1,
         "veto": 0,
         "abstain": 0
@@ -2666,28 +2736,40 @@
     "disagree_vs_heuristic_count": 0,
     "cards": [
       {
-        "ticker": "PUB.PA",
-        "name": "Publicis Groupe S.A.",
-        "algo_action": "sell",
-        "algo_reason": "Automated exit \u2014 left target set",
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
         "shadow_verdict": "agree",
         "reasons": [
-          "still_buyish is false \u2014 name no longer buy/strong_buy on the decision screen, so leaving the cohort supports the sell.",
-          "screen_signal is hold (not buy/strong_buy), consistent with a decisive exit from the buy cohort rather than a capacity-bump-only trim.",
-          "Algo reason is automated exit after leaving the target set; no still_buyish case for veto under rank_drop / capacity-bump rules.",
-          "Research verdict accumulate and overlay_bound are noted but do not contradict still_buyish false and hold screen signal for this sell."
+          "Effective screen signal is strong_buy with still_buyish true and research verdict accumulate.",
+          "Conviction rank 1 matches entry rank 1; rank_drop 0 is well below the hold gate threshold.",
+          "Research overlay is bound; FCF basis overlay is not bound on the live report."
         ],
         "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated exit \u2014 left target set"
-          },
           {
             "kind": "screen_signal",
             "source": "candidates",
             "detail": "Effective signal at decision time",
-            "value": "hold"
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 1
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 1
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
           },
           {
             "kind": "research_verdict",
@@ -2699,6 +2781,12 @@
             "kind": "still_buyish",
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
             "value": false
           },
           {
@@ -2713,11 +2801,11 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level_native",
-        "logged_at": "2026-10-18T08:09:23.675579+01:00",
-        "proposal_id": "buy_tier_level_native:PUB.PA:sell:2026-10-18T08:09:23.675579+01:00",
+        "logged_at": "2026-10-19T08:28:24.450457+01:00",
+        "proposal_id": "buy_tier_level_native:DG.PA:buy:2026-10-19T08:28:24.450457+01:00",
         "meta": {
-          "still_buyish": false,
-          "rank_drop": null,
+          "still_buyish": true,
+          "rank_drop": 0,
           "rank_drop_exit_min": 3,
           "research_verdict": "accumulate",
           "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
@@ -2733,7 +2821,7 @@
           "heuristic_baseline": {
             "shadow_verdict": "agree",
             "reasons": [
-              "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+              "Buy into buyish target set \u2014 agree with algo selection."
             ],
             "judge_spec_id": "heuristic.v1"
           },
@@ -2753,7 +2841,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-10-18T08:09:23.675579+01:00",
+      "generated_at": "2026-10-19T08:28:24.450457+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
@@ -2767,7 +2855,7 @@
         "abstain": 0
       },
       "by_algo_action": {
-        "sell": {
+        "buy": {
           "agree": 1,
           "veto": 0,
           "abstain": 0
@@ -2788,7 +2876,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-18T07:09:28.435623+00:00",
+  "generated_at": "2026-10-19T07:28:29.854880+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,

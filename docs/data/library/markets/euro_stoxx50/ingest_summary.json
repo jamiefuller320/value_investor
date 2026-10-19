@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-17T13:53:45.276591+00:00",
+  "run_at": "2026-10-18T18:53:48.054824+00:00",
   "market_id": "euro_stoxx50",
   "targets": [],
   "target_details": [],
@@ -9,15 +9,15 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-17T13:52:51.150539+00:00",
+    "snapshot_at": "2026-10-18T18:52:39.686937+00:00",
     "market_id": "euro_stoxx50",
-    "buy_tier_count": 15,
+    "buy_tier_count": 14,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 3,
+    "thin_body_buy_tier": 2,
     "indexed_without_body": 1,
     "bodies_min": 1,
-    "bodies_median": 5,
+    "bodies_median": 7.5,
     "bodies_max": 125,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -25,7 +25,6 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [
       "MUV2.DE",
-      "BAS.DE",
       "IFX.DE"
     ],
     "indexed_without_body_tickers": [
@@ -48,15 +47,15 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-17T13:53:45.255740+00:00",
+    "snapshot_at": "2026-10-18T18:53:48.035157+00:00",
     "market_id": "euro_stoxx50",
-    "buy_tier_count": 15,
+    "buy_tier_count": 14,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 3,
+    "thin_body_buy_tier": 2,
     "indexed_without_body": 1,
     "bodies_min": 1,
-    "bodies_median": 5,
+    "bodies_median": 7.5,
     "bodies_max": 125,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -64,7 +63,6 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [
       "MUV2.DE",
-      "BAS.DE",
       "IFX.DE"
     ],
     "indexed_without_body_tickers": [
@@ -74,12 +72,11 @@
       "SAP.DE": 1
     },
     "parked_tickers": [
-      "BAS.DE",
       "IFX.DE",
       "MUV2.DE",
       "SAP.DE"
     ],
-    "parked_count": 4,
+    "parked_count": 3,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
@@ -93,10 +90,10 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 15,
-    "hits": 14,
-    "new_rows_total": 1,
-    "curiosity_total": 15,
+    "scanned": 14,
+    "hits": 13,
+    "new_rows_total": 0,
+    "curiosity_total": 14,
     "errors": 0,
     "prioritization_weights": {
       "new_index_rows": 8.0,
@@ -109,7 +106,6 @@
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
       "MUV2.DE",
-      "BAS.DE",
       "IFX.DE",
       "SAP.DE"
     ],
@@ -124,7 +120,7 @@
   },
   "critical_path": {
     "market_id": "euro_stoxx50",
-    "assessed_at": "2026-10-17T13:52:52.036565+00:00",
+    "assessed_at": "2026-10-18T18:52:40.626621+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -137,7 +133,6 @@
     ],
     "thin_need_discovery": [
       "MUV2.DE",
-      "BAS.DE",
       "IFX.DE"
     ],
     "thin_need_bodies": [],
@@ -148,7 +143,7 @@
     ],
     "recommended_actions": [
       "Prefer indexed-without-body body refetch (1 tickers, top: SAP.DE(1))",
-      "Discovery/IR seed for 3 thin ticker(s) that already have bodies for every indexed filing",
+      "Discovery/IR seed for 2 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
@@ -156,13 +151,13 @@
       "zero_body": 0,
       "indexed_without_body_tickers": 1,
       "indexed_without_body_rows": 1,
-      "thin_need_discovery": 3,
+      "thin_need_discovery": 2,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 52.373954716,
+  "used_seconds": 66.472006274,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3547.626045284,
+  "leftover_seconds": 3533.527993726,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -170,22 +165,11 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_stoxx50",
-    "updated_at": "2026-10-17T13:53:45.262524+00:00",
+    "updated_at": "2026-10-18T18:53:48.041933+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 2,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
     "parked": [
-      {
-        "ticker": "BAS.DE",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-09-16T07:51:24.227763+00:00",
-        "filings_total": 1,
-        "filings_with_body": 1,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings"
-      },
       {
         "ticker": "MUV2.DE",
         "reason": "awaiting_periodic_report",
@@ -226,7 +210,6 @@
     "straggler_zero_runs": 2,
     "had_complete_targets": false,
     "leftover_tickers": [
-      "BAS.DE",
       "IFX.DE",
       "MUV2.DE",
       "SAP.DE"
@@ -267,6 +250,6 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261017-04"
+    "task_id": "eng-20261018-05"
   }
 }

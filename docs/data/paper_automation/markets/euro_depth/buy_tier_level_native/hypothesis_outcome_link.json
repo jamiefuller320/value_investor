@@ -3,13 +3,13 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-10-18T07:08:38.257584+00:00",
+  "generated_at": "2026-10-19T07:27:34.545191+00:00",
   "stamped_this_pass": {
-    "hold_episodes": 0,
+    "hold_episodes": 1,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 20,
+    "closed_total": 21,
     "closed_unknown_thesis": 0,
     "open_with_thesis": 32,
     "by_thesis_status": {
@@ -17,13 +17,13 @@
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 13,
-        "recovery_rate": 0.9231,
-        "sold_underwater_rate": 0.0769,
-        "mean_peak_unrealized_pct": 0.0392,
-        "mean_trough_unrealized_pct": -0.006,
+        "closed_count": 14,
+        "recovery_rate": 0.9286,
+        "sold_underwater_rate": 0.0714,
+        "mean_peak_unrealized_pct": 0.0413,
+        "mean_trough_unrealized_pct": -0.0073,
         "outcome_labels": {
-          "recovered": 12,
+          "recovered": 13,
           "sold_underwater": 1
         }
       },
@@ -64,7 +64,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 20,
+    "hold_closed_with_thesis": 21,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -683,7 +683,7 @@
       "ticker": "HEIA.AS",
       "name": "Heineken N.V.",
       "started_at": "2026-09-29T09:24:15.702291+02:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -725,9 +725,9 @@
       "peak_unrealized_pct": 0.0688,
       "trough_unrealized_pct": -0.0242,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-19T09:27:34.171916+02:00",
+      "linked_sell_trade_id": "68f977ec-7d92-4c86-8caa-c8e6362c1705"
     },
     {
       "episode_id": "buy_tier_level_native:BOL.ST:2026-09-29T09:24:15.702291+02:00",
@@ -2536,7 +2536,7 @@
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.052,
+      "peak_unrealized_pct": 0.0,
       "trough_unrealized_pct": -0.0535,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -2627,6 +2627,47 @@
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "buy_tier_level_native:KRX.IR:2026-10-19T09:27:34.171916+02:00",
+      "track_id": "buy_tier_level_native",
+      "ticker": "KRX.IR",
+      "name": "Kingspan Group plc",
+      "started_at": "2026-10-19T09:27:34.171916+02:00",
+      "status": "open",
+      "stress_triggers": [
+        "exit_streak"
+      ],
+      "entry_mark": 96.45,
+      "avg_cost": 96.45,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "",
+      "effective_signal": "",
+      "data_quality_score": null,
+      "conviction_score": null,
+      "exit_streak_at_start": 1,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null,
+      "thesis_status_at_start": "broken",
+      "recommended_action_at_start": "exit_candidate",
+      "thesis_reasons_at_start": [
+        "cheapness lost and not in buy tier"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": null,
+      "unrealized_pct_at_thesis": 0.0
     }
   ],
   "swap_rotations": [
@@ -3115,7 +3156,15 @@
           "cost": 0.0
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-19T09:27:34.171916+02:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0196,
+          "avg_buy_return": 0.0209,
+          "replacement_delta": 0.0405
+        }
+      ],
       "sell_returns_since_rotation": {
         "MIO.IR": -0.0196
       },
@@ -3275,7 +3324,7 @@
         "DTE.DE": 0.0241,
         "MT.AS": 0.0096,
         "AMRZ.SW": 0.0381,
-        "IFX.DE": -0.0535
+        "IFX.DE": 0.0
       },
       "verdict": null,
       "closed_at": null

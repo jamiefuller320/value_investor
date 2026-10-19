@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-18T07:10:22.962280+00:00
+Track: `buy_tier_level` · updated 2026-10-19T07:29:20.789559+00:00
 
 ## Portfolio loser feedback
 
@@ -10,12 +10,8 @@ Track: `buy_tier_level` · updated 2026-10-18T07:10:22.962280+00:00
 
 ## Holding reviews
 
-### UMC — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 40%
+### UMC — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### SONY — intact / hold_tolerate (+6.3%)
 - still buy

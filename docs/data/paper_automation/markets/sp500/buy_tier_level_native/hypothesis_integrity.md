@@ -1,14 +1,17 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-18T07:08:04.167267+00:00
+Track: `buy_tier_level_native` · updated 2026-10-19T07:27:21.668765+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **6** / 120 (5% count, 4% NAV)
+- Losers: **5** / 120 (4% count, 4% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
+
+### JBHT — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### MU — intact / watch_review (-19.2%)
 - deep drawdown (-19.2%) — re-check facts; thesis still intact
@@ -33,11 +36,6 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:04.167267+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 58%
-
-### HPE — weakening / watch_review (-6.0%)
-- conviction 30% below intact floor
-- still buy
-- research accumulate
 
 ### LEN — intact / hold_tolerate (-5.4%)
 - price drawdown alone does not invalidate value thesis
@@ -197,7 +195,7 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:04.167267+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 84%
+- conviction 85%
 
 ### URI — weakening / watch_review (+0.0%)
 - research verdict caution
@@ -209,7 +207,7 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:04.167267+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 46%
+- conviction 52%
 
 ### DECK — intact / hold_tolerate (+0.0%)
 - still buy
@@ -218,18 +216,12 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:04.167267+00:00
 - data_quality 1.00
 - conviction 43%
 
-### JBHT — weakening / watch_review (+0.0%)
-- research verdict caution
-- cheapness family no longer passes
-- still buy
-- data_quality 1.00
-
 ### WYNN — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 42%
+- conviction 43%
 
 ### CPRT — intact / hold_tolerate (+0.0%)
 - still buy
@@ -237,6 +229,25 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:04.167267+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 42%
+
+### ACGL — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 45%
+
+### JBL — weakening / watch_review (+0.0%)
+- research verdict caution
+- still buy
+- cheapness family still passes
+
+### MCD — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.90
+- conviction 39%
 
 ### FSLR — intact / hold_tolerate (+0.3%)
 - still strong_buy
@@ -466,7 +477,7 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:04.167267+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 40%
+- conviction 47%
 
 ### FTV — intact / hold_tolerate (+4.2%)
 - still buy
@@ -611,19 +622,12 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:04.167267+00:00
 - data_quality 1.00
 - conviction 53%
 
-### OXY — intact / hold_tolerate (+7.5%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 39%
-
 ### TRV — intact / hold_tolerate (+7.5%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 57%
+- conviction 56%
 
 ### HIG — intact / hold_tolerate (+7.5%)
 - still strong_buy
@@ -733,12 +737,6 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:04.167267+00:00
 - data_quality 1.00
 - conviction 51%
 
-### ADP — weakening / watch_review (+9.8%)
-- left buy tier (hold)
-- conviction 32% below intact floor
-- research accumulate
-- cheapness family still passes
-
 ### PAYX — intact / hold_tolerate (+9.9%)
 - still buy
 - research accumulate
@@ -807,7 +805,7 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:04.167267+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 66%
+- conviction 74%
 
 ### CTSH — intact / hold_tolerate (+15.5%)
 - still strong_buy

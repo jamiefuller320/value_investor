@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-17T16:41:31.143565+00:00",
+  "run_at": "2026-10-19T10:40:50.750966+00:00",
   "market_id": "iseq20",
   "targets": [],
   "target_details": [],
@@ -9,56 +9,64 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-17T16:41:22.807914+00:00",
+    "snapshot_at": "2026-10-19T10:40:40.912513+00:00",
     "market_id": "iseq20",
-    "buy_tier_count": 2,
+    "buy_tier_count": 3,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 0,
+    "thin_body_buy_tier": 1,
     "indexed_without_body": 0,
-    "bodies_min": 5,
-    "bodies_median": 20.5,
+    "bodies_min": 1,
+    "bodies_median": 5,
     "bodies_max": 36,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
-    "thin_body_tickers": [],
+    "thin_body_tickers": [
+      "KRX.IR"
+    ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
-    "parked_tickers": [],
-    "parked_count": 0,
+    "parked_tickers": [
+      "KRX.IR"
+    ],
+    "parked_count": 1,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-17T16:41:31.135119+00:00",
+    "snapshot_at": "2026-10-19T10:40:50.740030+00:00",
     "market_id": "iseq20",
-    "buy_tier_count": 2,
+    "buy_tier_count": 3,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 0,
+    "thin_body_buy_tier": 1,
     "indexed_without_body": 0,
-    "bodies_min": 5,
-    "bodies_median": 20.5,
+    "bodies_min": 1,
+    "bodies_median": 5,
     "bodies_max": 36,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
-    "thin_body_tickers": [],
+    "thin_body_tickers": [
+      "KRX.IR"
+    ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
-    "parked_tickers": [],
-    "parked_count": 0,
+    "parked_tickers": [
+      "KRX.IR"
+    ],
+    "parked_count": 1,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -67,7 +75,7 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 2,
+    "scanned": 3,
     "hits": 2,
     "new_rows_total": 0,
     "curiosity_total": 2,
@@ -81,7 +89,9 @@
     },
     "forced_by_critical_path": false,
     "max_runtime_seconds": 900.0,
-    "prefer_tickers": [],
+    "prefer_tickers": [
+      "KRX.IR"
+    ],
     "runtime_cutoff": false
   },
   "maintenance_mode": true,
@@ -93,30 +103,33 @@
   },
   "critical_path": {
     "market_id": "iseq20",
-    "assessed_at": "2026-10-17T16:41:23.087040+00:00",
+    "assessed_at": "2026-10-19T10:40:41.217636+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
-    "thin_need_discovery": [],
+    "thin_need_discovery": [
+      "KRX.IR"
+    ],
     "thin_need_bodies": [],
-    "primary_blocker": "none",
-    "force_discovery_scan": false,
+    "primary_blocker": "thin_need_discovery",
+    "force_discovery_scan": true,
     "auto_pin_tickers": [],
     "recommended_actions": [
-      "Filing critical path clear — maintenance deepen only"
+      "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
+      "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 0,
       "indexed_without_body_rows": 0,
-      "thin_need_discovery": 0,
+      "thin_need_discovery": 1,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 7.755739361999986,
+  "used_seconds": 9.209468880000031,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3592.244260638,
+  "leftover_seconds": 3590.79053112,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -124,28 +137,68 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "iseq20",
-    "updated_at": "2026-10-17T16:41:31.136729+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 12,
+    "updated_at": "2026-10-19T10:40:50.742122+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 14,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "KRX.IR",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-19T10:07:41.934159+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0,
+        "thin": true,
+        "source_surface": "euro_filings"
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": false,
-    "leftover_tickers": [],
+    "had_complete_targets": true,
+    "leftover_tickers": [
+      "KRX.IR"
+    ],
     "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/iseq20/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "true_parity",
-    "market_id": "iseq20"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "iseq20",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "iseq20",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261017-05"
+    "task_id": "eng-20261018-05"
   }
 }

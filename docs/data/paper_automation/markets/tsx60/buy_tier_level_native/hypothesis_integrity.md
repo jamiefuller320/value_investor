@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-18T07:08:57.958935+00:00
+Track: `buy_tier_level_native` · updated 2026-10-19T07:27:52.200082+00:00
 
 ## Portfolio loser feedback
 
@@ -73,19 +73,19 @@ Track: `buy_tier_level_native` · updated 2026-10-18T07:08:57.958935+00:00
 - still buy
 - cheapness family still passes
 
+### L.TO — intact / hold_tolerate (+7.3%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 62%
+
 ### MRU.TO — intact / hold_tolerate (+8.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 39%
-
-### L.TO — intact / hold_tolerate (+9.6%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 62%
 
 ### CNQ.TO — weakening / watch_review (+12.2%)
 - cheapness family no longer passes
