@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-19T18:49:17.589458+00:00`
+Generated: `2026-10-19T21:40:44.393289+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -37,7 +37,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `parked_hunter`/verified PR #1127 `eng-20261018-05` — Hunt fetchable IR source for parked hang_seng leftover 1109.HK
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 224
+- Occasion count: 225
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 4×
