@@ -2,15 +2,19 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
 from value_investor.lifecycle_board import (
     COLUMN_SHOW_CAPS,
+    JUST_BOUGHT_DAYS,
+    JUST_SOLD_DAYS,
     _episode_opened_at,
     build_lifecycle_board,
     classify_board_column,
+    close_in_window,
     merge_track_columns,
+    realized_exit_pnl_pct,
     tenure_band_for_days,
     tickers_on_lifecycle_board,
     write_lifecycle_board,
@@ -215,8 +219,18 @@ def test_held_name_is_not_also_on_the_screen_funnel(tmp_path: Path):
     assert sold_card["tenure_band"] == "fresh"
     assert sold_card["exit_price"] == 1.2
     assert sold_card["avg_cost"] == 1.0
+    assert sold_card["realized_exit_pnl_pct"] == 0.2
+    assert "realized_exit_pnl_pct" not in hold_card
     assert sold_card["opened_at"][:10] == (NOW - timedelta(days=20)).date().isoformat()
     assert sold_card["sold_at"][:10] == (NOW - timedelta(days=4)).date().isoformat()
+    hold_open = date.fromisoformat(hold_card["opened_at"][:10])
+    assert hold_card["close_in"]["start"] == (hold_open - timedelta(days=JUST_BOUGHT_DAYS)).isoformat()
+    assert "end" not in hold_card["close_in"]
+    sold_open = date.fromisoformat(sold_card["opened_at"][:10])
+    sold_on = date.fromisoformat(sold_card["sold_at"][:10])
+    assert sold_card["close_in"]["start"] == (sold_open - timedelta(days=JUST_BOUGHT_DAYS)).isoformat()
+    assert sold_card["close_in"]["end"] == (sold_on + timedelta(days=JUST_SOLD_DAYS)).isoformat()
+    assert sold_on + timedelta(days=JUST_SOLD_DAYS) > NOW.date()
     wait_card = next(card for card in columns["not_now"]["shown"] if card["ticker"] == "WAIT.L")
     assert wait_card["days_in_column"] == 10
     assert wait_card["tenure_band"] == "recent"
@@ -531,9 +545,83 @@ def test_dashboard_lifecycle_opens_experiment_cards():
     assert "function tradeFillMarker(" in charts
     assert "sold_at: card.sold_at" in app
     assert "exit_price: card.exit_price" in app
+    assert "close_in: card.close_in" in app
+    assert "function lifecyclePnlText(card)" in app
+    assert "realized_exit_pnl_pct" in app
     assert "_exit_price" in charts
+    assert "function clipPriceSeries(" in charts
+    assert "data-chart-range" in charts
     assert "Bought ${openedAt}" in charts
     assert "Sold ${soldAt}" in charts
+
+
+def test_close_in_window_stays_open_until_sold_and_clips_partial_end():
+    opened = "2026-10-01T09:00:00+00:00"
+    sold = "2026-10-16T15:00:00+00:00"
+    start = (date(2026, 10, 1) - timedelta(days=JUST_BOUGHT_DAYS)).isoformat()
+    end = (date(2026, 10, 16) + timedelta(days=JUST_SOLD_DAYS)).isoformat()
+    still_open = close_in_window(opened, None)
+    assert still_open == {
+        "days_before": JUST_BOUGHT_DAYS,
+        "days_after": JUST_SOLD_DAYS,
+        "start": start,
+    }
+    closed = close_in_window(opened, sold)
+    assert closed["start"] == start
+    assert closed["end"] == end
+    assert end > "2026-10-16"
+    assert close_in_window(None, None) is None
+    sold_only = close_in_window(None, sold)
+    assert "start" not in sold_only
+    assert sold_only["end"] == end
+
+
+def test_realized_exit_pnl_needs_both_prices():
+    assert realized_exit_pnl_pct(1.2, 1.0) == 0.2
+    assert realized_exit_pnl_pct(0.8, 1.0) == -0.2
+    assert realized_exit_pnl_pct(None, 1.0) is None
+    assert realized_exit_pnl_pct(1.2, None) is None
+    assert realized_exit_pnl_pct(1.2, 0) is None
+
+
+def test_clip_price_series_keeps_partial_window():
+    import subprocess
+
+    script = r"""
+const fs = require("fs");
+const src = fs.readFileSync("docs/charts.js", "utf8");
+const start = src.indexOf("function chartDay");
+const end = src.indexOf("function closeInRangeLabel");
+if (start < 0 || end < 0) process.exit(2);
+const CHART_SMA_SERIES = {
+  sma50: { key: "sma50_series" },
+  sma200: { key: "sma200_series" },
+};
+eval(src.slice(start, end));
+const series = {
+  dates: ["2026-09-01", "2026-09-20", "2026-10-10", "2026-11-01"],
+  closes: [1, 2, 3, 4],
+  sma50_series: [1.1, 2.1, 3.1, 4.1],
+};
+const partial = clipPriceSeries(series, { start: "2026-09-17", end: "2026-10-30" });
+if (partial.dates.join(",") !== "2026-09-20,2026-10-10") process.exit(3);
+if (partial.closes.join(",") !== "2,3") process.exit(4);
+if (partial.sma50_series.join(",") !== "2.1,3.1") process.exit(5);
+const openEnded = clipPriceSeries(series, { start: "2026-10-01" });
+if (openEnded.dates.join(",") !== "2026-10-10,2026-11-01") process.exit(6);
+const empty = clipPriceSeries(series, { start: "2027-01-01", end: "2027-01-15" });
+if (empty.dates.length !== 0) process.exit(7);
+const full = clipPriceSeries(series, {});
+if (full.dates.length !== 4) process.exit(8);
+console.log("ok");
+"""
+    completed = subprocess.run(
+        ["node", "-e", script],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.returncode == 0, completed.stderr or completed.stdout
 
 
 def _write_btl_fund(paper: Path, *, ticker: str, avg_cost: float, opened_days: int = 60) -> None:

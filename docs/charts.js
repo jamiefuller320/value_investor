@@ -446,12 +446,77 @@ function displayLevelsForSource(payload, source) {
   };
 }
 
-function renderChartBody(payload, report, source, overlays) {
+function chartDay(value) {
+  return String(value || "").slice(0, 10);
+}
+
+/** Keep closes that fall inside [start, end]. Missing edges stay open.
+ * A short series still returns — the window does not have to be fully populated.
+ */
+function clipPriceSeries(payload, range) {
+  const source = payload || {};
+  const dates = Array.isArray(source.dates) ? source.dates : [];
+  const closes = Array.isArray(source.closes) ? source.closes : [];
+  const start = chartDay(range && range.start);
+  const end = chartDay(range && range.end);
+  if ((!start && !end) || !dates.length) return source;
+  const indexes = [];
+  dates.forEach((date, index) => {
+    const day = chartDay(date);
+    if (!day) return;
+    if (start && day < start) return;
+    if (end && day > end) return;
+    indexes.push(index);
+  });
+  const take = (values) => {
+    if (!Array.isArray(values) || values.length !== dates.length) return values;
+    return indexes.map((index) => values[index]);
+  };
+  const next = {
+    ...source,
+    dates: indexes.map((index) => dates[index]),
+    closes: indexes.map((index) => (index < closes.length ? closes[index] : null)),
+  };
+  for (const meta of Object.values(CHART_SMA_SERIES)) {
+    if (Array.isArray(source[meta.key])) next[meta.key] = take(source[meta.key]);
+  }
+  return next;
+}
+
+function closeInRangeLabel(range) {
+  const before = Number(range && range.days_before);
+  const after = Number(range && range.days_after);
+  if (Number.isFinite(before) && Number.isFinite(after) && before === after) {
+    return `Sleeve ± ${before}d`;
+  }
+  const bits = [];
+  if (Number.isFinite(before)) bits.push(`−${before}d`);
+  if (Number.isFinite(after)) bits.push(`+${after}d`);
+  return bits.length ? `Sleeve ${bits.join(" / ")}` : "Sleeve window";
+}
+
+function chartRangeToggle(rangeMode, closeIn) {
+  if (!closeIn || (!closeIn.start && !closeIn.end)) return "";
+  const label = closeInRangeLabel(closeIn);
+  const mode = rangeMode === "close_in" ? "close_in" : "full";
+  return `
+    <div class="chart-level-toggle chart-range-toggle" role="group" aria-label="Chart range">
+      <button type="button" class="btn chart-toggle${mode === "full" ? " is-active" : ""}" data-chart-range="full">Full history</button>
+      <button type="button" class="btn chart-toggle${mode === "close_in" ? " is-active" : ""}" data-chart-range="close_in">${esc(
+        label
+      )}</button>
+    </div>`;
+}
+
+function renderChartBody(payload, report, source, overlays, rangeMode) {
   const baseLevels = displayLevelsForSource(payload, source);
   const levels = mergeChartLevels(baseLevels, report, overlays);
   const levelsAsOf = (payload.levels_as_of || payload.as_of || "").slice(0, 10);
   const initialAsOf = (payload.initial_levels_as_of || payload.signal_since || "").slice(0, 10);
   const signalSince = (payload.signal_since || "").slice(0, 10);
+  const closeIn = overlays && overlays.close_in ? overlays.close_in : null;
+  const range = rangeMode === "close_in" && closeIn ? "close_in" : "full";
+  const view = range === "close_in" ? clipPriceSeries(payload, closeIn) : payload;
   const openedAt = (overlays && overlays.opened_at ? String(overlays.opened_at) : "").slice(0, 10);
   const soldAt = (overlays && overlays.sold_at ? String(overlays.sold_at) : "").slice(0, 10);
   const entryPrice =
@@ -518,22 +583,35 @@ function renderChartBody(payload, report, source, overlays) {
       }">Initial recommendation</button>
     </div>`;
   const chartPayload = {
-    ...payload,
+    ...view,
     _opened_at: openedAt || null,
     _sold_at: soldAt || null,
     _entry_price: entryPrice,
     _exit_price: exitPrice,
   };
+  const closeCount = Array.isArray(view.dates) ? view.dates.length : 0;
+  const rangeCaption =
+    range === "close_in" && closeIn
+      ? `<p class="small muted">Close-in ${esc(chartDay(closeIn.start) || "…")} → ${esc(
+          chartDay(closeIn.end) || "latest"
+        )}. ${closeCount} published close${closeCount === 1 ? "" : "s"} sit inside this window.</p>`
+      : "";
+  const chartHtml =
+    range === "close_in" && closeCount === 0
+      ? `<p class="muted">No closes in this window yet.</p>`
+      : renderPriceChartSvg(chartPayload, levels);
   return `
     <p class="small muted">
-      ${esc(payload.period || "1y")} daily closes · as of ${esc((payload.as_of || "").slice(0, 10) || "—")}
+      ${esc(view.period || payload.period || "1y")} daily closes · as of ${esc((payload.as_of || "").slice(0, 10) || "—")}
       ${payload.signal ? ` · ${esc(String(payload.signal).replace(/_/g, " "))}` : ""}
       ${payload.market ? ` · ${esc(payload.market)}` : ""}
     </p>
+    ${chartRangeToggle(range, closeIn)}
+    ${rangeCaption}
     ${toggle}
     ${planHint}
     ${levelsHint}
-    ${renderPriceChartSvg(chartPayload, levels)}
+    ${chartHtml}
     ${levelsTableHtml(levels, { smaAsSeries, currency })}
     ${hasInitial ? crossingsTableHtml(payload.level_crossings || [], currency) : ""}
   `;
@@ -552,19 +630,35 @@ async function mountPriceChart(body, report, overlays) {
     const response = await fetch(path);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();
-    const render = (source) => {
-      body.innerHTML = renderChartBody(payload, report || {}, source, overlays || {});
+    let levelSource = "current";
+    let rangeMode = "full";
+    const render = () => {
+      body.innerHTML = renderChartBody(
+        payload,
+        report || {},
+        levelSource,
+        overlays || {},
+        rangeMode
+      );
     };
     if (!body.dataset.levelToggleBound) {
       body.dataset.levelToggleBound = "1";
       body.addEventListener("click", (event) => {
-        const button = event.target.closest("[data-level-source]");
-        if (!button || button.disabled || !body.contains(button)) return;
+        const levelButton = event.target.closest("[data-level-source]");
+        if (levelButton && !levelButton.disabled && body.contains(levelButton)) {
+          event.preventDefault();
+          levelSource = levelButton.dataset.levelSource || "current";
+          render();
+          return;
+        }
+        const rangeButton = event.target.closest("[data-chart-range]");
+        if (!rangeButton || rangeButton.disabled || !body.contains(rangeButton)) return;
         event.preventDefault();
-        render(button.dataset.levelSource);
+        rangeMode = rangeButton.dataset.chartRange || "full";
+        render();
       });
     }
-    render("current");
+    render();
   } catch (err) {
     body.innerHTML = `
       <p class="muted">Could not load price chart (${esc(err.message)}).</p>
