@@ -411,6 +411,16 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "NBA.LS": [
         "https://content.novabase.com/storage/uploads/relatorio-contas-novabase-2025-versao-ingles-nao-esef.pdf",
     ],
+    # euro_depth parked KRX.IR — eng-20261019-02: awaiting_periodic_report; annual-report.kingspan.com
+    # FY2025 statutory annual + kingspangroup.com Storyblok H1 2026 interim statement PDF.
+    "KRX.IR": [
+        "https://annual-report.kingspan.com/wp-content/uploads/2026/03/KS_AR25_Web.pdf",
+        "https://a.storyblok.com/f/289849314402549/x/202fe2e0ba/kgr-interim-statement-hy-2026.pdf",
+    ],
+    "KRX": [
+        "https://annual-report.kingspan.com/wp-content/uploads/2026/03/KS_AR25_Web.pdf",
+        "https://a.storyblok.com/f/289849314402549/x/202fe2e0ba/kgr-interim-statement-hy-2026.pdf",
+    ],
     # euro_depth IWB blocker — JMT.LS parked awaiting_periodic_report; FY2025 entire annual PDF.
     "JMT.LS": [
         "https://reports.jeronimomartins.com/annual-report/2025/_assets/downloads/entire-jeronimomartins-ar25.pdf",
