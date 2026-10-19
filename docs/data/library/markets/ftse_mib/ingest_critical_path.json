@@ -1,32 +1,72 @@
 {
   "market_id": "ftse_mib",
-  "assessed_at": "2026-10-18T18:54:57.546597+00:00",
+  "assessed_at": "2026-10-19T21:17:48.199469+00:00",
   "unmeasured": [],
   "zero_body": [],
-  "indexed_without_body": [],
+  "indexed_without_body": [
+    {
+      "ticker": "INW.MI",
+      "indexed_without_body": 3,
+      "filings_total": 5,
+      "filings_with_body": 2
+    },
+    {
+      "ticker": "MONC.MI",
+      "indexed_without_body": 3,
+      "filings_total": 5,
+      "filings_with_body": 2
+    },
+    {
+      "ticker": "LTMC.MI",
+      "indexed_without_body": 2,
+      "filings_total": 4,
+      "filings_with_body": 2
+    },
+    {
+      "ticker": "UNI.MI",
+      "indexed_without_body": 2,
+      "filings_total": 3,
+      "filings_with_body": 1
+    },
+    {
+      "ticker": "FCT.MI",
+      "indexed_without_body": 1,
+      "filings_total": 2,
+      "filings_with_body": 1
+    }
+  ],
   "thin_need_discovery": [
+    "PST.MI",
+    "TEN.MI",
+    "FCT.MI"
+  ],
+  "thin_need_bodies": [
     "MONC.MI",
     "UNI.MI",
-    "PST.MI",
     "LTMC.MI",
-    "TEN.MI",
     "INW.MI",
     "FCT.MI"
   ],
-  "thin_need_bodies": [],
-  "primary_blocker": "thin_need_discovery",
+  "primary_blocker": "indexed_without_body",
   "force_discovery_scan": true,
-  "auto_pin_tickers": [],
+  "auto_pin_tickers": [
+    "INW.MI",
+    "MONC.MI",
+    "LTMC.MI",
+    "UNI.MI",
+    "FCT.MI"
+  ],
   "recommended_actions": [
-    "Discovery/IR seed for 7 thin ticker(s) that already have bodies for every indexed filing",
+    "Prefer indexed-without-body body refetch (5 tickers, top: INW.MI(3), MONC.MI(3), LTMC.MI(2), UNI.MI(2), FCT.MI(1))",
+    "Discovery/IR seed for 3 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 0,
-    "indexed_without_body_rows": 0,
-    "thin_need_discovery": 7,
-    "thin_need_bodies": 0
+    "indexed_without_body_tickers": 5,
+    "indexed_without_body_rows": 11,
+    "thin_need_discovery": 3,
+    "thin_need_bodies": 5
   }
 }
