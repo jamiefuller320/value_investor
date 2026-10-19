@@ -7927,14 +7927,29 @@ def test_merge_ir_allowlist_filings_bootstraps_empty_1109_hk_index(tmp_path: Pat
 
 def test_parked_source_hunter_1109_hk_hang_seng_has_fetchable_ir():
     """eng-20261018-05: 1109.HK (China Resources Land) has live-fetchable HKEX statutory PDFs."""
+    from value_investor.research.filings import _ESEF_ENTITY_SEARCH_ALIASES
+
     assert "1109.HK" not in PARKED_SOURCE_HUNTER_SKIP
+    # Opaque listconews filenames fail the hunter title gate without issuer aliases.
+    aliases = _ESEF_ENTITY_SEARCH_ALIASES.get("1109") or ()
+    assert any("China Resources Land" in alias for alias in aliases)
     rows = fetch_filings_ir_allowlist("1109.HK")
     assert len(rows) == 3
     annual_url = next(row["url"] for row in rows if row["period"] == "annual")
-    body = _live_fetch_filing_body(annual_url)
+    body, source = _fetch_ir_allowlist_body(
+        {
+            "id": "hunter_gate",
+            "url": annual_url,
+            "period": "annual",
+            "source": "ir_allowlist",
+        },
+        ticker="1109.HK",
+    )
     if not body:
         pytest.skip("HKEX PDF body fetch unavailable (network) — retry later")
+    assert source
     assert len(body) >= 50000
+    assert "CHINA RESOURCES LAND" in body.upper()
     assert fetch_filing_body("https://simplywall.st/stock/sehk/1109") is None
 
 
