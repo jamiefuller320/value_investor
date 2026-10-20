@@ -27,6 +27,19 @@ from value_investor.research.ingest import (
 pytestmark = pytest.mark.usefixtures("board_not_written")
 
 
+@pytest.fixture
+def stub_price_charts(monkeypatch):
+    """publish_dashboard must not hit Yahoo for synthetic AAA.L / BBB.L (hangs CI)."""
+    monkeypatch.setattr(
+        "value_investor.publish.ensure_price_charts",
+        lambda **kwargs: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.publish.copy_charts_to_dashboard",
+        lambda **kwargs: None,
+    )
+
+
 def _write_sample_output(output_dir: Path) -> None:
     signals = pd.DataFrame(
         [
@@ -218,6 +231,7 @@ def test_build_dashboard_bundle_from_signals(tmp_path: Path):
     )
 
 
+@pytest.mark.usefixtures("stub_price_charts")
 def test_publish_dashboard_includes_sunday_review(tmp_path: Path):
     output_dir = tmp_path / "output"
     dest_dir = tmp_path / "docs"
@@ -259,6 +273,7 @@ def test_publish_dashboard_includes_sunday_review(tmp_path: Path):
     assert (data_dir / "review_history.json").exists()
 
 
+@pytest.mark.usefixtures("stub_price_charts")
 def test_publish_dashboard_writes_latest_json(tmp_path: Path):
     output_dir = tmp_path / "output"
     dest_dir = tmp_path / "docs"
@@ -275,6 +290,7 @@ def test_publish_dashboard_writes_latest_json(tmp_path: Path):
     assert (dest_dir / "data" / "archive" / "2026-07-08.json").exists()
 
 
+@pytest.mark.usefixtures("stub_price_charts")
 def test_publish_research_index_is_summarized(tmp_path: Path):
     output_dir = tmp_path / "output"
     dest_dir = tmp_path / "docs"
@@ -306,6 +322,7 @@ def test_publish_research_index_is_summarized(tmp_path: Path):
     assert (dest_dir / "research" / "AAA.L.md").exists()
 
 
+@pytest.mark.usefixtures("stub_price_charts")
 def test_publish_merges_committed_research_and_overlays_reports(tmp_path: Path):
     output_dir = tmp_path / "output"
     dest_dir = tmp_path / "docs"
@@ -620,6 +637,7 @@ def test_ingest_cma_ofcom_merger_writes_case_file(
     assert "Phase 1" in body_files[0].read_text(encoding="utf-8")
 
 
+@pytest.mark.usefixtures("stub_price_charts")
 def test_publish_prunes_old_dashboard_archives(tmp_path: Path):
     output_dir = tmp_path / "output"
     dest_dir = tmp_path / "docs"
