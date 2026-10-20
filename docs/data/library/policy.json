@@ -550,7 +550,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-10-19T18:46:19.324913+00:00",
+  "updated_at": "2026-10-19T21:20:12.093813+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -565,7 +565,9 @@
   "ingest_parallel_sprint": [
     "aex"
   ],
-  "ingest_parallel_sprint_2": [],
+  "ingest_parallel_sprint_2": [
+    "ftse_smallcap"
+  ],
   "ladder": {
     "enabled": true,
     "layers": [
@@ -832,16 +834,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-10-07T17:19:09.035916+00:00",
-        "parallel_stream": 2,
-        "from_market": "hang_seng",
-        "to_market": "sp500",
-        "stream_markets_after": [
-          "sp500"
-        ],
-        "ingest_parity_recorded": false
-      },
       {
         "at": "2026-10-07T17:38:51.114383+00:00",
         "parallel_stream": 1,
@@ -1518,6 +1510,28 @@
           "run_at": "2026-10-19T16:38:55.310381+00:00",
           "shortlist_count": 9,
           "ticker_count": 25
+        }
+      },
+      {
+        "reseeded": true,
+        "market_queue_appended": false,
+        "at": "2026-10-19T21:20:11.009179+00:00",
+        "parallel_stream": 2,
+        "from_market": null,
+        "to_market": "ftse_smallcap",
+        "stream_markets_after": [
+          "ftse_smallcap"
+        ],
+        "ingest_parity_recorded": false,
+        "screen_refresh": {
+          "refreshed": true,
+          "market_id": "ftse_smallcap",
+          "forced": true,
+          "prior_screen_at": "2026-10-19T06:52:48.713096+00:00",
+          "prior_age_days": 0,
+          "run_at": "2026-10-19T21:20:11.009193+00:00",
+          "shortlist_count": 10,
+          "ticker_count": 77
         }
       }
     ]
