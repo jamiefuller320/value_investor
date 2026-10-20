@@ -21197,8 +21197,45 @@
         "per_ticker": []
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20261020-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "MT.AS",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "KRX.IR"
+        ],
+        "market_id": "euro_depth",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261020-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-10-20T10:28:39.111884+00:00",
+      "completed_at": "2026-10-20T10:29:58.075272+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [],
+        "results": [],
+        "per_ticker": []
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-10-19T21:26:56.311558+00:00",
+  "updated_at": "2026-10-20T10:29:58.075287+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
