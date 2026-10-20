@@ -25,7 +25,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-10-20T20:27:19.156306+00:00",
+    "snapshot_at": "2026-10-20T20:50:56.381358+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 50,
     "unmeasured_buy_tier": 0,
@@ -109,7 +109,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-10-20T20:27:19.159505+00:00",
+  "evaluated_at": "2026-10-20T20:50:56.385477+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -179,7 +179,7 @@
         "no benchmark configured for aex"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-20T20:27:37.302845+00:00",
+        "snapshot_at": "2026-10-20T20:51:20.877299+00:00",
         "market_id": "aex",
         "buy_tier_count": 9,
         "unmeasured_buy_tier": 0,
@@ -232,85 +232,68 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-20T20:27:37.303559+00:00",
+      "evaluated_at": "2026-10-20T20:51:20.878272+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "parallel_sprint_2_markets": [
-    "ftse_smallcap"
+    "euro_stoxx50"
   ],
   "parallel_sprint_2_status": [
     {
-      "market_id": "ftse_smallcap",
+      "market_id": "euro_stoxx50",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=37)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=2, indexed_without_body=1)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
       "parked_tickers": [
-        "REC.L",
-        "TPT.L",
-        "ULTP.L"
+        "MUV2.DE",
+        "SAP.DE"
       ],
       "phase3_ready": false,
       "current_phase": 1,
       "next_phase": 1,
       "phase_blockers": [
-        "ftse_smallcap not in ladder.weekly_paper_shard_markets"
+        "euro_stoxx50 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-20T20:27:37.860452+00:00",
-        "market_id": "ftse_smallcap",
-        "buy_tier_count": 10,
+        "snapshot_at": "2026-10-20T20:51:21.557943+00:00",
+        "market_id": "euro_stoxx50",
+        "buy_tier_count": 14,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 0,
-        "indexed_without_body": 37,
-        "bodies_min": 52,
-        "bodies_median": 59.0,
-        "bodies_max": 102,
+        "thin_body_buy_tier": 2,
+        "indexed_without_body": 1,
+        "bodies_min": 1,
+        "bodies_median": 7.5,
+        "bodies_max": 125,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
-        "thin_body_tickers": [],
+        "thin_body_tickers": [
+          "MUV2.DE",
+          "IFX.DE"
+        ],
         "indexed_without_body_tickers": [
-          "DFS.L",
-          "ULTP.L",
-          "MER.L",
-          "APTD.L",
-          "FOXT.L",
-          "TPT.L",
-          "REC.L",
-          "CLIG.L"
+          "SAP.DE"
         ],
         "indexed_without_body_by_ticker": {
-          "DFS.L": 5,
-          "ULTP.L": 5,
-          "MER.L": 5,
-          "APTD.L": 5,
-          "FOXT.L": 5,
-          "TPT.L": 5,
-          "REC.L": 5,
-          "CLIG.L": 2
+          "SAP.DE": 1
         },
         "parked_tickers": [
-          "REC.L",
-          "TPT.L",
-          "ULTP.L"
+          "MUV2.DE",
+          "SAP.DE"
         ],
-        "parked_count": 3,
-        "effective_thin_body_buy_tier": 0,
-        "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 22,
-        "effective_indexed_without_body_tickers": [
-          "DFS.L",
-          "MER.L",
-          "APTD.L",
-          "FOXT.L",
-          "CLIG.L"
+        "parked_count": 2,
+        "effective_thin_body_buy_tier": 1,
+        "effective_thin_body_tickers": [
+          "IFX.DE"
         ],
+        "effective_indexed_without_body": 0,
+        "effective_indexed_without_body_tickers": [],
         "ingest_exhausted": false
       },
       "filing_gaps": 0,
@@ -328,14 +311,14 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-20T20:27:37.860889+00:00",
+      "evaluated_at": "2026-10-20T20:51:21.559096+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
     "aex",
-    "ftse_smallcap"
+    "euro_stoxx50"
   ],
   "market_queue": [
     "sp500",
@@ -392,7 +375,7 @@
     "aex"
   ],
   "scheduler_stream_2_markets": [
-    "ftse_smallcap"
+    "euro_stoxx50"
   ],
   "should_run_library_maintenance": true
 }
