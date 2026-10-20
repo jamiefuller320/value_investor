@@ -3079,27 +3079,30 @@ tr.selected td {
   border-top-style: dashed;
 }
 
-.sealed-life-card {
-  margin: 0.15rem 0 0.35rem;
-  padding: 0.45rem 0.5rem 0.5rem;
-  border-left: 2px solid rgba(43, 108, 176, 0.35);
+.sealed-life-detail-card {
+  margin: 0;
+  padding: 0.85rem 1rem 1rem;
+  border: 1px solid rgba(43, 108, 176, 0.28);
+  border-radius: 6px;
   background: rgba(43, 108, 176, 0.04);
 }
 
-.sealed-life-detail > .sealed-life-card {
-  margin: 0;
+.sealed-life-detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.55rem;
 }
 
-.sealed-life-card-head {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  margin-bottom: 0.35rem;
+.sealed-life-detail-title {
+  margin: 0;
+  font-size: 1.15rem;
 }
 
 .sealed-life-card-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.35rem 0.75rem;
   margin: 0;
 }
@@ -3118,28 +3121,25 @@ tr.selected td {
 }
 
 .sealed-life-card-note {
-  margin: 0.4rem 0 0.25rem;
+  margin: 0.55rem 0 0.35rem;
 }
 
-.sealed-life-card-actions {
-  margin-top: 0.2rem;
+.sealed-life-chart-heading {
+  margin: 0.65rem 0 0.35rem;
+  font-weight: 650;
 }
 
-.sealed-life-card-chart {
-  margin: 0;
-  padding: 0.15rem 0.45rem;
-  border: 1px solid rgba(43, 108, 176, 0.35);
+.sealed-life-detail-chart {
+  min-height: 12rem;
+  padding: 0.35rem 0.15rem 0.15rem;
   border-radius: 4px;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  font-size: 0.85rem;
-  cursor: pointer;
+  background: rgba(255, 255, 255, 0.55);
 }
 
-.sealed-life-card-chart:hover,
-.sealed-life-card-chart:focus-visible {
-  background: rgba(43, 108, 176, 0.1);
+@media (max-width: 800px) {
+  .sealed-life-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .sealed-life-ticker {
