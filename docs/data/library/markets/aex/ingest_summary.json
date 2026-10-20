@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-20T18:10:43.185329+00:00",
+  "run_at": "2026-10-20T20:12:45.120776+00:00",
   "market_id": "aex",
   "targets": [
     "MT.AS"
@@ -7,10 +7,10 @@
   "target_details": [
     {
       "ticker": "MT.AS",
-      "priority_score": 15.491700000000002,
-      "filings_total": 43,
+      "priority_score": 14.791699999999999,
+      "filings_total": 41,
       "filings_with_body": 40,
-      "indexed_without_body": 3,
+      "indexed_without_body": 1,
       "reason": "indexed_without_body"
     }
   ],
@@ -19,16 +19,16 @@
       "ticker": "MT.AS",
       "reason": "indexed_without_body",
       "before": {
-        "filings_total": 43,
+        "filings_total": 41,
         "filings_with_body": 40,
-        "indexed_without_body": 3
+        "indexed_without_body": 1
       },
       "after": {
         "filings_total": 41,
         "filings_with_body": 40,
         "indexed_without_body": 1
       },
-      "improved": true,
+      "improved": false,
       "regime": "euro_filings",
       "filings_summary": {
         "total": 41,
@@ -78,20 +78,18 @@
       }
     }
   ],
-  "improved": [
-    "MT.AS"
-  ],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-20T18:10:33.391995+00:00",
+    "snapshot_at": "2026-10-20T20:12:29.767011+00:00",
     "market_id": "aex",
     "buy_tier_count": 9,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 1,
-    "indexed_without_body": 4,
+    "indexed_without_body": 2,
     "bodies_min": 2,
     "bodies_median": 5,
     "bodies_max": 40,
@@ -108,7 +106,7 @@
     ],
     "indexed_without_body_by_ticker": {
       "ASML.AS": 1,
-      "MT.AS": 3
+      "MT.AS": 1
     },
     "parked_tickers": [
       "ASM.AS",
@@ -117,14 +115,14 @@
     "parked_count": 2,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 3,
+    "effective_indexed_without_body": 1,
     "effective_indexed_without_body_tickers": [
       "MT.AS"
     ],
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-20T18:10:43.173095+00:00",
+    "snapshot_at": "2026-10-20T20:12:45.106066+00:00",
     "market_id": "aex",
     "buy_tier_count": 9,
     "unmeasured_buy_tier": 0,
@@ -174,21 +172,21 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "aex",
-    "assessed_at": "2026-10-20T18:10:33.765410+00:00",
+    "assessed_at": "2026-10-20T20:12:30.173756+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
-      {
-        "ticker": "MT.AS",
-        "indexed_without_body": 3,
-        "filings_total": 43,
-        "filings_with_body": 40
-      },
       {
         "ticker": "ASML.AS",
         "indexed_without_body": 1,
         "filings_total": 20,
         "filings_with_body": 19
+      },
+      {
+        "ticker": "MT.AS",
+        "indexed_without_body": 1,
+        "filings_total": 41,
+        "filings_with_body": 40
       }
     ],
     "thin_need_discovery": [
@@ -198,11 +196,11 @@
     "primary_blocker": "indexed_without_body",
     "force_discovery_scan": true,
     "auto_pin_tickers": [
-      "MT.AS",
-      "ASML.AS"
+      "ASML.AS",
+      "MT.AS"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (2 tickers, top: MT.AS(3), ASML.AS(1))",
+      "Prefer indexed-without-body body refetch (2 tickers, top: ASML.AS(1), MT.AS(1))",
       "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
@@ -210,14 +208,14 @@
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 2,
-      "indexed_without_body_rows": 4,
+      "indexed_without_body_rows": 2,
       "thin_need_discovery": 1,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 8.891190015999996,
-  "budget_seconds": 262.5,
-  "leftover_seconds": 253.608809984,
+  "used_seconds": 14.497111973000017,
+  "budget_seconds": 87.5,
+  "leftover_seconds": 73.00288802699998,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -225,9 +223,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "aex",
-    "updated_at": "2026-10-20T18:10:43.176871+00:00",
+    "updated_at": "2026-10-20T20:12:45.110550+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -258,7 +256,7 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": false,
+    "had_complete_targets": true,
     "leftover_tickers": [
       "ASM.AS",
       "ASML.AS",
