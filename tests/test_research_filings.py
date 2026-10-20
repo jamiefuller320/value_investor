@@ -12316,15 +12316,20 @@ def test_fetch_filings_ir_allowlist_ftse_smallcap_aptd_l_builtins(tmp_path: Path
 
 
 def test_parked_source_hunter_aptd_l_ftse_smallcap_has_fetchable_ir():
-    """eng-20260911-07: APTD.L has live aptitudesoftware.com FY2025 ESEF + FY2024 AR + H1 PDFs."""
+    """eng-20260911-07: APTD.L has live aptitudesoftware.com FY2025 ESEF + FY2024 AR + H1 PDFs.
+
+    Live assert uses Annual-Report.pdf — the ESEF xhtml URL is currently Cloudflare 403.
+    """
     assert "APTD.L" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("APTD.L")
     assert len(rows) == 3
     urls = [row["url"] for row in rows]
     assert all("aptitudesoftware.com" in url for url in urls)
     assert any("2138009VHA1WI2VKMA28-2025-12-31-T01.xhtml" in url for url in urls)
-    body = fetch_filing_body(urls[0])
-    assert body
+    annual = [row for row in rows if "Annual-Report.pdf" in row["url"]]
+    assert len(annual) == 1
+    body, source = _fetch_ir_allowlist_body(annual[0], ticker="APTD.L")
+    assert body and source
     assert len(body) >= 50000
 
 
