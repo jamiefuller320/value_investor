@@ -354,6 +354,11 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/1243429/000124342926000020/mt-20251231.htm",
         "https://www.sec.gov/Archives/edgar/data/1243429/000124342926000072/arcelormittalform6-kjuly30.htm",
     ],
+    # aex parked leftover — eng-20261020-01: ASML.AS unfetchable_iwb; asml.com annual-report hub is
+    # Vercel/JS-only (empty body); SEC FY2025 20-F fetches for ir_allowlist deepen.
+    "ASML.AS": [
+        "https://www.sec.gov/Archives/edgar/data/937966/000162828026011378/asml-20251231.htm",
+    ],
     "POST.VI": [
         "https://assets.post.at/-/media/Dokumente/En/Investor-Relations/Geschaefts--und-Nachhaltigkeitsberichte/AustrianPost_Annual_Report_2025.pdf",
     ],
@@ -5438,6 +5443,10 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     ),
     "https://www.saint-gobain.com/en/finance/regulated-information/": (
         "https://files.webdisclosure.com/1391369/CP_Resultats_2025_VA_t.pdf"
+    ),
+    # eng-20261020-01: ASML.AS aex leftover IWB — asml.com annual-report hub is Vercel/JS-only.
+    "https://www.asml.com/en/investors/annual-report": (
+        "https://www.sec.gov/Archives/edgar/data/937966/000162828026011378/asml-20251231.htm"
     ),
 }
 
