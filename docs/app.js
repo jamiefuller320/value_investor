@@ -9946,6 +9946,14 @@ let sealedLifecycleModelId = "n200";
 /** Sealed observe board: heat map (default zoom-out) or one-line list. */
 let sealedLifecycleViewMode = "heatmap";
 let sealedLifecycleDetailKey = null;
+/** Per-phase cell/chip order: name | pnl | time. */
+let sealedLifecycleSortMode = "name";
+const SEALED_LIFECYCLE_SORT_MODES = ["name", "pnl", "time"];
+const SEALED_LIFECYCLE_SORT_LABELS = {
+  name: "Name",
+  pnl: "% P&L",
+  time: "Time in phase",
+};
 
 const LIFECYCLE_CHIP_SORT_KEY = "ftseValueInvestor.lifecycleChipSort.v1";
 const LIFECYCLE_CHIP_SORT_DIR_KEY = "ftseValueInvestor.lifecycleChipSortDir.v1";
@@ -11408,16 +11416,60 @@ function afterRenderSealedLifecycle(data) {
   void mountSealedLifecycleDetailChart(chip);
 }
 
+function normalizeSealedLifecycleSortMode(mode) {
+  return SEALED_LIFECYCLE_SORT_MODES.includes(mode) ? mode : "name";
+}
+
+/** True when the chip has a numeric fair-cost / open-mark percent to sort on. */
+function sealedLifecycleHasSortablePnl(chip) {
+  if (!chip || chip.return_pct == null || chip.return_pct === "") return false;
+  if (chip.return_basis === "open_unmarked") return false;
+  return Number.isFinite(Number(chip.return_pct));
+}
+
+/**
+ * Sort chips inside one phase. Same key applied to every column.
+ * name: A→Z. pnl: high→low with unmarked/missing last. time: short→long days in phase.
+ */
+function sortSealedLifecycleChips(chips, mode) {
+  const rows = Array.isArray(chips) ? chips.slice() : [];
+  const sortMode = normalizeSealedLifecycleSortMode(mode);
+  rows.sort((a, b) => {
+    const tickerCmp = String(a.ticker || "").localeCompare(String(b.ticker || ""));
+    if (sortMode === "name") return tickerCmp;
+    if (sortMode === "pnl") {
+      const aOk = sealedLifecycleHasSortablePnl(a);
+      const bOk = sealedLifecycleHasSortablePnl(b);
+      if (aOk !== bOk) return aOk ? -1 : 1;
+      if (aOk && bOk) {
+        const diff = Number(b.return_pct) - Number(a.return_pct);
+        if (diff !== 0) return diff;
+      }
+      return tickerCmp;
+    }
+    // time
+    const aDays = Number(a.days_in_phase);
+    const bDays = Number(b.days_in_phase);
+    const aNum = Number.isFinite(aDays) ? aDays : Number.POSITIVE_INFINITY;
+    const bNum = Number.isFinite(bDays) ? bDays : Number.POSITIVE_INFINITY;
+    if (aNum !== bNum) return aNum - bNum;
+    return tickerCmp;
+  });
+  return rows;
+}
+
 function renderSealedLifecycleHeatBoard(model, phases) {
   const columns = model.columns || {};
+  const sortMode = normalizeSealedLifecycleSortMode(sealedLifecycleSortMode);
   return phases
     .map(([id, label]) => {
       const packed = columns[id] || { count: 0, chips: [], label };
-      const cells = (packed.chips || []).map(sealedLifecycleHeatCell).join("");
+      const ordered = sortSealedLifecycleChips(packed.chips || [], sortMode);
+      const cells = ordered.map(sealedLifecycleHeatCell).join("");
       return `<section class="sealed-life-col sealed-heat-col" data-sealed-phase="${esc(id)}">
         <header class="lifecycle-col-header">
           <h3>${esc(packed.label || label)}</h3>
-          <span class="lifecycle-count">${packed.count ?? (packed.chips || []).length}</span>
+          <span class="lifecycle-count">${packed.count ?? ordered.length}</span>
         </header>
         <div class="sealed-heat-grid">${cells || '<p class="small muted">None</p>'}</div>
       </section>`;
@@ -11427,14 +11479,16 @@ function renderSealedLifecycleHeatBoard(model, phases) {
 
 function renderSealedLifecycleListBoard(model, phases) {
   const columns = model.columns || {};
+  const sortMode = normalizeSealedLifecycleSortMode(sealedLifecycleSortMode);
   return phases
     .map(([id, label]) => {
       const packed = columns[id] || { count: 0, chips: [], label };
-      const chips = (packed.chips || []).map(sealedLifecycleChip).join("");
+      const ordered = sortSealedLifecycleChips(packed.chips || [], sortMode);
+      const chips = ordered.map(sealedLifecycleChip).join("");
       return `<section class="sealed-life-col" data-sealed-phase="${esc(id)}">
         <header class="lifecycle-col-header">
           <h3>${esc(packed.label || label)}</h3>
-          <span class="lifecycle-count">${packed.count ?? (packed.chips || []).length}</span>
+          <span class="lifecycle-count">${packed.count ?? ordered.length}</span>
         </header>
         <div class="sealed-life-chips">${chips || '<p class="small muted">None</p>'}</div>
       </section>`;
@@ -11449,6 +11503,7 @@ function renderSealedLifecycle(data) {
   if (sealedLifecycleViewMode !== "list" && sealedLifecycleViewMode !== "heatmap") {
     sealedLifecycleViewMode = "heatmap";
   }
+  sealedLifecycleSortMode = normalizeSealedLifecycleSortMode(sealedLifecycleSortMode);
   const model =
     models.find((row) => row.model_id === sealedLifecycleModelId) || models[0] || null;
   if (model) sealedLifecycleModelId = model.model_id;
@@ -11485,9 +11540,23 @@ function renderSealedLifecycle(data) {
       <button type="button" class="tab${heatActive ? " active" : ""}" data-sealed-view="heatmap">Heat map</button>
       <button type="button" class="tab${!heatActive ? " active" : ""}" data-sealed-view="list">Chip list</button>
     </div>`;
+  const sortToggle = `<div class="sealed-life-sort-toggle" role="group" aria-label="Sort sealed episodes in each phase">
+      ${SEALED_LIFECYCLE_SORT_MODES.map(
+        (mode) =>
+          `<button type="button" class="tab${
+            sealedLifecycleSortMode === mode ? " active" : ""
+          }" data-sealed-sort="${esc(mode)}">${esc(SEALED_LIFECYCLE_SORT_LABELS[mode])}</button>`
+      ).join("")}
+    </div>`;
   const blurb = heatActive
     ? `Zoomed-out heat map for high-volume sealed books. Fill = fair-cost episode % (open unmarked stays neutral). Border = days in this phase (cool/short → warm/long). Click one cell for a detail card with the Sleeve ±14d assessment-window chart (same close-in clip as the live board). Chip list remains one click away — cards are not drawn on every name.`
     : `One-line chip scan: ticker, days in this column, episode percent. Click a line for the same assessment-window detail card. Prefer the heat map when a phase is dense.`;
+  const sortHint =
+    sealedLifecycleSortMode === "pnl"
+      ? "Sort: % P&L high→low in each phase; unmarked opens last."
+      : sealedLifecycleSortMode === "time"
+        ? "Sort: days in phase short→long in each phase."
+        : "Sort: ticker name A→Z in each phase.";
   return `${renderLifecycleSubnav()}
     <section class="card sealed-life-section">
       <div class="market-status-header">
@@ -11499,11 +11568,16 @@ function renderSealedLifecycle(data) {
             · as of ${esc((model.as_of || model.generated_at || "").slice(0, 10) || "—")}
           </p>
         </div>
-        ${viewToggle}
+        <div class="sealed-life-toolbar">
+          ${viewToggle}
+          ${sortToggle}
+        </div>
       </div>
       <div class="tabs sealed-life-models">${pills}</div>
       <p class="small muted">Sealed fair-cost cohort median ${esc(median)} is the book figure. ${blurb}</p>
-      <p class="small muted sealed-heat-legend">Legend: fill profit←neutral→loss · border short/cool←→long/warm · caps ±15% fill, 60d border.</p>
+      <p class="small muted sealed-heat-legend">Legend: fill profit←neutral→loss · border short/cool←→long/warm · caps ±15% fill, 60d border. ${esc(
+        sortHint
+      )}</p>
       <div class="sealed-life-board${heatActive ? " is-heatmap" : " is-list"}">${boardHtml}</div>
       ${renderSealedLifecycleDetail(model)}
     </section>`;
@@ -11683,6 +11757,15 @@ function bindLifecyclePanel() {
         event.preventDefault();
         const mode = sealedViewBtn.dataset.sealedView === "list" ? "list" : "heatmap";
         sealedLifecycleViewMode = mode;
+        renderLifecycle(dashboardData);
+        return;
+      }
+      const sealedSortBtn = event.target.closest("[data-sealed-sort]");
+      if (sealedSortBtn) {
+        event.preventDefault();
+        sealedLifecycleSortMode = normalizeSealedLifecycleSortMode(
+          sealedSortBtn.dataset.sealedSort
+        );
         renderLifecycle(dashboardData);
         return;
       }
