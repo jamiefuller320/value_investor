@@ -1,6 +1,6 @@
 # ICG plc (ICG.L) — Research memo
 
-_Version 1 · Updated 2026-10-18T08:16:53.437857+00:00 · Mode: structured_verdict_
+_Version 1 · Updated 2026-10-20T12:59:52.098112+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,5 +9,5 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.76
-Rationale: FY26 filings confirm the screen: £846m IFRS operating cash (~£839m FCF), 87p dividend (+5%, ~3.5× cover) and £113m net debt; Q1 FY27 AUM momentum supports quality/value, but IFRS leverage/Financial Health fails and alt-AM cyclical/regula...
-RiskTags: cyclical, regulatory, key_person, competitive, accounting, leverage
+Rationale: FY26 filings match the screen on IAS OCF/FCF (~£846m/~£839m) and 87p dividends (~3.5× cover); Q1 FY27 fee-earning AUM momentum supports value/quality, but IFRS consolidated leverage still fails Financial Health amid alt-AM cyclical/regul...
+RiskTags: cyclical, regulatory, leverage, liquidity, competitive
