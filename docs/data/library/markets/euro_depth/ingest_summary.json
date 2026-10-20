@@ -1,17 +1,26 @@
 {
-  "run_at": "2026-10-19T10:22:38.143237+00:00",
+  "run_at": "2026-10-20T07:23:15.058915+00:00",
   "market_id": "euro_depth",
   "targets": [
     "MT.AS",
+    "TEL2-B.ST",
     "SHELL.AS"
   ],
   "target_details": [
     {
       "ticker": "MT.AS",
-      "priority_score": 15.386700000000001,
-      "filings_total": 42,
+      "priority_score": 15.7367,
+      "filings_total": 43,
       "filings_with_body": 39,
-      "indexed_without_body": 3,
+      "indexed_without_body": 4,
+      "reason": "indexed_without_body"
+    },
+    {
+      "ticker": "TEL2-B.ST",
+      "priority_score": 23.810000000000002,
+      "filings_total": 10,
+      "filings_with_body": 9,
+      "indexed_without_body": 1,
       "reason": "indexed_without_body"
     },
     {
@@ -28,32 +37,32 @@
       "ticker": "MT.AS",
       "reason": "indexed_without_body",
       "before": {
-        "filings_total": 42,
+        "filings_total": 43,
         "filings_with_body": 39,
-        "indexed_without_body": 3
+        "indexed_without_body": 4
       },
       "after": {
-        "filings_total": 40,
-        "filings_with_body": 39,
+        "filings_total": 41,
+        "filings_with_body": 40,
         "indexed_without_body": 1
       },
       "improved": true,
       "regime": "euro_filings",
       "filings_summary": {
-        "total": 40,
+        "total": 41,
         "annual": 1,
-        "interim": 38,
+        "interim": 39,
         "trading_update": 0,
         "other": 1,
-        "with_body": 39,
+        "with_body": 40,
         "period_coverage": {
           "annual": {
             "total": 1,
             "with_body": 1
           },
           "interim": {
-            "total": 38,
-            "with_body": 37
+            "total": 39,
+            "with_body": 38
           },
           "trading_update": {
             "total": 0,
@@ -71,8 +80,8 @@
         "attempted": 0,
         "fetched": 0,
         "failed": 0,
-        "with_body_before": 39,
-        "with_body_after": 39,
+        "with_body_before": 40,
+        "with_body_after": 40,
         "investegate_fallbacks": 0,
         "skipped_unfetchable": 0,
         "deadline_hit": false,
@@ -80,6 +89,68 @@
           "added": 0,
           "total_allowlist": 2,
           "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    },
+    {
+      "ticker": "TEL2-B.ST",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 10,
+        "filings_with_body": 9,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 10,
+        "filings_with_body": 10,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 10,
+        "annual": 5,
+        "interim": 2,
+        "trading_update": 3,
+        "other": 0,
+        "with_body": 10,
+        "period_coverage": {
+          "annual": {
+            "total": 5,
+            "with_body": 5
+          },
+          "interim": {
+            "total": 2,
+            "with_body": 2
+          },
+          "trading_update": {
+            "total": 3,
+            "with_body": 3
+          },
+          "other": {
+            "total": 0,
+            "with_body": 0
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 10,
+        "with_body_after": 10,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
         },
         "shared_body_propagated": 0,
         "ir_metadata_reconciled": 0,
@@ -167,13 +238,14 @@
   ],
   "improved": [
     "MT.AS",
+    "TEL2-B.ST",
     "SHELL.AS"
   ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-19T10:18:33.109900+00:00",
+    "snapshot_at": "2026-10-20T07:19:07.458034+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 49,
     "unmeasured_buy_tier": 0,
@@ -236,7 +308,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-19T10:22:38.102897+00:00",
+    "snapshot_at": "2026-10-20T07:23:15.006945+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 49,
     "unmeasured_buy_tier": 0,
@@ -306,8 +378,8 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 49,
-    "hits": 40,
-    "new_rows_total": 0,
+    "hits": 41,
+    "new_rows_total": 1,
     "curiosity_total": 43,
     "errors": 0,
     "prioritization_weights": {
@@ -340,7 +412,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-10-19T10:18:35.784227+00:00",
+    "assessed_at": "2026-10-20T07:19:11.256256+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -413,9 +485,9 @@
       "thin_need_bodies": 3
     }
   },
-  "used_seconds": 239.73884649000001,
+  "used_seconds": 240.002633492,
   "budget_seconds": 2700.0,
-  "leftover_seconds": 2460.26115351,
+  "leftover_seconds": 2459.997366508,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -423,7 +495,7 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_depth",
-    "updated_at": "2026-10-19T10:22:38.111973+00:00",
+    "updated_at": "2026-10-20T07:23:15.018017+00:00",
     "exhausted": false,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
@@ -584,6 +656,6 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261018-05"
+    "task_id": "eng-20261019-02"
   }
 }
