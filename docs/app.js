@@ -9943,6 +9943,9 @@ let lifecycleMarketId = null;
 let lifecycleTrackId = null;
 let lifecycleSubpage = "positions";
 let sealedLifecycleModelId = "n200";
+/** Sealed observe board: heat map (default zoom-out) or one-line list. */
+let sealedLifecycleViewMode = "heatmap";
+let sealedLifecycleDetailKey = null;
 
 const LIFECYCLE_CHIP_SORT_KEY = "ftseValueInvestor.lifecycleChipSort.v1";
 const LIFECYCLE_CHIP_SORT_DIR_KEY = "ftseValueInvestor.lifecycleChipSortDir.v1";
@@ -11154,7 +11157,70 @@ function sealedLifecycleReturnLabel(chip) {
   return "Return";
 }
 
-function sealedLifecycleCard(chip, { hasChart }) {
+function sealedLifecycleEpisodeKey(chip) {
+  return [
+    chip.ticker || "",
+    chip.entry_run_at || "",
+    chip.exit_run_at || "",
+    chip.phase || "",
+  ].join("|");
+}
+
+function sealedLifecycleClamp01(value) {
+  if (!Number.isFinite(value)) return 0;
+  return Math.max(0, Math.min(1, value));
+}
+
+function sealedLifecycleMixRgb(a, b, t) {
+  const u = sealedLifecycleClamp01(t);
+  return [
+    Math.round(a[0] + (b[0] - a[0]) * u),
+    Math.round(a[1] + (b[1] - a[1]) * u),
+    Math.round(a[2] + (b[2] - a[2]) * u),
+  ];
+}
+
+function sealedLifecycleRgbCss(rgb, alpha) {
+  if (alpha == null) return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+  return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha})`;
+}
+
+/** Fill = P&amp;L size. Neutral when open with no stored mark. Caps at ±15%. */
+function sealedLifecycleHeatFill(chip) {
+  const neutral = [232, 234, 238];
+  if (chip.return_pct == null || chip.return_pct === "" || chip.return_basis === "open_unmarked") {
+    return sealedLifecycleRgbCss(neutral, 0.95);
+  }
+  const ret = Number(chip.return_pct);
+  if (!Number.isFinite(ret)) return sealedLifecycleRgbCss(neutral, 0.95);
+  const mag = sealedLifecycleClamp01(Math.abs(ret) / 0.15);
+  if (ret >= 0) {
+    const rgb = sealedLifecycleMixRgb(neutral, [46, 160, 90], Math.max(0.25, mag));
+    return sealedLifecycleRgbCss(rgb, 0.92);
+  }
+  const rgb = sealedLifecycleMixRgb(neutral, [179, 58, 58], Math.max(0.25, mag));
+  return sealedLifecycleRgbCss(rgb, 0.92);
+}
+
+/** Border = time in phase. Short → cool green; long → warm red. Soft-cap 60d. */
+function sealedLifecycleHeatBorder(chip) {
+  const days = Number(chip.days_in_phase);
+  const t = sealedLifecycleClamp01((Number.isFinite(days) ? days : 0) / 60);
+  const rgb = sealedLifecycleMixRgb([46, 160, 90], [179, 58, 58], t);
+  return sealedLifecycleRgbCss(rgb, 0.95);
+}
+
+function sealedLifecycleTinyPct(chip) {
+  if (chip.return_pct == null || chip.return_pct === "" || chip.return_basis === "open_unmarked") {
+    return "";
+  }
+  const n = Number(chip.return_pct) * 100;
+  if (!Number.isFinite(n)) return "";
+  const sign = n > 0 ? "+" : "";
+  return `${sign}${n.toFixed(0)}%`;
+}
+
+function sealedLifecycleCardHtml(chip, { hasChart, hidden }) {
   const holdDays = sealedLifecycleHoldDays(chip);
   const pct = sealedLifecyclePct(chip);
   const pctClass =
@@ -11169,7 +11235,11 @@ function sealedLifecycleCard(chip, { hasChart }) {
   const chartBtn = hasChart
     ? `<button type="button" class="sealed-life-card-chart" data-sealed-chart="1">Close-in chart</button>`
     : `<span class="small muted">No cached chart</span>`;
-  return `<div class="sealed-life-card" hidden>
+  return `<div class="sealed-life-card"${hidden ? " hidden" : ""}>
+    <div class="sealed-life-card-head">
+      <strong>${esc(chip.ticker || "")}</strong>
+      <span class="small muted">${esc(chip.phase || "")}</span>
+    </div>
     <dl class="sealed-life-card-grid">
       <div><dt>Entry</dt><dd>${esc(sealedLifecycleDateLabel(chip.entry_run_at))}</dd></div>
       <div><dt>Exit</dt><dd>${esc(sealedLifecycleDateLabel(chip.exit_run_at))}</dd></div>
@@ -11178,7 +11248,7 @@ function sealedLifecycleCard(chip, { hasChart }) {
       <div><dt>Hold days</dt><dd>${esc(holdDays == null ? "—" : `${holdDays}d`)}</dd></div>
       <div><dt>Status</dt><dd>${esc(chip.status || "—")}</dd></div>
     </dl>
-    <p class="small muted sealed-life-card-note">Fields from the sealed observe projection only. Market is not stored on these episode rows. No new fetch.</p>
+    <p class="small muted sealed-life-card-note">Stored observe fields only. Market not on these rows. No new fetch.</p>
     <div class="sealed-life-card-actions">${chartBtn}</div>
   </div>`;
 }
@@ -11197,23 +11267,50 @@ function sealedLifecycleChip(chip) {
           : "";
   const openClass = chip.return_basis === "open_mark" ? " is-open-mark" : "";
   const days = chip.days_in_phase == null ? "—" : `${chip.days_in_phase}d`;
+  const key = sealedLifecycleEpisodeKey(chip);
+  const expanded = sealedLifecycleDetailKey === key;
   const closeIn = chip.close_in ? esc(JSON.stringify(chip.close_in)) : "";
-  return `<div class="sealed-life-row">
+  return `<div class="sealed-life-row${expanded ? " is-expanded" : ""}">
     <button type="button" class="sealed-life-chip${openClass}" data-sealed-ticker="${esc(
       ticker
-    )}" data-sealed-entry="${esc(chip.entry_run_at || "")}" data-sealed-exit="${esc(
-      chip.exit_run_at || ""
-    )}" data-sealed-close-in="${closeIn}" data-return-basis="${esc(
+    )}" data-sealed-key="${esc(key)}" data-sealed-entry="${esc(
+      chip.entry_run_at || ""
+    )}" data-sealed-exit="${esc(chip.exit_run_at || "")}" data-sealed-close-in="${closeIn}" data-return-basis="${esc(
       chip.return_basis || ""
-    )}" aria-expanded="false" title="${esc(
-      `${sealedLifecycleChipTitle(chip)} Click to expand episode card.`
+    )}" aria-expanded="${expanded ? "true" : "false"}" title="${esc(
+      `${sealedLifecycleChipTitle(chip)} Optional: click for episode detail.`
     )}">
       <span class="sealed-life-ticker">${esc(ticker)}</span>
       <span class="sealed-life-days">${esc(days)}</span>
       <span class="sealed-life-pct${pctClass}">${esc(pct)}</span>
     </button>
-    ${sealedLifecycleCard(chip, { hasChart: Boolean(cached) })}
+    ${sealedLifecycleCardHtml(chip, { hasChart: Boolean(cached), hidden: !expanded })}
   </div>`;
+}
+
+function sealedLifecycleHeatCell(chip) {
+  const ticker = String(chip.ticker || "");
+  const key = sealedLifecycleEpisodeKey(chip);
+  const selected = sealedLifecycleDetailKey === key;
+  const tiny = sealedLifecycleTinyPct(chip);
+  const fill = sealedLifecycleHeatFill(chip);
+  const border = sealedLifecycleHeatBorder(chip);
+  const days = chip.days_in_phase == null ? "—" : `${chip.days_in_phase}d`;
+  const closeIn = chip.close_in ? esc(JSON.stringify(chip.close_in)) : "";
+  const label = tiny ? `${ticker} ${tiny}` : ticker;
+  return `<button type="button" class="sealed-heat-cell${
+    selected ? " is-selected" : ""
+  }" style="--sealed-heat-fill:${fill};--sealed-heat-border:${border}" data-sealed-heat-key="${esc(
+    key
+  )}" data-sealed-ticker="${esc(ticker)}" data-sealed-entry="${esc(
+    chip.entry_run_at || ""
+  )}" data-sealed-exit="${esc(chip.exit_run_at || "")}" data-sealed-close-in="${closeIn}" data-return-basis="${esc(
+    chip.return_basis || ""
+  )}" title="${esc(
+    `${ticker} · ${days} in phase · ${sealedLifecyclePct(chip)} · ${sealedLifecycleChipTitle(chip)}`
+  )}">
+    <span class="sealed-heat-ticker">${esc(label)}</span>
+  </button>`;
 }
 
 function openSealedLifecycleChart(chipEl) {
@@ -11233,38 +11330,76 @@ function openSealedLifecycleChart(chipEl) {
   });
 }
 
-function toggleSealedLifecycleCard(chipEl) {
-  const row = chipEl && chipEl.closest(".sealed-life-row");
-  if (!row) return;
-  const card = row.querySelector(".sealed-life-card");
-  if (!card) return;
-  const open = card.hasAttribute("hidden");
-  const board = row.closest(".sealed-life-board");
-  if (board) {
-    board.querySelectorAll(".sealed-life-row.is-expanded").forEach((other) => {
-      if (other === row) return;
-      other.classList.remove("is-expanded");
-      const otherCard = other.querySelector(".sealed-life-card");
-      if (otherCard) otherCard.setAttribute("hidden", "");
-      const otherChip = other.querySelector(".sealed-life-chip");
-      if (otherChip) otherChip.setAttribute("aria-expanded", "false");
-    });
+function findSealedLifecycleChip(model, key) {
+  if (!model || !key) return null;
+  const columns = model.columns || {};
+  for (const phase of ["just_bought", "holding", "just_sold", "post_sale"]) {
+    const chips = (columns[phase] && columns[phase].chips) || [];
+    for (const chip of chips) {
+      if (sealedLifecycleEpisodeKey(chip) === key) return chip;
+    }
   }
-  if (open) {
-    card.removeAttribute("hidden");
-    row.classList.add("is-expanded");
-    chipEl.setAttribute("aria-expanded", "true");
-  } else {
-    card.setAttribute("hidden", "");
-    row.classList.remove("is-expanded");
-    chipEl.setAttribute("aria-expanded", "false");
+  return null;
+}
+
+function renderSealedLifecycleDetail(model) {
+  const chip = findSealedLifecycleChip(model, sealedLifecycleDetailKey);
+  if (!chip) {
+    return `<div class="sealed-life-detail empty"><p class="small muted">Optional detail: click a heat cell (or a list line) for stored episode fields. Scan stays in the heat map.</p></div>`;
   }
+  const ticker = String(chip.ticker || "");
+  const cached = typeof cachedPriceChart === "function" && cachedPriceChart(ticker);
+  const closeIn = chip.close_in ? esc(JSON.stringify(chip.close_in)) : "";
+  return `<div class="sealed-life-detail" data-sealed-detail="1" data-sealed-ticker="${esc(
+    ticker
+  )}" data-sealed-entry="${esc(chip.entry_run_at || "")}" data-sealed-exit="${esc(
+    chip.exit_run_at || ""
+  )}" data-sealed-close-in="${closeIn}">
+    ${sealedLifecycleCardHtml(chip, { hasChart: Boolean(cached), hidden: false })}
+  </div>`;
+}
+
+function renderSealedLifecycleHeatBoard(model, phases) {
+  const columns = model.columns || {};
+  return phases
+    .map(([id, label]) => {
+      const packed = columns[id] || { count: 0, chips: [], label };
+      const cells = (packed.chips || []).map(sealedLifecycleHeatCell).join("");
+      return `<section class="sealed-life-col sealed-heat-col" data-sealed-phase="${esc(id)}">
+        <header class="lifecycle-col-header">
+          <h3>${esc(packed.label || label)}</h3>
+          <span class="lifecycle-count">${packed.count ?? (packed.chips || []).length}</span>
+        </header>
+        <div class="sealed-heat-grid">${cells || '<p class="small muted">None</p>'}</div>
+      </section>`;
+    })
+    .join("");
+}
+
+function renderSealedLifecycleListBoard(model, phases) {
+  const columns = model.columns || {};
+  return phases
+    .map(([id, label]) => {
+      const packed = columns[id] || { count: 0, chips: [], label };
+      const chips = (packed.chips || []).map(sealedLifecycleChip).join("");
+      return `<section class="sealed-life-col" data-sealed-phase="${esc(id)}">
+        <header class="lifecycle-col-header">
+          <h3>${esc(packed.label || label)}</h3>
+          <span class="lifecycle-count">${packed.count ?? (packed.chips || []).length}</span>
+        </header>
+        <div class="sealed-life-chips">${chips || '<p class="small muted">None</p>'}</div>
+      </section>`;
+    })
+    .join("");
 }
 
 function renderSealedLifecycle(data) {
   const board = (data && data.sealed_lifecycle) || {};
   const models = Array.isArray(board.models) ? board.models : [];
   sealedLifecycleModelId = normalizeSealedLifecycleModel(sealedLifecycleModelId);
+  if (sealedLifecycleViewMode !== "list" && sealedLifecycleViewMode !== "heatmap") {
+    sealedLifecycleViewMode = "heatmap";
+  }
   const model =
     models.find((row) => row.model_id === sealedLifecycleModelId) || models[0] || null;
   if (model) sealedLifecycleModelId = model.model_id;
@@ -11289,24 +11424,21 @@ function renderSealedLifecycle(data) {
     ["just_sold", "Just sold"],
     ["post_sale", "Post sale"],
   ];
-  const columns = model.columns || {};
-  const columnsHtml = phases
-    .map(([id, label]) => {
-      const packed = columns[id] || { count: 0, chips: [], label };
-      const chips = (packed.chips || []).map(sealedLifecycleChip).join("");
-      return `<section class="sealed-life-col" data-sealed-phase="${esc(id)}">
-        <header class="lifecycle-col-header">
-          <h3>${esc(packed.label || label)}</h3>
-          <span class="lifecycle-count">${packed.count ?? (packed.chips || []).length}</span>
-        </header>
-        <div class="sealed-life-chips">${chips || '<p class="small muted">None</p>'}</div>
-      </section>`;
-    })
-    .join("");
+  const heatActive = sealedLifecycleViewMode === "heatmap";
+  const boardHtml = heatActive
+    ? renderSealedLifecycleHeatBoard(model, phases)
+    : renderSealedLifecycleListBoard(model, phases);
   const medianNumber = Number(model.cohort_median);
   const median = Number.isFinite(medianNumber)
     ? `${medianNumber > 0 ? "+" : ""}${(medianNumber * 100).toFixed(2)}%`
     : "—";
+  const viewToggle = `<div class="sealed-life-view-toggle" role="group" aria-label="Sealed lifecycle view">
+      <button type="button" class="tab${heatActive ? " active" : ""}" data-sealed-view="heatmap">Heat map</button>
+      <button type="button" class="tab${!heatActive ? " active" : ""}" data-sealed-view="list">Chip list</button>
+    </div>`;
+  const blurb = heatActive
+    ? `Zoomed-out heat map for high-volume sealed books. Fill = fair-cost episode % (open unmarked stays neutral). Border = days in this phase (cool/short → warm/long). All green ≈ short + profitable; all red ≈ long + deep loss. Chip list remains one click away. Optional detail below — not on every cell.`
+    : `One-line chip scan: ticker, days in this column, episode percent. Optional expand for stored dates / mark. Prefer the heat map when a phase is dense.`;
   return `${renderLifecycleSubnav()}
     <section class="card sealed-life-section">
       <div class="market-status-header">
@@ -11318,12 +11450,13 @@ function renderSealedLifecycle(data) {
             · as of ${esc((model.as_of || model.generated_at || "").slice(0, 10) || "—")}
           </p>
         </div>
+        ${viewToggle}
       </div>
       <div class="tabs sealed-life-models">${pills}</div>
-      <p class="small muted">Sealed fair-cost cohort median ${esc(
-        median
-      )} is the book figure. Each line is one episode: ticker, days in this column, and that episode’s own percent. Click a line to expand its stored episode card (dates, fair-cost or open mark, phase days). Close-in chart stays a separate control when a price series is already cached — no new fetch.</p>
-      <div class="sealed-life-board">${columnsHtml}</div>
+      <p class="small muted">Sealed fair-cost cohort median ${esc(median)} is the book figure. ${blurb}</p>
+      <p class="small muted sealed-heat-legend">Legend: fill profit←neutral→loss · border short/cool←→long/warm · caps ±15% fill, 60d border.</p>
+      <div class="sealed-life-board${heatActive ? " is-heatmap" : " is-list"}">${boardHtml}</div>
+      ${renderSealedLifecycleDetail(model)}
     </section>`;
 }
 
@@ -11489,22 +11622,47 @@ function bindLifecyclePanel() {
       if (sealedModelBtn) {
         event.preventDefault();
         sealedLifecycleModelId = normalizeSealedLifecycleModel(sealedModelBtn.dataset.sealedModel);
+        sealedLifecycleDetailKey = null;
         lifecycleSubpage = "sealed";
         syncLifecycleHash();
+        renderLifecycle(dashboardData);
+        return;
+      }
+      const sealedViewBtn = event.target.closest("[data-sealed-view]");
+      if (sealedViewBtn) {
+        event.preventDefault();
+        const mode = sealedViewBtn.dataset.sealedView === "list" ? "list" : "heatmap";
+        sealedLifecycleViewMode = mode;
         renderLifecycle(dashboardData);
         return;
       }
       const sealedChartBtn = event.target.closest("[data-sealed-chart]");
       if (sealedChartBtn) {
         event.preventDefault();
-        const chipEl = sealedChartBtn.closest(".sealed-life-row")?.querySelector("[data-sealed-ticker]");
+        const detail = sealedChartBtn.closest(".sealed-life-detail[data-sealed-ticker]");
+        if (detail) {
+          openSealedLifecycleChart(detail);
+          return;
+        }
+        const row = sealedChartBtn.closest(".sealed-life-row");
+        const chipEl = row && row.querySelector(".sealed-life-chip[data-sealed-ticker]");
         if (chipEl) openSealedLifecycleChart(chipEl);
         return;
       }
-      const sealedChip = event.target.closest("[data-sealed-ticker]");
+      const sealedHeat = event.target.closest("[data-sealed-heat-key]");
+      if (sealedHeat) {
+        event.preventDefault();
+        const key = sealedHeat.dataset.sealedHeatKey || null;
+        sealedLifecycleDetailKey = sealedLifecycleDetailKey === key ? null : key;
+        renderLifecycle(dashboardData);
+        return;
+      }
+      const sealedChip = event.target.closest(".sealed-life-chip[data-sealed-key]");
       if (sealedChip) {
         event.preventDefault();
-        toggleSealedLifecycleCard(sealedChip);
+        const key = sealedChip.dataset.sealedKey || null;
+        sealedLifecycleDetailKey = sealedLifecycleDetailKey === key ? null : key;
+        renderLifecycle(dashboardData);
         return;
       }
       const marketBtn = event.target.closest("[data-lifecycle-market]");

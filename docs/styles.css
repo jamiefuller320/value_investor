@@ -2961,6 +2961,24 @@ tr.selected td {
   background: rgba(179, 58, 58, 0.12);
 }
 
+.sealed-life-section .market-status-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.sealed-life-view-toggle {
+  display: inline-flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.sealed-heat-legend {
+  margin: 0.15rem 0 0.65rem;
+}
+
 .sealed-life-board {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2978,6 +2996,49 @@ tr.selected td {
   gap: 0.1rem;
   max-height: 70vh;
   overflow: auto;
+}
+
+.sealed-heat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.28rem;
+  max-height: 70vh;
+  overflow: auto;
+  padding: 0.1rem 0.05rem 0.2rem;
+}
+
+.sealed-heat-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.1rem;
+  margin: 0;
+  padding: 0.2rem 0.15rem;
+  border: 2px solid var(--sealed-heat-border, #2ea05a);
+  border-radius: 3px;
+  background: var(--sealed-heat-fill, #e8eaee);
+  color: #1a1f2b;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 650;
+  line-height: 1.15;
+  text-align: center;
+  cursor: pointer;
+}
+
+.sealed-heat-cell:hover,
+.sealed-heat-cell:focus-visible,
+.sealed-heat-cell.is-selected {
+  outline: 2px solid rgba(43, 108, 176, 0.55);
+  outline-offset: 1px;
+}
+
+.sealed-heat-ticker {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  font-variant-numeric: tabular-nums;
 }
 
 .sealed-life-row {
@@ -3008,11 +3069,32 @@ tr.selected td {
   background: rgba(43, 108, 176, 0.08);
 }
 
+.sealed-life-detail {
+  margin-top: 0.85rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(92, 101, 120, 0.2);
+}
+
+.sealed-life-detail.empty {
+  border-top-style: dashed;
+}
+
 .sealed-life-card {
   margin: 0.15rem 0 0.35rem;
   padding: 0.45rem 0.5rem 0.5rem;
   border-left: 2px solid rgba(43, 108, 176, 0.35);
   background: rgba(43, 108, 176, 0.04);
+}
+
+.sealed-life-detail > .sealed-life-card {
+  margin: 0;
+}
+
+.sealed-life-card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
 }
 
 .sealed-life-card-grid {
@@ -3080,6 +3162,10 @@ tr.selected td {
 @media (max-width: 800px) {
   .sealed-life-board {
     grid-template-columns: 1fr;
+  }
+
+  .sealed-heat-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
