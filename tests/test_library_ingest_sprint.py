@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from unittest.mock import patch
 
 from value_investor.library_ingest_dispatch import list_library_ingest_parallel_sprint_markets
@@ -9,6 +10,7 @@ from value_investor.library_ingest_sprint import (
     parallel_sprint_markets_needing_ingest,
     run_library_ingest_sprint,
 )
+from value_investor.storage import write_json
 
 
 def test_list_parallel_sprint_excludes_focus():
@@ -57,14 +59,15 @@ def test_parallel_sprint_markets_needing_ingest_includes_thin_bodies_at_parity()
     assert markets == ["sp500"]
 
 
-def test_run_library_ingest_sprint_skips_when_no_work():
+def test_run_library_ingest_sprint_skips_when_no_work(tmp_path: Path):
+    """Skip path must not write committed docs/data/library/policy.json."""
     policy = {"focus_market": "euro_depth", "ingest_parallel_sprint": ["sp500"]}
+    policy_path = tmp_path / "policy.json"
+    write_json(policy_path, policy, compact=False)
+    library_root = tmp_path / "library"
+    library_root.mkdir()
     health = {"unmeasured_buy_tier": 0, "zero_body_buy_tier": 0, "thin_body_buy_tier": 0}
     with (
-        patch(
-            "value_investor.library_ingest_sprint.load_policy",
-            return_value=policy,
-        ),
         patch(
             "value_investor.library_ingest_sprint.parallel_sprint_markets_needing_ingest",
             return_value=["sp500"],
@@ -77,8 +80,15 @@ def test_run_library_ingest_sprint_skips_when_no_work():
         patch(
             "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
         ),
+        patch(
+            "value_investor.library_ingest_maintenance.reconcile_parallel_sprint_queues",
+            return_value=[],
+        ),
     ):
-        outcome = run_library_ingest_sprint()
+        outcome = run_library_ingest_sprint(
+            policy_path=policy_path,
+            library_root=library_root,
+        )
     run_loop.assert_not_called()
     assert outcome.skipped[0]["market_id"] == "sp500"
 

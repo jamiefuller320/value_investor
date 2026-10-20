@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-19T16:45:47.684696+00:00",
-  "occasion_count": 225,
+  "updated_at": "2026-10-20T05:32:33.255507+00:00",
+  "occasion_count": 229,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -4060,6 +4060,82 @@
       ],
       "notes": null,
       "details": {}
+    },
+    {
+      "id": "prf-20261020-001",
+      "recorded_at": "2026-10-20T03:21:22.440828+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY vs origin/main (branch 30 commits behind)",
+      "pr_number": 1133,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "CI green on head 7bd9935aeb; conflict blocks merge",
+      "details": {}
+    },
+    {
+      "id": "prf-20261020-002",
+      "recorded_at": "2026-10-20T03:55:46.159791+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "docs write guard: tests modified library/policy.json",
+      "pr_number": 1133,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "test (1)",
+        "test (3)"
+      ],
+      "notes": "pytest passed; docs write guard failed on docs/data/library/policy.json",
+      "details": {}
+    },
+    {
+      "id": "prf-20261020-003",
+      "recorded_at": "2026-10-20T04:30:11.478241+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "docs write guard: tests modified library/policy.json",
+      "pr_number": 1133,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "test (1)",
+        "test (3)"
+      ],
+      "notes": "Root cause: test_run_library_ingest_sprint_skips_when_no_work (+ epoch0 refresh_dispatch) wrote DEFAULT_POLICY_PATH; isolated with tmp_path",
+      "details": {}
+    },
+    {
+      "id": "prf-20261020-004",
+      "recorded_at": "2026-10-20T05:32:33.255507+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "docs write guard: M docs/data/library/policy.json after shard 3 (cascade sprint tests still hit DEFAULT_POLICY_PATH via reconcile)",
+      "pr_number": 1133,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (3)"
+      ],
+      "notes": "Isolate all four test_library_ingest_cascade run_library_ingest_sprint callers with tmp_path policy_path + reconcile patch",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -4206,6 +4282,16 @@
         ]
       },
       {
+        "failure_reason": "docs write guard: tests modified library/policy.json",
+        "count": 2,
+        "sources": {
+          "human_request": 2
+        },
+        "recent_prs": [
+          1133
+        ]
+      },
+      {
         "failure_reason": "ruff_format",
         "count": 1,
         "sources": {
@@ -4274,32 +4360,22 @@
         "recent_prs": [
           766
         ]
-      },
-      {
-        "failure_reason": "Conflicts with main after #768 (email-report ingest budget) merged",
-        "count": 1,
-        "sources": {
-          "human_request": 1
-        },
-        "recent_prs": [
-          770
-        ]
       }
     ],
     "by_kind": [
       {
         "kind": "merge_conflict",
-        "count": 118
+        "count": 119
       },
       {
         "kind": "ci_check",
-        "count": 107
+        "count": 110
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 222
+        "count": 226
       },
       {
         "source": "traffic_controller",

@@ -109,22 +109,29 @@ def test_admit_market_can_skip_cron_ensure():
         ensure.assert_not_called()
 
 
-def test_refresh_dispatch_sync_cron_ensures_epoch0():
+def test_refresh_dispatch_sync_cron_ensures_epoch0(tmp_path: Path):
+    """sync_cron path must not write committed docs/data/library/policy.json."""
     from value_investor.library_ingest_dispatch import refresh_euro_ingest_dispatch
+    from value_investor.storage import write_json
+
+    policy_path = tmp_path / "policy.json"
+    write_json(
+        policy_path,
+        {"ladder": {"admitted_learning_markets": ["sp500"]}},
+        compact=False,
+    )
+    library_root = tmp_path / "library"
+    library_root.mkdir()
+    dispatch_path = tmp_path / "euro_ingest_dispatch.json"
 
     with (
         patch(
             "value_investor.library_ingest_dispatch.evaluate_euro_ingest_dispatch",
             return_value={"mode": "sprint", "cron_morning": True},
         ),
-        patch("value_investor.library_ingest_dispatch.write_euro_ingest_dispatch"),
         patch(
             "value_investor.euro_ingest_cron_sync.sync_euro_ingest_cron_jobs",
             return_value={"results": []},
-        ),
-        patch(
-            "value_investor.library_ingest_dispatch.load_policy",
-            return_value={"ladder": {"admitted_learning_markets": ["sp500"]}},
         ),
         patch(
             "value_investor.epoch0_weekday_cron.ensure_epoch0_weekday_crons_for_policy",
@@ -132,9 +139,16 @@ def test_refresh_dispatch_sync_cron_ensures_epoch0():
         ) as epoch0,
         patch("value_investor.market_status.write_market_status", return_value="status.json"),
     ):
-        evaluation = refresh_euro_ingest_dispatch(sync_cron=True)
+        evaluation = refresh_euro_ingest_dispatch(
+            sync_cron=True,
+            reconcile_parallel=False,
+            policy_path=policy_path,
+            library_root=library_root,
+            dispatch_path=dispatch_path,
+        )
     assert evaluation["epoch0_cron_sync"]["keys"] == ["library-epoch0-weekday-us-edt"]
     epoch0.assert_called_once()
+    assert dispatch_path.is_file()
 
 
 def test_epoch0_weekday_workflow_uses_artifact_commit_retry() -> None:

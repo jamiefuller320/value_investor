@@ -208,6 +208,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "docs/data/observe_utilization.json" in text
     assert "docs/data/lifecycle_maturity_trajectory.json" in text
     assert "docs/data/lifecycle_board.json" in text
+    assert "docs/data/sealed_lifecycle.json" in text
     assert "docs/data/human_tasks_board.json" in text
     assert "docs/data/human_task_acks.json" in text
     assert "docs/data/ui_state_reconciliation.json" in text
@@ -237,6 +238,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "universe_filing_archive_miss_rate.json" in optional_line
     assert "lifecycle_maturity_trajectory.json" in optional_line
     assert "lifecycle_board.json" in optional_line
+    assert "sealed_lifecycle.json" in optional_line
     assert "human_tasks_board.json" in optional_line
     assert "human_task_acks.json" in optional_line
     assert "ui_state_reconciliation.json" in optional_line

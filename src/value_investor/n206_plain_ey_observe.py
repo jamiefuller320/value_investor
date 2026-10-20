@@ -234,6 +234,12 @@ def build_registration_payload(*, sealed_at: str | None = None) -> dict[str, Any
     }
 
 
+def _sealed_lifecycle_rows(episodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    from value_investor.sealed_lifecycle import slim_lifecycle_episodes
+
+    return slim_lifecycle_episodes(episodes)
+
+
 def score_plain_ey_hold(
     snapshots: list[RunSnapshot],
     *,
@@ -252,6 +258,7 @@ def score_plain_ey_hold(
     strategy_returns: list[float] = []
     stress_returns: list[float] = []
     episodes: list[dict[str, Any]] = []
+    open_lifecycle: list[dict[str, Any]] = []
     skipped_missing_fields = 0
     skipped_ineligible = 0
     skipped_filters = 0
@@ -299,6 +306,15 @@ def score_plain_ey_hold(
                 sessions=None,
             )
             if exit_idx is None:
+                open_lifecycle.append(
+                    {
+                        "ticker": ticker,
+                        "market_id": mid,
+                        "entry_run_at": snap.run_at,
+                        "status": "open",
+                        "influences_live": False,
+                    }
+                )
                 continue
             buy_pct, sell_pct = cfg.primary_buy_sell(mid)
             p_entry = _price_at(snapshots, i, ticker)
@@ -367,6 +383,7 @@ def score_plain_ey_hold(
         skipped_missing_fields=skipped_missing_fields,
         skipped_ineligible=skipped_ineligible,
         skipped_filters=skipped_filters,
+        open_lifecycle=open_lifecycle,
         generated_at=generated_at,
         prior_markers=prior_markers,
         panel_coverage=panel_coverage,
@@ -390,6 +407,7 @@ def _payload_from_returns(
     panel_coverage: dict[str, Any] | None,
     snapshot_count: int | None = None,
     weeks: int | None = None,
+    open_lifecycle: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     absolute_primary = _median_or_none(strategy_returns)
     stress_median = _median_or_none(stress_returns)
@@ -493,6 +511,7 @@ def _payload_from_returns(
         },
         "change_markers": markers,
         "episodes_sample": episodes[:25],
+        "lifecycle_episodes": _sealed_lifecycle_rows([*episodes, *(open_lifecycle or [])]),
         "ops_doc": str(DEFAULT_OPS_DOC),
         "_return_pcts": [round(v, 6) for v in strategy_returns],
         "_stress_return_pcts": [round(v, 6) for v in stress_returns],
@@ -572,6 +591,12 @@ def _merge_payloads(
     )
     # episodes_sample was rebuilt from concatenated samples; cap again.
     merged["episodes_sample"] = episodes[:25]
+    lifecycle_episodes: list[dict[str, Any]] = []
+    for payload in payloads:
+        for row in payload.get("lifecycle_episodes") or []:
+            if isinstance(row, dict):
+                lifecycle_episodes.append(row)
+    merged["lifecycle_episodes"] = lifecycle_episodes
     merged["markets_scored"] = [
         str((p.get("cost_basis") or {}).get("market_id") or "") for p in payloads
     ]
@@ -710,6 +735,9 @@ def refresh_n206_plain_ey_observe(
         store.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
         reg_path.parent.mkdir(parents=True, exist_ok=True)
         reg_path.write_text(json.dumps(registration, indent=2) + "\n", encoding="utf-8")
+        from value_investor.sealed_lifecycle import publish_sealed_lifecycle_projection
+
+        publish_sealed_lifecycle_projection(store.parent)
     return payload
 
 

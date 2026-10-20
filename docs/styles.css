@@ -2961,6 +2961,75 @@ tr.selected td {
   background: rgba(179, 58, 58, 0.12);
 }
 
+.sealed-life-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.sealed-life-col {
+  min-width: 0;
+}
+
+.sealed-life-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  max-height: 70vh;
+  overflow: auto;
+}
+
+.sealed-life-chip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 0.45rem;
+  align-items: baseline;
+  width: 100%;
+  margin: 0;
+  padding: 0.08rem 0.3rem;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: 1.35;
+  text-align: left;
+  cursor: default;
+}
+
+.sealed-life-chip.has-chart {
+  cursor: pointer;
+}
+
+.sealed-life-chip.has-chart:hover,
+.sealed-life-chip.has-chart:focus-visible {
+  background: rgba(43, 108, 176, 0.08);
+}
+
+.sealed-life-ticker {
+  font-weight: 650;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sealed-life-days,
+.sealed-life-pct {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sealed-life-chip.is-open-mark .sealed-life-pct {
+  text-decoration: underline dotted;
+}
+
+@media (max-width: 800px) {
+  .sealed-life-board {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 900px) {
   .lifecycle-board {
     grid-template-columns: repeat(8, minmax(10.5rem, 1fr));

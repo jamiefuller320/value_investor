@@ -890,6 +890,12 @@ def _ensure_momentum_price_frames(
     return frames
 
 
+def _sealed_lifecycle_rows(episodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    from value_investor.sealed_lifecycle import slim_lifecycle_episodes
+
+    return slim_lifecycle_episodes(episodes)
+
+
 def build_n201_observe(
     snapshots: list[RunSnapshot],
     *,
@@ -919,6 +925,7 @@ def build_n201_observe(
     patient_returns: list[float] = []
     stress_returns: list[float] = []
     episodes: list[dict[str, Any]] = []
+    open_lifecycle: list[dict[str, Any]] = []
     skipped_missing_fields = 0
     skipped_ineligible = 0
     skipped_filters = 0
@@ -967,6 +974,15 @@ def build_n201_observe(
                 sessions=sessions,
             )
             if exit_idx is None:
+                open_lifecycle.append(
+                    {
+                        "ticker": ticker,
+                        "market_id": mid,
+                        "entry_run_at": snap.run_at,
+                        "status": "open",
+                        "influences_live": False,
+                    }
+                )
                 continue  # still open
 
             buy_pct, sell_pct = cfg.primary_buy_sell(mid)
@@ -1170,6 +1186,7 @@ def build_n201_observe(
         },
         "change_markers": markers,
         "episodes_sample": episodes[:25],
+        "lifecycle_episodes": _sealed_lifecycle_rows([*episodes, *open_lifecycle]),
         "ops_doc": str(DEFAULT_OPS_DOC),
     }
     if panel_coverage is not None:
@@ -1520,6 +1537,11 @@ def _merge_observe_payloads(
     if absolute_primary is not None and patient_median is not None:
         patient_excess = round(absolute_primary - patient_median, 6)
 
+    lifecycle_episodes: list[dict[str, Any]] = []
+    for payload in payloads:
+        for row in payload.get("lifecycle_episodes") or []:
+            if isinstance(row, dict):
+                lifecycle_episodes.append(row)
     weeks = max(int(p.get("calendar_weeks_spanned") or 0) for p in payloads)
     entries_per_week = round(completed / weeks, 3) if weeks else None
     volume_gate_met = completed >= cfg.volume_min_episodes and weeks >= cfg.volume_min_weeks
@@ -1563,6 +1585,7 @@ def _merge_observe_payloads(
         },
         "change_markers": markers,
         "episodes_sample": episodes[:25],
+        "lifecycle_episodes": lifecycle_episodes,
         "panel_coverage": panel_coverage,
         "markets_scored": [
             str(p.get("cost_basis", {}).get("market_id") or p.get("market_id") or "")
@@ -1702,6 +1725,9 @@ def refresh_n201_value_mom_observe(
         store.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
         reg_path.parent.mkdir(parents=True, exist_ok=True)
         reg_path.write_text(json.dumps(registration, indent=2) + "\n", encoding="utf-8")
+        from value_investor.sealed_lifecycle import publish_sealed_lifecycle_projection
+
+        publish_sealed_lifecycle_projection(store.parent)
     return payload
 
 

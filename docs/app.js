@@ -612,6 +612,7 @@ const DASHBOARD_SIDECARS = [
   ["human_tasks_board", "data/human_tasks_board.json"],
   ["human_task_acks", "data/human_task_acks.json"],
   ["lifecycle_board", "data/lifecycle_board.json"],
+  ["sealed_lifecycle", "data/sealed_lifecycle.json"],
   ["ui_state_reconciliation", "data/ui_state_reconciliation.json"],
   ["universe_filing_archive_status", "data/universe_filing_archive_status.json"],
   ["daily_focus", "data/daily_focus.json"],
@@ -9941,6 +9942,7 @@ function renderAutomation(data) {
 let lifecycleMarketId = null;
 let lifecycleTrackId = null;
 let lifecycleSubpage = "positions";
+let sealedLifecycleModelId = "n200";
 
 const LIFECYCLE_CHIP_SORT_KEY = "ftseValueInvestor.lifecycleChipSort.v1";
 const LIFECYCLE_CHIP_SORT_DIR_KEY = "ftseValueInvestor.lifecycleChipSortDir.v1";
@@ -10030,9 +10032,17 @@ function sortLifecycleCards(shown, mode, dir) {
 
 const LIFECYCLE_SUBPAGE_IDS = new Set(["positions", "maturity"]);
 
+const SEALED_LIFECYCLE_MODELS = ["n200", "n201", "n206", "n210"];
+
+function normalizeSealedLifecycleModel(value) {
+  const key = String(value || "").toLowerCase();
+  return SEALED_LIFECYCLE_MODELS.includes(key) ? key : "n200";
+}
+
 function normalizeLifecycleSubpage(value) {
   const key = String(value || "").toLowerCase();
   if (key === "maturity" || key === "maturity-mix") return "maturity";
+  if (key === "sealed" || key === "sealed-models") return "sealed";
   if (key === "positions" || key === "board" || key === "tiles") return "positions";
   return "positions";
 }
@@ -10089,6 +10099,15 @@ function parseDashboardHash() {
   }
   let rest = parts.slice(1);
   let subpage = "positions";
+  if (rest[0] === "sealed" || rest[0] === "sealed-models") {
+    return {
+      tab: "lifecycle",
+      subpage: "sealed",
+      market: null,
+      track: null,
+      sealedModel: rest[1] || null,
+    };
+  }
   if (rest[0] === "maturity" || rest[0] === "maturity-mix") {
     subpage = "maturity";
     rest = rest.slice(1);
@@ -10108,6 +10127,11 @@ function parseDashboardHash() {
 }
 
 function syncLifecycleHash() {
+  if (lifecycleSubpage === "sealed") {
+    const model = normalizeSealedLifecycleModel(sealedLifecycleModelId);
+    history.replaceState(null, "", `#lifecycle/sealed/${model}`);
+    return;
+  }
   if (lifecycleSubpage === "maturity") {
     history.replaceState(null, "", "#lifecycle/maturity");
     return;
@@ -10126,6 +10150,9 @@ function applyDashboardHash() {
   if (!parsed || !parsed.tab) return;
   if (parsed.tab === "lifecycle") {
     if (parsed.subpage) lifecycleSubpage = normalizeLifecycleSubpage(parsed.subpage);
+    if (parsed.sealedModel) {
+      sealedLifecycleModelId = normalizeSealedLifecycleModel(parsed.sealedModel);
+    }
     if (parsed.market) lifecycleMarketId = parsed.market;
     if (parsed.track) lifecycleTrackId = parsed.track;
   }
@@ -10173,7 +10200,12 @@ function openLifecycleBoard(marketId) {
 }
 
 function renderLifecycleSubnav() {
-  const sub = lifecycleSubpage === "maturity" ? "maturity" : "positions";
+  const sub =
+    lifecycleSubpage === "maturity"
+      ? "maturity"
+      : lifecycleSubpage === "sealed"
+        ? "sealed"
+        : "positions";
   return `<nav class="paper-subnav lifecycle-subnav" aria-label="Lifecycle sections">
     <button type="button" class="paper-subtab${
       sub === "positions" ? " active" : ""
@@ -10181,6 +10213,9 @@ function renderLifecycleSubnav() {
     <button type="button" class="paper-subtab${
       sub === "maturity" ? " active" : ""
     }" data-lifecycle-subpage="maturity">Maturity mix</button>
+    <button type="button" class="paper-subtab${
+      sub === "sealed" ? " active" : ""
+    }" data-lifecycle-subpage="sealed">Sealed models</button>
   </nav>`;
 }
 
@@ -11077,6 +11112,138 @@ function findLifecycleTrack(market, trackId) {
   return tracks.find((row) => row.is_default) || tracks[0] || null;
 }
 
+function sealedLifecyclePct(chip) {
+  if (!chip || chip.return_pct == null || chip.return_pct === "") return "—";
+  const n = Number(chip.return_pct) * 100;
+  if (!Number.isFinite(n)) return "—";
+  const sign = n > 0 ? "+" : "";
+  return `${sign}${n.toFixed(1)}%`;
+}
+
+function sealedLifecycleChipTitle(chip) {
+  if (chip.return_basis === "open_mark") {
+    return "Open mark stored on the observe row. Not the sealed cohort median.";
+  }
+  if (chip.return_basis === "open_unmarked") {
+    return "Open episode. No stored mark. Not the sealed cohort median.";
+  }
+  if (chip.return_basis === "fair_cost_episode") {
+    return "Episode fair-cost return. Not the sealed cohort median.";
+  }
+  return "No episode return stored.";
+}
+
+function sealedLifecycleChip(chip) {
+  const ticker = String(chip.ticker || "");
+  const cached = typeof cachedPriceChart === "function" && cachedPriceChart(ticker);
+  const pct = sealedLifecyclePct(chip);
+  const pctClass =
+    chip.return_pct == null
+      ? ""
+      : Number(chip.return_pct) > 0
+        ? " text-positive"
+        : Number(chip.return_pct) < 0
+          ? " text-negative"
+          : "";
+  const openClass = chip.return_basis === "open_mark" ? " is-open-mark" : "";
+  const days = chip.days_in_phase == null ? "—" : `${chip.days_in_phase}d`;
+  const closeIn = chip.close_in ? esc(JSON.stringify(chip.close_in)) : "";
+  return `<button type="button" class="sealed-life-chip${openClass}${
+    cached ? " has-chart" : ""
+  }" data-sealed-ticker="${esc(ticker)}" data-sealed-entry="${esc(
+    chip.entry_run_at || ""
+  )}" data-sealed-exit="${esc(chip.exit_run_at || "")}" data-sealed-close-in="${closeIn}" data-return-basis="${esc(
+    chip.return_basis || ""
+  )}" title="${esc(sealedLifecycleChipTitle(chip))}">
+    <span class="sealed-life-ticker">${esc(ticker)}</span>
+    <span class="sealed-life-days">${esc(days)}</span>
+    <span class="sealed-life-pct${pctClass}">${esc(pct)}</span>
+  </button>`;
+}
+
+function openSealedLifecycleChart(chip) {
+  if (!chip || typeof openCachedPriceChart !== "function") return;
+  let closeIn = null;
+  if (chip.dataset.sealedCloseIn) {
+    try {
+      closeIn = JSON.parse(chip.dataset.sealedCloseIn);
+    } catch (err) {
+      closeIn = null;
+    }
+  }
+  openCachedPriceChart(chip.dataset.sealedTicker, {
+    opened_at: chip.dataset.sealedEntry || null,
+    sold_at: chip.dataset.sealedExit || null,
+    close_in: closeIn,
+  });
+}
+
+function renderSealedLifecycle(data) {
+  const board = (data && data.sealed_lifecycle) || {};
+  const models = Array.isArray(board.models) ? board.models : [];
+  sealedLifecycleModelId = normalizeSealedLifecycleModel(sealedLifecycleModelId);
+  const model =
+    models.find((row) => row.model_id === sealedLifecycleModelId) || models[0] || null;
+  if (model) sealedLifecycleModelId = model.model_id;
+  const pills = models
+    .map((row) => {
+      const active = model && row.model_id === model.model_id ? " active" : "";
+      const count = row.chip_count != null ? row.chip_count : "";
+      return `<button type="button" class="tab${active}" data-sealed-model="${esc(
+        row.model_id
+      )}">${esc(row.label || row.model_id)} <span class="small muted">${esc(
+        String(count)
+      )}</span></button>`;
+    })
+    .join("");
+  if (!model) {
+    return `${renderLifecycleSubnav()}
+      <div class="empty-state">Sealed lifecycle pages are not published yet. They refresh with the N200, N201, N206, and N210 observe stores (<code>data/sealed_lifecycle.json</code>).</div>`;
+  }
+  const phases = [
+    ["just_bought", "Just bought"],
+    ["holding", "Holding"],
+    ["just_sold", "Just sold"],
+    ["post_sale", "Post sale"],
+  ];
+  const columns = model.columns || {};
+  const columnsHtml = phases
+    .map(([id, label]) => {
+      const packed = columns[id] || { count: 0, chips: [], label };
+      const chips = (packed.chips || []).map(sealedLifecycleChip).join("");
+      return `<section class="sealed-life-col" data-sealed-phase="${esc(id)}">
+        <header class="lifecycle-col-header">
+          <h3>${esc(packed.label || label)}</h3>
+          <span class="lifecycle-count">${packed.count ?? (packed.chips || []).length}</span>
+        </header>
+        <div class="sealed-life-chips">${chips || '<p class="small muted">None</p>'}</div>
+      </section>`;
+    })
+    .join("");
+  const medianNumber = Number(model.cohort_median);
+  const median = Number.isFinite(medianNumber)
+    ? `${medianNumber > 0 ? "+" : ""}${(medianNumber * 100).toFixed(2)}%`
+    : "—";
+  return `${renderLifecycleSubnav()}
+    <section class="card sealed-life-section">
+      <div class="market-status-header">
+        <div>
+          <h3>${esc(model.label || "")} ${esc(model.title || "")}</h3>
+          <p class="small muted" style="margin:0.25rem 0 0">
+            <code>${esc(model.registration_id || "")}</code>
+            · observe only · influences_live false
+            · as of ${esc((model.as_of || model.generated_at || "").slice(0, 10) || "—")}
+          </p>
+        </div>
+      </div>
+      <div class="tabs sealed-life-models">${pills}</div>
+      <p class="small muted">Sealed fair-cost cohort median ${esc(
+        median
+      )} is the book figure. Each line is one episode: ticker, days in this column, and that episode’s own percent.</p>
+      <div class="sealed-life-board">${columnsHtml}</div>
+    </section>`;
+}
+
 function renderLifecycle(data) {
   const panel = document.getElementById("panel-lifecycle");
   if (!panel) return;
@@ -11088,6 +11255,11 @@ function renderLifecycle(data) {
       ${renderLifecycleSubnav()}
       ${renderLifecycleMaturitySection(data)}
     `;
+    return;
+  }
+
+  if (lifecycleSubpage === "sealed") {
+    panel.innerHTML = renderSealedLifecycle(data);
     return;
   }
 
@@ -11230,6 +11402,21 @@ function bindLifecyclePanel() {
         renderLifecycle(dashboardData);
         return;
       }
+      const sealedModelBtn = event.target.closest("[data-sealed-model]");
+      if (sealedModelBtn) {
+        event.preventDefault();
+        sealedLifecycleModelId = normalizeSealedLifecycleModel(sealedModelBtn.dataset.sealedModel);
+        lifecycleSubpage = "sealed";
+        syncLifecycleHash();
+        renderLifecycle(dashboardData);
+        return;
+      }
+      const sealedChip = event.target.closest("[data-sealed-ticker]");
+      if (sealedChip) {
+        event.preventDefault();
+        openSealedLifecycleChart(sealedChip);
+        return;
+      }
       const marketBtn = event.target.closest("[data-lifecycle-market]");
       if (marketBtn) {
         event.preventDefault();
@@ -11318,6 +11505,9 @@ function renderDashboard(data) {
   const parsed = parseDashboardHash();
   if (parsed && parsed.tab === "lifecycle") {
     if (parsed.subpage) lifecycleSubpage = normalizeLifecycleSubpage(parsed.subpage);
+    if (parsed.sealedModel) {
+      sealedLifecycleModelId = normalizeSealedLifecycleModel(parsed.sealedModel);
+    }
     if (parsed.market) lifecycleMarketId = parsed.market;
     if (parsed.track) lifecycleTrackId = parsed.track;
   }

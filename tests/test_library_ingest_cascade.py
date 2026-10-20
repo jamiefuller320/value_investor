@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from pathlib import Path
 from unittest.mock import patch
 
 from value_investor.library_ingest_cascade import (
@@ -13,6 +14,16 @@ from value_investor.library_ingest_cascade import (
     should_skip_spare_stream,
 )
 from value_investor.library_ingest_sprint import run_library_ingest_sprint
+from value_investor.storage import write_json
+
+
+def _isolated_sprint_policy(tmp_path: Path, policy: dict) -> tuple[Path, Path]:
+    """Write policy under tmp_path so sprint reconcile cannot touch DEFAULT_POLICY_PATH."""
+    policy_path = tmp_path / "policy.json"
+    write_json(policy_path, policy, compact=False)
+    library_root = tmp_path / "library"
+    library_root.mkdir()
+    return policy_path, library_root
 
 
 def test_head_market_defaults_to_euro_depth():
@@ -188,12 +199,13 @@ def test_evaluate_ingest_cascade_full_caps_after_parity():
     assert decision.stream_2_mode == "full"
 
 
-def test_run_sprint_stream_2_yields_at_peak_when_head_has_gaps():
+def test_run_sprint_stream_2_yields_at_peak_when_head_has_gaps(tmp_path: Path):
     policy = {
         "focus_market": "euro_depth",
         "ingest_parallel_sprint_2": ["asx200"],
         "ingest_effort_cascade": {"enabled": True},
     }
+    policy_path, library_root = _isolated_sprint_policy(tmp_path, policy)
     head_gaps = {
         "unmeasured_buy_tier": 2,
         "zero_body_buy_tier": 0,
@@ -213,22 +225,29 @@ def test_run_sprint_stream_2_yields_at_peak_when_head_has_gaps():
         patch(
             "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
         ),
+        patch(
+            "value_investor.library_ingest_maintenance.reconcile_parallel_sprint_queues",
+            return_value=[],
+        ),
     ):
         outcome = run_library_ingest_sprint(
             parallel_stream=2,
             now=datetime(2026, 9, 4, 8, 15, tzinfo=UTC),
+            policy_path=policy_path,
+            library_root=library_root,
         )
     run_loop.assert_not_called()
     assert outcome.skipped[0]["reason"] == "peak_hour_fallback"
     assert outcome.max_targets == 7
 
 
-def test_run_sprint_stream_2_runs_at_peak_when_head_idle():
+def test_run_sprint_stream_2_runs_at_peak_when_head_idle(tmp_path: Path):
     policy = {
         "focus_market": "euro_depth",
         "ingest_parallel_sprint_2": ["asx200"],
         "ingest_effort_cascade": {"enabled": True},
     }
+    policy_path, library_root = _isolated_sprint_policy(tmp_path, policy)
     gaps = {
         "unmeasured_buy_tier": 2,
         "zero_body_buy_tier": 0,
@@ -260,11 +279,17 @@ def test_run_sprint_stream_2_runs_at_peak_when_head_idle():
         patch(
             "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
         ),
+        patch(
+            "value_investor.library_ingest_maintenance.reconcile_parallel_sprint_queues",
+            return_value=[],
+        ),
     ):
         outcome = run_library_ingest_sprint(
             parallel_stream=2,
             now=datetime(2026, 9, 4, 8, 15, tzinfo=UTC),
             head_in_progress=False,
+            policy_path=policy_path,
+            library_root=library_root,
         )
     run_loop.assert_called_once()
     assert outcome.max_targets == 7
@@ -272,7 +297,7 @@ def test_run_sprint_stream_2_runs_at_peak_when_head_idle():
     assert run_loop.call_args.kwargs["max_targets"] == 7
 
 
-def test_run_sprint_stream_2_fills_down_when_assigned_has_no_gaps():
+def test_run_sprint_stream_2_fills_down_when_assigned_has_no_gaps(tmp_path: Path):
     policy = {
         "focus_market": "euro_depth",
         "market_queue": ["sp500", "asx200", "ftse_smallcap"],
@@ -280,6 +305,7 @@ def test_run_sprint_stream_2_fills_down_when_assigned_has_no_gaps():
         "ingest_parallel_sprint_2": ["asx200"],
         "ingest_effort_cascade": {"enabled": True},
     }
+    policy_path, library_root = _isolated_sprint_policy(tmp_path, policy)
     gaps = {
         "unmeasured_buy_tier": 2,
         "zero_body_buy_tier": 0,
@@ -318,24 +344,31 @@ def test_run_sprint_stream_2_fills_down_when_assigned_has_no_gaps():
         patch(
             "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
         ),
+        patch(
+            "value_investor.library_ingest_maintenance.reconcile_parallel_sprint_queues",
+            return_value=[],
+        ),
     ):
         outcome = run_library_ingest_sprint(
             parallel_stream=2,
             markets=["ftse_smallcap"],
             now=datetime(2026, 9, 4, 14, 15, tzinfo=UTC),
             head_in_progress=False,
+            policy_path=policy_path,
+            library_root=library_root,
         )
     run_loop.assert_called_once()
     assert outcome.markets == ["ftse_smallcap"]
     assert run_loop.call_args.args[0] == "ftse_smallcap"
 
 
-def test_run_sprint_stream_1_uses_spare_budget_when_head_has_gaps():
+def test_run_sprint_stream_1_uses_spare_budget_when_head_has_gaps(tmp_path: Path):
     policy = {
         "focus_market": "euro_depth",
         "ingest_parallel_sprint": ["sp500"],
         "ingest_effort_cascade": {"enabled": True},
     }
+    policy_path, library_root = _isolated_sprint_policy(tmp_path, policy)
     gaps = {
         "unmeasured_buy_tier": 1,
         "zero_body_buy_tier": 0,
@@ -367,10 +400,16 @@ def test_run_sprint_stream_1_uses_spare_budget_when_head_has_gaps():
         patch(
             "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
         ),
+        patch(
+            "value_investor.library_ingest_maintenance.reconcile_parallel_sprint_queues",
+            return_value=[],
+        ),
     ):
         outcome = run_library_ingest_sprint(
             parallel_stream=1,
             now=datetime(2026, 9, 4, 14, 15, tzinfo=UTC),
+            policy_path=policy_path,
+            library_root=library_root,
         )
     assert outcome.max_targets == 10
     assert outcome.max_runtime_seconds == 875.0
