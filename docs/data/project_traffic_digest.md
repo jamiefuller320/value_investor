@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-20T02:36:56.411156+00:00`
+Generated: `2026-10-20T07:53:00.683293+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -26,7 +26,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
 - [ok] Queue health overall=blocked; headline=Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-10-19T07:46:41.658434+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Ops monitor overall=warn at 2026-10-20T02:31:54.535463+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
@@ -36,7 +36,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none merged today)_
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 225
+- Occasion count: 229
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 4×
