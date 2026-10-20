@@ -2980,6 +2980,10 @@ tr.selected td {
   overflow: auto;
 }
 
+.sealed-life-row {
+  min-width: 0;
+}
+
 .sealed-life-chip {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
@@ -2995,16 +2999,65 @@ tr.selected td {
   font: inherit;
   line-height: 1.35;
   text-align: left;
-  cursor: default;
-}
-
-.sealed-life-chip.has-chart {
   cursor: pointer;
 }
 
-.sealed-life-chip.has-chart:hover,
-.sealed-life-chip.has-chart:focus-visible {
+.sealed-life-chip:hover,
+.sealed-life-chip:focus-visible,
+.sealed-life-row.is-expanded > .sealed-life-chip {
   background: rgba(43, 108, 176, 0.08);
+}
+
+.sealed-life-card {
+  margin: 0.15rem 0 0.35rem;
+  padding: 0.45rem 0.5rem 0.5rem;
+  border-left: 2px solid rgba(43, 108, 176, 0.35);
+  background: rgba(43, 108, 176, 0.04);
+}
+
+.sealed-life-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem 0.75rem;
+  margin: 0;
+}
+
+.sealed-life-card-grid dt {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted, #667);
+}
+
+.sealed-life-card-grid dd {
+  margin: 0.05rem 0 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.sealed-life-card-note {
+  margin: 0.4rem 0 0.25rem;
+}
+
+.sealed-life-card-actions {
+  margin-top: 0.2rem;
+}
+
+.sealed-life-card-chart {
+  margin: 0;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid rgba(43, 108, 176, 0.35);
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.sealed-life-card-chart:hover,
+.sealed-life-card-chart:focus-visible {
+  background: rgba(43, 108, 176, 0.1);
 }
 
 .sealed-life-ticker {
