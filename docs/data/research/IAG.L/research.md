@@ -1,6 +1,6 @@
 # International Consolidated Airlines Group S.A. (IAG.L) — Research memo
 
-_Version 1 · Updated 2026-10-18T08:13:13.661004+00:00 · Mode: structured_verdict_
+_Version 1 · Updated 2026-10-20T13:15:52.168588+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,6 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: high
-Confidence: 0.68
-Rationale: FY2025 Companies House accounts confirm +28% basic EPS and €3.1bn APM free cash flow with buybacks/dividends, supporting filing-aligned value screens; screen TTM FCF (~£1.1bn) vs filing (~£3.1bn) and airline leverage/liquidity leave the...
-RiskTags: cyclical, leverage, liquidity, regulatory, competitive
+Confidence: 0.70
+Rationale: FY2025 Companies House accounts (+28% basic EPS, €3.1bn APM FCF, dividends/buybacks) support filing-aligned cheapness/GARP, but H1 2026 profit decline, screen TTM FCF (~£1.1bn) vs filing (~£3.1bn), and weak liquidity/leverage keep adjust...
+RiskTags: cyclical, leverage, liquidity, competitive, regulatory
