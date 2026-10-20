@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-20T04:30:11.478241+00:00",
-  "occasion_count": 228,
+  "updated_at": "2026-10-20T05:32:33.255507+00:00",
+  "occasion_count": 229,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -4117,6 +4117,25 @@
       ],
       "notes": "Root cause: test_run_library_ingest_sprint_skips_when_no_work (+ epoch0 refresh_dispatch) wrote DEFAULT_POLICY_PATH; isolated with tmp_path",
       "details": {}
+    },
+    {
+      "id": "prf-20261020-004",
+      "recorded_at": "2026-10-20T05:32:33.255507+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "docs write guard: M docs/data/library/policy.json after shard 3 (cascade sprint tests still hit DEFAULT_POLICY_PATH via reconcile)",
+      "pr_number": 1133,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (3)"
+      ],
+      "notes": "Isolate all four test_library_ingest_cascade run_library_ingest_sprint callers with tmp_path policy_path + reconcile patch",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -4350,13 +4369,13 @@
       },
       {
         "kind": "ci_check",
-        "count": 109
+        "count": 110
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 225
+        "count": 226
       },
       {
         "source": "traffic_controller",
