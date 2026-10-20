@@ -1,18 +1,18 @@
 {
   "ticker": "PPH.L",
-  "run_at": "2026-09-15T07:43:57.741887+00:00",
-  "attached_at": "2026-09-15T13:09:48.257077+00:00",
-  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
-  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
+  "run_at": "2026-10-18T07:58:03.521754+00:00",
+  "attached_at": "2026-10-20T19:51:15.457745+00:00",
+  "history_run_path": "docs/data/history/run_20261018_075803.json.gz",
+  "history_models_path": "docs/data/history/models_20261018_075803.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 17,
-      "buy": 45,
-      "hold": 144,
-      "avoid": 42
+      "strong_buy": 15,
+      "buy": 52,
+      "hold": 122,
+      "avoid": 59
     },
-    "strong_buy_count": 17,
+    "strong_buy_count": 15,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,7 +20,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "insufficient_data": 102
+      "strong_buy": 18,
+      "buy": 33,
+      "hold": 46,
+      "avoid": 5
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -30,45 +33,57 @@
   "ticker_signal": {
     "ticker": "PPH.L",
     "signal": "buy",
-    "conviction_score": 0.6207,
+    "conviction_score": 0.5422,
     "data_quality_score": 1.0,
     "name": "PPHE Hotel Group Limited",
     "sector": "Consumer Cyclical",
-    "timing_signal": "neutral",
-    "timing_score": 0.625,
-    "action_note": "Buy — neutral timing",
-    "models_passed": 9.0,
-    "weighted_model_score": 0.5190227272727274,
-    "research_verdict": null,
+    "timing_signal": "accumulate",
+    "timing_score": 0.75,
+    "action_note": "Buy — favourable entry timing",
+    "models_passed": 7.0,
+    "weighted_model_score": 0.4604999999999999,
+    "research_verdict": "accumulate",
     "adjusted_signal": "buy",
-    "research_as_of": null,
-    "research_confidence": null,
+    "research_as_of": "2026-10-11T07:50:48.642646+00:00",
+    "research_confidence": 0.68,
     "fcf_basis_overlay": false,
+    "media_cyclical_thin_fcf_overlay": false,
+    "advertising_revenue_share": NaN,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": false,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
     "interim_quality_overlay": false,
     "earnings_basis_overlay": false,
     "interim_eps_decline_pct": null,
-    "adjusted_eps_growth_pct": -0.4383165188147012,
+    "adjusted_eps_growth_pct": null,
+    "yahoo_normalized_income_growth_pct": -0.4383165188147012,
     "signal_trend": "stable",
-    "weeks_at_signal": 7,
-    "passed_families": "cheapness,quality,dividend,garp,risk",
-    "price_vs_sma200_pct": -0.11932282483093659,
+    "weeks_at_signal": 16,
+    "passed_families": "cheapness,quality,dividend,risk",
+    "price_vs_sma200_pct": -0.1342393864520933,
     "core_order": "limit",
-    "core_limit": 1495.56,
-    "core_allocation_pct": 0.6,
-    "tactical_limit": 1435.14,
-    "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 1348.12,
-    "tactical_take_profit": 1558.01,
-    "trade_plan_summary": "Trade plan: core 60% limit £1495.56; tactical 40% limit £1435.14; tactical stop £1348.12, target £1558.01.",
-    "atr_14": 45.42,
-    "volume_ratio_20": 0.0218,
+    "core_limit": 1437.48,
+    "core_allocation_pct": 0.65,
+    "tactical_limit": 1379.4,
+    "tactical_allocation_pct": 0.35,
+    "tactical_stop_loss": 1295.76,
+    "tactical_take_profit": 1568.16,
+    "trade_plan_summary": "Trade plan: core 65% limit £1437.48; tactical 35% limit £1379.40; tactical stop £1295.76, target £1568.16.",
+    "atr_14": 55.7929,
+    "volume_ratio_20": 0.2221,
     "operating_cashflow": 100080000.0,
     "operating_cashflow_gross": null,
     "fcf_dividend_coverage_gross": null,
     "fcf_dividend_coverage_net": 3.0003143467873756,
     "fcf_definition_divergence": false,
     "fcf_divergence_flagged": false,
-    "fcf_dividend_coverage": null
+    "fcf_dividend_coverage": null,
+    "research_prompts": [],
+    "fcf_three_way_conviction_overlay": false,
+    "profit_to_cash_current_pct": NaN,
+    "profit_to_cash_prior_pct": NaN,
+    "profit_to_cash_yoy_decline_pp": NaN
   },
   "ticker_models": [
     {
@@ -111,13 +126,13 @@
       "ticker": "PPH.L",
       "model_id": "fcf_yield",
       "passed": true,
-      "score": 0.7547
+      "score": 0.7852
     },
     {
       "ticker": "PPH.L",
       "model_id": "low_pe_high_yield",
-      "passed": true,
-      "score": 1.0
+      "passed": false,
+      "score": 0.5
     },
     {
       "ticker": "PPH.L",
@@ -128,8 +143,8 @@
     {
       "ticker": "PPH.L",
       "model_id": "neff_pegy",
-      "passed": true,
-      "score": 0.9806
+      "passed": false,
+      "score": 0.0
     },
     {
       "ticker": "PPH.L",
@@ -153,7 +168,7 @@
       "ticker": "PPH.L",
       "model_id": "high_dividend",
       "passed": false,
-      "score": 0.4213
+      "score": 0.4879
     },
     {
       "ticker": "PPH.L",
@@ -165,7 +180,7 @@
       "ticker": "PPH.L",
       "model_id": "magic_formula",
       "passed": false,
-      "score": 0.1221
+      "score": 0.1267
     },
     {
       "ticker": "PPH.L",
@@ -177,7 +192,7 @@
       "ticker": "PPH.L",
       "model_id": "dreman_contrarian",
       "passed": true,
-      "score": 0.7063
+      "score": 0.7419
     },
     {
       "ticker": "PPH.L",
@@ -189,7 +204,7 @@
       "ticker": "PPH.L",
       "model_id": "composite_value",
       "passed": false,
-      "score": 0.5364
+      "score": 0.5922
     },
     {
       "ticker": "PPH.L",
@@ -204,6 +219,6 @@
       "score": 0.0
     }
   ],
-  "models_passed": 9,
+  "models_passed": 7,
   "models_total": 22
 }
