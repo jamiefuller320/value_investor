@@ -3,27 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-10-19T07:28:24.462151+00:00",
+  "generated_at": "2026-10-20T07:35:31.012956+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 3,
+    "closed_total": 4,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 10,
+    "open_with_thesis": 9,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 1,
-        "recovery_rate": 0.0,
-        "sold_underwater_rate": 1.0,
-        "mean_peak_unrealized_pct": -0.0034,
-        "mean_trough_unrealized_pct": -0.0375,
+        "closed_count": 2,
+        "recovery_rate": 0.5,
+        "sold_underwater_rate": 0.5,
+        "mean_peak_unrealized_pct": 0.0802,
+        "mean_trough_unrealized_pct": 0.042,
         "outcome_labels": {
-          "sold_underwater": 1
+          "sold_underwater": 1,
+          "recovered": 1
         }
       },
       "broken": {
@@ -62,11 +63,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 3,
+    "hold_closed_with_thesis": 4,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=3 (target >=8)",
-      "hold thesis buckets thin (weakening=1, broken=2; target >=3 each)",
+      "hold closed with thesis=4 (target >=8)",
+      "hold thesis buckets thin (weakening=2, broken=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -540,7 +541,7 @@
       "ticker": "RI.PA",
       "name": "Pernod Ricard SA",
       "started_at": "2026-10-14T09:52:15.188452+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -574,9 +575,9 @@
       "peak_unrealized_pct": 0.1638,
       "trough_unrealized_pct": 0.1215,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-20T08:35:31.000544+01:00",
+      "linked_sell_trade_id": "151a2751-0077-43c8-b7d9-dd87405da9d6"
     },
     {
       "episode_id": "buy_tier_level_native:PUB.PA:2026-10-16T08:27:57.896783+01:00",
@@ -657,7 +658,7 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": 0.1143,
+      "peak_unrealized_pct": 0.1309,
       "trough_unrealized_pct": 0.1143,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -701,7 +702,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": 0.0543,
-      "trough_unrealized_pct": 0.0543,
+      "trough_unrealized_pct": 0.039,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -787,14 +788,14 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "SGO.PA": -0.047
+        "SGO.PA": -0.0487
       },
       "buy_returns_since_rotation": {
-        "SAN.PA": 0.0021,
+        "SAN.PA": -0.0109,
         "TEP.PA": -0.0127,
-        "DG.PA": -0.0292,
-        "TTE.PA": 0.009,
-        "ORA.PA": 0.0286
+        "DG.PA": -0.0418,
+        "TTE.PA": 0.0068,
+        "ORA.PA": 0.0028
       },
       "verdict": null,
       "closed_at": null
@@ -863,12 +864,12 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "MC.PA": 0.0061
+        "MC.PA": -0.0117
       },
       "buy_returns_since_rotation": {
-        "SAN.PA": 0.016,
-        "DG.PA": 0.0117,
-        "TTE.PA": 0.0839
+        "SAN.PA": 0.0028,
+        "DG.PA": -0.0014,
+        "TTE.PA": 0.0815
       },
       "verdict": null,
       "closed_at": null
@@ -964,13 +965,13 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "SAN.PA": 0.016,
-        "DG.PA": 0.0117
+        "SAN.PA": 0.0028,
+        "DG.PA": -0.0014
       },
       "buy_returns_since_rotation": {
         "TEP.PA": 0.0354,
-        "TTE.PA": 0.0839,
-        "ORA.PA": 0.0418
+        "TTE.PA": 0.0815,
+        "ORA.PA": 0.0157
       },
       "verdict": null,
       "closed_at": null
@@ -1035,8 +1036,69 @@
         "TEP.PA": 0.0034
       },
       "buy_returns_since_rotation": {
-        "FGR.PA": 0.0226,
-        "PUB.PA": 0.0531
+        "FGR.PA": 0.0047,
+        "PUB.PA": 0.0439
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-10-20T08:35:31.000544+01:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-10-20T08:35:31.000544+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "RI.PA",
+          "price": 67.46,
+          "shares": 1.084821,
+          "gross": 73.18,
+          "cost": 0.02,
+          "avg_cost_at_exit": 58.62,
+          "realized_pct": 0.1508,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "research verdict caution",
+            "cheapness family no longer passes",
+            "conviction 32% below intact floor",
+            "still buy"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": 0.1508
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "FGR.PA",
+          "price": 99.18,
+          "shares": 0.135665,
+          "gross": 13.46,
+          "cost": 0.0
+        },
+        {
+          "ticker": "SGO.PA",
+          "price": 66.42,
+          "shares": 0.155465,
+          "gross": 10.33,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "RI.PA": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "FGR.PA": 0.0,
+        "SGO.PA": 0.0
       },
       "verdict": null,
       "closed_at": null

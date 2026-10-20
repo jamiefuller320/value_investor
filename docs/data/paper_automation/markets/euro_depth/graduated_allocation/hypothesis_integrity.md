@@ -1,24 +1,23 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `graduated_allocation` · updated 2026-10-19T07:31:28.633579+00:00
+Track: `graduated_allocation` · updated 2026-10-20T07:38:40.258270+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **1** / 5 (20% count, 19% NAV)
+- Losers: **0** / 5 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
-- Balancing hint: `tolerate_intact_losers`
+- Balancing hint: `maintain`
 
 ## Holding reviews
 
-### DG.PA — intact / hold_tolerate (-5.1%)
-- price drawdown alone does not invalidate value thesis
+### DG.PA — intact / hold_tolerate (-4.5%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 91%
 
-### C5H.IR — intact / hold_tolerate (-0.2%)
+### C5H.IR — intact / hold_tolerate (-1.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
@@ -30,16 +29,16 @@ Track: `graduated_allocation` · updated 2026-10-19T07:31:28.633579+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 74%
+- conviction 73%
 
-### TTE.PA — intact / hold_tolerate (+2.0%)
+### TTE.PA — intact / hold_tolerate (+1.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 80%
 
-### PHIA.AS — intact / hold_tolerate (+2.9%)
+### PHIA.AS — intact / hold_tolerate (+3.2%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

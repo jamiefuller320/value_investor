@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-19T07:29:43.254412+00:00
+Track: `buy_tier_level_native` · updated 2026-10-20T07:37:09.558894+00:00
 
 ## Portfolio loser feedback
 
@@ -10,22 +10,19 @@ Track: `buy_tier_level_native` · updated 2026-10-19T07:29:43.254412+00:00
 
 ## Holding reviews
 
-### KRX.IR — weakening / watch_review (+0.0%)
-- research verdict neutral
-- cheapness family no longer passes
-- still buy
-- data_quality 1.00
+### KRX.IR — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
-### OIZ.IR — intact / hold_tolerate (+0.4%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.90
-- conviction 57%
-
-### C5H.IR — intact / hold_tolerate (+0.8%)
+### C5H.IR — intact / hold_tolerate (+0.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 69%
+
+### OIZ.IR — intact / hold_tolerate (+2.2%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.90
+- conviction 56%

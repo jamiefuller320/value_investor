@@ -16668,5 +16668,456 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-20T07:34:56.303326+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ftse_smallcap/screen_latest.json",
+      "run_at": "2026-10-20T06:52:57.291935+00:00",
+      "generated_at": "2026-10-20T07:34:52.871482+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-20T08:34:52.887751+01:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-10-20T08:00:00+01:00",
+      "settle_at": "2026-10-20T09:15:00+01:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (2 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.003,
+    "candidates": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6804,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 91.9,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6733,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 124.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "CLIG.L",
+        "name": "City of London Investment Group Plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 458.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6804,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 91.9,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6733,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 124.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "CLIG.L",
+        "name": "City of London Investment Group Plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 458.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.55% / sell 0.05% (legacy symmetric slot 0.30%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1185.48,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 395.13,
+      "targets": [
+        {
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "signal": "strong_buy",
+          "conviction_score": 0.6804,
+          "price": 91.9
+        },
+        {
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "signal": "strong_buy",
+          "conviction_score": 0.6733,
+          "price": 124.0
+        },
+        {
+          "ticker": "CLIG.L",
+          "name": "City of London Investment Group Plc",
+          "signal": "buy",
+          "conviction_score": 0.4125,
+          "price": 458.0
+        }
+      ],
+      "anticipated_exits": [
+        {
+          "action": "sell",
+          "ticker": "ENQ.L",
+          "name": "EnQuest PLC",
+          "reason": "No longer in the top conviction target set",
+          "shares": 7.482491,
+          "price": 27.7281,
+          "value": 207.48
+        }
+      ],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "CLIG.L",
+          "name": "City of London Investment Group Plc",
+          "reason": "Top-up to equal weight",
+          "value": 207.37,
+          "price": 458.0,
+          "target_value": 395.13,
+          "conviction_score": 0.4125,
+          "signal": "buy"
+        }
+      ],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "reason": "Already near equal-weight target",
+          "value": 395.43,
+          "target_value": 395.13,
+          "conviction_score": 0.6733,
+          "signal": "strong_buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 1 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "da75e667-ec73-4556-bb0f-52e45bced7da",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-10-20T08:34:52.887751+01:00",
+        "ticker": "CAPD.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 1.46504,
+        "price": 124.0,
+        "gross": 181.66,
+        "cost": 0.09,
+        "net_cash": 181.57,
+        "note": "Automated trim",
+        "name": "Capital Limited",
+        "avg_cost_at_exit": 122.0
+      },
+      {
+        "id": "2d696694-09ce-4b2b-bd0e-78f1223849fe",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-10-20T08:34:52.887751+01:00",
+        "ticker": "CLIG.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.394281,
+        "price": 458.0,
+        "gross": 180.58,
+        "cost": 0.99,
+        "net_cash": -181.57,
+        "note": "Automated buy",
+        "name": "City of London Investment Group Plc"
+      }
+    ],
+    "nav_before": 1186.56,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "ENQ.L",
+        "shares": 7.482491,
+        "avg_cost": 27.7281,
+        "sector": "Energy",
+        "name": "EnQuest PLC",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CARD.L",
+        "shares": 4.374251,
+        "avg_cost": 89.3032,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 4.653997,
+        "avg_cost": 122.0,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "CARD.L": 1
+      },
+      "reentry_cooldown": {
+        "SBRE.L": 1
+      }
+    },
+    "nav_after": 1185.48,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "ENQ.L",
+        "shares": 7.482491,
+        "avg_cost": 27.7281,
+        "sector": "Energy",
+        "name": "EnQuest PLC",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CARD.L",
+        "shares": 4.374251,
+        "avg_cost": 89.3032,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 3.188957,
+        "avg_cost": 122.0,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CLIG.L",
+        "shares": 0.394281,
+        "avg_cost": 458.0,
+        "sector": "Financial Services",
+        "name": "City of London Investment Group Plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {
+        "ENQ.L": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
+      "verdict_counts": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": [
+        {
+          "ticker": "CLIG.L",
+          "name": "City of London Investment Group Plc",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Effective screen signal is buy and still_buyish is true, consistent with adding to the buyish cohort.",
+            "Conviction rank 3 matches entry rank 3 with rank_drop 0, so no rank deterioration versus sleeve entry.",
+            "Research verdict accumulate with overlay_bound true supports the automated buy selection."
+          ],
+          "evidence": [
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 3
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 3
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-20T08:34:52.887751+01:00",
+          "proposal_id": "buy_tier_level:CLIG.L:buy:2026-10-20T08:34:52.887751+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Buy into buyish target set \u2014 agree with algo selection."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
+    }
   }
 ]
