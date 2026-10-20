@@ -8321,6 +8321,24 @@ def test_fetch_filings_ir_allowlist_dax_dhl_de_builtins(tmp_path: Path):
     assert "DHL-Group-2025-Annual-Report.pdf" in rows[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_krx_ir_builtins(tmp_path: Path):
+    """Regression: KRX.IR awaiting_periodic_report — Kingspan FY2025 annual + H1 2026 interim PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("KRX.IR", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any(
+        "annual-report.kingspan.com" in url and "KS_AR25_Financial_Statements.pdf" in url
+        for url in urls
+    )
+    assert any("kgr-interim-statement-hy-2026.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_jmt_ls_builtins(tmp_path: Path):
     """Regression: JMT.LS awaiting_periodic_report — reports.jeronimomartins.com FY2025 annual PDF."""
     allowlist_path = tmp_path / "ir.json"
@@ -8428,6 +8446,7 @@ def test_fetch_filings_ir_allowlist_euro_depth_periphery_builtins(tmp_path: Path
         "OMV.VI": "reports.omv.com",
         "NVG.LS": "thenavigatorcompany.com",
         "JMT.LS": "reports.jeronimomartins.com",
+        "KRX.IR": "annual-report.kingspan.com",
         "GALP.LS": "galp.com/corp",
         "DQ7A.IR": "donegaligroup.com",
         "NBA.LS": "novabase.com",
@@ -12137,6 +12156,22 @@ def test_parked_source_hunter_fct_mi_ftse_mib_has_fetchable_ir():
     assert valid, reason
 
 
+def test_parked_source_hunter_krx_ir_euro_depth_has_fetchable_ir():
+    """eng-20261019-02: KRX.IR has live Kingspan FY2025 statutory annual + H1 2026 interim PDFs."""
+    assert "KRX.IR" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("KRX.IR")
+    assert len(rows) == 2
+    annual = [row for row in rows if row["period"] == "annual"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(annual) == 1
+    assert len(interim) == 1
+    body, source = _fetch_ir_allowlist_body(annual[0], ticker="KRX.IR")
+    assert body and source
+    assert len(body) >= 50000
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], body, ticker="KRX.IR")
+    assert valid, reason
+
+
 def test_parked_source_hunter_jmt_ls_euro_depth_has_fetchable_ir():
     """eng-20260911-02: JMT.LS has live reports.jeronimomartins.com FY2025 entire annual PDF."""
     assert "JMT.LS" not in PARKED_SOURCE_HUNTER_SKIP
@@ -12281,15 +12316,20 @@ def test_fetch_filings_ir_allowlist_ftse_smallcap_aptd_l_builtins(tmp_path: Path
 
 
 def test_parked_source_hunter_aptd_l_ftse_smallcap_has_fetchable_ir():
-    """eng-20260911-07: APTD.L has live aptitudesoftware.com FY2025 ESEF + FY2024 AR + H1 PDFs."""
+    """eng-20260911-07: APTD.L has live aptitudesoftware.com FY2025 ESEF + FY2024 AR + H1 PDFs.
+
+    Live assert uses Annual-Report.pdf — the ESEF xhtml URL is currently Cloudflare 403.
+    """
     assert "APTD.L" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("APTD.L")
     assert len(rows) == 3
     urls = [row["url"] for row in rows]
     assert all("aptitudesoftware.com" in url for url in urls)
     assert any("2138009VHA1WI2VKMA28-2025-12-31-T01.xhtml" in url for url in urls)
-    body = fetch_filing_body(urls[0])
-    assert body
+    annual = [row for row in rows if "Annual-Report.pdf" in row["url"]]
+    assert len(annual) == 1
+    body, source = _fetch_ir_allowlist_body(annual[0], ticker="APTD.L")
+    assert body and source
     assert len(body) >= 50000
 
 
