@@ -1,14 +1,14 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-19T07:27:30.501953+00:00
+Track: `buy_tier_level` · updated 2026-10-20T00:46:42.708399+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **11** / 28 (39% count, 38% NAV)
+- Losers: **11** / 27 (41% count, 38% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 - Selection feedback:
-  - dividend fails more often among losers (55% vs 18%)
+  - dividend fails more often among losers (55% vs 19%)
 
 ## Holding reviews
 
@@ -110,7 +110,7 @@ Track: `buy_tier_level` · updated 2026-10-19T07:27:30.501953+00:00
 - still buy
 - cheapness family still passes
 
-### NWS.AX — weakening / watch_review (-0.7%)
+### NWS.AX — weakening / watch_review (-0.3%)
 - research verdict caution
 - conviction 26% below intact floor
 - still buy
@@ -153,12 +153,6 @@ Track: `buy_tier_level` · updated 2026-10-19T07:27:30.501953+00:00
 - cheapness family still passes
 - data_quality 0.95
 - conviction 44%
-
-### PRN.AX — weakening / watch_review (+4.1%)
-- left buy tier (hold)
-- conviction 25% below intact floor
-- research accumulate
-- cheapness family still passes
 
 ### WDS.AX — intact / hold_tolerate (+5.3%)
 - still buy

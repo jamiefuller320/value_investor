@@ -1,15 +1,48 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-19T18:27:30.253786+11:00",
+    "local_time": "2026-10-20T11:46:42.394014+11:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-10-19T10:00:00+11:00",
-    "settle_at": "2026-10-19T10:30:00+11:00",
+    "market_open_at": "2026-10-20T10:00:00+11:00",
+    "settle_at": "2026-10-20T10:30:00+11:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "c03da15e-75e5-4c36-b62b-142c9b3c3c6c",
+      "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+      "acted_at": "2026-10-20T11:46:42.394014+11:00",
+      "ticker": "PRN.AX",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 17.691109,
+      "price": 2.04,
+      "gross": 36.09,
+      "cost": 0.06,
+      "net_cash": 36.03,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Perenti Limited",
+      "avg_cost_at_exit": 1.96,
+      "position_closed": true
+    },
+    {
+      "id": "47069b27-7abe-4836-a5d5-3c80d526041a",
+      "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+      "acted_at": "2026-10-20T11:46:42.394014+11:00",
+      "ticker": "NWS.AX",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.436458,
+      "price": 47.32,
+      "gross": 20.65,
+      "cost": 0.04,
+      "net_cash": -20.69,
+      "note": "Automated buy",
+      "name": "News Corporation"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +56,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 960.43,
-    "cash": 0.0,
+    "nav": 960.33,
+    "cash": 15.34,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -228,32 +261,10 @@
         "price": 6.29
       }
     ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "PRN.AX",
-        "name": "Perenti Limited",
-        "reason": "No longer in the top conviction target set",
-        "shares": 17.691109,
-        "price": 2.04,
-        "value": 36.09
-      }
-    ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
-      {
-        "action": "buy",
-        "ticker": "NWS.AX",
-        "name": "News Corporation",
-        "reason": "Top-up to equal weight",
-        "value": 20.69,
-        "price": 47.32,
-        "target_value": 35.57,
-        "conviction_score": 0.25619,
-        "signal": "buy"
-      }
-    ],
+    "anticipated_buys": [],
     "anticipated_holds": [
       {
         "action": "hold",
@@ -394,6 +405,16 @@
         "target_value": 35.57,
         "conviction_score": 0.3131,
         "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "NWS.AX",
+        "name": "News Corporation",
+        "reason": "Already near equal-weight target",
+        "value": 35.53,
+        "target_value": 35.57,
+        "conviction_score": 0.25619,
+        "signal": "buy"
       }
     ],
     "skipped": [],
@@ -406,7 +427,7 @@
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 27 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 14 near-target holding(s)."
+    "summary": "Next rebalance would target 27 equal-weight sleeve(s); leave 15 near-target holding(s)."
   },
   "alerts": [
     {
@@ -685,17 +706,6 @@
       "timing_signal": "neutral"
     },
     {
-      "ticker": "PRN.AX",
-      "name": "Perenti Limited",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Screen signal is now hold",
-      "mark": 2.04,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "neutral"
-    },
-    {
       "ticker": "CLW.AX",
       "name": "Charter Hall Long WALE REIT",
       "source": "paper",
@@ -733,7 +743,7 @@
       "id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
       "created_at": "2026-09-07T10:31:58.323814+00:00"
     },
-    "cash": 0.0,
+    "cash": 15.34,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -1012,17 +1022,6 @@
         "take_profit": null,
         "opened_at": "2026-10-16T11:47:21.890883+11:00"
       },
-      "PRN.AX": {
-        "ticker": "PRN.AX",
-        "shares": 17.691109,
-        "avg_cost": 1.96,
-        "name": "Perenti Limited",
-        "sector": "Basic Materials",
-        "currency": "AUD",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-10-16T11:47:21.890883+11:00"
-      },
       "CLW.AX": {
         "ticker": "CLW.AX",
         "shares": 10.480086,
@@ -1036,8 +1035,8 @@
       },
       "NWS.AX": {
         "ticker": "NWS.AX",
-        "shares": 0.314453,
-        "avg_cost": 47.66,
+        "shares": 0.750911,
+        "avg_cost": 47.4624,
         "name": "News Corporation",
         "sector": "Communication Services",
         "currency": "AUD",
@@ -2454,6 +2453,38 @@
         "net_cash": -15.01,
         "note": "Automated buy",
         "name": "News Corporation"
+      },
+      {
+        "id": "c03da15e-75e5-4c36-b62b-142c9b3c3c6c",
+        "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+        "acted_at": "2026-10-20T11:46:42.394014+11:00",
+        "ticker": "PRN.AX",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 17.691109,
+        "price": 2.04,
+        "gross": 36.09,
+        "cost": 0.06,
+        "net_cash": 36.03,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Perenti Limited",
+        "avg_cost_at_exit": 1.96,
+        "position_closed": true
+      },
+      {
+        "id": "47069b27-7abe-4836-a5d5-3c80d526041a",
+        "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+        "acted_at": "2026-10-20T11:46:42.394014+11:00",
+        "ticker": "NWS.AX",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.436458,
+        "price": 47.32,
+        "gross": 20.65,
+        "cost": 0.04,
+        "net_cash": -20.69,
+        "note": "Automated buy",
+        "name": "News Corporation"
       }
     ],
     "equity_curve": [
@@ -3483,26 +3514,43 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-20T11:46:42.394014+11:00",
+        "portfolio_value": 510.33,
+        "cash": 15.34,
+        "contributed_capital": 1000.0,
+        "positions": 27,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "AUD": 0.5238
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-19T18:27:30.253786+11:00",
+    "last_mark_at": "2026-10-20T11:46:42.394014+11:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "PRN.AX": 1
-      },
-      "reentry_cooldown": {}
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (2 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "asx200",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-19T07:27:30.496995+00:00",
+    "generated_at": "2026-10-20T00:46:42.702177+00:00",
     "observe_only": true,
-    "open_count": 29,
+    "open_count": 30,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -3573,13 +3621,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 0
+    "ingested_this_pass": 1,
+    "checkpoints_added_this_pass": 1
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-19T07:27:30.498944+00:00",
+    "generated_at": "2026-10-20T00:46:42.704708+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -3633,7 +3681,7 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 28,
+      "hold_closed_count": 29,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 54,
       "gaps": [
@@ -3643,26 +3691,26 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 27,
-        "recovered_to_breakeven": 18,
+        "count": 26,
+        "recovered_to_breakeven": 17,
         "close_reasons": {
-          "open": 27
+          "open": 26
         }
       },
       "closed": {
-        "count": 28,
-        "recovered_to_breakeven": 19,
+        "count": 29,
+        "recovered_to_breakeven": 20,
         "close_reasons": {
-          "sold_while_recovered": 19,
+          "sold_while_recovered": 20,
           "sold_while_underwater": 9
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 7,
+        "count": 8,
         "verdicts": {
-          "open": 7
+          "open": 8
         }
       },
       "closed": {
@@ -3671,11 +3719,11 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
-      "swap_rotations": 0
+      "hold_episodes": 0,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 0
     }
   },
@@ -3684,8 +3732,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-19T07:27:30.501953+00:00",
-    "as_of": "2026-10-19T18:27:30.253786+11:00",
+    "updated_at": "2026-10-20T00:46:42.708399+00:00",
+    "as_of": "2026-10-20T11:46:42.394014+11:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -3697,19 +3745,19 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 28,
+    "holding_count": 27,
     "underwater_count": 11,
     "thesis_status_counts": {
       "intact": 19,
-      "weakening": 9,
+      "weakening": 8,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 28,
+      "holding_count": 27,
       "loser_count": 11,
-      "loser_share": 0.3929,
-      "loser_nav_share": 0.3776,
+      "loser_share": 0.4074,
+      "loser_nav_share": 0.3837,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": false,
@@ -3725,13 +3773,13 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.4118,
-        "dividend": 0.1765,
-        "garp": 0.7059,
+        "quality": 0.375,
+        "dividend": 0.1875,
+        "garp": 0.6875,
         "risk": 0.0
       },
       "selection_feedback_flags": [
-        "dividend fails more often among losers (55% vs 18%)"
+        "dividend fails more often among losers (55% vs 19%)"
       ],
       "balancing_hint": "trim_weakening_losers",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
@@ -4317,9 +4365,9 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0071,
+        "unrealized_pct": -0.003,
         "mark": 47.32,
-        "avg_cost": 47.66,
+        "avg_cost": 47.4624,
         "signal": "buy",
         "timing_signal": "neutral",
         "conviction_score": 0.2562,
@@ -4590,47 +4638,6 @@
         "broken_reasons": []
       },
       {
-        "ticker": "PRN.AX",
-        "name": "Perenti Limited",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0408,
-        "mark": 2.04,
-        "avg_cost": 1.96,
-        "signal": "hold",
-        "timing_signal": "neutral",
-        "conviction_score": 0.2458,
-        "data_quality_score": 0.95,
-        "passed_families": [
-          "cheapness",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "quality",
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "left buy tier (hold)",
-          "conviction 25% below intact floor",
-          "research accumulate",
-          "cheapness family still passes"
-        ],
-        "intact_reasons": [
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 0.95"
-        ],
-        "weaken_reasons": [
-          "left buy tier (hold)",
-          "conviction 25% below intact floor"
-        ],
-        "broken_reasons": []
-      },
-      {
         "ticker": "WDS.AX",
         "name": "Woodside Energy Group Ltd",
         "thesis_status": "intact",
@@ -4884,15 +4891,15 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-19T07:27:30.505850+00:00",
+    "generated_at": "2026-10-20T00:46:42.713185+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 28,
+      "closed_total": 29,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 27,
+      "open_with_thesis": 26,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -4909,13 +4916,13 @@
           }
         },
         "broken": {
-          "closed_count": 3,
-          "recovery_rate": 0.6667,
-          "sold_underwater_rate": 0.3333,
-          "mean_peak_unrealized_pct": -0.0139,
-          "mean_trough_unrealized_pct": -0.0139,
+          "closed_count": 4,
+          "recovery_rate": 0.75,
+          "sold_underwater_rate": 0.25,
+          "mean_peak_unrealized_pct": -0.0002,
+          "mean_trough_unrealized_pct": -0.0002,
           "outcome_labels": {
-            "recovered": 2,
+            "recovered": 3,
             "sold_underwater": 1
           }
         },
@@ -4945,7 +4952,7 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 28,
+      "hold_closed_with_thesis": 29,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
         "swap sell legs with thesis=0 (target >=5)"
@@ -4959,15 +4966,15 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-19T07:27:30.512980+00:00",
-    "open_count": 10,
-    "closed_count": 18,
+    "generated_at": "2026-10-20T00:46:42.722524+00:00",
+    "open_count": 9,
+    "closed_count": 19,
     "scored_count": 4,
-    "scored_count_all": 18,
-    "recommit_scored_count": 14,
+    "scored_count_all": 19,
+    "recommit_scored_count": 15,
     "entry_kind_counts": {
       "first_entry": 4,
-      "recommit": 14
+      "recommit": 15
     },
     "any_de_risk_count": 3,
     "winning_cadence_counts": {
@@ -5017,17 +5024,17 @@
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
       "first_entry_scored": 4,
-      "recommit_scored": 14
+      "recommit_scored": 15
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
     "marked_this_pass": 10,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-19T18:27:30.253786+11:00",
+    "generated_at": "2026-10-20T11:46:42.394014+11:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -5054,8 +5061,8 @@
     "open_count": 34,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 28,
-      "off_book": 6,
+      "on_book": 27,
+      "off_book": 7,
       "never_funded": 0
     },
     "closed_by_capital_status": {
@@ -5078,53 +5085,243 @@
       "opened": 0,
       "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 0
+      "tagged_off_book": 1
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-19T18:27:30.253786+11:00",
+    "generated_at": "2026-10-20T11:46:42.394014+11:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "llm",
-    "judge_spec_id": "llm.v1",
-    "parent_spec_id": "heuristic.v1",
+    "judge_backend": "evidence_heuristic",
+    "judge_spec_id": "heuristic.v1",
+    "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 2,
+    "card_count": 2,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 1,
       "veto": 0,
-      "abstain": 0
+      "abstain": 1
     },
-    "by_algo_action": {},
-    "disagree_vs_heuristic_count": 0,
-    "cards": [],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
-    "llm_judge": {
-      "attempted": true,
-      "ok": true,
-      "fallback": null
-    },
-    "review": {
-      "schema_version": 1,
-      "track_id": "buy_tier_level",
-      "generated_at": "2026-10-19T18:27:30.253786+11:00",
-      "observe_only": true,
-      "influences_live": false,
-      "judge_backend": "llm",
-      "judge_spec_id": "llm.v1",
-      "parent_spec_id": "heuristic.v1",
-      "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
-      "verdict_counts": {
-        "agree": 0,
+    "by_algo_action": {
+      "sell": {
+        "agree": 1,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "buy": {
+        "agree": 0,
+        "veto": 0,
+        "abstain": 1
+      }
+    },
+    "disagree_vs_heuristic_count": 0,
+    "cards": [
+      {
+        "ticker": "PRN.AX",
+        "name": "Perenti Limited",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.24580000000000002
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-20T11:46:42.394014+11:00",
+        "proposal_id": "buy_tier_level:PRN.AX:sell:2026-10-20T11:46:42.394014+11:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": null,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "NWS.AX",
+        "name": "News Corporation",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "abstain",
+        "reasons": [
+          "Buy while not buyish \u2014 abstain."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 26
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 26
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.25619
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-20T11:46:42.394014+11:00",
+        "proposal_id": "buy_tier_level:NWS.AX:buy:2026-10-20T11:46:42.394014+11:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      }
+    ],
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
+    "review": {
+      "schema_version": 1,
+      "track_id": "buy_tier_level",
+      "generated_at": "2026-10-20T11:46:42.394014+11:00",
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+      "card_count": 2,
+      "verdict_counts": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 1
+      },
+      "by_algo_action": {
+        "sell": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 0,
+          "veto": 0,
+          "abstain": 1
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -5137,10 +5334,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-19T07:27:30.520101+00:00",
+  "generated_at": "2026-10-20T00:46:42.732613+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

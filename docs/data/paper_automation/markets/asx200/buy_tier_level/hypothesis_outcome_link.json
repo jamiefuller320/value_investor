@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-19T07:27:30.505850+00:00",
+  "generated_at": "2026-10-20T00:46:42.713185+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 28,
+    "closed_total": 29,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 27,
+    "open_with_thesis": 26,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -28,13 +28,13 @@
         }
       },
       "broken": {
-        "closed_count": 3,
-        "recovery_rate": 0.6667,
-        "sold_underwater_rate": 0.3333,
-        "mean_peak_unrealized_pct": -0.0139,
-        "mean_trough_unrealized_pct": -0.0139,
+        "closed_count": 4,
+        "recovery_rate": 0.75,
+        "sold_underwater_rate": 0.25,
+        "mean_peak_unrealized_pct": -0.0002,
+        "mean_trough_unrealized_pct": -0.0002,
         "outcome_labels": {
-          "recovered": 2,
+          "recovered": 3,
           "sold_underwater": 1
         }
       },
@@ -64,7 +64,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 28,
+    "hold_closed_with_thesis": 29,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -1923,6 +1923,14 @@
           "unrealized_pct": -0.0173,
           "peak_unrealized_pct": -0.0173,
           "trough_unrealized_pct": -0.0371
+        },
+        {
+          "scored_at": "2026-10-20T11:46:42.394014+11:00",
+          "days_after": 28,
+          "price": 34.03,
+          "unrealized_pct": 0.0526,
+          "peak_unrealized_pct": 0.0526,
+          "trough_unrealized_pct": -0.0371
         }
       ],
       "peak_unrealized_pct": 0.0526,
@@ -2865,7 +2873,7 @@
       "ticker": "PRN.AX",
       "name": "Perenti Limited",
       "started_at": "2026-10-19T18:27:30.253786+11:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -2897,9 +2905,9 @@
       "peak_unrealized_pct": 0.0408,
       "trough_unrealized_pct": 0.0408,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-20T11:46:42.394014+11:00",
+      "linked_sell_trade_id": "c03da15e-75e5-4c36-b62b-142c9b3c3c6c"
     }
   ],
   "swap_rotations": [
@@ -3392,6 +3400,56 @@
       "buy_returns_since_rotation": {
         "CLW.AX": 0.0,
         "NWS.AX": -0.0071
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-20T11:46:42.394014+11:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-20T11:46:42.394014+11:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "PRN.AX",
+          "price": 2.04,
+          "shares": 17.691109,
+          "gross": 36.09,
+          "cost": 0.06,
+          "avg_cost_at_exit": 1.96,
+          "realized_pct": 0.0408,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0408
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NWS.AX",
+          "price": 47.32,
+          "shares": 0.436458,
+          "gross": 20.65,
+          "cost": 0.04
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "PRN.AX": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "NWS.AX": 0.0
       },
       "verdict": null,
       "closed_at": null
