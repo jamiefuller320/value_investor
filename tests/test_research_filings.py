@@ -11903,6 +11903,23 @@ def test_parked_source_hunter_skip_pdd_us_adr_asia():
     assert fetch_filing_body(agm_proxy_6k) is None
 
 
+def test_parked_source_hunter_skip_tme_us_adr_asia():
+    """eng-20261021-06: TME leftover IWB is 6-K notice stubs, not missing 20-F/results."""
+    assert "TME" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["TME"]
+    assert "6-K" in reason
+    assert "substantiveness" in reason
+    assert "EX-99" in reason
+    assert "20-F" in reason
+    assert "sec_edgar" in reason
+    assert "ir.tencentmusic.com" in reason
+    assert fetch_filings_ir_allowlist("TME") == []
+    board_change_6k = (
+        "https://www.sec.gov/Archives/edgar/data/1744676/000095010325002670/dp225605_6k.htm"
+    )
+    assert fetch_filing_body(board_change_6k) is None
+
+
 def test_parked_source_hunter_skip_ldos_sp500():
     """eng-20260907-06: LDOS leftover IWB is acquisition-closing 8-K primary, not missing 10-K/10-Q."""
     assert "LDOS" in PARKED_SOURCE_HUNTER_SKIP
