@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-20T20:47:28.011358+00:00`
+Generated: `2026-10-21T02:37:50.129625+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,7 +33,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `parked_hunter`/verified PR #1131 `eng-20261019-02` — Hunt fetchable IR source for parked euro_depth leftover KRX.IR
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
 - Occasion count: 234
@@ -45,6 +45,21 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `deferred-ideas.json conflict after L516 merge` — 3×
 - `Merge conflicts in deferred-ideas.json with main` — 2×
 - `validate job failed` — 2×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 11 (open=10, resolved=1)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN FTSE decision-input utilization gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Price-only excess misstates track performance — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Two-lot retention beats full exit in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Primary book trails its control on total return — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Decision-review knobs saturated at bounds — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Paper book would halt on drawdown or concentration — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Deferred idea triggers name frozen books — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [resolved] WARN Orphaned pr_open engineering tasks — planned: `remediate_queue_merge_sync` (PM v1: recover/mark-merged engineering queue reconciliation; cleared lag=['none'])
 
 ## Merge authority
 - Status: **scoped_auto_merge**
