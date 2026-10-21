@@ -713,6 +713,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "DHL.DE": [
         "https://reporting-hub.group.dhl.com/ecomaXL/files/DHL-Group-2025-Annual-Report.pdf",
     ],
+    # dax leftover SIE.DE — eng-20261021-04: parked awaiting_periodic_report; ESEF lag;
+    # assets.new.siemens.com uuid: paths 400 after _sanitize_http_url; EQS statutory PDFs fetch.
+    "SIE.DE": [
+        "https://www.eqs-news.com/media/document/53433340-4eb8-4612-836a-b20b58ed33de/assets/DE0007236101-JA-2024-EQ-E-00.pdf",
+        "https://ir-api.eqs.com/storage/ir/f63333/documents/db728c41-10af-4deb-b10e-9b162a9b7f8a/DE0007236101-Q1-2025-EQ-E-00.pdf",
+    ],
     # asx200 buy-tier deepen — unmeasured EBO.AX (Markit latest-five feed is capital-change only).
     "EBO.AX": [
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-02984095-2A1616605",
@@ -1132,6 +1138,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     # dax VOW3.DE preferred share — base symbol VOW3 needs issuer tokens for IR title gate.
     "VOW3": ("Volkswagen", "Volkswagen AG", "Volkswagen Group"),
     "DTE": ("Deutsche Telekom", "Deutsche Telekom AG"),
+    # dax SIE.DE — EQS JA/Q1 slugs are ISIN-only; need issuer tokens for IR title gate.
+    "SIE": ("Siemens", "Siemens AG", "Siemens Aktiengesellschaft"),
     "BAS": ("BASF", "BASF SE"),
     "TTE": ("TotalEnergies", "TotalEnergies SE"),
     "ABI": ("Anheuser-Busch InBev", "Anheuser Busch InBev"),
