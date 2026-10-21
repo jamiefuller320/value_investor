@@ -1053,6 +1053,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "including FY2025 annual report are already bodied; investors.trip.com IR is "
         "Akamai bot-gated (403)."
     ),
+    "0941.HK": (
+        "hang_seng leftover IWB: indexed-without-body row is google_news_asia "
+        "Simply Wall Street stock-forecast HTML shell (fetch_filing_body None); "
+        "hkex_direct annual/interim HKEX PDFs including FY2025 annual report and "
+        "Interim Report 2026 are already bodied."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.

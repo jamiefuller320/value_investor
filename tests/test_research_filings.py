@@ -7996,6 +7996,22 @@ def test_parked_source_hunter_skip_9961_hk_hang_seng():
     )
 
 
+def test_parked_source_hunter_skip_0941_hk_hang_seng():
+    """eng-20261021-05: 0941.HK leftover IWB is Simply Wall Street shell, not missing HKEX filings."""
+    assert "0941.HK" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["0941.HK"]
+    assert "Simply Wall Street" in reason
+    assert "google_news_asia" in reason
+    assert "hkex_direct" in reason
+    assert fetch_filings_ir_allowlist("0941.HK") == []
+    assert (
+        fetch_filing_body(
+            "https://simplywall.st/stocks/hk/telecom/hkg-941/china-mobile-shares/future"
+        )
+        is None
+    )
+
+
 def test_fetch_filings_ir_allowlist_1109_hk_builtins_eng_20261018_05(tmp_path: Path):
     """eng-20261018-05: hang_seng parked 1109.HK — HKEX annual/interim statutory PDF seeds."""
     allowlist_path = tmp_path / "ir.json"
