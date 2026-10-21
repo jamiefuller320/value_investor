@@ -12476,6 +12476,38 @@ def test_parked_source_hunter_rec_l_ftse_smallcap_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_ftse_smallcap_clig_l_builtins(tmp_path: Path):
+    """Regression: CLIG.L parked IWB — clig.com FY2026/2025 AR + H1 Dec-25 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("CLIG.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any(
+        "Annual-Report-June-2026-City-of-London-Investment-Group-PLC.pdf" in url for url in urls
+    )
+    assert any(
+        "Annual-Report-June-2025-City-of-London-Investment-Group-PLC.pdf" in url for url in urls
+    )
+    assert any("City-of-London-Investment-Group-PLC-Interim-Dec-25.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
+def test_parked_source_hunter_clig_l_ftse_smallcap_has_fetchable_ir():
+    """eng-20261021-01: CLIG.L has live clig.com FY2026/2025 AR + H1 Dec-25 statutory PDFs."""
+    assert "CLIG.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("CLIG.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("clig.com" in url for url in urls)
+    assert any(
+        "Annual-Report-June-2026-City-of-London-Investment-Group-PLC.pdf" in url for url in urls
+    )
+    _first_fetchable_allowlist_body(urls)
+
+
 def test_fetch_filings_ir_allowlist_aim_mpe_l_builtins(tmp_path: Path):
     """Regression: MPE.L buy-tier no_key_bodies — mpevans.co.uk FY2025/2024 AR + H1 statutory PDFs."""
     allowlist_path = tmp_path / "ir.json"
