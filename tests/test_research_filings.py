@@ -8410,6 +8410,21 @@ def test_fetch_filings_ir_allowlist_dax_dhl_de_builtins(tmp_path: Path):
     assert "DHL-Group-2025-Annual-Report.pdf" in rows[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_dax_sie_de_builtins(tmp_path: Path):
+    """Regression: SIE.DE awaiting_periodic_report — EQS FY2025 annual + Q1 FY2026 earnings PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("SIE.DE", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("DE0007236101-JA-2024-EQ-E-00.pdf" in url for url in urls)
+    assert any("DE0007236101-Q1-2025-EQ-E-00.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_krx_ir_builtins(tmp_path: Path):
     """Regression: KRX.IR awaiting_periodic_report — Kingspan FY2025 annual + H1 2026 interim PDFs."""
     allowlist_path = tmp_path / "ir.json"
@@ -12139,6 +12154,30 @@ def test_parked_source_hunter_dhl_de_dax_has_fetchable_ir():
         pytest.skip("DHL reporting-hub body fetch unavailable (rate-limit / network) — retry later")
     assert len(body) >= 50000
     valid, reason = _validate_ir_allowlist_body_content(annual[0], body, ticker="DHL.DE")
+    assert valid, reason
+
+
+def test_parked_source_hunter_sie_de_dax_has_fetchable_ir():
+    """eng-20261021-04: SIE.DE EQS FY2025 annual + Q1 FY2026 earnings PDFs fetch and validate."""
+    assert "SIE.DE" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("SIE.DE")
+    assert len(rows) == 2
+    annual = [row for row in rows if row["period"] == "annual"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(annual) == 1
+    assert len(interim) == 1
+    assert "DE0007236101-JA-2024-EQ-E-00.pdf" in annual[0]["url"]
+    assert "DE0007236101-Q1-2025-EQ-E-00.pdf" in interim[0]["url"]
+    annual_body = _live_fetch_filing_body(annual[0]["url"])
+    if not annual_body:
+        pytest.skip("SIE.DE EQS annual body fetch unavailable (rate-limit / network) — retry later")
+    assert len(annual_body) >= 50000
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], annual_body, ticker="SIE.DE")
+    assert valid, reason
+    interim_body = _live_fetch_filing_body(interim[0]["url"])
+    if not interim_body:
+        pytest.skip("SIE.DE EQS Q1 body fetch unavailable (rate-limit / network) — retry later")
+    valid, reason = _validate_ir_allowlist_body_content(interim[0], interim_body, ticker="SIE.DE")
     assert valid, reason
 
 
