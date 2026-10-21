@@ -1,20 +1,31 @@
 {
   "schema_version": 1,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-20T18:34:32.122432+11:00",
+  "generated_at": "2026-10-21T11:46:42.235808+11:00",
   "observe_only": true,
   "influences_live": false,
-  "judge_backend": "llm",
-  "judge_spec_id": "llm.v1",
-  "parent_spec_id": "heuristic.v1",
+  "judge_backend": "evidence_heuristic",
+  "judge_spec_id": "heuristic.v1",
+  "parent_spec_id": null,
   "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-  "card_count": 0,
+  "card_count": 2,
   "verdict_counts": {
-    "agree": 0,
+    "agree": 2,
     "veto": 0,
     "abstain": 0
   },
-  "by_algo_action": {},
+  "by_algo_action": {
+    "sell": {
+      "agree": 1,
+      "veto": 0,
+      "abstain": 0
+    },
+    "buy": {
+      "agree": 1,
+      "veto": 0,
+      "abstain": 0
+    }
+  },
   "veto_sell_count": 0,
   "veto_sell_tickers": [],
   "promotion_gate": {
@@ -27,5 +38,5 @@
     ],
     "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
   },
-  "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
+  "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
 }

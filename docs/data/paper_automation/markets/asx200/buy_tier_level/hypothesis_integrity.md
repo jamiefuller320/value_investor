@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-20T07:34:32.292347+00:00
+Track: `buy_tier_level` · updated 2026-10-21T00:46:42.765574+00:00
 
 ## Portfolio loser feedback
 
@@ -116,18 +116,16 @@ Track: `buy_tier_level` · updated 2026-10-20T07:34:32.292347+00:00
 - data_quality 1.00
 - conviction 52%
 
-### NWS.AX — weakening / watch_review (-0.1%)
-- left buy tier (hold)
-- research verdict caution
-- conviction 17% below intact floor
-- cheapness family still passes
-- data_quality 1.00
-
 ### CLW.AX — intact / hold_tolerate (+0.0%)
 - still buy
 - cheapness family still passes
 - data_quality 0.90
 - conviction 51%
+
+### PRN.AX — weakening / watch_review (+0.0%)
+- conviction 25% below intact floor
+- still buy
+- research accumulate
 
 ### GMD.AX — weakening / watch_review (+0.3%)
 - research verdict caution
