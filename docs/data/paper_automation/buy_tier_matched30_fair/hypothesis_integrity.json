@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_matched30_fair",
-  "updated_at": "2026-10-19T11:09:08.302987+00:00",
-  "as_of": "2026-10-19T12:08:58.236303+01:00",
+  "updated_at": "2026-10-21T08:28:14.063474+00:00",
+  "as_of": "2026-10-21T09:28:02.537071+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -17,98 +17,141 @@
     "skip_underwater_urgency_when_intact": true
   },
   "holding_count": 30,
-  "underwater_count": 0,
+  "underwater_count": 1,
   "thesis_status_counts": {
-    "intact": 13,
-    "weakening": 17,
+    "intact": 16,
+    "weakening": 14,
     "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
     "holding_count": 30,
-    "loser_count": 0,
-    "loser_share": 0.0,
-    "loser_nav_share": 0.0,
+    "loser_count": 1,
+    "loser_share": 0.0333,
+    "loser_nav_share": 0.0309,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
-    "intact_loser_count": 0,
+    "intact_loser_count": 1,
     "weakening_loser_count": 0,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
-      "quality": 0.0,
+      "quality": 1.0,
       "dividend": 0.0,
-      "garp": 0.0,
+      "garp": 1.0,
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
       "cheapness": 0.0,
-      "quality": 0.1,
-      "dividend": 0.7333,
-      "garp": 0.6333,
+      "quality": 0.1379,
+      "dividend": 0.5862,
+      "garp": 0.6552,
       "risk": 0.0
     },
-    "selection_feedback_flags": [],
-    "balancing_hint": "maintain",
+    "selection_feedback_flags": [
+      "quality fails more often among losers (100% vs 14%)"
+    ],
+    "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
     {
-      "ticker": "CCC.L",
-      "name": "Computacenter plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
+      "ticker": "GEN.L",
+      "name": "Genuit Group plc",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0249,
-      "mark": 5095.0,
-      "avg_cost": 5225.0,
-      "signal": "hold",
+      "unrealized_pct": -0.0805,
+      "mark": 262.4388,
+      "avg_cost": 285.4,
+      "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.2386,
+      "conviction_score": 0.8689,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
+        "dividend",
         "risk"
       ],
       "failed_families": [
         "quality",
-        "dividend",
         "garp"
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "left buy tier (hold)",
-        "conviction 24% below intact floor",
-        "research accumulate",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00"
+        "data_quality 1.00",
+        "conviction 87%"
       ],
-      "weaken_reasons": [
-        "left buy tier (hold)",
-        "conviction 24% below intact floor"
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 87%"
       ],
+      "weaken_reasons": [],
       "broken_reasons": []
     },
     {
-      "ticker": "GNS.L",
-      "name": "Genus plc",
+      "ticker": "IGG.L",
+      "name": "IG Group Holdings plc",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0446,
+      "mark": 933.9,
+      "avg_cost": 977.5,
+      "signal": "buy",
+      "timing_signal": "insufficient_data",
+      "conviction_score": 1.0,
+      "data_quality_score": 0.9,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 100%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 100%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "HOC.L",
+      "name": "Hochschild Mining plc",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0225,
-      "mark": 2304.0,
-      "avg_cost": 2356.9871,
+      "unrealized_pct": -0.0359,
+      "mark": 497.0,
+      "avg_cost": 515.5,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.2367,
-      "data_quality_score": 0.9,
+      "conviction_score": 0.0548,
+      "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
         "quality",
@@ -120,88 +163,7 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "conviction 24% below intact floor",
-        "still buy",
-        "research accumulate"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90"
-      ],
-      "weaken_reasons": [
-        "conviction 24% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "CURY.L",
-      "name": "Currys plc",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0211,
-      "mark": 148.6,
-      "avg_cost": 151.8,
-      "signal": "strong_buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.5974,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 60%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 60%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "SCT.L",
-      "name": "Softcat plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0092,
-      "mark": 1714.0,
-      "avg_cost": 1730.0,
-      "signal": "buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.1648,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "conviction 16% below intact floor",
+        "conviction 5% below intact floor",
         "still buy",
         "research accumulate"
       ],
@@ -212,7 +174,88 @@
         "data_quality 1.00"
       ],
       "weaken_reasons": [
-        "conviction 16% below intact floor"
+        "conviction 5% below intact floor"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "PAF.L",
+      "name": "Pan African Resources PLC",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0309,
+      "mark": 116.2,
+      "avg_cost": 119.9,
+      "signal": "strong_buy",
+      "timing_signal": "insufficient_data",
+      "conviction_score": 1.0,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 100%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 100%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "RIO.L",
+      "name": "Rio Tinto Group",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.028,
+      "mark": 6530.0,
+      "avg_cost": 6718.0,
+      "signal": "buy",
+      "timing_signal": "insufficient_data",
+      "conviction_score": 0.0507,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "conviction 5% below intact floor",
+        "still buy",
+        "research accumulate"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00"
+      ],
+      "weaken_reasons": [
+        "conviction 5% below intact floor"
       ],
       "broken_reasons": []
     },
@@ -223,12 +266,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0091,
-      "mark": 928.0,
+      "unrealized_pct": -0.024,
+      "mark": 914.0,
       "avg_cost": 936.5,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.423,
+      "conviction_score": 0.923,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -245,112 +288,112 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 42%"
+        "conviction 92%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 42%"
+        "conviction 92%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
     },
     {
-      "ticker": "SN.L",
-      "name": "Smith & Nephew plc",
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0089,
-      "mark": 1082.4084,
-      "avg_cost": 1092.118,
-      "signal": "buy",
+      "unrealized_pct": -0.0228,
+      "mark": 116.2888,
+      "avg_cost": 119.0,
+      "signal": "strong_buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.2306,
+      "conviction_score": 0.08,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
         "quality",
+        "garp",
         "risk"
       ],
       "failed_families": [
-        "dividend",
-        "garp"
+        "dividend"
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "conviction 23% below intact floor",
-        "still buy",
+        "conviction 8% below intact floor",
+        "still strong_buy",
         "research accumulate"
       ],
       "intact_reasons": [
-        "still buy",
+        "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00"
       ],
       "weaken_reasons": [
-        "conviction 23% below intact floor"
+        "conviction 8% below intact floor"
       ],
       "broken_reasons": []
     },
     {
-      "ticker": "PAF.L",
-      "name": "Pan African Resources PLC",
+      "ticker": "FRES.L",
+      "name": "Fresnillo plc",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0067,
-      "mark": 119.1,
-      "avg_cost": 119.9,
-      "signal": "strong_buy",
+      "unrealized_pct": -0.0204,
+      "mark": 2640.947,
+      "avg_cost": 2696.0,
+      "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.5275,
+      "conviction_score": 1.0,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
         "quality",
-        "garp",
+        "dividend",
         "risk"
       ],
       "failed_families": [
-        "dividend"
+        "garp"
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "still strong_buy",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 53%"
+        "conviction 100%"
       ],
       "intact_reasons": [
-        "still strong_buy",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 53%"
+        "conviction 100%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
     },
     {
-      "ticker": "IMB.L",
-      "name": "Imperial Brands PLC",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
+      "ticker": "CURY.L",
+      "name": "Currys plc",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0063,
-      "mark": 2823.0,
-      "avg_cost": 2841.0,
-      "signal": "buy",
+      "unrealized_pct": -0.0184,
+      "mark": 149.0,
+      "avg_cost": 151.8,
+      "signal": "strong_buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.1629,
+      "conviction_score": 1.0,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -363,99 +406,20 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "conviction 16% below intact floor",
-        "still buy",
-        "research accumulate"
-      ],
-      "intact_reasons": [
-        "still buy",
+        "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "conviction 16% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "ALFA.L",
-      "name": "Alfa Financial Software Holdings PLC",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.006,
-      "mark": 164.6,
-      "avg_cost": 165.6,
-      "signal": "strong_buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.2362,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "conviction 24% below intact floor",
-        "still strong_buy",
-        "research accumulate"
+        "data_quality 1.00",
+        "conviction 100%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00"
+        "data_quality 1.00",
+        "conviction 100%"
       ],
-      "weaken_reasons": [
-        "conviction 24% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "HOC.L",
-      "name": "Hochschild Mining plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0039,
-      "mark": 513.5,
-      "avg_cost": 515.5,
-      "signal": "buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.2786,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "conviction 28% below intact floor",
-        "still buy",
-        "research accumulate"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "conviction 28% below intact floor"
-      ],
+      "weaken_reasons": [],
       "broken_reasons": []
     },
     {
@@ -465,12 +429,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0025,
-      "mark": 813.0,
+      "unrealized_pct": -0.0123,
+      "mark": 805.0,
       "avg_cost": 815.0,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.4555,
+      "conviction_score": 0.9555,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -487,16 +451,55 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 46%"
+        "conviction 96%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 46%"
+        "conviction 96%"
       ],
       "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "RKT.L",
+      "name": "Reckitt Benckiser Group plc",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0025,
+      "mark": 5492.0,
+      "avg_cost": 5506.0,
+      "signal": "buy",
+      "timing_signal": "insufficient_data",
+      "conviction_score": 0.2547,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "conviction 25% below intact floor",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00"
+      ],
+      "weaken_reasons": [
+        "conviction 25% below intact floor"
+      ],
       "broken_reasons": []
     },
     {
@@ -506,12 +509,12 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.001,
-      "mark": 201.4,
+      "unrealized_pct": -0.002,
+      "mark": 201.2,
       "avg_cost": 201.6,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.2522,
+      "conviction_score": 0.0497,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -525,7 +528,7 @@
       "research_verdict": "neutral",
       "reasons": [
         "research verdict neutral",
-        "conviction 25% below intact floor",
+        "conviction 5% below intact floor",
         "still buy",
         "cheapness family still passes"
       ],
@@ -536,23 +539,180 @@
       ],
       "weaken_reasons": [
         "research verdict neutral",
-        "conviction 25% below intact floor"
+        "conviction 5% below intact floor"
       ],
       "broken_reasons": []
     },
     {
-      "ticker": "RIO.L",
-      "name": "Rio Tinto Group",
+      "ticker": "EZJ.L",
+      "name": "easyJet plc",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0001,
-      "mark": 6719.0,
-      "avg_cost": 6718.0,
+      "unrealized_pct": -0.002,
+      "mark": 682.2,
+      "avg_cost": 683.6,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.2576,
+      "conviction_score": 0.2344,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "conviction 23% below intact floor",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00"
+      ],
+      "weaken_reasons": [
+        "conviction 23% below intact floor"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "HBR.L",
+      "name": "Harbour Energy plc",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 299.4,
+      "avg_cost": 299.4,
+      "signal": "buy",
+      "timing_signal": "insufficient_data",
+      "conviction_score": 0.2008,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "conviction 20% below intact floor",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00"
+      ],
+      "weaken_reasons": [
+        "conviction 20% below intact floor"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "HTG.L",
+      "name": "Hunting PLC",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 408.0,
+      "avg_cost": 408.0,
+      "signal": "buy",
+      "timing_signal": "insufficient_data",
+      "conviction_score": 0.1818,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "conviction 18% below intact floor",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00"
+      ],
+      "weaken_reasons": [
+        "conviction 18% below intact floor"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "AEP.L",
+      "name": "AEP Plantations Plc",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 176.29,
+      "avg_cost": 176.29,
+      "signal": "strong_buy",
+      "timing_signal": "insufficient_data",
+      "conviction_score": 0.0527,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "conviction 5% below intact floor",
+        "still strong_buy",
+        "research accumulate"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00"
+      ],
+      "weaken_reasons": [
+        "conviction 5% below intact floor"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "BT-A.L",
+      "name": "BT Group plc",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 205.4,
+      "avg_cost": 205.4,
+      "signal": "buy",
+      "timing_signal": "insufficient_data",
+      "conviction_score": 0.048,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -565,7 +725,7 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "conviction 26% below intact floor",
+        "conviction 5% below intact floor",
         "still buy",
         "research accumulate"
       ],
@@ -576,87 +736,47 @@
         "data_quality 1.00"
       ],
       "weaken_reasons": [
-        "conviction 26% below intact floor"
+        "conviction 5% below intact floor"
       ],
       "broken_reasons": []
     },
     {
-      "ticker": "DNLM.L",
-      "name": "Dunelm Group plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0008,
-      "mark": 883.675,
-      "avg_cost": 883.0,
-      "signal": "buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.2249,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "conviction 22% below intact floor",
-        "still buy",
-        "research accumulate"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "conviction 22% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "FRES.L",
-      "name": "Fresnillo plc",
+      "ticker": "OSB.L",
+      "name": "OSB Group Plc",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0015,
-      "mark": 2700.0,
-      "avg_cost": 2696.0,
-      "signal": "buy",
+      "unrealized_pct": 0.0031,
+      "mark": 479.1,
+      "avg_cost": 477.6,
+      "signal": "strong_buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.6336,
-      "data_quality_score": 1.0,
+      "conviction_score": 0.8819,
+      "data_quality_score": 0.75,
       "passed_families": [
         "cheapness",
-        "quality",
         "dividend",
         "risk"
       ],
       "failed_families": [
+        "quality",
         "garp"
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "still buy",
+        "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 63%"
+        "data_quality 0.75",
+        "conviction 88%"
       ],
       "intact_reasons": [
-        "still buy",
+        "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 63%"
+        "data_quality 0.75",
+        "conviction 88%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -668,12 +788,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0047,
-      "mark": 678.0,
+      "unrealized_pct": 0.0033,
+      "mark": 677.0,
       "avg_cost": 674.797,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.7139,
+      "conviction_score": 1.0,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -689,71 +809,31 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 71%"
+        "conviction 100%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 71%"
+        "conviction 100%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
     },
     {
-      "ticker": "IGG.L",
-      "name": "IG Group Holdings plc",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0056,
-      "mark": 983.0,
-      "avg_cost": 977.5,
-      "signal": "buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.5646,
-      "data_quality_score": 0.9,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 56%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 56%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "BYIT.L",
-      "name": "Bytes Technology Group plc",
+      "ticker": "MAB.L",
+      "name": "Mitchells & Butlers plc",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0058,
-      "mark": 450.4,
-      "avg_cost": 447.8,
+      "unrealized_pct": 0.0046,
+      "mark": 313.119,
+      "avg_cost": 311.684,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.229,
+      "conviction_score": 0.2079,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -764,60 +844,59 @@
         "dividend",
         "garp"
       ],
-      "research_verdict": "accumulate",
+      "research_verdict": null,
       "reasons": [
-        "conviction 23% below intact floor",
+        "conviction 21% below intact floor",
         "still buy",
-        "research accumulate"
+        "cheapness family still passes"
       ],
       "intact_reasons": [
         "still buy",
-        "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00"
       ],
       "weaken_reasons": [
-        "conviction 23% below intact floor"
+        "conviction 21% below intact floor"
       ],
       "broken_reasons": []
     },
     {
-      "ticker": "FGP.L",
-      "name": "FirstGroup plc",
+      "ticker": "NWG.L",
+      "name": "NatWest Group plc",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0059,
-      "mark": 203.2,
-      "avg_cost": 202.0,
-      "signal": "strong_buy",
+      "unrealized_pct": 0.0053,
+      "mark": 643.2,
+      "avg_cost": 639.8,
+      "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.3989,
-      "data_quality_score": 1.0,
+      "conviction_score": 0.8295,
+      "data_quality_score": 0.75,
       "passed_families": [
         "cheapness",
-        "quality",
-        "garp",
+        "dividend",
         "risk"
       ],
       "failed_families": [
-        "dividend"
+        "quality",
+        "garp"
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "still strong_buy",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 40%"
+        "data_quality 0.75",
+        "conviction 83%"
       ],
       "intact_reasons": [
-        "still strong_buy",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 40%"
+        "data_quality 0.75",
+        "conviction 83%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -829,12 +908,12 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0068,
-      "mark": 1859.0,
+      "unrealized_pct": 0.01,
+      "mark": 1865.0,
       "avg_cost": 1846.5,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.3221,
+      "conviction_score": 0.0634,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -847,7 +926,7 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "conviction 32% below intact floor",
+        "conviction 6% below intact floor",
         "still buy",
         "research accumulate"
       ],
@@ -858,31 +937,31 @@
         "data_quality 1.00"
       ],
       "weaken_reasons": [
-        "conviction 32% below intact floor"
+        "conviction 6% below intact floor"
       ],
       "broken_reasons": []
     },
     {
-      "ticker": "PPH.L",
-      "name": "PPHE Hotel Group Limited",
+      "ticker": "BARC.L",
+      "name": "Barclays PLC",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0069,
-      "mark": 1452.0,
-      "avg_cost": 1442.0,
+      "unrealized_pct": 0.0109,
+      "mark": 417.5,
+      "avg_cost": 413.0,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.6922,
-      "data_quality_score": 1.0,
+      "conviction_score": 0.8292,
+      "data_quality_score": 0.75,
       "passed_families": [
         "cheapness",
-        "quality",
         "dividend",
         "risk"
       ],
       "failed_families": [
+        "quality",
         "garp"
       ],
       "research_verdict": "accumulate",
@@ -890,56 +969,15 @@
         "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 69%"
+        "data_quality 0.75",
+        "conviction 83%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 69%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "MEGP.L",
-      "name": "ME Group International plc",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0101,
-      "mark": 120.2,
-      "avg_cost": 119.0,
-      "signal": "strong_buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.4064,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 41%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 41%"
+        "data_quality 0.75",
+        "conviction 83%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -956,7 +994,7 @@
       "avg_cost": 250.0,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.5725,
+      "conviction_score": 1.0,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -973,199 +1011,120 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 57%"
+        "conviction 100%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 57%"
+        "conviction 100%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
     },
     {
-      "ticker": "MONY.L",
-      "name": "MONY Group plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0178,
-      "mark": 203.2,
-      "avg_cost": 199.651,
-      "signal": "buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.1611,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "conviction 16% below intact floor",
-        "still buy",
-        "research accumulate"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "conviction 16% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "HIK.L",
-      "name": "Hikma Pharmaceuticals PLC",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0196,
-      "mark": 1664.0,
-      "avg_cost": 1632.0,
-      "signal": "strong_buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.2053,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "conviction 21% below intact floor",
-        "still strong_buy",
-        "research accumulate"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "conviction 21% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "JUP.L",
-      "name": "Jupiter Fund Management Plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0207,
-      "mark": 177.4,
-      "avg_cost": 173.8,
-      "signal": "buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.2803,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "conviction 28% below intact floor",
-        "still buy",
-        "research accumulate"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "conviction 28% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "RNK.L",
-      "name": "The Rank Group Plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0219,
-      "mark": 76.64,
-      "avg_cost": 75.0,
-      "signal": "strong_buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.2781,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "conviction 28% below intact floor",
-        "still strong_buy",
-        "research accumulate"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "conviction 28% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "GEN.L",
-      "name": "Genuit Group plc",
+      "ticker": "ICG.L",
+      "name": "ICG plc",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0273,
-      "mark": 293.2,
-      "avg_cost": 285.4,
+      "unrealized_pct": 0.0177,
+      "mark": 1781.0,
+      "avg_cost": 1750.0,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.3689,
-      "data_quality_score": 1.0,
+      "conviction_score": 0.9442,
+      "data_quality_score": 0.85,
       "passed_families": [
         "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.85",
+        "conviction 94%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.85",
+        "conviction 94%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "BGEO.L",
+      "name": "Lion Finance Group PLC",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0289,
+      "mark": 12480.0,
+      "avg_cost": 12130.0,
+      "signal": "strong_buy",
+      "timing_signal": "insufficient_data",
+      "conviction_score": 0.9118,
+      "data_quality_score": 0.7,
+      "passed_families": [
+        "cheapness",
+        "quality",
         "dividend",
         "risk"
       ],
       "failed_families": [
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.70",
+        "conviction 91%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.70",
+        "conviction 91%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "PPH.L",
+      "name": "PPHE Hotel Group Limited",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0319,
+      "mark": 1488.0,
+      "avg_cost": 1442.0,
+      "signal": "buy",
+      "timing_signal": "insufficient_data",
+      "conviction_score": 1.0,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
         "quality",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
         "garp"
       ],
       "research_verdict": "accumulate",
@@ -1174,14 +1133,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 37%"
+        "conviction 100%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 37%"
+        "conviction 100%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -1193,12 +1152,12 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0303,
-      "mark": 271.5,
+      "unrealized_pct": 0.0378,
+      "mark": 273.5,
       "avg_cost": 263.527,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.3113,
+      "conviction_score": 0.0613,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -1211,7 +1170,7 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "conviction 31% below intact floor",
+        "conviction 6% below intact floor",
         "still buy",
         "research accumulate"
       ],
@@ -1222,7 +1181,7 @@
         "data_quality 1.00"
       ],
       "weaken_reasons": [
-        "conviction 31% below intact floor"
+        "conviction 6% below intact floor"
       ],
       "broken_reasons": []
     },
@@ -1233,12 +1192,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0309,
-      "mark": 3138.0,
+      "unrealized_pct": 0.0489,
+      "mark": 3192.9099,
       "avg_cost": 3044.0,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.6951,
+      "conviction_score": 1.0,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -1255,16 +1214,56 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 70%"
+        "conviction 100%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 70%"
+        "conviction 100%"
       ],
       "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "RNK.L",
+      "name": "The Rank Group Plc",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.081,
+      "mark": 81.078,
+      "avg_cost": 75.0,
+      "signal": "strong_buy",
+      "timing_signal": "insufficient_data",
+      "conviction_score": 0.0547,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "conviction 5% below intact floor",
+        "still strong_buy",
+        "research accumulate"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00"
+      ],
+      "weaken_reasons": [
+        "conviction 5% below intact floor"
+      ],
       "broken_reasons": []
     }
   ],

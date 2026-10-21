@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-10-20T07:37:09.559976+00:00",
+  "generated_at": "2026-10-21T07:39:35.189114+00:00",
   "stamped_this_pass": {
-    "hold_episodes": 1,
+    "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 2,
+    "closed_total": 3,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -27,13 +27,14 @@
         }
       },
       "broken": {
-        "closed_count": 1,
-        "recovery_rate": 0.0,
-        "sold_underwater_rate": 1.0,
-        "mean_peak_unrealized_pct": -0.0026,
-        "mean_trough_unrealized_pct": -0.0026,
+        "closed_count": 2,
+        "recovery_rate": 0.5,
+        "sold_underwater_rate": 0.5,
+        "mean_peak_unrealized_pct": -0.0142,
+        "mean_trough_unrealized_pct": -0.0142,
         "outcome_labels": {
-          "sold_underwater": 1
+          "sold_underwater": 1,
+          "recovered": 1
         }
       },
       "insufficient_data": {
@@ -62,11 +63,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 2,
+    "hold_closed_with_thesis": 3,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=2 (target >=8)",
-      "hold thesis buckets thin (weakening=1, broken=1; target >=3 each)",
+      "hold closed with thesis=3 (target >=8)",
+      "hold thesis buckets thin (weakening=1, broken=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -271,7 +272,7 @@
       "ticker": "KRX.IR",
       "name": "Kingspan Group plc",
       "started_at": "2026-10-20T08:37:09.553933+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -285,12 +286,12 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": 0.0,
-      "trough_unrealized_pct": 0.0,
+      "peak_unrealized_pct": -0.0259,
+      "trough_unrealized_pct": -0.0259,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-21T08:39:35.179900+01:00",
+      "linked_sell_trade_id": "aecfd394-a827-4b7e-80cd-cca50f372054",
       "thesis_status_at_start": "broken",
       "recommended_action_at_start": "exit_candidate",
       "thesis_reasons_at_start": [
@@ -357,10 +358,10 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "EG7.IR": 0.0237
+        "EG7.IR": 0.0026
       },
       "buy_returns_since_rotation": {
-        "C5H.IR": -0.0019,
+        "C5H.IR": 0.0038,
         "OIZ.IR": 0.0
       },
       "verdict": null,
@@ -435,11 +436,61 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "C5H.IR": -0.0056,
+        "C5H.IR": 0.0,
         "OIZ.IR": 0.0178
       },
       "buy_returns_since_rotation": {
+        "KRX.IR": -0.0259
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-10-21T08:39:35.179900+01:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-10-21T08:39:35.179900+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "KRX.IR",
+          "price": 93.95,
+          "shares": 3.541926,
+          "gross": 332.76,
+          "cost": 0.08,
+          "avg_cost_at_exit": 96.45,
+          "realized_pct": -0.0259,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "neutral",
+          "unrealized_pct_at_thesis": -0.0259
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "GL9.IR",
+          "price": 20.24,
+          "shares": 16.432688,
+          "gross": 332.6,
+          "cost": 0.08
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
         "KRX.IR": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "GL9.IR": 0.0
       },
       "verdict": null,
       "closed_at": null

@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-19T21:20:59.810329+00:00",
+  "run_at": "2026-10-20T20:12:45.120776+00:00",
   "market_id": "aex",
   "targets": [
     "MT.AS"
@@ -83,7 +83,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-19T21:19:19.602111+00:00",
+    "snapshot_at": "2026-10-20T20:12:29.767011+00:00",
     "market_id": "aex",
     "buy_tier_count": 9,
     "unmeasured_buy_tier": 0,
@@ -122,7 +122,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-19T21:19:33.295216+00:00",
+    "snapshot_at": "2026-10-20T20:12:45.106066+00:00",
     "market_id": "aex",
     "buy_tier_count": 9,
     "unmeasured_buy_tier": 0,
@@ -149,15 +149,16 @@
     },
     "parked_tickers": [
       "ASM.AS",
-      "ASML.AS",
-      "MT.AS"
+      "ASML.AS"
     ],
-    "parked_count": 3,
+    "parked_count": 2,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body_tickers": [
+      "MT.AS"
+    ],
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
@@ -168,33 +169,10 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "advanced": true,
-    "parallel_stream": 1,
-    "from_market": "aex",
-    "to_market": null,
-    "stream_markets_after": [],
-    "parity_event": {
-      "recorded": false,
-      "reason": "ingest_exhausted_leftover_gaps",
-      "market_id": "aex",
-      "ingest_exhausted": true,
-      "exhausted_maintenance_recorded": true,
-      "parked_tickers": [
-        "ASM.AS",
-        "ASML.AS",
-        "MT.AS"
-      ],
-      "learning_admitted_changed": false,
-      "learning_admitted": true
-    },
-    "screen_refresh": null,
-    "at": "2026-10-19T21:19:49.078092+00:00",
-    "ingest_parity_recorded": false
-  },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "aex",
-    "assessed_at": "2026-10-19T21:19:19.911375+00:00",
+    "assessed_at": "2026-10-20T20:12:30.173756+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -235,9 +213,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 13.098851513999989,
+  "used_seconds": 14.497111973000017,
   "budget_seconds": 87.5,
-  "leftover_seconds": 74.40114848600001,
+  "leftover_seconds": 73.00288802699998,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -245,9 +223,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "aex",
-    "updated_at": "2026-10-19T21:19:33.298392+00:00",
-    "exhausted": true,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-10-20T20:12:45.110550+00:00",
+    "exhausted": false,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -273,18 +251,6 @@
         "indexed_without_body": 0,
         "thin": true,
         "source_surface": "euro_filings"
-      },
-      {
-        "ticker": "MT.AS",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-10-19T21:19:33.298392+00:00",
-        "park_via": "straggler_soft_park",
-        "filings_total": 41,
-        "filings_with_body": 40,
-        "indexed_without_body": 1,
-        "thin": false,
-        "source_surface": "euro_filings"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -296,43 +262,20 @@
       "ASML.AS",
       "MT.AS"
     ],
-    "unparked_leftover": [],
+    "unparked_leftover": [
+      "MT.AS"
+    ],
     "surface_released": [],
     "path": "docs/data/library/markets/aex/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "aex",
-    "ingest_exhausted_markets": [
-      "aex",
-      "asx200",
-      "atx",
-      "bel20",
-      "cac40",
-      "dax",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_mib",
-      "ftse_smallcap",
-      "hang_seng",
-      "ibex35",
-      "iseq20",
-      "nasdaq100",
-      "omxs30",
-      "psi20",
-      "smi",
-      "sp500",
-      "sti",
-      "tsx60",
-      "us_adr_asia"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "not_exhausted",
+    "market_id": "aex"
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261019-02"
+    "task_id": "eng-20261020-01"
   }
 }

@@ -2961,6 +2961,34 @@ tr.selected td {
   background: rgba(179, 58, 58, 0.12);
 }
 
+.sealed-life-section .market-status-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.sealed-life-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem 0.75rem;
+  flex-shrink: 0;
+}
+
+.sealed-life-view-toggle,
+.sealed-life-sort-toggle {
+  display: inline-flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.sealed-heat-legend {
+  margin: 0.15rem 0 0.65rem;
+}
+
 .sealed-life-board {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2980,6 +3008,53 @@ tr.selected td {
   overflow: auto;
 }
 
+.sealed-heat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.28rem;
+  max-height: 70vh;
+  overflow: auto;
+  padding: 0.1rem 0.05rem 0.2rem;
+}
+
+.sealed-heat-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.1rem;
+  margin: 0;
+  padding: 0.2rem 0.15rem;
+  border: 2px solid var(--sealed-heat-border, #2ea05a);
+  border-radius: 3px;
+  background: var(--sealed-heat-fill, #e8eaee);
+  color: #1a1f2b;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 650;
+  line-height: 1.15;
+  text-align: center;
+  cursor: pointer;
+}
+
+.sealed-heat-cell:hover,
+.sealed-heat-cell:focus-visible,
+.sealed-heat-cell.is-selected {
+  outline: 2px solid rgba(43, 108, 176, 0.55);
+  outline-offset: 1px;
+}
+
+.sealed-heat-ticker {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+
+.sealed-life-row {
+  min-width: 0;
+}
+
 .sealed-life-chip {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
@@ -2995,16 +3070,86 @@ tr.selected td {
   font: inherit;
   line-height: 1.35;
   text-align: left;
-  cursor: default;
-}
-
-.sealed-life-chip.has-chart {
   cursor: pointer;
 }
 
-.sealed-life-chip.has-chart:hover,
-.sealed-life-chip.has-chart:focus-visible {
+.sealed-life-chip:hover,
+.sealed-life-chip:focus-visible,
+.sealed-life-row.is-expanded > .sealed-life-chip {
   background: rgba(43, 108, 176, 0.08);
+}
+
+.sealed-life-detail {
+  margin-top: 0.85rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(92, 101, 120, 0.2);
+}
+
+.sealed-life-detail.empty {
+  border-top-style: dashed;
+}
+
+.sealed-life-detail-card {
+  margin: 0;
+  padding: 0.85rem 1rem 1rem;
+  border: 1px solid rgba(43, 108, 176, 0.28);
+  border-radius: 6px;
+  background: rgba(43, 108, 176, 0.04);
+}
+
+.sealed-life-detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.55rem;
+}
+
+.sealed-life-detail-title {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.sealed-life-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.35rem 0.75rem;
+  margin: 0;
+}
+
+.sealed-life-card-grid dt {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted, #667);
+}
+
+.sealed-life-card-grid dd {
+  margin: 0.05rem 0 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.sealed-life-card-note {
+  margin: 0.55rem 0 0.35rem;
+}
+
+.sealed-life-chart-heading {
+  margin: 0.65rem 0 0.35rem;
+  font-weight: 650;
+}
+
+.sealed-life-detail-chart {
+  min-height: 12rem;
+  padding: 0.35rem 0.15rem 0.15rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+@media (max-width: 800px) {
+  .sealed-life-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .sealed-life-ticker {
@@ -3027,6 +3172,10 @@ tr.selected td {
 @media (max-width: 800px) {
   .sealed-life-board {
     grid-template-columns: 1fr;
+  }
+
+  .sealed-heat-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 

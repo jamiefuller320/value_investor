@@ -77,6 +77,10 @@
         {
           "as_of": "2026-10-20T08:37:09.503074+01:00",
           "price": 2.645
+        },
+        {
+          "as_of": "2026-10-21T08:39:29.750186+01:00",
+          "price": 2.66
         }
       ]
     },
@@ -370,6 +374,10 @@
         },
         {
           "as_of": "2026-10-20T08:37:09.503074+01:00",
+          "price": 4.0
+        },
+        {
+          "as_of": "2026-10-21T08:39:29.750186+01:00",
           "price": 4.0
         }
       ]
@@ -723,7 +731,7 @@
       "track_id": "buy_tier_level",
       "ticker": "KRX.IR",
       "started_at": "2026-10-18T08:10:48.270475+01:00",
-      "status": "open",
+      "status": "closed",
       "lifecycle_stage": "starter",
       "entry_kind": "first_entry",
       "entry_price": 96.45,
@@ -746,6 +754,170 @@
         {
           "as_of": "2026-10-20T08:37:09.503074+01:00",
           "price": 96.45
+        },
+        {
+          "as_of": "2026-10-21T08:39:29.750186+01:00",
+          "price": 93.95
+        }
+      ],
+      "cadence_scores": [
+        {
+          "id": "lump_sum",
+          "label": "100% at decision",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 1,
+          "avg_fill": 96.45,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": -8.8,
+          "peak_deployed_return": -0.0259,
+          "end_value": 330.68,
+          "end_value_delta": 0.0,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-18T08:10:48.270475+01:00",
+              "price": 96.45
+            }
+          ],
+          "de_risk_gbp": 0.0
+        },
+        {
+          "id": "dca_2x_weekly",
+          "label": "50/50 over 1 week",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 96.45,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 169.74,
+          "peak_loss_gbp": -4.4,
+          "peak_deployed_return": -0.0259,
+          "end_value": 335.08,
+          "end_value_delta": 4.4,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-18T08:10:48.270475+01:00",
+              "price": 96.45
+            }
+          ],
+          "de_risk_gbp": 4.4
+        },
+        {
+          "id": "dca_4x_weekly",
+          "label": "25% weekly \u00d7 4",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 4,
+          "avg_fill": 96.45,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 254.61,
+          "peak_loss_gbp": -2.2,
+          "peak_deployed_return": -0.0259,
+          "end_value": 337.28,
+          "end_value_delta": 6.6,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-18T08:10:48.270475+01:00",
+              "price": 96.45
+            }
+          ],
+          "de_risk_gbp": 6.6
+        },
+        {
+          "id": "dca_2x_biweekly",
+          "label": "50/50 over 2 weeks",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 96.45,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 169.74,
+          "peak_loss_gbp": -4.4,
+          "peak_deployed_return": -0.0259,
+          "end_value": 335.08,
+          "end_value_delta": 4.4,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-18T08:10:48.270475+01:00",
+              "price": 96.45
+            }
+          ],
+          "de_risk_gbp": 4.4
+        },
+        {
+          "id": "dca_5x_weekday",
+          "label": "20% over 5 weekday marks",
+          "scored": true,
+          "tranches_filled": 4,
+          "tranches_target": 5,
+          "avg_fill": 95.8126,
+          "fill_advantage_pct": 0.0066,
+          "extra_cost": 0.36,
+          "leftover_cash": 67.9,
+          "peak_loss_gbp": -5.28,
+          "peak_deployed_return": -0.0194,
+          "end_value": 333.84,
+          "end_value_delta": 3.16,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-18T08:10:48.270475+01:00",
+              "price": 96.45
+            },
+            {
+              "tranche": 2,
+              "as_of": "2026-10-19T08:29:42.998414+01:00",
+              "price": 96.45
+            },
+            {
+              "tranche": 3,
+              "as_of": "2026-10-20T08:37:09.503074+01:00",
+              "price": 96.45
+            },
+            {
+              "tranche": 4,
+              "as_of": "2026-10-21T08:39:29.750186+01:00",
+              "price": 93.95
+            }
+          ],
+          "de_risk_gbp": 3.52
+        }
+      ],
+      "winning_cadence": "dca_4x_weekly",
+      "winning_end_value_delta": 6.6,
+      "any_de_risk": true,
+      "closed_at": "2026-10-21T08:39:29.750186+01:00",
+      "close_reason": "sold_before_window"
+    },
+    {
+      "id": "buy_tier_level:GL9.IR:2026-10-21T08:39:29.750186+01:00",
+      "track_id": "buy_tier_level",
+      "ticker": "GL9.IR",
+      "started_at": "2026-10-21T08:39:29.750186+01:00",
+      "status": "open",
+      "lifecycle_stage": "starter",
+      "entry_kind": "first_entry",
+      "entry_price": 20.24,
+      "notional": 329.52,
+      "shares": 16.280739,
+      "buy_cost_pct": 0.00175,
+      "screen_signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.3854,
+      "data_quality_score": 1.0,
+      "marks": [
+        {
+          "as_of": "2026-10-21T08:39:29.750186+01:00",
+          "price": 20.24
         }
       ]
     }

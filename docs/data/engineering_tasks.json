@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-10-20T08:11:08.275166+00:00",
+  "compiled_at": "2026-10-20T13:15:05.673767+00:00",
   "run_at": null,
   "task_count": 193,
   "tasks": [
@@ -10294,53 +10294,6 @@
       "merged_at": "2026-10-02T10:55:17.370432+00:00"
     },
     {
-      "id": "eng-20261020-01",
-      "area": "ingest",
-      "title": "Hunt fetchable IR source for parked aex leftover ASML.AS",
-      "summary": "Library market aex (AEX) parked ASML.AS after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statutory repor",
-      "priority": "low",
-      "priority_score": 12.0,
-      "source": "parked_source_hunter",
-      "evidence": {
-        "market_id": "aex",
-        "library_market": "aex",
-        "hunter_market_id": "aex",
-        "hunter_ticker": "ASML.AS",
-        "parked_reason": "unfetchable_iwb",
-        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "universe": "library",
-        "doc": "docs/ops/library-ingest-escalation.md"
-      },
-      "acceptance_criteria": [
-        "Inspect IR / exchange sources for ASML.AS only — do not invent URLs",
-        "If a fetchable statutory/IR body exists, add allowlist + regression test",
-        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
-        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
-    },
-    {
       "id": "eng-20261002-13",
       "area": "ingest",
       "title": "Repair dead hunter allowlist URL for ADYEN.AS",
@@ -10395,6 +10348,57 @@
       "completed_at": "2026-10-02T09:24:15.090277+00:00",
       "merged_at": "2026-10-02T09:54:55.076376+00:00",
       "no_diff_count": 0
+    },
+    {
+      "id": "eng-20261020-01",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked aex leftover ASML.AS",
+      "summary": "Library market aex (AEX) parked ASML.AS after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statutory repor",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "aex",
+        "library_market": "aex",
+        "hunter_market_id": "aex",
+        "hunter_ticker": "ASML.AS",
+        "parked_reason": "unfetchable_iwb",
+        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for ASML.AS only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "pr_open",
+      "result_path": "output/engineering_result_eng-20261020-01.md",
+      "branch_name": "cursor/eng-20261020-01-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-10-20T08:25:58.197506+00:00"
     },
     {
       "id": "eng-20261019-02",
@@ -12578,7 +12582,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-10-20T02:36:51.017526+00:00",
+    "evaluated_at": "2026-10-21T07:52:40.669429+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -12624,14 +12628,20 @@
         "last_kind": "request_conflict_resolve",
         "last_at": "2026-10-06T17:31:59.418835+00:00",
         "last_head_sha": null
+      },
+      "1135": {
+        "count": 1,
+        "last_kind": "request_conflict_resolve",
+        "last_at": "2026-10-20T12:32:25.082729+00:00",
+        "last_head_sha": null
       }
     },
-    "last_action_at": "2026-10-14T05:22:36.633433+00:00",
+    "last_action_at": "2026-10-20T12:32:25.082729+00:00",
     "resumed_at": "2026-10-14T05:22:36.633433+00:00"
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-10-20T08:16:07.427766+00:00",
+    "evaluated_at": "2026-10-21T10:21:25.292727+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -12639,9 +12649,9 @@
     },
     "resumed_at": "2026-10-14T07:12:50.922751+00:00"
   },
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "hunter_url_repair",
   "library_market_id": "aex",
-  "hunter_ticker": "ASML.AS",
+  "hunter_ticker": "ADYEN.AS",
   "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
   "source_gap_closure_run_id": "igc-20261019-03",
   "source_trial_id": "igc-20261019-03",

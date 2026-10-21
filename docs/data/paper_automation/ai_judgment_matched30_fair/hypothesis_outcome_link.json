@@ -3,13 +3,13 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "ai_judgment_matched30_fair",
-  "generated_at": "2026-10-19T11:08:58.165142+00:00",
+  "generated_at": "2026-10-21T08:28:02.446431+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 2,
     "closed_unknown_thesis": 0,
     "open_with_thesis": 8,
     "by_thesis_status": {
@@ -17,10 +17,24 @@
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.0273,
+        "mean_trough_unrealized_pct": -0.1472,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "broken": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 0.0,
+        "sold_underwater_rate": 1.0,
+        "mean_peak_unrealized_pct": -0.0249,
+        "mean_trough_unrealized_pct": -0.0607,
+        "outcome_labels": {
+          "sold_underwater": 1
+        }
       },
       "insufficient_data": {
         "closed_count": 0
@@ -48,10 +62,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 2,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=2 (target >=8)",
+      "hold thesis buckets thin (weakening=1, broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -97,7 +112,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": 0.012,
-      "trough_unrealized_pct": 0.012,
+      "trough_unrealized_pct": 0.0028,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -140,7 +155,7 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0211,
+      "peak_unrealized_pct": -0.0125,
       "trough_unrealized_pct": -0.0211,
       "recovered_to_breakeven": null,
       "close_reason": null,
@@ -153,7 +168,7 @@
       "ticker": "GEN.L",
       "name": "Genuit Group plc",
       "started_at": "2026-10-19T12:08:47.564770+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -184,11 +199,11 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": 0.0273,
-      "trough_unrealized_pct": 0.0273,
+      "trough_unrealized_pct": -0.1472,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-20T09:27:52.188491+01:00",
+      "linked_sell_trade_id": "5aca6014-08af-4011-8563-bbe245b4155b"
     },
     {
       "episode_id": "ai_judgment_matched30_fair:PAF.L:2026-10-19T12:08:47.564770+01:00",
@@ -227,7 +242,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0067,
-      "trough_unrealized_pct": -0.0067,
+      "trough_unrealized_pct": -0.0392,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -270,7 +285,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": 0.0056,
-      "trough_unrealized_pct": 0.0056,
+      "trough_unrealized_pct": -0.0446,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -313,7 +328,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0037,
-      "trough_unrealized_pct": -0.0037,
+      "trough_unrealized_pct": -0.0331,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -356,7 +371,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0091,
-      "trough_unrealized_pct": -0.0091,
+      "trough_unrealized_pct": -0.039,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -368,7 +383,7 @@
       "ticker": "CCC.L",
       "name": "Computacenter plc",
       "started_at": "2026-10-19T12:08:47.564770+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater",
         "exit_streak",
@@ -399,12 +414,511 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0249,
-      "trough_unrealized_pct": -0.0249,
+      "trough_unrealized_pct": -0.0607,
+      "recovered_to_breakeven": null,
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-10-20T09:27:52.188491+01:00",
+      "linked_sell_trade_id": "4439e0ec-abc3-4135-a0b3-a1a504d11861"
+    },
+    {
+      "episode_id": "ai_judgment_matched30_fair:GFRD.L:2026-10-20T09:27:52.188491+01:00",
+      "track_id": "ai_judgment_matched30_fair",
+      "ticker": "GFRD.L",
+      "name": "Galliford Try Holdings plc",
+      "started_at": "2026-10-20T09:27:52.188491+01:00",
+      "status": "open",
+      "stress_triggers": [
+        "underwater"
+      ],
+      "entry_mark": 667.0,
+      "avg_cost": 674.797,
+      "unrealized_pct_at_start": -0.0116,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "cheapness family no longer passes",
+        "still buy",
+        "research accumulate"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": -0.0116,
+      "screen_signal": "buy",
+      "effective_signal": "buy",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.9139000000000003,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0033,
+      "trough_unrealized_pct": -0.0116,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "ai_judgment_matched30_fair:FRES.L:2026-10-20T09:27:52.188491+01:00",
+      "track_id": "ai_judgment_matched30_fair",
+      "ticker": "FRES.L",
+      "name": "Fresnillo plc",
+      "started_at": "2026-10-20T09:27:52.188491+01:00",
+      "status": "open",
+      "stress_triggers": [
+        "underwater"
+      ],
+      "entry_mark": 2637.0,
+      "avg_cost": 2696.0,
+      "unrealized_pct_at_start": -0.0219,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "cheapness family no longer passes",
+        "still buy",
+        "research accumulate"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": -0.0219,
+      "screen_signal": "buy",
+      "effective_signal": "buy",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.8336000000000002,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0208,
+      "trough_unrealized_pct": -0.0219,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
     }
   ],
-  "swap_rotations": []
+  "swap_rotations": [
+    {
+      "rotation_id": "ai_judgment_matched30_fair:2026-10-20T09:27:52.188491+01:00",
+      "track_id": "ai_judgment_matched30_fair",
+      "logged_at": "2026-10-20T09:27:52.188491+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0028,
+      "sells": [
+        {
+          "ticker": "GEN.L",
+          "price": 243.38,
+          "shares": 0.290463,
+          "gross": 70.69,
+          "cost": 0.02,
+          "avg_cost_at_exit": 285.4,
+          "realized_pct": -0.1472,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.1472
+        },
+        {
+          "ticker": "CCC.L",
+          "price": 4908.0,
+          "shares": 0.015866,
+          "gross": 77.87,
+          "cost": 0.02,
+          "avg_cost_at_exit": 5225.0,
+          "realized_pct": -0.0607,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0607
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "ICG.L",
+          "price": 1750.0,
+          "shares": 0.045821,
+          "gross": 80.19,
+          "cost": 0.42
+        },
+        {
+          "ticker": "BGEO.L",
+          "price": 12130.0,
+          "shares": 0.00557,
+          "gross": 67.56,
+          "cost": 0.35
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "GEN.L": 0.0783,
+        "CCC.L": 0.0249
+      },
+      "buy_returns_since_rotation": {
+        "ICG.L": 0.0177,
+        "BGEO.L": 0.0289
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "ai_judgment_matched30_fair:2026-10-21T09:27:51.079402+01:00",
+      "track_id": "ai_judgment_matched30_fair",
+      "logged_at": "2026-10-21T09:27:51.079402+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0028,
+      "sells": [
+        {
+          "ticker": "CURY.L",
+          "price": 149.0,
+          "shares": 0.136928,
+          "gross": 20.4,
+          "cost": 0.01,
+          "avg_cost_at_exit": 151.8,
+          "realized_pct": -0.0184,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0184
+        },
+        {
+          "ticker": "PAF.L",
+          "price": 116.2,
+          "shares": 0.16672,
+          "gross": 19.37,
+          "cost": 0.0,
+          "avg_cost_at_exit": 119.9,
+          "realized_pct": -0.0309,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0309
+        },
+        {
+          "ticker": "GFRD.L",
+          "price": 677.0,
+          "shares": 0.032795,
+          "gross": 22.2,
+          "cost": 0.01,
+          "avg_cost_at_exit": 674.797,
+          "realized_pct": 0.0033,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0033
+        },
+        {
+          "ticker": "KLR.L",
+          "price": 3192.9099,
+          "shares": 0.008139,
+          "gross": 25.99,
+          "cost": 0.01,
+          "avg_cost_at_exit": 3044.0,
+          "realized_pct": 0.0489,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0489
+        },
+        {
+          "ticker": "PPH.L",
+          "price": 1488.0,
+          "shares": 0.016516,
+          "gross": 24.58,
+          "cost": 0.01,
+          "avg_cost_at_exit": 1442.0,
+          "realized_pct": 0.0319,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0319
+        },
+        {
+          "ticker": "FRES.L",
+          "price": 2640.0,
+          "shares": 0.007655,
+          "gross": 20.21,
+          "cost": 0.01,
+          "avg_cost_at_exit": 2696.0,
+          "realized_pct": -0.0208,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0208
+        },
+        {
+          "ticker": "COST.L",
+          "price": 253.0,
+          "shares": 0.090619,
+          "gross": 22.93,
+          "cost": 0.01,
+          "avg_cost_at_exit": 250.0,
+          "realized_pct": 0.012,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.012
+        },
+        {
+          "ticker": "IGG.L",
+          "price": 933.9,
+          "shares": 0.019523,
+          "gross": 18.23,
+          "cost": 0.0,
+          "avg_cost_at_exit": 977.5,
+          "realized_pct": -0.0446,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0446
+        },
+        {
+          "ticker": "DSCV.L",
+          "price": 805.0,
+          "shares": 0.02598,
+          "gross": 20.91,
+          "cost": 0.01,
+          "avg_cost_at_exit": 815.0,
+          "realized_pct": -0.0123,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0123
+        },
+        {
+          "ticker": "ICG.L",
+          "price": 1781.0,
+          "shares": 0.011589,
+          "gross": 20.64,
+          "cost": 0.01,
+          "avg_cost_at_exit": 1750.0,
+          "realized_pct": 0.0177,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0177
+        },
+        {
+          "ticker": "VCT.L",
+          "price": 914.0,
+          "shares": 0.021816,
+          "gross": 19.94,
+          "cost": 0.0,
+          "avg_cost_at_exit": 936.5,
+          "realized_pct": -0.024,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.024
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "OSB.L",
+          "price": 479.1,
+          "shares": 0.126599,
+          "gross": 60.65,
+          "cost": 0.32
+        },
+        {
+          "ticker": "NWG.L",
+          "price": 643.2,
+          "shares": 0.0943,
+          "gross": 60.65,
+          "cost": 0.32
+        },
+        {
+          "ticker": "BARC.L",
+          "price": 417.45,
+          "shares": 0.145295,
+          "gross": 60.65,
+          "cost": 0.32
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "CURY.L": 0.0,
+        "PAF.L": -0.0,
+        "GFRD.L": 0.0,
+        "KLR.L": 0.0,
+        "PPH.L": 0.0,
+        "FRES.L": 0.0,
+        "COST.L": 0.0,
+        "IGG.L": 0.0,
+        "DSCV.L": 0.0,
+        "ICG.L": 0.0,
+        "VCT.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "OSB.L": 0.0,
+        "NWG.L": 0.0,
+        "BARC.L": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    }
+  ]
 }

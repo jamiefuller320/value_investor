@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-19T21:16:17.728148+00:00",
+  "run_at": "2026-10-20T20:10:04.511254+00:00",
   "market_id": "euro_stoxx50",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-19T21:15:26.570987+00:00",
+    "snapshot_at": "2026-10-20T20:09:17.961144+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 14,
     "unmeasured_buy_tier": 0,
@@ -46,7 +46,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-19T21:16:17.708737+00:00",
+    "snapshot_at": "2026-10-20T20:10:04.490640+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 14,
     "unmeasured_buy_tier": 0,
@@ -71,16 +71,17 @@
       "SAP.DE": 1
     },
     "parked_tickers": [
-      "IFX.DE",
       "MUV2.DE",
       "SAP.DE"
     ],
-    "parked_count": 3,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
+    "parked_count": 2,
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
+      "IFX.DE"
+    ],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
@@ -91,7 +92,7 @@
   "discovery_scan": {
     "scanned": 14,
     "hits": 13,
-    "new_rows_total": 0,
+    "new_rows_total": 1,
     "curiosity_total": 14,
     "errors": 0,
     "prioritization_weights": {
@@ -112,14 +113,10 @@
   },
   "maintenance_mode": true,
   "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "euro_stoxx50"
-  },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "euro_stoxx50",
-    "assessed_at": "2026-10-19T21:15:27.438673+00:00",
+    "assessed_at": "2026-10-20T20:09:18.946678+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -154,9 +151,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 49.410970406000004,
+  "used_seconds": 44.549925333000004,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3550.589029594,
+  "leftover_seconds": 3555.450074667,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -164,9 +161,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_stoxx50",
-    "updated_at": "2026-10-19T21:16:17.715245+00:00",
-    "exhausted": true,
-    "complete_zero_improve_runs": 4,
+    "updated_at": "2026-10-20T20:10:04.497998+00:00",
+    "exhausted": false,
+    "complete_zero_improve_runs": 5,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -190,18 +187,6 @@
         "indexed_without_body": 1,
         "thin": false,
         "source_surface": "euro_filings"
-      },
-      {
-        "ticker": "IFX.DE",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-10-14T13:45:35.122524+00:00",
-        "park_via": "straggler_soft_park",
-        "filings_total": 1,
-        "filings_with_body": 1,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -213,43 +198,20 @@
       "MUV2.DE",
       "SAP.DE"
     ],
-    "unparked_leftover": [],
+    "unparked_leftover": [
+      "IFX.DE"
+    ],
     "surface_released": [],
     "path": "docs/data/library/markets/euro_stoxx50/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "euro_stoxx50",
-    "ingest_exhausted_markets": [
-      "aex",
-      "asx200",
-      "atx",
-      "bel20",
-      "cac40",
-      "dax",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_mib",
-      "ftse_smallcap",
-      "hang_seng",
-      "ibex35",
-      "iseq20",
-      "nasdaq100",
-      "omxs30",
-      "psi20",
-      "smi",
-      "sp500",
-      "sti",
-      "tsx60",
-      "us_adr_asia"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "not_exhausted",
+    "market_id": "euro_stoxx50"
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261019-02"
+    "task_id": "eng-20261020-01"
   }
 }

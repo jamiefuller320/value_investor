@@ -367,14 +367,14 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 225.2,
-    "estimated_spend_usd_this_week": 6.4,
+    "estimated_spend_usd_this_cycle": 225.6,
+    "estimated_spend_usd_this_week": 6.8,
     "week_id": "2026-W43",
     "cycle_id": "2026-10-d8",
     "weekly_ops_cap_usd": 84.5,
     "weekly_ops_plan_credit_share_cap": 0.15,
     "enforce_weekly_ops_cap": true,
-    "estimated_spend_weekly_ops_usd_this_week": 0.4,
+    "estimated_spend_weekly_ops_usd_this_week": 0.8,
     "note": "Cursor Ultra $200 included pool is surplus-math metadata. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder). Ad-hoc depth passes use ladder.spend_since_checkpoint_usd. Rememo daily cap stays at 3.",
     "cycle_surplus_provisional": {
       "status": "provisional",
@@ -550,7 +550,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-10-20T08:19:08.870291+00:00",
+  "updated_at": "2026-10-21T07:43:30.107717+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -562,9 +562,11 @@
     "omxs30",
     "psi20"
   ],
-  "ingest_parallel_sprint": [],
+  "ingest_parallel_sprint": [
+    "aex"
+  ],
   "ingest_parallel_sprint_2": [
-    "ftse_smallcap"
+    "euro_stoxx50"
   ],
   "ladder": {
     "enabled": true,
@@ -578,10 +580,10 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-10-20T06:52:57.291935+00:00",
+      "run_at": "2026-10-21T06:52:57.890835+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
-      "screen_shortlist": 50,
+      "screen_shortlist": 51,
       "research": {
         "model": "composer-2.5",
         "research_cap": 100,
@@ -616,7 +618,7 @@
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "weekly_ops_cap_usd": 84.5,
-        "estimated_spend_weekly_ops_usd_this_week": 0.4,
+        "estimated_spend_weekly_ops_usd_this_week": 0.8,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
@@ -675,12 +677,12 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "SAN.PA",
+              "ticker": "EVN.VI",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "EVN.VI",
+              "ticker": "SAN.PA",
               "reason": "fresh_memo"
             },
             {
@@ -690,12 +692,12 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "ACKB.BR",
+              "ticker": "LOGN.SW",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "LOGN.SW",
+              "ticker": "ACKB.BR",
               "reason": "fresh_memo"
             },
             {
@@ -710,6 +712,11 @@
             },
             {
               "market": "euro_depth",
+              "ticker": "DHL.DE",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
               "ticker": "AD.AS",
               "reason": "fresh_memo"
             },
@@ -720,21 +727,28 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "DHL.DE",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "SHELL.AS",
+              "ticker": "BOL.ST",
               "reason": "fresh_memo"
             }
           ],
           "first_time_preferred": true,
           "note": "Exact Yahoo ticker match; earlier queue market wins. Each market queue puts no-memo buy-tier first, then rememo. Fresh memos are skipped; thin / body-lag memos rememo after ingest."
         },
-        "targets": [],
-        "dry_run": true,
-        "executed": 0
+        "targets": [
+          {
+            "market": "iseq20",
+            "ticker": "GL9.IR",
+            "name": "Glanbia plc",
+            "signal": "buy",
+            "conviction_score": 0.3854
+          }
+        ],
+        "executed": 1,
+        "created": 1,
+        "updated": 0,
+        "errors": [],
+        "estimated_spend_usd": 0.4,
+        "remaining_usd_after": 83.7
       },
       "graduation": {
         "graduated": false,
@@ -832,52 +846,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-10-07T19:36:02.999596+00:00",
-        "parallel_stream": 1,
-        "from_market": "nasdaq100",
-        "to_market": null,
-        "stream_markets_after": [],
-        "ingest_parity_recorded": false
-      },
-      {
-        "at": "2026-10-07T20:03:27.114763+00:00",
-        "parallel_stream": 2,
-        "from_market": "sp500",
-        "to_market": null,
-        "stream_markets_after": [],
-        "ingest_parity_recorded": false
-      },
-      {
-        "reseeded": true,
-        "market_queue_appended": false,
-        "at": "2026-10-08T08:53:09.751520+00:00",
-        "parallel_stream": 1,
-        "from_market": null,
-        "to_market": "ftse_smallcap",
-        "stream_markets_after": [
-          "ftse_smallcap"
-        ],
-        "ingest_parity_recorded": false,
-        "screen_refresh": {
-          "refreshed": true,
-          "market_id": "ftse_smallcap",
-          "forced": true,
-          "prior_screen_at": "2026-10-08T06:52:45.205398+00:00",
-          "prior_age_days": 0,
-          "run_at": "2026-10-08T08:53:09.751534+00:00",
-          "shortlist_count": 11,
-          "ticker_count": 77
-        }
-      },
-      {
-        "at": "2026-10-08T10:51:11.760736+00:00",
-        "parallel_stream": 1,
-        "from_market": "ftse_smallcap",
-        "to_market": null,
-        "stream_markets_after": [],
-        "ingest_parity_recorded": false
-      },
       {
         "reseeded": true,
         "market_queue_appended": false,
@@ -1528,6 +1496,68 @@
         "from_market": "aex",
         "to_market": null,
         "stream_markets_after": [],
+        "ingest_parity_recorded": false
+      },
+      {
+        "reseeded": true,
+        "market_queue_appended": false,
+        "at": "2026-10-20T12:56:17.349494+00:00",
+        "parallel_stream": 1,
+        "from_market": null,
+        "to_market": "nasdaq100",
+        "stream_markets_after": [
+          "nasdaq100"
+        ],
+        "ingest_parity_recorded": false,
+        "screen_refresh": {
+          "refreshed": true,
+          "market_id": "nasdaq100",
+          "forced": true,
+          "prior_screen_at": "2026-10-20T06:52:57.291935+00:00",
+          "prior_age_days": 0,
+          "run_at": "2026-10-20T12:56:17.349517+00:00",
+          "shortlist_count": 39,
+          "ticker_count": 101
+        }
+      },
+      {
+        "at": "2026-10-20T13:45:38.569295+00:00",
+        "parallel_stream": 1,
+        "from_market": "nasdaq100",
+        "to_market": null,
+        "stream_markets_after": [],
+        "ingest_parity_recorded": false
+      },
+      {
+        "reseeded": true,
+        "market_queue_appended": false,
+        "at": "2026-10-20T15:22:56.371779+00:00",
+        "parallel_stream": 1,
+        "from_market": null,
+        "to_market": "aex",
+        "stream_markets_after": [
+          "aex"
+        ],
+        "ingest_parity_recorded": false,
+        "screen_refresh": {
+          "refreshed": true,
+          "market_id": "aex",
+          "forced": true,
+          "prior_screen_at": "2026-10-20T06:52:57.291935+00:00",
+          "prior_age_days": 0,
+          "run_at": "2026-10-20T15:22:56.371795+00:00",
+          "shortlist_count": 9,
+          "ticker_count": 25
+        }
+      },
+      {
+        "at": "2026-10-20T20:49:08.182620+00:00",
+        "parallel_stream": 2,
+        "from_market": "ftse_smallcap",
+        "to_market": "euro_stoxx50",
+        "stream_markets_after": [
+          "euro_stoxx50"
+        ],
         "ingest_parity_recorded": false
       }
     ]

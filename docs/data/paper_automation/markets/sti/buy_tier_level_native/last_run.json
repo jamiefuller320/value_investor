@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-20T08:37:00.652714+01:00",
+    "local_time": "2026-10-21T08:39:22.984290+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-20T08:00:00+01:00",
-    "settle_at": "2026-10-20T09:15:00+01:00",
+    "market_open_at": "2026-10-21T08:00:00+01:00",
+    "settle_at": "2026-10-21T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 983.35,
+    "nav": 995.81,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -36,21 +36,21 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 327.78,
+    "target_sleeve_value": 331.94,
     "targets": [
       {
         "ticker": "Y92.SI",
         "name": "Thai Beverage Public Company Limited",
         "signal": "strong_buy",
         "conviction_score": 0.8250000000000001,
-        "price": 0.42
+        "price": 0.425
       },
       {
         "ticker": "U14.SI",
         "name": "UOL Group Limited",
         "signal": "buy",
         "conviction_score": 0.5915149999999999,
-        "price": 7.73
+        "price": 7.93
       },
       {
         "ticker": "BUOU.SI",
@@ -70,35 +70,24 @@
         "ticker": "Y92.SI",
         "name": "Thai Beverage Public Company Limited",
         "reason": "Already near equal-weight target",
-        "value": 327.26,
-        "target_value": 327.78,
+        "value": 331.15,
+        "target_value": 331.94,
         "conviction_score": 0.8250000000000001,
         "signal": "strong_buy"
-      },
+      }
+    ],
+    "skipped": [
       {
-        "action": "hold",
-        "ticker": "U14.SI",
-        "name": "UOL Group Limited",
-        "reason": "Already near equal-weight target",
-        "value": 330.68,
-        "target_value": 327.78,
-        "conviction_score": 0.5915149999999999,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
         "ticker": "BUOU.SI",
         "name": "Frasers Logistics & Commercial Trust",
-        "reason": "Already near equal-weight target",
-        "value": 325.42,
-        "target_value": 327.78,
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 331.94,
         "conviction_score": 0.524195,
         "signal": "buy"
       }
     ],
-    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -107,7 +96,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 0.42,
+      "mark": 0.425,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -129,7 +118,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 7.73,
+      "mark": 7.93,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "accumulate"
@@ -830,9 +819,25 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-21T08:39:22.984290+01:00",
+        "portfolio_value": 995.81,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "SGD",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "SGD": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-20T08:37:00.652714+01:00",
+    "last_mark_at": "2026-10-21T08:39:22.984290+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -845,7 +850,7 @@
     "schema_version": 2,
     "market_id": "sti",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-20T07:37:00.656592+00:00",
+    "generated_at": "2026-10-21T07:39:22.989569+00:00",
     "observe_only": true,
     "open_count": 4,
     "closed_count": 0,
@@ -924,7 +929,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-20T07:37:00.657374+00:00",
+    "generated_at": "2026-10-21T07:39:22.990768+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1022,7 +1027,7 @@
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -1030,8 +1035,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-10-20T07:37:00.658341+00:00",
-    "as_of": "2026-10-20T08:37:00.652714+01:00",
+    "updated_at": "2026-10-21T07:39:22.992173+00:00",
+    "as_of": "2026-10-21T08:39:22.984290+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1082,53 +1087,14 @@
     },
     "holdings": [
       {
-        "ticker": "U14.SI",
-        "name": "UOL Group Limited",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0202,
-        "mark": 7.73,
-        "avg_cost": 7.8894,
-        "signal": "buy",
-        "timing_signal": "accumulate",
-        "conviction_score": 0.5915,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "caution",
-        "reasons": [
-          "research verdict caution",
-          "still buy",
-          "cheapness family still passes"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 59%"
-        ],
-        "weaken_reasons": [
-          "research verdict caution"
-        ],
-        "broken_reasons": []
-      },
-      {
         "ticker": "Y92.SI",
         "name": "Thai Beverage Public Company Limited",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0173,
-        "mark": 0.42,
+        "unrealized_pct": -0.0056,
+        "mark": 0.425,
         "avg_cost": 0.4274,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -1158,6 +1124,45 @@
           "conviction 82%"
         ],
         "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "U14.SI",
+        "name": "UOL Group Limited",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0051,
+        "mark": 7.93,
+        "avg_cost": 7.8894,
+        "signal": "buy",
+        "timing_signal": "accumulate",
+        "conviction_score": 0.5915,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "caution",
+        "reasons": [
+          "research verdict caution",
+          "still buy",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 59%"
+        ],
+        "weaken_reasons": [
+          "research verdict caution"
+        ],
         "broken_reasons": []
       },
       {
@@ -1207,7 +1212,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-20T07:37:00.659658+00:00",
+    "generated_at": "2026-10-21T07:39:22.994020+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1283,7 +1288,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-10-20T07:37:00.661322+00:00",
+    "generated_at": "2026-10-21T07:39:22.996389+00:00",
     "open_count": 1,
     "closed_count": 2,
     "scored_count": 2,
@@ -1349,7 +1354,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-20T08:37:00.652714+01:00",
+    "generated_at": "2026-10-21T08:39:22.984290+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1406,7 +1411,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-20T08:37:00.652714+01:00",
+    "generated_at": "2026-10-21T08:39:22.984290+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1414,39 +1419,147 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 1,
+    "card_count": 1,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 1,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {},
+    "by_algo_action": {
+      "rebuy_skip": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
     "disagree_vs_heuristic_count": 0,
-    "cards": [],
+    "cards": [
+      {
+        "ticker": "BUOU.SI",
+        "name": "Frasers Logistics & Commercial Trust",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Insufficient cash after higher-conviction fills is an explicit rebuy block; agree with skipping rebuy under capital constraint.",
+          "still_buyish is false, so leave-buy-cohort is decisive; deferring rebuy aligns with not treating the name as buy-rated at decision time.",
+          "screen_signal hold with research_verdict caution and overlay_bound true supports not forcing a rebuy despite unchanged conviction_rank and rank_drop 0."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 3
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 3
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level_native",
+        "logged_at": "2026-10-21T08:39:22.984290+01:00",
+        "proposal_id": "buy_tier_level_native:BUOU.SI:rebuy_skip:2026-10-21T08:39:22.984290+01:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null
+      "fallback": null,
+      "llm_card_count": 1
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-10-20T08:37:00.652714+01:00",
+      "generated_at": "2026-10-21T08:39:22.984290+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 1,
       "verdict_counts": {
-        "agree": 0,
+        "agree": 1,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -1462,7 +1575,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-20T07:37:00.663844+00:00",
+  "generated_at": "2026-10-21T07:39:27.098150+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (SGD reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,
