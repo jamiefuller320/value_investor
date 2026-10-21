@@ -2314,6 +2314,56 @@ def check_n215_technical_veto_observe(
     ]
 
 
+def check_n215_reentry_observe(
+    *,
+    output_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only N215: WARN+ soft-band × R1 breakout-wait reentry replay.
+
+    Writes ``docs/data/n215_reentry_observe.json`` (+ registration).
+    Walks forward from sealed buy_ts with point-in-time clear signals.
+    Never changes books or knobs (``auto_fixable=False``).
+    See docs/ops/n215-reentry-observe.md.
+    """
+    from value_investor.n215_reentry_observe import (
+        DEFAULT_OUTPUT_DIR,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_findings_from_n215_reentry,
+        refresh_n215_reentry_observe,
+    )
+
+    data_dir = Path(output_dir) if output_dir is not None else DEFAULT_OUTPUT_DIR
+    try:
+        payload = refresh_n215_reentry_observe(
+            output_dir=data_dir,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "N215 reentry observe"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+        for finding in ops_findings_from_n215_reentry(payload)
+    ]
+
+
 def check_n206_plain_ey_observe(
     *,
     output_dir: Path | None = None,
@@ -4080,6 +4130,7 @@ def collect_ops_findings(
     findings.extend(check_n210_ai_judgment_observe())
     findings.extend(check_n206_plain_ey_observe())
     findings.extend(check_n215_technical_veto_observe())
+    findings.extend(check_n215_reentry_observe())
     findings.extend(check_two_lot_replay())
     findings.extend(check_sec_companyfacts_coverage())
     findings.extend(check_hkex_direct_coverage())

@@ -47,5 +47,6 @@ Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
 
 ## Related
 
-- Project store: `technical-veto-adaptive-approaches.md`, `technical-veto-first-pass.md`
+- Reentry LQ-B (co-equal): [n215-reentry-observe.md](n215-reentry-observe.md)
+- Project store: `technical-veto-adaptive-approaches.md`, `technical-veto-first-pass.md`, `technical-veto-reentry-lq.md`
 - Park: **N215**
