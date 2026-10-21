@@ -365,6 +365,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "ASML.AS": [
         "https://www.sec.gov/Archives/edgar/data/937966/000162828026011378/asml-20251231.htm",
     ],
+    # aex parked leftover — eng-20261021-02: ASM.AS awaiting_periodic_report; ESEF lag before FY2025
+    # package is indexed; asm.com/media statutory PDFs fetch for ir_allowlist deepen.
+    "ASM.AS": [
+        "https://www.asm.com/media/3skhiimk/asm-2025-annual-report.pdf",
+        "https://www.asm.com/media/3xpkxmck/statutory-interim-report-2025-text.pdf",
+    ],
     "POST.VI": [
         "https://assets.post.at/-/media/Dokumente/En/Investor-Relations/Geschaefts--und-Nachhaltigkeitsberichte/AustrianPost_Annual_Report_2025.pdf",
     ],
