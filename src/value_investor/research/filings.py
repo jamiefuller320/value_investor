@@ -660,6 +660,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "ANDR.VI": [
         "https://www.andritz.com/resource/blob/689306/6ad9400073c46323b95b1be977870245/andritz-annual-report-2025-data.pdf",
     ],
+    # atx parked leftover — eng-20261021-08: CAI.VI awaiting_periodic_report; ESEF annual only;
+    # caimmo.com fileadmin statutory PDFs (FY2025 annual + H1 2026 interim).
+    "CAI.VI": [
+        "https://www.caimmo.com/fileadmin/documents/Finanzberichte/2025/CAImmo-Annual-Report-2025-final.pdf",
+        "https://www.caimmo.com/fileadmin/documents/Finanzberichte/2026/CAImmo-Interim-Financial-Report-as-at-30-June-2026.pdf",
+    ],
     # euro_depth IWB blocker — C5H.IR parked unfetchable_iwb; cairnhomes.com is Cloudflare-gated.
     "C5H.IR": [
         "https://cdn.prod.website-files.com/69b7ef256b857dda4aea6179/69c2b338210820632d00ff19_2a0d98224d9897df732ad96934d79ca9_Cairn%20Homes%20AR25%20Financial%20statementspdf.pdf",
