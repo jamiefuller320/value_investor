@@ -8441,6 +8441,22 @@ def test_fetch_filings_ir_allowlist_dax_sie_de_builtins(tmp_path: Path):
     assert sum(1 for row in rows if row["period"] == "interim") == 1
 
 
+def test_fetch_filings_ir_allowlist_atx_cai_vi_builtins(tmp_path: Path):
+    """eng-20261021-08: CAI.VI awaiting_periodic_report — caimmo.com FY2025 annual + H1 2026 interim PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("CAI.VI", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert all("caimmo.com/fileadmin/documents/Finanzberichte/" in url for url in urls)
+    assert any("CAImmo-Annual-Report-2025-final.pdf" in url for url in urls)
+    assert any("CAImmo-Interim-Financial-Report-as-at-30-June-2026.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_krx_ir_builtins(tmp_path: Path):
     """Regression: KRX.IR awaiting_periodic_report — Kingspan FY2025 annual + H1 2026 interim PDFs."""
     allowlist_path = tmp_path / "ir.json"
@@ -12102,6 +12118,31 @@ def test_parked_source_hunter_andr_vi_euro_depth_has_fetchable_ir():
     assert rows[0]["period"] == "annual"
     assert "andritz.com/resource/blob/" in rows[0]["url"]
     assert "annual-report-2025" in rows[0]["url"]
+
+
+def test_parked_source_hunter_cai_vi_atx_has_fetchable_ir():
+    """eng-20261021-08: CAI.VI caimmo.com FY2025 annual + H1 2026 interim PDFs fetch and validate."""
+    assert "CAI.VI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("CAI.VI")
+    assert len(rows) == 2
+    annual = [row for row in rows if row["period"] == "annual"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(annual) == 1
+    assert len(interim) == 1
+    assert "CAImmo-Annual-Report-2025-final.pdf" in annual[0]["url"]
+    assert "CAImmo-Interim-Financial-Report-as-at-30-June-2026.pdf" in interim[0]["url"]
+    annual_body = _live_fetch_filing_body(annual[0]["url"])
+    if not annual_body:
+        pytest.skip("CAI.VI annual body fetch unavailable (rate-limit / network) — retry later")
+    assert len(annual_body) >= 50000
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], annual_body, ticker="CAI.VI")
+    assert valid, reason
+    interim_body = _live_fetch_filing_body(interim[0]["url"])
+    if not interim_body:
+        pytest.skip("CAI.VI interim body fetch unavailable (rate-limit / network) — retry later")
+    assert len(interim_body) >= 10000
+    valid, reason = _validate_ir_allowlist_body_content(interim[0], interim_body, ticker="CAI.VI")
+    assert valid, reason
 
 
 def test_parked_source_hunter_ackb_br_euro_depth_has_fetchable_ir():
