@@ -1,50 +1,91 @@
 {
-  "run_at": "2026-10-21T13:12:33.017802+00:00",
+  "run_at": "2026-10-21T15:45:08.055374+00:00",
   "market_id": "nasdaq100",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "TRI"
+  ],
+  "target_details": [
+    {
+      "ticker": "TRI",
+      "priority_score": 17.8037,
+      "filings_total": 94,
+      "filings_with_body": 85,
+      "indexed_without_body": 9,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "TRI",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 94,
+        "filings_with_body": 85,
+        "indexed_without_body": 9
+      },
+      "after": {
+        "filings_total": 101,
+        "filings_with_body": 93,
+        "indexed_without_body": 8
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 94,
+        "annual": 5,
+        "interim": 46,
+        "trading_update": 7,
+        "other": 36,
+        "with_body": 86,
+        "period_coverage": {
+          "annual": {
+            "total": 5,
+            "with_body": 5
+          },
+          "interim": {
+            "total": 46,
+            "with_body": 38
+          },
+          "trading_update": {
+            "total": 7,
+            "with_body": 7
+          },
+          "other": {
+            "total": 28,
+            "with_body": 28
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 93,
+        "with_body_after": 93,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "TRI"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-21T13:12:25.952295+00:00",
-    "market_id": "nasdaq100",
-    "buy_tier_count": 40,
-    "unmeasured_buy_tier": 0,
-    "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 0,
-    "indexed_without_body": 10,
-    "bodies_min": 17,
-    "bodies_median": 20.5,
-    "bodies_max": 109,
-    "coverage_scope": "canonical_plus_shards",
-    "ftse_equivalent": false,
-    "unmeasured_tickers": [],
-    "zero_body_tickers": [],
-    "thin_body_tickers": [],
-    "indexed_without_body_tickers": [
-      "TRI",
-      "PDD"
-    ],
-    "indexed_without_body_by_ticker": {
-      "TRI": 9,
-      "PDD": 1
-    },
-    "parked_tickers": [
-      "PDD",
-      "TRI"
-    ],
-    "parked_count": 2,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
-  },
-  "health_after": {
-    "snapshot_at": "2026-10-21T13:12:33.007011+00:00",
+    "snapshot_at": "2026-10-21T15:44:12.553338+00:00",
     "market_id": "nasdaq100",
     "buy_tier_count": 40,
     "unmeasured_buy_tier": 0,
@@ -79,39 +120,55 @@
     ],
     "ingest_exhausted": false
   },
+  "health_after": {
+    "snapshot_at": "2026-10-21T15:45:08.043877+00:00",
+    "market_id": "nasdaq100",
+    "buy_tier_count": 40,
+    "unmeasured_buy_tier": 0,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 0,
+    "indexed_without_body": 9,
+    "bodies_min": 17,
+    "bodies_median": 20.5,
+    "bodies_max": 109,
+    "coverage_scope": "canonical_plus_shards",
+    "ftse_equivalent": false,
+    "unmeasured_tickers": [],
+    "zero_body_tickers": [],
+    "thin_body_tickers": [],
+    "indexed_without_body_tickers": [
+      "TRI",
+      "PDD"
+    ],
+    "indexed_without_body_by_ticker": {
+      "TRI": 8,
+      "PDD": 1
+    },
+    "parked_tickers": [
+      "PDD"
+    ],
+    "parked_count": 1,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 8,
+    "effective_indexed_without_body_tickers": [
+      "TRI"
+    ],
+    "ingest_exhausted": false
+  },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 40,
-    "hits": 0,
-    "new_rows_total": 0,
-    "curiosity_total": 0,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "TRI",
-      "PDD"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
+  "discovery_scan": null,
+  "maintenance_mode": false,
   "parity_handoff": null,
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "nasdaq100",
-    "assessed_at": "2026-10-21T13:12:27.187165+00:00",
+    "assessed_at": "2026-10-21T15:44:14.170462+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -148,9 +205,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 4.603094698000007,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3595.396905302,
+  "used_seconds": 52.250131342999964,
+  "budget_seconds": 787.5,
+  "leftover_seconds": 735.249868657,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -158,9 +215,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "nasdaq100",
-    "updated_at": "2026-10-21T13:12:33.011422+00:00",
+    "updated_at": "2026-10-21T15:45:08.048565+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -197,6 +254,6 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261021-01"
+    "task_id": "eng-20261021-03"
   }
 }
