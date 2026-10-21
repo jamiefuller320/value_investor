@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-21T12:32:31.173284+00:00`
+Generated: `2026-10-21T17:32:27.836997+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,6 +33,8 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `human`/human PR #1142 `eng-20261021-02` — Hunt fetchable IR source for parked aex leftover ASM.AS
+- `human`/human PR #1140 `eng-20261021-01` — Hunt fetchable IR source for parked ftse_smallcap leftover CLIG.L
 - `human`/human PR #1134 `eng-20261020-01` — Hunt fetchable IR source for parked aex leftover ASML.AS
 
 ## PR fix occasions — common failure reasons
