@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-21T15:45:08.055374+00:00",
+  "run_at": "2026-10-21T18:20:37.855165+00:00",
   "market_id": "nasdaq100",
   "targets": [
     "TRI"
@@ -7,10 +7,10 @@
   "target_details": [
     {
       "ticker": "TRI",
-      "priority_score": 17.8037,
-      "filings_total": 94,
-      "filings_with_body": 85,
-      "indexed_without_body": 9,
+      "priority_score": 17.4537,
+      "filings_total": 101,
+      "filings_with_body": 93,
+      "indexed_without_body": 8,
       "reason": "indexed_without_body"
     }
   ],
@@ -19,24 +19,24 @@
       "ticker": "TRI",
       "reason": "indexed_without_body",
       "before": {
-        "filings_total": 94,
-        "filings_with_body": 85,
-        "indexed_without_body": 9
+        "filings_total": 101,
+        "filings_with_body": 93,
+        "indexed_without_body": 8
       },
       "after": {
         "filings_total": 101,
         "filings_with_body": 93,
         "indexed_without_body": 8
       },
-      "improved": true,
+      "improved": false,
       "regime": "sec_edgar",
       "filings_summary": {
-        "total": 94,
+        "total": 98,
         "annual": 5,
         "interim": 46,
-        "trading_update": 7,
-        "other": 36,
-        "with_body": 86,
+        "trading_update": 8,
+        "other": 39,
+        "with_body": 90,
         "period_coverage": {
           "annual": {
             "total": 5,
@@ -47,12 +47,12 @@
             "with_body": 38
           },
           "trading_update": {
-            "total": 7,
-            "with_body": 7
+            "total": 8,
+            "with_body": 8
           },
           "other": {
-            "total": 28,
-            "with_body": 28
+            "total": 31,
+            "with_body": 31
           }
         }
       },
@@ -78,20 +78,18 @@
       }
     }
   ],
-  "improved": [
-    "TRI"
-  ],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-21T15:44:12.553338+00:00",
+    "snapshot_at": "2026-10-21T18:19:34.318111+00:00",
     "market_id": "nasdaq100",
     "buy_tier_count": 40,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 10,
+    "indexed_without_body": 9,
     "bodies_min": 17,
     "bodies_median": 20.5,
     "bodies_max": 109,
@@ -105,7 +103,7 @@
       "PDD"
     ],
     "indexed_without_body_by_ticker": {
-      "TRI": 9,
+      "TRI": 8,
       "PDD": 1
     },
     "parked_tickers": [
@@ -114,14 +112,14 @@
     "parked_count": 1,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 9,
+    "effective_indexed_without_body": 8,
     "effective_indexed_without_body_tickers": [
       "TRI"
     ],
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-21T15:45:08.043877+00:00",
+    "snapshot_at": "2026-10-21T18:20:37.840659+00:00",
     "market_id": "nasdaq100",
     "buy_tier_count": 40,
     "unmeasured_buy_tier": 0,
@@ -168,15 +166,15 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "nasdaq100",
-    "assessed_at": "2026-10-21T15:44:14.170462+00:00",
+    "assessed_at": "2026-10-21T18:19:36.331453+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
       {
         "ticker": "TRI",
-        "indexed_without_body": 9,
-        "filings_total": 94,
-        "filings_with_body": 85
+        "indexed_without_body": 8,
+        "filings_total": 101,
+        "filings_with_body": 93
       },
       {
         "ticker": "PDD",
@@ -194,20 +192,20 @@
       "PDD"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (2 tickers, top: TRI(9), PDD(1))"
+      "Prefer indexed-without-body body refetch (2 tickers, top: TRI(8), PDD(1))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 2,
-      "indexed_without_body_rows": 10,
+      "indexed_without_body_rows": 9,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 52.250131342999964,
-  "budget_seconds": 787.5,
-  "leftover_seconds": 735.249868657,
+  "used_seconds": 59.472859760999995,
+  "budget_seconds": 700.0,
+  "leftover_seconds": 640.527140239,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -215,9 +213,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "nasdaq100",
-    "updated_at": "2026-10-21T15:45:08.048565+00:00",
+    "updated_at": "2026-10-21T18:20:37.846540+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -235,7 +233,7 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": false,
+    "had_complete_targets": true,
     "leftover_tickers": [
       "PDD",
       "TRI"
