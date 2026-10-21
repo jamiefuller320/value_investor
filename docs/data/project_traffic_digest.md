@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-21T17:35:18.589197+00:00`
+Generated: `2026-10-21T20:48:43.383894+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,12 +33,14 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `parked_hunter`/verified PR #1145 `eng-20261021-04` — Hunt fetchable IR source for parked dax leftover SIE.DE
+- `human`/human PR #1143 `eng-20261021-03` — Hunt fetchable IR source for parked hang_seng leftover 9961.HK
 - `human`/human PR #1142 `eng-20261021-02` — Hunt fetchable IR source for parked aex leftover ASM.AS
 - `human`/human PR #1140 `eng-20261021-01` — Hunt fetchable IR source for parked ftse_smallcap leftover CLIG.L
 - `human`/human PR #1134 `eng-20261020-01` — Hunt fetchable IR source for parked aex leftover ASML.AS
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 237
+- Occasion count: 238
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 4×
