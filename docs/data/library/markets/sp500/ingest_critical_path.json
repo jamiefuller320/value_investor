@@ -1,7 +1,9 @@
 {
   "market_id": "sp500",
-  "assessed_at": "2026-10-20T13:37:58.158646+00:00",
-  "unmeasured": [],
+  "assessed_at": "2026-10-21T13:37:42.025948+00:00",
+  "unmeasured": [
+    "STLD"
+  ],
   "zero_body": [],
   "indexed_without_body": [
     {
@@ -31,19 +33,22 @@
   ],
   "thin_need_discovery": [],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
+    "STLD",
     "CRH",
     "EME",
     "LH",
     "LMT"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (4 tickers, top: CRH(2), EME(1), LH(1), LMT(1))"
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (4 tickers, top: CRH(2), EME(1), LH(1), LMT(1))",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
     "indexed_without_body_tickers": 4,
     "indexed_without_body_rows": 5,
