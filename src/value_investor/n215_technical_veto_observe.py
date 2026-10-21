@@ -411,9 +411,7 @@ def extract_features(
     }
     # Hard-rule fires (companion first-pass comparison)
     i01 = bool(
-        twin is not None
-        and elev_abs is not None
-        and 0.0 <= float(elev_abs) <= I01_ELEV_ABS_MAX
+        twin is not None and elev_abs is not None and 0.0 <= float(elev_abs) <= I01_ELEV_ABS_MAX
     )
     i02 = bool(dist_abs <= NEAR_HIGH_PCT and r20 >= I02_R20_MIN)
     hard_fires = {
@@ -674,8 +672,10 @@ def _rollup_band_catch_miss(rows: list[dict[str, Any]]) -> dict[str, Any]:
 
     hard = {
         "I01_or_I02": _hard_catch_miss(
-            lambda r: bool((r.get("hard_fires") or {}).get("I01"))
-            or bool((r.get("hard_fires") or {}).get("I02"))
+            lambda r: (
+                bool((r.get("hard_fires") or {}).get("I01"))
+                or bool((r.get("hard_fires") or {}).get("I02"))
+            )
         ),
         "any_of_six": _hard_catch_miss(
             lambda r: any(bool(v) for v in (r.get("hard_fires") or {}).values())
@@ -840,8 +840,12 @@ def refresh_n215_technical_veto_observe(
     reg_path = (
         Path(registration_path) if registration_path is not None else DEFAULT_REGISTRATION_PATH
     )
-    n200_path = Path(n200_store) if n200_store is not None else data_dir / "n200_tech_timing_observe.json"
-    n210_path = Path(n210_store) if n210_store is not None else data_dir / "n210_ai_judgment_observe.json"
+    n200_path = (
+        Path(n200_store) if n200_store is not None else data_dir / "n200_tech_timing_observe.json"
+    )
+    n210_path = (
+        Path(n210_store) if n210_store is not None else data_dir / "n210_ai_judgment_observe.json"
+    )
     chart_root = Path(charts_dir) if charts_dir is not None else data_dir / "charts"
 
     episodes = _load_closed_episodes(n200_path, "N200")
@@ -972,11 +976,7 @@ def format_n215_observe_text(payload: dict[str, Any]) -> str:
         )
     i01 = hard.get("I01_or_I02") if isinstance(hard.get("I01_or_I02"), dict) else {}
     any6 = hard.get("any_of_six") if isinstance(hard.get("any_of_six"), dict) else {}
-    lines.append(
-        f"hard I01|I02: catch {i01.get('deep_catch')} miss {i01.get('large_miss')}"
-    )
-    lines.append(
-        f"hard any-of-six: catch {any6.get('deep_catch')} miss {any6.get('large_miss')}"
-    )
+    lines.append(f"hard I01|I02: catch {i01.get('deep_catch')} miss {i01.get('large_miss')}")
+    lines.append(f"hard any-of-six: catch {any6.get('deep_catch')} miss {any6.get('large_miss')}")
     lines.append(f"admit: {admit.get('note')}")
     return "\n".join(lines) + "\n"
