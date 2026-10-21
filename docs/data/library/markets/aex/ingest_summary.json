@@ -1,107 +1,15 @@
 {
-  "run_at": "2026-10-21T15:35:08.141327+00:00",
+  "run_at": "2026-10-21T15:39:46.808477+00:00",
   "market_id": "aex",
-  "targets": [
-    "SHELL.AS"
-  ],
-  "target_details": [
-    {
-      "ticker": "SHELL.AS",
-      "priority_score": 17.4026,
-      "filings_total": 42,
-      "filings_with_body": 40,
-      "indexed_without_body": 2,
-      "reason": "indexed_without_body"
-    }
-  ],
-  "results": [
-    {
-      "ticker": "SHELL.AS",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 42,
-        "filings_with_body": 40,
-        "indexed_without_body": 2
-      },
-      "after": {
-        "filings_total": 40,
-        "filings_with_body": 40,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "euro_filings",
-      "filings_summary": {
-        "total": 40,
-        "annual": 3,
-        "interim": 37,
-        "trading_update": 0,
-        "other": 0,
-        "with_body": 40,
-        "period_coverage": {
-          "annual": {
-            "total": 3,
-            "with_body": 3
-          },
-          "interim": {
-            "total": 36,
-            "with_body": 36
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 0,
-            "with_body": 0
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 2,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 40,
-        "with_body_after": 40,
-        "retries_used": 0,
-        "retry_log": [
-          {
-            "filing_id": "ir_b4957d1e0b6ee417",
-            "url": "https://www.sec.gov/Archives/edgar/data/1306965/000130696525000007/shel-20241231.htm",
-            "attempt": 1,
-            "outcome": "fetched_pdf",
-            "source": "pdf"
-          },
-          {
-            "filing_id": "ir_d12a1392839b5a3f",
-            "url": "https://www.sec.gov/Archives/edgar/data/1306965/000130696524000026/shel-20231231.htm",
-            "attempt": 1,
-            "outcome": "fetched_pdf",
-            "source": "pdf"
-          }
-        ],
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 4,
-          "note": "merge_ir_allowlist_filings"
-        },
-        "mandatory": true,
-        "note": "refetch_ir_allowlist_filing_bodies"
-      }
-    }
-  ],
-  "improved": [
-    "SHELL.AS"
-  ],
+  "targets": [],
+  "target_details": [],
+  "results": [],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-21T15:34:27.115553+00:00",
+    "snapshot_at": "2026-10-21T15:39:46.167001+00:00",
     "market_id": "aex",
     "buy_tier_count": 9,
     "unmeasured_buy_tier": 0,
@@ -139,13 +47,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-21T15:35:08.084729+00:00",
+    "snapshot_at": "2026-10-21T15:39:46.787861+00:00",
     "market_id": "aex",
     "buy_tier_count": 9,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 1,
-    "indexed_without_body": 7,
+    "indexed_without_body": 2,
     "bodies_min": 2,
     "bodies_median": 5,
     "bodies_max": 40,
@@ -157,63 +65,42 @@
       "ASM.AS"
     ],
     "indexed_without_body_tickers": [
-      "ASM.AS",
       "ASML.AS",
       "MT.AS"
     ],
     "indexed_without_body_by_ticker": {
-      "ASM.AS": 2,
-      "ASML.AS": 2,
-      "MT.AS": 3
+      "ASML.AS": 1,
+      "MT.AS": 1
     },
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
-      "ASM.AS"
-    ],
-    "effective_indexed_without_body": 7,
-    "effective_indexed_without_body_tickers": [
+    "parked_tickers": [
       "ASM.AS",
       "ASML.AS",
       "MT.AS"
     ],
-    "ingest_exhausted": false
+    "parked_count": 3,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": false,
+  "recorded_gap_closure": true,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 9,
-    "hits": 6,
-    "new_rows_total": 2,
-    "curiosity_total": 6,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "ASM.AS",
-      "ASML.AS",
-      "MT.AS"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
+  "discovery_scan": null,
+  "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "aex"
+  },
   "critical_path": {
     "market_id": "aex",
-    "assessed_at": "2026-10-21T15:34:27.677075+00:00",
+    "assessed_at": "2026-10-21T15:39:46.462998+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -254,42 +141,102 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 39.849256217000004,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3560.150743783,
+  "used_seconds": 0.0013417429999975639,
+  "budget_seconds": 2100.0,
+  "leftover_seconds": 2099.998658257,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": 320.0,
-  "pin_tickers": [],
+  "per_ticker_max_seconds": null,
+  "pin_tickers": [
+    "ASM.AS"
+  ],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "aex",
-    "updated_at": "2026-10-21T15:35:08.090211+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 0,
+    "updated_at": "2026-10-21T15:39:46.791163+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "ASML.AS",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-18T17:00:22.731209+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 20,
+        "filings_with_body": 19,
+        "indexed_without_body": 1,
+        "thin": false,
+        "source_surface": "euro_filings"
+      },
+      {
+        "ticker": "ASM.AS",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-18T19:01:39.792828+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true,
+        "source_surface": "euro_filings"
+      },
+      {
+        "ticker": "MT.AS",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-21T13:16:15.650813+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 41,
+        "filings_with_body": 40,
+        "indexed_without_body": 1,
+        "thin": false,
+        "source_surface": "euro_filings"
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": false,
+    "had_complete_targets": true,
     "leftover_tickers": [
       "ASM.AS",
       "ASML.AS",
       "MT.AS"
     ],
-    "unparked_leftover": [
-      "ASM.AS",
-      "ASML.AS",
-      "MT.AS"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/aex/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "aex"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "aex",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "iseq20",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
