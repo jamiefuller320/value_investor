@@ -1,63 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-20T09:27:35.249582+01:00",
+    "local_time": "2026-10-21T09:27:35.510370+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-10-20T08:00:00+01:00",
-    "settle_at": "2026-10-20T09:15:00+01:00",
+    "market_open_at": "2026-10-21T08:00:00+01:00",
+    "settle_at": "2026-10-21T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [
-    {
-      "id": "3dbc8666-6393-489a-93ba-8b0e6ee4a743",
-      "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-      "acted_at": "2026-10-20T09:27:35.249582+01:00",
-      "ticker": "KLR.L",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 0.08852,
-      "price": 3114.0,
-      "gross": 275.65,
-      "cost": 0.07,
-      "net_cash": 275.58,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Keller Group plc",
-      "avg_cost_at_exit": 2983.2654,
-      "position_closed": true
-    },
-    {
-      "id": "9b6d8890-ff3f-481c-bc8b-7ca6a8c43869",
-      "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-      "acted_at": "2026-10-20T09:27:35.249582+01:00",
-      "ticker": "GFRD.L",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.405248,
-      "price": 667.0,
-      "gross": 270.3,
-      "cost": 1.42,
-      "net_cash": -271.72,
-      "note": "Automated buy",
-      "name": "Galliford Try Holdings plc"
-    },
-    {
-      "id": "67c34cef-0230-4533-83e7-e9e06472975e",
-      "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-      "acted_at": "2026-10-20T09:27:35.249582+01:00",
-      "ticker": "FRES.L",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.002574,
-      "price": 2637.0,
-      "gross": 6.79,
-      "cost": 0.04,
-      "net_cash": -6.82,
-      "note": "Automated buy",
-      "name": "Fresnillo plc"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -71,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 813.7,
+    "nav": 820.3,
     "cash": 0.0,
     "max_positions": 3,
     "min_conviction": 0.6,
@@ -84,58 +36,91 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 271.23,
+    "target_sleeve_value": 273.39,
     "targets": [
+      {
+        "ticker": "CURY.L",
+        "name": "Currys plc",
+        "signal": "strong_buy",
+        "conviction_score": 1.0,
+        "price": 149.0
+      },
+      {
+        "ticker": "PAF.L",
+        "name": "Pan African Resources PLC",
+        "signal": "strong_buy",
+        "conviction_score": 1.0,
+        "price": 116.0
+      },
       {
         "ticker": "GFRD.L",
         "name": "Galliford Try Holdings plc",
         "signal": "buy",
-        "conviction_score": 0.9139000000000003,
-        "price": 667.0
-      },
-      {
-        "ticker": "PPH.L",
-        "name": "PPHE Hotel Group Limited",
-        "signal": "buy",
-        "conviction_score": 0.8922000000000003,
-        "price": 1476.0
-      },
-      {
-        "ticker": "FRES.L",
-        "name": "Fresnillo plc",
-        "signal": "buy",
-        "conviction_score": 0.8336000000000002,
-        "price": 2637.0
+        "conviction_score": 1.0,
+        "price": 677.0
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "PPH.L",
+        "name": "PPHE Hotel Group Limited",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.186911,
+        "price": 1488.0,
+        "value": 278.12
+      },
+      {
+        "action": "sell",
+        "ticker": "FRES.L",
+        "name": "Fresnillo plc",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.10145,
+        "price": 2640.0,
+        "value": 267.83
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "CURY.L",
+        "name": "Currys plc",
+        "reason": "New sleeve",
+        "value": 273.39,
+        "price": 149.0,
+        "target_value": 273.39,
+        "conviction_score": 1.0,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "PAF.L",
+        "name": "Pan African Resources PLC",
+        "reason": "New sleeve",
+        "value": 272.43,
+        "price": 116.0,
+        "target_value": 273.39,
+        "conviction_score": 1.0,
+        "signal": "strong_buy"
+      }
+    ],
     "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "GFRD.L",
         "name": "Galliford Try Holdings plc",
         "reason": "Already near equal-weight target",
-        "value": 270.3,
-        "target_value": 271.23,
-        "conviction_score": 0.9139000000000003,
+        "value": 274.35,
+        "target_value": 273.39,
+        "conviction_score": 1.0,
         "signal": "buy"
       }
     ],
-    "skipped": [
-      {
-        "ticker": "FRES.L",
-        "name": "Fresnillo plc",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 271.23,
-        "conviction_score": 0.8336000000000002,
-        "signal": "buy"
-      }
-    ],
+    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 1 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 2 buy(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -144,7 +129,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 1476.0,
+      "mark": 1488.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -154,8 +139,8 @@
       "name": "Fresnillo plc",
       "source": "paper",
       "severity": "info",
-      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 2637.0,
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 2640.0,
       "stop_loss": 2426.44,
       "take_profit": 2936.52,
       "timing_signal": "insufficient_data"
@@ -166,7 +151,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 667.0,
+      "mark": 677.0,
       "stop_loss": 546.57,
       "take_profit": 734.4,
       "timing_signal": "insufficient_data"
@@ -1597,24 +1582,41 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-21T09:27:35.510370+01:00",
+        "portfolio_value": 820.3,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-20T09:27:35.249582+01:00",
+    "last_mark_at": "2026-10-21T09:27:35.510370+01:00",
     "rebalance_state": {
-      "exit_streak": {},
-      "reentry_cooldown": {
-        "KLR.L": 1
-      }
+      "exit_streak": {
+        "PPH.L": 1,
+        "FRES.L": 1
+      },
+      "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (3 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "ftse350",
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-20T08:27:52.058518+00:00",
+    "generated_at": "2026-10-21T08:27:50.948510+00:00",
     "observe_only": true,
     "open_count": 15,
     "closed_count": 0,
@@ -1687,13 +1689,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
-    "checkpoints_added_this_pass": 1
+    "ingested_this_pass": 0,
+    "checkpoints_added_this_pass": 2
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-20T08:27:52.060188+00:00",
+    "generated_at": "2026-10-21T08:27:50.950131+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1787,11 +1789,11 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -1799,8 +1801,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "ai_judgment_fair",
-    "updated_at": "2026-10-20T08:27:52.061965+00:00",
-    "as_of": "2026-10-20T09:27:35.249582+01:00",
+    "updated_at": "2026-10-21T08:27:50.952078+00:00",
+    "as_of": "2026-10-21T09:27:35.510370+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1813,7 +1815,7 @@
       "skip_underwater_urgency_when_intact": true
     },
     "holding_count": 3,
-    "underwater_count": 1,
+    "underwater_count": 0,
     "thesis_status_counts": {
       "intact": 3,
       "weakening": 0,
@@ -1822,33 +1824,31 @@
     },
     "portfolio_feedback": {
       "holding_count": 3,
-      "loser_count": 1,
-      "loser_share": 0.3333,
-      "loser_nav_share": 0.3288,
+      "loser_count": 0,
+      "loser_share": 0.0,
+      "loser_nav_share": 0.0,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
-      "intact_loser_count": 1,
+      "intact_loser_count": 0,
       "weakening_loser_count": 0,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
         "cheapness": 0.0,
         "quality": 0.0,
         "dividend": 0.0,
-        "garp": 1.0,
+        "garp": 0.0,
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
         "quality": 0.0,
         "dividend": 0.0,
-        "garp": 0.5,
+        "garp": 0.6667,
         "risk": 0.0
       },
-      "selection_feedback_flags": [
-        "garp fails more often among losers (100% vs 50%)"
-      ],
-      "balancing_hint": "tolerate_intact_losers",
+      "selection_feedback_flags": [],
+      "balancing_hint": "maintain",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
@@ -1857,14 +1857,14 @@
         "name": "Fresnillo plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
-        "underwater": true,
+        "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0503,
-        "mark": 2637.0,
+        "unrealized_pct": -0.0492,
+        "mark": 2640.0,
         "avg_cost": 2776.5563,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8336,
+        "conviction_score": 1.0,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1877,19 +1877,18 @@
         ],
         "research_verdict": "accumulate",
         "reasons": [
-          "price drawdown alone does not invalidate value thesis",
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 83%"
+          "conviction 100%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 83%"
+          "conviction 100%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1901,12 +1900,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0463,
-        "mark": 1476.0,
+        "unrealized_pct": -0.0385,
+        "mark": 1488.0,
         "avg_cost": 1547.6251,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8922,
+        "conviction_score": 1.0,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1923,14 +1922,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 89%"
+          "conviction 100%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 89%"
+          "conviction 100%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1942,12 +1941,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 667.0,
+        "unrealized_pct": 0.015,
+        "mark": 677.0,
         "avg_cost": 667.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9139,
+        "conviction_score": 1.0,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1963,14 +1962,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 91%"
+          "conviction 100%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 91%"
+          "conviction 100%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1983,7 +1982,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-20T08:27:52.064284+00:00",
+    "generated_at": "2026-10-21T08:27:50.954686+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2050,7 +2049,7 @@
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
     "observe_only": true,
-    "generated_at": "2026-10-20T08:27:52.068852+00:00",
+    "generated_at": "2026-10-21T08:27:50.960163+00:00",
     "open_count": 2,
     "closed_count": 10,
     "scored_count": 8,
@@ -2110,14 +2109,14 @@
       "recommit_scored": 2
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 1,
-    "marked_this_pass": 1,
+    "ingested_this_pass": 0,
+    "marked_this_pass": 2,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-20T09:27:35.249582+01:00",
+    "generated_at": "2026-10-21T09:27:35.510370+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2174,7 +2173,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-20T09:27:35.249582+01:00",
+    "generated_at": "2026-10-21T09:27:35.510370+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -2182,503 +2181,36 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 4,
-    "card_count": 4,
+    "proposal_count": 0,
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 3,
-      "veto": 1,
+      "agree": 0,
+      "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {
-      "rebuy_skip": {
-        "agree": 1,
-        "veto": 0,
-        "abstain": 0
-      },
-      "sell": {
-        "agree": 0,
-        "veto": 1,
-        "abstain": 0
-      },
-      "buy": {
-        "agree": 2,
-        "veto": 0,
-        "abstain": 0
-      }
-    },
+    "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
-    "cards": [
-      {
-        "ticker": "FRES.L",
-        "name": "Fresnillo plc",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 4
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 4
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.8336000000000002
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "filing_presence",
-            "source": "candidates",
-            "detail": "Key filing bodies / body count on disk at decision time",
-            "value": {
-              "key_filing_bodies": true,
-              "filings_with_body": 61,
-              "has_index": true
-            }
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          },
-          {
-            "kind": "adjusted_eps_growth_pct",
-            "source": "candidates",
-            "detail": "Filing-body adjusted EPS growth on the live report at decision time",
-            "value": -0.5770000000000001
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "ai_judgment_fair",
-        "logged_at": "2026-10-20T09:27:35.249582+01:00",
-        "proposal_id": "ai_judgment_fair:FRES.L:rebuy_skip:2026-10-20T09:27:35.249582+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": true,
-            "filings_with_body": 61,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": -0.5770000000000001
-          }
-        },
-        "schema_version": 1
-      },
-      {
-        "ticker": "KLR.L",
-        "name": "Keller Group plc",
-        "algo_action": "sell",
-        "algo_reason": "Automated exit \u2014 left target set",
-        "shadow_verdict": "veto",
-        "reasons": [
-          "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated exit \u2014 left target set"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 2
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 2
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.8951000000000003
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "filing_presence",
-            "source": "candidates",
-            "detail": "Key filing bodies / body count on disk at decision time",
-            "value": {
-              "key_filing_bodies": true,
-              "filings_with_body": 72,
-              "has_index": true
-            }
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "ai_judgment_fair",
-        "logged_at": "2026-10-20T09:27:35.249582+01:00",
-        "proposal_id": "ai_judgment_fair:KLR.L:sell:2026-10-20T09:27:35.249582+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": true,
-            "filings_with_body": 72,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      },
-      {
-        "ticker": "GFRD.L",
-        "name": "Galliford Try Holdings plc",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Buy into buyish target set \u2014 agree with algo selection."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 1
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 1
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.9139000000000003
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "filing_presence",
-            "source": "candidates",
-            "detail": "Key filing bodies / body count on disk at decision time",
-            "value": {
-              "key_filing_bodies": true,
-              "filings_with_body": 74,
-              "has_index": true
-            }
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "ai_judgment_fair",
-        "logged_at": "2026-10-20T09:27:35.249582+01:00",
-        "proposal_id": "ai_judgment_fair:GFRD.L:buy:2026-10-20T09:27:35.249582+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": true,
-            "filings_with_body": 74,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      },
-      {
-        "ticker": "FRES.L",
-        "name": "Fresnillo plc",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Buy into buyish target set \u2014 agree with algo selection."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 4
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 4
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.8336000000000002
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "filing_presence",
-            "source": "candidates",
-            "detail": "Key filing bodies / body count on disk at decision time",
-            "value": {
-              "key_filing_bodies": true,
-              "filings_with_body": 61,
-              "has_index": true
-            }
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          },
-          {
-            "kind": "adjusted_eps_growth_pct",
-            "source": "candidates",
-            "detail": "Filing-body adjusted EPS growth on the live report at decision time",
-            "value": -0.5770000000000001
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "ai_judgment_fair",
-        "logged_at": "2026-10-20T09:27:35.249582+01:00",
-        "proposal_id": "ai_judgment_fair:FRES.L:buy:2026-10-20T09:27:35.249582+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": true,
-            "filings_with_body": 61,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": -0.5770000000000001
-          }
-        },
-        "schema_version": 1
-      }
-    ],
+    "cards": [],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "ai_judgment_fair",
-      "generated_at": "2026-10-20T09:27:35.249582+01:00",
+      "generated_at": "2026-10-21T09:27:35.510370+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 4,
+      "card_count": 0,
       "verdict_counts": {
-        "agree": 3,
-        "veto": 1,
+        "agree": 0,
+        "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {
-        "rebuy_skip": {
-          "agree": 1,
-          "veto": 0,
-          "abstain": 0
-        },
-        "sell": {
-          "agree": 0,
-          "veto": 1,
-          "abstain": 0
-        },
-        "buy": {
-          "agree": 2,
-          "veto": 0,
-          "abstain": 0
-        }
-      },
-      "veto_sell_count": 1,
-      "veto_sell_tickers": [
-        "KLR.L"
-      ],
+      "by_algo_action": {},
+      "veto_sell_count": 0,
+      "veto_sell_tickers": [],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -2692,7 +2224,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-20T08:27:52.072799+00:00",
+  "generated_at": "2026-10-21T08:27:50.963456+00:00",
   "track_id": "ai_judgment_fair",
   "track_label": "AI judgment fair-cost lab (Suite B)",
   "is_primary_learning_track": true,
