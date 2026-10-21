@@ -7973,6 +7973,29 @@ def test_parked_source_hunter_skip_2331_hk_hang_seng():
     assert fetch_filing_body("https://simplywall.st/stock/sehk/2331") is None
 
 
+def test_parked_source_hunter_skip_9961_hk_hang_seng():
+    """eng-20261021-03: 9961.HK leftover IWB is third-party news shells, not missing HKEX filings."""
+    assert "9961.HK" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["9961.HK"]
+    assert "google_news_asia" in reason
+    assert "hkex_direct" in reason
+    assert "investors.trip.com" in reason
+    assert fetch_filings_ir_allowlist("9961.HK") == []
+    assert (
+        fetch_filing_body("https://pluang.com/en/news-feed/laporan-tahunan-trip-com-group-2025")
+        is None
+    )
+    assert (
+        fetch_filing_body(
+            "https://www.globenewswire.com/news-release/2026/05/05/3287965/3080/en/"
+            "tcom-investor-alert-trip-com-group-limited-securities-fraud-lawsuit-"
+            "investors-with-losses-may-seek-to-lead-the-class-action-after-"
+            "allegedly-hiding-antitrust-timeline-levi-korsinsky.html"
+        )
+        is None
+    )
+
+
 def test_fetch_filings_ir_allowlist_1109_hk_builtins_eng_20261018_05(tmp_path: Path):
     """eng-20261018-05: hang_seng parked 1109.HK — HKEX annual/interim statutory PDF seeds."""
     allowlist_path = tmp_path / "ir.json"
