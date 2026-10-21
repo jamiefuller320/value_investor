@@ -964,6 +964,13 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "interim results 6-Ks and 20-F are already bodied via sec_edgar; "
         "investor.pddholdings.com is bot-gated (403)."
     ),
+    "TME": (
+        "us_adr_asia leftover IWB: twelve SEC 6-K cover HTML primaries are board/AGM/"
+        "proxy/record-date notice stubs below the substantiveness/financial gate; "
+        "linked EX-99.x press releases fetch but are not the indexed URLs and fail "
+        "the financial gate; interim results 6-Ks and 20-F are already bodied via "
+        "sec_edgar; ir.tencentmusic.com is JS-only (no static statutory PDF hrefs)."
+    ),
     "LDOS": (
         "Leftover indexed-without-body row is Item 2.01/7.01/9.01 acquisition-closing 8-K "
         "primary below the substantiveness gate; EX-99.1 press release fetches but is not the "
