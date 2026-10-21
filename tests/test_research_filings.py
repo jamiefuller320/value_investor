@@ -11920,6 +11920,25 @@ def test_parked_source_hunter_skip_tme_us_adr_asia():
     assert fetch_filing_body(board_change_6k) is None
 
 
+def test_parked_source_hunter_skip_umc_us_adr_asia():
+    """eng-20261021-07: UMC leftover IWB is monthly revenue 6-K stubs, not missing 20-F/results."""
+    assert "UMC" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["UMC"]
+    assert "6-K" in reason
+    assert "substantiveness" in reason
+    assert "EX-99.1" in reason
+    assert "revenue" in reason
+    assert "20-F" in reason
+    assert "sec_edgar" in reason
+    assert "403" in reason
+    assert "umc.com" in reason
+    assert fetch_filings_ir_allowlist("UMC") == []
+    monthly_revenue_6k = (
+        "https://www.sec.gov/Archives/edgar/data/1033767/000119312526146257/6k_on_04082026.htm"
+    )
+    assert fetch_filing_body(monthly_revenue_6k) is None
+
+
 def test_parked_source_hunter_skip_ldos_sp500():
     """eng-20260907-06: LDOS leftover IWB is acquisition-closing 8-K primary, not missing 10-K/10-Q."""
     assert "LDOS" in PARKED_SOURCE_HUNTER_SKIP
