@@ -1,15 +1,91 @@
 {
-  "run_at": "2026-10-20T15:20:02.010625+00:00",
+  "run_at": "2026-10-21T15:33:10.110307+00:00",
   "market_id": "us_adr_asia",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "WIT"
+  ],
+  "target_details": [
+    {
+      "ticker": "WIT",
+      "priority_score": 17.3433,
+      "filings_total": 36,
+      "filings_with_body": 34,
+      "indexed_without_body": 2,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "WIT",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 36,
+        "filings_with_body": 34,
+        "indexed_without_body": 2
+      },
+      "after": {
+        "filings_total": 36,
+        "filings_with_body": 36,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 36,
+        "annual": 2,
+        "interim": 34,
+        "trading_update": 0,
+        "other": 0,
+        "with_body": 36,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 34,
+            "with_body": 34
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 0,
+            "with_body": 0
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 36,
+        "with_body_after": 36,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "WIT"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-20T15:20:00.689018+00:00",
+    "snapshot_at": "2026-10-21T15:33:03.195776+00:00",
     "market_id": "us_adr_asia",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
@@ -50,7 +126,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-20T15:20:01.993551+00:00",
+    "snapshot_at": "2026-10-21T15:33:10.092216+00:00",
     "market_id": "us_adr_asia",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
@@ -59,7 +135,7 @@
     "indexed_without_body": 39,
     "bodies_min": 17,
     "bodies_median": 33.0,
-    "bodies_max": 34,
+    "bodies_max": 36,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -128,7 +204,7 @@
   },
   "critical_path": {
     "market_id": "us_adr_asia",
-    "assessed_at": "2026-10-20T15:20:01.144377+00:00",
+    "assessed_at": "2026-10-21T15:33:03.659372+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -179,9 +255,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 0.38329690500006564,
+  "used_seconds": 5.9863356440000075,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3599.616703095,
+  "leftover_seconds": 3594.013664356,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -189,9 +265,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "us_adr_asia",
-    "updated_at": "2026-10-20T15:20:01.996872+00:00",
+    "updated_at": "2026-10-21T15:33:10.095362+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 4,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -246,7 +322,7 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [
       "JD",
       "PDD",
@@ -290,6 +366,6 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261020-01"
+    "task_id": "eng-20261021-03"
   }
 }
