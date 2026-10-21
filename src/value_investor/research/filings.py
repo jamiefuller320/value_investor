@@ -217,6 +217,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://recordfg.com/wp-content/uploads/2025/06/2024-Annual-Report-Record-plc.pdf",
         "https://recordfg.com/wp-content/uploads/2025/06/2024-Half-Year-Report-Record-plc.pdf",
     ],
+    # ftse_smallcap IWB blocker — CLIG.L parked unfetchable_iwb; CH PDFs fail but clig.com statutory PDFs fetch.
+    "CLIG.L": [
+        "https://clig.com/wp-content/uploads/2026/09/Annual-Report-June-2026-City-of-London-Investment-Group-PLC.pdf",
+        "https://clig.com/wp-content/uploads/2025/09/Annual-Report-June-2025-City-of-London-Investment-Group-PLC.pdf",
+        "https://clig.com/wp-content/uploads/2026/02/City-of-London-Investment-Group-PLC-Interim-Dec-25.pdf",
+    ],
     # aim buy-tier no_key_bodies — MPE.L has memo but RNS index misses statutory PDF bodies; mpevans.co.uk CDN fetch.
     "MPE.L": [
         "https://d1jgvns6wxbcsj.cloudfront.net/app/uploads/2026/03/25_03_25-annual-report.pdf",
