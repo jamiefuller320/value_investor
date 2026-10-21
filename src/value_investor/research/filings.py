@@ -971,6 +971,13 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "the financial gate; interim results 6-Ks and 20-F are already bodied via "
         "sec_edgar; ir.tencentmusic.com is JS-only (no static statutory PDF hrefs)."
     ),
+    "UMC": (
+        "us_adr_asia leftover IWB: seventeen SEC 6-K cover HTML primaries are monthly "
+        "revenue announcement stubs below the substantiveness/financial gate; linked "
+        "EX-99.1 exhibits are the same revenue notices and are not the indexed URLs; "
+        "interim results 6-Ks and 20-F are already bodied via sec_edgar; umc.com IR "
+        "is bot-gated (403)."
+    ),
     "LDOS": (
         "Leftover indexed-without-body row is Item 2.01/7.01/9.01 acquisition-closing 8-K "
         "primary below the substantiveness gate; EX-99.1 press release fetches but is not the "
