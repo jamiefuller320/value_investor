@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-20T09:38:13.579405+02:00",
+    "local_time": "2026-10-21T09:40:55.688812+02:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-10-20T09:00:00+02:00",
-    "settle_at": "2026-10-20T09:30:00+02:00",
+    "market_open_at": "2026-10-21T09:00:00+02:00",
+    "settle_at": "2026-10-21T09:30:00+02:00",
     "can_act": true,
     "reason": "ok"
   },
@@ -25,7 +25,7 @@
       "Never-left-candidates rebuy block: do not rebuy a name that has remained in the buy candidate pool continuously since exit.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1014.25,
+    "nav": 1018.18,
     "cash": 203.12,
     "max_positions": 5,
     "min_conviction": 0.0,
@@ -38,41 +38,41 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": true,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 202.85,
+    "target_sleeve_value": 203.64,
     "targets": [
       {
         "ticker": "DG.PA",
         "name": "Vinci SA",
         "signal": "strong_buy",
-        "conviction_score": 0.91,
-        "price": 106.35
+        "conviction_score": 0.9094000000000001,
+        "price": 106.65
       },
       {
         "ticker": "TTE.PA",
         "name": "TotalEnergies SE",
         "signal": "strong_buy",
         "conviction_score": 0.7958000000000001,
-        "price": 80.69
+        "price": 80.81
       },
       {
         "ticker": "PHIA.AS",
         "name": "Koninklijke Philips N.V.",
         "signal": "strong_buy",
-        "conviction_score": 0.7637,
-        "price": 23.07
+        "conviction_score": 0.7829,
+        "price": 23.03
       },
       {
         "ticker": "C5H.IR",
         "name": "Cairn Homes plc",
         "signal": "strong_buy",
         "conviction_score": 0.7537,
-        "price": 2.62
+        "price": 2.665
       },
       {
         "ticker": "EG7.IR",
         "name": "FBD Holdings plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7334,
+        "conviction_score": 0.7473000000000001,
         "price": 19.05
       }
     ],
@@ -86,18 +86,28 @@
         "ticker": "DG.PA",
         "name": "Vinci SA",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 198.79,
-        "target_value": 202.85,
-        "conviction_score": 0.91,
+        "value": 199.35,
+        "target_value": 203.64,
+        "conviction_score": 0.9094000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
+        "reason": "Already near equal-weight target",
+        "value": 205.37,
+        "target_value": 203.64,
+        "conviction_score": 0.7958000000000001,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
         "ticker": "C5H.IR",
         "name": "Cairn Homes plc",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 199.25,
-        "target_value": 202.85,
+        "reason": "Already near equal-weight target",
+        "value": 202.68,
+        "target_value": 203.64,
         "conviction_score": 0.7537,
         "signal": "strong_buy"
       }
@@ -107,13 +117,13 @@
         "ticker": "EG7.IR",
         "name": "FBD Holdings plc",
         "reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
-        "target_value": 202.85,
-        "conviction_score": 0.7334,
+        "target_value": 203.64,
+        "conviction_score": 0.7473000000000001,
         "signal": "strong_buy"
       }
     ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 5 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 5 equal-weight sleeve(s); leave 3 near-target holding(s)."
   },
   "alerts": [
     {
@@ -122,7 +132,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 106.3499984741211,
+      "mark": 106.6500015258789,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -133,7 +143,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 80.69000244140625,
+      "mark": 80.80999755859375,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -144,7 +154,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 23.06999969482422,
+      "mark": 23.030000686645508,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -155,7 +165,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 2.619999885559082,
+      "mark": 2.6649999618530273,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -928,9 +938,43 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-21T09:28:33.515678+02:00",
+        "portfolio_value": 884.57,
+        "cash": 203.12,
+        "contributed_capital": 1000.0,
+        "positions": 4,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.839
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-21T09:40:55.688812+02:00",
+        "portfolio_value": 887.04,
+        "cash": 203.12,
+        "contributed_capital": 1000.0,
+        "positions": 4,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.8391
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-20T09:38:13.579405+02:00",
+    "last_mark_at": "2026-10-21T09:40:55.688812+02:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {},
@@ -956,7 +1000,7 @@
     "schema_version": 2,
     "market_id": "euro_depth",
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-10-20T07:38:21.034880+00:00",
+    "generated_at": "2026-10-21T07:41:03.874368+00:00",
     "observe_only": true,
     "open_count": 5,
     "closed_count": 0,
@@ -1035,7 +1079,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-10-20T07:38:21.035754+00:00",
+    "generated_at": "2026-10-21T07:41:03.875724+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1101,7 +1145,7 @@
     "hold_recovery": {
       "open": {
         "count": 2,
-        "recovered_to_breakeven": 1,
+        "recovered_to_breakeven": 2,
         "close_reasons": {
           "open": 2
         }
@@ -1128,7 +1172,7 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
@@ -1141,8 +1185,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "still_in_buy_set",
-    "updated_at": "2026-10-20T07:38:21.036724+00:00",
-    "as_of": "2026-10-20T09:38:13.579405+02:00",
+    "updated_at": "2026-10-21T07:41:03.877181+00:00",
+    "as_of": "2026-10-21T09:40:55.688812+02:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1193,14 +1237,54 @@
     },
     "holdings": [
       {
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0014,
+        "mark": 106.65,
+        "avg_cost": 106.8,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.9094,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 91%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 91%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "C5H.IR",
         "name": "Cairn Homes plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0113,
-        "mark": 2.62,
+        "unrealized_pct": 0.0057,
+        "mark": 2.665,
         "avg_cost": 2.65,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
@@ -1233,58 +1317,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "DG.PA",
-        "name": "Vinci SA",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0042,
-        "mark": 106.35,
-        "avg_cost": 106.8,
-        "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.91,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 91%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 91%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "PHIA.AS",
         "name": "Koninklijke Philips N.V.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0322,
-        "mark": 23.07,
+        "unrealized_pct": 0.0304,
+        "mark": 23.03,
         "avg_cost": 22.35,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7637,
+        "conviction_score": 0.7829,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1300,14 +1344,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 76%"
+          "conviction 78%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 76%"
+          "conviction 78%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1319,8 +1363,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0456,
-        "mark": 80.69,
+        "unrealized_pct": 0.0472,
+        "mark": 80.81,
         "avg_cost": 77.17,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
@@ -1360,7 +1404,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-10-20T07:38:21.038008+00:00",
+    "generated_at": "2026-10-21T07:41:03.879016+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1428,7 +1472,7 @@
     "schema_version": 1,
     "track_id": "still_in_buy_set",
     "observe_only": true,
-    "generated_at": "2026-10-20T07:38:21.040436+00:00",
+    "generated_at": "2026-10-21T07:41:03.882527+00:00",
     "open_count": 4,
     "closed_count": 5,
     "scored_count": 5,
@@ -1496,7 +1540,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-10-20T09:38:13.579405+02:00",
+    "generated_at": "2026-10-21T09:40:55.688812+02:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1553,7 +1597,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-10-20T09:38:13.579405+02:00",
+    "generated_at": "2026-10-21T09:40:55.688812+02:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1584,9 +1628,9 @@
         "algo_reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
         "shadow_verdict": "agree",
         "reasons": [
-          "Still-in-candidates rebuy block applies because the name never left the buy pool; skipping rebuy avoids redundant re-entry while policy keeps it buy-eligible.",
-          "screen_signal strong_buy, still_buyish true, and research_verdict accumulate with overlay_bound true support continued buyish treatment.",
-          "rank_drop 0 with conviction_rank equal to entry_rank (7) shows no material rank deterioration that would argue for forced exit or override of the rebuy skip."
+          "still_buyish true with screen_signal strong_buy and research_verdict accumulate \u2014 rebuy_skip avoids churn while the name never left the buy cohort",
+          "rank_drop 0 with conviction_rank 8 matching entry_rank 8 \u2014 no hold-gate deterioration that would argue for treating exit as a decisive leave",
+          "algo_reason still-in-candidates rebuy block is consistent with overlay_bound true and unchanged buyish standing"
         ],
         "evidence": [
           {
@@ -1604,13 +1648,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 7
+            "value": 8
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 7
+            "value": 8
           },
           {
             "kind": "rank_drop",
@@ -1642,8 +1686,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "still_in_buy_set",
-        "logged_at": "2026-10-20T09:38:13.579405+02:00",
-        "proposal_id": "still_in_buy_set:EG7.IR:rebuy_skip:2026-10-20T09:38:13.579405+02:00",
+        "logged_at": "2026-10-21T09:40:55.688812+02:00",
+        "proposal_id": "still_in_buy_set:EG7.IR:rebuy_skip:2026-10-21T09:40:55.688812+02:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -1682,7 +1726,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "still_in_buy_set",
-      "generated_at": "2026-10-20T09:38:13.579405+02:00",
+      "generated_at": "2026-10-21T09:40:55.688812+02:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
@@ -1717,7 +1761,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-20T07:38:25.253367+00:00",
+  "generated_at": "2026-10-21T07:41:08.555859+00:00",
   "track_id": "still_in_buy_set",
   "track_label": "Still-in-buy-set hold twin (rank-drop<3, never-left-candidates, CD2; Suite A)",
   "is_primary_learning_track": false,

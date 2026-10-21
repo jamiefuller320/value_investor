@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `still_in_buy_set` · updated 2026-10-20T07:38:21.036724+00:00
+Track: `still_in_buy_set` · updated 2026-10-21T07:41:03.877181+00:00
 
 ## Portfolio loser feedback
 
@@ -10,28 +10,28 @@ Track: `still_in_buy_set` · updated 2026-10-20T07:38:21.036724+00:00
 
 ## Holding reviews
 
-### C5H.IR — intact / hold_tolerate (-1.1%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 75%
-
-### DG.PA — intact / hold_tolerate (-0.4%)
+### DG.PA — intact / hold_tolerate (-0.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 91%
 
-### PHIA.AS — intact / hold_tolerate (+3.2%)
+### C5H.IR — intact / hold_tolerate (+0.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 76%
+- conviction 75%
 
-### TTE.PA — intact / hold_tolerate (+4.6%)
+### PHIA.AS — intact / hold_tolerate (+3.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 78%
+
+### TTE.PA — intact / hold_tolerate (+4.7%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

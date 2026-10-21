@@ -4137,19 +4137,120 @@
       },
       "by_algo_action": {},
       "cards": []
+    },
+    {
+      "logged_at": "2026-10-21T09:37:43.341186+02:00",
+      "verdict_counts": {
+        "agree": 0,
+        "veto": 1,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "buy": {
+          "agree": 0,
+          "veto": 1,
+          "abstain": 0
+        }
+      },
+      "cards": [
+        {
+          "ticker": "IFX.DE",
+          "name": "Infineon Technologies AG",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "veto",
+          "reasons": [
+            "Effective screen signal at decision time is hold, not an entry-aligned buy.",
+            "still_buyish is false, so the name is not buy or strong_buy on the decision screen.",
+            "Research overlay verdict is caution, which does not support adding on a buy proposal.",
+            "rank_drop is 0 versus entry rank 12, so there is no rank-collapse narrative that would override hold/not-buyish state."
+          ],
+          "evidence": [
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 12
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 12
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-21T09:37:43.341186+02:00",
+          "proposal_id": "buy_tier_level:IFX.DE:buy:2026-10-21T09:37:43.341186+02:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "abstain",
+              "reasons": [
+                "Buy while not buyish \u2014 abstain."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
     }
   ],
   "observe_only": true,
   "influences_live": false,
   "track_id": "buy_tier_level",
   "last_pass": {
-    "logged_at": "2026-10-20T09:35:11.636782+02:00",
-    "card_count": 0,
+    "logged_at": "2026-10-21T09:37:43.341186+02:00",
+    "card_count": 1,
     "verdict_counts": {
       "agree": 0,
-      "veto": 0,
+      "veto": 1,
       "abstain": 0
     }
   },
-  "updated_at": "2026-10-20T07:35:11.730920+00:00"
+  "updated_at": "2026-10-21T07:37:49.128396+00:00"
 }

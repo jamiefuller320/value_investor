@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-20T07:37:08.189774+00:00
+Track: `buy_tier_level_native` · updated 2026-10-21T07:39:27.970713+00:00
 
 ## Portfolio loser feedback
 
@@ -10,8 +10,8 @@ Track: `buy_tier_level_native` · updated 2026-10-20T07:37:08.189774+00:00
 
 ## Holding reviews
 
-### COR.LS — weakening / watch_review (+0.8%)
+### COR.LS — weakening / watch_review (+0.2%)
 - research verdict caution
-- conviction 25% below intact floor
+- conviction 31% below intact floor
 - still buy
 - cheapness family still passes
