@@ -228,6 +228,8 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "docs/data/n201_value_mom_registration.json" in text
     assert "docs/data/n206_plain_ey_observe.json" in text
     assert "docs/data/n206_plain_ey_registration.json" in text
+    assert "docs/data/n215_technical_veto_observe.json" in text
+    assert "docs/data/n215_technical_veto_registration.json" in text
     # Optional (not OWNED) — same race-safe lane as queue_health / observe rollup.
     optional_line = next(
         line for line in text.splitlines() if "GHA_COMMIT_OPTIONAL" in line and ":-" in line
@@ -261,6 +263,8 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "n201_value_mom_registration.json" in optional_line
     assert "n206_plain_ey_observe.json" in optional_line
     assert "n206_plain_ey_registration.json" in optional_line
+    assert "n215_technical_veto_observe.json" in optional_line
+    assert "n215_technical_veto_registration.json" in optional_line
     assert "two_lot_replay.json" in optional_line
     assert "sec_companyfacts_coverage.json" in optional_line
     assert "hkex_direct_coverage.json" in optional_line

@@ -1,0 +1,57 @@
+{
+  "registration_id": "n215-soft-band-veto-v0",
+  "recipe_id": "n215-soft-score-recipe-v0",
+  "deferred_id": "N215",
+  "schema_version": 1,
+  "generated_at": "2026-10-21T18:58:21.088906+00:00",
+  "observe_only": true,
+  "influences_live": false,
+  "learning_question": "For each pre-registered soft-veto band threshold on sealed N200 closed episodes (charts \u2264 buy_ts), what is catch rate among deep losers (fair-cost \u2264 \u221210%) vs miss rate among large winners (\u2265 +10%)? Companion: risk_score distribution. Observe labels only \u2014 no live gate.",
+  "ops_doc": "docs/ops/n215-technical-veto-observe.md",
+  "recipe": {
+    "recipe_id": "n215-soft-score-recipe-v0",
+    "registration_id": "n215-soft-band-veto-v0",
+    "lookback_trading_days": 126,
+    "min_bars_for_score": 60,
+    "fractal_n": 5,
+    "twin_peak_tol": 0.02,
+    "twin_trough_min": 0.1,
+    "deep_loser": -0.1,
+    "large_winner": 0.1,
+    "normalization": {
+      "elev_abs_scale": 0.1,
+      "elev_range_scale": 0.3,
+      "near_high_scale": 0.1,
+      "r20_scale": 0.15,
+      "rsi_level_floor": 50.0,
+      "rsi_level_span": 30.0
+    },
+    "weights": {
+      "f_elev_abs": 0.15,
+      "f_elev_range": 0.1,
+      "f_near_high": 0.12,
+      "f_r20": 0.1,
+      "f_failed_bo": 0.18,
+      "f_rsi_fail": 0.15,
+      "f_rsi_level": 0.08,
+      "f_death_cross": 0.06,
+      "f_lost_200": 0.06
+    },
+    "bands": {
+      "PASS": "< 0.35",
+      "WARN": "[0.35, 0.55)",
+      "SOFT_VETO": "[0.55, 0.75)",
+      "HARD_CANDIDATE": ">= 0.75"
+    },
+    "band_cuts": {
+      "warn_lo": 0.35,
+      "soft_lo": 0.55,
+      "hard_lo": 0.75
+    },
+    "note": "Pre-registered before scoring. No grid search / no fit to KLR on this cohort for admission claims."
+  },
+  "cohort": {
+    "primary": "N200 closed lifecycle episodes with charts",
+    "anecdote": "N210 closed until volume_gate.met"
+  }
+}

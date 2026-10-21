@@ -2264,6 +2264,56 @@ def check_n210_ai_judgment_observe(
     ]
 
 
+def check_n215_technical_veto_observe(
+    *,
+    output_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only N215: soft-band technical veto risk scores on sealed buys.
+
+    Writes ``docs/data/n215_technical_veto_observe.json`` (+ registration).
+    Scores frozen feature→band recipe on N200/N210 closed episodes with charts
+    ≤ buy_ts. Never changes books or knobs (``auto_fixable=False``).
+    See docs/ops/n215-technical-veto-observe.md.
+    """
+    from value_investor.n215_technical_veto_observe import (
+        DEFAULT_OUTPUT_DIR,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_findings_from_n215_observe,
+        refresh_n215_technical_veto_observe,
+    )
+
+    data_dir = Path(output_dir) if output_dir is not None else DEFAULT_OUTPUT_DIR
+    try:
+        payload = refresh_n215_technical_veto_observe(
+            output_dir=data_dir,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "N215 soft-band technical veto observe"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+        for finding in ops_findings_from_n215_observe(payload)
+    ]
+
+
 def check_n206_plain_ey_observe(
     *,
     output_dir: Path | None = None,
@@ -4029,6 +4079,7 @@ def collect_ops_findings(
     findings.extend(check_n201_value_mom_observe())
     findings.extend(check_n210_ai_judgment_observe())
     findings.extend(check_n206_plain_ey_observe())
+    findings.extend(check_n215_technical_veto_observe())
     findings.extend(check_two_lot_replay())
     findings.extend(check_sec_companyfacts_coverage())
     findings.extend(check_hkex_direct_coverage())
