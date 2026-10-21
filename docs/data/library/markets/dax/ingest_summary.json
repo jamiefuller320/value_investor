@@ -1,38 +1,188 @@
 {
-  "run_at": "2026-10-20T18:12:05.954042+00:00",
+  "run_at": "2026-10-21T16:00:33.111319+00:00",
   "market_id": "dax",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "SIE.DE",
+    "HEN3.DE"
+  ],
+  "target_details": [
+    {
+      "ticker": "SIE.DE",
+      "priority_score": 12.2602,
+      "filings_total": 0,
+      "filings_with_body": 0,
+      "indexed_without_body": 0,
+      "reason": "unmeasured"
+    },
+    {
+      "ticker": "HEN3.DE",
+      "priority_score": 3.3308,
+      "filings_total": 1,
+      "filings_with_body": 1,
+      "indexed_without_body": 0,
+      "reason": "thin_bodies"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "SIE.DE",
+      "reason": "unmeasured",
+      "before": {
+        "filings_total": 0,
+        "filings_with_body": 0,
+        "indexed_without_body": 0
+      },
+      "after": {
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 1,
+        "annual": 0,
+        "interim": 0,
+        "trading_update": 0,
+        "other": 1,
+        "with_body": 1,
+        "period_coverage": {
+          "annual": {
+            "total": 0,
+            "with_body": 0
+          },
+          "interim": {
+            "total": 0,
+            "with_body": 0
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 1,
+            "with_body": 1
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 1,
+        "with_body_after": 1,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    },
+    {
+      "ticker": "HEN3.DE",
+      "reason": "thin_bodies",
+      "before": {
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0
+      },
+      "after": {
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0
+      },
+      "improved": false,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 1,
+        "annual": 1,
+        "interim": 0,
+        "trading_update": 0,
+        "other": 0,
+        "with_body": 1,
+        "period_coverage": {
+          "annual": {
+            "total": 1,
+            "with_body": 1
+          },
+          "interim": {
+            "total": 0,
+            "with_body": 0
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 0,
+            "with_body": 0
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 1,
+        "with_body_after": 1,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 1,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "SIE.DE"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-20T18:11:28.580832+00:00",
+    "snapshot_at": "2026-10-21T15:59:55.713460+00:00",
     "market_id": "dax",
-    "buy_tier_count": 10,
-    "unmeasured_buy_tier": 0,
+    "buy_tier_count": 12,
+    "unmeasured_buy_tier": 1,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 9,
+    "thin_body_buy_tier": 10,
     "indexed_without_body": 1,
     "bodies_min": 1,
-    "bodies_median": 1.5,
+    "bodies_median": 1,
     "bodies_max": 50,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
-    "unmeasured_tickers": [],
+    "unmeasured_tickers": [
+      "SIE.DE"
+    ],
     "zero_body_tickers": [],
     "thin_body_tickers": [
       "DHL.DE",
       "HEI.DE",
       "VOW3.DE",
-      "DTE.DE",
       "BAS.DE",
       "MUV2.DE",
       "FRE.DE",
       "DTG.DE",
-      "HNR1.DE"
+      "HNR1.DE",
+      "DTE.DE",
+      "HEN3.DE"
     ],
     "indexed_without_body_tickers": [
       "HEI.DE"
@@ -52,22 +202,24 @@
       "VOW3.DE"
     ],
     "parked_count": 9,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
+      "HEN3.DE"
+    ],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-20T18:12:05.924872+00:00",
+    "snapshot_at": "2026-10-21T16:00:33.075070+00:00",
     "market_id": "dax",
-    "buy_tier_count": 10,
+    "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 9,
+    "thin_body_buy_tier": 11,
     "indexed_without_body": 1,
     "bodies_min": 1,
-    "bodies_median": 1.5,
+    "bodies_median": 1.0,
     "bodies_max": 50,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -77,12 +229,14 @@
       "DHL.DE",
       "HEI.DE",
       "VOW3.DE",
-      "DTE.DE",
       "BAS.DE",
       "MUV2.DE",
       "FRE.DE",
       "DTG.DE",
-      "HNR1.DE"
+      "HNR1.DE",
+      "DTE.DE",
+      "HEN3.DE",
+      "SIE.DE"
     ],
     "indexed_without_body_tickers": [
       "HEI.DE"
@@ -102,11 +256,14 @@
       "VOW3.DE"
     ],
     "parked_count": 9,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
+    "effective_thin_body_buy_tier": 2,
+    "effective_thin_body_tickers": [
+      "HEN3.DE",
+      "SIE.DE"
+    ],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
@@ -114,45 +271,20 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 10,
-    "hits": 9,
-    "new_rows_total": 0,
-    "curiosity_total": 10,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "DHL.DE",
-      "VOW3.DE",
-      "DTE.DE",
-      "BAS.DE",
-      "MUV2.DE",
-      "FRE.DE",
-      "DTG.DE",
-      "HNR1.DE",
-      "HEI.DE"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
-  "parity_handoff": null,
-  "parallel_sprint_handoff": {
+  "discovery_scan": null,
+  "maintenance_mode": false,
+  "parity_handoff": {
     "skipped": true,
-    "reason": "not_parallel_sprint_market",
+    "reason": "not_focus_market",
     "market_id": "dax"
   },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "dax",
-    "assessed_at": "2026-10-20T18:11:29.238466+00:00",
-    "unmeasured": [],
+    "assessed_at": "2026-10-21T15:59:56.670001+00:00",
+    "unmeasured": [
+      "SIE.DE"
+    ],
     "zero_body": [],
     "indexed_without_body": [
       {
@@ -165,38 +297,41 @@
     "thin_need_discovery": [
       "DHL.DE",
       "VOW3.DE",
-      "DTE.DE",
       "BAS.DE",
       "MUV2.DE",
       "FRE.DE",
       "DTG.DE",
-      "HNR1.DE"
+      "HNR1.DE",
+      "DTE.DE",
+      "HEN3.DE"
     ],
     "thin_need_bodies": [
       "HEI.DE"
     ],
-    "primary_blocker": "indexed_without_body",
+    "primary_blocker": "unmeasured",
     "force_discovery_scan": true,
     "auto_pin_tickers": [
+      "SIE.DE",
       "HEI.DE"
     ],
     "recommended_actions": [
+      "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
       "Prefer indexed-without-body body refetch (1 tickers, top: HEI.DE(1))",
-      "Discovery/IR seed for 8 thin ticker(s) that already have bodies for every indexed filing",
+      "Discovery/IR seed for 9 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
-      "unmeasured": 0,
+      "unmeasured": 1,
       "zero_body": 0,
       "indexed_without_body_tickers": 1,
       "indexed_without_body_rows": 1,
-      "thin_need_discovery": 8,
+      "thin_need_discovery": 9,
       "thin_need_bodies": 1
     }
   },
-  "used_seconds": 36.002515964000054,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3563.997484036,
+  "used_seconds": 35.594239886,
+  "budget_seconds": 175.0,
+  "leftover_seconds": 139.405760114,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -204,9 +339,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "dax",
-    "updated_at": "2026-10-20T18:12:05.932467+00:00",
-    "exhausted": true,
-    "complete_zero_improve_runs": 24,
+    "updated_at": "2026-10-21T16:00:33.087087+00:00",
+    "exhausted": false,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -313,7 +448,7 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [
       "BAS.DE",
       "DHL.DE",
@@ -321,47 +456,27 @@
       "DTG.DE",
       "FRE.DE",
       "HEI.DE",
+      "HEN3.DE",
       "HNR1.DE",
       "MUV2.DE",
+      "SIE.DE",
       "VOW3.DE"
     ],
-    "unparked_leftover": [],
+    "unparked_leftover": [
+      "HEN3.DE",
+      "SIE.DE"
+    ],
     "surface_released": [],
     "path": "docs/data/library/markets/dax/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "dax",
-    "ingest_exhausted_markets": [
-      "aex",
-      "asx200",
-      "atx",
-      "bel20",
-      "cac40",
-      "dax",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_mib",
-      "ftse_smallcap",
-      "hang_seng",
-      "ibex35",
-      "iseq20",
-      "nasdaq100",
-      "omxs30",
-      "psi20",
-      "smi",
-      "sp500",
-      "sti",
-      "tsx60",
-      "us_adr_asia"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "not_exhausted",
+    "market_id": "dax"
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261020-01"
+    "task_id": "eng-20261021-03"
   }
 }

@@ -1,39 +1,50 @@
 {
-  "market_id": "nasdaq100",
-  "assessed_at": "2026-10-21T15:44:14.170462+00:00",
-  "unmeasured": [],
+  "market_id": "dax",
+  "assessed_at": "2026-10-21T15:59:56.670001+00:00",
+  "unmeasured": [
+    "SIE.DE"
+  ],
   "zero_body": [],
   "indexed_without_body": [
     {
-      "ticker": "TRI",
-      "indexed_without_body": 9,
-      "filings_total": 94,
-      "filings_with_body": 85
-    },
-    {
-      "ticker": "PDD",
+      "ticker": "HEI.DE",
       "indexed_without_body": 1,
-      "filings_total": 18,
-      "filings_with_body": 17
+      "filings_total": 3,
+      "filings_with_body": 2
     }
   ],
-  "thin_need_discovery": [],
-  "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "thin_need_discovery": [
+    "DHL.DE",
+    "VOW3.DE",
+    "BAS.DE",
+    "MUV2.DE",
+    "FRE.DE",
+    "DTG.DE",
+    "HNR1.DE",
+    "DTE.DE",
+    "HEN3.DE"
+  ],
+  "thin_need_bodies": [
+    "HEI.DE"
+  ],
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "TRI",
-    "PDD"
+    "SIE.DE",
+    "HEI.DE"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (2 tickers, top: TRI(9), PDD(1))"
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (1 tickers, top: HEI.DE(1))",
+    "Discovery/IR seed for 9 thin ticker(s) that already have bodies for every indexed filing",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
-    "indexed_without_body_tickers": 2,
-    "indexed_without_body_rows": 10,
-    "thin_need_discovery": 0,
-    "thin_need_bodies": 0
+    "indexed_without_body_tickers": 1,
+    "indexed_without_body_rows": 1,
+    "thin_need_discovery": 9,
+    "thin_need_bodies": 1
   }
 }
