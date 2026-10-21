@@ -7266,6 +7266,40 @@ def test_parked_source_hunter_asml_as_aex_has_fetchable_ir():
     assert valid, reason
 
 
+def test_fetch_filings_ir_allowlist_aex_asm_as_builtins_eng_20261021_02(tmp_path: Path):
+    """eng-20261021-02: ASM.AS awaiting_periodic_report — asm.com FY2025 annual + H1 2025 interim PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("ASM.AS", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert all(url.startswith("https://www.asm.com/media/") for url in urls)
+    assert any("asm-2025-annual-report.pdf" in url for url in urls)
+    assert any("statutory-interim-report-2025-text.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
+def test_parked_source_hunter_asm_as_aex_has_fetchable_ir():
+    """eng-20261021-02: ASM.AS has live asm.com FY2025 annual report PDF body."""
+    assert "ASM.AS" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("ASM.AS")
+    annual = next(
+        row
+        for row in rows
+        if row["period"] == "annual" and "asm-2025-annual-report.pdf" in row["url"]
+    )
+    body = _live_fetch_filing_body(annual["url"])
+    if not body:
+        pytest.skip("asm.com body fetch unavailable (network) — retry later")
+    assert len(body) > 5000
+    assert "annual report" in body.lower()
+    valid, reason = _validate_ir_allowlist_body_content(annual, body, ticker="ASM.AS")
+    assert valid, reason
+
+
 def test_fetch_filings_ir_allowlist_ftse_mib_unmeasured_builtins_eng_20260926_01(
     tmp_path: Path,
 ):
