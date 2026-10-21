@@ -7234,6 +7234,38 @@ def test_parked_source_hunter_mt_as_aex_has_fetchable_ir():
     assert valid, reason
 
 
+def test_fetch_filings_ir_allowlist_aex_asml_as_builtins_eng_20261020_01(tmp_path: Path):
+    """eng-20261020-01: ASML.AS unfetchable_iwb — SEC FY2025 20-F replaces JS-only annual-report hub."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("ASML.AS", path=allowlist_path)
+    assert len(rows) == 1
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert rows[0]["url"].endswith("asml-20251231.htm")
+    assert rows[0]["period"] == "annual"
+    hub = "https://www.asml.com/en/investors/annual-report"
+    assert fetch_filing_body(hub) is None
+
+
+def test_parked_source_hunter_asml_as_aex_has_fetchable_ir():
+    """eng-20261020-01: ASML.AS has live SEC FY2025 20-F body via canonicalized IR allowlist."""
+    assert "ASML.AS" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("ASML.AS")
+    annual = next(
+        row
+        for row in rows
+        if row["period"] == "annual" and row["url"].endswith("asml-20251231.htm")
+    )
+    body = _live_fetch_filing_body(annual["url"])
+    if not body:
+        pytest.skip("SEC.gov body fetch unavailable (rate-limit / network) — retry later")
+    assert len(body) > 5000
+    assert "form 20-f" in body.lower() or "annual report" in body.lower()
+    valid, reason = _validate_ir_allowlist_body_content(annual, body, ticker="ASML.AS")
+    assert valid, reason
+
+
 def test_fetch_filings_ir_allowlist_ftse_mib_unmeasured_builtins_eng_20260926_01(
     tmp_path: Path,
 ):
