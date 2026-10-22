@@ -12,6 +12,7 @@ from value_investor.n215_reentry_observe import (
     R5_TIMEOUT_SESSIONS,
     R6_WORSEN_DD,
     REGISTRATION_ID,
+    SCHEMA_VERSION,
     build_n215_reentry_observe,
     build_registration_payload,
     meets_band_gate,
@@ -192,6 +193,19 @@ def test_refresh_persist_and_findings(tmp_path: Path):
         ]
     }
     (tmp_path / "n215_technical_veto_observe.json").write_text(json.dumps(soft), encoding="utf-8")
+    # N206 holdout: one WARN+ mild winner that reenters (on-the-fly soft score)
+    n206 = {
+        "lifecycle_episodes": [
+            {
+                "ticker": "WIN.L",
+                "entry_run_at": f"{win_buy}T12:00:00+00:00",
+                "exit_run_at": f"{win_exit}T12:00:00+00:00",
+                "status": "closed",
+                "fair_cost_return": 0.08,
+            },
+        ]
+    }
+    (tmp_path / "n206_plain_ey_observe.json").write_text(json.dumps(n206), encoding="utf-8")
 
     store = tmp_path / "n215_reentry_observe.json"
     reg = tmp_path / "n215_reentry_registration.json"
@@ -205,20 +219,30 @@ def test_refresh_persist_and_findings(tmp_path: Path):
     )
     assert payload["registration_id"] == REGISTRATION_ID
     assert payload["pair_id"] == PAIR_ID
+    assert payload["schema_version"] == SCHEMA_VERSION
+    assert payload["thickened"] is True
     assert payload["observe_only"] is True
     assert payload["influences_live"] is False
     assert payload["admit_recommendation"]["live_reentry"] is False
+    assert payload["admit_recommendation"]["layer_b_closer_to_admit"] is False
     assert store.is_file() and reg.is_file()
     assert len(payload["episodes"]) == 3
     primary = payload["rollup"]["primary_WARN+_R1"]
     assert primary["gated_n"] == 2
+    assert "full_gate_reentered_rate" in primary
+    assert "positive_fc_re_admit_rate" in primary
     win_row = next(r for r in payload["episodes"] if r["ticker"] == "WIN.L")
     assert win_row["label"] == "reentered"
     lose_row = next(r for r in payload["episodes"] if r["ticker"] == "LOSE.L")
     assert lose_row["label"] == "abandoned_worsen"
+    holdout = payload.get("holdout_N206")
+    assert isinstance(holdout, dict)
+    assert holdout["never_tune"] is True
+    assert holdout["closed_n"] == 1
     findings = ops_findings_from_n215_reentry(payload)
     assert findings and findings[0]["title"] == FINDING_TITLE
     assert findings[0]["auto_fixable"] is False
+    assert "thickened" in findings[0]["summary"]
 
 
 def test_registration_seal_fields():
@@ -228,6 +252,7 @@ def test_registration_seal_fields():
     assert reg["pair"]["reentry_rule"] == "R1"
     assert reg["pair"]["r5_timeout_sessions"] == R5_TIMEOUT_SESSIONS
     assert reg["pair"]["r6_worsen_dd"] == R6_WORSEN_DD
+    assert reg["pair"]["thickened"] is True
 
 
 def test_build_empty_shape():
@@ -235,3 +260,15 @@ def test_build_empty_shape():
     assert payload["cohort"]["N200_closed"] == 0
     assert "primary_WARN+_R1" in payload["rollup"]
     assert payload["admit_recommendation"]["pair_admit_worthy"] is False
+    assert payload["holdout_N206"] is None
+
+
+def test_build_with_empty_holdout():
+    payload = build_n215_reentry_observe(
+        [],
+        holdout_episodes=[],
+        generated_at="2026-10-21T00:00:00+00:00",
+    )
+    assert payload["holdout_N206"] is not None
+    assert payload["holdout_N206"]["closed_n"] == 0
+    assert payload["holdout_N206"]["never_tune"] is True

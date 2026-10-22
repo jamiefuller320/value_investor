@@ -35,6 +35,7 @@ DEFAULT_STORE_PATH = Path("docs/data/n215_reentry_observe.json")
 DEFAULT_REGISTRATION_PATH = Path("docs/data/n215_reentry_registration.json")
 DEFAULT_OPS_DOC = Path("docs/ops/n215-reentry-observe.md")
 DEFAULT_N200_STORE = Path("docs/data/n200_tech_timing_observe.json")
+DEFAULT_N206_STORE = Path("docs/data/n206_plain_ey_observe.json")
 DEFAULT_CHARTS_DIR = Path("docs/data/charts")
 DEFAULT_SOFT_STORE = Path("docs/data/n215_technical_veto_observe.json")
 
@@ -43,7 +44,7 @@ PAIR_ID = "WARN+_R1"
 REENTRY_RULE_ID = "R1"
 BAND_GATE = "WARN+"
 DEFERRED_ID = "N215"
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2  # thickened: full WARN+ gate + N206 holdout (same frozen R1)
 
 LEARNING_QUESTION = (
     "Among soft-vetoed (WARN+) sealed N200 names that later became large winners "
@@ -51,11 +52,17 @@ LEARNING_QUESTION = (
     "(breakout-wait; R5=40d / R6=−15%) have re-admitted before opportunity "
     "expired — vs never (timeout / worsen)? Companion: path-cost Δ vs sealed "
     "baseline on recovered names; abandon rate on WARN+ deep losers. "
+    "Thickened observe: same frozen pair on all WARN+ N200 closed episodes "
+    "(full-gate outcome mix + positive-FC re-admit) and report-only N206 holdout. "
     "Observe labels only — no live gate."
 )
 
 FINDING_TITLE = "N215 reentry observe (WARN+×R1) refreshed"
 STORE_FAILED_TITLE = "N215 reentry observe failed"
+THICKENING_NOTE = (
+    "Widen beyond large/deep extreme cells: full WARN+ gated terminal mix on "
+    "N200 + positive-FC companion; N206 holdout report-only (never tune)."
+)
 
 # ---------------------------------------------------------------------------
 # Frozen pins (pre-registered before scoring — do not retune on this cohort)
@@ -331,9 +338,12 @@ def frozen_pair_blob() -> dict[str, Any]:
         "deep_loser": DEEP_LOSER,
         "large_winner": LARGE_WINNER,
         "point_in_time": "forward walk uses bars with date ≤ t at each step",
+        "thickened": True,
+        "thickening_note": THICKENING_NOTE,
         "note": (
             "Pre-registered before scoring. One progressive cell only — "
-            "do not retune mid-cohort; Layer B separate from soft-band admit."
+            "do not retune mid-cohort; Layer B separate from soft-band admit. "
+            "N206 holdout is report-only — never tune pins on holdout marks."
         ),
     }
 
@@ -351,13 +361,15 @@ def build_registration_payload(*, generated_at: str | None = None) -> dict[str, 
         "ops_doc": str(DEFAULT_OPS_DOC),
         "pair": frozen_pair_blob(),
         "cohort": {
-            "primary": "N200 closed lifecycle episodes with soft band ≥ WARN",
+            "primary": "N200 closed lifecycle episodes with soft band ≥ WARN (full gate)",
+            "holdout": "N206 closed lifecycle episodes — report-only; never tune",
             "soft_band_source": "score_episode / n215 soft-band recipe v0",
+            "thickening": THICKENING_NOTE,
         },
     }
 
 
-def _load_closed_episodes(store_path: Path) -> list[dict[str, Any]]:
+def _load_closed_episodes(store_path: Path, book: str) -> list[dict[str, Any]]:
     if not store_path.is_file():
         return []
     try:
@@ -383,7 +395,7 @@ def _load_closed_episodes(store_path: Path) -> list[dict[str, Any]]:
         out.append(
             {
                 "ticker": ticker,
-                "book": "N200",
+                "book": book,
                 "buy_ts": buy_ts,
                 "exit_run_at": row.get("exit_run_at"),
                 "fair_cost": fair_cost,
@@ -400,14 +412,16 @@ def score_reentry_episode(
     fair_cost: float | None,
     charts_dir: Path,
     soft_row: dict[str, Any] | None = None,
+    book: str = "N200",
 ) -> dict[str, Any]:
     """Soft-band at buy_ts + R1 monitor walk. Missing evidence → unevaluable."""
     buy_day = str(buy_ts)[:10]
     exit_day = str(exit_run_at)[:10] if exit_run_at else None
     bucket = outcome_bucket(fair_cost)
+    book_id = str(book or "N200")
     base: dict[str, Any] = {
         "ticker": ticker,
-        "book": "N200",
+        "book": book_id,
         "buy_ts": buy_ts,
         "buy_day": buy_day,
         "exit_run_at": exit_run_at,
@@ -423,7 +437,7 @@ def score_reentry_episode(
     if soft_row is None:
         soft_row = score_episode(
             ticker=ticker,
-            book="N200",
+            book=book_id,
             buy_ts=buy_ts,
             fair_cost=fair_cost,
             charts_dir=charts_dir,
@@ -501,6 +515,74 @@ def score_reentry_episode(
     }
 
 
+def _episode_detail(r: dict[str, Any], *, rich: bool = False) -> dict[str, Any]:
+    out: dict[str, Any] = {
+        "ticker": r.get("ticker"),
+        "book": r.get("book"),
+        "buy_day": r.get("buy_day"),
+        "soft_band": r.get("soft_band"),
+        "fair_cost": r.get("fair_cost"),
+        "bucket": r.get("bucket"),
+        "label": r.get("label"),
+        "sessions_to_outcome": r.get("sessions_to_outcome"),
+    }
+    if rich:
+        out.update(
+            {
+                "reentry_day": r.get("reentry_day"),
+                "alt_path_return": r.get("alt_path_return"),
+                "path_cost_delta": r.get("path_cost_delta"),
+            }
+        )
+    return out
+
+
+def _subset_rates(
+    subset: list[dict[str, Any]],
+    *,
+    prefix: str,
+) -> dict[str, Any]:
+    """Terminal reentered vs abandoned rates for a gated subset (all keys prefixed)."""
+    terminal = [
+        r
+        for r in subset
+        if r.get("evaluable")
+        and r.get("label") in {"reentered", "abandoned_timeout", "abandoned_worsen"}
+    ]
+    readmit = [r for r in terminal if r.get("label") == "reentered"]
+    never = [
+        r for r in terminal if r.get("label") in {"abandoned_timeout", "abandoned_worsen"}
+    ]
+    n_term = len(terminal)
+    days = [
+        float(r["sessions_to_outcome"])
+        for r in readmit
+        if r.get("sessions_to_outcome") is not None
+    ]
+    path_deltas = [
+        float(r["path_cost_delta"]) for r in readmit if r.get("path_cost_delta") is not None
+    ]
+    alt_rets = [
+        float(r["alt_path_return"]) for r in readmit if r.get("alt_path_return") is not None
+    ]
+    return {
+        f"{prefix}_gated_n": len(subset),
+        f"{prefix}_terminal_n": n_term,
+        f"{prefix}_re_admit_rate": f"{len(readmit)}/{n_term}" if n_term else "0/0",
+        f"{prefix}_re_admit_n": len(readmit),
+        f"{prefix}_never_rate": f"{len(never)}/{n_term}" if n_term else "0/0",
+        f"{prefix}_never_n": len(never),
+        f"{prefix}_median_days_to_reentry": _med(days),
+        f"{prefix}_path_cost_delta_median": _med(path_deltas),
+        f"{prefix}_alt_path_return_median": _med(alt_rets),
+        f"{prefix}_outcome_mix": {
+            "reentered": len(readmit),
+            "abandoned_timeout": sum(1 for r in terminal if r.get("label") == "abandoned_timeout"),
+            "abandoned_worsen": sum(1 for r in terminal if r.get("label") == "abandoned_worsen"),
+        },
+    }
+
+
 def _gate_rollup(rows: list[dict[str, Any]], *, gate: str) -> dict[str, Any]:
     if gate == "WARN+":
         gated = [r for r in rows if r.get("in_warn_plus")]
@@ -508,6 +590,17 @@ def _gate_rollup(rows: list[dict[str, Any]], *, gate: str) -> dict[str, Any]:
         gated = [r for r in rows if r.get("in_soft_plus")]
     large = [r for r in gated if r.get("bucket") == "large_winner"]
     deep = [r for r in gated if r.get("bucket") == "deep_loser"]
+    # Thickened winner/loser companions (beyond ±10% extremes)
+    positive_fc = [
+        r
+        for r in gated
+        if isinstance(r.get("fair_cost"), (int, float)) and float(r["fair_cost"]) > 0
+    ]
+    nonpositive_fc = [
+        r
+        for r in gated
+        if isinstance(r.get("fair_cost"), (int, float)) and float(r["fair_cost"]) <= 0
+    ]
 
     def _terminal(subset: list[dict[str, Any]]) -> list[dict[str, Any]]:
         # Evaluable with a decisive label (exclude still_monitor_eop from rates)
@@ -520,6 +613,7 @@ def _gate_rollup(rows: list[dict[str, Any]], *, gate: str) -> dict[str, Any]:
 
     large_term = _terminal(large)
     deep_term = _terminal(deep)
+    all_term = _terminal(gated)
     large_readmit = [r for r in large_term if r.get("label") == "reentered"]
     large_never = [
         r for r in large_term if r.get("label") in {"abandoned_timeout", "abandoned_worsen"}
@@ -528,6 +622,16 @@ def _gate_rollup(rows: list[dict[str, Any]], *, gate: str) -> dict[str, Any]:
         r for r in deep_term if r.get("label") in {"abandoned_timeout", "abandoned_worsen"}
     ]
     deep_readmit = [r for r in deep_term if r.get("label") == "reentered"]
+    all_readmit = [r for r in all_term if r.get("label") == "reentered"]
+    all_never = [
+        r for r in all_term if r.get("label") in {"abandoned_timeout", "abandoned_worsen"}
+    ]
+    pos_rates = _subset_rates(positive_fc, prefix="positive_fc")
+    nonpos_term = _terminal(nonpositive_fc)
+    nonpos_abandon = [
+        r for r in nonpos_term if r.get("label") in {"abandoned_timeout", "abandoned_worsen"}
+    ]
+    nonpos_readmit = [r for r in nonpos_term if r.get("label") == "reentered"]
     still = [r for r in gated if r.get("label") == "still_monitor_eop"]
     uneval = [r for r in gated if r.get("label") == "unevaluable"]
 
@@ -542,16 +646,31 @@ def _gate_rollup(rows: list[dict[str, Any]], *, gate: str) -> dict[str, Any]:
     alt_rets = [
         float(r["alt_path_return"]) for r in large_readmit if r.get("alt_path_return") is not None
     ]
+    # Path Δ on all reentered (full gate) for thickness
+    all_path_deltas = [
+        float(r["path_cost_delta"]) for r in all_readmit if r.get("path_cost_delta") is not None
+    ]
+    all_days = [
+        float(r["sessions_to_outcome"])
+        for r in all_readmit
+        if r.get("sessions_to_outcome") is not None
+    ]
 
     n_large_term = len(large_term)
     n_deep_term = len(deep_term)
+    n_all_term = len(all_term)
+    n_nonpos_term = len(nonpos_term)
     return {
         "gate": gate,
         "gated_n": len(gated),
         "large_winners_gated": len(large),
         "deep_losers_gated": len(deep),
+        "positive_fc_gated": len(positive_fc),
+        "nonpositive_fc_gated": len(nonpositive_fc),
         "large_terminal_n": n_large_term,
         "deep_terminal_n": n_deep_term,
+        "all_terminal_n": n_all_term,
+        # Prior LQ cell (large winners) — keep field names for ops/dashboard compat
         "re_admit_rate": (f"{len(large_readmit)}/{n_large_term}" if n_large_term else "0/0"),
         "re_admit_n": len(large_readmit),
         "never_rate": f"{len(large_never)}/{n_large_term}" if n_large_term else "0/0",
@@ -562,49 +681,49 @@ def _gate_rollup(rows: list[dict[str, Any]], *, gate: str) -> dict[str, Any]:
         "loser_abandon_rate": (f"{len(deep_abandon)}/{n_deep_term}" if n_deep_term else "0/0"),
         "loser_abandon_n": len(deep_abandon),
         "loser_re_admit_n": len(deep_readmit),
+        # Thickened: full WARN+/SOFT_VETO+ gated terminal mix
+        "full_gate_reentered_rate": (
+            f"{len(all_readmit)}/{n_all_term}" if n_all_term else "0/0"
+        ),
+        "full_gate_reentered_n": len(all_readmit),
+        "full_gate_never_rate": f"{len(all_never)}/{n_all_term}" if n_all_term else "0/0",
+        "full_gate_never_n": len(all_never),
+        "full_gate_median_days_to_reentry": _med(all_days),
+        "full_gate_path_cost_delta_median": _med(all_path_deltas),
+        "full_gate_outcome_mix": {
+            "reentered": len(all_readmit),
+            "abandoned_timeout": sum(
+                1 for r in all_term if r.get("label") == "abandoned_timeout"
+            ),
+            "abandoned_worsen": sum(1 for r in all_term if r.get("label") == "abandoned_worsen"),
+        },
+        # Thickened: positive fair-cost among gate (beyond large ≥+10%)
+        **pos_rates,
+        "nonpositive_fc_abandon_rate": (
+            f"{len(nonpos_abandon)}/{n_nonpos_term}" if n_nonpos_term else "0/0"
+        ),
+        "nonpositive_fc_abandon_n": len(nonpos_abandon),
+        "nonpositive_fc_re_admit_n": len(nonpos_readmit),
         "still_monitor_eop_n": len(still),
         "unevaluable_n": len(uneval),
-        "large_winner_detail": [
-            {
-                "ticker": r.get("ticker"),
-                "buy_day": r.get("buy_day"),
-                "soft_band": r.get("soft_band"),
-                "fair_cost": r.get("fair_cost"),
-                "label": r.get("label"),
-                "sessions_to_outcome": r.get("sessions_to_outcome"),
-                "reentry_day": r.get("reentry_day"),
-                "alt_path_return": r.get("alt_path_return"),
-                "path_cost_delta": r.get("path_cost_delta"),
-            }
-            for r in large
-        ],
-        "deep_loser_detail": [
-            {
-                "ticker": r.get("ticker"),
-                "buy_day": r.get("buy_day"),
-                "soft_band": r.get("soft_band"),
-                "fair_cost": r.get("fair_cost"),
-                "label": r.get("label"),
-                "sessions_to_outcome": r.get("sessions_to_outcome"),
-            }
-            for r in deep
-        ],
+        "large_winner_detail": [_episode_detail(r, rich=True) for r in large],
+        "deep_loser_detail": [_episode_detail(r) for r in deep],
+        "positive_fc_detail": [_episode_detail(r, rich=True) for r in positive_fc],
+        "full_gate_detail": [_episode_detail(r, rich=True) for r in gated],
     }
 
 
-def build_n215_reentry_observe(
+def _score_episode_rows(
     episodes: list[dict[str, Any]],
     *,
-    charts_dir: Path | None = None,
+    charts_dir: Path,
     soft_by_key: dict[tuple[str, str], dict[str, Any]] | None = None,
-    generated_at: str | None = None,
-) -> dict[str, Any]:
-    """Pure reentry score over sealed episode dicts."""
-    chart_root = Path(charts_dir) if charts_dir is not None else DEFAULT_CHARTS_DIR
+) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for ep in episodes:
         ticker = str(ep["ticker"])
         buy_ts = str(ep["buy_ts"])
+        book = str(ep.get("book") or "N200")
         key = (ticker, str(buy_ts)[:10])
         soft = soft_by_key.get(key) if soft_by_key else None
         rows.append(
@@ -613,17 +732,88 @@ def build_n215_reentry_observe(
                 buy_ts=buy_ts,
                 exit_run_at=ep.get("exit_run_at"),
                 fair_cost=ep.get("fair_cost"),
-                charts_dir=chart_root,
+                charts_dir=charts_dir,
                 soft_row=soft,
+                book=book,
             )
         )
+    return rows
+
+
+def _book_payload_slice(
+    rows: list[dict[str, Any]],
+    *,
+    book: str,
+) -> dict[str, Any]:
     warn_rollup = _gate_rollup(rows, gate="WARN+")
     soft_rollup = _gate_rollup(rows, gate="SOFT_VETO+")
-    # Primary cell verdict (observe sketch only)
+    return {
+        "book": book,
+        "closed_n": len(rows),
+        "warn_plus_gated": warn_rollup["gated_n"],
+        "soft_plus_gated": soft_rollup["gated_n"],
+        "warn_plus_large": warn_rollup["large_winners_gated"],
+        "warn_plus_deep": warn_rollup["deep_losers_gated"],
+        "warn_plus_positive_fc": warn_rollup["positive_fc_gated"],
+        "rollup": {
+            "primary_WARN+_R1": warn_rollup,
+            "companion_SOFT_VETO+_R1": soft_rollup,
+        },
+        "episodes": rows,
+    }
+
+
+def build_n215_reentry_observe(
+    episodes: list[dict[str, Any]],
+    *,
+    charts_dir: Path | None = None,
+    soft_by_key: dict[tuple[str, str], dict[str, Any]] | None = None,
+    holdout_episodes: list[dict[str, Any]] | None = None,
+    generated_at: str | None = None,
+) -> dict[str, Any]:
+    """Pure reentry score over sealed episode dicts (N200 primary + optional N206)."""
+    chart_root = Path(charts_dir) if charts_dir is not None else DEFAULT_CHARTS_DIR
+    rows = _score_episode_rows(episodes, charts_dir=chart_root, soft_by_key=soft_by_key)
+    primary_slice = _book_payload_slice(rows, book="N200")
+    warn_rollup = primary_slice["rollup"]["primary_WARN+_R1"]
+    soft_rollup = primary_slice["rollup"]["companion_SOFT_VETO+_R1"]
+    # Primary cell verdict (observe sketch only) — large-winner LQ cell
     n_term = int(warn_rollup.get("large_terminal_n") or 0)
     n_readmit = int(warn_rollup.get("re_admit_n") or 0)
     n_never = int(warn_rollup.get("never_n") or 0)
     salvages = bool(n_term > 0 and n_readmit > n_never)
+
+    holdout_blob: dict[str, Any] | None = None
+    if holdout_episodes is not None:
+        # Soft store is N200-keyed; holdout scores soft bands on the fly (never tune).
+        holdout_rows = _score_episode_rows(
+            holdout_episodes,
+            charts_dir=chart_root,
+            soft_by_key=None,
+        )
+        holdout_slice = _book_payload_slice(holdout_rows, book="N206")
+        h_warn = holdout_slice["rollup"]["primary_WARN+_R1"]
+        holdout_blob = {
+            "role": "report_only_holdout",
+            "never_tune": True,
+            "book": "N206",
+            "closed_n": holdout_slice["closed_n"],
+            "warn_plus_gated": holdout_slice["warn_plus_gated"],
+            "soft_plus_gated": holdout_slice["soft_plus_gated"],
+            "warn_plus_large": holdout_slice["warn_plus_large"],
+            "warn_plus_deep": holdout_slice["warn_plus_deep"],
+            "warn_plus_positive_fc": holdout_slice["warn_plus_positive_fc"],
+            "rollup": holdout_slice["rollup"],
+            "episodes": holdout_slice["episodes"],
+            "note": (
+                f"N206 holdout WARN+×R1 large re-admit {h_warn.get('re_admit_rate')} "
+                f"never {h_warn.get('never_rate')}; "
+                f"full-gate reentered {h_warn.get('full_gate_reentered_rate')}; "
+                f"loser abandon {h_warn.get('loser_abandon_rate')}. "
+                "Report-only — do not retune R1/R5/R6 on this book."
+            ),
+        }
+
     return {
         "schema_version": SCHEMA_VERSION,
         "registration_id": REGISTRATION_ID,
@@ -632,29 +822,43 @@ def build_n215_reentry_observe(
         "generated_at": generated_at or _utc_now(),
         "observe_only": True,
         "influences_live": False,
+        "thickened": True,
+        "thickening_note": THICKENING_NOTE,
         "learning_question": LEARNING_QUESTION,
         "ops_doc": str(DEFAULT_OPS_DOC),
         "pair": frozen_pair_blob(),
         "cohort": {
-            "N200_closed": len(rows),
+            "N200_closed": primary_slice["closed_n"],
             "warn_plus_gated": warn_rollup["gated_n"],
             "soft_plus_gated": soft_rollup["gated_n"],
             "warn_plus_large": warn_rollup["large_winners_gated"],
             "warn_plus_deep": warn_rollup["deep_losers_gated"],
+            "warn_plus_positive_fc": warn_rollup["positive_fc_gated"],
+            "N206_holdout_closed": (
+                holdout_blob.get("closed_n") if isinstance(holdout_blob, dict) else 0
+            ),
+            "N206_holdout_warn_plus": (
+                holdout_blob.get("warn_plus_gated") if isinstance(holdout_blob, dict) else 0
+            ),
         },
         "rollup": {
             "primary_WARN+_R1": warn_rollup,
             "companion_SOFT_VETO+_R1": soft_rollup,
         },
         "episodes": rows,
+        "holdout_N206": holdout_blob,
         "admit_recommendation": {
             "live_reentry": False,
             "live_veto": False,
             "pair_admit_worthy": False,
+            "layer_b_closer_to_admit": False,
             "observe_sketch_salvages_soft_vetoed_winners": salvages,
             "note": (
-                f"Primary WARN+×R1 re-admit {warn_rollup.get('re_admit_rate')} "
+                f"Primary WARN+×R1 large re-admit {warn_rollup.get('re_admit_rate')} "
                 f"never {warn_rollup.get('never_rate')}; "
+                f"full-gate reentered {warn_rollup.get('full_gate_reentered_rate')} "
+                f"never {warn_rollup.get('full_gate_never_rate')}; "
+                f"positive-FC re-admit {warn_rollup.get('positive_fc_re_admit_rate')}; "
                 f"loser abandon {warn_rollup.get('loser_abandon_rate')}. "
                 "Observe-only — Layer B not admitted; no live delay/reentry."
             ),
@@ -673,7 +877,8 @@ def _index_soft_store(soft_path: Path) -> dict[tuple[str, str], dict[str, Any]]:
     for row in payload.get("episodes") or []:
         if not isinstance(row, dict):
             continue
-        if str(row.get("book") or "") != "N200":
+        # Prefer N200 soft rows for primary; other books ignored (holdout scores on fly).
+        if str(row.get("book") or "") not in {"N200", ""}:
             continue
         ticker = str(row.get("ticker") or "")
         buy_day = str(row.get("buy_day") or str(row.get("buy_ts") or "")[:10])
@@ -688,12 +893,14 @@ def refresh_n215_reentry_observe(
     store_path: Path | None = None,
     registration_path: Path | None = None,
     n200_store: Path | None = None,
+    n206_store: Path | None = None,
     soft_store: Path | None = None,
     charts_dir: Path | None = None,
+    include_n206_holdout: bool = True,
     persist: bool = True,
     generated_at: str | None = None,
 ) -> dict[str, Any]:
-    """Load sealed N200 closed episodes + soft bands; walk R1 monitor."""
+    """Load sealed N200 (+ optional N206 holdout) closed episodes; walk R1."""
     data_dir = Path(output_dir) if output_dir is not None else DEFAULT_OUTPUT_DIR
     store = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
     reg_path = (
@@ -702,6 +909,9 @@ def refresh_n215_reentry_observe(
     n200_path = (
         Path(n200_store) if n200_store is not None else data_dir / "n200_tech_timing_observe.json"
     )
+    n206_path = (
+        Path(n206_store) if n206_store is not None else data_dir / "n206_plain_ey_observe.json"
+    )
     soft_path = (
         Path(soft_store)
         if soft_store is not None
@@ -709,12 +919,16 @@ def refresh_n215_reentry_observe(
     )
     chart_root = Path(charts_dir) if charts_dir is not None else data_dir / "charts"
 
-    episodes = _load_closed_episodes(n200_path)
+    episodes = _load_closed_episodes(n200_path, "N200")
+    holdout: list[dict[str, Any]] | None = None
+    if include_n206_holdout:
+        holdout = _load_closed_episodes(n206_path, "N206")
     soft_by_key = _index_soft_store(soft_path)
     payload = build_n215_reentry_observe(
         episodes,
         charts_dir=chart_root,
         soft_by_key=soft_by_key or None,
+        holdout_episodes=holdout,
         generated_at=generated_at,
     )
     registration = build_registration_payload(generated_at=payload["generated_at"])
@@ -738,20 +952,37 @@ def ops_findings_from_n215_reentry(payload: dict[str, Any]) -> list[dict[str, An
         if isinstance(payload.get("admit_recommendation"), dict)
         else {}
     )
+    holdout = (
+        payload.get("holdout_N206") if isinstance(payload.get("holdout_N206"), dict) else {}
+    )
+    h_warn = {}
+    if holdout:
+        h_roll = holdout.get("rollup") if isinstance(holdout.get("rollup"), dict) else {}
+        h_warn = (
+            h_roll.get("primary_WARN+_R1")
+            if isinstance(h_roll.get("primary_WARN+_R1"), dict)
+            else {}
+        )
     return [
         {
             "severity": "info",
             "category": "research",
             "title": FINDING_TITLE,
             "summary": (
-                f"{REGISTRATION_ID}: N200 closed={cohort.get('N200_closed')}; "
+                f"{REGISTRATION_ID}: thickened; N200 closed={cohort.get('N200_closed')}; "
                 f"WARN+ gated={cohort.get('warn_plus_gated')} "
                 f"(large={cohort.get('warn_plus_large')} "
-                f"deep={cohort.get('warn_plus_deep')}); "
-                f"re-admit={primary.get('re_admit_rate')} "
+                f"deep={cohort.get('warn_plus_deep')} "
+                f"posFC={cohort.get('warn_plus_positive_fc')}); "
+                f"large re-admit={primary.get('re_admit_rate')} "
                 f"never={primary.get('never_rate')}; "
+                f"full-gate reentered={primary.get('full_gate_reentered_rate')} "
+                f"never={primary.get('full_gate_never_rate')}; "
+                f"posFC re-admit={primary.get('positive_fc_re_admit_rate')}; "
                 f"loser_abandon={primary.get('loser_abandon_rate')}; "
-                f"path_Δ_med={primary.get('path_cost_delta_median')}. "
+                f"path_Δ_med={primary.get('path_cost_delta_median')}; "
+                f"N206 holdout WARN+={cohort.get('N206_holdout_warn_plus')} "
+                f"large re-admit={h_warn.get('re_admit_rate')}. "
                 f"salvages_sketch={admit.get('observe_sketch_salvages_soft_vetoed_winners')}. "
                 "Observe-only — no live writes (F8)."
             ),
@@ -776,31 +1007,60 @@ def format_n215_reentry_text(payload: dict[str, Any]) -> str:
         if isinstance(payload.get("admit_recommendation"), dict)
         else {}
     )
+    holdout = (
+        payload.get("holdout_N206") if isinstance(payload.get("holdout_N206"), dict) else {}
+    )
     lines = [
-        f"N215 {payload.get('registration_id')} (observe-only reentry WARN+×R1)",
+        f"N215 {payload.get('registration_id')} (observe-only reentry WARN+×R1; thickened)",
         f"pair={payload.get('pair_id')} influences_live={payload.get('influences_live')}",
         (
             f"cohort N200={cohort.get('N200_closed')} "
             f"WARN+={cohort.get('warn_plus_gated')} "
-            f"(large={cohort.get('warn_plus_large')} deep={cohort.get('warn_plus_deep')})"
+            f"(large={cohort.get('warn_plus_large')} deep={cohort.get('warn_plus_deep')} "
+            f"posFC={cohort.get('warn_plus_positive_fc')})"
         ),
         (
-            f"primary WARN+×R1: re-admit {primary.get('re_admit_rate')} "
+            f"primary WARN+×R1 large: re-admit {primary.get('re_admit_rate')} "
             f"never {primary.get('never_rate')} "
             f"median_days={primary.get('median_days_to_reentry')} "
             f"path_Δ_med={primary.get('path_cost_delta_median')}"
         ),
         (
-            f"loser abandon {primary.get('loser_abandon_rate')} "
-            f"(re-admit losers={primary.get('loser_re_admit_n')})"
+            f"full WARN+ gate: reentered {primary.get('full_gate_reentered_rate')} "
+            f"never {primary.get('full_gate_never_rate')} "
+            f"path_Δ_med={primary.get('full_gate_path_cost_delta_median')}"
         ),
         (
-            f"companion SOFT_VETO+×R1: re-admit {soft.get('re_admit_rate')} "
-            f"never {soft.get('never_rate')} "
+            f"positive-FC WARN+: re-admit {primary.get('positive_fc_re_admit_rate')} "
+            f"never {primary.get('positive_fc_never_rate')} "
+            f"path_Δ_med={primary.get('positive_fc_path_cost_delta_median')}"
+        ),
+        (
+            f"loser abandon {primary.get('loser_abandon_rate')} "
+            f"(re-admit losers={primary.get('loser_re_admit_n')}); "
+            f"nonposFC abandon {primary.get('nonpositive_fc_abandon_rate')}"
+        ),
+        (
+            f"companion SOFT_VETO+×R1: large re-admit {soft.get('re_admit_rate')} "
+            f"full-gate {soft.get('full_gate_reentered_rate')} "
             f"loser_abandon {soft.get('loser_abandon_rate')}"
         ),
-        f"admit: {admit.get('note')}",
     ]
+    if holdout:
+        h_roll = holdout.get("rollup") if isinstance(holdout.get("rollup"), dict) else {}
+        h_warn = (
+            h_roll.get("primary_WARN+_R1")
+            if isinstance(h_roll.get("primary_WARN+_R1"), dict)
+            else {}
+        )
+        lines.append(
+            f"N206 holdout: closed={holdout.get('closed_n')} "
+            f"WARN+={holdout.get('warn_plus_gated')} "
+            f"large re-admit {h_warn.get('re_admit_rate')} "
+            f"full-gate {h_warn.get('full_gate_reentered_rate')} "
+            f"loser abandon {h_warn.get('loser_abandon_rate')} (never_tune)"
+        )
+    lines.append(f"admit: {admit.get('note')}")
     detail = primary.get("large_winner_detail") or []
     if detail:
         lines.append("large winners in WARN+:")
@@ -819,6 +1079,7 @@ __all__ = [
     "BAND_GATE",
     "BAND_WARN_LO",
     "BREAKOUT_PCT",
+    "DEFAULT_N206_STORE",
     "DEFAULT_OPS_DOC",
     "DEFAULT_OUTPUT_DIR",
     "DEFAULT_REGISTRATION_PATH",
@@ -828,7 +1089,9 @@ __all__ = [
     "R5_TIMEOUT_SESSIONS",
     "R6_WORSEN_DD",
     "REGISTRATION_ID",
+    "SCHEMA_VERSION",
     "STORE_FAILED_TITLE",
+    "THICKENING_NOTE",
     "build_n215_reentry_observe",
     "build_registration_payload",
     "format_n215_reentry_text",

@@ -19,20 +19,26 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description=(
             "N215 sealed observe-only: WARN+ soft-band × R1 breakout-wait "
-            "reentry replay on N200 closed episodes. Never writes live books."
+            "reentry replay on N200 closed episodes (thickened full-gate) "
+            "+ optional N206 holdout. Never writes live books."
         )
     )
     parser.add_argument(
         "--output-dir",
         type=Path,
         default=DEFAULT_OUTPUT_DIR,
-        help="Data root containing n200/n215 stores and charts/",
+        help="Data root containing n200/n206/n215 stores and charts/",
     )
     parser.add_argument(
         "--store",
         type=Path,
         default=DEFAULT_STORE_PATH,
         help="Observe store path (default: docs/data/n215_reentry_observe.json)",
+    )
+    parser.add_argument(
+        "--no-n206-holdout",
+        action="store_true",
+        help="Skip N206 report-only holdout (default: include when store present)",
     )
     parser.add_argument(
         "--no-persist",
@@ -48,6 +54,7 @@ def main(argv: list[str] | None = None) -> int:
     payload = refresh_n215_reentry_observe(
         output_dir=args.output_dir,
         store_path=args.store,
+        include_n206_holdout=not args.no_n206_holdout,
         persist=not args.no_persist,
     )
     if args.json:

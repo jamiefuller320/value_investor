@@ -2,11 +2,11 @@
   "registration_id": "n215-reentry-warn-r1-v0",
   "pair_id": "WARN+_R1",
   "deferred_id": "N215",
-  "schema_version": 1,
-  "generated_at": "2026-10-22T02:34:11.493013+00:00",
+  "schema_version": 2,
+  "generated_at": "2026-10-22T06:19:48.328470+00:00",
   "observe_only": true,
   "influences_live": false,
-  "learning_question": "Among soft-vetoed (WARN+) sealed N200 names that later became large winners under sealed baseline fair-cost, how often would frozen MONITOR rule R1 (breakout-wait; R5=40d / R6=\u221215%) have re-admitted before opportunity expired \u2014 vs never (timeout / worsen)? Companion: path-cost \u0394 vs sealed baseline on recovered names; abandon rate on WARN+ deep losers. Observe labels only \u2014 no live gate.",
+  "learning_question": "Among soft-vetoed (WARN+) sealed N200 names that later became large winners under sealed baseline fair-cost, how often would frozen MONITOR rule R1 (breakout-wait; R5=40d / R6=\u221215%) have re-admitted before opportunity expired \u2014 vs never (timeout / worsen)? Companion: path-cost \u0394 vs sealed baseline on recovered names; abandon rate on WARN+ deep losers. Thickened observe: same frozen pair on all WARN+ N200 closed episodes (full-gate outcome mix + positive-FC re-admit) and report-only N206 holdout. Observe labels only \u2014 no live gate.",
   "ops_doc": "docs/ops/n215-reentry-observe.md",
   "pair": {
     "registration_id": "n215-reentry-warn-r1-v0",
@@ -27,10 +27,14 @@
     "deep_loser": -0.1,
     "large_winner": 0.1,
     "point_in_time": "forward walk uses bars with date \u2264 t at each step",
-    "note": "Pre-registered before scoring. One progressive cell only \u2014 do not retune mid-cohort; Layer B separate from soft-band admit."
+    "thickened": true,
+    "thickening_note": "Widen beyond large/deep extreme cells: full WARN+ gated terminal mix on N200 + positive-FC companion; N206 holdout report-only (never tune).",
+    "note": "Pre-registered before scoring. One progressive cell only \u2014 do not retune mid-cohort; Layer B separate from soft-band admit. N206 holdout is report-only \u2014 never tune pins on holdout marks."
   },
   "cohort": {
-    "primary": "N200 closed lifecycle episodes with soft band \u2265 WARN",
-    "soft_band_source": "score_episode / n215 soft-band recipe v0"
+    "primary": "N200 closed lifecycle episodes with soft band \u2265 WARN (full gate)",
+    "holdout": "N206 closed lifecycle episodes \u2014 report-only; never tune",
+    "soft_band_source": "score_episode / n215 soft-band recipe v0",
+    "thickening": "Widen beyond large/deep extreme cells: full WARN+ gated terminal mix on N200 + positive-FC companion; N206 holdout report-only (never tune)."
   }
 }
