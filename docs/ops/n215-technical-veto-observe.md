@@ -20,11 +20,15 @@ For each **pre-registered** soft-veto band threshold on sealed **N200** closed e
 | Fire | `soft_band == PASS` **and** `mid_range_60 ≥ 0.50` |
 | Feature | `(close_t0 − min_60) / (max_60 − min_60)` PIT |
 | Alone-benefit primary | **N200** |
-| Discovery / report-only | **N206** (do not retune thr on N206) |
+| Discovery / report-only | **N206** full + `N206_pre_warm` (do not retune thr) |
+| N206 warm claim | `N206_post_warm`: `buy_day >= 2026-10-23` (UTC); marker `n215-grind-mid60-n206-warm-v0` |
 | Soft weights | **Unchanged** — companion, not recipe v1 |
 | Live | **False** |
 
-Store path: `rollup.companion_grind_mid60`. Project store: `technical-veto-grind-mid60.md`.
+Store path: `rollup.companion_grind_mid60` (`N200`, `N206`, `N206_pre_warm`, `N206_post_warm`, `change_markers`).  
+Project store: `technical-veto-grind-mid60.md`, `technical-veto-grind-mid60-warm-start.md`.
+
+**How to read:** historical N206 counterfactual = contaminated/report-only. True N206 twin comparison from the warm marker is **only new sealed buys on/after 2026-10-23** (`N206_post_warm`). N200 stays the cross-book alone-benefit primary.
 
 ## Frozen recipe (pre-registered)
 

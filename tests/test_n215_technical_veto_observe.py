@@ -10,6 +10,8 @@ from value_investor.n215_technical_veto_observe import (
     BAND_SOFT_LO,
     BAND_WARN_LO,
     FINDING_TITLE,
+    GRIND_MID60_N206_WARM_DAY,
+    GRIND_MID60_N206_WARM_MARKER_ID,
     GRIND_MID60_RULE_ID,
     GRIND_MID60_THR,
     RECIPE_ID,
@@ -18,6 +20,7 @@ from value_investor.n215_technical_veto_observe import (
     build_n215_observe,
     build_registration_payload,
     extract_features,
+    grind_mid60_n206_warm_marker,
     ops_findings_from_n215_observe,
     refresh_n215_technical_veto_observe,
     score_episode,
@@ -180,14 +183,21 @@ def test_build_and_refresh_persist(tmp_path: Path):
     assert payload["admit_recommendation"]["live_veto"] is False
     assert payload["admit_recommendation"]["any_band_admit_worthy"] is False
     assert "companion_grind_mid60" in payload["rollup"]
-    assert payload["rollup"]["companion_grind_mid60"]["rule_id"] == GRIND_MID60_RULE_ID
-    assert payload["rollup"]["companion_grind_mid60"]["influences_live"] is False
+    grind = payload["rollup"]["companion_grind_mid60"]
+    assert grind["rule_id"] == GRIND_MID60_RULE_ID
+    assert grind["influences_live"] is False
+    assert grind["n206_warm_claim"] is True
+    assert grind["change_markers"][0]["marker_id"] == GRIND_MID60_N206_WARM_MARKER_ID
+    assert grind["N206_pre_warm"]["claim_set"] is False
+    assert grind["N206_post_warm"]["claim_set"] is True
+    assert grind["N206_post_warm"]["closed"] == 0  # no N206 episodes in fixture
     assert store.is_file() and reg.is_file()
     assert len(payload["episodes"]) == 2
     findings = ops_findings_from_n215_observe(payload)
     assert findings and findings[0]["title"] == FINDING_TITLE
     assert findings[0]["auto_fixable"] is False
     assert GRIND_MID60_RULE_ID in findings[0]["summary"]
+    assert "N206_post_warm" in findings[0]["summary"]
 
 
 def test_registration_seal_fields():
@@ -198,6 +208,18 @@ def test_registration_seal_fields():
     assert abs(sum(reg["recipe"]["weights"].values()) - 1.0) < 1e-9
     assert GRIND_MID60_RULE_ID in reg["companion_rules"]
     assert reg["companion_rules"][GRIND_MID60_RULE_ID]["influences_live"] is False
+    warm = reg["companion_rules"][GRIND_MID60_RULE_ID]["n206_warm_marker"]
+    assert warm["marker_id"] == GRIND_MID60_N206_WARM_MARKER_ID
+    assert warm["claim_buy_day_from"] == GRIND_MID60_N206_WARM_DAY
+
+
+def test_grind_mid60_n206_warm_marker_frozen():
+    m = grind_mid60_n206_warm_marker()
+    assert m["marker_id"] == GRIND_MID60_N206_WARM_MARKER_ID
+    assert m["claim_buy_day_from"] == "2026-10-23"
+    assert m["at"].startswith("2026-10-23")
+    assert m["influences_live"] is False
+    assert m["applies_to"] == "observe_only"
 
 
 def test_build_n215_observe_rollup_shape():
@@ -208,4 +230,43 @@ def test_build_n215_observe_rollup_shape():
     assert "cumulative_bands" in payload["rollup"]
     assert "hard_rule_companion" in payload["rollup"]
     assert "companion_grind_mid60" in payload["rollup"]
-    assert payload["rollup"]["companion_grind_mid60"]["alone_benefit_primary"] == "N200"
+    grind = payload["rollup"]["companion_grind_mid60"]
+    assert grind["alone_benefit_primary"] == "N200"
+    assert "N206_pre_warm" in grind and "N206_post_warm" in grind
+
+
+def test_n206_warm_split_by_buy_day(tmp_path: Path):
+    """Pre-warm contaminated vs post-warm claim partition on buy_day."""
+    charts = tmp_path / "charts"
+    charts.mkdir()
+    closes = [100.0] * 70
+    for i in range(60):
+        closes.append(95.0 + (i % 10) * 1.0)
+    closes[-1] = 103.0
+    _write_chart(charts / "OLD.L.json", closes=closes, start="2026-01-02")
+    _write_chart(charts / "NEW.L.json", closes=closes, start="2026-01-02")
+    episodes = [
+        {
+            "ticker": "OLD.L",
+            "book": "N206",
+            "buy_ts": "2026-10-20T12:00:00+00:00",
+            "fair_cost": -0.12,
+        },
+        {
+            "ticker": "NEW.L",
+            "book": "N206",
+            "buy_ts": "2026-10-23T12:00:00+00:00",
+            "fair_cost": -0.15,
+        },
+    ]
+    payload = build_n215_observe(
+        episodes, charts_dir=charts, generated_at="2026-10-22T00:00:00+00:00"
+    )
+    grind = payload["rollup"]["companion_grind_mid60"]
+    assert grind["N206"]["closed"] == 2
+    assert grind["N206_pre_warm"]["closed"] == 1
+    assert grind["N206_post_warm"]["closed"] == 1
+    assert grind["N206_pre_warm"]["claim_set"] is False
+    assert grind["N206_post_warm"]["claim_set"] is True
+    # Both deep PASS mid60 fires in this synthetic series
+    assert grind["N206_pre_warm"]["deep_n"] + grind["N206_post_warm"]["deep_n"] == 2

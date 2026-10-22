@@ -46,6 +46,12 @@ GRIND_MID60_LEARNING_QUESTION = (
     "positive alone net fair-cost benefit vs the unfiltered sealed cohort?"
 )
 
+# N206 warm-start marker (change_markers style): historical N206 = discovery /
+# contaminated report-only; claim comparison = new N206 buys from this day on.
+GRIND_MID60_N206_WARM_MARKER_ID = "n215-grind-mid60-n206-warm-v0"
+GRIND_MID60_N206_WARM_AT = "2026-10-23T00:00:00+00:00"
+GRIND_MID60_N206_WARM_DAY = "2026-10-23"  # buy_day >= this → post-warm claim set
+
 LEARNING_QUESTION = (
     "For each pre-registered soft-veto band threshold on sealed N200 closed "
     "episodes (charts ≤ buy_ts), what is catch rate among deep losers "
@@ -758,8 +764,25 @@ def _med_fc(xs: list[float]) -> float | None:
     return (ys[m - 1] + ys[m]) / 2.0
 
 
-def _book_grind_cell(rows: list[dict[str, Any]], book: str) -> dict[str, Any]:
+def _episode_buy_day(row: dict[str, Any]) -> str:
+    day = str(row.get("buy_day") or "").strip()
+    if len(day) >= 10:
+        return day[:10]
+    return str(row.get("buy_ts") or "")[:10]
+
+
+def _book_grind_cell(
+    rows: list[dict[str, Any]],
+    book: str,
+    *,
+    buy_day_min: str | None = None,
+    buy_day_max_exclusive: str | None = None,
+) -> dict[str, Any]:
     book_rows = [r for r in rows if r.get("book") == book]
+    if buy_day_min is not None:
+        book_rows = [r for r in book_rows if _episode_buy_day(r) >= buy_day_min]
+    if buy_day_max_exclusive is not None:
+        book_rows = [r for r in book_rows if _episode_buy_day(r) < buy_day_max_exclusive]
     deep = [r for r in book_rows if r.get("bucket") == "deep_loser"]
     large = [r for r in book_rows if r.get("bucket") == "large_winner"]
     fired = [r for r in book_rows if r.get("grind_mid60_fire")]
@@ -792,8 +815,65 @@ def _book_grind_cell(rows: list[dict[str, Any]], book: str) -> dict[str, Any]:
     }
 
 
+def grind_mid60_n206_warm_marker() -> dict[str, Any]:
+    """Logged change marker: N206 claim set starts at warm day (UTC)."""
+    return {
+        "marker_id": GRIND_MID60_N206_WARM_MARKER_ID,
+        "at": GRIND_MID60_N206_WARM_AT,
+        "claim_buy_day_from": GRIND_MID60_N206_WARM_DAY,
+        "lever": "params",
+        "before_id": "n206_full_cohort_discovery_contaminated",
+        "after_id": "n206_post_warm_claim_set",
+        "registration_id": REGISTRATION_ID,
+        "rule_id": GRIND_MID60_RULE_ID,
+        "reason": (
+            "Warm-start N206 mid60 twin claim: historical sealed N206 buys "
+            f"(buy_day < {GRIND_MID60_N206_WARM_DAY}) stay discovery/"
+            "contaminated report-only; alone-benefit / twin comparison for "
+            f"N206 uses only new buys with buy_day >= {GRIND_MID60_N206_WARM_DAY} "
+            "(UTC calendar day). N200 remains cross-book alone-benefit primary. "
+            "Same companion rule_id — instrumentation epoch via logged marker, "
+            "not a new learning question or live admit (F8)."
+        ),
+        "eligible_set_ref": f"n206_closed_buy_day_ge_{GRIND_MID60_N206_WARM_DAY}",
+        "applies_to": "observe_only",
+        "influences_live": False,
+    }
+
+
 def _rollup_grind_mid60(rows: list[dict[str, Any]]) -> dict[str, Any]:
-    """Alone companion: PASS ∧ mid_range_60 ≥ thr. N200 primary; N206 report-only."""
+    """Alone companion: PASS ∧ mid_range_60 ≥ thr. N200 primary; N206 warm-split."""
+    warm = grind_mid60_n206_warm_marker()
+    n206_all = _book_grind_cell(rows, "N206")
+    n206_pre = _book_grind_cell(
+        rows, "N206", buy_day_max_exclusive=GRIND_MID60_N206_WARM_DAY
+    )
+    n206_post = _book_grind_cell(rows, "N206", buy_day_min=GRIND_MID60_N206_WARM_DAY)
+    n206_pre = {
+        **n206_pre,
+        "role": "discovery_contaminated_report_only",
+        "buy_day_range": f"buy_day < {GRIND_MID60_N206_WARM_DAY}",
+        "claim_set": False,
+    }
+    n206_post = {
+        **n206_post,
+        "role": "n206_warm_claim_set",
+        "buy_day_range": f"buy_day >= {GRIND_MID60_N206_WARM_DAY}",
+        "claim_set": True,
+        "note": (
+            "Empty until new N206 sealed buys on/after the warm day. "
+            "This is the N206 twin comparison set — not the discovery backfill."
+        ),
+    }
+    n206_all = {
+        **n206_all,
+        "role": "full_cohort_contaminated_report_only",
+        "claim_set": False,
+        "note": (
+            "Full sealed N206 including discovery history. Do not use for admit; "
+            "prefer N206_post_warm for claim and N200 for cross-book alone-benefit."
+        ),
+    }
     return {
         "rule_id": GRIND_MID60_RULE_ID,
         "rule": f"soft_band==PASS AND mid_range_60 >= {GRIND_MID60_THR}",
@@ -806,16 +886,22 @@ def _rollup_grind_mid60(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "learning_question": GRIND_MID60_LEARNING_QUESTION,
         "discovery_book": "N206",
         "alone_benefit_primary": "N200",
+        "n206_warm_claim": True,
         "influences_live": False,
         "observe_only": True,
+        "change_markers": [warm],
         "N200": _book_grind_cell(rows, "N200"),
-        "N206": _book_grind_cell(rows, "N206"),
+        "N206": n206_all,
+        "N206_pre_warm": n206_pre,
+        "N206_post_warm": n206_post,
         "admit_recommendation": {
             "live_veto": False,
             "note": (
                 "Companion alone rule after counterfactual discovery. "
-                "N200 is alone-benefit primary; N206 is discovery/report-only — "
-                "do not retune threshold on N206. Not live."
+                "N200 is cross-book alone-benefit primary. N206 full/pre-warm "
+                "are discovery-contaminated report-only; N206_post_warm "
+                f"(buy_day >= {GRIND_MID60_N206_WARM_DAY}) is the warm claim "
+                "set for tomorrow-onward comparison. Do not retune thr. Not live."
             ),
         },
     }
@@ -881,12 +967,16 @@ def build_registration_payload(*, generated_at: str | None = None) -> dict[str, 
                 "learning_question": GRIND_MID60_LEARNING_QUESTION,
                 "discovery_book": "N206",
                 "alone_benefit_primary": "N200",
+                "n206_warm_marker": grind_mid60_n206_warm_marker(),
                 "influences_live": False,
             }
         },
         "cohort": {
             "primary": "N200 closed lifecycle episodes with charts",
-            "companion_report": "N206 closed for grind mid60 report-only",
+            "companion_report": (
+                f"N206 grind mid60: pre-warm (<{GRIND_MID60_N206_WARM_DAY}) "
+                "discovery/contaminated; post-warm claim set"
+            ),
             "anecdote": "N210 closed until volume_gate.met",
         },
     }
@@ -938,6 +1028,8 @@ def build_n215_observe(
                 "threshold": GRIND_MID60_THR,
                 "lookback_trading_days": GRIND_MID60_LOOKBACK,
                 "learning_question": GRIND_MID60_LEARNING_QUESTION,
+                "n206_warm_marker_id": GRIND_MID60_N206_WARM_MARKER_ID,
+                "n206_warm_claim_buy_day_from": GRIND_MID60_N206_WARM_DAY,
                 "influences_live": False,
             }
         },
@@ -951,7 +1043,8 @@ def build_n215_observe(
             "large_winners": rollup["large_winners"],
             "note": (
                 "Soft-band catch/miss primary remains N200. N206 scored for "
-                f"companion {GRIND_MID60_RULE_ID} report-only (discovery book)."
+                f"companion {GRIND_MID60_RULE_ID}: pre-warm discovery/"
+                f"contaminated; post-warm claim from {GRIND_MID60_N206_WARM_DAY}."
             ),
         },
         "rollup": rollup,
@@ -966,6 +1059,8 @@ def build_n215_observe(
                 "on a later propose — not claimed from this shadow. "
                 f"Companion {GRIND_MID60_RULE_ID}: "
                 f"N200 Δsum={((grind.get('N200') or {}).get('delta_fc_sum'))}; "
+                f"N206_post_warm n="
+                f"{((grind.get('N206_post_warm') or {}).get('closed'))}; "
                 "not live."
             ),
         },
@@ -1091,7 +1186,10 @@ def ops_findings_from_n215_observe(payload: dict[str, Any]) -> list[dict[str, An
                 f"SOFT_VETO+ catch={soft.get('deep_catch')} miss={soft.get('large_miss')}; "
                 f"hard any-of-six catch={any6.get('deep_catch')} miss={any6.get('large_miss')}. "
                 f"{GRIND_MID60_RULE_ID}: N200 catch={g200.get('deep_catch')} "
-                f"miss={g200.get('large_miss')} Δsum={g200.get('delta_fc_sum')}. "
+                f"miss={g200.get('large_miss')} Δsum={g200.get('delta_fc_sum')}; "
+                f"N206_post_warm(n>={GRIND_MID60_N206_WARM_DAY}) "
+                f"closed={((grind.get('N206_post_warm') or {}).get('closed'))} "
+                f"Δsum={((grind.get('N206_post_warm') or {}).get('delta_fc_sum'))}. "
                 f"live_veto={admit.get('live_veto')} "
                 f"observe_sketch_interesting={admit.get('observe_sketch_band_looks_interesting')}. "
                 "Observe-only — no live writes (F8)."
@@ -1151,12 +1249,18 @@ def format_n215_observe_text(payload: dict[str, Any]) -> str:
     )
     g200 = grind.get("N200") if isinstance(grind.get("N200"), dict) else {}
     g206 = grind.get("N206") if isinstance(grind.get("N206"), dict) else {}
+    g206_post = (
+        grind.get("N206_post_warm") if isinstance(grind.get("N206_post_warm"), dict) else {}
+    )
     lines.append(
         f"companion {GRIND_MID60_RULE_ID}: "
         f"N200 catch {g200.get('deep_catch')} miss {g200.get('large_miss')} "
         f"Δsum={g200.get('delta_fc_sum')}; "
-        f"N206 report catch {g206.get('deep_catch')} miss {g206.get('large_miss')} "
-        f"Δsum={g206.get('delta_fc_sum')}"
+        f"N206 full (contaminated) catch {g206.get('deep_catch')} miss "
+        f"{g206.get('large_miss')} Δsum={g206.get('delta_fc_sum')}; "
+        f"N206_post_warm>={GRIND_MID60_N206_WARM_DAY} closed={g206_post.get('closed')} "
+        f"catch {g206_post.get('deep_catch')} miss {g206_post.get('large_miss')} "
+        f"Δsum={g206_post.get('delta_fc_sum')}"
     )
     lines.append(f"admit: {admit.get('note')}")
     return "\n".join(lines) + "\n"
