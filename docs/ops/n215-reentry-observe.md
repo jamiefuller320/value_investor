@@ -9,6 +9,8 @@
 
 Among soft-vetoed (**WARN+**) sealed **N200** names that later became **large winners** under sealed baseline fair-cost: how often would frozen MONITOR rule **R1** (breakout-wait; **R5**=40 sessions / **R6**=−15% DD) have **re-admitted** before opportunity expired — vs **never** (timeout / worsen)? Companion: path-cost Δ vs sealed baseline on recovered names; abandon rate on WARN+ deep losers. Labels only — **no live gate**.
 
+**Thickened (same frozen pair):** also report full WARN+ gated terminal outcome mix, positive-FC re-admit (beyond ≥+10% large cell), and **N206** holdout (report-only; never tune).
+
 ## Frozen pair (pre-registered)
 
 | Piece | Pin |
@@ -19,6 +21,7 @@ Among soft-vetoed (**WARN+**) sealed **N200** names that later became **large wi
 | Point-in-time | Forward walk uses bars with `date ≤ t` at each step |
 | Fail-closed | Missing chart / no forward bars → `unevaluable` (not counted as never) |
 | Companion cell | Same R pins on **SOFT_VETO+** subset (report-only) |
+| Holdout | Same R pins on sealed **N206** closed episodes — report-only; **never tune** |
 
 Do **not** retune pins on this cohort for admission claims. Layer B separate from soft-band Layer A — no bundle-admit.
 
@@ -26,15 +29,15 @@ Do **not** retune pins on this cohort for admission claims. Layer B separate fro
 
 | Trigger | Schedule |
 |---|---|
-| **Daily ops-monitor** | `check_n215_reentry_observe` refreshes store from N200 sealed store + soft-band scores + charts |
-| Manual | `ftse-n215-reentry --output-dir docs/data` |
+| **Daily ops-monitor** | `check_n215_reentry_observe` refreshes store from N200 (+ N206 holdout) + soft-band scores + charts |
+| Manual | `ftse-n215-reentry --output-dir docs/data` (add `--no-n206-holdout` to skip holdout) |
 
 ## Artifacts
 
 | Path | Role |
 |---|---|
 | `docs/data/n215_reentry_registration.json` | Frozen seal / pair record |
-| `docs/data/n215_reentry_observe.json` | Per-episode monitor labels + re-admit/never rollup |
+| `docs/data/n215_reentry_observe.json` | Per-episode monitor labels + thickened rollups + `holdout_N206` |
 | This doc | Runbook |
 
 Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
@@ -45,9 +48,10 @@ Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
 - Progressive admission still required before any future Layer B influence.
 - Soft-band entry catch/miss remains co-equal LQ-A; this instrument is LQ-B only.
 - `still_monitor_eop` (chart ended before 40d without signal) is not counted in never rate.
+- N206 holdout marks must not drive pin changes.
 
 ## Related
 
 - Soft-band harness: [n215-technical-veto-observe.md](n215-technical-veto-observe.md)
-- Project store: `technical-veto-reentry-lq.md`, `technical-veto-monitor-reentry.md`
+- Project store: `technical-veto-reentry-lq.md`, `technical-veto-monitor-reentry.md`, `technical-veto-reentry-thickened.md`
 - Park: **N215**
