@@ -845,9 +845,7 @@ def _rollup_grind_mid60(rows: list[dict[str, Any]]) -> dict[str, Any]:
     """Alone companion: PASS ∧ mid_range_60 ≥ thr. N200 primary; N206 warm-split."""
     warm = grind_mid60_n206_warm_marker()
     n206_all = _book_grind_cell(rows, "N206")
-    n206_pre = _book_grind_cell(
-        rows, "N206", buy_day_max_exclusive=GRIND_MID60_N206_WARM_DAY
-    )
+    n206_pre = _book_grind_cell(rows, "N206", buy_day_max_exclusive=GRIND_MID60_N206_WARM_DAY)
     n206_post = _book_grind_cell(rows, "N206", buy_day_min=GRIND_MID60_N206_WARM_DAY)
     n206_pre = {
         **n206_pre,
@@ -1249,9 +1247,7 @@ def format_n215_observe_text(payload: dict[str, Any]) -> str:
     )
     g200 = grind.get("N200") if isinstance(grind.get("N200"), dict) else {}
     g206 = grind.get("N206") if isinstance(grind.get("N206"), dict) else {}
-    g206_post = (
-        grind.get("N206_post_warm") if isinstance(grind.get("N206_post_warm"), dict) else {}
-    )
+    g206_post = grind.get("N206_post_warm") if isinstance(grind.get("N206_post_warm"), dict) else {}
     lines.append(
         f"companion {GRIND_MID60_RULE_ID}: "
         f"N200 catch {g200.get('deep_catch')} miss {g200.get('large_miss')} "
