@@ -12207,6 +12207,27 @@ def test_parked_source_hunter_essity_b_st_euro_depth_has_fetchable_ir():
     assert "Annual-Report-2025" in rows[0]["url"]
 
 
+def test_parked_source_hunter_nibe_b_st_omxs30_has_fetchable_ir():
+    """eng-20261021-09: NIBE-B.ST nibegroup.com FY2025 annual + Q4 year-end PDFs (hunter confirmed)."""
+    assert "NIBE-B.ST" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("NIBE-B.ST")
+    assert len(rows) == 2
+    by_url = {row["url"]: row for row in rows}
+    annual_url = (
+        "https://www.nibegroup.com/download/18.6de1034419d7225b18639e/"
+        "1776148811225/GB-W-AR25-NIBE.pdf"
+    )
+    yearend_url = (
+        "https://www.nibegroup.com/download/18.7a7a546d19c4da3cab34/1770881343351/12-2-GB-Q4-25.pdf"
+    )
+    assert annual_url in by_url
+    assert yearend_url in by_url
+    assert by_url[annual_url]["period"] == "annual"
+    assert by_url[yearend_url]["period"] == "other"
+    assert fetch_filing_body(annual_url) is not None
+    assert fetch_filing_body(yearend_url) is not None
+
+
 def test_parked_source_hunter_vow3_de_dax_has_fetchable_ir():
     """eng-20261017-03: VOW3.DE volkswagen-group.com FY2025 annual + 9M interim PDFs."""
     assert "VOW3.DE" not in PARKED_SOURCE_HUNTER_SKIP
