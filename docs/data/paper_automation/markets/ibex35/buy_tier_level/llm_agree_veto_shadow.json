@@ -2888,7 +2888,7 @@
       ]
     },
     {
-      "logged_at": "2026-10-22T08:36:50.203130+01:00",
+      "logged_at": "2026-10-22T09:47:28.057890+01:00",
       "verdict_counts": {
         "agree": 1,
         "veto": 0,
@@ -2909,10 +2909,7 @@
           "algo_reason": "Insufficient cash after higher-conviction fills",
           "shadow_verdict": "agree",
           "reasons": [
-            "still_buyish is false, so the name is not on a buy/strong_buy screen at decision time; skipping rebuy aligns with leaving the buy cohort rather than forcing capacity back in.",
-            "Effective screen_signal is hold, consistent with rebuy_skip rather than a fresh buy mandate.",
-            "algo_reason cites insufficient cash after higher-conviction fills, a explicit rebuy block independent of merit.",
-            "rank_drop is 0 versus entry_rank 5, so there is no rank-collapse story that would argue for urgent rebuy; combined with research_verdict caution and overlay_bound true, skip is coherent."
+            "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
           ],
           "evidence": [
             {
@@ -2925,6 +2922,12 @@
               "source": "candidates",
               "detail": "Effective signal at decision time",
               "value": "hold"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 5
             },
             {
               "kind": "entry_rank",
@@ -2945,9 +2948,21 @@
               "value": "caution"
             },
             {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.43877
+            },
+            {
               "kind": "still_buyish",
               "source": "derived",
               "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
               "value": false
             },
             {
@@ -2957,13 +2972,13 @@
               "value": true
             }
           ],
-          "judge_backend": "llm",
-          "judge_spec_id": "llm.v1",
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
           "influences_live": false,
           "observe_only": true,
           "track_id": "buy_tier_level",
-          "logged_at": "2026-10-22T08:36:50.203130+01:00",
-          "proposal_id": "buy_tier_level:SCYR.MC:rebuy_skip:2026-10-22T08:36:50.203130+01:00",
+          "logged_at": "2026-10-22T09:47:28.057890+01:00",
+          "proposal_id": "buy_tier_level:SCYR.MC:rebuy_skip:2026-10-22T09:47:28.057890+01:00",
           "meta": {
             "still_buyish": false,
             "rank_drop": 0,
@@ -2978,18 +2993,9 @@
               "overlay_bound": true,
               "interim_eps_decline_pct": null,
               "adjusted_eps_growth_pct": null
-            },
-            "heuristic_baseline": {
-              "shadow_verdict": "agree",
-              "reasons": [
-                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-              ],
-              "judge_spec_id": "heuristic.v1"
-            },
-            "llm_merge": "ok"
+            }
           },
-          "schema_version": 1,
-          "parent_spec_id": "heuristic.v1"
+          "schema_version": 1
         }
       ]
     }
@@ -2998,7 +3004,7 @@
   "influences_live": false,
   "track_id": "buy_tier_level",
   "last_pass": {
-    "logged_at": "2026-10-22T08:36:50.203130+01:00",
+    "logged_at": "2026-10-22T09:47:28.057890+01:00",
     "card_count": 1,
     "verdict_counts": {
       "agree": 1,
@@ -3006,5 +3012,5 @@
       "abstain": 0
     }
   },
-  "updated_at": "2026-10-22T07:36:53.895891+00:00"
+  "updated_at": "2026-10-22T08:47:28.109392+00:00"
 }

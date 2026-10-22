@@ -1,6 +1,6 @@
 # Hypothesis outcome link
 
-Track: `buy_tier_level` · 2026-10-22T07:37:00.350575+00:00
+Track: `buy_tier_level` · 2026-10-22T08:47:29.458550+00:00
 
 ## Readiness
 
@@ -13,7 +13,7 @@ Track: `buy_tier_level` · 2026-10-22T07:37:00.350575+00:00
 
 ## Hold recovery by thesis
 
-- **weakening** (n=6): recovery 100%, sold underwater 0%, mean peak +7.9%
+- **weakening** (n=6): recovery 100%, sold underwater 0%, mean peak +7.7%
 - **broken** (n=1): recovery 100%, sold underwater 0%, mean peak +0.0%
 
 ## Swap rotation by sell thesis

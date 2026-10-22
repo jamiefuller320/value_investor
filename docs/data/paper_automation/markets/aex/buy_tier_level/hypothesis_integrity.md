@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-22T07:37:00.348307+00:00
+Track: `buy_tier_level` · updated 2026-10-22T08:47:29.456191+00:00
 
 ## Portfolio loser feedback
 
@@ -10,27 +10,29 @@ Track: `buy_tier_level` · updated 2026-10-22T07:37:00.348307+00:00
 
 ## Holding reviews
 
-### PRX.AS — intact / hold_tolerate (-3.6%)
+### RAND.AS — intact / hold_tolerate (-3.1%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 68%
+
+### PRX.AS — intact / hold_tolerate (-0.5%)
 - still buy
 - cheapness family still passes
 - data_quality 1.00
 - conviction 52%
 
-### AD.AS — intact / hold_tolerate (+0.7%)
+### AKZA.AS — intact / hold_tolerate (+1.2%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 77%
+
+### AD.AS — intact / hold_tolerate (+1.9%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 72%
-
-### AKZA.AS — intact / hold_tolerate (+2.5%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 62%
-
-### RAND.AS — weakening / watch_review (+14.4%)
-- left buy tier (hold)
-- research accumulate
-- cheapness family still passes

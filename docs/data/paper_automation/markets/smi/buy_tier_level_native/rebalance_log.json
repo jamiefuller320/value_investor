@@ -6878,24 +6878,24 @@
   },
   {
     "schema_version": 2,
-    "logged_at": "2026-10-22T07:37:39.884357+00:00",
+    "logged_at": "2026-10-22T08:47:34.405218+00:00",
     "track_id": "buy_tier_level_native",
     "track_label": "Buy-tier level native (CHF reporting, no FX friction, cold-start capital epoch)",
     "strategy_mode": "automated",
     "screen_source": {
       "path": "docs/data/paper_automation/markets/smi/screen_latest.json",
-      "run_at": "2026-10-22T06:53:02.981031+00:00",
-      "generated_at": "2026-10-22T07:37:39.779202+00:00"
+      "run_at": "2026-10-21T06:52:57.890835+00:00",
+      "generated_at": "2026-10-22T08:47:34.266612+00:00"
     },
     "knob_epoch_started_at": null,
     "gate": {
-      "local_time": "2026-10-22T08:37:39.868879+01:00",
+      "local_time": "2026-10-22T09:47:34.388608+01:00",
       "trading_day": true,
-      "after_settle": false,
+      "after_settle": true,
       "market_open_at": "2026-10-22T08:00:00+01:00",
       "settle_at": "2026-10-22T09:15:00+01:00",
-      "can_act": false,
-      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+      "can_act": true,
+      "reason": "ok"
     },
     "acted": true,
     "note": "Rebalanced after open settle (0 trade(s)).",
@@ -6926,7 +6926,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Healthcare",
-        "price": 126.94,
+        "price": 126.16,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -6940,7 +6940,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Basic Materials",
-        "price": 31.8,
+        "price": 31.96,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -6954,7 +6954,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Healthcare",
-        "price": 55.66,
+        "price": 55.86,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -6968,7 +6968,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Technology",
-        "price": 89.62,
+        "price": 89.14,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -6984,7 +6984,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Healthcare",
-        "price": 126.94,
+        "price": 126.16,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -6998,7 +6998,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Basic Materials",
-        "price": 31.8,
+        "price": 31.96,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -7012,7 +7012,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Healthcare",
-        "price": 55.66,
+        "price": 55.86,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -7026,7 +7026,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Technology",
-        "price": 89.62,
+        "price": 89.14,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -7046,7 +7046,7 @@
         "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
         "Dust guard: skip trim/top-up adjustments below \u00a310."
       ],
-      "nav": 1050.45,
+      "nav": 1049.67,
       "cash": 0.0,
       "max_positions": 120,
       "min_conviction": 0.0,
@@ -7059,35 +7059,35 @@
       "rank_drop_exit_min": 3,
       "block_rebuy_while_in_candidates": false,
       "min_rebalance_notional_gbp": 10.0,
-      "target_sleeve_value": 262.61,
+      "target_sleeve_value": 262.42,
       "targets": [
         {
           "ticker": "NOVN.SW",
           "name": "Novartis AG",
           "signal": "strong_buy",
           "conviction_score": 0.6100000000000001,
-          "price": 126.94
+          "price": 126.16
         },
         {
           "ticker": "LOGN.SW",
           "name": "Logitech International S.A.",
           "signal": "buy",
           "conviction_score": 0.5207,
-          "price": 89.62
+          "price": 89.14
         },
         {
           "ticker": "ALC.SW",
           "name": "Alcon Inc.",
           "signal": "buy",
           "conviction_score": 0.346375,
-          "price": 55.66
+          "price": 55.86
         },
         {
           "ticker": "AMRZ.SW",
           "name": "Amrize AG",
           "signal": "buy",
           "conviction_score": 0.345,
-          "price": 31.8
+          "price": 31.96
         }
       ],
       "anticipated_exits": [],
@@ -7097,11 +7097,21 @@
       "anticipated_holds": [
         {
           "action": "hold",
+          "ticker": "NOVN.SW",
+          "name": "Novartis AG",
+          "reason": "Already near equal-weight target",
+          "value": 263.91,
+          "target_value": 262.42,
+          "conviction_score": 0.6100000000000001,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
           "ticker": "LOGN.SW",
           "name": "Logitech International S.A.",
           "reason": "Already near equal-weight target",
-          "value": 261.78,
-          "target_value": 262.61,
+          "value": 260.38,
+          "target_value": 262.42,
           "conviction_score": 0.5207,
           "signal": "buy"
         },
@@ -7110,8 +7120,8 @@
           "ticker": "ALC.SW",
           "name": "Alcon Inc.",
           "reason": "Already near equal-weight target",
-          "value": 261.65,
-          "target_value": 262.61,
+          "value": 262.59,
+          "target_value": 262.42,
           "conviction_score": 0.346375,
           "signal": "buy"
         },
@@ -7120,18 +7130,18 @@
           "ticker": "AMRZ.SW",
           "name": "Amrize AG",
           "reason": "Already near equal-weight target",
-          "value": 261.48,
-          "target_value": 262.61,
+          "value": 262.79,
+          "target_value": 262.42,
           "conviction_score": 0.345,
           "signal": "buy"
         }
       ],
       "skipped": [],
       "waitlisted": [],
-      "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 3 near-target holding(s)."
+      "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 4 near-target holding(s)."
     },
     "trades": [],
-    "nav_before": 1050.45,
+    "nav_before": 1049.67,
     "cash_before": 0.0,
     "contributed_capital_before": 1000.0,
     "holdings_before": [
@@ -7180,7 +7190,7 @@
       "exit_streak": {},
       "reentry_cooldown": {}
     },
-    "nav_after": 1050.45,
+    "nav_after": 1049.67,
     "cash_after": 0.0,
     "holdings_after": [
       {
@@ -7231,9 +7241,9 @@
     "llm_agree_veto_shadow": {
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "llm",
-      "judge_spec_id": "llm.v1",
-      "parent_spec_id": "heuristic.v1",
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
       "verdict_counts": {
         "agree": 0,
         "veto": 0,

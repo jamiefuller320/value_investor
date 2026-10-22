@@ -6426,24 +6426,24 @@
   },
   {
     "schema_version": 2,
-    "logged_at": "2026-10-22T07:36:42.348646+00:00",
+    "logged_at": "2026-10-22T08:47:25.682153+00:00",
     "track_id": "buy_tier_level",
     "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
     "strategy_mode": "automated",
     "screen_source": {
       "path": "docs/data/paper_automation/markets/dax/screen_latest.json",
-      "run_at": "2026-10-22T06:53:02.981031+00:00",
-      "generated_at": "2026-10-22T07:36:42.308028+00:00"
+      "run_at": "2026-10-21T13:53:19.646328+00:00",
+      "generated_at": "2026-10-22T08:47:25.519008+00:00"
     },
     "knob_epoch_started_at": null,
     "gate": {
-      "local_time": "2026-10-22T08:36:42.317579+01:00",
+      "local_time": "2026-10-22T09:47:25.527900+01:00",
       "trading_day": true,
-      "after_settle": false,
+      "after_settle": true,
       "market_open_at": "2026-10-22T08:00:00+01:00",
       "settle_at": "2026-10-22T09:15:00+01:00",
-      "can_act": false,
-      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+      "can_act": true,
+      "reason": "ok"
     },
     "acted": true,
     "note": "Rebalanced after open settle (0 trade(s)).",
@@ -6474,7 +6474,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Healthcare",
-        "price": 38.45,
+        "price": 39.46,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -6490,7 +6490,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Healthcare",
-        "price": 38.45,
+        "price": 39.46,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -6510,7 +6510,7 @@
         "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
         "Dust guard: skip trim/top-up adjustments below \u00a310."
       ],
-      "nav": 1023.95,
+      "nav": 1032.75,
       "cash": 0.0,
       "max_positions": 120,
       "min_conviction": 0.0,
@@ -6523,14 +6523,14 @@
       "rank_drop_exit_min": 3,
       "block_rebuy_while_in_candidates": false,
       "min_rebalance_notional_gbp": 10.0,
-      "target_sleeve_value": 1022.75,
+      "target_sleeve_value": 1031.55,
       "targets": [
         {
           "ticker": "FME.DE",
           "name": "Fresenius Medical Care AG",
           "signal": "strong_buy",
           "conviction_score": 0.566695,
-          "price": 38.45
+          "price": 39.46
         }
       ],
       "anticipated_exits": [
@@ -6562,8 +6562,8 @@
           "name": "Fresenius Medical Care AG",
           "reason": "Top-up to equal weight",
           "value": 687.7,
-          "price": 38.45,
-          "target_value": 1022.75,
+          "price": 39.46,
+          "target_value": 1031.55,
           "conviction_score": 0.566695,
           "signal": "strong_buy"
         }
@@ -6574,7 +6574,7 @@
       "summary": "Next rebalance would target 1 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 1 buy(s)."
     },
     "trades": [],
-    "nav_before": 1023.95,
+    "nav_before": 1032.75,
     "cash_before": 0.0,
     "contributed_capital_before": 1000.0,
     "holdings_before": [
@@ -6613,7 +6613,7 @@
       "exit_streak": {},
       "reentry_cooldown": {}
     },
-    "nav_after": 1023.95,
+    "nav_after": 1032.75,
     "cash_after": 0.0,
     "holdings_after": [
       {
@@ -6657,9 +6657,9 @@
     "llm_agree_veto_shadow": {
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "llm",
-      "judge_spec_id": "llm.v1",
-      "parent_spec_id": "heuristic.v1",
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
       "verdict_counts": {
         "agree": 0,
         "veto": 0,

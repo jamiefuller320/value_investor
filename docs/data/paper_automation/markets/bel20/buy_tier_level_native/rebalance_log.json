@@ -8215,24 +8215,24 @@
   },
   {
     "schema_version": 2,
-    "logged_at": "2026-10-22T07:37:12.116754+00:00",
+    "logged_at": "2026-10-22T08:47:30.010843+00:00",
     "track_id": "buy_tier_level_native",
     "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
     "strategy_mode": "automated",
     "screen_source": {
       "path": "docs/data/paper_automation/markets/bel20/screen_latest.json",
-      "run_at": "2026-10-22T06:53:02.981031+00:00",
-      "generated_at": "2026-10-22T07:37:07.774787+00:00"
+      "run_at": "2026-10-21T06:52:57.890835+00:00",
+      "generated_at": "2026-10-22T08:47:29.902797+00:00"
     },
     "knob_epoch_started_at": null,
     "gate": {
-      "local_time": "2026-10-22T08:37:12.098704+01:00",
+      "local_time": "2026-10-22T09:47:29.977427+01:00",
       "trading_day": true,
-      "after_settle": false,
+      "after_settle": true,
       "market_open_at": "2026-10-22T08:00:00+01:00",
       "settle_at": "2026-10-22T09:15:00+01:00",
-      "can_act": false,
-      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+      "can_act": true,
+      "reason": "ok"
     },
     "acted": true,
     "note": "Rebalanced after open settle (0 trade(s)).",
@@ -8263,7 +8263,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "accumulate",
         "sector": "Industrials",
-        "price": 18.35,
+        "price": 18.72,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -8277,7 +8277,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Real Estate",
-        "price": 63.25,
+        "price": 62.8,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -8287,11 +8287,11 @@
         "name": "Solvay SA",
         "signal": "buy",
         "adjusted_signal": "hold",
-        "conviction_score": 0.21114,
+        "conviction_score": 0.17595,
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Basic Materials",
-        "price": 23.36,
+        "price": 23.85,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -8307,7 +8307,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "accumulate",
         "sector": "Industrials",
-        "price": 18.35,
+        "price": 18.72,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -8321,7 +8321,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Real Estate",
-        "price": 63.25,
+        "price": 62.8,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -8331,11 +8331,11 @@
         "name": "Solvay SA",
         "signal": "buy",
         "adjusted_signal": "hold",
-        "conviction_score": 0.21114,
+        "conviction_score": 0.17595,
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Basic Materials",
-        "price": 23.36,
+        "price": 23.85,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -8355,7 +8355,7 @@
         "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
         "Dust guard: skip trim/top-up adjustments below \u00a310."
       ],
-      "nav": 960.68,
+      "nav": 971.41,
       "cash": 0.0,
       "max_positions": 120,
       "min_conviction": 0.0,
@@ -8368,28 +8368,28 @@
       "rank_drop_exit_min": 3,
       "block_rebuy_while_in_candidates": false,
       "min_rebalance_notional_gbp": 10.0,
-      "target_sleeve_value": 320.23,
+      "target_sleeve_value": 323.8,
       "targets": [
         {
           "ticker": "UMI.BR",
           "name": "Umicore SA",
           "signal": "buy",
           "conviction_score": 0.7269,
-          "price": 18.35
+          "price": 18.72
         },
         {
           "ticker": "AED.BR",
           "name": "Aedifica NV/SA",
           "signal": "buy",
           "conviction_score": 0.5700000000000001,
-          "price": 63.25
+          "price": 62.8
         },
         {
           "ticker": "SOLB.BR",
           "name": "Solvay SA",
           "signal": "buy",
-          "conviction_score": 0.21114,
-          "price": 23.36
+          "conviction_score": 0.17595,
+          "price": 23.85
         }
       ],
       "anticipated_exits": [],
@@ -8402,9 +8402,19 @@
           "ticker": "UMI.BR",
           "name": "Umicore SA",
           "reason": "Already near equal-weight target",
-          "value": 317.42,
-          "target_value": 320.23,
+          "value": 323.82,
+          "target_value": 323.8,
           "conviction_score": 0.7269,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "AED.BR",
+          "name": "Aedifica NV/SA",
+          "reason": "Already near equal-weight target",
+          "value": 323.81,
+          "target_value": 323.8,
+          "conviction_score": 0.5700000000000001,
           "signal": "buy"
         },
         {
@@ -8412,18 +8422,18 @@
           "ticker": "SOLB.BR",
           "name": "Solvay SA",
           "reason": "Already near equal-weight target",
-          "value": 317.12,
-          "target_value": 320.23,
-          "conviction_score": 0.21114,
+          "value": 323.78,
+          "target_value": 323.8,
+          "conviction_score": 0.17595,
           "signal": "buy"
         }
       ],
       "skipped": [],
       "waitlisted": [],
-      "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 2 near-target holding(s)."
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
     },
     "trades": [],
-    "nav_before": 960.68,
+    "nav_before": 971.41,
     "cash_before": 0.0,
     "contributed_capital_before": 1000.0,
     "holdings_before": [
@@ -8462,7 +8472,7 @@
       "exit_streak": {},
       "reentry_cooldown": {}
     },
-    "nav_after": 960.68,
+    "nav_after": 971.41,
     "cash_after": 0.0,
     "holdings_after": [
       {
@@ -8503,9 +8513,9 @@
     "llm_agree_veto_shadow": {
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "llm",
-      "judge_spec_id": "llm.v1",
-      "parent_spec_id": "heuristic.v1",
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
       "verdict_counts": {
         "agree": 0,
         "veto": 0,

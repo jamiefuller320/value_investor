@@ -6286,27 +6286,27 @@
   },
   {
     "schema_version": 2,
-    "logged_at": "2026-10-22T07:37:18.925702+00:00",
+    "logged_at": "2026-10-22T08:47:32.341116+00:00",
     "track_id": "buy_tier_level",
     "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
     "strategy_mode": "automated",
     "screen_source": {
       "path": "docs/data/paper_automation/markets/us_adr_asia/screen_latest.json",
-      "run_at": "2026-10-22T06:53:02.981031+00:00",
-      "generated_at": "2026-10-22T07:37:14.727916+00:00"
+      "run_at": "2026-10-21T06:52:57.890835+00:00",
+      "generated_at": "2026-10-22T08:47:32.151142+00:00"
     },
     "knob_epoch_started_at": null,
     "gate": {
-      "local_time": "2026-10-22T08:37:14.735715+01:00",
+      "local_time": "2026-10-22T09:47:32.158781+01:00",
       "trading_day": true,
-      "after_settle": false,
+      "after_settle": true,
       "market_open_at": "2026-10-22T08:00:00+01:00",
       "settle_at": "2026-10-22T09:15:00+01:00",
-      "can_act": false,
-      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+      "can_act": true,
+      "reason": "ok"
     },
     "acted": true,
-    "note": "Rebalanced after open settle (2 trade(s)).",
+    "note": "Rebalanced after open settle (1 trade(s)).",
     "selection": {
       "skip_timing_wait": true,
       "min_conviction": 0.0,
@@ -6330,11 +6330,11 @@
         "name": "Wipro Limited",
         "signal": "strong_buy",
         "adjusted_signal": "strong_buy",
-        "conviction_score": 0.5967,
+        "conviction_score": 0.6433,
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Technology",
-        "price": 2.15,
+        "price": 2.05,
         "research_verdict": "neutral",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -6344,11 +6344,11 @@
         "name": "Sony Group Corporation",
         "signal": "buy",
         "adjusted_signal": "buy",
-        "conviction_score": 0.6792,
+        "conviction_score": 0.7083,
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Technology",
-        "price": 25.1,
+        "price": 25.21,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -6360,11 +6360,11 @@
         "name": "Wipro Limited",
         "signal": "strong_buy",
         "adjusted_signal": "strong_buy",
-        "conviction_score": 0.5967,
+        "conviction_score": 0.6433,
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Technology",
-        "price": 2.15,
+        "price": 2.05,
         "research_verdict": "neutral",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -6374,11 +6374,11 @@
         "name": "Sony Group Corporation",
         "signal": "buy",
         "adjusted_signal": "buy",
-        "conviction_score": 0.6792,
+        "conviction_score": 0.7083,
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Technology",
-        "price": 25.1,
+        "price": 25.21,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -6398,8 +6398,8 @@
         "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
         "Dust guard: skip trim/top-up adjustments below \u00a310."
       ],
-      "nav": 1198.22,
-      "cash": 15.54,
+      "nav": 1172.16,
+      "cash": 0.01,
       "max_positions": 120,
       "min_conviction": 0.0,
       "sector_cap": 1.0,
@@ -6411,89 +6411,71 @@
       "rank_drop_exit_min": 3,
       "block_rebuy_while_in_candidates": false,
       "min_rebalance_notional_gbp": 10.0,
-      "target_sleeve_value": 599.11,
+      "target_sleeve_value": 586.08,
       "targets": [
         {
           "ticker": "SONY",
           "name": "Sony Group Corporation",
           "signal": "buy",
-          "conviction_score": 0.6792,
-          "price": 25.1
+          "conviction_score": 0.7083,
+          "price": 25.21
         },
         {
           "ticker": "WIT",
           "name": "Wipro Limited",
           "signal": "strong_buy",
-          "conviction_score": 0.5967,
-          "price": 2.15
+          "conviction_score": 0.6433,
+          "price": 2.05
         }
       ],
       "anticipated_exits": [],
       "anticipated_grace_holds": [],
       "anticipated_trims": [],
-      "anticipated_buys": [
+      "anticipated_buys": [],
+      "anticipated_holds": [
         {
-          "action": "buy",
+          "action": "hold",
           "ticker": "SONY",
           "name": "Sony Group Corporation",
-          "reason": "Top-up to equal weight",
-          "value": 15.53,
-          "price": 25.1,
-          "target_value": 599.11,
-          "conviction_score": 0.6792,
+          "reason": "Already near equal-weight target",
+          "value": 586.07,
+          "target_value": 586.08,
+          "conviction_score": 0.7083,
           "signal": "buy"
-        }
-      ],
-      "anticipated_holds": [
+        },
         {
           "action": "hold",
           "ticker": "WIT",
           "name": "Wipro Limited",
           "reason": "Already near equal-weight target",
-          "value": 599.11,
-          "target_value": 599.11,
-          "conviction_score": 0.5967,
+          "value": 586.08,
+          "target_value": 586.08,
+          "conviction_score": 0.6433,
           "signal": "strong_buy"
         }
       ],
       "skipped": [],
       "waitlisted": [],
-      "summary": "Next rebalance would target 2 equal-weight sleeve(s); deploy cash into 1 buy(s); leave 1 near-target holding(s)."
+      "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
     },
     "trades": [
       {
-        "id": "503f81e9-3b22-4596-b99f-efa2d09cc1e0",
+        "id": "2f908074-b78b-43a1-8fcd-da971aa02a69",
         "fund_id": "6274124b-736c-48d4-88ab-e53d3dc06cfd",
-        "acted_at": "2026-10-22T08:37:14.735715+01:00",
+        "acted_at": "2026-10-22T09:47:32.158781+01:00",
         "ticker": "SONY",
         "side": "buy",
         "sizing_mode": "cash",
-        "shares": 0.497536,
-        "price": 25.1,
-        "gross": 12.49,
+        "shares": 0.494989,
+        "price": 25.21,
+        "gross": 12.48,
         "cost": 0.02,
-        "net_cash": -12.51,
+        "net_cash": -12.5,
         "note": "Automated buy",
         "name": "Sony Group Corporation"
-      },
-      {
-        "id": "c3b43643-75db-4e91-b91d-fa9802fc3490",
-        "fund_id": "6274124b-736c-48d4-88ab-e53d3dc06cfd",
-        "acted_at": "2026-10-22T08:37:14.735715+01:00",
-        "ticker": "WIT",
-        "side": "sell",
-        "sizing_mode": "cash",
-        "shares": 7.238999,
-        "price": 2.15,
-        "gross": 15.56,
-        "cost": 0.03,
-        "net_cash": 15.54,
-        "note": "Automated trim",
-        "name": "Wipro Limited",
-        "avg_cost_at_exit": 1.742
       }
     ],
-    "nav_before": 1198.27,
+    "nav_before": 1172.18,
     "cash_before": 12.51,
     "contributed_capital_before": 1000.0,
     "holdings_before": [
@@ -6522,12 +6504,12 @@
       "exit_streak": {},
       "reentry_cooldown": {}
     },
-    "nav_after": 1198.22,
-    "cash_after": 15.54,
+    "nav_after": 1172.16,
+    "cash_after": 0.01,
     "holdings_after": [
       {
         "ticker": "WIT",
-        "shares": 278.655072,
+        "shares": 285.894071,
         "avg_cost": 1.742,
         "sector": "Technology",
         "name": "Wipro Limited",
@@ -6537,8 +6519,8 @@
       },
       {
         "ticker": "SONY",
-        "shares": 23.250087,
-        "avg_cost": 23.8859,
+        "shares": 23.24754,
+        "avg_cost": 23.8882,
         "sector": "Technology",
         "name": "Sony Group Corporation",
         "momentum_grace": false,
@@ -6553,9 +6535,9 @@
     "llm_agree_veto_shadow": {
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "llm",
-      "judge_spec_id": "llm.v1",
-      "parent_spec_id": "heuristic.v1",
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
       "verdict_counts": {
         "agree": 1,
         "veto": 0,
@@ -6569,9 +6551,7 @@
           "algo_reason": "Automated buy",
           "shadow_verdict": "agree",
           "reasons": [
-            "screen_signal is buy and still_buyish is true, so the name remains in the active buyish cohort at decision time.",
-            "conviction_rank 1 with entry_rank 1 and rank_drop 0 is well inside the hold gate (rank_drop < 3), supporting entry rather than deferral.",
-            "research_verdict accumulate with overlay_bound true aligns with the automated buy; fcf_basis_overlay false does not block the proposal."
+            "Buy into buyish target set \u2014 agree with algo selection."
           ],
           "evidence": [
             {
@@ -6610,6 +6590,12 @@
               "value": "accumulate"
             },
             {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.7083
+            },
+            {
               "kind": "still_buyish",
               "source": "derived",
               "detail": "Name remains buy/strong_buy on the decision screen",
@@ -6628,13 +6614,13 @@
               "value": true
             }
           ],
-          "judge_backend": "llm",
-          "judge_spec_id": "llm.v1",
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
           "influences_live": false,
           "observe_only": true,
           "track_id": "buy_tier_level",
-          "logged_at": "2026-10-22T08:37:14.735715+01:00",
-          "proposal_id": "buy_tier_level:SONY:buy:2026-10-22T08:37:14.735715+01:00",
+          "logged_at": "2026-10-22T09:47:32.158781+01:00",
+          "proposal_id": "buy_tier_level:SONY:buy:2026-10-22T09:47:32.158781+01:00",
           "meta": {
             "still_buyish": true,
             "rank_drop": 0,
@@ -6649,18 +6635,9 @@
               "overlay_bound": true,
               "interim_eps_decline_pct": null,
               "adjusted_eps_growth_pct": null
-            },
-            "heuristic_baseline": {
-              "shadow_verdict": "agree",
-              "reasons": [
-                "Buy into buyish target set \u2014 agree with algo selection."
-              ],
-              "judge_spec_id": "heuristic.v1"
-            },
-            "llm_merge": "ok"
+            }
           },
-          "schema_version": 1,
-          "parent_spec_id": "heuristic.v1"
+          "schema_version": 1
         }
       ]
     }
