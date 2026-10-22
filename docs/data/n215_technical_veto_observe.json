@@ -3,7 +3,7 @@
   "registration_id": "n215-soft-band-veto-v0",
   "recipe_id": "n215-soft-score-recipe-v0",
   "deferred_id": "N215",
-  "generated_at": "2026-10-22T09:29:46.766874+00:00",
+  "generated_at": "2026-10-22T12:55:53.248044+00:00",
   "observe_only": true,
   "influences_live": false,
   "learning_question": "For each pre-registered soft-veto band threshold on sealed N200 closed episodes (charts \u2264 buy_ts), what is catch rate among deep losers (fair-cost \u2264 \u221210%) vs miss rate among large winners (\u2265 +10%)? Companion: risk_score distribution. Observe labels only \u2014 no live gate.",
@@ -56,6 +56,8 @@
       "threshold": 0.5,
       "lookback_trading_days": 60,
       "learning_question": "On sealed closed buys that soft-band labels PASS, does blocking entries whose close sits at or above the midpoint of the prior 60 trading-day range catch deep losers alone, with acceptable large-winner miss and positive alone net fair-cost benefit vs the unfiltered sealed cohort?",
+      "n206_warm_marker_id": "n215-grind-mid60-n206-warm-v0",
+      "n206_warm_claim_buy_day_from": "2026-10-23",
       "influences_live": false
     }
   },
@@ -67,7 +69,7 @@
     "N210_closed": 3,
     "deep_losers": 8,
     "large_winners": 6,
-    "note": "Soft-band catch/miss primary remains N200. N206 scored for companion n215-grind-mid60-pass-v0 report-only (discovery book)."
+    "note": "Soft-band catch/miss primary remains N200. N206 scored for companion n215-grind-mid60-pass-v0: pre-warm discovery/contaminated; post-warm claim from 2026-10-23."
   },
   "rollup": {
     "n200_closed": 106,
@@ -154,8 +156,25 @@
       "learning_question": "On sealed closed buys that soft-band labels PASS, does blocking entries whose close sits at or above the midpoint of the prior 60 trading-day range catch deep losers alone, with acceptable large-winner miss and positive alone net fair-cost benefit vs the unfiltered sealed cohort?",
       "discovery_book": "N206",
       "alone_benefit_primary": "N200",
+      "n206_warm_claim": true,
       "influences_live": false,
       "observe_only": true,
+      "change_markers": [
+        {
+          "marker_id": "n215-grind-mid60-n206-warm-v0",
+          "at": "2026-10-23T00:00:00+00:00",
+          "claim_buy_day_from": "2026-10-23",
+          "lever": "params",
+          "before_id": "n206_full_cohort_discovery_contaminated",
+          "after_id": "n206_post_warm_claim_set",
+          "registration_id": "n215-soft-band-veto-v0",
+          "rule_id": "n215-grind-mid60-pass-v0",
+          "reason": "Warm-start N206 mid60 twin claim: historical sealed N206 buys (buy_day < 2026-10-23) stay discovery/contaminated report-only; alone-benefit / twin comparison for N206 uses only new buys with buy_day >= 2026-10-23 (UTC calendar day). N200 remains cross-book alone-benefit primary. Same companion rule_id \u2014 instrumentation epoch via logged marker, not a new learning question or live admit (F8).",
+          "eligible_set_ref": "n206_closed_buy_day_ge_2026-10-23",
+          "applies_to": "observe_only",
+          "influences_live": false
+        }
+      ],
       "N200": {
         "closed": 106,
         "coverage": 106,
@@ -188,11 +207,55 @@
         "base_fc_sum": 7.215836,
         "alt_fc_sum": 8.175929,
         "delta_fc_sum": 0.960093,
-        "live_veto": false
+        "live_veto": false,
+        "role": "full_cohort_contaminated_report_only",
+        "claim_set": false,
+        "note": "Full sealed N206 including discovery history. Do not use for admit; prefer N206_post_warm for claim and N200 for cross-book alone-benefit."
+      },
+      "N206_pre_warm": {
+        "closed": 200,
+        "coverage": 187,
+        "fired": 35,
+        "deep_catch": "9/26",
+        "deep_n": 9,
+        "deep_total": 26,
+        "large_miss": "2/44",
+        "large_n": 2,
+        "large_total": 44,
+        "base_fc_median": 0.0139515,
+        "alt_fc_median": 0.020316,
+        "base_fc_sum": 7.215836,
+        "alt_fc_sum": 8.175929,
+        "delta_fc_sum": 0.960093,
+        "live_veto": false,
+        "role": "discovery_contaminated_report_only",
+        "buy_day_range": "buy_day < 2026-10-23",
+        "claim_set": false
+      },
+      "N206_post_warm": {
+        "closed": 0,
+        "coverage": 0,
+        "fired": 0,
+        "deep_catch": "0/0",
+        "deep_n": 0,
+        "deep_total": 0,
+        "large_miss": "0/0",
+        "large_n": 0,
+        "large_total": 0,
+        "base_fc_median": null,
+        "alt_fc_median": null,
+        "base_fc_sum": 0.0,
+        "alt_fc_sum": 0.0,
+        "delta_fc_sum": 0.0,
+        "live_veto": false,
+        "role": "n206_warm_claim_set",
+        "buy_day_range": "buy_day >= 2026-10-23",
+        "claim_set": true,
+        "note": "Empty until new N206 sealed buys on/after the warm day. This is the N206 twin comparison set \u2014 not the discovery backfill."
       },
       "admit_recommendation": {
         "live_veto": false,
-        "note": "Companion alone rule after counterfactual discovery. N200 is alone-benefit primary; N206 is discovery/report-only \u2014 do not retune threshold on N206. Not live."
+        "note": "Companion alone rule after counterfactual discovery. N200 is cross-book alone-benefit primary. N206 full/pre-warm are discovery-contaminated report-only; N206_post_warm (buy_day >= 2026-10-23) is the warm claim set for tomorrow-onward comparison. Do not retune thr. Not live."
       }
     },
     "score_distribution": {

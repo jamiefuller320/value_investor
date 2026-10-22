@@ -3,7 +3,7 @@
   "recipe_id": "n215-soft-score-recipe-v0",
   "deferred_id": "N215",
   "schema_version": 1,
-  "generated_at": "2026-10-22T09:29:46.766874+00:00",
+  "generated_at": "2026-10-22T12:55:53.248044+00:00",
   "observe_only": true,
   "influences_live": false,
   "learning_question": "For each pre-registered soft-veto band threshold on sealed N200 closed episodes (charts \u2264 buy_ts), what is catch rate among deep losers (fair-cost \u2264 \u221210%) vs miss rate among large winners (\u2265 +10%)? Companion: risk_score distribution. Observe labels only \u2014 no live gate.",
@@ -60,12 +60,26 @@
       "learning_question": "On sealed closed buys that soft-band labels PASS, does blocking entries whose close sits at or above the midpoint of the prior 60 trading-day range catch deep losers alone, with acceptable large-winner miss and positive alone net fair-cost benefit vs the unfiltered sealed cohort?",
       "discovery_book": "N206",
       "alone_benefit_primary": "N200",
+      "n206_warm_marker": {
+        "marker_id": "n215-grind-mid60-n206-warm-v0",
+        "at": "2026-10-23T00:00:00+00:00",
+        "claim_buy_day_from": "2026-10-23",
+        "lever": "params",
+        "before_id": "n206_full_cohort_discovery_contaminated",
+        "after_id": "n206_post_warm_claim_set",
+        "registration_id": "n215-soft-band-veto-v0",
+        "rule_id": "n215-grind-mid60-pass-v0",
+        "reason": "Warm-start N206 mid60 twin claim: historical sealed N206 buys (buy_day < 2026-10-23) stay discovery/contaminated report-only; alone-benefit / twin comparison for N206 uses only new buys with buy_day >= 2026-10-23 (UTC calendar day). N200 remains cross-book alone-benefit primary. Same companion rule_id \u2014 instrumentation epoch via logged marker, not a new learning question or live admit (F8).",
+        "eligible_set_ref": "n206_closed_buy_day_ge_2026-10-23",
+        "applies_to": "observe_only",
+        "influences_live": false
+      },
       "influences_live": false
     }
   },
   "cohort": {
     "primary": "N200 closed lifecycle episodes with charts",
-    "companion_report": "N206 closed for grind mid60 report-only",
+    "companion_report": "N206 grind mid60: pre-warm (<2026-10-23) discovery/contaminated; post-warm claim set",
     "anecdote": "N210 closed until volume_gate.met"
   }
 }
