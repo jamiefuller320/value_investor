@@ -1,16 +1,16 @@
 {
-  "run_at": "2026-10-22T15:31:46.567951+00:00",
-  "market_id": "aex",
+  "run_at": "2026-10-22T16:42:51.653720+00:00",
+  "market_id": "atx",
   "scan_cap": null,
   "max_runtime_seconds": 900.0,
   "prefer_tickers": [
-    "MT.AS",
-    "ASM.AS",
-    "ASML.AS"
+    "CAI.VI",
+    "EVN.VI",
+    "WIE.VI"
   ],
-  "scanned": 8,
+  "scanned": 5,
   "hits": 5,
-  "new_rows_total": 0,
+  "new_rows_total": 2,
   "curiosity_total": 5,
   "errors": 0,
   "runtime_cutoff": false,
@@ -24,21 +24,72 @@
   "note": "Scan-then-target: listing-only discovery; deepen uses existing ingest pass. Library sprint caps discovery wall-clock so body deepen still runs. Engineering fetch surface is never assumed complete.",
   "tickers": [
     {
-      "ticker": "MT.AS",
-      "name": "ArcelorMittal S.A.",
+      "ticker": "CAI.VI",
+      "name": "CA Immobilien Anlagen AG",
+      "signal": "buy",
+      "new_row_count": 2,
+      "listed_count": 4,
+      "prior_count": 2,
+      "priority_bonus": 12.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.caimmo.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.caimmo.com/fileadmin/documents/Finanzberichte/2025/CAImmo-Annual-Report-2025-final.pdf",
+          "headline": "IR allowlist document — CAImmo-Annual-Report-2025-final.pdf"
+        }
+      ],
+      "new_row_ids": [
+        "ir_a2692f62bb5b87c6",
+        "ir_c2327e7f9f05ec68"
+      ],
+      "error": null
+    },
+    {
+      "ticker": "EVN.VI",
+      "name": "EVN AG",
       "signal": "buy",
       "new_row_count": 0,
-      "listed_count": 42,
-      "prior_count": 43,
-      "priority_bonus": 0.0,
-      "curiosity": [],
+      "listed_count": 3,
+      "prior_count": 3,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.evn.at'",
+          "source": "ir_allowlist",
+          "url": "https://www.evn.at/en/investor-relations/publications/",
+          "headline": "IR allowlist document — https://www.evn.at/en/investor-relations/publications/"
+        }
+      ],
       "new_row_ids": [],
       "error": null
     },
     {
-      "ticker": "ASM.AS",
-      "name": "ASM International NV",
+      "ticker": "WIE.VI",
+      "name": "Wienerberger AG",
       "signal": "buy",
+      "new_row_count": 0,
+      "listed_count": 3,
+      "prior_count": 3,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.wienerberger.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.wienerberger.com/en/investors/reports-presentations.html",
+          "headline": "IR allowlist document — reports-presentations.html"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "STR.VI",
+      "name": "Strabag SE",
+      "signal": "strong_buy",
       "new_row_count": 0,
       "listed_count": 4,
       "prior_count": 4,
@@ -46,43 +97,19 @@
       "curiosity": [
         {
           "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.asm.com'",
+          "detail": "Unfamiliar filing URL host 'www.strabag.com'",
           "source": "ir_allowlist",
-          "url": "https://www.asm.com/media/3skhiimk/asm-2025-annual-report.pdf",
-          "headline": "IR allowlist document — asm-2025-annual-report.pdf"
+          "url": "https://www.strabag.com/site/strabag-company-locale/get/params_E1717455665/2418307/Annual_and_Sustainability_Report_2025.pdf",
+          "headline": "IR allowlist document — Annual_and_Sustainability_Report_2025.pdf"
         }
       ],
       "new_row_ids": [],
       "error": null
     },
     {
-      "ticker": "ASML.AS",
-      "name": "ASML Holding N.V.",
+      "ticker": "OMV.VI",
+      "name": "OMV Aktiengesellschaft",
       "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 20,
-      "prior_count": 21,
-      "priority_bonus": 0.0,
-      "curiosity": [],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "SHELL.AS",
-      "name": "Shell plc",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 38,
-      "prior_count": 40,
-      "priority_bonus": 0.0,
-      "curiosity": [],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "AD.AS",
-      "name": "Koninklijke Ahold Delhaize N.V.",
-      "signal": "strong_buy",
       "new_row_count": 0,
       "listed_count": 3,
       "prior_count": 3,
@@ -90,70 +117,10 @@
       "curiosity": [
         {
           "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'media.aholddelhaize.com'",
+          "detail": "Unfamiliar filing URL host 'reports.omv.com'",
           "source": "ir_allowlist",
-          "url": "https://media.aholddelhaize.com/media/bdsnpbxm/ahold-delhaize-q4-2025-summary-report.pdf",
-          "headline": "IR allowlist document — ahold-delhaize-q4-2025-summary-report.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "WKL.AS",
-      "name": "Wolters Kluwer N.V.",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 5,
-      "prior_count": 5,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'assets.contenthub.wolterskluwer.com'",
-          "source": "ir_allowlist",
-          "url": "https://assets.contenthub.wolterskluwer.com/api/public/content/3118646-2026-02-25-wolters-kluwer-2025-full-year-results-7391945524?v=2c966da9",
-          "headline": "IR allowlist document — 3118646-2026-02-25-wolters-kluwer-2025-full-year-results-7391945524?v=2c966da9"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "AKZA.AS",
-      "name": "Akzo Nobel N.V.",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 3,
-      "prior_count": 3,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.akzonobel.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.akzonobel.com/en/investors/results-center",
-          "headline": "IR allowlist document — results-center"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "PRX.AS",
-      "name": "Prosus N.V.",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 5,
-      "prior_count": 5,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.prosus.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.prosus.com/~/media/Files/P/prosus-corp-v2/results-reports-and-events-archive/annual-report/2026/fy2026-annual-report.pdf",
-          "headline": "IR allowlist document — fy2026-annual-report.pdf"
+          "url": "https://reports.omv.com/en/annual-report/2025/_assets/downloads/entire-omv-ar25.pdf",
+          "headline": "IR allowlist document — entire-omv-ar25.pdf"
         }
       ],
       "new_row_ids": [],
