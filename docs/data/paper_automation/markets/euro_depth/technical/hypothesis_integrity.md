@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `technical` · updated 2026-10-21T07:39:56.866637+00:00
+Track: `technical` · updated 2026-10-22T07:37:51.500396+00:00
 
 ## Portfolio loser feedback
 
@@ -10,35 +10,35 @@ Track: `technical` · updated 2026-10-21T07:39:56.866637+00:00
 
 ## Holding reviews
 
-### SAN.PA — intact / hold_tolerate (-0.8%)
+### SAN.PA — intact / hold_tolerate (-1.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 67%
 
-### AD.AS — intact / hold_tolerate (+4.4%)
+### AD.AS — intact / hold_tolerate (+4.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 73%
 
-### PHIA.AS — intact / hold_tolerate (+5.7%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 78%
-
-### ERIC-B.ST — intact / hold_tolerate (+6.2%)
+### ERIC-B.ST — intact / hold_tolerate (+4.7%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 72%
 
-### LOGN.SW — intact / hold_tolerate (+11.6%)
+### PHIA.AS — intact / hold_tolerate (+8.1%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 78%
+
+### LOGN.SW — intact / hold_tolerate (+11.7%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

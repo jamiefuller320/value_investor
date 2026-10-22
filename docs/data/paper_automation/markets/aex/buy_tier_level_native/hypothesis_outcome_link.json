@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-10-21T07:38:47.636971+00:00",
+  "generated_at": "2026-10-22T07:37:03.751306+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 6,
+    "closed_total": 7,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 5,
+        "closed_count": 6,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0473,
-        "mean_trough_unrealized_pct": -0.0115,
+        "mean_peak_unrealized_pct": 0.0793,
+        "mean_trough_unrealized_pct": -0.0116,
         "outcome_labels": {
-          "recovered": 5
+          "recovered": 6
         }
       },
       "broken": {
@@ -62,10 +62,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 6,
+    "hold_closed_with_thesis": 7,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=6 (target >=8)",
+      "hold closed with thesis=7 (target >=8)",
       "hold thesis buckets thin (broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
@@ -172,7 +172,7 @@
           "trough_unrealized_pct": -0.0367
         }
       ],
-      "peak_unrealized_pct": 0.0045,
+      "peak_unrealized_pct": 0.1386,
       "trough_unrealized_pct": -0.0445,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -185,7 +185,7 @@
       "ticker": "WKL.AS",
       "name": "Wolters Kluwer N.V.",
       "started_at": "2026-10-04T08:10:09.557971+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -224,12 +224,12 @@
           "trough_unrealized_pct": -0.0122
         }
       ],
-      "peak_unrealized_pct": 0.2249,
+      "peak_unrealized_pct": 0.2394,
       "trough_unrealized_pct": -0.0122,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-22T08:37:03.740363+01:00",
+      "linked_sell_trade_id": "6b11d4ea-3c7b-4843-9829-a5114c4e2d36"
     },
     {
       "episode_id": "buy_tier_level_native:PHIA.AS:2026-10-04T08:10:09.557971+01:00",
@@ -415,7 +415,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0072,
-      "trough_unrealized_pct": -0.0081,
+      "trough_unrealized_pct": -0.0384,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -709,16 +709,16 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "AD.AS": 0.0438,
-        "SHELL.AS": 0.1073,
-        "AKZA.AS": 0.0303,
-        "WKL.AS": 0.2344,
-        "RAND.AS": -0.0081,
-        "PHIA.AS": 0.078,
-        "ADYEN.AS": 0.0758
+        "AD.AS": 0.0317,
+        "SHELL.AS": 0.1103,
+        "AKZA.AS": 0.0487,
+        "WKL.AS": 0.2548,
+        "RAND.AS": 0.182,
+        "PHIA.AS": 0.102,
+        "ADYEN.AS": 0.0941
       },
       "buy_returns_since_rotation": {
-        "KPN.AS": 0.031
+        "KPN.AS": 0.0343
       },
       "verdict": null,
       "closed_at": null
@@ -837,18 +837,26 @@
           "cost": 0.02
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-22T08:37:03.740363+01:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0241,
+          "avg_buy_return": 0.0546,
+          "replacement_delta": 0.0305
+        }
+      ],
       "sell_returns_since_rotation": {
-        "PHIA.AS": 0.0124,
-        "ADYEN.AS": 0.0011,
-        "KPN.AS": 0.016
+        "PHIA.AS": 0.0349,
+        "ADYEN.AS": 0.0182,
+        "KPN.AS": 0.0193
       },
       "buy_returns_since_rotation": {
-        "AKZA.AS": 0.0097,
-        "SHELL.AS": 0.0107,
-        "AD.AS": 0.0202,
-        "RAND.AS": -0.0488,
-        "WKL.AS": 0.0725
+        "AKZA.AS": 0.0277,
+        "SHELL.AS": 0.0133,
+        "AD.AS": 0.0084,
+        "RAND.AS": 0.1336,
+        "WKL.AS": 0.0902
       },
       "verdict": null,
       "closed_at": null
@@ -1011,14 +1019,14 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "SHELL.AS": 0.0015,
-        "AD.AS": 0.0161,
-        "RAND.AS": -0.0069,
-        "WKL.AS": 0.027,
-        "AKZA.AS": -0.0105
+        "SHELL.AS": 0.0042,
+        "AD.AS": 0.0043,
+        "RAND.AS": 0.1834,
+        "WKL.AS": 0.0439,
+        "AKZA.AS": 0.0071
       },
       "buy_returns_since_rotation": {
-        "PRX.AS": -0.0081,
+        "PRX.AS": -0.0384,
         "ASM.AS": 0.0,
         "ASML.AS": 0.0
       },
@@ -1122,11 +1130,71 @@
         "ASML.AS": 0.0
       },
       "buy_returns_since_rotation": {
-        "AKZA.AS": 0.0017,
-        "AD.AS": 0.0083,
-        "RAND.AS": -0.0219,
-        "WKL.AS": -0.0045,
-        "PRX.AS": -0.0008
+        "AKZA.AS": 0.0196,
+        "AD.AS": -0.0034,
+        "RAND.AS": 0.1655,
+        "WKL.AS": 0.0119,
+        "PRX.AS": -0.0314
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-10-22T08:37:03.740363+01:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-10-22T08:37:03.740363+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "WKL.AS",
+          "price": 85.1,
+          "shares": 2.516398,
+          "gross": 214.15,
+          "cost": 0.05,
+          "avg_cost_at_exit": 74.9953,
+          "realized_pct": 0.1347,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.1347
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "AD.AS",
+          "price": 32.5,
+          "shares": 4.713446,
+          "gross": 153.19,
+          "cost": 0.04
+        },
+        {
+          "ticker": "AKZA.AS",
+          "price": 59.44,
+          "shares": 1.023745,
+          "gross": 60.85,
+          "cost": 0.02
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "WKL.AS": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "AD.AS": 0.0,
+        "AKZA.AS": 0.0
       },
       "verdict": null,
       "closed_at": null

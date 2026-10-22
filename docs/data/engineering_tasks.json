@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-22T07:58:48.080372+00:00",
+  "compiled_at": "2026-10-22T06:20:41.617425+00:00",
   "run_at": null,
-  "task_count": 203,
+  "task_count": 202,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -10350,56 +10350,6 @@
       "merged_at": "2026-10-02T10:55:17.370432+00:00"
     },
     {
-      "id": "eng-20261022-01",
-      "area": "ingest",
-      "title": "Hunt fetchable IR source for parked iseq20 leftover GL9.IR",
-      "summary": "Library market iseq20 (ISEQ 20) parked GL9.IR after ingest avenues were exhausted (awaiting_periodic_report). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: Next statutory annual or inte",
-      "priority": "low",
-      "priority_score": 12.0,
-      "source": "parked_source_hunter",
-      "evidence": {
-        "market_id": "iseq20",
-        "library_market": "iseq20",
-        "hunter_market_id": "iseq20",
-        "hunter_ticker": "GL9.IR",
-        "parked_reason": "awaiting_periodic_report",
-        "parked_revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "universe": "library",
-        "doc": "docs/ops/library-ingest-escalation.md"
-      },
-      "acceptance_criteria": [
-        "Inspect IR / exchange sources for GL9.IR only — do not invent URLs",
-        "If a fetchable statutory/IR body exists, add allowlist + regression test",
-        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
-        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "parked",
-      "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_policy": "preflight_clash",
-      "parked_at": "2026-10-22T08:33:33.271684+00:00"
-    },
-    {
       "id": "eng-20261002-13",
       "area": "ingest",
       "title": "Repair dead hunter allowlist URL for ADYEN.AS",
@@ -10471,8 +10421,7 @@
         "parked_reason": "awaiting_periodic_report",
         "parked_revisit_when": "Next statutory annual or interim report is issued and indexed",
         "universe": "library",
-        "doc": "docs/ops/library-ingest-escalation.md",
-        "merge_class": "parked_hunter"
+        "doc": "docs/ops/library-ingest-escalation.md"
       },
       "acceptance_criteria": [
         "Inspect IR / exchange sources for NIBE-B.ST only — do not invent URLs",
@@ -10501,15 +10450,11 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "merged",
+      "status": "pr_open",
       "result_path": "output/engineering_result_eng-20261021-09.md",
       "branch_name": "cursor/eng-20261021-09-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-10-22T00:12:19.095706+00:00",
-      "merge_class": "parked_hunter",
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1152",
-      "pr_number": 1152,
-      "merged_at": "2026-10-22T07:58:40.509471+00:00"
+      "completed_at": "2026-10-22T00:12:19.095706+00:00"
     },
     {
       "id": "eng-20261021-08",
@@ -13158,7 +13103,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-10-22T07:52:21.806388+00:00",
+    "evaluated_at": "2026-10-22T02:36:36.326036+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -13217,7 +13162,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-10-22T08:23:07.170862+00:00",
+    "evaluated_at": "2026-10-22T06:20:41.642322+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -13225,9 +13170,9 @@
     },
     "resumed_at": "2026-10-14T07:12:50.922751+00:00"
   },
-  "micro_compile_source": "parked_source_hunter",
-  "library_market_id": "iseq20",
-  "hunter_ticker": "GL9.IR",
+  "micro_compile_source": "hunter_url_repair",
+  "library_market_id": "omxs30",
+  "hunter_ticker": "ADYEN.AS",
   "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
   "source_gap_closure_run_id": "igc-20261019-03",
   "source_trial_id": "igc-20261019-03",

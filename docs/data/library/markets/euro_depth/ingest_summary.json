@@ -1,15 +1,89 @@
 {
-  "run_at": "2026-10-22T07:30:23.117430+00:00",
+  "run_at": "2026-10-21T13:08:15.095719+00:00",
   "market_id": "euro_depth",
-  "targets": [],
-  "target_details": [],
-  "results": [],
+  "targets": [
+    "IFX.DE"
+  ],
+  "target_details": [
+    {
+      "ticker": "IFX.DE",
+      "priority_score": 5.35,
+      "filings_total": 2,
+      "filings_with_body": 1,
+      "indexed_without_body": 0,
+      "reason": "thin_bodies"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "IFX.DE",
+      "reason": "thin_bodies",
+      "before": {
+        "filings_total": 2,
+        "filings_with_body": 1,
+        "indexed_without_body": 0
+      },
+      "after": {
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0
+      },
+      "improved": false,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 1,
+        "annual": 1,
+        "interim": 0,
+        "trading_update": 0,
+        "other": 0,
+        "with_body": 1,
+        "period_coverage": {
+          "annual": {
+            "total": 1,
+            "with_body": 1
+          },
+          "interim": {
+            "total": 0,
+            "with_body": 0
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 0,
+            "with_body": 0
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 1,
+        "with_body_after": 1,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 1,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
   "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-22T07:30:19.111673+00:00",
+    "snapshot_at": "2026-10-21T13:07:48.260484+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 51,
     "unmeasured_buy_tier": 0,
@@ -71,7 +145,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-22T07:30:23.088620+00:00",
+    "snapshot_at": "2026-10-21T13:08:15.043977+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 51,
     "unmeasured_buy_tier": 0,
@@ -144,7 +218,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-10-22T07:30:21.129872+00:00",
+    "assessed_at": "2026-10-21T13:07:52.042109+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -216,21 +290,21 @@
       "thin_need_bodies": 3
     }
   },
-  "used_seconds": 0.0020892330000208403,
+  "used_seconds": 19.14607378800001,
   "budget_seconds": 2100.0,
-  "leftover_seconds": 2099.997910767,
+  "leftover_seconds": 2080.853926212,
   "blocker_ticker": null,
   "per_ticker_max_seconds": null,
   "pin_tickers": [
-    "ESSITY-B.ST"
+    "IFX.DE"
   ],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_depth",
-    "updated_at": "2026-10-22T07:30:23.095556+00:00",
+    "updated_at": "2026-10-21T13:08:15.055101+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -365,6 +439,6 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261021-09"
+    "task_id": "eng-20261021-01"
   }
 }
