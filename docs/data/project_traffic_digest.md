@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-22T12:32:35.511700+00:00`
+Generated: `2026-10-22T17:31:01.530883+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -36,7 +36,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `human`/human PR #1152 `eng-20261021-09` — Hunt fetchable IR source for parked omxs30 leftover NIBE-B.ST
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 241
+- Occasion count: 242
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 4×
