@@ -25,19 +25,33 @@ Among soft-vetoed (**WARN+**) sealed **N200** names that later became **large wi
 
 Do **not** retune pins on this cohort for admission claims. Layer B separate from soft-band Layer A — no bundle-admit.
 
+## Clear-signal twin (design-locked companion)
+
+| Piece | Pin |
+|---|---|
+| Registration | `n215-reentry-warn-r4-v0` / pair `WARN+_R4` |
+| Reentry | **R4** RSI-reset: post-`t0` RSI14 ≤ **35**, then RSI14 ≥ **45** with close > **SMA20** |
+| Abandon | Same **R5**=40 / **R6**=−15% as primary |
+| Not | R1 thr nudge; R5 stretch; live admit from twin alone |
+| Store | `clear_signal_twin` in `n215_reentry_observe.json` + `n215_reentry_twin_r4_registration.json` |
+| Hurdles | Pre-registered (N200 large 3/3 · deep 4/4; N206 MU reenter + KHC/TROW abandon) |
+
+CLI default includes twin (`--no-twin` to skip). Project store: `technical-veto-clear-signal-twin.md`.
+
 ## When it runs
 
 | Trigger | Schedule |
 |---|---|
-| **Daily ops-monitor** | `check_n215_reentry_observe` refreshes store from N200 (+ N206 holdout) + soft-band scores + charts |
-| Manual | `ftse-n215-reentry --output-dir docs/data` (add `--no-n206-holdout` to skip holdout) |
+| **Daily ops-monitor** | `check_n215_reentry_observe` refreshes store from N200 (+ N206 holdout) + soft-band scores + charts (+ R4 twin) |
+| Manual | `ftse-n215-reentry --output-dir docs/data` (`--no-n206-holdout` / `--no-twin` optional) |
 
 ## Artifacts
 
 | Path | Role |
 |---|---|
-| `docs/data/n215_reentry_registration.json` | Frozen seal / pair record |
-| `docs/data/n215_reentry_observe.json` | Per-episode monitor labels + thickened rollups + `holdout_N206` |
+| `docs/data/n215_reentry_registration.json` | Frozen R1 seal / pair record |
+| `docs/data/n215_reentry_twin_r4_registration.json` | Frozen R4 twin seal |
+| `docs/data/n215_reentry_observe.json` | Per-episode R1 labels + thickened rollups + `holdout_N206` + `clear_signal_twin` |
 | This doc | Runbook |
 
 Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
@@ -53,5 +67,5 @@ Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
 ## Related
 
 - Soft-band harness: [n215-technical-veto-observe.md](n215-technical-veto-observe.md)
-- Project store: `technical-veto-reentry-lq.md`, `technical-veto-monitor-reentry.md`, `technical-veto-reentry-thickened.md`
+- Project store: `technical-veto-reentry-lq.md`, `technical-veto-monitor-reentry.md`, `technical-veto-reentry-thickened.md`, `technical-veto-clear-signal-twin.md`
 - Park: **N215**

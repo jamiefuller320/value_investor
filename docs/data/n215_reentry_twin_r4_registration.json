@@ -1,0 +1,67 @@
+{
+  "registration_id": "n215-reentry-warn-r4-v0",
+  "pair_id": "WARN+_R4",
+  "deferred_id": "N215",
+  "schema_version": 3,
+  "generated_at": "2026-10-22T07:56:00.834807+00:00",
+  "observe_only": true,
+  "influences_live": false,
+  "learning_question": "On the same WARN+ gated sealed episodes as primary WARN+\u00d7R1: does frozen MONITOR rule R4 (RSI-reset: post-t0 RSI\u226435 then RSI\u226545 with close>SMA20; R5=40d / R6=\u221215%) re-admit large winners that R1 misses (MU-class climax-reclaim) without false-clearing near-high dead-cats (KHC/TROW), and how does path-cost \u0394 compare? N200 primary; N206 holdout report-only (never tune). Shape-different twin \u2014 not R1 thr / not R5 stretch. Observe labels only \u2014 no live gate.",
+  "ops_doc": "docs/ops/n215-reentry-observe.md",
+  "baseline_pair_id": "WARN+_R1",
+  "pair": {
+    "registration_id": "n215-reentry-warn-r4-v0",
+    "pair_id": "WARN+_R4",
+    "band_gate": "WARN+",
+    "band_gate_threshold": 0.35,
+    "soft_recipe_id": "n215-soft-score-recipe-v0",
+    "reentry_rule": "R4",
+    "reentry_rule_name": "rsi-reset",
+    "rsi_period": 14,
+    "rsi_oversold": 35.0,
+    "rsi_reset": 45.0,
+    "sma_period": 20,
+    "oversold_window": "MONITOR post-t0 only (forward bars after buy)",
+    "r5_timeout_sessions": 40,
+    "r6_worsen_dd": -0.15,
+    "companion_gates_reported": [
+      "WARN+",
+      "SOFT_VETO+"
+    ],
+    "deep_loser": -0.1,
+    "large_winner": 0.1,
+    "point_in_time": "forward walk uses bars with date \u2264 t at each step",
+    "shape_vs_r1": "RSI oversold\u2192reset + SMA20 filter (not lookback swing-high +1%)",
+    "not_r1_thr": true,
+    "not_r5_stretch": true,
+    "admit_hurdles_pre_registered": {
+      "n200_large_re_admit_min": "3/3",
+      "n200_deep_abandon_min": "4/4",
+      "n206_mu_reentered": true,
+      "n206_khc_abandoned": true,
+      "n206_trow_abandoned": true,
+      "path_delta_reported": true,
+      "live_admit": false
+    },
+    "note": "Design-locked clear-signal twin after holdout autopsy. Same WARN+ gate + R5/R6 as primary R1. N206 report-only \u2014 never tune. No live Layer B admit from twin marks alone."
+  },
+  "admit_hurdles": {
+    "n200_large_re_admit_min": "3/3",
+    "n200_deep_abandon_min": "4/4",
+    "n206_mu_reentered": true,
+    "n206_khc_abandoned": true,
+    "n206_trow_abandoned": true,
+    "path_delta_reported": true,
+    "live_admit": false
+  },
+  "cohort": {
+    "primary": "N200 closed lifecycle episodes with soft band \u2265 WARN (same gate as R1)",
+    "holdout": "N206 closed \u2014 report-only; never tune on holdout marks",
+    "soft_band_source": "score_episode / n215 soft-band recipe v0",
+    "focus_holdout_failures": [
+      "MU",
+      "KHC",
+      "TROW"
+    ]
+  }
+}

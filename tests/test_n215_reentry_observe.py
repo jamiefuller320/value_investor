@@ -9,17 +9,23 @@ from value_investor.n215_reentry_observe import (
     BREAKOUT_PCT,
     FINDING_TITLE,
     PAIR_ID,
+    R4_RSI_OVERSOLD,
+    R4_RSI_RESET,
     R5_TIMEOUT_SESSIONS,
     R6_WORSEN_DD,
     REGISTRATION_ID,
     SCHEMA_VERSION,
+    TWIN_PAIR_ID,
+    TWIN_REGISTRATION_ID,
     build_n215_reentry_observe,
     build_registration_payload,
+    build_twin_registration_payload,
     meets_band_gate,
     ops_findings_from_n215_reentry,
     pre_t0_swing_high,
     refresh_n215_reentry_observe,
     walk_r1_monitor,
+    walk_r4_monitor,
 )
 
 
@@ -98,6 +104,57 @@ def test_walk_r1_timeout():
     walk = walk_r1_monitor(dates=dates, closes=closes, buy_day=buy_day, exit_day=None)
     assert walk["label"] == "abandoned_timeout"
     assert walk["sessions_walked"] == R5_TIMEOUT_SESSIONS
+
+
+def test_walk_r4_reenters_on_rsi_reset():
+    # Long warm-up, mild post-buy dip (stay above R6 −15%) then recovery.
+    # Construct closes so RSI prints ≤35 then ≥45 with close > SMA20.
+    pre = [100.0] * 40 + [100.0 - 0.2 * i for i in range(40)]  # gentle pre-drift
+    # t0 near 92; dip to ~80 (−13%) then rebound — avoid R6
+    post = [
+        90.0,
+        87.0,
+        84.0,
+        81.0,
+        80.0,
+        79.5,
+        81.0,
+        84.0,
+        88.0,
+        92.0,
+        96.0,
+        100.0,
+        104.0,
+        108.0,
+    ]
+    closes = pre + post
+    from datetime import date, timedelta
+
+    d0 = date(2026, 1, 1)
+    dates = [(d0 + timedelta(days=i)).isoformat() for i in range(len(closes))]
+    buy_day = dates[len(pre) - 1]
+    exit_day = dates[-1]
+    walk = walk_r4_monitor(dates=dates, closes=closes, buy_day=buy_day, exit_day=exit_day)
+    assert walk["evaluable"] is True
+    assert walk["label"] == "reentered", walk
+    assert walk["reason"] == "r4_rsi_reset"
+    assert walk["seen_oversold"] is True
+    assert float(walk["reentry_rsi"]) >= R4_RSI_RESET
+    assert R4_RSI_OVERSOLD == 35.0
+
+
+def test_walk_r4_worsen_before_reset():
+    pre = [100.0] * 40
+    post = [95.0, 90.0, 84.0]  # −16% from t0
+    closes = pre + post
+    from datetime import date, timedelta
+
+    d0 = date(2026, 1, 1)
+    dates = [(d0 + timedelta(days=i)).isoformat() for i in range(len(closes))]
+    buy_day = dates[len(pre) - 1]
+    walk = walk_r4_monitor(dates=dates, closes=closes, buy_day=buy_day, exit_day=None)
+    assert walk["label"] == "abandoned_worsen"
+    assert walk["drawdown_at_abandon"] <= R6_WORSEN_DD
 
 
 def test_walk_unevaluable_no_forward():
@@ -239,10 +296,18 @@ def test_refresh_persist_and_findings(tmp_path: Path):
     assert isinstance(holdout, dict)
     assert holdout["never_tune"] is True
     assert holdout["closed_n"] == 1
+    twin = payload.get("clear_signal_twin")
+    assert isinstance(twin, dict)
+    assert twin["pair_id"] == TWIN_PAIR_ID
+    assert twin["registration_id"] == TWIN_REGISTRATION_ID
+    assert twin["influences_live"] is False
+    assert "hurdle_evaluation" in twin
+    assert (tmp_path / "n215_reentry_twin_r4_registration.json").is_file()
     findings = ops_findings_from_n215_reentry(payload)
     assert findings and findings[0]["title"] == FINDING_TITLE
     assert findings[0]["auto_fixable"] is False
     assert "thickened" in findings[0]["summary"]
+    assert "twin_R4_hurdles" in findings[0]["summary"]
 
 
 def test_registration_seal_fields():
@@ -253,6 +318,11 @@ def test_registration_seal_fields():
     assert reg["pair"]["r5_timeout_sessions"] == R5_TIMEOUT_SESSIONS
     assert reg["pair"]["r6_worsen_dd"] == R6_WORSEN_DD
     assert reg["pair"]["thickened"] is True
+    twin_reg = build_twin_registration_payload(generated_at="2026-10-21T00:00:00+00:00")
+    assert twin_reg["pair_id"] == TWIN_PAIR_ID
+    assert twin_reg["pair"]["reentry_rule"] == "R4"
+    assert twin_reg["influences_live"] is False
+    assert twin_reg["admit_hurdles"]["live_admit"] is False
 
 
 def test_build_empty_shape():
@@ -261,6 +331,7 @@ def test_build_empty_shape():
     assert "primary_WARN+_R1" in payload["rollup"]
     assert payload["admit_recommendation"]["pair_admit_worthy"] is False
     assert payload["holdout_N206"] is None
+    assert isinstance(payload.get("clear_signal_twin"), dict)
 
 
 def test_build_with_empty_holdout():

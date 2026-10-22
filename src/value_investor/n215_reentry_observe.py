@@ -1,11 +1,14 @@
 """N215 soft-veto → MONITOR → reentry observe (labels only).
 
-Frozen pair: WARN+ band gate × R1 breakout-wait (R5 timeout 40d + R6 worsen
-−15% pinned inside). Walks forward from sealed buy_ts with bars date ≤ t only.
-Never influences live fills.
+Frozen primary pair: WARN+ band gate × R1 breakout-wait (R5 timeout 40d + R6
+worsen −15% pinned inside). Optional design-locked clear-signal twin:
+WARN+ × R4 RSI-reset (same R5/R6 companions) — shape-different, not R1 thr.
+
+Walks forward from sealed buy_ts with bars date ≤ t only. Never influences
+live fills.
 
 See ``docs/ops/n215-reentry-observe.md`` and Project store
-``technical-veto-reentry-lq.md``.
+``technical-veto-reentry-lq.md`` / ``technical-veto-clear-signal-twin.md``.
 """
 
 from __future__ import annotations
@@ -21,11 +24,18 @@ from value_investor.n215_technical_veto_observe import (
     DEEP_LOSER,
     LARGE_WINNER,
     LOOKBACK_TRADING_DAYS,
+    RSI_PERIOD,
     outcome_bucket,
     score_episode,
 )
 from value_investor.n215_technical_veto_observe import (
     RECIPE_ID as SOFT_RECIPE_ID,
+)
+from value_investor.n215_technical_veto_observe import (
+    _rsi_wilder as rsi_wilder,
+)
+from value_investor.n215_technical_veto_observe import (
+    _sma as sma,
 )
 from value_investor.price_charts import chart_filename
 
@@ -33,6 +43,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT_DIR = Path("docs/data")
 DEFAULT_STORE_PATH = Path("docs/data/n215_reentry_observe.json")
 DEFAULT_REGISTRATION_PATH = Path("docs/data/n215_reentry_registration.json")
+DEFAULT_TWIN_REGISTRATION_PATH = Path("docs/data/n215_reentry_twin_r4_registration.json")
 DEFAULT_OPS_DOC = Path("docs/ops/n215-reentry-observe.md")
 DEFAULT_N200_STORE = Path("docs/data/n200_tech_timing_observe.json")
 DEFAULT_N206_STORE = Path("docs/data/n206_plain_ey_observe.json")
@@ -44,7 +55,13 @@ PAIR_ID = "WARN+_R1"
 REENTRY_RULE_ID = "R1"
 BAND_GATE = "WARN+"
 DEFERRED_ID = "N215"
-SCHEMA_VERSION = 2  # thickened: full WARN+ gate + N206 holdout (same frozen R1)
+SCHEMA_VERSION = 3  # twin: WARN+×R4 RSI-reset companion (design-locked; R1 primary unchanged)
+
+# Clear-signal twin (shape-different from R1 — not thr spray / not R5 stretch)
+TWIN_REGISTRATION_ID = "n215-reentry-warn-r4-v0"
+TWIN_PAIR_ID = "WARN+_R4"
+TWIN_REENTRY_RULE_ID = "R4"
+TWIN_FOCUS_TICKERS = ("MU", "KHC", "TROW")
 
 LEARNING_QUESTION = (
     "Among soft-vetoed (WARN+) sealed N200 names that later became large winners "
@@ -72,6 +89,33 @@ BREAKOUT_PCT = 0.01  # close > pre-t0 swing high by ≥1%
 R5_TIMEOUT_SESSIONS = 40
 R6_WORSEN_DD = -0.15  # drawdown from t0 close
 MIN_FORWARD_BARS = 1  # need at least one post-buy bar to evaluate
+
+# R4 RSI-reset (catalog pins from technical-veto-monitor-reentry.md §4)
+R4_RSI_PERIOD = RSI_PERIOD  # 14
+R4_RSI_OVERSOLD = 35.0  # must print ≤ this during MONITOR (date ≥ t0)
+R4_RSI_RESET = 45.0  # then print ≥ this
+R4_SMA_PERIOD = 20  # close > SMA20 required at reset bar
+
+TWIN_LEARNING_QUESTION = (
+    "On the same WARN+ gated sealed episodes as primary WARN+×R1: does frozen "
+    "MONITOR rule R4 (RSI-reset: post-t0 RSI≤35 then RSI≥45 with close>SMA20; "
+    "R5=40d / R6=−15%) re-admit large winners that R1 misses (MU-class "
+    "climax-reclaim) without false-clearing near-high dead-cats (KHC/TROW), "
+    "and how does path-cost Δ compare? N200 primary; N206 holdout report-only "
+    "(never tune). Shape-different twin — not R1 thr / not R5 stretch. "
+    "Observe labels only — no live gate."
+)
+
+# Pre-registered admit hurdles (frozen before twin scoring)
+TWIN_ADMIT_HURDLES = {
+    "n200_large_re_admit_min": "3/3",  # do not worsen R1 extreme cell
+    "n200_deep_abandon_min": "4/4",  # zero false re-admit on N200 deep extremes
+    "n206_mu_reentered": True,  # recover the named large timeout
+    "n206_khc_abandoned": True,  # no false clear
+    "n206_trow_abandoned": True,  # no false clear
+    "path_delta_reported": True,  # report only; not a beat-R1 gate
+    "live_admit": False,  # never from this twin alone
+}
 
 
 def _utc_now() -> str:
@@ -313,6 +357,155 @@ def walk_r1_monitor(
     }
 
 
+def walk_r4_monitor(
+    *,
+    dates: list[str],
+    closes: list[float],
+    buy_day: str,
+    exit_day: str | None,
+) -> dict[str, Any]:
+    """Causal MONITOR walk for frozen R4 RSI-reset (+ R5/R6). Point-in-time only.
+
+    Clear shape (design-locked): during MONITOR (bars with date ≥ t0 forward
+    steps), RSI14 must print ≤ ``R4_RSI_OVERSOLD``, then later RSI14 ≥
+    ``R4_RSI_RESET`` with close > SMA20. Oversold must occur on a post-t0
+    bar — not a pre-buy historical dip — so the twin is a post-veto reset,
+    not a lookback thr on R1.
+    """
+    t0_idx = None
+    for i, d in enumerate(dates):
+        if d <= buy_day:
+            t0_idx = i
+        else:
+            break
+    if t0_idx is None:
+        return {
+            "evaluable": False,
+            "label": "unevaluable",
+            "reason": "no_bars_leq_buy_ts",
+        }
+    forward = len(dates) - (t0_idx + 1)
+    if forward < MIN_FORWARD_BARS:
+        return {
+            "evaluable": False,
+            "label": "unevaluable",
+            "reason": "insufficient_forward_bars",
+            "forward_bars": forward,
+            "t0_idx": t0_idx,
+            "t0_day": dates[t0_idx],
+        }
+
+    t0_close = closes[t0_idx]
+    rsi_series = rsi_wilder(closes, R4_RSI_PERIOD)
+    sma20 = sma(closes, R4_SMA_PERIOD)
+    exit_idx = None
+    if exit_day:
+        for i, d in enumerate(dates):
+            if d >= exit_day:
+                exit_idx = i
+                break
+    baseline_hold = (exit_idx - t0_idx) if exit_idx is not None and exit_idx > t0_idx else 5
+
+    sessions_walked = 0
+    min_dd = 0.0
+    seen_oversold = False
+    oversold_day: str | None = None
+    oversold_rsi: float | None = None
+    for step in range(1, R5_TIMEOUT_SESSIONS + 1):
+        i = t0_idx + step
+        if i >= len(closes):
+            return {
+                "evaluable": True,
+                "label": "still_monitor_eop",
+                "reason": "chart_ended_before_timeout",
+                "sessions_walked": sessions_walked,
+                "t0_day": dates[t0_idx],
+                "t0_close": t0_close,
+                "seen_oversold": seen_oversold,
+                "oversold_day": oversold_day,
+                "oversold_rsi": oversold_rsi,
+                "min_drawdown_from_t0": min_dd,
+                "forward_bars_available": forward,
+            }
+        sessions_walked = step
+        px = closes[i]
+        dd = (px / t0_close) - 1.0 if t0_close > 0 else 0.0
+        if dd < min_dd:
+            min_dd = dd
+        if dd <= R6_WORSEN_DD:
+            return {
+                "evaluable": True,
+                "label": "abandoned_worsen",
+                "reason": "r6_worsen",
+                "sessions_walked": sessions_walked,
+                "abandon_day": dates[i],
+                "abandon_px": px,
+                "t0_day": dates[t0_idx],
+                "t0_close": t0_close,
+                "seen_oversold": seen_oversold,
+                "oversold_day": oversold_day,
+                "oversold_rsi": oversold_rsi,
+                "min_drawdown_from_t0": min_dd,
+                "drawdown_at_abandon": dd,
+            }
+        rsi_i = rsi_series[i]
+        sma_i = sma20[i]
+        if rsi_i is not None and float(rsi_i) <= R4_RSI_OVERSOLD:
+            if not seen_oversold:
+                oversold_day = dates[i]
+                oversold_rsi = float(rsi_i)
+            seen_oversold = True
+        # R4 clear: prior oversold in MONITOR, then reset + trend filter
+        if (
+            seen_oversold
+            and rsi_i is not None
+            and float(rsi_i) >= R4_RSI_RESET
+            and sma_i is not None
+            and px > float(sma_i)
+        ):
+            alt_ret, exit_proxy, alt_detail = alt_path_return(
+                dates=dates,
+                closes=closes,
+                reentry_idx=i,
+                exit_day=exit_day,
+                baseline_hold_bars=baseline_hold,
+            )
+            return {
+                "evaluable": True,
+                "label": "reentered",
+                "reason": "r4_rsi_reset",
+                "sessions_walked": sessions_walked,
+                "reentry_day": dates[i],
+                "reentry_px": px,
+                "reentry_rsi": float(rsi_i),
+                "reentry_sma20": float(sma_i),
+                "t0_day": dates[t0_idx],
+                "t0_close": t0_close,
+                "seen_oversold": True,
+                "oversold_day": oversold_day,
+                "oversold_rsi": oversold_rsi,
+                "min_drawdown_from_t0": min_dd,
+                "alt_path_return": alt_ret,
+                "exit_proxy_day": exit_proxy,
+                "alt_path_detail": alt_detail,
+                "baseline_hold_bars": baseline_hold,
+            }
+
+    return {
+        "evaluable": True,
+        "label": "abandoned_timeout",
+        "reason": "r5_timeout",
+        "sessions_walked": sessions_walked,
+        "t0_day": dates[t0_idx],
+        "t0_close": t0_close,
+        "seen_oversold": seen_oversold,
+        "oversold_day": oversold_day,
+        "oversold_rsi": oversold_rsi,
+        "min_drawdown_from_t0": min_dd,
+        "forward_bars_available": forward,
+    }
+
+
 def meets_band_gate(band: str, *, gate: str = BAND_GATE) -> bool:
     if gate == "WARN+":
         return band in {"WARN", "SOFT_VETO", "HARD_CANDIDATE"}
@@ -413,12 +606,19 @@ def score_reentry_episode(
     charts_dir: Path,
     soft_row: dict[str, Any] | None = None,
     book: str = "N200",
+    clear_rule: str = REENTRY_RULE_ID,
 ) -> dict[str, Any]:
-    """Soft-band at buy_ts + R1 monitor walk. Missing evidence → unevaluable."""
+    """Soft-band at buy_ts + MONITOR walk (R1 or twin R4). Missing → unevaluable."""
     buy_day = str(buy_ts)[:10]
     exit_day = str(exit_run_at)[:10] if exit_run_at else None
     bucket = outcome_bucket(fair_cost)
     book_id = str(book or "N200")
+    rule = str(clear_rule or REENTRY_RULE_ID).upper()
+    if rule == TWIN_REENTRY_RULE_ID:
+        reg_id, pair_id = TWIN_REGISTRATION_ID, TWIN_PAIR_ID
+    else:
+        reg_id, pair_id = REGISTRATION_ID, PAIR_ID
+        rule = REENTRY_RULE_ID
     base: dict[str, Any] = {
         "ticker": ticker,
         "book": book_id,
@@ -428,8 +628,9 @@ def score_reentry_episode(
         "exit_day": exit_day,
         "fair_cost": fair_cost,
         "bucket": bucket,
-        "registration_id": REGISTRATION_ID,
-        "pair_id": PAIR_ID,
+        "registration_id": reg_id,
+        "pair_id": pair_id,
+        "clear_rule": rule,
         "influences_live": False,
         "observe_only": True,
     }
@@ -473,12 +674,20 @@ def score_reentry_episode(
             "reason": "missing_chart",
         }
     dates, closes = series
-    walk = walk_r1_monitor(
-        dates=dates,
-        closes=closes,
-        buy_day=buy_day,
-        exit_day=exit_day,
-    )
+    if rule == TWIN_REENTRY_RULE_ID:
+        walk = walk_r4_monitor(
+            dates=dates,
+            closes=closes,
+            buy_day=buy_day,
+            exit_day=exit_day,
+        )
+    else:
+        walk = walk_r1_monitor(
+            dates=dates,
+            closes=closes,
+            buy_day=buy_day,
+            exit_day=exit_day,
+        )
     label = str(walk.get("label") or "unevaluable")
     evaluable = bool(walk.get("evaluable"))
     path_delta = None
@@ -488,7 +697,7 @@ def score_reentry_episode(
             path_delta = float(alt_ret) - float(fair_cost)
         except (TypeError, ValueError):
             path_delta = None
-    return {
+    out: dict[str, Any] = {
         **base,
         "monitor_eligible": True,
         "evaluable": evaluable,
@@ -513,6 +722,11 @@ def score_reentry_episode(
             }
         },
     }
+    # R4 trail fields (absent on R1)
+    for k in ("seen_oversold", "oversold_day", "oversold_rsi", "reentry_rsi", "reentry_sma20"):
+        if k in walk:
+            out[k] = walk[k]
+    return out
 
 
 def _episode_detail(r: dict[str, Any], *, rich: bool = False) -> dict[str, Any]:
@@ -708,6 +922,7 @@ def _score_episode_rows(
     *,
     charts_dir: Path,
     soft_by_key: dict[tuple[str, str], dict[str, Any]] | None = None,
+    clear_rule: str = REENTRY_RULE_ID,
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for ep in episodes:
@@ -725,6 +940,7 @@ def _score_episode_rows(
                 charts_dir=charts_dir,
                 soft_row=soft,
                 book=book,
+                clear_rule=clear_rule,
             )
         )
     return rows
@@ -734,9 +950,11 @@ def _book_payload_slice(
     rows: list[dict[str, Any]],
     *,
     book: str,
+    clear_rule: str = REENTRY_RULE_ID,
 ) -> dict[str, Any]:
     warn_rollup = _gate_rollup(rows, gate="WARN+")
     soft_rollup = _gate_rollup(rows, gate="SOFT_VETO+")
+    rule = str(clear_rule or REENTRY_RULE_ID).upper()
     return {
         "book": book,
         "closed_n": len(rows),
@@ -746,10 +964,340 @@ def _book_payload_slice(
         "warn_plus_deep": warn_rollup["deep_losers_gated"],
         "warn_plus_positive_fc": warn_rollup["positive_fc_gated"],
         "rollup": {
-            "primary_WARN+_R1": warn_rollup,
-            "companion_SOFT_VETO+_R1": soft_rollup,
+            f"primary_WARN+_{rule}": warn_rollup,
+            f"companion_SOFT_VETO+_{rule}": soft_rollup,
         },
         "episodes": rows,
+    }
+
+
+def frozen_twin_pair_blob() -> dict[str, Any]:
+    return {
+        "registration_id": TWIN_REGISTRATION_ID,
+        "pair_id": TWIN_PAIR_ID,
+        "band_gate": BAND_GATE,
+        "band_gate_threshold": BAND_WARN_LO,
+        "soft_recipe_id": SOFT_RECIPE_ID,
+        "reentry_rule": TWIN_REENTRY_RULE_ID,
+        "reentry_rule_name": "rsi-reset",
+        "rsi_period": R4_RSI_PERIOD,
+        "rsi_oversold": R4_RSI_OVERSOLD,
+        "rsi_reset": R4_RSI_RESET,
+        "sma_period": R4_SMA_PERIOD,
+        "oversold_window": "MONITOR post-t0 only (forward bars after buy)",
+        "r5_timeout_sessions": R5_TIMEOUT_SESSIONS,
+        "r6_worsen_dd": R6_WORSEN_DD,
+        "companion_gates_reported": ["WARN+", "SOFT_VETO+"],
+        "deep_loser": DEEP_LOSER,
+        "large_winner": LARGE_WINNER,
+        "point_in_time": "forward walk uses bars with date ≤ t at each step",
+        "shape_vs_r1": "RSI oversold→reset + SMA20 filter (not lookback swing-high +1%)",
+        "not_r1_thr": True,
+        "not_r5_stretch": True,
+        "admit_hurdles_pre_registered": TWIN_ADMIT_HURDLES,
+        "note": (
+            "Design-locked clear-signal twin after holdout autopsy. "
+            "Same WARN+ gate + R5/R6 as primary R1. N206 report-only — never tune. "
+            "No live Layer B admit from twin marks alone."
+        ),
+    }
+
+
+def build_twin_registration_payload(*, generated_at: str | None = None) -> dict[str, Any]:
+    return {
+        "registration_id": TWIN_REGISTRATION_ID,
+        "pair_id": TWIN_PAIR_ID,
+        "deferred_id": DEFERRED_ID,
+        "schema_version": SCHEMA_VERSION,
+        "generated_at": generated_at or _utc_now(),
+        "observe_only": True,
+        "influences_live": False,
+        "learning_question": TWIN_LEARNING_QUESTION,
+        "ops_doc": str(DEFAULT_OPS_DOC),
+        "baseline_pair_id": PAIR_ID,
+        "pair": frozen_twin_pair_blob(),
+        "admit_hurdles": TWIN_ADMIT_HURDLES,
+        "cohort": {
+            "primary": "N200 closed lifecycle episodes with soft band ≥ WARN (same gate as R1)",
+            "holdout": "N206 closed — report-only; never tune on holdout marks",
+            "soft_band_source": "score_episode / n215 soft-band recipe v0",
+            "focus_holdout_failures": list(TWIN_FOCUS_TICKERS),
+        },
+    }
+
+
+def _focus_episode(
+    rows: list[dict[str, Any]],
+    *,
+    ticker: str,
+    prefer_bucket: str | None = None,
+) -> dict[str, Any] | None:
+    """Pick the gated WARN+ episode for a focus ticker (prefer named bucket)."""
+    cands = [
+        r
+        for r in rows
+        if str(r.get("ticker") or "") == ticker
+        and r.get("in_warn_plus")
+        and r.get("monitor_eligible")
+    ]
+    if not cands:
+        return None
+    if prefer_bucket:
+        bucketed = [r for r in cands if r.get("bucket") == prefer_bucket]
+        if bucketed:
+            # Prefer longest sealed hold / richest walk when duplicates
+            return max(
+                bucketed,
+                key=lambda r: (
+                    abs(float(r.get("fair_cost") or 0.0)),
+                    str(r.get("buy_day") or ""),
+                ),
+            )
+    return max(
+        cands,
+        key=lambda r: (
+            abs(float(r.get("fair_cost") or 0.0)),
+            str(r.get("buy_day") or ""),
+        ),
+    )
+
+
+def _focus_compare_row(
+    r1: dict[str, Any] | None,
+    r4: dict[str, Any] | None,
+    *,
+    ticker: str,
+) -> dict[str, Any]:
+    def _slim(r: dict[str, Any] | None) -> dict[str, Any] | None:
+        if r is None:
+            return None
+        return {
+            "ticker": r.get("ticker"),
+            "buy_day": r.get("buy_day"),
+            "soft_band": r.get("soft_band"),
+            "fair_cost": r.get("fair_cost"),
+            "bucket": r.get("bucket"),
+            "label": r.get("label"),
+            "reason": r.get("reason"),
+            "sessions_to_outcome": r.get("sessions_to_outcome"),
+            "reentry_day": r.get("reentry_day"),
+            "path_cost_delta": r.get("path_cost_delta"),
+            "alt_path_return": r.get("alt_path_return"),
+            "seen_oversold": r.get("seen_oversold"),
+            "oversold_day": r.get("oversold_day"),
+        }
+
+    return {
+        "ticker": ticker,
+        "r1": _slim(r1),
+        "r4": _slim(r4),
+        "label_changed": (
+            None if r1 is None or r4 is None else str(r1.get("label")) != str(r4.get("label"))
+        ),
+    }
+
+
+def evaluate_twin_hurdles(
+    *,
+    n200_r1: dict[str, Any],
+    n200_r4: dict[str, Any],
+    holdout_r1_rows: list[dict[str, Any]] | None,
+    holdout_r4_rows: list[dict[str, Any]] | None,
+) -> dict[str, Any]:
+    """Score pre-registered twin hurdles vs R1 baseline (observe-only)."""
+    checks: list[dict[str, Any]] = []
+
+    def _rate_ok(actual: str | None, required: str) -> bool:
+        return str(actual or "") == required
+
+    n200_large_ok = _rate_ok(
+        n200_r4.get("re_admit_rate"), TWIN_ADMIT_HURDLES["n200_large_re_admit_min"]
+    )
+    checks.append(
+        {
+            "id": "n200_large_re_admit",
+            "required": TWIN_ADMIT_HURDLES["n200_large_re_admit_min"],
+            "actual": n200_r4.get("re_admit_rate"),
+            "r1_baseline": n200_r1.get("re_admit_rate"),
+            "pass": n200_large_ok,
+        }
+    )
+    n200_deep_ok = _rate_ok(
+        n200_r4.get("loser_abandon_rate"), TWIN_ADMIT_HURDLES["n200_deep_abandon_min"]
+    )
+    checks.append(
+        {
+            "id": "n200_deep_abandon",
+            "required": TWIN_ADMIT_HURDLES["n200_deep_abandon_min"],
+            "actual": n200_r4.get("loser_abandon_rate"),
+            "r1_baseline": n200_r1.get("loser_abandon_rate"),
+            "pass": n200_deep_ok,
+        }
+    )
+
+    h_r1 = holdout_r1_rows or []
+    h_r4 = holdout_r4_rows or []
+    prefer = {"MU": "large_winner", "KHC": "deep_loser", "TROW": "deep_loser"}
+    focus_rows = []
+    named_pass = True
+    for t in TWIN_FOCUS_TICKERS:
+        r1 = _focus_episode(h_r1, ticker=t, prefer_bucket=prefer.get(t))
+        r4 = _focus_episode(h_r4, ticker=t, prefer_bucket=prefer.get(t))
+        focus_rows.append(_focus_compare_row(r1, r4, ticker=t))
+        if t == "MU":
+            ok = bool(r4 and r4.get("label") == "reentered")
+            checks.append(
+                {
+                    "id": "n206_mu_reentered",
+                    "required": True,
+                    "actual": r4.get("label") if r4 else None,
+                    "r1_baseline": r1.get("label") if r1 else None,
+                    "pass": ok,
+                }
+            )
+            named_pass = named_pass and ok
+        elif t in {"KHC", "TROW"}:
+            ok = bool(r4 and r4.get("label") in {"abandoned_timeout", "abandoned_worsen"})
+            checks.append(
+                {
+                    "id": f"n206_{t.lower()}_abandoned",
+                    "required": True,
+                    "actual": r4.get("label") if r4 else None,
+                    "r1_baseline": r1.get("label") if r1 else None,
+                    "pass": ok,
+                }
+            )
+            named_pass = named_pass and ok
+
+    path_reported = (
+        n200_r4.get("path_cost_delta_median") is not None
+        or int(n200_r4.get("re_admit_n") or 0) == 0
+    )
+    checks.append(
+        {
+            "id": "path_delta_reported",
+            "required": True,
+            "actual": n200_r4.get("path_cost_delta_median"),
+            "pass": path_reported,
+        }
+    )
+
+    all_pass = all(bool(c.get("pass")) for c in checks)
+    return {
+        "hurdles_pre_registered": TWIN_ADMIT_HURDLES,
+        "checks": checks,
+        "all_hurdles_pass": all_pass,
+        "focus_holdout": focus_rows,
+        "verdict": ("hurdles_met_observe_only" if all_pass else "hurdles_failed_park_twin"),
+        "live_admit": False,
+        "note": (
+            "All hurdles met on observe marks — still not a live Layer B admit "
+            "(progressive lock; path Δ / thickness remain separate)."
+            if all_pass
+            else "Twin fails pre-registered hurdles vs R1 baseline — park; "
+            "do not admit; do not thr-hunt."
+        ),
+    }
+
+
+def build_clear_signal_twin(
+    *,
+    episodes: list[dict[str, Any]],
+    charts_dir: Path,
+    soft_by_key: dict[tuple[str, str], dict[str, Any]] | None,
+    holdout_episodes: list[dict[str, Any]] | None,
+    r1_n200_rollup: dict[str, Any],
+    r1_holdout_rows: list[dict[str, Any]] | None,
+    generated_at: str | None = None,
+) -> dict[str, Any]:
+    """Score WARN+×R4 twin on the same gated samples as primary R1."""
+    twin_rows = _score_episode_rows(
+        episodes,
+        charts_dir=charts_dir,
+        soft_by_key=soft_by_key,
+        clear_rule=TWIN_REENTRY_RULE_ID,
+    )
+    twin_slice = _book_payload_slice(twin_rows, book="N200", clear_rule=TWIN_REENTRY_RULE_ID)
+    warn_r4 = twin_slice["rollup"][f"primary_WARN+_{TWIN_REENTRY_RULE_ID}"]
+    soft_r4 = twin_slice["rollup"][f"companion_SOFT_VETO+_{TWIN_REENTRY_RULE_ID}"]
+
+    holdout_blob: dict[str, Any] | None = None
+    holdout_r4_rows: list[dict[str, Any]] | None = None
+    if holdout_episodes is not None:
+        holdout_r4_rows = _score_episode_rows(
+            holdout_episodes,
+            charts_dir=charts_dir,
+            soft_by_key=None,
+            clear_rule=TWIN_REENTRY_RULE_ID,
+        )
+        h_slice = _book_payload_slice(holdout_r4_rows, book="N206", clear_rule=TWIN_REENTRY_RULE_ID)
+        h_warn = h_slice["rollup"][f"primary_WARN+_{TWIN_REENTRY_RULE_ID}"]
+        holdout_blob = {
+            "role": "report_only_holdout",
+            "never_tune": True,
+            "book": "N206",
+            "closed_n": h_slice["closed_n"],
+            "warn_plus_gated": h_slice["warn_plus_gated"],
+            "warn_plus_large": h_slice["warn_plus_large"],
+            "warn_plus_deep": h_slice["warn_plus_deep"],
+            "rollup": h_slice["rollup"],
+            "episodes": holdout_r4_rows,
+            "note": (
+                f"N206 holdout WARN+×R4 large re-admit {h_warn.get('re_admit_rate')} "
+                f"never {h_warn.get('never_rate')}; "
+                f"loser abandon {h_warn.get('loser_abandon_rate')}. "
+                "Report-only — never tune R4 pins on holdout."
+            ),
+        }
+
+    hurdles = evaluate_twin_hurdles(
+        n200_r1=r1_n200_rollup,
+        n200_r4=warn_r4,
+        holdout_r1_rows=r1_holdout_rows,
+        holdout_r4_rows=holdout_r4_rows,
+    )
+    return {
+        "registration_id": TWIN_REGISTRATION_ID,
+        "pair_id": TWIN_PAIR_ID,
+        "baseline_pair_id": PAIR_ID,
+        "deferred_id": DEFERRED_ID,
+        "generated_at": generated_at or _utc_now(),
+        "observe_only": True,
+        "influences_live": False,
+        "learning_question": TWIN_LEARNING_QUESTION,
+        "pair": frozen_twin_pair_blob(),
+        "admit_hurdles": TWIN_ADMIT_HURDLES,
+        "hurdle_evaluation": hurdles,
+        "cohort": {
+            "N200_closed": twin_slice["closed_n"],
+            "warn_plus_gated": warn_r4["gated_n"],
+            "warn_plus_large": warn_r4["large_winners_gated"],
+            "warn_plus_deep": warn_r4["deep_losers_gated"],
+        },
+        "rollup": {
+            f"primary_WARN+_{TWIN_REENTRY_RULE_ID}": warn_r4,
+            f"companion_SOFT_VETO+_{TWIN_REENTRY_RULE_ID}": soft_r4,
+            "vs_r1_n200": {
+                "r1_large_re_admit": r1_n200_rollup.get("re_admit_rate"),
+                "r4_large_re_admit": warn_r4.get("re_admit_rate"),
+                "r1_deep_abandon": r1_n200_rollup.get("loser_abandon_rate"),
+                "r4_deep_abandon": warn_r4.get("loser_abandon_rate"),
+                "r1_full_gate_reentered": r1_n200_rollup.get("full_gate_reentered_rate"),
+                "r4_full_gate_reentered": warn_r4.get("full_gate_reentered_rate"),
+                "r1_path_cost_delta_median": r1_n200_rollup.get("path_cost_delta_median"),
+                "r4_path_cost_delta_median": warn_r4.get("path_cost_delta_median"),
+            },
+        },
+        "episodes": twin_rows,
+        "holdout_N206": holdout_blob,
+        "admit_recommendation": {
+            "live_reentry": False,
+            "live_veto": False,
+            "twin_admit_worthy": False,
+            "hurdles_pass": hurdles["all_hurdles_pass"],
+            "verdict": hurdles["verdict"],
+            "note": hurdles["note"],
+        },
     }
 
 
@@ -759,12 +1307,18 @@ def build_n215_reentry_observe(
     charts_dir: Path | None = None,
     soft_by_key: dict[tuple[str, str], dict[str, Any]] | None = None,
     holdout_episodes: list[dict[str, Any]] | None = None,
+    include_clear_signal_twin: bool = True,
     generated_at: str | None = None,
 ) -> dict[str, Any]:
     """Pure reentry score over sealed episode dicts (N200 primary + optional N206)."""
     chart_root = Path(charts_dir) if charts_dir is not None else DEFAULT_CHARTS_DIR
-    rows = _score_episode_rows(episodes, charts_dir=chart_root, soft_by_key=soft_by_key)
-    primary_slice = _book_payload_slice(rows, book="N200")
+    rows = _score_episode_rows(
+        episodes,
+        charts_dir=chart_root,
+        soft_by_key=soft_by_key,
+        clear_rule=REENTRY_RULE_ID,
+    )
+    primary_slice = _book_payload_slice(rows, book="N200", clear_rule=REENTRY_RULE_ID)
     warn_rollup = primary_slice["rollup"]["primary_WARN+_R1"]
     soft_rollup = primary_slice["rollup"]["companion_SOFT_VETO+_R1"]
     # Primary cell verdict (observe sketch only) — large-winner LQ cell
@@ -774,14 +1328,16 @@ def build_n215_reentry_observe(
     salvages = bool(n_term > 0 and n_readmit > n_never)
 
     holdout_blob: dict[str, Any] | None = None
+    holdout_rows: list[dict[str, Any]] | None = None
     if holdout_episodes is not None:
         # Soft store is N200-keyed; holdout scores soft bands on the fly (never tune).
         holdout_rows = _score_episode_rows(
             holdout_episodes,
             charts_dir=chart_root,
             soft_by_key=None,
+            clear_rule=REENTRY_RULE_ID,
         )
-        holdout_slice = _book_payload_slice(holdout_rows, book="N206")
+        holdout_slice = _book_payload_slice(holdout_rows, book="N206", clear_rule=REENTRY_RULE_ID)
         h_warn = holdout_slice["rollup"]["primary_WARN+_R1"]
         holdout_blob = {
             "role": "report_only_holdout",
@@ -803,6 +1359,18 @@ def build_n215_reentry_observe(
                 "Report-only — do not retune R1/R5/R6 on this book."
             ),
         }
+
+    twin_blob: dict[str, Any] | None = None
+    if include_clear_signal_twin:
+        twin_blob = build_clear_signal_twin(
+            episodes=episodes,
+            charts_dir=chart_root,
+            soft_by_key=soft_by_key,
+            holdout_episodes=holdout_episodes,
+            r1_n200_rollup=warn_rollup,
+            r1_holdout_rows=holdout_rows,
+            generated_at=generated_at,
+        )
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -837,12 +1405,18 @@ def build_n215_reentry_observe(
         },
         "episodes": rows,
         "holdout_N206": holdout_blob,
+        "clear_signal_twin": twin_blob,
         "admit_recommendation": {
             "live_reentry": False,
             "live_veto": False,
             "pair_admit_worthy": False,
             "layer_b_closer_to_admit": False,
             "observe_sketch_salvages_soft_vetoed_winners": salvages,
+            "clear_signal_twin_hurdles_pass": (
+                bool(twin_blob.get("hurdle_evaluation", {}).get("all_hurdles_pass"))
+                if isinstance(twin_blob, dict)
+                else None
+            ),
             "note": (
                 f"Primary WARN+×R1 large re-admit {warn_rollup.get('re_admit_rate')} "
                 f"never {warn_rollup.get('never_rate')}; "
@@ -882,15 +1456,17 @@ def refresh_n215_reentry_observe(
     output_dir: Path | None = None,
     store_path: Path | None = None,
     registration_path: Path | None = None,
+    twin_registration_path: Path | None = None,
     n200_store: Path | None = None,
     n206_store: Path | None = None,
     soft_store: Path | None = None,
     charts_dir: Path | None = None,
     include_n206_holdout: bool = True,
+    include_clear_signal_twin: bool = True,
     persist: bool = True,
     generated_at: str | None = None,
 ) -> dict[str, Any]:
-    """Load sealed N200 (+ optional N206 holdout) closed episodes; walk R1."""
+    """Load sealed N200 (+ optional N206 holdout); walk R1 + optional R4 twin."""
     data_dir = Path(output_dir) if output_dir is not None else DEFAULT_OUTPUT_DIR
     store = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
     reg_path = (
@@ -908,6 +1484,11 @@ def refresh_n215_reentry_observe(
         else data_dir / "n215_technical_veto_observe.json"
     )
     chart_root = Path(charts_dir) if charts_dir is not None else data_dir / "charts"
+    twin_reg_path = (
+        Path(twin_registration_path)
+        if twin_registration_path is not None
+        else data_dir / "n215_reentry_twin_r4_registration.json"
+    )
 
     episodes = _load_closed_episodes(n200_path, "N200")
     holdout: list[dict[str, Any]] | None = None
@@ -919,14 +1500,19 @@ def refresh_n215_reentry_observe(
         charts_dir=chart_root,
         soft_by_key=soft_by_key or None,
         holdout_episodes=holdout,
+        include_clear_signal_twin=include_clear_signal_twin,
         generated_at=generated_at,
     )
     registration = build_registration_payload(generated_at=payload["generated_at"])
+    twin_reg = build_twin_registration_payload(generated_at=payload["generated_at"])
     if persist:
         store.parent.mkdir(parents=True, exist_ok=True)
         store.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
         reg_path.parent.mkdir(parents=True, exist_ok=True)
         reg_path.write_text(json.dumps(registration, indent=2) + "\n", encoding="utf-8")
+        if include_clear_signal_twin:
+            twin_reg_path.parent.mkdir(parents=True, exist_ok=True)
+            twin_reg_path.write_text(json.dumps(twin_reg, indent=2) + "\n", encoding="utf-8")
     return payload
 
 
@@ -972,6 +1558,7 @@ def ops_findings_from_n215_reentry(payload: dict[str, Any]) -> list[dict[str, An
                 f"N206 holdout WARN+={cohort.get('N206_holdout_warn_plus')} "
                 f"large re-admit={h_warn.get('re_admit_rate')}. "
                 f"salvages_sketch={admit.get('observe_sketch_salvages_soft_vetoed_winners')}. "
+                f"twin_R4_hurdles={admit.get('clear_signal_twin_hurdles_pass')}. "
                 "Observe-only — no live writes (F8)."
             ),
             "auto_fixable": False,
@@ -1046,6 +1633,38 @@ def format_n215_reentry_text(payload: dict[str, Any]) -> str:
             f"full-gate {h_warn.get('full_gate_reentered_rate')} "
             f"loser abandon {h_warn.get('loser_abandon_rate')} (never_tune)"
         )
+    twin = (
+        payload.get("clear_signal_twin")
+        if isinstance(payload.get("clear_signal_twin"), dict)
+        else None
+    )
+    if twin:
+        t_roll = twin.get("rollup") if isinstance(twin.get("rollup"), dict) else {}
+        t_warn = (
+            t_roll.get("primary_WARN+_R4")
+            if isinstance(t_roll.get("primary_WARN+_R4"), dict)
+            else {}
+        )
+        vs = t_roll.get("vs_r1_n200") if isinstance(t_roll.get("vs_r1_n200"), dict) else {}
+        he = (
+            twin.get("hurdle_evaluation") if isinstance(twin.get("hurdle_evaluation"), dict) else {}
+        )
+        lines.append(
+            f"twin WARN+×R4: large re-admit {t_warn.get('re_admit_rate')} "
+            f"(R1 {vs.get('r1_large_re_admit')}); "
+            f"deep abandon {t_warn.get('loser_abandon_rate')} "
+            f"(R1 {vs.get('r1_deep_abandon')}); "
+            f"hurdles_pass={he.get('all_hurdles_pass')} verdict={he.get('verdict')}"
+        )
+        for fr in he.get("focus_holdout") or []:
+            if not isinstance(fr, dict):
+                continue
+            r1 = fr.get("r1") if isinstance(fr.get("r1"), dict) else {}
+            r4 = fr.get("r4") if isinstance(fr.get("r4"), dict) else {}
+            lines.append(
+                f"  focus {fr.get('ticker')}: R1={r1.get('label')} → R4={r4.get('label')} "
+                f"changed={fr.get('label_changed')}"
+            )
     lines.append(f"admit: {admit.get('note')}")
     detail = primary.get("large_winner_detail") or []
     if detail:
@@ -1070,22 +1689,33 @@ __all__ = [
     "DEFAULT_OUTPUT_DIR",
     "DEFAULT_REGISTRATION_PATH",
     "DEFAULT_STORE_PATH",
+    "DEFAULT_TWIN_REGISTRATION_PATH",
     "FINDING_TITLE",
     "PAIR_ID",
+    "R4_RSI_OVERSOLD",
+    "R4_RSI_RESET",
+    "R4_SMA_PERIOD",
     "R5_TIMEOUT_SESSIONS",
     "R6_WORSEN_DD",
     "REGISTRATION_ID",
     "SCHEMA_VERSION",
     "STORE_FAILED_TITLE",
     "THICKENING_NOTE",
+    "TWIN_PAIR_ID",
+    "TWIN_REGISTRATION_ID",
+    "build_clear_signal_twin",
     "build_n215_reentry_observe",
     "build_registration_payload",
+    "build_twin_registration_payload",
+    "evaluate_twin_hurdles",
     "format_n215_reentry_text",
     "frozen_pair_blob",
+    "frozen_twin_pair_blob",
     "meets_band_gate",
     "ops_findings_from_n215_reentry",
     "pre_t0_swing_high",
     "refresh_n215_reentry_observe",
     "score_reentry_episode",
     "walk_r1_monitor",
+    "walk_r4_monitor",
 ]

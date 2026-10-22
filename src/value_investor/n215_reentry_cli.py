@@ -20,7 +20,8 @@ def main(argv: list[str] | None = None) -> int:
         description=(
             "N215 sealed observe-only: WARN+ soft-band × R1 breakout-wait "
             "reentry replay on N200 closed episodes (thickened full-gate) "
-            "+ optional N206 holdout. Never writes live books."
+            "+ optional N206 holdout + design-locked WARN+×R4 RSI-reset twin. "
+            "Never writes live books."
         )
     )
     parser.add_argument(
@@ -41,6 +42,11 @@ def main(argv: list[str] | None = None) -> int:
         help="Skip N206 report-only holdout (default: include when store present)",
     )
     parser.add_argument(
+        "--no-twin",
+        action="store_true",
+        help="Skip WARN+×R4 clear-signal twin companion (default: include)",
+    )
+    parser.add_argument(
         "--no-persist",
         action="store_true",
         help="Compute without writing store files",
@@ -55,6 +61,7 @@ def main(argv: list[str] | None = None) -> int:
         output_dir=args.output_dir,
         store_path=args.store,
         include_n206_holdout=not args.no_n206_holdout,
+        include_clear_signal_twin=not args.no_twin,
         persist=not args.no_persist,
     )
     if args.json:
