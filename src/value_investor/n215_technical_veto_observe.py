@@ -25,13 +25,26 @@ DEFAULT_STORE_PATH = Path("docs/data/n215_technical_veto_observe.json")
 DEFAULT_REGISTRATION_PATH = Path("docs/data/n215_technical_veto_registration.json")
 DEFAULT_OPS_DOC = Path("docs/ops/n215-technical-veto-observe.md")
 DEFAULT_N200_STORE = Path("docs/data/n200_tech_timing_observe.json")
+DEFAULT_N206_STORE = Path("docs/data/n206_plain_ey_observe.json")
 DEFAULT_N210_STORE = Path("docs/data/n210_ai_judgment_observe.json")
 DEFAULT_CHARTS_DIR = Path("docs/data/charts")
 
 REGISTRATION_ID = "n215-soft-band-veto-v0"
 RECIPE_ID = "n215-soft-score-recipe-v0"
+GRIND_MID60_RULE_ID = "n215-grind-mid60-pass-v0"
 DEFERRED_ID = "N215"
 SCHEMA_VERSION = 1
+
+# Companion alone rule (frozen 2026-10-22): soft PASS ∧ mid_range_60 ≥ thr.
+# Discovery = N206; alone-benefit primary = N200. Not a soft weight tweak. Not live.
+GRIND_MID60_LOOKBACK = 60
+GRIND_MID60_THR = 0.50
+GRIND_MID60_LEARNING_QUESTION = (
+    "On sealed closed buys that soft-band labels PASS, does blocking entries "
+    "whose close sits at or above the midpoint of the prior 60 trading-day "
+    "range catch deep losers alone, with acceptable large-winner miss and "
+    "positive alone net fair-cost benefit vs the unfiltered sealed cohort?"
+)
 
 LEARNING_QUESTION = (
     "For each pre-registered soft-veto band threshold on sealed N200 closed "
@@ -284,6 +297,14 @@ def extract_features(
     if n >= 21 and closes[-21] > 0:
         r20 = (t0 / closes[-21]) - 1.0
 
+    # Companion grind feature (not in soft weights): position in 60d range.
+    mid_range_60: float | None = None
+    if n >= 40:
+        w60 = closes[-GRIND_MID60_LOOKBACK:] if n >= GRIND_MID60_LOOKBACK else closes
+        wr60 = max(w60) - min(w60)
+        if wr60 > 0:
+            mid_range_60 = (t0 - min(w60)) / wr60
+
     twin = _find_twin_peak(window)
     # Remap twin indices to full series offset when window truncated.
     twin_offset = n - len(window)
@@ -401,6 +422,7 @@ def extract_features(
         "elev_range_of_window": elev_range,
         "r20": r20,
         "rsi_t0": rsi_t0,
+        "mid_range_60": mid_range_60,
         "twin": twin_detail,
         "failed_bo": failed_bo_detail,
         "rsi_fail": rsi_fail_detail,
@@ -521,6 +543,8 @@ def score_episode(
             "cited_features": {},
             "feature_contributions": [],
             "hard_fires": {},
+            "mid_range_60": None,
+            "grind_mid60_fire": False,
             "raw": {},
         }
     _dates, closes, sma50, sma200 = loaded
@@ -536,6 +560,8 @@ def score_episode(
             "cited_features": {},
             "feature_contributions": [],
             "hard_fires": {},
+            "mid_range_60": None,
+            "grind_mid60_fire": False,
             "raw": {"bars": len(closes)},
         }
     extracted = extract_features(closes, sma50=sma50, sma200=sma200)
@@ -549,6 +575,12 @@ def score_episode(
         raw=extracted["raw"],
         hard_fires=extracted["hard_fires"],
     )
+    mid60 = extracted["raw"].get("mid_range_60")
+    grind_fire = bool(band == "PASS" and mid60 is not None and float(mid60) >= GRIND_MID60_THR)
+    if grind_fire:
+        reasons.append(
+            f"companion={GRIND_MID60_RULE_ID} mid_range_60={float(mid60):.4f}>={GRIND_MID60_THR}"
+        )
     return {
         **base,
         "coverage": True,
@@ -560,11 +592,14 @@ def score_episode(
         "cited_features": {k: round(float(v), 6) for k, v in features.items()},
         "feature_contributions": contribs,
         "hard_fires": extracted["hard_fires"],
+        "mid_range_60": round(float(mid60), 6) if mid60 is not None else None,
+        "grind_mid60_fire": grind_fire,
         "raw": {
             "t0": extracted["raw"].get("t0"),
             "dist_abs": extracted["raw"].get("dist_abs"),
             "r20": extracted["raw"].get("r20"),
             "rsi_t0": extracted["raw"].get("rsi_t0"),
+            "mid_range_60": mid60,
             "twin": extracted["raw"].get("twin"),
             "failed_bo": extracted["raw"].get("failed_bo"),
             "death_cross": extracted["raw"].get("death_cross"),
@@ -702,12 +737,86 @@ def _rollup_band_catch_miss(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "exclusive_bands": exclusive,
         "cumulative_bands": cumulative,
         "hard_rule_companion": hard,
+        "companion_grind_mid60": _rollup_grind_mid60(rows),
         "score_distribution": {
             "deep_median": _med(scores_deep),
             "large_median": _med(scores_large),
             "all_n200_median": _med(scores_all),
             "deep_mean": (sum(scores_deep) / len(scores_deep)) if scores_deep else None,
             "large_mean": (sum(scores_large) / len(scores_large)) if scores_large else None,
+        },
+    }
+
+
+def _med_fc(xs: list[float]) -> float | None:
+    if not xs:
+        return None
+    ys = sorted(xs)
+    m = len(ys) // 2
+    if len(ys) % 2:
+        return ys[m]
+    return (ys[m - 1] + ys[m]) / 2.0
+
+
+def _book_grind_cell(rows: list[dict[str, Any]], book: str) -> dict[str, Any]:
+    book_rows = [r for r in rows if r.get("book") == book]
+    deep = [r for r in book_rows if r.get("bucket") == "deep_loser"]
+    large = [r for r in book_rows if r.get("bucket") == "large_winner"]
+    fired = [r for r in book_rows if r.get("grind_mid60_fire")]
+    deep_catch = sum(1 for r in deep if r.get("grind_mid60_fire"))
+    large_miss = sum(1 for r in large if r.get("grind_mid60_fire"))
+    base_fcs = [float(r["fair_cost"]) for r in book_rows if r.get("fair_cost") is not None]
+    alt_fcs = [
+        float(r["fair_cost"])
+        for r in book_rows
+        if r.get("fair_cost") is not None and not r.get("grind_mid60_fire")
+    ]
+    base_sum = sum(base_fcs) if base_fcs else 0.0
+    alt_sum = sum(alt_fcs) if alt_fcs else 0.0
+    return {
+        "closed": len(book_rows),
+        "coverage": sum(1 for r in book_rows if r.get("coverage")),
+        "fired": len(fired),
+        "deep_catch": f"{deep_catch}/{len(deep)}",
+        "deep_n": deep_catch,
+        "deep_total": len(deep),
+        "large_miss": f"{large_miss}/{len(large)}",
+        "large_n": large_miss,
+        "large_total": len(large),
+        "base_fc_median": _med_fc(base_fcs),
+        "alt_fc_median": _med_fc(alt_fcs),
+        "base_fc_sum": round(base_sum, 6),
+        "alt_fc_sum": round(alt_sum, 6),
+        "delta_fc_sum": round(alt_sum - base_sum, 6),
+        "live_veto": False,
+    }
+
+
+def _rollup_grind_mid60(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Alone companion: PASS ∧ mid_range_60 ≥ thr. N200 primary; N206 report-only."""
+    return {
+        "rule_id": GRIND_MID60_RULE_ID,
+        "rule": f"soft_band==PASS AND mid_range_60 >= {GRIND_MID60_THR}",
+        "mid_range_60": (
+            f"(close_t0 - min_{GRIND_MID60_LOOKBACK}) / "
+            f"(max_{GRIND_MID60_LOOKBACK} - min_{GRIND_MID60_LOOKBACK})"
+        ),
+        "threshold": GRIND_MID60_THR,
+        "lookback_trading_days": GRIND_MID60_LOOKBACK,
+        "learning_question": GRIND_MID60_LEARNING_QUESTION,
+        "discovery_book": "N206",
+        "alone_benefit_primary": "N200",
+        "influences_live": False,
+        "observe_only": True,
+        "N200": _book_grind_cell(rows, "N200"),
+        "N206": _book_grind_cell(rows, "N206"),
+        "admit_recommendation": {
+            "live_veto": False,
+            "note": (
+                "Companion alone rule after counterfactual discovery. "
+                "N200 is alone-benefit primary; N206 is discovery/report-only — "
+                "do not retune threshold on N206. Not live."
+            ),
         },
     }
 
@@ -762,8 +871,22 @@ def build_registration_payload(*, generated_at: str | None = None) -> dict[str, 
         "learning_question": LEARNING_QUESTION,
         "ops_doc": str(DEFAULT_OPS_DOC),
         "recipe": frozen_recipe_blob(),
+        "companion_rules": {
+            GRIND_MID60_RULE_ID: {
+                "rule_id": GRIND_MID60_RULE_ID,
+                "frozen_at": "2026-10-22",
+                "rule": f"soft_band==PASS AND mid_range_60 >= {GRIND_MID60_THR}",
+                "threshold": GRIND_MID60_THR,
+                "lookback_trading_days": GRIND_MID60_LOOKBACK,
+                "learning_question": GRIND_MID60_LEARNING_QUESTION,
+                "discovery_book": "N206",
+                "alone_benefit_primary": "N200",
+                "influences_live": False,
+            }
+        },
         "cohort": {
             "primary": "N200 closed lifecycle episodes with charts",
+            "companion_report": "N206 closed for grind mid60 report-only",
             "anecdote": "N210 closed until volume_gate.met",
         },
     }
@@ -790,7 +913,14 @@ def build_n215_observe(
         )
     rollup = _rollup_band_catch_miss(rows)
     n200_cov = sum(1 for r in rows if r.get("book") == "N200" and r.get("coverage"))
+    n206_rows = [r for r in rows if r.get("book") == "N206"]
+    n206_cov = sum(1 for r in n206_rows if r.get("coverage"))
     n210_rows = [r for r in rows if r.get("book") == "N210"]
+    grind = (
+        rollup.get("companion_grind_mid60")
+        if isinstance(rollup.get("companion_grind_mid60"), dict)
+        else {}
+    )
     return {
         "schema_version": SCHEMA_VERSION,
         "registration_id": REGISTRATION_ID,
@@ -802,22 +932,41 @@ def build_n215_observe(
         "learning_question": LEARNING_QUESTION,
         "ops_doc": str(DEFAULT_OPS_DOC),
         "recipe": frozen_recipe_blob(),
+        "companion_rules": {
+            GRIND_MID60_RULE_ID: {
+                "rule_id": GRIND_MID60_RULE_ID,
+                "threshold": GRIND_MID60_THR,
+                "lookback_trading_days": GRIND_MID60_LOOKBACK,
+                "learning_question": GRIND_MID60_LEARNING_QUESTION,
+                "influences_live": False,
+            }
+        },
         "cohort": {
             "N200_closed": rollup["n200_closed"],
             "N200_coverage": n200_cov,
+            "N206_closed": len(n206_rows),
+            "N206_coverage": n206_cov,
             "N210_closed": len(n210_rows),
             "deep_losers": rollup["deep_losers"],
             "large_winners": rollup["large_winners"],
+            "note": (
+                "Soft-band catch/miss primary remains N200. N206 scored for "
+                f"companion {GRIND_MID60_RULE_ID} report-only (discovery book)."
+            ),
         },
         "rollup": rollup,
         "episodes": rows,
         "admit_recommendation": {
             "live_veto": False,
             "any_band_admit_worthy": False,
+            "grind_mid60_live_veto": False,
             "note": (
                 "Observe success = durable band×catch/miss table. "
                 "Progressive admission of a hard gate requires alone net benefit "
-                "on a later propose — not claimed from this shadow."
+                "on a later propose — not claimed from this shadow. "
+                f"Companion {GRIND_MID60_RULE_ID}: "
+                f"N200 Δsum={((grind.get('N200') or {}).get('delta_fc_sum'))}; "
+                "not live."
             ),
         },
     }
@@ -829,12 +978,17 @@ def refresh_n215_technical_veto_observe(
     store_path: Path | None = None,
     registration_path: Path | None = None,
     n200_store: Path | None = None,
+    n206_store: Path | None = None,
     n210_store: Path | None = None,
     charts_dir: Path | None = None,
     persist: bool = True,
     generated_at: str | None = None,
 ) -> dict[str, Any]:
-    """Load sealed N200/N210 closed episodes + charts; score soft bands."""
+    """Load sealed N200/N206/N210 closed episodes + charts; score soft bands.
+
+    Soft-band primary rollup stays N200. N206 is loaded so companion
+    ``n215-grind-mid60-pass-v0`` can report discovery/holdout cells (not live).
+    """
     data_dir = Path(output_dir) if output_dir is not None else DEFAULT_OUTPUT_DIR
     store = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
     reg_path = (
@@ -843,12 +997,16 @@ def refresh_n215_technical_veto_observe(
     n200_path = (
         Path(n200_store) if n200_store is not None else data_dir / "n200_tech_timing_observe.json"
     )
+    n206_path = (
+        Path(n206_store) if n206_store is not None else data_dir / "n206_plain_ey_observe.json"
+    )
     n210_path = (
         Path(n210_store) if n210_store is not None else data_dir / "n210_ai_judgment_observe.json"
     )
     chart_root = Path(charts_dir) if charts_dir is not None else data_dir / "charts"
 
     episodes = _load_closed_episodes(n200_path, "N200")
+    episodes.extend(_load_closed_episodes(n206_path, "N206"))
     episodes.extend(_load_closed_episodes(n210_path, "N210"))
     payload = build_n215_observe(
         episodes,
@@ -911,6 +1069,12 @@ def ops_findings_from_n215_observe(payload: dict[str, Any]) -> list[dict[str, An
         else {}
     )
     any6 = hard_cmp.get("any_of_six") if isinstance(hard_cmp.get("any_of_six"), dict) else {}
+    grind = (
+        rollup.get("companion_grind_mid60")
+        if isinstance(rollup.get("companion_grind_mid60"), dict)
+        else {}
+    )
+    g200 = grind.get("N200") if isinstance(grind.get("N200"), dict) else {}
     admit = (
         payload.get("admit_recommendation")
         if isinstance(payload.get("admit_recommendation"), dict)
@@ -926,6 +1090,8 @@ def ops_findings_from_n215_observe(payload: dict[str, Any]) -> list[dict[str, An
                 f"deep={cohort.get('deep_losers')} large={cohort.get('large_winners')}; "
                 f"SOFT_VETO+ catch={soft.get('deep_catch')} miss={soft.get('large_miss')}; "
                 f"hard any-of-six catch={any6.get('deep_catch')} miss={any6.get('large_miss')}. "
+                f"{GRIND_MID60_RULE_ID}: N200 catch={g200.get('deep_catch')} "
+                f"miss={g200.get('large_miss')} Δsum={g200.get('delta_fc_sum')}. "
                 f"live_veto={admit.get('live_veto')} "
                 f"observe_sketch_interesting={admit.get('observe_sketch_band_looks_interesting')}. "
                 "Observe-only — no live writes (F8)."
@@ -978,5 +1144,19 @@ def format_n215_observe_text(payload: dict[str, Any]) -> str:
     any6 = hard.get("any_of_six") if isinstance(hard.get("any_of_six"), dict) else {}
     lines.append(f"hard I01|I02: catch {i01.get('deep_catch')} miss {i01.get('large_miss')}")
     lines.append(f"hard any-of-six: catch {any6.get('deep_catch')} miss {any6.get('large_miss')}")
+    grind = (
+        rollup.get("companion_grind_mid60")
+        if isinstance(rollup.get("companion_grind_mid60"), dict)
+        else {}
+    )
+    g200 = grind.get("N200") if isinstance(grind.get("N200"), dict) else {}
+    g206 = grind.get("N206") if isinstance(grind.get("N206"), dict) else {}
+    lines.append(
+        f"companion {GRIND_MID60_RULE_ID}: "
+        f"N200 catch {g200.get('deep_catch')} miss {g200.get('large_miss')} "
+        f"Δsum={g200.get('delta_fc_sum')}; "
+        f"N206 report catch {g206.get('deep_catch')} miss {g206.get('large_miss')} "
+        f"Δsum={g206.get('delta_fc_sum')}"
+    )
     lines.append(f"admit: {admit.get('note')}")
     return "\n".join(lines) + "\n"

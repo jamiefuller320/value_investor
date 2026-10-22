@@ -10,6 +10,8 @@ from value_investor.n215_technical_veto_observe import (
     BAND_SOFT_LO,
     BAND_WARN_LO,
     FINDING_TITLE,
+    GRIND_MID60_RULE_ID,
+    GRIND_MID60_THR,
     RECIPE_ID,
     REGISTRATION_ID,
     band_for_score,
@@ -89,6 +91,44 @@ def test_extract_features_near_high_rally():
     assert extracted["features"]["f_near_high"] > 0.5
     assert extracted["features"]["f_r20"] > 0.0
     assert extracted["raw"]["bars"] == len(closes)
+    assert extracted["raw"]["mid_range_60"] is not None
+    assert extracted["raw"]["mid_range_60"] >= GRIND_MID60_THR
+
+
+def test_grind_mid60_fires_only_on_pass_above_mid():
+    # Mid-range high but soft features near zero → PASS + grind fire.
+    # Quiet series ending in upper half of last 60d range.
+    closes = [100.0] * 40 + [90.0 + i * 0.4 for i in range(60)]  # ends ~114, range 90–114
+    extracted = extract_features(closes)
+    mid = extracted["raw"]["mid_range_60"]
+    assert mid is not None and mid >= GRIND_MID60_THR
+    score, _ = score_features(extracted["features"])
+    assert band_for_score(score) == "PASS"
+    # score_episode wires the companion flag
+    # (full path tested via synthetic chart below)
+
+
+def test_score_episode_grind_mid60_companion(tmp_path: Path):
+    charts = tmp_path / "charts"
+    charts.mkdir()
+    # Mild grind: 60d range ~95–105, close at 103 (mid≥0.5) without climax soft mass.
+    closes = [100.0] * 70
+    for i in range(60):
+        closes.append(95.0 + (i % 10) * 1.0)  # oscillate 95–104
+    closes[-1] = 103.0
+    _write_chart(charts / "GRD.L.json", closes=closes, start="2026-01-02")
+    row = score_episode(
+        ticker="GRD.L",
+        book="N200",
+        buy_ts="2026-05-15T12:00:00+00:00",
+        fair_cost=-0.15,
+        charts_dir=charts,
+    )
+    assert row["coverage"] is True
+    assert row["band"] == "PASS"
+    assert row["mid_range_60"] is not None and row["mid_range_60"] >= GRIND_MID60_THR
+    assert row["grind_mid60_fire"] is True
+    assert any(GRIND_MID60_RULE_ID in r for r in row["reasons"])
 
 
 def test_build_and_refresh_persist(tmp_path: Path):
@@ -117,8 +157,10 @@ def test_build_and_refresh_persist(tmp_path: Path):
             },
         ]
     }
+    n206 = {"lifecycle_episodes": []}
     n210 = {"lifecycle_episodes": []}
     (tmp_path / "n200_tech_timing_observe.json").write_text(json.dumps(n200), encoding="utf-8")
+    (tmp_path / "n206_plain_ey_observe.json").write_text(json.dumps(n206), encoding="utf-8")
     (tmp_path / "n210_ai_judgment_observe.json").write_text(json.dumps(n210), encoding="utf-8")
     # BBB missing chart → fail-closed PASS large winner
     store = tmp_path / "n215_technical_veto_observe.json"
@@ -137,11 +179,15 @@ def test_build_and_refresh_persist(tmp_path: Path):
     assert payload["influences_live"] is False
     assert payload["admit_recommendation"]["live_veto"] is False
     assert payload["admit_recommendation"]["any_band_admit_worthy"] is False
+    assert "companion_grind_mid60" in payload["rollup"]
+    assert payload["rollup"]["companion_grind_mid60"]["rule_id"] == GRIND_MID60_RULE_ID
+    assert payload["rollup"]["companion_grind_mid60"]["influences_live"] is False
     assert store.is_file() and reg.is_file()
     assert len(payload["episodes"]) == 2
     findings = ops_findings_from_n215_observe(payload)
     assert findings and findings[0]["title"] == FINDING_TITLE
     assert findings[0]["auto_fixable"] is False
+    assert GRIND_MID60_RULE_ID in findings[0]["summary"]
 
 
 def test_registration_seal_fields():
@@ -150,6 +196,8 @@ def test_registration_seal_fields():
     assert reg["observe_only"] is True
     assert reg["recipe"]["recipe_id"] == RECIPE_ID
     assert abs(sum(reg["recipe"]["weights"].values()) - 1.0) < 1e-9
+    assert GRIND_MID60_RULE_ID in reg["companion_rules"]
+    assert reg["companion_rules"][GRIND_MID60_RULE_ID]["influences_live"] is False
 
 
 def test_build_n215_observe_rollup_shape():
@@ -159,3 +207,5 @@ def test_build_n215_observe_rollup_shape():
     assert "exclusive_bands" in payload["rollup"]
     assert "cumulative_bands" in payload["rollup"]
     assert "hard_rule_companion" in payload["rollup"]
+    assert "companion_grind_mid60" in payload["rollup"]
+    assert payload["rollup"]["companion_grind_mid60"]["alone_benefit_primary"] == "N200"

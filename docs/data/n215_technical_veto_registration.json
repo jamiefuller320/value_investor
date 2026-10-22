@@ -3,7 +3,7 @@
   "recipe_id": "n215-soft-score-recipe-v0",
   "deferred_id": "N215",
   "schema_version": 1,
-  "generated_at": "2026-10-22T07:49:29.467772+00:00",
+  "generated_at": "2026-10-22T09:29:46.766874+00:00",
   "observe_only": true,
   "influences_live": false,
   "learning_question": "For each pre-registered soft-veto band threshold on sealed N200 closed episodes (charts \u2264 buy_ts), what is catch rate among deep losers (fair-cost \u2264 \u221210%) vs miss rate among large winners (\u2265 +10%)? Companion: risk_score distribution. Observe labels only \u2014 no live gate.",
@@ -50,8 +50,22 @@
     },
     "note": "Pre-registered before scoring. No grid search / no fit to KLR on this cohort for admission claims."
   },
+  "companion_rules": {
+    "n215-grind-mid60-pass-v0": {
+      "rule_id": "n215-grind-mid60-pass-v0",
+      "frozen_at": "2026-10-22",
+      "rule": "soft_band==PASS AND mid_range_60 >= 0.5",
+      "threshold": 0.5,
+      "lookback_trading_days": 60,
+      "learning_question": "On sealed closed buys that soft-band labels PASS, does blocking entries whose close sits at or above the midpoint of the prior 60 trading-day range catch deep losers alone, with acceptable large-winner miss and positive alone net fair-cost benefit vs the unfiltered sealed cohort?",
+      "discovery_book": "N206",
+      "alone_benefit_primary": "N200",
+      "influences_live": false
+    }
+  },
   "cohort": {
     "primary": "N200 closed lifecycle episodes with charts",
+    "companion_report": "N206 closed for grind mid60 report-only",
     "anecdote": "N210 closed until volume_gate.met"
   }
 }
