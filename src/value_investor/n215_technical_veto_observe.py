@@ -576,9 +576,7 @@ def score_episode(
         hard_fires=extracted["hard_fires"],
     )
     mid60 = extracted["raw"].get("mid_range_60")
-    grind_fire = bool(
-        band == "PASS" and mid60 is not None and float(mid60) >= GRIND_MID60_THR
-    )
+    grind_fire = bool(band == "PASS" and mid60 is not None and float(mid60) >= GRIND_MID60_THR)
     if grind_fire:
         reasons.append(
             f"companion={GRIND_MID60_RULE_ID} mid_range_60={float(mid60):.4f}>={GRIND_MID60_THR}"
