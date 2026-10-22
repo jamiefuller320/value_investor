@@ -550,14 +550,10 @@ def _subset_rates(
         and r.get("label") in {"reentered", "abandoned_timeout", "abandoned_worsen"}
     ]
     readmit = [r for r in terminal if r.get("label") == "reentered"]
-    never = [
-        r for r in terminal if r.get("label") in {"abandoned_timeout", "abandoned_worsen"}
-    ]
+    never = [r for r in terminal if r.get("label") in {"abandoned_timeout", "abandoned_worsen"}]
     n_term = len(terminal)
     days = [
-        float(r["sessions_to_outcome"])
-        for r in readmit
-        if r.get("sessions_to_outcome") is not None
+        float(r["sessions_to_outcome"]) for r in readmit if r.get("sessions_to_outcome") is not None
     ]
     path_deltas = [
         float(r["path_cost_delta"]) for r in readmit if r.get("path_cost_delta") is not None
@@ -623,9 +619,7 @@ def _gate_rollup(rows: list[dict[str, Any]], *, gate: str) -> dict[str, Any]:
     ]
     deep_readmit = [r for r in deep_term if r.get("label") == "reentered"]
     all_readmit = [r for r in all_term if r.get("label") == "reentered"]
-    all_never = [
-        r for r in all_term if r.get("label") in {"abandoned_timeout", "abandoned_worsen"}
-    ]
+    all_never = [r for r in all_term if r.get("label") in {"abandoned_timeout", "abandoned_worsen"}]
     pos_rates = _subset_rates(positive_fc, prefix="positive_fc")
     nonpos_term = _terminal(nonpositive_fc)
     nonpos_abandon = [
@@ -682,9 +676,7 @@ def _gate_rollup(rows: list[dict[str, Any]], *, gate: str) -> dict[str, Any]:
         "loser_abandon_n": len(deep_abandon),
         "loser_re_admit_n": len(deep_readmit),
         # Thickened: full WARN+/SOFT_VETO+ gated terminal mix
-        "full_gate_reentered_rate": (
-            f"{len(all_readmit)}/{n_all_term}" if n_all_term else "0/0"
-        ),
+        "full_gate_reentered_rate": (f"{len(all_readmit)}/{n_all_term}" if n_all_term else "0/0"),
         "full_gate_reentered_n": len(all_readmit),
         "full_gate_never_rate": f"{len(all_never)}/{n_all_term}" if n_all_term else "0/0",
         "full_gate_never_n": len(all_never),
@@ -692,9 +684,7 @@ def _gate_rollup(rows: list[dict[str, Any]], *, gate: str) -> dict[str, Any]:
         "full_gate_path_cost_delta_median": _med(all_path_deltas),
         "full_gate_outcome_mix": {
             "reentered": len(all_readmit),
-            "abandoned_timeout": sum(
-                1 for r in all_term if r.get("label") == "abandoned_timeout"
-            ),
+            "abandoned_timeout": sum(1 for r in all_term if r.get("label") == "abandoned_timeout"),
             "abandoned_worsen": sum(1 for r in all_term if r.get("label") == "abandoned_worsen"),
         },
         # Thickened: positive fair-cost among gate (beyond large ≥+10%)
@@ -952,9 +942,7 @@ def ops_findings_from_n215_reentry(payload: dict[str, Any]) -> list[dict[str, An
         if isinstance(payload.get("admit_recommendation"), dict)
         else {}
     )
-    holdout = (
-        payload.get("holdout_N206") if isinstance(payload.get("holdout_N206"), dict) else {}
-    )
+    holdout = payload.get("holdout_N206") if isinstance(payload.get("holdout_N206"), dict) else {}
     h_warn = {}
     if holdout:
         h_roll = holdout.get("rollup") if isinstance(holdout.get("rollup"), dict) else {}
@@ -1007,9 +995,7 @@ def format_n215_reentry_text(payload: dict[str, Any]) -> str:
         if isinstance(payload.get("admit_recommendation"), dict)
         else {}
     )
-    holdout = (
-        payload.get("holdout_N206") if isinstance(payload.get("holdout_N206"), dict) else {}
-    )
+    holdout = payload.get("holdout_N206") if isinstance(payload.get("holdout_N206"), dict) else {}
     lines = [
         f"N215 {payload.get('registration_id')} (observe-only reentry WARN+×R1; thickened)",
         f"pair={payload.get('pair_id')} influences_live={payload.get('influences_live')}",
