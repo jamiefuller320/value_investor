@@ -52,7 +52,7 @@
       "learning_tracks_churn_health.json"
     ]
   },
-  "updated_at": "2026-10-21T07:37:22.402947+00:00",
+  "updated_at": "2026-10-22T00:46:51.718822+00:00",
   "hold_episodes": [
     {
       "episode_id": "buy_tier_level:RRL.AX:2026-09-09T15:13:27.078661+10:00",
@@ -422,7 +422,7 @@
       "ticker": "PMV.AX",
       "name": "Premier Investments Limited",
       "started_at": "2026-09-10T15:14:27.513769+10:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -472,9 +472,9 @@
       "peak_unrealized_pct": 0.127,
       "trough_unrealized_pct": -0.0494,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-22T11:46:51.205174+11:00",
+      "linked_sell_trade_id": "1bb3bf2c-3b01-4d5e-9581-f3064bc62747"
     },
     {
       "episode_id": "buy_tier_level:CQR.AX:2026-09-10T15:14:27.513769+10:00",
@@ -945,7 +945,7 @@
       "ticker": "PXA.AX",
       "name": "PEXA Group Limited",
       "started_at": "2026-09-10T15:14:27.513769+10:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -996,9 +996,9 @@
       "peak_unrealized_pct": -0.0675,
       "trough_unrealized_pct": -0.1788,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-10-22T11:46:51.205174+11:00",
+      "linked_sell_trade_id": "e89d6312-8387-49dc-87b2-05631aca355d"
     },
     {
       "episode_id": "buy_tier_level:FMG.AX:2026-09-13T16:49:53.453726+10:00",
@@ -2681,7 +2681,16 @@
       "conviction_score": 0.13838,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-22T11:46:51.205174+11:00",
+          "days_after": 7,
+          "price": 2.66,
+          "unrealized_pct": 0.0038,
+          "peak_unrealized_pct": 0.0566,
+          "trough_unrealized_pct": 0.0038
+        }
+      ],
       "peak_unrealized_pct": 0.0566,
       "trough_unrealized_pct": 0.0038,
       "recovered_to_breakeven": true,
@@ -2724,7 +2733,16 @@
       "conviction_score": 0.4636,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-22T11:46:51.205174+11:00",
+          "days_after": 7,
+          "price": 28.19,
+          "unrealized_pct": -0.047,
+          "peak_unrealized_pct": -0.0321,
+          "trough_unrealized_pct": -0.047
+        }
+      ],
       "peak_unrealized_pct": -0.0321,
       "trough_unrealized_pct": -0.047,
       "recovered_to_breakeven": null,
@@ -2911,7 +2929,7 @@
       "ticker": "PRN.AX",
       "name": "Perenti Limited",
       "started_at": "2026-10-21T18:37:22.223096+11:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -2943,9 +2961,9 @@
       "peak_unrealized_pct": -0.0075,
       "trough_unrealized_pct": -0.0075,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-10-22T11:46:51.205174+11:00",
+      "linked_sell_trade_id": "dff0dea9-5b39-4e22-8788-55988d75f46b"
     },
     {
       "episode_id": "buy_tier_level:TUA.AX:2026-10-21T18:37:22.223096+11:00",
@@ -3333,7 +3351,15 @@
           "cost": 0.06
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-22T11:46:51.205174+11:00",
+          "days_after": 7,
+          "avg_sell_return": 0.008,
+          "avg_buy_return": 0.0168,
+          "replacement_delta": 0.0088
+        }
+      ],
       "sell_returns_since_rotation": {
         "DNL.AX": 0.0126,
         "BSL.AX": 0.0613,
@@ -3585,7 +3611,107 @@
       },
       "verdict": null,
       "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-22T11:46:51.205174+11:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-22T11:46:51.205174+11:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "PMV.AX",
+          "price": 13.22,
+          "shares": 2.934571,
+          "gross": 38.8,
+          "cost": 0.07,
+          "avg_cost_at_exit": 11.73,
+          "realized_pct": 0.127,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.127
+        },
+        {
+          "ticker": "PXA.AX",
+          "price": 6.57,
+          "shares": 6.161279,
+          "gross": 40.48,
+          "cost": 0.07,
+          "avg_cost_at_exit": 7.2406,
+          "realized_pct": -0.0926,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0926
+        },
+        {
+          "ticker": "PRN.AX",
+          "price": 1.995,
+          "shares": 17.547663,
+          "gross": 35.01,
+          "cost": 0.06,
+          "avg_cost_at_exit": 2.01,
+          "realized_pct": -0.0075,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0075
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "TUA.AX",
+          "price": 1.74,
+          "shares": 13.013024,
+          "gross": 22.64,
+          "cost": 0.04
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "PMV.AX": 0.0,
+        "PXA.AX": 0.0,
+        "PRN.AX": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "TUA.AX": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
     }
   ],
-  "hypothesis_outcome_link_updated_at": "2026-10-21T18:37:22.223096+11:00"
+  "hypothesis_outcome_link_updated_at": "2026-10-22T11:46:51.205174+11:00"
 }

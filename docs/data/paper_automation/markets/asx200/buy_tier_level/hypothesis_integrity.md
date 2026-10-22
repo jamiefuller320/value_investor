@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-21T07:37:22.407650+00:00
+Track: `buy_tier_level` · updated 2026-10-22T00:46:51.722493+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **9** / 28 (32% count, 31% NAV)
+- Losers: **8** / 25 (32% count, 29% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
@@ -68,12 +68,6 @@ Track: `buy_tier_level` · updated 2026-10-21T07:37:22.407650+00:00
 - data_quality 0.95
 - conviction 60%
 
-### PXA.AX — weakening / watch_review (-9.3%)
-- left buy tier (hold)
-- conviction 20% below intact floor
-- research accumulate
-- cheapness family still passes
-
 ### MND.AX — intact / hold_tolerate (-4.7%)
 - still buy
 - research accumulate
@@ -103,12 +97,6 @@ Track: `buy_tier_level` · updated 2026-10-21T07:37:22.407650+00:00
 ### ARB.AX — weakening / watch_review (-2.3%)
 - research verdict caution
 - still buy
-- cheapness family still passes
-
-### PRN.AX — weakening / watch_review (-0.8%)
-- left buy tier (hold)
-- conviction 24% below intact floor
-- research accumulate
 - cheapness family still passes
 
 ### TUA.AX — weakening / watch_review (+0.0%)
@@ -189,10 +177,3 @@ Track: `buy_tier_level` · updated 2026-10-21T07:37:22.407650+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 41%
-
-### PMV.AX — intact / hold_tolerate (+12.7%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 60%
