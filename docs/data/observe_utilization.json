@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-21T07:52:42.809656+00:00",
+  "generated_at": "2026-10-22T02:36:37.348593+00:00",
   "observe_only": true,
-  "headline": "2 warn instrument(s); trajectory worsening on 2.",
+  "headline": "2 warn instrument(s); improving vs last cycle on 1.",
   "surface_freshness": "fresh",
-  "ops_run_at": "2026-10-21T07:46:42.363868+00:00",
+  "ops_run_at": "2026-10-22T02:32:01.036623+00:00",
   "warn_instrument_count": 2,
   "trajectory_summary": {
-    "improving": 0,
-    "worsening": 2,
-    "flat": 3,
+    "improving": 1,
+    "worsening": 0,
+    "flat": 4,
     "unknown": 0,
     "history_points": 28,
     "note": "Deltas vs prior dashboard cycle (warn/gap counts; lower is better). Raw instrument stores commit with ops-monitor (L460)."
@@ -22,20 +22,20 @@
       "observe_only": true,
       "warn_active": true,
       "severity": "warn",
-      "finding_summary": "22 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, ftse350, hang_seng, ibex35 (+3 more): asx200/BWP.AX (no_memo, 415.78h since flip), ibex35/AENA.MC (no_key_bodies, 391.78h since flip), hang_seng/0001.HK (no_memo, 223.78h since flip), aex/MT.AS (no_memo, 175.78h since flip), aex/PRX.AS (no_memo, 175.78h since flip), asx200/GMD.AX (no_key_bodies, 175.78h since flip), euro_depth/PRX.AS (no_memo, 175.78h since flip), ibex35/NTGY.MC (no_key_bodies, 175.78h since flip), sp500/NUE (no_memo, 175.78h since flip), tsx60/ABX.TO (no_key_bodies, 175.78h since flip) (+12 more). Blocking: no_key_bodies=6, no_memo=16.",
+      "finding_summary": "21 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, ftse350, hang_seng, ibex35 (+3 more): asx200/BWP.AX (no_memo, 434.53h since flip), ibex35/AENA.MC (no_key_bodies, 410.53h since flip), hang_seng/0001.HK (no_memo, 242.53h since flip), aex/PRX.AS (no_memo, 194.53h since flip), asx200/GMD.AX (no_key_bodies, 194.53h since flip), euro_depth/PRX.AS (no_memo, 194.53h since flip), ibex35/NTGY.MC (no_key_bodies, 194.53h since flip), tsx60/ABX.TO (no_key_bodies, 194.53h since flip), tsx60/SAP.TO (no_key_bodies, 194.53h since flip), tsx60/TECK-B.TO (no_key_bodies, 194.53h since flip) (+11 more). Blocking: no_key_bodies=6, no_memo=15.",
       "metrics": {
-        "warn_not_usable": 22,
-        "open_not_usable": 30,
+        "warn_not_usable": 21,
+        "open_not_usable": 29,
         "cohort_count": 184,
-        "usable_in_window": 154,
+        "usable_in_window": 155,
         "market_count": 23,
         "blocking_stage_counts": {
-          "no_memo": 16,
+          "no_memo": 15,
           "no_accumulate_verdict": 8,
           "no_key_bodies": 6
         },
         "sibling_home_open_count": 0,
-        "true_no_memo_open_count": 16,
+        "true_no_memo_open_count": 15,
         "warn_sample": [
           {
             "ticker": "BWP.AX",
@@ -43,7 +43,7 @@
             "blocking_stage": "no_memo",
             "has_memo": false,
             "memo_home_market": null,
-            "hours_since_flip": 415.78
+            "hours_since_flip": 434.53
           },
           {
             "ticker": "AENA.MC",
@@ -51,7 +51,7 @@
             "blocking_stage": "no_key_bodies",
             "has_memo": true,
             "memo_home_market": "ibex35",
-            "hours_since_flip": 391.78
+            "hours_since_flip": 410.53
           },
           {
             "ticker": "0001.HK",
@@ -59,15 +59,7 @@
             "blocking_stage": "no_memo",
             "has_memo": false,
             "memo_home_market": null,
-            "hours_since_flip": 223.78
-          },
-          {
-            "ticker": "MT.AS",
-            "market_id": "aex",
-            "blocking_stage": "no_memo",
-            "has_memo": false,
-            "memo_home_market": null,
-            "hours_since_flip": 175.78
+            "hours_since_flip": 242.53
           },
           {
             "ticker": "PRX.AS",
@@ -75,7 +67,7 @@
             "blocking_stage": "no_memo",
             "has_memo": false,
             "memo_home_market": null,
-            "hours_since_flip": 175.78
+            "hours_since_flip": 194.53
           },
           {
             "ticker": "GMD.AX",
@@ -83,7 +75,7 @@
             "blocking_stage": "no_key_bodies",
             "has_memo": true,
             "memo_home_market": "asx200",
-            "hours_since_flip": 175.78
+            "hours_since_flip": 194.53
           },
           {
             "ticker": "PRX.AS",
@@ -91,7 +83,7 @@
             "blocking_stage": "no_memo",
             "has_memo": false,
             "memo_home_market": null,
-            "hours_since_flip": 175.78
+            "hours_since_flip": 194.53
           },
           {
             "ticker": "NTGY.MC",
@@ -99,28 +91,36 @@
             "blocking_stage": "no_key_bodies",
             "has_memo": true,
             "memo_home_market": "ibex35",
-            "hours_since_flip": 175.78
+            "hours_since_flip": 194.53
+          },
+          {
+            "ticker": "ABX.TO",
+            "market_id": "tsx60",
+            "blocking_stage": "no_key_bodies",
+            "has_memo": true,
+            "memo_home_market": "tsx60",
+            "hours_since_flip": 194.53
           }
         ]
       },
       "primary_metric": "warn_not_usable",
-      "primary_value": 22,
+      "primary_value": 21,
       "primary_label": "Warn cohort (≥24h path-incomplete)",
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-10-21T07:46:44.082825+00:00",
-        "age_hours": 0.1,
+        "as_of": "2026-10-22T02:32:02.352314+00:00",
+        "age_hours": 0.08,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": 1,
-        "direction": "worsening",
-        "label": "Worse since last cycle",
-        "prior_value": 21,
-        "prior_at": "2026-10-21T02:37:47.462032+00:00"
+        "delta": -1,
+        "direction": "improving",
+        "label": "Better since last cycle",
+        "prior_value": 22,
+        "prior_at": "2026-10-21T07:52:42.809656+00:00"
       }
     },
     {
@@ -152,8 +152,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-10-21T07:47:19.126960+00:00",
-        "age_hours": 0.09,
+        "as_of": "2026-10-22T02:32:28.129803+00:00",
+        "age_hours": 0.07,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -162,7 +162,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 9,
-        "prior_at": "2026-10-21T02:37:47.462032+00:00"
+        "prior_at": "2026-10-21T07:52:42.809656+00:00"
       }
     },
     {
@@ -174,9 +174,9 @@
       "severity": "ok",
       "finding_summary": null,
       "metrics": {
-        "miss_rate": 0.483,
-        "enter_body_miss_count": 156,
-        "cohort_count": 323,
+        "miss_rate": 0.4769,
+        "enter_body_miss_count": 155,
+        "cohort_count": 325,
         "open_still_missing_bodies": 15,
         "by_market": {
           "ftse350": {
@@ -186,10 +186,10 @@
             "miss_rate": 0.2667
           },
           "sp500": {
-            "cohort_count": 94,
+            "cohort_count": 96,
             "enter_body_miss_count": 44,
             "open_still_missing_bodies": 0,
-            "miss_rate": 0.4681
+            "miss_rate": 0.4583
           },
           "asx200": {
             "cohort_count": 23,
@@ -223,9 +223,9 @@
           },
           "nasdaq100": {
             "cohort_count": 24,
-            "enter_body_miss_count": 13,
+            "enter_body_miss_count": 12,
             "open_still_missing_bodies": 0,
-            "miss_rate": 0.5417
+            "miss_rate": 0.5
           },
           "cac40": {
             "cohort_count": 7,
@@ -326,17 +326,17 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-10-21T07:47:19.395993+00:00",
-        "age_hours": 0.09,
+        "as_of": "2026-10-22T02:32:28.339882+00:00",
+        "age_hours": 0.07,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": 1,
-        "direction": "worsening",
-        "label": "Worse since last cycle",
-        "prior_value": 14,
-        "prior_at": "2026-10-21T02:37:47.462032+00:00"
+        "delta": 0,
+        "direction": "flat",
+        "label": "Unchanged vs last cycle",
+        "prior_value": 15,
+        "prior_at": "2026-10-21T07:52:42.809656+00:00"
       }
     },
     {
@@ -362,8 +362,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-10-21T07:47:19.604234+00:00",
-        "age_hours": 0.09,
+        "as_of": "2026-10-22T02:32:28.561705+00:00",
+        "age_hours": 0.07,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -372,7 +372,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 0,
-        "prior_at": "2026-10-21T02:37:47.462032+00:00"
+        "prior_at": "2026-10-21T07:52:42.809656+00:00"
       }
     },
     {
@@ -385,7 +385,7 @@
       "finding_summary": null,
       "metrics": {
         "market_count": 23,
-        "open_count": 653,
+        "open_count": 667,
         "closed_count": 0,
         "first_episode_closed_count": 0,
         "source_records_missing_market_id": 0,
@@ -398,8 +398,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-10-21T07:47:19.607896+00:00",
-        "age_hours": 0.09,
+        "as_of": "2026-10-22T02:32:28.564722+00:00",
+        "age_hours": 0.07,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -408,34 +408,11 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 0,
-        "prior_at": "2026-10-21T02:37:47.462032+00:00"
+        "prior_at": "2026-10-21T07:52:42.809656+00:00"
       }
     }
   ],
   "history": [
-    {
-      "at": "2026-10-03T02:33:23.841867+00:00",
-      "buy_tier_flip_lag": {
-        "primary_value": 26,
-        "warn_active": true,
-        "freshness_state": "fresh"
-      },
-      "decision_input_inventory": {
-        "primary_value": 0,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      },
-      "universe_filing_archive_miss_rate": {
-        "primary_value": 12,
-        "warn_active": true,
-        "freshness_state": "fresh"
-      },
-      "shard_nav_fx_warp": {
-        "primary_value": 0,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      }
-    },
     {
       "at": "2026-10-04T02:33:08.462455+00:00",
       "buy_tier_flip_lag": {
@@ -1168,6 +1145,34 @@
       "at": "2026-10-21T07:52:42.809656+00:00",
       "buy_tier_flip_lag": {
         "primary_value": 22,
+        "warn_active": true,
+        "freshness_state": "fresh"
+      },
+      "decision_input_inventory": {
+        "primary_value": 9,
+        "warn_active": true,
+        "freshness_state": "fresh"
+      },
+      "universe_filing_archive_miss_rate": {
+        "primary_value": 15,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "shard_nav_fx_warp": {
+        "primary_value": 0,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "combined_tagged_learning": {
+        "primary_value": 0,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      }
+    },
+    {
+      "at": "2026-10-22T02:36:37.348593+00:00",
+      "buy_tier_flip_lag": {
+        "primary_value": 21,
         "warn_active": true,
         "freshness_state": "fresh"
       },
