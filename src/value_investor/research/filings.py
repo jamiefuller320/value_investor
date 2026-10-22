@@ -439,6 +439,11 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://annual-report.kingspan.com/wp-content/uploads/2026/03/KS_AR25_Financial_Statements.pdf",
         "https://a.storyblok.com/f/289849314402549/x/202fe2e0ba/kgr-interim-statement-hy-2026.pdf",
     ],
+    # iseq20 parked GL9.IR — eng-20261022-01: awaiting_periodic_report; glanbia.com FY2025 annual + HY26 PDFs.
+    "GL9.IR": [
+        "https://www.glanbia.com/sites/glanbia-plc/files/glanbia/investors/annual-report/2026/Glanbia-Annual-Report-2025.pdf",
+        "https://www.glanbia.com/sites/glanbia-plc/files/glanbia/investors/results-presentations/2026/Glanbia-HY26-Results.pdf",
+    ],
     # euro_depth IWB blocker — JMT.LS parked awaiting_periodic_report; FY2025 entire annual PDF.
     "JMT.LS": [
         "https://reports.jeronimomartins.com/annual-report/2025/_assets/downloads/entire-jeronimomartins-ar25.pdf",
@@ -5772,6 +5777,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.icgam.com/wp-content/uploads/2025/11/ICG_H1-FY26-RNS.pdf": "interim",
     "https://www.icgam.com/wp-content/uploads/2025/11/ICG-H1-FY26-results-presentation_vF.pdf": "interim",
     "https://www.icgam.com/wp-content/uploads/2026/07/j6J3er5HwjJ1-RNS-Q1_FY27-Trading-Statement_vF.pdf": "trading_update",
+    # eng-20261022-01: GL9.IR — Glanbia-HY26-Results slug has hy26 before -results (regex needs . or $).
+    "https://www.glanbia.com/sites/glanbia-plc/files/glanbia/investors/results-presentations/2026/Glanbia-HY26-Results.pdf": "interim",
 }
 
 
