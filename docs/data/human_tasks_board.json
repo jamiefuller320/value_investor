@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-22T07:52:24.653170+00:00",
+  "generated_at": "2026-10-22T23:04:33.194431+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -14,6 +14,48 @@
     "human": 41
   },
   "tasks": [
+    {
+      "id": "sunday-shard-epoch0-watch",
+      "title": "Watch shard epoch-0 and near-miss before forking AI",
+      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Admitted shard epoch-0 watch · 22",
+        "updated_at": "2026-10-22T20:24:58.705056+00:00",
+        "fingerprint": "024552489bf2820b",
+        "bullets": [
+          "euro_depth: phase=3 ai=False knob=False holdings=37",
+          "sp500: phase=1 ai=False knob=False holdings=120",
+          "aex: phase=0 ai=False knob=False holdings=4",
+          "aim: phase=0 ai=False knob=False holdings=15",
+          "atx: phase=0 ai=False knob=False holdings=2",
+          "bel20: phase=0 ai=False knob=False holdings=3",
+          "cac40: phase=1 ai=False knob=False holdings=13",
+          "dax: phase=1 ai=False knob=False holdings=3"
+        ],
+        "source_keys": [
+          "market_status"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-10-21T22:54:00.304576+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "445acb0f9a3f9032"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
     {
       "id": "sunday-assessment-scoreboard",
       "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
@@ -70,10 +112,10 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-10-22T06:23:45.809188+00:00",
-        "fingerprint": "dc29555946f38e8f",
+        "updated_at": "2026-10-22T13:00:16.529879+00:00",
+        "fingerprint": "807d87df5a91ac47",
         "bullets": [
-          "Occasions logged: 239",
+          "Occasions logged: 242",
           "PR mergeable=CONFLICTING against main: 7",
           "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
           "validate check failed: 4",
@@ -87,52 +129,10 @@
       },
       "ack": {
         "acked": true,
-        "stale": true,
-        "acked_at": "2026-10-21T22:54:00.318950+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "bf72eee4be5986f1"
-      },
-      "sort_bucket": "new_info",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "sunday-shard-epoch0-watch",
-      "title": "Watch shard epoch-0 and near-miss before forking AI",
-      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/market-sharded-learning.md",
-      "doc_anchor": "what-enter-learning-means",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-10-22T07:32:39.117076+00:00",
-        "fingerprint": "445acb0f9a3f9032",
-        "bullets": [
-          "euro_depth: phase=3 ai=False knob=False holdings=37",
-          "aex: phase=0 ai=False knob=False holdings=5",
-          "aim: phase=0 ai=False knob=False holdings=15",
-          "atx: phase=0 ai=False knob=False holdings=2",
-          "bel20: phase=0 ai=False knob=False holdings=3",
-          "cac40: phase=1 ai=False knob=False holdings=12",
-          "dax: phase=1 ai=False knob=False holdings=3",
-          "euro_stoxx50: phase=1 ai=False knob=False holdings=12"
-        ],
-        "source_keys": [
-          "market_status"
-        ]
-      },
-      "ack": {
-        "acked": true,
         "stale": false,
-        "acked_at": "2026-10-21T22:54:00.304576+00:00",
+        "acked_at": "2026-10-22T23:04:33.170376+00:00",
         "decision": "ack_observe",
-        "finding_fingerprint": "445acb0f9a3f9032"
+        "finding_fingerprint": "807d87df5a91ac47"
       },
       "sort_bucket": "acked",
       "auto_ackable": false,
@@ -215,12 +215,12 @@
       "approval_label": null,
       "analysis": {
         "headline": "0 attention-parked eng tasks · quiet (auto-ackable)",
-        "updated_at": "2026-10-22T07:52:21.294618+00:00",
+        "updated_at": "2026-10-22T22:59:21.457436+00:00",
         "fingerprint": "463c1c358411298f",
         "bullets": [
           "Quiet after recover-queue — observe Acknowledge is sufficient (no list-parked triage).",
           "Parked tasks: 1 (attention ~0)",
-          "Queue-clearing pause active: False — evaluated 2026-10-22T07:52:21.294618+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-10-22T22:59:21.457436+00:00",
           "Traffic pause active: False",
           "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)"
         ],
@@ -598,7 +598,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 1 open",
-        "updated_at": "2026-10-22T07:31:27.144521+00:00",
+        "updated_at": "2026-10-22T20:24:05.652473+00:00",
         "fingerprint": "f765d60144146672",
         "bullets": [
           "Open deviations: 1",
@@ -634,7 +634,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-10-21T08:28:42.325836+00:00",
+        "updated_at": "2026-10-22T08:52:10.772124+00:00",
         "fingerprint": "1d374ee9ad0e2d3b",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
@@ -1020,7 +1020,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-10-21T08:28:42.323630+00:00",
+        "updated_at": "2026-10-22T08:52:10.769964+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",
