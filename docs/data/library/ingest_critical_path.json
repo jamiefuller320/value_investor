@@ -1,23 +1,81 @@
 {
-  "market_id": "iseq20",
-  "assessed_at": "2026-10-22T10:41:32.149925+00:00",
+  "market_id": "euro_depth",
+  "assessed_at": "2026-10-22T12:58:52.020775+00:00",
   "unmeasured": [],
   "zero_body": [],
-  "indexed_without_body": [],
-  "thin_need_discovery": [],
-  "thin_need_bodies": [],
-  "primary_blocker": "none",
-  "force_discovery_scan": false,
-  "auto_pin_tickers": [],
+  "indexed_without_body": [
+    {
+      "ticker": "ABI.BR",
+      "indexed_without_body": 12,
+      "filings_total": 37,
+      "filings_with_body": 25
+    },
+    {
+      "ticker": "ESSITY-B.ST",
+      "indexed_without_body": 1,
+      "filings_total": 20,
+      "filings_with_body": 19
+    },
+    {
+      "ticker": "EVN.VI",
+      "indexed_without_body": 1,
+      "filings_total": 3,
+      "filings_with_body": 2
+    },
+    {
+      "ticker": "MT.AS",
+      "indexed_without_body": 1,
+      "filings_total": 41,
+      "filings_with_body": 40
+    },
+    {
+      "ticker": "UCB.BR",
+      "indexed_without_body": 1,
+      "filings_total": 2,
+      "filings_with_body": 1
+    },
+    {
+      "ticker": "WIE.VI",
+      "indexed_without_body": 1,
+      "filings_total": 3,
+      "filings_with_body": 2
+    }
+  ],
+  "thin_need_discovery": [
+    "APAM.AS",
+    "ACKB.BR",
+    "UCB.BR",
+    "MUV2.DE",
+    "BAS.DE",
+    "IFX.DE",
+    "DQ7A.IR"
+  ],
+  "thin_need_bodies": [
+    "EVN.VI",
+    "UCB.BR",
+    "WIE.VI"
+  ],
+  "primary_blocker": "indexed_without_body",
+  "force_discovery_scan": true,
+  "auto_pin_tickers": [
+    "ABI.BR",
+    "ESSITY-B.ST",
+    "EVN.VI",
+    "MT.AS",
+    "UCB.BR",
+    "WIE.VI"
+  ],
   "recommended_actions": [
-    "Filing critical path clear — maintenance deepen only"
+    "Prefer indexed-without-body body refetch (6 tickers, top: ABI.BR(12), ESSITY-B.ST(1), EVN.VI(1), MT.AS(1), UCB.BR(1))",
+    "Discovery/IR seed for 7 thin ticker(s) that already have bodies for every indexed filing",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 0,
-    "indexed_without_body_rows": 0,
-    "thin_need_discovery": 0,
-    "thin_need_bodies": 0
+    "indexed_without_body_tickers": 6,
+    "indexed_without_body_rows": 17,
+    "thin_need_discovery": 7,
+    "thin_need_bodies": 3
   }
 }
