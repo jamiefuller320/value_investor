@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-22T15:34:12.679478+00:00",
+  "generated_at": "2026-10-22T15:38:41.035132+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -31,19 +31,19 @@
     "market_count": 24,
     "ingest_counts": {
       "live": 1,
-      "sprint": 3,
-      "maintenance": 19,
+      "sprint": 2,
+      "maintenance": 20,
       "queued": 1
     },
     "role_counts": {
       "live": 1,
       "focus": 1,
-      "sprint": 2,
-      "admitted": 19,
+      "sprint": 1,
+      "admitted": 20,
       "queue": 1
     },
-    "sprint_count": 3,
-    "maintenance_count": 19,
+    "sprint_count": 2,
+    "maintenance_count": 20,
     "live_count": 1,
     "admitted_count": 22,
     "should_run_library_maintenance": true,
@@ -71,8 +71,7 @@
       "us_adr_asia"
     ],
     "spare_sprint": {
-      "1": "sp500",
-      "2": "aex"
+      "1": "sp500"
     },
     "equal_support_generated_at": "2026-10-22T15:16:55.730428+00:00"
   },
@@ -1942,17 +1941,17 @@
       "label": "AEX",
       "exchange": "Euronext Amsterdam",
       "currency": "EUR",
-      "role": "sprint",
+      "role": "admitted",
       "is_live": false,
       "is_focus": false,
       "is_graduated": true,
       "is_queue": true,
       "is_admitted": true,
       "is_ftse_equivalent": false,
-      "ingest": "sprint",
-      "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=1, indexed_without_body=7)",
-      "ingest_parity_met": false,
+      "ingest": "maintenance",
+      "ingest_stream": null,
+      "ingest_reason": null,
+      "ingest_parity_met": null,
       "ingest_exhausted": true,
       "queue_rank": 12,
       "shared_maintenance": true,
@@ -1965,7 +1964,7 @@
       "failed_fetch_count": 0,
       "last_metrics_refresh": "2026-10-22T07:15:54.386939+00:00",
       "last_constituents_refresh": "2026-10-22T07:15:42.684834+00:00",
-      "last_screen_at": "2026-10-22T15:32:12.165779+00:00",
+      "last_screen_at": "2026-10-22T06:53:02.981031+00:00",
       "signal_counts": {
         "hold": 14,
         "strong_buy": 4,
@@ -1988,38 +1987,21 @@
         "phase2_ready": false,
         "phase3_ready": false,
         "weekly_paper_enabled": false,
-        "weekday_paper_enabled": false,
+        "weekday_paper_enabled": true,
         "blockers": [
           "no benchmark configured for aex"
         ],
         "phase1": {
-          "screen_archives": 0,
+          "screen_archives": 35,
           "observe_snapshot_count": 0
         },
         "phase2": {
           "weekly_batch_count": 0,
-          "min_weekly_batches": 0
+          "min_weekly_batches": 4
         }
       },
-      "filing_health": {
-        "buy_tier_count": 8,
-        "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 1,
-        "indexed_without_body": 7,
-        "bodies_median": 5.0,
-        "coverage_scope": "canonical_plus_shards",
-        "ftse_equivalent": false,
-        "ingest_exhausted": false,
-        "parked_count": 0,
-        "zero_body_tickers": [],
-        "thin_body_tickers": [
-          "ASM.AS"
-        ],
-        "unmeasured_tickers": [],
-        "parked_tickers": []
-      },
-      "filing_gaps": 0,
+      "filing_health": null,
+      "filing_gaps": null,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -2075,57 +2057,7 @@
           "UNA.AS"
         ]
       },
-      "sprint_progress": {
-        "window_days": 2,
-        "run_count": 5,
-        "targets": 4,
-        "improved": 2,
-        "improved_tickers": [
-          "MT.AS",
-          "SHELL.AS"
-        ],
-        "last_run_at": "2026-10-22T15:32:00.812750+00:00",
-        "runtime_cutoff_runs": 0,
-        "error_runs": 0,
-        "gaps_before": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 1,
-          "indexed_without_body": 4,
-          "filing_gaps": 0
-        },
-        "gaps_after": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 1,
-          "indexed_without_body": 7,
-          "filing_gaps": 0
-        },
-        "gap_delta": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 3,
-          "filing_gaps": 0
-        },
-        "remaining": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 1,
-          "indexed_without_body": 7,
-          "filing_gaps": 0
-        },
-        "admission_ready": true,
-        "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [
-          {
-            "id": "no_observe_benchmark",
-            "severity": "warn",
-            "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock"
-          }
-        ],
-        "sprint_entered_at": "2026-10-22T15:32:12.165770+00:00"
-      },
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
@@ -2479,7 +2411,7 @@
         "filing_ready": true,
         "span_weeks": null,
         "unique_days": null,
-        "leftover": 8,
+        "leftover": 0,
         "steps": [
           {
             "id": "start",
