@@ -1,63 +1,15 @@
 {
-  "acted": true,
+  "acted": false,
   "gate": {
-    "local_time": "2026-10-22T03:35:54.616527-04:00",
+    "local_time": "2026-10-22T10:09:34.752721-04:00",
     "trading_day": true,
-    "after_settle": false,
+    "after_settle": true,
     "market_open_at": "2026-10-22T09:30:00-04:00",
     "settle_at": "2026-10-22T10:00:00-04:00",
-    "can_act": false,
-    "reason": "before market open"
+    "can_act": true,
+    "reason": "ok"
   },
-  "trades": [
-    {
-      "id": "94ce6a63-73b2-470e-984a-d03d81dbe537",
-      "fund_id": "8e88c089-7a66-4156-a459-2048d84db043",
-      "acted_at": "2026-10-22T03:35:54.616527-04:00",
-      "ticker": "CNQ.TO",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 0.929905,
-      "price": 76.2,
-      "gross": 70.86,
-      "cost": 0.12,
-      "net_cash": 70.73,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Canadian Natural Resources Limited",
-      "avg_cost_at_exit": 69.333,
-      "position_closed": true
-    },
-    {
-      "id": "48531ff1-efe3-41cf-b907-d00e815b9b96",
-      "fund_id": "8e88c089-7a66-4156-a459-2048d84db043",
-      "acted_at": "2026-10-22T03:35:54.616527-04:00",
-      "ticker": "TECK-B.TO",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.137172,
-      "price": 88.14,
-      "gross": 12.09,
-      "cost": 0.02,
-      "net_cash": -12.11,
-      "note": "Automated buy",
-      "name": "Teck Resources Limited"
-    },
-    {
-      "id": "ae24776b-eb51-4a71-8287-79b4061928f3",
-      "fund_id": "8e88c089-7a66-4156-a459-2048d84db043",
-      "acted_at": "2026-10-22T03:35:54.616527-04:00",
-      "ticker": "L.TO",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.351578,
-      "price": 68.46,
-      "gross": 24.07,
-      "cost": 0.04,
-      "net_cash": -24.11,
-      "note": "Automated buy",
-      "name": "Loblaw Companies Limited"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -71,8 +23,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 984.54,
-    "cash": 34.51,
+    "nav": 984.73,
+    "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -84,7 +36,7 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 75.73,
+    "target_sleeve_value": 75.74,
     "targets": [
       {
         "ticker": "OTEX.TO",
@@ -178,10 +130,43 @@
         "price": 40.67
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "CNQ.TO",
+        "name": "Canadian Natural Resources Limited",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.929905,
+        "price": 76.2,
+        "value": 70.86
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "TECK-B.TO",
+        "name": "Teck Resources Limited",
+        "reason": "Top-up to equal weight",
+        "value": 12.11,
+        "price": 88.14,
+        "target_value": 75.74,
+        "conviction_score": 0.6384000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "L.TO",
+        "name": "Loblaw Companies Limited",
+        "reason": "Top-up to equal weight",
+        "value": 24.11,
+        "price": 68.46,
+        "target_value": 75.74,
+        "conviction_score": 0.62,
+        "signal": "buy"
+      }
+    ],
     "anticipated_holds": [
       {
         "action": "hold",
@@ -189,7 +174,7 @@
         "name": "Open Text Corporation",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 73.02,
-        "target_value": 75.73,
+        "target_value": 75.74,
         "conviction_score": 0.865,
         "signal": "strong_buy"
       },
@@ -199,7 +184,7 @@
         "name": "WSP Global Inc.",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 73.53,
-        "target_value": 75.73,
+        "target_value": 75.74,
         "conviction_score": 0.8500000000000001,
         "signal": "strong_buy"
       },
@@ -209,7 +194,7 @@
         "name": "Kinross Gold Corporation",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 69.16,
-        "target_value": 75.73,
+        "target_value": 75.74,
         "conviction_score": 0.8031,
         "signal": "strong_buy"
       },
@@ -219,7 +204,7 @@
         "name": "Cenovus Energy Inc.",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 68.51,
-        "target_value": 75.73,
+        "target_value": 75.74,
         "conviction_score": 0.6634,
         "signal": "strong_buy"
       },
@@ -229,28 +214,8 @@
         "name": "Magna International Inc.",
         "reason": "Already near equal-weight target",
         "value": 75.52,
-        "target_value": 75.73,
+        "target_value": 75.74,
         "conviction_score": 0.6625,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "TECK-B.TO",
-        "name": "Teck Resources Limited",
-        "reason": "Already near equal-weight target",
-        "value": 75.72,
-        "target_value": 75.73,
-        "conviction_score": 0.6384000000000001,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "L.TO",
-        "name": "Loblaw Companies Limited",
-        "reason": "Already near equal-weight target",
-        "value": 75.7,
-        "target_value": 75.73,
-        "conviction_score": 0.62,
         "signal": "buy"
       },
       {
@@ -259,7 +224,7 @@
         "name": "Barrick Mining Corporation",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 68.45,
-        "target_value": 75.73,
+        "target_value": 75.74,
         "conviction_score": 0.5639000000000001,
         "signal": "buy"
       },
@@ -269,7 +234,7 @@
         "name": "Canadian National Railway Company",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 69.95,
-        "target_value": 75.73,
+        "target_value": 75.74,
         "conviction_score": 0.4967,
         "signal": "buy"
       },
@@ -279,7 +244,7 @@
         "name": "Rogers Communications Inc.",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 68.74,
-        "target_value": 75.73,
+        "target_value": 75.74,
         "conviction_score": 0.4867,
         "signal": "buy"
       },
@@ -289,7 +254,7 @@
         "name": "Metro Inc.",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 72.48,
-        "target_value": 75.73,
+        "target_value": 75.74,
         "conviction_score": 0.392,
         "signal": "buy"
       }
@@ -304,7 +269,7 @@
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 13 equal-weight sleeve(s); leave 11 near-target holding(s)."
+    "summary": "Next rebalance would target 13 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s); leave 9 near-target holding(s)."
   },
   "alerts": [
     {
@@ -418,6 +383,17 @@
       "timing_signal": "neutral"
     },
     {
+      "ticker": "CNQ.TO",
+      "name": "Canadian Natural Resources Limited",
+      "source": "paper",
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
+      "mark": 76.2,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "wait"
+    },
+    {
       "ticker": "CVE.TO",
       "name": "Cenovus Energy Inc.",
       "source": "paper",
@@ -466,7 +442,7 @@
       "id": "8e88c089-7a66-4156-a459-2048d84db043",
       "created_at": "2026-09-10T17:42:17.375213+00:00"
     },
-    "cash": 34.51,
+    "cash": 0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -580,6 +556,17 @@
         "take_profit": null,
         "opened_at": "2026-09-10T13:42:17.375117-04:00"
       },
+      "CNQ.TO": {
+        "ticker": "CNQ.TO",
+        "shares": 0.929905,
+        "avg_cost": 69.333,
+        "name": "Canadian Natural Resources Limited",
+        "sector": "Energy",
+        "currency": "CAD",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-13T02:49:57.191830-04:00"
+      },
       "CVE.TO": {
         "ticker": "CVE.TO",
         "shares": 1.472009,
@@ -593,8 +580,8 @@
       },
       "TECK-B.TO": {
         "ticker": "TECK-B.TO",
-        "shares": 0.859062,
-        "avg_cost": 94.2912,
+        "shares": 0.72189,
+        "avg_cost": 95.46,
         "name": "Teck Resources Limited",
         "sector": "Basic Materials",
         "currency": "CAD",
@@ -604,8 +591,8 @@
       },
       "L.TO": {
         "ticker": "L.TO",
-        "shares": 1.105707,
-        "avg_cost": 66.9532,
+        "shares": 0.754129,
+        "avg_cost": 66.2507,
         "name": "Loblaw Companies Limited",
         "sector": "Consumer Defensive",
         "currency": "CAD",
@@ -2026,53 +2013,6 @@
         "net_cash": -10.17,
         "note": "Automated buy",
         "name": "Loblaw Companies Limited"
-      },
-      {
-        "id": "94ce6a63-73b2-470e-984a-d03d81dbe537",
-        "fund_id": "8e88c089-7a66-4156-a459-2048d84db043",
-        "acted_at": "2026-10-22T03:35:54.616527-04:00",
-        "ticker": "CNQ.TO",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 0.929905,
-        "price": 76.2,
-        "gross": 70.86,
-        "cost": 0.12,
-        "net_cash": 70.73,
-        "note": "Automated exit \u2014 left target set",
-        "name": "Canadian Natural Resources Limited",
-        "avg_cost_at_exit": 69.333,
-        "position_closed": true
-      },
-      {
-        "id": "48531ff1-efe3-41cf-b907-d00e815b9b96",
-        "fund_id": "8e88c089-7a66-4156-a459-2048d84db043",
-        "acted_at": "2026-10-22T03:35:54.616527-04:00",
-        "ticker": "TECK-B.TO",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 0.137172,
-        "price": 88.14,
-        "gross": 12.09,
-        "cost": 0.02,
-        "net_cash": -12.11,
-        "note": "Automated buy",
-        "name": "Teck Resources Limited"
-      },
-      {
-        "id": "ae24776b-eb51-4a71-8287-79b4061928f3",
-        "fund_id": "8e88c089-7a66-4156-a459-2048d84db043",
-        "acted_at": "2026-10-22T03:35:54.616527-04:00",
-        "ticker": "L.TO",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 0.351578,
-        "price": 68.46,
-        "gross": 24.07,
-        "cost": 0.04,
-        "net_cash": -24.11,
-        "note": "Automated buy",
-        "name": "Loblaw Companies Limited"
       }
     ],
     "equity_curve": [
@@ -2745,43 +2685,27 @@
           "issues": []
         },
         "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-22T03:35:54.616527-04:00",
-        "portfolio_value": 539.74,
-        "cash": 34.51,
-        "contributed_capital": 1000.0,
-        "positions": 13,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0,
-            "CAD": 0.5318
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-22T03:35:54.616527-04:00",
+    "last_mark_at": "2026-10-21T03:37:42.119562-04:00",
     "rebalance_state": {
-      "exit_streak": {},
-      "reentry_cooldown": {
-        "CNQ.TO": 1
-      }
+      "exit_streak": {
+        "CNQ.TO": 1,
+        "L.TO": 1
+      },
+      "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (3 trade(s)).",
+  "note": "Already rebalanced today for this track \u2014 skipping duplicate pass (use --force to override).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "tsx60",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-22T07:35:54.739830+00:00",
+    "generated_at": "2026-10-22T14:09:34.765002+00:00",
     "observe_only": true,
-    "open_count": 12,
+    "open_count": 11,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -2816,7 +2740,7 @@
       }
     },
     "first_episode": {
-      "open_count": 9,
+      "open_count": 8,
       "closed_count": 0,
       "by_exit_kind": {
         "grace": {
@@ -2852,13 +2776,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
+    "ingested_this_pass": 0,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-22T07:35:54.741758+00:00",
+    "generated_at": "2026-10-22T14:09:34.766816+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2912,37 +2836,37 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 11,
+      "hold_closed_count": 10,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 18,
       "gaps": [
-        "hold_recovery closed episodes=11 (target >=15)",
+        "hold_recovery closed episodes=10 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 13,
-        "recovered_to_breakeven": 11,
+        "count": 14,
+        "recovered_to_breakeven": 12,
         "close_reasons": {
-          "open": 13
+          "open": 14
         }
       },
       "closed": {
-        "count": 11,
-        "recovered_to_breakeven": 9,
+        "count": 10,
+        "recovered_to_breakeven": 8,
         "close_reasons": {
-          "sold_while_recovered": 9,
+          "sold_while_recovered": 8,
           "sold_while_underwater": 2
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 11,
+        "count": 10,
         "verdicts": {
-          "open": 11
+          "open": 10
         }
       },
       "closed": {
@@ -2952,7 +2876,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 1,
@@ -2964,8 +2888,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-22T07:35:54.744981+00:00",
-    "as_of": "2026-10-22T03:35:54.616527-04:00",
+    "updated_at": "2026-10-22T14:09:34.769925+00:00",
+    "as_of": "2026-10-22T10:09:34.752721-04:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2977,19 +2901,19 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 13,
+    "holding_count": 14,
     "underwater_count": 3,
     "thesis_status_counts": {
       "intact": 9,
-      "weakening": 4,
+      "weakening": 5,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 13,
+      "holding_count": 14,
       "loser_count": 3,
-      "loser_share": 0.2308,
-      "loser_nav_share": 0.2249,
+      "loser_share": 0.2143,
+      "loser_nav_share": 0.2047,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
@@ -3004,10 +2928,10 @@
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.0,
+        "cheapness": 0.0909,
         "quality": 0.0,
-        "dividend": 0.4,
-        "garp": 0.4,
+        "dividend": 0.3636,
+        "garp": 0.3636,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -3101,9 +3025,9 @@
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0652,
+        "unrealized_pct": -0.0767,
         "mark": 88.14,
-        "avg_cost": 94.2912,
+        "avg_cost": 95.46,
         "signal": "buy",
         "timing_signal": "neutral",
         "conviction_score": 0.6384,
@@ -3384,9 +3308,9 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0225,
+        "unrealized_pct": 0.0333,
         "mark": 68.46,
-        "avg_cost": 66.9532,
+        "avg_cost": 66.2507,
         "signal": "buy",
         "timing_signal": "neutral",
         "conviction_score": 0.62,
@@ -3500,6 +3424,46 @@
         "broken_reasons": []
       },
       {
+        "ticker": "CNQ.TO",
+        "name": "Canadian Natural Resources Limited",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.099,
+        "mark": 76.2,
+        "avg_cost": 69.333,
+        "signal": "buy",
+        "timing_signal": "wait",
+        "conviction_score": 0.5606,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "cheapness"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "cheapness family no longer passes",
+          "still buy",
+          "research accumulate"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "data_quality 1.00",
+          "conviction 56%"
+        ],
+        "weaken_reasons": [
+          "cheapness family no longer passes"
+        ],
+        "broken_reasons": []
+      },
+      {
         "ticker": "OTEX.TO",
         "name": "Open Text Corporation",
         "thesis_status": "intact",
@@ -3547,27 +3511,27 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-22T07:35:54.748817+00:00",
+    "generated_at": "2026-10-22T14:09:34.773834+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 11,
+      "closed_total": 10,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 13,
+      "open_with_thesis": 14,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 5,
-          "recovery_rate": 0.6,
-          "sold_underwater_rate": 0.4,
-          "mean_peak_unrealized_pct": 0.0175,
-          "mean_trough_unrealized_pct": -0.0372,
+          "closed_count": 4,
+          "recovery_rate": 0.5,
+          "sold_underwater_rate": 0.5,
+          "mean_peak_unrealized_pct": -0.0038,
+          "mean_trough_unrealized_pct": -0.0378,
           "outcome_labels": {
-            "recovered": 3,
+            "recovered": 2,
             "sold_underwater": 2
           }
         },
@@ -3607,7 +3571,7 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 11,
+      "hold_closed_with_thesis": 10,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
         "swap sell legs with thesis=0 (target >=5)"
@@ -3621,7 +3585,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-22T07:35:54.758666+00:00",
+    "generated_at": "2026-10-22T14:09:34.783591+00:00",
     "open_count": 2,
     "closed_count": 23,
     "scored_count": 19,
@@ -3690,7 +3654,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-22T03:35:54.616527-04:00",
+    "generated_at": "2026-10-22T10:09:34.752721-04:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -3717,8 +3681,8 @@
     "open_count": 18,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 13,
-      "off_book": 4,
+      "on_book": 14,
+      "off_book": 3,
       "never_funded": 1
     },
     "closed_by_capital_status": {
@@ -3741,354 +3705,50 @@
       "opened": 0,
       "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 1
+      "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-22T03:35:54.616527-04:00",
+    "generated_at": "2026-10-22T10:09:34.752721-04:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "llm",
-    "judge_spec_id": "llm.v1",
-    "parent_spec_id": "heuristic.v1",
+    "judge_backend": "evidence_heuristic",
+    "judge_spec_id": "heuristic.v1",
+    "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 3,
-    "card_count": 3,
+    "proposal_count": 0,
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 2,
-      "veto": 1,
+      "agree": 0,
+      "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {
-      "sell": {
-        "agree": 0,
-        "veto": 1,
-        "abstain": 0
-      },
-      "buy": {
-        "agree": 2,
-        "veto": 0,
-        "abstain": 0
-      }
-    },
+    "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
-    "cards": [
-      {
-        "ticker": "CNQ.TO",
-        "name": "Canadian Natural Resources Limited",
-        "algo_action": "sell",
-        "algo_reason": "Automated exit \u2014 left target set",
-        "shadow_verdict": "veto",
-        "reasons": [
-          "Sell proposed while still_buyish with rank_drop 0 (below hold gate threshold of 3) \u2014 capacity-bump churn risk outweighs mechanical left-target-set exit.",
-          "Screen remains buy with research_verdict accumulate and conviction rank unchanged from entry (9)."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated exit \u2014 left target set"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 9
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 9
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-10-22T03:35:54.616527-04:00",
-        "proposal_id": "buy_tier_level:CNQ.TO:sell:2026-10-22T03:35:54.616527-04:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "veto",
-            "reasons": [
-              "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "TECK-B.TO",
-        "name": "Teck Resources Limited",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Effective screen_signal buy with still_buyish true and research_verdict accumulate; overlay_bound supports aligned entry.",
-          "Conviction rank 6 with rank_drop 0 consistent with fresh buyish cohort membership."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 6
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 6
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-10-22T03:35:54.616527-04:00",
-        "proposal_id": "buy_tier_level:TECK-B.TO:buy:2026-10-22T03:35:54.616527-04:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Buy into buyish target set \u2014 agree with algo selection."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "L.TO",
-        "name": "Loblaw Companies Limited",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Effective screen_signal buy with still_buyish true and research_verdict accumulate; overlay_bound supports aligned entry.",
-          "Conviction rank 7 with rank_drop 0 consistent with buy into buyish target set."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 7
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 7
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-10-22T03:35:54.616527-04:00",
-        "proposal_id": "buy_tier_level:L.TO:buy:2026-10-22T03:35:54.616527-04:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Buy into buyish target set \u2014 agree with algo selection."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      }
-    ],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
-    "llm_judge": {
-      "attempted": true,
-      "ok": true,
-      "fallback": null,
-      "llm_card_count": 3
-    },
+    "cards": [],
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-22T03:35:54.616527-04:00",
+      "generated_at": "2026-10-22T10:09:34.752721-04:00",
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "llm",
-      "judge_spec_id": "llm.v1",
-      "parent_spec_id": "heuristic.v1",
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 3,
+      "card_count": 0,
       "verdict_counts": {
-        "agree": 2,
-        "veto": 1,
+        "agree": 0,
+        "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {
-        "sell": {
-          "agree": 0,
-          "veto": 1,
-          "abstain": 0
-        },
-        "buy": {
-          "agree": 2,
-          "veto": 0,
-          "abstain": 0
-        }
-      },
-      "veto_sell_count": 1,
-      "veto_sell_tickers": [
-        "CNQ.TO"
-      ],
+      "by_algo_action": {},
+      "veto_sell_count": 0,
+      "veto_sell_tickers": [],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -4099,10 +3759,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-22T07:35:58.238138+00:00",
+  "generated_at": "2026-10-22T14:09:34.793061+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
