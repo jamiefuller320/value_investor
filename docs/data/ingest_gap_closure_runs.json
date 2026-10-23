@@ -21860,8 +21860,117 @@
         "per_ticker": []
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20261023-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "MT.AS",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "IFX.DE"
+        ],
+        "market_id": "euro_depth",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261023-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-10-23T07:31:49.508491+00:00",
+      "completed_at": "2026-10-23T07:34:07.698435+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "IFX.DE"
+        ],
+        "results": [
+          {
+            "ticker": "IFX.DE",
+            "reason": "thin_bodies",
+            "before": {
+              "filings_total": 2,
+              "filings_with_body": 1,
+              "indexed_without_body": 0
+            },
+            "after": {
+              "filings_total": 1,
+              "filings_with_body": 1,
+              "indexed_without_body": 0
+            },
+            "improved": false,
+            "regime": "euro_filings",
+            "filings_summary": {
+              "total": 1,
+              "annual": 1,
+              "interim": 0,
+              "trading_update": 0,
+              "other": 0,
+              "with_body": 1,
+              "period_coverage": {
+                "annual": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "interim": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 0,
+                  "with_body": 0
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 1,
+              "with_body_after": 1,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 1,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "IFX.DE",
+            "with_body_before": 1,
+            "with_body_after": 1,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-10-22T15:37:44.895868+00:00",
+  "updated_at": "2026-10-23T07:34:07.698444+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
