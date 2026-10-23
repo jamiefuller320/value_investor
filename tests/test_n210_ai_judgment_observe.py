@@ -330,11 +330,26 @@ def test_open_episodes_tracked_before_hold_completes():
         _snap(1, [_row("AAA.L", price=100.0)], month=1),
         _snap(8, [_row("AAA.L", price=101.0)], month=1),
     ]
-    payload = build_n210_observe(snaps, cfg=N210Config())
+    fair = costs_for_market("ftse350")
+    payload = build_n210_observe(
+        snaps,
+        cfg=N210Config(buy_cost_pct=fair.buy_pct, sell_cost_pct=fair.sell_pct),
+    )
     assert payload["completed_entry_episodes"] == 0
     assert payload["open_entry_episodes"] == 1
     assert payload["open_episodes_sample"][0]["ticker"] == "AAA.L"
     assert payload["influences_live"] is False
+    open_row = payload["open_episodes_sample"][0]
+    expected = round(0.01 - fair.buy_pct - fair.sell_pct, 6)
+    assert open_row["open_mark_return"] == expected
+    assert open_row["open_mark_basis"] == "fair_cost_as_if_closed_latest_quote"
+    # Slim lifecycle episodes also carry the mark for sealed chips.
+    life = [
+        r
+        for r in payload["lifecycle_episodes"]
+        if r.get("ticker") == "AAA.L" and r.get("status") == "open"
+    ]
+    assert life and life[0]["open_mark_return"] == expected
 
 
 def test_scoring_independent_of_fund_nav_cfg_stake():

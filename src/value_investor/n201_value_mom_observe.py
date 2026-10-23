@@ -34,6 +34,7 @@ from value_investor.market_trading_costs import (
     LIVE_PAPER_MARKET_ID,
     costs_for_market,
 )
+from value_investor.sealed_lifecycle import with_fair_cost_open_mark
 
 logger = logging.getLogger(__name__)
 
@@ -419,6 +420,21 @@ def _price_at(snapshots: list[RunSnapshot], idx: int, ticker: str) -> float | No
     if price is None or float(price) <= 0:
         return None
     return float(price)
+
+
+def _latest_quote(
+    snapshots: list[RunSnapshot],
+    ticker: str,
+    *,
+    from_idx: int = 0,
+) -> tuple[float | None, str | None]:
+    """Latest real archive quote for ``ticker`` at or after ``from_idx``."""
+    start = max(0, int(from_idx))
+    for idx in range(len(snapshots) - 1, start - 1, -1):
+        price = _price_at(snapshots, idx, ticker)
+        if price is not None:
+            return price, snapshots[idx].run_at
+    return None, None
 
 
 def _close_near(
@@ -973,19 +989,29 @@ def build_n201_observe(
                 market_id=mid,
                 sessions=sessions,
             )
+            buy_pct, sell_pct = cfg.primary_buy_sell(mid)
             if exit_idx is None:
+                # Display-only open mark from real archive quotes; not path primary.
+                p_entry = _price_at(snapshots, i, ticker)
+                p_mark, mark_at = _latest_quote(snapshots, ticker, from_idx=i)
                 open_lifecycle.append(
-                    {
-                        "ticker": ticker,
-                        "market_id": mid,
-                        "entry_run_at": snap.run_at,
-                        "status": "open",
-                        "influences_live": False,
-                    }
+                    with_fair_cost_open_mark(
+                        {
+                            "ticker": ticker,
+                            "market_id": mid,
+                            "entry_run_at": snap.run_at,
+                            "status": "open",
+                            "influences_live": False,
+                        },
+                        entry_price=p_entry,
+                        mark_price=p_mark,
+                        buy_cost_pct=buy_pct,
+                        sell_cost_pct=sell_pct,
+                        mark_run_at=mark_at,
+                    )
                 )
                 continue  # still open
 
-            buy_pct, sell_pct = cfg.primary_buy_sell(mid)
             p_entry = _price_at(snapshots, i, ticker)
             p_exit = _price_at(snapshots, exit_idx, ticker)
             if p_entry is None or p_exit is None:

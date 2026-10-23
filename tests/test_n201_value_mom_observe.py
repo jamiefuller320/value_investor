@@ -265,6 +265,41 @@ def test_scoring_independent_of_fund_nav_cfg_stake():
     )
 
 
+def test_open_episode_stores_fair_cost_mark_from_real_quotes():
+    """Still-clear short hold → open lifecycle row with fair-cost open mark."""
+    rows = [
+        _row("AAA.L", ey=0.20, mom=0.10, fh=True, price=100.0),
+        _row("BBB.L", ey=0.01, mom=0.10, fh=True, price=50.0),
+        _row("CCC.L", ey=0.02, mom=0.10, fh=True, price=50.0),
+    ]
+    rows_mark = [
+        _row("AAA.L", ey=0.20, mom=0.10, fh=True, price=110.0),
+        _row("BBB.L", ey=0.01, mom=0.10, fh=True, price=50.0),
+        _row("CCC.L", ey=0.02, mom=0.10, fh=True, price=50.0),
+    ]
+    snaps = [_snap(1, rows, month=1), _snap(8, rows_mark, month=1)]
+    fair = costs_for_market("ftse350")
+    payload = build_n201_observe(
+        snaps,
+        cfg=N201Config(
+            fetch_momentum_prices=False,
+            buy_cost_pct=fair.buy_pct,
+            sell_cost_pct=fair.sell_pct,
+        ),
+    )
+    assert payload["completed_entry_episodes"] == 0
+    opens = [
+        r
+        for r in payload["lifecycle_episodes"]
+        if r.get("status") == "open" and r.get("ticker") == "AAA.L"
+    ]
+    assert len(opens) == 1
+    expected = round(0.10 - fair.buy_pct - fair.sell_pct, 6)
+    assert opens[0]["open_mark_return"] == expected
+    assert opens[0]["open_mark_basis"] == "fair_cost_as_if_closed_latest_quote"
+    assert payload["influences_live"] is False
+
+
 def test_skips_missing_entry_fields_soft_gap():
     # AAA has no EY/mom/FH — cannot enter; BBB has full fields but weak EY.
     snaps = [

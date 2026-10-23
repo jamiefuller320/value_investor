@@ -42,6 +42,7 @@ from value_investor.n201_value_mom_observe import (
     _earnings_yield,
     _entry_filter_state,
     _find_exit_index,
+    _latest_quote,
     _median_or_none,
     _parse_dt,
     _plain_ey_top_share,
@@ -57,6 +58,7 @@ from value_investor.n201_value_mom_observe import (
     row_f9_eligible,
     trading_days_between,
 )
+from value_investor.sealed_lifecycle import with_fair_cost_open_mark
 
 DEFAULT_OUTPUT_DIR = Path("docs/data")
 DEFAULT_STORE_PATH = Path("docs/data/n206_plain_ey_observe.json")
@@ -305,18 +307,28 @@ def score_plain_ey_hold(
                 market_id=mid,
                 sessions=None,
             )
+            buy_pct, sell_pct = cfg.primary_buy_sell(mid)
             if exit_idx is None:
+                # Display-only open mark from real archive quotes; not path primary.
+                p_entry = _price_at(snapshots, i, ticker)
+                p_mark, mark_at = _latest_quote(snapshots, ticker, from_idx=i)
                 open_lifecycle.append(
-                    {
-                        "ticker": ticker,
-                        "market_id": mid,
-                        "entry_run_at": snap.run_at,
-                        "status": "open",
-                        "influences_live": False,
-                    }
+                    with_fair_cost_open_mark(
+                        {
+                            "ticker": ticker,
+                            "market_id": mid,
+                            "entry_run_at": snap.run_at,
+                            "status": "open",
+                            "influences_live": False,
+                        },
+                        entry_price=p_entry,
+                        mark_price=p_mark,
+                        buy_cost_pct=buy_pct,
+                        sell_cost_pct=sell_pct,
+                        mark_run_at=mark_at,
+                    )
                 )
                 continue
-            buy_pct, sell_pct = cfg.primary_buy_sell(mid)
             p_entry = _price_at(snapshots, i, ticker)
             p_exit = _price_at(snapshots, exit_idx, ticker)
             if p_entry is None or p_exit is None:

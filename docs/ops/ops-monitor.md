@@ -505,14 +505,20 @@ The four `sealed_observe_only` refreshes (`check_n200_tech_timing_observe`,
 `docs/data/sealed_lifecycle.json`. Each model page groups one-line chips
 (ticker, days in the current column, episode fair-cost % or a stored open
 mark) under just bought / holding / just sold / post sale, using
-`JUST_BOUGHT_DAYS` and `JUST_SOLD_DAYS` (both 14). The chip percent is not
-the cohort median and not the sample-mean strip. Above the board, the same
-page collates companion + phase/volume/path stages (+ N200 levers /
-freshness) from the observe store and `queue_health.*_pipeline_health` —
-single source of truth with Analysis → Observe; no divergent numbers.
-Full path table stays one click away on Analysis. `influences_live` stays
-false. No extra cron and no human gate. Dashboard: Lifecycle → **Sealed
-models** (`#lifecycle/sealed/n200`).
+`JUST_BOUGHT_DAYS` and `JUST_SOLD_DAYS` (both 14). On refresh, open episodes
+get `open_mark_return` from **real archive quotes** (entry snap price →
+latest available quote for that ticker), fair-cost as if closed at the mark
+(`OPEN_MARK_BASIS` = `fair_cost_as_if_closed_latest_quote` — same buy+sell
+drag as closed episodes). Missing entry or mark quote → fail closed, chip
+stays “No stored mark”; never invent a price. Open marks are display-only
+(not path primary / cohort median). The chip percent is not the cohort
+median and not the sample-mean strip. Above the board, the same page
+collates companion + phase/volume/path stages (+ N200 levers / freshness)
+from the observe store and `queue_health.*_pipeline_health` — single source
+of truth with Analysis → Observe; no divergent numbers. Full path table
+stays one click away on Analysis. `influences_live` stays false. No extra
+cron and no human gate. Dashboard: Lifecycle → **Sealed models**
+(`#lifecycle/sealed/n200`).
 
 ### Weekday light lifecycle_board refresh (L468)
 
