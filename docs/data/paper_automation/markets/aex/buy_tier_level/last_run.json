@@ -1,91 +1,30 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-22T09:47:29.409770+01:00",
+    "local_time": "2026-10-23T08:33:12.020045+01:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-10-22T08:00:00+01:00",
-    "settle_at": "2026-10-22T09:15:00+01:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-10-23T08:00:00+01:00",
+    "settle_at": "2026-10-23T09:15:00+01:00",
+    "can_act": false,
+    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
   "trades": [
     {
-      "id": "c84a7078-93c8-4f4e-95ee-1872cdc52fff",
+      "id": "9b93b0d3-2e2b-4dc7-9f4b-cae3393e5dda",
       "fund_id": "af324a71-e4f3-4ff7-b2ad-98db75dee080",
-      "acted_at": "2026-10-22T09:47:29.409770+01:00",
-      "ticker": "WKL.AS",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 2.502569,
-      "price": 83.72,
-      "gross": 209.52,
-      "cost": 0.37,
-      "net_cash": 209.15,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Wolters Kluwer N.V.",
-      "avg_cost_at_exit": 74.9795,
-      "position_closed": true
-    },
-    {
-      "id": "72c7b3c7-e7ba-4ea8-9ddd-1ea8072ba50f",
-      "fund_id": "af324a71-e4f3-4ff7-b2ad-98db75dee080",
-      "acted_at": "2026-10-22T09:47:29.409770+01:00",
-      "ticker": "AKZA.AS",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.876154,
-      "price": 58.4,
-      "gross": 51.17,
-      "cost": 0.09,
-      "net_cash": -51.26,
-      "note": "Automated buy",
-      "name": "Akzo Nobel N.V."
-    },
-    {
-      "id": "b20ebd96-65ef-4d0b-bd32-7498802d632b",
-      "fund_id": "af324a71-e4f3-4ff7-b2ad-98db75dee080",
-      "acted_at": "2026-10-22T09:47:29.409770+01:00",
-      "ticker": "AD.AS",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 1.514082,
-      "price": 32.88,
-      "gross": 49.78,
-      "cost": 0.09,
-      "net_cash": -49.87,
-      "note": "Automated buy",
-      "name": "Koninklijke Ahold Delhaize N.V."
-    },
-    {
-      "id": "ac07c1e0-d190-42fc-97bc-ec6a45459401",
-      "fund_id": "af324a71-e4f3-4ff7-b2ad-98db75dee080",
-      "acted_at": "2026-10-22T09:47:29.409770+01:00",
+      "acted_at": "2026-10-23T08:33:12.020045+01:00",
       "ticker": "RAND.AS",
-      "side": "buy",
+      "side": "sell",
       "sizing_mode": "cash",
-      "shares": 1.634996,
-      "price": 34.33,
-      "gross": 56.13,
-      "cost": 0.1,
-      "net_cash": -56.23,
-      "note": "Automated buy",
-      "name": "Randstad N.V."
-    },
-    {
-      "id": "8ac9ad67-8b7b-4b3d-be2f-b685d192079e",
-      "fund_id": "af324a71-e4f3-4ff7-b2ad-98db75dee080",
-      "acted_at": "2026-10-22T09:47:29.409770+01:00",
-      "ticker": "PRX.AS",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 1.449488,
-      "price": 35.67,
-      "gross": 51.7,
-      "cost": 0.09,
-      "net_cash": -51.79,
-      "note": "Automated buy",
-      "name": "Prosus N.V."
+      "shares": 0.923699,
+      "price": 40.65,
+      "gross": 37.55,
+      "cost": 0.07,
+      "net_cash": 37.48,
+      "note": "Automated trim",
+      "name": "Randstad N.V.",
+      "avg_cost_at_exit": 35.4414
     }
   ],
   "plan": {
@@ -101,8 +40,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1047.92,
-    "cash": -0.0,
+    "nav": 1090.81,
+    "cash": 37.48,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -114,80 +53,83 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 261.98,
+    "target_sleeve_value": 272.7,
     "targets": [
-      {
-        "ticker": "AKZA.AS",
-        "name": "Akzo Nobel N.V.",
-        "signal": "strong_buy",
-        "conviction_score": 0.7688,
-        "price": 58.4
-      },
       {
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "signal": "strong_buy",
         "conviction_score": 0.7233,
-        "price": 32.88
-      },
-      {
-        "ticker": "RAND.AS",
-        "name": "Randstad N.V.",
-        "signal": "buy",
-        "conviction_score": 0.6833,
-        "price": 34.33
+        "price": 32.91
       },
       {
         "ticker": "PRX.AS",
         "name": "Prosus N.V.",
         "signal": "buy",
-        "conviction_score": 0.5183,
-        "price": 35.67
+        "conviction_score": 0.5311,
+        "price": 33.93
+      },
+      {
+        "ticker": "RAND.AS",
+        "name": "Randstad N.V.",
+        "signal": "buy",
+        "conviction_score": 0.4458,
+        "price": 40.65
+      },
+      {
+        "ticker": "AKZA.AS",
+        "name": "Akzo Nobel N.V.",
+        "signal": "buy",
+        "conviction_score": 0.38439999999999996,
+        "price": 60.02
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_buys": [
       {
-        "action": "hold",
-        "ticker": "AKZA.AS",
-        "name": "Akzo Nobel N.V.",
-        "reason": "Already near equal-weight target",
-        "value": 261.98,
-        "target_value": 261.98,
-        "conviction_score": 0.7688,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
+        "action": "buy",
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
-        "reason": "Already near equal-weight target",
-        "value": 261.99,
-        "target_value": 261.98,
+        "reason": "Top-up to equal weight",
+        "value": 10.48,
+        "price": 32.91,
+        "target_value": 272.7,
         "conviction_score": 0.7233,
         "signal": "strong_buy"
       },
+      {
+        "action": "buy",
+        "ticker": "PRX.AS",
+        "name": "Prosus N.V.",
+        "reason": "Top-up to equal weight",
+        "value": 23.5,
+        "price": 33.93,
+        "target_value": 272.7,
+        "conviction_score": 0.5311,
+        "signal": "buy"
+      }
+    ],
+    "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "RAND.AS",
         "name": "Randstad N.V.",
         "reason": "Already near equal-weight target",
-        "value": 261.97,
-        "target_value": 261.98,
-        "conviction_score": 0.6833,
+        "value": 272.65,
+        "target_value": 272.7,
+        "conviction_score": 0.4458,
         "signal": "buy"
       },
       {
         "action": "hold",
-        "ticker": "PRX.AS",
-        "name": "Prosus N.V.",
-        "reason": "Already near equal-weight target",
-        "value": 261.98,
-        "target_value": 261.98,
-        "conviction_score": 0.5183,
+        "ticker": "AKZA.AS",
+        "name": "Akzo Nobel N.V.",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 269.25,
+        "target_value": 272.7,
+        "conviction_score": 0.38439999999999996,
         "signal": "buy"
       }
     ],
@@ -197,7 +139,7 @@
         "ticker": "SHELL.AS",
         "name": "Shell plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7526,
+        "conviction_score": 0.7673000000000001,
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       },
       {
@@ -208,7 +150,7 @@
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 4 near-target holding(s)."
+    "summary": "Next rebalance would target 4 equal-weight sleeve(s); deploy cash into 2 buy(s); leave 2 near-target holding(s)."
   },
   "alerts": [
     {
@@ -217,7 +159,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 32.88,
+      "mark": 32.91,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -228,7 +170,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 58.4,
+      "mark": 60.02,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -239,7 +181,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 34.33,
+      "mark": 40.65,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -249,8 +191,8 @@
       "name": "Prosus N.V.",
       "source": "paper",
       "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 35.67,
+      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
+      "mark": 33.93,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -271,7 +213,7 @@
       "id": "af324a71-e4f3-4ff7-b2ad-98db75dee080",
       "created_at": "2026-09-29T15:06:07.496770+00:00"
     },
-    "cash": -0.0,
+    "cash": 37.48,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -299,7 +241,7 @@
       },
       "RAND.AS": {
         "ticker": "RAND.AS",
-        "shares": 7.63106,
+        "shares": 6.707361,
         "avg_cost": 35.4414,
         "name": "Randstad N.V.",
         "sector": "Industrials",
@@ -1101,6 +1043,22 @@
         "net_cash": -51.79,
         "note": "Automated buy",
         "name": "Prosus N.V."
+      },
+      {
+        "id": "9b93b0d3-2e2b-4dc7-9f4b-cae3393e5dda",
+        "fund_id": "af324a71-e4f3-4ff7-b2ad-98db75dee080",
+        "acted_at": "2026-10-23T08:33:12.020045+01:00",
+        "ticker": "RAND.AS",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.923699,
+        "price": 40.65,
+        "gross": 37.55,
+        "cost": 0.07,
+        "net_cash": 37.48,
+        "note": "Automated trim",
+        "name": "Randstad N.V.",
+        "avg_cost_at_exit": 35.4414
       }
     ],
     "equity_curve": [
@@ -1501,24 +1459,39 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-23T08:33:12.020045+01:00",
+        "portfolio_value": 919.13,
+        "cash": 37.48,
+        "contributed_capital": 1000.0,
+        "positions": 4,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83701
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-22T09:47:29.409770+01:00",
+    "last_mark_at": "2026-10-23T08:33:12.020045+01:00",
     "rebalance_state": {
       "exit_streak": {},
-      "reentry_cooldown": {
-        "WKL.AS": 1
-      }
+      "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (5 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "aex",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-22T08:47:29.452830+00:00",
+    "generated_at": "2026-10-23T07:33:12.059985+00:00",
     "observe_only": true,
     "open_count": 7,
     "closed_count": 0,
@@ -1591,13 +1564,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
-    "checkpoints_added_this_pass": 3
+    "ingested_this_pass": 0,
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-22T08:47:29.454265+00:00",
+    "generated_at": "2026-10-23T07:33:12.061027+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1690,11 +1663,11 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     }
   },
   "hypothesis_integrity": {
@@ -1702,8 +1675,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-22T08:47:29.456191+00:00",
-    "as_of": "2026-10-22T09:47:29.409770+01:00",
+    "updated_at": "2026-10-23T07:33:12.062583+00:00",
+    "as_of": "2026-10-23T08:33:12.020045+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1716,7 +1689,7 @@
       "skip_underwater_urgency_when_intact": true
     },
     "holding_count": 4,
-    "underwater_count": 0,
+    "underwater_count": 1,
     "thesis_status_counts": {
       "intact": 4,
       "weakening": 0,
@@ -1725,87 +1698,47 @@
     },
     "portfolio_feedback": {
       "holding_count": 4,
-      "loser_count": 0,
-      "loser_share": 0.0,
-      "loser_nav_share": 0.0,
+      "loser_count": 1,
+      "loser_share": 0.25,
+      "loser_nav_share": 0.2366,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
-      "intact_loser_count": 0,
+      "intact_loser_count": 1,
       "weakening_loser_count": 0,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
         "cheapness": 0.0,
         "quality": 0.0,
         "dividend": 0.0,
-        "garp": 0.0,
+        "garp": 1.0,
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
         "quality": 0.0,
         "dividend": 0.0,
-        "garp": 0.5,
+        "garp": 0.6667,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
-      "balancing_hint": "maintain",
+      "balancing_hint": "tolerate_intact_losers",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
-      {
-        "ticker": "RAND.AS",
-        "name": "Randstad N.V.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0314,
-        "mark": 34.33,
-        "avg_cost": 35.4414,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.6833,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 68%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 68%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
       {
         "ticker": "PRX.AS",
         "name": "Prosus N.V.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
-        "underwater": false,
+        "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0048,
-        "mark": 35.67,
+        "unrealized_pct": -0.0533,
+        "mark": 33.93,
         "avg_cost": 35.8414,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5183,
+        "conviction_score": 0.5311,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1818,56 +1751,17 @@
         ],
         "research_verdict": null,
         "reasons": [
+          "price drawdown alone does not invalidate value thesis",
           "still buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 52%"
+          "conviction 53%"
         ],
         "intact_reasons": [
           "still buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 52%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "AKZA.AS",
-        "name": "Akzo Nobel N.V.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0118,
-        "mark": 58.4,
-        "avg_cost": 57.7187,
-        "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.7688,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 77%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 77%"
+          "conviction 53%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1879,8 +1773,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0187,
-        "mark": 32.88,
+        "unrealized_pct": 0.0197,
+        "mark": 32.91,
         "avg_cost": 32.2757,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -1912,6 +1806,87 @@
         ],
         "weaken_reasons": [],
         "broken_reasons": []
+      },
+      {
+        "ticker": "AKZA.AS",
+        "name": "Akzo Nobel N.V.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0399,
+        "mark": 60.02,
+        "avg_cost": 57.7187,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.3844,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 38%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 38%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "RAND.AS",
+        "name": "Randstad N.V.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.147,
+        "mark": 40.65,
+        "avg_cost": 35.4414,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.4458,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 45%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 45%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
       }
     ],
     "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
@@ -1921,7 +1896,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-22T08:47:29.458550+00:00",
+    "generated_at": "2026-10-23T07:33:12.064463+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1996,7 +1971,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-22T08:47:29.463534+00:00",
+    "generated_at": "2026-10-23T07:33:12.068429+00:00",
     "open_count": 1,
     "closed_count": 10,
     "scored_count": 10,
@@ -2063,7 +2038,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-22T09:47:29.409770+01:00",
+    "generated_at": "2026-10-23T08:33:12.020045+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2114,544 +2089,55 @@
       "opened": 0,
       "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 1
+      "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-22T09:47:29.409770+01:00",
+    "generated_at": "2026-10-23T08:33:12.020045+01:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "evidence_heuristic",
-    "judge_spec_id": "heuristic.v1",
-    "parent_spec_id": null,
+    "judge_backend": "llm",
+    "judge_spec_id": "llm.v1",
+    "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 5,
-    "card_count": 5,
+    "proposal_count": 0,
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 3,
-      "veto": 1,
-      "abstain": 1
+      "agree": 0,
+      "veto": 0,
+      "abstain": 0
     },
-    "by_algo_action": {
-      "sell": {
-        "agree": 0,
-        "veto": 1,
-        "abstain": 0
-      },
-      "buy": {
-        "agree": 3,
-        "veto": 0,
-        "abstain": 1
-      }
-    },
+    "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
-    "cards": [
-      {
-        "ticker": "WKL.AS",
-        "name": "Wolters Kluwer N.V.",
-        "algo_action": "sell",
-        "algo_reason": "Automated exit \u2014 left target set",
-        "shadow_verdict": "veto",
-        "reasons": [
-          "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated exit \u2014 left target set"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "strong_buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 5
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 5
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.6367
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-10-22T09:47:29.409770+01:00",
-        "proposal_id": "buy_tier_level:WKL.AS:sell:2026-10-22T09:47:29.409770+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      },
-      {
-        "ticker": "AKZA.AS",
-        "name": "Akzo Nobel N.V.",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Buy into buyish target set \u2014 agree with algo selection."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "strong_buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 1
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 1
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.7688
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-10-22T09:47:29.409770+01:00",
-        "proposal_id": "buy_tier_level:AKZA.AS:buy:2026-10-22T09:47:29.409770+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      },
-      {
-        "ticker": "AD.AS",
-        "name": "Koninklijke Ahold Delhaize N.V.",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Buy into buyish target set \u2014 agree with algo selection."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "strong_buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 3
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 3
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.7233
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-10-22T09:47:29.409770+01:00",
-        "proposal_id": "buy_tier_level:AD.AS:buy:2026-10-22T09:47:29.409770+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      },
-      {
-        "ticker": "RAND.AS",
-        "name": "Randstad N.V.",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Buy into buyish target set \u2014 agree with algo selection."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 4
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 4
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.6833
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-10-22T09:47:29.409770+01:00",
-        "proposal_id": "buy_tier_level:RAND.AS:buy:2026-10-22T09:47:29.409770+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      },
-      {
-        "ticker": "PRX.AS",
-        "name": "Prosus N.V.",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "abstain",
-        "reasons": [
-          "Buy while not buyish \u2014 abstain."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "hold"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 6
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 6
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.5183
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": false
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": false
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-10-22T09:47:29.409770+01:00",
-        "proposal_id": "buy_tier_level:PRX.AS:buy:2026-10-22T09:47:29.409770+01:00",
-        "meta": {
-          "still_buyish": false,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": null,
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": false,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      }
-    ],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
+    "cards": [],
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
+    "llm_judge": {
+      "attempted": true,
+      "ok": true,
+      "fallback": null
+    },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-22T09:47:29.409770+01:00",
+      "generated_at": "2026-10-23T08:33:12.020045+01:00",
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "evidence_heuristic",
-      "judge_spec_id": "heuristic.v1",
-      "parent_spec_id": null,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 5,
+      "card_count": 0,
       "verdict_counts": {
-        "agree": 3,
-        "veto": 1,
-        "abstain": 1
+        "agree": 0,
+        "veto": 0,
+        "abstain": 0
       },
-      "by_algo_action": {
-        "sell": {
-          "agree": 0,
-          "veto": 1,
-          "abstain": 0
-        },
-        "buy": {
-          "agree": 3,
-          "veto": 0,
-          "abstain": 1
-        }
-      },
-      "veto_sell_count": 1,
-      "veto_sell_tickers": [
-        "WKL.AS"
-      ],
+      "by_algo_action": {},
+      "veto_sell_count": 0,
+      "veto_sell_tickers": [],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -2662,10 +2148,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-22T08:47:29.470000+00:00",
+  "generated_at": "2026-10-23T07:33:12.073614+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

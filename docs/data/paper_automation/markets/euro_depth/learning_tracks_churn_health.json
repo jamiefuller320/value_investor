@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-22T07:39:54.935697+00:00",
+  "generated_at": "2026-10-23T07:37:14.472836+00:00",
   "lookback_days": 7,
   "primary_learning_track": "ai_judgment",
   "control_track": "rules",
@@ -16,46 +16,57 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-10-22T07:39:20.159173+00:00",
+        "reviewed_at": "2026-10-23T07:35:55.720041+00:00",
         "applied": false,
         "enough_history": true,
-        "cost_drag": 0.01,
-        "total_costs": 9.96,
-        "trade_count": 29,
-        "excess_after_costs": 0.014,
+        "cost_drag": 0.0107,
+        "total_costs": 10.68,
+        "trade_count": 31,
+        "excess_after_costs": 0.0223,
         "knobs_after": {
-          "max_positions": 5,
+          "max_positions": 6,
           "skip_timing_wait": true,
           "min_conviction": 0.0,
           "sector_cap": 0.3
         },
-        "proposed_changes": {},
+        "proposed_changes": {
+          "max_positions": 6
+        },
         "reasons": [
-          "No knob change warranted from current reviewed outcomes."
+          "Strong excess after costs (+2.2%) — raise max_positions."
         ]
       },
       "rebalance_state": {
         "exit_streak": {},
-        "reentry_cooldown": {},
+        "reentry_cooldown": {
+          "DG.PA": 1
+        },
         "buffered_holdings": 0
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (0 trade(s)).",
-        "trade_count": 0,
+        "note": "Rebalanced after open settle (2 trade(s)).",
+        "trade_count": 2,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 1,
-        "buys": 1,
-        "sells": 0,
+        "total": 3,
+        "buys": 2,
+        "sells": 1,
         "trims": 0,
-        "full_exits": 0,
-        "adjacent_side_flips": [],
-        "adjacent_flip_count": 0
+        "full_exits": 1,
+        "adjacent_side_flips": [
+          {
+            "ticker": "DG.PA",
+            "from_side": "buy",
+            "to_side": "sell",
+            "acted_at": "2026-10-23T09:34:04.223831+02:00"
+          }
+        ],
+        "adjacent_flip_count": 1
       }
     },
     "ai_judgment": {
@@ -68,46 +79,57 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-10-22T07:39:23.551985+00:00",
+        "reviewed_at": "2026-10-23T07:36:03.896605+00:00",
         "applied": false,
         "enough_history": true,
-        "cost_drag": 0.01,
-        "total_costs": 9.96,
-        "trade_count": 29,
-        "excess_after_costs": 0.0141,
+        "cost_drag": 0.0107,
+        "total_costs": 10.68,
+        "trade_count": 31,
+        "excess_after_costs": 0.0225,
         "knobs_after": {
-          "max_positions": 5,
+          "max_positions": 6,
           "skip_timing_wait": true,
           "min_conviction": 0.0,
           "sector_cap": 0.3
         },
-        "proposed_changes": {},
+        "proposed_changes": {
+          "max_positions": 6
+        },
         "reasons": [
-          "No knob change warranted from current reviewed outcomes."
+          "Strong excess after costs (+2.2%) — raise max_positions."
         ]
       },
       "rebalance_state": {
         "exit_streak": {},
-        "reentry_cooldown": {},
+        "reentry_cooldown": {
+          "DG.PA": 1
+        },
         "buffered_holdings": 0
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (0 trade(s)).",
-        "trade_count": 0,
+        "note": "Rebalanced after open settle (2 trade(s)).",
+        "trade_count": 2,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 1,
-        "buys": 1,
-        "sells": 0,
+        "total": 3,
+        "buys": 2,
+        "sells": 1,
         "trims": 0,
-        "full_exits": 0,
-        "adjacent_side_flips": [],
-        "adjacent_flip_count": 0
+        "full_exits": 1,
+        "adjacent_side_flips": [
+          {
+            "ticker": "DG.PA",
+            "from_side": "buy",
+            "to_side": "sell",
+            "acted_at": "2026-10-23T09:34:15.918272+02:00"
+          }
+        ],
+        "adjacent_flip_count": 1
       }
     },
     "momentum_grace": {
@@ -120,13 +142,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-10-22T07:39:27.791446+00:00",
+        "reviewed_at": "2026-10-23T07:36:12.101939+00:00",
         "applied": false,
         "enough_history": true,
-        "cost_drag": 0.01,
-        "total_costs": 10.0,
-        "trade_count": 28,
-        "excess_after_costs": 0.0239,
+        "cost_drag": 0.0107,
+        "total_costs": 10.71,
+        "trade_count": 29,
+        "excess_after_costs": 0.0332,
         "knobs_after": {
           "max_positions": 6,
           "skip_timing_wait": true,
@@ -137,29 +159,31 @@
           "max_positions": 6
         },
         "reasons": [
-          "Strong excess after costs (+2.4%) — raise max_positions."
+          "Strong excess after costs (+3.3%) — raise max_positions."
         ]
       },
       "rebalance_state": {
         "exit_streak": {},
-        "reentry_cooldown": {},
+        "reentry_cooldown": {
+          "DG.PA": 1
+        },
         "buffered_holdings": 0
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (1 trade(s)).",
-        "trade_count": 1,
+        "note": "Rebalanced after open settle (2 trade(s)).",
+        "trade_count": 2,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 1,
+        "total": 2,
         "buys": 1,
-        "sells": 0,
+        "sells": 1,
         "trims": 0,
-        "full_exits": 0,
+        "full_exits": 1,
         "adjacent_side_flips": [],
         "adjacent_flip_count": 0
       }
@@ -174,13 +198,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-10-22T07:39:31.318799+00:00",
+        "reviewed_at": "2026-10-23T07:36:19.996149+00:00",
         "applied": false,
         "enough_history": true,
-        "cost_drag": 0.0054,
-        "total_costs": 5.39,
-        "trade_count": 27,
-        "excess_after_costs": 0.0155,
+        "cost_drag": 0.0058,
+        "total_costs": 5.78,
+        "trade_count": 29,
+        "excess_after_costs": 0.0287,
         "knobs_after": {
           "max_positions": 5,
           "skip_timing_wait": true,
@@ -194,24 +218,26 @@
       },
       "rebalance_state": {
         "exit_streak": {},
-        "reentry_cooldown": {},
+        "reentry_cooldown": {
+          "DG.PA": 1
+        },
         "buffered_holdings": 0
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (0 trade(s)).",
-        "trade_count": 0,
+        "note": "Rebalanced after open settle (2 trade(s)).",
+        "trade_count": 2,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 0,
-        "buys": 0,
-        "sells": 0,
+        "total": 2,
+        "buys": 1,
+        "sells": 1,
         "trims": 0,
-        "full_exits": 0,
+        "full_exits": 1,
         "adjacent_side_flips": [],
         "adjacent_flip_count": 0
       }
@@ -226,13 +252,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-10-22T07:39:34.578662+00:00",
+        "reviewed_at": "2026-10-23T07:36:27.240246+00:00",
         "applied": false,
         "enough_history": true,
         "cost_drag": 0.0009,
         "total_costs": 0.9,
         "trade_count": 5,
-        "excess_after_costs": 0.0156,
+        "excess_after_costs": 0.0347,
         "knobs_after": {
           "max_positions": 5,
           "skip_timing_wait": true,
@@ -280,13 +306,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-10-22T07:39:39.856298+00:00",
+        "reviewed_at": "2026-10-23T07:36:39.590881+00:00",
         "applied": false,
         "enough_history": true,
         "cost_drag": 0.0098,
         "total_costs": 9.83,
         "trade_count": 110,
-        "excess_after_costs": 0.0157,
+        "excess_after_costs": 0.0348,
         "knobs_after": {
           "max_positions": 120,
           "skip_timing_wait": true,
@@ -313,20 +339,13 @@
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 6,
-        "buys": 3,
-        "sells": 2,
+        "total": 4,
+        "buys": 2,
+        "sells": 1,
         "trims": 1,
-        "full_exits": 2,
-        "adjacent_side_flips": [
-          {
-            "ticker": "HEIA.AS",
-            "from_side": "buy",
-            "to_side": "sell",
-            "acted_at": "2026-10-18T09:08:31.441158+02:00"
-          }
-        ],
-        "adjacent_flip_count": 1
+        "full_exits": 1,
+        "adjacent_side_flips": [],
+        "adjacent_flip_count": 0
       }
     },
     "buy_tier_level_dca": {
@@ -339,13 +358,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-10-22T07:39:48.486456+00:00",
+        "reviewed_at": "2026-10-23T07:37:00.641396+00:00",
         "applied": false,
         "enough_history": true,
         "cost_drag": 0.0074,
         "total_costs": 11.07,
         "trade_count": 123,
-        "excess_after_costs": 0.0137,
+        "excess_after_costs": 0.033,
         "knobs_after": {
           "max_positions": 120,
           "skip_timing_wait": true,
@@ -372,11 +391,11 @@
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 13,
-        "buys": 7,
-        "sells": 4,
+        "total": 9,
+        "buys": 5,
+        "sells": 2,
         "trims": 2,
-        "full_exits": 4,
+        "full_exits": 2,
         "adjacent_side_flips": [
           {
             "ticker": "KRX.IR",
@@ -398,22 +417,26 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-10-22T07:39:52.998423+00:00",
+        "reviewed_at": "2026-10-23T07:37:10.299075+00:00",
         "applied": false,
         "enough_history": true,
-        "cost_drag": 0.0052,
-        "total_costs": 5.17,
-        "trade_count": 14,
-        "excess_after_costs": 0.0074,
+        "cost_drag": 0.0056,
+        "total_costs": 5.57,
+        "trade_count": 16,
+        "excess_after_costs": 0.0271,
         "knobs_after": {
           "max_positions": 5,
           "skip_timing_wait": true,
           "min_conviction": 0.0,
           "sector_cap": 0.3
         },
-        "proposed_changes": {},
+        "proposed_changes": {
+          "max_positions": 6,
+          "sector_cap": 0.25
+        },
         "reasons": [
-          "No knob change warranted from current reviewed outcomes."
+          "Strong excess after costs (+2.7%) — raise max_positions.",
+          "Holdings concentrated in Industrials (41%) — tighten sector_cap."
         ]
       },
       "rebalance_state": {
@@ -431,10 +454,10 @@
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 0,
-        "buys": 0,
+        "total": 2,
+        "buys": 1,
         "sells": 0,
-        "trims": 0,
+        "trims": 1,
         "full_exits": 0,
         "adjacent_side_flips": [],
         "adjacent_flip_count": 0
@@ -444,7 +467,13 @@
   "alerts": [
     {
       "severity": "info",
-      "track": "buy_tier_level",
+      "track": "rules",
+      "title": "Adjacent buy/sell flips in lookback window",
+      "summary": "1 adjacent side flip(s) in last 7d."
+    },
+    {
+      "severity": "info",
+      "track": "ai_judgment",
       "title": "Adjacent buy/sell flips in lookback window",
       "summary": "1 adjacent side flip(s) in last 7d."
     },

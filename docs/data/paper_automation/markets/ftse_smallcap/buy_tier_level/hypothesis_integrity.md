@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-22T08:47:13.962100+00:00
+Track: `buy_tier_level` · updated 2026-10-23T07:32:11.448812+00:00
 
 ## Portfolio loser feedback
 
@@ -10,16 +10,16 @@ Track: `buy_tier_level` · updated 2026-10-22T08:47:13.962100+00:00
 
 ## Holding reviews
 
-### SBRE.L — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.85
-- conviction 37%
-
-### CAPD.L — intact / hold_tolerate (+1.4%)
+### CAPD.L — intact / hold_tolerate (+1.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 65%
+
+### SBRE.L — intact / hold_tolerate (+3.1%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.85
+- conviction 45%

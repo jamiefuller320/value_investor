@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-22T08:47:34.369085+00:00
+Track: `buy_tier_level` · updated 2026-10-23T07:33:32.345445+00:00
 
 ## Portfolio loser feedback
 
@@ -10,25 +10,25 @@ Track: `buy_tier_level` · updated 2026-10-22T08:47:34.369085+00:00
 
 ## Holding reviews
 
-### LOGN.SW — intact / hold_tolerate (+3.5%)
+### AMRZ.SW — weakening / watch_review (+5.9%)
+- conviction 34% below intact floor
+- still buy
+- research accumulate
+
+### LOGN.SW — intact / hold_tolerate (+7.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 52%
 
-### AMRZ.SW — weakening / watch_review (+3.9%)
-- conviction 34% below intact floor
-- still buy
-- research accumulate
-
-### ALC.SW — weakening / watch_review (+4.5%)
+### ALC.SW — weakening / watch_review (+7.7%)
 - research verdict caution
 - conviction 35% below intact floor
 - still buy
 - cheapness family still passes
 
-### NOVN.SW — intact / hold_tolerate (+7.6%)
+### NOVN.SW — intact / hold_tolerate (+9.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

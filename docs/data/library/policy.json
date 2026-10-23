@@ -374,7 +374,7 @@
     "weekly_ops_cap_usd": 84.5,
     "weekly_ops_plan_credit_share_cap": 0.15,
     "enforce_weekly_ops_cap": true,
-    "estimated_spend_weekly_ops_usd_this_week": 2.4,
+    "estimated_spend_weekly_ops_usd_this_week": 3.6,
     "note": "Cursor Ultra $200 included pool is surplus-math metadata. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder). Ad-hoc depth passes use ladder.spend_since_checkpoint_usd. Rememo daily cap stays at 3.",
     "cycle_surplus_provisional": {
       "status": "provisional",
@@ -550,7 +550,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-10-23T08:02:41.259291+00:00",
+  "updated_at": "2026-10-23T07:38:59.528465+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -565,7 +565,9 @@
   "ingest_parallel_sprint": [
     "sp500"
   ],
-  "ingest_parallel_sprint_2": [],
+  "ingest_parallel_sprint_2": [
+    "dax"
+  ],
   "ladder": {
     "enabled": true,
     "layers": [
@@ -578,10 +580,10 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-10-22T06:53:02.981031+00:00",
+      "run_at": "2026-10-23T06:52:47.537514+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
-      "screen_shortlist": 51,
+      "screen_shortlist": 50,
       "research": {
         "model": "composer-2.5",
         "research_cap": 100,
@@ -616,26 +618,26 @@
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "weekly_ops_cap_usd": 84.5,
-        "estimated_spend_weekly_ops_usd_this_week": 0.8,
+        "estimated_spend_weekly_ops_usd_this_week": 3.6,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_usd_before": 83.7,
+        "remaining_usd_before": 82.5,
         "dedupe": {
           "already_researched_count": 500,
           "fresh_skipped_count": 500,
           "rememo_eligible_count": 0,
           "rememo_eligible_sample": [],
-          "skipped_count": 414,
+          "skipped_count": 402,
           "skipped_sample": [
             {
               "market": "euro_depth",
-              "ticker": "DG.PA",
+              "ticker": "UMI.BR",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "UMI.BR",
+              "ticker": "DG.PA",
               "reason": "fresh_memo"
             },
             {
@@ -645,12 +647,12 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "TTE.PA",
+              "ticker": "PHIA.AS",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "PHIA.AS",
+              "ticker": "TTE.PA",
               "reason": "fresh_memo"
             },
             {
@@ -690,17 +692,17 @@
             },
             {
               "market": "euro_depth",
+              "ticker": "ANDR.VI",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
               "ticker": "ACKB.BR",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
               "ticker": "LOGN.SW",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "ANDR.VI",
               "reason": "fresh_memo"
             },
             {
@@ -725,16 +727,49 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "TEL2-B.ST",
+              "ticker": "RAND.AS",
               "reason": "fresh_memo"
             }
           ],
           "first_time_preferred": true,
           "note": "Exact Yahoo ticker match; earlier queue market wins. Each market queue puts no-memo buy-tier first, then rememo. Fresh memos are skipped; thin / body-lag memos rememo after ingest."
         },
-        "targets": [],
-        "dry_run": true,
-        "executed": 0
+        "targets": [
+          {
+            "market": "sp500",
+            "ticker": "T",
+            "name": "AT&T Inc.",
+            "signal": "strong_buy",
+            "conviction_score": 0.278
+          },
+          {
+            "market": "sp500",
+            "ticker": "WAB",
+            "name": "Westinghouse Air Brake Technologies Corporation",
+            "signal": "buy",
+            "conviction_score": 0.3742
+          },
+          {
+            "market": "sp500",
+            "ticker": "GEV",
+            "name": "GE Vernova Inc.",
+            "signal": "buy",
+            "conviction_score": 0.3511
+          },
+          {
+            "market": "sp500",
+            "ticker": "NOC",
+            "name": "Northrop Grumman Corporation",
+            "signal": "buy",
+            "conviction_score": 0.2717
+          }
+        ],
+        "executed": 4,
+        "created": 4,
+        "updated": 0,
+        "errors": [],
+        "estimated_spend_usd": 1.6,
+        "remaining_usd_after": 80.9
       },
       "graduation": {
         "graduated": false,
@@ -832,28 +867,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "reseeded": true,
-        "market_queue_appended": false,
-        "at": "2026-10-12T07:32:07.686276+00:00",
-        "parallel_stream": 2,
-        "from_market": null,
-        "to_market": "ftse_mib",
-        "stream_markets_after": [
-          "ftse_mib"
-        ],
-        "ingest_parity_recorded": false,
-        "screen_refresh": {
-          "refreshed": true,
-          "market_id": "ftse_mib",
-          "forced": true,
-          "prior_screen_at": "2026-10-12T06:52:50.803209+00:00",
-          "prior_age_days": 0,
-          "run_at": "2026-10-12T07:32:07.686293+00:00",
-          "shortlist_count": 11,
-          "ticker_count": 40
-        }
-      },
       {
         "at": "2026-10-12T10:49:45.405941+00:00",
         "parallel_stream": 1,
@@ -1521,6 +1534,28 @@
         "to_market": null,
         "stream_markets_after": [],
         "ingest_parity_recorded": false
+      },
+      {
+        "reseeded": true,
+        "market_queue_appended": false,
+        "at": "2026-10-23T07:37:26.520817+00:00",
+        "parallel_stream": 2,
+        "from_market": null,
+        "to_market": "dax",
+        "stream_markets_after": [
+          "dax"
+        ],
+        "ingest_parity_recorded": false,
+        "screen_refresh": {
+          "refreshed": true,
+          "market_id": "dax",
+          "forced": true,
+          "prior_screen_at": "2026-10-23T06:52:47.537514+00:00",
+          "prior_age_days": 0,
+          "run_at": "2026-10-23T07:37:26.520830+00:00",
+          "shortlist_count": 11,
+          "ticker_count": 40
+        }
       }
     ]
   },
