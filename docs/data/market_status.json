@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-23T20:15:32.393343+00:00",
+  "generated_at": "2026-10-23T20:16:13.121378+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -1405,13 +1405,14 @@
         "coverage_scope": "canonical",
         "ftse_equivalent": true,
         "ingest_exhausted": false,
-        "parked_count": 2,
+        "parked_count": 3,
         "zero_body_tickers": [],
         "thin_body_tickers": [],
         "unmeasured_tickers": [],
         "parked_tickers": [
           "EME",
-          "LH"
+          "LH",
+          "LMT"
         ]
       },
       "filing_gaps": 0,
@@ -1478,8 +1479,8 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 7,
-        "targets": 11,
+        "run_count": 8,
+        "targets": 13,
         "improved": 7,
         "improved_tickers": [
           "LH",
@@ -1490,7 +1491,7 @@
           "GEV",
           "CRH"
         ],
-        "last_run_at": "2026-10-23T18:03:43.712788+00:00",
+        "last_run_at": "2026-10-23T20:12:21.745280+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
