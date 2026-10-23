@@ -24,7 +24,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-10-23T15:54:06.214289+00:00",
+    "snapshot_at": "2026-10-23T16:42:34.267689+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 50,
     "unmeasured_buy_tier": 0,
@@ -95,7 +95,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-10-23T15:54:06.218096+00:00",
+  "evaluated_at": "2026-10-23T16:42:34.272233+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -165,7 +165,7 @@
         "sp500 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-23T15:54:48.567122+00:00",
+        "snapshot_at": "2026-10-23T16:43:14.592528+00:00",
         "market_id": "sp500",
         "buy_tier_count": 141,
         "unmeasured_buy_tier": 0,
@@ -221,72 +221,62 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-23T15:54:48.571746+00:00",
+      "evaluated_at": "2026-10-23T16:43:14.598358+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "parallel_sprint_2_markets": [
-    "us_adr_asia"
+    "omxs30"
   ],
   "parallel_sprint_2_status": [
     {
-      "market_id": "us_adr_asia",
+      "market_id": "omxs30",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=39)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=1, indexed_without_body=2)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
-      "parked_tickers": [
-        "JD",
-        "PDD",
-        "TME"
-      ],
+      "parked_tickers": [],
       "phase3_ready": false,
       "current_phase": 0,
       "next_phase": 1,
       "phase_blockers": [
-        "no benchmark configured for us_adr_asia"
+        "no benchmark configured for omxs30"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-23T15:54:49.011209+00:00",
-        "market_id": "us_adr_asia",
-        "buy_tier_count": 6,
+        "snapshot_at": "2026-10-23T16:43:15.242865+00:00",
+        "market_id": "omxs30",
+        "buy_tier_count": 11,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 0,
-        "indexed_without_body": 39,
-        "bodies_min": 17,
-        "bodies_median": 33.0,
-        "bodies_max": 36,
+        "thin_body_buy_tier": 1,
+        "indexed_without_body": 2,
+        "bodies_min": 1,
+        "bodies_median": 11,
+        "bodies_max": 16,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
-        "thin_body_tickers": [],
+        "thin_body_tickers": [
+          "NIBE-B.ST"
+        ],
         "indexed_without_body_tickers": [
-          "JD",
-          "TME",
-          "UMC",
-          "PDD"
+          "NIBE-B.ST"
         ],
         "indexed_without_body_by_ticker": {
-          "JD": 9,
-          "TME": 12,
-          "UMC": 17,
-          "PDD": 1
+          "NIBE-B.ST": 2
         },
-        "parked_tickers": [
-          "JD",
-          "PDD",
-          "TME"
+        "parked_tickers": [],
+        "parked_count": 0,
+        "effective_thin_body_buy_tier": 1,
+        "effective_thin_body_tickers": [
+          "NIBE-B.ST"
         ],
-        "parked_count": 3,
-        "effective_thin_body_buy_tier": 0,
-        "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 17,
+        "effective_indexed_without_body": 2,
         "effective_indexed_without_body_tickers": [
-          "UMC"
+          "NIBE-B.ST"
         ],
         "ingest_exhausted": false
       },
@@ -305,14 +295,14 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-23T15:54:49.011566+00:00",
+      "evaluated_at": "2026-10-23T16:43:15.243556+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
     "sp500",
-    "us_adr_asia"
+    "omxs30"
   ],
   "market_queue": [
     "sp500",
@@ -343,7 +333,7 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 15,
+    "hour_utc": 16,
     "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",
@@ -369,7 +359,7 @@
     "sp500"
   ],
   "scheduler_stream_2_markets": [
-    "us_adr_asia"
+    "omxs30"
   ],
   "should_run_library_maintenance": true
 }
