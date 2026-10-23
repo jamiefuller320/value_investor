@@ -172,6 +172,12 @@ def test_workflow_schedule_applies_with_tiny_caps() -> None:
     # Stage-1 defaults (was pilot max_units=2 / max_http_fetches=8).
     assert 'default: "4"' in text
     assert 'default: "16"' in text
+    # Cron has no workflow_dispatch inputs — env fallbacks must be stage-1 too
+    # (PR #1063 raised dispatch defaults but left schedule on pilot 2/8).
+    assert "github.event.inputs.max_units || '4'" in text
+    assert "github.event.inputs.max_http_fetches || '16'" in text
+    assert "github.event.inputs.max_units || '2'" not in text
+    assert "github.event.inputs.max_http_fetches || '8'" not in text
     assert "cancel-in-progress: true" in text
     assert "NOT a fourth" in text or "not a fourth" in text.lower()
     assert "universe_filings" in Path(".gitignore").read_text(encoding="utf-8")

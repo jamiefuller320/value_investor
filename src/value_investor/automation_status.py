@@ -101,9 +101,9 @@ WORKFLOW_SCHEDULES = {
     },
     "universe_filing_archive_pack": {
         "name": "Universe filing archive pack",
-        "cron": "0 22 * * 1-5",
+        "cron": "0 22 * * *",
         "cadence": (
-            "Mon–Fri 22:00 UTC quiet-window cold archive lane under "
+            "Daily 22:00 UTC quiet-window cold archive lane under "
             "archive_lane_gate (week-first then backward pack plan). "
             "Preemptible. head_needs_fat_slot does not suspend this lane. "
             "Suspends on unmeasured, zero-body, and stuck-flag pressure. "
