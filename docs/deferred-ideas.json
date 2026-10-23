@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-23T13:36:03+00:00",
+  "updated_at": "2026-10-23T17:27:55+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -14742,6 +14742,60 @@
       "added_at": "2026-10-23T13:35:36+00:00",
       "updated_at": "2026-10-23T13:36:03+00:00",
       "status_note": "Implemented open_mark_return from real archive quotes on sealed N200/N201/N206/N210 refresh (fair-cost as-if-closed). Fail closed if quote missing. Supersedes park-only #1163."
+    },
+    {
+      "id": "N217",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Watermark-conditional timing brackets",
+      "summary": "Do not condition N200 \u00b114d (or any timing brackets) on realized forward high/low watermarks. That stacks look-ahead path labels into a timing scoreboard. Keep watermarks as autopsy companions only.",
+      "revisit_when": "Never unless a separate pre-registered twin proves non-contaminated identification; default stay parked.",
+      "tags": [
+        "timing",
+        "watermark",
+        "look-ahead",
+        "n200",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-6e7f89d6-11fc-53a7-8d15-4597d0937540",
+      "added_at": "2026-10-23T17:27:49+00:00"
+    },
+    {
+      "id": "L619",
+      "category": "later",
+      "section": "learning",
+      "title": "N200 patient-hold exit twin (no leave-tier close)",
+      "summary": "Same raw_buy_tier new-enter population as N200, but exit = fixed 63 trading days (or patient hold) instead of first leave-tier. New registration_id only \u2014 isolates productive-hold opportunity from membership churn. Not a silent N200 amend.",
+      "revisit_when": "Human wants churn-free productive-hold LQ on buy-tier enters and launch-queue capacity allows a new observe twin; N200 leave-tier reframing accepted.",
+      "tags": [
+        "n200",
+        "patient-hold",
+        "exit-twin",
+        "observe",
+        "fair-cost"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-6e7f89d6-11fc-53a7-8d15-4597d0937540",
+      "added_at": "2026-10-23T17:27:49+00:00"
+    },
+    {
+      "id": "L620",
+      "category": "later",
+      "section": "learning",
+      "title": "Screen-premise high/low watermark companion (7d/28d)",
+      "summary": "Report-only MFE/MAE-style high and low watermark % spreads (buy-tier vs screened universe) on existing L530 fixed-horizon cohorts. Companion to buy_tier_spread \u2014 not a selection feature, not a timing conditioner, not a new seal.",
+      "revisit_when": "Human asks for path-shape on screen-premise and eng capacity is idle (P1 bind green; no launch-queue starve); thicken L530 only.",
+      "tags": [
+        "screen-premise",
+        "watermark",
+        "mfe-mae",
+        "observe",
+        "companion"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-6e7f89d6-11fc-53a7-8d15-4597d0937540",
+      "added_at": "2026-10-23T17:27:55+00:00"
     }
   ],
   "fragments": [
