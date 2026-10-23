@@ -6437,12 +6437,29 @@ def merge_ir_allowlist_filings(
         filings_dir.mkdir(parents=True, exist_ok=True)
 
     filings = list(payload.get("filings") or [])
+    bodies_dir = filings_dir / "bodies"
     known_ids = {row.get("id") for row in filings}
     known_urls = {str(row.get("url") or "").strip() for row in filings if row.get("url")}
     added = 0
+    metadata_refreshed = 0
     for row in allowlist_rows:
         url = str(row.get("url") or "").strip()
         if row.get("id") in known_ids or url in known_urls:
+            for index, existing in enumerate(filings):
+                if not _is_ir_allowlist_row(existing):
+                    continue
+                existing_url = str(existing.get("url") or "").strip()
+                if existing.get("id") != row.get("id") and existing_url != url:
+                    continue
+                snippet = _body_snippet_for_row(existing, bodies_dir)
+                refreshed = _apply_headline_period(dict(existing), body_snippet=snippet)
+                if (
+                    refreshed.get("period") != existing.get("period")
+                    or refreshed.get("priority") != existing.get("priority")
+                    or refreshed.get("entity_type") != existing.get("entity_type")
+                ):
+                    filings[index] = refreshed
+                    metadata_refreshed += 1
             continue
         filings.append(row)
         known_ids.add(row.get("id"))
@@ -6461,13 +6478,16 @@ def merge_ir_allowlist_filings(
     )
     if sources_used:
         payload["sources_used"] = sources_used
+    changed = added or metadata_refreshed or shared_body_propagated
     if added:
         payload["ir_allowlist_merged_at"] = datetime.now(UTC).isoformat()
-    if added or shared_body_propagated:
+    if changed:
         payload["ir_allowlist_body_synced_at"] = datetime.now(UTC).isoformat()
-    index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    if changed:
+        index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return {
         "added": added,
+        "metadata_refreshed": metadata_refreshed,
         "total_allowlist": len(allowlist_rows),
         "note": "merge_ir_allowlist_filings",
     }
@@ -9736,22 +9756,28 @@ def reconcile_filings_index_body_flags(
             "note": str(exc),
         }
     filings = list(payload.get("filings") or [])
+    bodies_dir = filings_dir / "bodies"
     before = sum(1 for row in filings if row.get("has_body"))
     reconciled = reconcile_filing_body_flags(
         filings,
-        filings_dir / "bodies",
+        bodies_dir,
         company_name=company_name,
         ticker=ticker,
     )
+    reconciled, ir_metadata_reconciled = _reconcile_ir_allowlist_row_metadata(
+        reconciled,
+        bodies_dir=bodies_dir,
+    )
     after = sum(1 for row in reconciled if row.get("has_body"))
     restored = after - before
-    if restored > 0:
+    if restored > 0 or ir_metadata_reconciled > 0:
         payload["filings"] = reconciled
         payload["summary"] = summarize_filings(reconciled)
         payload["reconciled_at"] = datetime.now(UTC).isoformat()
         write_json(index_path, payload, compact=True, compress=False)
     return {
         "restored": restored,
+        "ir_metadata_reconciled": ir_metadata_reconciled,
         "with_body_before": before,
         "with_body_after": after,
         "note": "reconcile_filings_index_body_flags",

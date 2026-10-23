@@ -7555,6 +7555,97 @@ def test_refetch_euro_filings_primary_bodies_ten_mi_eng_20261010_02(mock_fetch, 
     assert any(row.get("has_body") for row in payload.get("filings") or [])
 
 
+def test_merge_ir_allowlist_filings_refreshes_ten_mi_f6k_period_eng_20261023_04(
+    tmp_path: Path,
+):
+    """eng-20261023-04: stale TEN.MI f6k row tagged other must reconcile to interim on merge."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    f6k_url = "https://www.sec.gov/Archives/edgar/data/1190723/000117184326003164/f6k_050626fs.htm"
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_9f1cdeed761eb066",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — f6k_050626fs.htm",
+                        "url": f6k_url,
+                        "period": "other",
+                        "category": "ir_allowlist",
+                        "has_body": True,
+                        "body_path": None,
+                    }
+                ],
+                "summary": {
+                    "total": 1,
+                    "annual": 0,
+                    "interim": 0,
+                    "other": 1,
+                    "with_body": 1,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("TEN.MI", filings_dir)
+    assert meta["added"] == 1
+    assert meta.get("metadata_refreshed", 0) >= 1
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["interim"]) >= 1
+    assert int(payload["summary"]["other"]) == 0
+    f6k = next(row for row in payload["filings"] if f6k_url in str(row.get("url") or ""))
+    assert f6k["period"] == "interim"
+
+
+def test_reconcile_filings_index_body_flags_refreshes_ten_mi_ir_period_eng_20261023_04(
+    tmp_path: Path,
+):
+    """eng-20261023-04: reconcile pass fixes TEN.MI allowlist period without new body downloads."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    row_id = "ir_9f1cdeed761eb066"
+    f6k_url = "https://www.sec.gov/Archives/edgar/data/1190723/000117184326003164/f6k_050626fs.htm"
+    (bodies_dir / f"{row_id}.txt").write_text(
+        "Tenaris S.A. consolidated financial statements interim quarter revenue "
+        "operating income pipe seamless tubular products " * 20,
+        encoding="utf-8",
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": row_id,
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — f6k_050626fs.htm",
+                        "url": f6k_url,
+                        "period": "other",
+                        "category": "ir_allowlist",
+                        "has_body": True,
+                        "body_path": str(bodies_dir / f"{row_id}.txt"),
+                    }
+                ],
+                "summary": {"total": 1, "interim": 0, "other": 1, "with_body": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = reconcile_filings_index_body_flags(
+        filings_dir,
+        company_name="Tenaris S.A.",
+        ticker="TEN.MI",
+    )
+    assert result.get("ir_metadata_reconciled", 0) >= 1
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert payload["summary"]["interim"] == 1
+    assert payload["filings"][0]["period"] == "interim"
+
+
 def test_fetch_filings_ir_allowlist_bzu_mi_trading_update_live_eng_20261003_01():
     """eng-20261003-01: BZU.MI third IR PDF clears library thin_body (≥3 bodied filings)."""
     rows = fetch_filings_ir_allowlist("BZU.MI")
