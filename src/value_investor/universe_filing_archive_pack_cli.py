@@ -1,6 +1,6 @@
 """CLI for the gated universe filing archive pack lane (week-first pass).
 
-Production path is the weekday 22:00 UTC workflow. This CLI is for ad-hoc
+Production path is the nightly 22:00 UTC workflow. This CLI is for ad-hoc
 drill-down and local dry/apply runs. Always consults ``archive_lane_gate``.
 """
 
