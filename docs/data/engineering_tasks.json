@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-22T09:19:02.711659+00:00",
+  "compiled_at": "2026-10-23T00:23:19.085270+00:00",
   "run_at": null,
-  "task_count": 203,
+  "task_count": 204,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -10350,6 +10350,53 @@
       "merged_at": "2026-10-02T10:55:17.370432+00:00"
     },
     {
+      "id": "eng-20261023-01",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked sti leftover ME8U.SI",
+      "summary": "Library market sti (Straits Times Index) parked ME8U.SI after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "sti",
+        "library_market": "sti",
+        "hunter_market_id": "sti",
+        "hunter_ticker": "ME8U.SI",
+        "parked_reason": "unfetchable_iwb",
+        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for ME8U.SI only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20261022-01",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked iseq20 leftover GL9.IR",
@@ -10365,7 +10412,21 @@
         "parked_reason": "awaiting_periodic_report",
         "parked_revisit_when": "Next statutory annual or interim report is issued and indexed",
         "universe": "library",
-        "doc": "docs/ops/library-ingest-escalation.md"
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20261022-01",
+        "verified_at": "2026-10-23T00:20:48.571064+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_research_filings.py",
+            "tests/test_research_ingest.py",
+            "tests/test_gap_fill_deepen.py",
+            "tests/test_ingest_improvement.py",
+            "tests/test_companies_house.py"
+          ],
+          "output_tail": "........................................................................ [ 12%]\n........................................................................ [ 24%]\n........................................................................ [ 37%]\n........................................................................ [ 49%]\n........................................................................ [ 62%]\n........................................................................ [ 74%]\n........................................................................ [ 87%]\n........................................................................ [ 99%]\n..                                                                       [100%]\n=============================== warnings summary ===============================\ntests/test_research_filings.py::test_extract_filing_document_text_ocr_applies_depth_sections\n  /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/fitz/__init__.py:17: FutureWarning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n578 passed, 72 deselected, 1 warning in 238.89s (0:03:58)"
+        }
       },
       "acceptance_criteria": [
         "Inspect IR / exchange sources for GL9.IR only — do not invent URLs",
@@ -10394,11 +10455,14 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20261022-01.md",
       "branch_name": "cursor/eng-20261022-01-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-10-22T10:32:27.310741+00:00"
+      "completed_at": "2026-10-22T10:32:27.310741+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1156",
+      "pr_number": 1156,
+      "merged_at": "2026-10-23T00:20:48.574988+00:00"
     },
     {
       "id": "eng-20261002-13",
@@ -13144,15 +13208,15 @@
     }
   ],
   "ingest_health": {
-    "snapshot_at": "2026-10-21T18:56:11.425988+00:00",
+    "snapshot_at": "2026-10-23T00:16:24.899335+00:00",
     "buy_tier_count": 67,
     "measured_tickers": 67,
     "unmeasured_buy_tier": 0,
     "unmeasured_tickers": [],
     "zero_body_buy_tier": 0,
     "zero_body_tickers": [],
-    "indexed_without_body": 3,
-    "filings_with_body": 4864
+    "indexed_without_body": 5,
+    "filings_with_body": 4997
   },
   "traffic_control": {
     "stuck_pr_count": 0,
@@ -13216,7 +13280,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-10-22T23:21:52.081311+00:00",
+    "evaluated_at": "2026-10-23T00:25:31.941881+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -13225,8 +13289,8 @@
     "resumed_at": "2026-10-14T07:12:50.922751+00:00"
   },
   "micro_compile_source": "parked_source_hunter",
-  "library_market_id": "iseq20",
-  "hunter_ticker": "GL9.IR",
+  "library_market_id": "sti",
+  "hunter_ticker": "ME8U.SI",
   "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
   "source_gap_closure_run_id": "igc-20261019-03",
   "source_trial_id": "igc-20261019-03",
@@ -13237,16 +13301,16 @@
     "cooldown_hours": 12.0
   },
   "ingest_health_before": {
-    "snapshot_at": "2026-10-21T12:04:51.299452+00:00",
+    "snapshot_at": "2026-10-21T18:56:11.425988+00:00",
     "buy_tier_count": 67,
     "measured_tickers": 67,
     "unmeasured_buy_tier": 0,
     "unmeasured_tickers": [],
     "zero_body_buy_tier": 0,
     "zero_body_tickers": [],
-    "indexed_without_body": 6,
-    "filings_with_body": 4817
+    "indexed_without_body": 3,
+    "filings_with_body": 4864
   },
-  "reprioritized_at": "2026-10-21T18:56:11.426210+00:00",
-  "reprioritized_after_task": "eng-20261021-03"
+  "reprioritized_at": "2026-10-23T00:16:24.899559+00:00",
+  "reprioritized_after_task": "eng-20261022-01"
 }
