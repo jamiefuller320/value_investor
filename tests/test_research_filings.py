@@ -9941,6 +9941,50 @@ def test_apply_headline_period_shel_acquisition_completion_stays_other_with_body
     assert filing_lacks_material_body({**refreshed, "has_body": False}) is False
 
 
+def test_merge_ir_allowlist_filings_shel_propagates_sec_edgar_bodies(tmp_path: Path):
+    """eng-20261023-02: merge IR allowlist must inherit sec_edgar bodies for shared SEC URLs."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    sec_url = "https://www.sec.gov/Archives/edgar/data/1306965/000162828026017024/shel-20251231.htm"
+    body_path = bodies_dir / "74018f3f90d5a582.txt"
+    body_path.write_text("Shell Form 20-F consolidated.\n" + ("x" * 400), encoding="utf-8")
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_stub",
+                        "source": "ir_allowlist",
+                        "url": sec_url,
+                        "period": "annual",
+                        "has_body": False,
+                    },
+                    {
+                        "id": "74018f3f90d5a582",
+                        "source": "sec_edgar",
+                        "url": sec_url,
+                        "period": "annual",
+                        "entity_type": "consolidated",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    merge_ir_allowlist_filings("SHEL.L", filings_dir)
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    ir_row = next(row for row in saved["filings"] if row["id"] == "ir_stub")
+    assert ir_row["has_body"] is True
+    assert ir_row["body_path"] == str(body_path)
+    sec_row = next(row for row in saved["filings"] if row["id"] == "74018f3f90d5a582")
+    assert sec_row["has_body"] is True
+
+
 def test_fetch_filings_ir_allowlist_shel_l_includes_q1_6k(tmp_path: Path):
     """SHEL.L built-in allowlist includes Q1 2026 6-K for interim gap-fill."""
     allowlist_path = tmp_path / "empty_ir.json"

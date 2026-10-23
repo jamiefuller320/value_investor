@@ -6435,6 +6435,7 @@ def merge_ir_allowlist_filings(
         known_urls.add(url)
         added += 1
 
+    filings, shared_body_propagated = _propagate_bodies_across_shared_filing_ids(filings)
     payload["filings"] = filings
     payload["summary"] = summarize_filings(filings)
     sources_used = sorted(
@@ -6448,6 +6449,8 @@ def merge_ir_allowlist_filings(
         payload["sources_used"] = sources_used
     if added:
         payload["ir_allowlist_merged_at"] = datetime.now(UTC).isoformat()
+    if added or shared_body_propagated:
+        payload["ir_allowlist_body_synced_at"] = datetime.now(UTC).isoformat()
     index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return {
         "added": added,
@@ -11353,6 +11356,9 @@ def ingest_filings(
         )
         for row in merged
     ]
+    if regime in {"uk_rns", "euro_filings"}:
+        merged, _ = dedupe_rns_index_rows(merged, filings_dir=filings_dir)
+    merged, _ = _propagate_bodies_across_shared_filing_ids(merged)
     if regime in {"uk_rns", "euro_filings"}:
         merged, _ = dedupe_rns_index_rows(merged, filings_dir=filings_dir)
 
