@@ -57,7 +57,7 @@ LIVE_SCREEN_MARKET = "ftse350"
 FINDING_TITLE_STALE = "Universe archive pack bottleneck review stale"
 FINDING_TITLE_BOTTLENECK = "Universe archive pack processing bottleneck"
 
-# Weekday cron is 22:00 UTC; allow one miss before warn.
+# Nightly cron is 22:00 UTC; allow one miss before warn.
 DEFAULT_STALE_AFTER_HOURS = 36.0
 # Observe-only warn when one stage dominates wall time on an allowed dry pass.
 DEFAULT_DOMINANT_STAGE_SHARE = 0.6
@@ -393,7 +393,7 @@ def ops_finding_from_bottleneck_review(
             "title": FINDING_TITLE_STALE,
             "summary": (
                 f"Archive pack bottleneck review age {age_h:.1f}h exceeds "
-                f"{stale_after_hours:.0f}h (expected weekday 22:00 UTC refresh)."
+                f"{stale_after_hours:.0f}h (expected nightly 22:00 UTC refresh)."
             ),
             "auto_fixable": False,
         }

@@ -240,7 +240,8 @@ def test_ops_finding_stale_and_bottleneck_check(tmp_path: Path) -> None:
 
 def test_workflow_pins_weekday_2200_utc_and_week_first() -> None:
     text = Path(".github/workflows/universe-filing-archive-pack.yml").read_text(encoding="utf-8")
-    assert 'cron: "0 22 * * 1-5"' in text
+    assert 'cron: "0 22 * * *"' in text
+    assert 'cron: "0 22 * * 1-5"' not in text
     assert "cancel-in-progress: true" in text
     assert "ftse-universe-archive-pack" in text
     assert "universe_filing_archive_bottleneck_review.json" in text

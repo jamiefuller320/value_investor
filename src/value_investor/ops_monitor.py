@@ -1620,7 +1620,7 @@ def check_universe_filing_archive_pack_bottleneck(
     """Observe-only: post-run archive pack bottleneck review (no deepen rewrite).
 
     Reads ``docs/data/universe_filing_archive_bottleneck_review.json`` written by
-    the weekday 22:00 UTC ``universe-filing-archive-pack`` workflow. Warns when
+    the nightly 22:00 UTC ``universe-filing-archive-pack`` workflow. Warns when
     the review is missing/stale or (on an allowed dry pass) a stage dominates.
     Suspend/quiet_only outcomes while euro fat is active do **not** warn.
     """
