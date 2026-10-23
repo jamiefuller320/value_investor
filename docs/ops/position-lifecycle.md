@@ -134,7 +134,7 @@ as Portfolio / Performance):
 |----------|------|----------|
 | **Positions** (default) | `#lifecycle` · `#lifecycle/{market}` · `#lifecycle/{market}/{track}` | Per-market funnel of individual names + catalog experiment chips |
 | **Maturity mix** | `#lifecycle/maturity` | L463 observe twin — early-share trajectory, freshness, UW-by-stage / column shares (prefer Better/Worse over raw mix %). Separate store from `observe_utilization`, `beat_market`, and exit_shadow |
-| **Sealed models** | `#lifecycle/sealed/{n200\|n201\|n206\|n210}` | One page per sealed observe book. One-line chips (ticker, days in phase, episode %). Display only — `influences_live` stays false. See [ops-monitor](ops-monitor.md#sealed-observe-lifecycle-pages) |
+| **Sealed models** | `#lifecycle/sealed/{n200\|n201\|n206\|n210}` | One page per sealed observe book. Collated header (companion + phase/volume/path from the same observe stores as Analysis) then one-line chips (ticker, days in phase, episode %). Display only — `influences_live` stays false. See [ops-monitor](ops-monitor.md#sealed-observe-lifecycle-pages) |
 
 Legacy `#lifecycle/{market}/{track}` bookmarks still open **Positions**.
 
