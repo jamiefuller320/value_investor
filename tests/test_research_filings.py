@@ -7947,6 +7947,73 @@ def test_parked_source_hunter_n2iu_si_sti_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_sti_me8u_si_builtins_eng_20261023_01(tmp_path: Path):
+    """eng-20261023-01: sti parked ME8U.SI — SGX annual/interim statutory PDF seeds."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("ME8U.SI", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 2
+    urls = [row["url"] for row in rows]
+    assert any("MIT_AR2024_2025" in url for url in urls)
+    assert any("1QFY25%20Results" in url for url in urls)
+    assert any("2QFY24%20Results" in url for url in urls)
+    assert all("links.sgx.com" in url for url in urls)
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_me8u_si_index(tmp_path: Path):
+    """Empty ME8U.SI filings_index.json must gain IR rows for library sti measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("ME8U.SI", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] == 3
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) == 3
+    assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_parked_source_hunter_me8u_si_sti_has_fetchable_ir():
+    """eng-20261023-01: ME8U.SI (Mapletree Industrial Trust) has live-fetchable SGX statutory PDFs."""
+    assert "ME8U.SI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("ME8U.SI")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("links.sgx.com" in url for url in urls)
+    annual_url = next(url for url in urls if "MIT_AR2024_2025" in url)
+    body = _live_fetch_filing_body(annual_url)
+    if not body:
+        pytest.skip("SGX PDF body fetch unavailable (network) — retry later")
+    assert len(body) >= 50000
+
+
+def test_ir_allowlist_period_classifies_me8u_si_qfy_fileopen_slugs():
+    """eng-20261023-01: *QFY* MIT FileOpen slugs must map to interim (not annual fy token)."""
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://links.sgx.com/FileOpen/20250728_1QFY25%20Results_Financial%20Statement.ashx?App=Announcement&FileID=853321"
+        )
+        == "interim"
+    )
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://links.sgx.com/FileOpen/20241029_2QFY24%20Results_Financial%20Statement.ashx?App=Announcement&FileID=823421"
+        )
+        == "interim"
+    )
+
+
 def test_parked_source_hunter_skip_0968_hk_hang_seng():
     """eng-20261017-11: 0968.HK leftover IWB is bot-gated TipRanks news, not missing HKEX filings."""
     assert "0968.HK" in PARKED_SOURCE_HUNTER_SKIP

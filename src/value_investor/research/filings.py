@@ -932,6 +932,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://links.sgx.com/1.0.0/corporate-announcements/RSO9M5FJCQ0PWK0I/864566_20251022_MPACT%202QFY2526%20SGXNet.pdf",
         "https://links.sgx.com/1.0.0/corporate-announcements/CFWDF8Y9LG5KO2LJ/822876_20241024_MPACT%202QFY2425%20SGXNet.pdf",
     ],
+    # sti parked leftover — eng-20261023-01: ME8U.SI unfetchable_iwb; asia_filings indexed
+    # Google News summaries (incl. wrong-issuer MPACT annual); seed SGX statutory PDFs
+    # (investor.mapletreeindustrialtrust.com IR is WAF-gated).
+    "ME8U.SI": [
+        "https://links.sgx.com/FileOpen/20250625_MIT_AR2024_2025.ashx?App=Announcement&FileID=849749",
+        "https://links.sgx.com/FileOpen/20250728_1QFY25%20Results_Financial%20Statement.ashx?App=Announcement&FileID=853321",
+        "https://links.sgx.com/FileOpen/20241029_2QFY24%20Results_Financial%20Statement.ashx?App=Announcement&FileID=823421",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -1210,6 +1218,12 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
         "Mapletree Pan Asia Commercial Trust",
         "Mapletree Pan Asia",
         "MPACT",
+    ),
+    # sti ME8U.SI SGX allowlist — MIT_AR* / *QFY* FileOpen slugs need issuer tokens (fy false-positive).
+    "ME8U": (
+        "Mapletree Industrial Trust",
+        "Mapletree Industrial",
+        "MIT",
     ),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
@@ -5751,6 +5765,11 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     # eng-20261016-02: N2IU.SI — 2QFY* SGXNet slugs contain fy token (would classify annual).
     "https://links.sgx.com/1.0.0/corporate-announcements/RSO9M5FJCQ0PWK0I/864566_20251022_MPACT%202QFY2526%20SGXNet.pdf": "interim",
     "https://links.sgx.com/1.0.0/corporate-announcements/CFWDF8Y9LG5KO2LJ/822876_20241024_MPACT%202QFY2425%20SGXNet.pdf": "interim",
+    # eng-20261023-01: ME8U.SI — MIT_AR* FileOpen slug lacks annual token (would classify other).
+    "https://links.sgx.com/FileOpen/20250625_MIT_AR2024_2025.ashx?App=Announcement&FileID=849749": "annual",
+    # eng-20261023-01: ME8U.SI — 1QFY*/2QFY* FileOpen slugs contain fy token (would classify annual).
+    "https://links.sgx.com/FileOpen/20250728_1QFY25%20Results_Financial%20Statement.ashx?App=Announcement&FileID=853321": "interim",
+    "https://links.sgx.com/FileOpen/20241029_2QFY24%20Results_Financial%20Statement.ashx?App=Announcement&FileID=823421": "interim",
     # eng-20261004-01: GALP.LS — Inv_4Q25 path contains q2 so would classify interim.
     "https://www.galp.com/corp/Portals/0/Recursos/Inv_4Q25/Results_4Q25.pdf": "annual",
     # eng-20261009-03: JD.L HY27 slug has no half-year token (would classify other).
