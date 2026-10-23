@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-23T02:36:19.451088+00:00`
+Generated: `2026-10-23T07:52:03.096610+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -25,14 +25,16 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
-- [ok] Queue health overall=blocked; headline=Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-10-22T07:46:45.501940+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
+- [ok] Ops monitor overall=warn at 2026-10-23T02:31:52.600575+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `ingest_narrow`/verified PR #1160 `eng-20261023-03` — Close stubborn ingest gaps for KGF.L (chain 2/3: 0/0 bodies, run igc-20261023-01)
+- `ingest_narrow`/verified PR #1159 `eng-20261023-02` — Close stubborn ingest gaps for SHEL.L (chain 1/3: 0/0 bodies, run igc-20261023-01)
 - `parked_hunter`/verified PR #1158 `eng-20261023-01` — Hunt fetchable IR source for parked sti leftover ME8U.SI
 - `human`/human PR #1156 `eng-20261022-01` — Hunt fetchable IR source for parked iseq20 leftover GL9.IR
 
