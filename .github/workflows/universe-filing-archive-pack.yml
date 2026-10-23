@@ -8,8 +8,10 @@ name: Universe filing archive pack
 # See docs/ops/universe-filing-archive-pack.md
 on:
   schedule:
-    # Primary quiet slot: Mon–Fri 22:00 UTC (inside 21:00–05:00 quiet band).
-    - cron: "0 22 * * 1-5"
+    # Nightly quiet slot: every day 22:00 UTC (inside 21:00–05:00 quiet band,
+    # weekdays + weekends). No other workflow owns 22:00 UTC; gate still
+    # suspends on unmeasured/zero-body/stuck — not on head_needs_fat_slot.
+    - cron: "0 22 * * *"
   workflow_dispatch:
     inputs:
       allow_outside_quiet:

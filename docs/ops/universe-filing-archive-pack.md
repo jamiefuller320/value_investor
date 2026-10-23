@@ -2,8 +2,8 @@
 
 **Status:** Isolation + miss-rate observe + fail-open hydrate + **thin quiet
 `--apply` writers** shipped (week-first plan, archive budgets). **Stage-1 caps**
-live: `max_units=4`, `max_http_fetches=16` (tickers/bodies still 2/1). Weekday
-22:00 UTC cron runs bounded apply under `archive_lane_gate`. Do **not** add a
+live: `max_units=4`, `max_http_fetches=16` (tickers/bodies still 2/1). Nightly
+22:00 UTC cron (7 days) runs bounded apply under `archive_lane_gate`. Do **not** add a
 second live crawler or a fourth equal sprint stream.
 **Deferred:** **N180** (live crawler / fourth stream); **N181** (eng self-improve);
 **L521** thin Ops status panel shipped (outcome / clash / next widen); full achievement metrics still later. **L499** writers on stage-1 thin widen — accumulate quiet isolation_ok nights before stage 2.
@@ -50,7 +50,7 @@ Best-effort “low priority” without those controls is not sufficient.
 
 | Concern | Practical answer |
 |---------|------------------|
-| Runner conflict | Quiet band **21:00–05:00 UTC** weekdays + weekends; primary cron **Mon–Fri 22:00 UTC**; preemptible `cancel-in-progress`; max-concurrency 1; auto-suspend on unmeasured/zero-body counts and stuck flags. `head_needs_fat_slot` does not suspend |
+| Runner conflict | Quiet band **21:00–05:00 UTC** weekdays + weekends; primary cron **daily 22:00 UTC** (`0 22 * * *`); preemptible `cancel-in-progress`; max-concurrency 1; auto-suspend on unmeasured/zero-body counts and stuck flags. `head_needs_fat_slot` does not suspend. No other workflow owns 22:00 UTC (Sat ingest-loop is 20:05 / 23:05) |
 | Source conflict | **Separate identity/budget** + incremental as-published polls (not full-universe crawls) |
 | Eng surface | Keep thin (poll → fetch → normalize → zstd → cold store); no scoring/memos/daily-hub |
 | Completeness | Archive is **best-effort accelerator**. On hydrate, use pack if present; gaps fall through to live deepen. Never block active regime on pack holes |
@@ -69,7 +69,7 @@ This order must **not** drive `euro-ingest-loop` / sprint streams.
 
 | Piece | Role |
 |-------|------|
-| Workflow | `.github/workflows/universe-filing-archive-pack.yml` — cron `0 22 * * 1-5` |
+| Workflow | `.github/workflows/universe-filing-archive-pack.yml` — cron `0 22 * * *` |
 | Gate | `archive_lane_gate` — suspend on unmeasured/zero-body and stuck flags; `quiet_only` outside band; `head_needs_fat_slot` does not suspend; fail-open exit 0 |
 | Runner | `ftse-universe-archive-pack --apply --max-units 4 --max-http-fetches 16` |
 | Writers | `universe_filing_archive_writer` → cold root `docs/data/archive/universe_filings/` (gitignored) |
@@ -123,8 +123,9 @@ Miss-rate observe stays wired for learning / dashboard attention — it does **n
 auto-widen — human/eng raises workflow + code defaults only.
 
 Before **stage 2** (`max_units=8`, `max_http_fetches=32`): accumulate **5** quiet
-weekday apply nights with `capacity_isolation.isolation_ok=true` and no shared
-429 / runner collision vs euro maintenance or spare sprints. Rollback to prior
+apply nights with `capacity_isolation.isolation_ok=true` and no shared
+429 / runner collision vs euro maintenance or spare sprints (weekend applies
+count; suspend nights reset the streak). Rollback to prior
 stage (or pilot 2/8) on isolation fail, shared critical path, or focus-pressure
 suspend churn. Keep **N180** / **N181** parked. Use bottleneck review to tune
 stages; use miss-rate to measure whether packs helped (observe only).

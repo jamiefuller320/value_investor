@@ -278,7 +278,7 @@ def build_universe_filing_archive_status(
             "Thin Ops status from last pack_run + bottleneck review. "
             "Does not eng-spray or auto-widen (N180/N181)."
             if present
-            else "No pack_run artifact yet — weekday 22:00 UTC workflow writes it."
+            else "No pack_run artifact yet — nightly 22:00 UTC workflow writes it."
         ),
     }
 
