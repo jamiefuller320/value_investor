@@ -2102,6 +2102,16 @@ def _is_routine_own_share_or_pdmr_row(row: dict[str, Any]) -> bool:
     return "transaction in own shares" in headline or "director/pdmr" in headline
 
 
+def _is_routine_governance_rns_row(row: dict[str, Any]) -> bool:
+    """CEO/directorate RNS — indexed for leadership events, not statutory ingest gaps."""
+    headline = _headline_blob(row)
+    if "directorate change" in headline:
+        return True
+    if re.search(r"\bappoints\b.*\b(?:new\s+)?(?:chief executive|ceo)\b", headline):
+        return True
+    return bool(re.search(r"\b(?:chief executive|ceo)\s+appointment\b", headline))
+
+
 def _is_holding_disclosure_row(row: dict[str, Any]) -> bool:
     """Form 8.3/8.5 and major-holding RNS — indexed for audit, not ingest ROI."""
     if str(row.get("entity_type") or "") == "holding_disclosure":
@@ -2125,6 +2135,8 @@ def filing_lacks_material_body(row: dict[str, Any]) -> bool:
         return False
     if _is_routine_own_share_or_pdmr_row(row):
         return False
+    if _is_routine_governance_rns_row(row):
+        return False
     if _is_holding_disclosure_row(row):
         return False
     if str(row.get("period") or "") == "other" and _is_material_corporate_action_row(row):
@@ -2143,6 +2155,8 @@ def filing_counts_toward_body_penetration(row: dict[str, Any]) -> bool:
     if _is_index_noise_row(row):
         return False
     if _is_routine_own_share_or_pdmr_row(row):
+        return False
+    if _is_routine_governance_rns_row(row):
         return False
     if _is_holding_disclosure_row(row):
         return False

@@ -609,6 +609,53 @@ def test_filing_coverage_shel_ir_allowlist_sec_twins_no_gap_before_sanitize(tmp_
     assert not _has_outstanding_ingest_gap(coverage, ticker="SHEL.L")
 
 
+def test_filing_coverage_kgf_statutory_with_ceo_appointment_gap_not_outstanding(tmp_path: Path):
+    """eng-20261023-03: bodied statutory pack + CEO RNS stub must not pin gap-closure."""
+    from value_investor.research.ingest_improvement import (
+        _filing_coverage,
+        _has_outstanding_ingest_gap,
+    )
+    from value_investor.research.store import ResearchStore
+
+    output_dir = tmp_path / "output"
+    filings_dir = output_dir / "research" / "KGF.L" / "sources" / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {
+                    "total": 4,
+                    "annual": 1,
+                    "interim": 1,
+                    "trading_update": 1,
+                    "with_body": 3,
+                    "period_coverage": {
+                        "annual": {"total": 1, "with_body": 1},
+                        "interim": {"total": 1, "with_body": 1},
+                        "trading_update": {"total": 1, "with_body": 1},
+                    },
+                },
+                "filings": [
+                    {"id": "fy", "period": "annual", "has_body": True},
+                    {"id": "h1", "period": "interim", "has_body": True},
+                    {"id": "tu", "period": "trading_update", "has_body": True},
+                    {
+                        "id": "ceo",
+                        "period": "other",
+                        "headline": "Kingfisher Appoints New CEO",
+                        "has_body": False,
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    store = ResearchStore(output_dir)
+    coverage = _filing_coverage(store, "KGF.L", output_dir)
+    assert coverage["indexed_without_body"] == 0
+    assert not _has_outstanding_ingest_gap(coverage, ticker="KGF.L")
+
+
 def test_filing_coverage_kgf_missing_interim_listing_flags_gap(tmp_path: Path):
     """eng-20260922-03: bodied FY without indexed H1 must stay on ingest-improvement queue."""
     from value_investor.research.ingest_improvement import (

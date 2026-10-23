@@ -10013,6 +10013,81 @@ def test_filing_lacks_material_body_excludes_routine_own_shares():
     )
 
 
+def test_filing_lacks_material_body_excludes_kgf_ceo_appointment():
+    """eng-20261023-03: KGF.L CEO appointment RNS must not block gap-closure verification."""
+    from value_investor.research.filings import (
+        filing_counts_toward_body_penetration,
+        filing_lacks_material_body,
+    )
+
+    row = {
+        "headline": "Kingfisher Appoints New CEO",
+        "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/kingfisher-appoints-new-ceo/9819911",
+        "source": "investegate_direct",
+        "period": "other",
+        "has_body": False,
+    }
+    assert filing_lacks_material_body(row) is False
+    assert filing_counts_toward_body_penetration(row) is False
+
+
+def test_refetch_investegate_filing_bodies_kgf_ceo_appointment(tmp_path, monkeypatch):
+    """eng-20261023-03: Investegate refetch can persist KGF.L CEO appointment body."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    row_id = "c684d8498b936644"
+    ceo_url = (
+        "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/"
+        "kingfisher-appoints-new-ceo/9819911"
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "ticker": "KGF.L",
+                "company_name": "Kingfisher plc",
+                "filings": [
+                    {
+                        "id": row_id,
+                        "source": "investegate_direct",
+                        "headline": "Kingfisher Appoints New CEO",
+                        "published_at": "2026-10-13T00:00:00+00:00",
+                        "url": ceo_url,
+                        "period": "other",
+                        "has_body": False,
+                        "body_path": None,
+                        "priority": 0,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    ceo_body = (
+        "Disclaimer* Kingfisher PLC Kingfisher Appoints New CEO Sebastian Gundel appointed CEO. "
+        + ("Board and strategy commentary. " * 40)
+    )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        lambda url: (ceo_body, None) if url == ceo_url else (None, None),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="KGF.L",
+        company_name="Kingfisher plc",
+        max_bodies=5,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+    assert (filings_dir / "bodies" / f"{row_id}.txt").exists()
+
+
 def test_filing_counts_toward_body_penetration_excludes_rathbones_form_83():
     """eng-20260923-02: RAT.L Form 8.3 stubs must not inflate low-penetration scoring."""
     from value_investor.research.filings import filing_counts_toward_body_penetration
