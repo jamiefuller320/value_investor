@@ -45,6 +45,8 @@ Kept the same `registration_id` because this is an exploratory cost-stamp correc
 
 **Analysis → Observe** has an **investment model switcher** — select **N200 · observe** for its **own lifecycle monitor** (phase / volume / path + episodes sample + change markers bound to `n200_tech_timing_observe.json`), plus pipeline + path scoreboard + companion diagnostics. Strand A’s Lifecycle tab stays the live capital board (F5); this tab is observe-only and never auto-promotes (F8).
 
+**Lifecycle → Sealed models** (`#lifecycle/sealed/n200`) collates the same companion + phase/volume/path (+ entry/exit lever badges) above the episode chip board — same stores / `queue_health`; full path table stays on Analysis.
+
 **Automation → Queue & hunter** also shows **N200 / learning-factory pipeline** (phase floor, volume gate, **per-lever entry/exit verdicts**, store freshness, ops-check).
 
 Phase green = **mechanism throughput** only. Lever win/lose = **best-feasible under ±14d brackets at fair costs**, independent of path P&L. Neither is alpha or capital readiness (F8). Projection helper: `build_n200_pipeline_health_projection` → `queue_health.n200_pipeline_health.per_lever`.

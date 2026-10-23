@@ -6382,13 +6382,21 @@ function renderObserveLifecycleMarkers(store) {
   return `<ul class="list-plain model-lifecycle-markers">${items}</ul>`;
 }
 
-function renderObserveLifecycleMonitor(data, modelId) {
+function renderObserveLifecycleMonitor(data, modelId, { stagesOnly = false } = {}) {
   const id = normalizeInvestmentModel(modelId);
   const meta = investmentModelMeta(id);
   const pack = _observeLifecycleStore(data, id);
   const store = pack.store;
   const health = pack.health;
   if (!store && !health) {
+    if (stagesOnly) {
+      return `
+        <div class="sealed-life-stages model-lifecycle-monitor model-lifecycle-monitor-empty" data-lifecycle-model="${esc(
+          id
+        )}">
+          <p class="muted small">${esc(pack.emptyHint || meta.emptyHint)}</p>
+        </div>`;
+    }
     return `
       <section class="automation-section automation-section-full model-lifecycle-monitor model-lifecycle-monitor-empty" data-lifecycle-model="${esc(
         id
@@ -6462,20 +6470,7 @@ function renderObserveLifecycleMonitor(data, modelId) {
     id === "n210" && completedSampleLen === 0 && openSampleLen > 0
       ? `showing ${sampleLen} open (0 completed yet)`
       : `showing ${sampleLen} of ${totalEp} completed`;
-  return `
-    <section class="automation-section automation-section-full model-lifecycle-monitor" data-lifecycle-model="${esc(
-      id
-    )}">
-      <h2>Lifecycle monitor · ${esc(pack.label)}
-        <span class="badge badge-info model-mode-badge">observe</span>
-        ${walkerBadge}
-        ${waiter}
-      </h2>
-      <p class="small muted" style="margin-top:0">
-        Bound to <code>${esc(registration)}</code> sealed store — not Strand A’s Lifecycle board.
-        Phase / volume / path are this registration’s alone scoreboards; never auto-promote (F8).
-      </p>
-      ${thinNote}
+  const stageGrid = `
       <div class="grid n200-pipeline-grid model-lifecycle-stage-grid" style="margin-top:0.75rem">
         <div class="card n200-pipeline-card">
           <h3>Phase ${n200GateBadge(!!phase.floor_met)}</h3>
@@ -6518,7 +6513,36 @@ function renderObserveLifecycleMonitor(data, modelId) {
           )}
           <p class="small muted">Cohort median at fair costs — alone scoreboard.</p>
         </div>
-      </div>
+      </div>`;
+  if (stagesOnly) {
+    return `
+      <div class="sealed-life-stages model-lifecycle-monitor" data-lifecycle-model="${esc(id)}">
+        <div class="sealed-life-stages-head">
+          <span class="small muted">Phase / volume / path from sealed store <code>${esc(
+            registration
+          )}</code></span>
+          ${walkerBadge}
+          ${waiter}
+        </div>
+        ${thinNote}
+        ${stageGrid}
+      </div>`;
+  }
+  return `
+    <section class="automation-section automation-section-full model-lifecycle-monitor" data-lifecycle-model="${esc(
+      id
+    )}">
+      <h2>Lifecycle monitor · ${esc(pack.label)}
+        <span class="badge badge-info model-mode-badge">observe</span>
+        ${walkerBadge}
+        ${waiter}
+      </h2>
+      <p class="small muted" style="margin-top:0">
+        Bound to <code>${esc(registration)}</code> sealed store — not Strand A’s Lifecycle board.
+        Phase / volume / path are this registration’s alone scoreboards; never auto-promote (F8).
+      </p>
+      ${thinNote}
+      ${stageGrid}
       <div class="model-lifecycle-episodes" style="margin-top:0.85rem">
         <h3>Episodes sample
           <span class="small muted">${esc(sampleCaption)}</span>
@@ -6540,6 +6564,76 @@ function renderObserveLifecycleMonitor(data, modelId) {
         }. Does not write books or knobs.
       </p>
     </section>`;
+}
+
+/** Freshness / lever extras for sealed lifecycle collation (same queue_health / store SSoT). */
+function renderSealedLifecycleExtras(data, modelId) {
+  const id = normalizeInvestmentModel(modelId);
+  const health =
+    id === "n210"
+      ? resolveN210PipelineHealth(data)
+      : id === "n206"
+        ? resolveN206PipelineHealth(data)
+        : id === "n201"
+          ? resolveN201PipelineHealth(data)
+          : resolveN200PipelineHealth(data);
+  if (!health) {
+    return `<p class="small muted sealed-life-extras">Pipeline health not published yet.</p>`;
+  }
+  const freshness = health.freshness || {};
+  const pipeline = health.pipeline || {};
+  const functioningBadge =
+    pipeline.functioning === true
+      ? `<span class="badge badge-ii-yes">functioning</span>`
+      : pipeline.functioning === false
+        ? `<span class="badge badge-ii-no">attention</span>`
+        : `<span class="badge">unknown</span>`;
+  const waiter =
+    (id === "n201" || id === "n206" || id === "n210") && health.launch_queue_waiter
+      ? `<span class="badge badge-hold">launch-queue waiter</span>`
+      : "";
+  const walker =
+    id === "n210" && health.walker_active
+      ? `<span class="badge badge-info">walker active</span>`
+      : "";
+  let leverLine = "";
+  if (id === "n200") {
+    const perLever = health.per_lever || {};
+    leverLine = ` · entry ${n200LeverBadge(perLever.entry_verdict)} · exit ${n200LeverBadge(
+      perLever.exit_verdict
+    )}`;
+  }
+  return `
+    <p class="small muted sealed-life-extras" style="margin:0.5rem 0 0">
+      Pipeline ${observeFreshnessBadge(freshness.state)} ${functioningBadge}${waiter}${walker}${leverLine}
+      · store ${esc(fmtDate(health.store_generated_at))}
+    </p>`;
+}
+
+/**
+ * Collate Observe diagnostics onto Lifecycle → Sealed models (one composition per book).
+ * Reads the same observe stores / queue_health helpers as Analysis — no divergent numbers.
+ * Chip board below remains the episode scan; full path table stays on Analysis → Observe.
+ */
+function renderSealedLifecycleCollation(data, modelId) {
+  const id = normalizeInvestmentModel(modelId);
+  if (id !== "n200" && id !== "n201" && id !== "n206" && id !== "n210") return "";
+  const short = String(id).toUpperCase();
+  return `
+    <div class="sealed-life-collation" data-sealed-collation="${esc(id)}">
+      ${renderInvestmentModelCompanionStrip(data, id)}
+      ${renderObserveLifecycleMonitor(data, id, { stagesOnly: true })}
+      ${renderSealedLifecycleExtras(data, id)}
+      <p class="small muted sealed-life-collation-more" style="margin:0.45rem 0 0.85rem">
+        Full path table + pipeline cards on
+        <button type="button" class="link-btn" data-sealed-observe-jump="${esc(
+          id
+        )}">Analysis → Observe · ${esc(short)}</button>
+        · compact strip on
+        <button type="button" class="link-btn" data-tab-jump="automation">Automation → Queue</button>.
+        Same stores — observe-only; never auto-promote (F8).
+      </p>
+    </div>`;
 }
 
 function _observeSealStartedAt(store) {
@@ -11574,7 +11668,10 @@ function renderSealedLifecycle(data) {
         </div>
       </div>
       <div class="tabs sealed-life-models">${pills}</div>
-      <p class="small muted">Sealed fair-cost cohort median ${esc(median)} is the book figure. ${blurb}</p>
+      ${renderSealedLifecycleCollation(data, model.model_id)}
+      <p class="small muted">Episode board — chip % is fair-cost episode return (or stored open mark), not the cohort median ${esc(
+        median
+      )} above. ${blurb}</p>
       <p class="small muted sealed-heat-legend">Legend: fill profit←neutral→loss · border short/cool←→long/warm · caps ±15% fill, 60d border. ${esc(
         sortHint
       )}</p>
@@ -11740,6 +11837,20 @@ function bindLifecyclePanel() {
         lifecycleSubpage = normalizeLifecycleSubpage(subpageBtn.dataset.lifecycleSubpage);
         syncLifecycleHash();
         renderLifecycle(dashboardData);
+        return;
+      }
+      const sealedObserveJump = event.target.closest("[data-sealed-observe-jump]");
+      if (sealedObserveJump) {
+        event.preventDefault();
+        const model = normalizeInvestmentModel(sealedObserveJump.dataset.sealedObserveJump);
+        activateTab("analysis", { updateHash: false });
+        jumpToInvestmentModel(model, { updateHash: true, scroll: true });
+        return;
+      }
+      const tabJump = event.target.closest("[data-tab-jump]");
+      if (tabJump) {
+        event.preventDefault();
+        activateTab(tabJump.dataset.tabJump, { updateHash: true });
         return;
       }
       const sealedModelBtn = event.target.closest("[data-sealed-model]");

@@ -96,3 +96,37 @@ def test_ops_runbook_points_at_maturity_subpage() -> None:
     assert "**Positions**" in board
     assert "**Maturity mix**" in board
     assert "#lifecycle/maturity" in board
+
+
+def test_sealed_lifecycle_subpage_collates_observe_diagnostics() -> None:
+    """Lifecycle → Sealed models collates companion + stages from observe SSoT."""
+    text = APP_JS.read_text(encoding="utf-8")
+    assert "function renderSealedLifecycle(" in text
+    assert "function renderSealedLifecycleCollation(" in text
+    assert "function renderSealedLifecycleExtras(" in text
+    sealed_fn = text.split("function renderSealedLifecycle(", 1)[1].split(
+        "\nfunction renderLifecycle(", 1
+    )[0]
+    assert "renderSealedLifecycleCollation(" in sealed_fn
+    assert "renderSealedLifecycleHeatBoard" in sealed_fn or "renderSealedLifecycleListBoard" in sealed_fn
+    collate_fn = text.split("function renderSealedLifecycleCollation(", 1)[1].split(
+        "\nfunction ", 1
+    )[0]
+    assert "renderInvestmentModelCompanionStrip(" in collate_fn
+    assert "stagesOnly: true" in collate_fn or "stagesOnly:true" in collate_fn
+    assert "data-sealed-observe-jump" in collate_fn
+    assert "renderSealedLifecycleExtras(" in collate_fn
+    # stagesOnly reuses the same monitor helpers (no divergent numbers).
+    monitor_sig = text.split("function renderObserveLifecycleMonitor(", 1)[1].split(
+        "\n", 1
+    )[0]
+    assert "stagesOnly" in monitor_sig
+    assert 'data-lifecycle-subpage="sealed"' in text
+    assert "#lifecycle/sealed" in text or 'lifecycleSubpage = "sealed"' in text
+    css = STYLES.read_text(encoding="utf-8")
+    assert ".sealed-life-collation" in css
+    assert ".sealed-life-stages" in css
+    ops = OPS_MONITOR.read_text(encoding="utf-8")
+    assert "collates companion" in ops.lower() or "collate" in ops.lower()
+    board = POSITION_LIFECYCLE.read_text(encoding="utf-8")
+    assert "Collated header" in board or "companion" in board.lower()
