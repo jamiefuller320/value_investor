@@ -74,16 +74,93 @@ def test_push_ranker_maps_findings_and_digest(tmp_path: Path) -> None:
         tmp_path / POST_SELL_CUE_DIGEST_FILENAME,
         {
             "generated_at": "2026-10-14T12:00:00Z",
-            "headline": "3 post-sell cues ripe for review",
-            "items": [{"ticker": "AAA.L"}],
+            "timing_cues": [{"cue_id": "t1"}],
+            "selection_cues": [],
+            "hub_feed": {
+                "schema_version": 1,
+                "explore_candidates": [
+                    {
+                        "id": "post_sell:t1",
+                        "claim": "Timing cue A",
+                        "why_matters": "Why A",
+                        "falsify_or_promote": "Falsify A",
+                        "not_today": True,
+                    }
+                ],
+                "push_candidates": [
+                    {
+                        "id": "post_sell:human-gate",
+                        "claim": "Judge post-sell human gate",
+                        "why_matters": "Maps to a live checklist gate",
+                        "falsify_or_promote": "Gate closed or parked",
+                    }
+                ],
+            },
         },
         compact=False,
     )
     push = build_daily_push_suggestions(data_dir=tmp_path, cap=3)
     ids = [s["id"] for s in push["suggestions"]]
-    assert any("post_sell_cue_digest" in i for i in ids)
+    assert any("post_sell:human-gate" in i for i in ids)
     assert len(push["suggestions"]) <= 3
     assert push["fail_closed"] is True
+
+
+def test_push_ignores_legacy_items_headline_without_hub_feed(tmp_path: Path) -> None:
+    """L619 fail-closed: legacy items/headline must not invent a Push card."""
+    write_json(tmp_path / "ops_status.json", {"overall": "ok", "findings": []}, compact=False)
+    write_json(tmp_path / "engineering_tasks.json", {"tasks": []}, compact=False)
+    write_json(
+        tmp_path / "deferred_trigger_check.json",
+        {"met": [], "unmet": []},
+        compact=False,
+    )
+    write_json(
+        tmp_path / POST_SELL_CUE_DIGEST_FILENAME,
+        {
+            "generated_at": "2026-10-14T12:00:00Z",
+            "headline": "3 post-sell cues ripe for review",
+            "items": [{"ticker": "AAA.L"}],
+        },
+        compact=False,
+    )
+    push = build_daily_push_suggestions(data_dir=tmp_path)
+    assert push["suggestions"] == []
+
+
+def test_push_empty_when_hub_feed_has_only_explore(tmp_path: Path) -> None:
+    write_json(tmp_path / "ops_status.json", {"overall": "ok", "findings": []}, compact=False)
+    write_json(tmp_path / "engineering_tasks.json", {"tasks": []}, compact=False)
+    write_json(
+        tmp_path / "deferred_trigger_check.json",
+        {"met": [], "unmet": []},
+        compact=False,
+    )
+    write_json(
+        tmp_path / POST_SELL_CUE_DIGEST_FILENAME,
+        {
+            "generated_at": "2026-10-23T07:45:00Z",
+            "timing_cues": [{"cue_id": "t1"}],
+            "selection_cues": [{"cue_id": "s1"}],
+            "hub_feed": {
+                "schema_version": 1,
+                "explore_candidates": [
+                    {
+                        "id": "post_sell:t1",
+                        "claim": "Explore only",
+                        "why_matters": "Learning",
+                        "falsify_or_promote": "Gate",
+                        "not_today": True,
+                    }
+                ],
+                "push_candidates": [],
+            },
+        },
+        compact=False,
+    )
+    push = build_daily_push_suggestions(data_dir=tmp_path)
+    assert push["suggestions"] == []
+    assert push["empty_ok"] is True
 
 
 def test_push_fail_closed_empty(tmp_path: Path) -> None:
@@ -398,13 +475,98 @@ def test_status_report_includes_digest_row(tmp_path: Path) -> None:
     )
     write_json(
         tmp_path / POST_SELL_CUE_DIGEST_FILENAME,
-        {"headline": "digest ready", "items": [1, 2]},
+        {
+            "generated_at": "2026-10-23T07:45:00Z",
+            "timing_cues": [{"cue_id": "t1"}, {"cue_id": "t2"}],
+            "selection_cues": [{"cue_id": "s1"}],
+            "sunday_nest": {
+                "summary": "2 timing + 1 selection cues; control closed sells=3",
+            },
+            "hub_feed": {
+                "schema_version": 1,
+                "explore_candidates": [{"id": "post_sell:t1"}],
+                "push_candidates": [],
+            },
+        },
         compact=False,
     )
     report = build_daily_status_report(data_dir=tmp_path, local_date="2026-10-14")
     assert report["scoreboard_headline"] == "primary behind"
-    assert report["post_sell_cue_digest"]["present"] is True
-    assert any(r["id"] == "post_sell_cue_digest" for r in report["rows"])
+    digest_row = report["post_sell_cue_digest"]
+    assert digest_row["present"] is True
+    assert digest_row["item_count"] == 3
+    assert digest_row["hub_feed_present"] is True
+    assert digest_row["explore_candidate_count"] == 1
+    assert digest_row["push_candidate_count"] == 0
+    assert "items=None" not in digest_row["headline"]
+    assert "2 timing + 1 selection" in digest_row["headline"]
+    status_row = next(r for r in report["rows"] if r["id"] == "post_sell_cue_digest")
+    assert "items=None" not in status_row["value"]
+    assert "2 timing + 1 selection" in status_row["value"]
+
+
+def test_explore_consumes_hub_feed_candidates(tmp_path: Path) -> None:
+    """L619: Explore ≤2 from hub_feed.explore_candidates — not the twin stub."""
+    write_json(
+        tmp_path / POST_SELL_CUE_DIGEST_FILENAME,
+        {
+            "generated_at": "2026-10-23T07:45:00Z",
+            "timing_cues": [],
+            "selection_cues": [],
+            "hub_feed": {
+                "schema_version": 1,
+                "explore_candidates": [
+                    {
+                        "id": "post_sell:cue-a",
+                        "claim": "N200 entry lever win",
+                        "why_matters": "Factory timing signal",
+                        "falsify_or_promote": "Volume gate + thicker cohort",
+                        "not_today": True,
+                        "source": "post_sell_cue_digest",
+                    },
+                    {
+                        "id": "post_sell:cue-b",
+                        "claim": "Exit-time buy-set empty",
+                        "why_matters": "Selection thesis check",
+                        "falsify_or_promote": "Current-epoch join only",
+                        "not_today": True,
+                    },
+                    {
+                        "id": "post_sell:cue-c",
+                        "claim": "Third cue should be capped out",
+                        "why_matters": "Cap at 2",
+                        "falsify_or_promote": "D7A",
+                        "not_today": True,
+                    },
+                ],
+                "push_candidates": [],
+            },
+        },
+        compact=False,
+    )
+    explore = build_daily_explore_suggestions(data_dir=tmp_path, cap=2)
+    assert explore["hub_feed_used"] is True
+    assert len(explore["suggestions"]) == 2
+    ids = [s["id"] for s in explore["suggestions"]]
+    assert ids[0] == "explore:post_sell:cue-a"
+    assert ids[1] == "explore:post_sell:cue-b"
+    assert all(s["label"] == "not-today" for s in explore["suggestions"])
+    assert "explore:post-sell-cue-twin" not in ids
+
+
+def test_explore_fail_closed_without_hub_feed_no_post_sell_stub(tmp_path: Path) -> None:
+    """Missing hub_feed must not invent the anachronistic post-sell twin stub."""
+    write_json(
+        tmp_path / POST_SELL_CUE_DIGEST_FILENAME,
+        {"generated_at": "2026-10-23T07:45:00Z", "items": [1]},
+        compact=False,
+    )
+    explore = build_daily_explore_suggestions(data_dir=tmp_path, cap=2)
+    assert explore["hub_feed_used"] is False
+    ids = [s["id"] for s in explore["suggestions"]]
+    assert "explore:post-sell-cue-twin" not in ids
+    # Non-post-sell editorial default may still appear.
+    assert all("still_in_buy_set" not in str(s.get("claim") or "") for s in explore["suggestions"])
 
 
 def _write_b3_demotion(tmp_path: Path, *, primary: str = "ai_judgment_fair") -> None:

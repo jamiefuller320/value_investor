@@ -14,7 +14,7 @@ episode assessment and **not** cross-epoch truth.
 | Store | `docs/data/post_sell_cue_digest.json` (ops-monitor `GHA_COMMIT_OPTIONAL`) |
 | Finding | **Post-sell cue digest (observe)** (`auto_fixable=False`, category `research`) |
 | Selection skeleton | Nested `selection_postmortem_skeleton` — ended control (`buy_tier_level`) closed sells; feeds **N205** design only (`sealed=false`) |
-| Hub feed | `hub_feed.explore_candidates` (default) / `push_candidates` (empty unless cue maps to a live human gate). Sibling daily-hub ship consumes this — see Project store `docs/daily-hub-attention-redesign.md` |
+| Hub feed | `hub_feed.explore_candidates` (default) / `push_candidates` (empty unless cue maps to a live human gate). Daily hub Status/Push/Explore consume this feed (**L619**) — fail closed if `hub_feed` missing; see Project store `docs/daily-hub-attention-redesign.md` |
 | Sunday nest | Human checklist `sunday-post-sell-cues` next to `sunday-ai-path-scoreboard`; analysis-review slim key `post_sell_cue_digest` |
 
 ## Epoch key (required) + widen gate
