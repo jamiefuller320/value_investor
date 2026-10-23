@@ -526,6 +526,89 @@ def test_filing_coverage_shel_acquisition_rns_does_not_false_gap(tmp_path: Path)
     assert not _has_outstanding_ingest_gap(coverage, ticker="SHEL.L")
 
 
+def test_filing_coverage_shel_ir_allowlist_sec_twins_no_gap_before_sanitize(tmp_path: Path):
+    """eng-20261023-02: bodied sec_edgar twins must not leave IR allowlist IWB gaps."""
+    from value_investor.research.ingest_improvement import (
+        _filing_coverage,
+        _has_outstanding_ingest_gap,
+    )
+    from value_investor.research.store import ResearchStore
+
+    output_dir = tmp_path / "output"
+    filings_dir = output_dir / "research" / "SHEL.L" / "sources" / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    sec_annual = (
+        "https://www.sec.gov/Archives/edgar/data/1306965/000162828026017024/shel-20251231.htm"
+    )
+    sec_interim = (
+        "https://www.sec.gov/Archives/edgar/data/1306965/000162828026031628/shellq120266-k.htm"
+    )
+    annual_body = bodies_dir / "74018f3f90d5a582.txt"
+    interim_body = bodies_dir / "1a2ddc2b6036d0f6.txt"
+    annual_body.write_text("Shell Form 20-F consolidated.\n" + ("x" * 400), encoding="utf-8")
+    interim_body.write_text("Shell Q1 2026 6-K interim.\n" + ("x" * 400), encoding="utf-8")
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {
+                    "total": 4,
+                    "annual": 2,
+                    "interim": 2,
+                    "with_body": 2,
+                    "period_coverage": {
+                        "annual": {"total": 2, "with_body": 1},
+                        "interim": {"total": 2, "with_body": 1},
+                    },
+                },
+                "filings": [
+                    {
+                        "id": "ir_annual",
+                        "source": "ir_allowlist",
+                        "period": "annual",
+                        "entity_type": "consolidated",
+                        "url": sec_annual,
+                        "has_body": False,
+                    },
+                    {
+                        "id": "ir_interim",
+                        "source": "ir_allowlist",
+                        "period": "interim",
+                        "entity_type": "consolidated",
+                        "url": sec_interim,
+                        "has_body": False,
+                    },
+                    {
+                        "id": "sec_annual",
+                        "source": "sec_edgar",
+                        "period": "annual",
+                        "entity_type": "consolidated",
+                        "url": sec_annual,
+                        "has_body": True,
+                        "body_path": str(annual_body),
+                    },
+                    {
+                        "id": "sec_interim",
+                        "source": "sec_edgar",
+                        "period": "interim",
+                        "entity_type": "consolidated",
+                        "url": sec_interim,
+                        "has_body": True,
+                        "body_path": str(interim_body),
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    store = ResearchStore(output_dir)
+    coverage = _filing_coverage(store, "SHEL.L", output_dir)
+    assert coverage["indexed_without_body"] == 0
+    assert coverage["filings_annual"] == coverage["annual_with_body"]
+    assert coverage["filings_interim"] == coverage["interim_with_body"]
+    assert not _has_outstanding_ingest_gap(coverage, ticker="SHEL.L")
+
+
 def test_filing_coverage_kgf_missing_interim_listing_flags_gap(tmp_path: Path):
     """eng-20260922-03: bodied FY without indexed H1 must stay on ingest-improvement queue."""
     from value_investor.research.ingest_improvement import (

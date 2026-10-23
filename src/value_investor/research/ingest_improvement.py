@@ -287,12 +287,16 @@ def _filing_coverage(store: ResearchStore, ticker: str, output_dir: Path) -> dic
     try:
         index = read_json(index_path)
         filings = list(index.get("filings") or [])
-        from value_investor.research.filings import filing_lacks_material_body
+        from value_investor.research.filings import (
+            _propagate_bodies_across_shared_filing_ids,
+            filing_counts_toward_body_penetration,
+            filing_lacks_material_body,
+        )
 
+        filings, _ = _propagate_bodies_across_shared_filing_ids(filings)
         coverage["indexed_without_body"] = sum(
             1 for row in filings if filing_lacks_material_body(row)
         )
-        from value_investor.research.filings import filing_counts_toward_body_penetration
 
         material = [row for row in filings if filing_counts_toward_body_penetration(row)]
         coverage["material_filings_total"] = len(material)
