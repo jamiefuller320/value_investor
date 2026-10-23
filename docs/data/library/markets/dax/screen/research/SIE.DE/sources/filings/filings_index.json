@@ -3,26 +3,27 @@
   "company_name": "Siemens Aktiengesellschaft",
   "market": "dax",
   "regime": "euro_filings",
-  "fetched_at": "2026-10-21T18:40:27.294130+00:00",
+  "fetched_at": "2026-10-23T13:28:08.654405+00:00",
   "note": "Euro-listed results discovery via ESEF (filings.xbrl.org when available), AMF open data (info-financiere.gouv.fr, France OAM: half-year reports and results releases with direct PDF URLs) for .PA names and French LEIs, Cision newsroom RSS (news.cision.com: interim, year-end and annual reports with the report PDF attachment) for mapped Stockholm issuers, Belgium official / Euronext Brussels regulated-information for .BR names, Google News, optional IR allowlist URLs, Investegate (when listed), plus SEC 20-F/6-K when the issuer is dual-listed. period=annual|interim|other. Bodies when a direct HTML/PDF URL is available.",
   "sources_used": [
-    "google_news_euro"
+    "google_news_euro",
+    "ir_allowlist"
   ],
   "summary": {
-    "total": 1,
-    "annual": 0,
-    "interim": 0,
+    "total": 3,
+    "annual": 1,
+    "interim": 1,
     "trading_update": 0,
     "other": 1,
-    "with_body": 1,
+    "with_body": 3,
     "period_coverage": {
       "annual": {
-        "total": 0,
-        "with_body": 0
+        "total": 1,
+        "with_body": 1
       },
       "interim": {
-        "total": 0,
-        "with_body": 0
+        "total": 1,
+        "with_body": 1
       },
       "trading_update": {
         "total": 0,
@@ -35,6 +36,34 @@
     }
   },
   "filings": [
+    {
+      "id": "ir_f3d675944dfff92b",
+      "source": "ir_allowlist",
+      "headline": "IR allowlist document \u2014 DE0007236101-JA-2024-EQ-E-00.pdf",
+      "published_at": null,
+      "url": "https://www.eqs-news.com/media/document/53433340-4eb8-4612-836a-b20b58ed33de/assets/DE0007236101-JA-2024-EQ-E-00.pdf",
+      "period": "annual",
+      "category": "ir_allowlist",
+      "summary": "Manual IR/results URL from docs/data/research_ir_urls.json",
+      "has_body": true,
+      "body_path": "docs/data/library/markets/dax/screen/research/SIE.DE/sources/filings/bodies/ir_f3d675944dfff92b.txt",
+      "priority": 100,
+      "entity_type": "other"
+    },
+    {
+      "id": "ir_71e0823f193261db",
+      "source": "ir_allowlist",
+      "headline": "IR allowlist document \u2014 DE0007236101-Q1-2025-EQ-E-00.pdf",
+      "published_at": null,
+      "url": "https://ir-api.eqs.com/storage/ir/f63333/documents/db728c41-10af-4deb-b10e-9b162a9b7f8a/DE0007236101-Q1-2025-EQ-E-00.pdf",
+      "period": "interim",
+      "category": "ir_allowlist",
+      "summary": "Manual IR/results URL from docs/data/research_ir_urls.json",
+      "has_body": true,
+      "body_path": "docs/data/library/markets/dax/screen/research/SIE.DE/sources/filings/bodies/ir_71e0823f193261db.txt",
+      "priority": 100,
+      "entity_type": "consolidated"
+    },
     {
       "id": "78448f80652864a0",
       "source": "google_news_euro",
@@ -49,6 +78,5 @@
       "priority": 0,
       "entity_type": "other"
     }
-  ],
-  "refetched_at": "2026-10-21T18:40:30.408527+00:00"
+  ]
 }
