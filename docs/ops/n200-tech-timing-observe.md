@@ -56,7 +56,7 @@ Phase green = **mechanism throughput** only. Lever win/lose = **best-feasible un
 | Path | Role |
 |---|---|
 | `docs/data/n200_tech_timing_registration.json` | Frozen seal record (+ cost_basis / stress fields) |
-| `docs/data/n200_tech_timing_observe.json` | Bracket + **per-lever** scoreboards + markers + phase/volume + stress diagnostic (Pages sidecar) |
+| `docs/data/n200_tech_timing_observe.json` | Bracket + **per-lever** scoreboards + markers + phase/volume + stress diagnostic (Pages sidecar). Open episodes store display-only `open_mark_return` from real archive quotes (fair-cost as-if-closed; fail closed if quote missing) for sealed lifecycle chips |
 | `docs/data/queue_health.json` → `n200_pipeline_health` | Dashboard projection (phase / volume / **per_lever** / freshness) |
 | This doc | Runbook |
 
