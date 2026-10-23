@@ -8475,6 +8475,21 @@ def test_fetch_filings_ir_allowlist_euro_depth_krx_ir_builtins(tmp_path: Path):
     assert sum(1 for row in rows if row["period"] == "interim") == 1
 
 
+def test_fetch_filings_ir_allowlist_iseq20_gl9_ir_builtins(tmp_path: Path):
+    """Regression: GL9.IR awaiting_periodic_report — glanbia.com FY2025 annual + HY26 results PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("GL9.IR", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("Glanbia-Annual-Report-2025.pdf" in url for url in urls)
+    assert any("Glanbia-HY26-Results.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_jmt_ls_builtins(tmp_path: Path):
     """Regression: JMT.LS awaiting_periodic_report — reports.jeronimomartins.com FY2025 annual PDF."""
     allowlist_path = tmp_path / "ir.json"
@@ -12414,6 +12429,30 @@ def test_parked_source_hunter_krx_ir_euro_depth_has_fetchable_ir():
     assert len(body) >= 50000
     valid, reason = _validate_ir_allowlist_body_content(annual[0], body, ticker="KRX.IR")
     assert valid, reason
+
+
+def test_parked_source_hunter_gl9_ir_iseq20_has_fetchable_ir():
+    """eng-20261022-01: GL9.IR has live glanbia.com FY2025 annual report + HY26 results PDFs."""
+    assert "GL9.IR" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("GL9.IR")
+    assert len(rows) == 2
+    annual = [row for row in rows if row["period"] == "annual"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(annual) == 1
+    assert len(interim) == 1
+    assert "Glanbia-Annual-Report-2025.pdf" in annual[0]["url"]
+    assert "Glanbia-HY26-Results.pdf" in interim[0]["url"]
+    body, source = _fetch_ir_allowlist_body(annual[0], ticker="GL9.IR")
+    assert body and source
+    assert len(body) >= 50000
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], body, ticker="GL9.IR")
+    assert valid, reason
+    interim_body, interim_source = _fetch_ir_allowlist_body(interim[0], ticker="GL9.IR")
+    assert interim_body and interim_source
+    valid_i, reason_i = _validate_ir_allowlist_body_content(
+        interim[0], interim_body, ticker="GL9.IR"
+    )
+    assert valid_i, reason_i
 
 
 def test_parked_source_hunter_jmt_ls_euro_depth_has_fetchable_ir():
