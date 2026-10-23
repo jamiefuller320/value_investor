@@ -10,6 +10,8 @@ On threshold-eligible names, does **raw buy-tier** identity with calendar **±14
 
 Episode returns deduct fair T212-shaped friction from `market_trading_costs` (FTSE/LSE archive → `ftse350`: stamp + half-spread). Project-wide standing rule: [fair-cost-primacy.md](fair-cost-primacy.md). Legacy **3% per side** is kept as **stress / report-only** (control median + episode diagnostic), not promotion truth.
 
+**Leave-tier close (reframing pin):** Episodes open on a **new buy-tier cross** and close on the **first leave** of buy-tier. That leave is the sealed **identity-break / episode boundary** for `raw_buy_tier` — the anchor for ±14d entry/exit levers and path cell `entry_+0__exit_+0`. It is **not** a recommended live auto-sell policy (strand A / `buy_tier_level` use confirm screens and exit twins). Path primary answers timing around **membership spells**, not stock-choice skill alone. For “did buy-tier membership offer a productive forward window?” read the fixed-horizon [screen-premise backtest](screen-premise-backtest.md) (`buy_tier_spread` at 7d/28d), not N200 leave closes. Selection-as-lever stays parked (**N205**); do not fold it into this seal.
+
 ## Seal defaults (O2–O6)
 
 | ID | Choice |

@@ -107,7 +107,7 @@ def test_push_ranker_maps_findings_and_digest(tmp_path: Path) -> None:
 
 
 def test_push_ignores_legacy_items_headline_without_hub_feed(tmp_path: Path) -> None:
-    """L619 fail-closed: legacy items/headline must not invent a Push card."""
+    """L620 fail-closed: legacy items/headline must not invent a Push card."""
     write_json(tmp_path / "ops_status.json", {"overall": "ok", "findings": []}, compact=False)
     write_json(tmp_path / "engineering_tasks.json", {"tasks": []}, compact=False)
     write_json(
@@ -506,7 +506,7 @@ def test_status_report_includes_digest_row(tmp_path: Path) -> None:
 
 
 def test_explore_consumes_hub_feed_candidates(tmp_path: Path) -> None:
-    """L619: Explore ≤2 from hub_feed.explore_candidates — not the twin stub."""
+    """L620: Explore ≤2 from hub_feed.explore_candidates — not the twin stub."""
     write_json(
         tmp_path / POST_SELL_CUE_DIGEST_FILENAME,
         {

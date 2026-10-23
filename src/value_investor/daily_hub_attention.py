@@ -2,7 +2,7 @@
 
 Deterministic extractors — no LLM. Push fails closed when nothing high-signal;
 Explore is labeled not-today with a quality bar. Package M digest
-``post_sell_cue_digest.json`` is consumed via ``hub_feed`` only (L619):
+``post_sell_cue_digest.json`` is consumed via ``hub_feed`` only (L620):
 Status uses cue counts / sunday nest summary; Explore ≤2 from
 ``hub_feed.explore_candidates``; Push only from ``hub_feed.push_candidates``
 (empty unless a cue maps to a live human gate). Fail closed if ``hub_feed``
@@ -1006,7 +1006,7 @@ def _normalize_explore_card(row: dict[str, Any]) -> dict[str, Any] | None:
 def _default_explore_cards() -> list[dict[str, Any]]:
     """Seed/hub_feed-independent Explore defaults (≤2).
 
-    Post-sell cues come from Package M ``hub_feed.explore_candidates`` (L619) —
+    Post-sell cues come from Package M ``hub_feed.explore_candidates`` (L620) —
     do not hardcode a twin stub here (anachronistic still_in_buy_set copy).
     """
     return [
