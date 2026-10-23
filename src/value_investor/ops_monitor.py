@@ -972,9 +972,7 @@ def check_paper_learning_tracks(
         )
     elif core_acted and agree_veto_rollup.exists():
         rollup_payload = _paper_json_payload(agree_veto_rollup)
-        tracks_payload = (
-            rollup_payload.get("tracks") if isinstance(rollup_payload, dict) else None
-        )
+        tracks_payload = rollup_payload.get("tracks") if isinstance(rollup_payload, dict) else None
         note = str(rollup_payload.get("note") or "") if isinstance(rollup_payload, dict) else ""
         empty_tracks = not isinstance(tracks_payload, dict) or not tracks_payload
         bootstrap_stub = "bootstrap stub" in note.lower()
