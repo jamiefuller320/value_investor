@@ -147,9 +147,7 @@ def test_closed_chip_uses_fair_cost_episode_not_median_or_stress() -> None:
 
 def test_fair_cost_open_mark_return_matches_closed_drag() -> None:
     # +10% gross, 0.5% buy + 0.1% sell → 0.094 (same as closed fair-cost).
-    got = fair_cost_open_mark_return(
-        100.0, 110.0, buy_cost_pct=0.005, sell_cost_pct=0.001
-    )
+    got = fair_cost_open_mark_return(100.0, 110.0, buy_cost_pct=0.005, sell_cost_pct=0.001)
     assert got == 0.094
     assert fair_cost_open_mark_return(0.0, 110.0, buy_cost_pct=0.0, sell_cost_pct=0.0) is None
     assert fair_cost_open_mark_return(100.0, -1.0, buy_cost_pct=0.0, sell_cost_pct=0.0) is None
