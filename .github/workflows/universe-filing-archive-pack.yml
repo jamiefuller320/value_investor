@@ -62,8 +62,9 @@ jobs:
           ALLOW_OUTSIDE_QUIET: ${{ github.event.inputs.allow_outside_quiet || 'false' }}
           APPLY_INPUT: ${{ github.event.inputs.apply }}
           LOOKBACK_WEEKS: ${{ github.event.inputs.lookback_weeks || '12' }}
-          MAX_UNITS: ${{ github.event.inputs.max_units || '2' }}
-          MAX_HTTP_FETCHES: ${{ github.event.inputs.max_http_fetches || '8' }}
+          # Schedule has no inputs — fallbacks must match stage-1 (4/16), not pilot 2/8.
+          MAX_UNITS: ${{ github.event.inputs.max_units || '4' }}
+          MAX_HTTP_FETCHES: ${{ github.event.inputs.max_http_fetches || '16' }}
         run: |
           set -euo pipefail
           # Schedule always applies; workflow_dispatch honors apply input (default true).
