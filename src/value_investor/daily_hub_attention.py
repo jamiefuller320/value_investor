@@ -141,8 +141,7 @@ def post_sell_digest_status_row(digest: dict[str, Any] | None) -> dict[str, Any]
         headline = f"{timing_n} timing + {selection_n} selection cues"
     if not headline and hub is not None:
         headline = (
-            f"hub_feed explore={explore_n or 0} push={push_n or 0} "
-            "(no timing/selection cue lists)"
+            f"hub_feed explore={explore_n or 0} push={push_n or 0} (no timing/selection cue lists)"
         )
     if not headline:
         # Digest file present but no usable Package M fields — fail closed copy.
@@ -170,7 +169,9 @@ def _push_cards_from_hub_feed(
     out: list[dict[str, Any]] = []
     for cand in _list_of_dicts(hub.get("push_candidates")):
         claim = str(cand.get("claim") or cand.get("title") or "").strip()
-        why = str(cand.get("why_matters") or cand.get("why_now") or cand.get("summary") or "").strip()
+        why = str(
+            cand.get("why_matters") or cand.get("why_now") or cand.get("summary") or ""
+        ).strip()
         if not claim:
             continue
         raw_id = str(cand.get("id") or "").strip()
