@@ -505,7 +505,6 @@ The four `sealed_observe_only` refreshes (`check_n200_tech_timing_observe`,
 `docs/data/sealed_lifecycle.json`. Each model page groups one-line chips
 (ticker, days in the current column, episode fair-cost % or a stored open
 mark) under just bought / holding / just sold / post sale, using
-<<<<<<< HEAD
 `JUST_BOUGHT_DAYS` and `JUST_SOLD_DAYS` (both 14). On refresh, open episodes
 get `open_mark_return` from **real archive quotes** (entry snap price →
 latest available quote for that ticker), fair-cost as if closed at the mark
