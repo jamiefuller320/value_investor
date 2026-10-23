@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-23T12:32:28.761948+00:00`
+Generated: `2026-10-23T17:23:14.186993+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -39,7 +39,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `human`/human PR #1156 `eng-20261022-01` — Hunt fetchable IR source for parked iseq20 leftover GL9.IR
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 245
+- Occasion count: 247
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 4×
