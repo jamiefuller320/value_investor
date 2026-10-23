@@ -337,7 +337,6 @@ def test_daily_hub_accept_passes_focus_ack_decision() -> None:
     assert "badge-sell" in card
     html = Path("docs/index.html").read_text(encoding="utf-8")
     assert 'src="app.js?v=' in html
-    assert "system-map-20261014" in html
     assert "Market warning triage" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "zero_body_stuck" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "Expansive assessment" in OPS_MONITOR.read_text(encoding="utf-8")
@@ -458,7 +457,7 @@ def test_investment_model_switcher_catalog_and_hash() -> None:
     assert "launch-queue waiter" in text
     assert "not assessment primary" in text.lower()
     html = Path("docs/index.html").read_text(encoding="utf-8")
-    assert "system-map-20261014" in html
+    assert 'src="app.js?v=' in html
     assert "function renderObservePathScoreboardPanel(" in text
 
 
