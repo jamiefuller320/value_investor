@@ -357,6 +357,7 @@ human glance.
 | `buy_tier_level` acted with empty `automated_fund.json` holdings | fail | Monday cold-start fill; do not treat NAV as promotion truth |
 | Core track `acted=false` after a post-settle last_run | warn | Track skipped |
 | `learning_tracks_llm_agree_veto.json` missing after core tracks acted | warn | Observe-only algo→agree/veto shadow; never blocks fills — see [`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md) |
+| `learning_tracks_llm_agree_veto.json` present but `tracks` empty / bootstrap stub after core acted | warn | Same instrument — publish overlay gap (FTSE store/review not committed); title **LLM agree/veto shadow rollup empty** |
 | Any tunable review row (not frozen, not a fixed-knob lab) with non-empty `saturated_knobs` | warn | **Decision-review knobs saturated at bounds** — a proposal rule still fires but the knob is at its clamp bound, so the loop can no longer respond on that axis. `auto_fixable=False`; human decides whether the driver (cost model, churn, concentration) needs a policy change or new epoch — see [`decision-review.md`](decision-review.md#apply-gate-and-cooldown) |
 
 Graduation → observe refinement children (lineage on experiment assessment) are
@@ -378,16 +379,17 @@ bind, and EPS-from-body onto reports → slim candidates → agree/veto cites
 (observe-only; does not enable Phase C `autopsy_freeze`). First-run observe pin:
 `check_p1_first_run_pin` (time-boxed; see table below).
 
-**AI path cadence (observe / warn-only):** weekday finding stays **LLM agree/veto
-shadow rollup missing**. Human **Sunday** scoreboard review is checklist
+**AI path cadence (observe / warn-only):** weekday findings stay **LLM agree/veto
+shadow rollup missing** and **LLM agree/veto shadow rollup empty** (bootstrap
+stub / `tracks: {}`). Human **Sunday** scoreboard review is checklist
 `sunday-ai-path-scoreboard` (see
 [`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md#sunday-ai-path-scoreboard)
 + Project store `docs/ai-path-roadmap.md`). Phase-1 LLM judge
 (`LLM_AGREE_VETO_BACKEND=auto|llm`, `judge_spec_id=llm.v1`) stays observe-only —
 rollup still required; LLM failures fail closed to heuristic and must not block
-fills. Intended later finding title **AI path scoreboard — Sunday review**
-(`auto_fixable=False`) once a committed rollup freshness flag exists — do not
-invent rememo/ingest/eng spray from it. Beachhead / ecosystem parks (**N209** /
+fills. Empty-rollup warn is the committed freshness signal for hub/ops; a fuller
+**AI path scoreboard — Sunday review** finding stays later. Do not invent
+rememo/ingest/eng spray from it. Beachhead / ecosystem parks (**N209** /
 **L606** / **L605**) surface via **Deferred idea triggers met**, not a second
 daily ritual.
 
