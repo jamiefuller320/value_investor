@@ -517,7 +517,8 @@ def test_dashboard_assets_include_system_map_card():
     assert 'id="system-map-card"' in app
     assert "docs/architecture.md" in app
     assert "docs/PROJECT_OBJECTIVE.md" in app
-    assert "app.js?v=system-map-20261014" in html
+    # Cache-bust token changes with UI PRs; only require a versioned app.js load.
+    assert 'src="app.js?v=' in html
     assert ".system-map-pipeline" in css
     assert ".system-map-pillars" in css
     assert ".system-map-pillar-high" in css
