@@ -1,51 +1,129 @@
 {
-  "run_at": "2026-10-22T10:41:39.500187+00:00",
+  "run_at": "2026-10-23T12:55:10.032671+00:00",
   "market_id": "iseq20",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "GL9.IR"
+  ],
+  "target_details": [
+    {
+      "ticker": "GL9.IR",
+      "priority_score": 27.0854,
+      "filings_total": 4,
+      "filings_with_body": 2,
+      "indexed_without_body": 2,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "GL9.IR",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 4,
+        "filings_with_body": 2,
+        "indexed_without_body": 2
+      },
+      "after": {
+        "filings_total": 4,
+        "filings_with_body": 4,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 4,
+        "annual": 1,
+        "interim": 1,
+        "trading_update": 0,
+        "other": 2,
+        "with_body": 4,
+        "period_coverage": {
+          "annual": {
+            "total": 1,
+            "with_body": 1
+          },
+          "interim": {
+            "total": 1,
+            "with_body": 1
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 2,
+            "with_body": 2
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 4,
+        "with_body_after": 4,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 2,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "GL9.IR"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-22T10:41:31.857433+00:00",
+    "snapshot_at": "2026-10-23T12:54:32.371794+00:00",
     "market_id": "iseq20",
-    "buy_tier_count": 2,
+    "buy_tier_count": 3,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 0,
+    "thin_body_buy_tier": 1,
     "indexed_without_body": 0,
-    "bodies_min": 5,
-    "bodies_median": 20.5,
+    "bodies_min": 2,
+    "bodies_median": 5,
     "bodies_max": 36,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
-    "thin_body_tickers": [],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
-    "parked_tickers": [
+    "thin_body_tickers": [
       "GL9.IR"
     ],
-    "parked_count": 1,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
+    "indexed_without_body_tickers": [],
+    "indexed_without_body_by_ticker": {},
+    "parked_tickers": [],
+    "parked_count": 0,
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
+      "GL9.IR"
+    ],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-22T10:41:39.489696+00:00",
+    "snapshot_at": "2026-10-23T12:55:03.779092+00:00",
     "market_id": "iseq20",
-    "buy_tier_count": 2,
+    "buy_tier_count": 3,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
     "indexed_without_body": 0,
-    "bodies_min": 5,
-    "bodies_median": 20.5,
+    "bodies_min": 4,
+    "bodies_median": 5,
     "bodies_max": 36,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -69,10 +147,10 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 2,
-    "hits": 2,
-    "new_rows_total": 0,
-    "curiosity_total": 2,
+    "scanned": 3,
+    "hits": 3,
+    "new_rows_total": 2,
+    "curiosity_total": 3,
     "errors": 0,
     "prioritization_weights": {
       "new_index_rows": 8.0,
@@ -83,7 +161,9 @@
     },
     "forced_by_critical_path": false,
     "max_runtime_seconds": 900.0,
-    "prefer_tickers": [],
+    "prefer_tickers": [
+      "GL9.IR"
+    ],
     "runtime_cutoff": false
   },
   "maintenance_mode": true,
@@ -95,30 +175,33 @@
   },
   "critical_path": {
     "market_id": "iseq20",
-    "assessed_at": "2026-10-22T10:41:32.149925+00:00",
+    "assessed_at": "2026-10-23T12:54:32.592938+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
-    "thin_need_discovery": [],
+    "thin_need_discovery": [
+      "GL9.IR"
+    ],
     "thin_need_bodies": [],
-    "primary_blocker": "none",
-    "force_discovery_scan": false,
+    "primary_blocker": "thin_need_discovery",
+    "force_discovery_scan": true,
     "auto_pin_tickers": [],
     "recommended_actions": [
-      "Filing critical path clear — maintenance deepen only"
+      "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
+      "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 0,
       "indexed_without_body_rows": 0,
-      "thin_need_discovery": 0,
+      "thin_need_discovery": 1,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 7.00731090599993,
+  "used_seconds": 30.972573442999987,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3592.992689094,
+  "leftover_seconds": 3569.027426557,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -126,15 +209,15 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "iseq20",
-    "updated_at": "2026-10-22T10:41:39.492135+00:00",
+    "updated_at": "2026-10-23T12:55:03.780853+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 17,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [],
     "unparked_leftover": [],
     "surface_released": [],
@@ -147,7 +230,53 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261022-01"
+    "reason": "no parked leftover tickers remaining for hunter",
+    "tried_count": 47,
+    "candidate_count": 67,
+    "skipped_resolved_tickers": [
+      "ABI.BR",
+      "APAM.AS",
+      "BAS.DE",
+      "EVN.VI",
+      "MUV2.DE",
+      "WIE.VI",
+      "ACKB.BR",
+      "DQ7A.IR",
+      "IFX.DE",
+      "CRH",
+      "ULTP.L",
+      "DFS.L",
+      "FOXT.L",
+      "MER.L",
+      "APTD.L",
+      "NTR.TO",
+      "GIB-A.TO",
+      "SU.TO",
+      "MUV2.DE",
+      "SAP.DE",
+      "BAS.DE",
+      "IFX.DE",
+      "PDD",
+      "BAS.DE",
+      "DTE.DE",
+      "DTG.DE",
+      "FRE.DE",
+      "HNR1.DE",
+      "MUV2.DE",
+      "HEI.DE",
+      "HEN3.DE",
+      "PST.MI",
+      "TEN.MI",
+      "ACKB.BR",
+      "APAM.AS",
+      "0285.HK",
+      "0857.HK",
+      "0288.HK",
+      "2331.HK",
+      "EVN.VI",
+      "WIE.VI",
+      "PGHN.SW"
+    ],
+    "wait_behind_task_id": ""
   }
 }
