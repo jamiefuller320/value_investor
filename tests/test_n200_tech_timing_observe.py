@@ -206,6 +206,29 @@ def test_refresh_persists_registration_and_store(tmp_path: Path):
     assert FAIR_COST_MARKER_ID in marker_ids
 
 
+def test_open_episode_stores_fair_cost_mark_from_real_quotes():
+    # Still in buy-tier through the last snap — open row, not path-scored.
+    snaps = [
+        _snap(1, [("OPEN.L", "buy", 100.0)]),
+        _snap(8, [("OPEN.L", "buy", 105.0)]),
+        _snap(15, [("OPEN.L", "buy", 112.0)]),
+    ]
+    cfg = N200Config(buy_cost_pct=0.005, sell_cost_pct=0.001)
+    payload = build_n200_observe(snaps, cfg=cfg)
+    assert payload["completed_entry_episodes"] == 0
+    opens = [
+        row
+        for row in payload["lifecycle_episodes"]
+        if row.get("status") == "open" and row.get("ticker") == "OPEN.L"
+    ]
+    assert len(opens) == 1
+    # 112/100 - 1 - 0.006 = 0.114
+    assert opens[0]["open_mark_return"] == 0.114
+    assert opens[0]["open_mark_basis"] == "fair_cost_as_if_closed_latest_quote"
+    assert opens[0]["open_mark_at"] == snaps[-1].run_at
+    assert payload["influences_live"] is False
+
+
 def test_ops_findings_volume_gate():
     base = build_n200_observe([])
     base["completed_entry_episodes"] = 30

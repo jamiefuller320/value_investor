@@ -27,6 +27,7 @@ from value_investor.market_trading_costs import (
     costs_for_market,
 )
 from value_investor.paper_fund import BUY_SIGNALS
+from value_investor.sealed_lifecycle import with_fair_cost_open_mark
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT_DIR = Path("docs/data")
@@ -188,6 +189,21 @@ def _price_at(snapshots: list[RunSnapshot], idx: int, ticker: str) -> float | No
     if price is None or float(price) <= 0:
         return None
     return float(price)
+
+
+def _latest_quote(
+    snapshots: list[RunSnapshot],
+    ticker: str,
+    *,
+    from_idx: int = 0,
+) -> tuple[float | None, str | None]:
+    """Latest real archive quote for ``ticker`` at or after ``from_idx``."""
+    start = max(0, int(from_idx))
+    for idx in range(len(snapshots) - 1, start - 1, -1):
+        price = _price_at(snapshots, idx, ticker)
+        if price is not None:
+            return price, snapshots[idx].run_at
+    return None, None
 
 
 def episode_return(
@@ -542,13 +558,25 @@ def build_n200_observe(
                     exit_idx = j
                     break
             if exit_idx is None:
+                # Display-only open mark: real entry + latest archive quotes.
+                # Fail closed (no open_mark_return) if either quote is missing.
+                # Not scored for path primary / cohort median.
+                p_entry = _price_at(snapshots, i, ticker)
+                p_mark, mark_at = _latest_quote(snapshots, ticker, from_idx=i)
                 open_lifecycle.append(
-                    {
-                        "ticker": ticker,
-                        "entry_run_at": snap.run_at,
-                        "status": "open",
-                        "influences_live": False,
-                    }
+                    with_fair_cost_open_mark(
+                        {
+                            "ticker": ticker,
+                            "entry_run_at": snap.run_at,
+                            "status": "open",
+                            "influences_live": False,
+                        },
+                        entry_price=p_entry,
+                        mark_price=p_mark,
+                        buy_cost_pct=buy_pct,
+                        sell_cost_pct=sell_pct,
+                        mark_run_at=mark_at,
+                    )
                 )
                 continue  # still open — not scored for primary
             episode_cells: dict[str, float | None] = {}

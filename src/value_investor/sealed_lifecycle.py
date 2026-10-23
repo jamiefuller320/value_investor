@@ -7,6 +7,12 @@ open phases, days since exit on sold phases. Chip percent is the episode
 fair-cost return, or a mark already stored on an open row. It is never the
 cohort median and never the sample-mean strip.
 
+Open marks are written by sealed observe refresh from **real archive quotes**
+(entry snap price → latest available quote for that ticker), fair-cost as if
+closed at the mark (same buy+sell drag as closed episodes). Fail closed when
+either quote is missing — the chip then stays ``open_unmarked`` / “No stored
+mark”. Never invent a price. Never influence live capital.
+
 Does not promote, retune, or write a seal. ``influences_live`` stays false.
 """
 
@@ -39,13 +45,15 @@ PHASE_LABELS = {
 # Closed fair-cost episode return. First hit wins. Stress, patient-hold, and
 # cohort-median keys are intentionally absent.
 _CLOSED_RETURN_KEYS = ("fair_cost_return", "return_pct", "control_return")
-# Marks already stored on an open observe row. Do not invent a price.
+# Marks already stored on an open observe row (from real quotes on refresh).
 _OPEN_MARK_KEYS = (
     "open_mark_return",
     "mark_return_pct",
     "unrealized_return_pct",
     "unrealized_pnl_pct",
 )
+# Documented basis for marks written by sealed observe refresh.
+OPEN_MARK_BASIS = "fair_cost_as_if_closed_latest_quote"
 
 SEALED_MODELS: tuple[dict[str, str], ...] = (
     {
@@ -100,6 +108,58 @@ def _first_float(row: dict[str, Any], keys: tuple[str, ...]) -> float | None:
     return None
 
 
+def fair_cost_open_mark_return(
+    entry_price: float,
+    mark_price: float,
+    *,
+    buy_cost_pct: float,
+    sell_cost_pct: float,
+) -> float | None:
+    """Unrealized fair-cost return as if closed at ``mark_price``.
+
+    Same round-trip drag as sealed closed episodes (``raw - buy - sell``).
+    Fail closed (``None``) when either price is missing or non-positive —
+    callers must pass real quotes; this never invents a price.
+    """
+    entry = _optional_float(entry_price)
+    mark = _optional_float(mark_price)
+    if entry is None or mark is None or entry <= 0 or mark <= 0:
+        return None
+    raw = mark / entry - 1.0
+    return round(raw - float(buy_cost_pct) - float(sell_cost_pct), 6)
+
+
+def with_fair_cost_open_mark(
+    row: dict[str, Any],
+    *,
+    entry_price: float | None,
+    mark_price: float | None,
+    buy_cost_pct: float,
+    sell_cost_pct: float,
+    mark_run_at: str | None = None,
+) -> dict[str, Any]:
+    """Copy ``row`` and attach ``open_mark_return`` when both quotes are real.
+
+    Missing quotes leave the row unmarked (chip stays “No stored mark”).
+    """
+    out = dict(row)
+    if entry_price is None or mark_price is None:
+        return out
+    ret = fair_cost_open_mark_return(
+        entry_price,
+        mark_price,
+        buy_cost_pct=buy_cost_pct,
+        sell_cost_pct=sell_cost_pct,
+    )
+    if ret is None:
+        return out
+    out["open_mark_return"] = ret
+    out["open_mark_basis"] = OPEN_MARK_BASIS
+    if mark_run_at:
+        out["open_mark_at"] = mark_run_at
+    return out
+
+
 def slim_lifecycle_episode(episode: dict[str, Any]) -> dict[str, Any] | None:
     """Keep ticker, dates, and the one return a chip is allowed to show."""
     if not isinstance(episode, dict):
@@ -127,6 +187,12 @@ def slim_lifecycle_episode(episode: dict[str, Any]) -> dict[str, Any] | None:
         mark = _first_float(episode, _OPEN_MARK_KEYS)
         if mark is not None:
             row["open_mark_return"] = mark
+            basis = str(episode.get("open_mark_basis") or "").strip()
+            if basis:
+                row["open_mark_basis"] = basis
+            mark_at = episode.get("open_mark_at")
+            if mark_at:
+                row["open_mark_at"] = mark_at
     return row
 
 
@@ -356,8 +422,10 @@ def build_sealed_lifecycle_projection(
         "note": (
             "Display only. One line per episode: ticker, days in the current "
             "lifecycle column, and that episode's fair-cost return (closed) or "
-            "a mark already stored on the open row. Not the cohort median and "
-            "not the sample-mean strip. influences_live stays false."
+            "a fair-cost open mark from real archive quotes on the observe row "
+            f"({OPEN_MARK_BASIS}). Missing quotes stay unmarked — never invent "
+            "a price. Not the cohort median and not the sample-mean strip. "
+            "influences_live stays false."
         ),
         "models": models,
     }

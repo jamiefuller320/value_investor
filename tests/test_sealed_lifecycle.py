@@ -8,11 +8,14 @@ from pathlib import Path
 
 from value_investor.lifecycle_board import JUST_BOUGHT_DAYS, JUST_SOLD_DAYS
 from value_investor.sealed_lifecycle import (
+    OPEN_MARK_BASIS,
     assign_sealed_phase,
     build_model_lifecycle,
     build_sealed_lifecycle_projection,
     chip_return,
+    fair_cost_open_mark_return,
     slim_lifecycle_episode,
+    with_fair_cost_open_mark,
 )
 
 NOW = datetime(2026, 10, 19, tzinfo=UTC)
@@ -140,6 +143,40 @@ def test_closed_chip_uses_fair_cost_episode_not_median_or_stress() -> None:
     assert chips[0]["return_pct"] != page["cohort_median"]
     assert page["influences_live"] is False
     assert page["cohort_median"] == -0.0055
+
+
+def test_fair_cost_open_mark_return_matches_closed_drag() -> None:
+    # +10% gross, 0.5% buy + 0.1% sell → 0.094 (same as closed fair-cost).
+    got = fair_cost_open_mark_return(
+        100.0, 110.0, buy_cost_pct=0.005, sell_cost_pct=0.001
+    )
+    assert got == 0.094
+    assert fair_cost_open_mark_return(0.0, 110.0, buy_cost_pct=0.0, sell_cost_pct=0.0) is None
+    assert fair_cost_open_mark_return(100.0, -1.0, buy_cost_pct=0.0, sell_cost_pct=0.0) is None
+
+
+def test_with_fair_cost_open_mark_fails_closed_without_quotes() -> None:
+    base = {"ticker": "AAA.L", "status": "open", "entry_run_at": _iso("2026-10-18")}
+    missing = with_fair_cost_open_mark(
+        base,
+        entry_price=None,
+        mark_price=110.0,
+        buy_cost_pct=0.005,
+        sell_cost_pct=0.001,
+    )
+    assert "open_mark_return" not in missing
+    marked = with_fair_cost_open_mark(
+        base,
+        entry_price=100.0,
+        mark_price=110.0,
+        buy_cost_pct=0.005,
+        sell_cost_pct=0.001,
+        mark_run_at=_iso("2026-10-19"),
+    )
+    assert marked["open_mark_return"] == 0.094
+    assert marked["open_mark_basis"] == OPEN_MARK_BASIS
+    assert marked["open_mark_at"] == _iso("2026-10-19")
+    assert "influences_live" not in marked
 
 
 def test_open_chip_uses_stored_mark_and_labels_it() -> None:
