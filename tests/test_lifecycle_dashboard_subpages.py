@@ -108,7 +108,10 @@ def test_sealed_lifecycle_subpage_collates_observe_diagnostics() -> None:
         "\nfunction renderLifecycle(", 1
     )[0]
     assert "renderSealedLifecycleCollation(" in sealed_fn
-    assert "renderSealedLifecycleHeatBoard" in sealed_fn or "renderSealedLifecycleListBoard" in sealed_fn
+    assert (
+        "renderSealedLifecycleHeatBoard" in sealed_fn
+        or "renderSealedLifecycleListBoard" in sealed_fn
+    )
     collate_fn = text.split("function renderSealedLifecycleCollation(", 1)[1].split(
         "\nfunction ", 1
     )[0]
@@ -117,9 +120,7 @@ def test_sealed_lifecycle_subpage_collates_observe_diagnostics() -> None:
     assert "data-sealed-observe-jump" in collate_fn
     assert "renderSealedLifecycleExtras(" in collate_fn
     # stagesOnly reuses the same monitor helpers (no divergent numbers).
-    monitor_sig = text.split("function renderObserveLifecycleMonitor(", 1)[1].split(
-        "\n", 1
-    )[0]
+    monitor_sig = text.split("function renderObserveLifecycleMonitor(", 1)[1].split("\n", 1)[0]
     assert "stagesOnly" in monitor_sig
     assert 'data-lifecycle-subpage="sealed"' in text
     assert "#lifecycle/sealed" in text or 'lifecycleSubpage = "sealed"' in text
