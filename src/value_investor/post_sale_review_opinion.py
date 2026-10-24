@@ -113,7 +113,9 @@ def build_initial_opinion(item: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def seed_dialogue(item: dict[str, Any], opinion: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+def seed_dialogue(
+    item: dict[str, Any], opinion: dict[str, Any] | None = None
+) -> list[dict[str, Any]]:
     """Initial dialogue turn: factory opinion (+ learning points)."""
     packed = opinion if isinstance(opinion, dict) else build_initial_opinion(item)
     return [
@@ -160,16 +162,13 @@ def build_contextual_reply_text(
 
     lines = [
         f"Acknowledged owner Comment on [{book}] {ticker} "
-        f"(hold {hold_bit}, outcome {pct_bit}"
-        + (f", {exit_kind}" if exit_kind else "")
-        + ").",
+        f"(hold {hold_bit}, outcome {pct_bit}" + (f", {exit_kind}" if exit_kind else "") + ").",
         f'You wrote: "{comment_bit}"',
         "Development-loop read (observe / alignment only): dual-horizon charts are "
         "the surface for range-location and post-exit path claims; sealed exit "
         "reasons stay in the book trail — this card does not force knobs or fills "
         "(influences_live=false; Package M — not Package L auto-tune).",
-        "Accept if this reply matches what you see; Comment again to continue the "
-        "mini dialogue.",
+        "Accept if this reply matches what you see; Comment again to continue the mini dialogue.",
     ]
     return "\n".join(lines)
 
@@ -295,8 +294,7 @@ def generate_factory_reply(
         # if the model omitted it.
         if "influences_live" not in text.lower():
             text = (
-                text.rstrip()
-                + "\n\n(Observe / alignment only — influences_live=false; "
+                text.rstrip() + "\n\n(Observe / alignment only — influences_live=false; "
                 "Package M — not Package L auto-tune.)"
             )
         return {
