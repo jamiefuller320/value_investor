@@ -26,6 +26,7 @@ from value_investor.post_sale_review_labels import (
     is_actioned,
     load_post_sale_review_labels,
 )
+from value_investor.post_sale_review_opinion import attach_opinion_fields, seed_dialogue
 from value_investor.sealed_lifecycle import SEALED_MODELS
 from value_investor.storage import read_json, write_json
 
@@ -213,6 +214,7 @@ def _base_item(
     if extra:
         item.update(extra)
     item["framing"] = _framing_line(item)
+    attach_opinion_fields(item)
     return item
 
 
@@ -477,6 +479,11 @@ def build_post_sale_review_queue(
         card["observe_only"] = True
         if not card.get("framing"):
             card["framing"] = _framing_line(card)
+        # Ensure opinion / dialogue present on reply cards for chart annotation.
+        if not card.get("llm_opinion") or not card.get("learning_points"):
+            attach_opinion_fields(card)
+        elif not card.get("dialogue"):
+            card["dialogue"] = seed_dialogue(card)
         reply_cards.append(card)
 
     active = sort_queue_items(reply_cards + active_exits, sort_by=sort_by, descending=True)
@@ -500,13 +507,25 @@ def build_post_sale_review_queue(
         "ops_doc": OPS_DOC,
         "product_claim": (
             "Per-exit post-sale review queue across sealed Lifecycle books + "
-            "FTSE control — alignment Accept/Comment/reply; never fills or knobs"
+            "FTSE control — analysis opinion + learning points on charts; "
+            "Accept/Comment mini dialogue (initial opinion → comment → reply); "
+            "never fills or knobs"
         ),
         "learning_question": (
             "Are relevant charts reviewed with the same big-picture issues the "
             "owner sees, and are missed patterns captured into a development "
             "loop that responds?"
         ),
+        "dialogue": {
+            "turns": [
+                "initial_opinion",
+                "owner_comment",
+                "factory_reply",
+                "further_rounds_via_comment_on_reply",
+            ],
+            "influences_live": False,
+            "package": "M",
+        },
         "clocks": {
             "just_bought_days": JUST_BOUGHT_DAYS,
             "just_sold_days": JUST_SOLD_DAYS,

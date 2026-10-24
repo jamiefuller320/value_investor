@@ -66,6 +66,10 @@ jobs:
           COMMAND_ID: ${{ github.event.client_payload.command_id || '' }}
           COMMANDS_JSON: ${{ toJson(github.event.client_payload.commands) }}
           INPUT_COMMANDS_JSON: ${{ github.event.inputs.commands_json || '' }}
+          # Opt-in LLM factory reply on Comment (observe-only; fail-closed to contextual stub).
+          FTSE_POST_SALE_LLM_REPLY: "1"
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
         run: |
           python3 - <<'PY'
           import json

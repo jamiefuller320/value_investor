@@ -12,6 +12,11 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from value_investor.post_sale_review_opinion import (
+    attach_opinion_fields,
+    extend_dialogue_for_comment_reply,
+    generate_factory_reply,
+)
 from value_investor.storage import read_json, write_json
 
 LABELS_FILENAME = "post_sale_review_labels.json"
@@ -19,7 +24,7 @@ SCHEMA_VERSION = 1
 EVENT_KINDS = frozenset({"accept", "comment", "reply"})
 ACTION_KINDS = frozenset({"accept", "comment"})
 
-# Deterministic factory ack when owner Comments (LLM prose optional later).
+# Legacy stub kept for tests / callers that assert the old ack string.
 REPLY_STUB_TEXT = (
     "Acknowledged. Owner comment recorded for the development loop "
     "(observe / alignment only). No knobs or fills applied "
@@ -162,9 +167,15 @@ def record_comment(
     source: str = "",
     acted_by: str = "dashboard",
     snapshot: dict[str, Any] | None = None,
-    reply_stub_text: str = REPLY_STUB_TEXT,
+    reply_stub_text: str | None = None,
+    allow_llm_reply: bool | None = None,
+    llm_complete: Any | None = None,
 ) -> dict[str, Any]:
-    """Comment (missed pattern). Clears active item and spawns a reply stub."""
+    """Comment (missed pattern). Clears active item and spawns a factory reply.
+
+    Reply text prefers LLM when allowed; otherwise contextual deterministic
+    (or an explicit ``reply_stub_text`` override for tests).
+    """
     review_id = str(review_id or "").strip()
     if not review_id:
         raise ValueError("review_id is required")
@@ -174,6 +185,27 @@ def record_comment(
     store = load_post_sale_review_labels(data_dir)
     event_id = str(uuid.uuid4())
     reply_id = reply_review_id(review_id, event_id)
+    snap = dict(snapshot) if isinstance(snapshot, dict) else {}
+    # Ensure opinion fields exist so reply cards annotate charts.
+    if snap and not snap.get("llm_opinion"):
+        attach_opinion_fields(snap)
+
+    if reply_stub_text is not None:
+        reply_payload = {
+            "text": str(reply_stub_text).strip() or REPLY_STUB_TEXT,
+            "reply_kind": "deterministic_ack",
+            "llm_attempted": False,
+            "influences_live": False,
+        }
+    else:
+        reply_payload = generate_factory_reply(
+            owner_comment=text,
+            item=snap,
+            llm_complete=llm_complete,
+            allow_llm=allow_llm_reply,
+        )
+
+    comment_at = _utcnow()
     comment_event = {
         "event_id": event_id,
         "review_id": review_id,
@@ -181,14 +213,17 @@ def record_comment(
         "kind": "comment",
         "tag_at_action": str(tag_at_action or "new").strip() or "new",
         "text": text,
-        "acted_at": _utcnow(),
+        "acted_at": comment_at,
         "acted_by": acted_by,
         "source": str(source or "").strip(),
         "influences_live": False,
         "reply_review_id": reply_id,
-        "snapshot": dict(snapshot) if isinstance(snapshot, dict) else {},
+        "snapshot": snap,
     }
+    reply_at = _utcnow()
     reply_event_id = str(uuid.uuid4())
+    reply_kind = str(reply_payload.get("reply_kind") or "deterministic_contextual")
+    acted_by_factory = "factory_llm" if reply_kind == "llm" else "factory_reply"
     reply_event = {
         "event_id": reply_event_id,
         "review_id": reply_id,
@@ -196,14 +231,27 @@ def record_comment(
         "parent_review_id": review_id,
         "kind": "reply",
         "tag_at_action": "reply",
-        "text": str(reply_stub_text or REPLY_STUB_TEXT).strip(),
-        "acted_at": _utcnow(),
-        "acted_by": "factory_stub",
-        "source": str(source or "").strip() or "factory_reply_stub",
+        "text": str(reply_payload.get("text") or REPLY_STUB_TEXT).strip(),
+        "acted_at": reply_at,
+        "acted_by": acted_by_factory,
+        "source": str(source or "").strip() or "factory_reply",
         "influences_live": False,
-        "reply_kind": "deterministic_ack",
+        "reply_kind": reply_kind,
+        "llm_attempted": bool(reply_payload.get("llm_attempted")),
+        "llm_ok": reply_payload.get("llm_ok"),
     }
-    snap = dict(snapshot) if isinstance(snapshot, dict) else {}
+    if reply_payload.get("llm_error"):
+        reply_event["llm_error"] = reply_payload.get("llm_error")
+
+    dialogue = extend_dialogue_for_comment_reply(
+        prior_dialogue=snap.get("dialogue") if isinstance(snap.get("dialogue"), list) else None,
+        item=snap,
+        owner_comment=text,
+        reply_text=reply_event["text"],
+        reply_kind=reply_kind,
+        commented_at=comment_at,
+        replied_at=reply_at,
+    )
     reply_card = {
         "review_id": reply_id,
         "parent_review_id": review_id,
@@ -227,8 +275,14 @@ def record_comment(
         "sold_at": snap.get("sold_at") or snap.get("exit_at"),
         "avg_cost": snap.get("avg_cost"),
         "exit_price": snap.get("exit_price"),
+        "llm_opinion": snap.get("llm_opinion"),
+        "learning_points": snap.get("learning_points"),
+        "chart_annotations": snap.get("chart_annotations"),
+        "opinion_source": snap.get("opinion_source"),
+        "dialogue": dialogue,
         "reply_text": reply_event["text"],
         "owner_comment": text,
+        "reply_kind": reply_kind,
         "influences_live": False,
         "observe_only": True,
         "created_at": reply_event["acted_at"],

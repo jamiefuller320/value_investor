@@ -1,10 +1,228 @@
 {
   "schema_version": 1,
-  "updated_at": null,
+  "updated_at": "2026-10-24T17:43:59.660539+00:00",
   "influences_live": false,
   "observe_only": true,
   "package": "M",
-  "events": [],
-  "actioned_review_ids": [],
-  "active_replies": []
+  "events": [
+    {
+      "event_id": "0d3166b8-1e3f-4f2e-af18-d045498ce257",
+      "review_id": "57103cfc312800a752a0",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "It seems to be trading towards the bottom of its full history range.  What were the reasons for selling as it looks like a rapid entry and exit toward the bottom of its cyclical range?",
+      "acted_at": "2026-10-24T17:43:31.758721+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:0b983fe35e32a4bd",
+      "snapshot": {
+        "review_id": "57103cfc312800a752a0",
+        "review_fingerprint": "57103cfc312800a752a0",
+        "tag": "new",
+        "book_id": "n206",
+        "book_tag": "N206",
+        "model_id": "n206",
+        "registration_id": "strand-d-plain-ey-identity-v0",
+        "ticker": "SHL.AX",
+        "entry_at": "2026-10-16T06:52:34+00:00",
+        "exit_at": "2026-10-23T06:52:47+00:00",
+        "opened_at": "2026-10-16T06:52:34+00:00",
+        "sold_at": "2026-10-23T06:52:47+00:00",
+        "hold_days": 7,
+        "exit_kind": "just_sold",
+        "return_pct": 1.37,
+        "basis_label": "fair_cost_episode",
+        "close_in": {
+          "days_before": 14,
+          "days_after": 14,
+          "start": "2026-10-02",
+          "end": "2026-11-06"
+        },
+        "wider_tf": {
+          "days_before": 180,
+          "days_after": 90,
+          "start": "2026-04-19",
+          "end": "2027-01-21"
+        },
+        "charts": {
+          "episode": {
+            "days_before": 14,
+            "days_after": 14,
+            "start": "2026-10-02",
+            "end": "2026-11-06"
+          },
+          "wider_tf": {
+            "days_before": 180,
+            "days_after": 90,
+            "start": "2026-04-19",
+            "end": "2027-01-21"
+          }
+        },
+        "avg_cost": null,
+        "exit_price": null,
+        "population": "sealed_lifecycle",
+        "influences_live": false,
+        "observe_only": true,
+        "package": "M",
+        "days_since_exit": 1,
+        "phase_clock": "exit_run_at",
+        "framing": "[N206] SHL.AX · 2026-10-23 · hold 7d · just_sold\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 1.37%\nContext read-only — not a new veto. influences_live=false",
+        "llm_opinion": "N206 closed SHL.AX after a 7-day hold (2026-10-16 → 2026-10-23, just_sold): near-flat / small gain (1.37% fair_cost_episode). Rapid entry→exit Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+          "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 7-day hold, near-flat / small gain (1.37% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "dialogue": [
+          {
+            "role": "factory",
+            "kind": "initial_opinion",
+            "text": "N206 closed SHL.AX after a 7-day hold (2026-10-16 → 2026-10-23, just_sold): near-flat / small gain (1.37% fair_cost_episode). Rapid entry→exit Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+              "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 7-day hold, near-flat / small gain (1.37% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "source": "deterministic_v0",
+            "at": "2026-10-24T17:43:51.249673+00:00",
+            "influences_live": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "a5149d6d-ff00-4e5a-a077-4b3c46363bfc",
+      "review_id": "reply:0b983fe35e32a4bd",
+      "parent_event_id": "0d3166b8-1e3f-4f2e-af18-d045498ce257",
+      "parent_review_id": "57103cfc312800a752a0",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Acknowledged owner Comment on [N206] SHL.AX (hold 7d, outcome 1.37%, just_sold).\nYou wrote: \"It seems to be trading towards the bottom of its full history range.  What were the reasons for selling as it looks like a rapid entry and exit toward the bottom of its cyclical range?\"\n\nDual-horizon read (observe / alignment only): On the **episode** window, this was a rapid entry→exit (2026-10-16 → 2026-10-23) with a near-flat / small gain on fair_cost_episode (+1.37%) — the trade path alone can look like churn without cyclical context. On the **wider TF** companion chart, that is the right surface to check your claim: whether SHL.AX was sitting toward the lower part of its longer cyclical / full-history band around entry and exit, and whether price moved materially after exit. I am not asserting exact range percentiles or filing facts here; if the wider chart matches what you describe, your missed-pattern note is exactly the kind of alignment this loop is for.\n\nOn **why it sold**: this post-sale card does not reopen sealed sell-trigger IDs or replay N206’s internal rule text — those stay in the book trail. What we can state from the episode metadata is closure as **just_sold** after a short hold, not a veto of your wider-range read. The useful question for Accept vs further Comment is whether exit timing looks premature **relative to** the cyclical location you see on the wider TF (bottom-of-range entry/exit vs room left in the cycle), not whether the episode P&amp;L alone justified the hold length.\n\nDevelopment-loop only — no knobs, fills, or live capital (influences_live=false; Package M — not Package L auto-tune).\nAccept if this reply matches what you see on both charts; Comment again if range location, post-exit climb, or churn still looks off.",
+      "acted_at": "2026-10-24T17:43:31.758739+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
+    }
+  ],
+  "actioned_review_ids": [
+    "57103cfc312800a752a0"
+  ],
+  "active_replies": [
+    {
+      "review_id": "reply:0b983fe35e32a4bd",
+      "parent_review_id": "57103cfc312800a752a0",
+      "parent_event_id": "0d3166b8-1e3f-4f2e-af18-d045498ce257",
+      "tag": "reply",
+      "book_id": "n206",
+      "book_tag": "N206",
+      "model_id": "n206",
+      "ticker": "SHL.AX",
+      "entry_at": "2026-10-16T06:52:34+00:00",
+      "exit_at": "2026-10-23T06:52:47+00:00",
+      "hold_days": 7,
+      "exit_kind": "just_sold",
+      "return_pct": 1.37,
+      "basis_label": "fair_cost_episode",
+      "framing": "[N206] SHL.AX · 2026-10-23 · hold 7d · just_sold\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 1.37%\nContext read-only — not a new veto. influences_live=false",
+      "charts": {
+        "episode": {
+          "days_before": 14,
+          "days_after": 14,
+          "start": "2026-10-02",
+          "end": "2026-11-06"
+        },
+        "wider_tf": {
+          "days_before": 180,
+          "days_after": 90,
+          "start": "2026-04-19",
+          "end": "2027-01-21"
+        }
+      },
+      "close_in": {
+        "days_before": 14,
+        "days_after": 14,
+        "start": "2026-10-02",
+        "end": "2026-11-06"
+      },
+      "wider_tf": {
+        "days_before": 180,
+        "days_after": 90,
+        "start": "2026-04-19",
+        "end": "2027-01-21"
+      },
+      "opened_at": "2026-10-16T06:52:34+00:00",
+      "sold_at": "2026-10-23T06:52:47+00:00",
+      "avg_cost": null,
+      "exit_price": null,
+      "llm_opinion": "N206 closed SHL.AX after a 7-day hold (2026-10-16 → 2026-10-23, just_sold): near-flat / small gain (1.37% fair_cost_episode). Rapid entry→exit Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+        "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+      ],
+      "chart_annotations": {
+        "episode": "Episode: 7-day hold, near-flat / small gain (1.37% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+      },
+      "opinion_source": "deterministic_v0",
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "N206 closed SHL.AX after a 7-day hold (2026-10-16 → 2026-10-23, just_sold): near-flat / small gain (1.37% fair_cost_episode). Rapid entry→exit Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+            "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+          ],
+          "chart_annotations": {
+            "episode": "Episode: 7-day hold, near-flat / small gain (1.37% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "source": "deterministic_v0",
+          "at": "2026-10-24T17:43:59.660449+00:00",
+          "influences_live": false
+        },
+        {
+          "role": "owner",
+          "kind": "comment",
+          "text": "It seems to be trading towards the bottom of its full history range.  What were the reasons for selling as it looks like a rapid entry and exit toward the bottom of its cyclical range?",
+          "at": "2026-10-24T17:43:31.758721+00:00",
+          "influences_live": false
+        },
+        {
+          "role": "factory",
+          "kind": "reply",
+          "text": "Acknowledged owner Comment on [N206] SHL.AX (hold 7d, outcome 1.37%, just_sold).\nYou wrote: \"It seems to be trading towards the bottom of its full history range.  What were the reasons for selling as it looks like a rapid entry and exit toward the bottom of its cyclical range?\"\n\nDual-horizon read (observe / alignment only): On the **episode** window, this was a rapid entry→exit (2026-10-16 → 2026-10-23) with a near-flat / small gain on fair_cost_episode (+1.37%) — the trade path alone can look like churn without cyclical context. On the **wider TF** companion chart, that is the right surface to check your claim: whether SHL.AX was sitting toward the lower part of its longer cyclical / full-history band around entry and exit, and whether price moved materially after exit. I am not asserting exact range percentiles or filing facts here; if the wider chart matches what you describe, your missed-pattern note is exactly the kind of alignment this loop is for.\n\nOn **why it sold**: this post-sale card does not reopen sealed sell-trigger IDs or replay N206’s internal rule text — those stay in the book trail. What we can state from the episode metadata is closure as **just_sold** after a short hold, not a veto of your wider-range read. The useful question for Accept vs further Comment is whether exit timing looks premature **relative to** the cyclical location you see on the wider TF (bottom-of-range entry/exit vs room left in the cycle), not whether the episode P&amp;L alone justified the hold length.\n\nDevelopment-loop only — no knobs, fills, or live capital (influences_live=false; Package M — not Package L auto-tune).\nAccept if this reply matches what you see on both charts; Comment again if range location, post-exit climb, or churn still looks off.",
+          "source": "llm",
+          "at": "2026-10-24T17:43:31.758739+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "Acknowledged owner Comment on [N206] SHL.AX (hold 7d, outcome 1.37%, just_sold).\nYou wrote: \"It seems to be trading towards the bottom of its full history range.  What were the reasons for selling as it looks like a rapid entry and exit toward the bottom of its cyclical range?\"\n\nDual-horizon read (observe / alignment only): On the **episode** window, this was a rapid entry→exit (2026-10-16 → 2026-10-23) with a near-flat / small gain on fair_cost_episode (+1.37%) — the trade path alone can look like churn without cyclical context. On the **wider TF** companion chart, that is the right surface to check your claim: whether SHL.AX was sitting toward the lower part of its longer cyclical / full-history band around entry and exit, and whether price moved materially after exit. I am not asserting exact range percentiles or filing facts here; if the wider chart matches what you describe, your missed-pattern note is exactly the kind of alignment this loop is for.\n\nOn **why it sold**: this post-sale card does not reopen sealed sell-trigger IDs or replay N206’s internal rule text — those stay in the book trail. What we can state from the episode metadata is closure as **just_sold** after a short hold, not a veto of your wider-range read. The useful question for Accept vs further Comment is whether exit timing looks premature **relative to** the cyclical location you see on the wider TF (bottom-of-range entry/exit vs room left in the cycle), not whether the episode P&amp;L alone justified the hold length.\n\nDevelopment-loop only — no knobs, fills, or live capital (influences_live=false; Package M — not Package L auto-tune).\nAccept if this reply matches what you see on both charts; Comment again if range location, post-exit climb, or churn still looks off.",
+      "owner_comment": "It seems to be trading towards the bottom of its full history range.  What were the reasons for selling as it looks like a rapid entry and exit toward the bottom of its cyclical range?",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-24T17:43:31.758739+00:00"
+    }
+  ]
 }
