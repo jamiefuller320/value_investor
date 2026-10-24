@@ -131,3 +131,47 @@ def test_sealed_lifecycle_subpage_collates_observe_diagnostics() -> None:
     assert "collates companion" in ops.lower() or "collate" in ops.lower()
     board = POSITION_LIFECYCLE.read_text(encoding="utf-8")
     assert "Collated header" in board or "companion" in board.lower()
+
+
+def test_post_sale_review_layout_scrolls_on_tablet() -> None:
+    """Post-sale data card must not clip on iPad; dual charts stack ≤1180px."""
+    css = STYLES.read_text(encoding="utf-8")
+    app = APP_JS.read_text(encoding="utf-8")
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    ops = Path("docs/ops/post-sale-review-queue.md").read_text(encoding="utf-8")
+
+    assert "function renderPostSaleReviews(" in app
+    assert "post-sale-review-section" in app
+    assert "psr-dual-charts" in app
+    assert "psr-card-detail" in app
+    assert "mountDualHorizonCharts" in app
+
+    # Do not inherit lifecycle-board overflow:hidden clip on this surface.
+    assert ".post-sale-review-section.lifecycle-board-section" in css
+    section_rule = css.split(".post-sale-review-section.lifecycle-board-section", 1)[1].split(
+        "}", 1
+    )[0]
+    assert "overflow: visible" in section_rule
+    assert "safe-area-inset" in section_rule
+
+    detail_rule = css.split(".psr-card-detail", 1)[1].split("}", 1)[0]
+    assert "overflow-x: auto" in detail_rule
+    assert "overflow-y: auto" in detail_rule
+    assert "-webkit-overflow-scrolling: touch" in detail_rule
+    assert "overscroll-behavior: contain" in detail_rule
+
+    chart_rule = css.split(".psr-chart", 1)[1].split("}", 1)[0]
+    assert "overflow-x: auto" in chart_rule
+    assert "-webkit-overflow-scrolling: touch" in chart_rule
+
+    dual = css.split(".psr-dual-charts {", 1)[1].split("}", 1)[0]
+    assert "minmax(0, 1fr)" in dual
+
+    assert "@media (max-width: 1180px)" in css
+    tablet = css.split("@media (max-width: 1180px)", 1)[1].split("}", 2)[0]
+    assert ".psr-dual-charts" in tablet
+    assert "minmax(0, 1fr)" in tablet
+
+    assert "viewport-fit=cover" in html
+    assert "styles.css?v=" in html
+    assert "Tablet / iPad layout" in ops or "iPad" in ops

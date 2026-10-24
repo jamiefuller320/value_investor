@@ -43,6 +43,12 @@ Every card carries:
 Dashboard Lifecycle → **Post-sale reviews** mounts both; sealed detail’s old
 `close_in`-only default is no longer the review surface.
 
+**Tablet / iPad layout:** below ~1180px the dual charts stack (full card
+width each). Expanded card detail and each chart mount scroll independently
+(`overflow` + `-webkit-overflow-scrolling: touch`) so Safari does not clip
+the right edge or fight whole-page pan. Charts keep their readable
+`min-width` — swipe inside the chart / card, not hover-only affordances.
+
 ## Accept / Comment / reply
 
 | Control | Meaning | Effect |

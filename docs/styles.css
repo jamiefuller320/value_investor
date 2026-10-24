@@ -2716,17 +2716,32 @@ tr.selected td {
   overflow: hidden;
 }
 
+/* Post-sale reviews: board section clips the 8-col board; this surface must
+   not inherit that clip — iPad Safari (~768–1180) otherwise loses the right
+   edge of dual-horizon charts (price-chart min-width 760px). */
+.post-sale-review-section.lifecycle-board-section {
+  overflow: visible;
+  max-width: 100%;
+  min-width: 0;
+  padding-left: max(1.1rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1.1rem, env(safe-area-inset-right, 0px));
+}
+
 .post-sale-review-section .psr-queue {
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
   margin-top: 0.75rem;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .psr-card {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .psr-card-head {
@@ -2735,6 +2750,8 @@ tr.selected td {
   align-items: baseline;
   gap: 0.45rem 0.75rem;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   text-align: left;
   padding: 0.65rem 0.75rem;
   border: 0;
@@ -2763,31 +2780,65 @@ tr.selected td {
   color: #6a5320;
 }
 
+.psr-book,
+.psr-ticker,
+.psr-pct {
+  overflow-wrap: anywhere;
+}
+
 .psr-pct {
   font-variant-numeric: tabular-nums;
   margin-left: auto;
 }
 
+/* Scroll the expanded data card (not the whole page) so Safari touch pans
+   stay contained; charts keep readable min-width inside .psr-chart. */
 .psr-card-detail {
   padding: 0 0.75rem 0.85rem;
   border-top: 1px solid var(--border);
+  min-width: 0;
+  max-width: 100%;
+  max-height: min(70vh, 70dvh);
+  overflow-x: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y;
 }
 
 .psr-framing {
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
   margin: 0.65rem 0;
   font-family: inherit;
 }
 
 .psr-dual-charts {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 0.75rem;
   margin: 0.75rem 0;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.psr-dual-charts > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .psr-dual-charts h4 {
   margin: 0 0 0.35rem;
+}
+
+.psr-chart {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
 }
 
 .psr-actions {
@@ -2795,16 +2846,23 @@ tr.selected td {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 0.75rem;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .psr-comment-label {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.35rem;
+  min-width: 0;
+  flex: 1 1 12rem;
 }
 
 .psr-comment-input {
-  min-width: 14rem;
+  min-width: 0;
+  width: min(14rem, 100%);
+  flex: 1 1 10rem;
   font: inherit;
   padding: 0.25rem 0.4rem;
 }
@@ -2814,11 +2872,14 @@ tr.selected td {
   padding: 0.5rem 0.65rem;
   background: color-mix(in srgb, var(--bg) 85%, #c4b48a);
   border-radius: var(--radius);
+  overflow-wrap: anywhere;
 }
 
-@media (max-width: 900px) {
+/* iPad portrait (~768–834) + landscape (~1024–1180): stack dual horizons so
+   each chart gets full card width; horizontal scroll stays on .psr-chart. */
+@media (max-width: 1180px) {
   .psr-dual-charts {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
