@@ -20,6 +20,10 @@ OVERLAY_ROOT_FILES = (
     # F1 observe-only agree/veto rollup (paper-auto writes it; must round-trip
     # or the committed file stays the 2026-10-01 bootstrap stub with tracks={}).
     "learning_tracks_llm_agree_veto.json",
+    # Dual-path sleeve lab rollup (same allowlist-hole class as F1): paper-auto
+    # writes learning_tracks_sleeve_episodes.json every weekday pass; without
+    # this entry the committed tree never accumulates sleeve marks.
+    "learning_tracks_sleeve_episodes.json",
 )
 
 OVERLAY_TRACK_FILES = (
@@ -35,6 +39,9 @@ OVERLAY_TRACK_FILES = (
     # FTSE store never accumulates and the rollup stays empty.
     "llm_agree_veto_shadow.json",
     "llm_agree_veto_shadow_review.json",
+    # Dual-path sleeve lab per-track store + review (docs/ops/dual-path-sleeve-lab.md).
+    "sleeve_episodes.json",
+    "sleeve_episodes_review.json",
 )
 
 TRACK_CORE_FILES = (
