@@ -206,7 +206,7 @@ def test_accept_clears_active_and_comment_spawns_reply(tmp_path: Path):
     assert "Missed climbing wider TF" in reply["reply_text"]
     assert reply["dialogue"][-1]["kind"] == "reply"
     assert reply["dialogue"][-2]["kind"] == "comment"
-    comment = {"ok": True, "event": comment_event}
+    assert comment_event.get("reply_review_id")
 
     after = build_post_sale_review_queue(
         data_dir=data_dir, sealed=_sealed_fixture(), board=_board_fixture()
