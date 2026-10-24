@@ -1411,7 +1411,31 @@ def ingest_research_sources(
                 resolve_filings_regime,
             )
 
-            if resolve_filings_regime(market, ticker) == "uk_rns":
+            regime = resolve_filings_regime(market, ticker)
+            # eng-20261024-01: run HKEX direct ingest before IR allowlist refetch so
+            # intensive library pins (6618.HK) land bodies before per-ticker deadline.
+            if regime == "asia_filings":
+                from value_investor.library_ingest_budget import deadline_reached
+                from value_investor.research.filings import ensure_hkex_direct_filings_ingested
+
+                if not deadline_reached(deadline_monotonic):
+                    hkex_ensure = ensure_hkex_direct_filings_ingested(
+                        sources_dir,
+                        ticker=ticker,
+                        company_name=company_name,
+                        market=market,
+                        deepen_history=deepen_history,
+                    )
+                    filings_meta["hkex_ensure"] = hkex_ensure
+                    ingest_payload = hkex_ensure.get("ingest") or {}
+                    if ingest_payload.get("filings_summary"):
+                        filings_meta["filings_summary"] = dict(ingest_payload["filings_summary"])
+                    if ingest_payload.get("filings_sources"):
+                        filings_meta["filings_sources"] = list(ingest_payload["filings_sources"])
+                    if ingest_payload.get("filings_index_path"):
+                        filings_meta["filings_index_path"] = ingest_payload["filings_index_path"]
+
+            if regime == "uk_rns":
                 summary = filings_meta.get("filings_summary") or {}
                 if int(summary.get("with_body") or 0) == 0 and int(summary.get("total") or 0) > 0:
                     ch_refetch = refetch_companies_house_filing_bodies(
@@ -1436,7 +1460,7 @@ def ingest_research_sources(
                                 pass
                         filings_meta["ch_body_refetch"] = ch_refetch
 
-            elif resolve_filings_regime(market, ticker) in {
+            elif regime in {
                 "euro_filings",
                 "tsx_announcements",
             }:
@@ -1496,7 +1520,6 @@ def ingest_research_sources(
 
             if fetch_filings_ir_allowlist(ticker):
                 summary = filings_meta.get("filings_summary") or {}
-                regime = resolve_filings_regime(market, ticker)
                 ir_refetch = dict(filings_meta.get("ir_refetch") or {})
                 if regime not in {"euro_filings", "tsx_announcements"} and not deadline_reached(
                     deadline_monotonic
@@ -1535,26 +1558,6 @@ def ingest_research_sources(
                     "lease_maturity_count": metrics.get("lease_maturity_count", 0),
                     "mandatory": metrics.get("mandatory", False),
                 }
-
-        from value_investor.library_ingest_budget import deadline_reached
-        from value_investor.research.filings import ensure_hkex_direct_filings_ingested
-
-        if not deadline_reached(deadline_monotonic):
-            hkex_ensure = ensure_hkex_direct_filings_ingested(
-                sources_dir,
-                ticker=ticker,
-                company_name=company_name,
-                market=market,
-                deepen_history=deepen_history,
-            )
-            filings_meta["hkex_ensure"] = hkex_ensure
-            ingest_payload = hkex_ensure.get("ingest") or {}
-            if ingest_payload.get("filings_summary"):
-                filings_meta["filings_summary"] = dict(ingest_payload["filings_summary"])
-            if ingest_payload.get("filings_sources"):
-                filings_meta["filings_sources"] = list(ingest_payload["filings_sources"])
-            if ingest_payload.get("filings_index_path"):
-                filings_meta["filings_index_path"] = ingest_payload["filings_index_path"]
 
         if deepen_history:
             from value_investor.research.gap_fill_sources import deepen_thin_filings_if_needed

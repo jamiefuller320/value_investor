@@ -1248,6 +1248,13 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     # hang_seng 1109.HK — opaque HKEX listconews slugs need issuer tokens for
     # _ir_body_title_tokens_match (same pattern as FMG.AX / J36.SI).
     "1109": ("China Resources Land", "China Resources Land Limited"),
+    # hang_seng 6618.HK — eng-20261024-01: igc-20260930-10 IR refetch 0/yield;
+    # listconews filenames lack title tokens; statutory PDFs cite JD Health / 6618.
+    "6618": (
+        "JD Health International",
+        "JD Health International Inc.",
+        "JD Health",
+    ),
 }
 
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"

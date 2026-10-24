@@ -8359,6 +8359,32 @@ def test_fetch_filings_ir_allowlist_6618_hk_interim_seeds_eng_20261007_01(tmp_pa
     assert all("hkexnews.hk" in row["url"] for row in rows)
 
 
+def test_ir_allowlist_6618_hk_hkex_pdfs_pass_title_gate_eng_20261024_01():
+    """eng-20261024-01: opaque HKEX slugs must bodied via IR refetch (title token aliases)."""
+    from value_investor.research.filings import (
+        _ESEF_ENTITY_SEARCH_ALIASES,
+        _fetch_ir_allowlist_body,
+    )
+
+    aliases = _ESEF_ENTITY_SEARCH_ALIASES.get("6618") or ()
+    assert any("JD Health" in alias for alias in aliases)
+
+    interim_url = "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0813/2026081300236.pdf"
+    row = {
+        "id": "ir_c61e4577256acf9f",
+        "url": interim_url,
+        "period": "interim",
+        "source": "ir_allowlist",
+        "headline": "IR allowlist document — 2026081300236.pdf",
+    }
+    body, source = _fetch_ir_allowlist_body(row, ticker="6618.HK")
+    if not body:
+        pytest.skip("HKEX PDF body fetch unavailable (network) — retry later")
+    assert source
+    assert len(body) >= 40000
+    assert "jd health" in body.lower()
+
+
 def test_filings_index_hkex_direct_gap_detects_6618_stale_discovery_index():
     """eng-20261007-01: listing-only merge without hkex_direct is a library gap."""
     from value_investor.research.filings import filings_index_hkex_direct_gap
