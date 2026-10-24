@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-24T09:18:40+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-23T17:13:11+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -62,6 +62,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20261010-01 | Unconstrained strategy chat after US holdout null: if P1/freeze-extras/FTSE-stage rules were ignored, candidate north star would be radical screen simplification to plain value (+ maybe 1-2 published factors), edge in portfolio construction/costs/patience rather than model count, AI as underwriting not ranking, no pivot to technical-as-engine. | strategy, hsr-v1, plain-value |
 | frag-20261014-01 | Daily hub: after owner locks attention redesign forks D1-D6 (store docs/daily-hub-attention-redesign.md), ship deterministic status_report + Push 1-3 ranker in daily_focus.json. Drop ritual Focus Accept; bare health_warn email-only. Promote to ftse-defer add only after PR #1082 merges so beachhead can keep L606. | daily-hub, attention, ops-monitor |
 | frag-20261014-02 | Daily hub two-lane: Push fail-closed P1/P2 cited ≤3; Explore labeled not-today with claim+why+falsify, may sit outside North Star/AGENTS, durable→ftse-defer. Forks D1–D7 in store docs/daily-hub-attention-redesign.md. Promote after #1082 (keep L606 for beachhead). | daily-hub, attention, explore, ops-monitor |
+| frag-20261024-01 | Package L not_now: LLM episode debriefs / autopsy auto-tune / Accept→capital. Distinct and ALLOWED later under L623: LLM *reply* text to owner Comments as development-loop response (observe/alignment only). Promote full not_now idea after #1169 clears N-series. Store post-sale-review-dashboard-2026-10-24.md. | package-L, not-now, post-sale, pending-defer |
 
 ---
 
