@@ -1,9 +1,13 @@
 """Daily hub attention: status report, Push ranker, Explore lane (locked D1–D7).
 
 Deterministic extractors — no LLM. Push fails closed when nothing high-signal;
-Explore is labeled not-today with a quality bar. Optional Push source
-``post_sell_cue_digest.json`` is consumed when present (sibling package M);
-this module does not generate that digest.
+Explore is labeled not-today with a quality bar. Package M digest
+``post_sell_cue_digest.json`` is consumed via ``hub_feed`` only (L620):
+Status uses cue counts / sunday nest summary; Explore ≤2 from
+``hub_feed.explore_candidates``; Push only from ``hub_feed.push_candidates``
+(empty unless a cue maps to a live human gate). Fail closed if ``hub_feed``
+is missing — never invent ``items`` / ``headline`` / twin stubs. This module
+does not generate that digest.
 """
 
 from __future__ import annotations
@@ -84,7 +88,7 @@ _SATURATED_TRACK_RE = re.compile(r"(?:^|;\s*)([A-Za-z][A-Za-z0-9_]*):\s")
 # Ritual market-warn flag ids excluded from hub (D2) — stay ops-email / status.
 RITUAL_MARKET_WARN_FLAG_IDS = frozenset({"health_warn", "health_warn_rollup"})
 
-# Sibling package M may publish this; Push consumes when present.
+# Sibling package M may publish this; Status/Push/Explore consume hub_feed only.
 POST_SELL_CUE_DIGEST_FILENAME = "post_sell_cue_digest.json"
 
 
@@ -101,6 +105,123 @@ def _safe_read(path: Path) -> dict[str, Any] | None:
 def _stable_id(*parts: str) -> str:
     raw = "|".join(str(p or "").strip() for p in parts)
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:12]
+
+
+def _list_of_dicts(value: Any) -> list[dict[str, Any]]:
+    if not isinstance(value, list):
+        return []
+    return [row for row in value if isinstance(row, dict)]
+
+
+def digest_hub_feed(digest: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Return package-M ``hub_feed`` when present; else None (fail closed).
+
+    Does not invent candidates from legacy ``items`` / ``headline`` keys.
+    """
+    if not isinstance(digest, dict):
+        return None
+    hub = digest.get("hub_feed")
+    if not isinstance(hub, dict):
+        return None
+    return hub
+
+
+def post_sell_digest_status_row(digest: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Status strip fields from real digest cues + optional hub_feed counts."""
+    if not isinstance(digest, dict):
+        return None
+    timing_n = len(_list_of_dicts(digest.get("timing_cues")))
+    selection_n = len(_list_of_dicts(digest.get("selection_cues")))
+    nest = digest.get("sunday_nest") if isinstance(digest.get("sunday_nest"), dict) else {}
+    hub = digest_hub_feed(digest)
+    explore_n = len(_list_of_dicts(hub.get("explore_candidates"))) if hub else None
+    push_n = len(_list_of_dicts(hub.get("push_candidates"))) if hub else None
+    headline = str(nest.get("summary") or "").strip()
+    if not headline and (timing_n or selection_n):
+        headline = f"{timing_n} timing + {selection_n} selection cues"
+    if not headline and hub is not None:
+        headline = (
+            f"hub_feed explore={explore_n or 0} push={push_n or 0} (no timing/selection cue lists)"
+        )
+    if not headline:
+        # Digest file present but no usable Package M fields — fail closed copy.
+        headline = "present (hub_feed missing; no cue counts)"
+    return {
+        "present": True,
+        "generated_at": digest.get("generated_at") or digest.get("updated_at"),
+        "item_count": timing_n + selection_n,
+        "timing_cue_count": timing_n,
+        "selection_cue_count": selection_n,
+        "hub_feed_present": hub is not None,
+        "explore_candidate_count": explore_n,
+        "push_candidate_count": push_n,
+        "headline": headline,
+    }
+
+
+def _push_cards_from_hub_feed(
+    hub: dict[str, Any],
+    *,
+    closed_ids: set[str],
+    generated_at: str = "",
+) -> list[dict[str, Any]]:
+    """Map ``hub_feed.push_candidates`` → Push cards; empty list if none."""
+    out: list[dict[str, Any]] = []
+    for cand in _list_of_dicts(hub.get("push_candidates")):
+        claim = str(cand.get("claim") or cand.get("title") or "").strip()
+        why = str(
+            cand.get("why_matters") or cand.get("why_now") or cand.get("summary") or ""
+        ).strip()
+        if not claim:
+            continue
+        raw_id = str(cand.get("id") or "").strip()
+        dig_id = raw_id or f"push:post_sell:{_stable_id(claim, generated_at or 'v0')}"
+        if not dig_id.startswith("push:"):
+            dig_id = f"push:{dig_id}"
+        if dig_id in closed_ids or f"push:{dig_id}" in closed_ids:
+            continue
+        out.append(
+            {
+                "id": dig_id,
+                "lane": "push",
+                "priority": 0,
+                "title": claim,
+                "why_now": why or claim,
+                "cite": {
+                    "kind": "artifact",
+                    "ref": POST_SELL_CUE_DIGEST_FILENAME,
+                    "field": "hub_feed.push_candidates",
+                    "cue_id": raw_id or None,
+                },
+                "checklist_task_id": str(cand.get("checklist_task_id") or ""),
+                "href": str(cand.get("href") or "#automation/daily"),
+                "leverage": str(
+                    cand.get("leverage")
+                    or "Package M hub_feed push candidate — live human gate only"
+                ),
+                "source": "post_sell_cue_digest.hub_feed",
+            }
+        )
+    return out
+
+
+def _explore_cards_from_hub_feed(
+    hub: dict[str, Any],
+    *,
+    closed_ids: set[str],
+    cap: int,
+) -> list[dict[str, Any]]:
+    """Map ``hub_feed.explore_candidates`` through the Explore quality bar."""
+    cards: list[dict[str, Any]] = []
+    for cand in _list_of_dicts(hub.get("explore_candidates")):
+        card = _normalize_explore_card(cand)
+        if card is None or card["id"] in closed_ids:
+            continue
+        card["source"] = str(cand.get("source") or "post_sell_cue_digest")
+        cards.append(card)
+        if len(cards) >= cap:
+            break
+    return cards
 
 
 def _eng_tasks(eng: dict[str, Any] | None) -> list[dict[str, Any]]:
@@ -449,18 +570,7 @@ def build_daily_status_report(
     if focus_relevant is None:
         focus_relevant = bool(eval_rel.get("relevant")) if eval_rel else None
 
-    digest_row: dict[str, Any] | None = None
-    if digest:
-        digest_row = {
-            "present": True,
-            "generated_at": digest.get("generated_at") or digest.get("updated_at"),
-            "item_count": (
-                len(digest.get("items") or [])
-                if isinstance(digest.get("items"), list)
-                else digest.get("count")
-            ),
-            "headline": digest.get("headline") or digest.get("summary") or "",
-        }
+    digest_row = post_sell_digest_status_row(digest)
 
     rows = _status_rows(
         ops_overall=ops.get("overall"),
@@ -616,31 +726,16 @@ def build_daily_push_suggestions(
     later_suggestions: list[dict[str, Any]] = []
     non_actionable_observes: list[dict[str, str]] = []
 
-    # Priority 0 (when present): sibling post-sell cue digest — do not invent it.
-    if digest:
-        dig_id = f"push:post_sell_cue_digest:{_stable_id(str(digest.get('generated_at') or 'v0'))}"
-        if dig_id not in closed_ids and f"push:{dig_id}" not in closed_ids:
-            items = digest.get("items") if isinstance(digest.get("items"), list) else []
-            headline = str(digest.get("headline") or digest.get("summary") or "").strip()
-            if headline or items:
-                suggestions.append(
-                    {
-                        "id": dig_id,
-                        "lane": "push",
-                        "priority": 0,
-                        "title": "Review post-sell cue digest",
-                        "why_now": headline
-                        or f"Committed {POST_SELL_CUE_DIGEST_FILENAME} has {len(items)} item(s)",
-                        "cite": {
-                            "kind": "artifact",
-                            "ref": POST_SELL_CUE_DIGEST_FILENAME,
-                            "field": "headline" if headline else "items",
-                        },
-                        "checklist_task_id": "",
-                        "href": "#automation/daily",
-                        "leverage": "Consume sibling package-M digest — do not invent cues here",
-                    }
-                )
+    # Priority 0: Package M hub_feed.push_candidates only (fail closed if absent/empty).
+    hub = digest_hub_feed(digest)
+    if hub:
+        suggestions.extend(
+            _push_cards_from_hub_feed(
+                hub,
+                closed_ids=closed_ids,
+                generated_at=str((digest or {}).get("generated_at") or ""),
+            )
+        )
 
     for title, checklist_id, push_title, href in _PUSH_FINDING_MAP:
         finding = by_title.get(title)
@@ -827,7 +922,12 @@ def build_daily_explore_suggestions(
     closed_ids: set[str] | None = None,
     cap: int = EXPLORE_CAP,
 ) -> dict[str, Any]:
-    """D7 A: daily ≤2 Explore cards — labeled not-today; quality bar required."""
+    """D7 A: daily ≤2 Explore cards — labeled not-today; quality bar required.
+
+    Preference: seed ``explore_lines`` (editorial) → Package M
+    ``hub_feed.explore_candidates`` → non-post-sell editorial defaults.
+    Never invent post-sell twin stubs when ``hub_feed`` is missing.
+    """
     data_dir = Path(data_dir or DEFAULT_DATA_DIR)
     closed_ids = closed_ids or set()
     seed = _safe_read(Path(seed_path or data_dir / "project_daily_seed.json")) or {}
@@ -844,7 +944,21 @@ def build_daily_explore_suggestions(
         cards.append(card)
         if len(cards) >= cap:
             break
-    # Editorial defaults when seed empty — still quality-barred, not spray.
+    hub_feed_used = False
+    if len(cards) < cap:
+        digest = _safe_read(data_dir / POST_SELL_CUE_DIGEST_FILENAME)
+        hub = digest_hub_feed(digest)
+        if hub:
+            hub_feed_used = True
+            for card in _explore_cards_from_hub_feed(
+                hub, closed_ids=closed_ids, cap=cap - len(cards)
+            ):
+                if any(existing["id"] == card["id"] for existing in cards):
+                    continue
+                cards.append(card)
+                if len(cards) >= cap:
+                    break
+    # Non-post-sell editorial defaults only when seed + hub_feed both empty.
     if not cards:
         for row in _default_explore_cards():
             card = _normalize_explore_card(row)
@@ -861,6 +975,7 @@ def build_daily_explore_suggestions(
         "may_sit_outside_north_star": True,
         "must_not_displace_push": True,
         "quality_bar": ["claim", "why_matters", "falsify_or_promote"],
+        "hub_feed_used": hub_feed_used,
         "suggestions": cards[:cap],
     }
 
@@ -889,20 +1004,12 @@ def _normalize_explore_card(row: dict[str, Any]) -> dict[str, Any] | None:
 
 
 def _default_explore_cards() -> list[dict[str, Any]]:
-    """Seed-independent Explore defaults (≤2). Spec-challenging OK when labeled."""
+    """Seed/hub_feed-independent Explore defaults (≤2).
+
+    Post-sell cues come from Package M ``hub_feed.explore_candidates`` (L620) —
+    do not hardcode a twin stub here (anachronistic still_in_buy_set copy).
+    """
     return [
-        {
-            "id": "explore:post-sell-cue-twin",
-            "claim": "Post-sell cue twin: track still_in_buy_set + filing delta after exit",
-            "why_matters": (
-                "Separates timing vs thesis-break without a second live path; "
-                "sibling package M may publish post_sell_cue_digest for Push"
-            ),
-            "falsify_or_promote": (
-                "Thick closed exits; promote only if alone scoreboard beats "
-                "hold-buffer twin readiness gate"
-            ),
-        },
         {
             "id": "explore:memo-change-my-mind-cites",
             "claim": "LLM extract of “what would change my mind” from memo → cite card",
@@ -1133,6 +1240,7 @@ __all__ = [
     "build_daily_explore_suggestions",
     "build_daily_push_suggestions",
     "build_daily_status_report",
+    "digest_hub_feed",
     "eng_row_is_done",
     "hub_task_drop_reason",
     "later_crown_gap_card",
@@ -1142,5 +1250,6 @@ __all__ = [
     "filter_actionable_market_warn_tasks",
     "orphaned_pr_open_still_actionable",
     "parked_eng_still_actionable",
+    "post_sell_digest_status_row",
     "push_finding_still_actionable",
 ]
