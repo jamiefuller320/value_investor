@@ -6,11 +6,14 @@ Observe-only — `influences_live=false`. Not Package **L** auto-tune.
 
 ## Owner job
 
-1. Check that reviews of **relevant charts** are happening (episode + wider TF).
+1. Check that reviews of **relevant charts** are happening (episode + wider TF),
+   annotated with factory **opinion** + **learning points** on first open.
 2. **Comment** on patterns that might have been missed — do **not** force knobs.
-3. Comments are **considered and responded to** (durable note → factory reply
-   stub / optional LLM reply text later) — not silent ignore, not auto-apply.
-4. **Accept** = framing matches what I see. Accept/Comment also apply to
+3. Comments are **considered and responded to** (durable note → factory reply —
+   LLM when enabled, else contextual deterministic) — not silent ignore, not
+   auto-apply. Mini dialogue: initial opinion → Comment → reply → (further
+   Comment rounds on reply cards).
+4. **Accept** = framing / reply matches what I see. Accept/Comment also apply to
    **reply** tags.
 
 ## Stores
@@ -57,9 +60,13 @@ the right edge or fight whole-page pan. Charts keep their readable
 | **Comment** | Missed pattern | Label + leave queue + **spawn reply stub** |
 | **reply** tag | Factory response | Re-enters queue for owner Accept/Comment |
 
-Factory reply v0 is a **deterministic ack stub**. Optional LLM prose may replace
-the stub text later — still observe/alignment only, never Package L episode
-debrief auto-tune.
+**Initial opinion** on every card is structured deterministic v0 (`opinion_source=
+deterministic_v0`) with learning points + per-chart captions. Batch LLM upgrade
+of initial opinions is deferred.
+
+**Factory reply** on Comment: opt-in LLM via `FTSE_POST_SALE_LLM_REPLY=1` on the
+ack workflow (fail-closed to contextual deterministic). Still observe/alignment
+only — never Package L episode-debrief auto-tune.
 
 ## Dashboard bridge
 

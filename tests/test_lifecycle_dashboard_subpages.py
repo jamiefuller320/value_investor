@@ -141,10 +141,15 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     ops = Path("docs/ops/post-sale-review-queue.md").read_text(encoding="utf-8")
 
     assert "function renderPostSaleReviews(" in app
+    assert "function renderPostSaleDialogue(" in app
     assert "post-sale-review-section" in app
     assert "psr-dual-charts" in app
     assert "psr-card-detail" in app
+    assert "psr-dialogue" in app
+    assert "psr-learning-points" in app
+    assert "chart_annotations" in app
     assert "mountDualHorizonCharts" in app
+    assert "Durable history" in app
 
     # Do not inherit lifecycle-board overflow:hidden clip on this surface.
     assert ".post-sale-review-section.lifecycle-board-section" in css

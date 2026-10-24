@@ -11738,6 +11738,67 @@ function sortPostSaleReviewItems(items, sortBy) {
   return rows;
 }
 
+function renderPostSaleLearningPoints(points) {
+  const rows = Array.isArray(points) ? points.filter(Boolean) : [];
+  if (!rows.length) return "";
+  return `<ul class="psr-learning-points small">${rows
+    .map((p) => `<li>${esc(String(p))}</li>`)
+    .join("")}</ul>`;
+}
+
+function renderPostSaleDialogue(item) {
+  const turns = Array.isArray(item.dialogue) ? item.dialogue : [];
+  if (!turns.length && !(item.owner_comment || item.reply_text || item.llm_opinion)) {
+    return "";
+  }
+  const blocks = [];
+  if (turns.length) {
+    for (const turn of turns) {
+      if (!turn || typeof turn !== "object") continue;
+      const kind = String(turn.kind || turn.role || "note");
+      const label =
+        kind === "initial_opinion"
+          ? "Factory opinion"
+          : kind === "comment"
+            ? "Owner comment"
+            : kind === "reply"
+              ? "Factory reply"
+              : kind;
+      const source = turn.source ? ` · ${esc(String(turn.source))}` : "";
+      const points =
+        kind === "initial_opinion" ? renderPostSaleLearningPoints(turn.learning_points) : "";
+      blocks.push(`<div class="psr-dialogue-turn psr-dialogue-${esc(kind)}">
+        <p class="small"><strong>${esc(label)}</strong><span class="muted">${source}</span></p>
+        <p class="small psr-dialogue-text">${esc(turn.text || "—")}</p>
+        ${points}
+      </div>`);
+    }
+  } else {
+    if (item.llm_opinion) {
+      blocks.push(`<div class="psr-dialogue-turn psr-dialogue-initial_opinion">
+        <p class="small"><strong>Factory opinion</strong><span class="muted"> · ${esc(
+          item.opinion_source || "deterministic_v0"
+        )}</span></p>
+        <p class="small psr-dialogue-text">${esc(item.llm_opinion)}</p>
+        ${renderPostSaleLearningPoints(item.learning_points)}
+      </div>`);
+    }
+    if (item.owner_comment) {
+      blocks.push(`<div class="psr-dialogue-turn psr-dialogue-comment">
+        <p class="small"><strong>Owner comment</strong></p>
+        <p class="small psr-dialogue-text">${esc(item.owner_comment)}</p>
+      </div>`);
+    }
+    if (item.reply_text) {
+      blocks.push(`<div class="psr-dialogue-turn psr-dialogue-reply">
+        <p class="small"><strong>Factory reply</strong></p>
+        <p class="small psr-dialogue-text">${esc(item.reply_text)}</p>
+      </div>`);
+    }
+  }
+  return `<div class="psr-dialogue" aria-label="Post-sale review dialogue">${blocks.join("")}</div>`;
+}
+
 function renderPostSaleReviewCard(item, expanded) {
   const tag = String(item.tag || "new");
   const tagCls = tag === "reply" ? "psr-tag-reply" : "psr-tag-new";
@@ -11746,15 +11807,13 @@ function renderPostSaleReviewCard(item, expanded) {
   const exitDay = String(item.exit_at || "").slice(0, 10) || "—";
   const hold =
     item.hold_days != null && item.hold_days !== "" ? `${item.hold_days}d hold` : "";
-  const replyBlock =
-    tag === "reply"
-      ? `<div class="psr-reply-block">
-          <p class="small"><strong>Owner comment</strong></p>
-          <p class="small">${esc(item.owner_comment || "—")}</p>
-          <p class="small"><strong>Factory reply</strong></p>
-          <p class="small">${esc(item.reply_text || "—")}</p>
-        </div>`
-      : "";
+  const annotations = item.chart_annotations || {};
+  const episodeNote = annotations.episode
+    ? `<p class="small muted psr-chart-annotation">${esc(annotations.episode)}</p>`
+    : "";
+  const widerNote = annotations.wider_tf
+    ? `<p class="small muted psr-chart-annotation">${esc(annotations.wider_tf)}</p>`
+    : "";
   const framing = String(item.framing || "")
     .split("\n")
     .map((line) => `<div>${esc(line)}</div>`)
@@ -11762,17 +11821,19 @@ function renderPostSaleReviewCard(item, expanded) {
   const detail = expanded
     ? `<div class="psr-card-detail">
         <pre class="psr-framing small">${framing}</pre>
-        ${replyBlock}
-        <p class="small muted">Episode window + wider TF — owner verifies both. influences_live=false.</p>
+        ${renderPostSaleDialogue(item)}
+        <p class="small muted">Episode window + wider TF — owner verifies both. Mini dialogue: opinion → Comment → reply. influences_live=false.</p>
         <div class="psr-dual-charts">
           <div>
             <h4 class="small">Episode</h4>
+            ${episodeNote}
             <div class="psr-chart" data-psr-chart="episode" data-psr-id="${esc(
               item.review_id
             )}"></div>
           </div>
           <div>
             <h4 class="small">Wider TF</h4>
+            ${widerNote}
             <div class="psr-chart" data-psr-chart="wider" data-psr-id="${esc(
               item.review_id
             )}"></div>
@@ -11842,6 +11903,35 @@ function renderPostSaleReviews(data) {
   const byBook = Object.entries(queue.by_book || {})
     .map(([k, v]) => `${esc(k)} ${v}`)
     .join(" · ");
+  const labels = data.post_sale_review_labels || {};
+  const historyEvents = Array.isArray(labels.events) ? labels.events.slice() : [];
+  historyEvents.reverse();
+  const historyRows = historyEvents.slice(0, 40);
+  const historyHtml = historyRows.length
+    ? `<div class="psr-history">
+        <h4 class="small">Durable history (cleared from active)</h4>
+        <ul class="psr-history-list small">
+          ${historyRows
+            .map((ev) => {
+              const kind = String(ev.kind || "?");
+              const snap = ev.snapshot || {};
+              const ticker = snap.ticker || "";
+              const book = snap.book_tag || snap.book_id || "";
+              const when = String(ev.acted_at || "").replace("T", " ").slice(0, 19);
+              const text = String(ev.text || "").trim();
+              const textBit = text
+                ? ` — ${esc(text.length > 160 ? `${text.slice(0, 157)}…` : text)}`
+                : "";
+              return `<li><span class="psr-tag psr-tag-${esc(
+                kind === "reply" ? "reply" : "new"
+              )}">${esc(kind)}</span> ${esc(book)} <strong>${esc(
+                ticker || ev.review_id || "?"
+              )}</strong> <span class="muted">${esc(when)}</span>${textBit}</li>`;
+            })
+            .join("")}
+        </ul>
+      </div>`
+    : `<p class="small muted">No Accept/Comment history yet.</p>`;
   return `${renderLifecycleSubnav()}
     <section class="card lifecycle-board-section post-sale-review-section">
       <div class="market-status-header">
@@ -11869,8 +11959,9 @@ function renderPostSaleReviews(data) {
         ${byBook ? `· ${byBook}` : ""}
       </p>
       <p class="small muted">${esc(queue.attention_note || "")}</p>
-      <p class="small muted">Package M · influences_live=false · no Package L auto-tune</p>
+      <p class="small muted">Package M · influences_live=false · no Package L auto-tune · charts annotated with factory opinion + learning points</p>
       <div class="psr-queue" id="psr-queue">${cards}</div>
+      ${historyHtml}
     </section>`;
 }
 

@@ -14,9 +14,13 @@ from value_investor.post_sale_review import (
 )
 from value_investor.post_sale_review_actions import run_post_sale_review_action
 from value_investor.post_sale_review_labels import (
-    REPLY_STUB_TEXT,
     comments_awaiting_reply,
     load_post_sale_review_labels,
+)
+from value_investor.post_sale_review_opinion import (
+    OPINION_SOURCE_DETERMINISTIC,
+    build_initial_opinion,
+    generate_factory_reply,
 )
 
 
@@ -148,6 +152,12 @@ def test_build_queue_covers_sealed_and_control(tmp_path: Path):
     assert sample["charts"]["episode"]
     assert sample["charts"]["wider_tf"]
     assert "Outcome" in sample["framing"]
+    assert sample["llm_opinion"]
+    assert isinstance(sample["learning_points"], list) and sample["learning_points"]
+    assert sample["chart_annotations"]["episode"]
+    assert sample["chart_annotations"]["wider_tf"]
+    assert sample["dialogue"][0]["kind"] == "initial_opinion"
+    assert sample["influences_live"] is False
 
 
 def test_accept_clears_active_and_comment_spawns_reply(tmp_path: Path):
@@ -177,19 +187,26 @@ def test_accept_clears_active_and_comment_spawns_reply(tmp_path: Path):
     assert all(row["review_id"] != rid for row in refreshed["active"])
 
     control = next(row for row in refreshed["active"] if row["ticker"] == "BBB.L")
-    comment = run_post_sale_review_action(
+    # Force deterministic contextual reply (no live LLM in unit tests).
+    from value_investor.post_sale_review_labels import record_comment
+
+    comment_event = record_comment(
         data_dir,
         review_id=control["review_id"],
-        decision="comment",
         text="Missed climbing wider TF",
         tag_at_action="new",
         source="test",
+        acted_by="test",
         snapshot=control,
+        allow_llm_reply=False,
     )
-    assert comment["ok"] is True
-    reply = comment["event"]["reply"]
+    reply = comment_event["reply"]
     assert reply["tag"] == "reply"
-    assert REPLY_STUB_TEXT.split(".")[0] in reply["reply_text"]
+    assert "Acknowledged owner Comment" in reply["reply_text"]
+    assert "Missed climbing wider TF" in reply["reply_text"]
+    assert reply["dialogue"][-1]["kind"] == "reply"
+    assert reply["dialogue"][-2]["kind"] == "comment"
+    comment = {"ok": True, "event": comment_event}
 
     after = build_post_sale_review_queue(
         data_dir=data_dir, sealed=_sealed_fixture(), board=_board_fixture()
@@ -198,6 +215,8 @@ def test_accept_clears_active_and_comment_spawns_reply(tmp_path: Path):
     reply_rows = [row for row in after["active"] if row["tag"] == "reply"]
     assert len(reply_rows) == 1
     assert reply_rows[0]["owner_comment"] == "Missed climbing wider TF"
+    assert reply_rows[0]["llm_opinion"]
+    assert len(reply_rows[0]["dialogue"]) >= 3
 
     # Accept the reply → clears again
     run_post_sale_review_action(
@@ -235,3 +254,45 @@ def test_ops_findings_and_refresh(tmp_path: Path):
     titles = {row["title"] for row in findings}
     assert "Post-sale review queue (observe)" in titles
     assert all(row["auto_fixable"] is False for row in findings)
+    assert payload.get("dialogue", {}).get("influences_live") is False
+
+
+def test_initial_opinion_and_llm_reply_fallback():
+    item = {
+        "book_tag": "N206",
+        "ticker": "SHL.AX",
+        "hold_days": 7,
+        "return_pct": 1.37,
+        "exit_kind": "just_sold",
+        "basis_label": "fair_cost_episode",
+        "entry_at": "2026-10-16T06:52:34+00:00",
+        "exit_at": "2026-10-23T06:52:47+00:00",
+    }
+    opinion = build_initial_opinion(item)
+    assert opinion["opinion_source"] == OPINION_SOURCE_DETERMINISTIC
+    assert opinion["influences_live"] is False
+    assert "SHL.AX" in opinion["llm_opinion"]
+    assert opinion["learning_points"]
+
+    def boom(_prompt: str) -> str:
+        raise RuntimeError("no llm in unit test")
+
+    reply = generate_factory_reply(
+        owner_comment="Looks like bottom of range",
+        item=item,
+        llm_complete=boom,
+        allow_llm=True,
+    )
+    assert reply["llm_attempted"] is True
+    assert reply["llm_ok"] is False
+    assert reply["influences_live"] is False
+    assert "bottom of range" in reply["text"]
+
+    ok_reply = generate_factory_reply(
+        owner_comment="Missed climb",
+        item=item,
+        llm_complete=lambda _p: '{"reply": "Noted the climb on wider TF. influences_live=false."}',
+        allow_llm=True,
+    )
+    assert ok_reply["reply_kind"] == "llm"
+    assert "Noted the climb" in ok_reply["text"]
