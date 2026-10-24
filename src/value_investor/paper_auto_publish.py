@@ -1,8 +1,8 @@
 """Copy paper-auto artifacts between the CI output tree and committed dashboard data.
 
 The workflow allowlist historically omitted observe-only overlay stores
-(entry DCA, exit-timing, hypothesis). Those files must persist or weekday
-marks reset every run and evidence never accumulates.
+(entry DCA, exit-timing, hypothesis, LLM agree/veto shadow). Those files
+must persist or weekday marks reset every run and evidence never accumulates.
 """
 
 from __future__ import annotations
@@ -17,6 +17,9 @@ OVERLAY_ROOT_FILES = (
     "learning_tracks_exit_timing.json",
     "learning_tracks_hypothesis_integrity.json",
     "learning_tracks_hypothesis_outcomes.json",
+    # F1 observe-only agree/veto rollup (paper-auto writes it; must round-trip
+    # or the committed file stays the 2026-10-01 bootstrap stub with tracks={}).
+    "learning_tracks_llm_agree_veto.json",
 )
 
 OVERLAY_TRACK_FILES = (
@@ -27,6 +30,11 @@ OVERLAY_TRACK_FILES = (
     "hypothesis_integrity.json",
     "hypothesis_outcome_link.json",
     "hypothesis_outcome_link_review.json",
+    # F1 per-track append-only store + latest-pass review. Trails also land on
+    # rebalance_log / last_run (TRACK_CORE), but without these the dedicated
+    # FTSE store never accumulates and the rollup stays empty.
+    "llm_agree_veto_shadow.json",
+    "llm_agree_veto_shadow_review.json",
 )
 
 TRACK_CORE_FILES = (

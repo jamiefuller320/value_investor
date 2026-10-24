@@ -948,6 +948,9 @@ def check_paper_learning_tracks(
             )
 
     # Observe-only: algo→agree/veto shadow rollup should exist once core tracks act.
+    # Also warn when the committed file is still an empty/bootstrap stub — the
+    # historic paper-auto publish allowlist omitted F1 overlays, so a present
+    # stub silenced the missing-file check while FTSE reviews never rolled up.
     core_acted = any(
         isinstance(summary_tracks.get(tid), dict) and summary_tracks[tid].get("acted")
         for tid in core_track_ids
@@ -967,6 +970,29 @@ def check_paper_learning_tracks(
                 auto_fixable=False,
             )
         )
+    elif core_acted and agree_veto_rollup.exists():
+        rollup_payload = _paper_json_payload(agree_veto_rollup)
+        tracks_payload = rollup_payload.get("tracks") if isinstance(rollup_payload, dict) else None
+        note = str(rollup_payload.get("note") or "") if isinstance(rollup_payload, dict) else ""
+        empty_tracks = not isinstance(tracks_payload, dict) or not tracks_payload
+        bootstrap_stub = "bootstrap stub" in note.lower()
+        if empty_tracks or bootstrap_stub:
+            findings.append(
+                OpsFinding(
+                    severity="warn",
+                    category="paper",
+                    title="LLM agree/veto shadow rollup empty",
+                    summary=(
+                        f"{agree_veto_rollup.as_posix()} present after core tracks acted "
+                        "but tracks are empty (or still the bootstrap stub) — publish "
+                        "per-track llm_agree_veto_shadow_review.json via "
+                        "paper_auto_publish overlays so the FTSE rollup refreshes. "
+                        "Observe-only; never blocks fills. See "
+                        "docs/ops/llm-agree-veto-shadow.md."
+                    ),
+                    auto_fixable=False,
+                )
+            )
 
     return findings
 

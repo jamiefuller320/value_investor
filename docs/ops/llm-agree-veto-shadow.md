@@ -77,11 +77,15 @@ Until then: observe marks only; algo twin owns any capital-path churn experiment
 | Requirement | How |
 |-------------|-----|
 | Scheduled trigger | Weekday `ftse-paper-auto` (same pass as exit_shadow / sleeve_episodes) |
-| Persisted finding | Ops-monitor observe warn when rollup missing after core tracks acted |
+| Persist to dashboard data | `paper_auto_publish.publish_overlay_artifacts` must copy the rollup + per-track store/review (same allowlist lane as entry-DCA / exit-timing). Without that, FTSE keeps cards on `rebalance_log` / `last_run` only and the committed rollup stays the empty bootstrap stub. |
+| Persisted finding | Ops-monitor observe warn when rollup missing **or** empty/bootstrap after core tracks acted |
 | Runbook | This doc + [`ops-monitor.md`](ops-monitor.md) |
 | CLI | Optional — cards are on the rebalance trail; no sole-path CLI required |
 
-Finding title: **LLM agree/veto shadow rollup missing** (`auto_fixable=False`).
+Finding titles (`auto_fixable=False`):
+
+- **LLM agree/veto shadow rollup missing**
+- **LLM agree/veto shadow rollup empty** (present stub / `tracks: {}`)
 
 ## Sunday AI path scoreboard
 
