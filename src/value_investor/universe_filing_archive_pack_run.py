@@ -11,8 +11,10 @@ Minimum runnable lane under ``archive_lane_gate``:
 Artifacts:
 
 - ``docs/data/universe_filing_archive_pack_run.json`` — last run summary
+  (includes capped ``unit_results`` + ``unit_status_counts``)
 - ``docs/data/universe_filing_archive_bottleneck_review.json`` — stage timings /
-  throughput / errors by market (and source when fetches exist)
+  throughput / by-market attempted+completed from unit results (and source
+  when fetches exist)
 - Cold packs under ``docs/data/archive/universe_filings/`` (apply only; not
   committed by the weekday workflow)
 """
@@ -53,6 +55,8 @@ DEFAULT_PACK_RUN_PATH = Path("docs/data/universe_filing_archive_pack_run.json")
 DEFAULT_BOTTLENECK_PATH = Path("docs/data/universe_filing_archive_bottleneck_review.json")
 DEFAULT_POLICY_PATH = Path("docs/data/library/policy.json")
 LIVE_SCREEN_MARKET = "ftse350"
+# Cap committed per-unit rows (writer already slices to 40; keep pack_run lean).
+DEFAULT_UNIT_RESULTS_CAP = 40
 
 FINDING_TITLE_STALE = "Universe archive pack bottleneck review stale"
 FINDING_TITLE_BOTTLENECK = "Universe archive pack processing bottleneck"
@@ -204,6 +208,97 @@ def _by_market_from_plan(plan: dict[str, Any]) -> dict[str, Any]:
     return counts
 
 
+def capped_unit_results(
+    assemble: dict[str, Any] | None,
+    *,
+    cap: int = DEFAULT_UNIT_RESULTS_CAP,
+) -> list[dict[str, Any]]:
+    """Stable capped copy of assemble unit_results for committed pack_run."""
+    rows: list[dict[str, Any]] = []
+    for raw in _as_list((assemble or {}).get("unit_results")):
+        if not isinstance(raw, dict):
+            continue
+        rows.append(dict(raw))
+        if len(rows) >= max(0, int(cap)):
+            break
+    return rows
+
+
+def _final_status_by_unit(unit_results: list[dict[str, Any]]) -> dict[str, dict[str, str]]:
+    """Map unit_id → {market_id, status} using completed > other row statuses."""
+    finals: dict[str, dict[str, str]] = {}
+    for raw in unit_results:
+        if not isinstance(raw, dict):
+            continue
+        uid = str(raw.get("unit_id") or "").strip()
+        mid = str(raw.get("market_id") or "").strip()
+        status = str(raw.get("status") or "").strip() or "unknown"
+        if not uid:
+            continue
+        prev = finals.get(uid)
+        if prev is None:
+            finals[uid] = {"market_id": mid, "status": status}
+            continue
+        # Prefer completed; otherwise keep the latest non-empty status.
+        if prev["status"] == "completed":
+            continue
+        if status == "completed" or status:
+            finals[uid] = {"market_id": mid or prev["market_id"], "status": status}
+    return finals
+
+
+def unit_status_counts(unit_results: list[dict[str, Any]]) -> dict[str, int]:
+    """Unique-unit status histogram (completed / no_bodies / empty / …)."""
+    counts: dict[str, int] = {}
+    for row in _final_status_by_unit(unit_results).values():
+        status = row.get("status") or "unknown"
+        counts[status] = int(counts.get(status) or 0) + 1
+    return dict(sorted(counts.items()))
+
+
+def merge_unit_results_into_by_market(
+    by_market: dict[str, Any],
+    unit_results: list[dict[str, Any]] | None,
+) -> dict[str, Any]:
+    """Fill units_attempted / units_completed from assemble unit_results.
+
+    ``skipped_budget`` rows are not attempted (writer skips before attempted++).
+    Multiple ``no_bodies`` rows for one unit_id count as one attempted unit.
+    """
+    out: dict[str, Any] = {
+        mid: dict(row) if isinstance(row, dict) else {} for mid, row in (by_market or {}).items()
+    }
+    for _mid, row in out.items():
+        row.setdefault("units_planned", 0)
+        row["units_attempted"] = 0
+        row["units_completed"] = 0
+        row.setdefault("errors", 0)
+        row.setdefault("elapsed_ms", 0)
+
+    for uid, meta in _final_status_by_unit(list(unit_results or [])).items():
+        _ = uid
+        status = meta.get("status") or ""
+        mid = str(meta.get("market_id") or "").strip()
+        if not mid:
+            continue
+        row = out.setdefault(
+            mid,
+            {
+                "units_planned": 0,
+                "units_attempted": 0,
+                "units_completed": 0,
+                "errors": 0,
+                "elapsed_ms": 0,
+            },
+        )
+        if status == "skipped_budget":
+            continue
+        row["units_attempted"] = int(row.get("units_attempted") or 0) + 1
+        if status == "completed":
+            row["units_completed"] = int(row.get("units_completed") or 0) + 1
+    return out
+
+
 def build_bottleneck_review(
     *,
     run_id: str,
@@ -215,10 +310,12 @@ def build_bottleneck_review(
     dry_run: bool,
     errors: list[str] | None = None,
     by_source: dict[str, Any] | None = None,
+    unit_results: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Assemble the observe-only post-run bottleneck review payload."""
     plan = plan or {}
     stage_rows = list(stages)
+    unit_rows = list(unit_results or [])
     total_ms = sum(int(s.get("elapsed_ms") or 0) for s in stage_rows)
     dominant = None
     dominant_share = 0.0
@@ -289,8 +386,10 @@ def build_bottleneck_review(
         },
         "stages": stage_rows,
         "by_week": summarize_plan_by_week(plan) if plan.get("units") else [],
-        "by_market": _by_market_from_plan(plan),
+        "by_market": merge_unit_results_into_by_market(_by_market_from_plan(plan), unit_rows),
         "by_source": by_source if by_source is not None else _empty_by_source(),
+        "unit_results": unit_rows[:DEFAULT_UNIT_RESULTS_CAP],
+        "unit_status_counts": unit_status_counts(unit_rows),
         "throughput": {
             "units_planned": int(plan.get("unit_count") or 0),
             "units_attempted": 0,
@@ -463,6 +562,7 @@ def _finalize_and_persist(
         if isinstance(assemble.get("capacity_isolation"), dict)
         else {}
     )
+    unit_rows = capped_unit_results(assemble)
     pack_run = {
         "schema_version": SCHEMA_VERSION,
         "generated_at": clock.isoformat(),
@@ -490,6 +590,8 @@ def _finalize_and_persist(
         "units_completed": int(assemble.get("units_completed") or 0),
         "objects_written": int(assemble.get("objects_written") or 0),
         "hydrate_hits": int(assemble.get("hydrate_hits") or 0),
+        "unit_results": unit_rows,
+        "unit_status_counts": unit_status_counts(unit_rows),
         "capacity_isolation": isolation,
         "assemble_caps": assemble.get("caps") or {},
         "bottleneck_review_path": str(bottleneck_path),
@@ -536,6 +638,7 @@ def _finalize_and_persist(
         dry_run=dry_run,
         errors=errors,
         by_source=by_source,
+        unit_results=unit_rows,
     )
     review["throughput"]["units_attempted"] = int(assemble.get("units_attempted") or 0)
     review["throughput"]["units_completed"] = int(assemble.get("units_completed") or 0)
@@ -823,13 +926,17 @@ __all__ = [
     "DEFAULT_PACK_RUN_PATH",
     "DEFAULT_POLICY_PATH",
     "DEFAULT_STALE_AFTER_HOURS",
+    "DEFAULT_UNIT_RESULTS_CAP",
     "FINDING_TITLE_BOTTLENECK",
     "FINDING_TITLE_STALE",
     "LIVE_SCREEN_MARKET",
     "SCHEMA_VERSION",
     "build_bottleneck_review",
+    "capped_unit_results",
     "format_bottleneck_review_summary",
+    "merge_unit_results_into_by_market",
     "ops_finding_from_bottleneck_review",
     "resolve_archive_market_roster",
     "run_universe_filing_archive_pack",
+    "unit_status_counts",
 ]

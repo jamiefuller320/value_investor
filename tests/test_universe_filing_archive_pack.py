@@ -17,9 +17,11 @@ from value_investor.universe_filing_archive_pack_run import (
     FINDING_TITLE_STALE,
     build_bottleneck_review,
     format_bottleneck_review_summary,
+    merge_unit_results_into_by_market,
     ops_finding_from_bottleneck_review,
     resolve_archive_market_roster,
     run_universe_filing_archive_pack,
+    unit_status_counts,
 )
 
 
@@ -251,3 +253,84 @@ def test_workflow_pins_weekday_2200_utc_and_week_first() -> None:
     assert "week-first" in ops_doc.lower() or "Week-first" in ops_doc
     assert "week_first_then_backward" in ops_doc
     assert "22:00 UTC" in ops_doc
+    assert "unit_results" in ops_doc
+
+
+def test_merge_unit_results_into_by_market_dedupes_and_skips_budget() -> None:
+    planned = {
+        "ftse350": {
+            "units_planned": 1,
+            "units_attempted": 0,
+            "units_completed": 0,
+            "errors": 0,
+            "elapsed_ms": 0,
+        },
+        "sp500": {
+            "units_planned": 1,
+            "units_attempted": 0,
+            "units_completed": 0,
+            "errors": 0,
+            "elapsed_ms": 0,
+        },
+        "asx200": {
+            "units_planned": 1,
+            "units_attempted": 0,
+            "units_completed": 0,
+            "errors": 0,
+            "elapsed_ms": 0,
+        },
+        "euro_depth": {
+            "units_planned": 1,
+            "units_attempted": 0,
+            "units_completed": 0,
+            "errors": 0,
+            "elapsed_ms": 0,
+        },
+    }
+    unit_results = [
+        {"unit_id": "2026-W43:sp500", "market_id": "sp500", "status": "completed", "objects": 2},
+        {"unit_id": "2026-W43:euro_depth", "market_id": "euro_depth", "status": "completed"},
+        # Two ticker-level no_bodies rows for one unit → one attempted.
+        {"unit_id": "2026-W43:ftse350", "market_id": "ftse350", "status": "no_bodies"},
+        {"unit_id": "2026-W43:ftse350", "market_id": "ftse350", "status": "no_bodies"},
+        {"unit_id": "2026-W43:asx200", "market_id": "asx200", "status": "empty"},
+        {"unit_id": "2026-W42:sp500", "market_id": "sp500", "status": "skipped_budget"},
+    ]
+    by_market = merge_unit_results_into_by_market(planned, unit_results)
+    assert by_market["sp500"]["units_attempted"] == 1
+    assert by_market["sp500"]["units_completed"] == 1
+    assert by_market["euro_depth"]["units_attempted"] == 1
+    assert by_market["euro_depth"]["units_completed"] == 1
+    assert by_market["ftse350"]["units_attempted"] == 1
+    assert by_market["ftse350"]["units_completed"] == 0
+    assert by_market["asx200"]["units_attempted"] == 1
+    assert by_market["asx200"]["units_completed"] == 0
+    assert unit_status_counts(unit_results) == {
+        "completed": 2,
+        "empty": 1,
+        "no_bodies": 1,
+        "skipped_budget": 1,
+    }
+
+    review = build_bottleneck_review(
+        run_id="obs-1",
+        generated_at=datetime(2026, 10, 24, 0, 26, tzinfo=UTC),
+        outcome="apply_complete",
+        gate={"decision": "allow", "allowed": True},
+        plan={
+            "unit_count": 4,
+            "units": [
+                {"unit_id": "2026-W43:ftse350", "market_id": "ftse350"},
+                {"unit_id": "2026-W43:sp500", "market_id": "sp500"},
+                {"unit_id": "2026-W43:asx200", "market_id": "asx200"},
+                {"unit_id": "2026-W43:euro_depth", "market_id": "euro_depth"},
+            ],
+        },
+        stages=[{"id": "assemble", "elapsed_ms": 10, "status": "ok", "detail": {}}],
+        dry_run=False,
+        unit_results=unit_results,
+    )
+    assert review["by_market"]["sp500"]["units_completed"] == 1
+    assert review["by_market"]["ftse350"]["units_attempted"] == 1
+    assert review["unit_status_counts"]["completed"] == 2
+    assert len(review["unit_results"]) == 6

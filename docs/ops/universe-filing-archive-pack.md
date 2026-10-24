@@ -73,8 +73,8 @@ This order must **not** drive `euro-ingest-loop` / sprint streams.
 | Gate | `archive_lane_gate` — suspend on unmeasured/zero-body and stuck flags; `quiet_only` outside band; `head_needs_fat_slot` does not suspend; fail-open exit 0 |
 | Runner | `ftse-universe-archive-pack --apply --max-units 4 --max-http-fetches 16` |
 | Writers | `universe_filing_archive_writer` → cold root `docs/data/archive/universe_filings/` (gitignored) |
-| Last run | `docs/data/universe_filing_archive_pack_run.json` (includes `capacity_isolation`) |
-| Bottleneck review | `docs/data/universe_filing_archive_bottleneck_review.json` |
+| Last run | `docs/data/universe_filing_archive_pack_run.json` (includes `capacity_isolation`, capped `unit_results`, `unit_status_counts`) |
+| Bottleneck review | `docs/data/universe_filing_archive_bottleneck_review.json` (`by_market` attempted/completed from unit results) |
 | Status panel | `docs/data/universe_filing_archive_status.json` — thin Ops card (outcome, clash flags, next widen); Automation → Ops |
 | Ops-monitor | `check_universe_filing_archive_pack_bottleneck` — stale review warn; suspend outcomes do **not** warn; refreshes status panel |
 
