@@ -265,6 +265,11 @@ def build_universe_filing_archive_status(
             "units_completed": run.get("units_completed", throughput.get("units_completed")),
             "objects_written": run.get("objects_written", throughput.get("objects_written")),
             "plan_unit_count": run.get("plan_unit_count"),
+            "unit_status_counts": (
+                _as_dict(run.get("unit_status_counts"))
+                or _as_dict(review.get("unit_status_counts"))
+                or None
+            ),
             "errors": errors[:5],
             "error_count": len(errors),
             "dominant_stage": (_as_dict(review.get("dominant_stage")).get("id")),

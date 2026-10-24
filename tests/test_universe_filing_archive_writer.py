@@ -162,8 +162,27 @@ def test_assemble_and_apply_pack_with_injectable_fetch(tmp_path: Path) -> None:
     assert pack_run["fourth_equal_sprint_stream"] is False
     assert pack_run["capacity_isolation"]["isolation_ok"] is True
     assert pack_run["objects_written"] >= 1
-    assert result["bottleneck_review"]["throughput"]["units_completed"] >= 1
-    assert result["bottleneck_review"]["auto_rewrite_deepen"] is False
+    assert isinstance(pack_run.get("unit_results"), list)
+    assert pack_run["unit_results"]
+    assert pack_run["unit_status_counts"].get("completed", 0) >= 1
+    completed_markets = {
+        str(row.get("market_id"))
+        for row in pack_run["unit_results"]
+        if row.get("status") == "completed" and row.get("market_id")
+    }
+    assert completed_markets
+    review = result["bottleneck_review"]
+    assert review["throughput"]["units_completed"] >= 1
+    assert review["auto_rewrite_deepen"] is False
+    for mid in completed_markets:
+        assert review["by_market"][mid]["units_attempted"] >= 1
+        assert review["by_market"][mid]["units_completed"] >= 1
+    assert review["unit_status_counts"].get("completed", 0) >= 1
+    persisted = json.loads(pack_run_path.read_text(encoding="utf-8"))
+    assert persisted["unit_results"]
+    bn_persisted = json.loads(bottleneck_path.read_text(encoding="utf-8"))
+    for mid in completed_markets:
+        assert bn_persisted["by_market"][mid]["units_completed"] >= 1
 
 
 def test_workflow_schedule_applies_with_tiny_caps() -> None:
