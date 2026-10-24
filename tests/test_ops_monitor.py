@@ -1731,9 +1731,7 @@ def test_committed_paper_learning_tracks_are_complete():
         "Decision-review knobs saturated at bounds",
         "LLM agree/veto shadow rollup empty",
     }
-    structural = [
-        row for row in check_paper_learning_tracks() if row.title not in _observe_only
-    ]
+    structural = [row for row in check_paper_learning_tracks() if row.title not in _observe_only]
     assert structural == []
 
 
