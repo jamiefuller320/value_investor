@@ -42,7 +42,11 @@ Per track under `docs/data/paper_automation/{track}/`:
 Rollup: `docs/data/paper_automation/learning_tracks_sleeve_episodes.json`
 
 Weekday `ftse-paper-auto` runs the pass on every track after rebalance (alongside
-exit_shadow / exit_timing / entry DCA).
+exit_shadow / exit_timing / entry DCA). Persist via
+`paper_auto_publish.publish_overlay_artifacts` (`OVERLAY_ROOT_FILES` /
+`OVERLAY_TRACK_FILES`) — same allowlist lane as entry-DCA / F1 agree-veto.
+Without that round-trip the CI output is discarded and the committed tree stays
+empty (orphan CLI / output-only).
 
 ```bash
 # Manual refresh (marks / opens from current screen + fund)

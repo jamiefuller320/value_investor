@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-24T08:04:34+00:00",
+  "updated_at": "2026-10-23T17:13:11+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -14781,40 +14781,81 @@
       "status_note": "Shipped: daily_hub_attention Status/Push/Explore consume post_sell_cue_digest.hub_feed (fail closed). PR cursor/l619-hub-feed-consume-a9b2. Completes Package M.C attention contract; supersedes open defer on #1169 for L619."
     },
     {
+      "id": "N217",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Watermark-conditional timing brackets",
+      "summary": "Do not condition N200 \u00b114d (or any timing brackets) on realized forward high/low watermarks. That stacks look-ahead path labels into a timing scoreboard. Keep watermarks as autopsy companions only.",
+      "revisit_when": "Never unless a separate pre-registered twin proves non-contaminated identification; default stay parked.",
+      "tags": [
+        "timing",
+        "watermark",
+        "look-ahead",
+        "n200",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-6e7f89d6-11fc-53a7-8d15-4597d0937540",
+      "added_at": "2026-10-23T17:27:49+00:00"
+    },
+    {
       "id": "L621",
       "category": "later",
       "section": "learning",
-      "title": "Dashboard per-exit post-sale review cards (deterministic template + charts)",
-      "summary": "Report-only per closed-exit cards from Package M selection_postmortem_skeleton: deterministic well/poorly/why/improve template + reuse published data/charts via Lifecycle mountPriceChart (entry/exit markers). No Accept/Comment, no LLM prose, no knobs, no widen past fork F. Placement: deepen Lifecycle just_sold/post_sale (not Push dump). See store docs/post-sale-review-dashboard-2026-10-24.md.",
-      "revisit_when": "After open defer PRs #1167-#1169 merge and clash-aware eng free of P1 bind / F1 trail; Sunday nest shows digest cues are being read (ack or explicit owner re-pris for per-exit UI).",
+      "title": "Screen-premise high/low watermark companion (7d/28d)",
+      "summary": "Report-only MFE/MAE-style high and low watermark % spreads (buy-tier vs screened universe) on existing L530 fixed-horizon cohorts. Companion to buy_tier_spread \u2014 not a selection feature, not a timing conditioner, not a new seal.",
+      "revisit_when": "Human asks for path-shape on screen-premise and eng capacity is idle (P1 bind green; no launch-queue starve); thicken L530 only.",
       "tags": [
-        "package-M",
-        "post-sale",
-        "dashboard",
-        "lifecycle",
-        "N205-feed"
+        "screen-premise",
+        "watermark",
+        "mfe-mae",
+        "observe",
+        "companion"
       ],
       "status": "open",
-      "source": "https://cursor.com/agents/bc-c896dd8d-b56c-5991-9615-bb4752d9b707 store docs/post-sale-review-dashboard-2026-10-24.md",
-      "added_at": "2026-10-24T08:04:34+00:00"
+      "source": "https://cursor.com/agents/bc-6e7f89d6-11fc-53a7-8d15-4597d0937540",
+      "added_at": "2026-10-23T17:27:55+00:00"
     },
     {
       "id": "L622",
       "category": "later",
       "section": "learning",
-      "title": "Supabase Accept/Comment post-sale review labels (observe sidecar; never knobs)",
-      "summary": "Extend dashboard_commands with post-sale-review-ack/comment (batch like human-task-ack) writing docs/data/post_sale_review_labels.json. Human labels (accept/disagree/free-text) feed N205 design + defer/twin proposals only; influences_live=false; never paper-auto fills. Requires human checklist gate + ops finding (auto_fixable=false) + runbook. Reuses existing Supabase bridge \u2014 no new auth product. Behind per-exit report cards.",
-      "revisit_when": "Per-exit deterministic review cards shipped and Sunday/human demand for Accept/Comment is real; dashboard bridge batch pattern still healthy.",
+      "title": "Dashboard per-exit post-sale review queue (all sealed + control; dual-horizon)",
+      "summary": "Near-now attention product: sortable review queue covering ALL sealed Lifecycle books (N200/N201/N206/N210 + any later sealed observe) and FTSE control (tagged). Each item: deterministic what-happened framing + dual-horizon charts (episode + wider TF). Tags: new (unreviewed). Sealed use fair-cost/lifecycle identity; control may use Package M skeleton with fail-closed unjoinable residue. No Accept/Comment yet (L623). No knobs, no Package L auto-tune, no new sealed books. Store docs/post-sale-review-dashboard-2026-10-24.md.",
+      "revisit_when": "Next free factory/hub eng slot after open #1168/#1169 settle (or owner re-pris); not blocked on Sunday-ack proof; still behind hard P1 bind if contested.",
+      "tags": [
+        "package-M",
+        "post-sale",
+        "dashboard",
+        "lifecycle",
+        "sealed-all",
+        "N205-feed",
+        "dual-horizon"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-c896dd8d-b56c-5991-9615-bb4752d9b707 store docs/post-sale-review-dashboard-2026-10-24.md",
+      "added_at": "2026-10-24T08:04:34+00:00",
+      "updated_at": "2026-10-24T09:00:43+00:00"
+    },
+    {
+      "id": "L623",
+      "category": "later",
+      "section": "learning",
+      "title": "Post-sale review Accept/Comment queue + factory/LLM reply loop (observe)",
+      "summary": "Later: Supabase Accept/Comment on queue items (and on reply entries). Accept=framing match; Comment=missed pattern. Tags: new | reply (factory/LLM development-loop response text \u2014 observe/alignment only, NOT episode-debrief auto-tune). Actioned items clear from active queue but stay in durable sidecar/history. Factory MUST respond to Comments (ops/eng/defer/twin or LLM reply); influences_live=false; never knobs/fills. Checklist + ops finding required. Behind L622 cards.",
+      "revisit_when": "L622 review queue shipped and owner wants durable Accept/Comment + reply alignment; dashboard bridge batch pattern still healthy.",
       "tags": [
         "package-M",
         "supabase",
         "dashboard-bridge",
         "human-label",
+        "reply-loop",
         "N205-feed"
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-c896dd8d-b56c-5991-9615-bb4752d9b707 store docs/post-sale-review-dashboard-2026-10-24.md",
-      "added_at": "2026-10-24T08:04:34+00:00"
+      "added_at": "2026-10-24T08:04:34+00:00",
+      "updated_at": "2026-10-24T09:00:43+00:00"
     }
   ],
   "fragments": [
@@ -15498,7 +15539,7 @@
     },
     {
       "id": "frag-20261024-01",
-      "text": "Package L not_now (promote after #1169): LLM post-sale episode debriefs / autopsy auto-tune / Accept\u2192capital \u2014 stay parked; Accept/Comment = human label log only (store post-sale-review-dashboard-2026-10-24.md).",
+      "text": "Package L not_now: LLM episode debriefs / autopsy auto-tune / Accept\u2192capital. Distinct and ALLOWED later under L623: LLM *reply* text to owner Comments as development-loop response (observe/alignment only). Promote full not_now idea after #1169 clears N-series. Store post-sale-review-dashboard-2026-10-24.md.",
       "tags": [
         "package-L",
         "not-now",
@@ -15507,7 +15548,8 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-c896dd8d-b56c-5991-9615-bb4752d9b707",
-      "added_at": "2026-10-24T08:04:34+00:00"
+      "added_at": "2026-10-24T08:04:34+00:00",
+      "updated_at": "2026-10-24T09:00:43+00:00"
     }
   ],
   "schema_version": 1
