@@ -11,6 +11,7 @@ def test_index_html_cache_busts_app_js() -> None:
     html = Path("docs/index.html").read_text(encoding="utf-8")
     assert 'src="app.js?v=' in html
     assert 'src="dashboard_bridge.js?v=' in html
+    assert 'href="styles.css?v=' in html
 
 
 def test_load_dashboard_cache_busts_progress_report() -> None:
