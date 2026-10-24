@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-23T17:13:11+00:00",
+  "updated_at": "2026-10-24T10:59:41+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -14893,6 +14893,89 @@
     },
     {
       "id": "L624",
+      "category": "later",
+      "section": "universe",
+      "title": "Archive-lane IR/ASX discover yield (allowlist / hub)",
+      "summary": "FTSE and ASX quiet-pack units fail-open empty when IR allowlist discover returns nothing for pilot tickers (no ir_pdf budget burn). Improve archive-lane discover coverage (allowlist breadth, ASX/Companies House path) without a second live crawler or euro/P1 steal. Structural fix preferred over retry queue for these empties.",
+      "revisit_when": "After #1175 unit_results attribute repeated no_bodies to IR markets on quiet nights, or stage-2 widen is blocked by IR empty yield",
+      "tags": [
+        "cold-store",
+        "archive",
+        "ir-allowlist",
+        "asx",
+        "ftse",
+        "discover",
+        "l499"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-e6a6e64e-56de-580b-b15b-ac53e42268b0",
+      "added_at": "2026-10-24T10:59:22+00:00"
+    },
+    {
+      "id": "N220",
+      "category": "not_now",
+      "section": "universe",
+      "title": "Archive pack incomplete-unit retry / leftover queue",
+      "summary": "Persist week\u00d7market (or ticker) units that attempted but wrote zero cold objects and preferentially re-try them on later quiet nights. Not needed yet: week-first already re-plans the same head nightly; last FTSE/ASX empties were structural IR discover misses, so a queue would thrash empty allowlists and compete with breadth. Prefer unit_results (#1175) classification first.",
+      "revisit_when": "unit_results show persistent no_bodies for the same market across >=5 quiet isolation_ok nights, OR ISO week advances while IR markets never complete under stage-1 caps",
+      "tags": [
+        "cold-store",
+        "archive",
+        "retry",
+        "l499",
+        "not-now",
+        "unit-results"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-e6a6e64e-56de-580b-b15b-ac53e42268b0",
+      "added_at": "2026-10-24T10:59:41+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/universe_filing_archive_pack_run.json",
+            "path": "unit_status_counts.no_bodies",
+            "op": ">=",
+            "value": 2
+          },
+          {
+            "file": "docs/data/universe_filing_archive_status.json",
+            "path": "capacity_isolation.isolation_ok",
+            "op": "==",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "L625",
+      "category": "later",
+      "section": "universe",
+      "title": "Cold-store skip-already-packed + rotate pilot tickers",
+      "summary": "Assemble currently re-selects the first N universe CSV tickers every night and does not skip existing pack_index hits, so successful SEC/ESEF packs can waste fetch budget on rewrites. For eventual high throughput under higher caps, skip hydrated packs and rotate uncovered tickers within archive budgets \u2014 still preemptible, not a fourth equal sprint.",
+      "revisit_when": "Before or at stage-2 cap widen (max_units>=8 / max_http_fetches>=32), or when unit_results show completed units re-attempted with zero new objects across quiet nights",
+      "tags": [
+        "cold-store",
+        "archive",
+        "throughput",
+        "l499",
+        "caps"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-e6a6e64e-56de-580b-b15b-ac53e42268b0",
+      "added_at": "2026-10-24T10:59:41+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/universe_filing_archive_status.json",
+            "path": "current_caps.max_units",
+            "op": ">=",
+            "value": 8
+          }
+        ]
+      }
+    },
+    {
+      "id": "L626",
       "category": "later",
       "section": "learning",
       "title": "Declared-incomparable free-learner decision diary",
