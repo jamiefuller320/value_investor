@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-24T09:37:50.653685+00:00",
-  "occasion_count": 255,
+  "updated_at": "2026-10-24T09:39:48.102100+00:00",
+  "occasion_count": 256,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -4617,6 +4617,25 @@
       ],
       "notes": "post-rebase CI",
       "details": {}
+    },
+    {
+      "id": "prf-20261024-008",
+      "recorded_at": "2026-10-24T09:39:48.102100+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "ruff_check F401 unused timedelta in post_sale_review.py (run 40082538539); autofix did not land",
+      "pr_number": 1174,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "Fixed by dropping unused datetime.timedelta import; pushed 6c4cb64750",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -4847,18 +4866,18 @@
     ],
     "by_kind": [
       {
-        "kind": "merge_conflict",
+        "kind": "ci_check",
         "count": 128
       },
       {
-        "kind": "ci_check",
-        "count": 127
+        "kind": "merge_conflict",
+        "count": 128
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 251
+        "count": 252
       },
       {
         "source": "traffic_controller",
