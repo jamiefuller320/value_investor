@@ -34,8 +34,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="ftse-post-sale-review",
         description=(
-            "Post-sale review queue (Package M). Observe-only — "
-            "never influences fills or knobs."
+            "Post-sale review queue (Package M). Observe-only — never influences fills or knobs."
         ),
     )
     parser.add_argument(

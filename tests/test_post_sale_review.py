@@ -171,7 +171,9 @@ def test_accept_clears_active_and_comment_spawns_reply(tmp_path: Path):
     )
     assert accept["ok"] is True
     assert accept["influences_live"] is False
-    refreshed = build_post_sale_review_queue(data_dir=data_dir, sealed=_sealed_fixture(), board=_board_fixture())
+    refreshed = build_post_sale_review_queue(
+        data_dir=data_dir, sealed=_sealed_fixture(), board=_board_fixture()
+    )
     assert all(row["review_id"] != rid for row in refreshed["active"])
 
     control = next(row for row in refreshed["active"] if row["ticker"] == "BBB.L")
@@ -226,9 +228,7 @@ def test_ops_findings_and_refresh(tmp_path: Path):
     sealed_path.write_text(json.dumps(_sealed_fixture()), encoding="utf-8")
     board_path.write_text(json.dumps(_board_fixture()), encoding="utf-8")
     store = tmp_path / "post_sale_review_queue.json"
-    payload = refresh_post_sale_review_queue(
-        data_dir=tmp_path, store_path=store, persist=True
-    )
+    payload = refresh_post_sale_review_queue(data_dir=tmp_path, store_path=store, persist=True)
     assert store.is_file()
     assert payload["active_count"] >= 2
     findings = ops_findings_from_queue(payload)

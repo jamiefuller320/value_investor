@@ -54,9 +54,7 @@ def load_post_sale_review_labels(data_dir: Path) -> dict[str, Any]:
         return empty_labels_store()
     events = [row for row in (raw.get("events") or []) if isinstance(row, dict)]
     actioned = [
-        str(item).strip()
-        for item in (raw.get("actioned_review_ids") or [])
-        if str(item).strip()
+        str(item).strip() for item in (raw.get("actioned_review_ids") or []) if str(item).strip()
     ]
     replies = [row for row in (raw.get("active_replies") or []) if isinstance(row, dict)]
     return {
@@ -85,7 +83,9 @@ def _write_labels(data_dir: Path, store: dict[str, Any]) -> Path:
 
 
 def _actioned_set(store: dict[str, Any]) -> set[str]:
-    return {str(item).strip() for item in (store.get("actioned_review_ids") or []) if str(item).strip()}
+    return {
+        str(item).strip() for item in (store.get("actioned_review_ids") or []) if str(item).strip()
+    }
 
 
 def is_actioned(store: dict[str, Any] | None, review_id: str) -> bool:

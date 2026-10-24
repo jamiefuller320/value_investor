@@ -229,9 +229,9 @@ def _sealed_items(sealed: dict[str, Any] | None) -> list[dict[str, Any]]:
             continue
         meta = model_meta.get(model_id) or {}
         book_tag = str(model.get("label") or meta.get("label") or model_id.upper())
-        registration_id = str(
-            model.get("registration_id") or meta.get("registration_id") or ""
-        ).strip() or None
+        registration_id = (
+            str(model.get("registration_id") or meta.get("registration_id") or "").strip() or None
+        )
         columns = model.get("columns") if isinstance(model.get("columns"), dict) else {}
         for phase in ("just_sold", "post_sale"):
             packed = columns.get(phase) if isinstance(columns.get(phase), dict) else {}
@@ -253,7 +253,11 @@ def _sealed_items(sealed: dict[str, Any] | None) -> list[dict[str, Any]]:
                     days_n = int(days) if days is not None else None
                 except (TypeError, ValueError):
                     days_n = None
-                if phase == "post_sale" and days_n is not None and days_n > SEALED_POST_SALE_MAX_DAYS:
+                if (
+                    phase == "post_sale"
+                    and days_n is not None
+                    and days_n > SEALED_POST_SALE_MAX_DAYS
+                ):
                     continue
                 pct = _as_pct_display(chip.get("return_pct"))
                 basis = str(chip.get("return_basis") or "fair_cost_episode")
@@ -452,16 +456,13 @@ def build_post_sale_review_queue(
     root = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
     sealed_payload = sealed if sealed is not None else _safe_read(root / "sealed_lifecycle.json")
     board_payload = board if board is not None else _safe_read(root / "lifecycle_board.json")
-    labels_store = (
-        labels if labels is not None else load_post_sale_review_labels(root)
-    )
+    labels_store = labels if labels is not None else load_post_sale_review_labels(root)
 
     candidates = _dedupe_items(_sealed_items(sealed_payload) + _control_items(board_payload))
     active_exits = [
         item
         for item in candidates
-        if not is_actioned(labels_store, str(item.get("review_id")))
-        and _in_attention_queue(item)
+        if not is_actioned(labels_store, str(item.get("review_id"))) and _in_attention_queue(item)
     ]
     reply_cards: list[dict[str, Any]] = []
     for row in labels_store.get("active_replies") or []:
