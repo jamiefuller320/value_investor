@@ -10,7 +10,7 @@ L623: Accept/Comment clear active queue; Comment spawns factory reply stub.
 from __future__ import annotations
 
 import hashlib
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
