@@ -1,12 +1,12 @@
 {
-  "run_at": "2026-10-24T07:27:43.996712+00:00",
+  "run_at": "2026-10-24T07:46:43.596606+00:00",
   "overall": "fail",
   "findings": [
     {
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "20 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, ftse350, hang_seng, nasdaq100 (+2 more): asx200/BWP.AX (no_memo, 487.46h since flip), hang_seng/0001.HK (no_memo, 295.46h since flip), aex/PRX.AS (no_memo, 247.46h since flip), asx200/GMD.AX (no_key_bodies, 247.46h since flip), euro_depth/PRX.AS (no_memo, 247.46h since flip), tsx60/ABX.TO (no_key_bodies, 247.46h since flip), tsx60/SAP.TO (no_key_bodies, 247.46h since flip), tsx60/TECK-B.TO (no_key_bodies, 247.46h since flip), nasdaq100/AMAT (no_memo, 223.46h since flip), asx200/CLW.AX (no_memo, 199.46h since flip) (+10 more). Blocking: no_key_bodies=4, no_memo=16.",
+      "summary": "20 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, ftse350, hang_seng, nasdaq100 (+2 more): asx200/BWP.AX (no_memo, 487.78h since flip), hang_seng/0001.HK (no_memo, 295.78h since flip), aex/PRX.AS (no_memo, 247.78h since flip), asx200/GMD.AX (no_key_bodies, 247.78h since flip), euro_depth/PRX.AS (no_memo, 247.78h since flip), tsx60/ABX.TO (no_key_bodies, 247.78h since flip), tsx60/SAP.TO (no_key_bodies, 247.78h since flip), tsx60/TECK-B.TO (no_key_bodies, 247.78h since flip), nasdaq100/AMAT (no_memo, 223.78h since flip), asx200/CLW.AX (no_memo, 199.78h since flip) (+10 more). Blocking: no_key_bodies=4, no_memo=16.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -69,7 +69,7 @@
       "severity": "info",
       "category": "research",
       "title": "N201 value-mom observe refreshed",
-      "summary": "strand-c-short-horizon-value-mom-v0: 127 completed episodes over 13 weeks; entries/week=9.769; smooth_ret_cohort_median=0.020216 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.005007; stress_3pct_report_only=-0.039041; skipped_missing_entry_fields=75890. Observe-only — launch-queue waiter; no live writes (F8).",
+      "summary": "strand-c-short-horizon-value-mom-v0: 127 completed episodes over 13 weeks; entries/week=9.769; smooth_ret_cohort_median=0.020216 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.005007; stress_3pct_report_only=-0.039041; skipped_missing_entry_fields=75937. Observe-only — launch-queue waiter; no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -210,10 +210,19 @@
       "action_taken": null
     },
     {
+      "severity": "warn",
+      "category": "workflows",
+      "title": "Recent workflow failure: FTSE Ops Monitor",
+      "summary": "1 unresolved failure(s) since last success (runs: 40074148316).",
+      "auto_fixable": false,
+      "fixed": true,
+      "action_taken": "Recovery run in flight (#40075398584); suppressed from alert"
+    },
+    {
       "severity": "fail",
       "category": "engineering",
       "title": "Engineering agent sync failures",
-      "summary": "1 engineering-agent failure(s) in the last 6h while open tasks remain and no engineering PR is in flight.",
+      "summary": "2 engineering-agent failure(s) in the last 6h while open tasks remain and no engineering PR is in flight.",
       "auto_fixable": true,
       "fixed": false,
       "action_taken": null
@@ -230,7 +239,7 @@
       "max_age_hours": 30,
       "last_success_at": "2026-10-24T00:09:40+00:00",
       "last_success_run_id": 40043566865,
-      "age_hours": 7.3,
+      "age_hours": 7.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -243,7 +252,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-10-23T15:47:45+00:00",
       "last_success_run_id": 39981332239,
-      "age_hours": 15.7,
+      "age_hours": 16.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -254,8 +263,8 @@
       "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 3,
-      "last_success_at": "2026-10-24T07:16:27+00:00",
-      "last_success_run_id": 40073484041,
+      "last_success_at": "2026-10-24T07:34:03+00:00",
+      "last_success_run_id": 40074644840,
       "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 0,
@@ -267,9 +276,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-10-24T07:20:38+00:00",
-      "last_success_run_id": 40073758167,
-      "age_hours": 0.2,
+      "last_success_at": "2026-10-24T07:40:41+00:00",
+      "last_success_run_id": 40075078971,
+      "age_hours": 0.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -282,7 +291,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-10-23T12:43:08+00:00",
       "last_success_run_id": 39955434747,
-      "age_hours": 18.8,
+      "age_hours": 19.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -295,7 +304,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-18T12:40:17+00:00",
       "last_success_run_id": 39128255461,
-      "age_hours": 138.8,
+      "age_hours": 139.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -308,7 +317,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-23T06:52:01+00:00",
       "last_success_run_id": 39914128084,
-      "age_hours": 24.6,
+      "age_hours": 24.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -321,7 +330,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-18T07:56:58+00:00",
       "last_success_run_id": 39109566475,
-      "age_hours": 143.6,
+      "age_hours": 143.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -334,7 +343,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-18T07:56:59+00:00",
       "last_success_run_id": 39109567319,
-      "age_hours": 143.6,
+      "age_hours": 143.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -347,7 +356,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-18T16:00:26+00:00",
       "last_success_run_id": 39143024097,
-      "age_hours": 135.5,
+      "age_hours": 135.8,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -360,7 +369,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-10-23T08:26:38+00:00",
       "last_success_run_id": 39924668310,
-      "age_hours": 23.1,
+      "age_hours": 23.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -373,10 +382,10 @@
       "max_age_hours": 28,
       "last_success_at": "2026-10-24T02:30:43+00:00",
       "last_success_run_id": 40054470108,
-      "age_hours": 5.0,
+      "age_hours": 5.3,
       "stale": false,
-      "recent_failures_24h": 0,
-      "unresolved_failures_12h": 0
+      "recent_failures_24h": 1,
+      "unresolved_failures_12h": 1
     }
   ],
   "queue_status": {

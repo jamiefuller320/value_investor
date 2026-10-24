@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-24T07:33:53.185877+00:00`
+Generated: `2026-10-24T07:53:07.204497+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -26,7 +26,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
 - [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-10-24T02:31:52.421122+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Ops monitor overall=fail at 2026-10-24T07:27:43.996712+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
