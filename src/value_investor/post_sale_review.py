@@ -561,7 +561,11 @@ def refresh_post_sale_review_queue(
     root = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
     payload = build_post_sale_review_queue(data_dir=root)
     if persist:
-        dest = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
+        # Honour data_dir for the store path so tests / alternate roots never
+        # clobber committed docs/data/post_sale_review_queue.json.
+        dest = (
+            Path(store_path) if store_path is not None else (root / "post_sale_review_queue.json")
+        )
         dest.parent.mkdir(parents=True, exist_ok=True)
         write_json(dest, payload, compact=False)
         payload["path"] = str(dest)
