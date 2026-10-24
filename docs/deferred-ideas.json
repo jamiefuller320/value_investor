@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-23T17:27:55+00:00",
+  "updated_at": "2026-10-23T17:13:11+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -14744,6 +14744,43 @@
       "status_note": "Implemented open_mark_return from real archive quotes on sealed N200/N201/N206/N210 refresh (fair-cost as-if-closed). Fail closed if quote missing. Supersedes park-only #1163."
     },
     {
+      "id": "L619",
+      "category": "later",
+      "section": "learning",
+      "title": "N200 patient-hold exit twin (no leave-tier close)",
+      "summary": "Optional observe twin: same raw_buy_tier new-enter population as N200, but exit at fixed 63 trading days (or patient hold) instead of first leave of buy-tier \u2014 separates productive-hold opportunity at entry from membership-churn confounding. Not a silent amend of strand-b-plain-value-tech-timing-v0; new registration_id only.",
+      "revisit_when": "Human wants selection/productive-entry LQ without leave-tier churn AND launch-queue capacity after running sealed units; do not open while N200 leave-tier reframe pin and screen-premise remain the answer.",
+      "tags": [
+        "N200",
+        "exit-twin",
+        "buy-tier",
+        "timing-vs-selection",
+        "fair-cost"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-9e3ef0af-da4f-50ae-a2eb-52395fceda06 store docs/n200-buy-tier-exit-challenge-2026-10-23.md",
+      "added_at": "2026-10-23T17:13:11+00:00"
+    },
+    {
+      "id": "L620",
+      "category": "later",
+      "section": "ops",
+      "title": "Daily hub consume post_sell_cue_digest hub_feed",
+      "summary": "Package M ships hub_feed.explore_candidates with quality bar, but daily_hub_attention Status looks for items/headline (shows present items=None) and Explore uses hardcoded stubs instead of explore_candidates. Tiny observe/hub wire: Status headline from cue counts; Explore \u22642 from digest candidates; Push only if cue maps to a live human gate. Completes M.C attention contract \u2014 no new sealed book.",
+      "revisit_when": "Shipped when hub Status/Push/Explore consume hub_feed (L619 PR).",
+      "tags": [
+        "package-M",
+        "daily-hub",
+        "post-sell",
+        "explore"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-a70da106-735d-5001-adba-e5fe9c55a9b2",
+      "added_at": "2026-10-23T21:27:19+00:00",
+      "updated_at": "2026-10-23T21:27:26+00:00",
+      "status_note": "Shipped: daily_hub_attention Status/Push/Explore consume post_sell_cue_digest.hub_feed (fail closed). PR cursor/l619-hub-feed-consume-a9b2. Completes Package M.C attention contract; supersedes open defer on #1169 for L619."
+    },
+    {
       "id": "N217",
       "category": "not_now",
       "section": "not_now",
@@ -14762,25 +14799,7 @@
       "added_at": "2026-10-23T17:27:49+00:00"
     },
     {
-      "id": "L619",
-      "category": "later",
-      "section": "learning",
-      "title": "N200 patient-hold exit twin (no leave-tier close)",
-      "summary": "Same raw_buy_tier new-enter population as N200, but exit = fixed 63 trading days (or patient hold) instead of first leave-tier. New registration_id only \u2014 isolates productive-hold opportunity from membership churn. Not a silent N200 amend.",
-      "revisit_when": "Human wants churn-free productive-hold LQ on buy-tier enters and launch-queue capacity allows a new observe twin; N200 leave-tier reframing accepted.",
-      "tags": [
-        "n200",
-        "patient-hold",
-        "exit-twin",
-        "observe",
-        "fair-cost"
-      ],
-      "status": "open",
-      "source": "https://cursor.com/agents/bc-6e7f89d6-11fc-53a7-8d15-4597d0937540",
-      "added_at": "2026-10-23T17:27:49+00:00"
-    },
-    {
-      "id": "L620",
+      "id": "L621",
       "category": "later",
       "section": "learning",
       "title": "Screen-premise high/low watermark companion (7d/28d)",

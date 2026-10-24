@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-22T16:42:52.023566+00:00",
+  "run_at": "2026-10-23T18:10:17.584395+00:00",
   "market_id": "atx",
   "targets": [],
   "target_details": [],
@@ -9,13 +9,13 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-22T16:42:41.517346+00:00",
+    "snapshot_at": "2026-10-23T18:09:59.031999+00:00",
     "market_id": "atx",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 3,
-    "indexed_without_body": 2,
+    "indexed_without_body": 4,
     "bodies_min": 2,
     "bodies_median": 2,
     "bodies_max": 4,
@@ -29,10 +29,12 @@
       "WIE.VI"
     ],
     "indexed_without_body_tickers": [
+      "CAI.VI",
       "EVN.VI",
       "WIE.VI"
     ],
     "indexed_without_body_by_ticker": {
+      "CAI.VI": 2,
       "EVN.VI": 1,
       "WIE.VI": 1
     },
@@ -49,7 +51,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-22T16:42:52.005993+00:00",
+    "snapshot_at": "2026-10-23T18:10:10.033606+00:00",
     "market_id": "atx",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -99,7 +101,7 @@
   "discovery_scan": {
     "scanned": 5,
     "hits": 5,
-    "new_rows_total": 2,
+    "new_rows_total": 0,
     "curiosity_total": 5,
     "errors": 0,
     "prioritization_weights": {
@@ -127,10 +129,16 @@
   },
   "critical_path": {
     "market_id": "atx",
-    "assessed_at": "2026-10-22T16:42:41.864527+00:00",
+    "assessed_at": "2026-10-23T18:09:59.387809+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
+      {
+        "ticker": "CAI.VI",
+        "indexed_without_body": 2,
+        "filings_total": 4,
+        "filings_with_body": 2
+      },
       {
         "ticker": "EVN.VI",
         "indexed_without_body": 1,
@@ -144,36 +152,35 @@
         "filings_with_body": 2
       }
     ],
-    "thin_need_discovery": [
-      "CAI.VI"
-    ],
+    "thin_need_discovery": [],
     "thin_need_bodies": [
+      "CAI.VI",
       "EVN.VI",
       "WIE.VI"
     ],
     "primary_blocker": "indexed_without_body",
     "force_discovery_scan": true,
     "auto_pin_tickers": [
+      "CAI.VI",
       "EVN.VI",
       "WIE.VI"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (2 tickers, top: EVN.VI(1), WIE.VI(1))",
-      "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
+      "Prefer indexed-without-body body refetch (3 tickers, top: CAI.VI(2), EVN.VI(1), WIE.VI(1))",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 2,
-      "indexed_without_body_rows": 2,
-      "thin_need_discovery": 1,
-      "thin_need_bodies": 2
+      "indexed_without_body_tickers": 3,
+      "indexed_without_body_rows": 4,
+      "thin_need_discovery": 0,
+      "thin_need_bodies": 3
     }
   },
-  "used_seconds": 9.792738528999962,
+  "used_seconds": 10.28134181300004,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3590.207261471,
+  "leftover_seconds": 3589.718658187,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -181,9 +188,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "atx",
-    "updated_at": "2026-10-22T16:42:52.009450+00:00",
+    "updated_at": "2026-10-23T18:10:10.037153+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 21,
+    "complete_zero_improve_runs": 22,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -268,7 +275,51 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261022-01"
+    "reason": "no parked leftover tickers remaining for hunter",
+    "tried_count": 47,
+    "candidate_count": 65,
+    "skipped_resolved_tickers": [
+      "ABI.BR",
+      "APAM.AS",
+      "BAS.DE",
+      "EVN.VI",
+      "MUV2.DE",
+      "WIE.VI",
+      "ACKB.BR",
+      "DQ7A.IR",
+      "IFX.DE",
+      "ULTP.L",
+      "DFS.L",
+      "FOXT.L",
+      "MER.L",
+      "APTD.L",
+      "NTR.TO",
+      "GIB-A.TO",
+      "SU.TO",
+      "MUV2.DE",
+      "SAP.DE",
+      "BAS.DE",
+      "IFX.DE",
+      "PDD",
+      "BAS.DE",
+      "DTE.DE",
+      "DTG.DE",
+      "FRE.DE",
+      "HNR1.DE",
+      "MUV2.DE",
+      "HEI.DE",
+      "PST.MI",
+      "TEN.MI",
+      "ACKB.BR",
+      "APAM.AS",
+      "0285.HK",
+      "0857.HK",
+      "0288.HK",
+      "2331.HK",
+      "EVN.VI",
+      "WIE.VI",
+      "PGHN.SW"
+    ],
+    "wait_behind_task_id": ""
   }
 }
