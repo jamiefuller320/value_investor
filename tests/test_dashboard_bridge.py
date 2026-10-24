@@ -341,6 +341,8 @@ def test_process_pending_batches_each_ack_action_separately(monkeypatch) -> None
         "human-task-ack",
         "daily-focus-ack",
         "daily-discuss",
+        "post-sale-review-ack",
+        "post-sale-review-comment",
     }
 
 

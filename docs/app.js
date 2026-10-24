@@ -613,6 +613,8 @@ const DASHBOARD_SIDECARS = [
   ["human_task_acks", "data/human_task_acks.json"],
   ["lifecycle_board", "data/lifecycle_board.json"],
   ["sealed_lifecycle", "data/sealed_lifecycle.json"],
+  ["post_sale_review_queue", "data/post_sale_review_queue.json"],
+  ["post_sale_review_labels", "data/post_sale_review_labels.json"],
   ["ui_state_reconciliation", "data/ui_state_reconciliation.json"],
   ["universe_filing_archive_status", "data/universe_filing_archive_status.json"],
   ["daily_focus", "data/daily_focus.json"],
@@ -10135,7 +10137,7 @@ function sortLifecycleCards(shown, mode, dir) {
   return descending ? rows.reverse() : rows;
 }
 
-const LIFECYCLE_SUBPAGE_IDS = new Set(["positions", "maturity"]);
+const LIFECYCLE_SUBPAGE_IDS = new Set(["positions", "maturity", "reviews", "post-sale"]);
 
 const SEALED_LIFECYCLE_MODELS = ["n200", "n201", "n206", "n210"];
 
@@ -10148,6 +10150,9 @@ function normalizeLifecycleSubpage(value) {
   const key = String(value || "").toLowerCase();
   if (key === "maturity" || key === "maturity-mix") return "maturity";
   if (key === "sealed" || key === "sealed-models") return "sealed";
+  if (key === "reviews" || key === "post-sale" || key === "post-sale-reviews") {
+    return "reviews";
+  }
   if (key === "positions" || key === "board" || key === "tiles") return "positions";
   return "positions";
 }
@@ -10237,6 +10242,10 @@ function syncLifecycleHash() {
     history.replaceState(null, "", `#lifecycle/sealed/${model}`);
     return;
   }
+  if (lifecycleSubpage === "reviews") {
+    history.replaceState(null, "", "#lifecycle/reviews");
+    return;
+  }
   if (lifecycleSubpage === "maturity") {
     history.replaceState(null, "", "#lifecycle/maturity");
     return;
@@ -10310,7 +10319,9 @@ function renderLifecycleSubnav() {
       ? "maturity"
       : lifecycleSubpage === "sealed"
         ? "sealed"
-        : "positions";
+        : lifecycleSubpage === "reviews"
+          ? "reviews"
+          : "positions";
   return `<nav class="paper-subnav lifecycle-subnav" aria-label="Lifecycle sections">
     <button type="button" class="paper-subtab${
       sub === "positions" ? " active" : ""
@@ -10321,6 +10332,9 @@ function renderLifecycleSubnav() {
     <button type="button" class="paper-subtab${
       sub === "sealed" ? " active" : ""
     }" data-lifecycle-subpage="sealed">Sealed models</button>
+    <button type="button" class="paper-subtab${
+      sub === "reviews" ? " active" : ""
+    }" data-lifecycle-subpage="reviews">Post-sale reviews</button>
   </nav>`;
 }
 
@@ -11680,6 +11694,258 @@ function renderSealedLifecycle(data) {
     </section>`;
 }
 
+let postSaleReviewSort = "exit_at";
+let postSaleReviewExpandedId = null;
+
+function postSaleReviewOverlays(item) {
+  return {
+    close_in: item.close_in || (item.charts && item.charts.episode) || null,
+    wider_tf: item.wider_tf || (item.charts && item.charts.wider_tf) || null,
+    opened_at: item.opened_at || item.entry_at || null,
+    sold_at: item.sold_at || item.exit_at || null,
+    book_cost: item.avg_cost != null ? item.avg_cost : null,
+    exit_price: item.exit_price != null ? item.exit_price : null,
+  };
+}
+
+function sortPostSaleReviewItems(items, sortBy) {
+  const rows = Array.isArray(items) ? items.slice() : [];
+  const key = String(sortBy || "exit_at");
+  rows.sort((a, b) => {
+    if (key === "book") {
+      return String(a.book_tag || a.book_id || "").localeCompare(
+        String(b.book_tag || b.book_id || "")
+      );
+    }
+    if (key === "tag") {
+      const ar = a.tag === "reply" ? 0 : 1;
+      const br = b.tag === "reply" ? 0 : 1;
+      if (ar !== br) return ar - br;
+      return String(b.exit_at || "").localeCompare(String(a.exit_at || ""));
+    }
+    if (key === "loss_size") {
+      const ap = Number(a.return_pct);
+      const bp = Number(b.return_pct);
+      const an = Number.isFinite(ap) ? ap : 0;
+      const bn = Number.isFinite(bp) ? bp : 0;
+      return an - bn;
+    }
+    if (key === "ticker") {
+      return String(a.ticker || "").localeCompare(String(b.ticker || ""));
+    }
+    return String(b.exit_at || "").localeCompare(String(a.exit_at || ""));
+  });
+  return rows;
+}
+
+function renderPostSaleReviewCard(item, expanded) {
+  const tag = String(item.tag || "new");
+  const tagCls = tag === "reply" ? "psr-tag-reply" : "psr-tag-new";
+  const pct = item.return_pct;
+  const pctText = pct == null || pct === "" ? "n/a" : `${Number(pct).toFixed(2)}%`;
+  const exitDay = String(item.exit_at || "").slice(0, 10) || "—";
+  const hold =
+    item.hold_days != null && item.hold_days !== "" ? `${item.hold_days}d hold` : "";
+  const replyBlock =
+    tag === "reply"
+      ? `<div class="psr-reply-block">
+          <p class="small"><strong>Owner comment</strong></p>
+          <p class="small">${esc(item.owner_comment || "—")}</p>
+          <p class="small"><strong>Factory reply</strong></p>
+          <p class="small">${esc(item.reply_text || "—")}</p>
+        </div>`
+      : "";
+  const framing = String(item.framing || "")
+    .split("\n")
+    .map((line) => `<div>${esc(line)}</div>`)
+    .join("");
+  const detail = expanded
+    ? `<div class="psr-card-detail">
+        <pre class="psr-framing small">${framing}</pre>
+        ${replyBlock}
+        <p class="small muted">Episode window + wider TF — owner verifies both. influences_live=false.</p>
+        <div class="psr-dual-charts">
+          <div>
+            <h4 class="small">Episode</h4>
+            <div class="psr-chart" data-psr-chart="episode" data-psr-id="${esc(
+              item.review_id
+            )}"></div>
+          </div>
+          <div>
+            <h4 class="small">Wider TF</h4>
+            <div class="psr-chart" data-psr-chart="wider" data-psr-id="${esc(
+              item.review_id
+            )}"></div>
+          </div>
+        </div>
+        <div class="psr-actions">
+          <button type="button" class="btn btn-primary" data-psr-accept="${esc(
+            item.review_id
+          )}" data-psr-tag="${esc(tag)}">Accept</button>
+          <label class="small psr-comment-label">Comment
+            <input type="text" class="psr-comment-input" data-psr-comment-input="${esc(
+              item.review_id
+            )}" placeholder="Missed pattern…" />
+          </label>
+          <button type="button" class="btn" data-psr-comment="${esc(
+            item.review_id
+          )}" data-psr-tag="${esc(tag)}">Comment</button>
+        </div>
+        <p class="small muted" data-psr-status="${esc(item.review_id)}" aria-live="polite"></p>
+      </div>`
+    : "";
+  return `<article class="psr-card${expanded ? " is-expanded" : ""}" data-psr-card="${esc(
+    item.review_id
+  )}">
+    <button type="button" class="psr-card-head" data-psr-expand="${esc(item.review_id)}">
+      <span class="psr-tag ${tagCls}">${esc(tag)}</span>
+      <span class="psr-book">${esc(item.book_tag || item.book_id || "?")}</span>
+      <strong class="psr-ticker">${esc(item.ticker || "?")}</strong>
+      <span class="small muted">${esc(exitDay)}${hold ? ` · ${esc(hold)}` : ""}</span>
+      <span class="psr-pct">${esc(pctText)}</span>
+      <span class="small muted">${esc(item.basis_label || "")}</span>
+    </button>
+    ${detail}
+  </article>`;
+}
+
+function renderPostSaleReviews(data) {
+  const queue = data.post_sale_review_queue;
+  if (!queue || !Array.isArray(queue.active)) {
+    return `${renderLifecycleSubnav()}
+      <div class="empty-state">Post-sale review queue not published yet. Wait for ops-monitor or run <code>ftse-post-sale-review refresh</code>.</div>`;
+  }
+  const sortBy = postSaleReviewSort || queue.sort_default || "exit_at";
+  postSaleReviewSort = sortBy;
+  const items = sortPostSaleReviewItems(queue.active, sortBy);
+  const sortOptions = [
+    { id: "exit_at", label: "Exit date" },
+    { id: "loss_size", label: "Loss size" },
+    { id: "book", label: "Book" },
+    { id: "tag", label: "Tag (reply first)" },
+    { id: "ticker", label: "Ticker" },
+  ]
+    .map(
+      (row) =>
+        `<option value="${esc(row.id)}"${row.id === sortBy ? " selected" : ""}>${esc(
+          row.label
+        )}</option>`
+    )
+    .join("");
+  const cards = items.length
+    ? items
+        .map((item) =>
+          renderPostSaleReviewCard(item, postSaleReviewExpandedId === item.review_id)
+        )
+        .join("")
+    : `<p class="muted">Active queue empty — all exits Accept/Comment’d, or no recent sealed/control sells.</p>`;
+  const byBook = Object.entries(queue.by_book || {})
+    .map(([k, v]) => `${esc(k)} ${v}`)
+    .join(" · ");
+  return `${renderLifecycleSubnav()}
+    <section class="card lifecycle-board-section post-sale-review-section">
+      <div class="market-status-header">
+        <div>
+          <h3>Post-sale reviews</h3>
+          <p class="small muted" style="margin:0.25rem 0 0">
+            ${esc(
+              queue.product_claim ||
+                "Sealed Lifecycle exits + FTSE control — Accept/Comment alignment only."
+            )}
+          </p>
+        </div>
+        <div class="lifecycle-board-controls">
+          <label class="small">Sort
+            <select id="psr-sort">${sortOptions}</select>
+          </label>
+        </div>
+      </div>
+      <p class="small muted">
+        Active ${queue.active_count ?? items.length}
+        · new ${queue.new_count ?? "—"}
+        · reply ${queue.reply_count ?? "—"}
+        · actioned history ${queue.actioned_count ?? "—"}
+        · candidates ${queue.coverage?.candidate_exits ?? "—"}
+        ${byBook ? `· ${byBook}` : ""}
+      </p>
+      <p class="small muted">${esc(queue.attention_note || "")}</p>
+      <p class="small muted">Package M · influences_live=false · no Package L auto-tune</p>
+      <div class="psr-queue" id="psr-queue">${cards}</div>
+    </section>`;
+}
+
+async function afterRenderPostSaleReviews(data) {
+  const queue = data.post_sale_review_queue;
+  if (!queue || !postSaleReviewExpandedId) return;
+  const item = (queue.active || []).find(
+    (row) => row.review_id === postSaleReviewExpandedId
+  );
+  if (!item) return;
+  const root = document.getElementById("psr-queue");
+  if (!root) return;
+  const episode = root.querySelector(
+    `[data-psr-chart="episode"][data-psr-id="${CSS.escape(item.review_id)}"]`
+  );
+  const wider = root.querySelector(
+    `[data-psr-chart="wider"][data-psr-id="${CSS.escape(item.review_id)}"]`
+  );
+  if (typeof mountDualHorizonCharts === "function") {
+    await mountDualHorizonCharts(
+      episode,
+      wider,
+      { ticker: item.ticker, name: item.name || item.ticker },
+      postSaleReviewOverlays(item)
+    );
+  }
+}
+
+async function submitPostSaleReviewAction({ reviewId, decision, text, tag, item }) {
+  const statusEl = document.querySelector(`[data-psr-status="${CSS.escape(reviewId)}"]`);
+  const setStatus = (msg) => {
+    if (statusEl) statusEl.textContent = msg || "";
+  };
+  setStatus(decision === "comment" ? "Recording comment…" : "Recording Accept…");
+  const payload = {
+    review_id: reviewId,
+    decision,
+    text: text || "",
+    tag: tag || "new",
+    snapshot: item || {},
+  };
+  try {
+    if (window.DashboardBridge && (await window.DashboardBridge.init())) {
+      const action =
+        decision === "comment" ? "post-sale-review-comment" : "post-sale-review-ack";
+      await window.DashboardBridge.queueCommand(action, payload);
+      setStatus("Queued — waiting for git commit…");
+    } else {
+      const response = await fetch("/api/post-sale-review-action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok || body.ok === false) {
+        throw new Error(body.error || `HTTP ${response.status}`);
+      }
+      setStatus("Saved locally.");
+    }
+    // Optimistic clear from active queue (reply card arrives after git refresh).
+    const queue = (dashboardData || {}).post_sale_review_queue;
+    if (queue && Array.isArray(queue.active)) {
+      queue.active = queue.active.filter((row) => row.review_id !== reviewId);
+      queue.active_count = queue.active.length;
+      queue.new_count = queue.active.filter((row) => row.tag !== "reply").length;
+      queue.reply_count = queue.active.filter((row) => row.tag === "reply").length;
+      queue.actioned_count = (queue.actioned_count || 0) + 1;
+    }
+    if (postSaleReviewExpandedId === reviewId) postSaleReviewExpandedId = null;
+    renderLifecycle(dashboardData);
+  } catch (err) {
+    setStatus(`Failed: ${err.message || err}`);
+  }
+}
+
 function renderLifecycle(data) {
   const panel = document.getElementById("panel-lifecycle");
   if (!panel) return;
@@ -11697,6 +11963,12 @@ function renderLifecycle(data) {
   if (lifecycleSubpage === "sealed") {
     panel.innerHTML = renderSealedLifecycle(data);
     afterRenderSealedLifecycle(data);
+    return;
+  }
+
+  if (lifecycleSubpage === "reviews") {
+    panel.innerHTML = renderPostSaleReviews(data);
+    afterRenderPostSaleReviews(data);
     return;
   }
 
@@ -11830,6 +12102,12 @@ function bindLifecyclePanel() {
   const panel = document.getElementById("panel-lifecycle");
   if (panel && !panel.dataset.lifecycleBound) {
     panel.dataset.lifecycleBound = "1";
+    panel.addEventListener("change", (event) => {
+      if (event.target && event.target.id === "psr-sort") {
+        postSaleReviewSort = event.target.value || "exit_at";
+        renderLifecycle(dashboardData);
+      }
+    });
     panel.addEventListener("click", (event) => {
       const subpageBtn = event.target.closest("[data-lifecycle-subpage]");
       if (subpageBtn) {
@@ -11837,6 +12115,60 @@ function bindLifecyclePanel() {
         lifecycleSubpage = normalizeLifecycleSubpage(subpageBtn.dataset.lifecycleSubpage);
         syncLifecycleHash();
         renderLifecycle(dashboardData);
+        return;
+      }
+      const expandBtn = event.target.closest("[data-psr-expand]");
+      if (expandBtn) {
+        event.preventDefault();
+        const rid = expandBtn.dataset.psrExpand;
+        postSaleReviewExpandedId =
+          postSaleReviewExpandedId === rid ? null : rid || null;
+        renderLifecycle(dashboardData);
+        return;
+      }
+      const acceptBtn = event.target.closest("[data-psr-accept]");
+      if (acceptBtn) {
+        event.preventDefault();
+        const reviewId = acceptBtn.dataset.psrAccept;
+        const tag = acceptBtn.dataset.psrTag || "new";
+        const item = (
+          ((dashboardData || {}).post_sale_review_queue || {}).active || []
+        ).find((row) => row.review_id === reviewId);
+        submitPostSaleReviewAction({
+          reviewId,
+          decision: "accept",
+          text: "",
+          tag,
+          item,
+        });
+        return;
+      }
+      const commentBtn = event.target.closest("[data-psr-comment]");
+      if (commentBtn) {
+        event.preventDefault();
+        const reviewId = commentBtn.dataset.psrComment;
+        const tag = commentBtn.dataset.psrTag || "new";
+        const input = panel.querySelector(
+          `[data-psr-comment-input="${CSS.escape(reviewId)}"]`
+        );
+        const text = input ? String(input.value || "").trim() : "";
+        if (!text) {
+          const statusEl = panel.querySelector(
+            `[data-psr-status="${CSS.escape(reviewId)}"]`
+          );
+          if (statusEl) statusEl.textContent = "Comment text required.";
+          return;
+        }
+        const item = (
+          ((dashboardData || {}).post_sale_review_queue || {}).active || []
+        ).find((row) => row.review_id === reviewId);
+        submitPostSaleReviewAction({
+          reviewId,
+          decision: "comment",
+          text,
+          tag,
+          item,
+        });
         return;
       }
       const sealedObserveJump = event.target.closest("[data-sealed-observe-jump]");

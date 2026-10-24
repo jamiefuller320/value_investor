@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-24T09:12:39.525551+00:00",
-  "occasion_count": 255,
+  "updated_at": "2026-10-24T10:30:31.169495+00:00",
+  "occasion_count": 264,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -4615,6 +4615,173 @@
       "failed_check_names": [],
       "notes": null,
       "details": {}
+    },
+    {
+      "id": "prf-20261024-008",
+      "recorded_at": "2026-10-24T09:39:48.102100+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "ruff_check F401 unused timedelta in post_sale_review.py (run 40082538539); autofix did not land",
+      "pr_number": 1174,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "Fixed by dropping unused datetime.timedelta import; pushed 6c4cb64750",
+      "details": {}
+    },
+    {
+      "id": "prf-20261024-009",
+      "recorded_at": "2026-10-24T09:40:10.295625+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "ruff_format on post_sale_review*.py + test (run 40082734321); autofix did not land",
+      "pr_number": 1174,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "ruff format --fix applied locally",
+      "details": {}
+    },
+    {
+      "id": "prf-20261024-010",
+      "recorded_at": "2026-10-24T09:42:23.411304+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "ruff_format (run 40082734321); autofix did not land",
+      "pr_number": 1174,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "Formatted all changed Python vs origin/main; scripts/check_changed_python.py --base origin/main --head HEAD passes locally; CI validate already green on ac8b3db33e (run 40082870135)",
+      "details": {}
+    },
+    {
+      "id": "prf-20261024-011",
+      "recorded_at": "2026-10-24T10:02:16.483540+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "test (3) failed on run 40083064062",
+      "pr_number": 1174,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (3)"
+      ],
+      "notes": "investigating",
+      "details": {}
+    },
+    {
+      "id": "prf-20261024-012",
+      "recorded_at": "2026-10-24T10:02:36.142744+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "test_dashboard_lifecycle_opens_experiment_cards: mountPriceChart signature gained rangeMode",
+      "pr_number": 1174,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (3)"
+      ],
+      "notes": "Updated assertion for dual-horizon rangeMode + mountDualHorizonCharts",
+      "details": {}
+    },
+    {
+      "id": "prf-20261024-013",
+      "recorded_at": "2026-10-24T10:20:45.766066+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "docs write guard: refresh_post_sale_review_queue ignored data_dir for store path",
+      "pr_number": 1174,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (3)"
+      ],
+      "notes": "Default store now root/post_sale_review_queue.json under data_dir",
+      "details": {}
+    },
+    {
+      "id": "prf-20261024-014",
+      "recorded_at": "2026-10-24T10:22:24.930173+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "docs write guard on run 40084343034 (unclassified autofix): refresh wrote docs/data/post_sale_review_queue.json",
+      "pr_number": 1174,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (3)"
+      ],
+      "notes": "Fixed in 7d4bcfb1a5 — store path now under data_dir; local pytest leaves queue clean",
+      "details": {}
+    },
+    {
+      "id": "prf-20261024-015",
+      "recorded_at": "2026-10-24T10:29:08.651668+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "Reconcile after #1173 merged open L622/L623; keep ship PR done status",
+      "pr_number": 1174,
+      "branch": "cursor/post-sale-review-queue-c792",
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Prefer L622/L623 done from #1174 ship; drop duplicate open later from #1173",
+      "details": {}
+    },
+    {
+      "id": "prf-20261024-016",
+      "recorded_at": "2026-10-24T10:30:31.169495+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "aligned with remote main-merge after #1173; L622/L623 done retained",
+      "pr_number": 1174,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Reset to origin tip aee8cf2298 (merge reconcile) rather than force-pushing divergent rebase",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -4845,18 +5012,18 @@
     ],
     "by_kind": [
       {
-        "kind": "merge_conflict",
-        "count": 129
+        "kind": "ci_check",
+        "count": 133
       },
       {
-        "kind": "ci_check",
-        "count": 126
+        "kind": "merge_conflict",
+        "count": 131
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 251
+        "count": 260
       },
       {
         "source": "traffic_controller",

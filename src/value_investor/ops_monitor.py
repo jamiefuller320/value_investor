@@ -2490,6 +2490,54 @@ def check_post_sell_cue_digest(
     ]
 
 
+def check_post_sale_review_queue(
+    *,
+    data_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only Package M: sealed+control post-sale review queue (L622/L623).
+
+    Writes ``docs/data/post_sale_review_queue.json``. Accept/Comment labels live
+    in ``post_sale_review_labels.json`` (dashboard bridge). Never changes books
+    or knobs (``auto_fixable=False``). See docs/ops/post-sale-review-queue.md.
+    """
+    from value_investor.post_sale_review import (
+        DEFAULT_DATA_DIR,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_findings_from_queue,
+        refresh_post_sale_review_queue,
+    )
+
+    try:
+        payload = refresh_post_sale_review_queue(
+            data_dir=Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "Post-sale review queue (observe)"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+        for finding in ops_findings_from_queue(payload)
+    ]
+
+
 def check_hold_period_counterfactual(
     *,
     paper_root: Path | None = None,
@@ -4151,6 +4199,7 @@ def collect_ops_findings(
     findings.extend(check_total_return_view())
     findings.extend(check_hold_period_counterfactual())
     findings.extend(check_post_sell_cue_digest())
+    findings.extend(check_post_sale_review_queue())
     findings.extend(check_n200_tech_timing_observe())
     findings.extend(check_n201_value_mom_observe())
     findings.extend(check_n210_ai_judgment_observe())
