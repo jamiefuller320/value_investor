@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-24T09:29:28.579036+00:00",
+  "observe_only": true,
+  "influences_live": false,
+  "package": "M",
+  "ops_doc": "docs/ops/post-sale-review-queue.md",
+  "product_claim": "Per-exit post-sale review queue across sealed Lifecycle books + FTSE control — alignment Accept/Comment/reply; never fills or knobs",
+  "learning_question": "Are relevant charts reviewed with the same big-picture issues the owner sees, and are missed patterns captured into a development loop that responds?",
+  "seed": true,
+  "seed_note": "Thin seed for Pages; ops-monitor check_post_sale_review_queue refreshes active[].",
+  "coverage": {
+    "sealed_models": [
+      "n200",
+      "n201",
+      "n206",
+      "n210"
+    ],
+    "control": {
+      "book_id": "ftse_control",
+      "track_id": "buy_tier_level",
+      "tag": "FTSE control",
+      "epoch_join": "fail_closed_ok"
+    },
+    "candidate_exits": 0,
+    "sealed_candidate_exits": 0,
+    "control_candidate_exits": 0,
+    "just_sold_candidates": 0
+  },
+  "labels_store": "post_sale_review_labels.json",
+  "active_count": 0,
+  "actioned_count": 0,
+  "reply_count": 0,
+  "new_count": 0,
+  "by_book": {},
+  "sort_default": "exit_at",
+  "active": [],
+  "unreplied_comments": 0,
+  "history_event_count": 0
+}

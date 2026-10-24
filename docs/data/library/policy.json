@@ -367,8 +367,8 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 248.0,
-    "estimated_spend_usd_this_week": 29.2,
+    "estimated_spend_usd_this_cycle": 257.6,
+    "estimated_spend_usd_this_week": 38.8,
     "week_id": "2026-W43",
     "cycle_id": "2026-10-d8",
     "weekly_ops_cap_usd": 84.5,
@@ -550,7 +550,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-10-23T18:23:46.926274+00:00",
+  "updated_at": "2026-10-24T10:39:38.470451+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -565,7 +565,9 @@
   "ingest_parallel_sprint": [
     "sp500"
   ],
-  "ingest_parallel_sprint_2": [],
+  "ingest_parallel_sprint_2": [
+    "euro_stoxx50"
+  ],
   "ladder": {
     "enabled": true,
     "layers": [
@@ -865,14 +867,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-10-13T21:41:19.190365+00:00",
-        "parallel_stream": 1,
-        "from_market": "nasdaq100",
-        "to_market": null,
-        "stream_markets_after": [],
-        "ingest_parity_recorded": false
-      },
       {
         "reseeded": true,
         "market_queue_appended": false,
@@ -1544,6 +1538,28 @@
         "to_market": null,
         "stream_markets_after": [],
         "ingest_parity_recorded": true
+      },
+      {
+        "reseeded": true,
+        "market_queue_appended": false,
+        "at": "2026-10-24T07:35:57.513403+00:00",
+        "parallel_stream": 2,
+        "from_market": null,
+        "to_market": "euro_stoxx50",
+        "stream_markets_after": [
+          "euro_stoxx50"
+        ],
+        "ingest_parity_recorded": false,
+        "screen_refresh": {
+          "refreshed": true,
+          "market_id": "euro_stoxx50",
+          "forced": true,
+          "prior_screen_at": "2026-10-23T06:52:47.537514+00:00",
+          "prior_age_days": 1,
+          "run_at": "2026-10-24T07:35:57.513415+00:00",
+          "shortlist_count": 15,
+          "ticker_count": 50
+        }
       }
     ]
   },

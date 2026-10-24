@@ -529,6 +529,7 @@ def test_dashboard_lifecycle_opens_experiment_cards():
     assert (
         "async function mountPriceChart(body, report)" in charts
         or "async function mountPriceChart(body, report, overlays)" in charts
+        or "async function mountPriceChart(body, report, overlays, rangeMode)" in charts
     )
     assert "await mountPriceChart(body, report)" in charts
     assert "levelToggleBound" in charts
@@ -542,7 +543,9 @@ def test_dashboard_lifecycle_opens_experiment_cards():
     assert "sma50_series" in charts
     assert "book_cost" in charts
     assert "mergeChartLevels" in charts
-    assert "async function mountPriceChart(body, report, overlays)" in charts
+    # Dual-horizon post-sale reviews: optional rangeMode (episode / wider_tf / full).
+    assert "async function mountPriceChart(body, report, overlays, rangeMode)" in charts
+    assert "async function mountDualHorizonCharts(" in charts
     assert "levels_basis" in charts
     assert "prospective" in charts
     assert "formatChartPrice(value, currency)" in charts

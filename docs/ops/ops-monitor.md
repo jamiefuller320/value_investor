@@ -104,9 +104,17 @@ lane change and readiness gate (see N152 / P1 pin rules).
   carries that key (owner fork F). Finding
   **Post-sell cue digest (observe)** is observe-only (`auto_fixable=False`);
   store `docs/data/post_sell_cue_digest.json` is in `GHA_COMMIT_OPTIONAL`.
-  Selection skeleton feeds **N205** design only (not sealed). Hub Explore/Push
-  consume `hub_feed` (sibling ship). See
+  Selection skeleton feeds **N205** design only (not sealed). Hub Status/Push/Explore
+  consume `hub_feed` (**L620** — fail closed if missing). See
   [post-sell-cue-digest.md](post-sell-cue-digest.md).
+- **Post-sale review queue (package M)** — `check_post_sale_review_queue` builds
+  the per-exit review queue across all sealed Lifecycle books (N200/N201/N206/N210+)
+  plus FTSE control (`buy_tier_level`), with dual-horizon chart windows and
+  deterministic framing. Accept/Comment labels land in
+  `post_sale_review_labels.json` via dashboard bridge (never fills/knobs).
+  Findings: **Post-sale review queue (observe)** plus reply-pending /
+  unreplied-Comment / empty-trail warns (`auto_fixable=False`). See
+  [post-sale-review-queue.md](post-sale-review-queue.md).
 - **Ingest occupancy mismatch** — `check_ingest_occupancy_mismatch` writes
   `docs/data/ingest_occupancy.json` every ops-monitor run and warns only when
   the euro badge says `sprint` and `head_needs_fat_slot` is false
@@ -357,6 +365,7 @@ human glance.
 | `buy_tier_level` acted with empty `automated_fund.json` holdings | fail | Monday cold-start fill; do not treat NAV as promotion truth |
 | Core track `acted=false` after a post-settle last_run | warn | Track skipped |
 | `learning_tracks_llm_agree_veto.json` missing after core tracks acted | warn | Observe-only algo→agree/veto shadow; never blocks fills — see [`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md) |
+| `learning_tracks_llm_agree_veto.json` present but `tracks` empty / bootstrap stub after core acted | warn | Same instrument — publish overlay gap (FTSE store/review not committed); title **LLM agree/veto shadow rollup empty** |
 | Any tunable review row (not frozen, not a fixed-knob lab) with non-empty `saturated_knobs` | warn | **Decision-review knobs saturated at bounds** — a proposal rule still fires but the knob is at its clamp bound, so the loop can no longer respond on that axis. `auto_fixable=False`; human decides whether the driver (cost model, churn, concentration) needs a policy change or new epoch — see [`decision-review.md`](decision-review.md#apply-gate-and-cooldown) |
 
 Graduation → observe refinement children (lineage on experiment assessment) are
@@ -378,16 +387,17 @@ bind, and EPS-from-body onto reports → slim candidates → agree/veto cites
 (observe-only; does not enable Phase C `autopsy_freeze`). First-run observe pin:
 `check_p1_first_run_pin` (time-boxed; see table below).
 
-**AI path cadence (observe / warn-only):** weekday finding stays **LLM agree/veto
-shadow rollup missing**. Human **Sunday** scoreboard review is checklist
+**AI path cadence (observe / warn-only):** weekday findings stay **LLM agree/veto
+shadow rollup missing** and **LLM agree/veto shadow rollup empty** (bootstrap
+stub / `tracks: {}`). Human **Sunday** scoreboard review is checklist
 `sunday-ai-path-scoreboard` (see
 [`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md#sunday-ai-path-scoreboard)
 + Project store `docs/ai-path-roadmap.md`). Phase-1 LLM judge
 (`LLM_AGREE_VETO_BACKEND=auto|llm`, `judge_spec_id=llm.v1`) stays observe-only —
 rollup still required; LLM failures fail closed to heuristic and must not block
-fills. Intended later finding title **AI path scoreboard — Sunday review**
-(`auto_fixable=False`) once a committed rollup freshness flag exists — do not
-invent rememo/ingest/eng spray from it. Beachhead / ecosystem parks (**N209** /
+fills. Empty-rollup warn is the committed freshness signal for hub/ops; a fuller
+**AI path scoreboard — Sunday review** finding stays later. Do not invent
+rememo/ingest/eng spray from it. Beachhead / ecosystem parks (**N209** /
 **L606** / **L605**) surface via **Deferred idea triggers met**, not a second
 daily ritual.
 
@@ -436,6 +446,7 @@ archive pack workflow and refreshed at end of ops-monitor. Dashboard: Automation
 | `check_deferred_triggers` | **Deferred idea triggers met** / **… unreadable** / **… name frozen books** | An open deferred idea's structured `trigger` is met; a trigger is invalid or unknown for more than 7 days; or a free-text `revisit_when` still names a book frozen after the idea was last edited. Warn-only; a human picks up, retargets or closes the idea. See [deferred-triggers.md](deferred-triggers.md) | `docs/data/deferred_trigger_check.json` | Live |
 | `check_daily_hub_relevance` | **Daily hub Focus stale vs spend priorities** | Focus titles/summaries (seed preferred) + Daily hub aim line fail a cheap phrase/anchor match against committed P1/P2 allowlist, or still contain demoted stale phrases (e.g. RAT.L-as-north-star, Daily hub Phase 1 land, starve-euro-fat aim). Observe-only — never auto-rewrites Focus. See [Daily hub Focus relevance](#daily-hub-focus-relevance) | `docs/data/daily_hub_relevance.json` (+ anchors `docs/data/daily_hub_priority_anchors.json`) | Live |
 | `check_post_sell_cue_digest` | **Post-sell cue digest (observe)** | Deterministic timing + selection cues from N200 levers, exit-timing/shadow readiness, control closed-sell buckets, archive near-miss (L121 caveat). Epoch key joined from `rebalance_log` (fail closed); widen beyond FTSE control gated on epoch keys (fork F). Nested selection postmortem skeleton feeds **N205** (observe archive, not sealed). `hub_feed` for daily-hub Explore/Push. Observe-only — see [post-sell-cue-digest.md](post-sell-cue-digest.md) | `docs/data/post_sell_cue_digest.json` | Live |
+| `check_post_sale_review_queue` | **Post-sale review queue (observe)** | Per-exit alignment queue: all sealed Lifecycle exits + FTSE control; dual-horizon charts; Accept/Comment + factory reply stub (`influences_live=false`). Warns on unreplied Comments / pending reply tags / empty trail. Not Package L. See [post-sale-review-queue.md](post-sale-review-queue.md) | `docs/data/post_sale_review_queue.json`, `docs/data/post_sale_review_labels.json` | Live |
 | `check_daily_hub_push_empty` | **Daily push suggestions empty while mapped warns open** | Push ranker returned no cards but ops still has mapped human warns (saturated knobs, volume gates, parked eng, …). Observe-only — never invents Push cards or eng-sprays. See [Daily hub attention](#daily-hub-attention) | (derived from `ops_status.json` + push ranker) | Live |
 | `check_hold_period_counterfactual` | **Longer holds beat live exit buffer in replay** | A faithful replay of logged passes (baseline within 1% of logged NAV) with `exit_confirm_screens` 5/10/20 beats the live knob by ≥1pp on a headline track. Observe-only (L531) — no knob edit; next step is a cold-start twin. See [hold-period-counterfactual.md](hold-period-counterfactual.md) | `docs/data/hold_period_counterfactual.json` | Live |
 | `check_n200_tech_timing_observe` | **N200 tech-timing observe refreshed** / **N200 volume gate ready for review** | Sealed observe-only strand B (`strand-b-plain-value-tech-timing-v0`): raw_buy_tier identity + ±14d entry/exit brackets from archive history. Cost-aware absolute `smooth_ret_cohort_median` primary (fair-cost standing rule — [fair-cost-primacy.md](fair-cost-primacy.md)); **per-lever** entry/exit best-feasible verdicts independent of path P&L; control excess + stress report-only. Never writes books/knobs. Dashboard: Analysis → Observe **model switcher** (N200) + Automation → Queue **N200 pipeline health** (phase / volume / per-lever / freshness — not promote). See [n200-tech-timing-observe.md](n200-tech-timing-observe.md) | `docs/data/n200_tech_timing_observe.json`, `docs/data/n200_tech_timing_registration.json`, `queue_health.n200_pipeline_health` | Live |
@@ -585,7 +596,7 @@ with **Accept followed** vs **Discuss resolved**.
 | Accept-streak hint | Observe-only footer when ≥5 Accepts / 30d with 0 Discuss on a family — never auto-flips `automated: true` (N169) |
 | Aim filter | Suite A stress streaks / off-buy-tier zero-filing themes stay out unless already a checklist item or focus line |
 | Focus relevance | `check_daily_hub_relevance` (P1/P2 phrase anchors) — see [Daily hub Focus relevance](#daily-hub-focus-relevance) |
-| Status + Push + Explore | `status_report` / `push_suggestions` / `explore_suggestions` on `daily_focus.json` via `daily_hub_attention.py` (locked D1–D7). Focus = chips only (no Accept). Market hub rows skip ritual `health_warn` park (D2). Push ≤3 fail-closed; consumes `post_sell_cue_digest.json` when sibling package M publishes it (does not invent the digest). Explore ≤2 labeled not-today with claim/why/falsify. Finding **Daily push suggestions empty while mapped warns open** (`check_daily_hub_push_empty`, `auto_fixable=False`) — see [Daily hub attention](#daily-hub-attention) |
+| Status + Push + Explore | `status_report` / `push_suggestions` / `explore_suggestions` on `daily_focus.json` via `daily_hub_attention.py` (locked D1–D7). Focus = chips only (no Accept). Market hub rows skip ritual `health_warn` park (D2). Push ≤3 fail-closed; consumes Package M `post_sell_cue_digest.json` **`hub_feed` only** (L620: Status cue counts / sunday nest; Explore ≤2 from `explore_candidates`; Push only from `push_candidates` — fail closed if `hub_feed` missing; never invent `items`/`headline` stubs). Finding **Daily push suggestions empty while mapped warns open** (`check_daily_hub_push_empty`, `auto_fixable=False`) — see [Daily hub attention](#daily-hub-attention) |
 
 Project notes `Today —` bullets are the editorial surface; after the morning build,
 JSON wins for the UI. Agents do not push unprompted into chat — say
@@ -597,11 +608,11 @@ Locked two-lane redesign (Project store `docs/daily-hub-attention-redesign.md` D
 
 | Layer | Behavior |
 |-------|----------|
-| Status | Deterministic `build_daily_status_report` from ops / scoreboard / eng / defer / post-run / optional post-sell digest; eng strip only `open`/`parked`/`pr_open`/`in_progress` (never merged/cancelled) |
-| Push | `build_daily_push_suggestions` ≤3; cites mapped ops findings + eng head + defer met; fail-closed empty OK; optional Push source `docs/data/post_sell_cue_digest.json` when present. **Close-loop:** eng Push only for live `open`/`parked`; terminal `merged`/`cancelled`/`completed`/`failed` (or a `merged_at` stamp) never suggested. Stale ops **Parked engineering…** / **Orphaned pr_open…** findings are re-checked against live `engineering_tasks.json` (attention-parked + queue-clearing pause; any remaining `pr_open`) — drop from Push/Status when healed, even if `ops_status.json` has not refreshed yet. **B3 relevance:** while `evidentiary_demotion_ai_judgment_fair_v1` is committed and `primary_track` is still `ai_judgment_fair`, **Primary book trails its control** stays an observe warn (Status label `Observe (not Push)`) and is not a Push card — the outstanding gap is one **Later** chip (crown only after N210 / matched-30 volume gates). **Decision-review knobs saturated** drops from Push when every named book is that demoted track (anti-C already locked). If another book is also saturated, Push keeps one **now** card naming only that outstanding book. Hub tasks whose structured cite is a terminal eng id, a merged `pr_number`, or a merged fix SHA are removed. No new manual dismiss. |
-| Explore | `build_daily_explore_suggestions` ≤2; seed `explore_lines` or quality-barred defaults; badge not-today; Accept = park later (defer/fragment), never eng |
+| Status | Deterministic `build_daily_status_report` from ops / scoreboard / eng / defer / post-run / optional post-sell digest; digest Status row uses timing+selection cue counts + `sunday_nest.summary` + `hub_feed` counts (not legacy `items`/`headline`); eng strip only `open`/`parked`/`pr_open`/`in_progress` (never merged/cancelled) |
+| Push | `build_daily_push_suggestions` ≤3; cites mapped ops findings + eng head + defer met; fail-closed empty OK; Package M Push only via `hub_feed.push_candidates` (usually empty unless a cue maps to a live human gate — L620). **Close-loop:** eng Push only for live `open`/`parked`; terminal `merged`/`cancelled`/`completed`/`failed` (or a `merged_at` stamp) never suggested. Stale ops **Parked engineering…** / **Orphaned pr_open…** findings are re-checked against live `engineering_tasks.json` (attention-parked + queue-clearing pause; any remaining `pr_open`) — drop from Push/Status when healed, even if `ops_status.json` has not refreshed yet. **B3 relevance:** while `evidentiary_demotion_ai_judgment_fair_v1` is committed and `primary_track` is still `ai_judgment_fair`, **Primary book trails its control** stays an observe warn (Status label `Observe (not Push)`) and is not a Push card — the outstanding gap is one **Later** chip (crown only after N210 / matched-30 volume gates). **Decision-review knobs saturated** drops from Push when every named book is that demoted track (anti-C already locked). If another book is also saturated, Push keeps one **now** card naming only that outstanding book. Hub tasks whose structured cite is a terminal eng id, a merged `pr_number`, or a merged fix SHA are removed. No new manual dismiss. |
+| Explore | `build_daily_explore_suggestions` ≤2; seed `explore_lines` then Package M `hub_feed.explore_candidates` (L620) then non-post-sell quality-barred defaults; badge not-today; Accept = park later (defer/fragment), never eng; no hardcoded post-sell twin stub |
 | Finding | **Daily push suggestions empty while mapped warns open** — observe-only (mapped warns also re-validate parked-eng against live queue) |
-| Non-goals | No LLM brainstorm dump; no inventing post-sell digest / N205 (sibling package M); no forever-dismiss chrome |
+| Non-goals | No LLM brainstorm dump; no inventing post-sell digest / N205 / fake `hub_feed` items (sibling package M); no forever-dismiss chrome |
 
 ## Daily hub Focus relevance {#daily-hub-focus-relevance}
 
