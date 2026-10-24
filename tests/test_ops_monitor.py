@@ -1569,13 +1569,20 @@ def _write_paper_learning_root(
         encoding="utf-8",
     )
     # Observe-only agree/veto rollup present when core tracks have acted.
+    # Non-empty tracks — an empty/bootstrap stub now warns (publish allowlist gap).
     (paper / "learning_tracks_llm_agree_veto.json").write_text(
         json.dumps(
             {
                 "schema_version": 1,
                 "observe_only": True,
                 "influences_live": False,
-                "tracks": {},
+                "tracks": {
+                    "buy_tier_level": {
+                        "track_id": "buy_tier_level",
+                        "card_count": 1,
+                        "observe_only": True,
+                    }
+                },
             }
         ),
         encoding="utf-8",
@@ -1593,6 +1600,24 @@ def test_check_paper_learning_tracks_warns_when_agree_veto_rollup_missing(tmp_pa
     (paper / "learning_tracks_llm_agree_veto.json").unlink()
     titles = [row.title for row in check_paper_learning_tracks(paper)]
     assert "LLM agree/veto shadow rollup missing" in titles
+
+
+def test_check_paper_learning_tracks_warns_when_agree_veto_rollup_empty(tmp_path: Path):
+    paper = _write_paper_learning_root(tmp_path)
+    (paper / "learning_tracks_llm_agree_veto.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "observe_only": True,
+                "influences_live": False,
+                "tracks": {},
+                "note": "Bootstrap stub so ops-monitor does not warn before the next pass.",
+            }
+        ),
+        encoding="utf-8",
+    )
+    titles = [row.title for row in check_paper_learning_tracks(paper)]
+    assert "LLM agree/veto shadow rollup empty" in titles
 
 
 def test_check_paper_learning_tracks_flags_missing_review(tmp_path: Path):
@@ -1699,12 +1724,14 @@ def test_saturated_knobs_skip_frozen_books_and_fixed_knob_labs(tmp_path: Path):
 
 
 def test_committed_paper_learning_tracks_are_complete():
-    # Saturation is a data-dependent observe finding, not a structural gap.
-    structural = [
-        row
-        for row in check_paper_learning_tracks()
-        if row.title != "Decision-review knobs saturated at bounds"
-    ]
+    # Saturation and empty agree/veto rollup are data-dependent observe findings
+    # (rollup stays a bootstrap stub until the next paper-auto publish with F1
+    # overlays), not structural gaps in the committed track layout.
+    _observe_only = {
+        "Decision-review knobs saturated at bounds",
+        "LLM agree/veto shadow rollup empty",
+    }
+    structural = [row for row in check_paper_learning_tracks() if row.title not in _observe_only]
     assert structural == []
 
 

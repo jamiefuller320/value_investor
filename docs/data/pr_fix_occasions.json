@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-23T23:12:01.721815+00:00",
-  "occasion_count": 248,
+  "updated_at": "2026-10-24T00:09:43.747727+00:00",
+  "occasion_count": 252,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -4490,6 +4490,80 @@
       "failed_check_names": [],
       "notes": "Main already owned L619 (N200 patient-hold); hub_feed consume defer renumbered to L620 done",
       "details": {}
+    },
+    {
+      "id": "prf-20261024-001",
+      "recorded_at": "2026-10-24T00:04:24.334526+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "Rebase onto main after #1170 merge",
+      "pr_number": 1171,
+      "branch": "cursor/f1-agree-veto-publish-7d71",
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Serial merge queue after #1170",
+      "details": {}
+    },
+    {
+      "id": "prf-20261024-002",
+      "recorded_at": "2026-10-24T00:04:57.240123+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "test_committed_paper_learning_tracks_are_complete failed after empty-rollup warn",
+      "pr_number": 1171,
+      "branch": "cursor/f1-agree-veto-publish-7d71",
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "local pytest"
+      ],
+      "notes": "Exclude observe-only empty rollup from structural completeness like saturation",
+      "details": {}
+    },
+    {
+      "id": "prf-20261024-003",
+      "recorded_at": "2026-10-24T00:07:42.058021+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "ruff format on test_ops_monitor.py",
+      "pr_number": 1171,
+      "branch": "cursor/f1-agree-veto-publish-7d71",
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "validate"
+      ],
+      "notes": null,
+      "details": {}
+    },
+    {
+      "id": "prf-20261024-004",
+      "recorded_at": "2026-10-24T00:09:43.747727+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "ruff_format validate failed; autofix did not land",
+      "pr_number": 1171,
+      "branch": "cursor/f1-agree-veto-publish-7d71",
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": "968eab68d05e0eb58a6ff7e920dd9a0985cf3eb9",
+      "mergeable_state": null,
+      "failed_check_names": [
+        "validate"
+      ],
+      "notes": "Local ruff format already clean on 968eab68; merged latest main; waiting CI run 40043409781+",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -4720,18 +4794,18 @@
     ],
     "by_kind": [
       {
-        "kind": "merge_conflict",
-        "count": 125
+        "kind": "ci_check",
+        "count": 126
       },
       {
-        "kind": "ci_check",
-        "count": 123
+        "kind": "merge_conflict",
+        "count": 126
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 244
+        "count": 248
       },
       {
         "source": "traffic_controller",
