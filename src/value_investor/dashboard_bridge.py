@@ -27,6 +27,8 @@ SUPPORTED_ACTIONS = frozenset(
         "human-task-ack",
         "daily-focus-ack",
         "daily-discuss",
+        "post-sale-review-ack",
+        "post-sale-review-comment",
     }
 )
 
@@ -40,6 +42,9 @@ ACTION_REPOSITORY_DISPATCH: dict[str, str] = {
     "human-task-ack": "human-task-ack",
     "daily-focus-ack": "daily-focus-ack",
     "daily-discuss": "daily-discuss",
+    # Both Accept and Comment share one workflow; payload carries decision.
+    "post-sale-review-ack": "post-sale-review-ack",
+    "post-sale-review-comment": "post-sale-review-ack",
 }
 
 # Git-writing ack/discuss actions: one repository_dispatch per poll batch.
@@ -51,6 +56,8 @@ BATCHABLE_ACK_ACTIONS = frozenset(
         "human-task-ack",
         "daily-focus-ack",
         "daily-discuss",
+        "post-sale-review-ack",
+        "post-sale-review-comment",
     }
 )
 
@@ -224,6 +231,14 @@ def _command_payload_item(row: dict[str, Any]) -> dict[str, Any]:
     payload = row.get("payload") if isinstance(row.get("payload"), dict) else {}
     item = dict(payload)
     item["command_id"] = command_id
+    action = str(row.get("action") or "").strip()
+    if action:
+        item.setdefault("bridge_action", action)
+    # Post-sale review: map bridge action → decision when the UI omits it.
+    if action == "post-sale-review-comment":
+        item.setdefault("decision", "comment")
+    elif action == "post-sale-review-ack":
+        item.setdefault("decision", "accept")
     return item
 
 
@@ -323,6 +338,7 @@ def commands_from_client_payload(payload: dict[str, Any] | None) -> list[dict[st
         or single.get("task_id")
         or single.get("task_ref")
         or single.get("recommendation_id")
+        or single.get("review_id")
     ):
         return [single]
     return []

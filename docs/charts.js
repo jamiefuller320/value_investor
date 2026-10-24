@@ -495,16 +495,37 @@ function closeInRangeLabel(range) {
   return bits.length ? `Sleeve ${bits.join(" / ")}` : "Sleeve window";
 }
 
-function chartRangeToggle(rangeMode, closeIn) {
+function widerTfRangeLabel(range) {
+  const before = Number(range && range.days_before);
+  const after = Number(range && range.days_after);
+  if (Number.isFinite(before) && Number.isFinite(after)) {
+    return `Wider −${before}d / +${after}d`;
+  }
+  return "Wider TF";
+}
+
+function chartRangeToggle(rangeMode, closeIn, widerTf) {
   if (!closeIn || (!closeIn.start && !closeIn.end)) return "";
   const label = closeInRangeLabel(closeIn);
-  const mode = rangeMode === "close_in" ? "close_in" : "full";
+  const mode =
+    rangeMode === "close_in"
+      ? "close_in"
+      : rangeMode === "wider_tf" && widerTf
+        ? "wider_tf"
+        : "full";
+  const widerBtn =
+    widerTf && (widerTf.start || widerTf.end)
+      ? `<button type="button" class="btn chart-toggle${
+          mode === "wider_tf" ? " is-active" : ""
+        }" data-chart-range="wider_tf">${esc(widerTfRangeLabel(widerTf))}</button>`
+      : "";
   return `
     <div class="chart-level-toggle chart-range-toggle" role="group" aria-label="Chart range">
       <button type="button" class="btn chart-toggle${mode === "full" ? " is-active" : ""}" data-chart-range="full">Full history</button>
       <button type="button" class="btn chart-toggle${mode === "close_in" ? " is-active" : ""}" data-chart-range="close_in">${esc(
         label
       )}</button>
+      ${widerBtn}
     </div>`;
 }
 
@@ -515,8 +536,19 @@ function renderChartBody(payload, report, source, overlays, rangeMode) {
   const initialAsOf = (payload.initial_levels_as_of || payload.signal_since || "").slice(0, 10);
   const signalSince = (payload.signal_since || "").slice(0, 10);
   const closeIn = overlays && overlays.close_in ? overlays.close_in : null;
-  const range = rangeMode === "close_in" && closeIn ? "close_in" : "full";
-  const view = range === "close_in" ? clipPriceSeries(payload, closeIn) : payload;
+  const widerTf = overlays && overlays.wider_tf ? overlays.wider_tf : null;
+  const range =
+    rangeMode === "close_in" && closeIn
+      ? "close_in"
+      : rangeMode === "wider_tf" && widerTf
+        ? "wider_tf"
+        : "full";
+  const view =
+    range === "close_in"
+      ? clipPriceSeries(payload, closeIn)
+      : range === "wider_tf"
+        ? clipPriceSeries(payload, widerTf)
+        : payload;
   const openedAt = (overlays && overlays.opened_at ? String(overlays.opened_at) : "").slice(0, 10);
   const soldAt = (overlays && overlays.sold_at ? String(overlays.sold_at) : "").slice(0, 10);
   const entryPrice =
@@ -590,14 +622,17 @@ function renderChartBody(payload, report, source, overlays, rangeMode) {
     _exit_price: exitPrice,
   };
   const closeCount = Array.isArray(view.dates) ? view.dates.length : 0;
+  const clipRange = range === "wider_tf" ? widerTf : closeIn;
   const rangeCaption =
-    range === "close_in" && closeIn
-      ? `<p class="small muted">Close-in ${esc(chartDay(closeIn.start) || "…")} → ${esc(
-          chartDay(closeIn.end) || "latest"
-        )}. ${closeCount} published close${closeCount === 1 ? "" : "s"} sit inside this window.</p>`
+    (range === "close_in" || range === "wider_tf") && clipRange
+      ? `<p class="small muted">${range === "wider_tf" ? "Wider TF" : "Episode"} ${esc(
+          chartDay(clipRange.start) || "…"
+        )} → ${esc(chartDay(clipRange.end) || "latest")}. ${closeCount} published close${
+          closeCount === 1 ? "" : "s"
+        } sit inside this window.</p>`
       : "";
   const chartHtml =
-    range === "close_in" && closeCount === 0
+    (range === "close_in" || range === "wider_tf") && closeCount === 0
       ? `<p class="muted">No closes in this window yet.</p>`
       : renderPriceChartSvg(chartPayload, levels);
   return `
@@ -606,7 +641,7 @@ function renderChartBody(payload, report, source, overlays, rangeMode) {
       ${payload.signal ? ` · ${esc(String(payload.signal).replace(/_/g, " "))}` : ""}
       ${payload.market ? ` · ${esc(payload.market)}` : ""}
     </p>
-    ${chartRangeToggle(range, closeIn)}
+    ${chartRangeToggle(range, closeIn, widerTf)}
     ${rangeCaption}
     ${toggle}
     ${planHint}
@@ -677,7 +712,7 @@ function showPriceChart(body, payload, report, overlays, rangeMode) {
   paintPriceChart(body);
 }
 
-async function mountPriceChart(body, report, overlays) {
+async function mountPriceChart(body, report, overlays, rangeMode) {
   if (!body) return;
   const path = chartPathForReport(report);
   body.innerHTML = "<p class='muted'>Loading chart…</p>";
@@ -691,12 +726,38 @@ async function mountPriceChart(body, report, overlays) {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();
     rememberPriceChart(report && report.ticker, payload);
-    showPriceChart(body, payload, report, overlays, "full");
+    const startMode =
+      rangeMode ||
+      (overlays && overlays.wider_tf ? "wider_tf" : "full");
+    showPriceChart(body, payload, report, overlays, startMode);
   } catch (err) {
     body.innerHTML = `
       <p class="muted">Could not load price chart (${esc(err.message)}).</p>
       <p class="small muted">Charts are published for live-screen and lifecycle board names on dashboard update.</p>`;
   }
+}
+
+/** Post-sale review cards: episode + wider TF side by side (neither hidden). */
+async function mountDualHorizonCharts(episodeBody, widerBody, report, overlays) {
+  const path = chartPathForReport(report);
+  const load = async (body, mode) => {
+    if (!body) return;
+    body.innerHTML = "<p class='muted'>Loading chart…</p>";
+    if (!path) {
+      body.innerHTML = `<p class="muted">No chart path for this ticker.</p>`;
+      return;
+    }
+    try {
+      const response = await fetch(path);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const payload = await response.json();
+      rememberPriceChart(report && report.ticker, payload);
+      showPriceChart(body, payload, report, overlays || {}, mode);
+    } catch (err) {
+      body.innerHTML = `<p class="muted">Could not load chart (${esc(err.message)}).</p>`;
+    }
+  };
+  await Promise.all([load(episodeBody, "close_in"), load(widerBody, "wider_tf")]);
 }
 
 function openCachedPriceChart(ticker, overlays) {

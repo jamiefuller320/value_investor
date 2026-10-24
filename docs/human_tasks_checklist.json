@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-15",
+  "updated_at": "2026-10-24",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -213,9 +213,16 @@
         {
           "id": "sunday-post-sell-cues",
           "title": "Scan post-sell cue digest (timing + selection; nest under AI-path / scoreboard)",
-          "summary": "Thin Sunday nest (package M): with the analysis bundle / AI-path scoreboard neighborhood, skim docs/data/post_sell_cue_digest.json (ops finding Post-sell cue digest (observe)). Prefer current-epoch selection cues only; note epoch_unknown / older_epoch counts (fail-closed join from rebalance_log). Timing cues: N200 levers (label population ≠ FTSE control + registration_id), exit-timing/shadow readiness, archive near-miss with L121 caveat. Selection skeleton: in_buy_set_at_exit vs in_buy_set_now (do not treat still_in_buy_set as exit-time). Widen beyond FTSE control buy_tier_level is gated until every cue/row carries epoch keys (fork F) — do not widen from this nest. Park via ftse-defer; no --apply / no N205 seal / no new track. Hub Explore consumes hub_feed when sibling Status/Push/Explore lands.",
+          "summary": "Thin Sunday nest (package M): with the analysis bundle / AI-path scoreboard neighborhood, skim docs/data/post_sell_cue_digest.json (ops finding Post-sell cue digest (observe)). Prefer current-epoch selection cues only; note epoch_unknown / older_epoch counts (fail-closed join from rebalance_log). Timing cues: N200 levers (label population ≠ FTSE control + registration_id), exit-timing/shadow readiness, archive near-miss with L121 caveat. Selection skeleton: in_buy_set_at_exit vs in_buy_set_now (do not treat still_in_buy_set as exit-time). Widen beyond FTSE control buy_tier_level is gated until every cue/row carries epoch keys (fork F) — do not widen from this nest. Park via ftse-defer; no --apply / no N205 seal / no new track. Hub Explore consumes hub_feed when sibling Status/Push/Explore lands. Nest neighbor: sunday-post-sale-reviews (per-exit Accept/Comment queue).",
           "automated": false,
           "doc_path": "docs/ops/post-sell-cue-digest.md"
+        },
+        {
+          "id": "sunday-post-sale-reviews",
+          "title": "Work post-sale review queue (sealed + control; Accept/Comment alignment)",
+          "summary": "Sunday nest beside post-sell cues (Package M): open Lifecycle → Post-sale reviews (docs/data/post_sale_review_queue.json). Coverage = all sealed books (N200/N201/N206/N210+) + FTSE control buy_tier_level (tagged). Verify dual-horizon charts (episode + wider TF). Accept = framing matches; Comment = missed pattern (spawns factory reply stub — respond to reply tags too). Actioned items clear from active queue; durable history in post_sale_review_labels.json. influences_live=false — never knobs/fills / never Package L auto-tune. Ops finding Post-sale review queue (observe); warn on pending replies / unreplied Comments.",
+          "automated": false,
+          "doc_path": "docs/ops/post-sale-review-queue.md"
         },
         {
           "id": "sunday-entry-dca-cadence",
