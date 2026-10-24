@@ -55,12 +55,38 @@ def test_publish_persists_overlay_stores_across_tracks(tmp_path: Path):
 def test_overlay_file_lists_cover_dca_and_sibling_stores():
     assert "learning_tracks_entry_dca.json" in OVERLAY_ROOT_FILES
     assert "learning_tracks_llm_agree_veto.json" in OVERLAY_ROOT_FILES
+    assert "learning_tracks_sleeve_episodes.json" in OVERLAY_ROOT_FILES
     assert "entry_dca_overlay.json" in OVERLAY_TRACK_FILES
     assert "entry_dca_overlay_review.json" in OVERLAY_TRACK_FILES
     assert "exit_timing_cohorts.json" in OVERLAY_TRACK_FILES
     assert "hypothesis_integrity.json" in OVERLAY_TRACK_FILES
     assert "llm_agree_veto_shadow.json" in OVERLAY_TRACK_FILES
     assert "llm_agree_veto_shadow_review.json" in OVERLAY_TRACK_FILES
+    assert "sleeve_episodes.json" in OVERLAY_TRACK_FILES
+    assert "sleeve_episodes_review.json" in OVERLAY_TRACK_FILES
+
+
+def test_publish_persists_sleeve_episodes_overlay_stores(tmp_path: Path):
+    src = tmp_path / "output"
+    dest = tmp_path / "docs"
+    (src / "buy_tier_level").mkdir(parents=True)
+    (src / "learning_tracks_sleeve_episodes.json").write_text(
+        '{"tracks": {"buy_tier_level": {"closed_count": 1}}}\n'
+    )
+    (src / "buy_tier_level" / "sleeve_episodes.json").write_text(
+        '{"episodes": [], "track_id": "buy_tier_level"}\n'
+    )
+    (src / "buy_tier_level" / "sleeve_episodes_review.json").write_text(
+        '{"track_id": "buy_tier_level", "closed_count": 1}\n'
+    )
+
+    copied = publish_overlay_artifacts(src, dest)
+
+    assert "learning_tracks_sleeve_episodes.json" in copied
+    assert "buy_tier_level/sleeve_episodes.json" in copied
+    assert "buy_tier_level/sleeve_episodes_review.json" in copied
+    assert (dest / "learning_tracks_sleeve_episodes.json").is_file()
+    assert (dest / "buy_tier_level" / "sleeve_episodes_review.json").is_file()
 
 
 def test_publish_persists_agree_veto_overlay_stores(tmp_path: Path):
