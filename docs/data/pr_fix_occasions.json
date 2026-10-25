@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-25T10:31:24.578248+00:00",
-  "occasion_count": 270,
+  "updated_at": "2026-10-25T09:26:06.144198+00:00",
+  "occasion_count": 275,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -4857,41 +4857,131 @@
     },
     {
       "id": "prf-20261025-002",
-      "recorded_at": "2026-10-25T10:12:31.952518+00:00",
+      "recorded_at": "2026-10-25T09:07:58.556166+00:00",
       "source": "human_request",
       "kind": "ci_check",
-      "failure_reason": "stale_screen_and_pound_cap_goldens",
-      "pr_number": 1182,
-      "branch": "cursor/super-book-autopsy-voice-04bf",
+      "failure_reason": "ruff_format",
+      "pr_number": 1180,
+      "branch": null,
       "title": null,
-      "url": "https://github.com/jamiefuller320/value_investor/actions/runs/40182327016",
+      "url": null,
       "task_id": null,
-      "head_sha": "d2bcf5a8a8eb8edaf07ca299fed6030f938729eb",
+      "head_sha": null,
       "mergeable_state": null,
       "failed_check_names": [
-        "CI / test (2)",
-        "CI / test (3)"
+        "validate"
       ],
-      "notes": "Library/screen refresh: BAB yield, BMY ttm, BYG/EMG/HBR/ELM/JEMI/FCSS/LRE/LWDB/JEDT goldens; HWG left roster→VCT; pound caps 249/101. Unrelated to defer N228/L632/N229.",
+      "notes": "validate Ruff format on post_sale_decision_reasons.py; fixed on tip",
       "details": {}
     },
     {
       "id": "prf-20261025-003",
-      "recorded_at": "2026-10-25T10:31:24.578248+00:00",
+      "recorded_at": "2026-10-25T09:07:58.610265+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "CONFLICTING/DIRTY vs main before squash-merge",
+      "pr_number": 1180,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Owner approved; tip green but DIRTY",
+      "details": {}
+    },
+    {
+      "id": "prf-20261025-004",
+      "recorded_at": "2026-10-25T09:07:58.664106+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "CONFLICTING again after main advanced during CI wait",
+      "pr_number": 1180,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "tip was green; main moved",
+      "details": {}
+    },
+    {
+      "id": "prf-20261025-005",
+      "recorded_at": "2026-10-25T09:07:58.727833+00:00",
       "source": "human_request",
       "kind": "ci_check",
-      "failure_reason": "stale_screen_and_pound_cap_goldens",
-      "pr_number": 1182,
-      "branch": "cursor/super-book-autopsy-voice-04bf",
+      "failure_reason": "test_ftse_pound_cap GROW.L library_gbp_cap drift",
+      "pr_number": 1180,
+      "branch": null,
       "title": null,
-      "url": "https://github.com/jamiefuller320/value_investor/actions/runs/40183843441",
+      "url": null,
       "task_id": null,
-      "head_sha": "9da4577c79fad465a7294c679648dde3d17735a0",
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "test (3)"
+      ],
+      "notes": "Overlaps #1181 fix; updated expectation on #1180 tip",
+      "details": {}
+    },
+    {
+      "id": "prf-20261025-006",
+      "recorded_at": "2026-10-25T09:07:58.780720+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "flake: CLIG.L IR body fetch (test_research_filings)",
+      "pr_number": 1180,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "test (0)"
+      ],
+      "notes": "Transient empty body; added retries in _first_fetchable_allowlist_body",
+      "details": {}
+    },
+    {
+      "id": "prf-20261025-007",
+      "recorded_at": "2026-10-25T09:08:43.386896+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "test_ftse_pound_cap computable count 249 (was 250)",
+      "pr_number": 1180,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "test (3)"
+      ],
+      "notes": "Library/price coverage drifted again after #1181 merge; update cover counts",
+      "details": {}
+    },
+    {
+      "id": "prf-20261025-008",
+      "recorded_at": "2026-10-25T09:26:06.144198+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "test(2) gap_scan goldens drifted after #1181 rebase (BAB/BMY/BYG/DLN/EMG/HBR/ELM/JEMI/FCSS/LRE/LWDB/JEDT; HWG.L missing→VCT.L)",
+      "pr_number": 1180,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
       "mergeable_state": null,
       "failed_check_names": [
         "CI / test (2)"
       ],
-      "notes": "Follow-up: BHMG pe 435.0→416.5; DLN discount 40.3%→40.1%.",
+      "notes": "run 40175840590; data-bound screen assertions",
       "details": {}
     }
   ],
@@ -4988,6 +5078,17 @@
         ]
       },
       {
+        "failure_reason": "ruff_format",
+        "count": 2,
+        "sources": {
+          "human_request": 2
+        },
+        "recent_prs": [
+          673,
+          1180
+        ]
+      },
+      {
         "failure_reason": "Merge conflicts in deferred-ideas.json with main",
         "count": 2,
         "sources": {
@@ -5062,26 +5163,6 @@
         ]
       },
       {
-        "failure_reason": "stale_screen_and_pound_cap_goldens",
-        "count": 2,
-        "sources": {
-          "human_request": 2
-        },
-        "recent_prs": [
-          1182
-        ]
-      },
-      {
-        "failure_reason": "ruff_format",
-        "count": 1,
-        "sources": {
-          "human_request": 1
-        },
-        "recent_prs": [
-          673
-        ]
-      },
-      {
         "failure_reason": "dirty merge: deferred-ideas.json / deferred-review.md vs main after L424-L426 landings",
         "count": 1,
         "sources": {
@@ -5120,22 +5201,32 @@
         "recent_prs": [
           756
         ]
+      },
+      {
+        "failure_reason": "engineering_tasks/automation/queue_health vs main after #756 merge",
+        "count": 1,
+        "sources": {
+          "human_request": 1
+        },
+        "recent_prs": [
+          757
+        ]
       }
     ],
     "by_kind": [
       {
         "kind": "ci_check",
-        "count": 137
+        "count": 140
       },
       {
         "kind": "merge_conflict",
-        "count": 133
+        "count": 135
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 266
+        "count": 271
       },
       {
         "source": "traffic_controller",

@@ -43,6 +43,19 @@ def _snapshot_from_payload(payload: dict[str, Any]) -> dict[str, Any]:
         "exit_price",
         "registration_id",
         "population",
+        "buy_decision",
+        "sell_decision",
+        "buy_reason",
+        "sell_reason",
+        "decision_reasons_join_ok",
+        "exit_reason",
+        "entry_reason",
+        "entry_detail",
+        "llm_opinion",
+        "learning_points",
+        "chart_annotations",
+        "opinion_source",
+        "dialogue",
     )
     return {key: payload.get(key) for key in keys if key in payload}
 

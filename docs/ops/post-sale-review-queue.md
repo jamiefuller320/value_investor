@@ -36,6 +36,24 @@ Actioned items **clear from the active queue** but remain in labels history.
 only when ≤21d since exit **or** return ≤ −5%. Coverage counts still include the
 full candidate set so sealed/control population stays visible in ops findings.
 
+## Buy / sell decision reasons
+
+Every active card (initial + reply) carries structured **bought because** /
+**sold because** blocks (`buy_decision` / `sell_decision`):
+
+| Field | Meaning |
+|---|---|
+| `code` | Machine id (`leave_buy_tier`, `hold_trading_days`, `identity_break_ey_band`, …) or `unknown_unjoinable` |
+| `label` | Short human-readable line |
+| `source` | Where bound (`episode.*`, `observe.*`, `model_identity.n200`, `rebalance_log.trade_note`, …) |
+| `join_ok` | `true` only when a structured trail matched — else fail-closed unknown |
+
+Binding prefers chip / observe `exit_reason` + `entry_detail`, then N200’s
+deterministic buy-tier identity, then FTSE control `rebalance_log` trade notes.
+Never invents a sell trigger. Factory opinion + LLM reply prompts cite these
+fields so comments like “premature sell” can be weighed against the real exit
+code (e.g. leave buy-tier vs a tech/timing cue).
+
 ## Dual-horizon charts
 
 Every card carries:

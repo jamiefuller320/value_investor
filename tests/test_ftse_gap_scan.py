@@ -894,7 +894,7 @@ def test_vct_positive_eps_has_no_screen_pe_key():
     assert "P/E" not in vct.key_metric_names
     assert "positive_diluted_eps_without_screen_pe" in _ids(vct)
     assert "positive_diluted_eps_without_screen_pe" not in _ids(
-        _row(diluted_eps=0.028, key_metric_names=frozenset({"P/E"}))
+        _row(diluted_eps=0.318, key_metric_names=frozenset({"P/E"}))
     )
     assert "positive_diluted_eps_without_screen_pe" not in _ids(
         _row(diluted_eps=-0.16, key_metric_names=frozenset())
