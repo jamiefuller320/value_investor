@@ -367,6 +367,57 @@ def test_enrich_screening_snapshot_with_yahoo_quarterly():
     assert enriched["yahoo_quarterly"]["ttm_cashflow_suppressed"] is True
 
 
+def test_eng_20261025_04_enrich_snapshot_backfills_ocf_from_financials_annual():
+    """Research ingest must wire Yahoo annual cash-flow rows into screening snapshots."""
+    snapshot = {
+        "ticker": "MEGP.L",
+        "signal": "strong_buy",
+        "operating_cashflow": None,
+        "free_cashflow": None,
+    }
+    financials = {
+        "ticker": "MEGP.L",
+        "quarterly_income": {},
+        "quarterly_cashflow": {},
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 90_762_000.0,
+                "Free Cash Flow": 25_153_000.0,
+            },
+        },
+        "cashflow_metrics": {
+            "ttm_cashflow_suppressed": True,
+            "ttm_cashflow_suppressed_reason": "quarterly_cashflow_empty",
+        },
+    }
+    enriched = enrich_screening_snapshot_with_yahoo_quarterly(snapshot, financials)
+    assert enriched["operating_cashflow"] == pytest.approx(90_762_000.0)
+    assert enriched["free_cashflow"] == pytest.approx(25_153_000.0)
+    assert enriched["cashflow_metrics"]["operating_cashflow"] == pytest.approx(90_762_000.0)
+
+
+def test_eng_20261025_04_validate_company_metrics_cashflow_against_financials():
+    from value_investor.research.ingest import validate_company_metrics_cashflow_against_financials
+
+    financials = {
+        "cash_flow": {
+            "2025": {"Operating Cash Flow": 90_762_000.0, "Free Cash Flow": 25_153_000.0},
+        },
+    }
+    aligned = validate_company_metrics_cashflow_against_financials(
+        {"operating_cashflow": 90_762_000.0, "free_cashflow": 25_153_000.0},
+        financials,
+    )
+    assert aligned["aligned"] is True
+
+    drift = validate_company_metrics_cashflow_against_financials(
+        {"operating_cashflow": 1.0, "free_cashflow": 25_153_000.0},
+        financials,
+    )
+    assert drift["aligned"] is False
+    assert "operating_cashflow" in drift["mismatches"]
+
+
 def test_sync_snapshot_fcf_screen_ttm_verification_from_action_note():
     """Ingest must surface unverified screen TTM on ``fcf`` when quarterlies are empty."""
     snapshot = {
