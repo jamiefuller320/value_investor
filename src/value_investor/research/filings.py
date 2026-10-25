@@ -6108,7 +6108,16 @@ def _try_persist_rns_filing_body(
     )
     if not valid:
         return item, reason
-    updated = _apply_headline_period(item, body_snippet=body[:4000])
+    period_candidate = (
+        {"headline": extracted_headline.strip()}
+        if extracted_headline and extracted_headline.strip()
+        else None
+    )
+    updated = _apply_headline_period(
+        item,
+        candidate=period_candidate,
+        body_snippet=body[:4000],
+    )
     row_id = str(updated.get("id") or "")
     content_hash, dup_reason = _reject_duplicate_filing_body_hash(
         row_id,
@@ -6285,19 +6294,29 @@ def _fetch_rns_html_body_fallback(url: str) -> tuple[str | None, str | None]:
     return text, extracted_headline
 
 
-def _fetch_rns_filing_body_for_refetch(url: str) -> tuple[str | None, str | None]:
+def fetch_rns_filing_body(url: str | None) -> tuple[str | None, str | None]:
     """
-    Fetch an RNS body for indexed-without-body refetch.
+    Unified UK RNS body fetch for ingest and refetch passes.
 
-    Tries the PDF/HTML primary path first, then Investegate/LSE HTML-only fallback.
-    Returns ``(body, extracted_h1_headline)`` where ``extracted_h1_headline`` is set
-    only for the HTML fallback path (used to reject period/headline mismatches).
+    Resolves Google News wrappers to Investegate/LSE direct URLs, extracts PDF text,
+    then falls back to Investegate/LSE HTML narrative when PDF extract fails.
+    Returns ``(body, extracted_h1_headline)``; the headline is set only on HTML fallback
+    and drives FY/H1/trading re-tagging when persisting the body.
     """
+    if not url or not str(url).startswith("http"):
+        return None, None
     fetch_url = standardise_investegate_lse_fetch_url(url) or url
+    if "news.google.com" in fetch_url:
+        return None, None
     body = fetch_filing_body(fetch_url)
     if body:
         return body, None
     return _fetch_rns_html_body_fallback(fetch_url)
+
+
+def _fetch_rns_filing_body_for_refetch(url: str) -> tuple[str | None, str | None]:
+    """Backward-compatible alias for :func:`fetch_rns_filing_body`."""
+    return fetch_rns_filing_body(url)
 
 
 def _ir_body_fcf_bridge_incomplete(body: str) -> bool:
@@ -10738,7 +10757,8 @@ def refetch_ticker_rns_api_filing_bodies(
             and item.get("url")
             and not item.get("has_body")
         ):
-            body = fetch_filing_body(str(item["url"]))
+            item = _standardise_rns_index_row_url(item)
+            body, extracted_headline = fetch_rns_filing_body(str(item["url"]))
             if body:
                 item, reject_reason = _try_persist_rns_filing_body(
                     item,
@@ -10746,6 +10766,7 @@ def refetch_ticker_rns_api_filing_bodies(
                     company_name=company_name,
                     ticker=ticker,
                     bodies_dir=bodies_dir,
+                    extracted_headline=extracted_headline,
                     known_body_hashes=known_body_hashes,
                 )
                 if reject_reason:

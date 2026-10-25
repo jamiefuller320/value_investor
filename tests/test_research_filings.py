@@ -61,6 +61,7 @@ from value_investor.research.filings import (
     fetch_filings_euro_news,
     fetch_filings_investegate_company,
     fetch_filings_ir_allowlist,
+    fetch_rns_filing_body,
     filter_misattributed_filings,
     headline_relevant_to_issuer,
     ingest_filings,
@@ -3095,8 +3096,8 @@ def test_refetch_ticker_rns_api_stores_body_content_hash(tmp_path, monkeypatch):
     }
     (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
     monkeypatch.setattr(
-        "value_investor.research.filings.fetch_filing_body",
-        lambda url: sample_body if url == pdf_url else None,
+        "value_investor.research.filings.fetch_rns_filing_body",
+        lambda url: (sample_body, None) if url == pdf_url else (None, None),
     )
     result = refetch_ticker_rns_api_filing_bodies(
         filings_dir,
@@ -3277,6 +3278,74 @@ def test_fetch_rns_filing_body_for_refetch_google_news_to_lse_html_fallback(monk
     assert headline == "ITV plc Full Year Results 2025"
     assert body is not None
     assert "Revenue increased" in body
+
+
+def test_fetch_rns_filing_body_rejects_unresolved_google_news_eng_20261025_01(monkeypatch):
+    """eng-20261025-01: unified RNS fetch rejects unresolvable Google News wrappers."""
+    gnews = "https://news.google.com/rss/articles/CBMiabc?oc=5"
+    monkeypatch.setattr(
+        "value_investor.research.filings.resolve_google_news_publisher_url",
+        lambda url: url,
+    )
+    body, headline = fetch_rns_filing_body(gnews)
+    assert body is None
+    assert headline is None
+
+
+def test_fetch_rns_filing_body_upgrades_investegate_to_lse_pdf_eng_20261025_01(monkeypatch):
+    """eng-20261025-01: unified fetch standardises Investegate HTML to LSE PDF extract."""
+    investegate_url = "https://www.investegate.co.uk/announcement/rns/itv--itv/fy/1"
+    lse_pdf = "http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf"
+    pdf_text = "ITV plc full year results revenue operating profit " + ("x" * 220)
+    calls: list[str] = []
+
+    def fake_standardise(url):
+        calls.append(str(url))
+        return lse_pdf if "investegate" in str(url) else url
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.standardise_investegate_lse_fetch_url",
+        fake_standardise,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url, **kwargs: pdf_text if url == lse_pdf else None,
+    )
+    body, headline = fetch_rns_filing_body(investegate_url)
+    assert body == pdf_text
+    assert headline is None
+    assert lse_pdf in calls or investegate_url in calls
+
+
+def test_try_persist_rns_retags_period_from_extracted_html_headline_eng_20261025_01(tmp_path):
+    """eng-20261025-01: HTML fallback h1 re-tags FY/H1/trading before body persist."""
+    from value_investor.research.filings import _try_persist_rns_filing_body
+
+    bodies_dir = tmp_path / "bodies"
+    bodies_dir.mkdir()
+    row = {
+        "id": "itv_fy",
+        "source": "investegate_resolved",
+        "headline": "Regulatory News Service announcement - Investegate",
+        "period": "other",
+        "url": "https://docs.londonstockexchange.com/rns/itv/fy2025.html",
+    }
+    body = (
+        "ITV plc commentary for the year ended December 2025 with revenue and profit metrics. "
+        + ("x" * 220)
+    )
+    updated, reason = _try_persist_rns_filing_body(
+        row,
+        body,
+        company_name="ITV plc",
+        ticker="ITV.L",
+        bodies_dir=bodies_dir,
+        extracted_headline="ITV plc Full Year Results 2025",
+    )
+    assert reason is None
+    assert updated["has_body"] is True
+    assert updated["period"] == "annual"
+    assert "Full Year Results 2025" in updated["headline"]
 
 
 def test_refetch_investegate_persists_standardised_lse_url(tmp_path, monkeypatch):
@@ -5098,13 +5167,10 @@ def test_refetch_ticker_rns_api_filing_bodies_megp_prunes_and_downloads(tmp_path
         "summary": {"total": 2, "with_body": 0},
     }
     (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    megp_body = "ME Group International plc full year results " + ("revenue increased " * 30)
     monkeypatch.setattr(
-        "value_investor.research.filings.fetch_filing_body",
-        lambda url: (
-            "ME Group International plc full year results " + ("revenue increased " * 30)
-            if url == pdf_url
-            else None
-        ),
+        "value_investor.research.filings.fetch_rns_filing_body",
+        lambda url: (megp_body, None) if url == pdf_url else (None, None),
     )
     result = refetch_ticker_rns_api_filing_bodies(
         filings_dir,
