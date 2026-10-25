@@ -2538,6 +2538,56 @@ def check_post_sale_review_queue(
     ]
 
 
+def check_cue_consumer_mft(
+    *,
+    output_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only Package M: cue-consumer mid-flight-tune lab (super book).
+
+    Writes ``docs/data/cue_consumer_mft_observe.json`` (+ registration + start
+    gate). Declared-incomparable fixed-stake skeleton; ``influences_live=false``.
+    Never changes books or knobs (``auto_fixable=False``).
+    See docs/ops/cue-consumer-mft.md.
+    """
+    from value_investor.cue_consumer_mft import (
+        DEFAULT_OUTPUT_DIR,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_findings_from_cue_consumer_mft,
+        refresh_cue_consumer_mft,
+    )
+
+    data_dir = Path(output_dir) if output_dir is not None else DEFAULT_OUTPUT_DIR
+    try:
+        payload = refresh_cue_consumer_mft(
+            output_dir=data_dir,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "Cue-consumer MFT lab"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+        for finding in ops_findings_from_cue_consumer_mft(payload)
+    ]
+
+
 def check_hold_period_counterfactual(
     *,
     paper_root: Path | None = None,
@@ -4200,6 +4250,7 @@ def collect_ops_findings(
     findings.extend(check_hold_period_counterfactual())
     findings.extend(check_post_sell_cue_digest())
     findings.extend(check_post_sale_review_queue())
+    findings.extend(check_cue_consumer_mft())
     findings.extend(check_n200_tech_timing_observe())
     findings.extend(check_n201_value_mom_observe())
     findings.extend(check_n210_ai_judgment_observe())

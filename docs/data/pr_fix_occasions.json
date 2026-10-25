@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-25T10:35:50.617169+00:00",
-  "occasion_count": 276,
+  "updated_at": "2026-10-25T13:43:12.745859+00:00",
+  "occasion_count": 279,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -5002,6 +5002,63 @@
       ],
       "notes": "One-pass: merged main (already had BHMG/DLN+prior goldens); full AST audit 0 mismatches vs committed screen/library; defer IDs rebased N228/L633/N229 after L632 collision.",
       "details": {}
+    },
+    {
+      "id": "prf-20261025-010",
+      "recorded_at": "2026-10-25T12:36:34.877791+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "Ruff format failed on cue_consumer_mft / post_sale_review_opinion / test_cue_consumer_mft",
+      "pr_number": 1183,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "unformatted files; applying ruff format",
+      "details": {}
+    },
+    {
+      "id": "prf-20261025-011",
+      "recorded_at": "2026-10-25T13:14:32.992675+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "test(1) hung ~35m on pytest shard; cancelled run 40193898846 and re-ran",
+      "pr_number": 1183,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (1)"
+      ],
+      "notes": "Other shards green; validate already passed on tip bcf20037d3",
+      "details": {}
+    },
+    {
+      "id": "prf-20261025-012",
+      "recorded_at": "2026-10-25T13:43:12.745859+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "test(1) hung again ~24m on tip 471d6e485d (peers finished ≤8m); empty-commit re-trigger",
+      "pr_number": 1183,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (1)"
+      ],
+      "notes": "Cannot cancel via integration token; second re-trigger",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -5235,7 +5292,7 @@
     "by_kind": [
       {
         "kind": "ci_check",
-        "count": 141
+        "count": 144
       },
       {
         "kind": "merge_conflict",
@@ -5245,7 +5302,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 272
+        "count": 275
       },
       {
         "source": "traffic_controller",
