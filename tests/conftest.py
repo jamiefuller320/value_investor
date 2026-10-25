@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import inspect
 import os
 import subprocess
 from datetime import datetime
@@ -14,8 +15,9 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 _DOCS_STATUS_KEY = pytest.StashKey[set[str] | None]()
 
 # Name tokens for tests in test_research_filings.py that hit live IR/SEC/ASX
-# endpoints. Eng preflight excludes ``live_network`` so the 600s budget is not
-# burned on the known flake class (full CI still runs them).
+# endpoints. Eng preflight and PR/push CI (ci.yml) exclude ``live_network`` so
+# the suite does not burn budget / hang a shard on CDN stalls. Nightly
+# (ci-main-nightly.yml) still runs them.
 _LIVE_NETWORK_NAME_TOKENS = (
     "live_fetch",
     "has_fetchable_ir",
@@ -24,16 +26,57 @@ _LIVE_NETWORK_NAME_TOKENS = (
     "live_sec",
     "trading_update_live",
     "h1_live",
+    "_live_",  # e.g. f6k_live / leftover live helpers not covered above
     "sec_edgar_body_accepts_issuer_alias",
     "resolve_asx_publisher_document_url_fmg_marketindex_iwb_inline",
     "results_pdf_fetches",
 )
 
+_LIVE_FETCH_CALL_TOKENS = (
+    "fetch_filing_body(",
+    "_live_fetch_filing_body(",
+    "_first_fetchable_allowlist_body(",
+)
+
+
+def _research_filings_unpatched_live_fetch(item: pytest.Item) -> bool:
+    """True when the test body calls a live fetch helper without patching it."""
+    obj = getattr(item, "obj", None)
+    if obj is None:
+        return False
+    try:
+        src = inspect.getsource(obj)
+    except (OSError, TypeError):
+        return False
+    if not any(token in src for token in _LIVE_FETCH_CALL_TOKENS):
+        return False
+    # Decorator / in-body patch of fetch_filing_body → not a live CI fetch.
+    header, _, body = src.partition("\ndef ")
+    if "fetch_filing_body" in header and ("@patch" in header or "patch(" in header):
+        return False
+    if "monkeypatch" in src and "fetch_filing_body" in src:
+        if any(
+            needle in src
+            for needle in (
+                "filings.fetch_filing_body",
+                "setattr(fetch_filing_body",
+                'setattr("fetch_filing_body"',
+                "setattr('fetch_filing_body'",
+            )
+        ):
+            return False
+        # Common pattern: monkeypatch.setattr("value_investor.research.filings.fetch_filing_body", ...)
+        if "monkeypatch.setattr" in src and "fetch_filing_body" in src:
+            return False
+    if "patch(" in body and "fetch_filing_body" in body:
+        return False
+    return True
+
 
 def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line(
         "markers",
-        "live_network: hits live IR/SEC/ASX endpoints (skipped in eng preflight)",
+        "live_network: hits live IR/SEC/ASX endpoints (skipped in eng preflight + PR/push CI; nightly keeps them)",
     )
 
 
@@ -44,6 +87,9 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
             continue
         name = item.name
         if any(token in name for token in _LIVE_NETWORK_NAME_TOKENS):
+            item.add_marker(mark)
+            continue
+        if _research_filings_unpatched_live_fetch(item):
             item.add_marker(mark)
 
 

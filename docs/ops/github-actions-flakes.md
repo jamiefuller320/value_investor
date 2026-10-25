@@ -28,6 +28,7 @@ If the **latest** `CI` and `Deploy GitHub Pages` runs on `main` are green, older
 
 | Pattern | Typical cause | Action needed |
 |---------|---------------|---------------|
+| One pytest shard hung 20–35m+ while peers finish ≤8m (often after ~85%) | `test_research_filings.py` live IR/SEC fetches (`live_network`) landed on that shard after round-robin shift when a new earlier test module was added | PR/push CI now uses `-m "not live_network"` (nightly keeps live fetches). Do not empty-commit-retrigger — check whether the hung job is the research_filings shard |
 | `startup_failure` — *"workflow file issue"* | GitHub Actions runner could not start the job (no logs) | **Re-run** or push again; later runs on the same PR usually pass |
 | `HTTP 403: Resource not accessible by integration` on `gh workflow run` | Caller workflow `GITHUB_TOKEN` lacks `actions: write` | **Not a flake** — grant `actions: write` (email-report.yml pattern). Hygiene scan + workflow-failure signature. Unmatched other GHA failures bundle into **one** Daily-hub task (`gha:workflow-ci-failures`) |
 | `cancelled` — *"higher priority waiting request"* | `concurrency: cancel-in-progress` on CI when a newer commit lands on the same PR | **None** — superseded run |

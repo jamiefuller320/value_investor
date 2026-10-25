@@ -191,9 +191,9 @@ def should_run_acceptance_verify(task: dict[str, Any]) -> tuple[bool, str]:
     return True, "ok"
 
 
-# Live IR/SEC/ASX body fetches in test_research_filings.py are a known flake
-# class (ci-pr-autofix reruns them). Eng preflight must not burn its 600s budget
-# on them — full CI still runs the marked tests.
+# Live IR/SEC/ASX body fetches in test_research_filings.py are a known flake /
+# hang class (ci-pr-autofix may re-run; PR #1183 shard hung 20–35m+). Eng
+# preflight and PR/push CI skip them; nightly still runs the marked tests.
 PREFLIGHT_SKIP_LIVE_NETWORK_MARKER = "not live_network"
 
 

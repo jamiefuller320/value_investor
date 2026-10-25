@@ -61,6 +61,10 @@ jobs:
   test:
     needs: validate
     runs-on: ubuntu-latest
+    # Live IR/SEC/ASX body fetches (pytest mark live_network) can stall a shard
+    # 20–35m+ when CDNs hang; eng preflight already skips them. Nightly still
+    # runs the full suite including live_network (ci-main-nightly.yml).
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -83,7 +87,11 @@ jobs:
           set -euo pipefail
           FILES=$(python3 -m value_investor.pytest_shard --shard "${{ matrix.shard }}" --shards 4)
           echo "Running: $FILES"
-          pytest -q $FILES
+          # Skip live_network: known hang/flake class (see tests/conftest.py).
+          # Round-robin file sharding moves test_research_filings.py between
+          # shards when any earlier test module is added — concentrating the
+          # live IR fetches onto one job (#1183 shard 1 hang).
+          pytest -q -m "not live_network" $FILES
 
   engineering-path-guard:
     if: github.event_name == 'pull_request'

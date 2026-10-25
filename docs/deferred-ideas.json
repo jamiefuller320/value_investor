@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-25T12:33:08+00:00",
+  "updated_at": "2026-10-25T14:36:46+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -15348,6 +15348,23 @@
       "added_at": "2026-10-25T11:04:05+00:00",
       "updated_at": "2026-10-25T12:33:07+00:00",
       "status_note": "Same-day buy\u2192sell soft bias + major_error_reverse exception shipped in autopsy opinion + cue_consumer_mft assess helpers (soft penalty, not hard ban)."
+    },
+    {
+      "id": "L635",
+      "category": "later",
+      "section": "ops",
+      "title": "Weight-aware pytest sharding for research_filings",
+      "summary": "Round-robin by sorted file path moves the huge test_research_filings module (and its live_network tests) between CI shards whenever an earlier test file is added. PR/push CI now skips live_network; consider sharding by collected test count or isolating research_filings so one matrix job cannot absorb disproportionate runtime.",
+      "revisit_when": "A CI shard without live_network still regularly exceeds ~15 minutes, or nightly live_network shard timeouts become frequent",
+      "tags": [
+        "ci",
+        "pytest",
+        "sharding",
+        "live_network"
+      ],
+      "status": "open",
+      "source": "https://github.com/jamiefuller320/value_investor/pull/1183 hang investigation",
+      "added_at": "2026-10-25T14:36:46+00:00"
     }
   ],
   "fragments": [

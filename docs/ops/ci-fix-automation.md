@@ -215,11 +215,18 @@ The repo was bulk-formatted once (Aug 2026) so touched files rarely surface lega
 (see `.github/workflows/ci.yml` `paths-ignore`). That can hide test coupling to
 committed snapshots until a code PR runs pytest.
 
-**CI pytest parallelism:** `ci.yml` and `ci-main-nightly.yml` run the full suite
-as **four matrix shards** (`python3 -m value_investor.pytest_shard --shards 4`).
+**CI pytest parallelism:** `ci.yml` and `ci-main-nightly.yml` run the suite as
+**four matrix shards** (`python3 -m value_investor.pytest_shard --shards 4`).
 Each shard is an independent job; together they cover every `tests/` module
 exactly once. Preflight on engineering PRs is unchanged (scoped pytest before
 open). See `src/value_investor/pytest_shard.py`.
+
+**`live_network` mark:** PR/push CI runs `pytest -m "not live_network"` so live
+IR/SEC/ASX body fetches in `test_research_filings.py` cannot stall a shard
+(adding any earlier test module round-robins that file onto a different shard —
+#1183 moved it to shard 1 and hung ~20–35m+). Eng preflight already skipped the
+same mark. **`ci-main-nightly.yml`** still runs the full suite including
+`live_network`.
 
 **`ci-main-nightly.yml`** runs full pytest on `main` daily (07:30 UTC via
 cron-job.org; GitHub `schedule` backup). Failures enter the same ci-fix-responder
