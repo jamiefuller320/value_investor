@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-25T07:29:38+00:00",
+  "updated_at": "2026-10-25T07:54:59+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -15075,7 +15075,7 @@
       "section": "learning",
       "title": "Hardened ruleset proposals from cue-consumer MFT to new sealed twins",
       "summary": "Downstream of N222: when the mid-flight-tune sleeve has incorporation evidence, emit hardened_ruleset_proposal artifacts and re-test only as NEW sealed twins / cold-start observe seals (own registration_id). Never silent promote onto strand A; never mid-flight rewrite of existing sealed cue books; sealed re-test is a new epoch/identity. Distinct from N219 auto-promote of free-form agent mining.",
-      "revisit_when": "N222 eng reconsidered or running; owner locks Q6 (first emit after \u22652 knob epochs + close-count floor by default); O3 alone-first volume path clear for a new twin; no Data P1 steal.",
+      "revisit_when": "N222 eng reconsidered or running; Q6B soft thin readiness + novelty gate + per-root cap documented; O3 alone-first volume path clear for a new twin; lineage markers required; no Data P1 steal; cull\u2260live promote.",
       "tags": [
         "super-book",
         "hardened-proposal",
@@ -15085,7 +15085,8 @@
       ],
       "status": "open",
       "source": "store docs/super-book-midflight-tune-2026-10-25.md",
-      "added_at": "2026-10-25T07:29:38+00:00"
+      "added_at": "2026-10-25T07:29:38+00:00",
+      "updated_at": "2026-10-25T07:54:53+00:00"
     },
     {
       "id": "N224",
@@ -15100,9 +15101,11 @@
         "hardened-proposal",
         "falsify-first"
       ],
-      "status": "open",
+      "status": "done",
       "source": "store docs/super-book-midflight-tune-2026-10-25.md",
-      "added_at": "2026-10-25T07:29:38+00:00"
+      "added_at": "2026-10-25T07:29:38+00:00",
+      "updated_at": "2026-10-25T07:54:59+00:00",
+      "status_note": "Owner locked Q6B (thin/earlier emit with soft readiness). Soft thin gate + novelty/cap/cull supersede the Q6A hard wait; see store super-book-midflight-tune-2026-10-25.md."
     },
     {
       "id": "N225",
@@ -15120,6 +15123,101 @@
       "status": "open",
       "source": "store docs/super-book-midflight-tune-2026-10-25.md",
       "added_at": "2026-10-25T07:29:38+00:00"
+    },
+    {
+      "id": "L629",
+      "category": "later",
+      "section": "learning",
+      "title": "Soft thin-emit readiness for cue-consumer hardened proposals (Q6B)",
+      "summary": "When N222 runs: allow earlier hardened_ruleset_proposal emit under soft readiness (\u22653 lab closes citing levers OR \u22651 MoM window + proposal hygiene), not a \u22652-epoch hard gate. Emit still faces novelty/similarity gate and per-root concurrent cap \u2014 emit\u2260keep forever. Design: store super-book-midflight-tune-2026-10-25.md.",
+      "revisit_when": "N222 promoted to now/eng started; implement soft gate + hygiene fields before first spawn.",
+      "tags": [
+        "super-book",
+        "Q6B",
+        "thin-emit",
+        "soft-readiness"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-93d64983-54dd-5774-b451-11565bce04bf",
+      "added_at": "2026-10-25T07:54:53+00:00"
+    },
+    {
+      "id": "N226",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Novelty/similarity gate before cue-consumer sealed twin spawn",
+      "summary": "Hard anti-noise: before sealing a child from a hardened proposal, reject or merge near-duplicates of existing lineage members (ruleset distance / shared levers / same cue+timing recipe fingerprint). Prefer merge into parent over a second similar active seal. Prevents dozens of similar models.",
+      "revisit_when": "N222/N223 eng path open; fingerprint schema + reject/merge actions specified in eng pin; O1 capacity.",
+      "tags": [
+        "super-book",
+        "novelty",
+        "anti-noise",
+        "lineage"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-93d64983-54dd-5774-b451-11565bce04bf",
+      "added_at": "2026-10-25T07:54:53+00:00"
+    },
+    {
+      "id": "N227",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Per-root concurrent sealed-child cap with cull/replace (super-book lineage)",
+      "summary": "Hard cap on concurrent active sealed children per evolutionary_root_id (v0 default \u22643) plus O1/launch-queue global budget. At cap: cull or replace weakest before spawn \u2014 never accumulate. Cull criteria declared (fair-cost episode % and/or MoM levers) not opaque rank. Cull\u2260auto-promote survivor to live capital. Meta-first: no linear review load per child.",
+      "revisit_when": "N222/N223 eng path open; owner confirms or tightens Q7 cap default (\u22643); cull_spec_id + Sunday/at-cap cadence wired.",
+      "tags": [
+        "super-book",
+        "cap",
+        "cull",
+        "anti-noise",
+        "meta-first",
+        "O1"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-93d64983-54dd-5774-b451-11565bce04bf",
+      "added_at": "2026-10-25T07:54:53+00:00",
+      "trigger": {
+        "all": [
+          {
+            "on_or_after": "2026-12-01"
+          }
+        ]
+      }
+    },
+    {
+      "id": "L630",
+      "category": "later",
+      "section": "learning",
+      "title": "Lineage tracking for evolutionary sealed forks from cue-consumer proposals",
+      "summary": "Every spawned sealed child carries evolutionary_root_id, parent_proposal_id/parent_registration_id, and lineage_fork_id when start-point differs. Forks allowed only with explicit lineage; same declared cull logic applies across forks. Required for novelty gate and per-root caps.",
+      "revisit_when": "First hardened proposal ready to spawn; registration schema includes lineage markers before seal.",
+      "tags": [
+        "super-book",
+        "lineage",
+        "fork",
+        "evolutionary"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-93d64983-54dd-5774-b451-11565bce04bf",
+      "added_at": "2026-10-25T07:54:54+00:00"
+    },
+    {
+      "id": "L631",
+      "category": "later",
+      "section": "learning",
+      "title": "Archive frozen cull losers from super-book sealed children (no active noise)",
+      "summary": "Periodic cull removes weakest/similar children from the active observe set; retain frozen marks for credit-free mining/archive. Do not leave losers as active dashboard noise. Aligns meta-first attention preference.",
+      "revisit_when": "Cull cadence eng (with per-root cap) lands; archive path + dashboard nest under lineage root.",
+      "tags": [
+        "super-book",
+        "cull",
+        "archive",
+        "meta-first",
+        "anti-noise"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-93d64983-54dd-5774-b451-11565bce04bf",
+      "added_at": "2026-10-25T07:54:54+00:00"
     }
   ],
   "fragments": [
