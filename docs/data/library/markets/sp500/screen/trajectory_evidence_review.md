@@ -1,58 +1,57 @@
 # Trajectory evidence review
 
-Generated: 2026-10-23T07:22:44.177173+00:00
-Archive snapshots: 59
-Transition events: 3961
-Boundary watch panel: 190
+Generated: 2026-10-25T06:55:36.777486+00:00
+Archive snapshots: 60
+Transition events: 3985
+Boundary watch panel: 187
 Loser snapshot cards: None
 
 ## Boundary watch
 
-- Panel count: 190 (core tags only; mean weeks on boundary=26.87)
-- avoid_recovery_candidate: 4
-- buy_weakening: 2
-- hold_deteriorating: 9
+- Panel count: 187 (core tags only; mean weeks on boundary=26.95)
+- avoid_recovery_candidate: 3
+- hold_deteriorating: 8
 - hold_improving: 6
-- pre_avoid: 24
+- pre_avoid: 25
 - pre_buy: 124
 - strong_buy_candidate: 25
 
 ## Outcome summary (1-week forward)
 
-- Upgrades: n=453 mean=0.003014 positive_rate=0.2406
-- Downgrades: n=341 mean=0.002561 positive_rate=0.2141
+- Upgrades: n=468 mean=0.002453 positive_rate=0.2415
+- Downgrades: n=357 mean=0.002326 positive_rate=0.2157
 
 ### By transition key
 - avoid->buy: n=2 mean=-0.051723 positive_rate=0.0
-- avoid->hold: n=170 mean=0.002063 positive_rate=0.2824
+- avoid->hold: n=176 mean=0.001824 positive_rate=0.2784
 - buy->avoid: n=1 mean=-0.004061 positive_rate=0.0
-- buy->hold: n=115 mean=0.003287 positive_rate=0.2435
-- buy->strong_buy: n=77 mean=0.004402 positive_rate=0.2597
-- hold->avoid: n=141 mean=0.001336 positive_rate=0.227
-- hold->buy: n=173 mean=0.004069 positive_rate=0.2254
-- hold->strong_buy: n=31 mean=0.002422 positive_rate=0.0645
-- signal_unchanged: n=3112 mean=-0.002637 positive_rate=0.2551
-- strong_buy->buy: n=82 mean=0.003139 positive_rate=0.1463
+- buy->hold: n=124 mean=0.002864 positive_rate=0.2419
+- buy->strong_buy: n=80 mean=0.003768 positive_rate=0.2625
+- hold->avoid: n=147 mean=0.000882 positive_rate=0.2177
+- hold->buy: n=178 mean=0.003559 positive_rate=0.2303
+- hold->strong_buy: n=32 mean=-0.000141 positive_rate=0.0625
+- signal_unchanged: n=2659 mean=-0.003106 positive_rate=0.2979
+- strong_buy->buy: n=83 mean=0.003569 positive_rate=0.1687
 - strong_buy->hold: n=2 mean=0.026689 positive_rate=0.5
 
 ## Multi-horizon prediction calibration
 
-- 1w: scored=1921 hit_rate=0.2426
-- 4w: scored=1899 hit_rate=0.4055
-- 8w: scored=1827 hit_rate=0.4745
-- 12w: scored=1756 hit_rate=0.4391
+- 1w: scored=1979 hit_rate=0.2471
+- 4w: scored=1918 hit_rate=0.4098
+- 8w: scored=1830 hit_rate=0.4732
+- 12w: scored=1755 hit_rate=0.441
 
 ## Weeks to realization
 
-- Realized within 12w: 1386/1976 (rate=0.7014)
-- Median weeks: 2.0
-- Within 4w rate: 0.7439
+- Realized within 12w: 1421/2030 (rate=0.7)
+- Median weeks: 2
+- Within 4w rate: 0.7502
 
 ## Model focus candidates (for analysis-review scoring)
 
-- [transition_key] hold->strong_buy 1w positive_rate=0.0645 mean=0.002422 n=31 — opinion flip did not match next-week price
-- [transition_key] strong_buy->buy 1w positive_rate=0.1463 mean=0.003139 n=82 — opinion flip did not match next-week price
-- [transition_key] hold->buy 1w positive_rate=0.2254 mean=0.004069 n=173 — opinion flip did not match next-week price
-- [transition_key] hold->avoid 1w positive_rate=0.227 mean=0.001336 n=141 — opinion flip did not match next-week price
-- [transition_key] buy->hold 1w positive_rate=0.2435 mean=0.003287 n=115 — opinion flip did not match next-week price
-- [transition_key] signal_unchanged 1w positive_rate=0.2551 mean=-0.002637 n=3112 — opinion flip did not match next-week price
+- [transition_key] hold->strong_buy 1w positive_rate=0.0625 mean=-0.000141 n=32 — opinion flip did not match next-week price
+- [transition_key] strong_buy->buy 1w positive_rate=0.1687 mean=0.003569 n=83 — opinion flip did not match next-week price
+- [transition_key] hold->avoid 1w positive_rate=0.2177 mean=0.000882 n=147 — opinion flip did not match next-week price
+- [transition_key] hold->buy 1w positive_rate=0.2303 mean=0.003559 n=178 — opinion flip did not match next-week price
+- [transition_key] buy->hold 1w positive_rate=0.2419 mean=0.002864 n=124 — opinion flip did not match next-week price
+- [transition_key] buy->strong_buy 1w positive_rate=0.2625 mean=0.003768 n=80 — opinion flip did not match next-week price

@@ -1,15 +1,32 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-23T08:33:31.558892+01:00",
+    "local_time": "2026-10-25T07:08:35.590139+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-23T08:00:00+01:00",
-    "settle_at": "2026-10-23T09:15:00+01:00",
+    "market_open_at": "2026-10-25T08:00:00+00:00",
+    "settle_at": "2026-10-25T09:15:00+00:00",
     "can_act": false,
-    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    "reason": "before market open"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "70e7d6d2-4ba2-467e-af98-933062050d65",
+      "fund_id": "4fccad73-35ea-4c28-9c2b-6a42c72f3a4d",
+      "acted_at": "2026-10-25T07:08:35.590139+00:00",
+      "ticker": "OMV.VI",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 0.184354,
+      "price": 74.75,
+      "gross": 13.78,
+      "cost": 0.02,
+      "net_cash": 13.76,
+      "note": "Automated trim",
+      "name": "OMV Aktiengesellschaft",
+      "avg_cost_at_exit": 71.3647
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +40,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 998.13,
-    "cash": 0.0,
+    "nav": 994.41,
+    "cash": 13.76,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -36,27 +53,24 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 997.25,
+    "target_sleeve_value": 497.2,
     "targets": [
       {
         "ticker": "STR.VI",
         "name": "Strabag SE",
         "signal": "strong_buy",
         "conviction_score": 0.75,
-        "price": 98.5
-      }
-    ],
-    "anticipated_exits": [
+        "price": 96.4
+      },
       {
-        "action": "sell",
         "ticker": "OMV.VI",
         "name": "OMV Aktiengesellschaft",
-        "reason": "No longer in the top conviction target set",
-        "shares": 6.835753,
-        "price": 73.75,
-        "value": 504.14
+        "signal": "buy",
+        "conviction_score": 0.5601,
+        "price": 74.75
       }
     ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [
@@ -65,45 +79,48 @@
         "ticker": "STR.VI",
         "name": "Strabag SE",
         "reason": "Top-up to equal weight",
-        "value": 503.25,
-        "price": 98.5,
-        "target_value": 997.25,
+        "value": 13.74,
+        "price": 96.4,
+        "target_value": 497.2,
         "conviction_score": 0.75,
         "signal": "strong_buy"
       }
     ],
-    "anticipated_holds": [],
-    "skipped": [],
-    "waitlisted": [
+    "anticipated_holds": [
       {
+        "action": "hold",
         "ticker": "OMV.VI",
         "name": "OMV Aktiengesellschaft",
-        "signal": "buy",
-        "conviction_score": 0.5905,
-        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+        "reason": "Already near equal-weight target",
+        "value": 497.19,
+        "target_value": 497.2,
+        "conviction_score": 0.5601,
+        "signal": "buy"
       }
     ],
-    "summary": "Next rebalance would target 1 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s)."
+    "skipped": [],
+    "waitlisted": [],
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s); deploy cash into 1 buy(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
       "ticker": "OMV.VI",
       "name": "OMV Aktiengesellschaft",
       "source": "paper",
-      "severity": "watch",
-      "message": "Technical timing is wait \u2014 avoid adding size",
-      "mark": 73.75,
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 74.75,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "wait"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "STR.VI",
       "name": "Strabag SE",
       "source": "paper",
       "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 98.5,
+      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
+      "mark": 96.4,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -124,13 +141,13 @@
       "id": "4fccad73-35ea-4c28-9c2b-6a42c72f3a4d",
       "created_at": "2026-10-02T19:58:56.465993+00:00"
     },
-    "cash": 0.0,
+    "cash": 13.76,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
       "OMV.VI": {
         "ticker": "OMV.VI",
-        "shares": 6.835753,
+        "shares": 6.651399,
         "avg_cost": 71.3647,
         "name": "OMV Aktiengesellschaft",
         "sector": "Energy",
@@ -289,6 +306,22 @@
         "net_cash": -10.37,
         "note": "Automated buy",
         "name": "Strabag SE"
+      },
+      {
+        "id": "70e7d6d2-4ba2-467e-af98-933062050d65",
+        "fund_id": "4fccad73-35ea-4c28-9c2b-6a42c72f3a4d",
+        "acted_at": "2026-10-25T07:08:35.590139+00:00",
+        "ticker": "OMV.VI",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.184354,
+        "price": 74.75,
+        "gross": 13.78,
+        "cost": 0.02,
+        "net_cash": 13.76,
+        "note": "Automated trim",
+        "name": "OMV Aktiengesellschaft",
+        "avg_cost_at_exit": 71.3647
       }
     ],
     "equity_curve": [
@@ -655,24 +688,39 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-25T07:08:35.590139+00:00",
+        "portfolio_value": 835.19,
+        "cash": 13.76,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83764
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-23T08:33:31.558892+01:00",
+    "last_mark_at": "2026-10-25T07:08:35.590139+00:00",
     "rebalance_state": {
-      "exit_streak": {
-        "OMV.VI": 1
-      },
+      "exit_streak": {},
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "atx",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-23T07:33:31.641207+00:00",
+    "generated_at": "2026-10-25T07:08:35.638200+00:00",
     "observe_only": true,
     "open_count": 0,
     "closed_count": 0,
@@ -751,7 +799,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-23T07:33:31.641970+00:00",
+    "generated_at": "2026-10-25T07:08:35.638943+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -852,8 +900,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-23T07:33:31.642658+00:00",
-    "as_of": "2026-10-23T08:33:31.558892+01:00",
+    "updated_at": "2026-10-25T07:08:35.639801+00:00",
+    "as_of": "2026-10-25T07:08:35.590139+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -866,7 +914,7 @@
       "skip_underwater_urgency_when_intact": true
     },
     "holding_count": 2,
-    "underwater_count": 0,
+    "underwater_count": 1,
     "thesis_status_counts": {
       "intact": 2,
       "weakening": 0,
@@ -875,13 +923,13 @@
     },
     "portfolio_feedback": {
       "holding_count": 2,
-      "loser_count": 0,
-      "loser_share": 0.0,
-      "loser_nav_share": 0.0,
+      "loser_count": 1,
+      "loser_share": 0.5,
+      "loser_nav_share": 0.493,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
-      "within_tolerance": true,
-      "intact_loser_count": 0,
+      "within_tolerance": false,
+      "intact_loser_count": 1,
       "weakening_loser_count": 0,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
@@ -893,13 +941,13 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.5,
+        "quality": 1.0,
         "dividend": 0.0,
         "garp": 0.0,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
-      "balancing_hint": "maintain",
+      "balancing_hint": "hold_intact_review_selection",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
@@ -908,10 +956,10 @@
         "name": "Strabag SE",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
-        "underwater": false,
+        "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0321,
-        "mark": 98.5,
+        "unrealized_pct": -0.0527,
+        "mark": 96.4,
         "avg_cost": 101.7631,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -927,6 +975,7 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
+          "price drawdown alone does not invalidate value thesis",
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
@@ -950,12 +999,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0334,
-        "mark": 73.75,
+        "unrealized_pct": 0.0474,
+        "mark": 74.75,
         "avg_cost": 71.3647,
         "signal": "buy",
-        "timing_signal": "wait",
-        "conviction_score": 0.5905,
+        "timing_signal": "neutral",
+        "conviction_score": 0.5601,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -972,14 +1021,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 59%"
+          "conviction 56%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 59%"
+          "conviction 56%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -992,7 +1041,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-23T07:33:31.643582+00:00",
+    "generated_at": "2026-10-25T07:08:35.641018+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1052,7 +1101,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-23T07:33:31.645183+00:00",
+    "generated_at": "2026-10-25T07:08:35.642863+00:00",
     "open_count": 1,
     "closed_count": 1,
     "scored_count": 1,
@@ -1112,13 +1161,13 @@
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
-    "marked_this_pass": 2,
-    "closed_this_pass": 1
+    "marked_this_pass": 1,
+    "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-23T08:33:31.558892+01:00",
+    "generated_at": "2026-10-25T07:08:35.590139+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1175,7 +1224,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-23T08:33:31.558892+01:00",
+    "generated_at": "2026-10-25T07:08:35.590139+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1202,7 +1251,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-23T08:33:31.558892+01:00",
+      "generated_at": "2026-10-25T07:08:35.590139+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
@@ -1231,7 +1280,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-23T07:33:31.647303+00:00",
+  "generated_at": "2026-10-25T07:08:35.645655+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
