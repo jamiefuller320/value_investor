@@ -2998,6 +2998,57 @@ def _fcf_yield_unit_fx_error_from_row(row: pd.Series) -> bool:
     return bool(unit_fx_raw)
 
 
+def filing_aligned_primary_when_screen_company_diverge(
+    *,
+    screen_ttm: float | None,
+    company_adjusted: float | None,
+    filing_aligned: float | None,
+    fcf_bundle: dict[str, Any],
+    filing_currency: str = "USD",
+    company_adjusted_currency: str | None = None,
+) -> tuple[float | None, str | None]:
+    """FGP-style overlay primary: filing when screen and company-adjusted are the split pair.
+
+    Applies when auto-policy discarded company-adjusted, filing pairs with screen TTM,
+    and both diverge from company-adjusted beyond the universe threshold. Skips stale-year
+    company KPI rebinding so filing-year bridge policies (e.g. £73.8m) stay primary.
+    """
+    if (
+        company_adjusted is None
+        or screen_ttm is None
+        or filing_aligned is None
+        or bool(fcf_bundle.get("company_adjusted_stale_year"))
+    ):
+        return None, None
+    discarded = fcf_bundle.get("auto_policy_discarded") or []
+    if "company_adjusted" not in discarded:
+        return None, None
+    ca_currency = company_adjusted_currency or filing_currency
+    if not fcf_basis_values_diverge(
+        screen_ttm,
+        float(company_adjusted),
+        left_currency=filing_currency,
+        right_currency=ca_currency,
+        threshold=FCF_UNIVERSE_DIVERGENCE_THRESHOLD,
+    ):
+        return None, None
+    if not _fcf_sources_agree(
+        float(filing_aligned),
+        screen_ttm,
+        threshold=FCF_MAJORITY_AGREE_THRESHOLD,
+    ):
+        return None, None
+    if not fcf_basis_values_diverge(
+        float(filing_aligned),
+        float(company_adjusted),
+        left_currency=filing_currency,
+        right_currency=ca_currency,
+        threshold=FCF_UNIVERSE_DIVERGENCE_THRESHOLD,
+    ):
+        return None, None
+    return float(filing_aligned), "filing_aligned"
+
+
 def resolve_primary_fcf_for_overlay(
     row: pd.Series,
     fcf_bundle: dict[str, Any],
@@ -3005,13 +3056,38 @@ def resolve_primary_fcf_for_overlay(
     """Pick one auditable primary FCF for overlays and dividend-family suppression.
 
     Precedence (first match wins):
-    1. Reviewed or auto-resolved policy FCF when basis is not lone Yahoo screen TTM.
-    2. Company-adjusted / management APM FCF from filings or bridges.
-    3. When filing statutory OCF−CapEx disagrees with Yahoo TTM (or unit FX error):
+    1. FGP-style filing-aligned primary when screen TTM and company-adjusted diverge
+       while auto-policy discarded company-adjusted (three-way cases).
+    2. Reviewed or auto-resolved policy FCF when basis is not lone Yahoo screen TTM.
+    3. Company-adjusted / management APM FCF when it agrees with screen TTM.
+    4. When filing statutory OCF−CapEx disagrees with Yahoo TTM (or unit FX error):
        reconciled canonical when source is not screen TTM, else filing-aligned, else None.
-    4. Yahoo screen TTM when bases agree.
-    5. Row ``free_cashflow`` (already canonicalised on the universe frame).
+    5. Yahoo screen TTM when bases agree.
+    6. Row ``free_cashflow`` (already canonicalised on the universe frame).
     """
+    screen_ttm = screen_ttm_from_row(row)
+    filing_aligned_raw = fcf_bundle.get("filing_aligned")
+    filing_aligned = (
+        float(filing_aligned_raw) if isinstance(filing_aligned_raw, (int, float)) else None
+    )
+    filing_currency = str(fcf_bundle.get("currency") or "USD")
+    company_adjusted_raw = fcf_bundle.get("company_adjusted")
+    company_adjusted = (
+        float(company_adjusted_raw) if isinstance(company_adjusted_raw, (int, float)) else None
+    )
+    company_adjusted_currency = fcf_bundle.get("company_adjusted_currency")
+
+    filing_primary, filing_basis = filing_aligned_primary_when_screen_company_diverge(
+        screen_ttm=screen_ttm,
+        company_adjusted=company_adjusted,
+        filing_aligned=filing_aligned,
+        fcf_bundle=fcf_bundle,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
+    )
+    if filing_primary is not None and filing_basis is not None:
+        return filing_primary, filing_basis
+
     policy_fcf = fcf_bundle.get("policy_fcf")
     policy_basis = str(fcf_bundle.get("policy_basis") or "")
     if (
@@ -3021,16 +3097,15 @@ def resolve_primary_fcf_for_overlay(
     ):
         return float(policy_fcf), policy_basis or "policy_fcf"
 
-    company_adjusted = fcf_bundle.get("company_adjusted")
-    if isinstance(company_adjusted, (int, float)):
-        return float(company_adjusted), "company_adjusted"
-
-    screen_ttm = screen_ttm_from_row(row)
-    filing_aligned = fcf_bundle.get("filing_aligned")
-    if isinstance(filing_aligned, (int, float)):
-        filing_aligned = float(filing_aligned)
-    else:
-        filing_aligned = None
+    if company_adjusted is not None:
+        if screen_ttm is None or not fcf_basis_values_diverge(
+            screen_ttm,
+            company_adjusted,
+            left_currency=filing_currency,
+            right_currency=company_adjusted_currency or filing_currency,
+            threshold=FCF_UNIVERSE_DIVERGENCE_THRESHOLD,
+        ):
+            return company_adjusted, "company_adjusted"
 
     mismatched = (
         bool(fcf_bundle.get("filing_screen_mismatch"))
@@ -3140,11 +3215,15 @@ def format_fcf_basis_action_note(
     company_adjusted_currency: str | None = None,
     screen_ttm_unverified: bool = False,
     policy_basis: str | None = None,
+    filing_aligned_primary: bool = False,
 ) -> str:
     """Surface filing-aligned, screen TTM, and company-adjusted FCF side-by-side."""
     parts: list[str] = []
     if filing_aligned is not None:
-        parts.append(f"filing {_format_fcf_compact(filing_aligned, currency=filing_currency)}")
+        filing_label = "filing (primary)" if filing_aligned_primary else "filing"
+        parts.append(
+            f"{filing_label} {_format_fcf_compact(filing_aligned, currency=filing_currency)}"
+        )
     include_screen_ttm = screen_ttm is not None
     # MGNS-style: when filing is policy and IR/management FCF is on the note, drop
     # unverified Yahoo screen TTM; keep screen when only filing vs screen are shown
@@ -3271,6 +3350,30 @@ def append_fcf_divergence_to_action_note(
     if coverage_gross is None:
         coverage_gross = bundle.get("fcf_dividend_coverage_gross")
 
+    filing_aligned_for_note = (
+        _float_or_none(filing_aligned) if filing_aligned is not None else _float_or_none(canonical)
+    )
+    company_adjusted_float = _float_or_none(company_adjusted)
+    filing_primary, filing_primary_basis = filing_aligned_primary_when_screen_company_diverge(
+        screen_ttm=screen_ttm,
+        company_adjusted=company_adjusted_float,
+        filing_aligned=filing_aligned_for_note,
+        fcf_bundle=bundle,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
+    )
+    filing_aligned_primary = (
+        filing_primary_basis == "filing_aligned"
+        and filing_primary is not None
+        and fcf_three_way_mismatch_flagged(
+            filing_aligned=filing_aligned_for_note,
+            screen_ttm=screen_ttm,
+            company_adjusted=company_adjusted_float,
+            filing_currency=filing_currency,
+            company_adjusted_currency=company_adjusted_currency,
+        )
+    )
+
     notes: list[str] = []
     if fcf_action_note_mismatch(
         filing_aligned=filing_for_mismatch,
@@ -3301,6 +3404,7 @@ def append_fcf_divergence_to_action_note(
                     company_adjusted_currency=company_adjusted_currency,
                     screen_ttm_unverified=bool(bundle.get("screen_ttm_unverified")),
                     policy_basis=str(bundle.get("policy_basis") or "") or None,
+                    filing_aligned_primary=filing_aligned_primary,
                 )
             )
         elif canonical is not None and screen_ttm is not None:

@@ -3909,21 +3909,26 @@ def test_enrich_universe_with_canonical_fcf_prefers_filing_when_yahoo_quarterly_
     assert bundle["policy_basis"] == "filing_aligned"
 
 
-def test_enrich_universe_with_canonical_fcf_uses_company_adjusted_when_present(tmp_path: Path):
+def test_enrich_universe_with_canonical_fcf_uses_filing_when_screen_company_diverge(
+    tmp_path: Path,
+):
+    """FGP-style: filing pairs with screen TTM while company-adjusted is the outlier."""
     _fgp_style_research_tree(tmp_path)
     universe = pd.DataFrame(
         [
             {
                 "ticker": "FGP.L",
                 "free_cashflow": 362_600_000.0,
+                "free_cashflow_screen_ttm": 302_812_512.0,
                 "market_cap": 973_000_000.0,
             }
         ]
     )
     enriched = enrich_universe_with_canonical_fcf(universe, tmp_path)
     row = enriched.iloc[0]
-    assert row["free_cashflow_screen_ttm"] == 362_600_000.0
-    assert row["free_cashflow"] == 113_500_000.0
+    assert row["free_cashflow_screen_ttm"] == 302_812_512.0
+    assert row["free_cashflow"] == 362_600_000.0
+    assert row["primary_fcf_basis"] == "filing_aligned"
 
 
 def _fgp_fy2026_stale_bridge_sources(tmp_path: Path) -> None:
@@ -4098,7 +4103,7 @@ def test_enrich_universe_with_canonical_fcf_rebinds_stale_bridge_company_adjuste
 
 
 def test_fcf_overlay_models_exclude_divergent_screen_ttm(tmp_path: Path):
-    """FCF Yield and Earnings Quality must use company-adjusted FCF, not Yahoo screen TTM."""
+    """FGP-style: canonical FCF must be filing-aligned, not Yahoo screen TTM or company-adj outlier."""
     _fgp_style_research_tree(tmp_path)
     universe = pd.DataFrame(
         [
@@ -4115,15 +4120,15 @@ def test_fcf_overlay_models_exclude_divergent_screen_ttm(tmp_path: Path):
     )
     universe = enrich_universe_with_canonical_fcf(universe, tmp_path)
     universe = enrich_universe_with_filing_metrics(universe, tmp_path)
-    assert universe.iloc[0]["free_cashflow"] == 113_500_000.0
+    assert universe.iloc[0]["free_cashflow"] == 362_600_000.0
     assert universe.iloc[0]["free_cashflow_screen_ttm"] == 302_812_512.0
+    assert universe.iloc[0]["primary_fcf_basis"] == "filing_aligned"
 
     model_results = evaluate_universe(universe, models=[FCFYieldModel(), EarningsQualityModel()])
     fcf_yield = model_results.loc[model_results["model_id"] == "fcf_yield"].iloc[0]
     earnings_quality = model_results.loc[model_results["model_id"] == "earnings_quality"].iloc[0]
 
-    assert "31" not in str(fcf_yield["reasons"])
-    assert "11.7" in str(fcf_yield["reasons"]) or "11.6" in str(fcf_yield["reasons"])
+    assert "37.3" in str(fcf_yield["reasons"])
     assert bool(earnings_quality["passed"]) is True
     assert "FCF/NI=" in str(earnings_quality["reasons"])
 

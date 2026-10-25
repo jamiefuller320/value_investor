@@ -790,6 +790,35 @@ def test_parse_profit_to_cash_ratio_pair_itv_fy_style():
     assert profit_to_cash_yoy_decline_pp(pair[0], pair[1]) == pytest.approx(18.0)
 
 
+def test_filing_aligned_primary_when_screen_company_diverge_fgp_style():
+    from value_investor.scoring.fcf import filing_aligned_primary_when_screen_company_diverge
+
+    primary, basis = filing_aligned_primary_when_screen_company_diverge(
+        screen_ttm=302_812_512.0,
+        company_adjusted=113_500_000.0,
+        filing_aligned=362_600_000.0,
+        fcf_bundle={"auto_policy_discarded": ["company_adjusted"], "currency": "GBP"},
+        filing_currency="GBP",
+        company_adjusted_currency="GBP",
+    )
+    assert basis == "filing_aligned"
+    assert primary == pytest.approx(362_600_000.0)
+
+    skipped, _ = filing_aligned_primary_when_screen_company_diverge(
+        screen_ttm=302_812_512.0,
+        company_adjusted=73_800_000.0,
+        filing_aligned=362_600_000.0,
+        fcf_bundle={
+            "auto_policy_discarded": ["company_adjusted"],
+            "company_adjusted_stale_year": True,
+            "currency": "GBP",
+        },
+        filing_currency="GBP",
+        company_adjusted_currency="GBP",
+    )
+    assert skipped is None
+
+
 def test_fcf_three_way_mismatch_requires_all_three_bases():
     assert not fcf_three_way_mismatch_flagged(
         filing_aligned=148_000_000.0,
@@ -1011,15 +1040,25 @@ def test_reconcile_fcf_majority_prefers_company_when_paired_with_filing():
     assert "screen_ttm" in (bundle.get("auto_policy_discarded") or [])
 
 
-def test_overlay_free_cashflow_from_bundle_uses_company_adjusted():
-    row = pd.Series({"ticker": "FGP.L", "free_cashflow": 362_600_000.0})
+def test_overlay_free_cashflow_from_bundle_uses_filing_when_screen_company_diverge():
+    """FGP-style three-way split: filing pairs with screen; company-adjusted is outlier."""
+    row = pd.Series(
+        {
+            "ticker": "FGP.L",
+            "free_cashflow": 362_600_000.0,
+            "free_cashflow_screen_ttm": 302_812_512.0,
+        }
+    )
     bundle = {
         "company_adjusted": 113_500_000.0,
+        "company_adjusted_currency": "GBP",
         "filing_aligned": 362_600_000.0,
+        "currency": "GBP",
         "canonical": 113_500_000.0,
         "divergence_flagged": True,
+        "auto_policy_discarded": ["company_adjusted"],
     }
-    assert overlay_free_cashflow_from_bundle(row, bundle) == 113_500_000.0
+    assert overlay_free_cashflow_from_bundle(row, bundle) == 362_600_000.0
 
 
 def test_overlay_free_cashflow_from_bundle_suppresses_screen_ttm_on_mismatch():
@@ -1058,13 +1097,17 @@ def test_resolve_primary_fcf_for_overlay_precedence_and_basis_labels():
 
     company_bundle = {
         "company_adjusted": 113_500_000.0,
+        "company_adjusted_currency": "GBP",
         "filing_aligned": 362_600_000.0,
+        "currency": "GBP",
         "canonical": 362_600_000.0,
         "filing_screen_mismatch": True,
+        "auto_policy_discarded": ["company_adjusted"],
     }
-    assert resolve_primary_fcf_for_overlay(row, company_bundle) == (
-        113_500_000.0,
-        "company_adjusted",
+    fgp_row = pd.Series({"free_cashflow_screen_ttm": 302_812_512.0})
+    assert resolve_primary_fcf_for_overlay(fgp_row, company_bundle) == (
+        362_600_000.0,
+        "filing_aligned",
     )
 
     aligned_bundle = {
@@ -1335,9 +1378,11 @@ def test_build_company_reports_exports_fcf_basis_overlay_for_fgp(tmp_path: Path)
     assert snapshot["fcf_basis_overlay"] is True
     assert snapshot["adjusted_signal"] == "buy"
     assert snapshot["conviction_score"] == pytest.approx(0.51)
-    assert snapshot["cashflow_metrics"]["free_cashflow"] == 113_500_000.0
-    assert snapshot["key_metrics"]["FCF"] == "113500000.0"
+    assert snapshot["cashflow_metrics"]["free_cashflow"] == 362_600_000.0
+    assert snapshot["key_metrics"]["FCF"] == "362600000.0"
+    assert snapshot["fcf"]["primary_fcf_basis"] == "filing_aligned"
     assert "company-adj £113.5M" in snapshot["action_note"]
+    assert "filing (primary)" in snapshot["action_note"]
 
 
 def test_reconcile_fcf_binds_filing_year_company_adjusted_over_stale_bridge(tmp_path: Path):
@@ -2263,7 +2308,7 @@ def test_build_company_reports_fcf_basis_overlay_caps_sbry_style_buy(tmp_path: P
     assert snapshot["fcf_basis_overlay"] is True
     assert snapshot["adjusted_signal"] == "hold"
     assert "FCF basis mismatch" in snapshot["action_note"]
-    assert "filing £923M" in snapshot["action_note"]
+    assert "filing (primary)" in snapshot["action_note"]
     assert "screen TTM £821.9M" in snapshot["action_note"]
     assert "company-adj £" in snapshot["action_note"]
 
@@ -2345,7 +2390,7 @@ def test_build_company_reports_fcf_basis_overlay_caps_srp_style_buy(tmp_path: Pa
     assert snapshot["adjusted_signal"] == "hold"
     assert snapshot["conviction_score"] == pytest.approx(0.557915 * 0.85)
     assert "FCF basis mismatch" in snapshot["action_note"]
-    assert "filing £413.5M" in snapshot["action_note"]
+    assert "filing (primary)" in snapshot["action_note"]
     assert "screen TTM £361.2M" in snapshot["action_note"]
     assert "company-adj £219M" in snapshot["action_note"]
 
