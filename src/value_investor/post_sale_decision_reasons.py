@@ -118,7 +118,9 @@ def _decision(
     }
 
 
-def _entry_code_from_detail(detail: Any, *, model_id: str | None) -> tuple[str | None, dict[str, Any]]:
+def _entry_code_from_detail(
+    detail: Any, *, model_id: str | None
+) -> tuple[str | None, dict[str, Any]]:
     """Map a real ``entry_detail`` dict → code. Never invents when detail is missing."""
     if not isinstance(detail, dict) or not detail:
         return None, {}
@@ -179,8 +181,10 @@ def _normalize_exit_code(raw: Any) -> str | None:
         return "left_target_set"
     if "enter" in lower and "buy" in lower:
         return "enter_buy_tier"
-    if text in REASON_LABELS or text.startswith("identity_break_") or text.startswith(
-        "quality_break_"
+    if (
+        text in REASON_LABELS
+        or text.startswith("identity_break_")
+        or text.startswith("quality_break_")
     ):
         return text
     # Keep machine codes; human notes stay as code when short.
@@ -220,10 +224,17 @@ def _index_observe_episodes(payload: dict[str, Any] | None) -> dict[str, dict[st
             # Prefer richer rows (with exit_reason) over slim ones.
             ek = _episode_key(ticker, entry, exit_at)
             prior = out.get(ek)
-            richer = bool(row.get("exit_reason") or row.get("entry_detail") or row.get("entry_reason"))
-            if prior is None or (richer and not (
-                prior.get("exit_reason") or prior.get("entry_detail") or prior.get("entry_reason")
-            )):
+            richer = bool(
+                row.get("exit_reason") or row.get("entry_detail") or row.get("entry_reason")
+            )
+            if prior is None or (
+                richer
+                and not (
+                    prior.get("exit_reason")
+                    or prior.get("entry_detail")
+                    or prior.get("entry_reason")
+                )
+            ):
                 out[ek] = row
     return out
 
@@ -236,9 +247,7 @@ def load_sealed_episode_indexes(
     indexes: dict[str, dict[str, dict[str, Any]]] = {}
     for model_id, store_name in SEALED_OBSERVE_STORES:
         payload = _safe_read(root / store_name)
-        indexes[model_id] = _index_observe_episodes(
-            payload if isinstance(payload, dict) else None
-        )
+        indexes[model_id] = _index_observe_episodes(payload if isinstance(payload, dict) else None)
     return indexes
 
 
@@ -359,7 +368,9 @@ def bind_decision_reasons(
                     structured={"raw": ep.get("exit_reason")},
                 )
             if not buy.get("join_ok"):
-                detail = ep.get("entry_detail") if isinstance(ep.get("entry_detail"), dict) else None
+                detail = (
+                    ep.get("entry_detail") if isinstance(ep.get("entry_detail"), dict) else None
+                )
                 entry_reason = ep.get("entry_reason")
                 code, structured = _entry_code_from_detail(detail, model_id=model_id)
                 if entry_reason and not code:
@@ -410,7 +421,9 @@ def bind_decision_reasons(
     if book_id in CONTROL_BOOK_IDS and control_trades is not None:
         trades = control_trades.get(str(ticker).upper()) or []
         if not sell.get("join_ok"):
-            matched = _match_control_trade(trades, side="sell", at=str(exit_at) if exit_at else None)
+            matched = _match_control_trade(
+                trades, side="sell", at=str(exit_at) if exit_at else None
+            )
             if matched and matched.get("note"):
                 code = _normalize_exit_code(matched.get("note"))
                 sell = _decision(
@@ -422,7 +435,9 @@ def bind_decision_reasons(
                     label=reason_label(code or "left_target_set"),
                 )
         if not buy.get("join_ok"):
-            matched = _match_control_trade(trades, side="buy", at=str(entry_at) if entry_at else None)
+            matched = _match_control_trade(
+                trades, side="buy", at=str(entry_at) if entry_at else None
+            )
             if matched and matched.get("note"):
                 note = str(matched.get("note") or "")
                 # Control buys are "Automated buy" / similar — map to enter_target_set.
