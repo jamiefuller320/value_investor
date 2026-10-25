@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-25T18:43:19.439941+00:00",
+  "updated_at": "2026-10-25T19:52:51.242354+00:00",
   "influences_live": false,
   "observe_only": true,
   "package": "M",
@@ -418,6 +418,58 @@
       "reply_kind": "llm",
       "llm_attempted": true,
       "llm_ok": true
+    },
+    {
+      "event_id": "e01a098f-a08e-47d3-922b-41668b1f2d97",
+      "review_id": "reply:deb8ad557946fe89",
+      "parent_event_id": null,
+      "kind": "accept",
+      "tag_at_action": "reply",
+      "text": "",
+      "acted_at": "2026-10-25T19:52:51.236001+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "snapshot": {}
+    },
+    {
+      "event_id": "f0ebce7c-738c-4c8b-9fc2-2b5db63cfbc0",
+      "review_id": "reply:49813baf0ab26cb9",
+      "parent_event_id": null,
+      "kind": "accept",
+      "tag_at_action": "reply",
+      "text": "",
+      "acted_at": "2026-10-25T19:52:51.238192+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "snapshot": {}
+    },
+    {
+      "event_id": "dfd1bac3-5cbe-4323-acc0-b802da781a34",
+      "review_id": "reply:d0bca3424a89bbbc",
+      "parent_event_id": null,
+      "kind": "accept",
+      "tag_at_action": "reply",
+      "text": "",
+      "acted_at": "2026-10-25T19:52:51.240274+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "snapshot": {}
+    },
+    {
+      "event_id": "1d92f4da-3ba6-42fa-aae2-804493cb7482",
+      "review_id": "reply:9b05d28d53fe094f",
+      "parent_event_id": null,
+      "kind": "accept",
+      "tag_at_action": "reply",
+      "text": "",
+      "acted_at": "2026-10-25T19:52:51.242303+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "snapshot": {}
     }
   ],
   "actioned_review_ids": [
@@ -430,7 +482,11 @@
     "38ab18e7c2f3649520c5",
     "6c3f34f10a3737e7f6de",
     "b7149ac99b9abe8d1072",
-    "798faa2d68d2b032f9c6"
+    "798faa2d68d2b032f9c6",
+    "reply:deb8ad557946fe89",
+    "reply:49813baf0ab26cb9",
+    "reply:d0bca3424a89bbbc",
+    "reply:9b05d28d53fe094f"
   ],
   "active_replies": [
     {
@@ -798,94 +854,6 @@
       "created_at": "2026-10-25T18:42:51.662737+00:00"
     },
     {
-      "review_id": "reply:9b05d28d53fe094f",
-      "parent_review_id": "ac3bf5bee5a015c3ce7e",
-      "parent_event_id": "fe1d50ae-d187-450f-aa6d-ea00c1c6152d",
-      "tag": "reply",
-      "book_id": null,
-      "book_tag": null,
-      "model_id": null,
-      "ticker": null,
-      "entry_at": null,
-      "exit_at": null,
-      "hold_days": null,
-      "exit_kind": null,
-      "return_pct": null,
-      "basis_label": null,
-      "framing": null,
-      "charts": null,
-      "close_in": null,
-      "wider_tf": null,
-      "opened_at": null,
-      "sold_at": null,
-      "avg_cost": null,
-      "exit_price": null,
-      "buy_decision": null,
-      "sell_decision": null,
-      "buy_reason": null,
-      "sell_reason": null,
-      "decision_reasons_join_ok": null,
-      "llm_opinion": null,
-      "learning_points": null,
-      "chart_annotations": null,
-      "opinion_source": null,
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-          "learning_points": [
-            "Verify episode chart and wider TF together before Accepting framing.",
-            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
-          ],
-          "chart_annotations": {
-            "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
-            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-          },
-          "buy_strengths": [
-            "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "buy_weaknesses": [
-            "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
-          ],
-          "sell_strengths": [
-            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "sell_weaknesses": [
-            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
-          ],
-          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
-          "same_day_round_trip": false,
-          "same_day_assessment": "not_applicable",
-          "source": "deterministic_v0",
-          "at": "2026-10-25T18:42:55.182556+00:00",
-          "influences_live": false
-        },
-        {
-          "role": "owner",
-          "kind": "comment",
-          "text": "Looks to be trying to catch a falling knife.  Probably should have waited for evidence of a rebound towards the long term trend if fundamentals sound",
-          "at": "2026-10-25T18:42:55.182479+00:00",
-          "influences_live": false
-        },
-        {
-          "role": "factory",
-          "kind": "reply",
-          "text": "Observation only — no fills, capital, or live knobs were changed; influences_live stays false (Package M observe/align, not Package L auto-tune).\n\nYour read fits a dual-horizon lens: on the short horizon, entry can look like catching a falling knife before price shows stabilization; on the long horizon, if fundamentals still support the thesis, waiting for clearer evidence of rebound toward the long-term trend before adding or re-entering is a reasonable alignment check. We cannot weigh that against a mechanical sell identity (e.g. leave_buy_tier) versus a discretionary “too early” call here because structured trails did not join: decision_reasons.buy and decision_reasons.sell are both unknown — unjoinable (no structured trail), so we should not infer sell-trigger IDs, filing facts, or range percentiles for this episode.\n\nIf this pattern is what you want the book to emphasize, keep framing it as short-horizon timing vs long-horizon trend plus fundamentals — still observe-only until you accept a labeled direction.\n\nAccept this reply, or Comment with more detail (ticker, dates, or what “rebound evidence” would mean for you).",
-          "source": "llm",
-          "at": "2026-10-25T18:42:55.182498+00:00",
-          "influences_live": false
-        }
-      ],
-      "reply_text": "Observation only — no fills, capital, or live knobs were changed; influences_live stays false (Package M observe/align, not Package L auto-tune).\n\nYour read fits a dual-horizon lens: on the short horizon, entry can look like catching a falling knife before price shows stabilization; on the long horizon, if fundamentals still support the thesis, waiting for clearer evidence of rebound toward the long-term trend before adding or re-entering is a reasonable alignment check. We cannot weigh that against a mechanical sell identity (e.g. leave_buy_tier) versus a discretionary “too early” call here because structured trails did not join: decision_reasons.buy and decision_reasons.sell are both unknown — unjoinable (no structured trail), so we should not infer sell-trigger IDs, filing facts, or range percentiles for this episode.\n\nIf this pattern is what you want the book to emphasize, keep framing it as short-horizon timing vs long-horizon trend plus fundamentals — still observe-only until you accept a labeled direction.\n\nAccept this reply, or Comment with more detail (ticker, dates, or what “rebound evidence” would mean for you).",
-      "owner_comment": "Looks to be trying to catch a falling knife.  Probably should have waited for evidence of a rebound towards the long term trend if fundamentals sound",
-      "reply_kind": "llm",
-      "influences_live": false,
-      "observe_only": true,
-      "created_at": "2026-10-25T18:42:55.182498+00:00"
-    },
-    {
       "review_id": "reply:ac23464bfec07cd4",
       "parent_review_id": "bbec6fcdfe71dfa5b714",
       "parent_event_id": "149bc6d4-af1a-4ada-8fd8-4497f5b03b24",
@@ -1148,270 +1116,6 @@
       "influences_live": false,
       "observe_only": true,
       "created_at": "2026-10-25T18:43:07.519885+00:00"
-    },
-    {
-      "review_id": "reply:d0bca3424a89bbbc",
-      "parent_review_id": "6c3f34f10a3737e7f6de",
-      "parent_event_id": "09cec6f1-3966-4780-8aa6-7f175f74889f",
-      "tag": "reply",
-      "book_id": null,
-      "book_tag": null,
-      "model_id": null,
-      "ticker": null,
-      "entry_at": null,
-      "exit_at": null,
-      "hold_days": null,
-      "exit_kind": null,
-      "return_pct": null,
-      "basis_label": null,
-      "framing": null,
-      "charts": null,
-      "close_in": null,
-      "wider_tf": null,
-      "opened_at": null,
-      "sold_at": null,
-      "avg_cost": null,
-      "exit_price": null,
-      "buy_decision": null,
-      "sell_decision": null,
-      "buy_reason": null,
-      "sell_reason": null,
-      "decision_reasons_join_ok": null,
-      "llm_opinion": null,
-      "learning_points": null,
-      "chart_annotations": null,
-      "opinion_source": null,
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-          "learning_points": [
-            "Verify episode chart and wider TF together before Accepting framing.",
-            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
-          ],
-          "chart_annotations": {
-            "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
-            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-          },
-          "buy_strengths": [
-            "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "buy_weaknesses": [
-            "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
-          ],
-          "sell_strengths": [
-            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "sell_weaknesses": [
-            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
-          ],
-          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
-          "same_day_round_trip": false,
-          "same_day_assessment": "not_applicable",
-          "source": "deterministic_v0",
-          "at": "2026-10-25T18:43:11.330187+00:00",
-          "influences_live": false
-        },
-        {
-          "role": "owner",
-          "kind": "comment",
-          "text": "Premature sell? Looks like it could have continued to recover",
-          "at": "2026-10-25T18:43:11.330098+00:00",
-          "influences_live": false
-        },
-        {
-          "role": "factory",
-          "kind": "reply",
-          "text": "Observation only — no knobs, fills, or live capital are changed; influences_live stays false (Package M, not Package L auto-tune).\n\nOn “premature sell” and recovery: dual-horizon framing helps. Near-term, exiting before a bounce can feel early if price later reclaims prior levels. Over a longer horizon, the same exit may still align with risk bounds or identity rules even when a recovery eventually prints — missed upside and avoided drawdown are different lenses on one path, not a single verdict.\n\nStructured trail: decision_reasons.buy and decision_reasons.sell are both unknown — unjoinable (join_ok false). We cannot cite a mechanical sell code (e.g. leave_buy_tier), filing facts, or range percentiles from this episode; treating the exit as a named tech or tier trigger would be invented.\n\nYour “premature sell / could have continued to recover” label is a valid post-hoc pattern note. Without a joinable sell reason, we weigh it as owner judgment against an unidentified system exit, not against a confirmed mechanical identity exit.\n\nAccept this reply, or Comment with more context (dates, exit_kind, or what you were watching) for a sharper dual-horizon read — still observe-only.",
-          "source": "llm",
-          "at": "2026-10-25T18:43:11.330119+00:00",
-          "influences_live": false
-        }
-      ],
-      "reply_text": "Observation only — no knobs, fills, or live capital are changed; influences_live stays false (Package M, not Package L auto-tune).\n\nOn “premature sell” and recovery: dual-horizon framing helps. Near-term, exiting before a bounce can feel early if price later reclaims prior levels. Over a longer horizon, the same exit may still align with risk bounds or identity rules even when a recovery eventually prints — missed upside and avoided drawdown are different lenses on one path, not a single verdict.\n\nStructured trail: decision_reasons.buy and decision_reasons.sell are both unknown — unjoinable (join_ok false). We cannot cite a mechanical sell code (e.g. leave_buy_tier), filing facts, or range percentiles from this episode; treating the exit as a named tech or tier trigger would be invented.\n\nYour “premature sell / could have continued to recover” label is a valid post-hoc pattern note. Without a joinable sell reason, we weigh it as owner judgment against an unidentified system exit, not against a confirmed mechanical identity exit.\n\nAccept this reply, or Comment with more context (dates, exit_kind, or what you were watching) for a sharper dual-horizon read — still observe-only.",
-      "owner_comment": "Premature sell? Looks like it could have continued to recover",
-      "reply_kind": "llm",
-      "influences_live": false,
-      "observe_only": true,
-      "created_at": "2026-10-25T18:43:11.330119+00:00"
-    },
-    {
-      "review_id": "reply:49813baf0ab26cb9",
-      "parent_review_id": "b7149ac99b9abe8d1072",
-      "parent_event_id": "2cd454fa-f8ea-4951-a3e5-85fb6be5b0fe",
-      "tag": "reply",
-      "book_id": null,
-      "book_tag": null,
-      "model_id": null,
-      "ticker": null,
-      "entry_at": null,
-      "exit_at": null,
-      "hold_days": null,
-      "exit_kind": null,
-      "return_pct": null,
-      "basis_label": null,
-      "framing": null,
-      "charts": null,
-      "close_in": null,
-      "wider_tf": null,
-      "opened_at": null,
-      "sold_at": null,
-      "avg_cost": null,
-      "exit_price": null,
-      "buy_decision": null,
-      "sell_decision": null,
-      "buy_reason": null,
-      "sell_reason": null,
-      "decision_reasons_join_ok": null,
-      "llm_opinion": null,
-      "learning_points": null,
-      "chart_annotations": null,
-      "opinion_source": null,
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-          "learning_points": [
-            "Verify episode chart and wider TF together before Accepting framing.",
-            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
-          ],
-          "chart_annotations": {
-            "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
-            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-          },
-          "buy_strengths": [
-            "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "buy_weaknesses": [
-            "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
-          ],
-          "sell_strengths": [
-            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "sell_weaknesses": [
-            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
-          ],
-          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
-          "same_day_round_trip": false,
-          "same_day_assessment": "not_applicable",
-          "source": "deterministic_v0",
-          "at": "2026-10-25T18:43:15.094558+00:00",
-          "influences_live": false
-        },
-        {
-          "role": "owner",
-          "kind": "comment",
-          "text": "Premature sell/missed opportunity for a tactical sale following rapid exceedance of recent highs",
-          "at": "2026-10-25T18:43:15.094487+00:00",
-          "influences_live": false
-        },
-        {
-          "role": "factory",
-          "kind": "reply",
-          "text": "Observation only — no fills, knobs, or live capital are touched; influences_live stays false (Package M alignment, not Package L auto-tune).\n\nDual horizon: On the tactical lens, your note reads as a possible missed pattern — selling early while price was rapidly exceeding recent highs, where a tactical hold or staged exit might have captured more of the extension. On the structural lens, we cannot weigh that story against what the book actually recorded at exit: decision_reasons.buy and decision_reasons.sell are both unknown — unjoinable (no structured trail, join_ok false). Without a joined sell code we will not infer leave_buy_tier, tech triggers, filing facts, range percentiles, or any sell-trigger IDs.\n\nSo “premature sell” here is an owner hypothesis worth keeping in the review log, not a verified mismatch with a mechanical identity exit or a documented trigger. If a structured trail is backfilled later, we can reconcile tactical narrative vs recorded reason; until then the episode stays observational only.\n\nAccept this reply, or Comment with more context (dates, intended rule, or what you remember the exit rule to have been).",
-          "source": "llm",
-          "at": "2026-10-25T18:43:15.094507+00:00",
-          "influences_live": false
-        }
-      ],
-      "reply_text": "Observation only — no fills, knobs, or live capital are touched; influences_live stays false (Package M alignment, not Package L auto-tune).\n\nDual horizon: On the tactical lens, your note reads as a possible missed pattern — selling early while price was rapidly exceeding recent highs, where a tactical hold or staged exit might have captured more of the extension. On the structural lens, we cannot weigh that story against what the book actually recorded at exit: decision_reasons.buy and decision_reasons.sell are both unknown — unjoinable (no structured trail, join_ok false). Without a joined sell code we will not infer leave_buy_tier, tech triggers, filing facts, range percentiles, or any sell-trigger IDs.\n\nSo “premature sell” here is an owner hypothesis worth keeping in the review log, not a verified mismatch with a mechanical identity exit or a documented trigger. If a structured trail is backfilled later, we can reconcile tactical narrative vs recorded reason; until then the episode stays observational only.\n\nAccept this reply, or Comment with more context (dates, intended rule, or what you remember the exit rule to have been).",
-      "owner_comment": "Premature sell/missed opportunity for a tactical sale following rapid exceedance of recent highs",
-      "reply_kind": "llm",
-      "influences_live": false,
-      "observe_only": true,
-      "created_at": "2026-10-25T18:43:15.094507+00:00"
-    },
-    {
-      "review_id": "reply:deb8ad557946fe89",
-      "parent_review_id": "798faa2d68d2b032f9c6",
-      "parent_event_id": "0ea279f7-1b5d-4924-837d-5c9d17aa2922",
-      "tag": "reply",
-      "book_id": null,
-      "book_tag": null,
-      "model_id": null,
-      "ticker": null,
-      "entry_at": null,
-      "exit_at": null,
-      "hold_days": null,
-      "exit_kind": null,
-      "return_pct": null,
-      "basis_label": null,
-      "framing": null,
-      "charts": null,
-      "close_in": null,
-      "wider_tf": null,
-      "opened_at": null,
-      "sold_at": null,
-      "avg_cost": null,
-      "exit_price": null,
-      "buy_decision": null,
-      "sell_decision": null,
-      "buy_reason": null,
-      "sell_reason": null,
-      "decision_reasons_join_ok": null,
-      "llm_opinion": null,
-      "learning_points": null,
-      "chart_annotations": null,
-      "opinion_source": null,
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-          "learning_points": [
-            "Verify episode chart and wider TF together before Accepting framing.",
-            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
-          ],
-          "chart_annotations": {
-            "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
-            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-          },
-          "buy_strengths": [
-            "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "buy_weaknesses": [
-            "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
-          ],
-          "sell_strengths": [
-            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "sell_weaknesses": [
-            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
-          ],
-          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
-          "same_day_round_trip": false,
-          "same_day_assessment": "not_applicable",
-          "source": "deterministic_v0",
-          "at": "2026-10-25T18:43:19.439847+00:00",
-          "influences_live": false
-        },
-        {
-          "role": "owner",
-          "kind": "comment",
-          "text": "Duplicate episode",
-          "at": "2026-10-25T18:43:19.439779+00:00",
-          "influences_live": false
-        },
-        {
-          "role": "factory",
-          "kind": "reply",
-          "text": "Observation only — no knob, fill, or live-capital changes; influences_live stays false (Package M observe/align, not Package L auto-tune).\n\nYou flagged **Duplicate episode**. On dual horizons: **near-term**, we treat this row as a catalog hygiene issue — same ticker/exit window may already exist elsewhere in the post-sale set, so pattern stats and label counts should not double-count this instance until deduped. **Longer-term**, duplicate episodes usually mean two ingestion paths or a re-run without idempotency; the learning value is process (one canonical episode per realized round-trip), not re-litigating a sell we cannot reconstruct here.\n\nStructured trail: **decision_reasons.buy** and **decision_reasons.sell** are both unknown — unjoinable (join_ok false). We cannot cite buy codes, sell triggers (e.g. leave_buy_tier vs discretionary tech exit), filing facts, or range percentiles from this payload; any “premature sell” or missed-pattern read would be owner narrative only, not joinable to system reasons.\n\nAlignment: if this is truly duplicate, prefer **Accept** after confirming the canonical episode elsewhere, or **Comment** with which record should subsume this one (ticker, entry/exit dates, or episode id) so the factory side can mark alignment without touching live logic.",
-          "source": "llm",
-          "at": "2026-10-25T18:43:19.439797+00:00",
-          "influences_live": false
-        }
-      ],
-      "reply_text": "Observation only — no knob, fill, or live-capital changes; influences_live stays false (Package M observe/align, not Package L auto-tune).\n\nYou flagged **Duplicate episode**. On dual horizons: **near-term**, we treat this row as a catalog hygiene issue — same ticker/exit window may already exist elsewhere in the post-sale set, so pattern stats and label counts should not double-count this instance until deduped. **Longer-term**, duplicate episodes usually mean two ingestion paths or a re-run without idempotency; the learning value is process (one canonical episode per realized round-trip), not re-litigating a sell we cannot reconstruct here.\n\nStructured trail: **decision_reasons.buy** and **decision_reasons.sell** are both unknown — unjoinable (join_ok false). We cannot cite buy codes, sell triggers (e.g. leave_buy_tier vs discretionary tech exit), filing facts, or range percentiles from this payload; any “premature sell” or missed-pattern read would be owner narrative only, not joinable to system reasons.\n\nAlignment: if this is truly duplicate, prefer **Accept** after confirming the canonical episode elsewhere, or **Comment** with which record should subsume this one (ticker, entry/exit dates, or episode id) so the factory side can mark alignment without touching live logic.",
-      "owner_comment": "Duplicate episode",
-      "reply_kind": "llm",
-      "influences_live": false,
-      "observe_only": true,
-      "created_at": "2026-10-25T18:43:19.439797+00:00"
     }
   ]
 }
