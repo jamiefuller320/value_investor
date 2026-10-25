@@ -709,8 +709,7 @@ def build_post_sale_review_queue(
                 "(and FTSE control); book_tag distinguishes them"
             ),
             "reply_plus_original": (
-                "not both active — Comment actions the original and spawns "
-                "a reply:* card"
+                "not both active — Comment actions the original and spawns a reply:* card"
             ),
         },
         "sort_options": [
