@@ -1,13 +1,22 @@
 {
-  "run_at": "2026-10-25T13:29:33.118212+00:00",
+  "run_at": "2026-10-25T16:22:31.165990+00:00",
   "market_id": "euro_depth",
   "targets": [
+    "MT.AS",
     "UCB.BR"
   ],
   "target_details": [
     {
+      "ticker": "MT.AS",
+      "priority_score": 15.5037,
+      "filings_total": 43,
+      "filings_with_body": 40,
+      "indexed_without_body": 3,
+      "reason": "indexed_without_body"
+    },
+    {
       "ticker": "UCB.BR",
-      "priority_score": 14.6427,
+      "priority_score": 18.642699999999998,
       "filings_total": 2,
       "filings_with_body": 1,
       "indexed_without_body": 1,
@@ -15,6 +24,68 @@
     }
   ],
   "results": [
+    {
+      "ticker": "MT.AS",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 43,
+        "filings_with_body": 40,
+        "indexed_without_body": 3
+      },
+      "after": {
+        "filings_total": 41,
+        "filings_with_body": 40,
+        "indexed_without_body": 1
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 41,
+        "annual": 1,
+        "interim": 39,
+        "trading_update": 0,
+        "other": 1,
+        "with_body": 40,
+        "period_coverage": {
+          "annual": {
+            "total": 1,
+            "with_body": 1
+          },
+          "interim": {
+            "total": 39,
+            "with_body": 38
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 1,
+            "with_body": 1
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 40,
+        "with_body_after": 40,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 2,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    },
     {
       "ticker": "UCB.BR",
       "reason": "indexed_without_body",
@@ -78,17 +149,19 @@
       }
     }
   ],
-  "improved": [],
+  "improved": [
+    "MT.AS"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-25T13:29:01.458349+00:00",
+    "snapshot_at": "2026-10-25T16:18:34.529289+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 49,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 8,
+    "thin_body_buy_tier": 7,
     "indexed_without_body": 16,
     "bodies_min": 1,
     "bodies_median": 5,
@@ -102,69 +175,6 @@
       "APAM.AS",
       "ACKB.BR",
       "WIE.VI",
-      "MUV2.DE",
-      "BAS.DE",
-      "UCB.BR",
-      "DQ7A.IR"
-    ],
-    "indexed_without_body_tickers": [
-      "EVN.VI",
-      "WIE.VI",
-      "MT.AS",
-      "ABI.BR",
-      "UCB.BR"
-    ],
-    "indexed_without_body_by_ticker": {
-      "EVN.VI": 1,
-      "WIE.VI": 1,
-      "MT.AS": 1,
-      "ABI.BR": 12,
-      "UCB.BR": 1
-    },
-    "parked_tickers": [
-      "ABI.BR",
-      "ACKB.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "DQ7A.IR",
-      "EVN.VI",
-      "IFX.DE",
-      "WIE.VI"
-    ],
-    "parked_count": 8,
-    "effective_thin_body_buy_tier": 2,
-    "effective_thin_body_tickers": [
-      "MUV2.DE",
-      "UCB.BR"
-    ],
-    "effective_indexed_without_body": 2,
-    "effective_indexed_without_body_tickers": [
-      "MT.AS",
-      "UCB.BR"
-    ],
-    "ingest_exhausted": false
-  },
-  "health_after": {
-    "snapshot_at": "2026-10-25T13:29:23.876328+00:00",
-    "market_id": "euro_depth",
-    "buy_tier_count": 49,
-    "unmeasured_buy_tier": 0,
-    "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 8,
-    "indexed_without_body": 16,
-    "bodies_min": 1,
-    "bodies_median": 5,
-    "bodies_max": 125,
-    "coverage_scope": "canonical_plus_shards",
-    "ftse_equivalent": false,
-    "unmeasured_tickers": [],
-    "zero_body_tickers": [],
-    "thin_body_tickers": [
-      "EVN.VI",
-      "APAM.AS",
-      "ACKB.BR",
-      "WIE.VI",
-      "MUV2.DE",
       "BAS.DE",
       "UCB.BR",
       "DQ7A.IR"
@@ -205,19 +215,103 @@
     ],
     "ingest_exhausted": false
   },
+  "health_after": {
+    "snapshot_at": "2026-10-25T16:22:24.896908+00:00",
+    "market_id": "euro_depth",
+    "buy_tier_count": 49,
+    "unmeasured_buy_tier": 0,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 7,
+    "indexed_without_body": 16,
+    "bodies_min": 1,
+    "bodies_median": 5,
+    "bodies_max": 125,
+    "coverage_scope": "canonical_plus_shards",
+    "ftse_equivalent": false,
+    "unmeasured_tickers": [],
+    "zero_body_tickers": [],
+    "thin_body_tickers": [
+      "EVN.VI",
+      "APAM.AS",
+      "ACKB.BR",
+      "WIE.VI",
+      "BAS.DE",
+      "UCB.BR",
+      "DQ7A.IR"
+    ],
+    "indexed_without_body_tickers": [
+      "EVN.VI",
+      "WIE.VI",
+      "MT.AS",
+      "ABI.BR",
+      "UCB.BR"
+    ],
+    "indexed_without_body_by_ticker": {
+      "EVN.VI": 1,
+      "WIE.VI": 1,
+      "MT.AS": 1,
+      "ABI.BR": 12,
+      "UCB.BR": 1
+    },
+    "parked_tickers": [
+      "ABI.BR",
+      "ACKB.BR",
+      "APAM.AS",
+      "BAS.DE",
+      "DQ7A.IR",
+      "EVN.VI",
+      "UCB.BR",
+      "WIE.VI"
+    ],
+    "parked_count": 8,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body_tickers": [
+      "MT.AS"
+    ],
+    "ingest_exhausted": false
+  },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
+  "discovery_scan": {
+    "scanned": 49,
+    "hits": 42,
+    "new_rows_total": 0,
+    "curiosity_total": 46,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": true,
+    "max_runtime_seconds": 675.0,
+    "prefer_tickers": [
+      "APAM.AS",
+      "ACKB.BR",
+      "BAS.DE",
+      "UCB.BR",
+      "DQ7A.IR",
+      "ABI.BR",
+      "EVN.VI",
+      "MT.AS",
+      "WIE.VI"
+    ],
+    "runtime_cutoff": false
+  },
   "maintenance_mode": false,
   "parity_handoff": null,
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-10-25T13:29:05.268645+00:00",
+    "assessed_at": "2026-10-25T16:18:37.008314+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -287,21 +381,19 @@
       "thin_need_bodies": 3
     }
   },
-  "used_seconds": 14.757270613000003,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2085.242729387,
+  "used_seconds": 225.428657156,
+  "budget_seconds": 2700.0,
+  "leftover_seconds": 2474.571342844,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "UCB.BR"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_depth",
-    "updated_at": "2026-10-25T13:29:23.886523+00:00",
+    "updated_at": "2026-10-25T16:22:24.904495+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -382,14 +474,14 @@
         "source_surface": "euro_filings"
       },
       {
-        "ticker": "MUV2.DE",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-10-25T13:29:23.886523+00:00",
+        "ticker": "UCB.BR",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-25T16:22:24.904495+00:00",
         "park_via": "straggler_soft_park",
-        "filings_total": 3,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
+        "filings_total": 2,
+        "filings_with_body": 1,
+        "indexed_without_body": 1,
         "thin": true,
         "source_surface": "euro_filings"
       }
@@ -397,7 +489,7 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [
       "ABI.BR",
       "ACKB.BR",
@@ -406,13 +498,11 @@
       "DQ7A.IR",
       "EVN.VI",
       "MT.AS",
-      "MUV2.DE",
       "UCB.BR",
       "WIE.VI"
     ],
     "unparked_leftover": [
-      "MT.AS",
-      "UCB.BR"
+      "MT.AS"
     ],
     "surface_released": [],
     "path": "docs/data/library/markets/euro_depth/ingest_exhaustion.json"
@@ -426,7 +516,7 @@
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 47,
-    "candidate_count": 65,
+    "candidate_count": 64,
     "skipped_resolved_tickers": [
       "ABI.BR",
       "APAM.AS",
@@ -435,7 +525,7 @@
       "WIE.VI",
       "ACKB.BR",
       "DQ7A.IR",
-      "MUV2.DE",
+      "UCB.BR",
       "LMT",
       "CRH",
       "ULTP.L",

@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-25T13:42:40.269566+00:00",
+  "generated_at": "2026-10-25T16:24:54.544328+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -828,7 +828,7 @@
           "BAS.DE",
           "DQ7A.IR",
           "EVN.VI",
-          "MUV2.DE",
+          "UCB.BR",
           "WIE.VI"
         ]
       },
@@ -889,14 +889,14 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 4,
-        "targets": 5,
-        "improved": 4,
+        "run_count": 5,
+        "targets": 7,
+        "improved": 5,
         "improved_tickers": [
           "MT.AS",
           "SHELL.AS"
         ],
-        "last_run_at": "2026-10-25T13:29:23.880299+00:00",
+        "last_run_at": "2026-10-25T16:22:24.899965+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -909,14 +909,14 @@
         "gaps_after": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 8,
+          "thin": 7,
           "indexed_without_body": 16,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 0,
+          "thin": -1,
           "indexed_without_body": 1,
           "filing_gaps": 0
         },
@@ -1553,7 +1553,7 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 6,
+        "run_count": 4,
         "targets": 9,
         "improved": 5,
         "improved_tickers": [
@@ -1570,7 +1570,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 5,
+          "indexed_without_body": 6,
           "filing_gaps": 0
         },
         "gaps_after": {
@@ -1584,7 +1584,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 0,
+          "indexed_without_body": -1,
           "filing_gaps": 0
         },
         "remaining": {
