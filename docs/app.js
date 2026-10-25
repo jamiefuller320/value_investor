@@ -11746,6 +11746,47 @@ function renderPostSaleLearningPoints(points) {
     .join("")}</ul>`;
 }
 
+function renderPostSaleDecisionReasons(item) {
+  const buy = item && item.buy_decision && typeof item.buy_decision === "object"
+    ? item.buy_decision
+    : null;
+  const sell = item && item.sell_decision && typeof item.sell_decision === "object"
+    ? item.sell_decision
+    : null;
+  const buyLabel = buy && buy.label
+    ? String(buy.label)
+    : item && item.buy_reason
+      ? String(item.buy_reason)
+      : "Unknown — unjoinable (no structured trail)";
+  const sellLabel = sell && sell.label
+    ? String(sell.label)
+    : item && item.sell_reason
+      ? String(item.sell_reason)
+      : "Unknown — unjoinable (no structured trail)";
+  const buyOk = buy ? !!buy.join_ok : false;
+  const sellOk = sell ? !!sell.join_ok : false;
+  const buyCode = buy && buy.code ? String(buy.code) : "";
+  const sellCode = sell && sell.code ? String(sell.code) : "";
+  const buySrc = buy && buy.source ? String(buy.source) : "";
+  const sellSrc = sell && sell.source ? String(sell.source) : "";
+  return `<div class="psr-decision-reasons" aria-label="Buy and sell decision reasons">
+    <div class="psr-decision-row${buyOk ? "" : " is-unknown"}">
+      <span class="psr-decision-side">Bought because</span>
+      <span class="psr-decision-label">${esc(buyLabel)}</span>
+      <span class="small muted psr-decision-meta">${esc(
+        [buyCode && buyOk ? buyCode : "", buySrc].filter(Boolean).join(" · ") || "unjoinable"
+      )}</span>
+    </div>
+    <div class="psr-decision-row${sellOk ? "" : " is-unknown"}">
+      <span class="psr-decision-side">Sold because</span>
+      <span class="psr-decision-label">${esc(sellLabel)}</span>
+      <span class="small muted psr-decision-meta">${esc(
+        [sellCode && sellOk ? sellCode : "", sellSrc].filter(Boolean).join(" · ") || "unjoinable"
+      )}</span>
+    </div>
+  </div>`;
+}
+
 function renderPostSaleDialogue(item) {
   const turns = Array.isArray(item.dialogue) ? item.dialogue : [];
   if (!turns.length && !(item.owner_comment || item.reply_text || item.llm_opinion)) {
@@ -11818,8 +11859,10 @@ function renderPostSaleReviewCard(item, expanded) {
     .split("\n")
     .map((line) => `<div>${esc(line)}</div>`)
     .join("");
+  const collapsedReasons = !expanded ? renderPostSaleDecisionReasons(item) : "";
   const detail = expanded
     ? `<div class="psr-card-detail">
+        ${renderPostSaleDecisionReasons(item)}
         <pre class="psr-framing small">${framing}</pre>
         ${renderPostSaleDialogue(item)}
         <p class="small muted">Episode window + wider TF — owner verifies both. Mini dialogue: opinion → Comment → reply. influences_live=false.</p>
@@ -11866,6 +11909,7 @@ function renderPostSaleReviewCard(item, expanded) {
       <span class="psr-pct">${esc(pctText)}</span>
       <span class="small muted">${esc(item.basis_label || "")}</span>
     </button>
+    ${collapsedReasons}
     ${detail}
   </article>`;
 }

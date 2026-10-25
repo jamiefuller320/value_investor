@@ -161,7 +161,10 @@ def with_fair_cost_open_mark(
 
 
 def slim_lifecycle_episode(episode: dict[str, Any]) -> dict[str, Any] | None:
-    """Keep ticker, dates, and the one return a chip is allowed to show."""
+    """Keep ticker, dates, return, and structured entry/exit reasons when present.
+
+    Reasons are pass-through only (post-sale review / chips). Never invent them.
+    """
     if not isinstance(episode, dict):
         return None
     ticker = str(episode.get("ticker") or "").strip()
@@ -193,6 +196,33 @@ def slim_lifecycle_episode(episode: dict[str, Any]) -> dict[str, Any] | None:
             mark_at = episode.get("open_mark_at")
             if mark_at:
                 row["open_mark_at"] = mark_at
+    # Structured decision trail (Package M post-sale) — omit when absent.
+    exit_reason = str(episode.get("exit_reason") or "").strip()
+    if exit_reason:
+        row["exit_reason"] = exit_reason
+    entry_reason = str(episode.get("entry_reason") or "").strip()
+    if entry_reason:
+        row["entry_reason"] = entry_reason
+    entry_detail = episode.get("entry_detail")
+    if isinstance(entry_detail, dict) and entry_detail:
+        # Keep only compact filter facts — not full screen rows.
+        keep = {
+            key: entry_detail.get(key)
+            for key in (
+                "earnings_yield",
+                "in_ey_top30_local",
+                "momentum_12_1",
+                "financial_health_pass",
+                "require_momentum",
+                "adjusted_signal",
+                "research_verdict",
+                "conviction_score",
+                "timing_signal",
+            )
+            if key in entry_detail
+        }
+        if keep:
+            row["entry_detail"] = keep
     return row
 
 
@@ -268,6 +298,15 @@ def assign_sealed_phase(
         "entry_run_at": entry_raw or None,
         "exit_run_at": None if open_row else exit_raw,
     }
+    exit_reason = str(row.get("exit_reason") or "").strip()
+    if exit_reason and not open_row:
+        chip["exit_reason"] = exit_reason
+    entry_reason = str(row.get("entry_reason") or "").strip()
+    if entry_reason:
+        chip["entry_reason"] = entry_reason
+    entry_detail = row.get("entry_detail")
+    if isinstance(entry_detail, dict) and entry_detail:
+        chip["entry_detail"] = entry_detail
     window = close_in_window(
         str(entry_raw) if entry_raw else None,
         None if open_row else (str(exit_raw) if exit_raw else None),

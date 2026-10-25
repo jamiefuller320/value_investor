@@ -20,6 +20,12 @@ from value_investor.lifecycle_board import (
     POST_SALE_DAYS,
     close_in_window,
 )
+from value_investor.post_sale_decision_reasons import (
+    UNKNOWN_LABEL,
+    bind_decision_reasons,
+    load_control_trade_index,
+    load_sealed_episode_indexes,
+)
 from value_investor.post_sale_review_labels import (
     LABELS_FILENAME,
     comments_awaiting_reply,
@@ -148,8 +154,14 @@ def _framing_line(item: dict[str, Any]) -> str:
     basis = str(item.get("basis_label") or "return")
     pct = item.get("return_pct")
     pct_bit = f"{pct}%" if pct is not None else "n/a"
+    buy = item.get("buy_decision") if isinstance(item.get("buy_decision"), dict) else {}
+    sell = item.get("sell_decision") if isinstance(item.get("sell_decision"), dict) else {}
+    buy_bit = str(buy.get("label") or item.get("buy_reason") or UNKNOWN_LABEL)
+    sell_bit = str(sell.get("label") or item.get("sell_reason") or UNKNOWN_LABEL)
     return (
         f"[{book}] {ticker} · {exit_at} · {hold_bit}{kind_bit}\n"
+        f"Bought because: {buy_bit}\n"
+        f"Sold because: {sell_bit}\n"
         f"Charts: episode window + wider TF (owner verifies both)\n"
         f"Outcome ({basis}): {pct_bit}\n"
         f"Context read-only — not a new veto. influences_live=false"
@@ -173,6 +185,8 @@ def _base_item(
     population: str,
     epoch_join_ok: bool | None = None,
     extra: dict[str, Any] | None = None,
+    sealed_indexes: dict[str, dict[str, dict[str, Any]]] | None = None,
+    control_trades: dict[str, list[dict[str, Any]]] | None = None,
 ) -> dict[str, Any]:
     close_in = close_in_window(entry_at, exit_at)
     wider = wider_tf_window(entry_at, exit_at)
@@ -213,12 +227,21 @@ def _base_item(
         item["epoch_join_ok"] = epoch_join_ok
     if extra:
         item.update(extra)
+    bind_decision_reasons(
+        item,
+        sealed_indexes=sealed_indexes if sealed_indexes is not None else {},
+        control_trades=control_trades if control_trades is not None else {},
+    )
     item["framing"] = _framing_line(item)
     attach_opinion_fields(item)
     return item
 
 
-def _sealed_items(sealed: dict[str, Any] | None) -> list[dict[str, Any]]:
+def _sealed_items(
+    sealed: dict[str, Any] | None,
+    *,
+    sealed_indexes: dict[str, dict[str, dict[str, Any]]] | None = None,
+) -> list[dict[str, Any]]:
     if not isinstance(sealed, dict):
         return []
     model_meta = {row["model_id"]: row for row in SEALED_MODELS}
@@ -263,6 +286,16 @@ def _sealed_items(sealed: dict[str, Any] | None) -> list[dict[str, Any]]:
                     continue
                 pct = _as_pct_display(chip.get("return_pct"))
                 basis = str(chip.get("return_basis") or "fair_cost_episode")
+                extra: dict[str, Any] = {
+                    "days_since_exit": days_n,
+                    "phase_clock": chip.get("phase_clock"),
+                }
+                if chip.get("exit_reason"):
+                    extra["exit_reason"] = chip.get("exit_reason")
+                if chip.get("entry_reason"):
+                    extra["entry_reason"] = chip.get("entry_reason")
+                if isinstance(chip.get("entry_detail"), dict):
+                    extra["entry_detail"] = chip.get("entry_detail")
                 out.append(
                     _base_item(
                         book_id=model_id,
@@ -276,10 +309,9 @@ def _sealed_items(sealed: dict[str, Any] | None) -> list[dict[str, Any]]:
                         model_id=model_id,
                         registration_id=registration_id,
                         population="sealed_lifecycle",
-                        extra={
-                            "days_since_exit": days_n,
-                            "phase_clock": chip.get("phase_clock"),
-                        },
+                        extra=extra,
+                        sealed_indexes=sealed_indexes,
+                        control_trades={},
                     )
                 )
     return out
@@ -295,7 +327,11 @@ def _is_ftse_control_market(market: dict[str, Any]) -> bool:
     return mid == "ftse350" or "ftse 350" in label
 
 
-def _control_items(board: dict[str, Any] | None) -> list[dict[str, Any]]:
+def _control_items(
+    board: dict[str, Any] | None,
+    *,
+    control_trades: dict[str, list[dict[str, Any]]] | None = None,
+) -> list[dict[str, Any]]:
     """FTSE control buy_tier_level sold cards. Epoch join fail-closed OK (tagged)."""
     if not isinstance(board, dict):
         return []
@@ -357,6 +393,8 @@ def _control_items(board: dict[str, Any] | None) -> list[dict[str, Any]]:
                                 "days_since_exit": card.get("days_in_column"),
                                 "name": card.get("name"),
                             },
+                            sealed_indexes={},
+                            control_trades=control_trades,
                         )
                     )
     return out
@@ -459,8 +497,13 @@ def build_post_sale_review_queue(
     sealed_payload = sealed if sealed is not None else _safe_read(root / "sealed_lifecycle.json")
     board_payload = board if board is not None else _safe_read(root / "lifecycle_board.json")
     labels_store = labels if labels is not None else load_post_sale_review_labels(root)
+    sealed_indexes = load_sealed_episode_indexes(root)
+    control_trades = load_control_trade_index(root)
 
-    candidates = _dedupe_items(_sealed_items(sealed_payload) + _control_items(board_payload))
+    candidates = _dedupe_items(
+        _sealed_items(sealed_payload, sealed_indexes=sealed_indexes)
+        + _control_items(board_payload, control_trades=control_trades)
+    )
     active_exits = [
         item
         for item in candidates
@@ -477,7 +520,13 @@ def build_post_sale_review_queue(
         card["tag"] = "reply"
         card["influences_live"] = False
         card["observe_only"] = True
-        if not card.get("framing"):
+        if not card.get("buy_decision") or not card.get("sell_decision"):
+            bind_decision_reasons(
+                card,
+                sealed_indexes=sealed_indexes,
+                control_trades=control_trades,
+            )
+        if not card.get("framing") or "Bought because:" not in str(card.get("framing") or ""):
             card["framing"] = _framing_line(card)
         # Ensure opinion / dialogue present on reply cards for chart annotation.
         if not card.get("llm_opinion") or not card.get("learning_points"):

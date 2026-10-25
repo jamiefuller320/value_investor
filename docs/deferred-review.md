@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-24T17:45:23+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-25T00:46:54+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -364,7 +364,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L621 | **Screen-premise high/low watermark companion (7d/28d)** | Report-only MFE/MAE-style high and low watermark % spreads (buy-tier vs screened universe) on existing L530 fixed-horizon cohorts. Companion to buy_tier_spread — not a selection feature, not a timing conditioner, not a new seal. | Human asks for path-shape on screen-premise and eng capacity is idle (P1 bind green; no launch-queue starve); thicken L530 only. |
 | L626 | **Declared-incomparable free-learner decision diary** | Later narrow instrument: free learning model as deduction-only counterfactual (what is possible without locked rules; what we can deduce from its decisions). Hard scoreboard seals — decision diary + proposed rules + optional forward cold-start twin only; never path-% / NAV / win-rate on corpus history; never vs N200/N206. Credit-free mining required. Does not unlock N218 promote. Behind Package M hub_feed (L620 done) + F1 shadow marks + frozen discovery_protocol_id. See store free-learner-incomparable-scoreboard-2026-10-23.md. | L620 hub_feed consumed in daily Explore; F1 llm_agree_veto_shadow marks thick enough for Sunday read; owner locks discovery_protocol_id + incomparability product seals before any eng. |
 | L627 | **Batch LLM upgrade of post-sale initial opinions** | Active cards ship deterministic_v0 opinion + learning points on first paint. Optionally upgrade llm_opinion via capped LLM batch during refresh (FTSE_POST_SALE_LLM_OPINION) without Package L auto-tune. | Owner wants LLM prose on initial presentation after dialogue loop is in regular use, and Cursor agent budget for capped batches is acceptable. |
-| L628 | **Cite sealed sell-trigger IDs in post-sale factory replies** | Factory replies currently point to the book trail without joining sealed sell-trigger / exit-reason IDs. Add fail-closed trail join when identity is available so replies can name why-sold without inventing triggers. | Owner repeatedly asks why-sold on Comment and sealed exit-reason join is available for N200/N201/N206/N210 without new sealed books. |
+| L629 | **Backfill sealed lifecycle_episodes exit_reason on observe re-score** | slim_lifecycle_episode now preserves exit_reason/entry_detail, but committed lifecycle_episodes were slimmed without them. Next sealed observe refresh should rewrite lifecycle_episodes so post-sale joins cover all episodes, not only episodes_sample. | Next N201/N206/N210 observe refresh after slim_lifecycle_episode preserves exit_reason _(machine-checked)_ |
 
 ### Universe & data
 

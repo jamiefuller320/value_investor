@@ -645,6 +645,9 @@ def build_n200_observe(
                     "entry_run_at": snap.run_at,
                     "exit_run_at": snapshots[exit_idx].run_at,
                     "hold_days": hold_days,
+                    # Deterministic identity trail for post-sale review (Package M).
+                    "entry_reason": "enter_buy_tier",
+                    "exit_reason": "leave_buy_tier",
                     "eligibility": elig_note,
                     "cells": episode_cells,
                     "control_return": path_control,
