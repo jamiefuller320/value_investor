@@ -436,3 +436,121 @@ def test_initial_opinion_and_llm_reply_fallback():
     )
     assert ok_reply["reply_kind"] == "llm"
     assert "Noted the climb" in ok_reply["text"]
+
+
+def test_blank_reply_cards_suppressed_from_active(tmp_path: Path):
+    """Unusable ``?`` reply leftovers must not clutter the active queue."""
+    labels = {
+        "actioned_review_ids": ["parent-ok"],
+        "events": [],
+        "active_replies": [
+            {
+                "review_id": "reply:blank",
+                "parent_review_id": "parent-ok",
+                "tag": "reply",
+                "ticker": None,
+                "book_tag": None,
+                "owner_comment": "noise",
+                "reply_text": "stub",
+            },
+            {
+                "review_id": "reply:ok",
+                "parent_review_id": "parent-ok",
+                "tag": "reply",
+                "ticker": "AAA.L",
+                "book_tag": "N200",
+                "book_id": "n200",
+                "exit_at": "2026-10-20T10:00:00+00:00",
+                "entry_at": "2026-10-01T10:00:00+00:00",
+                "owner_comment": "real",
+                "reply_text": "stub",
+            },
+        ],
+    }
+    payload = build_post_sale_review_queue(
+        data_dir=tmp_path,
+        sealed=_sealed_fixture(),
+        board=_board_fixture(),
+        labels=labels,
+    )
+    reply_ids = {row["review_id"] for row in payload["active"] if row.get("tag") == "reply"}
+    assert "reply:blank" not in reply_ids
+    assert "reply:ok" in reply_ids
+    assert all(row.get("ticker") not in (None, "", "?") for row in payload["active"])
+
+
+def test_duplicate_clears_without_reply(tmp_path: Path):
+    data_dir = tmp_path
+    (data_dir / "sealed_lifecycle.json").write_text("{}", encoding="utf-8")
+    queue = build_post_sale_review_queue(
+        data_dir=data_dir,
+        sealed=_sealed_fixture(),
+        board=_board_fixture(),
+    )
+    item = next(row for row in queue["active"] if row["ticker"] == "AAA.L")
+    rid = item["review_id"]
+    result = run_post_sale_review_action(
+        data_dir,
+        review_id=rid,
+        decision="duplicate",
+        tag_at_action="new",
+        source="test",
+        snapshot=item,
+    )
+    assert result["ok"] is True
+    assert result["decision"] == "duplicate"
+    assert result["event"]["kind"] == "duplicate"
+    refreshed = build_post_sale_review_queue(
+        data_dir=data_dir, sealed=_sealed_fixture(), board=_board_fixture()
+    )
+    assert all(row["review_id"] != rid for row in refreshed["active"])
+    assert all(row.get("tag") != "reply" or row.get("parent_review_id") != rid for row in refreshed["active"])
+    labels = load_post_sale_review_labels(data_dir)
+    assert rid in labels["actioned_review_ids"]
+    assert any(row.get("kind") == "duplicate" for row in labels["events"])
+    assert labels["active_replies"] == []
+
+
+def test_nested_snapshot_batch_preserves_identity(tmp_path: Path):
+    """Bridge UI nests snapshot; batch must still spawn a usable reply card."""
+    from value_investor.post_sale_review_actions import run_post_sale_review_action_batch
+
+    data_dir = tmp_path
+    (data_dir / "sealed_lifecycle.json").write_text("{}", encoding="utf-8")
+    queue = build_post_sale_review_queue(
+        data_dir=data_dir,
+        sealed=_sealed_fixture(),
+        board=_board_fixture(),
+    )
+    item = next(row for row in queue["active"] if row["ticker"] == "BBB.L")
+    # Persist queue so _resolve_snapshot can heal if needed.
+    refresh_post_sale_review_queue(
+        data_dir=data_dir,
+        store_path=data_dir / "post_sale_review_queue.json",
+        persist=True,
+    )
+    batch = run_post_sale_review_action_batch(
+        data_dir,
+        [
+            {
+                "review_id": item["review_id"],
+                "decision": "comment",
+                "text": "Already saw this on N206",
+                "tag": "new",
+                "snapshot": item,
+            }
+        ],
+        source="test",
+        acted_by="test",
+    )
+    assert batch["ok"] is True
+    labels = load_post_sale_review_labels(data_dir)
+    assert labels["active_replies"]
+    reply = labels["active_replies"][-1]
+    assert reply.get("ticker") == "BBB.L"
+    assert reply.get("book_tag") or reply.get("book_id")
+    after = build_post_sale_review_queue(
+        data_dir=data_dir, sealed=_sealed_fixture(), board=_board_fixture()
+    )
+    assert all(row["review_id"] != item["review_id"] for row in after["active"])
+    assert any(row.get("tag") == "reply" and row.get("ticker") == "BBB.L" for row in after["active"])

@@ -67,6 +67,14 @@ def main(argv: list[str] | None = None) -> int:
     comment.add_argument("--text", required=True)
     comment.add_argument("--tag", default="new", help="new | reply")
 
+    duplicate = sub.add_parser(
+        "duplicate",
+        help="Mark duplicate pattern (clears item; no reply card)",
+    )
+    duplicate.add_argument("--review-id", required=True)
+    duplicate.add_argument("--tag", default="new", help="new | reply")
+    duplicate.add_argument("--note", default="")
+
     args = parser.parse_args(argv)
     data_dir = Path(args.data_dir)
 
@@ -98,6 +106,19 @@ def main(argv: list[str] | None = None) -> int:
             review_id=args.review_id,
             decision="comment",
             text=args.text,
+            tag_at_action=args.tag,
+            source="cli",
+            acted_by="cli",
+        )
+        _print(result, as_json=True)
+        return 0
+
+    if args.cmd == "duplicate":
+        result = run_post_sale_review_action(
+            data_dir,
+            review_id=args.review_id,
+            decision="duplicate",
+            text=args.note,
             tag_at_action=args.tag,
             source="cli",
             acted_by="cli",
