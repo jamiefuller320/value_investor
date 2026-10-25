@@ -83,9 +83,7 @@ def _deterministic_strengths_weaknesses(
                 "silent timing skill claim."
             )
     else:
-        sell_weaknesses.append(
-            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
-        )
+        sell_weaknesses.append("Sell reason unjoinable / unknown — never invent a sell-trigger ID.")
 
     if isinstance(pct, (int, float)) and pct <= -5:
         buy_weaknesses.append(
@@ -304,11 +302,7 @@ def build_initial_opinion(item: dict[str, Any]) -> dict[str, Any]:
     same_day_assessment = str(same_day_row["same_day_assessment"])
 
     rapid = " Rapid entry→exit" if short_hold else ""
-    same_day_bit = (
-        f" Same-day round-trip flagged ({same_day_assessment})."
-        if same_day
-        else ""
-    )
+    same_day_bit = f" Same-day round-trip flagged ({same_day_assessment})." if same_day else ""
     opinion = (
         f"{book} closed {ticker} after a {hold_bit} hold ({entry} → {exit_at}, "
         f"{exit_kind}): {outcome}.{rapid}{same_day_bit} "
@@ -425,9 +419,7 @@ def seed_dialogue(
             "sell_weaknesses": list(packed.get("sell_weaknesses") or []),
             "learning_point_forward": str(packed.get("learning_point_forward") or ""),
             "same_day_round_trip": bool(packed.get("same_day_round_trip")),
-            "same_day_assessment": str(
-                packed.get("same_day_assessment") or "not_applicable"
-            ),
+            "same_day_assessment": str(packed.get("same_day_assessment") or "not_applicable"),
             "source": str(packed.get("opinion_source") or OPINION_SOURCE_DETERMINISTIC),
             "at": str(packed.get("generated_at") or _utcnow()),
             "influences_live": False,

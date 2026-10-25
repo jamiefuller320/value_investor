@@ -138,9 +138,7 @@ def test_novelty_and_cap_stubs_document_remainder():
     assert proposal["spawn_status"] == "scaffold_only"
     assert proposal["thin_emit_readiness"]["soft_ready"] is True
 
-    merge = novelty_gate_stub(
-        proposal, active_fingerprints=[proposal["novelty_fingerprint"]]
-    )
+    merge = novelty_gate_stub(proposal, active_fingerprints=[proposal["novelty_fingerprint"]])
     assert merge["action"] == "merge"
     assert merge["deferred_id"] == "N226"
 

@@ -105,8 +105,7 @@ MOM_LEVERS: tuple[dict[str, str], ...] = (
     {
         "id": "sell_timing",
         "definition": (
-            "vs registered hold counterfactuals; default bias against "
-            "same-calendar-day exit"
+            "vs registered hold counterfactuals; default bias against same-calendar-day exit"
         ),
         "not": "N200 leave-tier as this lab's skill; same-day without error evidence",
     },
@@ -184,9 +183,7 @@ def assess_same_day_round_trip(
     Default ``likely_weakness`` when same-day; ``major_error_reverse`` only when
     caller supplies the flag **and** at least one durable evidence cite.
     """
-    is_same = same_day_round_trip(
-        entry_at=entry_at, exit_at=exit_at, hold_days=hold_days
-    )
+    is_same = same_day_round_trip(entry_at=entry_at, exit_at=exit_at, hold_days=hold_days)
     cites = [str(c).strip() for c in (evidence_cites or []) if str(c).strip()]
     if not is_same:
         return {
@@ -475,11 +472,7 @@ def evaluate_start_gate(
     """
     gate = dict(start_gate) if isinstance(start_gate, dict) else {}
     checkpoint_id = str(gate.get("checkpoint_id") or START_CHECKPOINT_ID)
-    cohort = [
-        str(x).strip()
-        for x in (gate.get("cohort_review_ids") or [])
-        if str(x).strip()
-    ]
+    cohort = [str(x).strip() for x in (gate.get("cohort_review_ids") or []) if str(x).strip()]
     status = str(gate.get("checkpoint_status") or "open").strip().lower()
     actioned = _actioned_review_ids(labels)
     remaining = [rid for rid in cohort if rid not in actioned]
@@ -638,9 +631,7 @@ def build_lab_payload(
     )
     novelty = novelty_gate_stub(
         sample_proposal,
-        active_fingerprints=[
-            str(c.get("novelty_fingerprint") or "") for c in children
-        ],
+        active_fingerprints=[str(c.get("novelty_fingerprint") or "") for c in children],
     )
     cap = concurrent_cap_stub(active_child_count=len(children))
     cull = cull_stub(active_children=children)
@@ -743,16 +734,10 @@ def refresh_cue_consumer_mft(
     data_dir = Path(output_dir) if output_dir is not None else DEFAULT_OUTPUT_DIR
     store = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
     reg_path = (
-        Path(registration_path)
-        if registration_path is not None
-        else DEFAULT_REGISTRATION_PATH
+        Path(registration_path) if registration_path is not None else DEFAULT_REGISTRATION_PATH
     )
-    gate_path = (
-        Path(start_gate_path) if start_gate_path is not None else DEFAULT_START_GATE_PATH
-    )
-    labels = _safe_read(
-        Path(labels_path) if labels_path is not None else DEFAULT_LABELS_PATH
-    )
+    gate_path = Path(start_gate_path) if start_gate_path is not None else DEFAULT_START_GATE_PATH
+    labels = _safe_read(Path(labels_path) if labels_path is not None else DEFAULT_LABELS_PATH)
     # queue_path reserved for future cohort-freeze helper; not required for eval.
     _ = queue_path or DEFAULT_QUEUE_PATH
 
@@ -768,9 +753,7 @@ def refresh_cue_consumer_mft(
     if not isinstance(gate_store, dict):
         gate_store = default_start_gate_payload(generated_at=when)
 
-    start_eval = evaluate_start_gate(
-        start_gate=gate_store, labels=labels, today=today
-    )
+    start_eval = evaluate_start_gate(start_gate=gate_store, labels=labels, today=today)
     # Persist measured status onto gate store (do not invent cohort ids).
     gate_store = dict(gate_store)
     gate_store["generated_at"] = when
