@@ -391,6 +391,82 @@ def apply_cashflow_metrics_fallback(
     return filled
 
 
+CASHFLOW_VALIDATION_REL_TOLERANCE = 0.01
+
+
+def validate_company_metrics_cashflow_against_financials(
+    metrics: dict[str, Any],
+    financials: dict[str, Any],
+    *,
+    relative_tolerance: float = CASHFLOW_VALIDATION_REL_TOLERANCE,
+) -> dict[str, Any]:
+    """Compare OCF/FCF on a metrics dict with values mirrored in ``financials_annual.json``."""
+    reference = extract_cashflow_metrics_from_annual_financials(financials)
+    stored = financials.get("cashflow_metrics") or {}
+    for key in CASHFLOW_METRIC_KEYS:
+        if reference.get(key) is not None:
+            continue
+        value = stored.get(key)
+        if value is None:
+            continue
+        try:
+            number = float(value)
+        except (TypeError, ValueError):
+            continue
+        if pd.notna(number):
+            reference[key] = number
+
+    mismatches: dict[str, dict[str, float]] = {}
+    for key in CASHFLOW_METRIC_KEYS:
+        expected = reference.get(key)
+        if expected is None:
+            continue
+        actual = metrics.get(key)
+        if actual is None:
+            continue
+        try:
+            exp_f = float(expected)
+            act_f = float(actual)
+        except (TypeError, ValueError):
+            mismatches[key] = {"expected": float("nan"), "actual": float("nan")}
+            continue
+        denom = max(abs(exp_f), 1.0)
+        if abs(act_f - exp_f) / denom > relative_tolerance:
+            mismatches[key] = {"expected": exp_f, "actual": act_f}
+
+    return {
+        "aligned": not mismatches,
+        "mismatches": mismatches,
+        "reference": {
+            key: reference[key] for key in CASHFLOW_METRIC_KEYS if reference.get(key) is not None
+        },
+    }
+
+
+def _sync_snapshot_cashflow_metrics_block(
+    snapshot: dict[str, Any],
+    financials: dict[str, Any],
+) -> None:
+    """Mirror top-level OCF/FCF onto ``cashflow_metrics`` when annual JSON supplies them."""
+    nested = dict(snapshot.get("cashflow_metrics") or {})
+    changed = False
+    for key in CASHFLOW_METRIC_KEYS:
+        top = snapshot.get(key)
+        if top is None:
+            continue
+        if nested.get(key) != top:
+            nested[key] = top
+            changed = True
+    extracted = extract_cashflow_metrics_from_annual_financials(financials)
+    for key in CASHFLOW_METRIC_KEYS:
+        value = extracted.get(key)
+        if value is not None and nested.get(key) is None:
+            nested[key] = value
+            changed = True
+    if changed:
+        snapshot["cashflow_metrics"] = nested
+
+
 def _financials_with_merged_cashflow_metrics(financials: dict[str, Any]) -> dict[str, Any]:
     """Ensure ``cashflow_metrics`` reflects Yahoo ``cash_flow`` rows for fetch backfill."""
     extracted = extract_cashflow_metrics_from_annual_financials(financials)
@@ -498,9 +574,19 @@ def supplement_company_metrics_cashflow(
         )
     if allow_live_fetch and (payload is None or not (payload.get("cash_flow") or {})):
         payload = fetch_annual_financials(str(resolved_ticker))
+    if isinstance(payload, dict):
+        payload = _financials_with_merged_cashflow_metrics(payload)
 
     metrics_dict = metrics.to_dict() if hasattr(metrics, "to_dict") else dict(metrics)
     filled = apply_cashflow_metrics_fallback(metrics_dict, payload)
+    if payload and filled:
+        validation = validate_company_metrics_cashflow_against_financials(metrics_dict, payload)
+        if not validation.get("aligned"):
+            logger.debug(
+                "Cash-flow backfill validation mismatch for %s: %s",
+                resolved_ticker,
+                validation.get("mismatches"),
+            )
     if not filled:
         return []
 
@@ -1055,6 +1141,9 @@ def enrich_screening_snapshot_with_yahoo_quarterly(
     if yahoo_quarterly:
         updated["yahoo_quarterly"] = yahoo_quarterly
     updated = sync_snapshot_fcf_screen_ttm_verification(updated, financials)
+    merged_financials = _financials_with_merged_cashflow_metrics(financials)
+    apply_cashflow_metrics_fallback(updated, merged_financials)
+    _sync_snapshot_cashflow_metrics_block(updated, merged_financials)
     prompt = format_empty_yahoo_quarterly_cashflow_research_prompt(financials)
     if prompt:
         updated = _merge_research_prompt_lines(updated, prompt)
