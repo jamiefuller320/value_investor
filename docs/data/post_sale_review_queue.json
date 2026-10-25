@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-25T18:33:20.719464+00:00",
+  "generated_at": "2026-10-25T18:43:19.545366+00:00",
   "observe_only": true,
   "influences_live": false,
   "package": "M",
@@ -52,575 +52,19 @@
   "attention_note": "Active queue = just_sold + reply + post_sale within 21d or return ≤ -5.0% (candidates within 84d still counted for coverage).",
   "labels_store": "post_sale_review_labels.json",
   "active_count": 251,
-  "actioned_count": 2,
-  "reply_count": 3,
-  "new_count": 248,
+  "actioned_count": 10,
+  "reply_count": 11,
+  "new_count": 240,
   "by_book": {
-    "N206": 128,
-    "N201": 72,
+    "N206": 122,
+    "N201": 70,
     "FTSE control": 16,
     "N210": 3,
     "N200": 30,
-    "?": 2
+    "?": 10
   },
   "sort_default": "exit_at",
   "active": [
-    {
-      "review_id": "3caa62fda58321d13fcd",
-      "review_fingerprint": "3caa62fda58321d13fcd",
-      "tag": "new",
-      "book_id": "n206",
-      "book_tag": "N206",
-      "model_id": "n206",
-      "registration_id": "strand-d-plain-ey-identity-v0",
-      "ticker": "BSX",
-      "entry_at": "2026-10-22T06:53:02+00:00",
-      "exit_at": "2026-10-25T06:22:45+00:00",
-      "opened_at": "2026-10-22T06:53:02+00:00",
-      "sold_at": "2026-10-25T06:22:45+00:00",
-      "hold_days": 3,
-      "exit_kind": "just_sold",
-      "return_pct": 2.3,
-      "basis_label": "fair_cost_episode",
-      "close_in": {
-        "days_before": 14,
-        "days_after": 14,
-        "start": "2026-10-08",
-        "end": "2026-11-08"
-      },
-      "wider_tf": {
-        "days_before": 180,
-        "days_after": 90,
-        "start": "2026-04-25",
-        "end": "2027-01-23"
-      },
-      "charts": {
-        "episode": {
-          "days_before": 14,
-          "days_after": 14,
-          "start": "2026-10-08",
-          "end": "2026-11-08"
-        },
-        "wider_tf": {
-          "days_before": 180,
-          "days_after": 90,
-          "start": "2026-04-25",
-          "end": "2027-01-23"
-        }
-      },
-      "avg_cost": null,
-      "exit_price": null,
-      "population": "sealed_lifecycle",
-      "influences_live": false,
-      "observe_only": true,
-      "package": "M",
-      "days_since_exit": 0,
-      "phase_clock": "exit_run_at",
-      "buy_decision": {
-        "side": "buy",
-        "code": "filters_newly_clear",
-        "label": "Filters newly cleared (entry)",
-        "source": "model_identity.n206",
-        "join_ok": true,
-        "structured": {
-          "rule": "progressive_filters_newly_clear"
-        },
-        "influences_live": false
-      },
-      "sell_decision": {
-        "side": "sell",
-        "code": "unknown_unjoinable",
-        "label": "Unknown — unjoinable (no structured trail)",
-        "source": "unjoinable",
-        "join_ok": false,
-        "structured": {},
-        "influences_live": false
-      },
-      "buy_reason": "Filters newly cleared (entry)",
-      "sell_reason": "Unknown — unjoinable (no structured trail)",
-      "decision_reasons_join_ok": false,
-      "framing": "[N206] BSX · 2026-10-25 · hold 3d · just_sold\nBought because: Filters newly cleared (entry)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 2.3%\nContext read-only — not a new veto. influences_live=false",
-      "llm_opinion": "N206 closed BSX after a 3-day hold (2026-10-22 → 2026-10-25, just_sold): gain (2.30% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-      "learning_points": [
-        "Verify episode chart and wider TF together before Accepting framing.",
-        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
-        "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
-        "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
-      ],
-      "chart_annotations": {
-        "episode": "Episode: 3-day hold, gain (2.30% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-      },
-      "opinion_source": "deterministic_v0",
-      "buy_strengths": [
-        "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail.",
-        "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
-      ],
-      "buy_weaknesses": [],
-      "sell_strengths": [
-        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-      ],
-      "sell_weaknesses": [
-        "Sell reason unjoinable / unknown — never invent a sell-trigger ID.",
-        "Short hold: check whether exit timing looks premature vs the wider range."
-      ],
-      "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-      "same_day_round_trip": false,
-      "same_day_assessment": "not_applicable",
-      "same_day_soft_penalty": false,
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "N206 closed BSX after a 3-day hold (2026-10-22 → 2026-10-25, just_sold): gain (2.30% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-          "learning_points": [
-            "Verify episode chart and wider TF together before Accepting framing.",
-            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
-            "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
-            "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
-          ],
-          "chart_annotations": {
-            "episode": "Episode: 3-day hold, gain (2.30% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-          },
-          "buy_strengths": [
-            "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail.",
-            "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
-          ],
-          "buy_weaknesses": [],
-          "sell_strengths": [
-            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "sell_weaknesses": [
-            "Sell reason unjoinable / unknown — never invent a sell-trigger ID.",
-            "Short hold: check whether exit timing looks premature vs the wider range."
-          ],
-          "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-          "same_day_round_trip": false,
-          "same_day_assessment": "not_applicable",
-          "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.676079+00:00",
-          "influences_live": false
-        }
-      ]
-    },
-    {
-      "review_id": "ac3bf5bee5a015c3ce7e",
-      "review_fingerprint": "ac3bf5bee5a015c3ce7e",
-      "tag": "new",
-      "book_id": "n206",
-      "book_tag": "N206",
-      "model_id": "n206",
-      "registration_id": "strand-d-plain-ey-identity-v0",
-      "ticker": "ATYM.L",
-      "entry_at": "2026-10-23T06:52:47+00:00",
-      "exit_at": "2026-10-25T06:22:45+00:00",
-      "opened_at": "2026-10-23T06:52:47+00:00",
-      "sold_at": "2026-10-25T06:22:45+00:00",
-      "hold_days": 2,
-      "exit_kind": "just_sold",
-      "return_pct": -3.68,
-      "basis_label": "fair_cost_episode",
-      "close_in": {
-        "days_before": 14,
-        "days_after": 14,
-        "start": "2026-10-09",
-        "end": "2026-11-08"
-      },
-      "wider_tf": {
-        "days_before": 180,
-        "days_after": 90,
-        "start": "2026-04-26",
-        "end": "2027-01-23"
-      },
-      "charts": {
-        "episode": {
-          "days_before": 14,
-          "days_after": 14,
-          "start": "2026-10-09",
-          "end": "2026-11-08"
-        },
-        "wider_tf": {
-          "days_before": 180,
-          "days_after": 90,
-          "start": "2026-04-26",
-          "end": "2027-01-23"
-        }
-      },
-      "avg_cost": null,
-      "exit_price": null,
-      "population": "sealed_lifecycle",
-      "influences_live": false,
-      "observe_only": true,
-      "package": "M",
-      "days_since_exit": 0,
-      "phase_clock": "exit_run_at",
-      "buy_decision": {
-        "side": "buy",
-        "code": "filters_newly_clear",
-        "label": "Filters newly cleared (entry)",
-        "source": "model_identity.n206",
-        "join_ok": true,
-        "structured": {
-          "rule": "progressive_filters_newly_clear"
-        },
-        "influences_live": false
-      },
-      "sell_decision": {
-        "side": "sell",
-        "code": "unknown_unjoinable",
-        "label": "Unknown — unjoinable (no structured trail)",
-        "source": "unjoinable",
-        "join_ok": false,
-        "structured": {},
-        "influences_live": false
-      },
-      "buy_reason": "Filters newly cleared (entry)",
-      "sell_reason": "Unknown — unjoinable (no structured trail)",
-      "decision_reasons_join_ok": false,
-      "framing": "[N206] ATYM.L · 2026-10-25 · hold 2d · just_sold\nBought because: Filters newly cleared (entry)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -3.68%\nContext read-only — not a new veto. influences_live=false",
-      "llm_opinion": "N206 closed ATYM.L after a 2-day hold (2026-10-23 → 2026-10-25, just_sold): small loss (-3.68% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-      "learning_points": [
-        "Verify episode chart and wider TF together before Accepting framing.",
-        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
-        "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history."
-      ],
-      "chart_annotations": {
-        "episode": "Episode: 2-day hold, small loss (-3.68% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-      },
-      "opinion_source": "deterministic_v0",
-      "buy_strengths": [
-        "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail."
-      ],
-      "buy_weaknesses": [],
-      "sell_strengths": [
-        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-      ],
-      "sell_weaknesses": [
-        "Sell reason unjoinable / unknown — never invent a sell-trigger ID.",
-        "Short hold: check whether exit timing looks premature vs the wider range."
-      ],
-      "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-      "same_day_round_trip": false,
-      "same_day_assessment": "not_applicable",
-      "same_day_soft_penalty": false,
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "N206 closed ATYM.L after a 2-day hold (2026-10-23 → 2026-10-25, just_sold): small loss (-3.68% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-          "learning_points": [
-            "Verify episode chart and wider TF together before Accepting framing.",
-            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
-            "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history."
-          ],
-          "chart_annotations": {
-            "episode": "Episode: 2-day hold, small loss (-3.68% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-          },
-          "buy_strengths": [
-            "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail."
-          ],
-          "buy_weaknesses": [],
-          "sell_strengths": [
-            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "sell_weaknesses": [
-            "Sell reason unjoinable / unknown — never invent a sell-trigger ID.",
-            "Short hold: check whether exit timing looks premature vs the wider range."
-          ],
-          "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-          "same_day_round_trip": false,
-          "same_day_assessment": "not_applicable",
-          "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675836+00:00",
-          "influences_live": false
-        }
-      ]
-    },
-    {
-      "review_id": "bbec6fcdfe71dfa5b714",
-      "review_fingerprint": "bbec6fcdfe71dfa5b714",
-      "tag": "new",
-      "book_id": "n201",
-      "book_tag": "N201",
-      "model_id": "n201",
-      "registration_id": "strand-c-short-horizon-value-mom-v0",
-      "ticker": "EVO.ST",
-      "entry_at": "2026-10-23T06:52:47+00:00",
-      "exit_at": "2026-10-25T06:22:45+00:00",
-      "opened_at": "2026-10-23T06:52:47+00:00",
-      "sold_at": "2026-10-25T06:22:45+00:00",
-      "hold_days": 2,
-      "exit_kind": "just_sold",
-      "return_pct": 5.54,
-      "basis_label": "fair_cost_episode",
-      "close_in": {
-        "days_before": 14,
-        "days_after": 14,
-        "start": "2026-10-09",
-        "end": "2026-11-08"
-      },
-      "wider_tf": {
-        "days_before": 180,
-        "days_after": 90,
-        "start": "2026-04-26",
-        "end": "2027-01-23"
-      },
-      "charts": {
-        "episode": {
-          "days_before": 14,
-          "days_after": 14,
-          "start": "2026-10-09",
-          "end": "2026-11-08"
-        },
-        "wider_tf": {
-          "days_before": 180,
-          "days_after": 90,
-          "start": "2026-04-26",
-          "end": "2027-01-23"
-        }
-      },
-      "avg_cost": null,
-      "exit_price": null,
-      "population": "sealed_lifecycle",
-      "influences_live": false,
-      "observe_only": true,
-      "package": "M",
-      "days_since_exit": 0,
-      "phase_clock": "exit_run_at",
-      "buy_decision": {
-        "side": "buy",
-        "code": "filters_newly_clear",
-        "label": "Filters newly cleared (entry)",
-        "source": "model_identity.n201",
-        "join_ok": true,
-        "structured": {
-          "rule": "progressive_filters_newly_clear"
-        },
-        "influences_live": false
-      },
-      "sell_decision": {
-        "side": "sell",
-        "code": "unknown_unjoinable",
-        "label": "Unknown — unjoinable (no structured trail)",
-        "source": "unjoinable",
-        "join_ok": false,
-        "structured": {},
-        "influences_live": false
-      },
-      "buy_reason": "Filters newly cleared (entry)",
-      "sell_reason": "Unknown — unjoinable (no structured trail)",
-      "decision_reasons_join_ok": false,
-      "framing": "[N201] EVO.ST · 2026-10-25 · hold 2d · just_sold\nBought because: Filters newly cleared (entry)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 5.54%\nContext read-only — not a new veto. influences_live=false",
-      "llm_opinion": "N201 closed EVO.ST after a 2-day hold (2026-10-23 → 2026-10-25, just_sold): gain (5.54% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-      "learning_points": [
-        "Verify episode chart and wider TF together before Accepting framing.",
-        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
-        "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
-        "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
-      ],
-      "chart_annotations": {
-        "episode": "Episode: 2-day hold, gain (5.54% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-      },
-      "opinion_source": "deterministic_v0",
-      "buy_strengths": [
-        "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail.",
-        "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
-      ],
-      "buy_weaknesses": [],
-      "sell_strengths": [
-        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-      ],
-      "sell_weaknesses": [
-        "Sell reason unjoinable / unknown — never invent a sell-trigger ID.",
-        "Short hold: check whether exit timing looks premature vs the wider range."
-      ],
-      "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-      "same_day_round_trip": false,
-      "same_day_assessment": "not_applicable",
-      "same_day_soft_penalty": false,
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "N201 closed EVO.ST after a 2-day hold (2026-10-23 → 2026-10-25, just_sold): gain (5.54% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-          "learning_points": [
-            "Verify episode chart and wider TF together before Accepting framing.",
-            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
-            "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
-            "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
-          ],
-          "chart_annotations": {
-            "episode": "Episode: 2-day hold, gain (5.54% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-          },
-          "buy_strengths": [
-            "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail.",
-            "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
-          ],
-          "buy_weaknesses": [],
-          "sell_strengths": [
-            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "sell_weaknesses": [
-            "Sell reason unjoinable / unknown — never invent a sell-trigger ID.",
-            "Short hold: check whether exit timing looks premature vs the wider range."
-          ],
-          "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-          "same_day_round_trip": false,
-          "same_day_assessment": "not_applicable",
-          "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672544+00:00",
-          "influences_live": false
-        }
-      ]
-    },
-    {
-      "review_id": "fd1d929f5a8c39bbe946",
-      "review_fingerprint": "fd1d929f5a8c39bbe946",
-      "tag": "new",
-      "book_id": "n201",
-      "book_tag": "N201",
-      "model_id": "n201",
-      "registration_id": "strand-c-short-horizon-value-mom-v0",
-      "ticker": "ATYM.L",
-      "entry_at": "2026-10-23T06:52:47+00:00",
-      "exit_at": "2026-10-25T06:22:45+00:00",
-      "opened_at": "2026-10-23T06:52:47+00:00",
-      "sold_at": "2026-10-25T06:22:45+00:00",
-      "hold_days": 2,
-      "exit_kind": "just_sold",
-      "return_pct": -3.68,
-      "basis_label": "fair_cost_episode",
-      "close_in": {
-        "days_before": 14,
-        "days_after": 14,
-        "start": "2026-10-09",
-        "end": "2026-11-08"
-      },
-      "wider_tf": {
-        "days_before": 180,
-        "days_after": 90,
-        "start": "2026-04-26",
-        "end": "2027-01-23"
-      },
-      "charts": {
-        "episode": {
-          "days_before": 14,
-          "days_after": 14,
-          "start": "2026-10-09",
-          "end": "2026-11-08"
-        },
-        "wider_tf": {
-          "days_before": 180,
-          "days_after": 90,
-          "start": "2026-04-26",
-          "end": "2027-01-23"
-        }
-      },
-      "avg_cost": null,
-      "exit_price": null,
-      "population": "sealed_lifecycle",
-      "influences_live": false,
-      "observe_only": true,
-      "package": "M",
-      "days_since_exit": 0,
-      "phase_clock": "exit_run_at",
-      "buy_decision": {
-        "side": "buy",
-        "code": "filters_newly_clear",
-        "label": "Filters newly cleared (entry)",
-        "source": "model_identity.n201",
-        "join_ok": true,
-        "structured": {
-          "rule": "progressive_filters_newly_clear"
-        },
-        "influences_live": false
-      },
-      "sell_decision": {
-        "side": "sell",
-        "code": "unknown_unjoinable",
-        "label": "Unknown — unjoinable (no structured trail)",
-        "source": "unjoinable",
-        "join_ok": false,
-        "structured": {},
-        "influences_live": false
-      },
-      "buy_reason": "Filters newly cleared (entry)",
-      "sell_reason": "Unknown — unjoinable (no structured trail)",
-      "decision_reasons_join_ok": false,
-      "framing": "[N201] ATYM.L · 2026-10-25 · hold 2d · just_sold\nBought because: Filters newly cleared (entry)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -3.68%\nContext read-only — not a new veto. influences_live=false",
-      "llm_opinion": "N201 closed ATYM.L after a 2-day hold (2026-10-23 → 2026-10-25, just_sold): small loss (-3.68% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-      "learning_points": [
-        "Verify episode chart and wider TF together before Accepting framing.",
-        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
-        "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history."
-      ],
-      "chart_annotations": {
-        "episode": "Episode: 2-day hold, small loss (-3.68% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-      },
-      "opinion_source": "deterministic_v0",
-      "buy_strengths": [
-        "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail."
-      ],
-      "buy_weaknesses": [],
-      "sell_strengths": [
-        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-      ],
-      "sell_weaknesses": [
-        "Sell reason unjoinable / unknown — never invent a sell-trigger ID.",
-        "Short hold: check whether exit timing looks premature vs the wider range."
-      ],
-      "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-      "same_day_round_trip": false,
-      "same_day_assessment": "not_applicable",
-      "same_day_soft_penalty": false,
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "N201 closed ATYM.L after a 2-day hold (2026-10-23 → 2026-10-25, just_sold): small loss (-3.68% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-          "learning_points": [
-            "Verify episode chart and wider TF together before Accepting framing.",
-            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
-            "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history."
-          ],
-          "chart_annotations": {
-            "episode": "Episode: 2-day hold, small loss (-3.68% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-          },
-          "buy_strengths": [
-            "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail."
-          ],
-          "buy_weaknesses": [],
-          "sell_strengths": [
-            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "sell_weaknesses": [
-            "Sell reason unjoinable / unknown — never invent a sell-trigger ID.",
-            "Short hold: check whether exit timing looks premature vs the wider range."
-          ],
-          "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-          "same_day_round_trip": false,
-          "same_day_assessment": "not_applicable",
-          "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672016+00:00",
-          "influences_live": false
-        }
-      ]
-    },
     {
       "review_id": "reply:0b983fe35e32a4bd",
       "parent_review_id": "57103cfc312800a752a0",
@@ -743,542 +187,6 @@
       "buy_reason": "Filters newly cleared (entry)",
       "sell_reason": "Unknown — unjoinable (no structured trail)",
       "decision_reasons_join_ok": false
-    },
-    {
-      "review_id": "38ab18e7c2f3649520c5",
-      "review_fingerprint": "38ab18e7c2f3649520c5",
-      "tag": "new",
-      "book_id": "n206",
-      "book_tag": "N206",
-      "model_id": "n206",
-      "registration_id": "strand-d-plain-ey-identity-v0",
-      "ticker": "SGO.PA",
-      "entry_at": "2026-10-22T06:53:02+00:00",
-      "exit_at": "2026-10-23T06:52:47+00:00",
-      "opened_at": "2026-10-22T06:53:02+00:00",
-      "sold_at": "2026-10-23T06:52:47+00:00",
-      "hold_days": 1,
-      "exit_kind": "just_sold",
-      "return_pct": -0.29,
-      "basis_label": "fair_cost_episode",
-      "close_in": {
-        "days_before": 14,
-        "days_after": 14,
-        "start": "2026-10-08",
-        "end": "2026-11-06"
-      },
-      "wider_tf": {
-        "days_before": 180,
-        "days_after": 90,
-        "start": "2026-04-25",
-        "end": "2027-01-21"
-      },
-      "charts": {
-        "episode": {
-          "days_before": 14,
-          "days_after": 14,
-          "start": "2026-10-08",
-          "end": "2026-11-06"
-        },
-        "wider_tf": {
-          "days_before": 180,
-          "days_after": 90,
-          "start": "2026-04-25",
-          "end": "2027-01-21"
-        }
-      },
-      "avg_cost": null,
-      "exit_price": null,
-      "population": "sealed_lifecycle",
-      "influences_live": false,
-      "observe_only": true,
-      "package": "M",
-      "days_since_exit": 2,
-      "phase_clock": "exit_run_at",
-      "buy_decision": {
-        "side": "buy",
-        "code": "filters_newly_clear",
-        "label": "Filters newly cleared (entry)",
-        "source": "model_identity.n206",
-        "join_ok": true,
-        "structured": {
-          "rule": "progressive_filters_newly_clear"
-        },
-        "influences_live": false
-      },
-      "sell_decision": {
-        "side": "sell",
-        "code": "unknown_unjoinable",
-        "label": "Unknown — unjoinable (no structured trail)",
-        "source": "unjoinable",
-        "join_ok": false,
-        "structured": {},
-        "influences_live": false
-      },
-      "buy_reason": "Filters newly cleared (entry)",
-      "sell_reason": "Unknown — unjoinable (no structured trail)",
-      "decision_reasons_join_ok": false,
-      "framing": "[N206] SGO.PA · 2026-10-23 · hold 1d · just_sold\nBought because: Filters newly cleared (entry)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -0.29%\nContext read-only — not a new veto. influences_live=false",
-      "llm_opinion": "N206 closed SGO.PA after a 1-day hold (2026-10-22 → 2026-10-23, just_sold): small loss (-0.29% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-      "learning_points": [
-        "Verify episode chart and wider TF together before Accepting framing.",
-        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
-        "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history."
-      ],
-      "chart_annotations": {
-        "episode": "Episode: 1-day hold, small loss (-0.29% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-      },
-      "opinion_source": "deterministic_v0",
-      "buy_strengths": [
-        "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail."
-      ],
-      "buy_weaknesses": [],
-      "sell_strengths": [
-        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-      ],
-      "sell_weaknesses": [
-        "Sell reason unjoinable / unknown — never invent a sell-trigger ID.",
-        "Short hold: check whether exit timing looks premature vs the wider range."
-      ],
-      "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-      "same_day_round_trip": false,
-      "same_day_assessment": "not_applicable",
-      "same_day_soft_penalty": false,
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "N206 closed SGO.PA after a 1-day hold (2026-10-22 → 2026-10-23, just_sold): small loss (-0.29% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-          "learning_points": [
-            "Verify episode chart and wider TF together before Accepting framing.",
-            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
-            "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history."
-          ],
-          "chart_annotations": {
-            "episode": "Episode: 1-day hold, small loss (-0.29% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-          },
-          "buy_strengths": [
-            "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail."
-          ],
-          "buy_weaknesses": [],
-          "sell_strengths": [
-            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "sell_weaknesses": [
-            "Sell reason unjoinable / unknown — never invent a sell-trigger ID.",
-            "Short hold: check whether exit timing looks premature vs the wider range."
-          ],
-          "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-          "same_day_round_trip": false,
-          "same_day_assessment": "not_applicable",
-          "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713435+00:00",
-          "influences_live": false
-        }
-      ]
-    },
-    {
-      "review_id": "6c3f34f10a3737e7f6de",
-      "review_fingerprint": "6c3f34f10a3737e7f6de",
-      "tag": "new",
-      "book_id": "n206",
-      "book_tag": "N206",
-      "model_id": "n206",
-      "registration_id": "strand-d-plain-ey-identity-v0",
-      "ticker": "HAL",
-      "entry_at": "2026-09-20T06:22:14+00:00",
-      "exit_at": "2026-10-23T06:52:47+00:00",
-      "opened_at": "2026-09-20T06:22:14+00:00",
-      "sold_at": "2026-10-23T06:52:47+00:00",
-      "hold_days": 33,
-      "exit_kind": "just_sold",
-      "return_pct": -1.69,
-      "basis_label": "fair_cost_episode",
-      "close_in": {
-        "days_before": 14,
-        "days_after": 14,
-        "start": "2026-09-06",
-        "end": "2026-11-06"
-      },
-      "wider_tf": {
-        "days_before": 180,
-        "days_after": 90,
-        "start": "2026-03-24",
-        "end": "2027-01-21"
-      },
-      "charts": {
-        "episode": {
-          "days_before": 14,
-          "days_after": 14,
-          "start": "2026-09-06",
-          "end": "2026-11-06"
-        },
-        "wider_tf": {
-          "days_before": 180,
-          "days_after": 90,
-          "start": "2026-03-24",
-          "end": "2027-01-21"
-        }
-      },
-      "avg_cost": null,
-      "exit_price": null,
-      "population": "sealed_lifecycle",
-      "influences_live": false,
-      "observe_only": true,
-      "package": "M",
-      "days_since_exit": 2,
-      "phase_clock": "exit_run_at",
-      "buy_decision": {
-        "side": "buy",
-        "code": "filters_newly_clear",
-        "label": "Filters newly cleared (entry)",
-        "source": "model_identity.n206",
-        "join_ok": true,
-        "structured": {
-          "rule": "progressive_filters_newly_clear"
-        },
-        "influences_live": false
-      },
-      "sell_decision": {
-        "side": "sell",
-        "code": "unknown_unjoinable",
-        "label": "Unknown — unjoinable (no structured trail)",
-        "source": "unjoinable",
-        "join_ok": false,
-        "structured": {},
-        "influences_live": false
-      },
-      "buy_reason": "Filters newly cleared (entry)",
-      "sell_reason": "Unknown — unjoinable (no structured trail)",
-      "decision_reasons_join_ok": false,
-      "framing": "[N206] HAL · 2026-10-23 · hold 33d · just_sold\nBought because: Filters newly cleared (entry)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -1.69%\nContext read-only — not a new veto. influences_live=false",
-      "llm_opinion": "N206 closed HAL after a 33-day hold (2026-09-20 → 2026-10-23, just_sold): small loss (-1.69% fair_cost_episode). Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-      "learning_points": [
-        "Verify episode chart and wider TF together before Accepting framing.",
-        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
-      ],
-      "chart_annotations": {
-        "episode": "Episode: 33-day hold, small loss (-1.69% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-      },
-      "opinion_source": "deterministic_v0",
-      "buy_strengths": [
-        "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail."
-      ],
-      "buy_weaknesses": [],
-      "sell_strengths": [
-        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-      ],
-      "sell_weaknesses": [
-        "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
-      ],
-      "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
-      "same_day_round_trip": false,
-      "same_day_assessment": "not_applicable",
-      "same_day_soft_penalty": false,
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "N206 closed HAL after a 33-day hold (2026-09-20 → 2026-10-23, just_sold): small loss (-1.69% fair_cost_episode). Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-          "learning_points": [
-            "Verify episode chart and wider TF together before Accepting framing.",
-            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
-          ],
-          "chart_annotations": {
-            "episode": "Episode: 33-day hold, small loss (-1.69% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-          },
-          "buy_strengths": [
-            "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail."
-          ],
-          "buy_weaknesses": [],
-          "sell_strengths": [
-            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "sell_weaknesses": [
-            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
-          ],
-          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
-          "same_day_round_trip": false,
-          "same_day_assessment": "not_applicable",
-          "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677787+00:00",
-          "influences_live": false
-        }
-      ]
-    },
-    {
-      "review_id": "b7149ac99b9abe8d1072",
-      "review_fingerprint": "b7149ac99b9abe8d1072",
-      "tag": "new",
-      "book_id": "n206",
-      "book_tag": "N206",
-      "model_id": "n206",
-      "registration_id": "strand-d-plain-ey-identity-v0",
-      "ticker": "GOOGL",
-      "entry_at": "2026-07-25T09:57:16+00:00",
-      "exit_at": "2026-10-23T06:52:47+00:00",
-      "opened_at": "2026-07-25T09:57:16+00:00",
-      "sold_at": "2026-10-23T06:52:47+00:00",
-      "hold_days": 90,
-      "exit_kind": "just_sold",
-      "return_pct": 1.05,
-      "basis_label": "fair_cost_episode",
-      "close_in": {
-        "days_before": 14,
-        "days_after": 14,
-        "start": "2026-07-11",
-        "end": "2026-11-06"
-      },
-      "wider_tf": {
-        "days_before": 180,
-        "days_after": 90,
-        "start": "2026-01-26",
-        "end": "2027-01-21"
-      },
-      "charts": {
-        "episode": {
-          "days_before": 14,
-          "days_after": 14,
-          "start": "2026-07-11",
-          "end": "2026-11-06"
-        },
-        "wider_tf": {
-          "days_before": 180,
-          "days_after": 90,
-          "start": "2026-01-26",
-          "end": "2027-01-21"
-        }
-      },
-      "avg_cost": null,
-      "exit_price": null,
-      "population": "sealed_lifecycle",
-      "influences_live": false,
-      "observe_only": true,
-      "package": "M",
-      "days_since_exit": 2,
-      "phase_clock": "exit_run_at",
-      "buy_decision": {
-        "side": "buy",
-        "code": "filters_newly_clear",
-        "label": "Filters newly cleared (entry)",
-        "source": "model_identity.n206",
-        "join_ok": true,
-        "structured": {
-          "rule": "progressive_filters_newly_clear"
-        },
-        "influences_live": false
-      },
-      "sell_decision": {
-        "side": "sell",
-        "code": "unknown_unjoinable",
-        "label": "Unknown — unjoinable (no structured trail)",
-        "source": "unjoinable",
-        "join_ok": false,
-        "structured": {},
-        "influences_live": false
-      },
-      "buy_reason": "Filters newly cleared (entry)",
-      "sell_reason": "Unknown — unjoinable (no structured trail)",
-      "decision_reasons_join_ok": false,
-      "framing": "[N206] GOOGL · 2026-10-23 · hold 90d · just_sold\nBought because: Filters newly cleared (entry)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 1.05%\nContext read-only — not a new veto. influences_live=false",
-      "llm_opinion": "N206 closed GOOGL after a 90-day hold (2026-07-25 → 2026-10-23, just_sold): near-flat / small gain (1.05% fair_cost_episode). Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-      "learning_points": [
-        "Verify episode chart and wider TF together before Accepting framing.",
-        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
-      ],
-      "chart_annotations": {
-        "episode": "Episode: 90-day hold, near-flat / small gain (1.05% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-      },
-      "opinion_source": "deterministic_v0",
-      "buy_strengths": [
-        "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail."
-      ],
-      "buy_weaknesses": [],
-      "sell_strengths": [
-        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-      ],
-      "sell_weaknesses": [
-        "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
-      ],
-      "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
-      "same_day_round_trip": false,
-      "same_day_assessment": "not_applicable",
-      "same_day_soft_penalty": false,
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "N206 closed GOOGL after a 90-day hold (2026-07-25 → 2026-10-23, just_sold): near-flat / small gain (1.05% fair_cost_episode). Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-          "learning_points": [
-            "Verify episode chart and wider TF together before Accepting framing.",
-            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
-          ],
-          "chart_annotations": {
-            "episode": "Episode: 90-day hold, near-flat / small gain (1.05% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-          },
-          "buy_strengths": [
-            "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail."
-          ],
-          "buy_weaknesses": [],
-          "sell_strengths": [
-            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "sell_weaknesses": [
-            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
-          ],
-          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
-          "same_day_round_trip": false,
-          "same_day_assessment": "not_applicable",
-          "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677760+00:00",
-          "influences_live": false
-        }
-      ]
-    },
-    {
-      "review_id": "798faa2d68d2b032f9c6",
-      "review_fingerprint": "798faa2d68d2b032f9c6",
-      "tag": "new",
-      "book_id": "n206",
-      "book_tag": "N206",
-      "model_id": "n206",
-      "registration_id": "strand-d-plain-ey-identity-v0",
-      "ticker": "GOOG",
-      "entry_at": "2026-07-25T09:57:16+00:00",
-      "exit_at": "2026-10-23T06:52:47+00:00",
-      "opened_at": "2026-07-25T09:57:16+00:00",
-      "sold_at": "2026-10-23T06:52:47+00:00",
-      "hold_days": 90,
-      "exit_kind": "just_sold",
-      "return_pct": 0.17,
-      "basis_label": "fair_cost_episode",
-      "close_in": {
-        "days_before": 14,
-        "days_after": 14,
-        "start": "2026-07-11",
-        "end": "2026-11-06"
-      },
-      "wider_tf": {
-        "days_before": 180,
-        "days_after": 90,
-        "start": "2026-01-26",
-        "end": "2027-01-21"
-      },
-      "charts": {
-        "episode": {
-          "days_before": 14,
-          "days_after": 14,
-          "start": "2026-07-11",
-          "end": "2026-11-06"
-        },
-        "wider_tf": {
-          "days_before": 180,
-          "days_after": 90,
-          "start": "2026-01-26",
-          "end": "2027-01-21"
-        }
-      },
-      "avg_cost": null,
-      "exit_price": null,
-      "population": "sealed_lifecycle",
-      "influences_live": false,
-      "observe_only": true,
-      "package": "M",
-      "days_since_exit": 2,
-      "phase_clock": "exit_run_at",
-      "buy_decision": {
-        "side": "buy",
-        "code": "filters_newly_clear",
-        "label": "Filters newly cleared (entry)",
-        "source": "model_identity.n206",
-        "join_ok": true,
-        "structured": {
-          "rule": "progressive_filters_newly_clear"
-        },
-        "influences_live": false
-      },
-      "sell_decision": {
-        "side": "sell",
-        "code": "unknown_unjoinable",
-        "label": "Unknown — unjoinable (no structured trail)",
-        "source": "unjoinable",
-        "join_ok": false,
-        "structured": {},
-        "influences_live": false
-      },
-      "buy_reason": "Filters newly cleared (entry)",
-      "sell_reason": "Unknown — unjoinable (no structured trail)",
-      "decision_reasons_join_ok": false,
-      "framing": "[N206] GOOG · 2026-10-23 · hold 90d · just_sold\nBought because: Filters newly cleared (entry)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 0.17%\nContext read-only — not a new veto. influences_live=false",
-      "llm_opinion": "N206 closed GOOG after a 90-day hold (2026-07-25 → 2026-10-23, just_sold): near-flat / small gain (0.17% fair_cost_episode). Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-      "learning_points": [
-        "Verify episode chart and wider TF together before Accepting framing.",
-        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
-      ],
-      "chart_annotations": {
-        "episode": "Episode: 90-day hold, near-flat / small gain (0.17% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-      },
-      "opinion_source": "deterministic_v0",
-      "buy_strengths": [
-        "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail."
-      ],
-      "buy_weaknesses": [],
-      "sell_strengths": [
-        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-      ],
-      "sell_weaknesses": [
-        "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
-      ],
-      "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
-      "same_day_round_trip": false,
-      "same_day_assessment": "not_applicable",
-      "same_day_soft_penalty": false,
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "N206 closed GOOG after a 90-day hold (2026-07-25 → 2026-10-23, just_sold): near-flat / small gain (0.17% fair_cost_episode). Bought because: Filters newly cleared (entry). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
-          "learning_points": [
-            "Verify episode chart and wider TF together before Accepting framing.",
-            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
-            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
-          ],
-          "chart_annotations": {
-            "episode": "Episode: 90-day hold, near-flat / small gain (0.17% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
-            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
-          },
-          "buy_strengths": [
-            "Buy decision is joinable: Filters newly cleared (entry) — comments can ground on that trail."
-          ],
-          "buy_weaknesses": [],
-          "sell_strengths": [
-            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
-          ],
-          "sell_weaknesses": [
-            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
-          ],
-          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
-          "same_day_round_trip": false,
-          "same_day_assessment": "not_applicable",
-          "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677706+00:00",
-          "influences_live": false
-        }
-      ]
     },
     {
       "review_id": "83074e10ccbc3266c927",
@@ -1416,7 +324,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.676282+00:00",
+          "at": "2026-10-25T18:43:19.533905+00:00",
           "influences_live": false
         }
       ]
@@ -1551,7 +459,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.676193+00:00",
+          "at": "2026-10-25T18:43:19.533767+00:00",
           "influences_live": false
         }
       ]
@@ -1686,7 +594,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.676136+00:00",
+          "at": "2026-10-25T18:43:19.533678+00:00",
           "influences_live": false
         }
       ]
@@ -1827,7 +735,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675906+00:00",
+          "at": "2026-10-25T18:43:19.533286+00:00",
           "influences_live": false
         }
       ]
@@ -1960,7 +868,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672709+00:00",
+          "at": "2026-10-25T18:43:19.501094+00:00",
           "influences_live": false
         }
       ]
@@ -2095,7 +1003,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672155+00:00",
+          "at": "2026-10-25T18:43:19.500227+00:00",
           "influences_live": false
         }
       ]
@@ -2234,7 +1142,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713949+00:00",
+          "at": "2026-10-25T18:43:19.536899+00:00",
           "influences_live": false
         }
       ]
@@ -2373,7 +1281,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713702+00:00",
+          "at": "2026-10-25T18:43:19.536544+00:00",
           "influences_live": false
         }
       ]
@@ -2510,7 +1418,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713613+00:00",
+          "at": "2026-10-25T18:43:19.536407+00:00",
           "influences_live": false
         }
       ]
@@ -2645,7 +1553,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677569+00:00",
+          "at": "2026-10-25T18:43:19.534414+00:00",
           "influences_live": false
         }
       ]
@@ -2778,7 +1686,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675354+00:00",
+          "at": "2026-10-25T18:43:19.532428+00:00",
           "influences_live": false
         }
       ]
@@ -2917,7 +1825,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673288+00:00",
+          "at": "2026-10-25T18:43:19.502017+00:00",
           "influences_live": false
         }
       ]
@@ -3056,7 +1964,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673147+00:00",
+          "at": "2026-10-25T18:43:19.501798+00:00",
           "influences_live": false
         }
       ]
@@ -3193,7 +2101,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673062+00:00",
+          "at": "2026-10-25T18:43:19.501666+00:00",
           "influences_live": false
         }
       ]
@@ -3326,7 +2234,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672515+00:00",
+          "at": "2026-10-25T18:43:19.500792+00:00",
           "influences_live": false
         }
       ]
@@ -3459,7 +2367,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671806+00:00",
+          "at": "2026-10-25T18:43:19.499687+00:00",
           "influences_live": false
         }
       ]
@@ -3594,7 +2502,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.714007+00:00",
+          "at": "2026-10-25T18:43:19.536987+00:00",
           "influences_live": false
         }
       ]
@@ -3733,7 +2641,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713763+00:00",
+          "at": "2026-10-25T18:43:19.536635+00:00",
           "influences_live": false
         }
       ]
@@ -3868,7 +2776,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713407+00:00",
+          "at": "2026-10-25T18:43:19.536076+00:00",
           "influences_live": false
         }
       ]
@@ -4001,7 +2909,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713376+00:00",
+          "at": "2026-10-25T18:43:19.536032+00:00",
           "influences_live": false
         }
       ]
@@ -4140,7 +3048,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675808+00:00",
+          "at": "2026-10-25T18:43:19.533148+00:00",
           "influences_live": false
         }
       ]
@@ -4279,7 +3187,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673206+00:00",
+          "at": "2026-10-25T18:43:19.501886+00:00",
           "influences_live": false
         }
       ]
@@ -4414,7 +3322,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672681+00:00",
+          "at": "2026-10-25T18:43:19.501049+00:00",
           "influences_live": false
         }
       ]
@@ -4549,7 +3457,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672600+00:00",
+          "at": "2026-10-25T18:43:19.500923+00:00",
           "influences_live": false
         }
       ]
@@ -4684,7 +3592,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672183+00:00",
+          "at": "2026-10-25T18:43:19.500272+00:00",
           "influences_live": false
         }
       ]
@@ -4822,7 +3730,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717575+00:00",
+          "at": "2026-10-25T18:43:19.542484+00:00",
           "influences_live": false
         }
       ]
@@ -4960,7 +3868,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717727+00:00",
+          "at": "2026-10-25T18:43:19.542699+00:00",
           "influences_live": false
         }
       ]
@@ -5104,7 +4012,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717494+00:00",
+          "at": "2026-10-25T18:43:19.542366+00:00",
           "influences_live": false
         }
       ]
@@ -5256,7 +4164,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717535+00:00",
+          "at": "2026-10-25T18:43:19.542429+00:00",
           "influences_live": false
         }
       ]
@@ -5397,7 +4305,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713643+00:00",
+          "at": "2026-10-25T18:43:19.536451+00:00",
           "influences_live": false
         }
       ]
@@ -5538,7 +4446,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.678045+00:00",
+          "at": "2026-10-25T18:43:19.535181+00:00",
           "influences_live": false
         }
       ]
@@ -5673,7 +4581,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.676051+00:00",
+          "at": "2026-10-25T18:43:19.533543+00:00",
           "influences_live": false
         }
       ]
@@ -5814,7 +4722,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673090+00:00",
+          "at": "2026-10-25T18:43:19.501710+00:00",
           "influences_live": false
         }
       ]
@@ -5947,7 +4855,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717381+00:00",
+          "at": "2026-10-25T18:43:19.542196+00:00",
           "influences_live": false
         }
       ]
@@ -6094,7 +5002,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717349+00:00",
+          "at": "2026-10-25T18:43:19.542140+00:00",
           "influences_live": false
         }
       ]
@@ -6237,7 +5145,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717316+00:00",
+          "at": "2026-10-25T18:43:19.542089+00:00",
           "influences_live": false
         }
       ]
@@ -6374,7 +5282,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675937+00:00",
+          "at": "2026-10-25T18:43:19.533355+00:00",
           "influences_live": false
         }
       ]
@@ -6521,7 +5429,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.668655+00:00",
+          "at": "2026-10-25T18:43:19.494725+00:00",
           "influences_live": false
         }
       ]
@@ -6656,7 +5564,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.668622+00:00",
+          "at": "2026-10-25T18:43:19.494675+00:00",
           "influences_live": false
         }
       ]
@@ -6789,7 +5697,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.668585+00:00",
+          "at": "2026-10-25T18:43:19.494622+00:00",
           "influences_live": false
         }
       ]
@@ -6932,7 +5840,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.668541+00:00",
+          "at": "2026-10-25T18:43:19.494560+00:00",
           "influences_live": false
         }
       ]
@@ -7079,7 +5987,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.668473+00:00",
+          "at": "2026-10-25T18:43:19.494475+00:00",
           "influences_live": false
         }
       ]
@@ -7214,7 +6122,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.714034+00:00",
+          "at": "2026-10-25T18:43:19.537031+00:00",
           "influences_live": false
         }
       ]
@@ -7349,7 +6257,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713978+00:00",
+          "at": "2026-10-25T18:43:19.536943+00:00",
           "influences_live": false
         }
       ]
@@ -7482,7 +6390,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713920+00:00",
+          "at": "2026-10-25T18:43:19.536855+00:00",
           "influences_live": false
         }
       ]
@@ -7623,7 +6531,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713879+00:00",
+          "at": "2026-10-25T18:43:19.536812+00:00",
           "influences_live": false
         }
       ]
@@ -7764,7 +6672,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713850+00:00",
+          "at": "2026-10-25T18:43:19.536769+00:00",
           "influences_live": false
         }
       ]
@@ -7905,7 +6813,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713822+00:00",
+          "at": "2026-10-25T18:43:19.536725+00:00",
           "influences_live": false
         }
       ]
@@ -8038,7 +6946,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713793+00:00",
+          "at": "2026-10-25T18:43:19.536681+00:00",
           "influences_live": false
         }
       ]
@@ -8173,7 +7081,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713732+00:00",
+          "at": "2026-10-25T18:43:19.536591+00:00",
           "influences_live": false
         }
       ]
@@ -8306,7 +7214,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713673+00:00",
+          "at": "2026-10-25T18:43:19.536500+00:00",
           "influences_live": false
         }
       ]
@@ -8441,7 +7349,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713493+00:00",
+          "at": "2026-10-25T18:43:19.536206+00:00",
           "influences_live": false
         }
       ]
@@ -8576,7 +7484,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713347+00:00",
+          "at": "2026-10-25T18:43:19.535988+00:00",
           "influences_live": false
         }
       ]
@@ -8711,7 +7619,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713318+00:00",
+          "at": "2026-10-25T18:43:19.535945+00:00",
           "influences_live": false
         }
       ]
@@ -8846,7 +7754,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713287+00:00",
+          "at": "2026-10-25T18:43:19.535902+00:00",
           "influences_live": false
         }
       ]
@@ -8979,7 +7887,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713253+00:00",
+          "at": "2026-10-25T18:43:19.535858+00:00",
           "influences_live": false
         }
       ]
@@ -9112,7 +8020,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713218+00:00",
+          "at": "2026-10-25T18:43:19.535815+00:00",
           "influences_live": false
         }
       ]
@@ -9253,7 +8161,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713179+00:00",
+          "at": "2026-10-25T18:43:19.535764+00:00",
           "influences_live": false
         }
       ]
@@ -9394,7 +8302,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713135+00:00",
+          "at": "2026-10-25T18:43:19.535720+00:00",
           "influences_live": false
         }
       ]
@@ -9529,7 +8437,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.712993+00:00",
+          "at": "2026-10-25T18:43:19.535647+00:00",
           "influences_live": false
         }
       ]
@@ -9670,7 +8578,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.678288+00:00",
+          "at": "2026-10-25T18:43:19.535603+00:00",
           "influences_live": false
         }
       ]
@@ -9811,7 +8719,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.678235+00:00",
+          "at": "2026-10-25T18:43:19.535515+00:00",
           "influences_live": false
         }
       ]
@@ -9944,7 +8852,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.678208+00:00",
+          "at": "2026-10-25T18:43:19.535471+00:00",
           "influences_live": false
         }
       ]
@@ -10077,7 +8985,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.678181+00:00",
+          "at": "2026-10-25T18:43:19.535428+00:00",
           "influences_live": false
         }
       ]
@@ -10218,7 +9126,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.678153+00:00",
+          "at": "2026-10-25T18:43:19.535382+00:00",
           "influences_live": false
         }
       ]
@@ -10353,7 +9261,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.678126+00:00",
+          "at": "2026-10-25T18:43:19.535315+00:00",
           "influences_live": false
         }
       ]
@@ -10488,7 +9396,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.678099+00:00",
+          "at": "2026-10-25T18:43:19.535270+00:00",
           "influences_live": false
         }
       ]
@@ -10629,7 +9537,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.678072+00:00",
+          "at": "2026-10-25T18:43:19.535226+00:00",
           "influences_live": false
         }
       ]
@@ -10770,7 +9678,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677992+00:00",
+          "at": "2026-10-25T18:43:19.535093+00:00",
           "influences_live": false
         }
       ]
@@ -10911,7 +9819,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677964+00:00",
+          "at": "2026-10-25T18:43:19.535048+00:00",
           "influences_live": false
         }
       ]
@@ -11046,7 +9954,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677937+00:00",
+          "at": "2026-10-25T18:43:19.534992+00:00",
           "influences_live": false
         }
       ]
@@ -11187,7 +10095,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677909+00:00",
+          "at": "2026-10-25T18:43:19.534949+00:00",
           "influences_live": false
         }
       ]
@@ -11322,7 +10230,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677867+00:00",
+          "at": "2026-10-25T18:43:19.534904+00:00",
           "influences_live": false
         }
       ]
@@ -11455,7 +10363,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677840+00:00",
+          "at": "2026-10-25T18:43:19.534860+00:00",
           "influences_live": false
         }
       ]
@@ -11596,7 +10504,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677814+00:00",
+          "at": "2026-10-25T18:43:19.534817+00:00",
           "influences_live": false
         }
       ]
@@ -11731,7 +10639,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677679+00:00",
+          "at": "2026-10-25T18:43:19.534596+00:00",
           "influences_live": false
         }
       ]
@@ -11866,7 +10774,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677651+00:00",
+          "at": "2026-10-25T18:43:19.534551+00:00",
           "influences_live": false
         }
       ]
@@ -12007,7 +10915,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677624+00:00",
+          "at": "2026-10-25T18:43:19.534507+00:00",
           "influences_live": false
         }
       ]
@@ -12142,7 +11050,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677487+00:00",
+          "at": "2026-10-25T18:43:19.534252+00:00",
           "influences_live": false
         }
       ]
@@ -12283,7 +11191,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677458+00:00",
+          "at": "2026-10-25T18:43:19.534207+00:00",
           "influences_live": false
         }
       ]
@@ -12428,7 +11336,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677416+00:00",
+          "at": "2026-10-25T18:43:19.534135+00:00",
           "influences_live": false
         }
       ]
@@ -12563,7 +11471,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.676395+00:00",
+          "at": "2026-10-25T18:43:19.534087+00:00",
           "influences_live": false
         }
       ]
@@ -12700,7 +11608,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.676368+00:00",
+          "at": "2026-10-25T18:43:19.534041+00:00",
           "influences_live": false
         }
       ]
@@ -12841,7 +11749,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.676309+00:00",
+          "at": "2026-10-25T18:43:19.533949+00:00",
           "influences_live": false
         }
       ]
@@ -12974,7 +11882,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.676254+00:00",
+          "at": "2026-10-25T18:43:19.533861+00:00",
           "influences_live": false
         }
       ]
@@ -13109,7 +12017,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.676223+00:00",
+          "at": "2026-10-25T18:43:19.533816+00:00",
           "influences_live": false
         }
       ]
@@ -13244,7 +12152,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.676165+00:00",
+          "at": "2026-10-25T18:43:19.533723+00:00",
           "influences_live": false
         }
       ]
@@ -13385,7 +12293,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.676108+00:00",
+          "at": "2026-10-25T18:43:19.533633+00:00",
           "influences_live": false
         }
       ]
@@ -13520,7 +12428,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.676023+00:00",
+          "at": "2026-10-25T18:43:19.533499+00:00",
           "influences_live": false
         }
       ]
@@ -13661,7 +12569,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675994+00:00",
+          "at": "2026-10-25T18:43:19.533453+00:00",
           "influences_live": false
         }
       ]
@@ -13798,7 +12706,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675867+00:00",
+          "at": "2026-10-25T18:43:19.533240+00:00",
           "influences_live": false
         }
       ]
@@ -13939,7 +12847,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675779+00:00",
+          "at": "2026-10-25T18:43:19.533105+00:00",
           "influences_live": false
         }
       ]
@@ -14074,7 +12982,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675751+00:00",
+          "at": "2026-10-25T18:43:19.533059+00:00",
           "influences_live": false
         }
       ]
@@ -14215,7 +13123,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675716+00:00",
+          "at": "2026-10-25T18:43:19.533009+00:00",
           "influences_live": false
         }
       ]
@@ -14350,7 +13258,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675688+00:00",
+          "at": "2026-10-25T18:43:19.532966+00:00",
           "influences_live": false
         }
       ]
@@ -14487,7 +13395,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675660+00:00",
+          "at": "2026-10-25T18:43:19.532921+00:00",
           "influences_live": false
         }
       ]
@@ -14622,7 +13530,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675627+00:00",
+          "at": "2026-10-25T18:43:19.532870+00:00",
           "influences_live": false
         }
       ]
@@ -14763,7 +13671,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675599+00:00",
+          "at": "2026-10-25T18:43:19.532825+00:00",
           "influences_live": false
         }
       ]
@@ -14904,7 +13812,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675573+00:00",
+          "at": "2026-10-25T18:43:19.532782+00:00",
           "influences_live": false
         }
       ]
@@ -15045,7 +13953,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675545+00:00",
+          "at": "2026-10-25T18:43:19.532738+00:00",
           "influences_live": false
         }
       ]
@@ -15186,7 +14094,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675487+00:00",
+          "at": "2026-10-25T18:43:19.532607+00:00",
           "influences_live": false
         }
       ]
@@ -15327,7 +14235,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675437+00:00",
+          "at": "2026-10-25T18:43:19.532564+00:00",
           "influences_live": false
         }
       ]
@@ -15468,7 +14376,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675409+00:00",
+          "at": "2026-10-25T18:43:19.532520+00:00",
           "influences_live": false
         }
       ]
@@ -15603,7 +14511,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675382+00:00",
+          "at": "2026-10-25T18:43:19.532475+00:00",
           "influences_live": false
         }
       ]
@@ -15744,7 +14652,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675327+00:00",
+          "at": "2026-10-25T18:43:19.532371+00:00",
           "influences_live": false
         }
       ]
@@ -15885,7 +14793,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672072+00:00",
+          "at": "2026-10-25T18:43:19.500089+00:00",
           "influences_live": false
         }
       ]
@@ -16020,7 +14928,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672044+00:00",
+          "at": "2026-10-25T18:43:19.500044+00:00",
           "influences_live": false
         }
       ]
@@ -16153,7 +15061,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713523+00:00",
+          "at": "2026-10-25T18:43:19.536249+00:00",
           "influences_live": false
         }
       ]
@@ -16292,7 +15200,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677542+00:00",
+          "at": "2026-10-25T18:43:19.534365+00:00",
           "influences_live": false
         }
       ]
@@ -16427,7 +15335,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.677514+00:00",
+          "at": "2026-10-25T18:43:19.534297+00:00",
           "influences_live": false
         }
       ]
@@ -16566,7 +15474,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672487+00:00",
+          "at": "2026-10-25T18:43:19.500748+00:00",
           "influences_live": false
         }
       ]
@@ -16701,7 +15609,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672456+00:00",
+          "at": "2026-10-25T18:43:19.500703+00:00",
           "influences_live": false
         }
       ]
@@ -16834,7 +15742,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.713583+00:00",
+          "at": "2026-10-25T18:43:19.536358+00:00",
           "influences_live": false
         }
       ]
@@ -16975,7 +15883,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.678019+00:00",
+          "at": "2026-10-25T18:43:19.535137+00:00",
           "influences_live": false
         }
       ]
@@ -17114,7 +16022,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675966+00:00",
+          "at": "2026-10-25T18:43:19.533405+00:00",
           "influences_live": false
         }
       ]
@@ -17249,7 +16157,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673315+00:00",
+          "at": "2026-10-25T18:43:19.502061+00:00",
           "influences_live": false
         }
       ]
@@ -17390,7 +16298,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673261+00:00",
+          "at": "2026-10-25T18:43:19.501973+00:00",
           "influences_live": false
         }
       ]
@@ -17531,7 +16439,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673234+00:00",
+          "at": "2026-10-25T18:43:19.501930+00:00",
           "influences_live": false
         }
       ]
@@ -17666,7 +16574,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673176+00:00",
+          "at": "2026-10-25T18:43:19.501842+00:00",
           "influences_live": false
         }
       ]
@@ -17799,7 +16707,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673119+00:00",
+          "at": "2026-10-25T18:43:19.501753+00:00",
           "influences_live": false
         }
       ]
@@ -17932,7 +16840,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673035+00:00",
+          "at": "2026-10-25T18:43:19.501622+00:00",
           "influences_live": false
         }
       ]
@@ -18067,7 +16975,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673008+00:00",
+          "at": "2026-10-25T18:43:19.501578+00:00",
           "influences_live": false
         }
       ]
@@ -18202,7 +17110,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672980+00:00",
+          "at": "2026-10-25T18:43:19.501535+00:00",
           "influences_live": false
         }
       ]
@@ -18337,7 +17245,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672953+00:00",
+          "at": "2026-10-25T18:43:19.501492+00:00",
           "influences_live": false
         }
       ]
@@ -18472,7 +17380,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672926+00:00",
+          "at": "2026-10-25T18:43:19.501447+00:00",
           "influences_live": false
         }
       ]
@@ -18607,7 +17515,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672898+00:00",
+          "at": "2026-10-25T18:43:19.501402+00:00",
           "influences_live": false
         }
       ]
@@ -18752,7 +17660,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672859+00:00",
+          "at": "2026-10-25T18:43:19.501352+00:00",
           "influences_live": false
         }
       ]
@@ -18887,7 +17795,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672828+00:00",
+          "at": "2026-10-25T18:43:19.501282+00:00",
           "influences_live": false
         }
       ]
@@ -19024,7 +17932,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672798+00:00",
+          "at": "2026-10-25T18:43:19.501238+00:00",
           "influences_live": false
         }
       ]
@@ -19159,7 +18067,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672768+00:00",
+          "at": "2026-10-25T18:43:19.501189+00:00",
           "influences_live": false
         }
       ]
@@ -19304,7 +18212,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672740+00:00",
+          "at": "2026-10-25T18:43:19.501144+00:00",
           "influences_live": false
         }
       ]
@@ -19445,7 +18353,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672572+00:00",
+          "at": "2026-10-25T18:43:19.500879+00:00",
           "influences_live": false
         }
       ]
@@ -19582,7 +18490,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672426+00:00",
+          "at": "2026-10-25T18:43:19.500658+00:00",
           "influences_live": false
         }
       ]
@@ -19727,7 +18635,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672395+00:00",
+          "at": "2026-10-25T18:43:19.500609+00:00",
           "influences_live": false
         }
       ]
@@ -19872,7 +18780,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672360+00:00",
+          "at": "2026-10-25T18:43:19.500559+00:00",
           "influences_live": false
         }
       ]
@@ -20007,7 +18915,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672323+00:00",
+          "at": "2026-10-25T18:43:19.500506+00:00",
           "influences_live": false
         }
       ]
@@ -20148,7 +19056,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672254+00:00",
+          "at": "2026-10-25T18:43:19.500414+00:00",
           "influences_live": false
         }
       ]
@@ -20283,7 +19191,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672225+00:00",
+          "at": "2026-10-25T18:43:19.500358+00:00",
           "influences_live": false
         }
       ]
@@ -20424,7 +19332,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672126+00:00",
+          "at": "2026-10-25T18:43:19.500177+00:00",
           "influences_live": false
         }
       ]
@@ -20559,7 +19467,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672099+00:00",
+          "at": "2026-10-25T18:43:19.500133+00:00",
           "influences_live": false
         }
       ]
@@ -20700,7 +19608,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671989+00:00",
+          "at": "2026-10-25T18:43:19.499955+00:00",
           "influences_live": false
         }
       ]
@@ -20835,7 +19743,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671961+00:00",
+          "at": "2026-10-25T18:43:19.499910+00:00",
           "influences_live": false
         }
       ]
@@ -20970,7 +19878,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671933+00:00",
+          "at": "2026-10-25T18:43:19.499867+00:00",
           "influences_live": false
         }
       ]
@@ -21111,7 +20019,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671903+00:00",
+          "at": "2026-10-25T18:43:19.499823+00:00",
           "influences_live": false
         }
       ]
@@ -21252,7 +20160,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671863+00:00",
+          "at": "2026-10-25T18:43:19.499778+00:00",
           "influences_live": false
         }
       ]
@@ -21387,7 +20295,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671835+00:00",
+          "at": "2026-10-25T18:43:19.499732+00:00",
           "influences_live": false
         }
       ]
@@ -21528,7 +20436,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671777+00:00",
+          "at": "2026-10-25T18:43:19.499641+00:00",
           "influences_live": false
         }
       ]
@@ -21674,7 +20582,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717654+00:00",
+          "at": "2026-10-25T18:43:19.542593+00:00",
           "influences_live": false
         }
       ]
@@ -21818,7 +20726,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717691+00:00",
+          "at": "2026-10-25T18:43:19.542645+00:00",
           "influences_live": false
         }
       ]
@@ -21958,7 +20866,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717614+00:00",
+          "at": "2026-10-25T18:43:19.542538+00:00",
           "influences_live": false
         }
       ]
@@ -22106,7 +21014,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717448+00:00",
+          "at": "2026-10-25T18:43:19.542281+00:00",
           "influences_live": false
         }
       ]
@@ -22243,7 +21151,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.678262+00:00",
+          "at": "2026-10-25T18:43:19.535559+00:00",
           "influences_live": false
         }
       ]
@@ -22382,7 +21290,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.676337+00:00",
+          "at": "2026-10-25T18:43:19.533993+00:00",
           "influences_live": false
         }
       ]
@@ -22519,7 +21427,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675517+00:00",
+          "at": "2026-10-25T18:43:19.532689+00:00",
           "influences_live": false
         }
       ]
@@ -22658,7 +21566,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.672288+00:00",
+          "at": "2026-10-25T18:43:19.500461+00:00",
           "influences_live": false
         }
       ]
@@ -22793,7 +21701,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.716734+00:00",
+          "at": "2026-10-25T18:43:19.541177+00:00",
           "influences_live": false
         }
       ]
@@ -22928,7 +21836,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.674940+00:00",
+          "at": "2026-10-25T18:43:19.531693+00:00",
           "influences_live": false
         }
       ]
@@ -23071,7 +21979,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.670625+00:00",
+          "at": "2026-10-25T18:43:19.497802+00:00",
           "influences_live": false
         }
       ]
@@ -23214,7 +22122,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.670345+00:00",
+          "at": "2026-10-25T18:43:19.497347+00:00",
           "influences_live": false
         }
       ]
@@ -23353,7 +22261,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.715545+00:00",
+          "at": "2026-10-25T18:43:19.539297+00:00",
           "influences_live": false
         }
       ]
@@ -23486,7 +22394,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.715219+00:00",
+          "at": "2026-10-25T18:43:19.538802+00:00",
           "influences_live": false
         }
       ]
@@ -23625,7 +22533,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.674192+00:00",
+          "at": "2026-10-25T18:43:19.504531+00:00",
           "influences_live": false
         }
       ]
@@ -23758,7 +22666,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673988+00:00",
+          "at": "2026-10-25T18:43:19.504174+00:00",
           "influences_live": false
         }
       ]
@@ -23898,7 +22806,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.718336+00:00",
+          "at": "2026-10-25T18:43:19.543431+00:00",
           "influences_live": false
         }
       ]
@@ -24046,7 +22954,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.718121+00:00",
+          "at": "2026-10-25T18:43:19.543121+00:00",
           "influences_live": false
         }
       ]
@@ -24186,7 +23094,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.718187+00:00",
+          "at": "2026-10-25T18:43:19.543223+00:00",
           "influences_live": false
         }
       ]
@@ -24326,7 +23234,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717764+00:00",
+          "at": "2026-10-25T18:43:19.542753+00:00",
           "influences_live": false
         }
       ]
@@ -24464,7 +23372,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.718549+00:00",
+          "at": "2026-10-25T18:43:19.543740+00:00",
           "influences_live": false
         }
       ]
@@ -24602,7 +23510,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.718086+00:00",
+          "at": "2026-10-25T18:43:19.543069+00:00",
           "influences_live": false
         }
       ]
@@ -24742,7 +23650,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.718153+00:00",
+          "at": "2026-10-25T18:43:19.543172+00:00",
           "influences_live": false
         }
       ]
@@ -24890,7 +23798,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717942+00:00",
+          "at": "2026-10-25T18:43:19.542914+00:00",
           "influences_live": false
         }
       ]
@@ -25031,7 +23939,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.714994+00:00",
+          "at": "2026-10-25T18:43:19.538469+00:00",
           "influences_live": false
         }
       ]
@@ -25164,7 +24072,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.714935+00:00",
+          "at": "2026-10-25T18:43:19.538371+00:00",
           "influences_live": false
         }
       ]
@@ -25305,7 +24213,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.714273+00:00",
+          "at": "2026-10-25T18:43:19.537392+00:00",
           "influences_live": false
         }
       ]
@@ -25438,7 +24346,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673808+00:00",
+          "at": "2026-10-25T18:43:19.503908+00:00",
           "influences_live": false
         }
       ]
@@ -25579,7 +24487,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.716421+00:00",
+          "at": "2026-10-25T18:43:19.540687+00:00",
           "influences_live": false
         }
       ]
@@ -25720,7 +24628,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.714370+00:00",
+          "at": "2026-10-25T18:43:19.537538+00:00",
           "influences_live": false
         }
       ]
@@ -25861,7 +24769,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673493+00:00",
+          "at": "2026-10-25T18:43:19.502366+00:00",
           "influences_live": false
         }
       ]
@@ -25996,7 +24904,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717192+00:00",
+          "at": "2026-10-25T18:43:19.541904+00:00",
           "influences_live": false
         }
       ]
@@ -26131,7 +25039,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.716476+00:00",
+          "at": "2026-10-25T18:43:19.540773+00:00",
           "influences_live": false
         }
       ]
@@ -26264,7 +25172,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.716186+00:00",
+          "at": "2026-10-25T18:43:19.540307+00:00",
           "influences_live": false
         }
       ]
@@ -26399,7 +25307,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.715779+00:00",
+          "at": "2026-10-25T18:43:19.539682+00:00",
           "influences_live": false
         }
       ]
@@ -26534,7 +25442,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675212+00:00",
+          "at": "2026-10-25T18:43:19.532153+00:00",
           "influences_live": false
         }
       ]
@@ -26673,7 +25581,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671710+00:00",
+          "at": "2026-10-25T18:43:19.499545+00:00",
           "influences_live": false
         }
       ]
@@ -26812,7 +25720,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.670849+00:00",
+          "at": "2026-10-25T18:43:19.498153+00:00",
           "influences_live": false
         }
       ]
@@ -26959,7 +25867,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.670286+00:00",
+          "at": "2026-10-25T18:43:19.497237+00:00",
           "influences_live": false
         }
       ]
@@ -27094,7 +26002,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.669321+00:00",
+          "at": "2026-10-25T18:43:19.495734+00:00",
           "influences_live": false
         }
       ]
@@ -27235,7 +26143,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.668842+00:00",
+          "at": "2026-10-25T18:43:19.495012+00:00",
           "influences_live": false
         }
       ]
@@ -27370,7 +26278,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.668782+00:00",
+          "at": "2026-10-25T18:43:19.494920+00:00",
           "influences_live": false
         }
       ]
@@ -27505,7 +26413,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.717080+00:00",
+          "at": "2026-10-25T18:43:19.541728+00:00",
           "influences_live": false
         }
       ]
@@ -27638,7 +26546,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.715935+00:00",
+          "at": "2026-10-25T18:43:19.539913+00:00",
           "influences_live": false
         }
       ]
@@ -27771,7 +26679,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.715191+00:00",
+          "at": "2026-10-25T18:43:19.538760+00:00",
           "influences_live": false
         }
       ]
@@ -27906,7 +26814,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.675105+00:00",
+          "at": "2026-10-25T18:43:19.531971+00:00",
           "influences_live": false
         }
       ]
@@ -28039,7 +26947,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.674395+00:00",
+          "at": "2026-10-25T18:43:19.504861+00:00",
           "influences_live": false
         }
       ]
@@ -28172,7 +27080,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673904+00:00",
+          "at": "2026-10-25T18:43:19.504042+00:00",
           "influences_live": false
         }
       ]
@@ -28315,7 +27223,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.714621+00:00",
+          "at": "2026-10-25T18:43:19.537904+00:00",
           "influences_live": false
         }
       ]
@@ -28458,7 +27366,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673666+00:00",
+          "at": "2026-10-25T18:43:19.503675+00:00",
           "influences_live": false
         }
       ]
@@ -28601,7 +27509,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.668985+00:00",
+          "at": "2026-10-25T18:43:19.495198+00:00",
           "influences_live": false
         }
       ]
@@ -28736,7 +27644,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.716530+00:00",
+          "at": "2026-10-25T18:43:19.540859+00:00",
           "influences_live": false
         }
       ]
@@ -28871,7 +27779,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.715807+00:00",
+          "at": "2026-10-25T18:43:19.539726+00:00",
           "influences_live": false
         }
       ]
@@ -29010,7 +27918,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.715517+00:00",
+          "at": "2026-10-25T18:43:19.539253+00:00",
           "influences_live": false
         }
       ]
@@ -29147,7 +28055,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.715278+00:00",
+          "at": "2026-10-25T18:43:19.538890+00:00",
           "influences_live": false
         }
       ]
@@ -29280,7 +28188,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.715135+00:00",
+          "at": "2026-10-25T18:43:19.538670+00:00",
           "influences_live": false
         }
       ]
@@ -29417,7 +28325,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.714864+00:00",
+          "at": "2026-10-25T18:43:19.538262+00:00",
           "influences_live": false
         }
       ]
@@ -29562,7 +28470,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.714681+00:00",
+          "at": "2026-10-25T18:43:19.537993+00:00",
           "influences_live": false
         }
       ]
@@ -29699,7 +28607,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.674756+00:00",
+          "at": "2026-10-25T18:43:19.531395+00:00",
           "influences_live": false
         }
       ]
@@ -29834,7 +28742,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.674729+00:00",
+          "at": "2026-10-25T18:43:19.531342+00:00",
           "influences_live": false
         }
       ]
@@ -29973,7 +28881,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.674164+00:00",
+          "at": "2026-10-25T18:43:19.504486+00:00",
           "influences_live": false
         }
       ]
@@ -30110,7 +29018,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.674016+00:00",
+          "at": "2026-10-25T18:43:19.504219+00:00",
           "influences_live": false
         }
       ]
@@ -30247,7 +29155,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673959+00:00",
+          "at": "2026-10-25T18:43:19.504129+00:00",
           "influences_live": false
         }
       ]
@@ -30380,7 +29288,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673933+00:00",
+          "at": "2026-10-25T18:43:19.504086+00:00",
           "influences_live": false
         }
       ]
@@ -30517,7 +29425,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673751+00:00",
+          "at": "2026-10-25T18:43:19.503816+00:00",
           "influences_live": false
         }
       ]
@@ -30658,7 +29566,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.714441+00:00",
+          "at": "2026-10-25T18:43:19.537629+00:00",
           "influences_live": false
         }
       ]
@@ -30799,7 +29707,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673551+00:00",
+          "at": "2026-10-25T18:43:19.502472+00:00",
           "influences_live": false
         }
       ]
@@ -30940,7 +29848,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.714186+00:00",
+          "at": "2026-10-25T18:43:19.537234+00:00",
           "influences_live": false
         }
       ]
@@ -31085,7 +29993,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.715433+00:00",
+          "at": "2026-10-25T18:43:19.539120+00:00",
           "influences_live": false
         }
       ]
@@ -31230,7 +30138,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.674079+00:00",
+          "at": "2026-10-25T18:43:19.504341+00:00",
           "influences_live": false
         }
       ]
@@ -31373,7 +30281,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671681+00:00",
+          "at": "2026-10-25T18:43:19.499500+00:00",
           "influences_live": false
         }
       ]
@@ -31520,7 +30428,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671490+00:00",
+          "at": "2026-10-25T18:43:19.499153+00:00",
           "influences_live": false
         }
       ]
@@ -31663,7 +30571,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.670401+00:00",
+          "at": "2026-10-25T18:43:19.497445+00:00",
           "influences_live": false
         }
       ]
@@ -31804,7 +30712,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.714553+00:00",
+          "at": "2026-10-25T18:43:19.537805+00:00",
           "influences_live": false
         }
       ]
@@ -31947,7 +30855,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.670457+00:00",
+          "at": "2026-10-25T18:43:19.497535+00:00",
           "influences_live": false
         }
       ]
@@ -32090,7 +30998,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.670373+00:00",
+          "at": "2026-10-25T18:43:19.497398+00:00",
           "influences_live": false
         }
       ]
@@ -32231,7 +31139,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.716214+00:00",
+          "at": "2026-10-25T18:43:19.540371+00:00",
           "influences_live": false
         }
       ]
@@ -32372,7 +31280,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.674557+00:00",
+          "at": "2026-10-25T18:43:19.505084+00:00",
           "influences_live": false
         }
       ]
@@ -32517,7 +31425,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.714340+00:00",
+          "at": "2026-10-25T18:43:19.537489+00:00",
           "influences_live": false
         }
       ]
@@ -32662,7 +31570,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.673462+00:00",
+          "at": "2026-10-25T18:43:19.502287+00:00",
           "influences_live": false
         }
       ]
@@ -32805,7 +31713,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671739+00:00",
+          "at": "2026-10-25T18:43:19.499589+00:00",
           "influences_live": false
         }
       ]
@@ -32948,7 +31856,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671462+00:00",
+          "at": "2026-10-25T18:43:19.499109+00:00",
           "influences_live": false
         }
       ]
@@ -33091,7 +31999,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671434+00:00",
+          "at": "2026-10-25T18:43:19.499064+00:00",
           "influences_live": false
         }
       ]
@@ -33234,7 +32142,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671347+00:00",
+          "at": "2026-10-25T18:43:19.498931+00:00",
           "influences_live": false
         }
       ]
@@ -33377,7 +32285,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.670258+00:00",
+          "at": "2026-10-25T18:43:19.497193+00:00",
           "influences_live": false
         }
       ]
@@ -33520,7 +32428,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.670172+00:00",
+          "at": "2026-10-25T18:43:19.497060+00:00",
           "influences_live": false
         }
       ]
@@ -33663,7 +32571,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.669671+00:00",
+          "at": "2026-10-25T18:43:19.496276+00:00",
           "influences_live": false
         }
       ]
@@ -33806,7 +32714,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.669164+00:00",
+          "at": "2026-10-25T18:43:19.495500+00:00",
           "influences_live": false
         }
       ]
@@ -33949,7 +32857,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.671004+00:00",
+          "at": "2026-10-25T18:43:19.498401+00:00",
           "influences_live": false
         }
       ]
@@ -34092,7 +33000,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.669909+00:00",
+          "at": "2026-10-25T18:43:19.496634+00:00",
           "influences_live": false
         }
       ]
@@ -34233,7 +33141,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.716304+00:00",
+          "at": "2026-10-25T18:43:19.540505+00:00",
           "influences_live": false
         }
       ]
@@ -34376,7 +33284,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.669614+00:00",
+          "at": "2026-10-25T18:43:19.496188+00:00",
           "influences_live": false
         }
       ]
@@ -34517,10 +33425,906 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.714803+00:00",
+          "at": "2026-10-25T18:43:19.538175+00:00",
           "influences_live": false
         }
       ]
+    },
+    {
+      "review_id": "reply:deb8ad557946fe89",
+      "parent_review_id": "798faa2d68d2b032f9c6",
+      "parent_event_id": "0ea279f7-1b5d-4924-837d-5c9d17aa2922",
+      "tag": "reply",
+      "book_id": null,
+      "book_tag": null,
+      "model_id": null,
+      "ticker": null,
+      "entry_at": null,
+      "exit_at": null,
+      "hold_days": null,
+      "exit_kind": null,
+      "return_pct": null,
+      "basis_label": null,
+      "framing": "[?] ? · ? · hold ?\nBought because: Unknown — unjoinable (no structured trail)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (return): n/a\nContext read-only — not a new veto. influences_live=false",
+      "charts": null,
+      "close_in": null,
+      "wider_tf": null,
+      "opened_at": null,
+      "sold_at": null,
+      "avg_cost": null,
+      "exit_price": null,
+      "buy_decision": {
+        "side": "buy",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "sell_decision": {
+        "side": "sell",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "buy_reason": "Unknown — unjoinable (no structured trail)",
+      "sell_reason": "Unknown — unjoinable (no structured trail)",
+      "decision_reasons_join_ok": false,
+      "llm_opinion": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+      ],
+      "chart_annotations": {
+        "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+      },
+      "opinion_source": "deterministic_v0",
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+          ],
+          "chart_annotations": {
+            "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "buy_strengths": [
+            "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "buy_weaknesses": [
+            "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+          ],
+          "sell_strengths": [
+            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "sell_weaknesses": [
+            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+          ],
+          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+          "same_day_round_trip": false,
+          "same_day_assessment": "not_applicable",
+          "source": "deterministic_v0",
+          "at": "2026-10-25T18:43:19.544983+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "Observation only — no knob, fill, or live-capital changes; influences_live stays false (Package M observe/align, not Package L auto-tune).\n\nYou flagged **Duplicate episode**. On dual horizons: **near-term**, we treat this row as a catalog hygiene issue — same ticker/exit window may already exist elsewhere in the post-sale set, so pattern stats and label counts should not double-count this instance until deduped. **Longer-term**, duplicate episodes usually mean two ingestion paths or a re-run without idempotency; the learning value is process (one canonical episode per realized round-trip), not re-litigating a sell we cannot reconstruct here.\n\nStructured trail: **decision_reasons.buy** and **decision_reasons.sell** are both unknown — unjoinable (join_ok false). We cannot cite buy codes, sell triggers (e.g. leave_buy_tier vs discretionary tech exit), filing facts, or range percentiles from this payload; any “premature sell” or missed-pattern read would be owner narrative only, not joinable to system reasons.\n\nAlignment: if this is truly duplicate, prefer **Accept** after confirming the canonical episode elsewhere, or **Comment** with which record should subsume this one (ticker, entry/exit dates, or episode id) so the factory side can mark alignment without touching live logic.",
+      "owner_comment": "Duplicate episode",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-25T18:43:19.439797+00:00",
+      "buy_strengths": [
+        "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "buy_weaknesses": [
+        "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+      ],
+      "sell_strengths": [
+        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "sell_weaknesses": [
+        "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+      ],
+      "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+      "same_day_round_trip": false,
+      "same_day_assessment": "not_applicable",
+      "same_day_soft_penalty": false
+    },
+    {
+      "review_id": "reply:49813baf0ab26cb9",
+      "parent_review_id": "b7149ac99b9abe8d1072",
+      "parent_event_id": "2cd454fa-f8ea-4951-a3e5-85fb6be5b0fe",
+      "tag": "reply",
+      "book_id": null,
+      "book_tag": null,
+      "model_id": null,
+      "ticker": null,
+      "entry_at": null,
+      "exit_at": null,
+      "hold_days": null,
+      "exit_kind": null,
+      "return_pct": null,
+      "basis_label": null,
+      "framing": "[?] ? · ? · hold ?\nBought because: Unknown — unjoinable (no structured trail)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (return): n/a\nContext read-only — not a new veto. influences_live=false",
+      "charts": null,
+      "close_in": null,
+      "wider_tf": null,
+      "opened_at": null,
+      "sold_at": null,
+      "avg_cost": null,
+      "exit_price": null,
+      "buy_decision": {
+        "side": "buy",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "sell_decision": {
+        "side": "sell",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "buy_reason": "Unknown — unjoinable (no structured trail)",
+      "sell_reason": "Unknown — unjoinable (no structured trail)",
+      "decision_reasons_join_ok": false,
+      "llm_opinion": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+      ],
+      "chart_annotations": {
+        "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+      },
+      "opinion_source": "deterministic_v0",
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+          ],
+          "chart_annotations": {
+            "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "buy_strengths": [
+            "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "buy_weaknesses": [
+            "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+          ],
+          "sell_strengths": [
+            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "sell_weaknesses": [
+            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+          ],
+          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+          "same_day_round_trip": false,
+          "same_day_assessment": "not_applicable",
+          "source": "deterministic_v0",
+          "at": "2026-10-25T18:43:19.544962+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "Observation only — no fills, knobs, or live capital are touched; influences_live stays false (Package M alignment, not Package L auto-tune).\n\nDual horizon: On the tactical lens, your note reads as a possible missed pattern — selling early while price was rapidly exceeding recent highs, where a tactical hold or staged exit might have captured more of the extension. On the structural lens, we cannot weigh that story against what the book actually recorded at exit: decision_reasons.buy and decision_reasons.sell are both unknown — unjoinable (no structured trail, join_ok false). Without a joined sell code we will not infer leave_buy_tier, tech triggers, filing facts, range percentiles, or any sell-trigger IDs.\n\nSo “premature sell” here is an owner hypothesis worth keeping in the review log, not a verified mismatch with a mechanical identity exit or a documented trigger. If a structured trail is backfilled later, we can reconcile tactical narrative vs recorded reason; until then the episode stays observational only.\n\nAccept this reply, or Comment with more context (dates, intended rule, or what you remember the exit rule to have been).",
+      "owner_comment": "Premature sell/missed opportunity for a tactical sale following rapid exceedance of recent highs",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-25T18:43:15.094507+00:00",
+      "buy_strengths": [
+        "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "buy_weaknesses": [
+        "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+      ],
+      "sell_strengths": [
+        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "sell_weaknesses": [
+        "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+      ],
+      "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+      "same_day_round_trip": false,
+      "same_day_assessment": "not_applicable",
+      "same_day_soft_penalty": false
+    },
+    {
+      "review_id": "reply:d0bca3424a89bbbc",
+      "parent_review_id": "6c3f34f10a3737e7f6de",
+      "parent_event_id": "09cec6f1-3966-4780-8aa6-7f175f74889f",
+      "tag": "reply",
+      "book_id": null,
+      "book_tag": null,
+      "model_id": null,
+      "ticker": null,
+      "entry_at": null,
+      "exit_at": null,
+      "hold_days": null,
+      "exit_kind": null,
+      "return_pct": null,
+      "basis_label": null,
+      "framing": "[?] ? · ? · hold ?\nBought because: Unknown — unjoinable (no structured trail)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (return): n/a\nContext read-only — not a new veto. influences_live=false",
+      "charts": null,
+      "close_in": null,
+      "wider_tf": null,
+      "opened_at": null,
+      "sold_at": null,
+      "avg_cost": null,
+      "exit_price": null,
+      "buy_decision": {
+        "side": "buy",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "sell_decision": {
+        "side": "sell",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "buy_reason": "Unknown — unjoinable (no structured trail)",
+      "sell_reason": "Unknown — unjoinable (no structured trail)",
+      "decision_reasons_join_ok": false,
+      "llm_opinion": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+      ],
+      "chart_annotations": {
+        "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+      },
+      "opinion_source": "deterministic_v0",
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+          ],
+          "chart_annotations": {
+            "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "buy_strengths": [
+            "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "buy_weaknesses": [
+            "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+          ],
+          "sell_strengths": [
+            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "sell_weaknesses": [
+            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+          ],
+          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+          "same_day_round_trip": false,
+          "same_day_assessment": "not_applicable",
+          "source": "deterministic_v0",
+          "at": "2026-10-25T18:43:19.544942+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "Observation only — no knobs, fills, or live capital are changed; influences_live stays false (Package M, not Package L auto-tune).\n\nOn “premature sell” and recovery: dual-horizon framing helps. Near-term, exiting before a bounce can feel early if price later reclaims prior levels. Over a longer horizon, the same exit may still align with risk bounds or identity rules even when a recovery eventually prints — missed upside and avoided drawdown are different lenses on one path, not a single verdict.\n\nStructured trail: decision_reasons.buy and decision_reasons.sell are both unknown — unjoinable (join_ok false). We cannot cite a mechanical sell code (e.g. leave_buy_tier), filing facts, or range percentiles from this episode; treating the exit as a named tech or tier trigger would be invented.\n\nYour “premature sell / could have continued to recover” label is a valid post-hoc pattern note. Without a joinable sell reason, we weigh it as owner judgment against an unidentified system exit, not against a confirmed mechanical identity exit.\n\nAccept this reply, or Comment with more context (dates, exit_kind, or what you were watching) for a sharper dual-horizon read — still observe-only.",
+      "owner_comment": "Premature sell? Looks like it could have continued to recover",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-25T18:43:11.330119+00:00",
+      "buy_strengths": [
+        "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "buy_weaknesses": [
+        "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+      ],
+      "sell_strengths": [
+        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "sell_weaknesses": [
+        "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+      ],
+      "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+      "same_day_round_trip": false,
+      "same_day_assessment": "not_applicable",
+      "same_day_soft_penalty": false
+    },
+    {
+      "review_id": "reply:c308fc5b33917dc5",
+      "parent_review_id": "38ab18e7c2f3649520c5",
+      "parent_event_id": "977e7bd7-3ee5-40f3-86f7-1c924392c4ad",
+      "tag": "reply",
+      "book_id": null,
+      "book_tag": null,
+      "model_id": null,
+      "ticker": null,
+      "entry_at": null,
+      "exit_at": null,
+      "hold_days": null,
+      "exit_kind": null,
+      "return_pct": null,
+      "basis_label": null,
+      "framing": "[?] ? · ? · hold ?\nBought because: Unknown — unjoinable (no structured trail)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (return): n/a\nContext read-only — not a new veto. influences_live=false",
+      "charts": null,
+      "close_in": null,
+      "wider_tf": null,
+      "opened_at": null,
+      "sold_at": null,
+      "avg_cost": null,
+      "exit_price": null,
+      "buy_decision": {
+        "side": "buy",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "sell_decision": {
+        "side": "sell",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "buy_reason": "Unknown — unjoinable (no structured trail)",
+      "sell_reason": "Unknown — unjoinable (no structured trail)",
+      "decision_reasons_join_ok": false,
+      "llm_opinion": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+      ],
+      "chart_annotations": {
+        "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+      },
+      "opinion_source": "deterministic_v0",
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+          ],
+          "chart_annotations": {
+            "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "buy_strengths": [
+            "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "buy_weaknesses": [
+            "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+          ],
+          "sell_strengths": [
+            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "sell_weaknesses": [
+            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+          ],
+          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+          "same_day_round_trip": false,
+          "same_day_assessment": "not_applicable",
+          "source": "deterministic_v0",
+          "at": "2026-10-25T18:43:19.544921+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "Observation and alignment only — no knob changes, fills, or live capital; influences_live stays false (Package M observation, not Package L auto-tune).\n\nYou labeled this a premature sell. Dual-horizon framing helps here without rewriting history: on a shorter horizon, exiting before a later move often reads as early; on a longer horizon, the question is whether the original thesis still held at exit and whether risk or identity rules justified stepping out even if price later recovered. Those two views can disagree — that tension is exactly what post-sale review is for.\n\nStructured join is not available for this episode: decision_reasons.buy and decision_reasons.sell are both unknown — unjoinable (no structured trail), so we cannot cite a buy code, sell trigger, filing fact, or range percentile from the system record. We also cannot weigh your “premature sell” label against a mechanical sell identity (e.g. leave_buy_tier as a tier exit rather than a tech trigger) because that structured sell reason was not joined.\n\nWhat we can align on in narrative: “premature” usually means you still saw edge or thesis intact at exit; without the trail, we treat that as your ground truth for learning, not as a retroactive override of what the book did.\n\nIf this framing matches how you see the trade, Accept this reply; if you want to sharpen it (e.g. which horizon felt wrong, or what you would have held for), Comment and we’ll refine — still observation-only.",
+      "owner_comment": "Premature sell",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-25T18:43:07.519885+00:00",
+      "buy_strengths": [
+        "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "buy_weaknesses": [
+        "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+      ],
+      "sell_strengths": [
+        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "sell_weaknesses": [
+        "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+      ],
+      "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+      "same_day_round_trip": false,
+      "same_day_assessment": "not_applicable",
+      "same_day_soft_penalty": false
+    },
+    {
+      "review_id": "reply:79e4cddc8e1fc5dc",
+      "parent_review_id": "fd1d929f5a8c39bbe946",
+      "parent_event_id": "7cad7682-cc09-4ec3-9754-11b06dfc5b0e",
+      "tag": "reply",
+      "book_id": null,
+      "book_tag": null,
+      "model_id": null,
+      "ticker": null,
+      "entry_at": null,
+      "exit_at": null,
+      "hold_days": null,
+      "exit_kind": null,
+      "return_pct": null,
+      "basis_label": null,
+      "framing": "[?] ? · ? · hold ?\nBought because: Unknown — unjoinable (no structured trail)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (return): n/a\nContext read-only — not a new veto. influences_live=false",
+      "charts": null,
+      "close_in": null,
+      "wider_tf": null,
+      "opened_at": null,
+      "sold_at": null,
+      "avg_cost": null,
+      "exit_price": null,
+      "buy_decision": {
+        "side": "buy",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "sell_decision": {
+        "side": "sell",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "buy_reason": "Unknown — unjoinable (no structured trail)",
+      "sell_reason": "Unknown — unjoinable (no structured trail)",
+      "decision_reasons_join_ok": false,
+      "llm_opinion": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+      ],
+      "chart_annotations": {
+        "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+      },
+      "opinion_source": "deterministic_v0",
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+          ],
+          "chart_annotations": {
+            "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "buy_strengths": [
+            "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "buy_weaknesses": [
+            "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+          ],
+          "sell_strengths": [
+            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "sell_weaknesses": [
+            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+          ],
+          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+          "same_day_round_trip": false,
+          "same_day_assessment": "not_applicable",
+          "source": "deterministic_v0",
+          "at": "2026-10-25T18:43:19.544900+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "This post-sale review is observation and alignment only: no knob changes, fills, or live capital; influences_live stays false and we are not running Package L auto-tune (Package M framing only).\n\nYou flagged this as a repeat episode. On dual horizons: near-term, repeating the same episode without a joinable structured trail means we cannot reconcile your missed-pattern read against recorded buy or sell codes—both decision_reasons.buy and decision_reasons.sell are unknown/unjoinable (join_ok false), so there is no authoritative sell-trigger ID, filing fact, or range percentile to cite here. Longer-term, “repeat episode” is still useful as a label for review hygiene: it signals the same narrative may be resurfacing before we have trail linkage; once join_ok is true on a future pass, we can weigh owner labels (e.g. premature sell) against the structured sell reason (e.g. leave_buy_tier as a mechanical identity exit, not a tech trigger).\n\nFor this pass, the structured why for entry and exit remains unknown—not invented. If this repeat pattern is the main point you want on record, say so in a follow-up comment; otherwise Accept to close this alignment slice or Comment with what differed from the prior episode (timing, size, or your exit thesis) so we can keep the dual-horizon story straight without pretending we have a trail we do not.",
+      "owner_comment": "Repeat episode",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-25T18:43:03.488201+00:00",
+      "buy_strengths": [
+        "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "buy_weaknesses": [
+        "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+      ],
+      "sell_strengths": [
+        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "sell_weaknesses": [
+        "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+      ],
+      "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+      "same_day_round_trip": false,
+      "same_day_assessment": "not_applicable",
+      "same_day_soft_penalty": false
+    },
+    {
+      "review_id": "reply:ac23464bfec07cd4",
+      "parent_review_id": "bbec6fcdfe71dfa5b714",
+      "parent_event_id": "149bc6d4-af1a-4ada-8fd8-4497f5b03b24",
+      "tag": "reply",
+      "book_id": null,
+      "book_tag": null,
+      "model_id": null,
+      "ticker": null,
+      "entry_at": null,
+      "exit_at": null,
+      "hold_days": null,
+      "exit_kind": null,
+      "return_pct": null,
+      "basis_label": null,
+      "framing": "[?] ? · ? · hold ?\nBought because: Unknown — unjoinable (no structured trail)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (return): n/a\nContext read-only — not a new veto. influences_live=false",
+      "charts": null,
+      "close_in": null,
+      "wider_tf": null,
+      "opened_at": null,
+      "sold_at": null,
+      "avg_cost": null,
+      "exit_price": null,
+      "buy_decision": {
+        "side": "buy",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "sell_decision": {
+        "side": "sell",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "buy_reason": "Unknown — unjoinable (no structured trail)",
+      "sell_reason": "Unknown — unjoinable (no structured trail)",
+      "decision_reasons_join_ok": false,
+      "llm_opinion": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+      ],
+      "chart_annotations": {
+        "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+      },
+      "opinion_source": "deterministic_v0",
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+          ],
+          "chart_annotations": {
+            "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "buy_strengths": [
+            "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "buy_weaknesses": [
+            "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+          ],
+          "sell_strengths": [
+            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "sell_weaknesses": [
+            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+          ],
+          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+          "same_day_round_trip": false,
+          "same_day_assessment": "not_applicable",
+          "source": "deterministic_v0",
+          "at": "2026-10-25T18:43:19.544879+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "Observation only — no knob, fill, or live-capital changes; influences_live stays false (Package M lens, not Package L auto-tune).\n\nYour note — “one of many similar brief episodes” — reads as a cross-episode pattern, not a single-trade verdict. Dual-horizon framing helps keep that honest:\n\n• Near horizon: Brief holds can look like repeated “premature” exits if you judge each exit against the next few weeks of price or narrative — especially when many episodes share similar length and outcome shape.\n• Far horizon: Without a joinable structured trail per episode, we cannot stack these into a confirmed systematic miss (e.g. same sell trigger misfiring, same tier rule firing too early). The similarity you see is a valid hypothesis for review; it is not yet evidenced in the decision log for this row.\n\nStructured reasons for this episode: buy and sell are both unknown — unjoinable (no structured trail); join_ok is false on both sides, so we do not cite decision_reasons.buy or decision_reasons.sell codes, sell-trigger IDs, filings, or range percentiles here.\n\nIf your label for some of these is “premature sell,” that owner judgment still stands as feedback; mechanically, we would normally weigh it against the recorded sell reason (e.g. leave_buy_tier as identity/tier exit vs a tech trigger). For this episode that comparison is not available — unjoinable — so we hold the pattern observation without attributing a specific mechanism.\n\nNext step: Accept this alignment reply, or Comment with what you want clustered next (e.g. hold-day band, exit_kind, or a few tickers) so we can keep comparing near- vs far-horizon reads without changing live settings.",
+      "owner_comment": "One of many similar brief episodes",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-25T18:42:59.593213+00:00",
+      "buy_strengths": [
+        "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "buy_weaknesses": [
+        "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+      ],
+      "sell_strengths": [
+        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "sell_weaknesses": [
+        "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+      ],
+      "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+      "same_day_round_trip": false,
+      "same_day_assessment": "not_applicable",
+      "same_day_soft_penalty": false
+    },
+    {
+      "review_id": "reply:9b05d28d53fe094f",
+      "parent_review_id": "ac3bf5bee5a015c3ce7e",
+      "parent_event_id": "fe1d50ae-d187-450f-aa6d-ea00c1c6152d",
+      "tag": "reply",
+      "book_id": null,
+      "book_tag": null,
+      "model_id": null,
+      "ticker": null,
+      "entry_at": null,
+      "exit_at": null,
+      "hold_days": null,
+      "exit_kind": null,
+      "return_pct": null,
+      "basis_label": null,
+      "framing": "[?] ? · ? · hold ?\nBought because: Unknown — unjoinable (no structured trail)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (return): n/a\nContext read-only — not a new veto. influences_live=false",
+      "charts": null,
+      "close_in": null,
+      "wider_tf": null,
+      "opened_at": null,
+      "sold_at": null,
+      "avg_cost": null,
+      "exit_price": null,
+      "buy_decision": {
+        "side": "buy",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "sell_decision": {
+        "side": "sell",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "buy_reason": "Unknown — unjoinable (no structured trail)",
+      "sell_reason": "Unknown — unjoinable (no structured trail)",
+      "decision_reasons_join_ok": false,
+      "llm_opinion": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+      ],
+      "chart_annotations": {
+        "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+      },
+      "opinion_source": "deterministic_v0",
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+          ],
+          "chart_annotations": {
+            "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "buy_strengths": [
+            "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "buy_weaknesses": [
+            "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+          ],
+          "sell_strengths": [
+            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "sell_weaknesses": [
+            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+          ],
+          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+          "same_day_round_trip": false,
+          "same_day_assessment": "not_applicable",
+          "source": "deterministic_v0",
+          "at": "2026-10-25T18:43:19.544857+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "Observation only — no fills, capital, or live knobs were changed; influences_live stays false (Package M observe/align, not Package L auto-tune).\n\nYour read fits a dual-horizon lens: on the short horizon, entry can look like catching a falling knife before price shows stabilization; on the long horizon, if fundamentals still support the thesis, waiting for clearer evidence of rebound toward the long-term trend before adding or re-entering is a reasonable alignment check. We cannot weigh that against a mechanical sell identity (e.g. leave_buy_tier) versus a discretionary “too early” call here because structured trails did not join: decision_reasons.buy and decision_reasons.sell are both unknown — unjoinable (no structured trail), so we should not infer sell-trigger IDs, filing facts, or range percentiles for this episode.\n\nIf this pattern is what you want the book to emphasize, keep framing it as short-horizon timing vs long-horizon trend plus fundamentals — still observe-only until you accept a labeled direction.\n\nAccept this reply, or Comment with more detail (ticker, dates, or what “rebound evidence” would mean for you).",
+      "owner_comment": "Looks to be trying to catch a falling knife.  Probably should have waited for evidence of a rebound towards the long term trend if fundamentals sound",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-25T18:42:55.182498+00:00",
+      "buy_strengths": [
+        "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "buy_weaknesses": [
+        "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+      ],
+      "sell_strengths": [
+        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "sell_weaknesses": [
+        "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+      ],
+      "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+      "same_day_round_trip": false,
+      "same_day_assessment": "not_applicable",
+      "same_day_soft_penalty": false
+    },
+    {
+      "review_id": "reply:a2d8c3afab7faf60",
+      "parent_review_id": "3caa62fda58321d13fcd",
+      "parent_event_id": "e97385f1-4047-42f9-a980-b05ce1645053",
+      "tag": "reply",
+      "book_id": null,
+      "book_tag": null,
+      "model_id": null,
+      "ticker": null,
+      "entry_at": null,
+      "exit_at": null,
+      "hold_days": null,
+      "exit_kind": null,
+      "return_pct": null,
+      "basis_label": null,
+      "framing": "[?] ? · ? · hold ?\nBought because: Unknown — unjoinable (no structured trail)\nSold because: Unknown — unjoinable (no structured trail)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (return): n/a\nContext read-only — not a new veto. influences_live=false",
+      "charts": null,
+      "close_in": null,
+      "wider_tf": null,
+      "opened_at": null,
+      "sold_at": null,
+      "avg_cost": null,
+      "exit_price": null,
+      "buy_decision": {
+        "side": "buy",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "sell_decision": {
+        "side": "sell",
+        "code": "unknown_unjoinable",
+        "label": "Unknown — unjoinable (no structured trail)",
+        "source": "unjoinable",
+        "join_ok": false,
+        "structured": {},
+        "influences_live": false
+      },
+      "buy_reason": "Unknown — unjoinable (no structured trail)",
+      "sell_reason": "Unknown — unjoinable (no structured trail)",
+      "decision_reasons_join_ok": false,
+      "llm_opinion": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+      ],
+      "chart_annotations": {
+        "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+      },
+      "opinion_source": "deterministic_v0",
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+          ],
+          "chart_annotations": {
+            "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "buy_strengths": [
+            "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "buy_weaknesses": [
+            "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+          ],
+          "sell_strengths": [
+            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "sell_weaknesses": [
+            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+          ],
+          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+          "same_day_round_trip": false,
+          "same_day_assessment": "not_applicable",
+          "source": "deterministic_v0",
+          "at": "2026-10-25T18:43:19.544835+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "Observation and alignment only — no knob, fill, or live-capital changes; influences_live stays false (Package M observe path, not Package L auto-tune).\n\nDual horizon: On the long horizon you describe a downtrend with a cautious buy thesis at long-term support — that framing fits how you’re reading the setup. On the shorter horizon, the exit may have looked early relative to that support story even if price later behaved differently; we’re not re-litigating the trade here, only whether your narrative matches what we can see in the record.\n\nStructured trail: decision_reasons.buy and decision_reasons.sell are both unknown — unjoinable (join_ok false, no structured trail). We cannot cite a buy code, sell trigger, leave_buy_tier, or any filing/range facts from this episode; anything mechanical about why we bought or sold is not joinable from the data attached to this review.\n\nYour “sold too early” label: That’s a fair owner read when the long-horizon support thesis still felt intact. Without a joinable sell reason we cannot weigh it against a structured identity exit (e.g. leave_buy_tier) or a tech trigger — we only note the tension between your cautious support buy and a shorter-horizon exit that felt premature to you.\n\nIf this alignment summary matches your intent, Accept; otherwise Comment with what you’d add or correct.",
+      "owner_comment": "Long term downward trend but looks like a reasonable cautious buy on long term support level.  Seems to have sold too early",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-25T18:42:51.662737+00:00",
+      "buy_strengths": [
+        "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "buy_weaknesses": [
+        "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+      ],
+      "sell_strengths": [
+        "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+      ],
+      "sell_weaknesses": [
+        "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+      ],
+      "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+      "same_day_round_trip": false,
+      "same_day_assessment": "not_applicable",
+      "same_day_soft_penalty": false
     },
     {
       "review_id": "reply:009300b78e14d164",
@@ -34607,7 +34411,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.719145+00:00",
+          "at": "2026-10-25T18:43:19.544810+00:00",
           "influences_live": false
         }
       ],
@@ -34719,7 +34523,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-25T18:33:20.719120+00:00",
+          "at": "2026-10-25T18:43:19.544777+00:00",
           "influences_live": false
         }
       ],
@@ -34748,5 +34552,5 @@
     }
   ],
   "unreplied_comments": 0,
-  "history_event_count": 6
+  "history_event_count": 22
 }
