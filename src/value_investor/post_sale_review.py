@@ -107,6 +107,12 @@ def _as_pct_display(value: Any, *, already_percent: bool = False) -> float | Non
     return round(num, 2)
 
 
+def _date_key(value: Any) -> str:
+    """Calendar day for episode identity (UTC ISO / date prefix)."""
+    text = str(value or "").strip()
+    return text[:10] if text else ""
+
+
 def review_fingerprint(
     *,
     book_id: str,
@@ -115,6 +121,12 @@ def review_fingerprint(
     exit_at: str | None,
     kind: str = "exit",
 ) -> str:
+    """Stable Accept/Comment id — full timestamps (do not change lightly).
+
+    Labels history keys off this id. Near-duplicate *display* collapse uses
+    :func:`episode_key` (calendar day) so second-level entry jitter does not
+    rewrite historical ``actioned_review_ids``.
+    """
     raw = "|".join(
         [
             str(book_id or "").strip(),
@@ -125,6 +137,28 @@ def review_fingerprint(
         ]
     )
     return hashlib.sha256(raw.encode()).hexdigest()[:20]
+
+
+def episode_key(
+    *,
+    book_id: str,
+    ticker: str,
+    entry_at: str | None,
+    exit_at: str | None,
+) -> str:
+    """Human episode identity: one card per book × ticker × entry day × exit day.
+
+    Cross-book same ticker is intentional (N201 vs N206) — book_id differs.
+    Same-day entry timestamp jitter (seconds/hours) collapses here.
+    """
+    return "|".join(
+        [
+            str(book_id or "").strip(),
+            str(ticker or "").strip().upper(),
+            _date_key(entry_at),
+            _date_key(exit_at),
+        ]
+    )
 
 
 def wider_tf_window(
@@ -196,9 +230,16 @@ def _base_item(
         entry_at=entry_at,
         exit_at=exit_at,
     )
+    ep_key = episode_key(
+        book_id=book_id,
+        ticker=ticker,
+        entry_at=entry_at,
+        exit_at=exit_at,
+    )
     item: dict[str, Any] = {
         "review_id": rid,
         "review_fingerprint": rid,
+        "episode_key": ep_key,
         "tag": "new",
         "book_id": book_id,
         "book_tag": book_tag,
@@ -409,16 +450,59 @@ def _optional_float(value: Any) -> float | None:
         return None
 
 
+def _return_pct_sort_value(item: dict[str, Any]) -> float:
+    pct = item.get("return_pct")
+    try:
+        return float(pct) if pct is not None and pct != "" else 0.0
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _prefer_episode_item(current: dict[str, Any], challenger: dict[str, Any]) -> dict[str, Any]:
+    """When collapsing same episode_key, keep the more material loss (attention)."""
+    if _return_pct_sort_value(challenger) < _return_pct_sort_value(current):
+        return challenger
+    return current
+
+
 def _dedupe_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    seen: set[str] = set()
-    out: list[dict[str, Any]] = []
+    """Dedupe by review_id, then by episode_key (calendar day) for exit cards.
+
+    Reply cards use ``reply:…`` ids and are not collapsed here (built separately).
+    Cross-book duplicates remain — different ``book_id`` → different episode_key.
+    """
+    by_rid: dict[str, dict[str, Any]] = {}
+    order: list[str] = []
     for item in items:
-        rid = str(item.get("review_id") or "")
-        if not rid or rid in seen:
+        rid = str(item.get("review_id") or "").strip()
+        if not rid:
             continue
-        seen.add(rid)
-        out.append(item)
-    return out
+        if rid not in by_rid:
+            by_rid[rid] = item
+            order.append(rid)
+            continue
+        by_rid[rid] = _prefer_episode_item(by_rid[rid], item)
+
+    by_episode: dict[str, dict[str, Any]] = {}
+    episode_order: list[str] = []
+    for rid in order:
+        item = by_rid[rid]
+        ep = str(item.get("episode_key") or "").strip()
+        if not ep:
+            ep = episode_key(
+                book_id=str(item.get("book_id") or ""),
+                ticker=str(item.get("ticker") or ""),
+                entry_at=item.get("entry_at"),  # type: ignore[arg-type]
+                exit_at=item.get("exit_at"),  # type: ignore[arg-type]
+            )
+            item = dict(item)
+            item["episode_key"] = ep
+        if ep not in by_episode:
+            by_episode[ep] = item
+            episode_order.append(ep)
+            continue
+        by_episode[ep] = _prefer_episode_item(by_episode[ep], item)
+    return [by_episode[ep] for ep in episode_order]
 
 
 def _in_attention_queue(item: dict[str, Any]) -> bool:
@@ -447,10 +531,17 @@ def _in_attention_queue(item: dict[str, Any]) -> bool:
     return False
 
 
+def _stock_sort_name(item: dict[str, Any]) -> str:
+    name = str(item.get("name") or "").strip()
+    ticker = str(item.get("ticker") or "").strip()
+    return (name or ticker).casefold()
+
+
 def _sort_key(item: dict[str, Any], sort_by: str) -> tuple[Any, ...]:
     key = str(sort_by or "exit_at").strip()
     exit_at = str(item.get("exit_at") or "")
     ticker = str(item.get("ticker") or "")
+    stock = _stock_sort_name(item)
     book = str(item.get("book_tag") or item.get("book_id") or "")
     tag = str(item.get("tag") or "new")
     pct = item.get("return_pct")
@@ -463,8 +554,8 @@ def _sort_key(item: dict[str, Any], sort_by: str) -> tuple[Any, ...]:
         # reply before new for attention
         tag_rank = 0 if tag == "reply" else 1
         return (tag_rank, exit_at, book, ticker)
-    if key == "ticker":
-        return (ticker, exit_at, book)
+    if key in {"ticker", "name", "stock"}:
+        return (stock, ticker.casefold(), exit_at, book)
     # default exit_at desc → caller reverses
     return (exit_at, book, ticker)
 
@@ -607,6 +698,27 @@ def build_post_sale_review_queue(
             f"{POST_SALE_ATTENTION_MAX_DAYS}d or return ≤ {POST_SALE_ATTENTION_LOSS_PCT}% "
             f"(candidates within {SEALED_POST_SALE_MAX_DAYS}d still counted for coverage)."
         ),
+        "duplicate_policy": {
+            "review_id": "exact fingerprint (book+ticker+entry+exit timestamps)",
+            "episode_key": (
+                "book_id|TICKER|entry_YYYY-MM-DD|exit_YYYY-MM-DD — collapses "
+                "same-day entry timestamp jitter; keeps worse return_pct"
+            ),
+            "cross_book": (
+                "intentional — same ticker may appear once per sealed book "
+                "(and FTSE control); book_tag distinguishes them"
+            ),
+            "reply_plus_original": (
+                "not both active — Comment actions the original and spawns a reply:* card"
+            ),
+        },
+        "sort_options": [
+            {"id": "exit_at", "label": "Date"},
+            {"id": "ticker", "label": "Stock"},
+            {"id": "loss_size", "label": "Loss size"},
+            {"id": "book", "label": "Book"},
+            {"id": "tag", "label": "Tag"},
+        ],
         "labels_store": LABELS_FILENAME,
         "active_count": len(active),
         "actioned_count": len(labels_store.get("actioned_review_ids") or []),
@@ -724,6 +836,7 @@ __all__ = [
     "WIDER_AFTER_DAYS",
     "WIDER_BEFORE_DAYS",
     "build_post_sale_review_queue",
+    "episode_key",
     "ops_findings_from_queue",
     "refresh_post_sale_review_queue",
     "review_fingerprint",

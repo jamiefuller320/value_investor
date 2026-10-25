@@ -36,6 +36,19 @@ Actioned items **clear from the active queue** but remain in labels history.
 only when ≤21d since exit **or** return ≤ −5%. Coverage counts still include the
 full candidate set so sealed/control population stays visible in ops findings.
 
+## Sort + duplicates
+
+Dashboard Lifecycle → Post-sale reviews has **touch-friendly sort chips**
+(Date · Stock · Loss size · Book · Tag). Date = sell/exit newest first; Stock =
+name A→Z (ticker when name missing). new/reply tags and Accept/Comment stay.
+
+| Looks like a duplicate? | What it is |
+|---|---|
+| Same ticker on N201 **and** N206 (etc.) | **Intentional** — one card per sealed book (+ FTSE control). `book_tag` badge is the model tag; `review_id` differs (`book_id` in fingerprint). |
+| Same ticker twice in **one** book, same entry/exit **day** | **Collapsed** via `episode_key` (`book\|TICKER\|entry_day\|exit_day`) — keeps the worse `return_pct`. Fixes board chips with second-level entry jitter. |
+| Same `review_id` twice | Already deduped; should not appear. |
+| `reply` + original both active | Should not — Comment actions the original and spawns a `reply:*` card. |
+
 ## Buy / sell decision reasons
 
 Every active card (initial + reply) carries structured **bought because** /
