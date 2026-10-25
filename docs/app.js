@@ -11708,14 +11708,37 @@ function postSaleReviewOverlays(item) {
   };
 }
 
+const POST_SALE_REVIEW_SORT_OPTIONS = [
+  { id: "exit_at", label: "Date" },
+  { id: "ticker", label: "Stock" },
+  { id: "loss_size", label: "Loss size" },
+  { id: "book", label: "Book" },
+  { id: "tag", label: "Tag" },
+];
+
+function normalizePostSaleReviewSort(value) {
+  const key = String(value || "exit_at");
+  if (key === "name" || key === "stock") return "ticker";
+  if (POST_SALE_REVIEW_SORT_OPTIONS.some((row) => row.id === key)) return key;
+  return "exit_at";
+}
+
+function postSaleReviewStockName(item) {
+  const name = String((item && item.name) || "").trim();
+  const ticker = String((item && item.ticker) || "").trim();
+  return name || ticker || "";
+}
+
 function sortPostSaleReviewItems(items, sortBy) {
   const rows = Array.isArray(items) ? items.slice() : [];
-  const key = String(sortBy || "exit_at");
+  const key = normalizePostSaleReviewSort(sortBy);
   rows.sort((a, b) => {
     if (key === "book") {
-      return String(a.book_tag || a.book_id || "").localeCompare(
+      const bookCmp = String(a.book_tag || a.book_id || "").localeCompare(
         String(b.book_tag || b.book_id || "")
       );
+      if (bookCmp) return bookCmp;
+      return String(b.exit_at || "").localeCompare(String(a.exit_at || ""));
     }
     if (key === "tag") {
       const ar = a.tag === "reply" ? 0 : 1;
@@ -11728,12 +11751,24 @@ function sortPostSaleReviewItems(items, sortBy) {
       const bp = Number(b.return_pct);
       const an = Number.isFinite(ap) ? ap : 0;
       const bn = Number.isFinite(bp) ? bp : 0;
-      return an - bn;
+      if (an !== bn) return an - bn;
+      return String(b.exit_at || "").localeCompare(String(a.exit_at || ""));
     }
     if (key === "ticker") {
+      const nameCmp = postSaleReviewStockName(a).localeCompare(
+        postSaleReviewStockName(b),
+        undefined,
+        { sensitivity: "base" }
+      );
+      if (nameCmp) return nameCmp;
       return String(a.ticker || "").localeCompare(String(b.ticker || ""));
     }
-    return String(b.exit_at || "").localeCompare(String(a.exit_at || ""));
+    // Date = sell/exit date, newest first
+    const dateCmp = String(b.exit_at || "").localeCompare(String(a.exit_at || ""));
+    if (dateCmp) return dateCmp;
+    return String(a.book_tag || a.book_id || "").localeCompare(
+      String(b.book_tag || b.book_id || "")
+    );
   });
   return rows;
 }
@@ -11848,6 +11883,9 @@ function renderPostSaleReviewCard(item, expanded) {
   const exitDay = String(item.exit_at || "").slice(0, 10) || "—";
   const hold =
     item.hold_days != null && item.hold_days !== "" ? `${item.hold_days}d hold` : "";
+  const bookLabel = String(item.book_tag || item.book_id || "?");
+  const showName =
+    item.name && String(item.name).trim() && String(item.name).trim() !== String(item.ticker || "");
   const annotations = item.chart_annotations || {};
   const episodeNote = annotations.episode
     ? `<p class="small muted psr-chart-annotation">${esc(annotations.episode)}</p>`
@@ -11900,12 +11938,19 @@ function renderPostSaleReviewCard(item, expanded) {
     : "";
   return `<article class="psr-card${expanded ? " is-expanded" : ""}" data-psr-card="${esc(
     item.review_id
-  )}">
+  )}" data-psr-book="${esc(bookLabel)}" data-psr-ticker="${esc(item.ticker || "")}">
     <button type="button" class="psr-card-head" data-psr-expand="${esc(item.review_id)}">
       <span class="psr-tag ${tagCls}">${esc(tag)}</span>
-      <span class="psr-book">${esc(item.book_tag || item.book_id || "?")}</span>
+      <span class="psr-book" title="Sealed book / control track">${esc(bookLabel)}</span>
       <strong class="psr-ticker">${esc(item.ticker || "?")}</strong>
-      <span class="small muted">${esc(exitDay)}${hold ? ` · ${esc(hold)}` : ""}</span>
+      ${
+        showName
+          ? `<span class="small muted psr-stock-name">${esc(String(item.name).trim())}</span>`
+          : ""
+      }
+      <span class="small muted psr-exit-date">${esc(exitDay)}${
+        hold ? ` · ${esc(hold)}` : ""
+      }</span>
       <span class="psr-pct">${esc(pctText)}</span>
       <span class="small muted">${esc(item.basis_label || "")}</span>
     </button>
@@ -11920,23 +11965,37 @@ function renderPostSaleReviews(data) {
     return `${renderLifecycleSubnav()}
       <div class="empty-state">Post-sale review queue not published yet. Wait for ops-monitor or run <code>ftse-post-sale-review refresh</code>.</div>`;
   }
-  const sortBy = postSaleReviewSort || queue.sort_default || "exit_at";
+  const sortBy = normalizePostSaleReviewSort(
+    postSaleReviewSort || queue.sort_default || "exit_at"
+  );
   postSaleReviewSort = sortBy;
   const items = sortPostSaleReviewItems(queue.active, sortBy);
-  const sortOptions = [
-    { id: "exit_at", label: "Exit date" },
-    { id: "loss_size", label: "Loss size" },
-    { id: "book", label: "Book" },
-    { id: "tag", label: "Tag (reply first)" },
-    { id: "ticker", label: "Ticker" },
-  ]
-    .map(
-      (row) =>
-        `<option value="${esc(row.id)}"${row.id === sortBy ? " selected" : ""}>${esc(
-          row.label
-        )}</option>`
-    )
-    .join("");
+  const sortOptions = Array.isArray(queue.sort_options) && queue.sort_options.length
+    ? queue.sort_options
+    : POST_SALE_REVIEW_SORT_OPTIONS;
+  const sortToggle = `<div class="psr-sort-toggle" role="group" aria-label="Sort post-sale reviews">
+      ${sortOptions
+        .map((row) => {
+          const id = normalizePostSaleReviewSort(row.id);
+          const label = String(row.label || id);
+          return `<button type="button" class="tab${
+            id === sortBy ? " active" : ""
+          }" data-psr-sort="${esc(id)}" aria-pressed="${
+            id === sortBy ? "true" : "false"
+          }">${esc(label)}</button>`;
+        })
+        .join("")}
+    </div>`;
+  const sortHint =
+    sortBy === "ticker"
+      ? "Sorted by stock name (A→Z; ticker when name missing)."
+      : sortBy === "loss_size"
+        ? "Sorted by episode return (worst first)."
+        : sortBy === "book"
+          ? "Sorted by sealed book / FTSE control tag."
+          : sortBy === "tag"
+            ? "Sorted reply tags first, then by exit date."
+            : "Sorted by sell/exit date (newest first).";
   const cards = items.length
     ? items
         .map((item) =>
@@ -11968,7 +12027,9 @@ function renderPostSaleReviews(data) {
                 : "";
               return `<li><span class="psr-tag psr-tag-${esc(
                 kind === "reply" ? "reply" : "new"
-              )}">${esc(kind)}</span> ${esc(book)} <strong>${esc(
+              )}">${esc(kind)}</span> <span class="psr-book">${esc(
+                book || "?"
+              )}</span> <strong>${esc(
                 ticker || ev.review_id || "?"
               )}</strong> <span class="muted">${esc(when)}</span>${textBit}</li>`;
             })
@@ -11988,10 +12049,9 @@ function renderPostSaleReviews(data) {
             )}
           </p>
         </div>
-        <div class="lifecycle-board-controls">
-          <label class="small">Sort
-            <select id="psr-sort">${sortOptions}</select>
-          </label>
+        <div class="lifecycle-board-controls psr-sort-controls">
+          <span class="small muted psr-sort-label">Sort</span>
+          ${sortToggle}
         </div>
       </div>
       <p class="small muted">
@@ -12002,6 +12062,7 @@ function renderPostSaleReviews(data) {
         · candidates ${queue.coverage?.candidate_exits ?? "—"}
         ${byBook ? `· ${byBook}` : ""}
       </p>
+      <p class="small muted">${esc(sortHint)} Same ticker on N200/N201/N206/… is one card per sealed book — book badge is the model tag, not a duplicate review_id.</p>
       <p class="small muted">${esc(queue.attention_note || "")}</p>
       <p class="small muted">Package M · influences_live=false · no Package L auto-tune · charts annotated with factory opinion + learning points</p>
       <div class="psr-queue" id="psr-queue">${cards}</div>
@@ -12237,13 +12298,14 @@ function bindLifecyclePanel() {
   const panel = document.getElementById("panel-lifecycle");
   if (panel && !panel.dataset.lifecycleBound) {
     panel.dataset.lifecycleBound = "1";
-    panel.addEventListener("change", (event) => {
-      if (event.target && event.target.id === "psr-sort") {
-        postSaleReviewSort = event.target.value || "exit_at";
-        renderLifecycle(dashboardData);
-      }
-    });
     panel.addEventListener("click", (event) => {
+      const sortBtn = event.target.closest("[data-psr-sort]");
+      if (sortBtn) {
+        event.preventDefault();
+        postSaleReviewSort = normalizePostSaleReviewSort(sortBtn.dataset.psrSort);
+        renderLifecycle(dashboardData);
+        return;
+      }
       const subpageBtn = event.target.closest("[data-lifecycle-subpage]");
       if (subpageBtn) {
         event.preventDefault();

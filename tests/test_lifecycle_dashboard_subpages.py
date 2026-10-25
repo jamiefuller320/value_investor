@@ -142,14 +142,19 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
 
     assert "function renderPostSaleReviews(" in app
     assert "function renderPostSaleDialogue(" in app
+    assert "function sortPostSaleReviewItems(" in app
+    assert "normalizePostSaleReviewSort" in app
     assert "post-sale-review-section" in app
     assert "psr-dual-charts" in app
     assert "psr-card-detail" in app
     assert "psr-dialogue" in app
     assert "psr-learning-points" in app
+    assert "psr-sort-toggle" in app
+    assert 'data-psr-sort="' in app
     assert "chart_annotations" in app
     assert "mountDualHorizonCharts" in app
     assert "Durable history" in app
+    assert "one card per sealed book" in app
 
     # Do not inherit lifecycle-board overflow:hidden clip on this surface.
     assert ".post-sale-review-section.lifecycle-board-section" in css
@@ -180,3 +185,7 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "viewport-fit=cover" in html
     assert "styles.css?v=" in html
     assert "Tablet / iPad layout" in ops or "iPad" in ops
+    assert "Sort + duplicates" in ops or "episode_key" in ops
+    assert ".psr-sort-toggle" in css
+    assert "touch-action: manipulation" in css
+    assert ".psr-book" in css

@@ -2786,9 +2786,55 @@ tr.selected td {
   overflow-wrap: anywhere;
 }
 
+/* Model / control tag — primary distinguisher when the same ticker appears
+   once per sealed book (not a duplicate review_id). */
+.psr-book {
+  flex: 0 0 auto;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.12rem 0.45rem;
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  background: color-mix(in srgb, var(--border) 35%, transparent);
+}
+
+.psr-ticker {
+  font-size: 1.05rem;
+}
+
+.psr-exit-date {
+  font-variant-numeric: tabular-nums;
+}
+
 .psr-pct {
   font-variant-numeric: tabular-nums;
   margin-left: auto;
+}
+
+/* iPad-friendly sort chips (same pattern as sealed-life-sort-toggle). */
+.psr-sort-controls {
+  align-items: center;
+  gap: 0.45rem 0.65rem;
+}
+
+.psr-sort-label {
+  flex: 0 0 auto;
+}
+
+.psr-sort-toggle {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  max-width: 100%;
+}
+
+.psr-sort-toggle .tab {
+  min-height: 2.25rem;
+  min-width: 3.25rem;
+  padding: 0.4rem 0.75rem;
+  touch-action: manipulation;
 }
 
 /* Scroll the expanded data card (not the whole page) so Safari touch pans

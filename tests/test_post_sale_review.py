@@ -7,9 +7,11 @@ from pathlib import Path
 from value_investor.post_sale_review import (
     CONTROL_BOOK_ID,
     build_post_sale_review_queue,
+    episode_key,
     ops_findings_from_queue,
     refresh_post_sale_review_queue,
     review_fingerprint,
+    sort_queue_items,
     wider_tf_window,
 )
 from value_investor.post_sale_review_actions import run_post_sale_review_action
@@ -119,6 +121,144 @@ def test_review_fingerprint_stable():
     )
     assert a == b
     assert len(a) == 20
+
+
+def test_episode_key_collapses_same_day_entry_jitter():
+    """Near-dup chips with second-level entry jitter share one episode_key."""
+    a = episode_key(
+        book_id="n206",
+        ticker="PYPL",
+        entry_at="2026-07-18T12:36:13+00:00",
+        exit_at="2026-10-16T06:52:34+00:00",
+    )
+    b = episode_key(
+        book_id="n206",
+        ticker="pypl",
+        entry_at="2026-07-18T12:36:32+00:00",
+        exit_at="2026-10-16T06:52:34+00:00",
+    )
+    assert a == b
+    # Distinct entry *days* stay distinct (real multi-episode).
+    c = episode_key(
+        book_id="n206",
+        ticker="PYPL",
+        entry_at="2026-07-19T12:36:13+00:00",
+        exit_at="2026-10-16T06:52:34+00:00",
+    )
+    assert c != a
+    # Cross-book same ticker is intentional — different episode_key.
+    other_book = episode_key(
+        book_id="n201",
+        ticker="PYPL",
+        entry_at="2026-07-18T12:36:13+00:00",
+        exit_at="2026-10-16T06:52:34+00:00",
+    )
+    assert other_book != a
+
+
+def test_build_queue_dedupes_same_day_near_dupes_keeps_cross_book(tmp_path: Path):
+    sealed = {
+        "models": [
+            {
+                "model_id": "n206",
+                "label": "N206",
+                "registration_id": "n206-reg",
+                "columns": {
+                    "just_sold": {
+                        "count": 2,
+                        "chips": [
+                            {
+                                "ticker": "PYPL",
+                                "phase": "just_sold",
+                                "status": "closed",
+                                "entry_run_at": "2026-07-18T12:36:13+00:00",
+                                "exit_run_at": "2026-10-16T06:52:34+00:00",
+                                "return_pct": 0.007,
+                                "return_basis": "fair_cost_episode",
+                                "days_in_phase": 3,
+                            },
+                            {
+                                "ticker": "PYPL",
+                                "phase": "just_sold",
+                                "status": "closed",
+                                "entry_run_at": "2026-07-18T12:36:32+00:00",
+                                "exit_run_at": "2026-10-16T06:52:34+00:00",
+                                "return_pct": -0.025,
+                                "return_basis": "fair_cost_episode",
+                                "days_in_phase": 3,
+                            },
+                        ],
+                    },
+                    "post_sale": {"count": 0, "chips": []},
+                },
+            },
+            {
+                "model_id": "n201",
+                "label": "N201",
+                "registration_id": "n201-reg",
+                "columns": {
+                    "just_sold": {
+                        "count": 1,
+                        "chips": [
+                            {
+                                "ticker": "PYPL",
+                                "phase": "just_sold",
+                                "status": "closed",
+                                "entry_run_at": "2026-07-18T12:36:13+00:00",
+                                "exit_run_at": "2026-10-16T06:52:34+00:00",
+                                "return_pct": -0.025,
+                                "return_basis": "fair_cost_episode",
+                                "days_in_phase": 3,
+                            }
+                        ],
+                    },
+                    "post_sale": {"count": 0, "chips": []},
+                },
+            },
+        ]
+    }
+    payload = build_post_sale_review_queue(
+        data_dir=tmp_path,
+        sealed=sealed,
+        board={"markets": []},
+        labels={"actioned_review_ids": [], "events": [], "active_replies": []},
+    )
+    pypl = [row for row in payload["active"] if row["ticker"] == "PYPL"]
+    assert len(pypl) == 2  # one per book
+    books = {row["book_id"] for row in pypl}
+    assert books == {"n206", "n201"}
+    n206 = next(row for row in pypl if row["book_id"] == "n206")
+    # Worse return kept when collapsing same-day jitter.
+    assert n206["return_pct"] == -2.5
+    assert "episode_key" in n206
+    assert payload["duplicate_policy"]["cross_book"].startswith("intentional")
+    assert any(row["id"] == "exit_at" for row in payload["sort_options"])
+    assert any(row["id"] == "ticker" for row in payload["sort_options"])
+
+
+def test_sort_queue_items_date_and_stock():
+    rows = [
+        {
+            "ticker": "BBB.L",
+            "name": "Bee",
+            "exit_at": "2026-10-10T00:00:00+00:00",
+            "book_tag": "N200",
+            "return_pct": -1.0,
+            "tag": "new",
+        },
+        {
+            "ticker": "AAA.L",
+            "name": "Aye",
+            "exit_at": "2026-10-20T00:00:00+00:00",
+            "book_tag": "N206",
+            "return_pct": -5.0,
+            "tag": "new",
+        },
+    ]
+    by_date = sort_queue_items(rows, sort_by="exit_at", descending=True)
+    assert [r["ticker"] for r in by_date] == ["AAA.L", "BBB.L"]
+    by_stock = sort_queue_items(rows, sort_by="ticker", descending=False)
+    assert [r["ticker"] for r in by_stock] == ["AAA.L", "BBB.L"]
 
 
 def test_wider_tf_window_pads_episode():
