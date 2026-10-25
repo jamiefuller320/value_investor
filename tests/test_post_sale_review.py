@@ -504,7 +504,10 @@ def test_duplicate_clears_without_reply(tmp_path: Path):
         data_dir=data_dir, sealed=_sealed_fixture(), board=_board_fixture()
     )
     assert all(row["review_id"] != rid for row in refreshed["active"])
-    assert all(row.get("tag") != "reply" or row.get("parent_review_id") != rid for row in refreshed["active"])
+    assert all(
+        row.get("tag") != "reply" or row.get("parent_review_id") != rid
+        for row in refreshed["active"]
+    )
     labels = load_post_sale_review_labels(data_dir)
     assert rid in labels["actioned_review_ids"]
     assert any(row.get("kind") == "duplicate" for row in labels["events"])
@@ -553,4 +556,6 @@ def test_nested_snapshot_batch_preserves_identity(tmp_path: Path):
         data_dir=data_dir, sealed=_sealed_fixture(), board=_board_fixture()
     )
     assert all(row["review_id"] != item["review_id"] for row in after["active"])
-    assert any(row.get("tag") == "reply" and row.get("ticker") == "BBB.L" for row in after["active"])
+    assert any(
+        row.get("tag") == "reply" and row.get("ticker") == "BBB.L" for row in after["active"]
+    )

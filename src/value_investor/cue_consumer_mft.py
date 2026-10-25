@@ -452,9 +452,9 @@ def _actioned_review_ids(labels: dict[str, Any] | None) -> set[str]:
         for ev in row.get("events") or []:
             if not isinstance(ev, dict):
                 continue
-            ev_action = str(
-                ev.get("action") or ev.get("label") or ev.get("kind") or ""
-            ).strip().lower()
+            ev_action = (
+                str(ev.get("action") or ev.get("label") or ev.get("kind") or "").strip().lower()
+            )
             if ev_action in clearing:
                 actioned.add(rid)
     return actioned

@@ -88,9 +88,10 @@ def _resolve_snapshot(
 ) -> dict[str, Any]:
     """Fill missing identity from the published queue when the bridge omitted it."""
     snap = dict(snapshot) if isinstance(snapshot, dict) else {}
-    if str(snap.get("ticker") or "").strip() and str(
-        snap.get("book_tag") or snap.get("book_id") or ""
-    ).strip():
+    if (
+        str(snap.get("ticker") or "").strip()
+        and str(snap.get("book_tag") or snap.get("book_id") or "").strip()
+    ):
         return snap
     queue = _safe_queue(data_dir)
     if not queue:
@@ -131,9 +132,7 @@ def run_post_sale_review_action(
     elif decision in {"duplicate", "dupe", "already_commented"}:
         decision = "duplicate"
     if decision not in ACTION_KINDS:
-        raise ValueError(
-            f"Unknown decision {decision!r}; allowed: accept, comment, duplicate"
-        )
+        raise ValueError(f"Unknown decision {decision!r}; allowed: accept, comment, duplicate")
 
     snap = _resolve_snapshot(data_dir, review_id, snapshot)
     if decision == "accept":
