@@ -6645,6 +6645,31 @@ def test_builtin_ir_allowlist_includes_hoc_l():
     assert "interim" in periods
 
 
+def test_builtin_ir_allowlist_includes_enq_l():
+    """eng-20261025-05: ftse_smallcap ENQ.L had empty IR allowlist (ir_presentation_metrics gap)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("ENQ.L") or []
+    assert any("50243_EnQuest_Annual_Report_2025.pdf" in url for url in urls)
+    assert any("EnQuest_HY26_Results_Combined_vF.pdf" in url for url in urls)
+    assert any("EnQuest_ARA25_RNS_vF.pdf" in url for url in urls)
+    assert all("enquest.com" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("ENQ.L")
+    assert len(rows) >= 4
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    periods = {row.get("period") for row in rows}
+    assert "annual" in periods
+    assert "interim" in periods
+
+
+def test_enq_l_fy_results_headline_classified_as_annual():
+    """eng-20261025-05: Investegate FY RNS uses 'Results for the year ended' without 'full year'."""
+    from value_investor.research.filings import classify_filing_period
+
+    headline = "Results for the year ended 31 December 2025 and 2026 outlook"
+    assert classify_filing_period(headline) == "annual"
+
+
 def test_builtin_ir_allowlist_includes_g1a_de():
     """DAX spare unmeasured G1A.DE needs GEA Group IR seeds (empty discovery)."""
     from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
