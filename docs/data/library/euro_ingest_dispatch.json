@@ -23,7 +23,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-10-25T17:22:53.774954+00:00",
+    "snapshot_at": "2026-10-25T17:43:47.168112+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 49,
     "unmeasured_buy_tier": 0,
@@ -94,7 +94,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-10-25T17:22:53.779012+00:00",
+  "evaluated_at": "2026-10-25T17:43:47.171107+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -168,7 +168,7 @@
         "ftse_smallcap not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-25T17:23:28.241468+00:00",
+        "snapshot_at": "2026-10-25T17:44:10.286473+00:00",
         "market_id": "ftse_smallcap",
         "buy_tier_count": 9,
         "unmeasured_buy_tier": 0,
@@ -231,7 +231,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-25T17:23:28.241953+00:00",
+      "evaluated_at": "2026-10-25T17:44:10.286851+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -243,7 +243,7 @@
       "market_id": "asx200",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=1)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=1, indexed_without_body=40)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
@@ -255,32 +255,36 @@
         "asx200 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-25T17:23:31.423658+00:00",
+        "snapshot_at": "2026-10-25T17:44:12.386106+00:00",
         "market_id": "asx200",
         "buy_tier_count": 30,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 0,
-        "indexed_without_body": 1,
+        "thin_body_buy_tier": 1,
+        "indexed_without_body": 40,
         "bodies_min": 3,
-        "bodies_median": 22.5,
+        "bodies_median": 23.5,
         "bodies_max": 155,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
-        "thin_body_tickers": [],
+        "thin_body_tickers": [
+          "ALK.AX"
+        ],
         "indexed_without_body_tickers": [
           "ALK.AX"
         ],
         "indexed_without_body_by_ticker": {
-          "ALK.AX": 1
+          "ALK.AX": 40
         },
         "parked_tickers": [],
         "parked_count": 0,
-        "effective_thin_body_buy_tier": 0,
-        "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 1,
+        "effective_thin_body_buy_tier": 1,
+        "effective_thin_body_tickers": [
+          "ALK.AX"
+        ],
+        "effective_indexed_without_body": 40,
         "effective_indexed_without_body_tickers": [
           "ALK.AX"
         ],
@@ -301,7 +305,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-25T17:23:31.424762+00:00",
+      "evaluated_at": "2026-10-25T17:44:12.386967+00:00",
       "should_run_parallel_ingest": true
     }
   ],
