@@ -77,8 +77,8 @@ def test_known_examples_when_files_contain_them():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
 
     bab = rows["BAB.L"]
-    assert bab.dividend_yield_raw == pytest.approx(0.78)
-    assert bab.yield_display == "78.0%"
+    assert bab.dividend_yield_raw == pytest.approx(0.8)
+    assert bab.yield_display == "80.0%"
     assert "raw_yield_below_one_displayed_as_percent" in _ids(bab)
 
     blnd = rows["BLND.L"]
@@ -309,7 +309,7 @@ def test_unflagged_filing_aligned_can_match_the_other_screen_figures():
 def test_bmy_and_cch_filing_aligned_match_the_statement_line():
     """Stored screen now puts filing_aligned on the statement line.
 
-    BMY's previous filing figure remains as screen_ttm, so the TTM check fires.
+    BMY's screen_ttm still differs from the statement line, so the TTM check fires.
     CCH's flag is true, so neither unflagged disagreement check fires. Constructed
     rows above still cover filing_aligned differing from the statement.
     """
@@ -318,7 +318,7 @@ def test_bmy_and_cch_filing_aligned_match_the_statement_line():
     assert bmy.displayed_fcf == pytest.approx(31_900_000.0)
     assert bmy.filing_aligned == pytest.approx(31_900_000.0)
     assert bmy.statement_fcf == pytest.approx(31_900_000.0)
-    assert bmy.screen_ttm == pytest.approx(27_800_000.0)
+    assert bmy.screen_ttm == pytest.approx(35_000_000.0)
     assert bmy.fcf_divergence_flagged is False
     assert "filing_aligned_differs_from_statement_fcf" not in _ids(bmy)
     assert "screen_ttm_differs_filing_aligned_matches_statement" in _ids(bmy)
@@ -337,7 +337,7 @@ def test_byg_and_dln_are_trust_rows_with_revenue_and_no_price():
     byg = rows["BYG.L"]
     assert byg.trust is True
     assert byg.statement_revenue == pytest.approx(209_084_000.0)
-    assert byg.discount_display == "32.0%"
+    assert byg.discount_display == "30.6%"
     assert byg.fcf_has_figure is False
     assert byg.history_price is None
     assert "trust_revenue_discount_without_fcf_or_price" in _ids(byg)
@@ -404,12 +404,12 @@ def test_emg_premium_counts_on_the_trust_revenue_check():
     emg = rows["EMG.L"]
     latest = json.loads((ROOT / "docs/data/latest.json").read_text())
     stored = next(raw for raw in latest["trust_reports"] if raw.get("ticker") == "EMG.L")
-    assert stored["key_metrics"]["P/B"] == "3.17"
+    assert stored["key_metrics"]["P/B"] == "2.94"
     assert emg.trust is True
-    assert emg.premium_display == "216.9%"
+    assert emg.premium_display == "193.7%"
     assert emg.discount_display is None
-    assert emg.pe_display == "16.2"
-    assert emg.yield_display == "3.7%"
+    assert emg.pe_display == "14.9"
+    assert emg.yield_display == "4.0%"
     assert "P/B" in emg.key_metric_names
     assert emg.fcf_has_figure is False
     assert emg.history_price is None
@@ -419,7 +419,7 @@ def test_emg_premium_counts_on_the_trust_revenue_check():
         for hit in hits_for(emg)
         if hit.rule_id == "trust_revenue_discount_without_fcf_or_price"
     )
-    assert "premium 216.9%" in detail
+    assert "premium 193.7%" in detail
 
 
 def _income_pair(ticker: str, year: str) -> tuple[float, float]:
@@ -475,11 +475,11 @@ def test_fras_gdwn_and_has_2026_income_pairs():
 def test_hbr_and_elm_positive_pe_beside_negative_diluted_eps():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
     hbr = rows["HBR.L"]
-    assert hbr.pe_display == "24.5"
+    assert hbr.pe_display == "25.0"
     assert hbr.diluted_eps == pytest.approx(-0.16)
     assert "positive_screen_pe_beside_negative_diluted_eps" in _ids(hbr)
     elm = rows["ELM.L"]
-    assert elm.pe_display == "20.6"
+    assert elm.pe_display == "20.1"
     assert elm.diluted_eps == pytest.approx(-0.078)
     assert "positive_screen_pe_beside_negative_diluted_eps" in _ids(elm)
     assert "positive_screen_pe_beside_negative_diluted_eps" not in _ids(
@@ -496,7 +496,7 @@ def test_hbr_and_elm_positive_pe_beside_negative_diluted_eps():
 
 def test_jemi_and_fcss_have_a_pe_and_neither_discount_nor_premium():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
-    for ticker, pe in (("JEMI.L", "4.7"), ("FCSS.L", "8.0")):
+    for ticker, pe in (("JEMI.L", "4.6"), ("FCSS.L", "7.8")):
         row = rows[ticker]
         assert row.trust is True
         assert row.pe_display == pe
@@ -531,10 +531,10 @@ def test_jemi_and_fcss_have_a_pe_and_neither_discount_nor_premium():
 def test_screen_pe_beside_a_revenue_year_with_no_eps_line():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
     expected = {
-        "LRE.L": ("7.2", "2025", 1_883_400_000.0, 293_400_000.0),
-        "LWDB.L": ("16.3", "2025", 366_003_000.0, 304_670_000.0),
+        "LRE.L": ("7.0", "2025", 1_883_400_000.0, 293_400_000.0),
+        "LWDB.L": ("5.1", "2025", 366_003_000.0, 304_670_000.0),
         "INPP.L": ("10.6", "2025", 267_760_000.0, 263_704_000.0),
-        "JEDT.L": ("5.4", "2026", 114_629_000.0, 112_129_000.0),
+        "JEDT.L": ("5.2", "2026", 114_629_000.0, 112_129_000.0),
     }
     for ticker, (pe, year, revenue, net) in expected.items():
         row = rows[ticker]
@@ -886,12 +886,13 @@ def test_non_gbp_fcf_currency_with_gbp_chart_and_no_quote_file():
     )
 
 
-def test_hwg_positive_eps_has_no_screen_pe_key():
+def test_vct_positive_eps_has_no_screen_pe_key():
+    """HWG.L left the screen roster; VCT.L is the current positive-EPS / no-P/E example."""
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
-    hwg = rows["HWG.L"]
-    assert hwg.diluted_eps == pytest.approx(0.028)
-    assert "P/E" not in hwg.key_metric_names
-    assert "positive_diluted_eps_without_screen_pe" in _ids(hwg)
+    vct = rows["VCT.L"]
+    assert vct.diluted_eps == pytest.approx(0.318)
+    assert "P/E" not in vct.key_metric_names
+    assert "positive_diluted_eps_without_screen_pe" in _ids(vct)
     assert "positive_diluted_eps_without_screen_pe" not in _ids(
         _row(diluted_eps=0.028, key_metric_names=frozenset({"P/E"}))
     )
