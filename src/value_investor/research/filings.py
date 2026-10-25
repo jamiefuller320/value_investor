@@ -175,6 +175,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.henryboot.co.uk/media/fv0nuosu/32326-henry-boot-ar2024-web.pdf",
         "https://www.henryboot.co.uk/media/tqvbhcvt/interim-results-25_main.pdf",
     ],
+    # eng-20261025-05: ftse_smallcap ENQ.L gap-closure had empty IR allowlist; FY/H1 statutory PDFs on enquest.com.
+    "ENQ.L": [
+        "https://www.enquest.com/fileadmin/content/Annual_Reports/Annual_Report_2025/50243_EnQuest_Annual_Report_2025.pdf",
+        "https://www.enquest.com/fileadmin/content/press_release_pdfs/2026/EnQuest_ARA25_RNS_vF.pdf",
+        "https://www.enquest.com/fileadmin/content/press_release_pdfs/2026/EnQuest_2025_Full_Year_Results_vFinal.pdf",
+        "https://www.enquest.com/fileadmin/content/press_release_pdfs/2026/EnQuest_HY26_Results_Combined_vF.pdf",
+    ],
     # ftse_smallcap IWB blocker — MER.L parked unfetchable_iwb; CH PDFs fail but mearsgroup.co.uk statutory PDFs fetch.
     "MER.L": [
         "https://www.mearsgroup.co.uk/media/jc1hix2m/mears-group-plc-annual-report-and-accounts-2025.pdf",
@@ -1284,6 +1291,7 @@ _sec_ticker_cik_cache: dict[str, int] | None = None
 _ANNUAL_PATTERNS = (
     r"\bfull[- ]year\b",
     r"\bfinal results\b",
+    r"\bresults for the year ended\b",
     r"\bannual report\b",
     r"\bannual results\b",
     r"\bannual information form\b",
@@ -3576,8 +3584,13 @@ def classify_rns_headline(
             return "annual"
         if re.search(r"\b(ir|half[- ]year report|interim results)\b", blob):
             return "interim"
-    elif re.search(r"\b(half[- ]year report|interim results)\b", blob):
+    elif re.search(r"\b(half[- ]year report|interim results|hy\d{2})\b", blob, re.I):
         return "interim"
+    if "allowlist" in blob:
+        if re.search(r"(annual_report|full_year|ara\d{2})", blob, re.I):
+            return "annual"
+        if re.search(r"hy\d{2}", blob, re.I):
+            return "interim"
     return "other"
 
 
@@ -5854,6 +5867,9 @@ def _ir_allowlist_period_from_url(url: str) -> str:
     # DACH annual-report shorthand (e.g. BASF/OMV *-ar25.pdf).
     if re.search(r"[-_/]ar\d{2}(?:[_\-]|\.|$)", lower):
         return "annual"
+    # EnQuest-style annual report announcement slugs (e.g. EnQuest_ARA25_RNS_vF.pdf).
+    if re.search(r"ara\d{2}", lower):
+        return "annual"
     # EQS statutory annual report slugs (e.g. DE000…-JA-2025-EQ-E-00.pdf).
     if re.search(r"-ja-20\d{2}-eq-[de]", lower):
         return "annual"
@@ -5863,6 +5879,9 @@ def _ir_allowlist_period_from_url(url: str) -> str:
         return "interim"
     # Roche half-year CDN slugs (e.g. hy25e.pdf) — eng-20261003-02 smi RO.SW IR allowlist.
     if re.search(r"[-_/]hy\d{2}[a-z]?(?:[.?]|$)", lower):
+        return "interim"
+    # EnQuest-style HY26 combined results (underscore suffix after period code).
+    if re.search(r"hy\d{2}_", lower):
         return "interim"
     if "stock-exchange-release" in lower and re.search(r"2802\d{2}", lower):
         return "interim"
