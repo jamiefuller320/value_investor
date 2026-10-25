@@ -22298,8 +22298,117 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20261025-02",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "ALK.AX",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "ALK.AX"
+        ],
+        "market_id": "asx200",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261025-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-10-25T17:47:19.198978+00:00",
+      "completed_at": "2026-10-25T17:49:31.646731+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": -29,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "ALK.AX"
+        ],
+        "results": [
+          {
+            "ticker": "ALK.AX",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 11,
+              "filings_with_body": 10,
+              "indexed_without_body": 1
+            },
+            "after": {
+              "filings_total": 62,
+              "filings_with_body": 32,
+              "indexed_without_body": 30
+            },
+            "improved": false,
+            "regime": "asx_announcements",
+            "filings_summary": {
+              "total": 12,
+              "annual": 1,
+              "interim": 0,
+              "trading_update": 0,
+              "other": 11,
+              "with_body": 12,
+              "period_coverage": {
+                "annual": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "interim": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 11,
+                  "with_body": 11
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 32,
+              "with_body_after": 32,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "ALK.AX",
+            "with_body_before": 10,
+            "with_body_after": 32,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-10-25T13:31:09.766117+00:00",
+  "updated_at": "2026-10-25T17:49:31.646742+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
