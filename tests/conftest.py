@@ -59,7 +59,7 @@ def _research_filings_unpatched_live_fetch(item: pytest.Item) -> bool:
             needle in src
             for needle in (
                 "filings.fetch_filing_body",
-                'setattr(fetch_filing_body',
+                "setattr(fetch_filing_body",
                 'setattr("fetch_filing_body"',
                 "setattr('fetch_filing_body'",
             )
