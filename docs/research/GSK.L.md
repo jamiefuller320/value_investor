@@ -1,6 +1,6 @@
 # GSK plc (GSK.L) — Research memo
 
-_Version 4 · Updated 2026-09-27T08:22:33.221008+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-25T08:25:47.034004+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.73
-Rationale: Oncology deal flow and Berenberg’s upgrade align with the buy screen; without new filings, FCF and earnings-basis gaps still cap conviction.
+Confidence: 0.74
+Rationale: October FDA wins for Jemperli and Hibsago support the buy screen; unresolved FCF and earnings-basis gaps still cap conviction versus the quantitative signal.
 RiskTags: regulatory, competitive, litigation, leverage, pension, accounting, key_person
 
 ## Weekly updates
@@ -28,3 +28,8 @@ No material change to H1 outlook, leverage, litigation, or patent-cliff risks.
 Headlines mostly recap Chimagen, HUTCHMED oncology deals and capital-markets-day themes (£40bn sales ambition, £1.9bn savings); Berenberg’s Hold-to-Buy upgrade (2,200p target) adds sell-side support but is not a filing event.
 Commentary on respiratory biologics and AI is pipeline messaging only; no new company guidance or regulatory disclosures this week.
 No material change to H1 outlook, leverage, litigation, or patent-cliff risks since 21 September.
+
+### 2026-10-25T08:25:47.034004+00:00
+Since 27 September, RNS/6-K disclosures include US FDA approval of Hibsago for chronic hepatitis B (21 October) and Jemperli for MSI-H/dMMR rectal cancer (19 October), plus closure of the HUTCHMED KRAS–EGFR licence.
+Commentary largely revisits Q2 outperformance and cost-efficiency themes; Wendy Becker joined the board on 8 October.
+No new interim results or guidance; leverage, litigation and patent-cliff risks are unchanged.

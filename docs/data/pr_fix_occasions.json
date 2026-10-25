@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-25T09:05:50.192809+00:00",
+  "updated_at": "2026-10-25T09:07:58.780720+00:00",
   "occasion_count": 273,
   "occasions": [
     {
@@ -4838,26 +4838,26 @@
     },
     {
       "id": "prf-20261025-001",
-      "recorded_at": "2026-10-25T00:50:33.806650+00:00",
+      "recorded_at": "2026-10-25T08:11:32.348941+00:00",
       "source": "human_request",
       "kind": "ci_check",
-      "failure_reason": "validate failed",
-      "pr_number": 1180,
-      "branch": null,
+      "failure_reason": "stale_library_gbp_cap_assertion",
+      "pr_number": 1181,
+      "branch": "cursor/super-book-mft-defer-04bf",
       "title": null,
-      "url": null,
+      "url": "https://github.com/jamiefuller320/value_investor/actions/runs/40174602529",
       "task_id": null,
-      "head_sha": null,
+      "head_sha": "4ed8e51876084f0a23d0c6621dc3914f20d9e7dd",
       "mergeable_state": null,
       "failed_check_names": [
-        "validate"
+        "CI / test (3) Pytest (shard 3/4)"
       ],
-      "notes": "CI notify on 963c019",
+      "notes": "test_ftse350_pound_caps_cover_priced_names: GROW.L library AIM market_cap refreshed 1125576576 -> 1145278464; unrelated to defer N222–N227. Update assertion.",
       "details": {}
     },
     {
       "id": "prf-20261025-002",
-      "recorded_at": "2026-10-25T00:52:29.718765+00:00",
+      "recorded_at": "2026-10-25T09:07:58.556166+00:00",
       "source": "human_request",
       "kind": "ci_check",
       "failure_reason": "ruff_format",
@@ -4871,12 +4871,12 @@
       "failed_check_names": [
         "validate"
       ],
-      "notes": "validate Ruff (changed Python only): post_sale_decision_reasons.py would be reformatted; fixed on tip 9a09295a4c",
+      "notes": "validate Ruff format on post_sale_decision_reasons.py; fixed on tip",
       "details": {}
     },
     {
       "id": "prf-20261025-003",
-      "recorded_at": "2026-10-25T07:06:03.560308+00:00",
+      "recorded_at": "2026-10-25T09:07:58.610265+00:00",
       "source": "human_request",
       "kind": "merge_conflict",
       "failure_reason": "CONFLICTING/DIRTY vs main before squash-merge",
@@ -4888,12 +4888,12 @@
       "head_sha": null,
       "mergeable_state": null,
       "failed_check_names": [],
-      "notes": "Owner approved merge; tip green but mergeStateStatus=DIRTY",
+      "notes": "Owner approved; tip green but DIRTY",
       "details": {}
     },
     {
       "id": "prf-20261025-004",
-      "recorded_at": "2026-10-25T07:59:00.694475+00:00",
+      "recorded_at": "2026-10-25T09:07:58.664106+00:00",
       "source": "human_request",
       "kind": "merge_conflict",
       "failure_reason": "CONFLICTING again after main advanced during CI wait",
@@ -4905,12 +4905,12 @@
       "head_sha": null,
       "mergeable_state": null,
       "failed_check_names": [],
-      "notes": "tip fffcbfab17 was green; main moved before squash",
+      "notes": "tip was green; main moved",
       "details": {}
     },
     {
       "id": "prf-20261025-005",
-      "recorded_at": "2026-10-25T08:14:03.822521+00:00",
+      "recorded_at": "2026-10-25T09:07:58.727833+00:00",
       "source": "human_request",
       "kind": "ci_check",
       "failure_reason": "test_ftse_pound_cap GROW.L library_gbp_cap drift",
@@ -4924,12 +4924,12 @@
       "failed_check_names": [
         "test (3)"
       ],
-      "notes": "Assertion 1145278464.0 == 1125576576 after main merge; update fixture expectation",
+      "notes": "Overlaps #1181 fix; updated expectation on #1180 tip",
       "details": {}
     },
     {
       "id": "prf-20261025-006",
-      "recorded_at": "2026-10-25T09:05:50.192809+00:00",
+      "recorded_at": "2026-10-25T09:07:58.780720+00:00",
       "source": "human_request",
       "kind": "ci_check",
       "failure_reason": "flake: CLIG.L IR body fetch (test_research_filings)",
@@ -4943,7 +4943,7 @@
       "failed_check_names": [
         "test (0)"
       ],
-      "notes": "Transient: No allowlist URL returned body>=50000; PDF reachable outside CI; re-trigger tip",
+      "notes": "Transient empty body; added retries in _first_fetchable_allowlist_body",
       "details": {}
     }
   ],
@@ -4991,19 +4991,6 @@
         ]
       },
       {
-        "failure_reason": "validate failed",
-        "count": 4,
-        "sources": {
-          "human_request": 4
-        },
-        "recent_prs": [
-          932,
-          1056,
-          1062,
-          1180
-        ]
-      },
-      {
         "failure_reason": "merge_conflict:dirty",
         "count": 4,
         "sources": {
@@ -5026,6 +5013,18 @@
           892,
           933,
           1179
+        ]
+      },
+      {
+        "failure_reason": "validate failed",
+        "count": 3,
+        "sources": {
+          "human_request": 3
+        },
+        "recent_prs": [
+          932,
+          1056,
+          1062
         ]
       },
       {

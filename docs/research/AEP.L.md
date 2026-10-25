@@ -1,6 +1,6 @@
 # AEP Plantations Plc (AEP.L) — Research memo
 
-_Version 4 · Updated 2026-10-04T07:51:16.142206+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-25T07:58:05.559736+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: Filings-backed case still supports Strong Buy; since 23 Sep only interim-dividend timing (12 Oct with Q3) plus buyback RNS—no new ops; cyclical and regulatory risks keep a phased accumulate overlay.
+Confidence: 0.73
+Rationale: Q3 RNS backs Strong Buy on 9m output and FY guidance; El Niño 2027 yield risk and the post-update sell-off keep a phased accumulate overlay, not full chase.
 RiskTags: cyclical, regulatory, customer_concentration, competitive, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Strong Buy screen unchanged (~75% composite, 21 weeks, stable); filing-backed th
 No new results since H1 2026 (2 Sep); 24 Sep–2 Oct RNS is interim-dividend timing (12 Oct with Q3), buybacks and voting rights only.  
 25–29 Sep TipRanks/Kalkine buyback recaps; US “AEP” ticker noise—no verified Indonesia ops or policy news.  
 Strong Buy screen unchanged (~77% composite, 23 weeks, stable).
+
+### 2026-10-25T07:58:05.559736+00:00
+12 Oct RNS: 9m 2026 trading update and interim dividend (3.73c, unchanged); own FFB and CPO up double digits, board confident on full-year market expectations.  
+RNS flags El Niño/dry weather as a possible drag on 2027 FFB yields; net cash after borrowings $99.0m after Pinago and buybacks; press reported an ~8% share fall on the weather line.  
+Strong Buy screen ~79% composite (3 weeks, stable); 13–23 Oct RNS is buybacks only; later news is mostly US “AEP” ticker/options noise.

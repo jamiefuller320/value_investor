@@ -1,6 +1,6 @@
 # Lion Finance Group PLC (BGEO.L) — Research memo
 
-_Version 1 · Updated 2026-10-19T13:59:52.875459+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-10-25T07:55:23.942149+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,5 +9,12 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: FY2025 filing-aligned FCF (~£1.86bn) and ~3.9× FCF/dividend cover support cheapness and dividend screens, but Companies House bodies are UK holdco-only, statutory basic EPS fell ~12% YoY, and EM banking leverage plus geopolitics keep hea...
+Rationale: Research confirms cheapness, FCF yield, and dividend cover versus the screen, but stays short of strong buy on statutory EPS decline, EM banking leverage, and UK holdco-only disclosure.
 RiskTags: regulatory, leverage, cyclical, other
+
+## Weekly updates
+
+### 2026-10-25T07:55:23.942149+00:00
+No material company news since 19 Oct; the news batch was LSE quote and generic FTSE watch coverage only.
+Strong buy screen unchanged (8/22 models, week two, stable); filing-aligned FY2025 FCF and dividend cover metrics unchanged.
+No new annual or interim filing extracts in this refresh window.

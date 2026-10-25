@@ -1,6 +1,6 @@
 # Genuit Group plc (GEN.L) — Research memo
 
-_Version 8 · Updated 2026-10-07T10:33:59.499806+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-10-25T08:03:53.234673+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.67
-Rationale: No post-H1 RNS; yield, FCF and leverage still support the screen, but H1 softness, 7/22 passes and ~44% conviction weaken full alignment with strong buy—phased accumulate remains appropriate.
+Confidence: 0.62
+Rationale: 20 Oct trading update cut FY underlying profit to ~£84m vs ~£91–96m consensus on Heating weakness; FCF, yield and leverage still support value, but the downgrade weakens full strong-buy alignment.
 RiskTags: cyclical, competitive, leverage, accounting, other
 
 ## Weekly updates
@@ -48,3 +48,8 @@ RSI ~49; price still marginally below the 200-day MA—the H1 trading picture is
 No trading or results RNS since the 11 Aug H1 report; the 7 Oct batch is routine TR-1 (2 Oct) plus Gen Z/Gen Digital false positives and third-party housing-scheme price commentary (29 Sep).  
 Screen remains **strong buy** (24w, stable) at ~44% conviction with **7/22** passes; Deep Value is off with P/B ~1.1.  
 RSI ~56; price still marginally below the 200-day MA—the H1 trading picture is unchanged.
+
+### 2026-10-25T08:03:53.234673+00:00
+20 Oct RNS trading update guides FY underlying operating profit to ~£84m (consensus ~£91–96m) on unseasonably warm weather and softer Heating; 9M LFL revenue −4.3%, but cash conversion >90% and leverage ~1.5x.  
+Screen still **strong buy** (10/22, ~79% composite, ~28% conviction, 1w new/improving); Deep Value back on at P/B ~1.0; RSI ~38, price below the 200-day MA.  
+News batch is Gen Digital/Gen Z noise and third-party comment on the warning; routine TR-1 and EBT purchase (23 Oct)—no new company guidance.

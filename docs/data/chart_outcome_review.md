@@ -1,6 +1,6 @@
 # Buy-tier chart outcomes
 
-59 terrible path(s) among 1101 buy-tier charts — inspect weakest names before treating timing as benign.
+87 terrible path(s) among 1120 buy-tier charts — inspect weakest names before treating timing as benign.
 
 **Verdict:** Has terrible outcomes (`has_terrible`)
 
@@ -10,49 +10,49 @@ Short-term underwater is expected while the hypothesis stands. The test is the l
 
 ## Counts
 
-- Charts: 1101
-- Well timed: 230
-- Target then fade: 5
-- Underwater (no target): 360
-- Intact positive: 258
-- Flat: 190
-- Terrible: 59
-- Stop hits: 4
-- Target hits: 24
+- Charts: 1120
+- Well timed: 229
+- Target then fade: 3
+- Underwater (no target): 407
+- Intact positive: 195
+- Flat: 199
+- Terrible: 87
+- Stop hits: 7
+- Target hits: 26
 
 ## Returns since recommendation
 
 - Median: +0.0%
-- Mean: +0.3%
-- Range: -52.8% to +79.0%
-- Median drawdown: -4.5%
+- Mean: -0.5%
+- Range: -54.3% to +79.6%
+- Median drawdown: -5.2%
 - Worst drawdown: -54.3%
 
 ## Well timed
 
 | Ticker | Signal | Return | Drawdown | Days to target |
 |---|---|---:|---:|---:|
-| RWS.L | buy | +79.0% | -1.7% | — |
-| ACN | strong_buy | +60.1% | -4.1% | — |
-| CTSH | strong_buy | +49.0% | -3.5% | — |
-| BS6.SI | buy | +43.9% | +0.0% | — |
-| APA | strong_buy | +41.5% | -0.2% | — |
-| CDA.AX | hold | +36.8% | -2.7% | — |
-| PRU.AX | hold | +36.2% | -0.2% | — |
-| WPP.L | hold | +35.6% | +0.0% | — |
+| RWS.L | buy | +79.6% | -1.7% | — |
+| ACN | strong_buy | +73.8% | -4.1% | — |
+| SAP.DE | hold | +55.1% | -7.2% | — |
+| THG.L | avoid | +48.1% | +0.0% | — |
+| JSE.L | hold | +45.2% | -6.6% | — |
+| NTAP | hold | +35.2% | +0.0% | — |
+| BS6.SI | buy | +34.8% | +0.0% | — |
+| DSY.PA | hold | +34.7% | -2.1% | — |
 
 ## Weakest open returns
 
 | Ticker | Signal | Return | Drawdown | Outcome | Stop | Target |
 |---|---|---:|---:|---|---|---|
-| LNZ.VI | hold | -52.8% | -54.3% | terrible | no | no |
-| APP | hold | -37.3% | -38.2% | terrible | no | no |
-| MAB1.L | hold | -32.2% | -39.3% | terrible | no | no |
-| GBG.L | hold | -30.9% | -36.8% | terrible | no | no |
-| VRT | hold | -29.8% | -29.8% | terrible | no | no |
-| NIO | avoid | -28.7% | -29.9% | terrible | no | no |
-| PNN.L | hold | -28.5% | -29.6% | terrible | no | no |
-| CIA.AX | hold | -28.1% | -28.1% | terrible | no | no |
+| LNZ.VI | hold | -54.3% | -54.3% | terrible | no | no |
+| APP | hold | -38.7% | -38.7% | terrible | no | no |
+| CIA.AX | hold | -33.2% | -33.2% | terrible | no | no |
+| AMAT | hold | -32.7% | -33.0% | terrible | no | no |
+| NIO | avoid | -31.6% | -31.6% | terrible | no | no |
+| GBG.L | hold | -31.4% | -36.8% | terrible | no | no |
+| CWR.L | avoid | -31.3% | -31.3% | terrible | no | no |
+| MIN.AX | hold | -31.3% | -31.3% | terrible | no | no |
 
 _Observe-only rollup of buy-tier chart JSON. Entry is the frozen initial last (recommendation-week close), not the first bar after signal_since. Short-term underwater is expected while the hypothesis stands — the test is the longer path. Do not apply decision-review knobs or entry-timing overlays from this file. Yahoo LSE GBp↔GBP ~100× mid-series flips are normalized before scoring (see price_unit_normalization on affected rows)._
 

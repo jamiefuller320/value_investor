@@ -3,55 +3,43 @@
   "last_run": {
     "schema_version": 1,
     "trigger": "post_run_review_email",
-    "evaluated_at": "2026-10-18T09:47:05.241716+00:00",
+    "evaluated_at": "2026-10-25T08:40:17.643856+00:00",
     "review_source": "output/post_run_review.md",
-    "fingerprint": "dd87440065d636a03c20",
+    "fingerprint": "709bfce5e9ad76cfc51a",
     "skipped": false,
     "skip_reason": null,
     "applied": true,
     "lanes": {
       "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
     },
-    "should_dispatch_engineering": false,
-    "lane_c_recommended": true,
-    "actions": [
-      {
-        "kind": "lane_c_note",
-        "detail": "Post-run plan lines lack open queue matches — after eng merges idle, run accelerated email_only (Lane C); do not re-compile verbatim plan"
-      }
-    ],
+    "should_dispatch_engineering": true,
+    "lane_c_recommended": false,
+    "actions": [],
     "queue_before": {
-      "open_count": 0,
+      "open_count": 4,
       "pr_open_count": 0
     },
     "compile_cap_audit": {
-      "candidate_count": 4,
+      "candidate_count": 5,
       "truncated_count": 0,
       "post_run_plan_beyond_cap": []
     },
     "plan_alignment": {
       "unlinked_plan_titles": [
-        "Backfill RNS/PDF bodies for indexed-without-body buy-tier tickers (IAG.L, BGEO.L, OSB.L first; then INCH.L, KLR.L) via Investegate/LSE direct URLs and PDF text extract",
-        "Shared pipeline rule: reject or re-fetch Google News wrapper URLs in `filings_index.json`; classify headlines (Full Year, Half Year, Trading Update) before index",
-        "Wire Yahoo `operating_cashflow` (and related cash-flow fields) into `CompanyMetrics` when present in `financials_annual.json`",
-        "Reconcile `latest.json` research[] with committed verdict store (close 85 vs 92 gap; index BARC.L, BGEO.L, IAG.L, ICG.L, NWG.L, OSB.L, SHAW.L)",
-        "Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)"
+        "Implement unified RNS body fetch (Investegate/LSE direct URL + PDF text extract) with Google News URL rejection and headline-based FY/H1/trading re-tagging"
       ],
       "terminal_only_titles": [
-        "Shared pipeline rule: reject or re-fetch Google News wrapper URLs in `filings_index.json`; classify headlines (Full Year, Half Year, Trading Update) before index",
-        "Wire Yahoo `operating_cashflow` (and related cash-flow fields) into `CompanyMetrics` when present in `financials_annual.json`",
-        "Reconcile `latest.json` research[] with committed verdict store (close 85 vs 92 gap; index BARC.L, BGEO.L, IAG.L, ICG.L, NWG.L, OSB.L, SHAW.L)",
-        "Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)"
+        "Implement unified RNS body fetch (Investegate/LSE direct URL + PDF text extract) with Google News URL rejection and headline-based FY/H1/trading re-tagging"
       ]
     },
-    "compile_cap_drain_skipped": "no compile-cap / role-coherence backlog candidates remaining",
+    "compile_cap_drain_skipped": "priority engineering queue not empty",
     "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
     "queue_after": {
-      "open_count": 0,
+      "open_count": 4,
       "pr_open_count": 0
     },
     "tasks_added_estimate": 0,
-    "dispatch_reason": "no open engineering tasks in queue"
+    "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
   },
   "runs": [
     {
@@ -431,6 +419,47 @@
       },
       "tasks_added_estimate": 0,
       "dispatch_reason": "no open engineering tasks in queue"
+    },
+    {
+      "schema_version": 1,
+      "trigger": "post_run_review_email",
+      "evaluated_at": "2026-10-25T08:40:17.643856+00:00",
+      "review_source": "output/post_run_review.md",
+      "fingerprint": "709bfce5e9ad76cfc51a",
+      "skipped": false,
+      "skip_reason": null,
+      "applied": true,
+      "lanes": {
+        "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
+      },
+      "should_dispatch_engineering": true,
+      "lane_c_recommended": false,
+      "actions": [],
+      "queue_before": {
+        "open_count": 4,
+        "pr_open_count": 0
+      },
+      "compile_cap_audit": {
+        "candidate_count": 5,
+        "truncated_count": 0,
+        "post_run_plan_beyond_cap": []
+      },
+      "plan_alignment": {
+        "unlinked_plan_titles": [
+          "Implement unified RNS body fetch (Investegate/LSE direct URL + PDF text extract) with Google News URL rejection and headline-based FY/H1/trading re-tagging"
+        ],
+        "terminal_only_titles": [
+          "Implement unified RNS body fetch (Investegate/LSE direct URL + PDF text extract) with Google News URL rejection and headline-based FY/H1/trading re-tagging"
+        ]
+      },
+      "compile_cap_drain_skipped": "priority engineering queue not empty",
+      "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
+      "queue_after": {
+        "open_count": 4,
+        "pr_open_count": 0
+      },
+      "tasks_added_estimate": 0,
+      "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     }
   ]
 }

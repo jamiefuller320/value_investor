@@ -1,6 +1,6 @@
 # The Rank Group Plc (RNK.L) — Research memo
 
-_Version 4 · Updated 2026-10-04T07:50:04.635818+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-25T07:56:29.919127+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.69
-Rationale: Research partly confirms the screen on cheapness and entry timing but weakens full strong-buy conviction via pre-Budget gaming-tax noise and unresolved FCF, liquidity and leverage.
+Confidence: 0.70
+Rationale: Q1 revenue growth and the closed GC settlement partly support cheapness and entry timing, but pre-Budget duty noise and unresolved FCF, leverage and liquidity still temper full strong-buy conviction.
 RiskTags: regulatory, cyclical, governance, competitive, leverage, accounting, liquidity
 
 ## Weekly updates
@@ -28,3 +28,8 @@ No new primary filings on gaming-machine tax or trading since the 15 Sep refresh
 Quant screen upgraded to **strong buy** (late Sep) with oversold RSI; no new trading or results RNS since the 23 Sep refresh.  
 Late-Sep media on gaming-machine tax ahead of the Budget again pressured the share price.  
 2023 LTIP vesting at 64.5% and routine PDMR buys/sells; fundamentals and FCF-basis gap unchanged.
+
+### 2026-10-25T07:56:29.919127+00:00
+7 Oct RNS: £5m Gambling Commission settlement confirmed in line with the prior provision; no further profit impact.  
+15 Oct Q1 update: LFL NGR +5%; management expects LFL operating profit in line with market expectations under the current tax regime.  
+Budget/MGD speculation still weighs on sentiment; screen FCF-basis and liquidity overlays unchanged.

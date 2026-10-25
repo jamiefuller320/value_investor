@@ -1,6 +1,6 @@
 # Endeavour Mining plc (EDV.L) — Research memo
 
-_Version 4 · Updated 2026-09-27T08:19:32.928498+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-25T08:23:59.762049+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.65
-Rationale: Research confirms the hold case: no post-H1 operational RNS, TR-1 holder notices only, media dividend chatter unverified; FCF/cover and H2/Mana production risks remain filing-unresolved.
+Confidence: 0.63
+Rationale: Research confirms the hold case: 9 Oct Ity fatality RNS and 12 Nov Q3 date add safety noise but no production reset; FCF basis, H2 output and Mana risks stay filing-unresolved.
 RiskTags: regulatory, cyclical, governance, competitive, accounting, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Hold screen drivers unchanged: FCF basis mismatch, H2-weighted output, and Mana/
 No operational RNS or results since H1-2026; 22–25 Sep filings are TR-1 holder notices only (BlackRock above 13%).  
 23–25 Sep coverage is third-party dividend/gold commentary—no company disclosures.  
 Hold screen drivers unchanged: FCF basis mismatch, H2-weighted output, and Mana/production risks.
+
+### 2026-10-25T08:23:59.762049+00:00
+Since late September: company RNS on 9 Oct reported a fatality at Ity (investigation; update with Q3); 14 Oct set Q3 results for 12 Nov—still no operational numbers post-H1.  
+Oct coverage is mostly third-party dividend/gold pieces and Ity commentary; recent filings are buybacks and PDMR only.  
+Hold drivers unchanged: FCF/coverage basis, H2-weighted output, and Mana/production risks remain unresolved in filings.
