@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-24T17:43:59.660539+00:00",
+  "updated_at": "2026-10-25T18:33:20.627987+00:00",
   "influences_live": false,
   "observe_only": true,
   "package": "M",
@@ -118,10 +118,71 @@
       "reply_kind": "llm",
       "llm_attempted": true,
       "llm_ok": true
+    },
+    {
+      "event_id": "fdb1af47-e199-4bb6-b80b-e50a637a2a6b",
+      "review_id": "e584d4d8214dfea3f58b",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Looks like a good entry, but premature sell ahead of a sensible sell target on the graph",
+      "acted_at": "2026-10-25T18:33:15.157646+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:355dac2dfc9ac62e",
+      "snapshot": {}
+    },
+    {
+      "event_id": "fdfc5f4c-ef40-44f7-8795-dac363310e01",
+      "review_id": "reply:355dac2dfc9ac62e",
+      "parent_event_id": "fdb1af47-e199-4bb6-b80b-e50a637a2a6b",
+      "parent_review_id": "e584d4d8214dfea3f58b",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Observation and alignment only — no knob, fill, or live-capital changes; influences_live stays false (Package M review, not Package L auto-tune).\n\nOn your read: the chart can show a sensible sell target still ahead while the exit feels premature — that is a useful dual-horizon tension. Near horizon: exiting before that visible target can look like a missed pattern if price later reaches or exceeds what you had in mind. Longer horizon: without a joined structured trail we cannot reconcile that label against what the book actually enforced at exit (e.g. a mechanical tier/identity exit versus a discretionary tech trigger).\n\nStructured reasons: buy and sell are both unknown — unjoinable (no structured trail; join_ok false). We will not infer sell-trigger IDs, filing facts, or range percentiles from the graph alone.\n\nYour “good entry, premature sell” framing is noted for learning; it does not override or rewrite the unjoinable sell record.\n\nIf this alignment works for you, Accept; otherwise Comment with what you want stressed (entry vs exit vs target on the graph).",
+      "acted_at": "2026-10-25T18:33:15.157664+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
+    },
+    {
+      "event_id": "cd44bdcb-b6f0-4cda-a901-edea50a5a6d6",
+      "review_id": "e584d4d8214dfea3f58b",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Looks like repeated occurrences sold early ahead of a sensible target",
+      "acted_at": "2026-10-25T18:33:20.627785+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:009300b78e14d164",
+      "snapshot": {}
+    },
+    {
+      "event_id": "f390dda1-68ff-44d7-b9de-dc7e3185be4f",
+      "review_id": "reply:009300b78e14d164",
+      "parent_event_id": "cd44bdcb-b6f0-4cda-a901-edea50a5a6d6",
+      "parent_review_id": "e584d4d8214dfea3f58b",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "We’re aligned on the pattern you’re flagging: across repeated episodes it can look like exits happened ahead of a sensible target, which reads as “sold early” on a longer horizon even when shorter-horizon discipline may have felt correct at the time.\n\nDual-horizon framing helps here without changing anything live. On the near horizon, an exit can be consistent with rules you had in place (risk, tier, time stop) even if price later reached a level you would have labeled a sensible target. On the farther horizon, the same exit can still look premature if the post-exit path suggests the target was reachable and the repeat count points to a systematic timing gap rather than one-off noise. Holding both views at once is observation only—we’re not second-guessing fills or retroactively applying a target you didn’t encode in the trail.\n\nStructured reasons for this episode are unknown and unjoinable: decision_reasons.buy and decision_reasons.sell both have join_ok false, so there is no joined buy thesis or sell trigger (for example, we cannot assert leave_buy_tier, a tech trigger, or filing-driven logic from this packet). Your “premature sell / ahead of target” label is a fair owner read of the missed-pattern; we cannot weigh it against a mechanical sell identity from structured data because that trail isn’t present—only that the label and the missing join are both worth noting together.\n\nThis reply is alignment and review only: influences_live stays false, and we are not auto-tuning Package L knobs or live capital (Package M observation scope, not Package L retune).\n\nIf this matches how you see the repeat early-exit vs target pattern, Accept; if you want to refine the dual-horizon read or add context for a future joinable episode, Comment.",
+      "acted_at": "2026-10-25T18:33:20.627803+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
     }
   ],
   "actioned_review_ids": [
-    "57103cfc312800a752a0"
+    "57103cfc312800a752a0",
+    "e584d4d8214dfea3f58b"
   ],
   "active_replies": [
     {
@@ -223,6 +284,182 @@
       "influences_live": false,
       "observe_only": true,
       "created_at": "2026-10-24T17:43:31.758739+00:00"
+    },
+    {
+      "review_id": "reply:355dac2dfc9ac62e",
+      "parent_review_id": "e584d4d8214dfea3f58b",
+      "parent_event_id": "fdb1af47-e199-4bb6-b80b-e50a637a2a6b",
+      "tag": "reply",
+      "book_id": null,
+      "book_tag": null,
+      "model_id": null,
+      "ticker": null,
+      "entry_at": null,
+      "exit_at": null,
+      "hold_days": null,
+      "exit_kind": null,
+      "return_pct": null,
+      "basis_label": null,
+      "framing": null,
+      "charts": null,
+      "close_in": null,
+      "wider_tf": null,
+      "opened_at": null,
+      "sold_at": null,
+      "avg_cost": null,
+      "exit_price": null,
+      "buy_decision": null,
+      "sell_decision": null,
+      "buy_reason": null,
+      "sell_reason": null,
+      "decision_reasons_join_ok": null,
+      "llm_opinion": null,
+      "learning_points": null,
+      "chart_annotations": null,
+      "opinion_source": null,
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+          ],
+          "chart_annotations": {
+            "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "buy_strengths": [
+            "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "buy_weaknesses": [
+            "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+          ],
+          "sell_strengths": [
+            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "sell_weaknesses": [
+            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+          ],
+          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+          "same_day_round_trip": false,
+          "same_day_assessment": "not_applicable",
+          "source": "deterministic_v0",
+          "at": "2026-10-25T18:33:15.157716+00:00",
+          "influences_live": false
+        },
+        {
+          "role": "owner",
+          "kind": "comment",
+          "text": "Looks like a good entry, but premature sell ahead of a sensible sell target on the graph",
+          "at": "2026-10-25T18:33:15.157646+00:00",
+          "influences_live": false
+        },
+        {
+          "role": "factory",
+          "kind": "reply",
+          "text": "Observation and alignment only — no knob, fill, or live-capital changes; influences_live stays false (Package M review, not Package L auto-tune).\n\nOn your read: the chart can show a sensible sell target still ahead while the exit feels premature — that is a useful dual-horizon tension. Near horizon: exiting before that visible target can look like a missed pattern if price later reaches or exceeds what you had in mind. Longer horizon: without a joined structured trail we cannot reconcile that label against what the book actually enforced at exit (e.g. a mechanical tier/identity exit versus a discretionary tech trigger).\n\nStructured reasons: buy and sell are both unknown — unjoinable (no structured trail; join_ok false). We will not infer sell-trigger IDs, filing facts, or range percentiles from the graph alone.\n\nYour “good entry, premature sell” framing is noted for learning; it does not override or rewrite the unjoinable sell record.\n\nIf this alignment works for you, Accept; otherwise Comment with what you want stressed (entry vs exit vs target on the graph).",
+          "source": "llm",
+          "at": "2026-10-25T18:33:15.157664+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "Observation and alignment only — no knob, fill, or live-capital changes; influences_live stays false (Package M review, not Package L auto-tune).\n\nOn your read: the chart can show a sensible sell target still ahead while the exit feels premature — that is a useful dual-horizon tension. Near horizon: exiting before that visible target can look like a missed pattern if price later reaches or exceeds what you had in mind. Longer horizon: without a joined structured trail we cannot reconcile that label against what the book actually enforced at exit (e.g. a mechanical tier/identity exit versus a discretionary tech trigger).\n\nStructured reasons: buy and sell are both unknown — unjoinable (no structured trail; join_ok false). We will not infer sell-trigger IDs, filing facts, or range percentiles from the graph alone.\n\nYour “good entry, premature sell” framing is noted for learning; it does not override or rewrite the unjoinable sell record.\n\nIf this alignment works for you, Accept; otherwise Comment with what you want stressed (entry vs exit vs target on the graph).",
+      "owner_comment": "Looks like a good entry, but premature sell ahead of a sensible sell target on the graph",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-25T18:33:15.157664+00:00"
+    },
+    {
+      "review_id": "reply:009300b78e14d164",
+      "parent_review_id": "e584d4d8214dfea3f58b",
+      "parent_event_id": "cd44bdcb-b6f0-4cda-a901-edea50a5a6d6",
+      "tag": "reply",
+      "book_id": null,
+      "book_tag": null,
+      "model_id": null,
+      "ticker": null,
+      "entry_at": null,
+      "exit_at": null,
+      "hold_days": null,
+      "exit_kind": null,
+      "return_pct": null,
+      "basis_label": null,
+      "framing": null,
+      "charts": null,
+      "close_in": null,
+      "wider_tf": null,
+      "opened_at": null,
+      "sold_at": null,
+      "avg_cost": null,
+      "exit_price": null,
+      "buy_decision": null,
+      "sell_decision": null,
+      "buy_reason": null,
+      "sell_reason": null,
+      "decision_reasons_join_ok": null,
+      "llm_opinion": null,
+      "learning_points": null,
+      "chart_annotations": null,
+      "opinion_source": null,
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "? closed ? after a unknown-length hold (? → ?, exit): return n/a (return). Bought because: Unknown — unjoinable (no structured trail). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+          ],
+          "chart_annotations": {
+            "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "buy_strengths": [
+            "No strong deterministic buy strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "buy_weaknesses": [
+            "Buy reason unjoinable / unknown — do not invent a buy thesis from the chart alone."
+          ],
+          "sell_strengths": [
+            "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+          ],
+          "sell_weaknesses": [
+            "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+          ],
+          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+          "same_day_round_trip": false,
+          "same_day_assessment": "not_applicable",
+          "source": "deterministic_v0",
+          "at": "2026-10-25T18:33:20.627859+00:00",
+          "influences_live": false
+        },
+        {
+          "role": "owner",
+          "kind": "comment",
+          "text": "Looks like repeated occurrences sold early ahead of a sensible target",
+          "at": "2026-10-25T18:33:20.627785+00:00",
+          "influences_live": false
+        },
+        {
+          "role": "factory",
+          "kind": "reply",
+          "text": "We’re aligned on the pattern you’re flagging: across repeated episodes it can look like exits happened ahead of a sensible target, which reads as “sold early” on a longer horizon even when shorter-horizon discipline may have felt correct at the time.\n\nDual-horizon framing helps here without changing anything live. On the near horizon, an exit can be consistent with rules you had in place (risk, tier, time stop) even if price later reached a level you would have labeled a sensible target. On the farther horizon, the same exit can still look premature if the post-exit path suggests the target was reachable and the repeat count points to a systematic timing gap rather than one-off noise. Holding both views at once is observation only—we’re not second-guessing fills or retroactively applying a target you didn’t encode in the trail.\n\nStructured reasons for this episode are unknown and unjoinable: decision_reasons.buy and decision_reasons.sell both have join_ok false, so there is no joined buy thesis or sell trigger (for example, we cannot assert leave_buy_tier, a tech trigger, or filing-driven logic from this packet). Your “premature sell / ahead of target” label is a fair owner read of the missed-pattern; we cannot weigh it against a mechanical sell identity from structured data because that trail isn’t present—only that the label and the missing join are both worth noting together.\n\nThis reply is alignment and review only: influences_live stays false, and we are not auto-tuning Package L knobs or live capital (Package M observation scope, not Package L retune).\n\nIf this matches how you see the repeat early-exit vs target pattern, Accept; if you want to refine the dual-horizon read or add context for a future joinable episode, Comment.",
+          "source": "llm",
+          "at": "2026-10-25T18:33:20.627803+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "We’re aligned on the pattern you’re flagging: across repeated episodes it can look like exits happened ahead of a sensible target, which reads as “sold early” on a longer horizon even when shorter-horizon discipline may have felt correct at the time.\n\nDual-horizon framing helps here without changing anything live. On the near horizon, an exit can be consistent with rules you had in place (risk, tier, time stop) even if price later reached a level you would have labeled a sensible target. On the farther horizon, the same exit can still look premature if the post-exit path suggests the target was reachable and the repeat count points to a systematic timing gap rather than one-off noise. Holding both views at once is observation only—we’re not second-guessing fills or retroactively applying a target you didn’t encode in the trail.\n\nStructured reasons for this episode are unknown and unjoinable: decision_reasons.buy and decision_reasons.sell both have join_ok false, so there is no joined buy thesis or sell trigger (for example, we cannot assert leave_buy_tier, a tech trigger, or filing-driven logic from this packet). Your “premature sell / ahead of target” label is a fair owner read of the missed-pattern; we cannot weigh it against a mechanical sell identity from structured data because that trail isn’t present—only that the label and the missing join are both worth noting together.\n\nThis reply is alignment and review only: influences_live stays false, and we are not auto-tuning Package L knobs or live capital (Package M observation scope, not Package L retune).\n\nIf this matches how you see the repeat early-exit vs target pattern, Accept; if you want to refine the dual-horizon read or add context for a future joinable episode, Comment.",
+      "owner_comment": "Looks like repeated occurrences sold early ahead of a sensible target",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-25T18:33:20.627803+00:00"
     }
   ]
 }
