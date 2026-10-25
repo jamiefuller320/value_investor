@@ -1,15 +1,63 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-23T08:33:12.479247+01:00",
+    "local_time": "2026-10-25T07:08:04.512158+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-23T08:00:00+01:00",
-    "settle_at": "2026-10-23T09:15:00+01:00",
+    "market_open_at": "2026-10-25T08:00:00+00:00",
+    "settle_at": "2026-10-25T09:15:00+00:00",
     "can_act": false,
-    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    "reason": "before market open"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "4c73bee5-5001-40f4-8b6c-e351915c3d80",
+      "fund_id": "0077d59b-0902-4d01-add7-458a2b36bf3b",
+      "acted_at": "2026-10-25T07:08:04.512158+00:00",
+      "ticker": "SOLB.BR",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 13.575497,
+      "price": 23.24,
+      "gross": 315.49,
+      "cost": 0.08,
+      "net_cash": 315.42,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Solvay SA",
+      "avg_cost_at_exit": 23.85,
+      "position_closed": true
+    },
+    {
+      "id": "b2b66305-27ff-447e-9bb4-86a2aaa1083f",
+      "fund_id": "0077d59b-0902-4d01-add7-458a2b36bf3b",
+      "acted_at": "2026-10-25T07:08:04.512158+00:00",
+      "ticker": "AED.BR",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 2.250363,
+      "price": 63.5,
+      "gross": 142.9,
+      "cost": 0.04,
+      "net_cash": -142.93,
+      "note": "Automated buy",
+      "name": "Aedifica NV/SA"
+    },
+    {
+      "id": "12deee37-e45f-4fc5-b5ff-e402057a76e8",
+      "fund_id": "0077d59b-0902-4d01-add7-458a2b36bf3b",
+      "acted_at": "2026-10-25T07:08:04.512158+00:00",
+      "ticker": "UMI.BR",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 10.013867,
+      "price": 17.22,
+      "gross": 172.44,
+      "cost": 0.04,
+      "net_cash": -172.48,
+      "note": "Automated buy",
+      "name": "Umicore SA"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,7 +71,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 954.84,
+    "nav": 940.63,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -36,64 +84,52 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 477.38,
+    "target_sleeve_value": 470.32,
     "targets": [
       {
-        "ticker": "UMI.BR",
-        "name": "Umicore SA",
-        "signal": "buy",
-        "conviction_score": 0.7474000000000001,
-        "price": 17.89
-      },
-      {
         "ticker": "AED.BR",
         "name": "Aedifica NV/SA",
         "signal": "buy",
         "conviction_score": 0.5700000000000001,
-        "price": 63.45
-      }
-    ],
-    "anticipated_exits": [
+        "price": 63.5
+      },
       {
-        "action": "sell",
-        "ticker": "SOLB.BR",
-        "name": "Solvay SA",
-        "reason": "No longer in the top conviction target set",
-        "shares": 13.575497,
-        "price": 23.44,
-        "value": 318.21
+        "ticker": "UMI.BR",
+        "name": "Umicore SA",
+        "signal": "strong_buy",
+        "conviction_score": 0.5061,
+        "price": 17.22
       }
     ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
+    "anticipated_buys": [],
+    "anticipated_holds": [
       {
-        "action": "buy",
-        "ticker": "UMI.BR",
-        "name": "Umicore SA",
-        "reason": "Top-up to equal weight",
-        "value": 167.92,
-        "price": 17.89,
-        "target_value": 477.38,
-        "conviction_score": 0.7474000000000001,
+        "action": "hold",
+        "ticker": "AED.BR",
+        "name": "Aedifica NV/SA",
+        "reason": "Already near equal-weight target",
+        "value": 470.32,
+        "target_value": 470.32,
+        "conviction_score": 0.5700000000000001,
         "signal": "buy"
       },
       {
-        "action": "buy",
-        "ticker": "AED.BR",
-        "name": "Aedifica NV/SA",
-        "reason": "Top-up to equal weight",
-        "value": 150.21,
-        "price": 63.45,
-        "target_value": 477.38,
-        "conviction_score": 0.5700000000000001,
-        "signal": "buy"
+        "action": "hold",
+        "ticker": "UMI.BR",
+        "name": "Umicore SA",
+        "reason": "Already near equal-weight target",
+        "value": 470.31,
+        "target_value": 470.32,
+        "conviction_score": 0.5061,
+        "signal": "strong_buy"
       }
     ],
-    "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s)."
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
   },
   "alerts": [
     {
@@ -101,8 +137,8 @@
       "name": "Umicore SA",
       "source": "paper",
       "severity": "info",
-      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 17.89,
+      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
+      "mark": 17.22,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "accumulate"
@@ -113,18 +149,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 63.45,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "neutral"
-    },
-    {
-      "ticker": "SOLB.BR",
-      "name": "Solvay SA",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Screen signal is now hold",
-      "mark": 23.44,
+      "mark": 63.5,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -151,8 +176,8 @@
     "holdings": {
       "UMI.BR": {
         "ticker": "UMI.BR",
-        "shares": 17.298091,
-        "avg_cost": 20.6995,
+        "shares": 27.311958,
+        "avg_cost": 19.4237,
         "name": "Umicore SA",
         "sector": "Industrials",
         "currency": "EUR",
@@ -162,25 +187,14 @@
       },
       "AED.BR": {
         "ticker": "AED.BR",
-        "shares": 5.15624,
-        "avg_cost": 63.2226,
+        "shares": 7.406603,
+        "avg_cost": 63.3069,
         "name": "Aedifica NV/SA",
         "sector": "Real Estate",
         "currency": "EUR",
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-09-30T08:26:48.579414+01:00"
-      },
-      "SOLB.BR": {
-        "ticker": "SOLB.BR",
-        "shares": 13.575497,
-        "avg_cost": 23.85,
-        "name": "Solvay SA",
-        "sector": "Basic Materials",
-        "currency": "EUR",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-10-21T08:38:53.509822+01:00"
       }
     },
     "trades": [
@@ -526,6 +540,53 @@
         "net_cash": -323.86,
         "note": "Automated buy",
         "name": "Solvay SA"
+      },
+      {
+        "id": "4c73bee5-5001-40f4-8b6c-e351915c3d80",
+        "fund_id": "0077d59b-0902-4d01-add7-458a2b36bf3b",
+        "acted_at": "2026-10-25T07:08:04.512158+00:00",
+        "ticker": "SOLB.BR",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 13.575497,
+        "price": 23.24,
+        "gross": 315.49,
+        "cost": 0.08,
+        "net_cash": 315.42,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Solvay SA",
+        "avg_cost_at_exit": 23.85,
+        "position_closed": true
+      },
+      {
+        "id": "b2b66305-27ff-447e-9bb4-86a2aaa1083f",
+        "fund_id": "0077d59b-0902-4d01-add7-458a2b36bf3b",
+        "acted_at": "2026-10-25T07:08:04.512158+00:00",
+        "ticker": "AED.BR",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 2.250363,
+        "price": 63.5,
+        "gross": 142.9,
+        "cost": 0.04,
+        "net_cash": -142.93,
+        "note": "Automated buy",
+        "name": "Aedifica NV/SA"
+      },
+      {
+        "id": "12deee37-e45f-4fc5-b5ff-e402057a76e8",
+        "fund_id": "0077d59b-0902-4d01-add7-458a2b36bf3b",
+        "acted_at": "2026-10-25T07:08:04.512158+00:00",
+        "ticker": "UMI.BR",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 10.013867,
+        "price": 17.22,
+        "gross": 172.44,
+        "cost": 0.04,
+        "net_cash": -172.48,
+        "note": "Automated buy",
+        "name": "Umicore SA"
       }
     ],
     "equity_curve": [
@@ -904,26 +965,42 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-25T07:08:04.512158+00:00",
+        "portfolio_value": 940.63,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-23T08:33:12.479247+01:00",
+    "last_mark_at": "2026-10-25T07:08:04.512158+00:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "SOLB.BR": 1
-      },
-      "reentry_cooldown": {}
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (3 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "bel20",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-23T07:33:12.482641+00:00",
+    "generated_at": "2026-10-25T07:08:04.516870+00:00",
     "observe_only": true,
-    "open_count": 3,
+    "open_count": 4,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -994,13 +1071,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-23T07:33:12.483441+00:00",
+    "generated_at": "2026-10-25T07:08:04.517951+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1054,36 +1131,36 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 2,
+      "hold_closed_count": 3,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 5,
       "gaps": [
-        "hold_recovery closed episodes=2 (target >=15)",
+        "hold_recovery closed episodes=3 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 3,
-        "recovered_to_breakeven": 1,
+        "count": 2,
+        "recovered_to_breakeven": 0,
         "close_reasons": {
-          "open": 3
+          "open": 2
         }
       },
       "closed": {
-        "count": 2,
-        "recovered_to_breakeven": 2,
+        "count": 3,
+        "recovered_to_breakeven": 3,
         "close_reasons": {
-          "sold_while_recovered": 2
+          "sold_while_recovered": 3
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 4,
+        "count": 5,
         "verdicts": {
-          "open": 4
+          "open": 5
         }
       },
       "closed": {
@@ -1093,7 +1170,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -1105,8 +1182,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-10-23T07:33:12.484341+00:00",
-    "as_of": "2026-10-23T08:33:12.479247+01:00",
+    "updated_at": "2026-10-25T07:08:04.519180+00:00",
+    "as_of": "2026-10-25T07:08:04.512158+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1118,22 +1195,22 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 3,
+    "holding_count": 2,
     "underwater_count": 1,
     "thesis_status_counts": {
       "intact": 2,
-      "weakening": 1,
+      "weakening": 0,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 3,
+      "holding_count": 2,
       "loser_count": 1,
-      "loser_share": 0.3333,
-      "loser_nav_share": 0.3241,
+      "loser_share": 0.5,
+      "loser_nav_share": 0.5,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
-      "within_tolerance": true,
+      "within_tolerance": false,
       "intact_loser_count": 1,
       "weakening_loser_count": 0,
       "broken_loser_count": 0,
@@ -1146,13 +1223,13 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.5,
+        "quality": 0.0,
         "dividend": 0.0,
         "garp": 1.0,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
-      "balancing_hint": "tolerate_intact_losers",
+      "balancing_hint": "hold_intact_review_selection",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
@@ -1163,12 +1240,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.1357,
-        "mark": 17.89,
-        "avg_cost": 20.6995,
-        "signal": "buy",
+        "unrealized_pct": -0.1135,
+        "mark": 17.22,
+        "avg_cost": 19.4237,
+        "signal": "strong_buy",
         "timing_signal": "accumulate",
-        "conviction_score": 0.7474,
+        "conviction_score": 0.5061,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1181,62 +1258,20 @@
         "research_verdict": "accumulate",
         "reasons": [
           "price drawdown alone does not invalidate value thesis",
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 75%"
+          "conviction 51%"
         ],
         "intact_reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 75%"
+          "conviction 51%"
         ],
         "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "SOLB.BR",
-        "name": "Solvay SA",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0172,
-        "mark": 23.44,
-        "avg_cost": 23.85,
-        "signal": "hold",
-        "timing_signal": "neutral",
-        "conviction_score": 0.1601,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "quality",
-          "garp"
-        ],
-        "research_verdict": "caution",
-        "reasons": [
-          "left buy tier (hold)",
-          "research verdict caution",
-          "conviction 16% below intact floor",
-          "cheapness family still passes",
-          "data_quality 1.00"
-        ],
-        "intact_reasons": [
-          "cheapness family still passes",
-          "data_quality 1.00"
-        ],
-        "weaken_reasons": [
-          "left buy tier (hold)",
-          "research verdict caution",
-          "conviction 16% below intact floor"
-        ],
         "broken_reasons": []
       },
       {
@@ -1246,9 +1281,9 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0036,
-        "mark": 63.45,
-        "avg_cost": 63.2226,
+        "unrealized_pct": 0.0031,
+        "mark": 63.5,
+        "avg_cost": 63.3069,
         "signal": "buy",
         "timing_signal": "neutral",
         "conviction_score": 0.57,
@@ -1288,27 +1323,27 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-23T07:33:12.485572+00:00",
+    "generated_at": "2026-10-25T07:08:04.520765+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 2,
+      "closed_total": 3,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 3,
+      "open_with_thesis": 2,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 1,
+          "closed_count": 2,
           "recovery_rate": 1.0,
           "sold_underwater_rate": 0.0,
-          "mean_peak_unrealized_pct": -0.0184,
-          "mean_trough_unrealized_pct": -0.0184,
+          "mean_peak_unrealized_pct": -0.0178,
+          "mean_trough_unrealized_pct": -0.022,
           "outcome_labels": {
-            "recovered": 1
+            "recovered": 2
           }
         },
         "broken": {
@@ -1347,11 +1382,11 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 2,
+      "hold_closed_with_thesis": 3,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold closed with thesis=2 (target >=8)",
-        "hold thesis buckets thin (weakening=1, broken=1; target >=3 each)",
+        "hold closed with thesis=3 (target >=8)",
+        "hold thesis buckets thin (weakening=2, broken=1; target >=3 each)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
       "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -1363,15 +1398,15 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-10-23T07:33:12.487693+00:00",
-    "open_count": 1,
-    "closed_count": 4,
+    "generated_at": "2026-10-25T07:08:04.524027+00:00",
+    "open_count": 0,
+    "closed_count": 5,
     "scored_count": 3,
-    "scored_count_all": 4,
-    "recommit_scored_count": 1,
+    "scored_count_all": 5,
+    "recommit_scored_count": 2,
     "entry_kind_counts": {
       "first_entry": 3,
-      "recommit": 1
+      "recommit": 2
     },
     "any_de_risk_count": 2,
     "winning_cadence_counts": {
@@ -1420,17 +1455,17 @@
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
       "first_entry_scored": 3,
-      "recommit_scored": 1
+      "recommit_scored": 2
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
     "marked_this_pass": 1,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-23T08:33:12.479247+01:00",
+    "generated_at": "2026-10-25T07:08:04.512158+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1457,8 +1492,8 @@
     "open_count": 4,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 3,
-      "off_book": 1,
+      "on_book": 2,
+      "off_book": 2,
       "never_funded": 0
     },
     "closed_by_capital_status": {
@@ -1481,13 +1516,13 @@
       "opened": 0,
       "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 0
+      "tagged_off_book": 1
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-23T08:33:12.479247+01:00",
+    "generated_at": "2026-10-25T07:08:04.512158+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1495,39 +1530,321 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 3,
+    "card_count": 3,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 3,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {},
+    "by_algo_action": {
+      "sell": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      },
+      "buy": {
+        "agree": 2,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
     "disagree_vs_heuristic_count": 0,
-    "cards": [],
+    "cards": [
+      {
+        "ticker": "SOLB.BR",
+        "name": "Solvay SA",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Effective screen signal is hold and still_buyish is false, so leaving the buy cohort is decisive rather than a capacity-bump sell.",
+          "Research overlay is bound with verdict caution, consistent with exit rather than vetoing a premature sell.",
+          "Algo reason matches automated exit after leaving the target set."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level_native",
+        "logged_at": "2026-10-25T07:08:04.512158+00:00",
+        "proposal_id": "buy_tier_level_native:SOLB.BR:sell:2026-10-25T07:08:04.512158+00:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": null,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "AED.BR",
+        "name": "Aedifica NV/SA",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Effective screen signal is buy with still_buyish true and rank_drop 0 at conviction rank 1.",
+          "Research verdict accumulate with overlay bound supports entry.",
+          "No rank_drop or hold-gate concern; buy aligns with buyish target set."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 1
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level_native",
+        "logged_at": "2026-10-25T07:08:04.512158+00:00",
+        "proposal_id": "buy_tier_level_native:AED.BR:buy:2026-10-25T07:08:04.512158+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Buy into buyish target set \u2014 agree with algo selection."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "UMI.BR",
+        "name": "Umicore SA",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Effective screen signal is strong_buy with still_buyish true and rank_drop 0 at conviction rank 2.",
+          "Research verdict accumulate with overlay bound supports entry.",
+          "Rank stable versus entry; buy into buyish target set is consistent with algo."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 2
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 2
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level_native",
+        "logged_at": "2026-10-25T07:08:04.512158+00:00",
+        "proposal_id": "buy_tier_level_native:UMI.BR:buy:2026-10-25T07:08:04.512158+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Buy into buyish target set \u2014 agree with algo selection."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null
+      "fallback": null,
+      "llm_card_count": 3
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-10-23T08:33:12.479247+01:00",
+      "generated_at": "2026-10-25T07:08:04.512158+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 3,
       "verdict_counts": {
-        "agree": 0,
+        "agree": 3,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "sell": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 2,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -1543,7 +1860,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-23T07:33:12.490746+00:00",
+  "generated_at": "2026-10-25T07:08:07.996735+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,

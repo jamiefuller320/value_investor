@@ -13,7 +13,7 @@
     "id": "209e7801-81df-4109-938c-1715d2dcffbd",
     "created_at": "2026-10-04T07:05:34.607421+00:00"
   },
-  "cash": 10.15,
+  "cash": 5.8,
   "contributed_capital": 1000.0,
   "deposits_applied": 0,
   "holdings": {
@@ -27,17 +27,6 @@
       "stop_loss": null,
       "take_profit": null,
       "opened_at": "2026-10-04T09:05:34.607335+02:00"
-    },
-    "TTE.PA": {
-      "ticker": "TTE.PA",
-      "shares": 2.541347,
-      "avg_cost": 77.17,
-      "name": "TotalEnergies SE",
-      "sector": "Energy",
-      "currency": "EUR",
-      "stop_loss": null,
-      "take_profit": null,
-      "opened_at": "2026-10-09T09:33:31.856638+02:00"
     },
     "PHIA.AS": {
       "ticker": "PHIA.AS",
@@ -63,14 +52,25 @@
     },
     "UMI.BR": {
       "ticker": "UMI.BR",
-      "shares": 11.377381,
-      "avg_cost": 17.82,
+      "shares": 11.962805,
+      "avg_cost": 17.7906,
       "name": "Umicore SA",
       "sector": "Industrials",
       "currency": "EUR",
       "stop_loss": null,
       "take_profit": null,
       "opened_at": "2026-10-23T09:24:22.898412+02:00"
+    },
+    "TEL2-B.ST": {
+      "ticker": "TEL2-B.ST",
+      "shares": 1.285928,
+      "avg_cost": 159.85,
+      "name": "Tele2 AB (publ)",
+      "sector": "Communication Services",
+      "currency": "SEK",
+      "stop_loss": null,
+      "take_profit": null,
+      "opened_at": "2026-10-25T08:09:50.685526+01:00"
     }
   },
   "trades": [
@@ -324,6 +324,53 @@
       "note": "Automated trim",
       "name": "Koninklijke Philips N.V.",
       "avg_cost_at_exit": 22.35
+    },
+    {
+      "id": "20fcf369-6173-4827-945f-9b61719ad1e7",
+      "fund_id": "209e7801-81df-4109-938c-1715d2dcffbd",
+      "acted_at": "2026-10-25T07:57:09.874822+01:00",
+      "ticker": "UMI.BR",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.585424,
+      "price": 17.22,
+      "gross": 10.08,
+      "cost": 0.02,
+      "net_cash": -10.1,
+      "note": "Automated buy",
+      "name": "Umicore SA"
+    },
+    {
+      "id": "ad374161-4bcb-47c1-ba18-b4d5af2706ef",
+      "fund_id": "209e7801-81df-4109-938c-1715d2dcffbd",
+      "acted_at": "2026-10-25T08:09:50.685526+01:00",
+      "ticker": "TTE.PA",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 2.541347,
+      "price": 83.45,
+      "gross": 212.08,
+      "cost": 0.39,
+      "net_cash": 211.68,
+      "note": "Automated exit \u2014 left target set",
+      "name": "TotalEnergies SE",
+      "avg_cost_at_exit": 77.17,
+      "position_closed": true
+    },
+    {
+      "id": "18b6deb4-9bbd-47ae-8a41-0b0061d3aea4",
+      "fund_id": "209e7801-81df-4109-938c-1715d2dcffbd",
+      "acted_at": "2026-10-25T08:09:50.685526+01:00",
+      "ticker": "TEL2-B.ST",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 1.285928,
+      "price": 159.85,
+      "gross": 205.56,
+      "cost": 0.38,
+      "net_cash": -205.94,
+      "note": "Automated buy",
+      "name": "Tele2 AB (publ)"
     }
   ],
   "equity_curve": [
@@ -875,25 +922,63 @@
         "issues": []
       },
       "note": "Automated rebalance"
+    },
+    {
+      "at": "2026-10-25T07:57:09.874822+01:00",
+      "portfolio_value": 862.84,
+      "cash": 0.05,
+      "contributed_capital": 1000.0,
+      "positions": 5,
+      "reporting_currency": "GBP",
+      "hedge_assumption": "none",
+      "fx": {
+        "rates": {
+          "GBP": 1.0,
+          "EUR": 0.83764
+        },
+        "issues": []
+      },
+      "note": "Automated rebalance"
+    },
+    {
+      "at": "2026-10-25T08:09:50.685526+01:00",
+      "portfolio_value": 706.37,
+      "cash": 5.8,
+      "contributed_capital": 1000.0,
+      "positions": 5,
+      "reporting_currency": "GBP",
+      "hedge_assumption": "none",
+      "fx": {
+        "rates": {
+          "GBP": 1.0,
+          "EUR": 0.83764,
+          "SEK": 0.07505
+        },
+        "issues": []
+      },
+      "note": "Automated rebalance"
     }
   ],
-  "last_mark_at": "2026-10-23T09:34:46.492651+02:00",
+  "last_mark_at": "2026-10-25T08:09:50.685526+01:00",
   "rebalance_state": {
     "exit_streak": {},
-    "reentry_cooldown": {},
+    "reentry_cooldown": {
+      "TTE.PA": 2
+    },
     "entry_candidate_rank": {
       "DG.PA": 1,
-      "TTE.PA": 9,
       "PHIA.AS": 5,
       "C5H.IR": 7,
-      "UMI.BR": 1
+      "UMI.BR": 1,
+      "TEL2-B.ST": 6
     },
     "still_in_candidates_block": {
       "EG7.IR": true,
       "AED.BR": true,
       "ERIC-B.ST": true,
       "AD.AS": true,
-      "SAN.PA": true
+      "SAN.PA": true,
+      "TTE.PA": true
     }
   },
   "settled_corporate_actions": [],

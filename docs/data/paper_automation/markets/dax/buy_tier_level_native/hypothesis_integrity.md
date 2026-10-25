@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-23T07:32:47.845119+00:00
+Track: `buy_tier_level_native` · updated 2026-10-25T07:07:21.517237+00:00
 
 ## Portfolio loser feedback
 
@@ -10,12 +10,10 @@ Track: `buy_tier_level_native` · updated 2026-10-23T07:32:47.845119+00:00
 
 ## Holding reviews
 
-### SIE.DE — weakening / watch_review (-1.2%)
-- conviction 34% below intact floor
-- still buy
-- research accumulate
+### SIE.DE — broken / exit_candidate (-0.7%)
+- cheapness lost and not in buy tier
 
-### FME.DE — weakening / watch_review (+2.1%)
+### FME.DE — weakening / watch_review (+5.5%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes

@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-23T07:32:54.432569+00:00",
+  "generated_at": "2026-10-25T07:07:23.779832+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 6,
+    "closed_total": 7,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 15,
+    "open_with_thesis": 14,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 6,
-        "recovery_rate": 0.8333,
-        "sold_underwater_rate": 0.1667,
-        "mean_peak_unrealized_pct": 0.0205,
-        "mean_trough_unrealized_pct": -0.0685,
+        "closed_count": 7,
+        "recovery_rate": 0.8571,
+        "sold_underwater_rate": 0.1429,
+        "mean_peak_unrealized_pct": 0.0259,
+        "mean_trough_unrealized_pct": -0.059,
         "outcome_labels": {
-          "recovered": 5,
+          "recovered": 6,
           "sold_underwater": 1
         }
       },
@@ -56,10 +56,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 6,
+    "hold_closed_with_thesis": 7,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=6 (target >=8)",
+      "hold closed with thesis=7 (target >=8)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -1001,7 +1001,7 @@
         }
       ],
       "peak_unrealized_pct": 0.0717,
-      "trough_unrealized_pct": -0.0163,
+      "trough_unrealized_pct": -0.0217,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -1053,7 +1053,7 @@
         }
       ],
       "peak_unrealized_pct": -0.0164,
-      "trough_unrealized_pct": -0.0878,
+      "trough_unrealized_pct": -0.1195,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -1065,7 +1065,7 @@
       "ticker": "RWS.L",
       "name": "RWS Holdings plc",
       "started_at": "2026-10-15T08:36:12.722235+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -1108,9 +1108,9 @@
       "peak_unrealized_pct": 0.0582,
       "trough_unrealized_pct": -0.0021,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-25T07:07:23.761214+00:00",
+      "linked_sell_trade_id": "72c6c069-7a11-4937-8cb5-70597a5fbd2d"
     },
     {
       "episode_id": "buy_tier_level:KGH.L:2026-10-20T08:35:41.278020+01:00",
@@ -1192,7 +1192,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0118,
-      "trough_unrealized_pct": -0.0639,
+      "trough_unrealized_pct": -0.0925,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -1319,11 +1319,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "IGR.L": -0.0474
+        "IGR.L": -0.0526
       },
       "buy_returns_since_rotation": {
         "PEBB.L": -0.0738,
-        "RWS.L": 0.0215
+        "RWS.L": 0.0473
       },
       "verdict": null,
       "closed_at": null
@@ -1388,11 +1388,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "RWS.L": 0.0245
+        "RWS.L": 0.0504
       },
       "buy_returns_since_rotation": {
-        "MPE.L": -0.0891,
-        "IGR.L": -0.0163
+        "MPE.L": -0.1208,
+        "IGR.L": -0.0217
       },
       "verdict": null,
       "closed_at": null
@@ -1449,10 +1449,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "KGH.L": -0.0471
+        "KGH.L": -0.0294
       },
       "buy_returns_since_rotation": {
-        "IGR.L": -0.0822
+        "IGR.L": -0.0872
       },
       "verdict": null,
       "closed_at": null
@@ -1537,12 +1537,12 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "PAF.L": -0.0185,
-        "BREE.L": 0.0417
+        "PAF.L": -0.0485,
+        "BREE.L": 0.0628
       },
       "buy_returns_since_rotation": {
-        "RWS.L": -0.0021,
-        "IGR.L": -0.067
+        "RWS.L": 0.0231,
+        "IGR.L": -0.0722
       },
       "verdict": null,
       "closed_at": null
@@ -1590,12 +1590,20 @@
           "cost": 0.06
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-25T07:07:23.761214+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0054,
+          "avg_buy_return": -0.0925,
+          "replacement_delta": -0.0979
+        }
+      ],
       "sell_returns_since_rotation": {
-        "YNGN.L": 0.0
+        "YNGN.L": 0.0054
       },
       "buy_returns_since_rotation": {
-        "PAF.L": -0.0639
+        "PAF.L": -0.0925
       },
       "verdict": null,
       "closed_at": null
@@ -1647,7 +1655,60 @@
         "TFW.L": 0.0155
       },
       "buy_returns_since_rotation": {
-        "PAF.L": -0.0413
+        "PAF.L": -0.0706
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-25T07:07:23.761214+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-25T07:07:23.761214+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0032,
+      "sells": [
+        {
+          "ticker": "RWS.L",
+          "price": 146.0,
+          "shares": 0.442711,
+          "gross": 64.64,
+          "cost": 0.05,
+          "avg_cost_at_exit": 142.7,
+          "realized_pct": 0.0231,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "research verdict caution",
+            "cheapness family no longer passes",
+            "conviction 24% below intact floor",
+            "still buy"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": 0.0231
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "TFW.L",
+          "price": 262.0,
+          "shares": 0.187532,
+          "gross": 49.13,
+          "cost": 0.28
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "RWS.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "TFW.L": 0.0
       },
       "verdict": null,
       "closed_at": null

@@ -1,32 +1,37 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-23T07:33:11.588881+00:00
+Track: `buy_tier_level_native` · updated 2026-10-25T07:07:44.968264+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 3 (0% count, 0% NAV)
+- Losers: **0** / 4 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
 ## Holding reviews
 
-### REC.MI — intact / hold_tolerate (-0.1%)
+### INW.MI — weakening / watch_review (+0.0%)
+- research verdict caution
+- conviction 24% below intact floor
 - still buy
-- research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 71%
 
-### BZU.MI — intact / hold_tolerate (+4.3%)
-- still buy
+### REC.MI — weakening / watch_review (+1.5%)
+- left buy tier (hold)
+- conviction 29% below intact floor
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 45%
 
-### ENI.MI — intact / hold_tolerate (+5.6%)
+### BZU.MI — intact / hold_tolerate (+5.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 68%
+- conviction 44%
+
+### ENI.MI — intact / hold_tolerate (+11.8%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 49%

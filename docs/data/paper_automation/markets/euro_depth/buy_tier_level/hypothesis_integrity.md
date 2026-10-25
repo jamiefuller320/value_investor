@@ -1,46 +1,38 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-23T07:35:44.640050+00:00
+Track: `buy_tier_level` · updated 2026-10-25T07:10:29.820399+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **9** / 37 (24% count, 23% NAV)
+- Losers: **8** / 38 (21% count, 20% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
 
-### UMI.BR — intact / watch_review (-20.4%)
-- deep drawdown (-20.4%) — re-check facts; thesis still intact
+### UMI.BR — intact / watch_review (-23.2%)
+- deep drawdown (-23.2%) — re-check facts; thesis still intact
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 
-### BOL.ST — intact / watch_review (-17.3%)
-- deep drawdown (-17.3%) — re-check facts; thesis still intact
+### BOL.ST — intact / watch_review (-16.7%)
+- deep drawdown (-16.7%) — re-check facts; thesis still intact
 - price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 
-### VOW.DE — intact / watch_review (-16.9%)
-- deep drawdown (-16.9%) — re-check facts; thesis still intact
+### MELE.BR — intact / watch_review (-16.1%)
+- deep drawdown (-16.1%) — re-check facts; thesis still intact
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-
-### MELE.BR — intact / hold_tolerate (-14.9%)
-- price drawdown alone does not invalidate value thesis
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 47%
 
 ### VOLV-B.ST — intact / hold_tolerate (-9.6%)
 - price drawdown alone does not invalidate value thesis
@@ -50,176 +42,174 @@ Track: `buy_tier_level` · updated 2026-10-23T07:35:44.640050+00:00
 - data_quality 1.00
 - conviction 63%
 
-### ANDR.VI — intact / hold_tolerate (-6.9%)
+### STR.VI — intact / hold_tolerate (-6.8%)
 - price drawdown alone does not invalidate value thesis
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 63%
-
-### VOE.VI — intact / hold_tolerate (-6.4%)
-- price drawdown alone does not invalidate value thesis
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 61%
-
-### DG.PA — intact / hold_tolerate (-5.2%)
-- price drawdown alone does not invalidate value thesis
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 90%
-
-### AED.BR — intact / hold_tolerate (-5.1%)
-- price drawdown alone does not invalidate value thesis
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 61%
-
-### PRX.AS — intact / hold_tolerate (-3.9%)
-- still buy
-- cheapness family still passes
-- data_quality 1.00
-- conviction 48%
-
-### STR.VI — intact / hold_tolerate (-3.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 85%
 
-### DOC.VI — intact / hold_tolerate (-3.5%)
+### ANDR.VI — intact / hold_tolerate (-6.8%)
+- price drawdown alone does not invalidate value thesis
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 62%
+
+### VOE.VI — intact / hold_tolerate (-5.9%)
+- price drawdown alone does not invalidate value thesis
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 61%
+
+### AED.BR — intact / hold_tolerate (-5.4%)
+- price drawdown alone does not invalidate value thesis
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 61%
+
+### DG.PA — intact / hold_tolerate (-4.5%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 90%
+
+### PRX.AS — intact / hold_tolerate (-4.3%)
+- still buy
+- cheapness family still passes
+- data_quality 1.00
+- conviction 50%
+
+### DOC.VI — intact / hold_tolerate (-3.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 38%
 
-### AKZA.AS — intact / hold_tolerate (-2.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 52%
-
-### COR.LS — weakening / watch_review (-1.9%)
-- research verdict caution
-- still buy
-- cheapness family still passes
-
-### POST.VI — intact / hold_tolerate (-1.6%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 43%
-
-### MC.PA — intact / hold_tolerate (-1.4%)
+### AKZA.AS — intact / hold_tolerate (-3.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 51%
 
-### OMV.VI — intact / hold_tolerate (-0.1%)
+### MC.PA — intact / hold_tolerate (-1.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 60%
+- conviction 53%
 
-### SAN.PA — intact / hold_tolerate (+0.5%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 68%
-
-### C5H.IR — intact / hold_tolerate (+0.9%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 75%
-
-### SKA-B.ST — intact / hold_tolerate (+1.2%)
+### POST.VI — intact / hold_tolerate (-0.6%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 63%
+- conviction 43%
 
-### EG7.IR — intact / hold_tolerate (+1.6%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 73%
-
-### SGO.PA — intact / hold_tolerate (+2.7%)
+### C5H.IR — intact / hold_tolerate (-0.5%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 72%
+- conviction 79%
 
-### JMT.LS — intact / hold_tolerate (+2.8%)
+### COR.LS — weakening / watch_review (-0.3%)
+- research verdict caution
+- still buy
+- cheapness family still passes
+
+### KRX.IR — weakening / watch_review (-0.0%)
+- research verdict neutral
+- still buy
+- cheapness family still passes
+
+### MUV2.DE — intact / hold_tolerate (-0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.90
+- conviction 56%
+
+### SKF-B.ST — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 42%
+- conviction 56%
 
-### DTE.DE — intact / hold_tolerate (+3.3%)
-- still buy
+### SAN.PA — intact / hold_tolerate (+0.2%)
+- still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 60%
+- conviction 67%
 
-### OIZ.IR — intact / hold_tolerate (+3.6%)
+### OIZ.IR — intact / hold_tolerate (+1.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
 - conviction 61%
 
-### TTE.PA — intact / hold_tolerate (+3.7%)
+### OMV.VI — intact / hold_tolerate (+1.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 76%
+- conviction 41%
 
-### DHL.DE — intact / hold_tolerate (+3.9%)
+### SKA-B.ST — intact / hold_tolerate (+2.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 75%
+- conviction 62%
 
-### TEL2-B.ST — intact / hold_tolerate (+3.9%)
+### JMT.LS — intact / hold_tolerate (+2.6%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 70%
+- conviction 42%
 
-### ERIC-B.ST — intact / hold_tolerate (+4.7%)
+### DTE.DE — intact / hold_tolerate (+2.6%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 60%
+
+### EG7.IR — intact / hold_tolerate (+2.9%)
 - still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 73%
+
+### SGO.PA — intact / hold_tolerate (+3.3%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 71%
+
+### DHL.DE — intact / hold_tolerate (+4.5%)
+- still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 72%
 
-### AD.AS — intact / hold_tolerate (+5.6%)
+### TEL2-B.ST — intact / hold_tolerate (+4.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
@@ -233,44 +223,58 @@ Track: `buy_tier_level` · updated 2026-10-23T07:35:44.640050+00:00
 - data_quality 1.00
 - conviction 53%
 
-### RAND.AS — intact / hold_tolerate (+6.0%)
+### AD.AS — intact / hold_tolerate (+6.4%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 70%
+- conviction 73%
 
-### PHIA.AS — intact / hold_tolerate (+9.7%)
+### TTE.PA — intact / hold_tolerate (+6.5%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 47%
+
+### RAND.AS — intact / hold_tolerate (+7.6%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 71%
+
+### ERIC-B.ST — intact / hold_tolerate (+7.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 80%
+- conviction 71%
 
-### SHELL.AS — intact / hold_tolerate (+11.3%)
+### PHIA.AS — intact / hold_tolerate (+10.6%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 78%
+
+### NOVN.SW — intact / hold_tolerate (+14.2%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 64%
+- conviction 49%
 
-### NOVN.SW — intact / hold_tolerate (+14.1%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 53%
-
-### LOGN.SW — intact / hold_tolerate (+14.8%)
+### LOGN.SW — intact / hold_tolerate (+14.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 62%
 
-### WKL.AS — intact / hold_tolerate (+30.6%)
+### WKL.AS — intact / hold_tolerate (+33.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 53%
+- conviction 52%
