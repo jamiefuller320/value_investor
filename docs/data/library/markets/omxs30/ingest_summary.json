@@ -1,61 +1,82 @@
 {
-  "run_at": "2026-10-24T12:14:54.887870+00:00",
+  "run_at": "2026-10-25T16:36:51.663928+00:00",
   "market_id": "omxs30",
-  "targets": [],
-  "target_details": [],
+  "targets": [
+    "LIFCO-B.ST"
+  ],
+  "target_details": [
+    {
+      "ticker": "LIFCO-B.ST",
+      "priority_score": 3.3449,
+      "filings_total": 1,
+      "filings_with_body": 1,
+      "indexed_without_body": 0,
+      "reason": "thin_bodies"
+    }
+  ],
   "results": [],
   "improved": [],
-  "errors": [],
+  "errors": [
+    "LIFCO-B.ST: Failed to perform, curl: (16) . See https://curl.se/libcurl/c/libcurl-errors.html first for more details."
+  ],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-24T12:13:58.373844+00:00",
+    "snapshot_at": "2026-10-25T16:35:52.029475+00:00",
     "market_id": "omxs30",
-    "buy_tier_count": 11,
+    "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 0,
+    "thin_body_buy_tier": 1,
     "indexed_without_body": 0,
-    "bodies_min": 3,
-    "bodies_median": 11,
+    "bodies_min": 1,
+    "bodies_median": 10.5,
     "bodies_max": 16,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
-    "thin_body_tickers": [],
+    "thin_body_tickers": [
+      "LIFCO-B.ST"
+    ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
     "parked_tickers": [],
     "parked_count": 0,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
+      "LIFCO-B.ST"
+    ],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-24T12:14:48.570058+00:00",
+    "snapshot_at": "2026-10-25T16:36:46.008251+00:00",
     "market_id": "omxs30",
-    "buy_tier_count": 11,
+    "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 0,
+    "thin_body_buy_tier": 1,
     "indexed_without_body": 0,
-    "bodies_min": 3,
-    "bodies_median": 11,
+    "bodies_min": 1,
+    "bodies_median": 10.5,
     "bodies_max": 16,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
-    "thin_body_tickers": [],
+    "thin_body_tickers": [
+      "LIFCO-B.ST"
+    ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
     "parked_tickers": [],
     "parked_count": 0,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
+      "LIFCO-B.ST"
+    ],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
     "ingest_exhausted": false
@@ -67,7 +88,7 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 11,
+    "scanned": 12,
     "hits": 8,
     "new_rows_total": 0,
     "curiosity_total": 9,
@@ -81,42 +102,43 @@
     },
     "forced_by_critical_path": false,
     "max_runtime_seconds": 900.0,
-    "prefer_tickers": [],
+    "prefer_tickers": [
+      "LIFCO-B.ST"
+    ],
     "runtime_cutoff": false
   },
   "maintenance_mode": true,
   "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "omxs30"
-  },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "omxs30",
-    "assessed_at": "2026-10-24T12:13:58.857372+00:00",
+    "assessed_at": "2026-10-25T16:35:52.399916+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
-    "thin_need_discovery": [],
+    "thin_need_discovery": [
+      "LIFCO-B.ST"
+    ],
     "thin_need_bodies": [],
-    "primary_blocker": "none",
-    "force_discovery_scan": false,
+    "primary_blocker": "thin_need_discovery",
+    "force_discovery_scan": true,
     "auto_pin_tickers": [],
     "recommended_actions": [
-      "Filing critical path clear — maintenance deepen only"
+      "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
+      "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 0,
       "indexed_without_body_rows": 0,
-      "thin_need_discovery": 0,
+      "thin_need_discovery": 1,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 49.23721428599998,
+  "used_seconds": 53.24691887700004,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3550.762785714,
+  "leftover_seconds": 3546.753081123,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -124,23 +146,27 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "omxs30",
-    "updated_at": "2026-10-24T12:14:48.573767+00:00",
+    "updated_at": "2026-10-25T16:36:46.010775+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": false,
-    "leftover_tickers": [],
-    "unparked_leftover": [],
+    "had_complete_targets": true,
+    "leftover_tickers": [
+      "LIFCO-B.ST"
+    ],
+    "unparked_leftover": [
+      "LIFCO-B.ST"
+    ],
     "surface_released": [],
     "path": "docs/data/library/markets/omxs30/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
     "skipped": true,
-    "reason": "true_parity",
+    "reason": "not_exhausted",
     "market_id": "omxs30"
   },
   "parked_hunter_compile": {
@@ -156,8 +182,9 @@
       "WIE.VI",
       "ACKB.BR",
       "DQ7A.IR",
-      "IFX.DE",
+      "UCB.BR",
       "LMT",
+      "CRH",
       "ULTP.L",
       "DFS.L",
       "FOXT.L",
