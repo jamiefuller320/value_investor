@@ -79,12 +79,21 @@ the right edge or fight whole-page pan. Charts keep their readable
 | **reply** tag | Factory response | Re-enters queue for owner Accept/Comment |
 
 **Initial opinion** on every card is structured deterministic v0 (`opinion_source=
-deterministic_v0`) with learning points + per-chart captions. Batch LLM upgrade
-of initial opinions is deferred.
+deterministic_v0`) with learning points + per-chart captions, plus **L633**
+plain-language `buy_strengths` / `buy_weaknesses` / `sell_strengths` /
+`sell_weaknesses`, one `learning_point_forward` (super-book lane candidate), and
+same-day round-trip soft bias (`same_day_round_trip` /
+`same_day_assessment`: `likely_weakness` default; `major_error_reverse` only with
+durable cites — not a hard ban). Batch LLM prose upgrade of initial opinions is
+deferred (**L627**).
 
 **Factory reply** on Comment: opt-in LLM via `FTSE_POST_SALE_LLM_REPLY=1` on the
-ack workflow (fail-closed to contextual deterministic). Still observe/alignment
-only — never Package L episode-debrief auto-tune.
+ack workflow (fail-closed to contextual deterministic). Deterministic path
+**considers** the owner Comment (`human_comment_consideration`: agree / partial /
+disagree) — never blind-follows into knobs. Still observe/alignment only — never
+Package L episode-debrief auto-tune. `learning_point_forward` may feed the
+cue-consumer MFT lab intake when that sleeve is running — see
+[cue-consumer-mft.md](cue-consumer-mft.md).
 
 ## Dashboard bridge
 
