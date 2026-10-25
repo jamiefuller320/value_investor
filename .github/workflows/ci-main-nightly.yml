@@ -63,4 +63,7 @@ jobs:
         run: |
           set -euo pipefail
           FILES=$(python3 -m value_investor.pytest_shard --shard "${{ matrix.shard }}" --shards 4)
+          echo "Running: $FILES"
+          # Nightly keeps live_network (IR/SEC/ASX body fetches). PR/push CI
+          # excludes them via -m "not live_network" — see ci.yml + conftest.
           pytest -q $FILES
