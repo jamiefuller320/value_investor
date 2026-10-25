@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-23T07:33:26.986735+00:00
+Track: `buy_tier_level_native` · updated 2026-10-25T07:08:29.380463+00:00
 
 ## Portfolio loser feedback
 
@@ -10,7 +10,7 @@ Track: `buy_tier_level_native` · updated 2026-10-23T07:33:26.986735+00:00
 
 ## Holding reviews
 
-### U14.SI — weakening / watch_review (+0.6%)
+### U14.SI — weakening / watch_review (+0.4%)
 - research verdict caution
 - still buy
 - cheapness family still passes
