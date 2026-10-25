@@ -309,7 +309,7 @@ def test_unflagged_filing_aligned_can_match_the_other_screen_figures():
 def test_bmy_and_cch_filing_aligned_match_the_statement_line():
     """Stored screen now puts filing_aligned on the statement line.
 
-    BMY's previous filing figure remains as screen_ttm, so the TTM check fires.
+    BMY's screen_ttm still differs from the statement line, so the TTM check fires.
     CCH's flag is true, so neither unflagged disagreement check fires. Constructed
     rows above still cover filing_aligned differing from the statement.
     """
@@ -887,6 +887,7 @@ def test_non_gbp_fcf_currency_with_gbp_chart_and_no_quote_file():
 
 
 def test_vct_positive_eps_has_no_screen_pe_key():
+    """HWG.L left the screen roster; VCT.L is the current positive-EPS / no-P/E example."""
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
     vct = rows["VCT.L"]
     assert vct.diluted_eps == pytest.approx(0.318)
