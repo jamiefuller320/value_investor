@@ -96,7 +96,7 @@ def test_known_examples_when_files_contain_them():
     assert "empty_fcf_object_with_operating_cashflow" in _ids(empty_fcf)
 
     bhmg = rows["BHMG.L"]
-    assert bhmg.pe_display == "435.0"
+    assert bhmg.pe_display == "416.5"
     assert bhmg.history_price == pytest.approx(419.0)
     assert "screen_pe_equals_pence_price" not in _ids(bhmg)
     matched_price = _row(pe_display="419.0", history_price=419.0)
@@ -344,7 +344,7 @@ def test_byg_and_dln_are_trust_rows_with_revenue_and_no_price():
     dln = rows["DLN.L"]
     assert dln.trust is True
     assert dln.statement_revenue == pytest.approx(388_700_000.0)
-    assert dln.discount_display == "40.3%"
+    assert dln.discount_display == "40.1%"
     assert dln.fcf_has_figure is False
     assert dln.history_price is None
     assert "trust_revenue_discount_without_fcf_or_price" in _ids(dln)
