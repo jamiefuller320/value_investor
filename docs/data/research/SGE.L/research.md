@@ -1,15 +1,15 @@
 # The Sage Group plc (SGE.L) — Research memo
 
-_Version 4 · Updated 2026-09-27T08:18:28.859796+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-25T08:22:45.437265+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: caution
 Risk: medium
-Confidence: 0.68
-Rationale: Research stays neutral on hold: July guidance is unchanged and the 23 September make-whole notice completes the planned 2028-note redemption, but rich valuation, leverage and the FCF basis gap still block adding size.
+Confidence: 0.64
+Rationale: July guidance remains the latest operational disclosure and is unchanged, but the avoid screen’s rich multiples, overbought timing and filing FCF gap align with caution—not a return to accumulate.
 RiskTags: competitive, leverage, key_person, regulatory, accounting
 
 ## Weekly updates
@@ -28,3 +28,8 @@ FCF filing vs screen mismatch and ELT succession watch unchanged versus the July
 Screen remains **hold** but the run reset (1 week, deteriorating trend, conviction ~23%); RSI ~48, neutral timing.  
 23 September RNS fixed the make-whole amount ahead of 28 September redemption of the €500m 2028 notes—refinancing housekeeping, not a trading change.  
 Headlines are Kalkine-only (AI bolt-ons, chart support); FCF filing vs screen mismatch and ELT succession watch unchanged since July.
+
+### 2026-10-25T08:22:45.437265+00:00
+Screen is **avoid** (2 weeks, stable, conviction ~15%); timing **wait**, RSI ~76, extended above the 200-day MA.  
+No operational RNS since the 29 July nine-month trading update; October headlines are Kalkine/Simply Wall St ahead of autumn FY results.  
+FCF filing vs screen mismatch, leverage and ELT succession watch unchanged; September bond refinancing already completed.

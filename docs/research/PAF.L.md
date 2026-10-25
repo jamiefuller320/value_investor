@@ -1,6 +1,6 @@
 # Pan African Resources PLC (PAF.L) — Research memo
 
-_Version 8 · Updated 2026-10-07T10:22:44.417761+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-10-25T07:43:44.125973+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: Filing-aligned FY26 FCF and net cash still support the buy screen; no new disclosures, while softer model trend and Oct/Nov chair succession keep the overlay at accumulate.
+Rationale: Filing-aligned FY26 FCF supports the strong buy screen; no new trading disclosures, while Nov chair handover and gold cyclicality keep the research overlay at accumulate.
 RiskTags: regulatory, cyclical, governance, pension, competitive, leverage, accounting, key_person
 
 ## Weekly updates
@@ -48,3 +48,8 @@ Strong buy screen unchanged (15/22, filing-aligned FCF ~£341m, neutral timing);
 Quantitative screen is **buy** (15/22, neutral timing), down from strong buy with a new, deteriorating one-week label; filing-aligned FCF ~£341m is unchanged.  
 No company RNS and an empty news batch since 4 Oct; last filing remains 16 Sep audited FY26.  
 Oct/Nov chair succession and the October ZAR500m buy-back window are unchanged live overlay context.
+
+### 2026-10-25T07:43:44.125973+00:00
+Quantitative screen is **strong buy** again (15/22 models, three weeks, stable trend), up from buy on 7 Oct; filing-aligned FCF ~£341m is unchanged.  
+23 Oct RNS sets AGM for 19 Nov and confirms Keith Spencer’s retirement and Charles Needham as incoming chair; 14 Oct Companies House integrated report filing adds no new trading data beyond 16 Sep audited FY26.  
+News since 7 Oct is third-party only (FY26 results, Australian growth); routine TR-1 holdings notices only.

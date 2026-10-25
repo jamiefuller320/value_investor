@@ -1,6 +1,6 @@
 # Galliford Try Holdings plc (GFRD.L) — Research memo
 
-_Version 8 · Updated 2026-10-07T10:35:16.510828+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-10-25T08:05:10.264721+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.78
-Rationale: Oct framework RNS and FY26 annual report filing reinforce backlog behind the buy screen; FY26 provision risks unchanged, so conviction stays medium not higher.
+Rationale: Pagabo Major Works RNS adds to the regulated backlog and supports the buy screen; FY26 rectification and fire-safety risks are unchanged, and the CEO sale is routine disclosure only.
 RiskTags: cyclical, regulatory, litigation, accounting, competitive
 
 ## Weekly updates
@@ -48,3 +48,8 @@ Thesis unchanged: net cash, backlog and capital returns vs rectification provisi
 6 Oct RNS: FY2026 annual report filed to NSM with AGM materials; 1–7 Oct contract RNS for Pagabo, Constructing West Midlands and Oxford Inspire frameworks.  
 29 Sep–1 Oct routine PDMR/LTIP tax-related sales; buyback own-share transactions continue.  
 Quantitative **buy** unchanged (9/22 models, stable); timing **wait** (RSI ~62, still extended vs 200-day MA).
+
+### 2026-10-25T08:05:10.264721+00:00
+20 Oct RNS: appointed to the £5bn Pagabo Major Works framework (South West, South East, London and Scotland lots); buyback own-share transactions continue.  
+15 Oct PDMR: CEO Bill Hocking disclosed sale of 250,000 shares; later press is mostly framework recap and price/200-day MA commentary, with no new accounts.  
+Quantitative **buy** unchanged (10/22 models, stable); timing **neutral** (RSI ~56, still modestly above 200-day MA).

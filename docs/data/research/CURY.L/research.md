@@ -1,6 +1,6 @@
 # Currys plc (CURY.L) — Research memo
 
-_Version 6 · Updated 2026-10-18T08:40:32.201960+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-10-25T07:45:13.552157+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.71
-Rationale: Filing-backed cheapness and the 10 Sep trading update still support the strong-buy screen, but stale data, a disclosed CFO sale and unchanged cyclical, pension and execution risks keep research at accumulate.
+Confidence: 0.72
+Rationale: Screen cheapness is stronger, but stale 10 Sep/28 Aug filings and unchanged cyclical, pension, liquidity and execution risks still limit research vs the strong-buy signal.
 RiskTags: cyclical, competitive, pension, leverage, key_person, liquidity, accounting, other
 
 ## Weekly updates
@@ -38,3 +38,8 @@ News is Kalkine/Yahoo-style commentary only; the case still rests on the 10 Sep 
 Strong buy screen persists (~77% composite, fourth week); no new trading statement or accounts since the 10 Sep update and 28 Aug annual report.  
 Since 4 Oct: routine buyback RNS, 7 Oct investor-meet scheduling (interims due 17 Dec), and 16 Oct CFO sale of 500k shares (property funding; holdings still above policy).  
 Press is commentary (valuation, insider headlines); prior cyclical, pension and execution risks unchanged.
+
+### 2026-10-25T07:45:13.552157+00:00
+Strong buy screen persists (~81% composite, fifth week; models 10/22), with no change to filing-backed fundamentals since the 10 Sep trading update.  
+Since 18 Oct: only routine buyback RNS (20 Oct); no new trading statement, interims or accounts ahead of the 17 Dec date flagged on 7 Oct.  
+News is Kalkine/Yahoo-style commentary (buyback, valuation); cyclical, pension, liquidity and execution risks are unchanged.

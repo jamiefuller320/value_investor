@@ -1,6 +1,6 @@
 # Playtech plc (PTEC.L) — Research memo
 
-_Version 3 · Updated 2026-09-27T07:59:49.008136+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-10-25T08:10:47.765320+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.69
-Rationale: H1 trading and cash conversion still partly weaken the avoid case, but FY25 filing FCF/quality flags, fresh secured debt, and unresolved litigation/governance issues keep conviction capped.
+Confidence: 0.68
+Rationale: Research partly weakens the avoid case on H1 momentum, but unchanged FY25 filing FCF, a 14-week avoid screen, and unresolved litigation, governance and leverage cap conviction.
 RiskTags: regulatory, litigation, governance, customer_concentration, accounting, competitive, leverage
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Quantitative screen remains avoid on FY25 filing-aligned FCF (−€52.9m) and w
 22 Sep RNS: €350m 5.5% senior secured notes due 2031 (priced 15 Sep) closed successfully; screen leverage/FCF inputs remain on FY25 filing basis, not post-bond.  
 Analyst price targets moved higher (roughly 290–532p band); routine PDMR notice—no new operating, regulatory, or Evolution litigation filings in batch.  
 Quantitative screen unchanged: avoid (9w, 2/22 models, statutory FCF −£52.9m); H1 company-defined cash metrics still not in screen inputs.
+
+### 2026-10-25T08:10:47.765320+00:00
+No new Playtech RNS since the 22 Sep €350m bond close; the news batch is commentary only (Americas B2B, legacy note redemption, analyst views).  
+Quantitative screen still **avoid** (14w, 2/22, composite 18%) on FY25 filing-aligned FCF −£52.9m; H1 cash metrics remain outside screen inputs.  
+Litigation, governance and Spectrum/Evolution overhang unchanged in the filings pull.

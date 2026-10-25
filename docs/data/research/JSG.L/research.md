@@ -1,6 +1,6 @@
 # Johnson Service Group PLC (JSG.L) — Research memo
 
-_Version 4 · Updated 2026-09-27T08:15:06.804430+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-25T08:19:18.777454+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.73
-Rationale: Statutory H1 still supports the screen’s quality-and-yield case; press and routine RNS only restate known HORECA softness and buybacks—research stays neutral on buy, not full alignment.
+Confidence: 0.72
+Rationale: H1 statutory results still underpin the screen’s quality-and-yield case; since the memo, RNS is routine and press only restates known HORECA softness—research stays neutral on buy, not full alignment.
 RiskTags: cyclical, competitive, leverage, pension, accounting, liquidity
 
 ## Weekly updates
@@ -28,3 +28,8 @@ No material change to the investment case versus the 8 Sep interim results.
 Four secondary pieces since 21 Sep reiterate softer hotel/HORECA linen demand and ongoing buybacks; TipRanks flagged share cancellation alongside the programme.
 Indexed RNS is routine only (22 Sep transaction in own shares, 23 Sep FIL holding)—no trading update or revision to H1 messaging.
 No material change to the case versus the 8 September interim results.
+
+### 2026-10-25T08:19:18.777454+00:00
+Since 27 Sep, indexed RNS is routine only: 1 Oct total voting rights, weekly transactions in own shares, and holder notices (including Moneta below 3% on 21 Oct).
+Secondary press (12 Oct) reports Deutsche Bank cutting its target to 200p on weak catering demand and rising energy costs—consistent with H1, not new company guidance.
+No trading update or results release; the case is unchanged versus the 8 September interim results.
