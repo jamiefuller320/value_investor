@@ -83,13 +83,21 @@ width each). Expanded card detail and each chart mount scroll independently
 the right edge or fight whole-page pan. Charts keep their readable
 `min-width` — swipe inside the chart / card, not hover-only affordances.
 
-## Accept / Comment / reply
+## Accept / Comment / Duplicate / reply
 
 | Control | Meaning | Effect |
 |---|---|---|
 | **Accept** | Framing matches | Label + leave active queue |
-| **Comment** | Missed pattern | Label + leave queue + **spawn reply stub** |
-| **reply** tag | Factory response | Re-enters queue for owner Accept/Comment |
+| **Comment** | Missed pattern | Label + leave queue + **spawn reply stub** (when identity snapshot usable) |
+| **Duplicate** | Same pattern already commented (cross-book / repeat) | Label + leave active queue (**no** reply card) |
+| **reply** tag | Factory response | Re-enters queue for owner Accept/Comment/Duplicate |
+
+**Blank ``?`` cards:** Comment payloads that omit ticker/book (nested-only
+`snapshot` without flat keys) used to spawn `[?] ? · ?` reply rows that sorted
+to the top. Queue rebuild now **fail-closes** those out of `active`, prunes
+unusable `active_replies`, and the bridge flattens identity onto the command
+payload. Soft reload keeps Accept/Comment/Duplicate cleared via a session
+overlay until labels/queue sidecars catch up.
 
 **Initial opinion** on every card is structured deterministic v0 (`opinion_source=
 deterministic_v0`) with learning points + per-chart captions, plus **L633**
@@ -114,8 +122,9 @@ cue-consumer MFT lab intake when that sleeve is running — see
 |---|---|
 | `post-sale-review-ack` | Accept |
 | `post-sale-review-comment` | Comment (+ text) |
+| `post-sale-review-duplicate` | Duplicate (optional note) |
 
-Both batch into workflow `post-sale-review-ack.yml` → commit labels + queue.
+All three batch into workflow `post-sale-review-ack.yml` → commit labels + queue.
 Local serve: `POST /api/post-sale-review-action`.
 
 CLI (optional drill-down):
@@ -124,6 +133,7 @@ CLI (optional drill-down):
 ftse-post-sale-review refresh
 ftse-post-sale-review accept --review-id …
 ftse-post-sale-review comment --review-id … --text "…"
+ftse-post-sale-review duplicate --review-id …
 ```
 
 ## Automation wiring

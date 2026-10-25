@@ -29,8 +29,10 @@ from value_investor.post_sale_decision_reasons import (
 from value_investor.post_sale_review_labels import (
     LABELS_FILENAME,
     comments_awaiting_reply,
+    heal_active_replies_file,
     is_actioned,
     load_post_sale_review_labels,
+    prune_active_replies,
 )
 from value_investor.post_sale_review_opinion import attach_opinion_fields, seed_dialogue
 from value_investor.sealed_lifecycle import SEALED_MODELS
@@ -531,6 +533,70 @@ def _in_attention_queue(item: dict[str, Any]) -> bool:
     return False
 
 
+def _queue_card_usable(item: dict[str, Any]) -> bool:
+    """Hide ``?`` / blank-identity cards from the active attention queue."""
+    ticker = str(item.get("ticker") or "").strip()
+    if not ticker or ticker == "?":
+        return False
+    book = str(item.get("book_tag") or item.get("book_id") or "").strip()
+    if book in {"", "?"}:
+        return False
+    return True
+
+
+def _enrich_reply_from_parent(
+    card: dict[str, Any],
+    *,
+    candidates_by_id: dict[str, dict[str, Any]],
+) -> dict[str, Any] | None:
+    """Copy identity from the parent exit when Comment snapshot was empty."""
+    out = dict(card)
+    if _queue_card_usable(out):
+        return out
+    parent_id = str(out.get("parent_review_id") or "").strip()
+    parent = candidates_by_id.get(parent_id) if parent_id else None
+    if not isinstance(parent, dict):
+        return None
+    for key in (
+        "book_id",
+        "book_tag",
+        "model_id",
+        "ticker",
+        "name",
+        "entry_at",
+        "exit_at",
+        "hold_days",
+        "exit_kind",
+        "return_pct",
+        "basis_label",
+        "charts",
+        "close_in",
+        "wider_tf",
+        "opened_at",
+        "sold_at",
+        "avg_cost",
+        "exit_price",
+        "buy_decision",
+        "sell_decision",
+        "buy_reason",
+        "sell_reason",
+        "decision_reasons_join_ok",
+        "framing",
+        "llm_opinion",
+        "learning_points",
+        "chart_annotations",
+        "opinion_source",
+        "episode_key",
+        "population",
+        "registration_id",
+    ):
+        if out.get(key) in (None, "", "?") and parent.get(key) not in (None, ""):
+            out[key] = parent.get(key)
+    if not _queue_card_usable(out):
+        return None
+    return out
+
+
 def _stock_sort_name(item: dict[str, Any]) -> str:
     name = str(item.get("name") or "").strip()
     ticker = str(item.get("ticker") or "").strip()
@@ -595,19 +661,32 @@ def build_post_sale_review_queue(
         _sealed_items(sealed_payload, sealed_indexes=sealed_indexes)
         + _control_items(board_payload, control_trades=control_trades)
     )
+    candidates_by_id = {
+        str(item.get("review_id") or "").strip(): item
+        for item in candidates
+        if str(item.get("review_id") or "").strip()
+    }
+    # Drop blank ``?`` reply leftovers so rebuild cannot re-surface them.
+    prune_active_replies(labels_store)
     active_exits = [
         item
         for item in candidates
-        if not is_actioned(labels_store, str(item.get("review_id"))) and _in_attention_queue(item)
+        if not is_actioned(labels_store, str(item.get("review_id")))
+        and _in_attention_queue(item)
+        and _queue_card_usable(item)
     ]
     reply_cards: list[dict[str, Any]] = []
+    seen_reply_ids: set[str] = set()
     for row in labels_store.get("active_replies") or []:
         if not isinstance(row, dict):
             continue
         rid = str(row.get("review_id") or "").strip()
-        if not rid or is_actioned(labels_store, rid):
+        if not rid or is_actioned(labels_store, rid) or rid in seen_reply_ids:
             continue
-        card = dict(row)
+        enriched = _enrich_reply_from_parent(row, candidates_by_id=candidates_by_id)
+        if enriched is None:
+            continue
+        card = enriched
         card["tag"] = "reply"
         card["influences_live"] = False
         card["observe_only"] = True
@@ -624,6 +703,9 @@ def build_post_sale_review_queue(
             attach_opinion_fields(card)
         elif not card.get("dialogue"):
             card["dialogue"] = seed_dialogue(card)
+        if not _queue_card_usable(card):
+            continue
+        seen_reply_ids.add(rid)
         reply_cards.append(card)
 
     active = sort_queue_items(reply_cards + active_exits, sort_by=sort_by, descending=True)
@@ -648,7 +730,8 @@ def build_post_sale_review_queue(
         "product_claim": (
             "Per-exit post-sale review queue across sealed Lifecycle books + "
             "FTSE control — analysis opinion + learning points on charts; "
-            "Accept/Comment mini dialogue (initial opinion → comment → reply); "
+            "Accept/Comment/Duplicate (initial opinion → comment → reply; "
+            "Duplicate clears same-pattern cross-book noise); "
             "never fills or knobs"
         ),
         "learning_question": (
@@ -739,7 +822,12 @@ def refresh_post_sale_review_queue(
     persist: bool = True,
 ) -> dict[str, Any]:
     root = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
+    heal_info = {"healed": False, "removed": 0}
+    if persist:
+        # Drop blank ``?`` reply leftovers so rebuild cannot re-surface them.
+        heal_info = heal_active_replies_file(root)
     payload = build_post_sale_review_queue(data_dir=root)
+    payload["labels_heal"] = heal_info
     if persist:
         # Honour data_dir for the store path so tests / alternate roots never
         # clobber committed docs/data/post_sale_review_queue.json.

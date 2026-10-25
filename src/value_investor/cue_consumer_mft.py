@@ -436,16 +436,26 @@ def _actioned_review_ids(labels: dict[str, Any] | None) -> set[str]:
     """Review IDs that left the active queue via Accept/Comment (or reply Accept)."""
     actioned: set[str] = set()
     index = _label_history_index(labels)
+    clearing = {
+        "accept",
+        "comment",
+        "duplicate",
+        "accepted",
+        "commented",
+        "duplicated",
+    }
     for rid, row in index.items():
-        action = str(row.get("action") or row.get("label") or "").strip().lower()
-        if action in {"accept", "comment", "accepted", "commented"}:
+        action = str(row.get("action") or row.get("label") or row.get("kind") or "").strip().lower()
+        if action in clearing:
             actioned.add(rid)
         # Nested events list
         for ev in row.get("events") or []:
             if not isinstance(ev, dict):
                 continue
-            ev_action = str(ev.get("action") or ev.get("label") or "").strip().lower()
-            if ev_action in {"accept", "comment", "accepted", "commented"}:
+            ev_action = (
+                str(ev.get("action") or ev.get("label") or ev.get("kind") or "").strip().lower()
+            )
+            if ev_action in clearing:
                 actioned.add(rid)
     return actioned
 

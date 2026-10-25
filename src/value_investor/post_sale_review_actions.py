@@ -1,4 +1,4 @@
-"""Dashboard / CLI actions for post-sale review Accept + Comment.
+"""Dashboard / CLI actions for post-sale review Accept / Comment / Duplicate.
 
 Observe-only write path into ``docs/data/post_sale_review_labels.json``.
 Refreshes ``post_sale_review_queue.json`` after each action.
@@ -18,46 +18,94 @@ from value_investor.post_sale_review_labels import (
     ACTION_KINDS,
     record_accept,
     record_comment,
+    record_duplicate,
+)
+from value_investor.storage import read_json
+
+_SNAPSHOT_KEYS = (
+    "book_id",
+    "book_tag",
+    "model_id",
+    "ticker",
+    "name",
+    "entry_at",
+    "exit_at",
+    "hold_days",
+    "exit_kind",
+    "return_pct",
+    "basis_label",
+    "framing",
+    "charts",
+    "close_in",
+    "wider_tf",
+    "opened_at",
+    "sold_at",
+    "avg_cost",
+    "exit_price",
+    "registration_id",
+    "population",
+    "buy_decision",
+    "sell_decision",
+    "buy_reason",
+    "sell_reason",
+    "decision_reasons_join_ok",
+    "exit_reason",
+    "entry_reason",
+    "entry_detail",
+    "llm_opinion",
+    "learning_points",
+    "chart_annotations",
+    "opinion_source",
+    "dialogue",
+    "episode_key",
+    "parent_review_id",
 )
 
 
+def _safe_queue(data_dir: Path) -> dict[str, Any] | None:
+    path = Path(data_dir) / "post_sale_review_queue.json"
+    try:
+        raw = read_json(path)
+    except (OSError, FileNotFoundError, ValueError, TypeError):
+        return None
+    return raw if isinstance(raw, dict) else None
+
+
 def _snapshot_from_payload(payload: dict[str, Any]) -> dict[str, Any]:
-    keys = (
-        "book_id",
-        "book_tag",
-        "model_id",
-        "ticker",
-        "entry_at",
-        "exit_at",
-        "hold_days",
-        "exit_kind",
-        "return_pct",
-        "basis_label",
-        "framing",
-        "charts",
-        "close_in",
-        "wider_tf",
-        "opened_at",
-        "sold_at",
-        "avg_cost",
-        "exit_price",
-        "registration_id",
-        "population",
-        "buy_decision",
-        "sell_decision",
-        "buy_reason",
-        "sell_reason",
-        "decision_reasons_join_ok",
-        "exit_reason",
-        "entry_reason",
-        "entry_detail",
-        "llm_opinion",
-        "learning_points",
-        "chart_annotations",
-        "opinion_source",
-        "dialogue",
-    )
-    return {key: payload.get(key) for key in keys if key in payload}
+    """Merge nested ``snapshot`` with flat payload keys (bridge UI nests both)."""
+    nested = payload.get("snapshot") if isinstance(payload.get("snapshot"), dict) else {}
+    merged: dict[str, Any] = dict(nested)
+    for key in _SNAPSHOT_KEYS:
+        if key in payload and payload[key] is not None:
+            merged[key] = payload[key]
+    return {key: merged[key] for key in _SNAPSHOT_KEYS if key in merged}
+
+
+def _resolve_snapshot(
+    data_dir: Path,
+    review_id: str,
+    snapshot: dict[str, Any] | None,
+) -> dict[str, Any]:
+    """Fill missing identity from the published queue when the bridge omitted it."""
+    snap = dict(snapshot) if isinstance(snapshot, dict) else {}
+    if (
+        str(snap.get("ticker") or "").strip()
+        and str(snap.get("book_tag") or snap.get("book_id") or "").strip()
+    ):
+        return snap
+    queue = _safe_queue(data_dir)
+    if not queue:
+        return snap
+    rid = str(review_id or "").strip()
+    for row in queue.get("active") or []:
+        if not isinstance(row, dict):
+            continue
+        if str(row.get("review_id") or "").strip() != rid:
+            continue
+        filled = {key: row[key] for key in _SNAPSHOT_KEYS if key in row}
+        filled.update({k: v for k, v in snap.items() if v is not None})
+        return filled
+    return snap
 
 
 def run_post_sale_review_action(
@@ -72,7 +120,7 @@ def run_post_sale_review_action(
     snapshot: dict[str, Any] | None = None,
     refresh_queue: bool = True,
 ) -> dict[str, Any]:
-    """Record Accept or Comment. Comment always spawns a reply stub."""
+    """Record Accept, Comment, or Duplicate. Comment spawns a reply when usable."""
     review_id = str(review_id or "").strip()
     if not review_id:
         raise ValueError("review_id is required")
@@ -81,12 +129,24 @@ def run_post_sale_review_action(
         decision = "accept"
     elif decision in {"comment", "note"}:
         decision = "comment"
+    elif decision in {"duplicate", "dupe", "already_commented"}:
+        decision = "duplicate"
     if decision not in ACTION_KINDS:
-        raise ValueError(f"Unknown decision {decision!r}; allowed: accept, comment")
+        raise ValueError(f"Unknown decision {decision!r}; allowed: accept, comment, duplicate")
 
-    snap = dict(snapshot) if isinstance(snapshot, dict) else {}
+    snap = _resolve_snapshot(data_dir, review_id, snapshot)
     if decision == "accept":
         event = record_accept(
+            data_dir,
+            review_id=review_id,
+            tag_at_action=tag_at_action,
+            note=text,
+            source=source,
+            acted_by=acted_by,
+            snapshot=snap,
+        )
+    elif decision == "duplicate":
+        event = record_duplicate(
             data_dir,
             review_id=review_id,
             tag_at_action=tag_at_action,
@@ -127,7 +187,7 @@ def run_post_sale_review_action_batch(
     source: str = "dashboard_bridge",
     acted_by: str = "dashboard",
 ) -> dict[str, Any]:
-    """Apply a batch of Accept/Comment payloads (one GHA workflow)."""
+    """Apply a batch of Accept/Comment/Duplicate payloads (one GHA workflow)."""
     results: list[dict[str, Any]] = []
     errors: list[dict[str, Any]] = []
     for raw in items:
@@ -140,6 +200,8 @@ def run_post_sale_review_action_batch(
         if not decision:
             if bridge_action.endswith("comment") or "comment" in bridge_action:
                 decision = "comment"
+            elif bridge_action.endswith("duplicate") or "duplicate" in bridge_action:
+                decision = "duplicate"
             else:
                 decision = "accept"
         try:

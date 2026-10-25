@@ -1129,6 +1129,11 @@ async function applyDashboardSidecars(data) {
     dailyFocusBase = data.daily_focus;
     syncDailyFocusOverlay(data);
   }
+  // Post-sale Accept/Comment/Duplicate: keep cleared across soft reload until
+  // labels sidecar / queue rebuild catches up (same pattern as daily hub).
+  if (data.post_sale_review_queue) {
+    syncPostSaleQueueOverlay(data);
+  }
   return data;
 }
 
@@ -11696,6 +11701,75 @@ function renderSealedLifecycle(data) {
 
 let postSaleReviewSort = "exit_at";
 let postSaleReviewExpandedId = null;
+/** Session overlay: review_ids cleared by Accept/Comment/Duplicate before git. */
+const pendingPostSaleActions = Object.create(null);
+
+function rememberPendingPostSaleAction(reviewId, decision) {
+  const rid = String(reviewId || "").trim();
+  if (!rid) return;
+  pendingPostSaleActions[rid] = {
+    decision: String(decision || "accept"),
+    at: Date.now(),
+  };
+}
+
+function prunePendingPostSaleActions(data) {
+  const labels = (data && data.post_sale_review_labels) || {};
+  const actioned = new Set(
+    (Array.isArray(labels.actioned_review_ids) ? labels.actioned_review_ids : [])
+      .map((id) => String(id || "").trim())
+      .filter(Boolean)
+  );
+  for (const ev of Array.isArray(labels.events) ? labels.events : []) {
+    if (!ev || typeof ev !== "object") continue;
+    const kind = String(ev.kind || "").toLowerCase();
+    if (kind === "accept" || kind === "comment" || kind === "duplicate") {
+      const rid = String(ev.review_id || "").trim();
+      if (rid) actioned.add(rid);
+    }
+  }
+  for (const rid of Object.keys(pendingPostSaleActions)) {
+    if (actioned.has(rid)) delete pendingPostSaleActions[rid];
+  }
+}
+
+function postSaleReviewCardUsable(item) {
+  if (!item || typeof item !== "object") return false;
+  const ticker = String(item.ticker || "").trim();
+  if (!ticker || ticker === "?") return false;
+  const book = String(item.book_tag || item.book_id || "").trim();
+  if (!book || book === "?") return false;
+  return true;
+}
+
+function syncPostSaleQueueOverlay(data) {
+  if (!data || !data.post_sale_review_queue) return;
+  prunePendingPostSaleActions(data);
+  const queue = data.post_sale_review_queue;
+  if (!Array.isArray(queue.active)) return;
+  const labels = data.post_sale_review_labels || {};
+  const actioned = new Set(
+    (Array.isArray(labels.actioned_review_ids) ? labels.actioned_review_ids : [])
+      .map((id) => String(id || "").trim())
+      .filter(Boolean)
+  );
+  const pending = new Set(Object.keys(pendingPostSaleActions));
+  queue.active = queue.active.filter((row) => {
+    const rid = String((row && row.review_id) || "").trim();
+    if (!rid) return false;
+    if (pending.has(rid) || actioned.has(rid)) return false;
+    return postSaleReviewCardUsable(row);
+  });
+  queue.active_count = queue.active.length;
+  queue.new_count = queue.active.filter((row) => row.tag !== "reply").length;
+  queue.reply_count = queue.active.filter((row) => row.tag === "reply").length;
+  const byBook = {};
+  for (const row of queue.active) {
+    const key = String(row.book_tag || row.book_id || "?");
+    byBook[key] = (byBook[key] || 0) + 1;
+  }
+  queue.by_book = byBook;
+}
 
 function postSaleReviewOverlays(item) {
   return {
@@ -11781,6 +11855,16 @@ function renderPostSaleLearningPoints(points) {
     .join("")}</ul>`;
 }
 
+function postSaleReasonLabelBroken(label) {
+  const text = String(label || "").trim();
+  if (!text) return true;
+  // Owner noise: unknown/unjoinable chips that render as "? -" / "?".
+  if (text === "?" || text === "? -" || text === "?—" || /^[?？]\s*[-–—]?\s*$/.test(text)) {
+    return true;
+  }
+  return false;
+}
+
 function renderPostSaleDecisionReasons(item) {
   const buy = item && item.buy_decision && typeof item.buy_decision === "object"
     ? item.buy_decision
@@ -11804,22 +11888,29 @@ function renderPostSaleDecisionReasons(item) {
   const sellCode = sell && sell.code ? String(sell.code) : "";
   const buySrc = buy && buy.source ? String(buy.source) : "";
   const sellSrc = sell && sell.source ? String(sell.source) : "";
-  return `<div class="psr-decision-reasons" aria-label="Buy and sell decision reasons">
-    <div class="psr-decision-row${buyOk ? "" : " is-unknown"}">
+  const rows = [];
+  if (!postSaleReasonLabelBroken(buyLabel)) {
+    rows.push(`<div class="psr-decision-row${buyOk ? "" : " is-unknown"}">
       <span class="psr-decision-side">Bought because</span>
       <span class="psr-decision-label">${esc(buyLabel)}</span>
       <span class="small muted psr-decision-meta">${esc(
         [buyCode && buyOk ? buyCode : "", buySrc].filter(Boolean).join(" · ") || "unjoinable"
       )}</span>
-    </div>
-    <div class="psr-decision-row${sellOk ? "" : " is-unknown"}">
+    </div>`);
+  }
+  if (!postSaleReasonLabelBroken(sellLabel)) {
+    rows.push(`<div class="psr-decision-row${sellOk ? "" : " is-unknown"}">
       <span class="psr-decision-side">Sold because</span>
       <span class="psr-decision-label">${esc(sellLabel)}</span>
       <span class="small muted psr-decision-meta">${esc(
         [sellCode && sellOk ? sellCode : "", sellSrc].filter(Boolean).join(" · ") || "unjoinable"
       )}</span>
-    </div>
-  </div>`;
+    </div>`);
+  }
+  if (!rows.length) return "";
+  return `<div class="psr-decision-reasons" aria-label="Buy and sell decision reasons">${rows.join(
+    ""
+  )}</div>`;
 }
 
 function renderPostSaleDialogue(item) {
@@ -11924,6 +12015,9 @@ function renderPostSaleReviewCard(item, expanded) {
           <button type="button" class="btn btn-primary" data-psr-accept="${esc(
             item.review_id
           )}" data-psr-tag="${esc(tag)}">Accept</button>
+          <button type="button" class="btn" data-psr-duplicate="${esc(
+            item.review_id
+          )}" data-psr-tag="${esc(tag)}" title="Same pattern already commented (e.g. other book)">Duplicate</button>
           <label class="small psr-comment-label">Comment
             <input type="text" class="psr-comment-input" data-psr-comment-input="${esc(
               item.review_id
@@ -11965,11 +12059,15 @@ function renderPostSaleReviews(data) {
     return `${renderLifecycleSubnav()}
       <div class="empty-state">Post-sale review queue not published yet. Wait for ops-monitor or run <code>ftse-post-sale-review refresh</code>.</div>`;
   }
+  syncPostSaleQueueOverlay(data);
   const sortBy = normalizePostSaleReviewSort(
     postSaleReviewSort || queue.sort_default || "exit_at"
   );
   postSaleReviewSort = sortBy;
-  const items = sortPostSaleReviewItems(queue.active, sortBy);
+  const items = sortPostSaleReviewItems(
+    (queue.active || []).filter(postSaleReviewCardUsable),
+    sortBy
+  );
   const sortOptions = Array.isArray(queue.sort_options) && queue.sort_options.length
     ? queue.sort_options
     : POST_SALE_REVIEW_SORT_OPTIONS;
@@ -12100,18 +12198,34 @@ async function submitPostSaleReviewAction({ reviewId, decision, text, tag, item 
   const setStatus = (msg) => {
     if (statusEl) statusEl.textContent = msg || "";
   };
-  setStatus(decision === "comment" ? "Recording comment…" : "Recording Accept…");
+  const statusVerb =
+    decision === "comment"
+      ? "Recording comment…"
+      : decision === "duplicate"
+        ? "Recording duplicate…"
+        : "Recording Accept…";
+  setStatus(statusVerb);
+  // Optimistic clear first so soft reload / bridge latency cannot bounce the card.
+  rememberPendingPostSaleAction(reviewId, decision);
+  const snap = item && typeof item === "object" ? item : {};
+  // Flatten identity onto the payload — GHA batch reads flat keys; nested
+  // snapshot alone previously spawned blank ``?`` reply cards.
   const payload = {
+    ...snap,
     review_id: reviewId,
     decision,
     text: text || "",
     tag: tag || "new",
-    snapshot: item || {},
+    snapshot: snap,
   };
   try {
     if (window.DashboardBridge && (await window.DashboardBridge.init())) {
       const action =
-        decision === "comment" ? "post-sale-review-comment" : "post-sale-review-ack";
+        decision === "comment"
+          ? "post-sale-review-comment"
+          : decision === "duplicate"
+            ? "post-sale-review-duplicate"
+            : "post-sale-review-ack";
       await window.DashboardBridge.queueCommand(action, payload);
       setStatus("Queued — waiting for git commit…");
     } else {
@@ -12126,19 +12240,13 @@ async function submitPostSaleReviewAction({ reviewId, decision, text, tag, item 
       }
       setStatus("Saved locally.");
     }
-    // Optimistic clear from active queue (reply card arrives after git refresh).
-    const queue = (dashboardData || {}).post_sale_review_queue;
-    if (queue && Array.isArray(queue.active)) {
-      queue.active = queue.active.filter((row) => row.review_id !== reviewId);
-      queue.active_count = queue.active.length;
-      queue.new_count = queue.active.filter((row) => row.tag !== "reply").length;
-      queue.reply_count = queue.active.filter((row) => row.tag === "reply").length;
-      queue.actioned_count = (queue.actioned_count || 0) + 1;
-    }
+    if (dashboardData) syncPostSaleQueueOverlay(dashboardData);
     if (postSaleReviewExpandedId === reviewId) postSaleReviewExpandedId = null;
     renderLifecycle(dashboardData);
   } catch (err) {
+    delete pendingPostSaleActions[String(reviewId || "").trim()];
     setStatus(`Failed: ${err.message || err}`);
+    if (dashboardData) renderLifecycle(dashboardData);
   }
 }
 
@@ -12334,6 +12442,23 @@ function bindLifecyclePanel() {
         submitPostSaleReviewAction({
           reviewId,
           decision: "accept",
+          text: "",
+          tag,
+          item,
+        });
+        return;
+      }
+      const duplicateBtn = event.target.closest("[data-psr-duplicate]");
+      if (duplicateBtn) {
+        event.preventDefault();
+        const reviewId = duplicateBtn.dataset.psrDuplicate;
+        const tag = duplicateBtn.dataset.psrTag || "new";
+        const item = (
+          ((dashboardData || {}).post_sale_review_queue || {}).active || []
+        ).find((row) => row.review_id === reviewId);
+        submitPostSaleReviewAction({
+          reviewId,
+          decision: "duplicate",
           text: "",
           tag,
           item,

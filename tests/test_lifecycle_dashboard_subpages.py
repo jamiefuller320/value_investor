@@ -155,6 +155,10 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "mountDualHorizonCharts" in app
     assert "Durable history" in app
     assert "one card per sealed book" in app
+    assert "data-psr-duplicate=" in app
+    assert "pendingPostSaleActions" in app
+    assert "syncPostSaleQueueOverlay" in app
+    assert "postSaleReviewCardUsable" in app
 
     # Do not inherit lifecycle-board overflow:hidden clip on this surface.
     assert ".post-sale-review-section.lifecycle-board-section" in css

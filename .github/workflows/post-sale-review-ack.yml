@@ -1,9 +1,10 @@
-name: Post-sale review Accept / Comment
+name: Post-sale review Accept / Comment / Duplicate
 
 # Observe-only alignment labels from Lifecycle → Post-sale reviews.
 # Dispatched by dashboard-bridge after Supabase dashboard_commands insert.
-# Actions: post-sale-review-ack (Accept) and post-sale-review-comment (Comment).
-# Comment always spawns a deterministic factory reply stub (tag=reply).
+# Actions: post-sale-review-ack (Accept), post-sale-review-comment (Comment),
+# post-sale-review-duplicate (Duplicate pattern — clear, no reply).
+# Comment spawns a factory reply stub (tag=reply) when snapshot identity is usable.
 # Never applies knobs, fills, or Package L auto-tune (influences_live=false).
 on:
   repository_dispatch:
@@ -15,7 +16,7 @@ on:
         required: false
         type: string
       decision:
-        description: accept | comment
+        description: accept | comment | duplicate
         required: false
         default: accept
         type: string

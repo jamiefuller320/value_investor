@@ -21,8 +21,10 @@ from value_investor.storage import read_json, write_json
 
 LABELS_FILENAME = "post_sale_review_labels.json"
 SCHEMA_VERSION = 1
-EVENT_KINDS = frozenset({"accept", "comment", "reply"})
-ACTION_KINDS = frozenset({"accept", "comment"})
+EVENT_KINDS = frozenset({"accept", "comment", "reply", "duplicate"})
+ACTION_KINDS = frozenset({"accept", "comment", "duplicate"})
+# Labels that clear an item from the active queue (durable).
+CLEARING_ACTION_KINDS = frozenset({"accept", "comment", "duplicate"})
 
 # Legacy stub kept for tests / callers that assert the old ack string.
 REPLY_STUB_TEXT = (
@@ -100,6 +102,66 @@ def is_actioned(store: dict[str, Any] | None, review_id: str) -> bool:
     return rid in _actioned_set(store)
 
 
+def _reply_card_usable(row: dict[str, Any]) -> bool:
+    """Fail-closed: blank / ``?`` identity cards must not clutter the active queue."""
+    ticker = str(row.get("ticker") or "").strip()
+    if not ticker or ticker == "?":
+        return False
+    book = str(row.get("book_tag") or row.get("book_id") or "").strip()
+    if book in {"", "?"}:
+        return False
+    return True
+
+
+def heal_active_replies_file(data_dir: Path) -> dict[str, Any]:
+    """Persist prune of blank/duplicate ``active_replies`` (events untouched)."""
+    store = load_post_sale_review_labels(data_dir)
+    removed = prune_active_replies(store)
+    if removed:
+        path = _write_labels(data_dir, store)
+        return {"healed": True, "removed": removed, "path": str(path)}
+    return {"healed": False, "removed": 0, "path": str(Path(data_dir) / LABELS_FILENAME)}
+
+
+def prune_active_replies(store: dict[str, Any]) -> int:
+    """Drop unusable / duplicate reply cards from ``active_replies``.
+
+    Keeps the newest usable card per ``parent_review_id`` (and per review_id).
+    Events history is untouched. Returns number of rows removed.
+    """
+    rows = [row for row in (store.get("active_replies") or []) if isinstance(row, dict)]
+    before = len(rows)
+    usable = [row for row in rows if _reply_card_usable(row)]
+    by_parent: dict[str, dict[str, Any]] = {}
+    orphan_order: list[dict[str, Any]] = []
+    for row in usable:
+        parent = str(row.get("parent_review_id") or "").strip()
+        rid = str(row.get("review_id") or "").strip()
+        if not rid:
+            continue
+        if not parent:
+            orphan_order.append(row)
+            continue
+        prior = by_parent.get(parent)
+        if prior is None:
+            by_parent[parent] = row
+            continue
+        # Prefer newer created_at when both usable.
+        if str(row.get("created_at") or "") >= str(prior.get("created_at") or ""):
+            by_parent[parent] = row
+    # Preserve stable-ish order: orphans then parents in first-seen order.
+    kept: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for row in orphan_order + list(by_parent.values()):
+        rid = str(row.get("review_id") or "").strip()
+        if not rid or rid in seen_ids:
+            continue
+        seen_ids.add(rid)
+        kept.append(row)
+    store["active_replies"] = kept
+    return before - len(kept)
+
+
 def _mark_actioned(store: dict[str, Any], review_id: str) -> None:
     rid = str(review_id or "").strip()
     if not rid:
@@ -108,12 +170,15 @@ def _mark_actioned(store: dict[str, Any], review_id: str) -> None:
     if rid not in actioned:
         actioned.append(rid)
     store["actioned_review_ids"] = actioned
-    # Drop from active replies if this was a reply card.
+    # Drop from active replies if this was a reply card OR its parent was cleared.
     store["active_replies"] = [
         row
         for row in (store.get("active_replies") or [])
-        if isinstance(row, dict) and str(row.get("review_id") or "").strip() != rid
+        if isinstance(row, dict)
+        and str(row.get("review_id") or "").strip() != rid
+        and str(row.get("parent_review_id") or "").strip() != rid
     ]
+    prune_active_replies(store)
 
 
 def reply_review_id(parent_review_id: str, event_id: str) -> str:
@@ -144,6 +209,47 @@ def record_accept(
         "kind": "accept",
         "tag_at_action": str(tag_at_action or "new").strip() or "new",
         "text": str(note or "").strip(),
+        "acted_at": _utcnow(),
+        "acted_by": acted_by,
+        "source": str(source or "").strip(),
+        "influences_live": False,
+        "snapshot": dict(snapshot) if isinstance(snapshot, dict) else {},
+    }
+    events = list(store.get("events") or [])
+    events.append(event)
+    store["events"] = events
+    _mark_actioned(store, review_id)
+    path = _write_labels(data_dir, store)
+    return {**event, "path": str(path), "cleared_from_active": True}
+
+
+def record_duplicate(
+    data_dir: Path,
+    *,
+    review_id: str,
+    tag_at_action: str = "new",
+    note: str = "",
+    source: str = "",
+    acted_by: str = "dashboard",
+    snapshot: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Mark as duplicate pattern (already commented). Clears without a reply card."""
+    review_id = str(review_id or "").strip()
+    if not review_id:
+        raise ValueError("review_id is required")
+    store = load_post_sale_review_labels(data_dir)
+    event_id = str(uuid.uuid4())
+    text = str(note or "").strip() or (
+        "Duplicate pattern — similar episode already commented "
+        "(cross-book / repeat). Cleared from active queue."
+    )
+    event = {
+        "event_id": event_id,
+        "review_id": review_id,
+        "parent_event_id": None,
+        "kind": "duplicate",
+        "tag_at_action": str(tag_at_action or "new").strip() or "new",
+        "text": text,
         "acted_at": _utcnow(),
         "acted_by": acted_by,
         "source": str(source or "").strip(),
@@ -301,8 +407,11 @@ def record_comment(
         for row in (store.get("active_replies") or [])
         if isinstance(row, dict) and str(row.get("review_id") or "").strip() != reply_id
     ]
-    replies.append(reply_card)
+    # Only surface usable reply cards (fail-closed if snapshot lacked identity).
+    if _reply_card_usable(reply_card):
+        replies.append(reply_card)
     store["active_replies"] = replies
+    prune_active_replies(store)
     path = _write_labels(data_dir, store)
     return {
         **comment_event,
@@ -335,6 +444,7 @@ def comments_awaiting_reply(store: dict[str, Any] | None) -> list[dict[str, Any]
 
 __all__ = [
     "ACTION_KINDS",
+    "CLEARING_ACTION_KINDS",
     "EVENT_KINDS",
     "LABELS_FILENAME",
     "REPLY_STUB_TEXT",
@@ -343,7 +453,10 @@ __all__ = [
     "empty_labels_store",
     "is_actioned",
     "load_post_sale_review_labels",
+    "heal_active_replies_file",
+    "prune_active_replies",
     "record_accept",
     "record_comment",
+    "record_duplicate",
     "reply_review_id",
 ]
