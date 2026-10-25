@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import time
 from datetime import UTC, datetime
 from pathlib import Path
 from unittest.mock import patch
@@ -12747,13 +12748,23 @@ def test_fetch_filings_ir_allowlist_ftse_smallcap_mer_l_builtins(tmp_path: Path)
     assert sum(1 for row in rows if row["period"] == "interim") == 1
 
 
-def _first_fetchable_allowlist_body(urls: list[str], *, min_len: int = 50_000) -> str:
-    """Try each IR URL — host/CDN ordering is not stable across CI runs."""
-    for url in urls:
-        body = fetch_filing_body(url)
-        if body and len(body) >= min_len:
-            return body
-    pytest.fail(f"No allowlist URL returned body>={min_len}: {urls}")
+def _first_fetchable_allowlist_body(
+    urls: list[str], *, min_len: int = 50_000, attempts: int = 3
+) -> str:
+    """Try each IR URL — host/CDN ordering is not stable across CI runs.
+
+    Retry the full URL list a few times: Sucuri/CDN occasionally returns empty
+    bodies under CI load (CLIG.L flake on #1180).
+    """
+    last_urls = list(urls)
+    for attempt in range(max(1, int(attempts))):
+        for url in last_urls:
+            body = fetch_filing_body(url)
+            if body and len(body) >= min_len:
+                return body
+        if attempt + 1 < max(1, int(attempts)):
+            time.sleep(1.5 * (attempt + 1))
+    pytest.fail(f"No allowlist URL returned body>={min_len}: {last_urls}")
 
 
 def test_parked_source_hunter_mer_l_ftse_smallcap_has_fetchable_ir():

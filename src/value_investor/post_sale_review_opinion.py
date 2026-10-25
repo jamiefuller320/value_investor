@@ -17,6 +17,11 @@ from collections.abc import Callable
 from datetime import UTC, datetime
 from typing import Any
 
+from value_investor.post_sale_decision_reasons import (
+    UNKNOWN_LABEL,
+    format_decision_reasons_for_prompt,
+)
+
 LlmCompleteFn = Callable[[str], str]
 
 OPINION_SOURCE_DETERMINISTIC = "deterministic_v0"
@@ -48,6 +53,11 @@ def build_initial_opinion(item: dict[str, Any]) -> dict[str, Any]:
     basis = str(item.get("basis_label") or "return")
     entry = str(item.get("entry_at") or "")[:10] or "?"
     exit_at = str(item.get("exit_at") or "")[:10] or "?"
+    reasons = format_decision_reasons_for_prompt(item)
+    buy_label = str(reasons["buy"].get("label") or UNKNOWN_LABEL)
+    sell_label = str(reasons["sell"].get("label") or UNKNOWN_LABEL)
+    sell_code = str(reasons["sell"].get("code") or "")
+    sell_join_ok = bool(reasons["sell"].get("join_ok"))
 
     hold_bit = f"{hold}-day" if hold is not None else "unknown-length"
     if isinstance(pct, (int, float)):
@@ -67,6 +77,7 @@ def build_initial_opinion(item: dict[str, Any]) -> dict[str, Any]:
     opinion = (
         f"{book} closed {ticker} after a {hold_bit} hold ({entry} → {exit_at}, "
         f"{exit_kind}): {outcome}.{rapid} "
+        f"Bought because: {buy_label}. Sold because: {sell_label}. "
         "Read episode window for the trade path and wider TF for the cyclical / "
         "trend context the episode alone can hide. Observe-only — not a veto."
     )
@@ -75,12 +86,21 @@ def build_initial_opinion(item: dict[str, Any]) -> dict[str, Any]:
         "Verify episode chart and wider TF together before Accepting framing.",
         "Comment on missed patterns (range location, climb after exit, rapid churn) "
         "— factory must reply; no knobs/fills from this loop.",
+        f"Ground comments in the structured sell reason ({sell_label}) — "
+        "e.g. 'premature' is only meaningful vs a timing/tech trigger, not a "
+        "buy-tier / identity exit.",
     ]
     if short_hold:
-        learning_points.append(
-            "Short hold: check whether exit timing / churn looks premature vs the "
-            "wider range the owner may see on longer history."
-        )
+        if sell_join_ok and sell_code in {"leave_buy_tier", "left_target_set"}:
+            learning_points.append(
+                "Short hold with buy-tier / target-set exit: churn may be mechanical "
+                "identity leave — weigh that before calling the sell premature."
+            )
+        else:
+            learning_points.append(
+                "Short hold: check whether exit timing / churn looks premature vs the "
+                "wider range the owner may see on longer history."
+            )
     if isinstance(pct, (int, float)) and pct <= -5:
         learning_points.append(
             "Material loss: ask whether the miss was pick quality, timing, or both "
@@ -159,14 +179,24 @@ def build_contextual_reply_text(
     pct_bit = f"{pct}%" if isinstance(pct, (int, float)) else "n/a"
     comment = str(owner_comment or "").strip()
     comment_bit = comment if len(comment) <= 280 else comment[:277] + "…"
+    reasons = format_decision_reasons_for_prompt(snap)
+    buy_label = str(reasons["buy"].get("label") or UNKNOWN_LABEL)
+    sell_label = str(reasons["sell"].get("label") or UNKNOWN_LABEL)
+    sell_code = str(reasons["sell"].get("code") or "")
+    sell_join = bool(reasons["sell"].get("join_ok"))
 
     lines = [
         f"Acknowledged owner Comment on [{book}] {ticker} "
         f"(hold {hold_bit}, outcome {pct_bit}" + (f", {exit_kind}" if exit_kind else "") + ").",
         f'You wrote: "{comment_bit}"',
+        f"Structured decision trail — bought because: {buy_label}; "
+        f"sold because: {sell_label}"
+        + (f" [{sell_code}]" if sell_join and sell_code else "")
+        + ".",
         "Development-loop read (observe / alignment only): dual-horizon charts are "
-        "the surface for range-location and post-exit path claims; sealed exit "
-        "reasons stay in the book trail — this card does not force knobs or fills "
+        "the surface for range-location and post-exit path claims; cite the "
+        "structured buy/sell reasons above (fail-closed when unjoinable) — this "
+        "card does not force knobs or fills "
         "(influences_live=false; Package M — not Package L auto-tune).",
         "Accept if this reply matches what you see; Comment again to continue the mini dialogue.",
     ]
@@ -233,8 +263,11 @@ def build_llm_reply_prompt(*, owner_comment: str, item: dict[str, Any] | None) -
             "Observe / alignment only — never change knobs, fills, or live capital.",
             "influences_live must remain false; Package M not Package L auto-tune.",
             "Address the owner's missed-pattern comment using dual-horizon framing.",
-            "Do not invent filing facts, exact historical range percentiles, or "
-            "sealed sell-trigger IDs you were not given.",
+            "Cite decision_reasons.buy / decision_reasons.sell when join_ok is true; "
+            "when join_ok is false say the reason is unknown/unjoinable — never invent "
+            "sell-trigger IDs, filing facts, or range percentiles you were not given.",
+            "Weigh owner labels like 'premature sell' against the structured sell "
+            "reason (e.g. leave_buy_tier is mechanical identity exit, not a tech trigger).",
             "Invite Accept or further Comment on this reply.",
             'Return JSON only: {"reply": "..."}',
         ],
@@ -250,6 +283,7 @@ def build_llm_reply_prompt(*, owner_comment: str, item: dict[str, Any] | None) -
             "basis_label": snap.get("basis_label"),
             "llm_opinion": snap.get("llm_opinion"),
             "learning_points": snap.get("learning_points"),
+            "decision_reasons": format_decision_reasons_for_prompt(snap),
         },
         "owner_comment": str(owner_comment or "").strip(),
     }

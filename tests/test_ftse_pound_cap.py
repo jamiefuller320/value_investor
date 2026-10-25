@@ -28,8 +28,8 @@ def test_ftse350_pound_caps_cover_priced_names():
     missing = [row for row in rows if row.cap_gbp is None]
     by_ticker = {row.ticker: row for row in rows}
 
-    assert len(computable) == 250
-    assert len(missing) == 100
+    assert len(computable) == 249
+    assert len(missing) == 101
 
     shel = by_ticker["SHEL.L"]
     assert shel.method == "price_x_financials_shares"

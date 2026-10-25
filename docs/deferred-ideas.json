@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-25T07:54:59+00:00",
+  "updated_at": "2026-10-25T09:07:58+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -15039,9 +15039,11 @@
         "sealed",
         "observe"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-3f4eeb53-4629-55c2-9f59-9df23dd19b72",
-      "added_at": "2026-10-24T17:45:23+00:00"
+      "added_at": "2026-10-24T17:45:23+00:00",
+      "updated_at": "2026-10-25T09:07:58+00:00",
+      "status_note": "Post-sale cards + factory opinion/reply bind structured buy/sell reasons (fail-closed). Shipped in #1180."
     },
     {
       "id": "N222",
@@ -15218,6 +15220,29 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-93d64983-54dd-5774-b451-11565bce04bf",
       "added_at": "2026-10-25T07:54:54+00:00"
+    },
+    {
+      "id": "L632",
+      "category": "later",
+      "section": "learning",
+      "title": "Backfill sealed lifecycle_episodes exit_reason on observe re-score",
+      "summary": "slim_lifecycle_episode now preserves exit_reason/entry_detail, but committed lifecycle_episodes were slimmed without them. Next sealed observe refresh should rewrite lifecycle_episodes so post-sale joins cover all episodes, not only episodes_sample.",
+      "revisit_when": "Next N201/N206/N210 observe refresh after slim_lifecycle_episode preserves exit_reason",
+      "tags": [
+        "post-sale",
+        "sealed",
+        "observe"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-c570e2f8-ed00-5119-baf5-c1fe62df004d",
+      "added_at": "2026-10-25T09:07:58+00:00",
+      "trigger": {
+        "any": [
+          {
+            "on_or_after": "2026-11-01"
+          }
+        ]
+      }
     }
   ],
   "fragments": [
