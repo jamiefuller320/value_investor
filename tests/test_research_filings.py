@@ -95,7 +95,9 @@ from value_investor.research.filings import (
     select_research_filing_slot_rows,
     standardise_investegate_lse_fetch_url,
     summarize_filings,
+    supplement_companies_house_pdf_bodies_when_rns_thin,
     supplement_company_metrics_cashflow,
+    uk_rns_bodies_empty_or_thin,
 )
 from value_investor.research.ingest import (
     apply_cashflow_metrics_fallback,
@@ -4584,6 +4586,141 @@ def test_refetch_companies_house_filing_bodies_pdf_extract(tmp_path, monkeypatch
     assert saved["filings"][0]["has_body"] is True
     assert (filings_dir / "bodies" / "ch_row_1.txt").exists()
     assert saved["filings"][1]["has_body"] is False
+
+
+def test_uk_rns_bodies_empty_or_thin_detects_missing_statutory(tmp_path):
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    filings = [
+        {
+            "id": "rns_trading",
+            "source": "investegate_direct",
+            "headline": "Trading update",
+            "period": "trading_update",
+            "has_body": False,
+        },
+        {
+            "id": "rns_annual",
+            "source": "investegate_direct",
+            "headline": "Preliminary results for the year ended 31 Dec 2025",
+            "period": "annual",
+            "has_body": False,
+        },
+    ]
+    assert uk_rns_bodies_empty_or_thin(filings, bodies_dir=bodies_dir) is True
+
+
+def test_supplement_companies_house_pdf_bodies_when_rns_thin_stores_pdf_extract(
+    tmp_path, monkeypatch
+):
+    """eng-20261025-02: document-api PDF extract lands under filings/bodies/ when RNS is empty."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    ch_url = "https://document-api.company-information.service.gov.uk/document/ch-pdf"
+    index = {
+        "filings": [
+            {
+                "id": "rns_stub",
+                "source": "ticker_rns_api",
+                "headline": "Transaction in own shares",
+                "period": "other",
+                "has_body": False,
+            },
+            {
+                "id": "ch_annual",
+                "source": "companies_house",
+                "headline": "Companies House accounts — group",
+                "url": ch_url,
+                "document_metadata_url": ch_url,
+                "period": "annual",
+                "has_body": False,
+                "priority": 140,
+            },
+        ]
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    pdf_body = "A" * 220 + " statutory accounts pension borrowings covenant going concern"
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.fetch_filings_companies_house",
+        lambda **kwargs: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        lambda row: pdf_body,
+    )
+    result = supplement_companies_house_pdf_bodies_when_rns_thin(
+        filings_dir,
+        ticker="BT-A.L",
+        company_name="BT Group plc",
+        max_bodies=3,
+    )
+    assert result.get("skipped") is False
+    assert result["fetched"] == 1
+    assert (bodies_dir / "ch_annual.txt").read_text(encoding="utf-8") == pdf_body
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    ch_row = next(row for row in saved["filings"] if row["id"] == "ch_annual")
+    assert ch_row["has_body"] is True
+    assert "bodies/ch_annual.txt" in str(ch_row["body_path"])
+
+
+def test_supplement_companies_house_pdf_skips_when_rns_statutory_bodied(tmp_path):
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    filler = "X" * 250 + " full year results revenue operating profit"
+    rns_paths = {
+        "rns_fy": bodies_dir / "rns_fy.txt",
+        "rns_h1": bodies_dir / "rns_h1.txt",
+        "rns_tu": bodies_dir / "rns_tu.txt",
+    }
+    for path in rns_paths.values():
+        path.write_text(filler, encoding="utf-8")
+    index = {
+        "filings": [
+            {
+                "id": "rns_fy",
+                "source": "investegate_direct",
+                "headline": "Full year results for the year ended 31 March 2026",
+                "period": "annual",
+                "has_body": True,
+                "body_path": str(rns_paths["rns_fy"]),
+            },
+            {
+                "id": "rns_h1",
+                "source": "investegate_direct",
+                "headline": "Half year results for the six months ended 30 Sep 2025",
+                "period": "interim",
+                "has_body": True,
+                "body_path": str(rns_paths["rns_h1"]),
+            },
+            {
+                "id": "rns_tu",
+                "source": "ticker_rns_api",
+                "headline": "Q1 trading update",
+                "period": "trading_update",
+                "has_body": True,
+                "body_path": str(rns_paths["rns_tu"]),
+            },
+            {
+                "id": "ch_annual",
+                "source": "companies_house",
+                "headline": "Companies House accounts — group",
+                "url": "https://document-api.company-information.service.gov.uk/document/x",
+                "period": "annual",
+                "has_body": False,
+            },
+        ]
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    result = supplement_companies_house_pdf_bodies_when_rns_thin(
+        filings_dir,
+        ticker="BT-A.L",
+        company_name="BT Group plc",
+    )
+    assert result.get("skipped") is True
+    assert result["note"] == "rns_bodies_sufficient"
 
 
 def test_refetch_companies_house_filing_bodies_retries_stale_has_body(tmp_path, monkeypatch):

@@ -9421,34 +9421,10 @@ def _write_bodies(
 
 
 def _fetch_companies_house_body(row: dict[str, Any]) -> str | None:
-    """Download and extract text from a Companies House accounts filing."""
-    from value_investor.research.companies_house import (
-        companies_house_api_key,
-        iter_ch_document_downloads,
-    )
+    """Download filed-accounts PDF/iXBRL via document-api and extract research text."""
+    from value_investor.research.companies_house import fetch_companies_house_filing_body
 
-    key = companies_house_api_key()
-    if not key:
-        return None
-    meta_url = str(row.get("document_metadata_url") or row.get("url") or "")
-    if not meta_url:
-        return None
-    try:
-        downloads = iter_ch_document_downloads(meta_url, api_key=key)
-    except Exception as exc:  # noqa: BLE001
-        logger.debug("CH body fetch failed for %s: %s", row.get("id"), exc)
-        return None
-    candidates: list[tuple[str, str]] = []
-    for raw, content_type in downloads:
-        text = _extract_filing_document_text(raw, content_type)
-        if text and len(text) >= 200:
-            candidates.append((text, content_type))
-    best_text = _select_best_ch_body_text(candidates)
-    if not best_text:
-        return None
-    if len(best_text) > FILINGS_BODY_MAX_CHARS:
-        best_text = best_text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
-    return best_text
+    return fetch_companies_house_filing_body(row)
 
 
 def _body_clearly_misattributed(text: str, company_name: str, ticker: str) -> bool:
@@ -10103,6 +10079,121 @@ def supplement_garbled_ch_filing_bodies(
     }
 
 
+UK_RNS_THIN_BODY_MIN_TOTAL = 3
+_UK_RNS_NON_CH_BODY_SOURCES = frozenset(
+    {
+        "sec_edgar",
+        "ir_allowlist",
+        "companies_house",
+    }
+)
+
+
+def _is_uk_rns_body_row(row: dict[str, Any]) -> bool:
+    """Indexed UK announcement row that is not CH statutory accounts or IR/SEC supplements."""
+    if _is_ch_filing_row(row):
+        return False
+    source = str(row.get("source") or "")
+    if source in _UK_RNS_NON_CH_BODY_SOURCES:
+        return False
+    return True
+
+
+def uk_rns_bodies_empty_or_thin(
+    filings: list[dict[str, Any]],
+    *,
+    bodies_dir: Path,
+    min_total_bodies: int = UK_RNS_THIN_BODY_MIN_TOTAL,
+) -> bool:
+    """
+    True when RNS-derived bodies are missing or too thin to support FINANCIAL REVIEW.
+
+    Triggers Companies House filed-accounts PDF supplement (document-api → ``bodies/``).
+    """
+    bodies_dir = Path(bodies_dir)
+    rns_rows = [row for row in filings if _is_uk_rns_body_row(row)]
+    substantive_rns = 0
+    statutory_rns = 0
+    indexed_statutory = False
+    for row in rns_rows:
+        period = str(row.get("period") or "")
+        headline = str(row.get("headline") or "")
+        if period in {"annual", "interim"} and _is_statutory_results_headline(headline):
+            indexed_statutory = True
+        if not row.get("has_body"):
+            continue
+        path = _resolve_filing_body_path_for_row(row, bodies_dir)
+        if path is None:
+            continue
+        try:
+            text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if not _filing_text_is_substantive(text, min_chars=200):
+            continue
+        substantive_rns += 1
+        if period in {"annual", "interim"} and _is_statutory_results_headline(headline):
+            statutory_rns += 1
+    total_with_body = sum(1 for row in filings if row.get("has_body"))
+    if substantive_rns == 0:
+        return True
+    if total_with_body < min_total_bodies:
+        return True
+    if indexed_statutory and statutory_rns == 0:
+        return True
+    return False
+
+
+def supplement_companies_house_pdf_bodies_when_rns_thin(
+    filings_dir: Path,
+    *,
+    ticker: str,
+    company_name: str,
+    max_bodies: int = 6,
+) -> dict[str, Any]:
+    """
+    When UK RNS bodies are empty or thin, index CH accounts (if needed) and fetch PDF/iXBRL bodies.
+
+    Writes plain-text extracts under ``filings/bodies/*.txt`` via document-api download.
+    """
+    from value_investor.research.companies_house import fetch_filings_companies_house
+
+    filings_dir = Path(filings_dir)
+    bodies_dir = filings_dir / "bodies"
+    index_path = filings_dir / "filings_index.json"
+    prior = _load_prior_filings_rows(filings_dir)
+    if not prior:
+        return {"skipped": True, "note": "no filings_index"}
+    if not uk_rns_bodies_empty_or_thin(prior, bodies_dir=bodies_dir):
+        return {"skipped": True, "note": "rns_bodies_sufficient"}
+
+    ch_rows = fetch_filings_companies_house(ticker=ticker, company_name=company_name)
+    if ch_rows:
+        payload: dict[str, Any] = {}
+        if index_path.is_file():
+            try:
+                payload = json.loads(index_path.read_text(encoding="utf-8"))
+            except (OSError, ValueError, TypeError):
+                payload = {}
+        merged = normalize_companies_house_index_rows(
+            merge_filings(list(payload.get("filings") or prior), ch_rows)
+        )
+        payload["filings"] = merged
+        payload["summary"] = summarize_filings(merged)
+        payload["ch_supplement_listing_at"] = datetime.now(UTC).isoformat()
+        index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+    refetch = refetch_companies_house_filing_bodies(
+        filings_dir,
+        max_bodies=max_bodies,
+        ticker=ticker,
+        company_name=company_name,
+    )
+    refetch["skipped"] = False
+    refetch["note"] = "supplement_companies_house_pdf_bodies_when_rns_thin"
+    return refetch
+
+
 def refetch_companies_house_filing_bodies(
     filings_dir: Path,
     *,
@@ -10608,23 +10699,45 @@ def refetch_uk_primary_filing_bodies(
         max_bodies=max_bodies,
         prune_unfetchable_after_attempt=prune_failed_residual_fetches,
     )
+    ch_pdf_supplement = supplement_companies_house_pdf_bodies_when_rns_thin(
+        filings_dir,
+        ticker=ticker,
+        company_name=company_name,
+        max_bodies=max(4, max_bodies // 2),
+    )
     before = int(ch.get("with_body_before") or 0)
-    after = int(residual.get("with_body_after") or rns.get("with_body_after") or before)
+    after = int(
+        ch_pdf_supplement.get("with_body_after")
+        or residual.get("with_body_after")
+        or rns.get("with_body_after")
+        or before
+    )
     return {
         "companies_house": ch,
         "rns": rns,
         "residual": residual,
         "listing_refresh": listing_refresh,
         "body_reconcile": body_reconcile,
+        "companies_house_pdf_supplement": ch_pdf_supplement,
         "attempted": (
             int(ch.get("attempted") or 0)
             + int(rns.get("attempted") or 0)
             + int(residual.get("attempted") or 0)
+            + (
+                int(ch_pdf_supplement.get("attempted") or 0)
+                if not ch_pdf_supplement.get("skipped")
+                else 0
+            )
         ),
         "fetched": (
             int(ch.get("fetched") or 0)
             + int(rns.get("fetched") or 0)
             + int(residual.get("fetched") or 0)
+            + (
+                int(ch_pdf_supplement.get("fetched") or 0)
+                if not ch_pdf_supplement.get("skipped")
+                else 0
+            )
         ),
         "with_body_before": before,
         "with_body_after": after,
@@ -11407,6 +11520,22 @@ def ingest_filings(
         company_name=company_name,
         ticker=ticker,
     )
+    ch_pdf_supplement: dict[str, Any] = {"skipped": True, "note": "not_uk_rns"}
+    if regime == "uk_rns":
+        ch_pdf_supplement = supplement_companies_house_pdf_bodies_when_rns_thin(
+            filings_dir,
+            ticker=ticker,
+            company_name=company_name,
+            max_bodies=max(4, max_bodies),
+        )
+        if not ch_pdf_supplement.get("skipped"):
+            merged = _load_prior_filings_rows(filings_dir) or merged
+            merged = reconcile_filing_body_flags(
+                merged,
+                bodies_dir,
+                company_name=company_name,
+                ticker=ticker,
+            )
     merged, unextractable_urls = drop_attempted_unextractable_rows(
         merged, body_attempted, unextractable_urls
     )
@@ -11524,6 +11653,7 @@ def ingest_filings(
         "filings_summary": index["summary"],
         "filings_sources": index["sources_used"],
         "filings_regime": regime,
+        "companies_house_pdf_supplement": ch_pdf_supplement,
         "yahoo_cashflow_metrics_refresh": cashflow_refresh,
         "sec_companyfacts_refresh": companyfacts_refresh,
     }
