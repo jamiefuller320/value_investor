@@ -18,7 +18,7 @@ from value_investor.market_trading_costs import costs_for_market
 logger = logging.getLogger(__name__)
 
 MIN_BARS = 200
-LOOKBACK_PERIOD = "1y"
+LOOKBACK_PERIOD = "2y"
 ATR_PERIOD = 14
 VOLUME_RATIO_WINDOW = 20
 
@@ -741,6 +741,11 @@ def enrich_signals_with_technicals(
         for ticker, frame in price_history.items()
         if "Close" in frame.columns
     }
+    volume_history = {
+        ticker: frame["Volume"]
+        for ticker, frame in price_history.items()
+        if "Volume" in frame.columns and not frame["Volume"].dropna().empty
+    }
 
     rows: list[dict[str, Any]] = []
     for ticker in tickers:
@@ -779,6 +784,7 @@ def enrich_signals_with_technicals(
             history=close_history,
             chart_dir=Path(chart_dir),
             signal_filter=None,
+            volumes=volume_history,
         )
 
     return enriched
