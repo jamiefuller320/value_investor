@@ -28,6 +28,7 @@ from value_investor.post_sale_decision_reasons import (
 )
 from value_investor.post_sale_review_labels import (
     LABELS_FILENAME,
+    actioned_episode_keys,
     comments_awaiting_reply,
     heal_active_replies_file,
     is_actioned,
@@ -668,10 +669,12 @@ def build_post_sale_review_queue(
     }
     # Drop blank ``?`` reply leftovers so rebuild cannot re-surface them.
     prune_active_replies(labels_store)
+    cleared_episodes = actioned_episode_keys(labels_store)
     active_exits = [
         item
         for item in candidates
         if not is_actioned(labels_store, str(item.get("review_id")))
+        and str(item.get("episode_key") or "").strip() not in cleared_episodes
         and _in_attention_queue(item)
         and _queue_card_usable(item)
     ]

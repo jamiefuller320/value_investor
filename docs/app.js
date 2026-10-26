@@ -11701,16 +11701,123 @@ function renderSealedLifecycle(data) {
 
 let postSaleReviewSort = "exit_at";
 let postSaleReviewExpandedId = null;
-/** Session overlay: review_ids cleared by Accept/Comment/Duplicate before git. */
+/** Session + localStorage overlay: clears survive iPad refresh until labels git. */
+const PENDING_POST_SALE_STORAGE_KEY = "ftse.pendingPostSaleActions.v1";
 const pendingPostSaleActions = Object.create(null);
+/** Identity-only keys for bridge payload (avoid oversized repository_dispatch). */
+const POST_SALE_BRIDGE_SNAPSHOT_KEYS = [
+  "book_id",
+  "book_tag",
+  "model_id",
+  "ticker",
+  "name",
+  "entry_at",
+  "exit_at",
+  "hold_days",
+  "exit_kind",
+  "return_pct",
+  "basis_label",
+  "framing",
+  "registration_id",
+  "population",
+  "buy_decision",
+  "sell_decision",
+  "buy_reason",
+  "sell_reason",
+  "decision_reasons_join_ok",
+  "exit_reason",
+  "entry_reason",
+  "entry_detail",
+  "episode_key",
+  "parent_review_id",
+  "avg_cost",
+  "exit_price",
+  "opened_at",
+  "sold_at",
+];
 
-function rememberPendingPostSaleAction(reviewId, decision) {
+function loadPendingPostSaleActionsFromStorage() {
+  try {
+    const raw = localStorage.getItem(PENDING_POST_SALE_STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return;
+    const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    for (const [rid, row] of Object.entries(parsed)) {
+      if (!rid || !row || typeof row !== "object") continue;
+      const at = Number(row.at) || 0;
+      if (at && at < cutoff) continue;
+      pendingPostSaleActions[rid] = row;
+    }
+  } catch {
+    /* ignore quota / private mode */
+  }
+}
+
+function persistPendingPostSaleActions() {
+  try {
+    localStorage.setItem(
+      PENDING_POST_SALE_STORAGE_KEY,
+      JSON.stringify(pendingPostSaleActions)
+    );
+  } catch {
+    /* ignore quota / private mode */
+  }
+}
+
+loadPendingPostSaleActionsFromStorage();
+
+function slimPostSaleBridgeSnapshot(item) {
+  const src = item && typeof item === "object" ? item : {};
+  const out = {};
+  for (const key of POST_SALE_BRIDGE_SNAPSHOT_KEYS) {
+    if (src[key] != null && src[key] !== "") out[key] = src[key];
+  }
+  return out;
+}
+
+function rememberPendingPostSaleAction(reviewId, decision, meta) {
   const rid = String(reviewId || "").trim();
   if (!rid) return;
+  const info = meta && typeof meta === "object" ? meta : {};
+  const slim = slimPostSaleBridgeSnapshot(info.item || info.snapshot || {});
   pendingPostSaleActions[rid] = {
     decision: String(decision || "accept"),
     at: Date.now(),
+    text: String(info.text || "").trim(),
+    snapshot: slim,
+    episode_key: String(slim.episode_key || info.episode_key || "").trim(),
   };
+  persistPendingPostSaleActions();
+}
+
+function postSaleActionedEpisodeKeys(labels) {
+  const out = new Set();
+  const store = labels && typeof labels === "object" ? labels : {};
+  for (const ev of Array.isArray(store.events) ? store.events : []) {
+    if (!ev || typeof ev !== "object") continue;
+    const kind = String(ev.kind || "").toLowerCase();
+    if (kind !== "accept" && kind !== "comment" && kind !== "duplicate") continue;
+    const snap = ev.snapshot && typeof ev.snapshot === "object" ? ev.snapshot : {};
+    const ep = String(snap.episode_key || "").trim();
+    if (ep) {
+      out.add(ep);
+      continue;
+    }
+    const book = String(snap.book_id || snap.book_tag || "").trim();
+    const ticker = String(snap.ticker || "").trim().toUpperCase();
+    const entryDay = String(snap.entry_at || "").trim().slice(0, 10);
+    const exitDay = String(snap.exit_at || "").trim().slice(0, 10);
+    if (book && ticker && entryDay && exitDay) {
+      out.add([book, ticker, entryDay, exitDay].join("|"));
+    }
+  }
+  for (const row of Object.values(pendingPostSaleActions)) {
+    if (!row || typeof row !== "object") continue;
+    const ep = String(row.episode_key || (row.snapshot && row.snapshot.episode_key) || "").trim();
+    if (ep) out.add(ep);
+  }
+  return out;
 }
 
 function prunePendingPostSaleActions(data) {
@@ -11728,9 +11835,14 @@ function prunePendingPostSaleActions(data) {
       if (rid) actioned.add(rid);
     }
   }
+  let changed = false;
   for (const rid of Object.keys(pendingPostSaleActions)) {
-    if (actioned.has(rid)) delete pendingPostSaleActions[rid];
+    if (actioned.has(rid)) {
+      delete pendingPostSaleActions[rid];
+      changed = true;
+    }
   }
+  if (changed) persistPendingPostSaleActions();
 }
 
 function postSaleReviewCardUsable(item) {
@@ -11740,6 +11852,36 @@ function postSaleReviewCardUsable(item) {
   const book = String(item.book_tag || item.book_id || "").trim();
   if (!book || book === "?") return false;
   return true;
+}
+
+function buildOptimisticPostSaleReplyCard(parentId, pending) {
+  const slim =
+    pending && pending.snapshot && typeof pending.snapshot === "object"
+      ? pending.snapshot
+      : {};
+  if (!postSaleReviewCardUsable(slim)) return null;
+  const text = String((pending && pending.text) || "").trim();
+  if (!text) return null;
+  const replyId = `pending-reply:${parentId}`;
+  return {
+    ...slim,
+    review_id: replyId,
+    parent_review_id: parentId,
+    tag: "reply",
+    owner_comment: text,
+    reply_text: "Factory reply pending — waiting for git commit…",
+    dialogue: [
+      { kind: "comment", text, source: "owner" },
+      {
+        kind: "reply",
+        text: "Factory reply pending — waiting for git commit…",
+        source: "pending",
+      },
+    ],
+    influences_live: false,
+    observe_only: true,
+    pending_optimistic: true,
+  };
 }
 
 function syncPostSaleQueueOverlay(data) {
@@ -11754,12 +11896,37 @@ function syncPostSaleQueueOverlay(data) {
       .filter(Boolean)
   );
   const pending = new Set(Object.keys(pendingPostSaleActions));
+  const clearedEpisodes = postSaleActionedEpisodeKeys(labels);
+  const existingReplyParents = new Set(
+    queue.active
+      .filter((row) => row && row.tag === "reply")
+      .map((row) => String((row && row.parent_review_id) || "").trim())
+      .filter(Boolean)
+  );
   queue.active = queue.active.filter((row) => {
     const rid = String((row && row.review_id) || "").trim();
     if (!rid) return false;
     if (pending.has(rid) || actioned.has(rid)) return false;
+    const ep = String((row && row.episode_key) || "").trim();
+    if (ep && clearedEpisodes.has(ep) && row.tag !== "reply") return false;
     return postSaleReviewCardUsable(row);
   });
+  // Comment: keep a visible reply stub (with owner text) until labels catch up.
+  const optimistic = [];
+  for (const [rid, pendingRow] of Object.entries(pendingPostSaleActions)) {
+    if (!pendingRow || String(pendingRow.decision || "").toLowerCase() !== "comment") {
+      continue;
+    }
+    if (existingReplyParents.has(rid)) continue;
+    if (queue.active.some((row) => String(row.parent_review_id || "").trim() === rid)) {
+      continue;
+    }
+    const card = buildOptimisticPostSaleReplyCard(rid, pendingRow);
+    if (card) optimistic.push(card);
+  }
+  if (optimistic.length) {
+    queue.active = optimistic.concat(queue.active);
+  }
   queue.active_count = queue.active.length;
   queue.new_count = queue.active.filter((row) => row.tag !== "reply").length;
   queue.reply_count = queue.active.filter((row) => row.tag === "reply").length;
@@ -11988,6 +12155,13 @@ function renderPostSaleReviewCard(item, expanded) {
     .split("\n")
     .map((line) => `<div>${esc(line)}</div>`)
     .join("");
+  const ownerComment = String(item.owner_comment || "").trim();
+  const commentPreview =
+    tag === "reply" && ownerComment
+      ? `<p class="small psr-comment-preview"><strong>Your comment</strong> — ${esc(
+          ownerComment.length > 180 ? `${ownerComment.slice(0, 177)}…` : ownerComment
+        )}</p>`
+      : "";
   const collapsedReasons = !expanded ? renderPostSaleDecisionReasons(item) : "";
   const detail = expanded
     ? `<div class="psr-card-detail">
@@ -12048,6 +12222,7 @@ function renderPostSaleReviewCard(item, expanded) {
       <span class="psr-pct">${esc(pctText)}</span>
       <span class="small muted">${esc(item.basis_label || "")}</span>
     </button>
+    ${commentPreview}
     ${collapsedReasons}
     ${detail}
   </article>`;
@@ -12205,11 +12380,13 @@ async function submitPostSaleReviewAction({ reviewId, decision, text, tag, item 
         ? "Recording duplicate…"
         : "Recording Accept…";
   setStatus(statusVerb);
+  const snap = slimPostSaleBridgeSnapshot(item && typeof item === "object" ? item : {});
   // Optimistic clear first so soft reload / bridge latency cannot bounce the card.
-  rememberPendingPostSaleAction(reviewId, decision);
-  const snap = item && typeof item === "object" ? item : {};
+  // Persist to localStorage so iPad full refresh during GHA lag cannot resurrect it.
+  rememberPendingPostSaleAction(reviewId, decision, { text: text || "", item: snap });
   // Flatten identity onto the payload — GHA batch reads flat keys; nested
-  // snapshot alone previously spawned blank ``?`` reply cards.
+  // snapshot alone previously spawned blank ``?`` reply cards. Slim keys keep
+  // repository_dispatch under GitHub's client_payload size limit when batched.
   const payload = {
     ...snap,
     review_id: reviewId,
@@ -12245,6 +12422,7 @@ async function submitPostSaleReviewAction({ reviewId, decision, text, tag, item 
     renderLifecycle(dashboardData);
   } catch (err) {
     delete pendingPostSaleActions[String(reviewId || "").trim()];
+    persistPendingPostSaleActions();
     setStatus(`Failed: ${err.message || err}`);
     if (dashboardData) renderLifecycle(dashboardData);
   }

@@ -559,3 +559,71 @@ def test_nested_snapshot_batch_preserves_identity(tmp_path: Path):
     assert any(
         row.get("tag") == "reply" and row.get("ticker") == "BBB.L" for row in after["active"]
     )
+
+
+def test_actioned_episode_key_keeps_jitter_fingerprint_cleared(tmp_path: Path):
+    """Same calendar episode with a new review_id fingerprint stays cleared."""
+    from value_investor.post_sale_review_labels import actioned_episode_keys
+
+    sealed = _sealed_fixture()
+    board = _board_fixture()
+    base = build_post_sale_review_queue(
+        data_dir=tmp_path, sealed=sealed, board=board
+    )
+    item = next(row for row in base["active"] if row["ticker"] == "AAA.L")
+    ep = item["episode_key"]
+    labels = {
+        "actioned_review_ids": ["stale-fingerprint-from-old-seconds"],
+        "events": [
+            {
+                "kind": "comment",
+                "review_id": "stale-fingerprint-from-old-seconds",
+                "text": "already reviewed",
+                "snapshot": {
+                    "episode_key": ep,
+                    "ticker": item["ticker"],
+                    "book_id": item["book_id"],
+                    "book_tag": item["book_tag"],
+                    "entry_at": item["entry_at"],
+                    "exit_at": item["exit_at"],
+                },
+            }
+        ],
+        "active_replies": [],
+    }
+    assert ep in actioned_episode_keys(labels)
+    payload = build_post_sale_review_queue(
+        data_dir=tmp_path, sealed=sealed, board=board, labels=labels
+    )
+    assert all(row.get("episode_key") != ep or row.get("tag") == "reply" for row in payload["active"])
+    assert all(row.get("review_id") != item["review_id"] for row in payload["active"])
+
+
+def test_resolve_snapshot_heals_from_labels_when_queue_cleared(tmp_path: Path):
+    """Batch race: card already gone from active queue; heal identity from labels."""
+    from value_investor.post_sale_review_actions import _resolve_snapshot
+    from value_investor.post_sale_review_labels import record_accept
+    from value_investor.storage import write_json
+
+    data_dir = tmp_path
+    (data_dir / "sealed_lifecycle.json").write_text("{}", encoding="utf-8")
+    queue = build_post_sale_review_queue(
+        data_dir=data_dir, sealed=_sealed_fixture(), board=_board_fixture()
+    )
+    item = next(row for row in queue["active"] if row["ticker"] == "BBB.L")
+    write_json(data_dir / "post_sale_review_queue.json", {"active": []}, compact=False)
+    record_accept(
+        data_dir,
+        review_id=item["review_id"],
+        snapshot={
+            "ticker": item["ticker"],
+            "book_tag": item["book_tag"],
+            "book_id": item["book_id"],
+            "episode_key": item["episode_key"],
+            "entry_at": item["entry_at"],
+            "exit_at": item["exit_at"],
+        },
+    )
+    healed = _resolve_snapshot(data_dir, item["review_id"], {})
+    assert healed.get("ticker") == "BBB.L"
+    assert healed.get("book_tag") or healed.get("book_id")

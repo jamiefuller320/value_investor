@@ -159,6 +159,13 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "pendingPostSaleActions" in app
     assert "syncPostSaleQueueOverlay" in app
     assert "postSaleReviewCardUsable" in app
+    assert "PENDING_POST_SALE_STORAGE_KEY" in app
+    assert "slimPostSaleBridgeSnapshot" in app
+    assert "buildOptimisticPostSaleReplyCard" in app
+    assert "psr-comment-preview" in app
+    assert "postSaleActionedEpisodeKeys" in app
+    assert "psr-comment-preview" in css
+    assert "post-sale-queue-regression-20261026" in html
 
     # Do not inherit lifecycle-board overflow:hidden clip on this surface.
     assert ".post-sale-review-section.lifecycle-board-section" in css
