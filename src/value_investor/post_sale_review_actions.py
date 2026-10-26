@@ -137,9 +137,10 @@ def _resolve_snapshot(
         for row in labels.get("active_replies") or []:
             if not isinstance(row, dict):
                 continue
-            if str(row.get("review_id") or "").strip() != rid and str(
-                row.get("parent_review_id") or ""
-            ).strip() != rid:
+            if (
+                str(row.get("review_id") or "").strip() != rid
+                and str(row.get("parent_review_id") or "").strip() != rid
+            ):
                 continue
             filled = _fill_from_row(snap, row)
             if _identity_ok(filled):

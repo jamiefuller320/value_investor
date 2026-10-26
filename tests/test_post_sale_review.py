@@ -567,9 +567,7 @@ def test_actioned_episode_key_keeps_jitter_fingerprint_cleared(tmp_path: Path):
 
     sealed = _sealed_fixture()
     board = _board_fixture()
-    base = build_post_sale_review_queue(
-        data_dir=tmp_path, sealed=sealed, board=board
-    )
+    base = build_post_sale_review_queue(data_dir=tmp_path, sealed=sealed, board=board)
     item = next(row for row in base["active"] if row["ticker"] == "AAA.L")
     ep = item["episode_key"]
     labels = {
@@ -595,7 +593,9 @@ def test_actioned_episode_key_keeps_jitter_fingerprint_cleared(tmp_path: Path):
     payload = build_post_sale_review_queue(
         data_dir=tmp_path, sealed=sealed, board=board, labels=labels
     )
-    assert all(row.get("episode_key") != ep or row.get("tag") == "reply" for row in payload["active"])
+    assert all(
+        row.get("episode_key") != ep or row.get("tag") == "reply" for row in payload["active"]
+    )
     assert all(row.get("review_id") != item["review_id"] for row in payload["active"])
 
 
