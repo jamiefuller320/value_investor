@@ -14,7 +14,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-10-26T19:39:38.422723+00:00",
+    "snapshot_at": "2026-10-26T19:42:19.445794+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 49,
     "unmeasured_buy_tier": 0,
@@ -88,7 +88,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-10-26T19:39:38.439699+00:00",
+  "evaluated_at": "2026-10-26T19:42:19.461719+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -136,59 +136,74 @@
     "us_adr_asia"
   ],
   "parallel_sprint_markets": [
-    "euro_stoxx50"
+    "ftse_mib"
   ],
   "parallel_sprint_status": [
     {
-      "market_id": "euro_stoxx50",
+      "market_id": "ftse_mib",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=1, indexed_without_body=5)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=5, indexed_without_body=8)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
-      "parked_tickers": [
-        "BAS.DE"
-      ],
+      "parked_tickers": [],
       "phase3_ready": false,
-      "current_phase": 1,
+      "current_phase": 0,
       "next_phase": 1,
       "phase_blockers": [
-        "euro_stoxx50 not in ladder.weekly_paper_shard_markets"
+        "no benchmark configured for ftse_mib"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-26T19:40:13.706294+00:00",
-        "market_id": "euro_stoxx50",
-        "buy_tier_count": 14,
+        "snapshot_at": "2026-10-26T19:42:51.938983+00:00",
+        "market_id": "ftse_mib",
+        "buy_tier_count": 8,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 1,
-        "indexed_without_body": 5,
+        "thin_body_buy_tier": 5,
+        "indexed_without_body": 8,
         "bodies_min": 1,
-        "bodies_median": 11.0,
-        "bodies_max": 125,
+        "bodies_median": 2.0,
+        "bodies_max": 52,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
         "thin_body_tickers": [
-          "BAS.DE"
+          "MONC.MI",
+          "PST.MI",
+          "UNI.MI",
+          "LTMC.MI",
+          "FCT.MI"
         ],
         "indexed_without_body_tickers": [
-          "NOKIA.HE"
+          "MONC.MI",
+          "UNI.MI",
+          "LTMC.MI",
+          "FCT.MI"
         ],
         "indexed_without_body_by_ticker": {
-          "NOKIA.HE": 5
+          "MONC.MI": 3,
+          "UNI.MI": 2,
+          "LTMC.MI": 2,
+          "FCT.MI": 1
         },
-        "parked_tickers": [
-          "BAS.DE"
+        "parked_tickers": [],
+        "parked_count": 0,
+        "effective_thin_body_buy_tier": 5,
+        "effective_thin_body_tickers": [
+          "MONC.MI",
+          "PST.MI",
+          "UNI.MI",
+          "LTMC.MI",
+          "FCT.MI"
         ],
-        "parked_count": 1,
-        "effective_thin_body_buy_tier": 0,
-        "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 5,
+        "effective_indexed_without_body": 8,
         "effective_indexed_without_body_tickers": [
-          "NOKIA.HE"
+          "MONC.MI",
+          "UNI.MI",
+          "LTMC.MI",
+          "FCT.MI"
         ],
         "ingest_exhausted": false
       },
@@ -207,7 +222,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-26T19:40:13.708825+00:00",
+      "evaluated_at": "2026-10-26T19:42:51.948257+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -231,7 +246,7 @@
         "dax not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-26T19:40:14.487729+00:00",
+        "snapshot_at": "2026-10-26T19:42:52.662720+00:00",
         "market_id": "dax",
         "buy_tier_count": 10,
         "unmeasured_buy_tier": 0,
@@ -289,13 +304,13 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-26T19:40:14.488383+00:00",
+      "evaluated_at": "2026-10-26T19:42:52.663183+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
-    "euro_stoxx50",
+    "ftse_mib",
     "dax"
   ],
   "market_queue": [
@@ -350,7 +365,7 @@
     }
   },
   "scheduler_stream_1_markets": [
-    "euro_stoxx50"
+    "ftse_mib"
   ],
   "scheduler_stream_2_markets": [
     "dax"

@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-26T17:13:51.608195+00:00",
+  "run_at": "2026-10-26T19:41:06.416019+00:00",
   "market_id": "euro_stoxx50",
   "targets": [
     "NOKIA.HE"
@@ -8,8 +8,8 @@
     {
       "ticker": "NOKIA.HE",
       "priority_score": 15.927,
-      "filings_total": 41,
-      "filings_with_body": 36,
+      "filings_total": 44,
+      "filings_with_body": 39,
       "indexed_without_body": 5,
       "reason": "indexed_without_body"
     }
@@ -19,8 +19,8 @@
       "ticker": "NOKIA.HE",
       "reason": "indexed_without_body",
       "before": {
-        "filings_total": 41,
-        "filings_with_body": 36,
+        "filings_total": 44,
+        "filings_with_body": 39,
         "indexed_without_body": 5
       },
       "after": {
@@ -31,11 +31,11 @@
       "improved": false,
       "regime": "euro_filings",
       "filings_summary": {
-        "total": 47,
+        "total": 48,
         "annual": 21,
         "interim": 9,
         "trading_update": 1,
-        "other": 16,
+        "other": 17,
         "with_body": 39,
         "period_coverage": {
           "annual": {
@@ -51,7 +51,7 @@
             "with_body": 1
           },
           "other": {
-            "total": 16,
+            "total": 17,
             "with_body": 9
           }
         }
@@ -83,43 +83,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-26T17:12:40.914413+00:00",
-    "market_id": "euro_stoxx50",
-    "buy_tier_count": 14,
-    "unmeasured_buy_tier": 0,
-    "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 1,
-    "indexed_without_body": 5,
-    "bodies_min": 1,
-    "bodies_median": 11.0,
-    "bodies_max": 125,
-    "coverage_scope": "canonical_plus_shards",
-    "ftse_equivalent": false,
-    "unmeasured_tickers": [],
-    "zero_body_tickers": [],
-    "thin_body_tickers": [
-      "BAS.DE"
-    ],
-    "indexed_without_body_tickers": [
-      "NOKIA.HE"
-    ],
-    "indexed_without_body_by_ticker": {
-      "NOKIA.HE": 5
-    },
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
-      "BAS.DE"
-    ],
-    "effective_indexed_without_body": 5,
-    "effective_indexed_without_body_tickers": [
-      "NOKIA.HE"
-    ],
-    "ingest_exhausted": false
-  },
-  "health_after": {
-    "snapshot_at": "2026-10-26T17:13:48.672752+00:00",
+    "snapshot_at": "2026-10-26T19:39:02.589045+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 14,
     "unmeasured_buy_tier": 0,
@@ -154,27 +118,95 @@
     ],
     "ingest_exhausted": false
   },
+  "health_after": {
+    "snapshot_at": "2026-10-26T19:39:31.659109+00:00",
+    "market_id": "euro_stoxx50",
+    "buy_tier_count": 14,
+    "unmeasured_buy_tier": 0,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 1,
+    "indexed_without_body": 5,
+    "bodies_min": 1,
+    "bodies_median": 11.0,
+    "bodies_max": 125,
+    "coverage_scope": "canonical_plus_shards",
+    "ftse_equivalent": false,
+    "unmeasured_tickers": [],
+    "zero_body_tickers": [],
+    "thin_body_tickers": [
+      "BAS.DE"
+    ],
+    "indexed_without_body_tickers": [
+      "NOKIA.HE"
+    ],
+    "indexed_without_body_by_ticker": {
+      "NOKIA.HE": 5
+    },
+    "parked_tickers": [
+      "BAS.DE",
+      "NOKIA.HE"
+    ],
+    "parked_count": 2,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
+  },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "euro_stoxx50",
+    "to_market": "ftse_mib",
+    "stream_markets_after": [
+      "ftse_mib"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "euro_stoxx50",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "BAS.DE",
+        "NOKIA.HE"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "ftse_mib",
+      "forced": true,
+      "prior_screen_at": "2026-10-26T07:45:27.432456+00:00",
+      "prior_age_days": 0,
+      "run_at": "2026-10-26T19:41:03.062425+00:00",
+      "shortlist_count": 8,
+      "ticker_count": 40
+    },
+    "at": "2026-10-26T19:39:52.884339+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "euro_stoxx50",
-    "assessed_at": "2026-10-26T17:12:41.937737+00:00",
+    "assessed_at": "2026-10-26T19:39:03.536694+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
       {
         "ticker": "NOKIA.HE",
         "indexed_without_body": 5,
-        "filings_total": 41,
-        "filings_with_body": 36
+        "filings_total": 44,
+        "filings_with_body": 39
       }
     ],
     "thin_need_discovery": [
@@ -200,21 +232,19 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 65.72713209400001,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2034.272867906,
+  "used_seconds": 27.185789934000013,
+  "budget_seconds": 87.5,
+  "leftover_seconds": 60.31421006599999,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "NOKIA.HE"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_stoxx50",
-    "updated_at": "2026-10-26T17:13:48.680080+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-10-26T19:39:31.666373+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -228,6 +258,18 @@
         "indexed_without_body": 0,
         "thin": true,
         "source_surface": "euro_filings+ir_allowlist_direct"
+      },
+      {
+        "ticker": "NOKIA.HE",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-26T19:39:31.666373+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 44,
+        "filings_with_body": 39,
+        "indexed_without_body": 5,
+        "thin": false,
+        "source_surface": "euro_filings+ir_allowlist_direct"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -238,24 +280,45 @@
       "BAS.DE",
       "NOKIA.HE"
     ],
-    "unparked_leftover": [
-      "NOKIA.HE"
-    ],
-    "surface_released": [
-      "NOKIA.HE"
-    ],
+    "unparked_leftover": [],
+    "surface_released": [],
     "path": "docs/data/library/markets/euro_stoxx50/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "euro_stoxx50"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "euro_stoxx50",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "iseq20",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 49,
-    "candidate_count": 30,
+    "candidate_count": 31,
     "skipped_resolved_tickers": [
       "LMT",
       "CRH",
