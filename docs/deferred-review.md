@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-26T15:10:29+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-26T17:10:22+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -379,6 +379,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L637 | **Novelty-gated sealed forks from mixable entry/exit lens policies** | Not infinite model variants. Lenses identify a broad entry or exit pattern; each has an appropriate policy (timing/pacing may differ per side); composition allowed (entry A + exit B). Prefer lenses on cue_consumer_mft. Sealed spawn only as few novelty-gated forks from those lens policies after closes-primary emit + cull proven — not parallel-model sprawl; hard anti-noise ≤3 active children/root. | cue_consumer_mft closes-primary emit path live AND novelty+cull (N226/N227) proven on at least one thin spawn cycle; then consider novelty-gated forks from mixable entry/exit lens policies (not one book per situation) |
 | L638 | **Richer confidence and mitigation fields on post-sale autopsy cards** | Owner judgment-in-the-round ask: surface confidence and how-to-mitigate on sell/buy autopsy cards (alongside target/realism/market-agree). Extends Package M voice; alignment-only; do not invent reasons; fail-closed unknown. Distinct from L139 rebalance-log confidence and N27 live gating. | judgment-in-the-round super-book rubric in use OR owner asks autopsy cards to mirror B5/B6/S5/S6 checklist fields; after current autopsy voice schema stable |
 | L639 | **cue_consumer_mft episode walker / fixed-stake fills** | Armed observe lab still has no episode walker or paper fills. Add PIT cue-consumption walker with fixed-stake v0 closes for MoM levers after Q8B freeze+complete (or calendar), without Package L or live promote. | Q8B open_autopsy_cohort_2026_q4 frozen and complete (or calendar 2026-12-01) and owner wants lab closes volume _(machine-checked)_ |
+| L641 | **Automatic missed-opportunity analysis for highest-performing not-bought names** | Owner lock (blind-split): beside lab/interesting deep autopsy, automatically analyze highest-performing names not bought as missed-opportunity feed for stock-choice / entry lens on the super book. Not full sealed-book manual autopsy; observe-only; does not block Q8B start. | Blind-split entry_blind instrument ships or owner asks for missed-opportunity feed into cue_consumer_mft stock-choice lever |
 
 ### Universe & data
 
