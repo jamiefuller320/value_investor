@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-25T07:51:23.894775+00:00",
+  "generated_at": "2026-10-26T02:39:49.833590+00:00",
   "observe_only": true,
-  "headline": "2 warn instrument(s); trajectory worsening on 1.",
+  "headline": "2 warn instrument(s); trajectory worsening on 2.",
   "surface_freshness": "fresh",
-  "ops_run_at": "2026-10-25T07:42:11.314668+00:00",
+  "ops_run_at": "2026-10-26T02:31:54.795275+00:00",
   "warn_instrument_count": 2,
   "trajectory_summary": {
-    "improving": 1,
-    "worsening": 1,
+    "improving": 0,
+    "worsening": 2,
     "flat": 3,
     "unknown": 0,
     "history_points": 28,
@@ -22,37 +22,29 @@
       "observe_only": true,
       "warn_active": true,
       "severity": "warn",
-      "finding_summary": "18 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, ftse350, hang_seng, nasdaq100 (+1 more): asx200/BWP.AX (no_memo, 511.79h since flip), hang_seng/0001.HK (no_memo, 319.79h since flip), aex/PRX.AS (no_memo, 271.79h since flip), asx200/GMD.AX (no_key_bodies, 271.79h since flip), euro_depth/PRX.AS (no_memo, 271.79h since flip), tsx60/ABX.TO (no_key_bodies, 271.79h since flip), tsx60/SAP.TO (no_key_bodies, 271.79h since flip), tsx60/TECK-B.TO (no_key_bodies, 271.79h since flip), nasdaq100/AMAT (no_memo, 247.79h since flip), asx200/CLW.AX (no_memo, 223.79h since flip) (+8 more). Blocking: no_key_bodies=4, no_memo=14.",
+      "finding_summary": "23 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, euro_stoxx50, ftse350, ftse_mib (+3 more): hang_seng/0001.HK (no_memo, 338.53h since flip), aex/PRX.AS (no_memo, 290.53h since flip), asx200/GMD.AX (no_key_bodies, 290.53h since flip), euro_depth/PRX.AS (no_memo, 290.53h since flip), tsx60/ABX.TO (no_key_bodies, 290.53h since flip), tsx60/SAP.TO (no_key_bodies, 290.53h since flip), tsx60/TECK-B.TO (no_key_bodies, 290.53h since flip), nasdaq100/AMAT (no_memo, 266.53h since flip), asx200/CLW.AX (no_memo, 242.53h since flip), euro_depth/MT.AS (no_memo, 194.53h since flip) (+13 more). Blocking: no_index=2, no_key_bodies=7, no_memo=14.",
       "metrics": {
-        "warn_not_usable": 18,
-        "open_not_usable": 32,
-        "cohort_count": 204,
-        "usable_in_window": 172,
+        "warn_not_usable": 23,
+        "open_not_usable": 33,
+        "cohort_count": 197,
+        "usable_in_window": 164,
         "market_count": 23,
         "blocking_stage_counts": {
+          "no_accumulate_verdict": 10,
           "no_memo": 14,
-          "no_accumulate_verdict": 8,
-          "no_key_bodies": 8,
+          "no_key_bodies": 7,
           "no_index": 2
         },
-        "sibling_home_open_count": 1,
-        "true_no_memo_open_count": 15,
+        "sibling_home_open_count": 0,
+        "true_no_memo_open_count": 16,
         "warn_sample": [
-          {
-            "ticker": "BWP.AX",
-            "market_id": "asx200",
-            "blocking_stage": "no_memo",
-            "has_memo": false,
-            "memo_home_market": null,
-            "hours_since_flip": 511.79
-          },
           {
             "ticker": "0001.HK",
             "market_id": "hang_seng",
             "blocking_stage": "no_memo",
             "has_memo": false,
             "memo_home_market": null,
-            "hours_since_flip": 319.79
+            "hours_since_flip": 338.53
           },
           {
             "ticker": "PRX.AS",
@@ -60,7 +52,7 @@
             "blocking_stage": "no_memo",
             "has_memo": false,
             "memo_home_market": null,
-            "hours_since_flip": 271.79
+            "hours_since_flip": 290.53
           },
           {
             "ticker": "GMD.AX",
@@ -68,7 +60,7 @@
             "blocking_stage": "no_key_bodies",
             "has_memo": true,
             "memo_home_market": "asx200",
-            "hours_since_flip": 271.79
+            "hours_since_flip": 290.53
           },
           {
             "ticker": "PRX.AS",
@@ -76,7 +68,7 @@
             "blocking_stage": "no_memo",
             "has_memo": false,
             "memo_home_market": null,
-            "hours_since_flip": 271.79
+            "hours_since_flip": 290.53
           },
           {
             "ticker": "ABX.TO",
@@ -84,7 +76,7 @@
             "blocking_stage": "no_key_bodies",
             "has_memo": true,
             "memo_home_market": "tsx60",
-            "hours_since_flip": 271.79
+            "hours_since_flip": 290.53
           },
           {
             "ticker": "SAP.TO",
@@ -92,7 +84,7 @@
             "blocking_stage": "no_key_bodies",
             "has_memo": true,
             "memo_home_market": "tsx60",
-            "hours_since_flip": 271.79
+            "hours_since_flip": 290.53
           },
           {
             "ticker": "TECK-B.TO",
@@ -100,28 +92,36 @@
             "blocking_stage": "no_key_bodies",
             "has_memo": true,
             "memo_home_market": "tsx60",
-            "hours_since_flip": 271.79
+            "hours_since_flip": 290.53
+          },
+          {
+            "ticker": "AMAT",
+            "market_id": "nasdaq100",
+            "blocking_stage": "no_memo",
+            "has_memo": false,
+            "memo_home_market": null,
+            "hours_since_flip": 266.53
           }
         ]
       },
       "primary_metric": "warn_not_usable",
-      "primary_value": 18,
+      "primary_value": 23,
       "primary_label": "Warn cohort (≥24h path-incomplete)",
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-10-25T07:47:33.388286+00:00",
-        "age_hours": 0.06,
+        "as_of": "2026-10-26T02:31:56.287823+00:00",
+        "age_hours": 0.13,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": -2,
-        "direction": "improving",
-        "label": "Better since last cycle",
-        "prior_value": 20,
-        "prior_at": "2026-10-25T02:38:28.037359+00:00"
+        "delta": 5,
+        "direction": "worsening",
+        "label": "Worse since last cycle",
+        "prior_value": 18,
+        "prior_at": "2026-10-25T07:47:31.978862+00:00"
       }
     },
     {
@@ -131,39 +131,39 @@
       "observe_only": true,
       "warn_active": true,
       "severity": "warn",
-      "finding_summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `memo_recent` missing on 9/67 names (e.g. EZJ.L, HBR.L, HTG.L, LRE.L, MAB.L, PRU.L, RKT.L, GSK.L, JSG.L). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
+      "finding_summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `memo_recent` missing on 17/73 names (e.g. VLX.L, ATYM.L, EZJ.L, HBR.L, HTG.L, LRE.L, MAB.L, PRU.L, RKT.L, ABF.L +7 more). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
       "metrics": {
-        "inventory_count": 67,
-        "fully_ready_count": 58,
-        "names_with_any_gap": 9,
+        "inventory_count": 73,
+        "fully_ready_count": 56,
+        "names_with_any_gap": 17,
         "dominant_gap_field": "memo_recent",
-        "dominant_gap_count": 9,
+        "dominant_gap_count": 17,
         "gap_counts": {
-          "key_filing_bodies": 0,
+          "key_filing_bodies": 1,
           "fcf_basis_bound": 0,
-          "overlay_bound": 7,
-          "memo_recent": 9
+          "overlay_bound": 9,
+          "memo_recent": 17
         },
         "verdict": "memo_recent"
       },
       "primary_metric": "dominant_gap_count",
-      "primary_value": 9,
+      "primary_value": 17,
       "primary_label": "Dominant gap (memo_recent)",
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-10-25T07:48:01.476390+00:00",
-        "age_hours": 0.06,
+        "as_of": "2026-10-26T02:32:25.987004+00:00",
+        "age_hours": 0.12,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": 0,
-        "direction": "flat",
-        "label": "Unchanged vs last cycle",
+        "delta": 8,
+        "direction": "worsening",
+        "label": "Worse since last cycle",
         "prior_value": 9,
-        "prior_at": "2026-10-25T02:38:28.037359+00:00"
+        "prior_at": "2026-10-25T07:47:31.978862+00:00"
       }
     },
     {
@@ -175,16 +175,16 @@
       "severity": "ok",
       "finding_summary": null,
       "metrics": {
-        "miss_rate": 0.4678,
-        "enter_body_miss_count": 167,
-        "cohort_count": 357,
+        "miss_rate": 0.4586,
+        "enter_body_miss_count": 166,
+        "cohort_count": 362,
         "open_still_missing_bodies": 17,
         "by_market": {
           "ftse350": {
-            "cohort_count": 60,
-            "enter_body_miss_count": 16,
-            "open_still_missing_bodies": 0,
-            "miss_rate": 0.2667
+            "cohort_count": 65,
+            "enter_body_miss_count": 15,
+            "open_still_missing_bodies": 1,
+            "miss_rate": 0.2308
           },
           "sp500": {
             "cohort_count": 105,
@@ -225,7 +225,7 @@
           "nasdaq100": {
             "cohort_count": 28,
             "enter_body_miss_count": 12,
-            "open_still_missing_bodies": 1,
+            "open_still_missing_bodies": 0,
             "miss_rate": 0.4286
           },
           "cac40": {
@@ -327,17 +327,17 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-10-25T07:48:01.684144+00:00",
-        "age_hours": 0.06,
+        "as_of": "2026-10-26T02:32:26.370966+00:00",
+        "age_hours": 0.12,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": 5,
-        "direction": "worsening",
-        "label": "Worse since last cycle",
-        "prior_value": 12,
-        "prior_at": "2026-10-25T02:38:28.037359+00:00"
+        "delta": 0,
+        "direction": "flat",
+        "label": "Unchanged vs last cycle",
+        "prior_value": 17,
+        "prior_at": "2026-10-25T07:47:31.978862+00:00"
       }
     },
     {
@@ -363,8 +363,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-10-25T07:48:01.712884+00:00",
-        "age_hours": 0.06,
+        "as_of": "2026-10-26T02:32:26.669882+00:00",
+        "age_hours": 0.12,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -373,7 +373,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 0,
-        "prior_at": "2026-10-25T02:38:28.037359+00:00"
+        "prior_at": "2026-10-25T07:47:31.978862+00:00"
       }
     },
     {
@@ -386,7 +386,7 @@
       "finding_summary": null,
       "metrics": {
         "market_count": 23,
-        "open_count": 741,
+        "open_count": 743,
         "closed_count": 0,
         "first_episode_closed_count": 0,
         "source_records_missing_market_id": 0,
@@ -399,8 +399,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.1h ago.",
-        "as_of": "2026-10-25T07:48:01.713591+00:00",
-        "age_hours": 0.06,
+        "as_of": "2026-10-26T02:32:26.673485+00:00",
+        "age_hours": 0.12,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -409,39 +409,11 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 0,
-        "prior_at": "2026-10-25T02:38:28.037359+00:00"
+        "prior_at": "2026-10-25T07:47:31.978862+00:00"
       }
     }
   ],
   "history": [
-    {
-      "at": "2026-10-06T09:10:43.501308+00:00",
-      "buy_tier_flip_lag": {
-        "primary_value": 20,
-        "warn_active": true,
-        "freshness_state": "fresh"
-      },
-      "decision_input_inventory": {
-        "primary_value": 0,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      },
-      "universe_filing_archive_miss_rate": {
-        "primary_value": 21,
-        "warn_active": true,
-        "freshness_state": "fresh"
-      },
-      "shard_nav_fx_warp": {
-        "primary_value": 0,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      },
-      "combined_tagged_learning": {
-        "primary_value": 0,
-        "warn_active": false,
-        "freshness_state": "fresh"
-      }
-    },
     {
       "at": "2026-10-07T02:34:24.563355+00:00",
       "buy_tier_flip_lag": {
@@ -1179,6 +1151,34 @@
       },
       "decision_input_inventory": {
         "primary_value": 9,
+        "warn_active": true,
+        "freshness_state": "fresh"
+      },
+      "universe_filing_archive_miss_rate": {
+        "primary_value": 17,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "shard_nav_fx_warp": {
+        "primary_value": 0,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "combined_tagged_learning": {
+        "primary_value": 0,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      }
+    },
+    {
+      "at": "2026-10-26T02:39:47.747489+00:00",
+      "buy_tier_flip_lag": {
+        "primary_value": 23,
+        "warn_active": true,
+        "freshness_state": "fresh"
+      },
+      "decision_input_inventory": {
+        "primary_value": 17,
         "warn_active": true,
         "freshness_state": "fresh"
       },

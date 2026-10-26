@@ -1,10 +1,46 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-25T07:50:05.561516+00:00",
+  "generated_at": "2026-10-26T02:35:37.748223+00:00",
   "observe_only": true,
-  "open_ideas": 582,
-  "with_trigger": 20,
-  "met": [],
+  "open_ideas": 591,
+  "with_trigger": 23,
+  "met": [
+    {
+      "id": "N216",
+      "title": "Body-fetch pipeline rewrite for euro thin/IWB drain",
+      "status": "open",
+      "first_met_at": "2026-10-26T02:35:37.748223+00:00",
+      "conditions": [
+        {
+          "condition": {
+            "file": "docs/data/decision_input_inventory.json",
+            "path": "summary.gap_counts.key_filing_bodies",
+            "op": ">",
+            "value": 0
+          },
+          "state": "met",
+          "actual": 1
+        },
+        {
+          "condition": {
+            "file": "docs/data/market_status.json",
+            "path": "markets[market_id=euro_depth].filing_health.indexed_without_body",
+            "op": ">",
+            "value": 20
+          },
+          "state": "unmet",
+          "actual": 16
+        },
+        {
+          "condition": {
+            "on_or_after": "2026-11-23"
+          },
+          "state": "unmet",
+          "actual": "2026-10-26"
+        }
+      ]
+    }
+  ],
   "unknown": [
     {
       "id": "L558",
@@ -54,9 +90,11 @@
     "N213",
     "L616",
     "N215",
-    "N216",
     "N220",
-    "L625"
+    "L625",
+    "N223",
+    "N227",
+    "L632"
   ],
   "frozen_mentions": [
     {
