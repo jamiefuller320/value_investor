@@ -1,8 +1,9 @@
 {
-  "run_at": "2026-10-25T17:15:25.272820+00:00",
+  "run_at": "2026-10-26T16:55:37.706549+00:00",
   "market_id": "smi",
   "targets": [
-    "NOVN.SW"
+    "NOVN.SW",
+    "PGHN.SW"
   ],
   "target_details": [
     {
@@ -12,6 +13,14 @@
       "filings_with_body": 34,
       "indexed_without_body": 1,
       "reason": "indexed_without_body"
+    },
+    {
+      "ticker": "PGHN.SW",
+      "priority_score": 5.481,
+      "filings_total": 2,
+      "filings_with_body": 2,
+      "indexed_without_body": 0,
+      "reason": "thin_bodies"
     }
   ],
   "results": [
@@ -76,6 +85,68 @@
         "ir_metadata_reconciled": 0,
         "note": "no missing IR allowlist bodies"
       }
+    },
+    {
+      "ticker": "PGHN.SW",
+      "reason": "thin_bodies",
+      "before": {
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0
+      },
+      "after": {
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0
+      },
+      "improved": false,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 2,
+        "annual": 1,
+        "interim": 1,
+        "trading_update": 0,
+        "other": 0,
+        "with_body": 2,
+        "period_coverage": {
+          "annual": {
+            "total": 1,
+            "with_body": 1
+          },
+          "interim": {
+            "total": 1,
+            "with_body": 1
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 0,
+            "with_body": 0
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 2,
+        "with_body_after": 2,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 2,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
     }
   ],
   "improved": [
@@ -85,7 +156,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-25T17:14:38.191593+00:00",
+    "snapshot_at": "2026-10-26T16:54:53.129959+00:00",
     "market_id": "smi",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -104,18 +175,18 @@
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
-    "parked_tickers": [
+    "parked_tickers": [],
+    "parked_count": 0,
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
       "PGHN.SW"
     ],
-    "parked_count": 1,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-25T17:15:17.327254+00:00",
+    "snapshot_at": "2026-10-26T16:55:35.768201+00:00",
     "market_id": "smi",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -134,15 +205,15 @@
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
-    "parked_tickers": [
+    "parked_tickers": [],
+    "parked_count": 0,
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
       "PGHN.SW"
     ],
-    "parked_count": 1,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
@@ -172,14 +243,10 @@
   },
   "maintenance_mode": true,
   "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "smi"
-  },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "smi",
-    "assessed_at": "2026-10-25T17:14:38.569556+00:00",
+    "assessed_at": "2026-10-26T16:54:53.364119+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -203,9 +270,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 38.35506308199999,
+  "used_seconds": 42.172172788,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3561.644936918,
+  "leftover_seconds": 3557.827827212,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -213,24 +280,11 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "smi",
-    "updated_at": "2026-10-25T17:15:17.330463+00:00",
-    "exhausted": true,
+    "updated_at": "2026-10-26T16:55:35.771674+00:00",
+    "exhausted": false,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
-    "parked": [
-      {
-        "ticker": "PGHN.SW",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-10-04T13:48:12.312361+00:00",
-        "park_via": "straggler_soft_park",
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings"
-      }
-    ],
+    "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
@@ -238,86 +292,40 @@
     "leftover_tickers": [
       "PGHN.SW"
     ],
-    "unparked_leftover": [],
-    "surface_released": [],
+    "unparked_leftover": [
+      "PGHN.SW"
+    ],
+    "surface_released": [
+      "PGHN.SW"
+    ],
     "path": "docs/data/library/markets/smi/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "smi",
-    "ingest_exhausted_markets": [
-      "aex",
-      "asx200",
-      "atx",
-      "bel20",
-      "cac40",
-      "dax",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_mib",
-      "ftse_smallcap",
-      "hang_seng",
-      "ibex35",
-      "iseq20",
-      "nasdaq100",
-      "omxs30",
-      "psi20",
-      "smi",
-      "sp500",
-      "sti",
-      "tsx60",
-      "us_adr_asia"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "not_exhausted",
+    "market_id": "smi"
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 47,
-    "candidate_count": 64,
+    "tried_count": 49,
+    "candidate_count": 29,
     "skipped_resolved_tickers": [
-      "ABI.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "EVN.VI",
-      "WIE.VI",
-      "ACKB.BR",
-      "DQ7A.IR",
-      "UCB.BR",
       "LMT",
       "CRH",
       "ULTP.L",
-      "DFS.L",
-      "FOXT.L",
       "MER.L",
+      "TPT.L",
       "APTD.L",
+      "FOXT.L",
       "NTR.TO",
       "GIB-A.TO",
       "SU.TO",
-      "SAP.DE",
-      "BAS.DE",
-      "IFX.DE",
       "PDD",
-      "BAS.DE",
-      "DTE.DE",
-      "DTG.DE",
-      "FRE.DE",
-      "HNR1.DE",
-      "MUV2.DE",
-      "HEI.DE",
-      "PST.MI",
-      "TEN.MI",
-      "ACKB.BR",
-      "APAM.AS",
       "0285.HK",
       "0857.HK",
       "0288.HK",
-      "2331.HK",
-      "EVN.VI",
-      "WIE.VI",
-      "PGHN.SW"
+      "2331.HK"
     ],
     "wait_behind_task_id": ""
   }
