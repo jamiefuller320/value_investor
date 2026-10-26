@@ -52,6 +52,10 @@ def test_build_price_chart_payload_normalizes_gbp_unit_flip():
 
 def test_build_price_chart_payload_includes_levels():
     series = _series()
+    volume = pd.Series(
+        [1_000 + i * 10 for i in range(len(series))],
+        index=series.index,
+    )
     payload = build_price_chart_payload(
         ticker="AAA.L",
         name="Alpha",
@@ -66,6 +70,7 @@ def test_build_price_chart_payload_includes_levels():
             "tactical_stop_loss": 90.0,
             "tactical_take_profit": 110.0,
         },
+        volume=volume,
     )
     assert payload is not None
     assert payload["ticker"] == "AAA.L"
@@ -86,6 +91,12 @@ def test_build_price_chart_payload_includes_levels():
     assert any(value is not None for value in payload["sma200_series"])
     assert payload["levels_basis"] == "trade_plan"
     assert payload["currency"] == "GBP"
+    assert payload["period"] == "2y"
+    assert payload["clip_warmup_calendar_days"] == 220
+    assert "volumes" in payload
+    assert len(payload["volumes"]) == len(payload["closes"])
+    assert any(v is not None for v in payload["volumes"])
+    assert len(payload["dates"]) <= 280
 
 
 def test_build_price_chart_payload_prospective_levels_for_hold_not_held():
@@ -169,11 +180,40 @@ def test_chart_payload_needs_refresh_and_prospective_helper():
                 "sma50_series": [1],
                 "sma200_series": [1],
                 "dates": ["a"],
+                "volumes": [10],
+                "period": "1y",
+                "levels": {"core_limit": 1},
+            },
+            signal="hold",
+        )
+        is True
+    )
+    assert (
+        chart_payload_needs_refresh(
+            {
+                "sma50_series": [1],
+                "sma200_series": [1],
+                "dates": ["a"],
+                "volumes": [10],
+                "period": "2y",
                 "levels": {"core_limit": 1},
             },
             signal="hold",
         )
         is False
+    )
+    assert (
+        chart_payload_needs_refresh(
+            {
+                "sma50_series": [1],
+                "sma200_series": [1],
+                "dates": ["a"],
+                "period": "2y",
+                "levels": {"core_limit": 1},
+            },
+            signal="hold",
+        )
+        is True
     )
     plan = prospective_trade_plan_from_series(_series(), signal="hold")
     assert plan is not None

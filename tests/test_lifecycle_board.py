@@ -557,6 +557,11 @@ def test_dashboard_lifecycle_opens_experiment_cards():
     assert "realized_exit_pnl_pct" in app
     assert "_exit_price" in charts
     assert "function clipPriceSeries(" in charts
+    assert "CLIP_WARMUP_CALENDAR_DAYS" in charts
+    assert "assessment_band" in charts
+    assert "function chartVolumeToggle(" in charts
+    assert "data-chart-volume" in charts
+    assert "showVolume: false" in charts
     assert "data-chart-range" in charts
     assert "Bought ${openedAt}" in charts
     assert "Sold ${soldAt}" in charts
@@ -608,18 +613,29 @@ eval(src.slice(start, end));
 const series = {
   dates: ["2026-09-01", "2026-09-20", "2026-10-10", "2026-11-01"],
   closes: [1, 2, 3, 4],
+  volumes: [10, 20, 30, 40],
   sma50_series: [1.1, 2.1, 3.1, 4.1],
 };
 const partial = clipPriceSeries(series, { start: "2026-09-17", end: "2026-10-30" });
 if (partial.dates.join(",") !== "2026-09-20,2026-10-10") process.exit(3);
 if (partial.closes.join(",") !== "2,3") process.exit(4);
 if (partial.sma50_series.join(",") !== "2.1,3.1") process.exit(5);
+if (partial.volumes.join(",") !== "20,30") process.exit(9);
+if (!partial.assessment_band || partial.assessment_band.start !== "2026-09-17") process.exit(10);
 const openEnded = clipPriceSeries(series, { start: "2026-10-01" });
 if (openEnded.dates.join(",") !== "2026-10-10,2026-11-01") process.exit(6);
 const empty = clipPriceSeries(series, { start: "2027-01-01", end: "2027-01-15" });
 if (empty.dates.length !== 0) process.exit(7);
 const full = clipPriceSeries(series, {});
 if (full.dates.length !== 4) process.exit(8);
+const padded = clipPriceSeries(
+  series,
+  { start: "2026-10-10", end: "2026-11-01" },
+  { warmupCalendarDays: 30 }
+);
+if (padded.dates.join(",") !== "2026-09-20,2026-10-10,2026-11-01") process.exit(11);
+if (padded.assessment_band.start !== "2026-10-10") process.exit(12);
+if (padded.assessment_band.end !== "2026-11-01") process.exit(13);
 console.log("ok");
 """
     completed = subprocess.run(
