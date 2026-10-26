@@ -16,6 +16,15 @@ from value_investor.storage import read_json
 UNKNOWN_CODE = "unknown_unjoinable"
 UNKNOWN_LABEL = "Unknown — unjoinable (no structured trail)"
 
+# Hard-rule / cohort exits — low autopsy priority (Package M owner preference).
+MECHANICAL_SELL_CODES: frozenset[str] = frozenset(
+    {
+        "hold_trading_days",
+        "leave_buy_tier",
+        "left_target_set",
+    }
+)
+
 # Human-readable labels for sealed / control reason codes we already emit.
 REASON_LABELS: dict[str, str] = {
     "enter_buy_tier": "Entered buy-tier (new cross)",
@@ -69,6 +78,54 @@ def _safe_read(path: Path) -> dict[str, Any] | list[Any] | None:
     if isinstance(payload, (dict, list)):
         return payload
     return None
+
+
+def sell_reason_code(item: dict[str, Any] | None) -> str:
+    """Best-effort sell/exit code from a queue card (fail-closed empty)."""
+    if not isinstance(item, dict):
+        return ""
+    sell = item.get("sell_decision") if isinstance(item.get("sell_decision"), dict) else {}
+    for candidate in (
+        sell.get("code"),
+        item.get("exit_reason"),
+        item.get("sell_reason_code"),
+        item.get("sell_reason"),
+    ):
+        text = str(candidate or "").strip()
+        if text:
+            return text
+    return ""
+
+
+def is_mechanical_sell_code(code: str | None) -> bool:
+    """True for max-days / leave-buy-cohort (and control left-target) hard rules."""
+    raw = str(code or "").strip()
+    if not raw:
+        return False
+    if raw in MECHANICAL_SELL_CODES:
+        return True
+    # Defensive aliases owners may see in prose chips.
+    lowered = raw.casefold()
+    if "hold_trading_days" in lowered or "max_days" in lowered:
+        return True
+    if lowered in {"leave_buy_tier", "leave_buy_cohort", "left_target_set"}:
+        return True
+    return False
+
+
+def sell_interest_rank(item: dict[str, Any] | None) -> int:
+    """Lower = more interesting for autopsy attention.
+
+    0 — identity / quality breaks (highest)
+    1 — other non-mechanical (incl. unknown / unjoinable)
+    2 — mechanical hard-rule exits (max-days, leave buy-tier / target set)
+    """
+    code = sell_reason_code(item)
+    if is_mechanical_sell_code(code):
+        return 2
+    if code.startswith("identity_break_") or code.startswith("quality_break_"):
+        return 0
+    return 1
 
 
 def reason_label(code: str | None, *, fallback: str | None = None) -> str:
@@ -502,13 +559,17 @@ def format_decision_reasons_for_prompt(item: dict[str, Any] | None) -> dict[str,
 
 __all__ = [
     "CONTROL_REBALANCE_REL",
+    "MECHANICAL_SELL_CODES",
     "REASON_LABELS",
     "UNKNOWN_CODE",
     "UNKNOWN_LABEL",
     "attach_decision_reasons",
     "bind_decision_reasons",
     "format_decision_reasons_for_prompt",
+    "is_mechanical_sell_code",
     "load_control_trade_index",
     "load_sealed_episode_indexes",
     "reason_label",
+    "sell_interest_rank",
+    "sell_reason_code",
 ]

@@ -232,6 +232,8 @@ def test_build_queue_dedupes_same_day_near_dupes_keeps_cross_book(tmp_path: Path
     assert n206["return_pct"] == -2.5
     assert "episode_key" in n206
     assert payload["duplicate_policy"]["cross_book"].startswith("intentional")
+    assert payload["sort_default"] == "interesting"
+    assert any(row["id"] == "interesting" for row in payload["sort_options"])
     assert any(row["id"] == "exit_at" for row in payload["sort_options"])
     assert any(row["id"] == "ticker" for row in payload["sort_options"])
 
@@ -259,6 +261,47 @@ def test_sort_queue_items_date_and_stock():
     assert [r["ticker"] for r in by_date] == ["AAA.L", "BBB.L"]
     by_stock = sort_queue_items(rows, sort_by="ticker", descending=False)
     assert [r["ticker"] for r in by_stock] == ["AAA.L", "BBB.L"]
+
+
+def test_sort_queue_items_interesting_puts_identity_break_first():
+    from value_investor.post_sale_decision_reasons import sell_interest_rank
+
+    rows = [
+        {
+            "ticker": "MECH.L",
+            "exit_at": "2026-10-22T00:00:00+00:00",
+            "tag": "new",
+            "sell_decision": {"code": "hold_trading_days", "label": "Hold horizon"},
+        },
+        {
+            "ticker": "LEAVE.L",
+            "exit_at": "2026-10-21T00:00:00+00:00",
+            "tag": "new",
+            "sell_decision": {"code": "leave_buy_tier", "label": "Left buy-tier"},
+        },
+        {
+            "ticker": "ID.L",
+            "exit_at": "2026-10-10T00:00:00+00:00",
+            "tag": "new",
+            "sell_decision": {
+                "code": "identity_break_ey_band",
+                "label": "Left EY top band",
+            },
+        },
+        {
+            "ticker": "ID2.L",
+            "exit_at": "2026-10-20T00:00:00+00:00",
+            "tag": "reply",
+            "sell_decision": {
+                "code": "identity_break_ey_band",
+                "label": "Left EY top band",
+            },
+        },
+    ]
+    assert sell_interest_rank(rows[0]) == 2
+    assert sell_interest_rank(rows[2]) == 0
+    ordered = sort_queue_items(rows, sort_by="interesting")
+    assert [r["ticker"] for r in ordered] == ["ID2.L", "ID.L", "MECH.L", "LEAVE.L"]
 
 
 def test_wider_tf_window_pads_episode():

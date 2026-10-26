@@ -11699,7 +11699,7 @@ function renderSealedLifecycle(data) {
     </section>`;
 }
 
-let postSaleReviewSort = "exit_at";
+let postSaleReviewSort = "interesting";
 let postSaleReviewExpandedId = null;
 /** Session + localStorage overlay: clears survive iPad refresh until labels git. */
 const PENDING_POST_SALE_STORAGE_KEY = "ftse.pendingPostSaleActions.v1";
@@ -11950,6 +11950,7 @@ function postSaleReviewOverlays(item) {
 }
 
 const POST_SALE_REVIEW_SORT_OPTIONS = [
+  { id: "interesting", label: "Interesting" },
   { id: "exit_at", label: "Date" },
   { id: "ticker", label: "Stock" },
   { id: "loss_size", label: "Loss size" },
@@ -11957,11 +11958,18 @@ const POST_SALE_REVIEW_SORT_OPTIONS = [
   { id: "tag", label: "Tag" },
 ];
 
+const POST_SALE_MECHANICAL_SELL_CODES = new Set([
+  "hold_trading_days",
+  "leave_buy_tier",
+  "left_target_set",
+]);
+
 function normalizePostSaleReviewSort(value) {
-  const key = String(value || "exit_at");
+  const key = String(value || "interesting");
   if (key === "name" || key === "stock") return "ticker";
+  if (key === "interest" || key === "priority") return "interesting";
   if (POST_SALE_REVIEW_SORT_OPTIONS.some((row) => row.id === key)) return key;
-  return "exit_at";
+  return "interesting";
 }
 
 function postSaleReviewStockName(item) {
@@ -11970,10 +11978,54 @@ function postSaleReviewStockName(item) {
   return name || ticker || "";
 }
 
+function postSaleSellReasonCode(item) {
+  const sell =
+    item && item.sell_decision && typeof item.sell_decision === "object"
+      ? item.sell_decision
+      : null;
+  const candidates = [
+    sell && sell.code,
+    item && item.exit_reason,
+    item && item.sell_reason_code,
+    item && item.sell_reason,
+  ];
+  for (const raw of candidates) {
+    const text = String(raw || "").trim();
+    if (text) return text;
+  }
+  return "";
+}
+
+function postSaleSellInterestRank(item) {
+  // 0 = identity/quality break; 1 = other non-mechanical; 2 = max-days / leave cohort.
+  const code = postSaleSellReasonCode(item);
+  const lowered = code.toLowerCase();
+  if (
+    POST_SALE_MECHANICAL_SELL_CODES.has(code) ||
+    lowered.includes("hold_trading_days") ||
+    lowered.includes("max_days") ||
+    lowered === "leave_buy_cohort"
+  ) {
+    return 2;
+  }
+  if (code.startsWith("identity_break_") || code.startsWith("quality_break_")) {
+    return 0;
+  }
+  return 1;
+}
+
 function sortPostSaleReviewItems(items, sortBy) {
   const rows = Array.isArray(items) ? items.slice() : [];
   const key = normalizePostSaleReviewSort(sortBy);
   rows.sort((a, b) => {
+    if (key === "interesting") {
+      const ir = postSaleSellInterestRank(a) - postSaleSellInterestRank(b);
+      if (ir) return ir;
+      const ar = a.tag === "reply" ? 0 : 1;
+      const br = b.tag === "reply" ? 0 : 1;
+      if (ar !== br) return ar - br;
+      return String(b.exit_at || "").localeCompare(String(a.exit_at || ""));
+    }
     if (key === "book") {
       const bookCmp = String(a.book_tag || a.book_id || "").localeCompare(
         String(b.book_tag || b.book_id || "")
@@ -12236,16 +12288,20 @@ function renderPostSaleReviews(data) {
   }
   syncPostSaleQueueOverlay(data);
   const sortBy = normalizePostSaleReviewSort(
-    postSaleReviewSort || queue.sort_default || "exit_at"
+    postSaleReviewSort || queue.sort_default || "interesting"
   );
   postSaleReviewSort = sortBy;
   const items = sortPostSaleReviewItems(
     (queue.active || []).filter(postSaleReviewCardUsable),
     sortBy
   );
-  const sortOptions = Array.isArray(queue.sort_options) && queue.sort_options.length
-    ? queue.sort_options
-    : POST_SALE_REVIEW_SORT_OPTIONS;
+  let sortOptions = Array.isArray(queue.sort_options) && queue.sort_options.length
+    ? queue.sort_options.slice()
+    : POST_SALE_REVIEW_SORT_OPTIONS.slice();
+  // Stale published queue JSON may omit Interesting until ops-monitor refresh.
+  if (!sortOptions.some((row) => normalizePostSaleReviewSort(row && row.id) === "interesting")) {
+    sortOptions = [{ id: "interesting", label: "Interesting" }, ...sortOptions];
+  }
   const sortToggle = `<div class="psr-sort-toggle" role="group" aria-label="Sort post-sale reviews">
       ${sortOptions
         .map((row) => {
@@ -12260,15 +12316,17 @@ function renderPostSaleReviews(data) {
         .join("")}
     </div>`;
   const sortHint =
-    sortBy === "ticker"
-      ? "Sorted by stock name (A→Z; ticker when name missing)."
-      : sortBy === "loss_size"
-        ? "Sorted by episode return (worst first)."
-        : sortBy === "book"
-          ? "Sorted by sealed book / FTSE control tag."
-          : sortBy === "tag"
-            ? "Sorted reply tags first, then by exit date."
-            : "Sorted by sell/exit date (newest first).";
+    sortBy === "interesting"
+      ? "Interesting first: identity/quality breaks, then other non-mechanical, then max-days / leave-buy-cohort."
+      : sortBy === "ticker"
+        ? "Sorted by stock name (A→Z; ticker when name missing)."
+        : sortBy === "loss_size"
+          ? "Sorted by episode return (worst first)."
+          : sortBy === "book"
+            ? "Sorted by sealed book / FTSE control tag."
+            : sortBy === "tag"
+              ? "Sorted reply tags first, then by exit date."
+              : "Sorted by sell/exit date (newest first).";
   const cards = items.length
     ? items
         .map((item) =>

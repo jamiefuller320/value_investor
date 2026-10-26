@@ -39,8 +39,12 @@ full candidate set so sealed/control population stays visible in ops findings.
 ## Sort + duplicates
 
 Dashboard Lifecycle → Post-sale reviews has **touch-friendly sort chips**
-(Date · Stock · Loss size · Book · Tag). Date = sell/exit newest first; Stock =
-name A→Z (ticker when name missing). new/reply tags and Accept/Comment stay.
+(**Interesting** · Date · Stock · Loss size · Book · Tag). **Default =
+Interesting:** identity/quality breaks and other non-mechanical sells rise
+above hard-rule mechanical exits (`hold_trading_days` / max-days,
+`leave_buy_tier`, control `left_target_set`); reply tags still ahead within
+band; newest exit within band. Date = sell/exit newest first; Stock = name
+A→Z (ticker when name missing). Accept/Comment/Duplicate unchanged.
 
 | Looks like a duplicate? | What it is |
 |---|---|
