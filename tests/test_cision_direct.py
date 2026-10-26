@@ -263,7 +263,9 @@ def test_period_bonus_surface_and_unextractable_wiring():
     assert _source_bonus("cision_direct") == _source_bonus("amf_direct")
     assert filing_source_surface("omxs30", "VOLV-B.ST") == "euro_filings+cision_direct"
     assert filing_source_surface("euro_depth", "SKF-B.ST") == "euro_filings+cision_direct"
-    assert filing_source_surface("omxs30", "HM-B.ST") == "euro_filings"
+    # SWMA.ST: unmapped + no IR allowlist — plain euro_filings control
+    # (HM-B.ST now carries ir_allowlist_direct once seeded).
+    assert filing_source_surface("omxs30", "SWMA.ST") == "euro_filings"
     assert "cision_direct" in UNEXTRACTABLE_BODY_SOURCES
 
 
@@ -360,7 +362,7 @@ def test_load_exhaustion_releases_parked_mapped_swedish_names_only(tmp_path: Pat
             "exhausted": True,
             "parked": [
                 {"ticker": "SAND.ST", "reason": "awaiting_periodic_report"},
-                {"ticker": "HM-B.ST", "reason": "awaiting_periodic_report"},
+                {"ticker": "SWMA.ST", "reason": "awaiting_periodic_report"},
                 {"ticker": "SKF-B.ST", "source_surface": "euro_filings+cision_direct"},
             ],
         },
@@ -368,7 +370,7 @@ def test_load_exhaustion_releases_parked_mapped_swedish_names_only(tmp_path: Pat
     )
     payload = load_ingest_exhaustion("omxs30", library_root=tmp_path)
     assert payload["surface_released"] == ["SAND.ST"]
-    assert sorted(r["ticker"] for r in payload["parked"]) == ["HM-B.ST", "SKF-B.ST"]
+    assert sorted(r["ticker"] for r in payload["parked"]) == ["SKF-B.ST", "SWMA.ST"]
 
 
 def test_library_discovery_listing_includes_cision_without_page_fetches():

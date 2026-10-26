@@ -16,6 +16,9 @@ const CHART_SMA_SERIES = {
   sma200: { key: "sma200_series", color: "#64748b", label: "SMA 200" },
 };
 
+/** Calendar-day pad before assessment start so SMA200 is visible entering the window. */
+const CLIP_WARMUP_CALENDAR_DAYS = 220;
+
 /** Horizontal trade levels — SMAs prefer series overlays when present. */
 const CHART_HORIZONTAL_LEVEL_KEYS = [
   "last",
@@ -183,6 +186,53 @@ function tradeFillMarker(dates, markerDate, price, xAt, yAt, pad, label, color, 
     <text x="${mx + 6}" y="${labelY}" class="chart-signal-marker-label" style="fill:${color}">${esc(label)}</text>`;
 }
 
+function assessmentBandRect(dates, band, xAt, pad) {
+  if (!band || !dates.length) return "";
+  const start = chartDay(band.start);
+  const end = chartDay(band.end);
+  if (!start && !end) return "";
+  let startIdx = 0;
+  let endIdx = dates.length - 1;
+  if (start) {
+    startIdx = dates.findIndex((date) => chartDay(date) >= start);
+    if (startIdx < 0) return "";
+  }
+  if (end) {
+    for (let i = 0; i < dates.length; i += 1) {
+      if (chartDay(dates[i]) <= end) endIdx = i;
+      else break;
+    }
+  }
+  if (endIdx < startIdx) return "";
+  const x1 = xAt(startIdx);
+  const x2 = xAt(endIdx);
+  const w = Math.max(1, x2 - x1);
+  return `<rect x="${x1}" y="${pad.top}" width="${w}" height="${pad.plotH}"
+    fill="rgba(15, 23, 42, 0.055)" stroke="none" />
+    <text x="${x1 + 4}" y="${pad.top + 12}" class="chart-axis-label" style="fill:#64748b">Assessment</text>`;
+}
+
+function volumeBarsSvg(volumes, xAt, volPad, plotW) {
+  if (!Array.isArray(volumes) || !volumes.length) return "";
+  const nums = volumes
+    .map((v) => (v == null || Number.isNaN(Number(v)) ? null : Number(v)))
+    .filter((v) => v != null && v >= 0);
+  if (!nums.length) return "";
+  const maxV = Math.max(...nums, 1);
+  const barW = Math.max(1, (plotW / Math.max(volumes.length, 1)) * 0.7);
+  return volumes
+    .map((raw, index) => {
+      if (raw == null || Number.isNaN(Number(raw))) return "";
+      const value = Number(raw);
+      const h = (value / maxV) * volPad.plotH;
+      const x = xAt(index) - barW / 2;
+      const y = volPad.top + volPad.plotH - h;
+      return `<rect x="${x}" y="${y}" width="${barW}" height="${Math.max(0.5, h)}"
+        fill="rgba(100, 116, 139, 0.45)" />`;
+    })
+    .join("");
+}
+
 function renderPriceChartSvg(payload, levelsOverride) {
   const dates = payload.dates || [];
   const closes = payload.closes || [];
@@ -191,6 +241,8 @@ function renderPriceChartSvg(payload, levelsOverride) {
   }
 
   const currency = payload.currency || "GBP";
+  const showVolume = Boolean(payload._show_volume);
+  const volumes = Array.isArray(payload.volumes) ? payload.volumes : [];
   const levels = { ...(levelsOverride || payload.levels || {}) };
   const smaSeriesPresent = Object.values(CHART_SMA_SERIES).some((meta) =>
     Array.isArray(payload[meta.key])
@@ -211,11 +263,15 @@ function renderPriceChartSvg(payload, levelsOverride) {
   }, 90);
   const rightPad = Math.max(168, longestLabel + 28);
   const width = 620 + rightPad;
-  const height = 380;
-  const pad = { top: 28, right: rightPad, bottom: 42, left: 22, plotH: 0 };
+  const volPane = showVolume ? 72 : 0;
+  const height = 380 + volPane;
+  const pad = { top: 28, right: rightPad, bottom: 42 + volPane, left: 22, plotH: 0 };
   const plotW = width - pad.left - pad.right;
   const plotH = height - pad.top - pad.bottom;
   pad.plotH = plotH;
+  const volPad = showVolume
+    ? { top: pad.top + plotH + 10, plotH: Math.max(28, volPane - 18) }
+    : null;
 
   const seriesValues = Object.values(CHART_SMA_SERIES).flatMap((meta) =>
     Array.isArray(payload[meta.key])
@@ -351,16 +407,28 @@ function renderPriceChartSvg(payload, levelsOverride) {
     )
     .join("");
 
+  const volumeLegend = showVolume
+    ? `<span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#64748b"></span>Volume</span>`
+    : "";
   const legend = `${activeLevels
     .map(
       ([, style]) =>
         `<span class="chart-legend-item"><span class="chart-legend-swatch" style="background:${style.color}"></span>${esc(style.label)}</span>`
     )
-    .join("")}${smaLegend}`;
+    .join("")}${smaLegend}${volumeLegend}`;
+  const band = assessmentBandRect(dates, payload.assessment_band, xAt, pad);
+  const volumeSvg =
+    showVolume && volPad ? volumeBarsSvg(volumes, xAt, volPad, plotW) : "";
+  const volumeDivider = showVolume
+    ? `<line x1="${pad.left}" y1="${pad.top + plotH + 4}" x2="${width - pad.right}" y2="${
+        pad.top + plotH + 4
+      }" stroke="#e2e8f0" stroke-width="1" />`
+    : "";
 
   return `
     <div class="price-chart-wrap">
       <svg viewBox="0 0 ${width} ${height}" width="${width}" class="price-chart" role="img" aria-label="Price chart with trade levels">
+        ${band}
         ${grid}
         <polygon points="${areaPoints}" fill="rgba(43,108,176,0.08)"></polygon>
         <polyline fill="none" stroke="#2b6cb0" stroke-width="2.25" points="${linePoints}" />
@@ -369,6 +437,8 @@ function renderPriceChartSvg(payload, levelsOverride) {
         ${levelLines}
         <text x="${pad.left}" y="${pad.top + 4}" class="chart-axis-label">${formatChartPrice(maxY, currency)}</text>
         <text x="${pad.left}" y="${pad.top + plotH}" class="chart-axis-label">${formatChartPrice(minY, currency)}</text>
+        ${volumeDivider}
+        ${volumeSvg}
         ${xLabels}
       </svg>
       <div class="chart-legend">${legend}</div>
@@ -450,21 +520,38 @@ function chartDay(value) {
   return String(value || "").slice(0, 10);
 }
 
-/** Keep closes that fall inside [start, end]. Missing edges stay open.
- * A short series still returns — the window does not have to be fully populated.
+function shiftCalendarDays(isoDay, deltaDays) {
+  const day = chartDay(isoDay);
+  if (!day || !Number.isFinite(deltaDays) || deltaDays === 0) return day;
+  const stamp = new Date(`${day}T12:00:00Z`);
+  if (Number.isNaN(stamp.getTime())) return day;
+  stamp.setUTCDate(stamp.getUTCDate() + deltaDays);
+  return stamp.toISOString().slice(0, 10);
+}
+
+/** Keep closes inside [start − warm-up, end]. Missing edges stay open.
+ * Warm-up (default 0) pads before assessment start so SMA200 is visible.
+ * Sets ``assessment_band`` to the unpadded window for shading.
  */
-function clipPriceSeries(payload, range) {
+function clipPriceSeries(payload, range, options) {
   const source = payload || {};
   const dates = Array.isArray(source.dates) ? source.dates : [];
   const closes = Array.isArray(source.closes) ? source.closes : [];
   const start = chartDay(range && range.start);
   const end = chartDay(range && range.end);
   if ((!start && !end) || !dates.length) return source;
+  const warmupRaw = options && options.warmupCalendarDays;
+  const warmup =
+    warmupRaw == null || warmupRaw === ""
+      ? 0
+      : Number(warmupRaw);
+  const padDays = Number.isFinite(warmup) && warmup > 0 ? warmup : 0;
+  const clipStart = start && padDays ? shiftCalendarDays(start, -padDays) : start;
   const indexes = [];
   dates.forEach((date, index) => {
     const day = chartDay(date);
     if (!day) return;
-    if (start && day < start) return;
+    if (clipStart && day < clipStart) return;
     if (end && day > end) return;
     indexes.push(index);
   });
@@ -477,8 +564,12 @@ function clipPriceSeries(payload, range) {
     dates: indexes.map((index) => dates[index]),
     closes: indexes.map((index) => (index < closes.length ? closes[index] : null)),
   };
+  if (Array.isArray(source.volumes)) next.volumes = take(source.volumes);
   for (const meta of Object.values(CHART_SMA_SERIES)) {
     if (Array.isArray(source[meta.key])) next[meta.key] = take(source[meta.key]);
+  }
+  if (start || end) {
+    next.assessment_band = { start: start || null, end: end || null };
   }
   return next;
 }
@@ -529,7 +620,21 @@ function chartRangeToggle(rangeMode, closeIn, widerTf) {
     </div>`;
 }
 
-function renderChartBody(payload, report, source, overlays, rangeMode) {
+function chartVolumeToggle(showVolume, hasVolume) {
+  const active = showVolume ? " is-active" : "";
+  const disabled = hasVolume ? "" : " disabled";
+  const title = hasVolume
+    ? "Show volume bars (observe aid; default off on dual-horizon cards)"
+    : "No volume series in chart payload yet";
+  return `
+    <div class="chart-level-toggle chart-volume-toggle" role="group" aria-label="Volume display">
+      <button type="button" class="btn chart-toggle${active}" data-chart-volume="1"${disabled} title="${esc(
+        title
+      )}" aria-pressed="${showVolume ? "true" : "false"}">Volume</button>
+    </div>`;
+}
+
+function renderChartBody(payload, report, source, overlays, rangeMode, showVolume) {
   const baseLevels = displayLevelsForSource(payload, source);
   const levels = mergeChartLevels(baseLevels, report, overlays);
   const levelsAsOf = (payload.levels_as_of || payload.as_of || "").slice(0, 10);
@@ -543,11 +648,20 @@ function renderChartBody(payload, report, source, overlays, rangeMode) {
       : rangeMode === "wider_tf" && widerTf
         ? "wider_tf"
         : "full";
+  const warmupDays = Number(
+    payload.clip_warmup_calendar_days != null
+      ? payload.clip_warmup_calendar_days
+      : CLIP_WARMUP_CALENDAR_DAYS
+  );
+  const clipOpts =
+    range === "close_in" || range === "wider_tf"
+      ? { warmupCalendarDays: Number.isFinite(warmupDays) ? warmupDays : CLIP_WARMUP_CALENDAR_DAYS }
+      : undefined;
   const view =
     range === "close_in"
-      ? clipPriceSeries(payload, closeIn)
+      ? clipPriceSeries(payload, closeIn, clipOpts)
       : range === "wider_tf"
-        ? clipPriceSeries(payload, widerTf)
+        ? clipPriceSeries(payload, widerTf, clipOpts)
         : payload;
   const openedAt = (overlays && overlays.opened_at ? String(overlays.opened_at) : "").slice(0, 10);
   const soldAt = (overlays && overlays.sold_at ? String(overlays.sold_at) : "").slice(0, 10);
@@ -568,6 +682,7 @@ function renderChartBody(payload, report, source, overlays, rangeMode) {
   const tradeLevelsPresent = hasTradePlanLevels(levels);
   const levelsBasis = String(payload.levels_basis || "");
   const currency = payload.currency || "GBP";
+  const volumeOn = Boolean(showVolume);
   let levelsHint = "";
   if (asOfLabel) {
     const basisLine =
@@ -620,28 +735,48 @@ function renderChartBody(payload, report, source, overlays, rangeMode) {
     _sold_at: soldAt || null,
     _entry_price: entryPrice,
     _exit_price: exitPrice,
+    _show_volume: volumeOn,
   };
   const closeCount = Array.isArray(view.dates) ? view.dates.length : 0;
   const clipRange = range === "wider_tf" ? widerTf : closeIn;
+  const band = view.assessment_band || null;
+  const assessmentCount =
+    band && Array.isArray(view.dates)
+      ? view.dates.filter((date) => {
+          const day = chartDay(date);
+          if (!day) return false;
+          if (band.start && day < chartDay(band.start)) return false;
+          if (band.end && day > chartDay(band.end)) return false;
+          return true;
+        }).length
+      : closeCount;
+  const padNote =
+    (range === "close_in" || range === "wider_tf") && clipOpts
+      ? ` Includes ~${esc(String(clipOpts.warmupCalendarDays))}d MA warm-up before the band.`
+      : "";
   const rangeCaption =
     (range === "close_in" || range === "wider_tf") && clipRange
-      ? `<p class="small muted">${range === "wider_tf" ? "Wider TF" : "Episode"} ${esc(
+      ? `<p class="small muted">${range === "wider_tf" ? "Wider TF" : "Episode"} assessment ${esc(
           chartDay(clipRange.start) || "…"
-        )} → ${esc(chartDay(clipRange.end) || "latest")}. ${closeCount} published close${
-          closeCount === 1 ? "" : "s"
-        } sit inside this window.</p>`
+        )} → ${esc(chartDay(clipRange.end) || "latest")}. ${assessmentCount} close${
+          assessmentCount === 1 ? "" : "s"
+        } in band · ${closeCount} plotted.${padNote}</p>`
       : "";
+  const hasVolume = Array.isArray(payload.volumes) && payload.volumes.some((v) => v != null);
   const chartHtml =
     (range === "close_in" || range === "wider_tf") && closeCount === 0
       ? `<p class="muted">No closes in this window yet.</p>`
       : renderPriceChartSvg(chartPayload, levels);
   return `
     <p class="small muted">
-      ${esc(view.period || payload.period || "1y")} daily closes · as of ${esc((payload.as_of || "").slice(0, 10) || "—")}
+      ${esc(view.period || payload.period || "2y")} daily closes · as of ${esc((payload.as_of || "").slice(0, 10) || "—")}
       ${payload.signal ? ` · ${esc(String(payload.signal).replace(/_/g, " "))}` : ""}
       ${payload.market ? ` · ${esc(payload.market)}` : ""}
     </p>
-    ${chartRangeToggle(range, closeIn, widerTf)}
+    <div class="chart-toolbar">
+      ${chartRangeToggle(range, closeIn, widerTf)}
+      ${chartVolumeToggle(volumeOn, hasVolume)}
+    </div>
     ${rangeCaption}
     ${toggle}
     ${planHint}
@@ -674,7 +809,8 @@ function paintPriceChart(body) {
     state.report || {},
     state.levelSource,
     state.overlays || {},
-    state.rangeMode
+    state.rangeMode,
+    state.showVolume
   );
 }
 
@@ -688,6 +824,13 @@ function bindPriceChartBody(body) {
     if (levelButton && !levelButton.disabled && body.contains(levelButton)) {
       event.preventDefault();
       state.levelSource = levelButton.dataset.levelSource || "current";
+      paintPriceChart(body);
+      return;
+    }
+    const volumeButton = event.target.closest("[data-chart-volume]");
+    if (volumeButton && !volumeButton.disabled && body.contains(volumeButton)) {
+      event.preventDefault();
+      state.showVolume = !state.showVolume;
       paintPriceChart(body);
       return;
     }
@@ -707,6 +850,8 @@ function showPriceChart(body, payload, report, overlays, rangeMode) {
     overlays: overlays || {},
     levelSource: "current",
     rangeMode: rangeMode || "full",
+    // Volume stays in payload for LLM/autopsy; UI default off (iPad dual-horizon).
+    showVolume: false,
   };
   bindPriceChartBody(body);
   paintPriceChart(body);

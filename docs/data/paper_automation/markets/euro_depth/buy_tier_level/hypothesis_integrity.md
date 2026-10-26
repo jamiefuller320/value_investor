@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-25T07:10:29.820399+00:00
+Track: `buy_tier_level` · updated 2026-10-26T08:46:46.007249+00:00
 
 ## Portfolio loser feedback
 
@@ -127,12 +127,12 @@ Track: `buy_tier_level` · updated 2026-10-25T07:10:29.820399+00:00
 - still buy
 - cheapness family still passes
 
-### KRX.IR — weakening / watch_review (-0.0%)
+### KRX.IR — weakening / watch_review (+0.0%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
 
-### MUV2.DE — intact / hold_tolerate (-0.0%)
+### MUV2.DE — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
 - cheapness family still passes

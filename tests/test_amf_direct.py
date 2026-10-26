@@ -555,8 +555,10 @@ def test_discovery_merge_filters_unextractable_amf_urls_and_keeps_key(tmp_path: 
 def test_filing_source_surface_marks_amf_adapter():
     assert filing_source_surface("cac40", "CAP.PA") == "euro_filings+amf_direct"
     assert filing_source_surface("euro_stoxx50", "MC.PA") == "euro_filings+amf_direct"
+    # ALV.DE: no AMF identity and no IR allowlist — plain euro_filings control
+    # (SAP.DE now carries ir_allowlist_direct once seeded).
     with patch("value_investor.research.amf_direct._cached_identity", return_value={}):
-        assert filing_source_surface("dax", "SAP.DE") == "euro_filings"
+        assert filing_source_surface("dax", "ALV.DE") == "euro_filings"
     with patch("value_investor.research.amf_direct._cached_identity", return_value=FR_IDENTITY):
         assert filing_source_surface("aex", "XYZ.AS") == "euro_filings+amf_direct"
 
@@ -576,7 +578,7 @@ def test_load_exhaustion_releases_parked_french_names_only(tmp_path: Path):
     )
     write_json(
         tmp_path / "markets" / "dax" / "ingest_exhaustion.json",
-        {"market_id": "dax", "exhausted": True, "parked": [{"ticker": "SAP.DE"}]},
+        {"market_id": "dax", "exhausted": True, "parked": [{"ticker": "ALV.DE"}]},
         compact=False,
     )
     cac = load_ingest_exhaustion("cac40", library_root=tmp_path)
@@ -585,7 +587,7 @@ def test_load_exhaustion_releases_parked_french_names_only(tmp_path: Path):
     with patch("value_investor.research.amf_direct._cached_identity", return_value={}):
         dax = load_ingest_exhaustion("dax", library_root=tmp_path)
     assert dax["surface_released"] == []
-    assert [r["ticker"] for r in dax["parked"]] == ["SAP.DE"]
+    assert [r["ticker"] for r in dax["parked"]] == ["ALV.DE"]
 
 
 def test_library_discovery_listing_includes_amf_for_pa():
