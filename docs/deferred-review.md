@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-26T14:59:06+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-26T17:58:24+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -265,7 +265,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N231 | **Blanket post-sale autopsy clearance of mechanical exits** | Owner: little value analysing all max-days / leave-buy-cohort exits now; comments largely duplicate. Prefer identity-break and other non-mechanical sells; feed premature-sell and no-support downtrend lessons into super-book lenses. | After identity-break cohort has thick commented marks and super-book judgment checklist is wired; or when mechanical exits show new distinct failure modes. |
 | N232 | **Q8B cohort head-cap / shrink helper beyond sticky propose** | Proposed non-mechanical cohort is ~78 ids. If owner finds that too large for a named checkpoint, add an explicit capped head-slice or book filter on propose-cohort — do not silently auto-shrink. | Owner rejects freeze of full non_mechanical_open_autopsy_v0 set and asks for a smaller named slice |
 | N233 | **Register cue_consumer_mft as paper-automation learning track** | Do not add a fourth equal paper learning track for the super book while observe arm + Q8B gate suffice. Paper-auto registration would risk sprint noise and P1 confusion. | Episode walker proven on observe store and owner explicitly wants paper-auto parity twin |
-| N234 | **Full four-stage blind autopsy automation** | Do not ship entry_blind + entry_revisit + exit_blind + exit_revisit automation together. v0 is entry_blind only (then entry_revisit at fixed buy+28d); exit stages and full ops-monitor wiring per stage wait until entry pair proves attention load. | entry_blind (+ entry_revisit) usable on lab/interesting Package M queue; forks locked (sell-day exit_blind, exit+28d, lab/interesting scope) |
 
 ---
 

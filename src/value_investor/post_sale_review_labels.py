@@ -51,8 +51,12 @@ def empty_labels_store() -> dict[str, Any]:
     }
 
 
-def load_post_sale_review_labels(data_dir: Path) -> dict[str, Any]:
-    path = Path(data_dir) / LABELS_FILENAME
+def load_post_sale_review_labels(
+    data_dir: Path,
+    *,
+    filename: str = LABELS_FILENAME,
+) -> dict[str, Any]:
+    path = Path(data_dir) / str(filename or LABELS_FILENAME)
     try:
         raw = read_json(path)
     except FileNotFoundError:
@@ -76,8 +80,13 @@ def load_post_sale_review_labels(data_dir: Path) -> dict[str, Any]:
     }
 
 
-def _write_labels(data_dir: Path, store: dict[str, Any]) -> Path:
-    dest = Path(data_dir) / LABELS_FILENAME
+def _write_labels(
+    data_dir: Path,
+    store: dict[str, Any],
+    *,
+    filename: str = LABELS_FILENAME,
+) -> Path:
+    dest = Path(data_dir) / str(filename or LABELS_FILENAME)
     dest.parent.mkdir(parents=True, exist_ok=True)
     payload = dict(store)
     payload["schema_version"] = SCHEMA_VERSION
@@ -143,14 +152,19 @@ def _reply_card_usable(row: dict[str, Any]) -> bool:
     return True
 
 
-def heal_active_replies_file(data_dir: Path) -> dict[str, Any]:
+def heal_active_replies_file(
+    data_dir: Path,
+    *,
+    filename: str = LABELS_FILENAME,
+) -> dict[str, Any]:
     """Persist prune of blank/duplicate ``active_replies`` (events untouched)."""
-    store = load_post_sale_review_labels(data_dir)
+    name = str(filename or LABELS_FILENAME)
+    store = load_post_sale_review_labels(data_dir, filename=name)
     removed = prune_active_replies(store)
     if removed:
-        path = _write_labels(data_dir, store)
+        path = _write_labels(data_dir, store, filename=name)
         return {"healed": True, "removed": removed, "path": str(path)}
-    return {"healed": False, "removed": 0, "path": str(Path(data_dir) / LABELS_FILENAME)}
+    return {"healed": False, "removed": 0, "path": str(Path(data_dir) / name)}
 
 
 def prune_active_replies(store: dict[str, Any]) -> int:
@@ -225,12 +239,14 @@ def record_accept(
     source: str = "",
     acted_by: str = "dashboard",
     snapshot: dict[str, Any] | None = None,
+    filename: str = LABELS_FILENAME,
 ) -> dict[str, Any]:
     """Accept framing (or a reply). Clears the item from the active queue."""
     review_id = str(review_id or "").strip()
     if not review_id:
         raise ValueError("review_id is required")
-    store = load_post_sale_review_labels(data_dir)
+    name = str(filename or LABELS_FILENAME)
+    store = load_post_sale_review_labels(data_dir, filename=name)
     event_id = str(uuid.uuid4())
     event = {
         "event_id": event_id,
@@ -249,7 +265,7 @@ def record_accept(
     events.append(event)
     store["events"] = events
     _mark_actioned(store, review_id)
-    path = _write_labels(data_dir, store)
+    path = _write_labels(data_dir, store, filename=name)
     return {**event, "path": str(path), "cleared_from_active": True}
 
 
@@ -262,12 +278,14 @@ def record_duplicate(
     source: str = "",
     acted_by: str = "dashboard",
     snapshot: dict[str, Any] | None = None,
+    filename: str = LABELS_FILENAME,
 ) -> dict[str, Any]:
     """Mark as duplicate pattern (already commented). Clears without a reply card."""
     review_id = str(review_id or "").strip()
     if not review_id:
         raise ValueError("review_id is required")
-    store = load_post_sale_review_labels(data_dir)
+    name = str(filename or LABELS_FILENAME)
+    store = load_post_sale_review_labels(data_dir, filename=name)
     event_id = str(uuid.uuid4())
     text = str(note or "").strip() or (
         "Duplicate pattern — similar episode already commented "
@@ -290,7 +308,7 @@ def record_duplicate(
     events.append(event)
     store["events"] = events
     _mark_actioned(store, review_id)
-    path = _write_labels(data_dir, store)
+    path = _write_labels(data_dir, store, filename=name)
     return {**event, "path": str(path), "cleared_from_active": True}
 
 
@@ -306,6 +324,7 @@ def record_comment(
     reply_stub_text: str | None = None,
     allow_llm_reply: bool | None = None,
     llm_complete: Any | None = None,
+    filename: str = LABELS_FILENAME,
 ) -> dict[str, Any]:
     """Comment (missed pattern). Clears active item and spawns a factory reply.
 
@@ -318,7 +337,8 @@ def record_comment(
     text = str(text or "").strip()
     if not text:
         raise ValueError("comment text is required")
-    store = load_post_sale_review_labels(data_dir)
+    name = str(filename or LABELS_FILENAME)
+    store = load_post_sale_review_labels(data_dir, filename=name)
     event_id = str(uuid.uuid4())
     reply_id = reply_review_id(review_id, event_id)
     snap = dict(snapshot) if isinstance(snapshot, dict) else {}
@@ -442,7 +462,7 @@ def record_comment(
         replies.append(reply_card)
     store["active_replies"] = replies
     prune_active_replies(store)
-    path = _write_labels(data_dir, store)
+    path = _write_labels(data_dir, store, filename=name)
     return {
         **comment_event,
         "path": str(path),

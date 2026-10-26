@@ -162,3 +162,9 @@ ftse-post-sale-review duplicate --review-id …
 - Silent drop of Comments
 - Treating LLM reply as Package L capital influence
 - Dumping the full queue onto Daily hub Push (Explore ≤2 cues only elsewhere)
+
+## Related — entry_blind (sibling)
+
+Blind **entry** critique (PIT through buy day; no outcome leakage) lives in a
+separate queue: [entry-blind-review.md](entry-blind-review.md). Do not mix
+post-sale outcome chrome onto `entry_blind` cards.
