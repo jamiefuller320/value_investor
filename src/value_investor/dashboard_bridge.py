@@ -30,6 +30,9 @@ SUPPORTED_ACTIONS = frozenset(
         "post-sale-review-ack",
         "post-sale-review-comment",
         "post-sale-review-duplicate",
+        "entry-blind-review-ack",
+        "entry-blind-review-comment",
+        "entry-blind-review-duplicate",
     }
 )
 
@@ -47,6 +50,9 @@ ACTION_REPOSITORY_DISPATCH: dict[str, str] = {
     "post-sale-review-ack": "post-sale-review-ack",
     "post-sale-review-comment": "post-sale-review-ack",
     "post-sale-review-duplicate": "post-sale-review-ack",
+    "entry-blind-review-ack": "entry-blind-review-ack",
+    "entry-blind-review-comment": "entry-blind-review-ack",
+    "entry-blind-review-duplicate": "entry-blind-review-ack",
 }
 
 # Git-writing ack/discuss actions: one repository_dispatch per poll batch.
@@ -61,6 +67,9 @@ BATCHABLE_ACK_ACTIONS = frozenset(
         "post-sale-review-ack",
         "post-sale-review-comment",
         "post-sale-review-duplicate",
+        "entry-blind-review-ack",
+        "entry-blind-review-comment",
+        "entry-blind-review-duplicate",
     }
 )
 
@@ -237,12 +246,12 @@ def _command_payload_item(row: dict[str, Any]) -> dict[str, Any]:
     action = str(row.get("action") or "").strip()
     if action:
         item.setdefault("bridge_action", action)
-    # Post-sale review: map bridge action → decision when the UI omits it.
-    if action == "post-sale-review-comment":
+    # Post-sale / entry-blind review: map bridge action → decision when omitted.
+    if action in {"post-sale-review-comment", "entry-blind-review-comment"}:
         item.setdefault("decision", "comment")
-    elif action == "post-sale-review-duplicate":
+    elif action in {"post-sale-review-duplicate", "entry-blind-review-duplicate"}:
         item.setdefault("decision", "duplicate")
-    elif action == "post-sale-review-ack":
+    elif action in {"post-sale-review-ack", "entry-blind-review-ack"}:
         item.setdefault("decision", "accept")
     return item
 

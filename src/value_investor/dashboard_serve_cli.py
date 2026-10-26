@@ -307,6 +307,42 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
                 status, out, ctype = _json_bytes({"ok": True, **result})
                 self._send(status, out, ctype)
                 return
+            if parsed.path == "/api/entry-blind-review-action":
+                body, err = self._read_json_object_body()
+                if err is not None:
+                    self._send(*err)
+                    return
+                assert body is not None
+                try:
+                    from value_investor.entry_blind_review_actions import (
+                        run_entry_blind_review_action,
+                    )
+
+                    snap = body.get("snapshot")
+                    result = run_entry_blind_review_action(
+                        repo_root / "docs" / "data",
+                        review_id=str(body.get("review_id") or ""),
+                        decision=str(body.get("decision") or "accept"),
+                        text=str(body.get("text") or body.get("note") or ""),
+                        tag_at_action=str(body.get("tag") or "new"),
+                        source="dashboard_local",
+                        acted_by="dashboard",
+                        snapshot=snap if isinstance(snap, dict) else body,
+                    )
+                except Exception as exc:  # noqa: BLE001 — surface to UI
+                    status, out, ctype = _json_bytes(
+                        {
+                            "ok": False,
+                            "error": str(exc),
+                            "traceback": traceback.format_exc(),
+                        },
+                        status=400,
+                    )
+                    self._send(status, out, ctype)
+                    return
+                status, out, ctype = _json_bytes({"ok": True, **result})
+                self._send(status, out, ctype)
+                return
             if parsed.path == "/api/daily-focus-ack":
                 body, err = self._read_json_object_body()
                 if err is not None:
@@ -482,6 +518,7 @@ def main(argv: list[str] | None = None) -> int:
     print("POST /api/lifecycle-experiment-start → start graduated entry DCA execute")
     print("POST /api/human-task-ack → observe-ack / approve human checklist task")
     print("POST /api/post-sale-review-action → Accept/Comment post-sale review (observe)")
+    print("POST /api/entry-blind-review-action → Accept/Comment entry_blind review (observe)")
     print("POST /api/daily-focus-ack → ack Daily hub focus line for local_date")
     print("POST /api/daily-discuss → queue recommendation into daily_discuss_inbox")
     print("Ctrl+C to stop")

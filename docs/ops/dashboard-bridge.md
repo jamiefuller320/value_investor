@@ -20,7 +20,7 @@ flowchart LR
 | `dashboard_commands` table | Durable queue of page → git requests |
 | Realtime channel `ftse-dashboard` | Fast ping (`command`) + completion notify (`artifact-updated`) |
 | `ftse-dashboard-bridge process-pending` | Worker — polls table, dispatches GitHub `repository_dispatch` |
-| Target workflows | `progress-report.yml`, `engineering-queue.yml`, `ops-monitor.yml`, `dashboard-bridge.yml` (`refresh-queue-ui`), `lifecycle-experiment-ack.yml`, `lifecycle-experiment-start.yml`, `human-task-ack.yml`, `daily-focus-ack.yml`, `daily-discuss.yml`, `post-sale-review-ack.yml` (`post-sale-review-ack` / `post-sale-review-comment`) |
+| Target workflows | `progress-report.yml`, `engineering-queue.yml`, `ops-monitor.yml`, `dashboard-bridge.yml` (`refresh-queue-ui`), `lifecycle-experiment-ack.yml`, `lifecycle-experiment-start.yml`, `human-task-ack.yml`, `daily-focus-ack.yml`, `daily-discuss.yml`, `post-sale-review-ack.yml` (`post-sale-review-ack` / `post-sale-review-comment`), `entry-blind-review-ack.yml` (`entry-blind-review-ack` / comment / duplicate) |
 
 **Yes — one Supabase channel/table can cover all page→git actions.** Add new actions by extending `SUPPORTED_ACTIONS` in `dashboard_bridge.py` and wiring a workflow handler.
 
@@ -61,7 +61,7 @@ GitHub concurrency **cancels previously pending** runs in a group even when
 `repository_dispatch` per click therefore drops most acks.
 
 For `human-task-ack`, `daily-focus-ack`, `daily-discuss`, `post-sale-review-ack`,
-and `post-sale-review-comment`, `process-pending`:
+`post-sale-review-comment`, and `entry-blind-review-*` acks, `process-pending`:
 
 1. **Batches** all pending rows of that action into **one** dispatch
    (`client_payload.commands[]`).
