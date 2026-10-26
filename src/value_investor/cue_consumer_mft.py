@@ -41,10 +41,21 @@ PER_ROOT_ACTIVE_CAP = 3
 CALENDAR_FALLBACK = "2026-12-01"
 # Q8B: named frozen open-autopsy cohort — not active_count==0 forever-wait.
 START_CHECKPOINT_ID = "open_autopsy_cohort_2026_q4"
+# Concrete cohort selection (prefs: prefer identity-break / non-mechanical).
+COHORT_SELECTION_ID = "non_mechanical_open_autopsy_v0"
+COHORT_EXIT_REASON_PREFIXES = ("identity_break", "quality_break")
+PIPELINE_STATUS_SKELETON = "skeleton_registered"
+PIPELINE_STATUS_ARMED = "armed_observe_awaiting_q8b"
+PIPELINE_STATUS_SHADOWS_OK = "armed_observe_q8b_eligible"
+LAB_ARM_MARKER_ID = "mft-lab-arm-epoch0-v0"
+JUDGMENT_RUBRIC_ID = "judgment_in_the_round_v0"
+AUTOPSY_FEED_CAP = 25
 
 FINDING_TITLE = "Cue-consumer MFT lab refreshed"
 STORE_FAILED_TITLE = "Cue-consumer MFT lab failed"
 START_GATE_ELIGIBLE_TITLE = "Cue-consumer MFT start gate eligible (evolutionary shadows)"
+LAB_ARMED_TITLE = "Cue-consumer MFT lab armed (observe)"
+COHORT_FREEZE_PROPOSED_TITLE = "Cue-consumer MFT Q8B cohort freeze proposed — owner confirm"
 CATEGORY = "research"
 
 DEFAULT_OUTPUT_DIR = Path("docs/data")
@@ -210,6 +221,252 @@ def assess_same_day_round_trip(
         "note": (
             "Same-day buy→sell is default undesirable; mark major_error_reverse "
             "only with durable intraday / reason evidence — soft bias, not hard ban."
+        ),
+    }
+
+
+def _is_non_mechanical_exit_reason(exit_reason: Any) -> bool:
+    text = str(exit_reason or "").strip().lower()
+    if not text:
+        return False
+    return any(text.startswith(prefix) for prefix in COHORT_EXIT_REASON_PREFIXES)
+
+
+def propose_start_cohort(
+    queue: dict[str, Any] | None,
+    *,
+    checkpoint_id: str = START_CHECKPOINT_ID,
+    selection_id: str = COHORT_SELECTION_ID,
+) -> dict[str, Any]:
+    """Build the concrete Q8B named-cohort proposal from the open autopsy queue.
+
+    Selection (locked definition for ``open_autopsy_cohort_2026_q4``):
+    - Active ``post_sale_review_queue`` rows only (snapshot at propose time)
+    - Exclude ``reply:`` dialogue thread ids
+    - Keep non-mechanical exits whose ``exit_reason`` starts with
+      ``identity_break`` or ``quality_break`` (prefs: prefer these over
+      max-days / leave-buy-cohort mechanical piles)
+    - Sorted by ``sold_at`` / ``exit_at`` ascending for stable freeze order
+
+    This does **not** write ``cohort_review_ids`` — owner must confirm via
+    ``freeze_start_cohort(..., apply=True)`` (human gate).
+    """
+    active = []
+    if isinstance(queue, dict):
+        raw = queue.get("active") or []
+        if isinstance(raw, list):
+            active = [row for row in raw if isinstance(row, dict)]
+
+    selected: list[dict[str, Any]] = []
+    for row in active:
+        rid = str(row.get("review_id") or row.get("id") or "").strip()
+        if not rid or rid.startswith("reply:"):
+            continue
+        if not _is_non_mechanical_exit_reason(row.get("exit_reason")):
+            continue
+        selected.append(
+            {
+                "review_id": rid,
+                "book_id": row.get("book_id"),
+                "ticker": row.get("ticker"),
+                "exit_reason": row.get("exit_reason"),
+                "sold_at": row.get("sold_at") or row.get("exit_at"),
+                "learning_point_forward": row.get("learning_point_forward"),
+            }
+        )
+
+    def _sort_key(item: dict[str, Any]) -> str:
+        return str(item.get("sold_at") or "") + "|" + str(item.get("review_id") or "")
+
+    selected.sort(key=_sort_key)
+    review_ids = [str(item["review_id"]) for item in selected]
+    by_reason: dict[str, int] = {}
+    by_book: dict[str, int] = {}
+    for item in selected:
+        reason = str(item.get("exit_reason") or "unknown")
+        book = str(item.get("book_id") or "unknown")
+        by_reason[reason] = by_reason.get(reason, 0) + 1
+        by_book[book] = by_book.get(book, 0) + 1
+
+    return {
+        "checkpoint_id": checkpoint_id,
+        "selection_id": selection_id,
+        "mode": "q8b_named_cohort_checkpoint",
+        "proposed_cohort_review_ids": review_ids,
+        "proposed_cohort_size": len(review_ids),
+        "proposed_cohort_sample": selected[:10],
+        "by_exit_reason": by_reason,
+        "by_book_id": by_book,
+        "excludes": [
+            "reply_dialogue_threads",
+            "hold_trading_days_mechanical",
+            "leave_buy_tier_mechanical",
+            "blank_exit_reason",
+        ],
+        "how_measured": (
+            f"Freeze proposed_cohort_review_ids into cohort_review_ids under "
+            f"checkpoint_id={checkpoint_id}. Checkpoint completes when every "
+            "frozen id is Accept/Comment-actioned in post_sale_review_labels; "
+            "new just_sold refill does not reopen. Calendar alternate "
+            f"{CALENDAR_FALLBACK}."
+        ),
+        "owner_decision": (
+            "Confirm freeze of this named non-mechanical open-autopsy cohort "
+            "(or shrink/rebuild via CLI propose-cohort before freeze). "
+            "Evolutionary shadows wait on freeze+completion (or calendar)."
+        ),
+        "influences_live": False,
+        "auto_apply": False,
+    }
+
+
+def freeze_start_cohort(
+    *,
+    start_gate: dict[str, Any] | None,
+    proposal: dict[str, Any] | None = None,
+    review_ids: list[str] | None = None,
+    apply: bool = False,
+    generated_at: str | None = None,
+) -> dict[str, Any]:
+    """Copy proposed (or explicit) review_ids into ``cohort_review_ids``.
+
+    Dry-run by default (``apply=False``). Never invents ids; never clears an
+    already-frozen cohort unless ``review_ids`` is explicitly supplied with
+    ``apply=True`` (owner re-freeze).
+    """
+    when = generated_at or _utcnow()
+    gate = (
+        dict(start_gate)
+        if isinstance(start_gate, dict)
+        else default_start_gate_payload(generated_at=when)
+    )
+    existing = [str(x).strip() for x in (gate.get("cohort_review_ids") or []) if str(x).strip()]
+    if review_ids is not None:
+        ids = [str(x).strip() for x in review_ids if str(x).strip()]
+    elif isinstance(proposal, dict):
+        ids = [
+            str(x).strip()
+            for x in (proposal.get("proposed_cohort_review_ids") or [])
+            if str(x).strip()
+        ]
+    else:
+        ids = [
+            str(x).strip() for x in (gate.get("proposed_cohort_review_ids") or []) if str(x).strip()
+        ]
+
+    result = {
+        "apply": bool(apply),
+        "would_freeze_n": len(ids),
+        "already_frozen_n": len(existing),
+        "checkpoint_id": str(gate.get("checkpoint_id") or START_CHECKPOINT_ID),
+        "influences_live": False,
+    }
+    if not ids:
+        result["status"] = "noop_empty_proposal"
+        result["gate"] = gate
+        return result
+    if existing and review_ids is None:
+        result["status"] = "noop_already_frozen"
+        result["gate"] = gate
+        return result
+    if not apply:
+        result["status"] = "dry_run"
+        result["preview_review_ids"] = ids[:20]
+        result["gate"] = gate
+        return result
+
+    gate["cohort_review_ids"] = ids
+    gate["cohort_frozen_at"] = when
+    gate["opened_at"] = gate.get("opened_at") or when
+    gate["checkpoint_status"] = "open"
+    gate["completed_at"] = None
+    gate["cohort_selection_id"] = (
+        (proposal or {}).get("selection_id")
+        if isinstance(proposal, dict)
+        else gate.get("cohort_selection_id") or COHORT_SELECTION_ID
+    )
+    gate["proposed_cohort_review_ids"] = ids
+    gate["proposed_at"] = gate.get("proposed_at") or when
+    gate["generated_at"] = when
+    result["status"] = "frozen"
+    result["gate"] = gate
+    return result
+
+
+def judgment_in_the_round_stub() -> dict[str, Any]:
+    """Observe-only checklist schema (design lock) — N228 fills later."""
+    buy = {
+        key: {"answer": None, "confidence": None, "cites": [], "unknown": True}
+        for key in ("B1", "B2", "B3", "B4", "B5", "B6")
+    }
+    sell = {
+        key: {"answer": None, "confidence": None, "cites": [], "unknown": True}
+        for key in ("S1", "S2", "S3", "S4", "S5", "S6")
+    }
+    return {
+        "rubric_id": JUDGMENT_RUBRIC_ID,
+        "influences_live": False,
+        "observe_only": True,
+        "rules_role": "scaffold_propose",
+        "buy": buy,
+        "sell": sell,
+        "rule_candidates": [],
+        "llm_stance": None,
+        "misfit_evidence": None,
+        "deferred_id": "N228",
+        "note": (
+            "Schema stub only — deterministic/LLM fill + misfit trail remain "
+            "N228. Missing cites fail-close influence."
+        ),
+    }
+
+
+def build_autopsy_alignment_feed(
+    queue: dict[str, Any] | None,
+    *,
+    cap: int = AUTOPSY_FEED_CAP,
+) -> dict[str, Any]:
+    """Package M → lab observe feed: learning_point_forward rows (no auto-tune)."""
+    active: list[dict[str, Any]] = []
+    if isinstance(queue, dict):
+        raw = queue.get("active") or []
+        if isinstance(raw, list):
+            active = [row for row in raw if isinstance(row, dict)]
+
+    rows: list[dict[str, Any]] = []
+    for item in active:
+        rid = str(item.get("review_id") or "").strip()
+        if not rid or rid.startswith("reply:"):
+            continue
+        forward = str(item.get("learning_point_forward") or "").strip()
+        if not forward:
+            continue
+        if not _is_non_mechanical_exit_reason(item.get("exit_reason")):
+            continue
+        rows.append(
+            {
+                "review_id": rid,
+                "book_id": item.get("book_id"),
+                "ticker": item.get("ticker"),
+                "exit_reason": item.get("exit_reason"),
+                "learning_point_forward": forward,
+                "same_day_assessment": item.get("same_day_assessment"),
+            }
+        )
+        if len(rows) >= cap:
+            break
+
+    return {
+        "source": "post_sale_review_queue.active",
+        "package": "M",
+        "role": "alignment_inform_lab_only",
+        "auto_tune": False,
+        "package_l": False,
+        "count": len(rows),
+        "rows": rows,
+        "note": (
+            "Autopsy learning_point_forward informs the lab observe trail. "
+            "Does not auto-tune sealed books or open Package L."
         ),
     }
 
@@ -543,12 +800,17 @@ def default_start_gate_payload(*, generated_at: str | None = None) -> dict[str, 
         "completed_at": None,
         "cohort_review_ids": [],
         "cohort_frozen_at": None,
+        "cohort_selection_id": COHORT_SELECTION_ID,
+        "proposed_cohort_review_ids": [],
+        "proposed_at": None,
         "calendar_fallback": CALENDAR_FALLBACK,
         "mode": "q8b_named_cohort_checkpoint",
         "how_measured": (
-            "Owner/ops freezes active open-autopsy review_ids into "
-            "cohort_review_ids (named checkpoint). Gate completes when all "
-            "frozen ids are actioned in labels history; daily just_sold refill "
+            "Named cohort = currently-open non-mechanical autopsy rows "
+            f"({COHORT_SELECTION_ID}: exit_reason identity_break* / "
+            "quality_break*; exclude reply: threads). Owner confirms freeze of "
+            "proposed_cohort_review_ids → cohort_review_ids. Gate completes when "
+            "all frozen ids are Accept/Comment-actioned; daily just_sold refill "
             "does not reset the cohort. Calendar alternate 2026-12-01."
         ),
         "influences_live": False,
@@ -563,7 +825,9 @@ def build_registration_payload(*, sealed_at: str | None = None) -> dict[str, Any
         "lab_id": LAB_ID,
         "evolutionary_root_id": EVOLUTIONARY_ROOT_ID,
         "deferred_id": DEFERRED_ID,
-        "status": "observe_lab_skeleton",
+        "status": "observe_lab_armed",
+        "pipeline_status": PIPELINE_STATUS_ARMED,
+        "lab_arm_marker_id": LAB_ARM_MARKER_ID,
         "observe_only": True,
         "influences_live": False,
         "auto_fixable": False,
@@ -609,7 +873,13 @@ def build_registration_payload(*, sealed_at: str | None = None) -> dict[str, Any
         "start_gate": {
             "mode": "q8b_named_cohort_checkpoint",
             "checkpoint_id": START_CHECKPOINT_ID,
+            "cohort_selection_id": COHORT_SELECTION_ID,
             "calendar_fallback": CALENDAR_FALLBACK,
+        },
+        "spend_guard": {
+            "lane": "investment_observe",
+            "steals_data_p1_fat_slot": False,
+            "fail_closed_if_would_steal_p1": True,
         },
         "same_day_policy": SAME_DAY_POLICY,
         "ops_doc": str(DEFAULT_OPS_DOC),
@@ -621,14 +891,21 @@ def build_lab_payload(
     start_gate_eval: dict[str, Any],
     generated_at: str | None = None,
     knob_epoch_started_at: str | None = None,
+    lab_armed_at: str | None = None,
     closed_lab_episodes: list[dict[str, Any]] | None = None,
     active_children: list[dict[str, Any]] | None = None,
+    autopsy_alignment_feed: dict[str, Any] | None = None,
+    start_gate_store: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Build observe store payload (skeleton — no live fills / no episode walker)."""
+    """Build observe store payload (armed observe — no live fills / no episode walker)."""
     when = generated_at or _utcnow()
     epoch_at = knob_epoch_started_at or when
+    armed_at = lab_armed_at or when
     closed = [e for e in (closed_lab_episodes or []) if isinstance(e, dict)]
     children = [c for c in (active_children or []) if isinstance(c, dict)]
+    gate_store = start_gate_store if isinstance(start_gate_store, dict) else {}
+    shadows_ok = bool(start_gate_eval.get("eligible"))
+    pipeline_status = PIPELINE_STATUS_SHADOWS_OK if shadows_ok else PIPELINE_STATUS_ARMED
     sample_proposal = build_hardened_proposal_stub(
         levers_touched=["sell_timing"],
         tune_spec_id=TUNE_SPEC_ID,
@@ -645,6 +922,7 @@ def build_lab_payload(
     )
     cap = concurrent_cap_stub(active_child_count=len(children))
     cull = cull_stub(active_children=children)
+    feed = autopsy_alignment_feed or build_autopsy_alignment_feed(None)
 
     levers_board = []
     for lever in MOM_LEVERS:
@@ -657,6 +935,11 @@ def build_lab_payload(
             }
         )
 
+    proposed_n = len(
+        [x for x in (gate_store.get("proposed_cohort_review_ids") or []) if str(x).strip()]
+    )
+    frozen_n = len([x for x in (gate_store.get("cohort_review_ids") or []) if str(x).strip()])
+
     return {
         "schema_version": SCHEMA_VERSION,
         "generated_at": when,
@@ -664,8 +947,10 @@ def build_lab_payload(
         "registration_id": REGISTRATION_ID,
         "evolutionary_root_id": EVOLUTIONARY_ROOT_ID,
         "deferred_id": DEFERRED_ID,
-        "status": "observe_lab_skeleton",
-        "pipeline_status": "skeleton_registered",
+        "status": "observe_lab_armed",
+        "pipeline_status": pipeline_status,
+        "lab_arm_marker_id": LAB_ARM_MARKER_ID,
+        "lab_armed_at": armed_at,
         "observe_only": True,
         "influences_live": False,
         "auto_fixable": False,
@@ -673,6 +958,15 @@ def build_lab_payload(
         "scoreboard_id": SCOREBOARD_ID,
         "metric_spec_id": METRIC_SPEC_ID,
         "learning_question": LEARNING_QUESTION,
+        "spend_guard": {
+            "lane": "investment_observe",
+            "steals_data_p1_fat_slot": False,
+            "fail_closed_if_would_steal_p1": True,
+            "note": (
+                "Lab refresh/arm is JSON observe-only — never claims the Data "
+                "P1 ingest fat slot / fourth equal sprint."
+            ),
+        },
         "sizing": {
             "mode": "fixed_stake",
             "stake_units": FIXED_STAKE_UNITS,
@@ -685,6 +979,7 @@ def build_lab_payload(
             "knob_set_id": KNOB_SET_ID,
             "allowed_on": "this_lab_only",
             "package_l_on_sealed": False,
+            "lab_arm_marker_id": LAB_ARM_MARKER_ID,
         },
         "cue_selection": {
             "cue_whitelist_id": CUE_WHITELIST_ID,
@@ -692,6 +987,20 @@ def build_lab_payload(
             "pit_rule": "cue_ts_lte_decision_ts",
             "stub": True,
             "note": "PIT selection stub — short whitelist only; no look-ahead.",
+        },
+        "judgment_in_the_round": judgment_in_the_round_stub(),
+        "autopsy_alignment_feed": feed,
+        "observe_shadow_pass": {
+            "kind": "autopsy_alignment_plus_judgment_schema",
+            "fills": False,
+            "evolutionary_spawn": False,
+            "influences_live": False,
+            "rows_considered": int(feed.get("count") or 0),
+            "note": (
+                "Observe shadow hook: Package M learning_point_forward feed + "
+                "judgment checklist schema. No paper fills; no sealed spawn "
+                "until Q8B + novelty/cap (N223/N226/N227)."
+            ),
         },
         "mom_levers": levers_board,
         "same_day_policy": SAME_DAY_POLICY,
@@ -708,7 +1017,13 @@ def build_lab_payload(
         "concurrent_cap": cap,
         "cull": cull,
         "start_gate": start_gate_eval,
-        "evolutionary_shadows_eligible": bool(start_gate_eval.get("eligible")),
+        "start_gate_cohort": {
+            "proposed_n": proposed_n,
+            "frozen_n": frozen_n,
+            "selection_id": gate_store.get("cohort_selection_id") or COHORT_SELECTION_ID,
+            "owner_freeze_pending": bool(proposed_n) and frozen_n == 0,
+        },
+        "evolutionary_shadows_eligible": shadows_ok,
         "remainder_deferred": {
             "N223": "hardened proposals → new sealed twins (spawn path)",
             "N226": "full novelty/similarity distance gate",
@@ -719,10 +1034,11 @@ def build_lab_payload(
             "N229": "human chart draw tools (keep deferred)",
         },
         "soft_gaps": [
-            "Skeleton only — no episode walker / no live cue consumption yet.",
+            "Armed observe — still no episode walker / no live cue fills.",
             "Do not back-label cue-book NAV as lab wins.",
             "Do not open Package L on sealed; cull ≠ live promote.",
             "Evolutionary shadows wait on Q8B start gate (or calendar fallback).",
+            "Owner must confirm freeze of proposed non-mechanical autopsy cohort.",
         ],
         "ops_doc": str(DEFAULT_OPS_DOC),
     }
@@ -739,8 +1055,13 @@ def refresh_cue_consumer_mft(
     persist: bool = True,
     generated_at: str | None = None,
     today: date | None = None,
+    refresh_proposal: bool = False,
 ) -> dict[str, Any]:
-    """Refresh lab registration + start-gate evaluation; persist observe stores."""
+    """Arm/refresh lab + start-gate evaluation; persist observe stores.
+
+    Proposes the Q8B named cohort when none is frozen yet (sticky proposal
+    unless ``refresh_proposal``). Never auto-freezes — owner CLI confirm.
+    """
     data_dir = Path(output_dir) if output_dir is not None else DEFAULT_OUTPUT_DIR
     store = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
     reg_path = (
@@ -748,25 +1069,50 @@ def refresh_cue_consumer_mft(
     )
     gate_path = Path(start_gate_path) if start_gate_path is not None else DEFAULT_START_GATE_PATH
     labels = _safe_read(Path(labels_path) if labels_path is not None else DEFAULT_LABELS_PATH)
-    # queue_path reserved for future cohort-freeze helper; not required for eval.
-    _ = queue_path or DEFAULT_QUEUE_PATH
+    queue = _safe_read(Path(queue_path) if queue_path is not None else DEFAULT_QUEUE_PATH)
 
     when = generated_at or _utcnow()
     prior = _safe_read(store) if store.is_file() else None
     prior_epoch = None
+    prior_armed = None
     if isinstance(prior, dict):
         mid = prior.get("mid_flight_tune")
         if isinstance(mid, dict):
             prior_epoch = mid.get("knob_epoch_started_at")
+        prior_armed = prior.get("lab_armed_at")
 
     gate_store = _safe_read(gate_path) if gate_path.is_file() else None
     if not isinstance(gate_store, dict):
         gate_store = default_start_gate_payload(generated_at=when)
+    else:
+        gate_store = dict(gate_store)
+
+    frozen = [str(x).strip() for x in (gate_store.get("cohort_review_ids") or []) if str(x).strip()]
+    proposed = [
+        str(x).strip()
+        for x in (gate_store.get("proposed_cohort_review_ids") or [])
+        if str(x).strip()
+    ]
+    # Propose sticky cohort when nothing frozen yet (do not invent freeze).
+    if not frozen and (refresh_proposal or not proposed):
+        proposal = propose_start_cohort(queue)
+        gate_store["proposed_cohort_review_ids"] = list(
+            proposal.get("proposed_cohort_review_ids") or []
+        )
+        gate_store["proposed_at"] = when
+        gate_store["cohort_selection_id"] = proposal.get("selection_id") or COHORT_SELECTION_ID
+        gate_store["proposal_summary"] = {
+            "proposed_cohort_size": proposal.get("proposed_cohort_size"),
+            "by_exit_reason": proposal.get("by_exit_reason"),
+            "by_book_id": proposal.get("by_book_id"),
+            "owner_decision": proposal.get("owner_decision"),
+            "excludes": proposal.get("excludes"),
+        }
 
     start_eval = evaluate_start_gate(start_gate=gate_store, labels=labels, today=today)
-    # Persist measured status onto gate store (do not invent cohort ids).
-    gate_store = dict(gate_store)
     gate_store["generated_at"] = when
+    gate_store["checkpoint_id"] = gate_store.get("checkpoint_id") or START_CHECKPOINT_ID
+    gate_store["cohort_selection_id"] = gate_store.get("cohort_selection_id") or COHORT_SELECTION_ID
     gate_store["checkpoint_status"] = start_eval["checkpoint_status"]
     if start_eval["cohort_complete"] and not gate_store.get("completed_at"):
         gate_store["completed_at"] = when
@@ -775,13 +1121,21 @@ def refresh_cue_consumer_mft(
         "eligibility_reason": start_eval["eligibility_reason"],
         "cohort_remaining_n": len(start_eval.get("cohort_remaining") or []),
         "calendar_ok": start_eval["calendar_ok"],
+        "proposed_n": len(
+            [x for x in (gate_store.get("proposed_cohort_review_ids") or []) if str(x).strip()]
+        ),
+        "frozen_n": len(frozen),
         "evaluated_at": when,
     }
 
+    feed = build_autopsy_alignment_feed(queue)
     payload = build_lab_payload(
         start_gate_eval=start_eval,
         generated_at=when,
         knob_epoch_started_at=str(prior_epoch) if prior_epoch else when,
+        lab_armed_at=str(prior_armed) if prior_armed else when,
+        autopsy_alignment_feed=feed,
+        start_gate_store=gate_store,
     )
     registration = build_registration_payload()
 
@@ -793,30 +1147,73 @@ def refresh_cue_consumer_mft(
         payload["store_path"] = str(store)
         payload["registration_path"] = str(reg_path)
         payload["start_gate_path"] = str(gate_path)
-        # Touch data_dir so callers using custom roots still see files under it.
         _ = data_dir
     return payload
 
 
 def ops_findings_from_cue_consumer_mft(payload: dict[str, Any]) -> list[dict[str, Any]]:
     gate = payload.get("start_gate") if isinstance(payload.get("start_gate"), dict) else {}
+    cohort = (
+        payload.get("start_gate_cohort")
+        if isinstance(payload.get("start_gate_cohort"), dict)
+        else {}
+    )
     findings: list[dict[str, Any]] = [
         {
             "severity": "info",
             "category": CATEGORY,
             "title": FINDING_TITLE,
             "summary": (
-                f"Lab {LAB_ID} ({REGISTRATION_ID}) skeleton refreshed; "
+                f"Lab {LAB_ID} ({REGISTRATION_ID}) armed/refreshed; "
                 f"pipeline={payload.get('pipeline_status')}; "
                 f"closed_lab_episodes={payload.get('closed_lab_episodes', 0)}; "
                 f"start_gate_eligible={bool(payload.get('evolutionary_shadows_eligible'))} "
                 f"({gate.get('eligibility_reason')}). "
                 "Observe-only; influences_live=false; declared incomparable; "
-                "no Package L / no strand-A promote."
+                "no Package L / no strand-A promote; does not steal Data P1 fat slot."
             ),
             "auto_fixable": False,
         }
     ]
+    if payload.get("lab_armed_at") and payload.get("pipeline_status") in {
+        PIPELINE_STATUS_ARMED,
+        PIPELINE_STATUS_SHADOWS_OK,
+    }:
+        findings.append(
+            {
+                "severity": "info",
+                "category": CATEGORY,
+                "title": LAB_ARMED_TITLE,
+                "summary": (
+                    f"Lab arm marker {LAB_ARM_MARKER_ID} at "
+                    f"{payload.get('lab_armed_at')}; epoch "
+                    f"{(payload.get('mid_flight_tune') or {}).get('knob_epoch_started_at')}; "
+                    f"tune_spec={TUNE_SPEC_ID}. Observe shadow pass runs "
+                    "(autopsy alignment feed + judgment schema stub). No fills; "
+                    "evolutionary shadows still gated by Q8B/calendar."
+                ),
+                "auto_fixable": False,
+            }
+        )
+    if cohort.get("owner_freeze_pending"):
+        findings.append(
+            {
+                "severity": "info",
+                "category": CATEGORY,
+                "title": COHORT_FREEZE_PROPOSED_TITLE,
+                "summary": (
+                    f"Q8B checkpoint {START_CHECKPOINT_ID} has "
+                    f"{cohort.get('proposed_n')} proposed non-mechanical "
+                    f"review_ids ({cohort.get('selection_id')}) and 0 frozen. "
+                    "Owner decision: confirm freeze via "
+                    "`ftse-cue-consumer-mft freeze-cohort --apply` (or rebuild "
+                    "with propose-cohort). Evolutionary shadows wait on "
+                    f"freeze+completion or calendar {CALENDAR_FALLBACK}. "
+                    "Still observe-only; no Package L."
+                ),
+                "auto_fixable": False,
+            }
+        )
     if payload.get("evolutionary_shadows_eligible"):
         findings.append(
             {
@@ -837,14 +1234,22 @@ def ops_findings_from_cue_consumer_mft(payload: dict[str, Any]) -> list[dict[str
 
 def format_cue_consumer_mft_text(payload: dict[str, Any]) -> str:
     gate = payload.get("start_gate") if isinstance(payload.get("start_gate"), dict) else {}
+    cohort = (
+        payload.get("start_gate_cohort")
+        if isinstance(payload.get("start_gate_cohort"), dict)
+        else {}
+    )
     lines = [
         f"Cue-consumer MFT lab ({payload.get('registration_id')})",
         f"  status: {payload.get('status')} / {payload.get('pipeline_status')}",
+        f"  lab_armed_at: {payload.get('lab_armed_at')}",
         f"  influences_live: {payload.get('influences_live')}",
         f"  scoreboard: {payload.get('scoreboard_id')} (declared incomparable)",
         f"  closed_lab_episodes: {payload.get('closed_lab_episodes')}",
         f"  start_gate eligible: {payload.get('evolutionary_shadows_eligible')} "
         f"({gate.get('eligibility_reason')})",
+        f"  cohort proposed/frozen: {cohort.get('proposed_n')}/{cohort.get('frozen_n')} "
+        f"(owner_freeze_pending={cohort.get('owner_freeze_pending')})",
         f"  ops: {payload.get('ops_doc')}",
     ]
     return "\n".join(lines) + "\n"
@@ -852,6 +1257,8 @@ def format_cue_consumer_mft_text(payload: dict[str, Any]) -> str:
 
 __all__ = [
     "CALENDAR_FALLBACK",
+    "COHORT_FREEZE_PROPOSED_TITLE",
+    "COHORT_SELECTION_ID",
     "CUE_WHITELIST",
     "CUE_WHITELIST_ID",
     "DEFAULT_OPS_DOC",
@@ -861,8 +1268,11 @@ __all__ = [
     "DEFAULT_STORE_PATH",
     "FINDING_TITLE",
     "FIXED_STAKE_UNITS",
+    "LAB_ARMED_TITLE",
+    "LAB_ARM_MARKER_ID",
     "LAB_ID",
     "PER_ROOT_ACTIVE_CAP",
+    "PIPELINE_STATUS_ARMED",
     "REGISTRATION_ID",
     "SCOREBOARD_ID",
     "START_CHECKPOINT_ID",
@@ -871,6 +1281,7 @@ __all__ = [
     "THIN_EMIT_MIN_CLOSES",
     "TUNE_SPEC_ID",
     "assess_same_day_round_trip",
+    "build_autopsy_alignment_feed",
     "build_hardened_proposal_stub",
     "build_lab_payload",
     "build_registration_payload",
@@ -879,9 +1290,12 @@ __all__ = [
     "default_start_gate_payload",
     "evaluate_start_gate",
     "format_cue_consumer_mft_text",
+    "freeze_start_cohort",
+    "judgment_in_the_round_stub",
     "novelty_fingerprint",
     "novelty_gate_stub",
     "ops_findings_from_cue_consumer_mft",
+    "propose_start_cohort",
     "refresh_cue_consumer_mft",
     "same_day_round_trip",
     "select_pit_cues",
