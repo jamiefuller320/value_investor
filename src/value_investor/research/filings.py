@@ -497,6 +497,11 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.nibegroup.com/download/18.6de1034419d7225b18639e/1776148811225/GB-W-AR25-NIBE.pdf",
         "https://www.nibegroup.com/download/18.7a7a546d19c4da3cab34/1770881343351/12-2-GB-Q4-25.pdf",
     ],
+    # omxs30 parked leftover — eng-20261026-04: LIFCO-B.ST awaiting_periodic_report; Cision
+    # newsroom empty since 2023; lifco.se Next.js embeds network.s-z.se FY2025 annual PDF.
+    "LIFCO-B.ST": [
+        "https://network.s-z.se/app/uploads/sites/16/Lifco-annual-report-2025.pdf",
+    ],
     # omxs30 buy-tier deepen — eng-20261003-03: SKF-B.ST — GLEIF may cache a non-filing subsidiary LEI; IR backup when ESEF misses.
     "SKF-B.ST": [
         "https://cdn.skfmediahub.skf.com/api/public/096ee325b273e74a/pdf_preview_medium/SKF_ASR_2025_ENG_locked_pdf_preview_medium.pdf",

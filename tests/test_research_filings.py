@@ -12838,6 +12838,19 @@ def test_parked_source_hunter_nibe_b_st_omxs30_has_fetchable_ir():
     assert fetch_filing_body(yearend_url) is not None
 
 
+def test_parked_source_hunter_lifco_b_st_omxs30_has_fetchable_ir():
+    """eng-20261026-04: LIFCO-B.ST network.s-z.se FY2025 annual PDF (hunter confirmed)."""
+    assert "LIFCO-B.ST" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("LIFCO-B.ST")
+    assert len(rows) == 1
+    assert rows[0]["period"] == "annual"
+    assert "network.s-z.se" in rows[0]["url"]
+    assert "Lifco-annual-report-2025.pdf" in rows[0]["url"]
+    body = fetch_filing_body(rows[0]["url"])
+    assert body
+    assert len(body) >= 50000
+
+
 def test_parked_source_hunter_vow3_de_dax_has_fetchable_ir():
     """eng-20261017-03: VOW3.DE volkswagen-group.com FY2025 annual + 9M interim PDFs."""
     assert "VOW3.DE" not in PARKED_SOURCE_HUNTER_SKIP
