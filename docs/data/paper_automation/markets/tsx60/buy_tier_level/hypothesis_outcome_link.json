@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-25T07:06:36.391445+00:00",
+  "generated_at": "2026-10-26T14:19:29.734608+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 10,
+    "closed_total": 12,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 14,
+    "open_with_thesis": 12,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 4,
-        "recovery_rate": 0.5,
-        "sold_underwater_rate": 0.5,
-        "mean_peak_unrealized_pct": -0.0038,
-        "mean_trough_unrealized_pct": -0.0378,
+        "closed_count": 6,
+        "recovery_rate": 0.6667,
+        "sold_underwater_rate": 0.3333,
+        "mean_peak_unrealized_pct": 0.0167,
+        "mean_trough_unrealized_pct": -0.0584,
         "outcome_labels": {
-          "recovered": 2,
+          "recovered": 4,
           "sold_underwater": 2
         }
       },
@@ -63,7 +63,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 10,
+    "hold_closed_with_thesis": 12,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -303,7 +303,7 @@
       "ticker": "RCI-B.TO",
       "name": "Rogers Communications Inc.",
       "started_at": "2026-09-13T02:49:57.191830-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -353,9 +353,9 @@
       "peak_unrealized_pct": 0.0028,
       "trough_unrealized_pct": -0.1642,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-26T10:19:29.499780-04:00",
+      "linked_sell_trade_id": "30516c18-acdf-49c0-81b0-dd4a50cfeae4"
     },
     {
       "episode_id": "buy_tier_level:MRU.TO:2026-09-13T02:49:57.191830-04:00",
@@ -535,7 +535,7 @@
       "ticker": "CNQ.TO",
       "name": "Canadian Natural Resources Limited",
       "started_at": "2026-09-14T03:18:03.258470-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -585,9 +585,9 @@
       "peak_unrealized_pct": 0.1125,
       "trough_unrealized_pct": -0.0348,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-26T10:19:29.499780-04:00",
+      "linked_sell_trade_id": "45b02741-8559-4eff-87fd-ecfcfdc18349"
     },
     {
       "episode_id": "buy_tier_level:CVE.TO:2026-09-14T03:18:03.258470-04:00",
@@ -2700,6 +2700,122 @@
       },
       "buy_returns_since_rotation": {
         "L.TO": -0.0048
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-26T10:19:29.499780-04:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-26T10:19:29.499780-04:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "RCI-B.TO",
+          "price": 45.36,
+          "shares": 1.540866,
+          "gross": 69.89,
+          "cost": 0.12,
+          "avg_cost_at_exit": 50.3846,
+          "realized_pct": -0.0997,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "neutral",
+          "unrealized_pct_at_thesis": -0.0997
+        },
+        {
+          "ticker": "CNQ.TO",
+          "price": 77.12,
+          "shares": 0.929905,
+          "gross": 71.71,
+          "cost": 0.13,
+          "avg_cost_at_exit": 69.333,
+          "realized_pct": 0.1123,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.1123
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "CVE.TO",
+          "price": 45.98,
+          "shares": 0.305229,
+          "gross": 14.03,
+          "cost": 0.02
+        },
+        {
+          "ticker": "TECK-B.TO",
+          "price": 82.68,
+          "shares": 0.266299,
+          "gross": 22.02,
+          "cost": 0.04
+        },
+        {
+          "ticker": "L.TO",
+          "price": 68.67,
+          "shares": 0.435468,
+          "gross": 29.9,
+          "cost": 0.05
+        },
+        {
+          "ticker": "ABX.TO",
+          "price": 53.36,
+          "shares": 0.335075,
+          "gross": 17.88,
+          "cost": 0.03
+        },
+        {
+          "ticker": "CNR.TO",
+          "price": 172.5,
+          "shares": 0.065974,
+          "gross": 11.38,
+          "cost": 0.02
+        },
+        {
+          "ticker": "IFC.TO",
+          "price": 264.54,
+          "shares": 0.045217,
+          "gross": 11.96,
+          "cost": 0.02
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "RCI-B.TO": 0.0,
+        "CNQ.TO": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "CVE.TO": 0.0,
+        "TECK-B.TO": 0.0,
+        "L.TO": 0.0,
+        "ABX.TO": 0.0,
+        "CNR.TO": 0.0,
+        "IFC.TO": 0.0
       },
       "verdict": null,
       "closed_at": null

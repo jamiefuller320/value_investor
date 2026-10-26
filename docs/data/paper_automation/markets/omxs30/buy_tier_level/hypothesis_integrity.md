@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-25T07:08:49.994382+00:00
+Track: `buy_tier_level` · updated 2026-10-26T14:19:54.554227+00:00
 
 ## Portfolio loser feedback
 
@@ -30,7 +30,7 @@ Track: `buy_tier_level` · updated 2026-10-25T07:08:49.994382+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 77%
+- conviction 87%
 
 ### VOLV-B.ST — intact / hold_tolerate (-1.9%)
 - still strong_buy
@@ -54,7 +54,6 @@ Track: `buy_tier_level` · updated 2026-10-25T07:08:49.994382+00:00
 
 ### LIFCO-B.ST — weakening / watch_review (+0.0%)
 - research verdict neutral
-- conviction 34% below intact floor
 - still buy
 - cheapness family still passes
 

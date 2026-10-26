@@ -9357,5 +9357,617 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-26T14:19:44.795137+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/bel20/screen_latest.json",
+      "run_at": "2026-10-25T06:22:45.477230+00:00",
+      "generated_at": "2026-10-26T14:19:44.731143+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-26T14:19:44.740211+00:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-10-26T08:00:00+00:00",
+      "settle_at": "2026-10-26T09:15:00+00:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (4 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0018,
+    "candidates": [
+      {
+        "ticker": "APAM.AS",
+        "name": "Aperam S.A.",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.49629999999999996,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Basic Materials",
+        "price": 35.58,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "UMI.BR",
+        "name": "Umicore SA",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.5061,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Industrials",
+        "price": 17.22,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "AED.BR",
+        "name": "Aedifica NV/SA",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5700000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Real Estate",
+        "price": 63.5,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "ACKB.BR",
+        "name": "Ackermans & Van Haaren NV",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4954,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 253.8,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "APAM.AS",
+        "name": "Aperam S.A.",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.49629999999999996,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Basic Materials",
+        "price": 35.58,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "UMI.BR",
+        "name": "Umicore SA",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.5061,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Industrials",
+        "price": 17.22,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "AED.BR",
+        "name": "Aedifica NV/SA",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5700000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Real Estate",
+        "price": 63.5,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "ACKB.BR",
+        "name": "Ackermans & Van Haaren NV",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4954,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 253.8,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.18% / sell 0.18% (legacy symmetric slot 0.18%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 931.42,
+      "cash": -0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 232.86,
+      "targets": [
+        {
+          "ticker": "AED.BR",
+          "name": "Aedifica NV/SA",
+          "signal": "buy",
+          "conviction_score": 0.5700000000000001,
+          "price": 63.5
+        },
+        {
+          "ticker": "UMI.BR",
+          "name": "Umicore SA",
+          "signal": "strong_buy",
+          "conviction_score": 0.5061,
+          "price": 17.22
+        },
+        {
+          "ticker": "APAM.AS",
+          "name": "Aperam S.A.",
+          "signal": "strong_buy",
+          "conviction_score": 0.49629999999999996,
+          "price": 35.58
+        },
+        {
+          "ticker": "ACKB.BR",
+          "name": "Ackermans & Van Haaren NV",
+          "signal": "buy",
+          "conviction_score": 0.4954,
+          "price": 253.8
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "AED.BR",
+          "name": "Aedifica NV/SA",
+          "reason": "Already near equal-weight target",
+          "value": 232.85,
+          "target_value": 232.86,
+          "conviction_score": 0.5700000000000001,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "UMI.BR",
+          "name": "Umicore SA",
+          "reason": "Already near equal-weight target",
+          "value": 232.86,
+          "target_value": 232.86,
+          "conviction_score": 0.5061,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "APAM.AS",
+          "name": "Aperam S.A.",
+          "reason": "Already near equal-weight target",
+          "value": 232.86,
+          "target_value": 232.86,
+          "conviction_score": 0.49629999999999996,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "ACKB.BR",
+          "name": "Ackermans & Van Haaren NV",
+          "reason": "Already near equal-weight target",
+          "value": 232.86,
+          "target_value": 232.86,
+          "conviction_score": 0.4954,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 4 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "b10c3c4f-1b62-465b-b8a3-061cff4a72b2",
+        "fund_id": "47f76ce8-ee3b-4031-a1c2-8bd63645f5eb",
+        "acted_at": "2026-10-26T14:19:44.740211+00:00",
+        "ticker": "AED.BR",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 3.680291,
+        "price": 63.5,
+        "gross": 233.7,
+        "cost": 0.41,
+        "net_cash": 233.29,
+        "note": "Automated trim",
+        "name": "Aedifica NV/SA",
+        "avg_cost_at_exit": 63.3091
+      },
+      {
+        "id": "3ef8c5e5-a5c7-4b86-ae8a-fd991ad42475",
+        "fund_id": "47f76ce8-ee3b-4031-a1c2-8bd63645f5eb",
+        "acted_at": "2026-10-26T14:19:44.740211+00:00",
+        "ticker": "UMI.BR",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 13.568364,
+        "price": 17.22,
+        "gross": 233.65,
+        "cost": 0.41,
+        "net_cash": 233.24,
+        "note": "Automated trim",
+        "name": "Umicore SA",
+        "avg_cost_at_exit": 19.4272
+      },
+      {
+        "id": "76d2f424-9b3e-4bc1-945a-bc4e1fd0c08d",
+        "fund_id": "47f76ce8-ee3b-4031-a1c2-8bd63645f5eb",
+        "acted_at": "2026-10-26T14:19:44.740211+00:00",
+        "ticker": "APAM.AS",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 6.544588,
+        "price": 35.58,
+        "gross": 232.86,
+        "cost": 0.41,
+        "net_cash": -233.26,
+        "note": "Automated buy",
+        "name": "Aperam S.A."
+      },
+      {
+        "id": "ea6b18bb-820f-4622-b5df-a59c5bac7ac4",
+        "fund_id": "47f76ce8-ee3b-4031-a1c2-8bd63645f5eb",
+        "acted_at": "2026-10-26T14:19:44.740211+00:00",
+        "ticker": "ACKB.BR",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.91748,
+        "price": 253.8,
+        "gross": 232.86,
+        "cost": 0.41,
+        "net_cash": -233.26,
+        "note": "Automated buy",
+        "name": "Ackermans & Van Haaren NV"
+      }
+    ],
+    "nav_before": 933.06,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "UMI.BR",
+        "shares": 27.090724,
+        "avg_cost": 19.4272,
+        "sector": "Industrials",
+        "name": "Umicore SA",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "AED.BR",
+        "shares": 7.347298,
+        "avg_cost": 63.3091,
+        "sector": "Real Estate",
+        "name": "Aedifica NV/SA",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "SOLB.BR": 1
+      }
+    },
+    "nav_after": 931.42,
+    "cash_after": -0.0,
+    "holdings_after": [
+      {
+        "ticker": "UMI.BR",
+        "shares": 13.52236,
+        "avg_cost": 19.4272,
+        "sector": "Industrials",
+        "name": "Umicore SA",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "AED.BR",
+        "shares": 3.667007,
+        "avg_cost": 63.3091,
+        "sector": "Real Estate",
+        "name": "Aedifica NV/SA",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "APAM.AS",
+        "shares": 6.544588,
+        "avg_cost": 35.58,
+        "sector": "Basic Materials",
+        "name": "Aperam S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "ACKB.BR",
+        "shares": 0.91748,
+        "avg_cost": 253.8,
+        "sector": "Industrials",
+        "name": "Ackermans & Van Haaren NV",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "verdict_counts": {
+        "agree": 2,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": [
+        {
+          "ticker": "APAM.AS",
+          "name": "Aperam S.A.",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 3
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 3
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.49629999999999996
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-26T14:19:44.740211+00:00",
+          "proposal_id": "buy_tier_level:APAM.AS:buy:2026-10-26T14:19:44.740211+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "ACKB.BR",
+          "name": "Ackermans & Van Haaren NV",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 4
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 4
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.4954
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-26T14:19:44.740211+00:00",
+          "proposal_id": "buy_tier_level:ACKB.BR:buy:2026-10-26T14:19:44.740211+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        }
+      ]
+    }
   }
 ]

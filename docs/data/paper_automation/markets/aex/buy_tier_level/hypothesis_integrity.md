@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-25T07:07:50.090740+00:00
+Track: `buy_tier_level` · updated 2026-10-26T14:19:44.323230+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 6 (0% count, 0% NAV)
+- Losers: **0** / 8 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
@@ -27,6 +27,18 @@ Track: `buy_tier_level` · updated 2026-10-25T07:07:50.090740+00:00
 - conviction 33% below intact floor
 - still buy
 - research accumulate
+
+### ASM.AS — intact / hold_tolerate (+0.0%)
+- still buy
+- cheapness family still passes
+- data_quality 1.00
+- conviction 58%
+
+### MT.AS — intact / hold_tolerate (+0.0%)
+- still buy
+- cheapness family still passes
+- data_quality 1.00
+- conviction 44%
 
 ### AKZA.AS — intact / hold_tolerate (+1.6%)
 - still buy

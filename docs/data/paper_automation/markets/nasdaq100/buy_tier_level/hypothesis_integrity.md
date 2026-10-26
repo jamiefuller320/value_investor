@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-25T07:06:55.231200+00:00
+Track: `buy_tier_level` · updated 2026-10-26T14:19:31.732871+00:00
 
 ## Portfolio loser feedback
 
@@ -9,9 +9,6 @@ Track: `buy_tier_level` · updated 2026-10-25T07:06:55.231200+00:00
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
-
-### SBUX — broken / exit_candidate (+5.6%)
-- cheapness lost and not in buy tier
 
 ### SNDK — weakening / watch_review (-18.6%)
 - research verdict caution
@@ -103,18 +100,18 @@ Track: `buy_tier_level` · updated 2026-10-25T07:06:55.231200+00:00
 - data_quality 1.00
 - conviction 56%
 
-### AVGO — weakening / watch_review (-0.9%)
-- research verdict caution
-- cheapness family no longer passes
-- still buy
-- data_quality 1.00
-
 ### BKR — intact / hold_tolerate (-0.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 51%
+
+### AVGO — weakening / watch_review (-0.5%)
+- research verdict caution
+- cheapness family no longer passes
+- still buy
+- data_quality 1.00
 
 ### MSFT — intact / hold_tolerate (+0.0%)
 - still buy
@@ -129,6 +126,18 @@ Track: `buy_tier_level` · updated 2026-10-25T07:06:55.231200+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 40%
+
+### TXN — weakening / watch_review (+0.0%)
+- cheapness family no longer passes
+- conviction 33% below intact floor
+- still buy
+- research accumulate
+
+### HON — weakening / watch_review (+0.0%)
+- research verdict neutral
+- conviction 31% below intact floor
+- still strong_buy
+- cheapness family still passes
 
 ### PEP — intact / hold_tolerate (+1.1%)
 - still strong_buy
@@ -223,13 +232,6 @@ Track: `buy_tier_level` · updated 2026-10-25T07:06:55.231200+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 54%
-
-### ADP — intact / hold_tolerate (+11.3%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 57%
 
 ### GEHC — intact / hold_tolerate (+12.5%)
 - still strong_buy

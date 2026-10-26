@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-25T07:06:55.235745+00:00",
+  "generated_at": "2026-10-26T14:19:31.737661+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 12,
+    "closed_total": 14,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 28,
+    "open_with_thesis": 26,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 5,
+        "closed_count": 7,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0982,
-        "mean_trough_unrealized_pct": 0.013,
+        "mean_peak_unrealized_pct": 0.0974,
+        "mean_trough_unrealized_pct": -0.0064,
         "outcome_labels": {
-          "recovered": 5
+          "recovered": 7
         }
       },
       "broken": {
@@ -62,7 +62,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 12,
+    "hold_closed_with_thesis": 14,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -965,7 +965,7 @@
       "ticker": "ADP",
       "name": "Automatic Data Processing, Inc.",
       "started_at": "2026-09-22T03:44:54.064981-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -1015,9 +1015,9 @@
       "peak_unrealized_pct": 0.1272,
       "trough_unrealized_pct": -0.0568,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-26T10:19:31.625778-04:00",
+      "linked_sell_trade_id": "3cb9e3da-9a46-4a76-908f-33fc8a9925f1"
     },
     {
       "episode_id": "buy_tier_level:PAYX:2026-09-22T03:44:54.064981-04:00",
@@ -1314,7 +1314,7 @@
       "ticker": "SBUX",
       "name": "Starbucks Corporation",
       "started_at": "2026-09-24T03:45:21.467879-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -1364,9 +1364,9 @@
       "peak_unrealized_pct": 0.0634,
       "trough_unrealized_pct": -0.053,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-26T10:19:31.625778-04:00",
+      "linked_sell_trade_id": "851e6e1a-7da2-46ad-875b-18304c336571"
     },
     {
       "episode_id": "buy_tier_level:REGN:2026-09-29T03:24:19.266107-04:00",
@@ -2844,6 +2844,98 @@
         "MSFT": 0.0,
         "LRCX": 0.0,
         "AVGO": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-26T10:19:31.625778-04:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-26T10:19:31.625778-04:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "ADP",
+          "price": 304.16,
+          "shares": 0.107472,
+          "gross": 32.69,
+          "cost": 0.06,
+          "avg_cost_at_exit": 273.19,
+          "realized_pct": 0.1134,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.1134
+        },
+        {
+          "ticker": "SBUX",
+          "price": 100.8,
+          "shares": 0.304622,
+          "gross": 30.71,
+          "cost": 0.05,
+          "avg_cost_at_exit": 95.44,
+          "realized_pct": 0.0562,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0562
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "AVGO",
+          "price": 321.68,
+          "shares": 0.041083,
+          "gross": 13.22,
+          "cost": 0.02
+        },
+        {
+          "ticker": "TXN",
+          "price": 284.69,
+          "shares": 0.096742,
+          "gross": 27.54,
+          "cost": 0.05
+        },
+        {
+          "ticker": "HON",
+          "price": 221.15,
+          "shares": 0.101361,
+          "gross": 22.42,
+          "cost": 0.04
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "ADP": 0.0,
+        "SBUX": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "AVGO": 0.0,
+        "TXN": 0.0,
+        "HON": 0.0
       },
       "verdict": null,
       "closed_at": null

@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-25T07:07:39.901014+00:00
+Track: `buy_tier_level` · updated 2026-10-26T14:19:43.733443+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 4 (0% count, 0% NAV)
+- Losers: **0** / 8 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
@@ -12,14 +12,41 @@ Track: `buy_tier_level` · updated 2026-10-25T07:07:39.901014+00:00
 
 ### INW.MI — weakening / watch_review (+0.0%)
 - research verdict caution
-- conviction 24% below intact floor
+- conviction 28% below intact floor
 - still buy
 - cheapness family still passes
 
-### REC.MI — weakening / watch_review (+1.5%)
-- left buy tier (hold)
-- conviction 29% below intact floor
+### MONC.MI — intact / hold_tolerate (+0.0%)
+- still strong_buy
 - research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 69%
+
+### PST.MI — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 57%
+
+### UNI.MI — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.90
+- conviction 56%
+
+### LTMC.MI — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 52%
+
+### FCT.MI — weakening / watch_review (+0.0%)
+- research verdict caution
+- still buy
 - cheapness family still passes
 
 ### BZU.MI — intact / hold_tolerate (+5.8%)
@@ -34,4 +61,4 @@ Track: `buy_tier_level` · updated 2026-10-25T07:07:39.901014+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 49%
+- conviction 58%

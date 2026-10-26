@@ -3,13 +3,13 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-25T07:07:21.488097+00:00",
+  "generated_at": "2026-10-26T14:19:33.688564+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 3,
+    "closed_total": 4,
     "closed_unknown_thesis": 0,
     "open_with_thesis": 2,
     "by_thesis_status": {
@@ -27,13 +27,13 @@
         }
       },
       "broken": {
-        "closed_count": 2,
+        "closed_count": 3,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0115,
-        "mean_trough_unrealized_pct": 0.0062,
+        "mean_peak_unrealized_pct": 0.0032,
+        "mean_trough_unrealized_pct": -0.0017,
         "outcome_labels": {
-          "recovered": 2
+          "recovered": 3
         }
       },
       "insufficient_data": {
@@ -62,11 +62,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 3,
+    "hold_closed_with_thesis": 4,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=3 (target >=8)",
-      "hold thesis buckets thin (weakening=1, broken=2; target >=3 each)",
+      "hold closed with thesis=4 (target >=8)",
+      "hold thesis buckets thin (weakening=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -269,7 +269,7 @@
       "ticker": "SIE.DE",
       "name": "Siemens Aktiengesellschaft",
       "started_at": "2026-10-22T09:47:25.527900+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -286,9 +286,9 @@
       "peak_unrealized_pct": -0.0133,
       "trough_unrealized_pct": -0.0175,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-26T14:19:33.642883+00:00",
+      "linked_sell_trade_id": "6daaa21f-7b25-4241-9950-26afa04aa6cc",
       "thesis_status_at_start": "broken",
       "recommended_action_at_start": "exit_candidate",
       "thesis_reasons_at_start": [
@@ -303,6 +303,50 @@
       ],
       "research_verdict_at_start": null,
       "unrealized_pct_at_thesis": 0.0
+    },
+    {
+      "episode_id": "buy_tier_level:BAS.DE:2026-10-26T14:19:33.642883+00:00",
+      "track_id": "buy_tier_level",
+      "ticker": "BAS.DE",
+      "name": "BASF SE",
+      "started_at": "2026-10-26T14:19:33.642883+00:00",
+      "status": "open",
+      "stress_triggers": [
+        "signal_downgrade"
+      ],
+      "entry_mark": 52.45,
+      "avg_cost": 52.45,
+      "unrealized_pct_at_start": 0.0,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "research verdict caution",
+        "cheapness family no longer passes",
+        "still buy",
+        "data_quality 1.00"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "caution",
+      "unrealized_pct_at_thesis": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.563125,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
     }
   ],
   "swap_rotations": [
@@ -391,7 +435,7 @@
       ],
       "sell_returns_since_rotation": {
         "FME.DE": 0.0282,
-        "DHL.DE": 0.0
+        "DHL.DE": 0.0142
       },
       "buy_returns_since_rotation": {
         "G1A.DE": 0.0379
@@ -456,7 +500,7 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "DHL.DE": -0.0198
+        "DHL.DE": -0.0059
       },
       "buy_returns_since_rotation": {
         "FME.DE": 0.0191,
@@ -638,6 +682,147 @@
       "buy_returns_since_rotation": {
         "FME.DE": 0.0327,
         "SIE.DE": 0.0043
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-26T14:19:33.642883+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-26T14:19:33.642883+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "SIE.DE",
+          "price": 256.8,
+          "shares": 2.000553,
+          "gross": 513.74,
+          "cost": 0.9,
+          "avg_cost_at_exit": 258.7102,
+          "realized_pct": -0.0074,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0074
+        },
+        {
+          "ticker": "FME.DE",
+          "price": 40.46,
+          "shares": 10.501531,
+          "gross": 424.89,
+          "cost": 0.74,
+          "avg_cost_at_exit": 38.3835,
+          "realized_pct": 0.0541,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "research verdict caution",
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "data_quality 1.00"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": 0.0541
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "DHL.DE",
+          "price": 57.28,
+          "shares": 1.81439,
+          "gross": 103.93,
+          "cost": 0.18
+        },
+        {
+          "ticker": "HEI.DE",
+          "price": 147.8,
+          "shares": 0.703168,
+          "gross": 103.93,
+          "cost": 0.18
+        },
+        {
+          "ticker": "FRE.DE",
+          "price": 46.1,
+          "shares": 2.254409,
+          "gross": 103.93,
+          "cost": 0.18
+        },
+        {
+          "ticker": "MUV2.DE",
+          "price": 556.6,
+          "shares": 0.18672,
+          "gross": 103.93,
+          "cost": 0.18
+        },
+        {
+          "ticker": "DTG.DE",
+          "price": 40.05,
+          "shares": 2.402845,
+          "gross": 96.23,
+          "cost": 0.17
+        },
+        {
+          "ticker": "BAS.DE",
+          "price": 52.45,
+          "shares": 1.981473,
+          "gross": 103.93,
+          "cost": 0.18
+        },
+        {
+          "ticker": "HNR1.DE",
+          "price": 280.2,
+          "shares": 0.370907,
+          "gross": 103.93,
+          "cost": 0.18
+        },
+        {
+          "ticker": "DTE.DE",
+          "price": 25.35,
+          "shares": 4.099735,
+          "gross": 103.93,
+          "cost": 0.18
+        },
+        {
+          "ticker": "VOW3.DE",
+          "price": 69.1,
+          "shares": 1.504027,
+          "gross": 103.93,
+          "cost": 0.18
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "SIE.DE": 0.0,
+        "FME.DE": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "DHL.DE": 0.0,
+        "HEI.DE": 0.0,
+        "FRE.DE": 0.0,
+        "MUV2.DE": 0.0,
+        "DTG.DE": 0.0,
+        "BAS.DE": 0.0,
+        "HNR1.DE": 0.0,
+        "DTE.DE": 0.0,
+        "VOW3.DE": 0.0
       },
       "verdict": null,
       "closed_at": null

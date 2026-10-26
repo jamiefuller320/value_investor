@@ -3,13 +3,13 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-25T07:07:39.902941+00:00",
+  "generated_at": "2026-10-26T14:19:43.735334+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 3,
+    "closed_total": 4,
     "closed_unknown_thesis": 0,
     "open_with_thesis": 4,
     "by_thesis_status": {
@@ -17,13 +17,13 @@
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 1,
+        "closed_count": 2,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.1256,
-        "mean_trough_unrealized_pct": 0.0114,
+        "mean_peak_unrealized_pct": 0.0698,
+        "mean_trough_unrealized_pct": -0.0004,
         "outcome_labels": {
-          "recovered": 1
+          "recovered": 2
         }
       },
       "broken": {
@@ -62,11 +62,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 3,
+    "hold_closed_with_thesis": 4,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=3 (target >=8)",
-      "hold thesis buckets thin (weakening=1, broken=2; target >=3 each)",
+      "hold closed with thesis=4 (target >=8)",
+      "hold thesis buckets thin (weakening=2, broken=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -134,7 +134,7 @@
       "ticker": "REC.MI",
       "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
       "started_at": "2026-10-05T08:38:11.562071+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -176,9 +176,9 @@
       "peak_unrealized_pct": 0.0141,
       "trough_unrealized_pct": -0.0123,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-26T14:19:43.553175+00:00",
+      "linked_sell_trade_id": "f4fe4f02-db0a-402a-af2a-4a861f67863a"
     },
     {
       "episode_id": "buy_tier_level:TEN.MI:2026-10-07T09:47:31.973884+01:00",
@@ -400,6 +400,50 @@
       "effective_signal": "hold",
       "data_quality_score": 1.0,
       "conviction_score": 0.23528,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "buy_tier_level:FCT.MI:2026-10-26T14:19:43.553175+00:00",
+      "track_id": "buy_tier_level",
+      "ticker": "FCT.MI",
+      "name": "Fincantieri S.p.A.",
+      "started_at": "2026-10-26T14:19:43.553175+00:00",
+      "status": "open",
+      "stress_triggers": [
+        "signal_downgrade"
+      ],
+      "entry_mark": 12.02,
+      "avg_cost": 12.02,
+      "unrealized_pct_at_start": 0.0,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "research verdict caution",
+        "cheapness family no longer passes",
+        "still buy",
+        "data_quality 1.00"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "caution",
+      "unrealized_pct_at_thesis": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.374,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
@@ -641,7 +685,7 @@
       },
       "buy_returns_since_rotation": {
         "BZU.MI": 0.0445,
-        "TEN.MI": 0.0
+        "TEN.MI": 0.0384
       },
       "verdict": null,
       "closed_at": null
@@ -717,7 +761,7 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "TEN.MI": 0.0
+        "TEN.MI": 0.0384
       },
       "buy_returns_since_rotation": {
         "BZU.MI": 0.064,
@@ -862,7 +906,7 @@
         "AMP.MI": -0.0124
       },
       "buy_returns_since_rotation": {
-        "LTMC.MI": 0.0
+        "LTMC.MI": 0.0249
       },
       "verdict": null,
       "closed_at": null
@@ -924,7 +968,7 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "LTMC.MI": 0.0
+        "LTMC.MI": 0.0249
       },
       "buy_returns_since_rotation": {
         "REC.MI": 0.0151,
@@ -995,6 +1039,148 @@
       "buy_returns_since_rotation": {
         "ENI.MI": 0.0744,
         "BZU.MI": 0.0773
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-26T14:19:43.553175+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-26T14:19:43.553175+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "REC.MI",
+          "price": 53.8,
+          "shares": 6.491966,
+          "gross": 349.27,
+          "cost": 0.61,
+          "avg_cost_at_exit": 53.0241,
+          "realized_pct": 0.0146,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0146
+        },
+        {
+          "ticker": "ENI.MI",
+          "price": 27.65,
+          "shares": 8.388515,
+          "gross": 231.94,
+          "cost": 0.41,
+          "avg_cost_at_exit": 24.7347,
+          "realized_pct": 0.1179,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.1179
+        },
+        {
+          "ticker": "BZU.MI",
+          "price": 39.43,
+          "shares": 5.551735,
+          "gross": 218.9,
+          "cost": 0.38,
+          "avg_cost_at_exit": 37.2692,
+          "realized_pct": 0.058,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.058
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "MONC.MI",
+          "price": 42.66,
+          "shares": 3.155895,
+          "gross": 134.63,
+          "cost": 0.24
+        },
+        {
+          "ticker": "PST.MI",
+          "price": 24.0,
+          "shares": 5.609604,
+          "gross": 134.63,
+          "cost": 0.24
+        },
+        {
+          "ticker": "UNI.MI",
+          "price": 24.59,
+          "shares": 5.47501,
+          "gross": 134.63,
+          "cost": 0.24
+        },
+        {
+          "ticker": "LTMC.MI",
+          "price": 25.14,
+          "shares": 5.35523,
+          "gross": 134.63,
+          "cost": 0.24
+        },
+        {
+          "ticker": "FCT.MI",
+          "price": 12.02,
+          "shares": 11.20054,
+          "gross": 134.63,
+          "cost": 0.24
+        },
+        {
+          "ticker": "INW.MI",
+          "price": 7.325,
+          "shares": 16.951146,
+          "gross": 124.17,
+          "cost": 0.22
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "REC.MI": 0.0,
+        "ENI.MI": 0.0,
+        "BZU.MI": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "MONC.MI": 0.0,
+        "PST.MI": 0.0,
+        "UNI.MI": 0.0,
+        "LTMC.MI": 0.0,
+        "FCT.MI": 0.0,
+        "INW.MI": 0.0
       },
       "verdict": null,
       "closed_at": null
