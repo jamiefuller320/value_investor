@@ -102,6 +102,36 @@ def is_actioned(store: dict[str, Any] | None, review_id: str) -> bool:
     return rid in _actioned_set(store)
 
 
+def actioned_episode_keys(store: dict[str, Any] | None) -> set[str]:
+    """Episode keys cleared by Accept/Comment/Duplicate (survives review_id jitter).
+
+    ``review_id`` fingerprints full timestamps; board chips sometimes rewrite
+    entry/exit seconds so a new fingerprint would re-enter active. Calendar
+    ``episode_key`` on the event snapshot keeps the same exit cleared.
+    """
+    if not store:
+        return set()
+    out: set[str] = set()
+    for row in store.get("events") or []:
+        if not isinstance(row, dict):
+            continue
+        kind = str(row.get("kind") or "").strip().lower()
+        if kind not in CLEARING_ACTION_KINDS:
+            continue
+        snap = row.get("snapshot") if isinstance(row.get("snapshot"), dict) else {}
+        ep = str(snap.get("episode_key") or "").strip()
+        if ep:
+            out.add(ep)
+            continue
+        book = str(snap.get("book_id") or snap.get("book_tag") or "").strip()
+        ticker = str(snap.get("ticker") or "").strip().upper()
+        entry_day = str(snap.get("entry_at") or "").strip()[:10]
+        exit_day = str(snap.get("exit_at") or "").strip()[:10]
+        if book and ticker and entry_day and exit_day:
+            out.add("|".join([book, ticker, entry_day, exit_day]))
+    return out
+
+
 def _reply_card_usable(row: dict[str, Any]) -> bool:
     """Fail-closed: blank / ``?`` identity cards must not clutter the active queue."""
     ticker = str(row.get("ticker") or "").strip()
@@ -449,6 +479,7 @@ __all__ = [
     "LABELS_FILENAME",
     "REPLY_STUB_TEXT",
     "SCHEMA_VERSION",
+    "actioned_episode_keys",
     "comments_awaiting_reply",
     "empty_labels_store",
     "is_actioned",

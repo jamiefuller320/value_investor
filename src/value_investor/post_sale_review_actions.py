@@ -16,6 +16,7 @@ from value_investor.post_sale_review import (
 )
 from value_investor.post_sale_review_labels import (
     ACTION_KINDS,
+    load_post_sale_review_labels,
     record_accept,
     record_comment,
     record_duplicate,
@@ -81,30 +82,69 @@ def _snapshot_from_payload(payload: dict[str, Any]) -> dict[str, Any]:
     return {key: merged[key] for key in _SNAPSHOT_KEYS if key in merged}
 
 
+def _identity_ok(snap: dict[str, Any]) -> bool:
+    ticker = str(snap.get("ticker") or "").strip()
+    book = str(snap.get("book_tag") or snap.get("book_id") or "").strip()
+    return bool(ticker and ticker != "?" and book and book != "?")
+
+
+def _fill_from_row(snap: dict[str, Any], row: dict[str, Any]) -> dict[str, Any]:
+    filled = {key: row[key] for key in _SNAPSHOT_KEYS if key in row}
+    filled.update({k: v for k, v in snap.items() if v is not None})
+    return filled
+
+
 def _resolve_snapshot(
     data_dir: Path,
     review_id: str,
     snapshot: dict[str, Any] | None,
 ) -> dict[str, Any]:
-    """Fill missing identity from the published queue when the bridge omitted it."""
+    """Fill missing identity from queue / prior labels when the bridge omitted it.
+
+    Searches published ``active`` first, then prior event snapshots for the same
+    ``review_id`` (batch race: card already cleared from the queue JSON).
+    """
     snap = dict(snapshot) if isinstance(snapshot, dict) else {}
-    if (
-        str(snap.get("ticker") or "").strip()
-        and str(snap.get("book_tag") or snap.get("book_id") or "").strip()
-    ):
-        return snap
-    queue = _safe_queue(data_dir)
-    if not queue:
-        return snap
+    if _identity_ok(snap):
+        # Still backfill episode_key when the UI slimmed the payload.
+        if str(snap.get("episode_key") or "").strip():
+            return snap
     rid = str(review_id or "").strip()
-    for row in queue.get("active") or []:
-        if not isinstance(row, dict):
-            continue
-        if str(row.get("review_id") or "").strip() != rid:
-            continue
-        filled = {key: row[key] for key in _SNAPSHOT_KEYS if key in row}
-        filled.update({k: v for k, v in snap.items() if v is not None})
-        return filled
+    queue = _safe_queue(data_dir)
+    if queue and rid:
+        for row in queue.get("active") or []:
+            if not isinstance(row, dict):
+                continue
+            if str(row.get("review_id") or "").strip() != rid:
+                continue
+            filled = _fill_from_row(snap, row)
+            if _identity_ok(filled):
+                return filled
+    # Labels history: prior Accept/Comment on this id (or sibling events).
+    if rid:
+        labels = load_post_sale_review_labels(data_dir)
+        for row in labels.get("events") or []:
+            if not isinstance(row, dict):
+                continue
+            if str(row.get("review_id") or "").strip() != rid:
+                continue
+            prior = row.get("snapshot") if isinstance(row.get("snapshot"), dict) else {}
+            if not prior:
+                continue
+            filled = _fill_from_row(snap, prior)
+            if _identity_ok(filled):
+                return filled
+        for row in labels.get("active_replies") or []:
+            if not isinstance(row, dict):
+                continue
+            if (
+                str(row.get("review_id") or "").strip() != rid
+                and str(row.get("parent_review_id") or "").strip() != rid
+            ):
+                continue
+            filled = _fill_from_row(snap, row)
+            if _identity_ok(filled):
+                return filled
     return snap
 
 

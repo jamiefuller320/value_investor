@@ -12838,6 +12838,19 @@ def test_parked_source_hunter_nibe_b_st_omxs30_has_fetchable_ir():
     assert fetch_filing_body(yearend_url) is not None
 
 
+def test_parked_source_hunter_lifco_b_st_omxs30_has_fetchable_ir():
+    """eng-20261026-04: LIFCO-B.ST network.s-z.se FY2025 annual PDF (hunter confirmed)."""
+    assert "LIFCO-B.ST" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("LIFCO-B.ST")
+    assert len(rows) == 1
+    assert rows[0]["period"] == "annual"
+    assert "network.s-z.se" in rows[0]["url"]
+    assert "Lifco-annual-report-2025.pdf" in rows[0]["url"]
+    body = fetch_filing_body(rows[0]["url"])
+    assert body
+    assert len(body) >= 50000
+
+
 def test_parked_source_hunter_vow3_de_dax_has_fetchable_ir():
     """eng-20261017-03: VOW3.DE volkswagen-group.com FY2025 annual + 9M interim PDFs."""
     assert "VOW3.DE" not in PARKED_SOURCE_HUNTER_SKIP
@@ -14181,6 +14194,54 @@ def test_parked_source_hunter_san_pa_euro_stoxx50_has_fetchable_ir():
     for row in rows:
         body = fetch_filing_body(row["url"])
         assert body and len(body) > 5000
+
+
+def test_fetch_filings_ir_allowlist_euro_stoxx50_nokia_he_builtins_eng_20261026_03(
+    tmp_path: Path,
+):
+    """eng-20261026-03: NOKIA.HE unfetchable_iwb — ml-eu GlobeNewswire statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("NOKIA.HE", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert all("globenewswire.com/Resource/Download" in url for url in urls)
+    assert any(url.endswith("nokia-in-2024-annual-report.pdf") for url in urls)
+    assert any(url.endswith("nokia-in-2025-annual-report.pdf") for url in urls)
+    assert any(url.endswith("nokia-corporation-report-q2-half-year-2026.pdf") for url in urls)
+    assert {row["period"] for row in rows} == {"annual", "interim"}
+
+
+def test_load_ir_url_allowlist_canonicalizes_nokia_he_bare_globenewswire_uuids(
+    tmp_path: Path,
+):
+    """Bare ml-eu UUID Resource/Download URLs map to suffix statutory PDFs."""
+    bare = "https://ml-eu.globenewswire.com/Resource/Download/b3e238ec-c204-4bb0-8531-e0802350d19e"
+    live = _BUILTIN_IR_URLS["NOKIA.HE"][1]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"NOKIA.HE": [bare]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["NOKIA.HE"]
+    assert bare not in mapping["NOKIA.HE"]
+
+
+def test_parked_source_hunter_nokia_he_euro_stoxx50_has_fetchable_ir():
+    """eng-20261026-03: NOKIA.HE has live ml-eu GlobeNewswire annual + H1 2026 PDFs."""
+    assert "NOKIA.HE" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("NOKIA.HE")
+    assert len(rows) == 3
+    annual_2025 = next(
+        row
+        for row in rows
+        if row["period"] == "annual" and row["url"].endswith("nokia-in-2025-annual-report.pdf")
+    )
+    body = fetch_filing_body(annual_2025["url"])
+    assert body and len(body) > 5000
+    assert "Nokia in 2025" in body
+    valid, reason = _validate_ir_allowlist_body_content(annual_2025, body, ticker="NOKIA.HE")
+    assert valid, reason
 
 
 def test_fetch_filings_ir_allowlist_cac40_sgo_pa_builtins(tmp_path: Path):

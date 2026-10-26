@@ -232,6 +232,8 @@ def test_build_queue_dedupes_same_day_near_dupes_keeps_cross_book(tmp_path: Path
     assert n206["return_pct"] == -2.5
     assert "episode_key" in n206
     assert payload["duplicate_policy"]["cross_book"].startswith("intentional")
+    assert payload["sort_default"] == "interesting"
+    assert any(row["id"] == "interesting" for row in payload["sort_options"])
     assert any(row["id"] == "exit_at" for row in payload["sort_options"])
     assert any(row["id"] == "ticker" for row in payload["sort_options"])
 
@@ -259,6 +261,47 @@ def test_sort_queue_items_date_and_stock():
     assert [r["ticker"] for r in by_date] == ["AAA.L", "BBB.L"]
     by_stock = sort_queue_items(rows, sort_by="ticker", descending=False)
     assert [r["ticker"] for r in by_stock] == ["AAA.L", "BBB.L"]
+
+
+def test_sort_queue_items_interesting_puts_identity_break_first():
+    from value_investor.post_sale_decision_reasons import sell_interest_rank
+
+    rows = [
+        {
+            "ticker": "MECH.L",
+            "exit_at": "2026-10-22T00:00:00+00:00",
+            "tag": "new",
+            "sell_decision": {"code": "hold_trading_days", "label": "Hold horizon"},
+        },
+        {
+            "ticker": "LEAVE.L",
+            "exit_at": "2026-10-21T00:00:00+00:00",
+            "tag": "new",
+            "sell_decision": {"code": "leave_buy_tier", "label": "Left buy-tier"},
+        },
+        {
+            "ticker": "ID.L",
+            "exit_at": "2026-10-10T00:00:00+00:00",
+            "tag": "new",
+            "sell_decision": {
+                "code": "identity_break_ey_band",
+                "label": "Left EY top band",
+            },
+        },
+        {
+            "ticker": "ID2.L",
+            "exit_at": "2026-10-20T00:00:00+00:00",
+            "tag": "reply",
+            "sell_decision": {
+                "code": "identity_break_ey_band",
+                "label": "Left EY top band",
+            },
+        },
+    ]
+    assert sell_interest_rank(rows[0]) == 2
+    assert sell_interest_rank(rows[2]) == 0
+    ordered = sort_queue_items(rows, sort_by="interesting")
+    assert [r["ticker"] for r in ordered] == ["ID2.L", "ID.L", "MECH.L", "LEAVE.L"]
 
 
 def test_wider_tf_window_pads_episode():
@@ -559,3 +602,111 @@ def test_nested_snapshot_batch_preserves_identity(tmp_path: Path):
     assert any(
         row.get("tag") == "reply" and row.get("ticker") == "BBB.L" for row in after["active"]
     )
+
+
+def test_actioned_episode_key_keeps_jitter_fingerprint_cleared(tmp_path: Path):
+    """Same calendar episode with a new review_id fingerprint stays cleared."""
+    from value_investor.post_sale_review_labels import actioned_episode_keys
+
+    sealed = _sealed_fixture()
+    board = _board_fixture()
+    base = build_post_sale_review_queue(data_dir=tmp_path, sealed=sealed, board=board)
+    item = next(row for row in base["active"] if row["ticker"] == "AAA.L")
+    ep = item["episode_key"]
+    labels = {
+        "actioned_review_ids": ["stale-fingerprint-from-old-seconds"],
+        "events": [
+            {
+                "kind": "comment",
+                "review_id": "stale-fingerprint-from-old-seconds",
+                "text": "already reviewed",
+                "snapshot": {
+                    "episode_key": ep,
+                    "ticker": item["ticker"],
+                    "book_id": item["book_id"],
+                    "book_tag": item["book_tag"],
+                    "entry_at": item["entry_at"],
+                    "exit_at": item["exit_at"],
+                },
+            }
+        ],
+        "active_replies": [],
+    }
+    assert ep in actioned_episode_keys(labels)
+    payload = build_post_sale_review_queue(
+        data_dir=tmp_path, sealed=sealed, board=board, labels=labels
+    )
+    assert all(
+        row.get("episode_key") != ep or row.get("tag") == "reply" for row in payload["active"]
+    )
+    assert all(row.get("review_id") != item["review_id"] for row in payload["active"])
+
+
+def test_resolve_snapshot_heals_from_labels_when_queue_cleared(tmp_path: Path):
+    """Batch race: card already gone from active queue; heal identity from labels."""
+    from value_investor.post_sale_review_actions import _resolve_snapshot
+    from value_investor.post_sale_review_labels import record_accept
+    from value_investor.storage import write_json
+
+    data_dir = tmp_path
+    (data_dir / "sealed_lifecycle.json").write_text("{}", encoding="utf-8")
+    queue = build_post_sale_review_queue(
+        data_dir=data_dir, sealed=_sealed_fixture(), board=_board_fixture()
+    )
+    item = next(row for row in queue["active"] if row["ticker"] == "BBB.L")
+    write_json(data_dir / "post_sale_review_queue.json", {"active": []}, compact=False)
+    record_accept(
+        data_dir,
+        review_id=item["review_id"],
+        snapshot={
+            "ticker": item["ticker"],
+            "book_tag": item["book_tag"],
+            "book_id": item["book_id"],
+            "episode_key": item["episode_key"],
+            "entry_at": item["entry_at"],
+            "exit_at": item["exit_at"],
+        },
+    )
+    healed = _resolve_snapshot(data_dir, item["review_id"], {})
+    assert healed.get("ticker") == "BBB.L"
+    assert healed.get("book_tag") or healed.get("book_id")
+
+
+def test_reply_rebuild_preserves_comment_dialogue(tmp_path: Path):
+    """Missing learning_points must not wipe owner comment/reply dialogue turns."""
+    labels = {
+        "actioned_review_ids": ["parent-1"],
+        "events": [],
+        "active_replies": [
+            {
+                "review_id": "reply:keep",
+                "parent_review_id": "parent-1",
+                "tag": "reply",
+                "ticker": "AAA.L",
+                "book_tag": "N200",
+                "book_id": "n200",
+                "exit_at": "2026-10-20T10:00:00+00:00",
+                "entry_at": "2026-10-01T10:00:00+00:00",
+                "owner_comment": "Premature sell",
+                "reply_text": "Acknowledged premature sell.",
+                "llm_opinion": "",
+                "learning_points": [],
+                "dialogue": [
+                    {"kind": "initial_opinion", "text": "seed"},
+                    {"kind": "comment", "text": "Premature sell"},
+                    {"kind": "reply", "text": "Acknowledged premature sell."},
+                ],
+            }
+        ],
+    }
+    payload = build_post_sale_review_queue(
+        data_dir=tmp_path,
+        sealed=_sealed_fixture(),
+        board=_board_fixture(),
+        labels=labels,
+    )
+    reply = next(row for row in payload["active"] if row["review_id"] == "reply:keep")
+    kinds = [str(t.get("kind")) for t in (reply.get("dialogue") or []) if isinstance(t, dict)]
+    assert "comment" in kinds
+    assert "reply" in kinds
+    assert reply.get("owner_comment") == "Premature sell"
