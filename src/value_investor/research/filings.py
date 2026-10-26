@@ -719,6 +719,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sanofi.com/assets/dotcom/content-app/publications/half-year-financial-reports/Half-year-financial-report-2025.pdf",
         "https://www.sanofi.com/assets/dotcom/content-app/publications/annual-report-on-form-20-f/2024-01-01-form-20-f-2024-en.pdf",
     ],
+    # euro_stoxx50 IWB blocker — eng-20261026-03: NOKIA.HE unfetchable_iwb; nokia.com newsroom
+    # HTML bodies are site chrome; ml-eu GlobeNewswire statutory PDF attachments fetch
+    # (filename suffix supplies title tokens — bare UUID Resource/Download fails title_mismatch).
+    "NOKIA.HE": [
+        "https://ml-eu.globenewswire.com/Resource/Download/29eadcd8-8f27-42a4-be91-f509e03ea12f/nokia-in-2024-annual-report.pdf",
+        "https://ml-eu.globenewswire.com/Resource/Download/b3e238ec-c204-4bb0-8531-e0802350d19e/nokia-in-2025-annual-report.pdf",
+        "https://ml-eu.globenewswire.com/Resource/Download/3f0c9c33-04b4-4498-b6d8-f6705ef358a8/nokia-corporation-report-q2-half-year-2026.pdf",
+    ],
     # dax leftover VOW3.DE — eng-20261017-03: annual-report-2025-1886 hub 404; FY2025 PDF + H1/9M interim.
     "VOW.DE": [
         "https://www.volkswagen-group.com/en/press-releases/volkswagen-group-strengthens-financial-resilience-in-2025-strong-fourth-quarter-in-a-challenging-environment-20202/download?disposition=attachment",
@@ -1254,6 +1262,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "PST": ("Poste Italiane", "Poste Italiane SpA", "Poste Italiane S.p.A."),
     "TEN": ("Tenaris", "Tenaris S.A.", "Tenaris SA"),
     "ADYEN": ("Adyen N.V.", "Adyen"),
+    # euro_stoxx50 NOKIA.HE — ml-eu GlobeNewswire UUID slugs need issuer tokens for IR title gate.
+    "NOKIA": ("Nokia Oyj", "Nokia Corporation", "Nokia"),
     # hang_seng 1109.HK — opaque HKEX listconews slugs need issuer tokens for
     # _ir_body_title_tokens_match (same pattern as FMG.AX / J36.SI).
     "1109": ("China Resources Land", "China Resources Land Limited"),
@@ -5535,6 +5545,16 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     ),
     "https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440": (
         "https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440/press-release-lvmh-2025-annual-results.pdf"
+    ),
+    # eng-20261026-03: NOKIA.HE bare GlobeNewswire UUIDs → suffix PDFs (title tokens + period).
+    "https://ml-eu.globenewswire.com/Resource/Download/29eadcd8-8f27-42a4-be91-f509e03ea12f": (
+        "https://ml-eu.globenewswire.com/Resource/Download/29eadcd8-8f27-42a4-be91-f509e03ea12f/nokia-in-2024-annual-report.pdf"
+    ),
+    "https://ml-eu.globenewswire.com/Resource/Download/b3e238ec-c204-4bb0-8531-e0802350d19e": (
+        "https://ml-eu.globenewswire.com/Resource/Download/b3e238ec-c204-4bb0-8531-e0802350d19e/nokia-in-2025-annual-report.pdf"
+    ),
+    "https://ml-eu.globenewswire.com/Resource/Download/3f0c9c33-04b4-4498-b6d8-f6705ef358a8": (
+        "https://ml-eu.globenewswire.com/Resource/Download/3f0c9c33-04b4-4498-b6d8-f6705ef358a8/nokia-corporation-report-q2-half-year-2026.pdf"
     ),
     # eng-20260911-01: GlobeNewswire HTML/PDF IR rows fail validation; contenthub statutory PDFs serve.
     "https://www.globenewswire.com/news-release/2026/02/25/3244280/0/en/Wolters-Kluwer-2025-Full-Year-Report.html": (
