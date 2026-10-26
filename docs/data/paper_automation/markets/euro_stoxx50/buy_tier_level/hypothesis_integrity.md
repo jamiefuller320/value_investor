@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-25T07:06:41.386964+00:00
+Track: `buy_tier_level` · updated 2026-10-26T08:47:02.677342+00:00
 
 ## Portfolio loser feedback
 
@@ -8,12 +8,9 @@ Track: `buy_tier_level` · updated 2026-10-25T07:06:41.386964+00:00
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 - Selection feedback:
-  - garp fails more often among losers (100% vs 50%)
+  - garp fails more often among losers (100% vs 42%)
 
 ## Holding reviews
-
-### VOW.DE — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
 
 ### DTE.DE — intact / hold_tolerate (-5.5%)
 - price drawdown alone does not invalidate value thesis
@@ -42,12 +39,19 @@ Track: `buy_tier_level` · updated 2026-10-25T07:06:41.386964+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 45%
+- conviction 53%
 
 ### PRX.AS — weakening / watch_review (+0.0%)
-- conviction 29% below intact floor
+- conviction 35% below intact floor
 - still buy
 - cheapness family still passes
+
+### NOKIA.HE — weakening / watch_review (+0.0%)
+- research verdict caution
+- cheapness family no longer passes
+- conviction 15% below intact floor
+- still buy
+- data_quality 1.00
 
 ### SGO.PA — intact / hold_tolerate (+0.9%)
 - still strong_buy
@@ -75,7 +79,7 @@ Track: `buy_tier_level` · updated 2026-10-25T07:06:41.386964+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 47%
+- conviction 55%
 
 ### SAN.PA — intact / hold_tolerate (+4.3%)
 - still strong_buy
