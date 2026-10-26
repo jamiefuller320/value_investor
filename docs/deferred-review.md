@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-26T15:12:37+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-26T17:11:47+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -379,6 +379,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L638 | **Richer confidence and mitigation fields on post-sale autopsy cards** | Owner judgment-in-the-round ask: surface confidence and how-to-mitigate on sell/buy autopsy cards (alongside target/realism/market-agree). Extends Package M voice; alignment-only; do not invent reasons; fail-closed unknown. Distinct from L139 rebalance-log confidence and N27 live gating. | judgment-in-the-round super-book rubric in use OR owner asks autopsy cards to mirror B5/B6/S5/S6 checklist fields; after current autopsy voice schema stable |
 | L639 | **Exit blind/revisit autopsy stages** | After entry_blind/entry_revisit prove load, add exit_blind (PIT at sell, no post-exit marks) and exit_revisit (default exit+28d) with interesting-first priority reuse; demote mechanical max-days/leave-buy-cohort from active exit stages. | entry_revisit live and attention load acceptable; owner locks exit_blind clock + exit_revisit T |
 | L640 | **Blind-split auto lens_id from revisit outcomes** | Do not auto-assign lens_id or spawn sealed forks from autopsy revisit themes. Lenses harden via cue_consumer_mft + novelty/cull; learning_point_forward may hint lens_side only. | mixable entry/exit lenses wired on lab (N228 path) and closes-primary emit+cull proven |
+| L641 | **Missed-opportunity auto digest for blind autopsy / stock choice** | Companion observe stream (auto digest, ops-monitor wired) of the highest-performing not-bought cohort vs lab/buy path. Feeds super-book entry lenses and MoM stock-choice lever — not a manual autopsy of all sealed books. Cap cohort size; alignment-only. | entry_blind v0 ships on lab/interesting OR super-book Q8B cohort freeze completes (whichever first); then design ranking metric + cap |
 
 ### Universe & data
 
