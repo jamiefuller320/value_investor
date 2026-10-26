@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-26T08:37:28+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-26T14:59:06+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -262,6 +262,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N228 | **Rule-aware LLM decide + misfit evidence trail on cue-consumer lab** | On cue_consumer_mft: algo/rules propose or constrain; LLM agrees/vetoes/chooses within registered knob/rule set with durable llm-live-path-evidence. When rules do not fit, emit structured misfit_evidence (rule_id/decision_code + cites) for future experimental rules — never silently invent live knobs. Ingest Package M autopsy feedback. Behind N222; influences_live=false; no Package L on sealed. | N222 eng reconsidered or lab skeleton running; F1 shadow marks readable; autopsy learning_point_forward field exists or deferred voice slice shipped. |
 | N229 | **Human chart highlight and draw-lines read path on post-sale reviews** | iPad-primary UX: highlight regions and single/parallel lines on episode+wider TF charts; serialize post_hoc_human_geometry with Comment; factory/LLM fail-closed if unread. Geometry is critique input only — never PIT fill feature on sealed books; never Package L. Design locked in post-sale-autopsy-llm-voice-2026-10-25.md; eng substantial — park behind voice enrich. | Plain-language autopsy voice enrich shipped or explicitly skipped; clash idle; owner re-asks draw tools; iPad gesture prototype scoped. |
 | N230 | **Post-sale autopsy classical TA overlay suite** | Beyond fixing SMA warm-up: RSI(14) sparkline/chip, ATR band, MACD pane, Bollinger, etc. on Package M dual-horizon cards. Useful for richer human Comments but high noise vs one thin lookback instrument; must not become live veto inputs. | After lookback warm-up fix is live and Package M comment volume shows demand for OB/OS or volatility context beyond SMA50/200 |
+| N231 | **Blanket post-sale autopsy clearance of mechanical exits** | Owner: little value analysing all max-days / leave-buy-cohort exits now; comments largely duplicate. Prefer identity-break and other non-mechanical sells; feed premature-sell and no-support downtrend lessons into super-book lenses. | After identity-break cohort has thick commented marks and super-book judgment checklist is wired; or when mechanical exits show new distinct failure modes. |
 
 ---
 

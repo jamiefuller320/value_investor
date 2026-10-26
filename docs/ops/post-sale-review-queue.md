@@ -39,8 +39,12 @@ full candidate set so sealed/control population stays visible in ops findings.
 ## Sort + duplicates
 
 Dashboard Lifecycle → Post-sale reviews has **touch-friendly sort chips**
-(Date · Stock · Loss size · Book · Tag). Date = sell/exit newest first; Stock =
-name A→Z (ticker when name missing). new/reply tags and Accept/Comment stay.
+(**Interesting** · Date · Stock · Loss size · Book · Tag). **Default =
+Interesting:** identity/quality breaks and other non-mechanical sells rise
+above hard-rule mechanical exits (`hold_trading_days` / max-days,
+`leave_buy_tier`, control `left_target_set`); reply tags still ahead within
+band; newest exit within band. Date = sell/exit newest first; Stock = name
+A→Z (ticker when name missing). Accept/Comment/Duplicate unchanged.
 
 | Looks like a duplicate? | What it is |
 |---|---|
@@ -95,9 +99,15 @@ the right edge or fight whole-page pan. Charts keep their readable
 **Blank ``?`` cards:** Comment payloads that omit ticker/book (nested-only
 `snapshot` without flat keys) used to spawn `[?] ? · ?` reply rows that sorted
 to the top. Queue rebuild now **fail-closes** those out of `active`, prunes
-unusable `active_replies`, and the bridge flattens identity onto the command
-payload. Soft reload keeps Accept/Comment/Duplicate cleared via a session
-overlay until labels/queue sidecars catch up.
+unusable `active_replies`, and the bridge flattens **slim** identity onto the
+command payload (no heavy chart/dialogue blobs — keeps batched
+`repository_dispatch` under GitHub’s client_payload size limit). Soft reload
+**and full page refresh** keep Accept/Comment/Duplicate cleared via a
+session + `localStorage` overlay until labels/queue sidecars catch up.
+Comment also injects an optimistic reply stub so owner text stays visible
+while git lags. Cleared **`episode_key`** (calendar day) also stays out of
+active when board chips rewrite entry/exit seconds (new `review_id`, same
+episode). Reply cards show a **Your comment** preview without expanding.
 
 **Initial opinion** on every card is structured deterministic v0 (`opinion_source=
 deterministic_v0`) with learning points + per-chart captions, plus **L633**
