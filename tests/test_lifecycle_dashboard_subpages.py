@@ -165,7 +165,7 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "psr-comment-preview" in app
     assert "postSaleActionedEpisodeKeys" in app
     assert "psr-comment-preview" in css
-    assert "post-sale-interesting-sort-20261026" in html
+    assert "post-sale-dialogue-preserve-20261026" in html
     assert 'id: "interesting"' in app or "interesting" in app
     assert "postSaleSellInterestRank" in app
 

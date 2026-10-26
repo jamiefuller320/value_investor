@@ -714,9 +714,30 @@ def build_post_sale_review_queue(
         if not card.get("framing") or "Bought because:" not in str(card.get("framing") or ""):
             card["framing"] = _framing_line(card)
         # Ensure opinion / dialogue present on reply cards for chart annotation.
-        if not card.get("llm_opinion") or not card.get("learning_points"):
+        # Never replace a multi-turn comment/reply thread with a fresh seed
+        # (attach_opinion_fields always rewrites dialogue).
+        prior_dialogue = card.get("dialogue") if isinstance(card.get("dialogue"), list) else []
+        has_comment_thread = any(
+            isinstance(turn, dict)
+            and str(turn.get("kind") or turn.get("role") or "").lower()
+            in {"comment", "reply", "owner"}
+            for turn in prior_dialogue
+        )
+        needs_opinion = not card.get("llm_opinion") or not card.get("learning_points")
+        if needs_opinion and not has_comment_thread:
             attach_opinion_fields(card)
-        elif not card.get("dialogue"):
+        elif needs_opinion and has_comment_thread:
+            # Fill opinion fields but keep the owner/factory thread intact.
+            saved = list(prior_dialogue)
+            owner_comment = card.get("owner_comment")
+            reply_text = card.get("reply_text")
+            attach_opinion_fields(card)
+            card["dialogue"] = saved
+            if owner_comment:
+                card["owner_comment"] = owner_comment
+            if reply_text:
+                card["reply_text"] = reply_text
+        elif not prior_dialogue:
             card["dialogue"] = seed_dialogue(card)
         if not _queue_card_usable(card):
             continue

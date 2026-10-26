@@ -670,3 +670,43 @@ def test_resolve_snapshot_heals_from_labels_when_queue_cleared(tmp_path: Path):
     healed = _resolve_snapshot(data_dir, item["review_id"], {})
     assert healed.get("ticker") == "BBB.L"
     assert healed.get("book_tag") or healed.get("book_id")
+
+
+def test_reply_rebuild_preserves_comment_dialogue(tmp_path: Path):
+    """Missing learning_points must not wipe owner comment/reply dialogue turns."""
+    labels = {
+        "actioned_review_ids": ["parent-1"],
+        "events": [],
+        "active_replies": [
+            {
+                "review_id": "reply:keep",
+                "parent_review_id": "parent-1",
+                "tag": "reply",
+                "ticker": "AAA.L",
+                "book_tag": "N200",
+                "book_id": "n200",
+                "exit_at": "2026-10-20T10:00:00+00:00",
+                "entry_at": "2026-10-01T10:00:00+00:00",
+                "owner_comment": "Premature sell",
+                "reply_text": "Acknowledged premature sell.",
+                "llm_opinion": "",
+                "learning_points": [],
+                "dialogue": [
+                    {"kind": "initial_opinion", "text": "seed"},
+                    {"kind": "comment", "text": "Premature sell"},
+                    {"kind": "reply", "text": "Acknowledged premature sell."},
+                ],
+            }
+        ],
+    }
+    payload = build_post_sale_review_queue(
+        data_dir=tmp_path,
+        sealed=_sealed_fixture(),
+        board=_board_fixture(),
+        labels=labels,
+    )
+    reply = next(row for row in payload["active"] if row["review_id"] == "reply:keep")
+    kinds = [str(t.get("kind")) for t in (reply.get("dialogue") or []) if isinstance(t, dict)]
+    assert "comment" in kinds
+    assert "reply" in kinds
+    assert reply.get("owner_comment") == "Premature sell"

@@ -12134,18 +12134,24 @@ function renderPostSaleDecisionReasons(item) {
 
 function renderPostSaleDialogue(item) {
   const turns = Array.isArray(item.dialogue) ? item.dialogue : [];
-  if (!turns.length && !(item.owner_comment || item.reply_text || item.llm_opinion)) {
+  const ownerComment = String((item && item.owner_comment) || "").trim();
+  const replyText = String((item && item.reply_text) || "").trim();
+  if (!turns.length && !(ownerComment || replyText || (item && item.llm_opinion))) {
     return "";
   }
   const blocks = [];
+  let sawComment = false;
+  let sawReply = false;
   if (turns.length) {
     for (const turn of turns) {
       if (!turn || typeof turn !== "object") continue;
       const kind = String(turn.kind || turn.role || "note");
+      if (kind === "comment" || kind === "owner") sawComment = true;
+      if (kind === "reply") sawReply = true;
       const label =
         kind === "initial_opinion"
           ? "Factory opinion"
-          : kind === "comment"
+          : kind === "comment" || kind === "owner"
             ? "Owner comment"
             : kind === "reply"
               ? "Factory reply"
@@ -12159,6 +12165,19 @@ function renderPostSaleDialogue(item) {
         ${points}
       </div>`);
     }
+    // If rebuild reseeded dialogue to opinion-only, still surface stored fields.
+    if (!sawComment && ownerComment) {
+      blocks.push(`<div class="psr-dialogue-turn psr-dialogue-comment">
+        <p class="small"><strong>Owner comment</strong></p>
+        <p class="small psr-dialogue-text">${esc(ownerComment)}</p>
+      </div>`);
+    }
+    if (!sawReply && replyText) {
+      blocks.push(`<div class="psr-dialogue-turn psr-dialogue-reply">
+        <p class="small"><strong>Factory reply</strong></p>
+        <p class="small psr-dialogue-text">${esc(replyText)}</p>
+      </div>`);
+    }
   } else {
     if (item.llm_opinion) {
       blocks.push(`<div class="psr-dialogue-turn psr-dialogue-initial_opinion">
@@ -12169,16 +12188,16 @@ function renderPostSaleDialogue(item) {
         ${renderPostSaleLearningPoints(item.learning_points)}
       </div>`);
     }
-    if (item.owner_comment) {
+    if (ownerComment) {
       blocks.push(`<div class="psr-dialogue-turn psr-dialogue-comment">
         <p class="small"><strong>Owner comment</strong></p>
-        <p class="small psr-dialogue-text">${esc(item.owner_comment)}</p>
+        <p class="small psr-dialogue-text">${esc(ownerComment)}</p>
       </div>`);
     }
-    if (item.reply_text) {
+    if (replyText) {
       blocks.push(`<div class="psr-dialogue-turn psr-dialogue-reply">
         <p class="small"><strong>Factory reply</strong></p>
-        <p class="small psr-dialogue-text">${esc(item.reply_text)}</p>
+        <p class="small psr-dialogue-text">${esc(replyText)}</p>
       </div>`);
     }
   }
@@ -12207,7 +12226,17 @@ function renderPostSaleReviewCard(item, expanded) {
     .split("\n")
     .map((line) => `<div>${esc(line)}</div>`)
     .join("");
-  const ownerComment = String(item.owner_comment || "").trim();
+  let ownerComment = String(item.owner_comment || "").trim();
+  if (!ownerComment && Array.isArray(item.dialogue)) {
+    for (const turn of item.dialogue) {
+      if (!turn || typeof turn !== "object") continue;
+      const kind = String(turn.kind || turn.role || "").toLowerCase();
+      if (kind === "comment" || kind === "owner") {
+        ownerComment = String(turn.text || "").trim();
+        if (ownerComment) break;
+      }
+    }
+  }
   const commentPreview =
     tag === "reply" && ownerComment
       ? `<p class="small psr-comment-preview"><strong>Your comment</strong> — ${esc(
