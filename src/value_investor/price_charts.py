@@ -20,8 +20,11 @@ from value_investor.storage import (
 
 logger = logging.getLogger(__name__)
 
-MAX_CHART_POINTS = 180
-CHART_LOOKBACK_PERIOD = "1y"
+# 2y so SMA200 is formed at dual-horizon wider-TF left edge (Package M autopsy).
+MAX_CHART_POINTS = 280
+CHART_LOOKBACK_PERIOD = "2y"
+# Calendar-day pad before assessment start so SMA200 warm-up is visible in clip.
+CLIP_WARMUP_CALENDAR_DAYS = 220
 BUY_TIER_SIGNALS = frozenset({"strong_buy", "buy"})
 CROSSING_LEVEL_KEYS = (
     "core_limit",
@@ -97,6 +100,31 @@ def _rolling_series_at(
             values.append(None)
         else:
             values.append(_round_price(float(raw)))
+    return values
+
+
+def _volume_at(volume: pd.Series | None, sample_index: pd.Index) -> list[float | None]:
+    """Sample daily volume at the same timestamps as downsampled closes."""
+    if volume is None:
+        return [None] * len(sample_index)
+    clean = volume.dropna()
+    if clean.empty:
+        return [None] * len(sample_index)
+    values: list[float | None] = []
+    for stamp in sample_index:
+        if stamp not in clean.index:
+            values.append(None)
+            continue
+        raw = clean.loc[stamp]
+        if isinstance(raw, pd.Series):
+            raw = raw.iloc[-1]
+        if raw is None or pd.isna(raw):
+            values.append(None)
+            continue
+        try:
+            values.append(float(raw))
+        except (TypeError, ValueError):
+            values.append(None)
     return values
 
 
@@ -403,8 +431,13 @@ def build_price_chart_payload(
     snapshot_dirs: list[Path] | None = None,
     market: str | None = None,
     held: bool = False,
+    volume: pd.Series | None = None,
 ) -> dict[str, Any] | None:
-    """Build a compact chart JSON for one ticker."""
+    """Build a compact chart JSON for one ticker.
+
+    ``volumes`` (aligned to ``dates``) is always present for LLM / autopsy
+    context. Dashboard UI toggles volume display off by default.
+    """
     clean = series.dropna()
     if clean.empty:
         return None
@@ -442,6 +475,7 @@ def build_price_chart_payload(
     sma200_series = _rolling_series_at(clean, window=200, sample_index=sampled.index)
     sma50 = next((value for value in reversed(sma50_series) if value is not None), None)
     sma200 = next((value for value in reversed(sma200_series) if value is not None), None)
+    volumes = _volume_at(volume, sampled.index)
 
     as_of_iso = (as_of or datetime.now(UTC)).isoformat()
     # Prefer an explicit streak start; fall back to this screen's as-of date.
@@ -512,8 +546,10 @@ def build_price_chart_payload(
         "levels_as_of": as_of_iso[:10],
         "levels_basis": levels_basis,
         "period": CHART_LOOKBACK_PERIOD,
+        "clip_warmup_calendar_days": CLIP_WARMUP_CALENDAR_DAYS,
         "dates": dates,
         "closes": closes,
+        "volumes": volumes,
         "sma50_series": sma50_series,
         "sma200_series": sma200_series,
         "levels": current_levels,
@@ -554,11 +590,13 @@ def write_price_charts_from_history(
     snapshot_dirs: list[Path] | None = None,
     signal_filter: Collection[str] | None = None,
     market: str | None = None,
+    volumes: dict[str, pd.Series] | None = None,
 ) -> list[Path]:
     """Persist chart payloads for signal rows that have price history.
 
     ``signal_filter`` limits which signals are written. ``None`` writes every
     row with history (used so lifecycle cards beyond buy-tier get charts).
+    Optional ``volumes`` is keyed by ticker (same index family as closes).
     """
     if signals.empty or "ticker" not in signals.columns:
         return []
@@ -568,6 +606,7 @@ def write_price_charts_from_history(
     parent_history = chart_dir.parent / "history"
     if parent_history not in dirs:
         dirs.append(parent_history)
+    volume_map = volumes or {}
 
     rows = signals
     if signal_filter is not None and "signal" in signals.columns:
@@ -593,6 +632,7 @@ def write_price_charts_from_history(
             existing=_existing_chart(chart_dir, ticker),
             snapshot_dirs=dirs,
             market=market,
+            volume=volume_map.get(ticker),
         )
         if payload is None:
             continue
@@ -608,6 +648,7 @@ def write_buy_tier_charts_from_history(
     as_of: datetime | None = None,
     snapshot_dirs: list[Path] | None = None,
     market: str | None = None,
+    volumes: dict[str, pd.Series] | None = None,
 ) -> list[Path]:
     """Persist chart payloads for strong_buy / buy rows that have price history."""
     return write_price_charts_from_history(
@@ -618,6 +659,7 @@ def write_buy_tier_charts_from_history(
         snapshot_dirs=snapshot_dirs,
         signal_filter=BUY_TIER_SIGNALS,
         market=market,
+        volumes=volumes,
     )
 
 
@@ -651,14 +693,21 @@ def chart_payload_needs_refresh(
     signal: str | None = None,
     held: bool = False,
 ) -> bool:
-    """True when chart JSON is missing SMA series or entry levels for prospects."""
+    """True when chart JSON is missing SMA series, volumes, or entry levels."""
     if not isinstance(payload, dict):
         return True
     if "sma50_series" not in payload or "sma200_series" not in payload:
         return True
+    if "volumes" not in payload:
+        return True
+    if str(payload.get("period") or "") != CHART_LOOKBACK_PERIOD:
+        return True
     dates = payload.get("dates") or []
     series = payload.get("sma50_series") or []
+    volumes = payload.get("volumes") or []
     if dates and len(series) != len(dates):
+        return True
+    if dates and len(volumes) != len(dates):
         return True
     sig = str(signal or payload.get("signal") or "").strip().lower()
     if held or sig == "avoid":
@@ -731,22 +780,25 @@ def ensure_price_charts(
                 keep_paths.append(path)
         return keep_paths
 
-    from value_investor.technical_analysis import fetch_close_history
+    from value_investor.technical_analysis import fetch_price_history
 
-    history = fetch_close_history(
+    frames = fetch_price_history(
         [str(report["ticker"]) for report in to_build],
+        period=CHART_LOOKBACK_PERIOD,
         market=market,
     )
     written: list[Path] = list(keep_paths)
     for report in to_build:
         ticker = str(report["ticker"])
-        series = history.get(ticker)
-        if series is None or series.empty:
+        frame = frames.get(ticker)
+        if frame is None or frame.empty or "Close" not in frame.columns:
             logger.warning("No price history for chart: %s", ticker)
             existing_path = chart_dir / chart_filename(ticker)
             if existing_path.exists():
                 written.append(existing_path)
             continue
+        series = frame["Close"]
+        volume = frame["Volume"] if "Volume" in frame.columns else None
         plan = (
             report.get("trade_plan")
             if isinstance(report.get("trade_plan"), dict)
@@ -764,6 +816,7 @@ def ensure_price_charts(
             snapshot_dirs=[chart_dir.parent / "history", COMMITTED_HISTORY_DIR],
             market=market,
             held=bool(report.get("held")),
+            volume=volume,
         )
         if payload is None:
             continue
