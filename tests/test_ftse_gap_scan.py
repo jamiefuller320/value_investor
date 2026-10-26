@@ -823,12 +823,13 @@ def test_screen_ttm_differs_while_filing_aligned_matches_the_statement():
     )
 
 
-def test_atym_and_grg_cashflow_metrics_have_no_fcf_ttm():
+def test_grg_cashflow_metrics_annual_fcf_without_ttm():
+    """GRG remains the committed annual-without-TTM fixture; ATYM now has TTM."""
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
     atym = rows["ATYM.L"]
     assert atym.cashflow_annual_fcf == pytest.approx(110_835_000)
-    assert atym.cashflow_fcf_ttm is None
-    assert "cashflow_metrics_annual_fcf_without_ttm" in _ids(atym)
+    assert atym.cashflow_fcf_ttm == pytest.approx(137_175_000)
+    assert "cashflow_metrics_annual_fcf_without_ttm" not in _ids(atym)
     grg = rows["GRG.L"]
     assert grg.cashflow_annual_fcf == pytest.approx(51_600_000)
     assert grg.cashflow_fcf_ttm is None
