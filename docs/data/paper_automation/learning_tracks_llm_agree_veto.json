@@ -1,10 +1,190 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-01T06:55:00+00:00",
+  "generated_at": "2026-10-26T08:52:49.709315+00:00",
   "observe_only": true,
   "influences_live": false,
   "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
   "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-  "tracks": {},
-  "note": "Bootstrap stub so ops-monitor does not warn before the next weekday paper-auto pass writes real cards. Observe-only — do not treat as live sell authority."
+  "tracks": {
+    "buy_tier_level": {
+      "schema_version": 1,
+      "track_id": "buy_tier_level",
+      "generated_at": "2026-10-26T08:52:22.334558+00:00",
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+      "card_count": 17,
+      "verdict_counts": {
+        "agree": 17,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 17,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "veto_sell_count": 0,
+      "veto_sell_tickers": [],
+      "promotion_gate": {
+        "ready_for_hard_veto": false,
+        "requires": [
+          "Thick disagreement cohort vs still_in_buy_set twin marks",
+          "Evidence schema present on every live-bound card (fail-closed)",
+          "Explicit cold-start / epoch promotion \u2014 never mid-flight Suite A edit",
+          "Suite B framing before treating as adoption truth"
+        ],
+        "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
+      },
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+    },
+    "buy_tier_level_dca": {
+      "schema_version": 1,
+      "track_id": "buy_tier_level_dca",
+      "generated_at": "2026-10-26T08:52:36.002927+00:00",
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+      "card_count": 22,
+      "verdict_counts": {
+        "agree": 22,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 22,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "veto_sell_count": 0,
+      "veto_sell_tickers": [],
+      "promotion_gate": {
+        "ready_for_hard_veto": false,
+        "requires": [
+          "Thick disagreement cohort vs still_in_buy_set twin marks",
+          "Evidence schema present on every live-bound card (fail-closed)",
+          "Explicit cold-start / epoch promotion \u2014 never mid-flight Suite A edit",
+          "Suite B framing before treating as adoption truth"
+        ],
+        "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
+      },
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+    },
+    "ai_judgment_fair": {
+      "schema_version": 1,
+      "track_id": "ai_judgment_fair",
+      "generated_at": "2026-10-26T08:51:35.170332+00:00",
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+      "card_count": 0,
+      "verdict_counts": {
+        "agree": 0,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {},
+      "veto_sell_count": 0,
+      "veto_sell_tickers": [],
+      "promotion_gate": {
+        "ready_for_hard_veto": false,
+        "requires": [
+          "Thick disagreement cohort vs still_in_buy_set twin marks",
+          "Evidence schema present on every live-bound card (fail-closed)",
+          "Explicit cold-start / epoch promotion \u2014 never mid-flight Suite A edit",
+          "Suite B framing before treating as adoption truth"
+        ],
+        "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
+      },
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+    },
+    "ai_judgment_matched30_fair": {
+      "schema_version": 1,
+      "track_id": "ai_judgment_matched30_fair",
+      "generated_at": "2026-10-26T08:51:55.076959+00:00",
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+      "card_count": 6,
+      "verdict_counts": {
+        "agree": 6,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 6,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "veto_sell_count": 0,
+      "veto_sell_tickers": [],
+      "promotion_gate": {
+        "ready_for_hard_veto": false,
+        "requires": [
+          "Thick disagreement cohort vs still_in_buy_set twin marks",
+          "Evidence schema present on every live-bound card (fail-closed)",
+          "Explicit cold-start / epoch promotion \u2014 never mid-flight Suite A edit",
+          "Suite B framing before treating as adoption truth"
+        ],
+        "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
+      },
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+    },
+    "buy_tier_matched30_fair": {
+      "schema_version": 1,
+      "track_id": "buy_tier_matched30_fair",
+      "generated_at": "2026-10-26T08:52:08.745742+00:00",
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+      "card_count": 7,
+      "verdict_counts": {
+        "agree": 7,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 7,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "veto_sell_count": 0,
+      "veto_sell_tickers": [],
+      "promotion_gate": {
+        "ready_for_hard_veto": false,
+        "requires": [
+          "Thick disagreement cohort vs still_in_buy_set twin marks",
+          "Evidence schema present on every live-bound card (fail-closed)",
+          "Explicit cold-start / epoch promotion \u2014 never mid-flight Suite A edit",
+          "Suite B framing before treating as adoption truth"
+        ],
+        "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
+      },
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+    }
+  },
+  "note": "Observe-only rollup of algo\u2192agree/veto shadow cards. Do not treat veto counts as live sell authority."
 }
