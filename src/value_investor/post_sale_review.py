@@ -25,9 +25,11 @@ from value_investor.post_sale_decision_reasons import (
     bind_decision_reasons,
     load_control_trade_index,
     load_sealed_episode_indexes,
+    sell_interest_rank,
 )
 from value_investor.post_sale_review_labels import (
     LABELS_FILENAME,
+    actioned_episode_keys,
     comments_awaiting_reply,
     heal_active_replies_file,
     is_actioned,
@@ -603,8 +605,14 @@ def _stock_sort_name(item: dict[str, Any]) -> str:
     return (name or ticker).casefold()
 
 
+def _exit_at_desc_token(exit_at: str) -> str:
+    """Invert ISO-ish exit strings so ascending sort yields newest first."""
+    text = str(exit_at or "")
+    return "".join(chr(0x10FFFF - ord(ch)) for ch in text)
+
+
 def _sort_key(item: dict[str, Any], sort_by: str) -> tuple[Any, ...]:
-    key = str(sort_by or "exit_at").strip()
+    key = str(sort_by or "interesting").strip()
     exit_at = str(item.get("exit_at") or "")
     ticker = str(item.get("ticker") or "")
     stock = _stock_sort_name(item)
@@ -612,6 +620,11 @@ def _sort_key(item: dict[str, Any], sort_by: str) -> tuple[Any, ...]:
     tag = str(item.get("tag") or "new")
     pct = item.get("return_pct")
     pct_n = float(pct) if isinstance(pct, (int, float)) else 0.0
+    if key == "interesting":
+        # Identity/quality first, other non-mechanical next, mechanical last;
+        # reply before new; newest exit within band.
+        tag_rank = 0 if tag == "reply" else 1
+        return (sell_interest_rank(item), tag_rank, _exit_at_desc_token(exit_at), book, ticker)
     if key == "loss_size":
         return (pct_n, exit_at, book, ticker)
     if key == "book":
@@ -622,17 +635,17 @@ def _sort_key(item: dict[str, Any], sort_by: str) -> tuple[Any, ...]:
         return (tag_rank, exit_at, book, ticker)
     if key in {"ticker", "name", "stock"}:
         return (stock, ticker.casefold(), exit_at, book)
-    # default exit_at desc → caller reverses
+    # exit_at desc → caller reverses
     return (exit_at, book, ticker)
 
 
 def sort_queue_items(
     items: list[dict[str, Any]],
     *,
-    sort_by: str = "exit_at",
+    sort_by: str = "interesting",
     descending: bool | None = None,
 ) -> list[dict[str, Any]]:
-    key = str(sort_by or "exit_at").strip()
+    key = str(sort_by or "interesting").strip()
     if descending is None:
         descending = key in {"exit_at", "loss_size"}
     ordered = sorted(items, key=lambda row: _sort_key(row, key))
@@ -647,7 +660,7 @@ def build_post_sale_review_queue(
     sealed: dict[str, Any] | None = None,
     board: dict[str, Any] | None = None,
     labels: dict[str, Any] | None = None,
-    sort_by: str = "exit_at",
+    sort_by: str = "interesting",
 ) -> dict[str, Any]:
     """Build active queue + history pointers. Never influences live."""
     root = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
@@ -668,10 +681,12 @@ def build_post_sale_review_queue(
     }
     # Drop blank ``?`` reply leftovers so rebuild cannot re-surface them.
     prune_active_replies(labels_store)
+    cleared_episodes = actioned_episode_keys(labels_store)
     active_exits = [
         item
         for item in candidates
         if not is_actioned(labels_store, str(item.get("review_id")))
+        and str(item.get("episode_key") or "").strip() not in cleared_episodes
         and _in_attention_queue(item)
         and _queue_card_usable(item)
     ]
@@ -699,16 +714,37 @@ def build_post_sale_review_queue(
         if not card.get("framing") or "Bought because:" not in str(card.get("framing") or ""):
             card["framing"] = _framing_line(card)
         # Ensure opinion / dialogue present on reply cards for chart annotation.
-        if not card.get("llm_opinion") or not card.get("learning_points"):
+        # Never replace a multi-turn comment/reply thread with a fresh seed
+        # (attach_opinion_fields always rewrites dialogue).
+        prior_dialogue = card.get("dialogue") if isinstance(card.get("dialogue"), list) else []
+        has_comment_thread = any(
+            isinstance(turn, dict)
+            and str(turn.get("kind") or turn.get("role") or "").lower()
+            in {"comment", "reply", "owner"}
+            for turn in prior_dialogue
+        )
+        needs_opinion = not card.get("llm_opinion") or not card.get("learning_points")
+        if needs_opinion and not has_comment_thread:
             attach_opinion_fields(card)
-        elif not card.get("dialogue"):
+        elif needs_opinion and has_comment_thread:
+            # Fill opinion fields but keep the owner/factory thread intact.
+            saved = list(prior_dialogue)
+            owner_comment = card.get("owner_comment")
+            reply_text = card.get("reply_text")
+            attach_opinion_fields(card)
+            card["dialogue"] = saved
+            if owner_comment:
+                card["owner_comment"] = owner_comment
+            if reply_text:
+                card["reply_text"] = reply_text
+        elif not prior_dialogue:
             card["dialogue"] = seed_dialogue(card)
         if not _queue_card_usable(card):
             continue
         seen_reply_ids.add(rid)
         reply_cards.append(card)
 
-    active = sort_queue_items(reply_cards + active_exits, sort_by=sort_by, descending=True)
+    active = sort_queue_items(reply_cards + active_exits, sort_by=sort_by)
     sealed_n = sum(1 for row in candidates if row.get("population") == "sealed_lifecycle")
     control_n = sum(
         1 for row in candidates if row.get("population") == "ftse_control_buy_tier_level"
@@ -796,19 +832,28 @@ def build_post_sale_review_queue(
             ),
         },
         "sort_options": [
+            {"id": "interesting", "label": "Interesting"},
             {"id": "exit_at", "label": "Date"},
             {"id": "ticker", "label": "Stock"},
             {"id": "loss_size", "label": "Loss size"},
             {"id": "book", "label": "Book"},
             {"id": "tag", "label": "Tag"},
         ],
+        "sort_policy": {
+            "default": "interesting",
+            "interesting": {
+                "high": "identity_break_* / quality_break_* (non-mechanical)",
+                "mid": "other non-mechanical / unknown",
+                "low": "hold_trading_days / leave_buy_tier / left_target_set",
+            },
+        },
         "labels_store": LABELS_FILENAME,
         "active_count": len(active),
         "actioned_count": len(labels_store.get("actioned_review_ids") or []),
         "reply_count": sum(1 for row in active if row.get("tag") == "reply"),
         "new_count": sum(1 for row in active if row.get("tag") != "reply"),
         "by_book": by_book,
-        "sort_default": sort_by,
+        "sort_default": sort_by or "interesting",
         "active": active,
         "unreplied_comments": len(awaiting),
         "history_event_count": len(labels_store.get("events") or []),
