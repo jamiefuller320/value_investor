@@ -553,6 +553,8 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     ],
     # dax buy-tier deepen — eng-20260922-05: ESEF index empty; IR PDF seeds unmeasured names.
     # eng-20261006-01: igc-20260920-03 0/0 — add H1 statutory report so library deepen clears thin_body (≥3).
+    # eng-20261026-02: igc-20260922-07 gaps_remain_without_refetch — parked unfetchable_iwb; H1 PDF
+    # fetches via ir_allowlist_direct surface release + mandatory IR refetch.
     "HEI.DE": [
         "https://www.heidelbergmaterials.com/system/files/2026-03/HM_Annual_Financial_Statements_2025.pdf",
         "https://www.eqs-news.com/media/document/86940b2a-a5f1-41b6-8b27-6ee13543a147/assets/DE0006047004-JA-2025-EQ-D-00.pdf",
@@ -3490,6 +3492,11 @@ def resolve_filings_regime(market: str | None, ticker: str) -> str:
     return "uk_rns"
 
 
+def ir_allowlist_direct_eligible(ticker: str) -> bool:
+    """True when configured IR allowlist URLs can deepen euro_filings indexed rows."""
+    return bool(fetch_filings_ir_allowlist(ticker))
+
+
 def filing_source_surface(market: str | None, ticker: str) -> str:
     """Fetch-surface label for a ticker: the regime plus any direct adapter it gains.
 
@@ -3504,6 +3511,8 @@ def filing_source_surface(market: str | None, ticker: str) -> str:
         return f"{regime}+amf_direct"
     if regime == "euro_filings" and cision_eligible(ticker):
         return f"{regime}+cision_direct"
+    if regime == "euro_filings" and ir_allowlist_direct_eligible(ticker):
+        return f"{regime}+ir_allowlist_direct"
     return regime
 
 
