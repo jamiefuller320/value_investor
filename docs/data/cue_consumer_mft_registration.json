@@ -4,7 +4,9 @@
   "lab_id": "cue_consumer_mft",
   "evolutionary_root_id": "cue-consumer-mft-root-v0",
   "deferred_id": "N222",
-  "status": "observe_lab_skeleton",
+  "status": "observe_lab_armed",
+  "pipeline_status": "armed_observe_awaiting_q8b",
+  "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
   "observe_only": true,
   "influences_live": false,
   "auto_fixable": false,
@@ -51,7 +53,13 @@
   "start_gate": {
     "mode": "q8b_named_cohort_checkpoint",
     "checkpoint_id": "open_autopsy_cohort_2026_q4",
+    "cohort_selection_id": "non_mechanical_open_autopsy_v0",
     "calendar_fallback": "2026-12-01"
+  },
+  "spend_guard": {
+    "lane": "investment_observe",
+    "steals_data_p1_fat_slot": false,
+    "fail_closed_if_would_steal_p1": true
   },
   "same_day_policy": {
     "default": "undesirable",

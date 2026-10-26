@@ -8,8 +8,13 @@ from pathlib import Path
 
 from value_investor.cue_consumer_mft import (
     CALENDAR_FALLBACK,
+    COHORT_FREEZE_PROPOSED_TITLE,
+    COHORT_SELECTION_ID,
     FIXED_STAKE_UNITS,
+    LAB_ARM_MARKER_ID,
+    LAB_ARMED_TITLE,
     LAB_ID,
+    PIPELINE_STATUS_ARMED,
     REGISTRATION_ID,
     SCOREBOARD_ID,
     START_CHECKPOINT_ID,
@@ -20,8 +25,11 @@ from value_investor.cue_consumer_mft import (
     build_registration_payload,
     concurrent_cap_stub,
     evaluate_start_gate,
+    freeze_start_cohort,
+    judgment_in_the_round_stub,
     novelty_gate_stub,
     ops_findings_from_cue_consumer_mft,
+    propose_start_cohort,
     refresh_cue_consumer_mft,
     select_pit_cues,
     thin_emit_readiness,
@@ -193,18 +201,107 @@ def test_q8b_start_gate_named_cohort_not_active_count():
     assert cal["eligibility_reason"] == "calendar_fallback_on_or_after"
 
 
+def test_propose_cohort_non_mechanical_excludes_reply_and_mechanical():
+    queue = {
+        "active": [
+            {
+                "review_id": "keep-ib",
+                "book_id": "n206",
+                "exit_reason": "identity_break_ey_band",
+                "sold_at": "2026-10-20",
+                "learning_point_forward": "lesson",
+            },
+            {
+                "review_id": "skip-mech",
+                "book_id": "n200",
+                "exit_reason": "hold_trading_days",
+                "sold_at": "2026-10-21",
+            },
+            {
+                "review_id": "reply:abc",
+                "book_id": "n206",
+                "exit_reason": "identity_break_ey_band",
+                "sold_at": "2026-10-19",
+            },
+            {
+                "review_id": "keep-qb",
+                "book_id": "n201",
+                "exit_reason": "quality_break_financial_health",
+                "sold_at": "2026-10-18",
+            },
+        ]
+    }
+    proposal = propose_start_cohort(queue)
+    assert proposal["selection_id"] == COHORT_SELECTION_ID
+    assert proposal["proposed_cohort_review_ids"] == ["keep-qb", "keep-ib"]
+    assert proposal["auto_apply"] is False
+
+
+def test_freeze_cohort_dry_run_then_apply():
+    proposal = {
+        "selection_id": COHORT_SELECTION_ID,
+        "proposed_cohort_review_ids": ["a", "b"],
+    }
+    dry = freeze_start_cohort(start_gate={}, proposal=proposal, apply=False)
+    assert dry["status"] == "dry_run"
+    assert dry["would_freeze_n"] == 2
+    assert not dry["gate"].get("cohort_review_ids")
+
+    applied = freeze_start_cohort(start_gate={}, proposal=proposal, apply=True)
+    assert applied["status"] == "frozen"
+    assert applied["gate"]["cohort_review_ids"] == ["a", "b"]
+    assert applied["gate"]["cohort_frozen_at"]
+
+    noop = freeze_start_cohort(start_gate=applied["gate"], proposal=proposal, apply=True)
+    assert noop["status"] == "noop_already_frozen"
+
+
+def test_judgment_stub_fail_closed_and_observe_only():
+    stub = judgment_in_the_round_stub()
+    assert stub["influences_live"] is False
+    assert stub["deferred_id"] == "N228"
+    assert stub["buy"]["B1"]["unknown"] is True
+    assert stub["sell"]["S4"]["cites"] == []
+
+
 def test_refresh_persists_stores_and_findings(tmp_path: Path):
+    queue_path = tmp_path / "post_sale_review_queue.json"
+    queue_path.write_text(
+        json.dumps(
+            {
+                "active": [
+                    {
+                        "review_id": "rev-ib",
+                        "book_id": "n206",
+                        "ticker": "AAA.L",
+                        "exit_reason": "identity_break_ey_band",
+                        "sold_at": "2026-10-20",
+                        "learning_point_forward": "Wider TF before timing proof.",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
     payload = refresh_cue_consumer_mft(
         output_dir=tmp_path,
         store_path=tmp_path / "cue_consumer_mft_observe.json",
         registration_path=tmp_path / "cue_consumer_mft_registration.json",
         start_gate_path=tmp_path / "cue_consumer_mft_start_gate.json",
+        queue_path=queue_path,
         labels_path=tmp_path / "missing_labels.json",
         persist=True,
         today=date(2026, 10, 25),
     )
     assert payload["influences_live"] is False
     assert payload["registration_id"] == REGISTRATION_ID
+    assert payload["status"] == "observe_lab_armed"
+    assert payload["pipeline_status"] == PIPELINE_STATUS_ARMED
+    assert payload["lab_arm_marker_id"] == LAB_ARM_MARKER_ID
+    assert payload["spend_guard"]["steals_data_p1_fat_slot"] is False
+    assert payload["judgment_in_the_round"]["rubric_id"]
+    assert payload["autopsy_alignment_feed"]["count"] == 1
+    assert payload["start_gate_cohort"]["owner_freeze_pending"] is True
     assert "knob_epoch_started_at" in payload["mid_flight_tune"]
     assert payload["mid_flight_tune"]["tune_spec_id"] == TUNE_SPEC_ID
     assert (tmp_path / "cue_consumer_mft_observe.json").is_file()
@@ -215,10 +312,14 @@ def test_refresh_persists_stores_and_findings(tmp_path: Path):
     assert findings
     assert all(f["auto_fixable"] is False for f in findings)
     assert any("Cue-consumer MFT lab refreshed" == f["title"] for f in findings)
+    assert any(f["title"] == LAB_ARMED_TITLE for f in findings)
+    assert any(f["title"] == COHORT_FREEZE_PROPOSED_TITLE for f in findings)
 
     gate = json.loads((tmp_path / "cue_consumer_mft_start_gate.json").read_text())
     assert gate["checkpoint_id"] == START_CHECKPOINT_ID
     assert gate["influences_live"] is False
+    assert gate["proposed_cohort_review_ids"] == ["rev-ib"]
+    assert gate["cohort_review_ids"] == []
 
 
 def test_autopsy_voice_enrich_l633_and_same_day():
