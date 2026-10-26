@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-26T02:39:48.817448+00:00",
+  "compiled_at": "2026-10-26T07:53:45.662440+00:00",
   "run_at": null,
-  "task_count": 214,
+  "task_count": 215,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2745,6 +2745,99 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
+      "id": "eng-20261026-02",
+      "area": "ingest",
+      "title": "Close library ingest gaps for dax / HEI.DE (chain 1/3: 0/0 improved, run igc-20260922-07)",
+      "summary": "Ingest gap-closure run igc-20260922-07 (chain root igc-20260922-07, round 1) targeted HEI.DE with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20260922-07",
+        "trial_id": "igc-20260922-07",
+        "chain_root_id": "igc-20260922-07",
+        "chain_round": 1,
+        "tickers": [
+          "HEI.DE"
+        ],
+        "ticker": "HEI.DE",
+        "market_id": "dax",
+        "library_market": "dax",
+        "universe": "library",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": true,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "HEI.DE",
+            "DTG.DE",
+            "FRE.DE",
+            "HNR1.DE",
+            "HEN3.DE",
+            "VOW3.DE",
+            "FME.DE"
+          ],
+          "market_id": "dax",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "HEI.DE",
+            "DTG.DE",
+            "FRE.DE",
+            "HNR1.DE",
+            "HEN3.DE",
+            "VOW3.DE",
+            "FME.DE"
+          ],
+          "market_id": "dax",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
+        },
+        "compile_reason": "gaps_remain_without_refetch"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for HEI.DE",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20261026-01",
       "area": "ingest",
       "title": "Close library ingest gaps for dax / HEI.DE (chain 1/3: 0/0 improved, run igc-20260922-02)",
@@ -2837,11 +2930,11 @@
       "auto_merge": false,
       "status": "cancelled",
       "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_policy": "duplicate",
       "parked_at": "2026-10-26T03:00:55.989879+00:00",
+      "parked_policy": "duplicate",
       "duplicate_of": "eng-20261006-01",
-      "cancelled_at": "2026-10-26T03:19:30.881806+00:00",
       "cancelled_reason": "tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20261006-01",
+      "cancelled_at": "2026-10-26T03:19:30.881806+00:00",
       "cancelled_policy": "superseded_gap_closure"
     },
     {
@@ -13978,7 +14071,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-10-26T02:38:52.150736+00:00",
+    "evaluated_at": "2026-10-26T07:52:34.332742+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -14037,7 +14130,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-10-26T07:20:11.687636+00:00",
+    "evaluated_at": "2026-10-26T07:52:34.283750+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -14064,7 +14157,7 @@
   "reprioritized_at": "2026-10-25T13:25:31.415150+00:00",
   "reprioritized_after_task": "eng-20261025-01",
   "micro_compile_source": "ingest_gap_closure",
-  "source_gap_closure_run_id": "igc-20260922-02",
-  "source_trial_id": "igc-20260922-02",
-  "source_chain_root_id": "igc-20260922-02"
+  "source_gap_closure_run_id": "igc-20260922-07",
+  "source_trial_id": "igc-20260922-07",
+  "source_chain_root_id": "igc-20260922-07"
 }
