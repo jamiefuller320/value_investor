@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-25T07:06:04.249816+00:00
+Track: `buy_tier_level` · updated 2026-10-26T00:47:38.103993+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **10** / 27 (37% count, 34% NAV)
+- Losers: **10** / 28 (36% count, 34% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
@@ -95,12 +95,6 @@ Track: `buy_tier_level` · updated 2026-10-25T07:06:04.249816+00:00
 - data_quality 0.95
 - conviction 53%
 
-### SHL.AX — weakening / watch_review (-3.5%)
-- left buy tier (hold)
-- conviction 33% below intact floor
-- research accumulate
-- cheapness family still passes
-
 ### SMR.AX — weakening / watch_review (-3.4%)
 - research verdict caution
 - conviction 21% below intact floor
@@ -124,6 +118,26 @@ Track: `buy_tier_level` · updated 2026-10-25T07:06:04.249816+00:00
 - data_quality 0.95
 - conviction 60%
 
+### NEM.AX — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 47%
+
+### ALK.AX — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 46%
+
+### IMD.AX — weakening / watch_review (+0.0%)
+- research verdict neutral
+- conviction 32% below intact floor
+- still buy
+- cheapness family still passes
+
 ### WDS.AX — weakening / watch_review (+1.6%)
 - research verdict caution
 - still buy
@@ -137,7 +151,7 @@ Track: `buy_tier_level` · updated 2026-10-25T07:06:04.249816+00:00
 
 ### NWS.AX — weakening / watch_review (+1.8%)
 - research verdict caution
-- conviction 18% below intact floor
+- conviction 22% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -152,13 +166,6 @@ Track: `buy_tier_level` · updated 2026-10-25T07:06:04.249816+00:00
 - conviction 19% below intact floor
 - still buy
 - cheapness family still passes
-
-### TUA.AX — weakening / watch_review (+4.6%)
-- left buy tier (hold)
-- research verdict caution
-- conviction 16% below intact floor
-- cheapness family still passes
-- data_quality 0.95
 
 ### AMC.AX — intact / hold_tolerate (+4.7%)
 - still buy
