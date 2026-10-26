@@ -7945,6 +7945,106 @@ def test_refetch_euro_filings_primary_bodies_hei_de_eng_20261006_01(mock_fetch, 
     assert any(row.get("has_body") for row in payload.get("filings") or [])
 
 
+def test_load_prior_filings_rows_reconciles_hei_de_interim_body_eng_20261026_01(tmp_path: Path):
+    """eng-20261026-01: listing merge must not leave HEI.DE interim IWB when body exists on disk."""
+    from value_investor.research.filings import (
+        _load_prior_filings_rows,
+        fetch_filings_ir_allowlist,
+        merge_filings,
+    )
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    interim_url = (
+        "https://www.heidelbergmaterials.com/system/files/2025-07/"
+        "Heidelberg_Materials_Half-year_financial_report_2025.pdf"
+    )
+    interim_row = next(
+        row for row in fetch_filings_ir_allowlist("HEI.DE") if row["url"] == interim_url
+    )
+    body_text = (
+        "Heidelberg Materials AG half-year financial report consolidated "
+        "revenue operating profit cash flow interim results 2025 " * 40
+    )
+    (bodies_dir / f"{interim_row['id']}.txt").write_text(body_text, encoding="utf-8")
+
+    indexed = fetch_filings_ir_allowlist("HEI.DE")
+    merged = merge_filings(indexed)
+    for row in merged:
+        row["has_body"] = False
+        row["body_path"] = None
+    index_payload = {
+        "ticker": "HEI.DE",
+        "company_name": "Heidelberg Materials AG",
+        "filings": merged,
+        "summary": {"total": len(merged), "with_body": 0},
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index_payload), encoding="utf-8")
+
+    prior = _load_prior_filings_rows(filings_dir)
+    interim = next(row for row in prior if row["url"] == interim_url)
+    assert interim.get("has_body") is True
+    assert interim.get("body_path")
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["with_body"]) >= 1
+
+
+def test_refetch_ir_allowlist_hei_de_interim_after_index_desync_eng_20261026_01(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """eng-20261026-01: IR refetch must bodied HEI.DE H1 when index lost has_body after listing merge."""
+    from value_investor.research.filings import (
+        fetch_filings_ir_allowlist,
+        merge_filings,
+        refetch_ir_allowlist_filing_bodies,
+    )
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    indexed = fetch_filings_ir_allowlist("HEI.DE")
+    merged = merge_filings(indexed)
+    for row in merged:
+        row["has_body"] = False
+        row["body_path"] = None
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "ticker": "HEI.DE",
+                "company_name": "Heidelberg Materials AG",
+                "filings": merged,
+                "summary": {"total": len(merged), "with_body": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    body_text = (
+        "Heidelberg Materials AG half-year financial report consolidated "
+        "revenue operating profit cash flow interim results 2025 " * 40
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: body_text if "Half-year_financial_report_2025" in url else body_text,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "HEI.DE",
+        company_name="Heidelberg Materials AG",
+        max_bodies=5,
+    )
+    assert result["fetched"] >= 1
+    assert result["with_body_after"] >= 3
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    interim_url = (
+        "https://www.heidelbergmaterials.com/system/files/2025-07/"
+        "Heidelberg_Materials_Half-year_financial_report_2025.pdf"
+    )
+    interim = next(row for row in payload["filings"] if row["url"] == interim_url)
+    assert interim.get("has_body") is True
+
+
 def test_fetch_filings_ir_allowlist_hang_seng_unmeasured_builtins_eng_20260930_03(
     tmp_path: Path,
 ):
@@ -12760,6 +12860,23 @@ def test_parked_source_hunter_dte_de_euro_depth_has_fetchable_ir():
     assert rows[0]["period"] == "annual"
     assert "report.telekom.com" in rows[0]["url"]
     assert "entire-dtag-ar25.pdf" in rows[0]["url"]
+
+
+def test_parked_source_hunter_hei_de_dax_has_fetchable_ir():
+    """eng-20261026-01: HEI.DE parked unfetchable_iwb — all IR allowlist PDFs fetch and validate."""
+    assert "HEI.DE" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("HEI.DE")
+    assert len(rows) >= 3
+    annual = [row for row in rows if row["period"] == "annual"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(annual) >= 2
+    assert len(interim) == 1
+    assert "Half-year_financial_report_2025" in interim[0]["url"]
+    for row in rows:
+        body = fetch_filing_body(row["url"])
+        assert body and len(body) >= 5000
+        valid, reason = _validate_ir_allowlist_body_content(row, body, ticker="HEI.DE")
+        assert valid, reason
 
 
 def test_parked_source_hunter_dhl_de_dax_has_fetchable_ir():

@@ -6511,9 +6511,16 @@ def merge_ir_allowlist_filings(
     if added or shared_body_propagated:
         payload["ir_allowlist_body_synced_at"] = datetime.now(UTC).isoformat()
     index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    company = str(payload.get("company_name") or ticker or "").strip()
+    reconcile_meta = reconcile_filings_index_body_flags(
+        filings_dir,
+        company_name=company or ticker,
+        ticker=ticker,
+    )
     return {
         "added": added,
         "total_allowlist": len(allowlist_rows),
+        "reconcile": reconcile_meta,
         "note": "merge_ir_allowlist_filings",
     }
 
@@ -9498,7 +9505,29 @@ def _load_prior_filings_rows(filings_dir: Path) -> list[dict[str, Any]]:
         logger.debug("Could not read prior filings index at %s: %s", index_path, exc)
         return []
     filings = payload.get("filings")
-    return list(filings) if isinstance(filings, list) else []
+    if not isinstance(filings, list):
+        return []
+    ticker = str(payload.get("ticker") or "").strip()
+    company_name = str(payload.get("company_name") or ticker or "").strip()
+    if not ticker:
+        return list(filings)
+    bodies_dir = Path(filings_dir) / "bodies"
+    before = sum(1 for row in filings if row.get("has_body"))
+    reconciled = reconcile_filing_body_flags(
+        filings,
+        bodies_dir,
+        company_name=company_name or ticker,
+        ticker=ticker,
+    )
+    after = sum(1 for row in reconciled if row.get("has_body"))
+    if after > before:
+        payload["filings"] = reconciled
+        payload["summary"] = summarize_filings(reconciled)
+        try:
+            index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        except OSError as exc:
+            logger.debug("Could not persist reconciled filings index at %s: %s", index_path, exc)
+    return reconciled
 
 
 # Direct-feed sources whose bodiless rows are dropped after a body attempt

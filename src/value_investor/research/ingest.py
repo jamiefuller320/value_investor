@@ -1471,7 +1471,18 @@ def ingest_research_sources(
         "filings_sources": [],
     }
     if include_filings:
-        from value_investor.research.filings import ingest_filings
+        from value_investor.research.filings import (
+            ingest_filings,
+            reconcile_filings_index_body_flags,
+        )
+
+        filings_dir = sources_dir / "filings"
+        if filings_dir.is_dir():
+            reconcile_filings_index_body_flags(
+                filings_dir,
+                company_name=company_name,
+                ticker=ticker,
+            )
 
         try:
             filings_meta = ingest_filings(
