@@ -155,9 +155,7 @@ def strip_outcome_fields(item: dict[str, Any]) -> dict[str, Any]:
     charts = out.get("charts")
     if isinstance(charts, dict):
         out["charts"] = {
-            k: v
-            for k, v in charts.items()
-            if k in {"pit", "entry_pit"} and isinstance(v, dict)
+            k: v for k, v in charts.items() if k in {"pit", "entry_pit"} and isinstance(v, dict)
         }
     # Never leave sell chrome even if nested under decision blobs.
     out.pop("sell_decision", None)
@@ -215,9 +213,7 @@ def _attach_entry_blind_opinion(item: dict[str, Any]) -> dict[str, Any]:
     strengths: list[str] = []
     weaknesses: list[str] = []
     if buy_ok:
-        strengths.append(
-            f"Buy decision is joinable: {buy_label} — ground comments on that trail."
-        )
+        strengths.append(f"Buy decision is joinable: {buy_label} — ground comments on that trail.")
     else:
         weaknesses.append(
             "Buy reason unjoinable / unknown — do not invent a thesis from the chart alone."
@@ -349,8 +345,7 @@ def _sealed_just_bought_items(
         meta = model_meta.get(model_id) or {}
         book_tag = str(model.get("label") or meta.get("label") or model_id.upper())
         registration_id = (
-            str(model.get("registration_id") or meta.get("registration_id") or "").strip()
-            or None
+            str(model.get("registration_id") or meta.get("registration_id") or "").strip() or None
         )
         columns = model.get("columns") if isinstance(model.get("columns"), dict) else {}
         packed = columns.get("just_bought") if isinstance(columns.get("just_bought"), dict) else {}
@@ -551,9 +546,7 @@ def build_entry_blind_review_queue(
     """Build active entry_blind queue. Never influences live."""
     root = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
     sealed_payload = sealed if sealed is not None else _safe_read(root / "sealed_lifecycle.json")
-    lab_payload = (
-        lab if lab is not None else _safe_read(root / "cue_consumer_mft_observe.json")
-    )
+    lab_payload = lab if lab is not None else _safe_read(root / "cue_consumer_mft_observe.json")
     labels_store = labels if labels is not None else load_entry_blind_review_labels(root)
     sealed_indexes = load_sealed_episode_indexes(root)
     control_trades = load_control_trade_index(root)
@@ -714,9 +707,7 @@ def refresh_entry_blind_review_queue(
     payload["labels_heal"] = heal_info
     if persist:
         dest = (
-            Path(store_path)
-            if store_path is not None
-            else (root / "entry_blind_review_queue.json")
+            Path(store_path) if store_path is not None else (root / "entry_blind_review_queue.json")
         )
         dest.parent.mkdir(parents=True, exist_ok=True)
         write_json(dest, payload, compact=False)
