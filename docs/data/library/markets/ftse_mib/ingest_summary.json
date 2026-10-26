@@ -1,24 +1,100 @@
 {
-  "run_at": "2026-10-24T19:02:50.447896+00:00",
+  "run_at": "2026-10-26T13:42:20.504893+00:00",
   "market_id": "ftse_mib",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "INW.MI"
+  ],
+  "target_details": [
+    {
+      "ticker": "INW.MI",
+      "priority_score": 17.3821,
+      "filings_total": 5,
+      "filings_with_body": 2,
+      "indexed_without_body": 3,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "INW.MI",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 5,
+        "filings_with_body": 2,
+        "indexed_without_body": 3
+      },
+      "after": {
+        "filings_total": 5,
+        "filings_with_body": 5,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 5,
+        "annual": 1,
+        "interim": 2,
+        "trading_update": 0,
+        "other": 2,
+        "with_body": 5,
+        "period_coverage": {
+          "annual": {
+            "total": 1,
+            "with_body": 1
+          },
+          "interim": {
+            "total": 2,
+            "with_body": 2
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 2,
+            "with_body": 2
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 5,
+        "with_body_after": 5,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 3,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "INW.MI"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-24T19:02:15.573212+00:00",
+    "snapshot_at": "2026-10-26T13:39:41.714262+00:00",
     "market_id": "ftse_mib",
-    "buy_tier_count": 9,
+    "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 6,
-    "indexed_without_body": 8,
+    "indexed_without_body": 11,
     "bodies_min": 1,
-    "bodies_median": 2,
-    "bodies_max": 54,
+    "bodies_median": 2.0,
+    "bodies_max": 52,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -28,20 +104,22 @@
       "PST.MI",
       "UNI.MI",
       "LTMC.MI",
-      "TEN.MI",
-      "FCT.MI"
+      "FCT.MI",
+      "INW.MI"
     ],
     "indexed_without_body_tickers": [
       "MONC.MI",
       "UNI.MI",
       "LTMC.MI",
-      "FCT.MI"
+      "FCT.MI",
+      "INW.MI"
     ],
     "indexed_without_body_by_ticker": {
       "MONC.MI": 3,
       "UNI.MI": 2,
       "LTMC.MI": 2,
-      "FCT.MI": 1
+      "FCT.MI": 1,
+      "INW.MI": 3
     },
     "parked_tickers": [
       "FCT.MI",
@@ -52,23 +130,27 @@
       "UNI.MI"
     ],
     "parked_count": 6,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
+      "INW.MI"
+    ],
+    "effective_indexed_without_body": 3,
+    "effective_indexed_without_body_tickers": [
+      "INW.MI"
+    ],
+    "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-24T19:02:43.309114+00:00",
+    "snapshot_at": "2026-10-26T13:40:32.149250+00:00",
     "market_id": "ftse_mib",
-    "buy_tier_count": 9,
+    "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 6,
+    "thin_body_buy_tier": 5,
     "indexed_without_body": 8,
     "bodies_min": 1,
-    "bodies_median": 2,
-    "bodies_max": 54,
+    "bodies_median": 2.0,
+    "bodies_max": 52,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -78,7 +160,6 @@
       "PST.MI",
       "UNI.MI",
       "LTMC.MI",
-      "TEN.MI",
       "FCT.MI"
     ],
     "indexed_without_body_tickers": [
@@ -98,10 +179,9 @@
       "LTMC.MI",
       "MONC.MI",
       "PST.MI",
-      "TEN.MI",
       "UNI.MI"
     ],
-    "parked_count": 6,
+    "parked_count": 5,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
@@ -115,10 +195,10 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 9,
-    "hits": 7,
+    "scanned": 8,
+    "hits": 8,
     "new_rows_total": 0,
-    "curiosity_total": 7,
+    "curiosity_total": 8,
     "errors": 0,
     "prioritization_weights": {
       "new_index_rows": 8.0,
@@ -131,8 +211,8 @@
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
       "PST.MI",
-      "TEN.MI",
       "FCT.MI",
+      "INW.MI",
       "MONC.MI",
       "LTMC.MI",
       "UNI.MI"
@@ -142,16 +222,54 @@
   "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "ftse_mib"
+    "advanced": true,
+    "parallel_stream": 2,
+    "from_market": "ftse_mib",
+    "to_market": "omxs30",
+    "stream_markets_after": [
+      "omxs30"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "ftse_mib",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "FCT.MI",
+        "LTMC.MI",
+        "MONC.MI",
+        "PST.MI",
+        "UNI.MI"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "omxs30",
+      "forced": true,
+      "prior_screen_at": "2026-10-25T06:22:45.477230+00:00",
+      "prior_age_days": 1,
+      "run_at": "2026-10-26T13:42:13.399792+00:00",
+      "shortlist_count": 12,
+      "ticker_count": 30
+    },
+    "at": "2026-10-26T13:41:00.034408+00:00",
+    "ingest_parity_recorded": false
   },
   "critical_path": {
     "market_id": "ftse_mib",
-    "assessed_at": "2026-10-24T19:02:16.200205+00:00",
+    "assessed_at": "2026-10-26T13:39:42.437410+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
+      {
+        "ticker": "INW.MI",
+        "indexed_without_body": 3,
+        "filings_total": 5,
+        "filings_with_body": 2
+      },
       {
         "ticker": "MONC.MI",
         "indexed_without_body": 3,
@@ -179,40 +297,41 @@
     ],
     "thin_need_discovery": [
       "PST.MI",
-      "TEN.MI",
       "FCT.MI"
     ],
     "thin_need_bodies": [
       "MONC.MI",
       "UNI.MI",
       "LTMC.MI",
-      "FCT.MI"
+      "FCT.MI",
+      "INW.MI"
     ],
     "primary_blocker": "indexed_without_body",
     "force_discovery_scan": true,
     "auto_pin_tickers": [
+      "INW.MI",
       "MONC.MI",
       "LTMC.MI",
       "UNI.MI",
       "FCT.MI"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (4 tickers, top: MONC.MI(3), LTMC.MI(2), UNI.MI(2), FCT.MI(1))",
-      "Discovery/IR seed for 3 thin ticker(s) that already have bodies for every indexed filing",
+      "Prefer indexed-without-body body refetch (5 tickers, top: INW.MI(3), MONC.MI(3), LTMC.MI(2), UNI.MI(2), FCT.MI(1))",
+      "Discovery/IR seed for 2 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 4,
-      "indexed_without_body_rows": 8,
-      "thin_need_discovery": 3,
-      "thin_need_bodies": 4
+      "indexed_without_body_tickers": 5,
+      "indexed_without_body_rows": 11,
+      "thin_need_discovery": 2,
+      "thin_need_bodies": 5
     }
   },
-  "used_seconds": 26.480771903999994,
+  "used_seconds": 48.95348469300001,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3573.519228096,
+  "leftover_seconds": 3551.046515307,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -220,9 +339,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_mib",
-    "updated_at": "2026-10-24T19:02:43.315496+00:00",
+    "updated_at": "2026-10-26T13:40:32.156287+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 2,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -230,18 +349,6 @@
         "reason": "awaiting_periodic_report",
         "revisit_when": "Next statutory annual or interim report is issued and indexed",
         "parked_at": "2026-09-27T20:12:58.751368+00:00",
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings"
-      },
-      {
-        "ticker": "TEN.MI",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-10-06T11:19:12.130613+00:00",
-        "park_via": "straggler_soft_park",
         "filings_total": 2,
         "filings_with_body": 2,
         "indexed_without_body": 0,
@@ -306,7 +413,6 @@
       "LTMC.MI",
       "MONC.MI",
       "PST.MI",
-      "TEN.MI",
       "UNI.MI"
     ],
     "unparked_leftover": [],
@@ -347,7 +453,7 @@
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 47,
-    "candidate_count": 65,
+    "candidate_count": 60,
     "skipped_resolved_tickers": [
       "ABI.BR",
       "APAM.AS",
@@ -356,20 +462,18 @@
       "WIE.VI",
       "ACKB.BR",
       "DQ7A.IR",
-      "IFX.DE",
+      "UCB.BR",
       "LMT",
       "CRH",
       "ULTP.L",
-      "DFS.L",
       "FOXT.L",
       "MER.L",
       "APTD.L",
+      "TPT.L",
       "NTR.TO",
       "GIB-A.TO",
       "SU.TO",
-      "SAP.DE",
       "BAS.DE",
-      "IFX.DE",
       "PDD",
       "BAS.DE",
       "DTE.DE",
@@ -379,7 +483,6 @@
       "MUV2.DE",
       "HEI.DE",
       "PST.MI",
-      "TEN.MI",
       "ACKB.BR",
       "APAM.AS",
       "0285.HK",
