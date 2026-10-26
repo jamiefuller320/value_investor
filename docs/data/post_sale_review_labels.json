@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-25T20:17:27.158956+00:00",
+  "updated_at": "2026-10-26T08:33:21.509373+00:00",
   "influences_live": false,
   "observe_only": true,
   "package": "M",
@@ -590,6 +590,637 @@
       "reply_kind": "llm",
       "llm_attempted": true,
       "llm_ok": true
+    },
+    {
+      "event_id": "da9eb9ae-799a-4fd4-8d93-0ec87cf5e5d1",
+      "review_id": "0d6acaac8fbb8af5347a",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Hold horizon caused premature sale vs historic range",
+      "acted_at": "2026-10-26T08:33:06.943788+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:cb578052e2559809",
+      "snapshot": {
+        "book_id": "n206",
+        "book_tag": "N206",
+        "model_id": "n206",
+        "ticker": "0883.HK",
+        "entry_at": "2026-07-18T18:11:18+00:00",
+        "exit_at": "2026-10-16T06:52:34+00:00",
+        "hold_days": 90,
+        "exit_kind": "just_sold",
+        "return_pct": 5.08,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N206] 0883.HK · 2026-10-16 · hold 90d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Hold horizon (63 trading days)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 5.08%\nContext read-only — not a new veto. influences_live=false",
+        "charts": {
+          "episode": {
+            "days_after": 14,
+            "days_before": 14,
+            "end": "2026-10-30",
+            "start": "2026-07-04"
+          },
+          "wider_tf": {
+            "days_after": 90,
+            "days_before": 180,
+            "end": "2027-01-14",
+            "start": "2026-01-19"
+          }
+        },
+        "close_in": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-10-30",
+          "start": "2026-07-04"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2027-01-14",
+          "start": "2026-01-19"
+        },
+        "opened_at": "2026-07-18T18:11:18+00:00",
+        "sold_at": "2026-10-16T06:52:34+00:00",
+        "avg_cost": null,
+        "exit_price": null,
+        "registration_id": "strand-d-plain-ey-identity-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.130281694819976,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": null,
+            "require_momentum": false
+          }
+        },
+        "sell_decision": {
+          "code": "hold_trading_days",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Hold horizon (63 trading days)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "hold_trading_days"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "sell_reason": "Hold horizon (63 trading days)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "hold_trading_days",
+        "entry_detail": {
+          "earnings_yield": 0.130281694819976,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        },
+        "llm_opinion": "N206 closed 0883.HK after a 90-day hold (2026-07-18 → 2026-10-16, just_sold): gain (5.08% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Hold horizon (63 trading days). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Hold horizon (63 trading days)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 90-day hold, gain (5.08% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "dialogue": [
+          {
+            "at": "2026-10-26T07:47:41.555417+00:00",
+            "buy_strengths": [
+              "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail.",
+              "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+            ],
+            "buy_weaknesses": [],
+            "chart_annotations": {
+              "episode": "Episode: 90-day hold, gain (5.08% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "influences_live": false,
+            "kind": "initial_opinion",
+            "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Hold horizon (63 trading days)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+            ],
+            "role": "factory",
+            "same_day_assessment": "not_applicable",
+            "same_day_round_trip": false,
+            "sell_strengths": [
+              "Sell decision is joinable: Hold horizon (63 trading days) [hold_trading_days] — weigh 'premature' claims against this code."
+            ],
+            "sell_weaknesses": [],
+            "source": "deterministic_v0",
+            "text": "N206 closed 0883.HK after a 90-day hold (2026-07-18 → 2026-10-16, just_sold): gain (5.08% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Hold horizon (63 trading days). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+          }
+        ],
+        "episode_key": "n206|0883.HK|2026-07-18|2026-10-16"
+      }
+    },
+    {
+      "event_id": "cb5e3a8e-c20f-466d-abe2-21e5e60585ca",
+      "review_id": "reply:cb578052e2559809",
+      "parent_event_id": "da9eb9ae-799a-4fd4-8d93-0ec87cf5e5d1",
+      "parent_review_id": "0d6acaac8fbb8af5347a",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "N206 · 0883.HK (fair_cost_episode): observe-only alignment — no knob, fill, or live-capital changes; influences_live stays false (Package M review, not Package L auto-tune).\n\nStructured reasons (join_ok): **Buy** — filters_newly_clear: EY top 30%, financial health pass, no momentum gate (episode.entry_detail). **Sell** — hold_trading_days: hold horizon (63 trading days) (episode.exit_reason). Exit was a scheduled horizon close after ~90 calendar days (+5.08%), not a range-location or technical sell trigger.\n\nOn “premature vs historic range”: “Premature” usually means the exit fired before a timing/tech rule you still wanted in force. Here the sell reason is identity/mechanical (horizon met), so range placement alone does not override that label — it is a separate question whether horizon length fits this name’s cycle.\n\nDual-horizon check (before Accepting framing): (1) **Episode window** 2026-07-18 → 2026-10-16 — path, churn, and where price sat relative to the range you had in mind at exit. (2) **Wider timeframe** — trend/cycle context the 90-day slice can hide (continued climb, mean reversion, or chop after exit). We were not given range percentiles or post-exit prints in this packet; verify both horizons on chart rather than inferring them here.\n\nWeighing your comment: if post-exit price moved through levels you cared about, that is useful **missed-pattern** signal for horizon calibration in observe-only review — not evidence that the recorded sell reason was wrong (it still reads as horizon, not “left range”).\n\nAccept this framing, or Comment with what you see on episode vs wider TF (range location at exit, post-exit climb) for a further factory reply.",
+      "acted_at": "2026-10-26T08:33:06.943807+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
+    },
+    {
+      "event_id": "14d62a85-6825-4348-8323-8e10f63ebd02",
+      "review_id": "4b29d55008c9be00f5b7",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Bought into possible bottom, but previous declining trend resumed.  More cautious entry in this scenario?",
+      "acted_at": "2026-10-26T08:33:10.987643+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:1408d4625bf4c95a",
+      "snapshot": {
+        "book_id": "n206",
+        "book_tag": "N206",
+        "model_id": "n206",
+        "ticker": "1024.HK",
+        "entry_at": "2026-07-18T18:11:18+00:00",
+        "exit_at": "2026-10-16T06:52:34+00:00",
+        "hold_days": 90,
+        "exit_kind": "just_sold",
+        "return_pct": -32.73,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N206] 1024.HK · 2026-10-16 · hold 90d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Hold horizon (63 trading days)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -32.73%\nContext read-only — not a new veto. influences_live=false",
+        "charts": {
+          "episode": {
+            "days_after": 14,
+            "days_before": 14,
+            "end": "2026-10-30",
+            "start": "2026-07-04"
+          },
+          "wider_tf": {
+            "days_after": 90,
+            "days_before": 180,
+            "end": "2027-01-14",
+            "start": "2026-01-19"
+          }
+        },
+        "close_in": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-10-30",
+          "start": "2026-07-04"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2027-01-14",
+          "start": "2026-01-19"
+        },
+        "opened_at": "2026-07-18T18:11:18+00:00",
+        "sold_at": "2026-10-16T06:52:34+00:00",
+        "avg_cost": null,
+        "exit_price": null,
+        "registration_id": "strand-d-plain-ey-identity-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.112754164800585,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": null,
+            "require_momentum": false
+          }
+        },
+        "sell_decision": {
+          "code": "hold_trading_days",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Hold horizon (63 trading days)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "hold_trading_days"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "sell_reason": "Hold horizon (63 trading days)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "hold_trading_days",
+        "entry_detail": {
+          "earnings_yield": 0.112754164800585,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        },
+        "llm_opinion": "N206 closed 1024.HK after a 90-day hold (2026-07-18 → 2026-10-16, just_sold): material loss (-32.73% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Hold horizon (63 trading days). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Hold horizon (63 trading days)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+          "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 90-day hold, material loss (-32.73% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "dialogue": [
+          {
+            "at": "2026-10-26T07:47:41.555468+00:00",
+            "buy_strengths": [
+              "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [
+              "Material fair-cost loss: pick quality and/or buy timing may be weak — read wider TF before blaming only the sell."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 90-day hold, material loss (-32.73% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "influences_live": false,
+            "kind": "initial_opinion",
+            "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Hold horizon (63 trading days)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+              "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+            ],
+            "role": "factory",
+            "same_day_assessment": "not_applicable",
+            "same_day_round_trip": false,
+            "sell_strengths": [
+              "Sell decision is joinable: Hold horizon (63 trading days) [hold_trading_days] — weigh 'premature' claims against this code."
+            ],
+            "sell_weaknesses": [
+              "Exit did not prevent a material loss — ask whether sell timing/strategy could have cut earlier without inventing knobs."
+            ],
+            "source": "deterministic_v0",
+            "text": "N206 closed 1024.HK after a 90-day hold (2026-07-18 → 2026-10-16, just_sold): material loss (-32.73% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Hold horizon (63 trading days). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+          }
+        ],
+        "episode_key": "n206|1024.HK|2026-07-18|2026-10-16"
+      }
+    },
+    {
+      "event_id": "b92215eb-e88e-4f70-a20c-a334f4abdf6b",
+      "review_id": "reply:1408d4625bf4c95a",
+      "parent_event_id": "14d62a85-6825-4348-8323-8e10f63ebd02",
+      "parent_review_id": "4b29d55008c9be00f5b7",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Observe-only alignment for N206 / 1024.HK (90-day hold, fair_cost_episode −32.73%). Dual horizon: on the episode window, your read fits — entry looked like a possible bottom, then the prior decline resumed; on a wider timeframe, that cyclical/down leg is easy to under-weight if we only stare at the entry bar. Structured join is clean on both sides. Buy: filters_newly_clear — EY top 30%, financial health pass, no momentum gate (momentum_12_1 not required), so the book took a value/filter clearance entry, not a confirmed trend-reversal signal. Sell: hold_trading_days — Hold horizon (63 trading days); this is a mechanical horizon exit, not a filing or tech “trend resumed” trigger, so the loss path is not explained by the system “calling the top” — it held through the resume until the clock. Your “more cautious entry in this scenario?” is a fair owner label against that buy story (bottom vs continuing structure); weighing it here does not change knobs, fills, or live capital (influences_live false; Package M observation, not Package L auto-tune). For the material loss, a read-only split helps: pick quality (filters vs backdrop) vs timing (horizon exit while price still weak) vs both — no Layer reopen from this card. If this framing matches your chart read on episode + wider TF, Accept; otherwise Comment with range location or post-exit climb and we’ll align further.",
+      "acted_at": "2026-10-26T08:33:10.987665+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
+    },
+    {
+      "event_id": "ace9a573-5eb3-4c85-a429-5ca5d7de4f40",
+      "review_id": "21e1e3001965e7557d0c",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Reasonable entry, maybe dca would have helped?",
+      "acted_at": "2026-10-26T08:33:16.573156+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:909eae9ba613a7f2",
+      "snapshot": {
+        "book_id": "n206",
+        "book_tag": "N206",
+        "model_id": "n206",
+        "ticker": "1378.HK",
+        "entry_at": "2026-07-18T18:11:18+00:00",
+        "exit_at": "2026-10-16T06:52:34+00:00",
+        "hold_days": 90,
+        "exit_kind": "just_sold",
+        "return_pct": -11.69,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N206] 1378.HK · 2026-10-16 · hold 90d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Hold horizon (63 trading days)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -11.69%\nContext read-only — not a new veto. influences_live=false",
+        "charts": {
+          "episode": {
+            "days_after": 14,
+            "days_before": 14,
+            "end": "2026-10-30",
+            "start": "2026-07-04"
+          },
+          "wider_tf": {
+            "days_after": 90,
+            "days_before": 180,
+            "end": "2027-01-14",
+            "start": "2026-01-19"
+          }
+        },
+        "close_in": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-10-30",
+          "start": "2026-07-04"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2027-01-14",
+          "start": "2026-01-19"
+        },
+        "opened_at": "2026-07-18T18:11:18+00:00",
+        "sold_at": "2026-10-16T06:52:34+00:00",
+        "avg_cost": null,
+        "exit_price": null,
+        "registration_id": "strand-d-plain-ey-identity-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.124434383509756,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": null,
+            "require_momentum": false
+          }
+        },
+        "sell_decision": {
+          "code": "hold_trading_days",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Hold horizon (63 trading days)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "hold_trading_days"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "sell_reason": "Hold horizon (63 trading days)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "hold_trading_days",
+        "entry_detail": {
+          "earnings_yield": 0.124434383509756,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        },
+        "llm_opinion": "N206 closed 1378.HK after a 90-day hold (2026-07-18 → 2026-10-16, just_sold): material loss (-11.69% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Hold horizon (63 trading days). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Hold horizon (63 trading days)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+          "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 90-day hold, material loss (-11.69% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "dialogue": [
+          {
+            "at": "2026-10-26T07:47:41.555608+00:00",
+            "buy_strengths": [
+              "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [
+              "Material fair-cost loss: pick quality and/or buy timing may be weak — read wider TF before blaming only the sell."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 90-day hold, material loss (-11.69% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "influences_live": false,
+            "kind": "initial_opinion",
+            "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Hold horizon (63 trading days)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+              "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+            ],
+            "role": "factory",
+            "same_day_assessment": "not_applicable",
+            "same_day_round_trip": false,
+            "sell_strengths": [
+              "Sell decision is joinable: Hold horizon (63 trading days) [hold_trading_days] — weigh 'premature' claims against this code."
+            ],
+            "sell_weaknesses": [
+              "Exit did not prevent a material loss — ask whether sell timing/strategy could have cut earlier without inventing knobs."
+            ],
+            "source": "deterministic_v0",
+            "text": "N206 closed 1378.HK after a 90-day hold (2026-07-18 → 2026-10-16, just_sold): material loss (-11.69% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Hold horizon (63 trading days). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+          }
+        ],
+        "episode_key": "n206|1378.HK|2026-07-18|2026-10-16"
+      }
+    },
+    {
+      "event_id": "5309657f-2398-4153-9e14-4a9968d1a433",
+      "review_id": "reply:909eae9ba613a7f2",
+      "parent_event_id": "ace9a573-5eb3-4c85-a429-5ca5d7de4f40",
+      "parent_review_id": "21e1e3001965e7557d0c",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "N206 / 1378.HK — observe-only (no knobs, fills, or live capital; influences_live stays false; Package M framing, not Package L auto-tune).\n\nDual horizon: On the episode window (2026-07-18 → 2026-10-16, ~90 calendar days, -11.69% fair_cost_episode), weigh path and drawdown against a wider timeframe for cyclical/trend context the episode alone can hide before you Accept this framing.\n\nStructured reasons (join_ok): **Buy** — filters_newly_clear: EY top 30%, financial health pass, no momentum gate (episode.entry_detail). **Sell** — hold_trading_days: Hold horizon (63 trading days) (episode.exit_reason). That exit is a mechanical horizon rule, not a technical or range-location trigger — so “maybe DCA would have helped” is a sizing/path question (single entry at clear vs staged adds), not a verdict that the sell was “premature” vs a timing signal.\n\nYour “reasonable entry” aligns with the buy story: entry quality looked structurally fine at clear; the material loss still invites a read-only split — pick quality vs path/timing vs both — without reopening Layer from this card.\n\nIf you Comment further, note any missed pattern (range location at entry/exit, post-exit climb, churn) on episode chart + wider TF together. Otherwise **Accept** or **Comment** on this reply.",
+      "acted_at": "2026-10-26T08:33:16.573174+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
+    },
+    {
+      "event_id": "4176c374-0b4d-4242-879f-c8d5c6af96a8",
+      "review_id": "01ac029a291524f982b4",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Bought into long term decline trend.  More cautious entry? Consider macd?",
+      "acted_at": "2026-10-26T08:33:21.509166+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:f610aced153d9b9b",
+      "snapshot": {
+        "book_id": "n206",
+        "book_tag": "N206",
+        "model_id": "n206",
+        "ticker": "2313.HK",
+        "entry_at": "2026-07-18T18:11:18+00:00",
+        "exit_at": "2026-09-29T21:28:27+00:00",
+        "hold_days": 73,
+        "exit_kind": "post_sale",
+        "return_pct": -22.54,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N206] 2313.HK · 2026-09-29 · hold 73d · post_sale\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -22.54%\nContext read-only — not a new veto. influences_live=false",
+        "charts": {
+          "episode": {
+            "days_after": 14,
+            "days_before": 14,
+            "end": "2026-10-13",
+            "start": "2026-07-04"
+          },
+          "wider_tf": {
+            "days_after": 90,
+            "days_before": 180,
+            "end": "2026-12-28",
+            "start": "2026-01-19"
+          }
+        },
+        "close_in": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-10-13",
+          "start": "2026-07-04"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2026-12-28",
+          "start": "2026-01-19"
+        },
+        "opened_at": "2026-07-18T18:11:18+00:00",
+        "sold_at": "2026-09-29T21:28:27+00:00",
+        "avg_cost": null,
+        "exit_price": null,
+        "registration_id": "strand-d-plain-ey-identity-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.100900903809756,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": null,
+            "require_momentum": false
+          }
+        },
+        "sell_decision": {
+          "code": "identity_break_ey_band",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left EY top band (identity break)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "identity_break_ey_band"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "sell_reason": "Left EY top band (identity break)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "identity_break_ey_band",
+        "entry_detail": {
+          "earnings_yield": 0.100900903809756,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        },
+        "llm_opinion": "N206 closed 2313.HK after a 73-day hold (2026-07-18 → 2026-09-29, post_sale): material loss (-22.54% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+          "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 73-day hold, material loss (-22.54% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "dialogue": [
+          {
+            "at": "2026-10-26T07:47:41.560874+00:00",
+            "buy_strengths": [
+              "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [
+              "Material fair-cost loss: pick quality and/or buy timing may be weak — read wider TF before blaming only the sell."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 73-day hold, material loss (-22.54% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "influences_live": false,
+            "kind": "initial_opinion",
+            "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+              "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+            ],
+            "role": "factory",
+            "same_day_assessment": "not_applicable",
+            "same_day_round_trip": false,
+            "sell_strengths": [
+              "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+            ],
+            "sell_weaknesses": [
+              "Exit did not prevent a material loss — ask whether sell timing/strategy could have cut earlier without inventing knobs."
+            ],
+            "source": "deterministic_v0",
+            "text": "N206 closed 2313.HK after a 73-day hold (2026-07-18 → 2026-09-29, post_sale): material loss (-22.54% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+          }
+        ],
+        "episode_key": "n206|2313.HK|2026-07-18|2026-09-29"
+      }
+    },
+    {
+      "event_id": "304b5167-dc34-45ec-b543-32cdc941bf0c",
+      "review_id": "reply:f610aced153d9b9b",
+      "parent_event_id": "4176c374-0b4d-4242-879f-c8d5c6af96a8",
+      "parent_review_id": "01ac029a291524f982b4",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "N206 · 2313.HK (73d, −22.54% fair_cost_episode, post_sale) — observe-only; influences_live stays false (Package M, not live auto-tune).\n\nDual horizon: On the episode window, entry on 2026-07-18 matched a filters-newly-clear buy: EY top 30%, financial health pass, no momentum gate (decision_reasons.buy, join_ok). Exit on 2026-09-29 was mechanical — Left EY top band (identity break) (decision_reasons.sell, join_ok), not a MACD or other timing trigger; “more cautious entry” is the right lens for your decline comment, not “premature sell.”\n\nYour missed pattern — buying into a longer-term decline — is exactly what the wider timeframe is for: locally, value filters can clear while the stock remains in a multi-month down trend the episode chart understates. That tension is pick vs timing (quality still looked fine on EY/FH at entry; path after entry hurt). MACD is not in this entry stack today; noting it here is alignment for a future rules discussion, not a change from this card.\n\nBefore Accepting framing, skim episode chart plus wider TF together. Accept this reply, or Comment with range location / post-exit climb if you want those weighed next.",
+      "acted_at": "2026-10-26T08:33:21.509185+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
     }
   ],
   "actioned_review_ids": [
@@ -608,7 +1239,11 @@
     "reply:d0bca3424a89bbbc",
     "reply:9b05d28d53fe094f",
     "95bf74ba51ae2c016ecd",
-    "0a0e398d82110eac9de7"
+    "0a0e398d82110eac9de7",
+    "0d6acaac8fbb8af5347a",
+    "4b29d55008c9be00f5b7",
+    "21e1e3001965e7557d0c",
+    "01ac029a291524f982b4"
   ],
   "active_replies": [
     {
@@ -710,6 +1345,577 @@
       "influences_live": false,
       "observe_only": true,
       "created_at": "2026-10-24T17:43:31.758739+00:00"
+    },
+    {
+      "review_id": "reply:cb578052e2559809",
+      "parent_review_id": "0d6acaac8fbb8af5347a",
+      "parent_event_id": "da9eb9ae-799a-4fd4-8d93-0ec87cf5e5d1",
+      "tag": "reply",
+      "book_id": "n206",
+      "book_tag": "N206",
+      "model_id": "n206",
+      "ticker": "0883.HK",
+      "entry_at": "2026-07-18T18:11:18+00:00",
+      "exit_at": "2026-10-16T06:52:34+00:00",
+      "hold_days": 90,
+      "exit_kind": "just_sold",
+      "return_pct": 5.08,
+      "basis_label": "fair_cost_episode",
+      "framing": "[N206] 0883.HK · 2026-10-16 · hold 90d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Hold horizon (63 trading days)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 5.08%\nContext read-only — not a new veto. influences_live=false",
+      "charts": {
+        "episode": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-10-30",
+          "start": "2026-07-04"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2027-01-14",
+          "start": "2026-01-19"
+        }
+      },
+      "close_in": {
+        "days_after": 14,
+        "days_before": 14,
+        "end": "2026-10-30",
+        "start": "2026-07-04"
+      },
+      "wider_tf": {
+        "days_after": 90,
+        "days_before": 180,
+        "end": "2027-01-14",
+        "start": "2026-01-19"
+      },
+      "opened_at": "2026-07-18T18:11:18+00:00",
+      "sold_at": "2026-10-16T06:52:34+00:00",
+      "avg_cost": null,
+      "exit_price": null,
+      "buy_decision": {
+        "code": "filters_newly_clear",
+        "influences_live": false,
+        "join_ok": true,
+        "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "side": "buy",
+        "source": "episode.entry_detail",
+        "structured": {
+          "earnings_yield": 0.130281694819976,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        }
+      },
+      "sell_decision": {
+        "code": "hold_trading_days",
+        "influences_live": false,
+        "join_ok": true,
+        "label": "Hold horizon (63 trading days)",
+        "side": "sell",
+        "source": "episode.exit_reason",
+        "structured": {
+          "raw": "hold_trading_days"
+        }
+      },
+      "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+      "sell_reason": "Hold horizon (63 trading days)",
+      "decision_reasons_join_ok": true,
+      "llm_opinion": "N206 closed 0883.HK after a 90-day hold (2026-07-18 → 2026-10-16, just_sold): gain (5.08% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Hold horizon (63 trading days). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Hold horizon (63 trading days)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+      ],
+      "chart_annotations": {
+        "episode": "Episode: 90-day hold, gain (5.08% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+      },
+      "opinion_source": "deterministic_v0",
+      "dialogue": [
+        {
+          "at": "2026-10-26T07:47:41.555417+00:00",
+          "buy_strengths": [
+            "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail.",
+            "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+          ],
+          "buy_weaknesses": [],
+          "chart_annotations": {
+            "episode": "Episode: 90-day hold, gain (5.08% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "influences_live": false,
+          "kind": "initial_opinion",
+          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Hold horizon (63 trading days)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+          ],
+          "role": "factory",
+          "same_day_assessment": "not_applicable",
+          "same_day_round_trip": false,
+          "sell_strengths": [
+            "Sell decision is joinable: Hold horizon (63 trading days) [hold_trading_days] — weigh 'premature' claims against this code."
+          ],
+          "sell_weaknesses": [],
+          "source": "deterministic_v0",
+          "text": "N206 closed 0883.HK after a 90-day hold (2026-07-18 → 2026-10-16, just_sold): gain (5.08% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Hold horizon (63 trading days). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+        },
+        {
+          "role": "owner",
+          "kind": "comment",
+          "text": "Hold horizon caused premature sale vs historic range",
+          "at": "2026-10-26T08:33:06.943788+00:00",
+          "influences_live": false
+        },
+        {
+          "role": "factory",
+          "kind": "reply",
+          "text": "N206 · 0883.HK (fair_cost_episode): observe-only alignment — no knob, fill, or live-capital changes; influences_live stays false (Package M review, not Package L auto-tune).\n\nStructured reasons (join_ok): **Buy** — filters_newly_clear: EY top 30%, financial health pass, no momentum gate (episode.entry_detail). **Sell** — hold_trading_days: hold horizon (63 trading days) (episode.exit_reason). Exit was a scheduled horizon close after ~90 calendar days (+5.08%), not a range-location or technical sell trigger.\n\nOn “premature vs historic range”: “Premature” usually means the exit fired before a timing/tech rule you still wanted in force. Here the sell reason is identity/mechanical (horizon met), so range placement alone does not override that label — it is a separate question whether horizon length fits this name’s cycle.\n\nDual-horizon check (before Accepting framing): (1) **Episode window** 2026-07-18 → 2026-10-16 — path, churn, and where price sat relative to the range you had in mind at exit. (2) **Wider timeframe** — trend/cycle context the 90-day slice can hide (continued climb, mean reversion, or chop after exit). We were not given range percentiles or post-exit prints in this packet; verify both horizons on chart rather than inferring them here.\n\nWeighing your comment: if post-exit price moved through levels you cared about, that is useful **missed-pattern** signal for horizon calibration in observe-only review — not evidence that the recorded sell reason was wrong (it still reads as horizon, not “left range”).\n\nAccept this framing, or Comment with what you see on episode vs wider TF (range location at exit, post-exit climb) for a further factory reply.",
+          "source": "llm",
+          "at": "2026-10-26T08:33:06.943807+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "N206 · 0883.HK (fair_cost_episode): observe-only alignment — no knob, fill, or live-capital changes; influences_live stays false (Package M review, not Package L auto-tune).\n\nStructured reasons (join_ok): **Buy** — filters_newly_clear: EY top 30%, financial health pass, no momentum gate (episode.entry_detail). **Sell** — hold_trading_days: hold horizon (63 trading days) (episode.exit_reason). Exit was a scheduled horizon close after ~90 calendar days (+5.08%), not a range-location or technical sell trigger.\n\nOn “premature vs historic range”: “Premature” usually means the exit fired before a timing/tech rule you still wanted in force. Here the sell reason is identity/mechanical (horizon met), so range placement alone does not override that label — it is a separate question whether horizon length fits this name’s cycle.\n\nDual-horizon check (before Accepting framing): (1) **Episode window** 2026-07-18 → 2026-10-16 — path, churn, and where price sat relative to the range you had in mind at exit. (2) **Wider timeframe** — trend/cycle context the 90-day slice can hide (continued climb, mean reversion, or chop after exit). We were not given range percentiles or post-exit prints in this packet; verify both horizons on chart rather than inferring them here.\n\nWeighing your comment: if post-exit price moved through levels you cared about, that is useful **missed-pattern** signal for horizon calibration in observe-only review — not evidence that the recorded sell reason was wrong (it still reads as horizon, not “left range”).\n\nAccept this framing, or Comment with what you see on episode vs wider TF (range location at exit, post-exit climb) for a further factory reply.",
+      "owner_comment": "Hold horizon caused premature sale vs historic range",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-26T08:33:06.943807+00:00"
+    },
+    {
+      "review_id": "reply:1408d4625bf4c95a",
+      "parent_review_id": "4b29d55008c9be00f5b7",
+      "parent_event_id": "14d62a85-6825-4348-8323-8e10f63ebd02",
+      "tag": "reply",
+      "book_id": "n206",
+      "book_tag": "N206",
+      "model_id": "n206",
+      "ticker": "1024.HK",
+      "entry_at": "2026-07-18T18:11:18+00:00",
+      "exit_at": "2026-10-16T06:52:34+00:00",
+      "hold_days": 90,
+      "exit_kind": "just_sold",
+      "return_pct": -32.73,
+      "basis_label": "fair_cost_episode",
+      "framing": "[N206] 1024.HK · 2026-10-16 · hold 90d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Hold horizon (63 trading days)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -32.73%\nContext read-only — not a new veto. influences_live=false",
+      "charts": {
+        "episode": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-10-30",
+          "start": "2026-07-04"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2027-01-14",
+          "start": "2026-01-19"
+        }
+      },
+      "close_in": {
+        "days_after": 14,
+        "days_before": 14,
+        "end": "2026-10-30",
+        "start": "2026-07-04"
+      },
+      "wider_tf": {
+        "days_after": 90,
+        "days_before": 180,
+        "end": "2027-01-14",
+        "start": "2026-01-19"
+      },
+      "opened_at": "2026-07-18T18:11:18+00:00",
+      "sold_at": "2026-10-16T06:52:34+00:00",
+      "avg_cost": null,
+      "exit_price": null,
+      "buy_decision": {
+        "code": "filters_newly_clear",
+        "influences_live": false,
+        "join_ok": true,
+        "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "side": "buy",
+        "source": "episode.entry_detail",
+        "structured": {
+          "earnings_yield": 0.112754164800585,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        }
+      },
+      "sell_decision": {
+        "code": "hold_trading_days",
+        "influences_live": false,
+        "join_ok": true,
+        "label": "Hold horizon (63 trading days)",
+        "side": "sell",
+        "source": "episode.exit_reason",
+        "structured": {
+          "raw": "hold_trading_days"
+        }
+      },
+      "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+      "sell_reason": "Hold horizon (63 trading days)",
+      "decision_reasons_join_ok": true,
+      "llm_opinion": "N206 closed 1024.HK after a 90-day hold (2026-07-18 → 2026-10-16, just_sold): material loss (-32.73% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Hold horizon (63 trading days). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Hold horizon (63 trading days)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+        "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+      ],
+      "chart_annotations": {
+        "episode": "Episode: 90-day hold, material loss (-32.73% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+      },
+      "opinion_source": "deterministic_v0",
+      "dialogue": [
+        {
+          "at": "2026-10-26T07:47:41.555468+00:00",
+          "buy_strengths": [
+            "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail."
+          ],
+          "buy_weaknesses": [
+            "Material fair-cost loss: pick quality and/or buy timing may be weak — read wider TF before blaming only the sell."
+          ],
+          "chart_annotations": {
+            "episode": "Episode: 90-day hold, material loss (-32.73% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "influences_live": false,
+          "kind": "initial_opinion",
+          "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Hold horizon (63 trading days)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+            "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+          ],
+          "role": "factory",
+          "same_day_assessment": "not_applicable",
+          "same_day_round_trip": false,
+          "sell_strengths": [
+            "Sell decision is joinable: Hold horizon (63 trading days) [hold_trading_days] — weigh 'premature' claims against this code."
+          ],
+          "sell_weaknesses": [
+            "Exit did not prevent a material loss — ask whether sell timing/strategy could have cut earlier without inventing knobs."
+          ],
+          "source": "deterministic_v0",
+          "text": "N206 closed 1024.HK after a 90-day hold (2026-07-18 → 2026-10-16, just_sold): material loss (-32.73% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Hold horizon (63 trading days). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+        },
+        {
+          "role": "owner",
+          "kind": "comment",
+          "text": "Bought into possible bottom, but previous declining trend resumed.  More cautious entry in this scenario?",
+          "at": "2026-10-26T08:33:10.987643+00:00",
+          "influences_live": false
+        },
+        {
+          "role": "factory",
+          "kind": "reply",
+          "text": "Observe-only alignment for N206 / 1024.HK (90-day hold, fair_cost_episode −32.73%). Dual horizon: on the episode window, your read fits — entry looked like a possible bottom, then the prior decline resumed; on a wider timeframe, that cyclical/down leg is easy to under-weight if we only stare at the entry bar. Structured join is clean on both sides. Buy: filters_newly_clear — EY top 30%, financial health pass, no momentum gate (momentum_12_1 not required), so the book took a value/filter clearance entry, not a confirmed trend-reversal signal. Sell: hold_trading_days — Hold horizon (63 trading days); this is a mechanical horizon exit, not a filing or tech “trend resumed” trigger, so the loss path is not explained by the system “calling the top” — it held through the resume until the clock. Your “more cautious entry in this scenario?” is a fair owner label against that buy story (bottom vs continuing structure); weighing it here does not change knobs, fills, or live capital (influences_live false; Package M observation, not Package L auto-tune). For the material loss, a read-only split helps: pick quality (filters vs backdrop) vs timing (horizon exit while price still weak) vs both — no Layer reopen from this card. If this framing matches your chart read on episode + wider TF, Accept; otherwise Comment with range location or post-exit climb and we’ll align further.",
+          "source": "llm",
+          "at": "2026-10-26T08:33:10.987665+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "Observe-only alignment for N206 / 1024.HK (90-day hold, fair_cost_episode −32.73%). Dual horizon: on the episode window, your read fits — entry looked like a possible bottom, then the prior decline resumed; on a wider timeframe, that cyclical/down leg is easy to under-weight if we only stare at the entry bar. Structured join is clean on both sides. Buy: filters_newly_clear — EY top 30%, financial health pass, no momentum gate (momentum_12_1 not required), so the book took a value/filter clearance entry, not a confirmed trend-reversal signal. Sell: hold_trading_days — Hold horizon (63 trading days); this is a mechanical horizon exit, not a filing or tech “trend resumed” trigger, so the loss path is not explained by the system “calling the top” — it held through the resume until the clock. Your “more cautious entry in this scenario?” is a fair owner label against that buy story (bottom vs continuing structure); weighing it here does not change knobs, fills, or live capital (influences_live false; Package M observation, not Package L auto-tune). For the material loss, a read-only split helps: pick quality (filters vs backdrop) vs timing (horizon exit while price still weak) vs both — no Layer reopen from this card. If this framing matches your chart read on episode + wider TF, Accept; otherwise Comment with range location or post-exit climb and we’ll align further.",
+      "owner_comment": "Bought into possible bottom, but previous declining trend resumed.  More cautious entry in this scenario?",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-26T08:33:10.987665+00:00"
+    },
+    {
+      "review_id": "reply:909eae9ba613a7f2",
+      "parent_review_id": "21e1e3001965e7557d0c",
+      "parent_event_id": "ace9a573-5eb3-4c85-a429-5ca5d7de4f40",
+      "tag": "reply",
+      "book_id": "n206",
+      "book_tag": "N206",
+      "model_id": "n206",
+      "ticker": "1378.HK",
+      "entry_at": "2026-07-18T18:11:18+00:00",
+      "exit_at": "2026-10-16T06:52:34+00:00",
+      "hold_days": 90,
+      "exit_kind": "just_sold",
+      "return_pct": -11.69,
+      "basis_label": "fair_cost_episode",
+      "framing": "[N206] 1378.HK · 2026-10-16 · hold 90d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Hold horizon (63 trading days)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -11.69%\nContext read-only — not a new veto. influences_live=false",
+      "charts": {
+        "episode": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-10-30",
+          "start": "2026-07-04"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2027-01-14",
+          "start": "2026-01-19"
+        }
+      },
+      "close_in": {
+        "days_after": 14,
+        "days_before": 14,
+        "end": "2026-10-30",
+        "start": "2026-07-04"
+      },
+      "wider_tf": {
+        "days_after": 90,
+        "days_before": 180,
+        "end": "2027-01-14",
+        "start": "2026-01-19"
+      },
+      "opened_at": "2026-07-18T18:11:18+00:00",
+      "sold_at": "2026-10-16T06:52:34+00:00",
+      "avg_cost": null,
+      "exit_price": null,
+      "buy_decision": {
+        "code": "filters_newly_clear",
+        "influences_live": false,
+        "join_ok": true,
+        "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "side": "buy",
+        "source": "episode.entry_detail",
+        "structured": {
+          "earnings_yield": 0.124434383509756,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        }
+      },
+      "sell_decision": {
+        "code": "hold_trading_days",
+        "influences_live": false,
+        "join_ok": true,
+        "label": "Hold horizon (63 trading days)",
+        "side": "sell",
+        "source": "episode.exit_reason",
+        "structured": {
+          "raw": "hold_trading_days"
+        }
+      },
+      "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+      "sell_reason": "Hold horizon (63 trading days)",
+      "decision_reasons_join_ok": true,
+      "llm_opinion": "N206 closed 1378.HK after a 90-day hold (2026-07-18 → 2026-10-16, just_sold): material loss (-11.69% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Hold horizon (63 trading days). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Hold horizon (63 trading days)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+        "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+      ],
+      "chart_annotations": {
+        "episode": "Episode: 90-day hold, material loss (-11.69% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+      },
+      "opinion_source": "deterministic_v0",
+      "dialogue": [
+        {
+          "at": "2026-10-26T07:47:41.555608+00:00",
+          "buy_strengths": [
+            "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail."
+          ],
+          "buy_weaknesses": [
+            "Material fair-cost loss: pick quality and/or buy timing may be weak — read wider TF before blaming only the sell."
+          ],
+          "chart_annotations": {
+            "episode": "Episode: 90-day hold, material loss (-11.69% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "influences_live": false,
+          "kind": "initial_opinion",
+          "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Hold horizon (63 trading days)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+            "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+          ],
+          "role": "factory",
+          "same_day_assessment": "not_applicable",
+          "same_day_round_trip": false,
+          "sell_strengths": [
+            "Sell decision is joinable: Hold horizon (63 trading days) [hold_trading_days] — weigh 'premature' claims against this code."
+          ],
+          "sell_weaknesses": [
+            "Exit did not prevent a material loss — ask whether sell timing/strategy could have cut earlier without inventing knobs."
+          ],
+          "source": "deterministic_v0",
+          "text": "N206 closed 1378.HK after a 90-day hold (2026-07-18 → 2026-10-16, just_sold): material loss (-11.69% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Hold horizon (63 trading days). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+        },
+        {
+          "role": "owner",
+          "kind": "comment",
+          "text": "Reasonable entry, maybe dca would have helped?",
+          "at": "2026-10-26T08:33:16.573156+00:00",
+          "influences_live": false
+        },
+        {
+          "role": "factory",
+          "kind": "reply",
+          "text": "N206 / 1378.HK — observe-only (no knobs, fills, or live capital; influences_live stays false; Package M framing, not Package L auto-tune).\n\nDual horizon: On the episode window (2026-07-18 → 2026-10-16, ~90 calendar days, -11.69% fair_cost_episode), weigh path and drawdown against a wider timeframe for cyclical/trend context the episode alone can hide before you Accept this framing.\n\nStructured reasons (join_ok): **Buy** — filters_newly_clear: EY top 30%, financial health pass, no momentum gate (episode.entry_detail). **Sell** — hold_trading_days: Hold horizon (63 trading days) (episode.exit_reason). That exit is a mechanical horizon rule, not a technical or range-location trigger — so “maybe DCA would have helped” is a sizing/path question (single entry at clear vs staged adds), not a verdict that the sell was “premature” vs a timing signal.\n\nYour “reasonable entry” aligns with the buy story: entry quality looked structurally fine at clear; the material loss still invites a read-only split — pick quality vs path/timing vs both — without reopening Layer from this card.\n\nIf you Comment further, note any missed pattern (range location at entry/exit, post-exit climb, churn) on episode chart + wider TF together. Otherwise **Accept** or **Comment** on this reply.",
+          "source": "llm",
+          "at": "2026-10-26T08:33:16.573174+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "N206 / 1378.HK — observe-only (no knobs, fills, or live capital; influences_live stays false; Package M framing, not Package L auto-tune).\n\nDual horizon: On the episode window (2026-07-18 → 2026-10-16, ~90 calendar days, -11.69% fair_cost_episode), weigh path and drawdown against a wider timeframe for cyclical/trend context the episode alone can hide before you Accept this framing.\n\nStructured reasons (join_ok): **Buy** — filters_newly_clear: EY top 30%, financial health pass, no momentum gate (episode.entry_detail). **Sell** — hold_trading_days: Hold horizon (63 trading days) (episode.exit_reason). That exit is a mechanical horizon rule, not a technical or range-location trigger — so “maybe DCA would have helped” is a sizing/path question (single entry at clear vs staged adds), not a verdict that the sell was “premature” vs a timing signal.\n\nYour “reasonable entry” aligns with the buy story: entry quality looked structurally fine at clear; the material loss still invites a read-only split — pick quality vs path/timing vs both — without reopening Layer from this card.\n\nIf you Comment further, note any missed pattern (range location at entry/exit, post-exit climb, churn) on episode chart + wider TF together. Otherwise **Accept** or **Comment** on this reply.",
+      "owner_comment": "Reasonable entry, maybe dca would have helped?",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-26T08:33:16.573174+00:00"
+    },
+    {
+      "review_id": "reply:f610aced153d9b9b",
+      "parent_review_id": "01ac029a291524f982b4",
+      "parent_event_id": "4176c374-0b4d-4242-879f-c8d5c6af96a8",
+      "tag": "reply",
+      "book_id": "n206",
+      "book_tag": "N206",
+      "model_id": "n206",
+      "ticker": "2313.HK",
+      "entry_at": "2026-07-18T18:11:18+00:00",
+      "exit_at": "2026-09-29T21:28:27+00:00",
+      "hold_days": 73,
+      "exit_kind": "post_sale",
+      "return_pct": -22.54,
+      "basis_label": "fair_cost_episode",
+      "framing": "[N206] 2313.HK · 2026-09-29 · hold 73d · post_sale\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -22.54%\nContext read-only — not a new veto. influences_live=false",
+      "charts": {
+        "episode": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-10-13",
+          "start": "2026-07-04"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2026-12-28",
+          "start": "2026-01-19"
+        }
+      },
+      "close_in": {
+        "days_after": 14,
+        "days_before": 14,
+        "end": "2026-10-13",
+        "start": "2026-07-04"
+      },
+      "wider_tf": {
+        "days_after": 90,
+        "days_before": 180,
+        "end": "2026-12-28",
+        "start": "2026-01-19"
+      },
+      "opened_at": "2026-07-18T18:11:18+00:00",
+      "sold_at": "2026-09-29T21:28:27+00:00",
+      "avg_cost": null,
+      "exit_price": null,
+      "buy_decision": {
+        "code": "filters_newly_clear",
+        "influences_live": false,
+        "join_ok": true,
+        "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "side": "buy",
+        "source": "episode.entry_detail",
+        "structured": {
+          "earnings_yield": 0.100900903809756,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        }
+      },
+      "sell_decision": {
+        "code": "identity_break_ey_band",
+        "influences_live": false,
+        "join_ok": true,
+        "label": "Left EY top band (identity break)",
+        "side": "sell",
+        "source": "episode.exit_reason",
+        "structured": {
+          "raw": "identity_break_ey_band"
+        }
+      },
+      "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+      "sell_reason": "Left EY top band (identity break)",
+      "decision_reasons_join_ok": true,
+      "llm_opinion": "N206 closed 2313.HK after a 73-day hold (2026-07-18 → 2026-09-29, post_sale): material loss (-22.54% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+        "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+      ],
+      "chart_annotations": {
+        "episode": "Episode: 73-day hold, material loss (-22.54% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+      },
+      "opinion_source": "deterministic_v0",
+      "dialogue": [
+        {
+          "at": "2026-10-26T07:47:41.560874+00:00",
+          "buy_strengths": [
+            "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail."
+          ],
+          "buy_weaknesses": [
+            "Material fair-cost loss: pick quality and/or buy timing may be weak — read wider TF before blaming only the sell."
+          ],
+          "chart_annotations": {
+            "episode": "Episode: 73-day hold, material loss (-22.54% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+          },
+          "influences_live": false,
+          "kind": "initial_opinion",
+          "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+            "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+          ],
+          "role": "factory",
+          "same_day_assessment": "not_applicable",
+          "same_day_round_trip": false,
+          "sell_strengths": [
+            "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+          ],
+          "sell_weaknesses": [
+            "Exit did not prevent a material loss — ask whether sell timing/strategy could have cut earlier without inventing knobs."
+          ],
+          "source": "deterministic_v0",
+          "text": "N206 closed 2313.HK after a 73-day hold (2026-07-18 → 2026-09-29, post_sale): material loss (-22.54% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+        },
+        {
+          "role": "owner",
+          "kind": "comment",
+          "text": "Bought into long term decline trend.  More cautious entry? Consider macd?",
+          "at": "2026-10-26T08:33:21.509166+00:00",
+          "influences_live": false
+        },
+        {
+          "role": "factory",
+          "kind": "reply",
+          "text": "N206 · 2313.HK (73d, −22.54% fair_cost_episode, post_sale) — observe-only; influences_live stays false (Package M, not live auto-tune).\n\nDual horizon: On the episode window, entry on 2026-07-18 matched a filters-newly-clear buy: EY top 30%, financial health pass, no momentum gate (decision_reasons.buy, join_ok). Exit on 2026-09-29 was mechanical — Left EY top band (identity break) (decision_reasons.sell, join_ok), not a MACD or other timing trigger; “more cautious entry” is the right lens for your decline comment, not “premature sell.”\n\nYour missed pattern — buying into a longer-term decline — is exactly what the wider timeframe is for: locally, value filters can clear while the stock remains in a multi-month down trend the episode chart understates. That tension is pick vs timing (quality still looked fine on EY/FH at entry; path after entry hurt). MACD is not in this entry stack today; noting it here is alignment for a future rules discussion, not a change from this card.\n\nBefore Accepting framing, skim episode chart plus wider TF together. Accept this reply, or Comment with range location / post-exit climb if you want those weighed next.",
+          "source": "llm",
+          "at": "2026-10-26T08:33:21.509185+00:00",
+          "influences_live": false
+        }
+      ],
+      "reply_text": "N206 · 2313.HK (73d, −22.54% fair_cost_episode, post_sale) — observe-only; influences_live stays false (Package M, not live auto-tune).\n\nDual horizon: On the episode window, entry on 2026-07-18 matched a filters-newly-clear buy: EY top 30%, financial health pass, no momentum gate (decision_reasons.buy, join_ok). Exit on 2026-09-29 was mechanical — Left EY top band (identity break) (decision_reasons.sell, join_ok), not a MACD or other timing trigger; “more cautious entry” is the right lens for your decline comment, not “premature sell.”\n\nYour missed pattern — buying into a longer-term decline — is exactly what the wider timeframe is for: locally, value filters can clear while the stock remains in a multi-month down trend the episode chart understates. That tension is pick vs timing (quality still looked fine on EY/FH at entry; path after entry hurt). MACD is not in this entry stack today; noting it here is alignment for a future rules discussion, not a change from this card.\n\nBefore Accepting framing, skim episode chart plus wider TF together. Accept this reply, or Comment with range location / post-exit climb if you want those weighed next.",
+      "owner_comment": "Bought into long term decline trend.  More cautious entry? Consider macd?",
+      "reply_kind": "llm",
+      "influences_live": false,
+      "observe_only": true,
+      "created_at": "2026-10-26T08:33:21.509185+00:00"
     }
   ]
 }
