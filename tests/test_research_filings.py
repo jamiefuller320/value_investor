@@ -7945,6 +7945,109 @@ def test_refetch_euro_filings_primary_bodies_hei_de_eng_20261006_01(mock_fetch, 
     assert any(row.get("has_body") for row in payload.get("filings") or [])
 
 
+def test_filing_source_surface_hei_de_ir_allowlist_direct_eng_20261026_02():
+    """eng-20261026-02: parked HEI.DE must gain ir_allowlist_direct surface for exhaustion release."""
+    from value_investor.research.filings import filing_source_surface, ir_allowlist_direct_eligible
+
+    assert ir_allowlist_direct_eligible("HEI.DE")
+    assert filing_source_surface("dax", "HEI.DE") == "euro_filings+ir_allowlist_direct"
+
+
+def test_load_exhaustion_releases_parked_hei_de_ir_surface_eng_20261026_02(tmp_path: Path):
+    """eng-20261026-02: dax HEI.DE parked at euro_filings is released when IR allowlist surface ships."""
+    from value_investor.library_ingest_exhaustion import load_ingest_exhaustion
+    from value_investor.storage import write_json
+
+    write_json(
+        tmp_path / "markets" / "dax" / "ingest_exhaustion.json",
+        {
+            "market_id": "dax",
+            "exhausted": True,
+            "parked": [
+                {
+                    "ticker": "HEI.DE",
+                    "reason": "unfetchable_iwb",
+                    "source_surface": "euro_filings",
+                },
+                {
+                    "ticker": "NOTICKER.DE",
+                    "reason": "unfetchable_iwb",
+                    "source_surface": "euro_filings",
+                },
+            ],
+        },
+        compact=False,
+    )
+    payload = load_ingest_exhaustion("dax", library_root=tmp_path)
+    assert "HEI.DE" in payload["surface_released"]
+    assert [row["ticker"] for row in payload["parked"]] == ["NOTICKER.DE"]
+
+
+@patch("value_investor.research.filings._fetch_ir_allowlist_body")
+def test_refetch_ir_allowlist_hei_de_h1_interim_eng_20261026_02(mock_fetch, tmp_path: Path):
+    """eng-20261026-02: leftover H1 row must refetch so library ingest clears indexed_without_body."""
+    mock_fetch.return_value = (
+        "Heidelberg Materials half year interim financial report consolidated revenue "
+        "operating profit cash flow " * 40,
+        "pdf",
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_ad5fd414650fb689",
+                        "source": "ir_allowlist",
+                        "url": "https://www.heidelbergmaterials.com/system/files/2025-07/Heidelberg_Materials_Half-year_financial_report_2025.pdf",
+                        "period": "interim",
+                        "has_body": False,
+                    },
+                    {
+                        "id": "ir_b0e06b2966d9ae0d",
+                        "source": "ir_allowlist",
+                        "url": "https://www.heidelbergmaterials.com/system/files/2026-03/HM_Annual_Financial_Statements_2025.pdf",
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings_dir / "bodies" / "ir_b0e06b2966d9ae0d.txt"),
+                    },
+                ],
+                "summary": {"with_body": 1, "total": 2},
+            }
+        ),
+        encoding="utf-8",
+    )
+    (filings_dir / "bodies").mkdir()
+    (filings_dir / "bodies" / "ir_b0e06b2966d9ae0d.txt").write_text(
+        "annual " * 500, encoding="utf-8"
+    )
+
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        ticker="HEI.DE",
+        company_name="Heidelberg Materials AG",
+        max_bodies=3,
+    )
+    assert result["attempted"] >= 1
+    assert result["fetched"] >= 1
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    interim = next(row for row in payload["filings"] if row["period"] == "interim")
+    assert interim.get("has_body") is True
+
+
+def test_parked_source_hunter_hei_de_dax_has_fetchable_ir_eng_20261026_02():
+    """eng-20261026-02: HEI.DE H1 2025 statutory PDF fetches and passes IR validation."""
+    assert "HEI.DE" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("HEI.DE")
+    interim = next(row for row in rows if row["period"] == "interim")
+    assert "Half-year_financial_report_2025" in interim["url"]
+    body = fetch_filing_body(interim["url"])
+    assert body and len(body) > 5000
+    valid, reason = _validate_ir_allowlist_body_content(interim, body, ticker="HEI.DE")
+    assert valid, reason
+
+
 def test_fetch_filings_ir_allowlist_hang_seng_unmeasured_builtins_eng_20260930_03(
     tmp_path: Path,
 ):
