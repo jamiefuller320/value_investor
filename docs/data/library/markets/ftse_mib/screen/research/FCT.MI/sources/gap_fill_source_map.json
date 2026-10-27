@@ -2,7 +2,7 @@
   "ticker": "FCT.MI",
   "company_name": "Fincantieri S.p.A.",
   "market": "ftse_mib",
-  "built_at": "2026-09-29T07:58:46.840299+00:00",
+  "built_at": "2026-10-27T10:56:04.112253+00:00",
   "inventory": {
     "available": {
       "filings_index": true,
@@ -21,19 +21,19 @@
       "yahoo_quarterly_cashflow",
       "yahoo_quarterly_income"
     ],
-    "filings_body_files": 1,
-    "filings_indexed_bodies": 1,
+    "filings_body_files": 2,
+    "filings_indexed_bodies": 2,
     "filings_summary": {
-      "total": 1,
-      "annual": 0,
+      "total": 2,
+      "annual": 1,
       "interim": 0,
       "trading_update": 0,
       "other": 1,
-      "with_body": 1,
+      "with_body": 2,
       "period_coverage": {
         "annual": {
-          "total": 0,
-          "with_body": 0
+          "total": 1,
+          "with_body": 1
         },
         "interim": {
           "total": 0,
@@ -51,8 +51,8 @@
     },
     "period_coverage": {
       "annual": {
-        "total": 0,
-        "with_body": 0
+        "total": 1,
+        "with_body": 1
       },
       "interim": {
         "total": 0,
@@ -67,7 +67,7 @@
         "with_body": 1
       }
     },
-    "news_article_count": 119,
+    "news_article_count": 129,
     "evidence_ladder": [
       "filings_bodies",
       "filings_index",
@@ -84,22 +84,22 @@
   "body_refetch": {
     "attempted": 0,
     "fetched": 0,
-    "with_body_before": 1,
-    "with_body_after": 1,
+    "with_body_before": 2,
+    "with_body_after": 2,
     "note": "refetch_missing_filing_bodies"
   },
   "ch_refetch": {
     "attempted": 0,
     "fetched": 0,
-    "with_body_before": 1,
-    "with_body_after": 1,
+    "with_body_before": 2,
+    "with_body_after": 2,
     "note": "no missing CH bodies"
   },
   "investegate_refetch": {
     "attempted": 0,
     "fetched": 0,
-    "with_body_before": 1,
-    "with_body_after": 1,
+    "with_body_before": 2,
+    "with_body_after": 2,
     "google_news_rejected": 0,
     "misattributed_pruned": 0,
     "note": "no missing Investegate/LSE bodies"
@@ -107,28 +107,46 @@
   "ticker_rns_refetch": {
     "attempted": 0,
     "fetched": 0,
-    "with_body_before": 1,
-    "with_body_after": 1,
+    "with_body_before": 2,
+    "with_body_after": 2,
     "pruned": 0,
     "note": "no missing ticker_rns_api bodies"
   },
-  "ir_refetch": {},
+  "ir_refetch": {
+    "attempted": 0,
+    "fetched": 0,
+    "failed": 0,
+    "with_body_before": 2,
+    "with_body_after": 2,
+    "investegate_fallbacks": 0,
+    "skipped_unfetchable": 0,
+    "deadline_hit": false,
+    "merge": {
+      "added": 0,
+      "total_allowlist": 1,
+      "note": "merge_ir_allowlist_filings"
+    },
+    "shared_body_propagated": 0,
+    "ir_metadata_reconciled": 0,
+    "note": "no missing IR allowlist bodies",
+    "mandatory": true,
+    "allowlist_count": 1
+  },
   "screen_run_manifest": {
     "ticker": "FCT.MI",
-    "run_at": "2026-09-27T07:15:34.843280+00:00",
-    "attached_at": "2026-09-29T07:58:45.931586+00:00",
-    "history_run_path": "docs/data/history/run_20260927_071534.json.gz",
-    "history_models_path": "docs/data/history/models_20260927_071534.json.gz",
+    "run_at": "2026-10-25T07:32:00.532121+00:00",
+    "attached_at": "2026-10-27T10:56:03.205125+00:00",
+    "history_run_path": "docs/data/history/run_20261025_073200.json.gz",
+    "history_models_path": "docs/data/history/models_20261025_073200.json.gz",
     "universe_meta": {
       "company_count": 248,
       "signal_counts": {
-        "strong_buy": 12,
-        "buy": 45,
-        "hold": 138,
-        "avoid": 52,
-        "insufficient_data": 1
+        "strong_buy": 17,
+        "buy": 56,
+        "hold": 114,
+        "avoid": 61
       },
-      "strong_buy_count": 12,
+      "strong_buy_count": 17,
       "universe": "ftse350",
       "universe_label": "FTSE 350",
       "excluded_investment_vehicles": 102,
@@ -136,10 +154,10 @@
       "screen_trusts": true,
       "trust_count": 102,
       "trust_signal_counts": {
-        "strong_buy": 15,
-        "buy": 31,
-        "hold": 45,
-        "avoid": 11
+        "strong_buy": 18,
+        "buy": 32,
+        "hold": 46,
+        "avoid": 6
       },
       "broker_overlay": "trading212",
       "t212_overlay": true,
@@ -157,7 +175,7 @@
     "bridge_count": 0,
     "segment_split_count": 0,
     "lease_maturity_count": 0,
-    "mandatory": false,
+    "mandatory": true,
     "path": "docs/data/library/markets/ftse_mib/screen/research/FCT.MI/sources/ir_presentation_metrics.json"
   },
   "filing_interim_financials": {
@@ -186,7 +204,7 @@
     "ir_presentation_metrics",
     "macro_context"
   ],
-  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. Use screen_run_manifest.json for universe-level signal counts and ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines, segment revenue splits, and IFRS 16 lease maturity tables. Use ch_annual_year_in_numbers.json for CH annual revenue, adjusted operating profit, secured workload, and margin/backlog ratios when present. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements. Use peer_model_pass_table.json for cross-ticker model pass/score comparisons within the sector cohort (e.g. moat or yield rankings).",
+  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. Use screen_run_manifest.json for universe-level signal counts and ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines, segment revenue splits, and IFRS 16 lease maturity tables. Use ch_annual_year_in_numbers.json for CH annual revenue, adjusted operating profit, secured workload, and margin/backlog ratios when present. Use sec_companyfacts.json (US names) for filed annual OCF, capex and dividends paid before falling back to Yahoo. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements. Use peer_model_pass_table.json for cross-ticker model pass/score comparisons within the sector cohort (e.g. moat or yield rankings).",
   "peer_model_pass_table": {
     "attached": false,
     "peer_count": 0,
