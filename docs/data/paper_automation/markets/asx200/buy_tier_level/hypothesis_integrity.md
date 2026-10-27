@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-26T00:47:38.103993+00:00
+Track: `buy_tier_level` · updated 2026-10-27T00:47:43.326580+00:00
 
 ## Portfolio loser feedback
 
@@ -111,13 +111,6 @@ Track: `buy_tier_level` · updated 2026-10-26T00:47:38.103993+00:00
 - still buy
 - cheapness family still passes
 
-### PMV.AX — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 60%
-
 ### NEM.AX — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
@@ -137,6 +130,11 @@ Track: `buy_tier_level` · updated 2026-10-26T00:47:38.103993+00:00
 - conviction 32% below intact floor
 - still buy
 - cheapness family still passes
+
+### PRN.AX — weakening / watch_review (+0.0%)
+- conviction 29% below intact floor
+- still buy
+- research accumulate
 
 ### WDS.AX — weakening / watch_review (+1.6%)
 - research verdict caution
