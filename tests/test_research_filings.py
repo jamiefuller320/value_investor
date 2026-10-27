@@ -8548,16 +8548,22 @@ def test_fetch_filings_ir_allowlist_smi_unmeasured_builtins_eng_20261003_02(tmp_
     allowlist_path = tmp_path / "ir.json"
     allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
 
-    for ticker in ("PGHN.SW", "RO.SW"):
-        rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
-        assert len(rows) == 2, ticker
-        assert all(row["source"] == "ir_allowlist" for row in rows)
-        assert any(row["period"] == "annual" for row in rows)
-        assert any(row["period"] == "interim" for row in rows)
+    pghn_rows = fetch_filings_ir_allowlist("PGHN.SW", path=allowlist_path)
+    assert len(pghn_rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in pghn_rows)
+    assert sum(1 for row in pghn_rows if row["period"] == "annual") >= 2
+    assert any(row["period"] == "interim" for row in pghn_rows)
 
-    pghn_urls = [row["url"] for row in fetch_filings_ir_allowlist("PGHN.SW", path=allowlist_path)]
+    ro_rows = fetch_filings_ir_allowlist("RO.SW", path=allowlist_path)
+    assert len(ro_rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in ro_rows)
+    assert any(row["period"] == "annual" for row in ro_rows)
+    assert any(row["period"] == "interim" for row in ro_rows)
+
+    pghn_urls = [row["url"] for row in pghn_rows]
     assert any("annual-report-2025.pdf" in url for url in pghn_urls)
     assert any("pghn-interim-report-2026.pdf" in url for url in pghn_urls)
+    assert any("annual-results-presentation-2025.pdf" in url for url in pghn_urls)
 
     ro_urls = [row["url"] for row in fetch_filings_ir_allowlist("RO.SW", path=allowlist_path)]
     assert any("rocheannualreport2025.pdf" in url for url in ro_urls)
@@ -8585,11 +8591,25 @@ def test_merge_ir_allowlist_filings_bootstraps_empty_pghn_sw_index(tmp_path: Pat
 
     meta = merge_ir_allowlist_filings("PGHN.SW", filings_dir)
     assert meta["added"] >= 1
-    assert meta["total_allowlist"] >= 2
+    assert meta["total_allowlist"] >= 3
 
     payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
-    assert int(payload["summary"]["total"]) >= 2
+    assert int(payload["summary"]["total"]) >= 3
     assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_fetch_filings_ir_allowlist_pghn_sw_third_pdf_live_eng_20261027_01():
+    """eng-20261027-01: PGHN.SW third IR PDF clears library thin_body (≥3 bodied filings)."""
+    rows = fetch_filings_ir_allowlist("PGHN.SW")
+    presentation = next(
+        row
+        for row in rows
+        if row["period"] == "annual" and "annual-results-presentation-2025.pdf" in row["url"]
+    )
+    body = fetch_filing_body(presentation["url"])
+    assert body and len(body) > 5000
+    valid, reason = _validate_ir_allowlist_body_content(presentation, body, ticker="PGHN.SW")
+    assert valid, reason
 
 
 def test_sanitize_http_url_preserves_plus_in_query():
