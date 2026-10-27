@@ -14,7 +14,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-10-27T16:41:14.563926+00:00",
+    "snapshot_at": "2026-10-27T16:41:31.699344+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 49,
     "unmeasured_buy_tier": 0,
@@ -88,7 +88,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-10-27T16:41:14.565729+00:00",
+  "evaluated_at": "2026-10-27T16:41:31.701090+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -157,7 +157,7 @@
         "euro_stoxx50 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-27T16:41:32.025829+00:00",
+        "snapshot_at": "2026-10-27T16:42:05.541168+00:00",
         "market_id": "euro_stoxx50",
         "buy_tier_count": 14,
         "unmeasured_buy_tier": 0,
@@ -207,19 +207,19 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-27T16:41:32.027328+00:00",
+      "evaluated_at": "2026-10-27T16:42:05.543549+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "parallel_sprint_2_markets": [
-    "bel20"
+    "aex"
   ],
   "parallel_sprint_2_status": [
     {
-      "market_id": "bel20",
+      "market_id": "aex",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=2, indexed_without_body=0)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=1)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
@@ -228,38 +228,38 @@
       "current_phase": 0,
       "next_phase": 1,
       "phase_blockers": [
-        "no benchmark configured for bel20"
+        "no benchmark configured for aex"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-27T16:41:32.198767+00:00",
-        "market_id": "bel20",
-        "buy_tier_count": 4,
+        "snapshot_at": "2026-10-27T16:42:06.076363+00:00",
+        "market_id": "aex",
+        "buy_tier_count": 9,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 2,
-        "indexed_without_body": 0,
-        "bodies_min": 1,
-        "bodies_median": 2.5,
-        "bodies_max": 4,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 1,
+        "bodies_min": 3,
+        "bodies_median": 4,
+        "bodies_max": 41,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
-        "thin_body_tickers": [
-          "APAM.AS",
-          "ACKB.BR"
+        "thin_body_tickers": [],
+        "indexed_without_body_tickers": [
+          "MT.AS"
         ],
-        "indexed_without_body_tickers": [],
-        "indexed_without_body_by_ticker": {},
+        "indexed_without_body_by_ticker": {
+          "MT.AS": 1
+        },
         "parked_tickers": [],
         "parked_count": 0,
-        "effective_thin_body_buy_tier": 2,
-        "effective_thin_body_tickers": [
-          "APAM.AS",
-          "ACKB.BR"
+        "effective_thin_body_buy_tier": 0,
+        "effective_thin_body_tickers": [],
+        "effective_indexed_without_body": 1,
+        "effective_indexed_without_body_tickers": [
+          "MT.AS"
         ],
-        "effective_indexed_without_body": 0,
-        "effective_indexed_without_body_tickers": [],
         "ingest_exhausted": false
       },
       "filing_gaps": 0,
@@ -277,14 +277,14 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-27T16:41:32.199008+00:00",
+      "evaluated_at": "2026-10-27T16:42:06.076803+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
     "euro_stoxx50",
-    "bel20"
+    "aex"
   ],
   "market_queue": [
     "sp500",
@@ -341,7 +341,7 @@
     "euro_stoxx50"
   ],
   "scheduler_stream_2_markets": [
-    "bel20"
+    "aex"
   ],
   "should_run_library_maintenance": true
 }
