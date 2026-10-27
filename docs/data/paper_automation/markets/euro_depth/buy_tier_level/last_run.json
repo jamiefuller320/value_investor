@@ -1,15 +1,110 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-26T09:46:44.363636+01:00",
+    "local_time": "2026-10-27T09:46:38.509344+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-10-26T09:00:00+01:00",
-    "settle_at": "2026-10-26T09:30:00+01:00",
+    "market_open_at": "2026-10-27T09:00:00+01:00",
+    "settle_at": "2026-10-27T09:30:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "45e93b6b-1e16-4309-b3e1-eb1ff9bc12a3",
+      "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+      "acted_at": "2026-10-27T09:46:38.509344+01:00",
+      "ticker": "WKL.AS",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 0.30181,
+      "price": 88.18,
+      "gross": 26.61,
+      "cost": 0.05,
+      "net_cash": 26.56,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Wolters Kluwer N.V.",
+      "avg_cost_at_exit": 66.24,
+      "position_closed": true
+    },
+    {
+      "id": "7429e100-f8df-4997-a76e-b22dc659534c",
+      "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+      "acted_at": "2026-10-27T09:46:38.509344+01:00",
+      "ticker": "PHIA.AS",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 0.463262,
+      "price": 24.08,
+      "gross": 11.16,
+      "cost": 0.02,
+      "net_cash": 11.13,
+      "note": "Automated trim",
+      "name": "Koninklijke Philips N.V.",
+      "avg_cost_at_exit": 21.78
+    },
+    {
+      "id": "0e013f77-3986-43cd-8a63-1c998d6b3b7f",
+      "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+      "acted_at": "2026-10-27T09:46:38.509344+01:00",
+      "ticker": "EVN.VI",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.709573,
+      "price": 29.5,
+      "gross": 20.93,
+      "cost": 0.04,
+      "net_cash": -20.97,
+      "note": "Automated buy",
+      "name": "EVN AG"
+    },
+    {
+      "id": "f31d1e97-cd66-46d7-a4d8-027c0fd3c960",
+      "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+      "acted_at": "2026-10-27T09:46:38.509344+01:00",
+      "ticker": "APAM.AS",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.469282,
+      "price": 35.58,
+      "gross": 16.7,
+      "cost": 0.03,
+      "net_cash": -16.73,
+      "note": "Automated buy",
+      "name": "Aperam S.A."
+    },
+    {
+      "id": "a2eaaa81-1639-4022-9d17-f449921f42f8",
+      "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+      "acted_at": "2026-10-27T09:46:38.509344+01:00",
+      "ticker": "NOVN.SW",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 0.08663,
+      "price": 128.0,
+      "gross": 11.09,
+      "cost": 0.02,
+      "net_cash": 11.07,
+      "note": "Automated trim",
+      "name": "Novartis AG",
+      "avg_cost_at_exit": 112.04
+    },
+    {
+      "id": "55980488-777a-4f8a-827f-8de529aeef2e",
+      "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+      "acted_at": "2026-10-27T09:46:38.509344+01:00",
+      "ticker": "WIE.VI",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.690483,
+      "price": 16.0,
+      "gross": 11.05,
+      "cost": 0.02,
+      "net_cash": -11.07,
+      "note": "Automated buy",
+      "name": "Wienerberger AG"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +118,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1006.66,
-    "cash": 0.0,
+    "nav": 1006.48,
+    "cash": -0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -36,7 +131,7 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 25.17,
+    "target_sleeve_value": 20.97,
     "targets": [
       {
         "ticker": "UMI.BR",
@@ -123,6 +218,13 @@
         "price": 66.92
       },
       {
+        "ticker": "EVN.VI",
+        "name": "EVN AG",
+        "signal": "strong_buy",
+        "conviction_score": 0.6789000000000001,
+        "price": 29.5
+      },
+      {
         "ticker": "SAN.PA",
         "name": "Sanofi",
         "signal": "strong_buy",
@@ -135,6 +237,13 @@
         "signal": "buy",
         "conviction_score": 0.6578,
         "price": 483.2
+      },
+      {
+        "ticker": "APAM.AS",
+        "name": "Aperam S.A.",
+        "signal": "strong_buy",
+        "conviction_score": 0.6524000000000001,
+        "price": 35.58
       },
       {
         "ticker": "VOLV-B.ST",
@@ -163,6 +272,13 @@
         "signal": "strong_buy",
         "conviction_score": 0.6161000000000001,
         "price": 91.36
+      },
+      {
+        "ticker": "ACKB.BR",
+        "name": "Ackermans & Van Haaren NV",
+        "signal": "strong_buy",
+        "conviction_score": 0.614,
+        "price": 253.8
       },
       {
         "ticker": "OIZ.IR",
@@ -242,6 +358,13 @@
         "price": 58.62
       },
       {
+        "ticker": "ABI.BR",
+        "name": "Anheuser-Busch InBev SA/NV",
+        "signal": "buy",
+        "conviction_score": 0.502,
+        "price": 75.4
+      },
+      {
         "ticker": "PRX.AS",
         "name": "Prosus N.V.",
         "signal": "buy",
@@ -254,6 +377,13 @@
         "signal": "buy",
         "conviction_score": 0.49429999999999996,
         "price": 128.0
+      },
+      {
+        "ticker": "WIE.VI",
+        "name": "Wienerberger AG",
+        "signal": "buy",
+        "conviction_score": 0.47600000000000003,
+        "price": 16.0
       },
       {
         "ticker": "TTE.PA",
@@ -298,6 +428,13 @@
         "price": 74.75
       },
       {
+        "ticker": "BAS.DE",
+        "name": "BASF SE",
+        "signal": "buy",
+        "conviction_score": 0.40562,
+        "price": 52.45
+      },
+      {
         "ticker": "HM-B.ST",
         "name": "H & M Hennes & Mauritz AB (publ)",
         "signal": "buy",
@@ -317,143 +454,112 @@
         "signal": "buy",
         "conviction_score": 0.35173,
         "price": 6.9
-      }
-    ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "WKL.AS",
-        "name": "Wolters Kluwer N.V.",
-        "reason": "No longer in the top conviction target set",
-        "shares": 0.30181,
-        "price": 88.18,
-        "value": 26.61
-      }
-    ],
-    "anticipated_grace_holds": [],
-    "anticipated_trims": [],
-    "anticipated_buys": [
-      {
-        "action": "buy",
-        "ticker": "SKF-B.ST",
-        "name": "AB SKF (publ)",
-        "reason": "Top-up to equal weight",
-        "value": 14.24,
-        "price": 269.5,
-        "target_value": 25.17,
-        "conviction_score": 0.5591,
-        "signal": "buy"
       },
       {
-        "action": "buy",
-        "ticker": "PRX.AS",
-        "name": "Prosus N.V.",
-        "reason": "Top-up to equal weight",
-        "value": 12.32,
-        "price": 34.17,
-        "target_value": 25.17,
-        "conviction_score": 0.4955,
-        "signal": "buy"
+        "ticker": "UCB.BR",
+        "name": "UCB SA",
+        "signal": "buy",
+        "conviction_score": 0.3427,
+        "price": 272.7
+      },
+      {
+        "ticker": "DQ7A.IR",
+        "name": "Donegal Investment Group plc",
+        "signal": "buy",
+        "conviction_score": 0.208335,
+        "price": 8.25
       }
     ],
+    "anticipated_exits": [],
+    "anticipated_grace_holds": [],
+    "anticipated_trims": [],
+    "anticipated_buys": [],
     "anticipated_holds": [
       {
         "action": "hold",
-        "ticker": "UMI.BR",
-        "name": "Umicore SA",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 21.54,
-        "target_value": 25.17,
-        "conviction_score": 0.9144,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "STR.VI",
-        "name": "Strabag SE",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 24.31,
-        "target_value": 25.17,
-        "conviction_score": 0.8488,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "BOL.ST",
-        "name": "Boliden AB (publ)",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 24.76,
-        "target_value": 25.17,
-        "conviction_score": 0.6578,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "VOLV-B.ST",
-        "name": "AB Volvo (publ)",
+        "ticker": "PHIA.AS",
+        "name": "Koninklijke Philips N.V.",
         "reason": "Already near equal-weight target",
-        "value": 25.34,
-        "target_value": 25.17,
-        "conviction_score": 0.6256,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "DTE.DE",
-        "name": "Deutsche Telekom AG",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 23.87,
-        "target_value": 25.17,
-        "conviction_score": 0.5967,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "KRX.IR",
-        "name": "Kingspan Group plc",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 24.51,
-        "target_value": 25.17,
-        "conviction_score": 0.5838,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "MUV2.DE",
-        "name": "M\u00fcnchener R\u00fcckversicherungs-Gesellschaft Aktiengesellschaft in M\u00fcnchen",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 24.51,
-        "target_value": 25.17,
-        "conviction_score": 0.5593,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "MELE.BR",
-        "name": "Melexis NV",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 23.69,
-        "target_value": 25.17,
-        "conviction_score": 0.5494,
+        "value": 20.95,
+        "target_value": 20.97,
+        "conviction_score": 0.7832,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
-        "ticker": "MC.PA",
-        "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 24.88,
-        "target_value": 25.17,
-        "conviction_score": 0.5298,
+        "ticker": "EVN.VI",
+        "name": "EVN AG",
+        "reason": "Already near equal-weight target",
+        "value": 20.93,
+        "target_value": 20.97,
+        "conviction_score": 0.6789000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "NOVN.SW",
+        "name": "Novartis AG",
+        "reason": "Already near equal-weight target",
+        "value": 20.95,
+        "target_value": 20.97,
+        "conviction_score": 0.49429999999999996,
         "signal": "buy"
       }
     ],
     "skipped": [
       {
+        "ticker": "APAM.AS",
+        "name": "Aperam S.A.",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 20.97,
+        "conviction_score": 0.6524000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "ticker": "ACKB.BR",
+        "name": "Ackermans & Van Haaren NV",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 20.97,
+        "conviction_score": 0.614,
+        "signal": "strong_buy"
+      },
+      {
+        "ticker": "SKF-B.ST",
+        "name": "AB SKF (publ)",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 20.97,
+        "conviction_score": 0.5591,
+        "signal": "buy"
+      },
+      {
+        "ticker": "ABI.BR",
+        "name": "Anheuser-Busch InBev SA/NV",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 20.97,
+        "conviction_score": 0.502,
+        "signal": "buy"
+      },
+      {
+        "ticker": "PRX.AS",
+        "name": "Prosus N.V.",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 20.97,
+        "conviction_score": 0.4955,
+        "signal": "buy"
+      },
+      {
+        "ticker": "WIE.VI",
+        "name": "Wienerberger AG",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 20.97,
+        "conviction_score": 0.47600000000000003,
+        "signal": "buy"
+      },
+      {
         "ticker": "HEIA.AS",
         "name": "Heineken N.V.",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 25.17,
+        "target_value": 20.97,
         "conviction_score": 0.47209999999999996,
         "signal": "buy"
       },
@@ -461,16 +567,40 @@
         "ticker": "MT.AS",
         "name": "ArcelorMittal S.A.",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 25.17,
+        "target_value": 20.97,
         "conviction_score": 0.4537,
+        "signal": "buy"
+      },
+      {
+        "ticker": "BAS.DE",
+        "name": "BASF SE",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 20.97,
+        "conviction_score": 0.40562,
         "signal": "buy"
       },
       {
         "ticker": "HM-B.ST",
         "name": "H & M Hennes & Mauritz AB (publ)",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 25.17,
+        "target_value": 20.97,
         "conviction_score": 0.3999,
+        "signal": "buy"
+      },
+      {
+        "ticker": "UCB.BR",
+        "name": "UCB SA",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 20.97,
+        "conviction_score": 0.3427,
+        "signal": "buy"
+      },
+      {
+        "ticker": "DQ7A.IR",
+        "name": "Donegal Investment Group plc",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 20.97,
+        "conviction_score": 0.208335,
         "signal": "buy"
       }
     ],
@@ -483,7 +613,7 @@
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 40 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s); leave 9 near-target holding(s)."
+    "summary": "Next rebalance would target 48 equal-weight sleeve(s); leave 3 near-target holding(s)."
   },
   "alerts": [
     {
@@ -650,17 +780,6 @@
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "accumulate"
-    },
-    {
-      "ticker": "WKL.AS",
-      "name": "Wolters Kluwer N.V.",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Technical timing is wait \u2014 avoid adding size",
-      "mark": 88.18,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "wait"
     },
     {
       "ticker": "C5H.IR",
@@ -903,6 +1022,39 @@
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
+    },
+    {
+      "ticker": "EVN.VI",
+      "name": "EVN AG",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 29.5,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "APAM.AS",
+      "name": "Aperam S.A.",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 35.58,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "accumulate"
+    },
+    {
+      "ticker": "WIE.VI",
+      "name": "Wienerberger AG",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 16.0,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
     }
   ],
   "fund": {
@@ -920,7 +1072,7 @@
       "id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
       "created_at": "2026-09-09T07:22:40.558605+00:00"
     },
-    "cash": 0.0,
+    "cash": -0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -959,7 +1111,7 @@
       },
       "PHIA.AS": {
         "ticker": "PHIA.AS",
-        "shares": 1.333299,
+        "shares": 0.870037,
         "avg_cost": 21.78,
         "name": "Koninklijke Philips N.V.",
         "sector": "Healthcare",
@@ -1089,17 +1241,6 @@
         "take_profit": null,
         "opened_at": "2026-09-13T08:49:29.998772+02:00"
       },
-      "WKL.AS": {
-        "ticker": "WKL.AS",
-        "shares": 0.30181,
-        "avg_cost": 66.24,
-        "name": "Wolters Kluwer N.V.",
-        "sector": "Industrials",
-        "currency": "EUR",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-09-13T08:49:29.998772+02:00"
-      },
       "C5H.IR": {
         "ticker": "C5H.IR",
         "shares": 10.291512,
@@ -1124,7 +1265,7 @@
       },
       "NOVN.SW": {
         "ticker": "NOVN.SW",
-        "shares": 0.250307,
+        "shares": 0.163677,
         "avg_cost": 112.04,
         "name": "Novartis AG",
         "sector": "Healthcare",
@@ -1341,6 +1482,39 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-10-25T08:06:17.037998+01:00"
+      },
+      "EVN.VI": {
+        "ticker": "EVN.VI",
+        "shares": 0.709573,
+        "avg_cost": 29.5,
+        "name": "EVN AG",
+        "sector": "Utilities",
+        "currency": "EUR",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-10-27T09:46:38.509344+01:00"
+      },
+      "APAM.AS": {
+        "ticker": "APAM.AS",
+        "shares": 0.469282,
+        "avg_cost": 35.58,
+        "name": "Aperam S.A.",
+        "sector": "Basic Materials",
+        "currency": "EUR",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-10-27T09:46:38.509344+01:00"
+      },
+      "WIE.VI": {
+        "ticker": "WIE.VI",
+        "shares": 0.690483,
+        "avg_cost": 16.0,
+        "name": "Wienerberger AG",
+        "sector": "Basic Materials",
+        "currency": "EUR",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-10-27T09:46:38.509344+01:00"
       }
     },
     "trades": [
@@ -3139,6 +3313,100 @@
         "net_cash": -10.94,
         "note": "Automated buy",
         "name": "AB SKF (publ)"
+      },
+      {
+        "id": "45e93b6b-1e16-4309-b3e1-eb1ff9bc12a3",
+        "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+        "acted_at": "2026-10-27T09:46:38.509344+01:00",
+        "ticker": "WKL.AS",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.30181,
+        "price": 88.18,
+        "gross": 26.61,
+        "cost": 0.05,
+        "net_cash": 26.56,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Wolters Kluwer N.V.",
+        "avg_cost_at_exit": 66.24,
+        "position_closed": true
+      },
+      {
+        "id": "7429e100-f8df-4997-a76e-b22dc659534c",
+        "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+        "acted_at": "2026-10-27T09:46:38.509344+01:00",
+        "ticker": "PHIA.AS",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.463262,
+        "price": 24.08,
+        "gross": 11.16,
+        "cost": 0.02,
+        "net_cash": 11.13,
+        "note": "Automated trim",
+        "name": "Koninklijke Philips N.V.",
+        "avg_cost_at_exit": 21.78
+      },
+      {
+        "id": "0e013f77-3986-43cd-8a63-1c998d6b3b7f",
+        "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+        "acted_at": "2026-10-27T09:46:38.509344+01:00",
+        "ticker": "EVN.VI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.709573,
+        "price": 29.5,
+        "gross": 20.93,
+        "cost": 0.04,
+        "net_cash": -20.97,
+        "note": "Automated buy",
+        "name": "EVN AG"
+      },
+      {
+        "id": "f31d1e97-cd66-46d7-a4d8-027c0fd3c960",
+        "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+        "acted_at": "2026-10-27T09:46:38.509344+01:00",
+        "ticker": "APAM.AS",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.469282,
+        "price": 35.58,
+        "gross": 16.7,
+        "cost": 0.03,
+        "net_cash": -16.73,
+        "note": "Automated buy",
+        "name": "Aperam S.A."
+      },
+      {
+        "id": "a2eaaa81-1639-4022-9d17-f449921f42f8",
+        "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+        "acted_at": "2026-10-27T09:46:38.509344+01:00",
+        "ticker": "NOVN.SW",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.08663,
+        "price": 128.0,
+        "gross": 11.09,
+        "cost": 0.02,
+        "net_cash": 11.07,
+        "note": "Automated trim",
+        "name": "Novartis AG",
+        "avg_cost_at_exit": 112.04
+      },
+      {
+        "id": "55980488-777a-4f8a-827f-8de529aeef2e",
+        "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
+        "acted_at": "2026-10-27T09:46:38.509344+01:00",
+        "ticker": "WIE.VI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.690483,
+        "price": 16.0,
+        "gross": 11.05,
+        "cost": 0.02,
+        "net_cash": -11.07,
+        "note": "Automated buy",
+        "name": "Wienerberger AG"
       }
     ],
     "equity_curve": [
@@ -5027,26 +5295,45 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-27T09:46:38.509344+01:00",
+        "portfolio_value": 714.65,
+        "cash": -0.0,
+        "contributed_capital": 1000.0,
+        "positions": 40,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "CHF": 0.9058,
+            "EUR": 0.83744,
+            "SEK": 0.07511
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-26T09:46:44.363636+01:00",
+    "last_mark_at": "2026-10-27T09:46:38.509344+01:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "WKL.AS": 1
-      },
-      "reentry_cooldown": {}
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (6 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "euro_depth",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-26T08:46:45.999183+00:00",
+    "generated_at": "2026-10-27T08:46:39.536899+00:00",
     "observe_only": true,
-    "open_count": 26,
+    "open_count": 27,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -5081,7 +5368,7 @@
       }
     },
     "first_episode": {
-      "open_count": 23,
+      "open_count": 24,
       "closed_count": 0,
       "by_exit_kind": {
         "grace": {
@@ -5117,13 +5404,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-26T08:46:46.002096+00:00",
+    "generated_at": "2026-10-27T08:46:39.538907+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -5177,9 +5464,9 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 24,
+      "hold_closed_count": 25,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 51,
+      "hold_with_data_quality_count": 52,
       "gaps": [
         "swap_rotation closed rotations=0 (target >=10)"
       ],
@@ -5194,19 +5481,19 @@
         }
       },
       "closed": {
-        "count": 24,
-        "recovered_to_breakeven": 22,
+        "count": 25,
+        "recovered_to_breakeven": 23,
         "close_reasons": {
-          "sold_while_recovered": 22,
+          "sold_while_recovered": 23,
           "sold_while_underwater": 2
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 18,
+        "count": 19,
         "verdicts": {
-          "open": 18
+          "open": 19
         }
       },
       "closed": {
@@ -5215,12 +5502,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 0
+      "hold_episodes": 1,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 2
     }
   },
   "hypothesis_integrity": {
@@ -5228,8 +5515,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-26T08:46:46.007249+00:00",
-    "as_of": "2026-10-26T09:46:44.363636+01:00",
+    "updated_at": "2026-10-27T08:46:39.542271+00:00",
+    "as_of": "2026-10-27T09:46:38.509344+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -5241,18 +5528,18 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 38,
+    "holding_count": 40,
     "underwater_count": 8,
     "thesis_status_counts": {
-      "intact": 36,
-      "weakening": 2,
+      "intact": 37,
+      "weakening": 3,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 38,
+      "holding_count": 40,
       "loser_count": 8,
-      "loser_share": 0.2105,
+      "loser_share": 0.2,
       "loser_nav_share": 0.1977,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
@@ -5269,9 +5556,9 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.1667,
-        "dividend": 0.0667,
-        "garp": 0.5,
+        "quality": 0.2188,
+        "dividend": 0.0625,
+        "garp": 0.4688,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -6054,6 +6341,128 @@
         "broken_reasons": []
       },
       {
+        "ticker": "EVN.VI",
+        "name": "EVN AG",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 29.5,
+        "avg_cost": 29.5,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6789,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "quality"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 68%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 68%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "APAM.AS",
+        "name": "Aperam S.A.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 35.58,
+        "avg_cost": 35.58,
+        "signal": "strong_buy",
+        "timing_signal": "accumulate",
+        "conviction_score": 0.6524,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "quality"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 65%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 65%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "WIE.VI",
+        "name": "Wienerberger AG",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 16.0,
+        "avg_cost": 16.0,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.476,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "caution",
+        "reasons": [
+          "research verdict caution",
+          "still buy",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 48%"
+        ],
+        "weaken_reasons": [
+          "research verdict caution"
+        ],
+        "broken_reasons": []
+      },
+      {
         "ticker": "SAN.PA",
         "name": "Sanofi",
         "thesis_status": "intact",
@@ -6783,47 +7192,6 @@
         ],
         "weaken_reasons": [],
         "broken_reasons": []
-      },
-      {
-        "ticker": "WKL.AS",
-        "name": "Wolters Kluwer N.V.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.3312,
-        "mark": 88.18,
-        "avg_cost": 66.24,
-        "signal": "buy",
-        "timing_signal": "wait",
-        "conviction_score": 0.5175,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 52%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 52%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
       }
     ],
     "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
@@ -6833,13 +7201,13 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-26T08:46:46.013789+00:00",
+    "generated_at": "2026-10-27T08:46:39.546392+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 24,
+      "closed_total": 25,
       "closed_unknown_thesis": 0,
       "open_with_thesis": 29,
       "by_thesis_status": {
@@ -6847,13 +7215,13 @@
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 15,
-          "recovery_rate": 0.9333,
-          "sold_underwater_rate": 0.0667,
-          "mean_peak_unrealized_pct": 0.0455,
-          "mean_trough_unrealized_pct": -0.0344,
+          "closed_count": 16,
+          "recovery_rate": 0.9375,
+          "sold_underwater_rate": 0.0625,
+          "mean_peak_unrealized_pct": 0.0633,
+          "mean_trough_unrealized_pct": -0.0161,
           "outcome_labels": {
-            "recovered": 14,
+            "recovered": 15,
             "sold_underwater": 1
           }
         },
@@ -6894,7 +7262,7 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 24,
+      "hold_closed_with_thesis": 25,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
         "swap sell legs with thesis=0 (target >=5)"
@@ -6908,8 +7276,8 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-26T08:46:46.031946+00:00",
-    "open_count": 10,
+    "generated_at": "2026-10-27T08:46:39.557158+00:00",
+    "open_count": 13,
     "closed_count": 34,
     "scored_count": 28,
     "scored_count_all": 34,
@@ -6970,14 +7338,14 @@
       "recommit_scored": 6
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 3,
     "marked_this_pass": 10,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-26T09:46:44.363636+01:00",
+    "generated_at": "2026-10-27T09:46:38.509344+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -7001,12 +7369,12 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 58,
+    "open_count": 63,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 38,
-      "off_book": 13,
-      "never_funded": 7
+      "on_book": 40,
+      "off_book": 14,
+      "never_funded": 9
     },
     "closed_by_capital_status": {
       "on_book": 0,
@@ -7025,16 +7393,16 @@
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 0,
+      "opened": 5,
       "closed": 0,
-      "tagged_on_book": 0,
-      "tagged_off_book": 0
+      "tagged_on_book": 3,
+      "tagged_off_book": 1
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-26T09:46:44.363636+01:00",
+    "generated_at": "2026-10-27T09:46:38.509344+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -7042,25 +7410,320 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 3,
-    "card_count": 3,
+    "proposal_count": 16,
+    "card_count": 16,
     "verdict_counts": {
-      "agree": 3,
-      "veto": 0,
-      "abstain": 0
+      "agree": 14,
+      "veto": 1,
+      "abstain": 1
     },
     "by_algo_action": {
       "rebuy_skip": {
-        "agree": 3,
+        "agree": 12,
         "veto": 0,
         "abstain": 0
+      },
+      "sell": {
+        "agree": 0,
+        "veto": 1,
+        "abstain": 0
+      },
+      "buy": {
+        "agree": 2,
+        "veto": 0,
+        "abstain": 1
       }
     },
     "disagree_vs_heuristic_count": 0,
     "cards": [
       {
-        "ticker": "HEIA.AS",
-        "name": "Heineken N.V.",
+        "ticker": "APAM.AS",
+        "name": "Aperam S.A.",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 16
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 16
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.6524000000000001
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:APAM.AS:rebuy_skip:2026-10-27T09:46:38.509344+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "ACKB.BR",
+        "name": "Ackermans & Van Haaren NV",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 21
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 21
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.614
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:ACKB.BR:rebuy_skip:2026-10-27T09:46:38.509344+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "SKF-B.ST",
+        "name": "AB SKF (publ)",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 28
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 28
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.5591
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:SKF-B.ST:rebuy_skip:2026-10-27T09:46:38.509344+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "ABI.BR",
+        "name": "Anheuser-Busch InBev SA/NV",
         "algo_action": "rebuy_skip",
         "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
@@ -7090,6 +7753,285 @@
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
             "value": 34
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.502
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:ABI.BR:rebuy_skip:2026-10-27T09:46:38.509344+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "PRX.AS",
+        "name": "Prosus N.V.",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 35
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 35
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.4955
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": false
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:PRX.AS:rebuy_skip:2026-10-27T09:46:38.509344+01:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": null,
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": false,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "WIE.VI",
+        "name": "Wienerberger AG",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 37
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 37
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.47600000000000003
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:WIE.VI:rebuy_skip:2026-10-27T09:46:38.509344+01:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "HEIA.AS",
+        "name": "Heineken N.V.",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 39
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 39
           },
           {
             "kind": "rank_drop",
@@ -7133,8 +8075,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-26T09:46:44.363636+01:00",
-        "proposal_id": "buy_tier_level:HEIA.AS:rebuy_skip:2026-10-26T09:46:44.363636+01:00",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:HEIA.AS:rebuy_skip:2026-10-27T09:46:38.509344+01:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -7178,13 +8120,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 35
+            "value": 40
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 35
+            "value": 40
           },
           {
             "kind": "rank_drop",
@@ -7222,8 +8164,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-26T09:46:44.363636+01:00",
-        "proposal_id": "buy_tier_level:MT.AS:rebuy_skip:2026-10-26T09:46:44.363636+01:00",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:MT.AS:rebuy_skip:2026-10-27T09:46:38.509344+01:00",
         "meta": {
           "still_buyish": false,
           "rank_drop": 0,
@@ -7236,6 +8178,101 @@
             "key_filing_bodies": null,
             "filings_with_body": null,
             "overlay_bound": false,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "BAS.DE",
+        "name": "BASF SE",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 44
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 44
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.40562
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:BAS.DE:rebuy_skip:2026-10-27T09:46:38.509344+01:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
             "interim_eps_decline_pct": null,
             "adjusted_eps_growth_pct": null
           }
@@ -7267,13 +8304,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 39
+            "value": 45
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 39
+            "value": 45
           },
           {
             "kind": "rank_drop",
@@ -7317,13 +8354,583 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-26T09:46:44.363636+01:00",
-        "proposal_id": "buy_tier_level:HM-B.ST:rebuy_skip:2026-10-26T09:46:44.363636+01:00",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:HM-B.ST:rebuy_skip:2026-10-27T09:46:38.509344+01:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
           "rank_drop_exit_min": 3,
           "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "UCB.BR",
+        "name": "UCB SA",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 48
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 48
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.3427
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:UCB.BR:rebuy_skip:2026-10-27T09:46:38.509344+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "DQ7A.IR",
+        "name": "Donegal Investment Group plc",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 49
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 49
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.208335
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:DQ7A.IR:rebuy_skip:2026-10-27T09:46:38.509344+01:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "WKL.AS",
+        "name": "Wolters Kluwer N.V.",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "veto",
+        "reasons": [
+          "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 32
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 32
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.5175000000000001
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:WKL.AS:sell:2026-10-27T09:46:38.509344+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "EVN.VI",
+        "name": "EVN AG",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Buy into buyish target set \u2014 agree with algo selection."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 13
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 13
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.6789000000000001
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:EVN.VI:buy:2026-10-27T09:46:38.509344+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "APAM.AS",
+        "name": "Aperam S.A.",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Buy into buyish target set \u2014 agree with algo selection."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 16
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 16
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.6524000000000001
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:APAM.AS:buy:2026-10-27T09:46:38.509344+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "WIE.VI",
+        "name": "Wienerberger AG",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "abstain",
+        "reasons": [
+          "Buy while not buyish \u2014 abstain."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 37
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 37
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.47600000000000003
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-27T09:46:38.509344+01:00",
+        "proposal_id": "buy_tier_level:WIE.VI:buy:2026-10-27T09:46:38.509344+01:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
           "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
           "judge_spec_id": "heuristic.v1",
           "p1_live_inputs": {
@@ -7342,28 +8949,40 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-26T09:46:44.363636+01:00",
+      "generated_at": "2026-10-27T09:46:38.509344+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 3,
+      "card_count": 16,
       "verdict_counts": {
-        "agree": 3,
-        "veto": 0,
-        "abstain": 0
+        "agree": 14,
+        "veto": 1,
+        "abstain": 1
       },
       "by_algo_action": {
         "rebuy_skip": {
-          "agree": 3,
+          "agree": 12,
           "veto": 0,
           "abstain": 0
+        },
+        "sell": {
+          "agree": 0,
+          "veto": 1,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 2,
+          "veto": 0,
+          "abstain": 1
         }
       },
-      "veto_sell_count": 0,
-      "veto_sell_tickers": [],
+      "veto_sell_count": 1,
+      "veto_sell_tickers": [
+        "WKL.AS"
+      ],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -7377,7 +8996,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-26T08:46:46.070244+00:00",
+  "generated_at": "2026-10-27T08:46:39.581883+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

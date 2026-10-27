@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-26T08:47:02.677342+00:00
+Track: `buy_tier_level` · updated 2026-10-27T08:46:50.813167+00:00
 
 ## Portfolio loser feedback
 
@@ -8,9 +8,12 @@ Track: `buy_tier_level` · updated 2026-10-26T08:47:02.677342+00:00
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 - Selection feedback:
-  - garp fails more often among losers (100% vs 42%)
+  - garp fails more often among losers (100% vs 50%)
 
 ## Holding reviews
+
+### NOKIA.HE — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### DTE.DE — intact / hold_tolerate (-5.5%)
 - price drawdown alone does not invalidate value thesis
@@ -45,13 +48,6 @@ Track: `buy_tier_level` · updated 2026-10-26T08:47:02.677342+00:00
 - conviction 35% below intact floor
 - still buy
 - cheapness family still passes
-
-### NOKIA.HE — weakening / watch_review (+0.0%)
-- research verdict caution
-- cheapness family no longer passes
-- conviction 15% below intact floor
-- still buy
-- data_quality 1.00
 
 ### SGO.PA — intact / hold_tolerate (+0.9%)
 - still strong_buy

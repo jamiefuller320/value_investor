@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-10-26T08:47:02.677342+00:00",
-  "as_of": "2026-10-26T09:47:02.396619+01:00",
+  "updated_at": "2026-10-27T08:46:50.813167+00:00",
+  "as_of": "2026-10-27T09:46:50.656782+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -20,8 +20,8 @@
   "underwater_count": 1,
   "thesis_status_counts": {
     "intact": 11,
-    "weakening": 2,
-    "broken": 0,
+    "weakening": 1,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
@@ -46,16 +46,48 @@
       "cheapness": 0.0833,
       "quality": 0.0833,
       "dividend": 0.1667,
-      "garp": 0.4167,
-      "risk": 0.0
+      "garp": 0.5,
+      "risk": 0.0833
     },
     "selection_feedback_flags": [
-      "garp fails more often among losers (100% vs 42%)"
+      "garp fails more often among losers (100% vs 50%)"
     ],
     "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
+    {
+      "ticker": "NOKIA.HE",
+      "name": "NOKIA.HE",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 7.37,
+      "avg_cost": 7.37,
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "cheapness lost and not in buy tier"
+      ],
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
+    },
     {
       "ticker": "DTE.DE",
       "name": "Deutsche Telekom AG",
@@ -258,48 +290,6 @@
       "broken_reasons": []
     },
     {
-      "ticker": "NOKIA.HE",
-      "name": "Nokia Oyj",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 7.37,
-      "avg_cost": 7.37,
-      "signal": "buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.1505,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "cheapness",
-        "quality",
-        "dividend"
-      ],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "cheapness family no longer passes",
-        "conviction 15% below intact floor",
-        "still buy",
-        "data_quality 1.00"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "research verdict caution",
-        "cheapness family no longer passes",
-        "conviction 15% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
       "ticker": "SGO.PA",
       "name": "Compagnie de Saint-Gobain S.A.",
       "thesis_status": "intact",
@@ -310,7 +300,7 @@
       "mark": 66.92,
       "avg_cost": 66.3566,
       "signal": "strong_buy",
-      "timing_signal": "neutral",
+      "timing_signal": "accumulate",
       "conviction_score": 0.7056,
       "data_quality_score": 1.0,
       "passed_families": [
