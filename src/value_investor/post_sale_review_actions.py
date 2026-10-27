@@ -20,6 +20,7 @@ from value_investor.post_sale_review_labels import (
     record_accept,
     record_comment,
     record_duplicate,
+    stamp_episode_key,
 )
 from value_investor.storage import read_json
 
@@ -104,11 +105,9 @@ def _resolve_snapshot(
     Searches published ``active`` first, then prior event snapshots for the same
     ``review_id`` (batch race: card already cleared from the queue JSON).
     """
-    snap = dict(snapshot) if isinstance(snapshot, dict) else {}
-    if _identity_ok(snap):
-        # Still backfill episode_key when the UI slimmed the payload.
-        if str(snap.get("episode_key") or "").strip():
-            return snap
+    snap = stamp_episode_key(snapshot)
+    if _identity_ok(snap) and str(snap.get("episode_key") or "").strip():
+        return snap
     rid = str(review_id or "").strip()
     queue = _safe_queue(data_dir)
     if queue and rid:
@@ -117,7 +116,7 @@ def _resolve_snapshot(
                 continue
             if str(row.get("review_id") or "").strip() != rid:
                 continue
-            filled = _fill_from_row(snap, row)
+            filled = stamp_episode_key(_fill_from_row(snap, row))
             if _identity_ok(filled):
                 return filled
     # Labels history: prior Accept/Comment on this id (or sibling events).
@@ -131,7 +130,7 @@ def _resolve_snapshot(
             prior = row.get("snapshot") if isinstance(row.get("snapshot"), dict) else {}
             if not prior:
                 continue
-            filled = _fill_from_row(snap, prior)
+            filled = stamp_episode_key(_fill_from_row(snap, prior))
             if _identity_ok(filled):
                 return filled
         for row in labels.get("active_replies") or []:
@@ -142,10 +141,10 @@ def _resolve_snapshot(
                 and str(row.get("parent_review_id") or "").strip() != rid
             ):
                 continue
-            filled = _fill_from_row(snap, row)
+            filled = stamp_episode_key(_fill_from_row(snap, row))
             if _identity_ok(filled):
                 return filled
-    return snap
+    return stamp_episode_key(snap)
 
 
 def run_post_sale_review_action(

@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-26T17:58:24+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-27T22:22:52+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -539,6 +539,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L584 | **Parallel orthogonal strategy hypotheses with shared timing experiments** | Refinement of the two-element model: run a small set of structurally distinct strategy hypotheses in parallel (not one sleeve only), each as its own observation strand on the shared data engine. Prefer orthogonal theses over near-copy screen variants. Entry/exit and cost experiments can be shared factorially across sleeves for collective learning while each hypothesis keeps its own identity freeze and sealed markers. Cap the set; refuse isomorphic duplicates. | First alternate strand (B or C) has a sealed registration_id; then share timing experiments factorially across strands while each keeps its identity freeze. |
 | L606 | **Tiny offline filing-beachhead follow-on archive pilot (no news product)** | After owner forks + L605 gates, optional tiny offline pilot filing_beachhead_followon_archive_v0: one pre-registered theme lexicon; mark filing-visible beachheads with void lookback; score follow-on disclosure rate + long-horizon fair-cost vs same-sector / theme-sector controls; kill pilots/boilerplate; influences_live=false. News/RNS only optional later timing twin. No sealed registration_id, no launch-queue deepen, no live sleeve, no news crawl. | N209 is status now or owner green-lights filings-beachhead archive pilot; forks 1A/5A/6A/7A chosen; challenge beachhead falsifiers accepted; AI path roadmap Phase 5 only after Phase 1 shadow judge path is live or explicitly deferred (docs/ai-path-roadmap.md); still no seal fighting O2 D and no news product; cadence via Sunday deferred triggers + roadmap scoreboard |
 | L636 | **Post-sale autopsy chart volume pane** | Add Yahoo volume (bars or volume_ratio_20 spike markers) under dual-horizon post-sale charts as a human support/sentiment read. Data already fetched as OHLCV but chart JSON persists Close only. Observe-only — never a live fill/knob input. | After CHART_LOOKBACK 1y→2y ships and owner Comments cite volume/support/sentiment at least twice on Package M cards |
+| L645 | **Post-sale further Comment rounds on factory reply cards** | Active queue is uncommented exits only (VI-55). Optional later: a separate history/thread UI to Accept or continue dialogue on factory replies without re-queuing them into the attention list. | Owner asks to resume multi-turn autopsy dialogue after uncommented-only queue has been stable in daily use |
 
 ### Ops / reliability
 

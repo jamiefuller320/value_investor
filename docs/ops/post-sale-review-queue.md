@@ -9,12 +9,11 @@ Observe-only — `influences_live=false`. Not Package **L** auto-tune.
 1. Check that reviews of **relevant charts** are happening (episode + wider TF),
    annotated with factory **opinion** + **learning points** on first open.
 2. **Comment** on patterns that might have been missed — do **not** force knobs.
-3. Comments are **considered and responded to** (durable note → factory reply —
-   LLM when enabled, else contextual deterministic) — not silent ignore, not
-   auto-apply. Mini dialogue: initial opinion → Comment → reply → (further
-   Comment rounds on reply cards).
-4. **Accept** = framing / reply matches what I see. Accept/Comment also apply to
-   **reply** tags.
+3. Comments are **considered and responded to** (durable note → factory reply in
+   history — LLM when enabled, else contextual deterministic) — not silent
+   ignore, not auto-apply. Active queue stays **uncommented exits only**.
+4. **Accept** = framing matches what I see. Accept / Comment / Duplicate all
+   clear the card from active; dialogue lives under durable history.
 
 ## Stores
 
@@ -32,9 +31,10 @@ Actioned items **clear from the active queue** but remain in labels history.
 | Sealed N200/N201/N206/N210 (+ later sealed) | Fair-cost / lifecycle episode | Candidates: `just_sold` + `post_sale` ≤ 84d |
 | FTSE control `buy_tier_level` | Board sold cards | Same queue with **FTSE control** tag; epoch-join fail-closed OK |
 
-**Active attention filter (Package M):** `just_sold` + `reply` always; `post_sale`
-only when ≤21d since exit **or** return ≤ −5%. Coverage counts still include the
-full candidate set so sealed/control population stays visible in ops findings.
+**Active attention filter (Package M):** uncommented exits only — `just_sold`
+always; `post_sale` when ≤21d since exit **or** return ≤ −5%. Factory `reply`
+events stay in labels history (never re-queued). Coverage counts still include
+the full candidate set so sealed/control population stays visible in ops findings.
 
 ## Sort + duplicates
 
@@ -42,20 +42,20 @@ Dashboard Lifecycle → Post-sale reviews has **touch-friendly sort chips**
 (**Interesting** · Date · Stock · Loss size · Book · Tag). **Default =
 Interesting:** identity/quality breaks and other non-mechanical sells rise
 above hard-rule mechanical exits (`hold_trading_days` / max-days,
-`leave_buy_tier`, control `left_target_set`); reply tags still ahead within
-band; newest exit within band. Date = sell/exit newest first; Stock = name
-A→Z (ticker when name missing). Accept/Comment/Duplicate unchanged.
+`leave_buy_tier`, control `left_target_set`); newest exit within band. Date =
+sell/exit newest first; Stock = name A→Z (ticker when name missing).
+Accept/Comment/Duplicate unchanged (clear from active).
 
 | Looks like a duplicate? | What it is |
 |---|---|
 | Same ticker on N201 **and** N206 (etc.) | **Intentional** — one card per sealed book (+ FTSE control). `book_tag` badge is the model tag; `review_id` differs (`book_id` in fingerprint). |
 | Same ticker twice in **one** book, same entry/exit **day** | **Collapsed** via `episode_key` (`book\|TICKER\|entry_day\|exit_day`) — keeps the worse `return_pct`. Fixes board chips with second-level entry jitter. |
 | Same `review_id` twice | Already deduped; should not appear. |
-| `reply` + original both active | Should not — Comment actions the original and spawns a `reply:*` card. |
+| Commented episode still in active | Should not — Comment clears it; factory reply is history-only. |
 
 ## Buy / sell decision reasons
 
-Every active card (initial + reply) carries structured **bought because** /
+Every active card carries structured **bought because** /
 **sold because** blocks (`buy_decision` / `sell_decision`):
 
 | Field | Meaning |
@@ -92,22 +92,18 @@ the right edge or fight whole-page pan. Charts keep their readable
 | Control | Meaning | Effect |
 |---|---|---|
 | **Accept** | Framing matches | Label + leave active queue |
-| **Comment** | Missed pattern | Label + leave queue + **spawn reply stub** (when identity snapshot usable) |
-| **Duplicate** | Same pattern already commented (cross-book / repeat) | Label + leave active queue (**no** reply card) |
-| **reply** tag | Factory response | Re-enters queue for owner Accept/Comment/Duplicate |
+| **Comment** | Missed pattern | Label + factory reply in **history** + leave active queue |
+| **Duplicate** | Same pattern already commented (cross-book / repeat) | Label + leave active queue |
 
-**Blank ``?`` cards:** Comment payloads that omit ticker/book (nested-only
-`snapshot` without flat keys) used to spawn `[?] ? · ?` reply rows that sorted
-to the top. Queue rebuild now **fail-closes** those out of `active`, prunes
-unusable `active_replies`, and the bridge flattens **slim** identity onto the
-command payload (no heavy chart/dialogue blobs — keeps batched
-`repository_dispatch` under GitHub’s client_payload size limit). Soft reload
-**and full page refresh** keep Accept/Comment/Duplicate cleared via a
-session + `localStorage` overlay until labels/queue sidecars catch up.
-Comment also injects an optimistic reply stub so owner text stays visible
-while git lags. Cleared **`episode_key`** (calendar day) also stays out of
-active when board chips rewrite entry/exit seconds (new `review_id`, same
-episode). Reply cards show a **Your comment** preview without expanding.
+**Uncommented-only active queue:** Accept / Comment / Duplicate must not
+bounce back after refresh. Factory replies are written to labels `events`
+(and shown under durable history) — they do **not** re-enter `active`.
+Blank ``?`` identity cards are fail-closed out of `active`; legacy
+`active_replies` are cleared on refresh. Bridge flattens **slim** identity
+(+ `episode_key`) onto the command payload. Soft reload and full page
+refresh keep clears via session + `localStorage` until labels/queue catch
+up. Cleared **`episode_key`** (calendar day) also stays out when board chips
+rewrite entry/exit seconds (new `review_id`, same episode).
 
 **Initial opinion** on every card is structured deterministic v0 (`opinion_source=
 deterministic_v0`) with learning points + per-chart captions, plus **L633**

@@ -4,7 +4,7 @@ Package **M** attention / alignment (not Package L auto-tune).
 Observe-only: ``influences_live=false``. Never changes fills or knobs.
 
 L622: sortable queue + dual-horizon cards + deterministic framing.
-L623: Accept/Comment clear active queue; Comment spawns factory reply stub.
+L623: Accept/Comment/Duplicate clear active (uncommented) queue; factory reply in history.
 """
 
 from __future__ import annotations
@@ -36,7 +36,7 @@ from value_investor.post_sale_review_labels import (
     load_post_sale_review_labels,
     prune_active_replies,
 )
-from value_investor.post_sale_review_opinion import attach_opinion_fields, seed_dialogue
+from value_investor.post_sale_review_opinion import attach_opinion_fields
 from value_investor.sealed_lifecycle import SEALED_MODELS
 from value_investor.storage import read_json, write_json
 
@@ -60,7 +60,7 @@ WIDER_AFTER_DAYS = 90
 # Cap sealed post_sale tenure on the candidate set (match board POST_SALE_DAYS).
 SEALED_POST_SALE_MAX_DAYS = POST_SALE_DAYS
 # Attention filter for active queue (Package M — not dump-all theater).
-# just_sold + reply always; post_sale only when fresh or material loss.
+# Uncommented exits only: just_sold always; post_sale when fresh or material loss.
 POST_SALE_ATTENTION_MAX_DAYS = 21
 POST_SALE_ATTENTION_LOSS_PCT = -5.0
 
@@ -674,14 +674,12 @@ def build_post_sale_review_queue(
         _sealed_items(sealed_payload, sealed_indexes=sealed_indexes)
         + _control_items(board_payload, control_trades=control_trades)
     )
-    candidates_by_id = {
-        str(item.get("review_id") or "").strip(): item
-        for item in candidates
-        if str(item.get("review_id") or "").strip()
-    }
-    # Drop blank ``?`` reply leftovers so rebuild cannot re-surface them.
+    # Drop legacy reply leftovers so rebuild cannot re-surface commented cards.
     prune_active_replies(labels_store)
+    labels_store["active_replies"] = []
     cleared_episodes = actioned_episode_keys(labels_store)
+    # Active queue = uncommented / unactioned exits only. Factory replies from
+    # Comment live in labels ``events`` (durable history), not here.
     active_exits = [
         item
         for item in candidates
@@ -690,61 +688,7 @@ def build_post_sale_review_queue(
         and _in_attention_queue(item)
         and _queue_card_usable(item)
     ]
-    reply_cards: list[dict[str, Any]] = []
-    seen_reply_ids: set[str] = set()
-    for row in labels_store.get("active_replies") or []:
-        if not isinstance(row, dict):
-            continue
-        rid = str(row.get("review_id") or "").strip()
-        if not rid or is_actioned(labels_store, rid) or rid in seen_reply_ids:
-            continue
-        enriched = _enrich_reply_from_parent(row, candidates_by_id=candidates_by_id)
-        if enriched is None:
-            continue
-        card = enriched
-        card["tag"] = "reply"
-        card["influences_live"] = False
-        card["observe_only"] = True
-        if not card.get("buy_decision") or not card.get("sell_decision"):
-            bind_decision_reasons(
-                card,
-                sealed_indexes=sealed_indexes,
-                control_trades=control_trades,
-            )
-        if not card.get("framing") or "Bought because:" not in str(card.get("framing") or ""):
-            card["framing"] = _framing_line(card)
-        # Ensure opinion / dialogue present on reply cards for chart annotation.
-        # Never replace a multi-turn comment/reply thread with a fresh seed
-        # (attach_opinion_fields always rewrites dialogue).
-        prior_dialogue = card.get("dialogue") if isinstance(card.get("dialogue"), list) else []
-        has_comment_thread = any(
-            isinstance(turn, dict)
-            and str(turn.get("kind") or turn.get("role") or "").lower()
-            in {"comment", "reply", "owner"}
-            for turn in prior_dialogue
-        )
-        needs_opinion = not card.get("llm_opinion") or not card.get("learning_points")
-        if needs_opinion and not has_comment_thread:
-            attach_opinion_fields(card)
-        elif needs_opinion and has_comment_thread:
-            # Fill opinion fields but keep the owner/factory thread intact.
-            saved = list(prior_dialogue)
-            owner_comment = card.get("owner_comment")
-            reply_text = card.get("reply_text")
-            attach_opinion_fields(card)
-            card["dialogue"] = saved
-            if owner_comment:
-                card["owner_comment"] = owner_comment
-            if reply_text:
-                card["reply_text"] = reply_text
-        elif not prior_dialogue:
-            card["dialogue"] = seed_dialogue(card)
-        if not _queue_card_usable(card):
-            continue
-        seen_reply_ids.add(rid)
-        reply_cards.append(card)
-
-    active = sort_queue_items(reply_cards + active_exits, sort_by=sort_by)
+    active = sort_queue_items(active_exits, sort_by=sort_by)
     sealed_n = sum(1 for row in candidates if row.get("population") == "sealed_lifecycle")
     control_n = sum(
         1 for row in candidates if row.get("population") == "ftse_control_buy_tier_level"
@@ -766,9 +710,9 @@ def build_post_sale_review_queue(
         "product_claim": (
             "Per-exit post-sale review queue across sealed Lifecycle books + "
             "FTSE control — analysis opinion + learning points on charts; "
-            "Accept/Comment/Duplicate (initial opinion → comment → reply; "
-            "Duplicate clears same-pattern cross-book noise); "
-            "never fills or knobs"
+            "Accept/Comment/Duplicate clear the active (uncommented) queue; "
+            "factory reply stays in durable history; Duplicate clears "
+            "same-pattern cross-book noise; never fills or knobs"
         ),
         "learning_question": (
             "Are relevant charts reviewed with the same big-picture issues the "
@@ -779,11 +723,11 @@ def build_post_sale_review_queue(
             "turns": [
                 "initial_opinion",
                 "owner_comment",
-                "factory_reply",
-                "further_rounds_via_comment_on_reply",
+                "factory_reply_in_history",
             ],
             "influences_live": False,
             "package": "M",
+            "active_queue": "uncommented_exits_only",
         },
         "clocks": {
             "just_bought_days": JUST_BOUGHT_DAYS,
@@ -807,15 +751,17 @@ def build_post_sale_review_queue(
             "just_sold_candidates": just_sold_n,
             "attention_filter": {
                 "just_sold": "always",
-                "reply": "always",
+                "reply": "never_in_active_history_only",
                 "post_sale_max_days": POST_SALE_ATTENTION_MAX_DAYS,
                 "post_sale_loss_pct_at_or_below": POST_SALE_ATTENTION_LOSS_PCT,
             },
         },
         "attention_note": (
-            "Active queue = just_sold + reply + post_sale within "
-            f"{POST_SALE_ATTENTION_MAX_DAYS}d or return ≤ {POST_SALE_ATTENTION_LOSS_PCT}% "
-            f"(candidates within {SEALED_POST_SALE_MAX_DAYS}d still counted for coverage)."
+            "Active queue = uncommented exits only (just_sold + post_sale within "
+            f"{POST_SALE_ATTENTION_MAX_DAYS}d or return ≤ {POST_SALE_ATTENTION_LOSS_PCT}%). "
+            "Accept/Comment/Duplicate clear the card; factory replies stay in "
+            "durable history (not re-queued). "
+            f"Candidates within {SEALED_POST_SALE_MAX_DAYS}d still counted for coverage."
         ),
         "duplicate_policy": {
             "review_id": "exact fingerprint (book+ticker+entry+exit timestamps)",
@@ -828,7 +774,7 @@ def build_post_sale_review_queue(
                 "(and FTSE control); book_tag distinguishes them"
             ),
             "reply_plus_original": (
-                "not both active — Comment actions the original and spawns a reply:* card"
+                "Comment clears the original; factory reply is history-only (never both in active)"
             ),
         },
         "sort_options": [
@@ -891,17 +837,15 @@ def ops_findings_from_queue(payload: dict[str, Any] | None) -> list[dict[str, An
         return []
     findings: list[dict[str, Any]] = []
     active = int(payload.get("active_count") or 0)
-    replies = int(payload.get("reply_count") or 0)
     unreplied = int(payload.get("unreplied_comments") or 0)
     candidates = int((payload.get("coverage") or {}).get("candidate_exits") or 0)
     actioned = int(payload.get("actioned_count") or 0)
 
     summary = (
-        f"Active post-sale reviews: {active} "
-        f"(new={payload.get('new_count')}, reply={replies}); "
+        f"Active uncommented post-sale reviews: {active}; "
         f"actioned history={actioned}; "
         f"candidates sealed+control={candidates}. "
-        f"Accept/Comment observe-only (influences_live=false)."
+        f"Accept/Comment/Duplicate observe-only (influences_live=false)."
     )
     findings.append(
         {
@@ -922,19 +866,6 @@ def ops_findings_from_queue(payload: dict[str, Any] | None) -> list[dict[str, An
                     f"{unreplied} owner Comment(s) lack a factory reply. "
                     "Development loop must respond (stub or LLM reply text) — "
                     "never silent ignore; never auto-apply knobs."
-                ),
-                "auto_fixable": False,
-            }
-        )
-    if replies > 0:
-        findings.append(
-            {
-                "severity": "warn",
-                "category": CATEGORY,
-                "title": PENDING_REPLIES_TITLE,
-                "summary": (
-                    f"{replies} reply-tagged item(s) await owner Accept/Comment "
-                    "on the factory response (alignment only)."
                 ),
                 "auto_fixable": False,
             }

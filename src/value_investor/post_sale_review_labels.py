@@ -111,15 +111,60 @@ def is_actioned(store: dict[str, Any] | None, review_id: str) -> bool:
     return rid in _actioned_set(store)
 
 
+def _episode_key_from_snap(snap: dict[str, Any] | None) -> str:
+    """Calendar episode_key from a snapshot (prefers explicit field)."""
+    if not isinstance(snap, dict):
+        return ""
+    ep = str(snap.get("episode_key") or "").strip()
+    if ep:
+        return ep
+    book = str(snap.get("book_id") or "").strip()
+    if not book:
+        # Display tags like N206 → n206 so reconstructed keys match queue items.
+        book = str(snap.get("book_tag") or "").strip().lower()
+    ticker = str(snap.get("ticker") or "").strip().upper()
+    entry_day = str(snap.get("entry_at") or "").strip()[:10]
+    exit_day = str(snap.get("exit_at") or "").strip()[:10]
+    if book and ticker and entry_day and exit_day:
+        return "|".join([book, ticker, entry_day, exit_day])
+    return ""
+
+
+def stamp_episode_key(snap: dict[str, Any] | None) -> dict[str, Any]:
+    """Ensure ``episode_key`` is present when identity fields allow it."""
+    out = dict(snap) if isinstance(snap, dict) else {}
+    if str(out.get("episode_key") or "").strip():
+        return out
+    ep = _episode_key_from_snap(out)
+    if ep:
+        out["episode_key"] = ep
+    return out
+
+
 def actioned_episode_keys(store: dict[str, Any] | None) -> set[str]:
     """Episode keys cleared by Accept/Comment/Duplicate (survives review_id jitter).
 
     ``review_id`` fingerprints full timestamps; board chips sometimes rewrite
     entry/exit seconds so a new fingerprint would re-enter active. Calendar
     ``episode_key`` on the event snapshot keeps the same exit cleared.
+
+    Empty pre-#1189 snapshots are healed from sibling events / reply cards that
+    share the same ``review_id`` (or ``parent_review_id``).
     """
     if not store:
         return set()
+    identity_by_rid: dict[str, str] = {}
+    for row in list(store.get("events") or []) + list(store.get("active_replies") or []):
+        if not isinstance(row, dict):
+            continue
+        snap = row.get("snapshot") if isinstance(row.get("snapshot"), dict) else row
+        ep = _episode_key_from_snap(snap if isinstance(snap, dict) else {})
+        if not ep:
+            continue
+        for key_name in ("review_id", "parent_review_id"):
+            rid = str(row.get(key_name) or "").strip()
+            if rid and rid not in identity_by_rid:
+                identity_by_rid[rid] = ep
     out: set[str] = set()
     for row in store.get("events") or []:
         if not isinstance(row, dict):
@@ -128,16 +173,12 @@ def actioned_episode_keys(store: dict[str, Any] | None) -> set[str]:
         if kind not in CLEARING_ACTION_KINDS:
             continue
         snap = row.get("snapshot") if isinstance(row.get("snapshot"), dict) else {}
-        ep = str(snap.get("episode_key") or "").strip()
+        ep = _episode_key_from_snap(snap)
+        if not ep:
+            rid = str(row.get("review_id") or "").strip()
+            ep = identity_by_rid.get(rid, "")
         if ep:
             out.add(ep)
-            continue
-        book = str(snap.get("book_id") or snap.get("book_tag") or "").strip()
-        ticker = str(snap.get("ticker") or "").strip().upper()
-        entry_day = str(snap.get("entry_at") or "").strip()[:10]
-        exit_day = str(snap.get("exit_at") or "").strip()[:10]
-        if book and ticker and entry_day and exit_day:
-            out.add("|".join([book, ticker, entry_day, exit_day]))
     return out
 
 
@@ -157,14 +198,19 @@ def heal_active_replies_file(
     *,
     filename: str = LABELS_FILENAME,
 ) -> dict[str, Any]:
-    """Persist prune of blank/duplicate ``active_replies`` (events untouched)."""
+    """Drop ``active_replies`` from the labels sleeve (events history untouched).
+
+    Active queue is **uncommented exits only** — factory replies stay in
+    ``events`` (durable history) and must not re-enter the attention list.
+    """
     name = str(filename or LABELS_FILENAME)
     store = load_post_sale_review_labels(data_dir, filename=name)
-    removed = prune_active_replies(store)
-    if removed:
-        path = _write_labels(data_dir, store, filename=name)
-        return {"healed": True, "removed": removed, "path": str(path)}
-    return {"healed": False, "removed": 0, "path": str(Path(data_dir) / name)}
+    before = len([row for row in (store.get("active_replies") or []) if isinstance(row, dict)])
+    if not before:
+        return {"healed": False, "removed": 0, "path": str(Path(data_dir) / name)}
+    store["active_replies"] = []
+    path = _write_labels(data_dir, store, filename=name)
+    return {"healed": True, "removed": before, "path": str(path)}
 
 
 def prune_active_replies(store: dict[str, Any]) -> int:
@@ -248,6 +294,7 @@ def record_accept(
     name = str(filename or LABELS_FILENAME)
     store = load_post_sale_review_labels(data_dir, filename=name)
     event_id = str(uuid.uuid4())
+    snap = stamp_episode_key(snapshot)
     event = {
         "event_id": event_id,
         "review_id": review_id,
@@ -259,7 +306,7 @@ def record_accept(
         "acted_by": acted_by,
         "source": str(source or "").strip(),
         "influences_live": False,
-        "snapshot": dict(snapshot) if isinstance(snapshot, dict) else {},
+        "snapshot": snap,
     }
     events = list(store.get("events") or [])
     events.append(event)
@@ -291,6 +338,7 @@ def record_duplicate(
         "Duplicate pattern — similar episode already commented "
         "(cross-book / repeat). Cleared from active queue."
     )
+    snap = stamp_episode_key(snapshot)
     event = {
         "event_id": event_id,
         "review_id": review_id,
@@ -302,7 +350,7 @@ def record_duplicate(
         "acted_by": acted_by,
         "source": str(source or "").strip(),
         "influences_live": False,
-        "snapshot": dict(snapshot) if isinstance(snapshot, dict) else {},
+        "snapshot": snap,
     }
     events = list(store.get("events") or [])
     events.append(event)
@@ -341,8 +389,8 @@ def record_comment(
     store = load_post_sale_review_labels(data_dir, filename=name)
     event_id = str(uuid.uuid4())
     reply_id = reply_review_id(review_id, event_id)
-    snap = dict(snapshot) if isinstance(snapshot, dict) else {}
-    # Ensure opinion fields exist so reply cards annotate charts.
+    snap = stamp_episode_key(snapshot)
+    # Ensure opinion fields exist so history / charts can annotate later.
     if snap and not snap.get("llm_opinion"):
         attach_opinion_fields(snap)
 
@@ -424,6 +472,7 @@ def record_comment(
         "return_pct": snap.get("return_pct"),
         "basis_label": snap.get("basis_label"),
         "framing": snap.get("framing"),
+        "episode_key": snap.get("episode_key"),
         "charts": snap.get("charts"),
         "close_in": snap.get("close_in"),
         "wider_tf": snap.get("wider_tf"),
@@ -452,15 +501,16 @@ def record_comment(
     events.extend([comment_event, reply_event])
     store["events"] = events
     _mark_actioned(store, review_id)
-    replies = [
+    # Active queue = uncommented exits only. Factory reply stays in events
+    # history; do not re-queue a reply:* card (that looked like the commented
+    # episode bouncing back).
+    store["active_replies"] = [
         row
         for row in (store.get("active_replies") or [])
-        if isinstance(row, dict) and str(row.get("review_id") or "").strip() != reply_id
+        if isinstance(row, dict)
+        and str(row.get("review_id") or "").strip() != reply_id
+        and str(row.get("parent_review_id") or "").strip() != review_id
     ]
-    # Only surface usable reply cards (fail-closed if snapshot lacked identity).
-    if _reply_card_usable(reply_card):
-        replies.append(reply_card)
-    store["active_replies"] = replies
     prune_active_replies(store)
     path = _write_labels(data_dir, store, filename=name)
     return {
@@ -469,6 +519,7 @@ def record_comment(
         "cleared_from_active": True,
         "reply": reply_card,
         "reply_event": reply_event,
+        "reply_queued": False,
     }
 
 
@@ -510,4 +561,5 @@ __all__ = [
     "record_comment",
     "record_duplicate",
     "reply_review_id",
+    "stamp_episode_key",
 ]
