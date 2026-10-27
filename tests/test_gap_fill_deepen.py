@@ -667,3 +667,87 @@ def test_prepare_gap_fill_calls_ir_refetch_for_unmeasured_aed_br(
     mock_ir_refetch.assert_called_once()
     assert pack["ir_refetch"]["merge"]["added"] == 2
     assert pack["ir_refetch"]["allowlist_count"] == 2
+
+
+def test_filings_deepen_still_needed_pghn_sw_two_bodies_pending_allowlist():
+    """eng-20261027-02: PGHN.SW with 2/2 bodies still needs deepen until third allowlist PDF lands."""
+    from value_investor.research.gap_fill_sources import _filings_deepen_still_needed
+
+    needed, reason = _filings_deepen_still_needed(
+        ticker="PGHN.SW",
+        with_body=2,
+        total=2,
+        min_bodies=2,
+    )
+    assert needed is True
+    assert reason == "pending_ir_allowlist_urls"
+
+
+@patch("value_investor.research.gap_fill_sources.execute_planned_alternate_sources")
+@patch("value_investor.research.gap_fill_sources.prepare_gap_fill_source_pack")
+def test_deepen_thin_filings_runs_for_pghn_library_parity(
+    mock_prepare,
+    mock_execute,
+    tmp_path: Path,
+):
+    """eng-20261027-02: library parity (≥3 bodies) must not skip deepen at with_body=2."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"summary": {"with_body": 2, "total": 2}, "sources_used": ["ir_allowlist"]}),
+        encoding="utf-8",
+    )
+    mock_prepare.return_value = {"planned_alternate_sources": [{"id": "company_ir_presentation"}]}
+    mock_execute.return_value = {"sources_tried": ["company_ir_presentation"], "fetched": 1}
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"summary": {"with_body": 3, "total": 3}, "sources_used": ["ir_allowlist"]}),
+        encoding="utf-8",
+    )
+
+    result = deepen_thin_filings_if_needed(
+        ticker="PGHN.SW",
+        company_name="Partners Group Holding AG",
+        sources_dir=tmp_path,
+        market="smi",
+        filings_summary={"with_body": 2, "total": 2},
+    )
+    assert result["skipped"] is False
+    assert result["improved"] is True
+    mock_prepare.assert_called_once()
+
+
+@patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
+def test_prepare_gap_fill_bootstraps_index_from_ir_allowlist_before_refetch(
+    mock_refetch,
+    mock_ir_refetch,
+    mock_news,
+    tmp_path: Path,
+):
+    """eng-20261027-02: gap-fill must merge IR rows before refetch_missing (no 0/0 on empty index)."""
+    from value_investor.research.gap_fill_sources import prepare_gap_fill_source_pack
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    mock_refetch.return_value = {"attempted": 1, "fetched": 0, "with_body_after": 0}
+    mock_ir_refetch.return_value = {
+        "fetched": 1,
+        "with_body_after": 1,
+        "merge": {"added": 3, "total_allowlist": 3},
+    }
+
+    prepare_gap_fill_source_pack(
+        ticker="PGHN.SW",
+        company_name="Partners Group Holding AG",
+        sources_dir=tmp_path,
+        open_questions=["annual report bodies"],
+        market="smi",
+    )
+
+    index_path = filings_dir / "filings_index.json"
+    assert index_path.exists()
+    payload = json.loads(index_path.read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 3
+    mock_refetch.assert_called_once()
+    mock_ir_refetch.assert_called_once()
