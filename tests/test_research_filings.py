@@ -8612,6 +8612,41 @@ def test_fetch_filings_ir_allowlist_pghn_sw_third_pdf_live_eng_20261027_01():
     assert valid, reason
 
 
+@patch("value_investor.research.filings.fetch_filing_body")
+def test_refetch_ir_allowlist_pghn_sw_merges_third_row_eng_20261027_02(mock_fetch, tmp_path: Path):
+    """eng-20261027-02: two bodied IR rows must merge/fetch the FY2025 results deck (library ≥3)."""
+    mock_fetch.return_value = (
+        "Partners Group consolidated net income assets under management "
+        "annual results presentation " * 40
+    )
+    rows = fetch_filings_ir_allowlist("PGHN.SW")
+    assert len(rows) == 3
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    bodied = [{**row, "has_body": True} for row in rows[:2]]
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": bodied,
+                "summary": {"with_body": 2, "total": 2},
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "PGHN.SW",
+        company_name="Partners Group Holding AG",
+        max_bodies=5,
+    )
+    assert int(result.get("merge", {}).get("added") or 0) >= 1
+    assert result["with_body_after"] >= 3
+    assert result["fetched"] >= 1
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 3
+    assert int(payload["summary"]["with_body"]) >= 3
+
+
 def test_sanitize_http_url_preserves_plus_in_query():
     """ESEF entity search uses urlencode spaces as ``+``; must not become literal ``%2B``."""
     from value_investor.research.filings import _sanitize_http_url

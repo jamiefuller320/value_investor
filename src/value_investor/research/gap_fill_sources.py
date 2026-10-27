@@ -502,6 +502,11 @@ def prepare_gap_fill_source_pack(
 
     # Re-attempt PDF / direct RNS bodies before the agent answers.
     filings_dir = sources_dir / "filings"
+    ir_allowlist_rows = fetch_filings_ir_allowlist(ticker)
+    # eng-20261027-02: bootstrap filings_index from IR allowlist before body refetch
+    # (otherwise refetch_missing_filing_bodies returns 0/0 when the index file is absent).
+    if ir_allowlist_rows:
+        merge_ir_allowlist_filings(ticker, filings_dir)
     hkex_ensure: dict[str, Any] = {}
     if _market_bucket(market, ticker) == "asia":
         from value_investor.research.filings import ensure_hkex_direct_filings_ingested
@@ -533,7 +538,6 @@ def prepare_gap_fill_source_pack(
         if int(primary_refetch.get("fetched") or 0) > 0:
             body_refetch = primary_refetch
     ir_refetch: dict[str, Any] = {}
-    ir_allowlist_rows = fetch_filings_ir_allowlist(ticker)
     if ir_allowlist_rows:
         ir_refetch = refetch_ir_allowlist_filing_bodies(
             filings_dir,
@@ -795,6 +799,24 @@ def execute_planned_alternate_sources(
 THIN_FILINGS_BODY_THRESHOLD = 2
 
 
+def _filings_deepen_still_needed(
+    *,
+    ticker: str,
+    with_body: int,
+    total: int,
+    min_bodies: int,
+) -> tuple[bool, str]:
+    """True when memo/gap-fill deepen should run despite a non-zero body count."""
+    allowlist_n = len(fetch_filings_ir_allowlist(ticker))
+    if allowlist_n > total:
+        return True, "pending_ir_allowlist_urls"
+    if total > 0 and with_body < max(3, total // 2):
+        return True, "library_parity_thin_bodies"
+    if with_body < min_bodies:
+        return True, "below_body_threshold"
+    return False, "sufficient_bodies"
+
+
 def deepen_thin_filings_if_needed(
     *,
     ticker: str,
@@ -814,10 +836,17 @@ def deepen_thin_filings_if_needed(
     sources_dir = Path(sources_dir)
     summary = dict(filings_summary or {})
     with_body = int(summary.get("with_body") or 0)
-    if with_body >= min_bodies:
+    total = int(summary.get("total") or 0)
+    needed, reason = _filings_deepen_still_needed(
+        ticker=ticker,
+        with_body=with_body,
+        total=total,
+        min_bodies=min_bodies,
+    )
+    if not needed:
         return {
             "skipped": True,
-            "reason": "sufficient_bodies",
+            "reason": reason,
             "with_body_before": with_body,
             "with_body_after": with_body,
         }
