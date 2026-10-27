@@ -2,7 +2,7 @@
   "ticker": "BAS.DE",
   "company_name": "BASF SE",
   "market": "euro_depth",
-  "built_at": "2026-08-30T13:20:50.877511+00:00",
+  "built_at": "2026-10-27T07:27:55.815418+00:00",
   "inventory": {
     "available": {
       "filings_index": true,
@@ -24,19 +24,19 @@
     "filings_indexed_bodies": 1,
     "filings_summary": {
       "total": 1,
-      "annual": 0,
-      "interim": 1,
+      "annual": 1,
+      "interim": 0,
       "trading_update": 0,
       "other": 0,
       "with_body": 1,
       "period_coverage": {
         "annual": {
-          "total": 0,
-          "with_body": 0
-        },
-        "interim": {
           "total": 1,
           "with_body": 1
+        },
+        "interim": {
+          "total": 0,
+          "with_body": 0
         },
         "trading_update": {
           "total": 0,
@@ -50,12 +50,12 @@
     },
     "period_coverage": {
       "annual": {
-        "total": 0,
-        "with_body": 0
-      },
-      "interim": {
         "total": 1,
         "with_body": 1
+      },
+      "interim": {
+        "total": 0,
+        "with_body": 0
       },
       "trading_update": {
         "total": 0,
@@ -66,7 +66,7 @@
         "with_body": 0
       }
     },
-    "news_article_count": 78,
+    "news_article_count": 113,
     "evidence_ladder": [
       "filings_bodies",
       "filings_index",
@@ -93,14 +93,19 @@
   "ir_refetch": {
     "attempted": 0,
     "fetched": 0,
+    "failed": 0,
     "with_body_before": 1,
     "with_body_after": 1,
     "investegate_fallbacks": 0,
+    "skipped_unfetchable": 0,
+    "deadline_hit": false,
     "merge": {
       "added": 0,
       "total_allowlist": 1,
       "note": "merge_ir_allowlist_filings"
     },
+    "shared_body_propagated": 0,
+    "ir_metadata_reconciled": 0,
     "note": "no missing IR allowlist bodies",
     "mandatory": true,
     "allowlist_count": 1
@@ -116,7 +121,18 @@
     "mandatory": true,
     "path": "docs/data/library/markets/euro_depth/screen/research/BAS.DE/sources/ir_presentation_metrics.json"
   },
-  "alternate_news_added": 3,
+  "filing_interim_financials": {
+    "has_interim_highlights": false,
+    "has_trading_advertising": false,
+    "corporate_action_count": 0,
+    "path": "docs/data/library/markets/euro_depth/screen/research/BAS.DE/sources/filing_interim_financials.json"
+  },
+  "ch_annual_year_in_numbers": {
+    "year_count": 0,
+    "latest_secured_workload_to_revenue_ratio": null,
+    "path": "docs/data/library/markets/euro_depth/screen/research/BAS.DE/sources/ch_annual_year_in_numbers.json"
+  },
+  "alternate_news_added": 4,
   "alternate_news_path": "docs/data/library/markets/euro_depth/screen/research/BAS.DE/sources/alternate_news.json",
   "planned_alternate_sources": [],
   "evidence_ladder": [
@@ -131,5 +147,5 @@
     "ir_presentation_metrics",
     "macro_context"
   ],
-  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. Use screen_run_manifest.json for universe-level signal counts and ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines, segment revenue splits, and IFRS 16 lease maturity tables. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
+  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. Use screen_run_manifest.json for universe-level signal counts and ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines, segment revenue splits, and IFRS 16 lease maturity tables. Use ch_annual_year_in_numbers.json for CH annual revenue, adjusted operating profit, secured workload, and margin/backlog ratios when present. Use sec_companyfacts.json (US names) for filed annual OCF, capex and dividends paid before falling back to Yahoo. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
 }
