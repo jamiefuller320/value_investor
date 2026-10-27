@@ -2,7 +2,7 @@
   "ticker": "ACKB.BR",
   "company_name": "Ackermans & Van Haaren NV",
   "market": "euro_depth",
-  "built_at": "2026-09-04T13:53:04.654336+00:00",
+  "built_at": "2026-10-27T10:45:04.962582+00:00",
   "inventory": {
     "available": {
       "filings_index": true,
@@ -22,19 +22,19 @@
       "yahoo_quarterly_income",
       "screen_run_manifest"
     ],
-    "filings_body_files": 1,
-    "filings_indexed_bodies": 1,
+    "filings_body_files": 2,
+    "filings_indexed_bodies": 2,
     "filings_summary": {
-      "total": 1,
-      "annual": 0,
+      "total": 2,
+      "annual": 1,
       "interim": 1,
       "trading_update": 0,
       "other": 0,
-      "with_body": 1,
+      "with_body": 2,
       "period_coverage": {
         "annual": {
-          "total": 0,
-          "with_body": 0
+          "total": 1,
+          "with_body": 1
         },
         "interim": {
           "total": 1,
@@ -52,8 +52,8 @@
     },
     "period_coverage": {
       "annual": {
-        "total": 0,
-        "with_body": 0
+        "total": 1,
+        "with_body": 1
       },
       "interim": {
         "total": 1,
@@ -68,7 +68,7 @@
         "with_body": 0
       }
     },
-    "news_article_count": 36,
+    "news_article_count": 103,
     "evidence_ladder": [
       "filings_bodies",
       "filings_index",
@@ -85,30 +85,40 @@
   "body_refetch": {
     "attempted": 0,
     "fetched": 0,
-    "with_body_before": 1,
-    "with_body_after": 1,
+    "with_body_before": 2,
+    "with_body_after": 2,
     "note": "refetch_missing_filing_bodies"
   },
   "ch_refetch": {},
   "investegate_refetch": {},
   "ticker_rns_refetch": {},
   "ir_refetch": {
-    "attempted": 0,
+    "attempted": 1,
     "fetched": 0,
     "failed": 0,
-    "with_body_before": 1,
-    "with_body_after": 1,
+    "with_body_before": 2,
+    "with_body_after": 2,
+    "retries_used": 0,
+    "retry_log": [
+      {
+        "filing_id": "ir_8fbaca83da724a39",
+        "url": "https://www.vfb.be/Media/Default/pdf/avh-halfjaarresultaten-2025-persbericht-20250829.pdf",
+        "attempt": 1,
+        "outcome": "fetched_pdf",
+        "source": "pdf"
+      }
+    ],
     "investegate_fallbacks": 0,
     "skipped_unfetchable": 0,
     "deadline_hit": false,
     "merge": {
       "added": 0,
-      "total_allowlist": 1,
+      "total_allowlist": 2,
       "note": "merge_ir_allowlist_filings"
     },
-    "note": "no missing IR allowlist bodies",
     "mandatory": true,
-    "allowlist_count": 1
+    "note": "refetch_ir_allowlist_filing_bodies",
+    "allowlist_count": 2
   },
   "screen_run_manifest": {
     "attached": false,
@@ -121,7 +131,18 @@
     "mandatory": true,
     "path": "docs/data/library/markets/euro_depth/screen/research/ACKB.BR/sources/ir_presentation_metrics.json"
   },
-  "alternate_news_added": 2,
+  "filing_interim_financials": {
+    "has_interim_highlights": false,
+    "has_trading_advertising": false,
+    "corporate_action_count": 0,
+    "path": "docs/data/library/markets/euro_depth/screen/research/ACKB.BR/sources/filing_interim_financials.json"
+  },
+  "ch_annual_year_in_numbers": {
+    "year_count": 0,
+    "latest_secured_workload_to_revenue_ratio": null,
+    "path": "docs/data/library/markets/euro_depth/screen/research/ACKB.BR/sources/ch_annual_year_in_numbers.json"
+  },
+  "alternate_news_added": 4,
   "alternate_news_path": "docs/data/library/markets/euro_depth/screen/research/ACKB.BR/sources/alternate_news.json",
   "planned_alternate_sources": [],
   "evidence_ladder": [
@@ -136,5 +157,5 @@
     "ir_presentation_metrics",
     "macro_context"
   ],
-  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. Use screen_run_manifest.json for universe-level signal counts and ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines, segment revenue splits, and IFRS 16 lease maturity tables. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
+  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. Use screen_run_manifest.json for universe-level signal counts and ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines, segment revenue splits, and IFRS 16 lease maturity tables. Use ch_annual_year_in_numbers.json for CH annual revenue, adjusted operating profit, secured workload, and margin/backlog ratios when present. Use sec_companyfacts.json (US names) for filed annual OCF, capex and dividends paid before falling back to Yahoo. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
 }
