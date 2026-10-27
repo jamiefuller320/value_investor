@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-27T13:37:35.208906+00:00",
+  "run_at": "2026-10-27T16:08:12.412459+00:00",
   "market_id": "ftse_mib",
   "targets": [
     "FCT.MI"
@@ -83,7 +83,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-27T13:37:12.754234+00:00",
+    "snapshot_at": "2026-10-27T16:06:22.378181+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
@@ -116,7 +116,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-27T13:37:31.516120+00:00",
+    "snapshot_at": "2026-10-27T16:06:37.831366+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
@@ -137,16 +137,15 @@
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
     "parked_tickers": [
+      "FCT.MI",
       "PST.MI"
     ],
-    "parked_count": 1,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
-      "FCT.MI"
-    ],
+    "parked_count": 2,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -157,10 +156,43 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "ftse_mib",
+    "to_market": "euro_stoxx50",
+    "stream_markets_after": [
+      "euro_stoxx50"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "ftse_mib",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "FCT.MI",
+        "PST.MI"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "euro_stoxx50",
+      "forced": true,
+      "prior_screen_at": "2026-10-25T19:23:25.024786+00:00",
+      "prior_age_days": 2,
+      "run_at": "2026-10-27T16:08:07.539980+00:00",
+      "shortlist_count": 14,
+      "ticker_count": 50
+    },
+    "at": "2026-10-27T16:06:54.362229+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "ftse_mib",
-    "assessed_at": "2026-10-27T13:37:13.223241+00:00",
+    "assessed_at": "2026-10-27T16:06:23.082397+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -185,9 +217,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 17.824365067000002,
-  "budget_seconds": 2086.3842642609998,
-  "leftover_seconds": 2068.5598991939996,
+  "used_seconds": 14.059840800000018,
+  "budget_seconds": 87.5,
+  "leftover_seconds": 73.44015919999998,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -195,9 +227,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_mib",
-    "updated_at": "2026-10-27T13:37:31.521850+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-10-27T16:06:37.838652+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -205,6 +237,18 @@
         "reason": "awaiting_periodic_report",
         "revisit_when": "Next statutory annual or interim report is issued and indexed",
         "parked_at": "2026-10-27T10:56:18.612926+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true,
+        "source_surface": "euro_filings+ir_allowlist_direct"
+      },
+      {
+        "ticker": "FCT.MI",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-27T16:06:37.838652+00:00",
         "park_via": "straggler_soft_park",
         "filings_total": 2,
         "filings_with_body": 2,
@@ -221,22 +265,45 @@
       "FCT.MI",
       "PST.MI"
     ],
-    "unparked_leftover": [
-      "FCT.MI"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/ftse_mib/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "ftse_mib"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "ftse_mib",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "iseq20",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 49,
-    "candidate_count": 39,
+    "candidate_count": 40,
     "skipped_resolved_tickers": [
       "LMT",
       "CRH",
