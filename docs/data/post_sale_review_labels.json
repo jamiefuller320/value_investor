@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-26T09:53:15.732035+00:00",
+  "updated_at": "2026-10-27T18:14:58.046118+00:00",
   "influences_live": false,
   "observe_only": true,
   "package": "M",
@@ -2520,6 +2520,698 @@
         ],
         "episode_key": "n206|BREE.L|2026-10-12|2026-10-14"
       }
+    },
+    {
+      "event_id": "16054d8c-ea5e-43c7-8084-8a484abb598e",
+      "review_id": "fc0637178a1b2673adc0",
+      "parent_event_id": null,
+      "kind": "duplicate",
+      "tag_at_action": "new",
+      "text": "Duplicate pattern — similar episode already commented (cross-book / repeat). Cleared from active queue.",
+      "acted_at": "2026-10-27T18:14:58.024233+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "snapshot": {
+        "book_id": "n206",
+        "book_tag": "N206",
+        "model_id": "n206",
+        "ticker": "C5H.IR",
+        "entry_at": "2026-08-16T11:58:34+00:00",
+        "exit_at": "2026-10-23T06:52:47+00:00",
+        "hold_days": 68,
+        "exit_kind": "just_sold",
+        "return_pct": 4.68,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N206] C5H.IR · 2026-10-23 · hold 68d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 4.68%\nContext read-only — not a new veto. influences_live=false",
+        "charts": {
+          "episode": {
+            "days_after": 14,
+            "days_before": 14,
+            "end": "2026-11-06",
+            "start": "2026-08-02"
+          },
+          "wider_tf": {
+            "days_after": 90,
+            "days_before": 180,
+            "end": "2027-01-21",
+            "start": "2026-02-17"
+          }
+        },
+        "close_in": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-11-06",
+          "start": "2026-08-02"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2027-01-21",
+          "start": "2026-02-17"
+        },
+        "opened_at": "2026-08-16T11:58:34+00:00",
+        "sold_at": "2026-10-23T06:52:47+00:00",
+        "avg_cost": null,
+        "exit_price": null,
+        "registration_id": "strand-d-plain-ey-identity-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.0812379031684813,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": null,
+            "require_momentum": false
+          }
+        },
+        "sell_decision": {
+          "code": "identity_break_ey_band",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left EY top band (identity break)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "identity_break_ey_band"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "sell_reason": "Left EY top band (identity break)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "identity_break_ey_band",
+        "entry_detail": {
+          "earnings_yield": 0.0812379031684813,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        },
+        "llm_opinion": "N206 closed C5H.IR after a 68-day hold (2026-08-16 → 2026-10-23, just_sold): gain (4.68% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 68-day hold, gain (4.68% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "dialogue": [
+          {
+            "at": "2026-10-27T07:47:54.102795+00:00",
+            "buy_strengths": [
+              "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail.",
+              "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+            ],
+            "buy_weaknesses": [],
+            "chart_annotations": {
+              "episode": "Episode: 68-day hold, gain (4.68% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "influences_live": false,
+            "kind": "initial_opinion",
+            "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+            ],
+            "role": "factory",
+            "same_day_assessment": "not_applicable",
+            "same_day_round_trip": false,
+            "sell_strengths": [
+              "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+            ],
+            "sell_weaknesses": [],
+            "source": "deterministic_v0",
+            "text": "N206 closed C5H.IR after a 68-day hold (2026-08-16 → 2026-10-23, just_sold): gain (4.68% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+          }
+        ],
+        "episode_key": "n206|C5H.IR|2026-08-16|2026-10-23"
+      }
+    },
+    {
+      "event_id": "99e977d8-a318-476b-9727-a779ef44227e",
+      "review_id": "6ea5e899389d7cbfa764",
+      "parent_event_id": null,
+      "kind": "duplicate",
+      "tag_at_action": "new",
+      "text": "Duplicate pattern — similar episode already commented (cross-book / repeat). Cleared from active queue.",
+      "acted_at": "2026-10-27T18:14:58.029457+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "snapshot": {
+        "book_id": "n206",
+        "book_tag": "N206",
+        "model_id": "n206",
+        "ticker": "EVO.ST",
+        "entry_at": "2026-08-14T15:46:25+00:00",
+        "exit_at": "2026-10-22T06:53:02+00:00",
+        "hold_days": 69,
+        "exit_kind": "just_sold",
+        "return_pct": 6.51,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N206] EVO.ST · 2026-10-22 · hold 69d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 6.51%\nContext read-only — not a new veto. influences_live=false",
+        "charts": {
+          "episode": {
+            "days_after": 14,
+            "days_before": 14,
+            "end": "2026-11-05",
+            "start": "2026-07-31"
+          },
+          "wider_tf": {
+            "days_after": 90,
+            "days_before": 180,
+            "end": "2027-01-20",
+            "start": "2026-02-15"
+          }
+        },
+        "close_in": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-11-05",
+          "start": "2026-07-31"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2027-01-20",
+          "start": "2026-02-15"
+        },
+        "opened_at": "2026-08-14T15:46:25+00:00",
+        "sold_at": "2026-10-22T06:53:02+00:00",
+        "avg_cost": null,
+        "exit_price": null,
+        "registration_id": "strand-d-plain-ey-identity-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.0779431367404772,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": null,
+            "require_momentum": false
+          }
+        },
+        "sell_decision": {
+          "code": "identity_break_ey_band",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left EY top band (identity break)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "identity_break_ey_band"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "sell_reason": "Left EY top band (identity break)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "identity_break_ey_band",
+        "entry_detail": {
+          "earnings_yield": 0.0779431367404772,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        },
+        "llm_opinion": "N206 closed EVO.ST after a 69-day hold (2026-08-14 → 2026-10-22, just_sold): gain (6.51% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 69-day hold, gain (6.51% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "dialogue": [
+          {
+            "at": "2026-10-27T07:47:54.103542+00:00",
+            "buy_strengths": [
+              "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail.",
+              "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+            ],
+            "buy_weaknesses": [],
+            "chart_annotations": {
+              "episode": "Episode: 69-day hold, gain (6.51% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "influences_live": false,
+            "kind": "initial_opinion",
+            "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+            ],
+            "role": "factory",
+            "same_day_assessment": "not_applicable",
+            "same_day_round_trip": false,
+            "sell_strengths": [
+              "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+            ],
+            "sell_weaknesses": [],
+            "source": "deterministic_v0",
+            "text": "N206 closed EVO.ST after a 69-day hold (2026-08-14 → 2026-10-22, just_sold): gain (6.51% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+          }
+        ],
+        "episode_key": "n206|EVO.ST|2026-08-14|2026-10-22"
+      }
+    },
+    {
+      "event_id": "736f6f0f-a46e-4dfa-a8ad-b0c08d59a432",
+      "review_id": "0641b74aa972ce1eae67",
+      "parent_event_id": null,
+      "kind": "duplicate",
+      "tag_at_action": "new",
+      "text": "Duplicate pattern — similar episode already commented (cross-book / repeat). Cleared from active queue.",
+      "acted_at": "2026-10-27T18:14:58.034902+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "snapshot": {
+        "book_id": "n201",
+        "book_tag": "N201",
+        "model_id": "n201",
+        "ticker": "SMR.AX",
+        "entry_at": "2026-10-21T06:52:57+00:00",
+        "exit_at": "2026-10-22T06:53:02+00:00",
+        "hold_days": 1,
+        "exit_kind": "just_sold",
+        "return_pct": -3.36,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N201] SMR.AX · 2026-10-22 · hold 1d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -3.36%\nContext read-only — not a new veto. influences_live=false",
+        "charts": {
+          "episode": {
+            "days_after": 14,
+            "days_before": 14,
+            "end": "2026-11-05",
+            "start": "2026-10-07"
+          },
+          "wider_tf": {
+            "days_after": 90,
+            "days_before": 180,
+            "end": "2027-01-20",
+            "start": "2026-04-24"
+          }
+        },
+        "close_in": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-11-05",
+          "start": "2026-10-07"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2027-01-20",
+          "start": "2026-04-24"
+        },
+        "opened_at": "2026-10-21T06:52:57+00:00",
+        "sold_at": "2026-10-22T06:53:02+00:00",
+        "avg_cost": null,
+        "exit_price": null,
+        "registration_id": "strand-c-short-horizon-value-mom-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.0647329838182227,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": 0.296093383421524,
+            "require_momentum": true
+          }
+        },
+        "sell_decision": {
+          "code": "identity_break_ey_band",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left EY top band (identity break)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "identity_break_ey_band"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+        "sell_reason": "Left EY top band (identity break)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "identity_break_ey_band",
+        "entry_detail": {
+          "earnings_yield": 0.0647329838182227,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": 0.296093383421524,
+          "require_momentum": true
+        },
+        "llm_opinion": "N201 closed SMR.AX after a 1-day hold (2026-10-21 → 2026-10-22, just_sold): small loss (-3.36% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+          "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 1-day hold, small loss (-3.36% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "dialogue": [
+          {
+            "at": "2026-10-27T07:47:54.097448+00:00",
+            "buy_strengths": [
+              "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [],
+            "chart_annotations": {
+              "episode": "Episode: 1-day hold, small loss (-3.36% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "influences_live": false,
+            "kind": "initial_opinion",
+            "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+              "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history."
+            ],
+            "role": "factory",
+            "same_day_assessment": "not_applicable",
+            "same_day_round_trip": false,
+            "sell_strengths": [
+              "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+            ],
+            "sell_weaknesses": [
+              "Short hold: check whether exit timing looks premature vs the wider range."
+            ],
+            "source": "deterministic_v0",
+            "text": "N201 closed SMR.AX after a 1-day hold (2026-10-21 → 2026-10-22, just_sold): small loss (-3.36% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+          }
+        ],
+        "episode_key": "n201|SMR.AX|2026-10-21|2026-10-22"
+      }
+    },
+    {
+      "event_id": "51013722-4171-4afe-a5d8-ee41006abf8c",
+      "review_id": "41d1397a243c323131fd",
+      "parent_event_id": null,
+      "kind": "duplicate",
+      "tag_at_action": "new",
+      "text": "Duplicate pattern — similar episode already commented (cross-book / repeat). Cleared from active queue.",
+      "acted_at": "2026-10-27T18:14:58.040425+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "snapshot": {
+        "book_id": "n206",
+        "book_tag": "N206",
+        "model_id": "n206",
+        "ticker": "0857.HK",
+        "entry_at": "2026-09-29T21:28:27+00:00",
+        "exit_at": "2026-10-22T06:53:02+00:00",
+        "hold_days": 23,
+        "exit_kind": "just_sold",
+        "return_pct": -0.59,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N206] 0857.HK · 2026-10-22 · hold 23d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -0.59%\nContext read-only — not a new veto. influences_live=false",
+        "charts": {
+          "episode": {
+            "days_after": 14,
+            "days_before": 14,
+            "end": "2026-11-05",
+            "start": "2026-09-15"
+          },
+          "wider_tf": {
+            "days_after": 90,
+            "days_before": 180,
+            "end": "2027-01-20",
+            "start": "2026-04-02"
+          }
+        },
+        "close_in": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-11-05",
+          "start": "2026-09-15"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2027-01-20",
+          "start": "2026-04-02"
+        },
+        "opened_at": "2026-09-29T21:28:27+00:00",
+        "sold_at": "2026-10-22T06:53:02+00:00",
+        "avg_cost": null,
+        "exit_price": null,
+        "registration_id": "strand-d-plain-ey-identity-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.115226329861641,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": null,
+            "require_momentum": false
+          }
+        },
+        "sell_decision": {
+          "code": "identity_break_ey_band",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left EY top band (identity break)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "identity_break_ey_band"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "sell_reason": "Left EY top band (identity break)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "identity_break_ey_band",
+        "entry_detail": {
+          "earnings_yield": 0.115226329861641,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        },
+        "llm_opinion": "N206 closed 0857.HK after a 23-day hold (2026-09-29 → 2026-10-22, just_sold): small loss (-0.59% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 23-day hold, small loss (-0.59% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "dialogue": [
+          {
+            "at": "2026-10-27T07:47:54.101451+00:00",
+            "buy_strengths": [
+              "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [],
+            "chart_annotations": {
+              "episode": "Episode: 23-day hold, small loss (-0.59% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "influences_live": false,
+            "kind": "initial_opinion",
+            "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+            ],
+            "role": "factory",
+            "same_day_assessment": "not_applicable",
+            "same_day_round_trip": false,
+            "sell_strengths": [
+              "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+            ],
+            "sell_weaknesses": [],
+            "source": "deterministic_v0",
+            "text": "N206 closed 0857.HK after a 23-day hold (2026-09-29 → 2026-10-22, just_sold): small loss (-0.59% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+          }
+        ],
+        "episode_key": "n206|0857.HK|2026-09-29|2026-10-22"
+      }
+    },
+    {
+      "event_id": "6061ec09-5809-4e5d-92d8-9860d7fc5e37",
+      "review_id": "64c2af3480b31141af73",
+      "parent_event_id": null,
+      "kind": "duplicate",
+      "tag_at_action": "new",
+      "text": "Duplicate pattern — similar episode already commented (cross-book / repeat). Cleared from active queue.",
+      "acted_at": "2026-10-27T18:14:58.046053+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "snapshot": {
+        "book_id": "n206",
+        "book_tag": "N206",
+        "model_id": "n206",
+        "ticker": "STLD",
+        "entry_at": "2026-10-21T06:52:57+00:00",
+        "exit_at": "2026-10-22T06:53:02+00:00",
+        "hold_days": 1,
+        "exit_kind": "just_sold",
+        "return_pct": 1.12,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N206] STLD · 2026-10-22 · hold 1d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 1.12%\nContext read-only — not a new veto. influences_live=false",
+        "charts": {
+          "episode": {
+            "days_after": 14,
+            "days_before": 14,
+            "end": "2026-11-05",
+            "start": "2026-10-07"
+          },
+          "wider_tf": {
+            "days_after": 90,
+            "days_before": 180,
+            "end": "2027-01-20",
+            "start": "2026-04-24"
+          }
+        },
+        "close_in": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-11-05",
+          "start": "2026-10-07"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2027-01-20",
+          "start": "2026-04-24"
+        },
+        "opened_at": "2026-10-21T06:52:57+00:00",
+        "sold_at": "2026-10-22T06:53:02+00:00",
+        "avg_cost": null,
+        "exit_price": null,
+        "registration_id": "strand-d-plain-ey-identity-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.055407782998299,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": null,
+            "require_momentum": false
+          }
+        },
+        "sell_decision": {
+          "code": "identity_break_ey_band",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left EY top band (identity break)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "identity_break_ey_band"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "sell_reason": "Left EY top band (identity break)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "identity_break_ey_band",
+        "entry_detail": {
+          "earnings_yield": 0.055407782998299,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        },
+        "llm_opinion": "N206 closed STLD after a 1-day hold (2026-10-21 → 2026-10-22, just_sold): near-flat / small gain (1.12% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+          "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+          "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 1-day hold, near-flat / small gain (1.12% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "dialogue": [
+          {
+            "at": "2026-10-27T07:47:54.105841+00:00",
+            "buy_strengths": [
+              "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [],
+            "chart_annotations": {
+              "episode": "Episode: 1-day hold, near-flat / small gain (1.12% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "influences_live": false,
+            "kind": "initial_opinion",
+            "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+              "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+              "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+            ],
+            "role": "factory",
+            "same_day_assessment": "not_applicable",
+            "same_day_round_trip": false,
+            "sell_strengths": [
+              "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+            ],
+            "sell_weaknesses": [
+              "Short hold: check whether exit timing looks premature vs the wider range."
+            ],
+            "source": "deterministic_v0",
+            "text": "N206 closed STLD after a 1-day hold (2026-10-21 → 2026-10-22, just_sold): near-flat / small gain (1.12% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+          }
+        ],
+        "episode_key": "n206|STLD|2026-10-21|2026-10-22"
+      }
     }
   ],
   "actioned_review_ids": [
@@ -2551,7 +3243,12 @@
     "d242798bbc78a8561341",
     "cdb92e20ac632c0afc01",
     "f0775008bbb69c0f6344",
-    "bf8c1eafacb3dae4b063"
+    "bf8c1eafacb3dae4b063",
+    "fc0637178a1b2673adc0",
+    "6ea5e899389d7cbfa764",
+    "0641b74aa972ce1eae67",
+    "41d1397a243c323131fd",
+    "64c2af3480b31141af73"
   ],
   "active_replies": [
     {
