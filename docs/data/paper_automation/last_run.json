@@ -1,13 +1,13 @@
 {
-  "acted": true,
+  "acted": false,
   "gate": {
-    "local_time": "2026-10-26T11:28:22.549653+00:00",
+    "local_time": "2026-10-27T08:46:51.193191+00:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-10-26T08:00:00+00:00",
-    "settle_at": "2026-10-26T09:15:00+00:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-10-27T08:00:00+00:00",
+    "settle_at": "2026-10-27T09:15:00+00:00",
+    "can_act": false,
+    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
   "trades": [],
   "plan": {
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 804.18,
+    "nav": 796.36,
     "cash": 4.14,
     "max_positions": 3,
     "min_conviction": 0.6,
@@ -36,28 +36,28 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 268.04,
+    "target_sleeve_value": 265.43,
     "targets": [
       {
         "ticker": "CURY.L",
         "name": "Currys plc",
         "signal": "strong_buy",
-        "conviction_score": 0.8258000000000002,
-        "price": 146.6
+        "conviction_score": 0.9258000000000003,
+        "price": 144.7
       },
       {
         "ticker": "PAF.L",
         "name": "Pan African Resources PLC",
         "signal": "strong_buy",
-        "conviction_score": 0.8235000000000002,
-        "price": 111.0
+        "conviction_score": 0.9235000000000003,
+        "price": 109.534
       },
       {
         "ticker": "IGG.L",
         "name": "IG Group Holdings plc",
         "signal": "buy",
-        "conviction_score": 0.6929000000000002,
-        "price": 944.985
+        "conviction_score": 0.7929000000000003,
+        "price": 962.0
       }
     ],
     "anticipated_exits": [
@@ -67,8 +67,8 @@
         "name": "Lion Finance Group PLC",
         "reason": "No longer in the top conviction target set",
         "shares": 0.021819,
-        "price": 12340.0,
-        "value": 269.25
+        "price": 12300.0,
+        "value": 268.37
       }
     ],
     "anticipated_grace_holds": [],
@@ -79,10 +79,10 @@
         "ticker": "IGG.L",
         "name": "IG Group Holdings plc",
         "reason": "New sleeve",
-        "value": 268.04,
-        "price": 944.985,
-        "target_value": 268.04,
-        "conviction_score": 0.6929000000000002,
+        "value": 265.43,
+        "price": 962.0,
+        "target_value": 265.43,
+        "conviction_score": 0.7929000000000003,
         "signal": "buy"
       }
     ],
@@ -92,9 +92,9 @@
         "ticker": "CURY.L",
         "name": "Currys plc",
         "reason": "Already near equal-weight target",
-        "value": 266.72,
-        "target_value": 268.04,
-        "conviction_score": 0.8258000000000002,
+        "value": 263.26,
+        "target_value": 265.43,
+        "conviction_score": 0.9258000000000003,
         "signal": "strong_buy"
       },
       {
@@ -102,9 +102,9 @@
         "ticker": "PAF.L",
         "name": "Pan African Resources PLC",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 264.08,
-        "target_value": 268.04,
-        "conviction_score": 0.8235000000000002,
+        "value": 260.59,
+        "target_value": 265.43,
+        "conviction_score": 0.9235000000000003,
         "signal": "strong_buy"
       }
     ],
@@ -119,7 +119,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 146.60000610351562,
+      "mark": 144.6999969482422,
       "stop_loss": 135.2,
       "take_profit": 163.62,
       "timing_signal": "insufficient_data"
@@ -130,7 +130,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 111.0,
+      "mark": 109.53399658203125,
       "stop_loss": 106.11,
       "take_profit": 128.41,
       "timing_signal": "insufficient_data"
@@ -141,7 +141,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 12340.0,
+      "mark": 12300.0,
       "stop_loss": 10970.08,
       "take_profit": 13586.4,
       "timing_signal": "insufficient_data"
@@ -1744,12 +1744,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "waiting for open settle (75 min after 08:00 Europe/London)",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "ftse350",
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-26T11:28:45.442302+00:00",
+    "generated_at": "2026-10-27T08:47:07.154645+00:00",
     "observe_only": true,
     "open_count": 18,
     "closed_count": 0,
@@ -1823,12 +1823,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 0
+    "checkpoints_added_this_pass": 2
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-26T11:28:45.444067+00:00",
+    "generated_at": "2026-10-27T08:47:07.156600+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1920,12 +1920,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 2
     }
   },
   "hypothesis_integrity": {
@@ -1933,8 +1933,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "ai_judgment_fair",
-    "updated_at": "2026-10-26T11:28:45.446001+00:00",
-    "as_of": "2026-10-26T11:28:22.549653+00:00",
+    "updated_at": "2026-10-27T08:47:07.158954+00:00",
+    "as_of": "2026-10-27T08:46:51.193191+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1991,12 +1991,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0095,
-        "mark": 146.6,
+        "unrealized_pct": -0.0223,
+        "mark": 144.7,
         "avg_cost": 148.0,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8258,
+        "conviction_score": 0.9258,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2013,14 +2013,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 83%"
+          "conviction 93%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 83%"
+          "conviction 93%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2032,12 +2032,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0003,
-        "mark": 111.0,
+        "unrealized_pct": -0.0129,
+        "mark": 109.534,
         "avg_cost": 110.965,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8235,
+        "conviction_score": 0.9235,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2053,14 +2053,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 82%"
+          "conviction 92%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 82%"
+          "conviction 92%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2072,12 +2072,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0156,
-        "mark": 12340.0,
+        "unrealized_pct": 0.0123,
+        "mark": 12300.0,
         "avg_cost": 12150.0,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.5169,
+        "conviction_score": 0.6169,
         "data_quality_score": 0.7,
         "passed_families": [
           "cheapness",
@@ -2094,14 +2094,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.70",
-          "conviction 52%"
+          "conviction 62%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.70",
-          "conviction 52%"
+          "conviction 62%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2114,7 +2114,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-26T11:28:45.448453+00:00",
+    "generated_at": "2026-10-27T08:47:07.161718+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2181,7 +2181,7 @@
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
     "observe_only": true,
-    "generated_at": "2026-10-26T11:28:45.453225+00:00",
+    "generated_at": "2026-10-27T08:47:07.167143+00:00",
     "open_count": 3,
     "closed_count": 12,
     "scored_count": 10,
@@ -2249,7 +2249,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-26T11:28:22.549653+00:00",
+    "generated_at": "2026-10-27T08:46:51.193191+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2306,7 +2306,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-26T11:28:22.549653+00:00",
+    "generated_at": "2026-10-27T08:46:51.193191+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -2328,7 +2328,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "ai_judgment_fair",
-      "generated_at": "2026-10-26T11:28:22.549653+00:00",
+      "generated_at": "2026-10-27T08:46:51.193191+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
@@ -2357,7 +2357,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-26T11:28:45.456548+00:00",
+  "generated_at": "2026-10-27T08:47:07.170666+00:00",
   "track_id": "ai_judgment_fair",
   "track_label": "AI judgment fair-cost lab (Suite B)",
   "is_primary_learning_track": true,
