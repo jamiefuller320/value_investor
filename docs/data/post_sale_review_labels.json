@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-27T18:16:32.451393+00:00",
+  "updated_at": "2026-10-27T20:23:04.150682+00:00",
   "influences_live": false,
   "observe_only": true,
   "package": "M",
@@ -3496,6 +3496,290 @@
         ],
         "episode_key": "n206|VLO|2026-10-21|2026-10-22"
       }
+    },
+    {
+      "event_id": "a963f2fe-f3dd-4113-8cb1-f14c3a88db2a",
+      "review_id": "2a5483a1a4c10bd6de74",
+      "parent_event_id": null,
+      "kind": "accept",
+      "tag_at_action": "new",
+      "text": "",
+      "acted_at": "2026-10-27T20:23:04.144138+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "snapshot": {
+        "book_id": "n201",
+        "book_tag": "N201",
+        "model_id": "n201",
+        "ticker": "TECK-B.TO",
+        "entry_at": "2026-10-20T06:52:57+00:00",
+        "exit_at": "2026-10-21T06:52:57+00:00",
+        "hold_days": 1,
+        "exit_kind": "just_sold",
+        "return_pct": 0.68,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N201] TECK-B.TO · 2026-10-21 · hold 1d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 0.68%\nContext read-only — not a new veto. influences_live=false",
+        "charts": {
+          "episode": {
+            "days_after": 14,
+            "days_before": 14,
+            "end": "2026-11-04",
+            "start": "2026-10-06"
+          },
+          "wider_tf": {
+            "days_after": 90,
+            "days_before": 180,
+            "end": "2027-01-19",
+            "start": "2026-04-23"
+          }
+        },
+        "close_in": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-11-04",
+          "start": "2026-10-06"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2027-01-19",
+          "start": "2026-04-23"
+        },
+        "opened_at": "2026-10-20T06:52:57+00:00",
+        "sold_at": "2026-10-21T06:52:57+00:00",
+        "avg_cost": null,
+        "exit_price": null,
+        "registration_id": "strand-c-short-horizon-value-mom-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.0580421927272436,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": 0.485491883329959,
+            "require_momentum": true
+          }
+        },
+        "sell_decision": {
+          "code": "identity_break_ey_band",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left EY top band (identity break)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "identity_break_ey_band"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+        "sell_reason": "Left EY top band (identity break)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "identity_break_ey_band",
+        "entry_detail": {
+          "earnings_yield": 0.0580421927272436,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": 0.485491883329959,
+          "require_momentum": true
+        },
+        "llm_opinion": "N201 closed TECK-B.TO after a 1-day hold (2026-10-20 → 2026-10-21, just_sold): near-flat / small gain (0.68% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+          "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+          "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 1-day hold, near-flat / small gain (0.68% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "dialogue": [
+          {
+            "at": "2026-10-27T18:16:32.529021+00:00",
+            "buy_strengths": [
+              "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [],
+            "chart_annotations": {
+              "episode": "Episode: 1-day hold, near-flat / small gain (0.68% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "influences_live": false,
+            "kind": "initial_opinion",
+            "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+              "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+              "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+            ],
+            "role": "factory",
+            "same_day_assessment": "not_applicable",
+            "same_day_round_trip": false,
+            "sell_strengths": [
+              "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+            ],
+            "sell_weaknesses": [
+              "Short hold: check whether exit timing looks premature vs the wider range."
+            ],
+            "source": "deterministic_v0",
+            "text": "N201 closed TECK-B.TO after a 1-day hold (2026-10-20 → 2026-10-21, just_sold): near-flat / small gain (0.68% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+          }
+        ],
+        "episode_key": "n201|TECK-B.TO|2026-10-20|2026-10-21"
+      }
+    },
+    {
+      "event_id": "39a8517c-06bc-472f-832c-786766c5ae73",
+      "review_id": "a860e5672cb0824d542a",
+      "parent_event_id": null,
+      "kind": "accept",
+      "tag_at_action": "new",
+      "text": "",
+      "acted_at": "2026-10-27T20:23:04.150613+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "snapshot": {
+        "book_id": "n206",
+        "book_tag": "N206",
+        "model_id": "n206",
+        "ticker": "TECK-B.TO",
+        "entry_at": "2026-10-20T06:52:57+00:00",
+        "exit_at": "2026-10-21T06:52:57+00:00",
+        "hold_days": 1,
+        "exit_kind": "just_sold",
+        "return_pct": 0.68,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N206] TECK-B.TO · 2026-10-21 · hold 1d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 0.68%\nContext read-only — not a new veto. influences_live=false",
+        "charts": {
+          "episode": {
+            "days_after": 14,
+            "days_before": 14,
+            "end": "2026-11-04",
+            "start": "2026-10-06"
+          },
+          "wider_tf": {
+            "days_after": 90,
+            "days_before": 180,
+            "end": "2027-01-19",
+            "start": "2026-04-23"
+          }
+        },
+        "close_in": {
+          "days_after": 14,
+          "days_before": 14,
+          "end": "2026-11-04",
+          "start": "2026-10-06"
+        },
+        "wider_tf": {
+          "days_after": 90,
+          "days_before": 180,
+          "end": "2027-01-19",
+          "start": "2026-04-23"
+        },
+        "opened_at": "2026-10-20T06:52:57+00:00",
+        "sold_at": "2026-10-21T06:52:57+00:00",
+        "avg_cost": null,
+        "exit_price": null,
+        "registration_id": "strand-d-plain-ey-identity-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.0580421927272436,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": null,
+            "require_momentum": false
+          }
+        },
+        "sell_decision": {
+          "code": "identity_break_ey_band",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left EY top band (identity break)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "identity_break_ey_band"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "sell_reason": "Left EY top band (identity break)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "identity_break_ey_band",
+        "entry_detail": {
+          "earnings_yield": 0.0580421927272436,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        },
+        "llm_opinion": "N206 closed TECK-B.TO after a 1-day hold (2026-10-20 → 2026-10-21, just_sold): near-flat / small gain (0.68% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+          "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+          "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 1-day hold, near-flat / small gain (0.68% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "dialogue": [
+          {
+            "at": "2026-10-27T18:16:32.535584+00:00",
+            "buy_strengths": [
+              "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [],
+            "chart_annotations": {
+              "episode": "Episode: 1-day hold, near-flat / small gain (0.68% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "influences_live": false,
+            "kind": "initial_opinion",
+            "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+              "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+              "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+            ],
+            "role": "factory",
+            "same_day_assessment": "not_applicable",
+            "same_day_round_trip": false,
+            "sell_strengths": [
+              "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+            ],
+            "sell_weaknesses": [
+              "Short hold: check whether exit timing looks premature vs the wider range."
+            ],
+            "source": "deterministic_v0",
+            "text": "N206 closed TECK-B.TO after a 1-day hold (2026-10-20 → 2026-10-21, just_sold): near-flat / small gain (0.68% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto."
+          }
+        ],
+        "episode_key": "n206|TECK-B.TO|2026-10-20|2026-10-21"
+      }
     }
   ],
   "actioned_review_ids": [
@@ -3534,7 +3818,9 @@
     "41d1397a243c323131fd",
     "64c2af3480b31141af73",
     "be744a986616bcc4941c",
-    "a84fe51e18aa4b204ee3"
+    "a84fe51e18aa4b204ee3",
+    "2a5483a1a4c10bd6de74",
+    "a860e5672cb0824d542a"
   ],
   "active_replies": [
     {
