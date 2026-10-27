@@ -1,15 +1,91 @@
 {
-  "run_at": "2026-10-26T10:37:19.254529+00:00",
+  "run_at": "2026-10-27T07:38:58.767658+00:00",
   "market_id": "cac40",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "TTE.PA"
+  ],
+  "target_details": [
+    {
+      "ticker": "TTE.PA",
+      "priority_score": 26.0216,
+      "filings_total": 116,
+      "filings_with_body": 113,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "TTE.PA",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 116,
+        "filings_with_body": 113,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 117,
+        "filings_with_body": 117,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 117,
+        "annual": 7,
+        "interim": 57,
+        "trading_update": 6,
+        "other": 47,
+        "with_body": 117,
+        "period_coverage": {
+          "annual": {
+            "total": 7,
+            "with_body": 7
+          },
+          "interim": {
+            "total": 57,
+            "with_body": 57
+          },
+          "trading_update": {
+            "total": 6,
+            "with_body": 6
+          },
+          "other": {
+            "total": 47,
+            "with_body": 47
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 117,
+        "with_body_after": 117,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 1,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "TTE.PA"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-26T10:36:22.542426+00:00",
+    "snapshot_at": "2026-10-27T07:36:04.273646+00:00",
     "market_id": "cac40",
     "buy_tier_count": 14,
     "unmeasured_buy_tier": 0,
@@ -35,7 +111,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-26T10:37:11.815084+00:00",
+    "snapshot_at": "2026-10-27T07:38:55.253527+00:00",
     "market_id": "cac40",
     "buy_tier_count": 14,
     "unmeasured_buy_tier": 0,
@@ -44,7 +120,7 @@
     "indexed_without_body": 0,
     "bodies_min": 7,
     "bodies_median": 10.5,
-    "bodies_max": 113,
+    "bodies_max": 117,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -69,7 +145,7 @@
   "discovery_scan": {
     "scanned": 14,
     "hits": 5,
-    "new_rows_total": 0,
+    "new_rows_total": 1,
     "curiosity_total": 6,
     "errors": 0,
     "prioritization_weights": {
@@ -93,7 +169,7 @@
   },
   "critical_path": {
     "market_id": "cac40",
-    "assessed_at": "2026-10-26T10:36:23.391031+00:00",
+    "assessed_at": "2026-10-27T07:36:05.146120+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -114,9 +190,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 47.557763701,
+  "used_seconds": 169.28378093999999,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3552.442236299,
+  "leftover_seconds": 3430.71621906,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -124,9 +200,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "cac40",
-    "updated_at": "2026-10-26T10:37:11.820692+00:00",
+    "updated_at": "2026-10-27T07:38:55.258494+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 3,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -146,30 +222,20 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 47,
-    "candidate_count": 63,
+    "tried_count": 49,
+    "candidate_count": 39,
     "skipped_resolved_tickers": [
-      "ABI.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "EVN.VI",
-      "WIE.VI",
-      "ACKB.BR",
-      "DQ7A.IR",
-      "UCB.BR",
       "LMT",
       "CRH",
       "ULTP.L",
-      "FOXT.L",
       "MER.L",
-      "APTD.L",
       "TPT.L",
+      "APTD.L",
+      "FOXT.L",
       "NTR.TO",
       "GIB-A.TO",
       "SU.TO",
-      "SAP.DE",
       "BAS.DE",
-      "IFX.DE",
       "PDD",
       "BAS.DE",
       "DTE.DE",
@@ -177,18 +243,10 @@
       "FRE.DE",
       "HNR1.DE",
       "MUV2.DE",
-      "HEI.DE",
-      "PST.MI",
-      "TEN.MI",
-      "ACKB.BR",
-      "APAM.AS",
       "0285.HK",
       "0857.HK",
       "0288.HK",
-      "2331.HK",
-      "EVN.VI",
-      "WIE.VI",
-      "PGHN.SW"
+      "2331.HK"
     ],
     "wait_behind_task_id": ""
   }
