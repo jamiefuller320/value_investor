@@ -664,13 +664,16 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.novartis.com/sites/novartis_com/files/2025-01-interim-financial-report-en.pdf",
     ],
     # smi buy-tier deepen — eng-20261003-02: PGHN.SW unmeasured — ESEF/news empty; IR PDF seeds.
+    # eng-20261027-01: two bodied IR rows still fail library parity (needs ≥3 bodies); FY2025 results deck.
     "PGHN.SW": [
         "https://www.partnersgroup.com/~/media/Files/P/Partnersgroup/Universal/shareholders/reports-and-presentations/2026/annual-report-2025.pdf",
         "https://www.partnersgroup.com/~/media/Files/P/Partnersgroup/Universal/shareholders/reports-and-presentations/2026/pghn-interim-report-2026.pdf",
+        "https://www.partnersgroup.com/~/media/Files/P/Partnersgroup/Universal/shareholders/reports-and-presentations/2026/annual-results-presentation-2025.pdf",
     ],
     "PGHN": [
         "https://www.partnersgroup.com/~/media/Files/P/Partnersgroup/Universal/shareholders/reports-and-presentations/2026/annual-report-2025.pdf",
         "https://www.partnersgroup.com/~/media/Files/P/Partnersgroup/Universal/shareholders/reports-and-presentations/2026/pghn-interim-report-2026.pdf",
+        "https://www.partnersgroup.com/~/media/Files/P/Partnersgroup/Universal/shareholders/reports-and-presentations/2026/annual-results-presentation-2025.pdf",
     ],
     # smi buy-tier deepen — eng-20261003-02: RO.SW (Roche bearer) unmeasured — roche.com CDN PDFs.
     "RO.SW": [
