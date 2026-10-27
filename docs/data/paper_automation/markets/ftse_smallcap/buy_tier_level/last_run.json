@@ -1,42 +1,61 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-26T14:19:28.527325+00:00",
+    "local_time": "2026-10-27T14:20:06.546363+00:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-10-26T08:00:00+00:00",
-    "settle_at": "2026-10-26T09:15:00+00:00",
+    "market_open_at": "2026-10-27T08:00:00+00:00",
+    "settle_at": "2026-10-27T09:15:00+00:00",
     "can_act": true,
     "reason": "ok"
   },
   "trades": [
     {
-      "id": "c5eda866-ad5c-42dc-94d1-7efad5b5638b",
+      "id": "844c56b7-4c06-4ee1-abce-a5f411188b73",
       "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
-      "acted_at": "2026-10-26T14:19:28.527325+00:00",
-      "ticker": "CAPD.L",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 2.448043,
-      "price": 117.5,
-      "gross": 287.65,
-      "cost": 1.58,
-      "net_cash": -289.23,
-      "note": "Automated buy",
-      "name": "Capital Limited"
+      "acted_at": "2026-10-27T14:20:06.546363+00:00",
+      "ticker": "CARD.L",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 0.003961,
+      "price": 90.4,
+      "gross": 0.36,
+      "cost": 0.0,
+      "net_cash": 0.36,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Card Factory plc",
+      "avg_cost_at_exit": 90.4,
+      "position_closed": true
     },
     {
-      "id": "6615c89b-598e-4cec-8bd8-18d4792cfec4",
+      "id": "e959b93f-3af6-4ba8-acba-ec456f2b53be",
       "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
-      "acted_at": "2026-10-26T14:19:28.527325+00:00",
+      "acted_at": "2026-10-27T14:20:06.546363+00:00",
+      "ticker": "TPT.L",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 8.241338,
+      "price": 35.0,
+      "gross": 288.45,
+      "cost": 0.14,
+      "net_cash": 288.3,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Topps Tiles Plc",
+      "avg_cost_at_exit": 35.0,
+      "position_closed": true
+    },
+    {
+      "id": "308663e2-a886-4206-bef6-152f510d13dd",
+      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+      "acted_at": "2026-10-27T14:20:06.546363+00:00",
       "ticker": "SBRE.L",
       "side": "buy",
       "sizing_mode": "cash",
-      "shares": 0.002606,
+      "shares": 1.694484,
       "price": 169.0,
-      "gross": 0.44,
-      "cost": 0.0,
-      "net_cash": -0.44,
+      "gross": 286.37,
+      "cost": 1.58,
+      "net_cash": -287.94,
       "note": "Automated buy",
       "name": "Sabre Insurance Group plc"
     }
@@ -54,8 +73,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1156.67,
-    "cash": 0.0,
+    "nav": 1154.95,
+    "cash": 0.72,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -67,7 +86,7 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 578.26,
+    "target_sleeve_value": 577.47,
     "targets": [
       {
         "ticker": "CAPD.L",
@@ -84,41 +103,10 @@
         "price": 169.0
       }
     ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "CARD.L",
-        "name": "Card Factory plc",
-        "reason": "No longer in the top conviction target set",
-        "shares": 0.003961,
-        "price": 90.4,
-        "value": 0.36
-      },
-      {
-        "action": "sell",
-        "ticker": "TPT.L",
-        "name": "Topps Tiles Plc",
-        "reason": "No longer in the top conviction target set",
-        "shares": 8.241338,
-        "price": 35.0,
-        "value": 288.45
-      }
-    ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
-      {
-        "action": "buy",
-        "ticker": "SBRE.L",
-        "name": "Sabre Insurance Group plc",
-        "reason": "Top-up to equal weight",
-        "value": 287.94,
-        "price": 169.0,
-        "target_value": 578.26,
-        "conviction_score": 0.45039999999999997,
-        "signal": "buy"
-      }
-    ],
+    "anticipated_buys": [],
     "anticipated_holds": [
       {
         "action": "hold",
@@ -126,9 +114,19 @@
         "name": "Capital Limited",
         "reason": "Already near equal-weight target",
         "value": 577.54,
-        "target_value": 578.26,
+        "target_value": 577.47,
         "conviction_score": 0.65,
         "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "SBRE.L",
+        "name": "Sabre Insurance Group plc",
+        "reason": "Already near equal-weight target",
+        "value": 576.69,
+        "target_value": 577.47,
+        "conviction_score": 0.45039999999999997,
+        "signal": "buy"
       }
     ],
     "skipped": [],
@@ -141,7 +139,7 @@
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 1 buy(s); leave 1 near-target holding(s)."
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
   },
   "alerts": [
     {
@@ -165,28 +163,6 @@
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
-    },
-    {
-      "ticker": "CARD.L",
-      "name": "Card Factory plc",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Technical timing is wait \u2014 avoid adding size",
-      "mark": 90.4,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "wait"
-    },
-    {
-      "ticker": "TPT.L",
-      "name": "Topps Tiles Plc",
-      "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 35.0,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": null
     }
   ],
   "fund": {
@@ -204,7 +180,7 @@
       "id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
       "created_at": "2026-09-09T07:23:01.537822+00:00"
     },
-    "cash": 0.0,
+    "cash": 0.72,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -221,36 +197,14 @@
       },
       "SBRE.L": {
         "ticker": "SBRE.L",
-        "shares": 1.71786,
-        "avg_cost": 166.0046,
+        "shares": 3.412344,
+        "avg_cost": 167.492,
         "name": "Sabre Insurance Group plc",
         "sector": "Financial Services",
         "currency": "GBP",
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-10-21T08:37:36.497529+01:00"
-      },
-      "CARD.L": {
-        "ticker": "CARD.L",
-        "shares": 0.003961,
-        "avg_cost": 90.4,
-        "name": "Card Factory plc",
-        "sector": "Consumer Cyclical",
-        "currency": "GBP",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-10-25T07:06:30.618231+00:00"
-      },
-      "TPT.L": {
-        "ticker": "TPT.L",
-        "shares": 8.241338,
-        "avg_cost": 35.0,
-        "name": "Topps Tiles Plc",
-        "sector": "Consumer Cyclical",
-        "currency": "GBP",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-10-25T07:06:30.618231+00:00"
       }
     },
     "trades": [
@@ -2040,6 +1994,55 @@
         "net_cash": -0.44,
         "note": "Automated buy",
         "name": "Sabre Insurance Group plc"
+      },
+      {
+        "id": "844c56b7-4c06-4ee1-abce-a5f411188b73",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-10-27T14:20:06.546363+00:00",
+        "ticker": "CARD.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.003961,
+        "price": 90.4,
+        "gross": 0.36,
+        "cost": 0.0,
+        "net_cash": 0.36,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Card Factory plc",
+        "avg_cost_at_exit": 90.4,
+        "position_closed": true
+      },
+      {
+        "id": "e959b93f-3af6-4ba8-acba-ec456f2b53be",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-10-27T14:20:06.546363+00:00",
+        "ticker": "TPT.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 8.241338,
+        "price": 35.0,
+        "gross": 288.45,
+        "cost": 0.14,
+        "net_cash": 288.3,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Topps Tiles Plc",
+        "avg_cost_at_exit": 35.0,
+        "position_closed": true
+      },
+      {
+        "id": "308663e2-a886-4206-bef6-152f510d13dd",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-10-27T14:20:06.546363+00:00",
+        "ticker": "SBRE.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 1.694484,
+        "price": 169.0,
+        "gross": 286.37,
+        "cost": 1.58,
+        "net_cash": -287.94,
+        "note": "Automated buy",
+        "name": "Sabre Insurance Group plc"
       }
     ],
     "equity_curve": [
@@ -2738,27 +2741,43 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-27T14:20:06.546363+00:00",
+        "portfolio_value": 1154.95,
+        "cash": 0.72,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-26T14:19:28.527325+00:00",
+    "last_mark_at": "2026-10-27T14:20:06.546363+00:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "CARD.L": 1,
         "TPT.L": 1
-      },
-      "reentry_cooldown": {}
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (2 trade(s)).",
+  "note": "Rebalanced after open settle (3 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "ftse_smallcap",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-26T14:19:28.536825+00:00",
+    "generated_at": "2026-10-27T14:20:06.559492+00:00",
     "observe_only": true,
-    "open_count": 23,
+    "open_count": 25,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -2829,13 +2848,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 3
+    "ingested_this_pass": 2,
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-26T14:19:28.538851+00:00",
+    "generated_at": "2026-10-27T14:20:06.562118+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2889,7 +2908,7 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 21,
+      "hold_closed_count": 23,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 13,
       "gaps": [
@@ -2899,25 +2918,25 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 3,
-        "recovered_to_breakeven": 2,
+        "count": 1,
+        "recovered_to_breakeven": 0,
         "close_reasons": {
-          "open": 3
+          "open": 1
         }
       },
       "closed": {
-        "count": 21,
-        "recovered_to_breakeven": 21,
+        "count": 23,
+        "recovered_to_breakeven": 23,
         "close_reasons": {
-          "sold_while_recovered": 21
+          "sold_while_recovered": 23
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 29,
+        "count": 30,
         "verdicts": {
-          "open": 29
+          "open": 30
         }
       },
       "closed": {
@@ -2926,12 +2945,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 2,
-      "swap_rotations": 0
+      "hold_episodes": 0,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 2
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -2939,8 +2958,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-26T14:19:28.541982+00:00",
-    "as_of": "2026-10-26T14:19:28.527325+00:00",
+    "updated_at": "2026-10-27T14:20:06.566210+00:00",
+    "as_of": "2026-10-27T14:20:06.546363+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2952,16 +2971,16 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 4,
+    "holding_count": 2,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 3,
+      "intact": 2,
       "weakening": 0,
-      "broken": 1,
+      "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 4,
+      "holding_count": 2,
       "loser_count": 0,
       "loser_share": 0.0,
       "loser_nav_share": 0.0,
@@ -2979,49 +2998,17 @@
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.25,
-        "quality": 0.5,
+        "cheapness": 0.0,
+        "quality": 0.0,
         "dividend": 0.5,
         "garp": 0.5,
-        "risk": 0.25
+        "risk": 0.0
       },
       "selection_feedback_flags": [],
       "balancing_hint": "maintain",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
-      {
-        "ticker": "TPT.L",
-        "name": "TPT.L",
-        "thesis_status": "broken",
-        "recommended_action": "exit_candidate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 35.0,
-        "avg_cost": 35.0,
-        "signal": null,
-        "timing_signal": null,
-        "conviction_score": null,
-        "data_quality_score": null,
-        "passed_families": [],
-        "failed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "research_verdict": null,
-        "reasons": [
-          "cheapness lost and not in buy tier"
-        ],
-        "intact_reasons": [],
-        "weaken_reasons": [],
-        "broken_reasons": [
-          "cheapness lost and not in buy tier"
-        ]
-      },
       {
         "ticker": "CAPD.L",
         "name": "Capital Limited",
@@ -3064,56 +3051,15 @@
         "broken_reasons": []
       },
       {
-        "ticker": "CARD.L",
-        "name": "Card Factory plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 90.4,
-        "avg_cost": 90.4,
-        "signal": "strong_buy",
-        "timing_signal": "wait",
-        "conviction_score": 0.6804,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [
-          "quality"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 68%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 68%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "SBRE.L",
         "name": "Sabre Insurance Group plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.018,
+        "unrealized_pct": 0.009,
         "mark": 169.0,
-        "avg_cost": 166.0046,
+        "avg_cost": 167.492,
         "signal": "buy",
         "timing_signal": "neutral",
         "conviction_score": 0.4504,
@@ -3153,37 +3099,37 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-26T14:19:28.545800+00:00",
+    "generated_at": "2026-10-27T14:20:06.570823+00:00",
     "stamped_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 21,
+      "closed_total": 23,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 3,
+      "open_with_thesis": 1,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 7,
+          "closed_count": 8,
           "recovery_rate": 1.0,
           "sold_underwater_rate": 0.0,
-          "mean_peak_unrealized_pct": 0.0859,
-          "mean_trough_unrealized_pct": -0.0138,
+          "mean_peak_unrealized_pct": 0.0752,
+          "mean_trough_unrealized_pct": -0.0121,
           "outcome_labels": {
-            "recovered": 7
+            "recovered": 8
           }
         },
         "broken": {
-          "closed_count": 14,
+          "closed_count": 15,
           "recovery_rate": 1.0,
           "sold_underwater_rate": 0.0,
-          "mean_peak_unrealized_pct": 0.0303,
-          "mean_trough_unrealized_pct": 0.0242,
+          "mean_peak_unrealized_pct": 0.0284,
+          "mean_trough_unrealized_pct": 0.0228,
           "outcome_labels": {
-            "recovered": 14
+            "recovered": 15
           }
         },
         "insufficient_data": {
@@ -3212,7 +3158,7 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 21,
+      "hold_closed_with_thesis": 23,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
         "swap sell legs with thesis=0 (target >=5)"
@@ -3226,15 +3172,15 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-26T14:19:28.552815+00:00",
-    "open_count": 4,
-    "closed_count": 19,
+    "generated_at": "2026-10-27T14:20:06.580108+00:00",
+    "open_count": 2,
+    "closed_count": 21,
     "scored_count": 9,
-    "scored_count_all": 19,
-    "recommit_scored_count": 10,
+    "scored_count_all": 21,
+    "recommit_scored_count": 12,
     "entry_kind_counts": {
       "first_entry": 9,
-      "recommit": 10
+      "recommit": 12
     },
     "any_de_risk_count": 0,
     "winning_cadence_counts": {
@@ -3283,17 +3229,17 @@
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
       "first_entry_scored": 9,
-      "recommit_scored": 10
+      "recommit_scored": 12
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
     "marked_this_pass": 4,
-    "closed_this_pass": 0
+    "closed_this_pass": 2
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-26T14:19:28.527325+00:00",
+    "generated_at": "2026-10-27T14:20:06.546363+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -3320,8 +3266,8 @@
     "open_count": 10,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 4,
-      "off_book": 6,
+      "on_book": 2,
+      "off_book": 8,
       "never_funded": 0
     },
     "closed_by_capital_status": {
@@ -3344,13 +3290,13 @@
       "opened": 0,
       "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 0
+      "tagged_off_book": 2
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-26T14:19:28.527325+00:00",
+    "generated_at": "2026-10-27T14:20:06.546363+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -3358,16 +3304,21 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 2,
-    "card_count": 2,
+    "proposal_count": 3,
+    "card_count": 3,
     "verdict_counts": {
       "agree": 2,
-      "veto": 0,
+      "veto": 1,
       "abstain": 0
     },
     "by_algo_action": {
+      "sell": {
+        "agree": 1,
+        "veto": 1,
+        "abstain": 0
+      },
       "buy": {
-        "agree": 2,
+        "agree": 1,
         "veto": 0,
         "abstain": 0
       }
@@ -3375,19 +3326,19 @@
     "disagree_vs_heuristic_count": 0,
     "cards": [
       {
-        "ticker": "CAPD.L",
-        "name": "Capital Limited",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "veto",
         "reasons": [
-          "Buy into buyish target set \u2014 agree with algo selection."
+          "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
         ],
         "evidence": [
           {
             "kind": "algo_reason",
             "source": "plan_or_trade",
-            "detail": "Automated buy"
+            "detail": "Automated exit \u2014 left target set"
           },
           {
             "kind": "screen_signal",
@@ -3399,13 +3350,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 2
+            "value": 1
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 2
+            "value": 1
           },
           {
             "kind": "rank_drop",
@@ -3423,7 +3374,7 @@
             "kind": "conviction_score",
             "source": "candidates",
             "detail": "Conviction score at decision time",
-            "value": 0.65
+            "value": 0.6804
           },
           {
             "kind": "still_buyish",
@@ -3449,8 +3400,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-26T14:19:28.527325+00:00",
-        "proposal_id": "buy_tier_level:CAPD.L:buy:2026-10-26T14:19:28.527325+00:00",
+        "logged_at": "2026-10-27T14:20:06.546363+00:00",
+        "proposal_id": "buy_tier_level:CARD.L:sell:2026-10-27T14:20:06.546363+00:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -3463,6 +3414,53 @@
             "key_filing_bodies": null,
             "filings_with_body": null,
             "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "TPT.L",
+        "name": "Topps Tiles Plc",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-27T14:20:06.546363+00:00",
+        "proposal_id": "buy_tier_level:TPT.L:sell:2026-10-27T14:20:06.546363+00:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": null,
+          "rank_drop_exit_min": 3,
+          "research_verdict": null,
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": null,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": null,
             "interim_eps_decline_pct": null,
             "adjusted_eps_growth_pct": null
           }
@@ -3544,8 +3542,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-26T14:19:28.527325+00:00",
-        "proposal_id": "buy_tier_level:SBRE.L:buy:2026-10-26T14:19:28.527325+00:00",
+        "logged_at": "2026-10-27T14:20:06.546363+00:00",
+        "proposal_id": "buy_tier_level:SBRE.L:buy:2026-10-27T14:20:06.546363+00:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -3569,28 +3567,35 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-26T14:19:28.527325+00:00",
+      "generated_at": "2026-10-27T14:20:06.546363+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 2,
+      "card_count": 3,
       "verdict_counts": {
         "agree": 2,
-        "veto": 0,
+        "veto": 1,
         "abstain": 0
       },
       "by_algo_action": {
+        "sell": {
+          "agree": 1,
+          "veto": 1,
+          "abstain": 0
+        },
         "buy": {
-          "agree": 2,
+          "agree": 1,
           "veto": 0,
           "abstain": 0
         }
       },
-      "veto_sell_count": 0,
-      "veto_sell_tickers": [],
+      "veto_sell_count": 1,
+      "veto_sell_tickers": [
+        "CARD.L"
+      ],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -3604,7 +3609,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-26T14:19:28.558894+00:00",
+  "generated_at": "2026-10-27T14:20:06.587889+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

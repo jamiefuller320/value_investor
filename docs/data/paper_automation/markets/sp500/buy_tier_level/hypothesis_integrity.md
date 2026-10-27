@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-26T14:19:10.254474+00:00
+Track: `buy_tier_level` · updated 2026-10-27T14:19:43.319824+00:00
 
 ## Portfolio loser feedback
 
@@ -116,10 +116,13 @@ Track: `buy_tier_level` · updated 2026-10-26T14:19:10.254474+00:00
 - data_quality 1.00
 - conviction 66%
 
-### TGT — weakening / watch_review (-7.1%)
-- timing=wait while underwater
+### TGT — intact / hold_tolerate (-7.1%)
+- price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 57%
 
 ### SNA — intact / hold_tolerate (-6.8%)
 - price drawdown alone does not invalidate value thesis
@@ -417,6 +420,13 @@ Track: `buy_tier_level` · updated 2026-10-26T14:19:10.254474+00:00
 - conviction 33% below intact floor
 - still buy
 - cheapness family still passes
+
+### MPC — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 67%
 
 ### KIM — intact / hold_tolerate (+0.1%)
 - still buy
@@ -820,13 +830,6 @@ Track: `buy_tier_level` · updated 2026-10-26T14:19:10.254474+00:00
 - cheapness family still passes
 - data_quality 0.90
 - conviction 47%
-
-### APA — intact / hold_tolerate (+22.7%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 66%
 
 ### IT — intact / hold_tolerate (+23.5%)
 - still strong_buy

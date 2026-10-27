@@ -3,37 +3,37 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-26T14:19:28.545800+00:00",
+  "generated_at": "2026-10-27T14:20:06.570823+00:00",
   "stamped_this_pass": {
-    "hold_episodes": 1,
+    "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 21,
+    "closed_total": 23,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 1,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 7,
+        "closed_count": 8,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0859,
-        "mean_trough_unrealized_pct": -0.0138,
+        "mean_peak_unrealized_pct": 0.0752,
+        "mean_trough_unrealized_pct": -0.0121,
         "outcome_labels": {
-          "recovered": 7
+          "recovered": 8
         }
       },
       "broken": {
-        "closed_count": 14,
+        "closed_count": 15,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0303,
-        "mean_trough_unrealized_pct": 0.0242,
+        "mean_peak_unrealized_pct": 0.0284,
+        "mean_trough_unrealized_pct": 0.0228,
         "outcome_labels": {
-          "recovered": 14
+          "recovered": 15
         }
       },
       "insufficient_data": {
@@ -62,7 +62,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 21,
+    "hold_closed_with_thesis": 23,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -1049,7 +1049,7 @@
       "ticker": "CARD.L",
       "name": "Card Factory plc",
       "started_at": "2026-10-26T14:19:28.527325+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -1082,9 +1082,9 @@
       "peak_unrealized_pct": 0.0,
       "trough_unrealized_pct": 0.0,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-27T14:20:06.546363+00:00",
+      "linked_sell_trade_id": "844c56b7-4c06-4ee1-abce-a5f411188b73"
     },
     {
       "episode_id": "buy_tier_level:TPT.L:2026-10-26T14:19:28.527325+00:00",
@@ -1092,7 +1092,7 @@
       "ticker": "TPT.L",
       "name": "Topps Tiles Plc",
       "started_at": "2026-10-26T14:19:28.527325+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -1106,12 +1106,12 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": 0.0,
-      "trough_unrealized_pct": 0.0,
+      "peak_unrealized_pct": 0.0029,
+      "trough_unrealized_pct": 0.0029,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-27T14:20:06.546363+00:00",
+      "linked_sell_trade_id": "e959b93f-3af6-4ba8-acba-ec456f2b53be",
       "thesis_status_at_start": "broken",
       "recommended_action_at_start": "exit_candidate",
       "thesis_reasons_at_start": [
@@ -3241,7 +3241,7 @@
       "buy_returns_since_rotation": {
         "CARD.L": 0.0273,
         "CAPD.L": -0.0369,
-        "TPT.L": -0.0028
+        "TPT.L": 0.0
       },
       "verdict": null,
       "closed_at": null
@@ -3303,7 +3303,7 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "TPT.L": -0.0028
+        "TPT.L": 0.0
       },
       "buy_returns_since_rotation": {
         "CARD.L": -0.0153,
@@ -3412,7 +3412,15 @@
           "cost": 0.99
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-27T14:20:06.546363+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0524,
+          "avg_buy_return": 0.1048,
+          "replacement_delta": 0.1572
+        }
+      ],
       "sell_returns_since_rotation": {
         "CAPD.L": -0.0524
       },
@@ -3637,7 +3645,83 @@
       },
       "buy_returns_since_rotation": {
         "CARD.L": 0.0,
-        "TPT.L": 0.0
+        "TPT.L": 0.0029
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-27T14:20:06.546363+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-27T14:20:06.546363+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.003,
+      "sells": [
+        {
+          "ticker": "CARD.L",
+          "price": 90.4,
+          "shares": 0.003961,
+          "gross": 0.36,
+          "cost": 0.0,
+          "avg_cost_at_exit": 90.4,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0
+        },
+        {
+          "ticker": "TPT.L",
+          "price": 35.0,
+          "shares": 8.241338,
+          "gross": 288.45,
+          "cost": 0.14,
+          "avg_cost_at_exit": 35.0,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "SBRE.L",
+          "price": 169.0,
+          "shares": 1.694484,
+          "gross": 286.37,
+          "cost": 1.58
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "CARD.L": 0.0,
+        "TPT.L": 0.0029
+      },
+      "buy_returns_since_rotation": {
+        "SBRE.L": 0.0
       },
       "verdict": null,
       "closed_at": null

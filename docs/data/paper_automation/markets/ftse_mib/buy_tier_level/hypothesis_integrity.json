@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-10-26T14:19:43.733443+00:00",
-  "as_of": "2026-10-26T14:19:43.553175+00:00",
+  "updated_at": "2026-10-27T14:20:36.762733+00:00",
+  "as_of": "2026-10-27T14:20:36.678981+00:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -19,9 +19,9 @@
   "holding_count": 8,
   "underwater_count": 0,
   "thesis_status_counts": {
-    "intact": 6,
+    "intact": 5,
     "weakening": 2,
-    "broken": 0,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
@@ -43,17 +43,49 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
-      "quality": 0.0,
-      "dividend": 0.375,
+      "cheapness": 0.125,
+      "quality": 0.125,
+      "dividend": 0.5,
       "garp": 0.5,
-      "risk": 0.0
+      "risk": 0.125
     },
     "selection_feedback_flags": [],
     "balancing_hint": "maintain",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
+    {
+      "ticker": "PST.MI",
+      "name": "PST.MI",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 24.0,
+      "avg_cost": 24.0,
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "cheapness lost and not in buy tier"
+      ],
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
+    },
     {
       "ticker": "INW.MI",
       "name": "Infrastrutture Wireless Italiane S.p.A.",
@@ -66,7 +98,7 @@
       "avg_cost": 7.325,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.2823,
+      "conviction_score": 0.3294,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -80,7 +112,7 @@
       "research_verdict": "caution",
       "reasons": [
         "research verdict caution",
-        "conviction 28% below intact floor",
+        "conviction 33% below intact floor",
         "still buy",
         "cheapness family still passes"
       ],
@@ -91,7 +123,7 @@
       ],
       "weaken_reasons": [
         "research verdict caution",
-        "conviction 28% below intact floor"
+        "conviction 33% below intact floor"
       ],
       "broken_reasons": []
     },
@@ -132,47 +164,6 @@
         "cheapness family still passes",
         "data_quality 1.00",
         "conviction 69%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "PST.MI",
-      "name": "Poste Italiane S.p.A.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 24.0,
-      "avg_cost": 24.0,
-      "signal": "buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.5667,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 57%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 57%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -351,7 +342,7 @@
       "avg_cost": 24.7347,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5813,
+      "conviction_score": 0.6698,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -367,14 +358,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 58%"
+        "conviction 67%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 58%"
+        "conviction 67%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
