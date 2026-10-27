@@ -14,7 +14,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-10-27T11:04:30.147779+00:00",
+    "snapshot_at": "2026-10-27T13:23:25.170700+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 49,
     "unmeasured_buy_tier": 0,
@@ -23,7 +23,7 @@
     "indexed_without_body": 5,
     "bodies_min": 1,
     "bodies_median": 5,
-    "bodies_max": 129,
+    "bodies_max": 130,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -88,7 +88,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-10-27T11:04:30.149250+00:00",
+  "evaluated_at": "2026-10-27T13:23:25.172219+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -143,11 +143,13 @@
       "market_id": "ftse_mib",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=4, indexed_without_body=5)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=2, indexed_without_body=0)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
-      "parked_tickers": [],
+      "parked_tickers": [
+        "PST.MI"
+      ],
       "phase3_ready": false,
       "current_phase": 0,
       "next_phase": 1,
@@ -155,15 +157,15 @@
         "no benchmark configured for ftse_mib"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-27T11:04:47.319108+00:00",
+        "snapshot_at": "2026-10-27T13:23:58.350204+00:00",
         "market_id": "ftse_mib",
         "buy_tier_count": 8,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 4,
-        "indexed_without_body": 5,
-        "bodies_min": 1,
-        "bodies_median": 2.5,
+        "thin_body_buy_tier": 2,
+        "indexed_without_body": 0,
+        "bodies_min": 2,
+        "bodies_median": 3.5,
         "bodies_max": 52,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
@@ -171,35 +173,20 @@
         "zero_body_tickers": [],
         "thin_body_tickers": [
           "PST.MI",
-          "UNI.MI",
-          "LTMC.MI",
           "FCT.MI"
         ],
-        "indexed_without_body_tickers": [
-          "UNI.MI",
-          "LTMC.MI",
-          "FCT.MI"
+        "indexed_without_body_tickers": [],
+        "indexed_without_body_by_ticker": {},
+        "parked_tickers": [
+          "PST.MI"
         ],
-        "indexed_without_body_by_ticker": {
-          "UNI.MI": 2,
-          "LTMC.MI": 2,
-          "FCT.MI": 1
-        },
-        "parked_tickers": [],
-        "parked_count": 0,
-        "effective_thin_body_buy_tier": 4,
+        "parked_count": 1,
+        "effective_thin_body_buy_tier": 1,
         "effective_thin_body_tickers": [
-          "PST.MI",
-          "UNI.MI",
-          "LTMC.MI",
           "FCT.MI"
         ],
-        "effective_indexed_without_body": 5,
-        "effective_indexed_without_body_tickers": [
-          "UNI.MI",
-          "LTMC.MI",
-          "FCT.MI"
-        ],
+        "effective_indexed_without_body": 0,
+        "effective_indexed_without_body_tickers": [],
         "ingest_exhausted": false
       },
       "filing_gaps": 0,
@@ -217,7 +204,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-27T11:04:47.319500+00:00",
+      "evaluated_at": "2026-10-27T13:23:58.352398+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -241,7 +228,7 @@
         "no benchmark configured for aex"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-27T11:04:47.602980+00:00",
+        "snapshot_at": "2026-10-27T13:23:58.878142+00:00",
         "market_id": "aex",
         "buy_tier_count": 9,
         "unmeasured_buy_tier": 0,
@@ -287,7 +274,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-27T11:04:47.603393+00:00",
+      "evaluated_at": "2026-10-27T13:23:58.878474+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -325,11 +312,11 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 11,
-    "skip_stream_2_now": true,
+    "hour_utc": 13,
+    "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",
-    "reason": "Head euro_depth still has filing gaps; stream 2 yields hour 11:00 UTC to the priority slot.",
+    "reason": "Head euro_depth still has filing gaps; spare width is each strand's unfilled names capped by host budget left and time left.",
     "config": {
       "enabled": true,
       "stream_1_target_fraction": 0.5,
