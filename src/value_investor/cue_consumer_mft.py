@@ -670,12 +670,26 @@ def build_hardened_proposal_stub(
     }
 
 
+_CLEARING_LABEL_ACTIONS = frozenset(
+    {
+        "accept",
+        "comment",
+        "duplicate",
+        "accepted",
+        "commented",
+        "duplicated",
+    }
+)
+
+
 def _label_history_index(labels: dict[str, Any] | None) -> dict[str, dict[str, Any]]:
     """Map review_id → latest label row from post_sale_review_labels.json."""
     if not isinstance(labels, dict):
         return {}
     index: dict[str, dict[str, Any]] = {}
-    history = labels.get("history") or labels.get("labels") or []
+    # Canonical Package M store uses top-level ``events`` (kind=accept/comment/…).
+    # Older fixtures used ``history`` / ``labels`` / ``by_review_id``.
+    history = labels.get("history") or labels.get("labels") or labels.get("events") or []
     if isinstance(labels.get("by_review_id"), dict):
         for rid, row in labels["by_review_id"].items():
             if isinstance(row, dict):
@@ -689,30 +703,45 @@ def _label_history_index(labels: dict[str, Any] | None) -> dict[str, dict[str, A
     return index
 
 
+def _row_clearing_action(row: dict[str, Any]) -> str:
+    return str(row.get("action") or row.get("label") or row.get("kind") or "").strip().lower()
+
+
 def _actioned_review_ids(labels: dict[str, Any] | None) -> set[str]:
-    """Review IDs that left the active queue via Accept/Comment (or reply Accept)."""
+    """Review IDs that left the active queue via Accept/Comment (or Duplicate).
+
+    Joins the live Package M labels shape:
+    - canonical ``actioned_review_ids`` list (same source as queue clear)
+    - top-level ``events`` rows with ``kind`` in accept/comment/duplicate
+    - legacy ``history`` / ``by_review_id`` fixtures (``action`` / ``label`` / ``kind``)
+    """
     actioned: set[str] = set()
-    index = _label_history_index(labels)
-    clearing = {
-        "accept",
-        "comment",
-        "duplicate",
-        "accepted",
-        "commented",
-        "duplicated",
-    }
-    for rid, row in index.items():
-        action = str(row.get("action") or row.get("label") or row.get("kind") or "").strip().lower()
-        if action in clearing:
+    if not isinstance(labels, dict):
+        return actioned
+
+    for item in labels.get("actioned_review_ids") or []:
+        rid = str(item or "").strip()
+        if rid:
             actioned.add(rid)
-        # Nested events list
+
+    # Top-level events (and nested events under indexed rows).
+    for row in labels.get("events") or []:
+        if not isinstance(row, dict):
+            continue
+        if _row_clearing_action(row) not in _CLEARING_LABEL_ACTIONS:
+            continue
+        rid = str(row.get("review_id") or row.get("id") or "").strip()
+        if rid:
+            actioned.add(rid)
+
+    index = _label_history_index(labels)
+    for rid, row in index.items():
+        if _row_clearing_action(row) in _CLEARING_LABEL_ACTIONS:
+            actioned.add(rid)
         for ev in row.get("events") or []:
             if not isinstance(ev, dict):
                 continue
-            ev_action = (
-                str(ev.get("action") or ev.get("label") or ev.get("kind") or "").strip().lower()
-            )
-            if ev_action in clearing:
+            if _row_clearing_action(ev) in _CLEARING_LABEL_ACTIONS:
                 actioned.add(rid)
     return actioned
 
@@ -769,6 +798,7 @@ def evaluate_start_gate(
         "checkpoint_status": "complete" if cohort_complete else "open",
         "cohort_size": len(cohort),
         "cohort_actioned": len(cohort) - len(remaining),
+        "cohort_remaining_n": len(remaining),
         "cohort_remaining": remaining[:20],
         "cohort_complete": cohort_complete,
         "calendar_fallback": CALENDAR_FALLBACK,
@@ -779,8 +809,9 @@ def evaluate_start_gate(
         "how_measured": (
             "Freeze open-autopsy review_ids into cue_consumer_mft_start_gate.json "
             f"cohort_review_ids under checkpoint_id={checkpoint_id}. Complete when "
-            "each id is Accept/Comment-actioned in post_sale_review_labels — new "
-            "just_sold refill of the active queue does not reopen the checkpoint. "
+            "each id is Accept/Comment-actioned in post_sale_review_labels "
+            "(actioned_review_ids + events.kind) — new just_sold refill of the "
+            "active queue does not reopen the checkpoint. "
             f"Alternate: on_or_after {CALENDAR_FALLBACK}."
         ),
         "evolutionary_shadows_note": (
@@ -1119,7 +1150,12 @@ def refresh_cue_consumer_mft(
     gate_store["last_evaluation"] = {
         "eligible": start_eval["eligible"],
         "eligibility_reason": start_eval["eligibility_reason"],
-        "cohort_remaining_n": len(start_eval.get("cohort_remaining") or []),
+        "cohort_remaining_n": int(
+            start_eval.get("cohort_remaining_n")
+            if start_eval.get("cohort_remaining_n") is not None
+            else len(start_eval.get("cohort_remaining") or [])
+        ),
+        "cohort_actioned": int(start_eval.get("cohort_actioned") or 0),
         "calendar_ok": start_eval["calendar_ok"],
         "proposed_n": len(
             [x for x in (gate_store.get("proposed_cohort_review_ids") or []) if str(x).strip()]
