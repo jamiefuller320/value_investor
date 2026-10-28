@@ -1,6 +1,6 @@
 # Victrex plc (VCT.L) — Research memo
 
-_Version 4 · Updated 2026-10-11T08:02:07.500842+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-28T10:54:10.893978+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.70
-Rationale: Pre-close PBT guidance stands and the persistent buy screen holds, but no new RNS and the 24 Sep dividend reset plus ~0.95× FCF cover still temper the yield case — confirms measured accumulation.
+Confidence: 0.68
+Rationale: Persistent buy screen and Sep FY26 PBT guidance stand, but no post-capital-markets trading RNS and ~0.95x FCF cover on the reset dividend still temper yield — confirms measured accumulation.
 RiskTags: cyclical, competitive, liquidity, leverage, accounting, customer_concentration, key_person, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Quantitative buy signal unchanged (second week, stable timing).
 No trading or results RNS since the 9 Sep pre-close upgrade; only routine 30 Sep voting-rights and 5 Oct holder disclosure.  
 News batch since 4 Oct empty; quantitative buy signal unchanged (fourth week, stable).  
 No material change to FY26 guidance or the 24 Sep dividend and capital-return framework.
+
+### 2026-10-28T10:54:10.893978+00:00
+No trading or results RNS since the 9 Sep pre-close upgrade; filings index through 28 Oct shows only routine holder/voting-rights items (including 5 Oct Norges Bank TR-1).  
+News since 11 Oct is quote syndication and a 20 Oct Kalkine comment piece — no new company disclosures.  
+Quantitative buy signal unchanged (seventh week, stable); FY26 PBT guidance and the 24 Sep dividend/capital-return framework unchanged.

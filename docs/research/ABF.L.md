@@ -1,6 +1,6 @@
 # Associated British Foods plc (ABF.L) — Research memo
 
-_Version 4 · Updated 2026-10-04T08:01:39.936802+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-28T11:14:25.709019+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.63
-Rationale: With no new disclosures or news, research stays neutral on the buy screen; September trading cautions and the filing vs management FCF gap remain unaddressed.
+Confidence: 0.62
+Rationale: Press reiterates September outlook cautions without new disclosures; unresolved FCF definition gaps leave research neutral on the buy screen, not confirming cheapness alone.
 RiskTags: cyclical, competitive, regulatory, pension, accounting, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ No material primary filings since the 15 September refresh; September outlook ca
 No company news in the batch since the 21 September refresh.  
 No new primary RNS or accounts filings after the 10 September trading statement.  
 September segment cautions and the unresolved FCF basis gap are unchanged.
+
+### 2026-10-28T11:14:25.709019+00:00
+Since 4 October, secondary media has revisited the September trading cautions (Sugar, grocery, European Primark) and Primark UK delivery, plus commentary on British Sugar changes.  
+Simply Wall Street–style forecast pieces circulated; nothing adds primary RNS or accounts evidence.  
+September outlook risks and the unresolved filing vs management FCF basis gap are unchanged.

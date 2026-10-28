@@ -1,6 +1,6 @@
 # Currys plc (CURY.L) — Research memo
 
-_Version 7 · Updated 2026-10-25T07:45:13.552157+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-10-28T10:48:07.133682+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Screen cheapness is stronger, but stale 10 Sep/28 Aug filings and unchanged cyclical, pension, liquidity and execution risks still limit research vs the strong-buy signal.
+Rationale: Strong-buy screen persists (~81%, sixth week), but research still rests on the 10 Sep update; 27 Oct NED notice and buyback RNS do not offset cyclical, pension, liquidity and execution risks.
 RiskTags: cyclical, competitive, pension, leverage, key_person, liquidity, accounting, other
 
 ## Weekly updates
@@ -43,3 +43,8 @@ Press is commentary (valuation, insider headlines); prior cyclical, pension and 
 Strong buy screen persists (~81% composite, fifth week; models 10/22), with no change to filing-backed fundamentals since the 10 Sep trading update.  
 Since 18 Oct: only routine buyback RNS (20 Oct); no new trading statement, interims or accounts ahead of the 17 Dec date flagged on 7 Oct.  
 News is Kalkine/Yahoo-style commentary (buyback, valuation); cyclical, pension, liquidity and execution risks are unchanged.
+
+### 2026-10-28T10:48:07.133682+00:00
+Strong buy screen persists (~81% composite, sixth week); fundamentals are still anchored on the 10 Sep trading update and 28 Aug annual report.  
+Since 25 Oct: 27 Oct RNS on an independent NED stepping down on 19 Jan 2027 and a routine buyback; no trading statement or interims ahead of 17 Dec.  
+Press is Yahoo quote-page only; prior cyclical, pension, liquidity and execution risks are unchanged.

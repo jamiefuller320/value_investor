@@ -1,6 +1,6 @@
 # Centrica plc (CNA.L) — Research memo
 
-_Version 4 · Updated 2026-10-04T08:03:11.635320+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-28T11:15:58.673601+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.71
-Rationale: Research still confirms the screen buy on cheapness and ROE; the Oct upstream sale completion is mildly supportive but H1 negative FCF and unresolved FCF/dividend-cover definitions limit conviction.
+Rationale: Research still confirms the screen buy on cheapness and ROE; no new disclosures since the upstream sale completion; FCF basis mismatch and H1 negative FCF still cap conviction.
 RiskTags: regulatory, cyclical, pension, leverage, competitive, accounting
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Quantitative screen still buy with accumulate timing; FCF basis mismatch and H1 
 1 October RNS: Spirit Energy completed the Cygnus, GMA and SNS sale to Serica (£33m consideration; £44m decommissioning liabilities transferred); Morecambe Hub is now the principal producing asset.  
 Since 21 September, other RNS was routine (Total Voting Rights, director shareholdings); syndicated pieces on grid delays, Sizewell C/Rough and nuclear SMR added no new primary disclosures.  
 Screen still buy (P/E ~9.9, yield ~3.8%); FCF basis mismatch and H1 2026 negative quarterly FCF overlay unchanged.
+
+### 2026-10-28T11:15:58.673601+00:00
+Since 4 October there has been no RNS with financial or strategic substance; only routine director/PDMR shareholding notices (14 and 26 October).
+Syndicated LSE quote and analyst forecast pieces add no new primary disclosures.
+The screen remains a stable buy (P/E ~10.0, yield ~3.8%); FCF basis mismatch and H1 2026 negative quarterly FCF overlay are unchanged.

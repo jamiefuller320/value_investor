@@ -1,6 +1,6 @@
 # Pets at Home Group Plc (PETS.L) — Research memo
 
-_Version 4 · Updated 2026-10-04T08:00:41.853524+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-28T11:13:11.633239+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.64
-Rationale: No trading or results RNS since 21 Sep; buyback RNS continues but syndicated news adds no verified fundamentals—FCF mismatch and weak liquidity keep research neutral on hold.
+Rationale: Ongoing buyback RNS and price momentum press add no verified update; FCF basis mismatch and weak liquidity keep research neutral on the hold screen.
 RiskTags: cyclical, competitive, governance, leverage, liquidity, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Screen hold stable (2w); FCF definition divergence and weak current-ratio flags 
 No trading or results RNS since 21 Sep; H1 FY27 remains due 25 November 2026.  
 RNS is buyback, total voting rights (1 Oct), and routine filings only; press is syndicated (buybacks, retail price)—no new fundamentals.  
 Screen hold stable (7w); FCF definition divergence and weak current-ratio flags unchanged.
+
+### 2026-10-28T11:13:11.633239+00:00
+No trading or results RNS since 4 Oct; H1 FY27 remains scheduled for 25 November 2026.
+RNS since then is buyback only (Transaction in Own Shares, 5 Oct); press is syndicated (52-week high commentary, generic pet items)—no new fundamentals.
+Screen hold stable (12w); timing wait on overbought RSI; FCF definition divergence and weak current-ratio flags unchanged.

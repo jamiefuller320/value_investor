@@ -1,6 +1,6 @@
 # FirstGroup plc (FGP.L) — Research memo
 
-_Version 7 · Updated 2026-10-07T10:40:37.498987+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-10-28T10:49:36.432868+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: Persistent screen cheapness and active buybacks modestly support the case, but unresolved FCF bases and DfT/rail, leverage and pension risks still stop research from fully endorsing strong buy.
+Confidence: 0.73
+Rationale: Persistent cheapness and buybacks modestly support the case, but unresolved FCF bases and DfT/rail, leverage and pension risks still stop research fully endorsing strong buy; RSI ~91 worsens timing.
 RiskTags: regulatory, cyclical, leverage, pension
 
 ## Weekly updates
@@ -41,3 +41,8 @@ No material change. Empty news batch since 23 Sep; no new filings or headlines. 
 Headlines since 27 Sep: buyback extended with higher treasury holdings; ~1.7m shares repurchased 21–25 Sep and routine “transaction in own shares” notices; six-month block listing noted no employee-scheme issuance Apr–Sep 2026.
 Strong buy screen still stable (24 weeks); RSI ~71 (was ~56)—timing less favourable; no new filings.
 FCF triple-basis mismatch and DfT/rail overlay unchanged; buybacks support capital return but do not resolve cash-flow definition risk.
+
+### 2026-10-28T10:49:36.432868+00:00
+Since 7 Oct the incremental batch is only an LSE quote page; the wider feed adds routine buyback and capital-reduction notices (12–19 Oct) and a third-party rail route-block headline (14 Oct).  
+Strong buy screen still stable (28 weeks); RSI ~91 (was ~71)—screen timing is now wait; FCF triple-basis and DfT/rail overlay unchanged.  
+No new results filings in this batch.

@@ -1,6 +1,6 @@
 # Domino's Pizza Group plc (DOM.L) — Research memo
 
-_Version 4 · Updated 2026-10-04T08:18:42.918185+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-28T11:34:34.746678+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.75
-Rationale: H1 filings still anchor value, but only routine holdings/voting-rights RNS and commentator price noise since September—FCF/cover mismatch unchanged, confirming not upgrading the Buy screen.
+Confidence: 0.76
+Rationale: 21 Oct Q3 RNS shows positive LFL trading and unchanged FY expectations; H1 still anchors value, but the filing vs screen FCF gap is unchanged—confirms accumulate, not a stronger Buy overlay.
 RiskTags: cyclical, governance, leverage, customer_concentration, competitive, accounting
 
 ## Weekly updates
@@ -27,3 +27,8 @@ Research view unchanged: accumulate.
 No results or trading updates since the 21 September refresh; RNS since then is routine holdings (23–24 September) and total voting rights (1 October).
 News is third-party commentary on share volatility and macro uncertainty, with no new company disclosures.
 Buy screen unchanged (6 weeks); same filing vs screen TTM FCF divergence and neutral timing.
+
+### 2026-10-28T11:34:34.746678+00:00
+21 October Q3 trading statement: LFL sales +2.3%, orders +1.4%; board maintains full-year expectations in line with market.  
+Other RNS since 4 October is routine holdings (12–28 October); no interim results.  
+Commentary on Berenberg initiation and Chick ’N’ Dip; Buy screen at 11 weeks, same FCF filing vs TTM mismatch.

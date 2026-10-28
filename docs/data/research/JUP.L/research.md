@@ -1,6 +1,6 @@
 # Jupiter Fund Management Plc (JUP.L) — Research memo
 
-_Version 4 · Updated 2026-10-07T10:46:23.609932+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-28T11:40:29.253742+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Research still confirms the buy screen on H1 filing-backed turnaround and cheap multiples; post-Sep news is buyback/voting-rights routine plus PDMR disclosure, with no new results or AUM flow evidence.
+Confidence: 0.74
+Rationale: Q3 RNS-backed net inflows and record AUM extend H1 turnaround momentum and confirm the buy screen; CCLA outflows and cyclical flow risk still qualify the case.
 RiskTags: cyclical, competitive, regulatory, key_person, accounting, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Thesis unchanged: cheap screen vs cyclical flows, CCLA integration, fee-margin d
 Since 21 Sep, coverage is mostly capital-return housekeeping: 650k share cancellation (28 Sep), total voting rights at ~513m (30 Sep), and further transaction-in-own-shares RNS (5 Oct).  
 A 1 Oct Director/PDMR shareholding notice and related press on a large insider transaction add no new earnings or flow data beyond routine disclosure.  
 No new results, trading updates or substantive filings; H1 2026 remains the research baseline.
+
+### 2026-10-28T11:40:29.253742+00:00
+Since 7 Oct, Jupiter published a 15 Oct Q3 trading update: £0.7bn net inflows, YTD £1.4bn, record AUM £75.9bn; CCLA saw £0.5bn net outflows.  
+The 8 Oct RNS marked completion of the 2026 share buyback; follow-on coverage is mostly commentary on flows and valuation, not new filings.  
+Full-year results are scheduled for 25 Feb 2027; H1 2026 remains the last full earnings baseline.

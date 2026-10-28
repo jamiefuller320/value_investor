@@ -1,6 +1,6 @@
 # Rio Tinto Group (RIO.L) — Research memo
 
-_Version 4 · Updated 2026-10-11T08:13:12.598540+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-28T11:01:20.787587+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Research still supports phased accumulation on a persistent buy screen and filing cheapness, but is neutral on sparse post-Sep news and unchanged statutory FCF/dividend-cover limits.
+Confidence: 0.73
+Rationale: Research supports phased accumulation on a new strong-buy screen and cheapness, but is neutral on thin, non-RNS news and unchanged statutory FCF cover limits versus the full strong-buy case.
 RiskTags: cyclical, regulatory, governance, pension, leverage, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Buy screen still persistent (8/22, ~6 weeks, RSI ~43); filing view unchanged on 
 Since 23 Sep, news is thin—Yahoo chart pages and secondary earnings commentary only; no RNS, trading statement, Aurukun completion, or revised 2026 guidance sourced.  
 211 US cent interim dividend (FX set mid-Sep) would have paid 24 Sep; no post-payment company update in the batch.  
 Buy screen still persistent (8/22, 11w, stable, RSI ~46); filing view unchanged on statutory 0.73× FCF dividend cover and FCF-yield/earnings-quality fails.
+
+### 2026-10-28T11:01:20.787587+00:00
+Screen is now **strong buy** (11/22, two weeks, stable, RSI ~33) versus the prior long-running buy label from 25 Oct.  
+Secondary press flags ~$1.9bn Queensland bauxite spend and a proposed CEO target pay increase; no RNS, trading statement, or revised 2026 guidance in the batch.  
+Filing view unchanged: statutory 0.73× FCF dividend cover and FCF-yield / earnings-quality screen fails.

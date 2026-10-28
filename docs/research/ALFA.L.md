@@ -1,6 +1,6 @@
 # Alfa Financial Software Holdings PLC (ALFA.L) — Research memo
 
-_Version 4 · Updated 2026-10-11T08:03:56.546002+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-28T10:56:29.847415+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: H1 2026 filing still supports subscription and TCV momentum with FY on track; no post-Sep RNS or news weakens the screen buy; premium P/B, FX and governance offsets unchanged.
+Rationale: No new RNS since Sep H1; Oct press is mostly mis-tagged Alfa Laval—not ALFA.L; H1 still supports the strong buy screen; premium P/B, FCF basis and governance offsets unchanged.
 RiskTags: cyclical, competitive, governance, customer_concentration, key_person, regulatory, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ H1 themes—ARR/TCV growth, contracting delays, severance and FX on reported pro
 No new company RNS since the 3 Sep H1 report; only routine 30 Sep total voting rights since the 23 Sep refresh.  
 24 Sep–11 Oct news batch is empty; no profit warnings or regulatory actions identified.  
 Disclosure set and H1 themes (ARR/TCV, FX, contracting) are unchanged; thesis intact.
+
+### 2026-10-28T10:56:29.847415+00:00
+No new company RNS since 30 Sep total voting rights; the 3 Sep H1 2026 report remains the latest substantive disclosure.  
+11–28 Oct news is mostly mis-tagged Alfa Laval (OM:ALFA) pieces, not Alfa Financial Software; only routine LSE quote noise for ALFA.L.  
+No profit warnings or regulatory actions identified; thesis unchanged.
