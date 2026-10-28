@@ -1847,6 +1847,70 @@ def bind_overlay_fcf_to_filing_year_company_adjusted(
     return bundle
 
 
+def build_fcf_basis_registry(fcf_bundle: dict[str, Any]) -> dict[str, Any]:
+    """Structured filing / screen TTM / company-adjusted selection for exports and overlays."""
+    policy_basis = str(fcf_bundle.get("policy_basis") or "").strip() or None
+    policy_fcf = _float_or_none(fcf_bundle.get("policy_fcf"))
+    canonical = _float_or_none(fcf_bundle.get("canonical"))
+    source = str(fcf_bundle.get("source") or "")
+    # Bridge/auto policy already stamped ``canonical``; prefer it over live
+    # ``policy_fcf`` which may have been refreshed from RNS prose mid-reconcile.
+    if source.startswith("policy_") and canonical is not None:
+        selected_fcf = canonical
+    else:
+        selected_fcf = policy_fcf if policy_fcf is not None else canonical
+    selected_basis = policy_basis
+    if selected_basis is None and selected_fcf is not None:
+        if source.startswith("policy_"):
+            selected_basis = source.removeprefix("policy_")
+        elif source.endswith("_filing_aligned") or source == "auto_fallback_filing_aligned":
+            selected_basis = "filing_aligned"
+        elif source.endswith("_company_adjusted"):
+            selected_basis = "company_adjusted"
+        elif "screen_ttm" in source:
+            selected_basis = "screen_ttm"
+
+    return {
+        "selected_basis": selected_basis,
+        "selected_fcf": selected_fcf,
+        "primary_fcf": _float_or_none(fcf_bundle.get("primary_fcf")),
+        "primary_fcf_basis": fcf_bundle.get("primary_fcf_basis"),
+        "filing_aligned": _float_or_none(fcf_bundle.get("filing_aligned")),
+        "screen_ttm": _float_or_none(fcf_bundle.get("screen_ttm")),
+        "company_adjusted": _float_or_none(fcf_bundle.get("company_adjusted")),
+        "screen_ttm_unverified": bool(fcf_bundle.get("screen_ttm_unverified")),
+        "company_adjusted_stale_year": bool(fcf_bundle.get("company_adjusted_stale_year")),
+        "fiscal_year": fcf_bundle.get("fiscal_year"),
+        "currency": fcf_bundle.get("currency"),
+        "selection_source": fcf_bundle.get("source"),
+        "bridge_resolved": bool(fcf_bundle.get("bridge_resolved")),
+        "auto_policy_method": fcf_bundle.get("auto_policy_method"),
+    }
+
+
+def finalize_fcf_basis_bundle(bundle: dict[str, Any]) -> dict[str, Any]:
+    """Attach the basis registry; fill canonical only when policy has not already stamped it."""
+    out = dict(bundle)
+    registry = build_fcf_basis_registry(out)
+    selected = registry.get("selected_fcf")
+    source = str(out.get("source") or "")
+    if (
+        selected is not None
+        and out.get("canonical") is None
+        and (out.get("bridge_resolved") or out.get("auto_policy_resolved"))
+        and not source.startswith("policy_")
+    ):
+        out["canonical"] = float(selected)
+    # Keep registry selected_fcf aligned with the final canonical when present.
+    if out.get("canonical") is not None:
+        registry = dict(registry)
+        registry["selected_fcf"] = float(out["canonical"])
+        if registry.get("selected_basis") is None and source.startswith("policy_"):
+            registry["selected_basis"] = source.removeprefix("policy_") or None
+    out["fcf_basis_registry"] = registry
+    return out
+
+
 def fcf_basis_values_diverge(
     left: float | None,
     right: float | None,
@@ -2729,7 +2793,8 @@ def reconcile_fcf_for_ticker(
             "fcf_yield_unit_fx_error": False,
         }
     )
-    return stamp_primary_fcf_on_bundle(bundle, stub_row)
+    stamped = stamp_primary_fcf_on_bundle(bundle, stub_row)
+    return finalize_fcf_basis_bundle(stamped)
 
 
 def _float_or_none(value: Any) -> float | None:
