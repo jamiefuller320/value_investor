@@ -1,89 +1,15 @@
 {
-  "run_at": "2026-10-27T16:08:12.412459+00:00",
+  "run_at": "2026-10-28T07:42:32.223562+00:00",
   "market_id": "ftse_mib",
-  "targets": [
-    "FCT.MI"
-  ],
-  "target_details": [
-    {
-      "ticker": "FCT.MI",
-      "priority_score": 3.44,
-      "filings_total": 2,
-      "filings_with_body": 2,
-      "indexed_without_body": 0,
-      "reason": "thin_bodies"
-    }
-  ],
-  "results": [
-    {
-      "ticker": "FCT.MI",
-      "reason": "thin_bodies",
-      "before": {
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0
-      },
-      "after": {
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0
-      },
-      "improved": false,
-      "regime": "euro_filings",
-      "filings_summary": {
-        "total": 2,
-        "annual": 1,
-        "interim": 0,
-        "trading_update": 0,
-        "other": 1,
-        "with_body": 2,
-        "period_coverage": {
-          "annual": {
-            "total": 1,
-            "with_body": 1
-          },
-          "interim": {
-            "total": 0,
-            "with_body": 0
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 1,
-            "with_body": 1
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 2,
-        "with_body_after": 2,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 1,
-          "note": "merge_ir_allowlist_filings"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    }
-  ],
+  "targets": [],
+  "target_details": [],
+  "results": [],
   "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-27T16:06:22.378181+00:00",
+    "snapshot_at": "2026-10-28T07:41:57.232874+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
@@ -104,19 +30,18 @@
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
     "parked_tickers": [
+      "FCT.MI",
       "PST.MI"
     ],
-    "parked_count": 1,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
-      "FCT.MI"
-    ],
+    "parked_count": 2,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-27T16:06:37.831366+00:00",
+    "snapshot_at": "2026-10-28T07:42:27.149136+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
@@ -153,46 +78,37 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 8,
+    "hits": 8,
+    "new_rows_total": 0,
+    "curiosity_total": 8,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "PST.MI",
+      "FCT.MI"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "advanced": true,
-    "parallel_stream": 1,
-    "from_market": "ftse_mib",
-    "to_market": "euro_stoxx50",
-    "stream_markets_after": [
-      "euro_stoxx50"
-    ],
-    "parity_event": {
-      "recorded": false,
-      "reason": "ingest_exhausted_leftover_gaps",
-      "market_id": "ftse_mib",
-      "ingest_exhausted": true,
-      "exhausted_maintenance_recorded": true,
-      "parked_tickers": [
-        "FCT.MI",
-        "PST.MI"
-      ],
-      "learning_admitted_changed": false,
-      "learning_admitted": true
-    },
-    "screen_refresh": {
-      "refreshed": true,
-      "market_id": "euro_stoxx50",
-      "forced": true,
-      "prior_screen_at": "2026-10-25T19:23:25.024786+00:00",
-      "prior_age_days": 2,
-      "run_at": "2026-10-27T16:08:07.539980+00:00",
-      "shortlist_count": 14,
-      "ticker_count": 50
-    },
-    "at": "2026-10-27T16:06:54.362229+00:00",
-    "ingest_parity_recorded": false
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "ftse_mib"
   },
   "critical_path": {
     "market_id": "ftse_mib",
-    "assessed_at": "2026-10-27T16:06:23.082397+00:00",
+    "assessed_at": "2026-10-28T07:41:57.912245+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -217,9 +133,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 14.059840800000018,
-  "budget_seconds": 87.5,
-  "leftover_seconds": 73.44015919999998,
+  "used_seconds": 28.48368705200005,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3571.5163129479997,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -227,9 +143,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_mib",
-    "updated_at": "2026-10-27T16:06:37.838652+00:00",
+    "updated_at": "2026-10-28T07:42:27.158251+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 2,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -303,7 +219,7 @@
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 49,
-    "candidate_count": 40,
+    "candidate_count": 44,
     "skipped_resolved_tickers": [
       "LMT",
       "CRH",
@@ -324,10 +240,14 @@
       "HNR1.DE",
       "MUV2.DE",
       "PST.MI",
+      "ACKB.BR",
+      "APAM.AS",
       "0285.HK",
       "0857.HK",
       "0288.HK",
-      "2331.HK"
+      "2331.HK",
+      "EVN.VI",
+      "WIE.VI"
     ],
     "wait_behind_task_id": ""
   }
