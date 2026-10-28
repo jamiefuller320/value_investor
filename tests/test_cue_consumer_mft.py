@@ -37,13 +37,13 @@ from value_investor.cue_consumer_mft import (
     thin_emit_readiness,
 )
 from value_investor.post_sale_review_labels import empty_labels_store, load_post_sale_review_labels
-from value_investor.storage import write_json
 from value_investor.post_sale_review_opinion import (
     OPINION_SOURCE_DETERMINISTIC,
     build_initial_opinion,
     consider_human_comment,
     generate_factory_reply,
 )
+from value_investor.storage import write_json
 
 
 def test_registration_is_observe_only_fixed_stake():
