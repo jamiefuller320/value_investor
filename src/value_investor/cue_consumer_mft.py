@@ -1261,13 +1261,9 @@ def refresh_cue_consumer_mft(
         queue=queue,
     )
     if int(ghost_heal.get("cleared_n") or 0) > 0:
-        labels = _safe_read(
-            Path(labels_path) if labels_path is not None else DEFAULT_LABELS_PATH
-        )
+        labels = _safe_read(Path(labels_path) if labels_path is not None else DEFAULT_LABELS_PATH)
 
-    start_eval = evaluate_start_gate(
-        start_gate=gate_store, labels=labels, queue=queue, today=today
-    )
+    start_eval = evaluate_start_gate(start_gate=gate_store, labels=labels, queue=queue, today=today)
     gate_store["generated_at"] = when
     gate_store["checkpoint_id"] = gate_store.get("checkpoint_id") or START_CHECKPOINT_ID
     gate_store["cohort_selection_id"] = gate_store.get("cohort_selection_id") or COHORT_SELECTION_ID
@@ -1283,9 +1279,7 @@ def refresh_cue_consumer_mft(
             else len(start_eval.get("cohort_remaining") or [])
         ),
         "cohort_actioned": int(start_eval.get("cohort_actioned") or 0),
-        "cohort_remaining_in_active_n": int(
-            start_eval.get("cohort_remaining_in_active_n") or 0
-        ),
+        "cohort_remaining_in_active_n": int(start_eval.get("cohort_remaining_in_active_n") or 0),
         "cohort_remaining_ghosts_n": int(start_eval.get("cohort_remaining_ghosts_n") or 0),
         "ghost_heal_cleared_n": int(ghost_heal.get("cleared_n") or 0),
         "calendar_ok": start_eval["calendar_ok"],
