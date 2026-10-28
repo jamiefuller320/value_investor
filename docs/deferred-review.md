@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-28T14:45:35+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-28T14:55:23+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -384,6 +384,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L644 | **Missed-opportunity auto digest for blind autopsy / stock choice** | Companion observe stream (auto digest, ops-monitor wired) of the highest-performing not-bought cohort vs lab/buy path. Feeds super-book entry lenses and MoM stock-choice lever — not a manual autopsy of all sealed books. Cap cohort size; alignment-only. | entry_blind v0 ships on lab/interesting OR super-book Q8B cohort freeze completes (whichever first); then design ranking metric + cap |
 | L646 | **cue_consumer_mft weekday paper-auto track wiring** | Lab walker records observe episodes in cue_consumer_mft_observe.json. Optional later: wire a weekday paper-auto track / rebalance-log twin for the lab book without stealing Data P1 or spawning sealed children. | Lab has durable closed episode volume and owner wants weekday paper-auto marks alongside archive walker |
 | L647 | **Remote LLM voice on N228 judgment checklist (still observe-only)** | Deterministic N228 cite fill ships on cue_consumer_mft decide trail. Optional later: remote LLM agree/veto prose on the same B1-B6/S1-S6 checklist with durable cites — influences_live=false until a separate promote gate; never Package L. | Deterministic judgment fill has closed-episode volume and owner asks for LLM voice on lab decide (F1 shadow marks readable) |
+| L648 | **Entry-revisit chart path series on buy+28d cards** | Thin entry_revisit v0 shows textual path status (still_open/already_exited + fair-cost %). Later: mount path_to_plus28 chart series on Lifecycle Entry +28d cards (same dual-horizon style as post-sale, clipped at buy+28d). | entry_revisit queue has regular Sunday volume and owner asks for chart on +28d cards |
 
 ### Universe & data
 
@@ -684,7 +685,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L612 | **Refresh cold-store Ops badge from the live fat-slot bit** | The Automation Ops cold-store card copies the last pack_run gate. After head_needs_fat_slot goes false, that card can keep saying suspend until the next 22:00 pack even though archive_lane_gate would allow. Do not treat the card as the live stop, and do not let the archive run while the bit is true. | head_needs_fat_slot is false and the Ops cold-store card still shows gate suspend with focus_fat_slot_sprint_active from an older pack_run |
 | L614 | **Publish FTSE pound caps observe-only after 1104** | PR 1104 adds compute_ftse350_pound_caps and 150 sourced share counts so 250 of 350 caps are computable. The function is not called by the screen, memos, paper fund, or N200–N210. After it is on main, publish the caps as an observe-only ops finding. Leave historical paper NAV and observe episode marks as they were. | When pull request 1104 is merged to main. |
 | L635 | **Weight-aware pytest sharding for research_filings** | Round-robin by sorted file path moves the huge test_research_filings module (and its live_network tests) between CI shards whenever an earlier test file is added. PR/push CI now skips live_network; consider sharding by collected test count or isolating research_filings so one matrix job cannot absorb disproportionate runtime. | A CI shard without live_network still regularly exceeds ~15 minutes, or nightly live_network shard timeouts become frequent |
-| L640 | **cue_consumer_mft dashboard / observe-utilization strip** | Surface lab arm status, Q8B proposed/frozen/remaining, and MoM lever stubs on dashboard or observe_utilization without a new equal sprint. | Lab has closed episodes or owner asks for hub visibility of super-book arm state |
 
 ---
 

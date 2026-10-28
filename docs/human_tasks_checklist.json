@@ -227,9 +227,17 @@
         {
           "id": "sunday-entry-blind-reviews",
           "title": "Work entry-blind review queue (lab/interesting buys; PIT only)",
-          "summary": "Sunday nest beside post-sale reviews (Package M v0): open Lifecycle → Entry blind (docs/data/entry_blind_review_queue.json). Critique recent lab / interesting buys with PIT chart through buy day + buy decision reasons only — no post-fill path / realized % / exit chrome. Accept/Comment/Duplicate; actioned clear from active; history in entry_blind_review_labels.json. influences_live=false — never knobs/fills. Ops finding Entry-blind review queue (observe). Exit stages + missed-opp stay parked.",
+          "summary": "Sunday nest beside post-sale reviews (Package M v0): open Lifecycle → Entry blind (docs/data/entry_blind_review_queue.json). Critique recent lab / interesting buys with PIT chart through buy day + buy decision reasons only — no post-fill path / realized % / exit chrome. Accept/Comment/Duplicate; actioned clear from active; history in entry_blind_review_labels.json. influences_live=false — never knobs/fills. Ops finding Entry-blind review queue (observe). Nest neighbor: sunday-entry-revisit-reviews. Exit stages + missed-opp stay parked.",
           "automated": false,
           "doc_path": "docs/ops/entry-blind-review.md"
+        },
+        {
+          "id": "sunday-entry-revisit-reviews",
+          "title": "Work entry-revisit queue (fixed buy+28d after entry_blind)",
+          "summary": "Sunday nest beside entry-blind (Package M): open Lifecycle → Entry +28d (docs/data/entry_revisit_review_queue.json). Only cards with entry_blind Accept/Comment and asof ≥ buy_day+28. Frozen blind summary + path through +28d (still_open / already_exited). Accept/Comment/Duplicate; never rewrite blind labels; influences_live=false — never knobs/fills / never Package L. Ops finding Entry-revisit review queue (observe).",
+          "automated": false,
+          "doc_path": "docs/ops/entry-blind-review.md",
+          "doc_anchor": "entry-revisit-buy28d--shipped"
         },
         {
           "id": "sunday-entry-dca-cadence",

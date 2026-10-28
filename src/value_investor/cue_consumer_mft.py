@@ -1726,7 +1726,7 @@ def build_lab_payload(
             "L631": "archive frozen cull losers",
             "N228": "shipped_deterministic_fill_v0",
             "N229": "human chart draw tools (keep deferred)",
-            "L640": "dashboard / observe-utilization strip",
+            "L640": "shipped_observe_utilization_strip",
             "N228_llm_api": (
                 "optional later: remote LLM agree/veto voice on the same "
                 "checklist — still influences_live=false until promote gate"
