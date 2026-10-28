@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-28T11:42:15.197083+00:00",
+  "generated_at": "2026-10-28T13:44:34.318813+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -105,16 +105,16 @@
       "failed_fetch_count": 0,
       "last_metrics_refresh": null,
       "last_constituents_refresh": null,
-      "last_screen_at": "2026-10-28T10:27:58.820841+00:00",
+      "last_screen_at": "2026-10-25T07:32:00.532121+00:00",
       "signal_counts": {
         "strong_buy": 17,
-        "buy": 50,
-        "hold": 121,
-        "avoid": 60
+        "buy": 56,
+        "hold": 114,
+        "avoid": 61
       },
-      "shortlist_count": 67,
+      "shortlist_count": 73,
       "strong_buy": 17,
-      "buy": 50,
+      "buy": 56,
       "learning_phase": 4,
       "learning_phase_label": "Live screen",
       "phase_blockers": [],
@@ -593,6 +593,47 @@
               "buy_tier_level_dca_market": 1498.24
             },
             "market": 1002.04
+          },
+          {
+            "date": "2026-10-26",
+            "held": 995.99,
+            "nav": 995.99,
+            "held_stock": 995.99,
+            "cash": 0.0,
+            "positions": 63,
+            "contributed_capital": null,
+            "branches": {
+              "buy_tier_level_dca": 1517.47,
+              "buy_tier_level_dca_market": 1498.24
+            },
+            "market": 1002.04
+          },
+          {
+            "date": "2026-10-27",
+            "held": 1001.97,
+            "nav": 1001.97,
+            "held_stock": 1001.97,
+            "cash": 0.0,
+            "positions": 63,
+            "contributed_capital": null,
+            "branches": {
+              "buy_tier_level_dca": 1518.65,
+              "buy_tier_level_dca_market": 1498.24
+            },
+            "market": 1002.04
+          },
+          {
+            "date": "2026-10-28",
+            "held": 1003.76,
+            "nav": 1003.76,
+            "held_stock": 1003.76,
+            "cash": 0.0,
+            "positions": 63,
+            "contributed_capital": null,
+            "branches": {
+              "buy_tier_level_dca_market": 1498.24
+            },
+            "market": 1002.04
           }
         ],
         "series": [
@@ -652,16 +693,16 @@
               "monthly_deposit": 500.0,
               "kind": "deposit_matched_index"
             },
-            "point_count": 22
+            "point_count": 25
           }
         ],
         "last": {
-          "date": "2026-10-23",
-          "held": 985.46,
+          "date": "2026-10-28",
+          "held": 1003.76,
           "market": 1002.04,
-          "nav": 985.46,
+          "nav": 1003.76,
           "positions": 63,
-          "excess_pct": -0.016546
+          "excess_pct": 0.001716
         }
       },
       "learning_depth": null,
@@ -880,12 +921,12 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 6,
-        "targets": 43,
-        "improved": 17,
+        "run_count": 5,
+        "targets": 42,
+        "improved": 16,
         "improved_tickers": [
-          "MT.AS",
           "ABI.BR",
+          "MT.AS",
           "ERIC-B.ST",
           "VOLV-B.ST",
           "SKA-B.ST",
