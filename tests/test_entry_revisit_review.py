@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.entry_blind_review import review_fingerprint
@@ -24,11 +24,11 @@ def test_due_at_is_buy_plus_28_calendar_days():
     assert ENTRY_REVISIT_DAYS == 28
     assert entry_revisit_clock_ready(
         "2026-09-01T10:00:00+00:00",
-        asof=datetime(2026, 9, 29, tzinfo=timezone.utc),
+        asof=datetime(2026, 9, 29, tzinfo=UTC),
     )
     assert not entry_revisit_clock_ready(
         "2026-09-01T10:00:00+00:00",
-        asof=datetime(2026, 9, 28, tzinfo=timezone.utc),
+        asof=datetime(2026, 9, 28, tzinfo=UTC),
     )
 
 
@@ -96,13 +96,13 @@ def test_queue_requires_blind_accept_and_clock(tmp_path: Path):
 
     early = build_entry_revisit_review_queue(
         data_dir=data,
-        asof=datetime(2026, 9, 15, tzinfo=timezone.utc),
+        asof=datetime(2026, 9, 15, tzinfo=UTC),
     )
     assert early["active_count"] == 0
 
     due = build_entry_revisit_review_queue(
         data_dir=data,
-        asof=datetime(2026, 10, 1, tzinfo=timezone.utc),
+        asof=datetime(2026, 10, 1, tzinfo=UTC),
     )
     assert due["active_count"] == 1
     card = due["active"][0]
@@ -121,7 +121,7 @@ def test_queue_requires_blind_accept_and_clock(tmp_path: Path):
     payload = refresh_entry_revisit_review_queue(
         data_dir=data,
         persist=True,
-        asof=datetime(2026, 10, 1, tzinfo=timezone.utc),
+        asof=datetime(2026, 10, 1, tzinfo=UTC),
     )
     assert Path(payload["path"]).is_file()
 
@@ -136,6 +136,6 @@ def test_queue_requires_blind_accept_and_clock(tmp_path: Path):
     assert result["influences_live"] is False
     after = build_entry_revisit_review_queue(
         data_dir=data,
-        asof=datetime(2026, 10, 1, tzinfo=timezone.utc),
+        asof=datetime(2026, 10, 1, tzinfo=UTC),
     )
     assert after["active_count"] == 0
