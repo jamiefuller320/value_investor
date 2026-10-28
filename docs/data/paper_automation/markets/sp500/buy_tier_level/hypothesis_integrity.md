@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-27T14:19:43.319824+00:00
+Track: `buy_tier_level` · updated 2026-10-28T14:18:56.464375+00:00
 
 ## Portfolio loser feedback
 
@@ -415,18 +415,26 @@ Track: `buy_tier_level` · updated 2026-10-27T14:19:43.319824+00:00
 - still buy
 - cheapness family still passes
 
-### PFE — weakening / watch_review (+0.0%)
-- research verdict caution
-- conviction 33% below intact floor
-- still buy
-- cheapness family still passes
-
 ### MPC — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 67%
+
+### ACN — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 84%
+
+### STZ — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 71%
 
 ### KIM — intact / hold_tolerate (+0.1%)
 - still buy
@@ -713,13 +721,6 @@ Track: `buy_tier_level` · updated 2026-10-27T14:19:43.319824+00:00
 - research verdict neutral
 - still buy
 - cheapness family still passes
-
-### ROP — intact / hold_tolerate (+7.6%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 85%
 
 ### BDX — intact / hold_tolerate (+7.7%)
 - still buy

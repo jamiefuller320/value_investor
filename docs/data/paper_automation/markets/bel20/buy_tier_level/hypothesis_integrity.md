@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-27T14:20:44.152811+00:00
+Track: `buy_tier_level` · updated 2026-10-28T14:19:51.419890+00:00
 
 ## Portfolio loser feedback
 
@@ -10,27 +10,19 @@ Track: `buy_tier_level` · updated 2026-10-27T14:20:44.152811+00:00
 
 ## Holding reviews
 
+### APAM.AS — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### ACKB.BR — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
 ### UMI.BR — intact / hold_tolerate (-11.4%)
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 51%
-
-### APAM.AS — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 50%
-
-### ACKB.BR — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 50%
+- conviction 60%
 
 ### AED.BR — intact / hold_tolerate (+0.3%)
 - still buy

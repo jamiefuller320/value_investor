@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-27T14:20:48.682651+00:00
+Track: `buy_tier_level` · updated 2026-10-28T14:20:00.251421+00:00
 
 ## Portfolio loser feedback
 
@@ -9,6 +9,12 @@ Track: `buy_tier_level` · updated 2026-10-27T14:20:48.682651+00:00
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
+
+### EVN.VI — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### WIE.VI — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### STR.VI — intact / hold_tolerate (-5.3%)
 - price drawdown alone does not invalidate value thesis
@@ -24,18 +30,6 @@ Track: `buy_tier_level` · updated 2026-10-27T14:20:48.682651+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 54%
-
-### EVN.VI — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 53%
-
-### WIE.VI — weakening / watch_review (+0.0%)
-- research verdict caution
-- still buy
-- cheapness family still passes
 
 ### OMV.VI — intact / hold_tolerate (+4.7%)
 - still buy

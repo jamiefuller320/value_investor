@@ -1,16 +1,16 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-27T14:20:36.762733+00:00
+Track: `buy_tier_level` · updated 2026-10-28T14:19:41.615910+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 8 (0% count, 0% NAV)
+- Losers: **0** / 7 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
 ## Holding reviews
 
-### PST.MI — broken / exit_candidate (+0.0%)
+### FCT.MI — broken / exit_candidate (+0.0%)
 - cheapness lost and not in buy tier
 
 ### INW.MI — weakening / watch_review (+0.0%)
@@ -40,11 +40,6 @@ Track: `buy_tier_level` · updated 2026-10-27T14:20:36.762733+00:00
 - data_quality 1.00
 - conviction 52%
 
-### FCT.MI — weakening / watch_review (+0.0%)
-- research verdict caution
-- still buy
-- cheapness family still passes
-
 ### BZU.MI — intact / hold_tolerate (+5.8%)
 - still buy
 - research accumulate
@@ -52,7 +47,7 @@ Track: `buy_tier_level` · updated 2026-10-27T14:20:36.762733+00:00
 - data_quality 1.00
 - conviction 44%
 
-### ENI.MI — intact / hold_tolerate (+11.8%)
+### ENI.MI — intact / hold_tolerate (+8.2%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

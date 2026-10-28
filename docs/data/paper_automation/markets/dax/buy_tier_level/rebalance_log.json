@@ -9885,5 +9885,1083 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-28T14:19:30.856365+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/dax/screen_latest.json",
+      "run_at": "2026-10-26T15:14:07.098367+00:00",
+      "generated_at": "2026-10-28T14:19:30.736744+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-28T14:19:30.748405+00:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-10-28T08:00:00+00:00",
+      "settle_at": "2026-10-28T09:15:00+00:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (10 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0018,
+    "candidates": [
+      {
+        "ticker": "FME.DE",
+        "name": "Fresenius Medical Care AG",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.566695,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 40.46,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "HEI.DE",
+        "name": "Heidelberg Materials AG",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.655,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 147.8,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "FME.DE",
+        "name": "Fresenius Medical Care AG",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.566695,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 40.46,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "HEI.DE",
+        "name": "Heidelberg Materials AG",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.655,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 147.8,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.18% / sell 0.18% (legacy symmetric slot 0.18%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1035.85,
+      "cash": -0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 517.92,
+      "targets": [
+        {
+          "ticker": "HEI.DE",
+          "name": "Heidelberg Materials AG",
+          "signal": "strong_buy",
+          "conviction_score": 0.655,
+          "price": 147.8
+        },
+        {
+          "ticker": "FME.DE",
+          "name": "Fresenius Medical Care AG",
+          "signal": "strong_buy",
+          "conviction_score": 0.566695,
+          "price": 40.46
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "HEI.DE",
+          "name": "Heidelberg Materials AG",
+          "reason": "Already near equal-weight target",
+          "value": 517.93,
+          "target_value": 517.92,
+          "conviction_score": 0.655,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "FME.DE",
+          "name": "Fresenius Medical Care AG",
+          "reason": "Already near equal-weight target",
+          "value": 517.92,
+          "target_value": 517.92,
+          "conviction_score": 0.566695,
+          "signal": "strong_buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "445dcc5a-4cf5-431b-9ab7-6e3ed0fb7e27",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-10-28T14:19:30.748405+00:00",
+        "ticker": "DHL.DE",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 1.81439,
+        "price": 57.28,
+        "gross": 103.93,
+        "cost": 0.18,
+        "net_cash": 103.75,
+        "note": "Automated exit \u2014 left target set",
+        "name": "DHL AG",
+        "avg_cost_at_exit": 57.28,
+        "position_closed": true
+      },
+      {
+        "id": "14fc4ee9-0930-4c01-98ab-7ebb65ec0333",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-10-28T14:19:30.748405+00:00",
+        "ticker": "FRE.DE",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 2.254409,
+        "price": 46.1,
+        "gross": 103.93,
+        "cost": 0.18,
+        "net_cash": 103.75,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Fresenius SE & Co. KGaA",
+        "avg_cost_at_exit": 46.1,
+        "position_closed": true
+      },
+      {
+        "id": "b9ebba5c-bc40-4389-a196-e34869257840",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-10-28T14:19:30.748405+00:00",
+        "ticker": "MUV2.DE",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.18672,
+        "price": 556.6,
+        "gross": 103.93,
+        "cost": 0.18,
+        "net_cash": 103.75,
+        "note": "Automated exit \u2014 left target set",
+        "name": "M\u00fcnchener R\u00fcckversicherungs-Gesellschaft Aktiengesellschaft in M\u00fcnchen",
+        "avg_cost_at_exit": 556.6,
+        "position_closed": true
+      },
+      {
+        "id": "a98d4d13-2569-44b6-8af2-5520568d4ff4",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-10-28T14:19:30.748405+00:00",
+        "ticker": "DTG.DE",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 2.402845,
+        "price": 40.05,
+        "gross": 96.23,
+        "cost": 0.17,
+        "net_cash": 96.07,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Daimler Truck Holding AG",
+        "avg_cost_at_exit": 40.05,
+        "position_closed": true
+      },
+      {
+        "id": "59001aeb-c883-453b-a6ed-8a37c832850d",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-10-28T14:19:30.748405+00:00",
+        "ticker": "BAS.DE",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 1.981473,
+        "price": 52.45,
+        "gross": 103.93,
+        "cost": 0.18,
+        "net_cash": 103.75,
+        "note": "Automated exit \u2014 left target set",
+        "name": "BASF SE",
+        "avg_cost_at_exit": 52.45,
+        "position_closed": true
+      },
+      {
+        "id": "1de2ea0b-e5ac-4b75-94ca-4e39d5b39821",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-10-28T14:19:30.748405+00:00",
+        "ticker": "HNR1.DE",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.370907,
+        "price": 280.2,
+        "gross": 103.93,
+        "cost": 0.18,
+        "net_cash": 103.75,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Hannover R\u00fcck SE",
+        "avg_cost_at_exit": 280.2,
+        "position_closed": true
+      },
+      {
+        "id": "4807e53e-36ed-446c-84c6-24840ee8386d",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-10-28T14:19:30.748405+00:00",
+        "ticker": "DTE.DE",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 4.099735,
+        "price": 25.35,
+        "gross": 103.93,
+        "cost": 0.18,
+        "net_cash": 103.75,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Deutsche Telekom AG",
+        "avg_cost_at_exit": 25.35,
+        "position_closed": true
+      },
+      {
+        "id": "5c10a59e-be5e-4641-a2f0-b8e600f4bb26",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-10-28T14:19:30.748405+00:00",
+        "ticker": "VOW3.DE",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 1.504027,
+        "price": 69.1,
+        "gross": 103.93,
+        "cost": 0.18,
+        "net_cash": 103.75,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Volkswagen AG",
+        "avg_cost_at_exit": 69.1,
+        "position_closed": true
+      },
+      {
+        "id": "84b7dbc9-febf-46a6-8939-243378599b70",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-10-28T14:19:30.748405+00:00",
+        "ticker": "HEI.DE",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 2.749019,
+        "price": 147.8,
+        "gross": 406.3,
+        "cost": 0.71,
+        "net_cash": -407.02,
+        "note": "Automated buy",
+        "name": "Heidelberg Materials AG"
+      },
+      {
+        "id": "e7d528f0-1291-404f-a684-4f24ddfb4854",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-10-28T14:19:30.748405+00:00",
+        "ticker": "FME.DE",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 10.245891,
+        "price": 40.46,
+        "gross": 414.55,
+        "cost": 0.73,
+        "net_cash": -415.27,
+        "note": "Automated buy",
+        "name": "Fresenius Medical Care AG"
+      }
+    ],
+    "nav_before": 1038.72,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "FME.DE",
+        "shares": 2.554785,
+        "avg_cost": 38.3835,
+        "sector": "Healthcare",
+        "name": "Fresenius Medical Care AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "DHL.DE",
+        "shares": 1.81439,
+        "avg_cost": 57.28,
+        "sector": "Industrials",
+        "name": "DHL AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "HEI.DE",
+        "shares": 0.755242,
+        "avg_cost": 147.8,
+        "sector": "Basic Materials",
+        "name": "Heidelberg Materials AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "FRE.DE",
+        "shares": 2.254409,
+        "avg_cost": 46.1,
+        "sector": "Healthcare",
+        "name": "Fresenius SE & Co. KGaA",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "MUV2.DE",
+        "shares": 0.18672,
+        "avg_cost": 556.6,
+        "sector": "Financial Services",
+        "name": "M\u00fcnchener R\u00fcckversicherungs-Gesellschaft Aktiengesellschaft in M\u00fcnchen",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "DTG.DE",
+        "shares": 2.402845,
+        "avg_cost": 40.05,
+        "sector": "Industrials",
+        "name": "Daimler Truck Holding AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "BAS.DE",
+        "shares": 1.981473,
+        "avg_cost": 52.45,
+        "sector": "Basic Materials",
+        "name": "BASF SE",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "HNR1.DE",
+        "shares": 0.370907,
+        "avg_cost": 280.2,
+        "sector": "Financial Services",
+        "name": "Hannover R\u00fcck SE",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "DTE.DE",
+        "shares": 4.099735,
+        "avg_cost": 25.35,
+        "sector": "Communication Services",
+        "name": "Deutsche Telekom AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "VOW3.DE",
+        "shares": 1.504027,
+        "avg_cost": 69.1,
+        "sector": "Consumer Cyclical",
+        "name": "Volkswagen AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "DHL.DE": 1,
+        "FRE.DE": 1,
+        "MUV2.DE": 1,
+        "DTG.DE": 1,
+        "BAS.DE": 1,
+        "HNR1.DE": 1,
+        "DTE.DE": 1,
+        "VOW3.DE": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "nav_after": 1035.85,
+    "cash_after": -0.0,
+    "holdings_after": [
+      {
+        "ticker": "FME.DE",
+        "shares": 12.800676,
+        "avg_cost": 40.0456,
+        "sector": "Healthcare",
+        "name": "Fresenius Medical Care AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "HEI.DE",
+        "shares": 3.504261,
+        "avg_cost": 147.8,
+        "sector": "Basic Materials",
+        "name": "Heidelberg Materials AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "DHL.DE": 1,
+        "FRE.DE": 1,
+        "MUV2.DE": 1,
+        "DTG.DE": 1,
+        "BAS.DE": 1,
+        "HNR1.DE": 1,
+        "DTE.DE": 1,
+        "VOW3.DE": 1
+      }
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "verdict_counts": {
+        "agree": 10,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": [
+        {
+          "ticker": "DHL.DE",
+          "name": "DHL AG",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-28T14:19:30.748405+00:00",
+          "proposal_id": "buy_tier_level:DHL.DE:sell:2026-10-28T14:19:30.748405+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "FRE.DE",
+          "name": "Fresenius SE & Co. KGaA",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-28T14:19:30.748405+00:00",
+          "proposal_id": "buy_tier_level:FRE.DE:sell:2026-10-28T14:19:30.748405+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "MUV2.DE",
+          "name": "M\u00fcnchener R\u00fcckversicherungs-Gesellschaft Aktiengesellschaft in M\u00fcnchen",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-28T14:19:30.748405+00:00",
+          "proposal_id": "buy_tier_level:MUV2.DE:sell:2026-10-28T14:19:30.748405+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "DTG.DE",
+          "name": "Daimler Truck Holding AG",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-28T14:19:30.748405+00:00",
+          "proposal_id": "buy_tier_level:DTG.DE:sell:2026-10-28T14:19:30.748405+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "BAS.DE",
+          "name": "BASF SE",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-28T14:19:30.748405+00:00",
+          "proposal_id": "buy_tier_level:BAS.DE:sell:2026-10-28T14:19:30.748405+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "HNR1.DE",
+          "name": "Hannover R\u00fcck SE",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-28T14:19:30.748405+00:00",
+          "proposal_id": "buy_tier_level:HNR1.DE:sell:2026-10-28T14:19:30.748405+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "DTE.DE",
+          "name": "Deutsche Telekom AG",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-28T14:19:30.748405+00:00",
+          "proposal_id": "buy_tier_level:DTE.DE:sell:2026-10-28T14:19:30.748405+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "VOW3.DE",
+          "name": "Volkswagen AG",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-28T14:19:30.748405+00:00",
+          "proposal_id": "buy_tier_level:VOW3.DE:sell:2026-10-28T14:19:30.748405+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "HEI.DE",
+          "name": "Heidelberg Materials AG",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 1
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 1
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.655
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-28T14:19:30.748405+00:00",
+          "proposal_id": "buy_tier_level:HEI.DE:buy:2026-10-28T14:19:30.748405+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "FME.DE",
+          "name": "Fresenius Medical Care AG",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 2
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 2
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.566695
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-28T14:19:30.748405+00:00",
+          "proposal_id": "buy_tier_level:FME.DE:buy:2026-10-28T14:19:30.748405+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        }
+      ]
+    }
   }
 ]

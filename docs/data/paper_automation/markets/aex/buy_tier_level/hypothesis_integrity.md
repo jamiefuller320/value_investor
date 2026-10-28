@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-27T14:20:43.504116+00:00
+Track: `buy_tier_level` · updated 2026-10-28T14:19:47.306790+00:00
 
 ## Portfolio loser feedback
 
@@ -21,14 +21,14 @@ Track: `buy_tier_level` · updated 2026-10-27T14:20:43.504116+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 57%
+- conviction 65%
 
 ### KPN.AS — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 38%
+- conviction 44%
 
 ### ASM.AS — intact / hold_tolerate (+0.0%)
 - still buy
@@ -47,7 +47,7 @@ Track: `buy_tier_level` · updated 2026-10-27T14:20:43.504116+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 52%
+- conviction 59%
 
 ### AD.AS — intact / hold_tolerate (+2.3%)
 - still strong_buy
@@ -61,4 +61,4 @@ Track: `buy_tier_level` · updated 2026-10-27T14:20:43.504116+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 60%
+- conviction 68%
