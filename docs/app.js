@@ -11713,6 +11713,12 @@ let postSaleReviewSort = "interesting";
 let postSaleReviewExpandedId = null;
 /** Session + localStorage overlay: clears survive iPad refresh until labels git. */
 const PENDING_POST_SALE_STORAGE_KEY = "ftse.pendingPostSaleActions.v1";
+/**
+ * Max age for optimistic clears without durable labels catch-up.
+ * Longer windows left Q8B gate remaining pointing at cards the owner could not
+ * see (pending hid them; bridge/GHA never wrote Accept/Comment/Duplicate).
+ */
+const PENDING_POST_SALE_MAX_AGE_MS = 2 * 60 * 60 * 1000;
 const pendingPostSaleActions = Object.create(null);
 /** Identity-only keys for bridge payload (avoid oversized repository_dispatch). */
 const POST_SALE_BRIDGE_SNAPSHOT_KEYS = [
@@ -11752,16 +11758,31 @@ function loadPendingPostSaleActionsFromStorage() {
     if (!raw) return;
     const parsed = JSON.parse(raw);
     if (!parsed || typeof parsed !== "object") return;
-    const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const cutoff = Date.now() - PENDING_POST_SALE_MAX_AGE_MS;
     for (const [rid, row] of Object.entries(parsed)) {
       if (!rid || !row || typeof row !== "object") continue;
       const at = Number(row.at) || 0;
-      if (at && at < cutoff) continue;
+      if (!at || at < cutoff) continue;
       pendingPostSaleActions[rid] = row;
     }
   } catch {
     /* ignore quota / private mode */
   }
+}
+
+/** Drop optimistic clears that never landed in labels (resurfaces stuck cards). */
+function pruneStalePendingPostSaleActions() {
+  const cutoff = Date.now() - PENDING_POST_SALE_MAX_AGE_MS;
+  let changed = false;
+  for (const rid of Object.keys(pendingPostSaleActions)) {
+    const row = pendingPostSaleActions[rid];
+    const at = row && typeof row === "object" ? Number(row.at) || 0 : 0;
+    if (!at || at < cutoff) {
+      delete pendingPostSaleActions[rid];
+      changed = true;
+    }
+  }
+  if (changed) persistPendingPostSaleActions();
 }
 
 function persistPendingPostSaleActions() {
@@ -11896,6 +11917,7 @@ function buildOptimisticPostSaleReplyCard(parentId, pending) {
 
 function syncPostSaleQueueOverlay(data) {
   if (!data || !data.post_sale_review_queue) return;
+  pruneStalePendingPostSaleActions();
   prunePendingPostSaleActions(data);
   const queue = data.post_sale_review_queue;
   if (!Array.isArray(queue.active)) return;

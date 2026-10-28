@@ -23,9 +23,11 @@ from value_investor.cue_consumer_mft import (
     assess_same_day_round_trip,
     build_hardened_proposal_stub,
     build_registration_payload,
+    classify_cohort_remaining,
     concurrent_cap_stub,
     evaluate_start_gate,
     freeze_start_cohort,
+    heal_q8b_cohort_ghosts,
     judgment_in_the_round_stub,
     novelty_gate_stub,
     ops_findings_from_cue_consumer_mft,
@@ -34,12 +36,14 @@ from value_investor.cue_consumer_mft import (
     select_pit_cues,
     thin_emit_readiness,
 )
+from value_investor.post_sale_review_labels import empty_labels_store, load_post_sale_review_labels
 from value_investor.post_sale_review_opinion import (
     OPINION_SOURCE_DETERMINISTIC,
     build_initial_opinion,
     consider_human_comment,
     generate_factory_reply,
 )
+from value_investor.storage import write_json
 
 
 def test_registration_is_observe_only_fixed_stake():
@@ -167,12 +171,19 @@ def test_q8b_start_gate_named_cohort_not_active_count():
             "checkpoint_status": "open",
         },
         labels={"history": [{"review_id": "rev-a", "action": "accept"}]},
+        queue={
+            "active": [
+                {"review_id": "rev-b", "ticker": "HAL", "book_id": "n201"},
+            ]
+        },
         today=date(2026, 10, 25),
     )
     assert open_eval["mode"] == "q8b_named_cohort_checkpoint"
     assert open_eval["eligible"] is False
     assert open_eval["cohort_remaining"] == ["rev-b"]
     assert open_eval["cohort_remaining_n"] == 1
+    assert open_eval["cohort_remaining_in_active"] == ["rev-b"]
+    assert open_eval["cohort_remaining_ghosts_n"] == 0
     assert open_eval["not_gate"] == "active_count==0_forever_wait_while_just_sold_refills"
 
     # Cohort complete even if a hypothetical active queue would be non-empty.
@@ -230,6 +241,49 @@ def test_q8b_start_gate_named_cohort_not_active_count():
     )
     assert cal["eligible"] is True
     assert cal["eligibility_reason"] == "calendar_fallback_on_or_after"
+
+
+def test_q8b_remaining_ghosts_vs_usable_active(tmp_path: Path):
+    """Remaining absent from usable active (or blank/?) are ghosts — heal clears them."""
+    remaining = ["visible", "ghost-absent", "ghost-blank"]
+    queue = {
+        "active": [
+            {"review_id": "visible", "ticker": "HAL", "book_id": "n201"},
+            {"review_id": "ghost-blank", "ticker": "?", "book_id": "?"},
+        ]
+    }
+    classified = classify_cohort_remaining(remaining, queue=queue)
+    assert classified["remaining_in_active"] == ["visible"]
+    assert classified["remaining_ghosts"] == ["ghost-absent", "ghost-blank"]
+
+    ghost_eval = evaluate_start_gate(
+        start_gate={"cohort_review_ids": remaining},
+        labels={"actioned_review_ids": [], "events": []},
+        queue=queue,
+        today=date(2026, 10, 28),
+    )
+    assert ghost_eval["cohort_remaining_ghosts"] == ["ghost-absent", "ghost-blank"]
+    assert ghost_eval["cohort_remaining_in_active"] == ["visible"]
+
+    write_json(tmp_path / "post_sale_review_labels.json", empty_labels_store(), compact=False)
+    heal = heal_q8b_cohort_ghosts(
+        tmp_path,
+        start_gate={"cohort_review_ids": remaining},
+        labels={"actioned_review_ids": [], "events": []},
+        queue=queue,
+    )
+    assert heal["cleared_n"] == 2
+    assert set(heal["cleared"]) == {"ghost-absent", "ghost-blank"}
+    labels = load_post_sale_review_labels(tmp_path)
+    assert set(labels["actioned_review_ids"]) >= {"ghost-absent", "ghost-blank"}
+    after = evaluate_start_gate(
+        start_gate={"cohort_review_ids": remaining},
+        labels=labels,
+        queue=queue,
+        today=date(2026, 10, 28),
+    )
+    assert after["cohort_remaining"] == ["visible"]
+    assert after["cohort_remaining_ghosts_n"] == 0
 
 
 def test_propose_cohort_non_mechanical_excludes_reply_and_mechanical():

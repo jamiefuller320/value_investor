@@ -160,12 +160,14 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "syncPostSaleQueueOverlay" in app
     assert "postSaleReviewCardUsable" in app
     assert "PENDING_POST_SALE_STORAGE_KEY" in app
+    assert "PENDING_POST_SALE_MAX_AGE_MS" in app
+    assert "pruneStalePendingPostSaleActions" in app
     assert "slimPostSaleBridgeSnapshot" in app
     assert "buildOptimisticPostSaleReplyCard" in app
     assert "psr-comment-preview" in app
     assert "postSaleActionedEpisodeKeys" in app
     assert "psr-comment-preview" in css
-    assert "post-sale-uncommented-only-20261027" in html
+    assert "post-sale-pending-ttl-20261028" in html
     assert 'toLowerCase() === "reply"' in app
     assert "pending-reply:" in app
     assert 'id: "interesting"' in app or "interesting" in app
