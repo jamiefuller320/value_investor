@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-28T09:24:18.702924+00:00",
+  "updated_at": "2026-10-28T09:34:47.072552+00:00",
   "influences_live": false,
   "observe_only": true,
   "package": "M",
@@ -11929,6 +11929,1239 @@
         "entry_reason": "enter_buy_tier",
         "episode_key": "n200|SCT.L|2026-10-11|2026-10-18"
       }
+    },
+    {
+      "event_id": "117cec2b-5659-4ab6-8ee1-7163aad8fffd",
+      "review_id": "3a419af43a192c435d3f",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Poorly timed buy but general trend still looks positive?",
+      "acted_at": "2026-10-28T09:34:09.071398+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:b81220593a333021",
+      "snapshot": {
+        "book_id": "ftse_control",
+        "book_tag": "FTSE control",
+        "model_id": "buy_tier_level",
+        "ticker": "CKN.L",
+        "name": "Clarkson PLC",
+        "entry_at": "2026-10-05T09:33:58.165022+01:00",
+        "exit_at": "2026-10-13T09:28:03.909666+01:00",
+        "hold_days": 8,
+        "exit_kind": "post_sale",
+        "return_pct": 5.71,
+        "basis_label": "realized_exit",
+        "framing": "[FTSE control] CKN.L · 2026-10-13 · hold 8d · post_sale\nBought because: Entered target / buy-tier set (control)\nSold because: Left target / buy-tier set (control)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (realized_exit): 5.71%\nContext read-only — not a new veto. influences_live=false",
+        "opened_at": "2026-10-05T09:33:58.165022+01:00",
+        "sold_at": "2026-10-13T09:28:03.909666+01:00",
+        "avg_cost": 5075,
+        "exit_price": 5365,
+        "population": "ftse_control_buy_tier_level",
+        "buy_decision": {
+          "code": "enter_target_set",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Entered target / buy-tier set (control)",
+          "side": "buy",
+          "source": "rebalance_log.trade_note",
+          "structured": {
+            "acted_at": "2026-10-05T09:33:58.165022+01:00",
+            "note": "Automated buy"
+          }
+        },
+        "sell_decision": {
+          "code": "left_target_set",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left target / buy-tier set (control)",
+          "side": "sell",
+          "source": "rebalance_log.trade_note",
+          "structured": {
+            "acted_at": "2026-10-13T09:28:03.909666+01:00",
+            "note": "Automated exit — left target set"
+          }
+        },
+        "buy_reason": "Entered target / buy-tier set (control)",
+        "sell_reason": "Left target / buy-tier set (control)",
+        "decision_reasons_join_ok": true,
+        "episode_key": "ftse_control|CKN.L|2026-10-05|2026-10-13",
+        "llm_opinion": "FTSE control closed CKN.L after a 8-day hold (2026-10-05 → 2026-10-13, post_sale): gain (5.71% realized_exit). Rapid entry→exit Bought because: Entered target / buy-tier set (control). Sold because: Left target / buy-tier set (control). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left target / buy-tier set (control)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+          "Short hold with buy-tier / target-set exit: churn may be mechanical identity leave — weigh that before calling the sell premature.",
+          "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 8-day hold, gain (5.71% realized_exit). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "buy_strengths": [
+          "Buy decision is joinable: Entered target / buy-tier set (control) — comments can ground on that trail.",
+          "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+        ],
+        "buy_weaknesses": [],
+        "sell_strengths": [
+          "Sell decision is joinable: Left target / buy-tier set (control) [left_target_set] — weigh 'premature' claims against this code.",
+          "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+        ],
+        "sell_weaknesses": [
+          "Short hold: check whether exit timing looks premature vs the wider range."
+        ],
+        "learning_point_forward": "Short mechanical leave-buy-tier exits are identity churn, not timing skill — do not harden 'hold longer' from these without a separate twin.",
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "same_day_soft_penalty": false,
+        "dialogue": [
+          {
+            "role": "factory",
+            "kind": "initial_opinion",
+            "text": "FTSE control closed CKN.L after a 8-day hold (2026-10-05 → 2026-10-13, post_sale): gain (5.71% realized_exit). Rapid entry→exit Bought because: Entered target / buy-tier set (control). Sold because: Left target / buy-tier set (control). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left target / buy-tier set (control)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+              "Short hold with buy-tier / target-set exit: churn may be mechanical identity leave — weigh that before calling the sell premature.",
+              "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 8-day hold, gain (5.71% realized_exit). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "buy_strengths": [
+              "Buy decision is joinable: Entered target / buy-tier set (control) — comments can ground on that trail.",
+              "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+            ],
+            "buy_weaknesses": [],
+            "sell_strengths": [
+              "Sell decision is joinable: Left target / buy-tier set (control) [left_target_set] — weigh 'premature' claims against this code.",
+              "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+            ],
+            "sell_weaknesses": [
+              "Short hold: check whether exit timing looks premature vs the wider range."
+            ],
+            "learning_point_forward": "Short mechanical leave-buy-tier exits are identity churn, not timing skill — do not harden 'hold longer' from these without a separate twin.",
+            "same_day_round_trip": false,
+            "same_day_assessment": "not_applicable",
+            "source": "deterministic_v0",
+            "at": "2026-10-28T09:33:58.626347+00:00",
+            "influences_live": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "50502fc6-a364-4dfa-9a26-b466f28cea82",
+      "review_id": "reply:b81220593a333021",
+      "parent_event_id": "117cec2b-5659-4ab6-8ee1-7163aad8fffd",
+      "parent_review_id": "3a419af43a192c435d3f",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Observe-only (Package M; no live capital or auto-tune). Structured reasons join cleanly: buy — enter_target_set, \"Entered target / buy-tier set (control)\" (2026-10-05, automated buy); sell — left_target_set, \"Left target / buy-tier set (control)\" (2026-10-13, automated exit — left target set). That sell is a mechanical identity leave from the control set, not a timing or technical trigger, so it should not be read as the book calling the wider trend broken.\n\nDual horizon: on the episode window (8 days, +5.71% realized_exit), entry and exit both follow set membership — rapid churn with a small positive outcome. Your \"poorly timed buy\" fits cyclical/range placement on a wider TF that the episode chart alone can underplay; if the broader trend still looks positive, that aligns with treating the buy as early or poorly located while the exit was \"no longer in tier,\" not a deliberate fade of trend.\n\nWeighing your comment: a constructive general trend does not contradict a mechanical sell; it suggests the post-exit path may continue up without implying the exit was \"wrong\" under control rules — only that entry timing vs wider structure is worth noting in Comment if range location was weak at entry.\n\nPlease Accept this framing or Comment further (e.g. range location at entry, climb after 2026-10-13 on wider TF).\n\n(Observe / alignment only — influences_live=false; Package M — not Package L auto-tune.)",
+      "acted_at": "2026-10-28T09:34:09.071422+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
+    },
+    {
+      "event_id": "98023455-3939-477c-a214-11cbb7455ae7",
+      "review_id": "17cf5f196fe759033c18",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Late entry",
+      "acted_at": "2026-10-28T09:34:14.149164+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:5d4c700342887cae",
+      "snapshot": {
+        "book_id": "ftse_control",
+        "book_tag": "FTSE control",
+        "model_id": "buy_tier_level",
+        "ticker": "MOON.L",
+        "name": "Moonpig Group PLC",
+        "entry_at": "2026-10-09T09:39:00.279965+01:00",
+        "exit_at": "2026-10-13T09:28:03.909666+01:00",
+        "hold_days": 4,
+        "exit_kind": "post_sale",
+        "return_pct": -1.34,
+        "basis_label": "realized_exit",
+        "framing": "[FTSE control] MOON.L · 2026-10-13 · hold 4d · post_sale\nBought because: Entered target / buy-tier set (control)\nSold because: Left target / buy-tier set (control)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (realized_exit): -1.34%\nContext read-only — not a new veto. influences_live=false",
+        "opened_at": "2026-10-09T09:39:00.279965+01:00",
+        "sold_at": "2026-10-13T09:28:03.909666+01:00",
+        "avg_cost": 283.2,
+        "exit_price": 279.4,
+        "population": "ftse_control_buy_tier_level",
+        "buy_decision": {
+          "code": "enter_target_set",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Entered target / buy-tier set (control)",
+          "side": "buy",
+          "source": "rebalance_log.trade_note",
+          "structured": {
+            "acted_at": "2026-10-09T09:39:00.279965+01:00",
+            "note": "Automated buy"
+          }
+        },
+        "sell_decision": {
+          "code": "left_target_set",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left target / buy-tier set (control)",
+          "side": "sell",
+          "source": "rebalance_log.trade_note",
+          "structured": {
+            "acted_at": "2026-10-13T09:28:03.909666+01:00",
+            "note": "Automated exit — left target set"
+          }
+        },
+        "buy_reason": "Entered target / buy-tier set (control)",
+        "sell_reason": "Left target / buy-tier set (control)",
+        "decision_reasons_join_ok": true,
+        "episode_key": "ftse_control|MOON.L|2026-10-09|2026-10-13",
+        "llm_opinion": "FTSE control closed MOON.L after a 4-day hold (2026-10-09 → 2026-10-13, post_sale): small loss (-1.34% realized_exit). Rapid entry→exit Bought because: Entered target / buy-tier set (control). Sold because: Left target / buy-tier set (control). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left target / buy-tier set (control)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+          "Short hold with buy-tier / target-set exit: churn may be mechanical identity leave — weigh that before calling the sell premature."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 4-day hold, small loss (-1.34% realized_exit). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "buy_strengths": [
+          "Buy decision is joinable: Entered target / buy-tier set (control) — comments can ground on that trail."
+        ],
+        "buy_weaknesses": [],
+        "sell_strengths": [
+          "Sell decision is joinable: Left target / buy-tier set (control) [left_target_set] — weigh 'premature' claims against this code.",
+          "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+        ],
+        "sell_weaknesses": [
+          "Short hold: check whether exit timing looks premature vs the wider range."
+        ],
+        "learning_point_forward": "Short mechanical leave-buy-tier exits are identity churn, not timing skill — do not harden 'hold longer' from these without a separate twin.",
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "same_day_soft_penalty": false,
+        "dialogue": [
+          {
+            "role": "factory",
+            "kind": "initial_opinion",
+            "text": "FTSE control closed MOON.L after a 4-day hold (2026-10-09 → 2026-10-13, post_sale): small loss (-1.34% realized_exit). Rapid entry→exit Bought because: Entered target / buy-tier set (control). Sold because: Left target / buy-tier set (control). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left target / buy-tier set (control)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+              "Short hold with buy-tier / target-set exit: churn may be mechanical identity leave — weigh that before calling the sell premature."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 4-day hold, small loss (-1.34% realized_exit). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "buy_strengths": [
+              "Buy decision is joinable: Entered target / buy-tier set (control) — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [],
+            "sell_strengths": [
+              "Sell decision is joinable: Left target / buy-tier set (control) [left_target_set] — weigh 'premature' claims against this code.",
+              "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+            ],
+            "sell_weaknesses": [
+              "Short hold: check whether exit timing looks premature vs the wider range."
+            ],
+            "learning_point_forward": "Short mechanical leave-buy-tier exits are identity churn, not timing skill — do not harden 'hold longer' from these without a separate twin.",
+            "same_day_round_trip": false,
+            "same_day_assessment": "not_applicable",
+            "source": "deterministic_v0",
+            "at": "2026-10-28T09:34:09.089236+00:00",
+            "influences_live": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "5dd013dc-cdad-4654-abbe-f00e07d36203",
+      "review_id": "reply:5d4c700342887cae",
+      "parent_event_id": "98023455-3939-477c-a214-11cbb7455ae7",
+      "parent_review_id": "17cf5f196fe759033c18",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Observe-only alignment (no knobs, fills, or live capital; influences_live false — Package M, not Package L auto-tune).\n\nYour comment — **late entry** — is best read on two horizons. On the **episode window** (2026-10-09 → 2026-10-13, 4 days, −1.34% realized_exit): we only know the control book acted when identity rules said so, not whether price was already extended locally. On the **wider timeframe**, cyclical/trend context the episode hides is where “late” usually shows up (e.g. entry after most of a leg, or into a range top) — worth checking chart + wider TF together before locking that label.\n\nStructured reasons (join_ok): **Buy** — `enter_target_set`: Entered target / buy-tier set (control) (2026-10-09, rebalance note: Automated buy). **Sell** — `left_target_set`: Left target / buy-tier set (control) (2026-10-13, rebalance note: Automated exit — left target set). The exit was a mechanical **leave buy-tier / target-set** identity event, not a separate timing or tech sell trigger — so “late entry” is a timing/read question on the buy side and on horizon context, not a mismatch with a premature-exit story tied to a tech rule.\n\nShort hold with buy-in then tier leave can look like churn even when both legs are rule-faithful; weigh that before treating the round trip as purely discretionary mistiming.\n\nIf this framing fits, **Accept**; otherwise **Comment** with what you see on episode vs wider TF (e.g. range location, climb after exit) and we can refine observe-only alignment.",
+      "acted_at": "2026-10-28T09:34:14.149182+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
+    },
+    {
+      "event_id": "2981891f-c2e8-4065-938f-bd6d94fdb8af",
+      "review_id": "6f3002e28506782b4b38",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Exit looks premature against trend vs historical highs",
+      "acted_at": "2026-10-28T09:34:19.058893+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:93f08f4e92c7767c",
+      "snapshot": {
+        "book_id": "ftse_control",
+        "book_tag": "FTSE control",
+        "model_id": "buy_tier_level",
+        "ticker": "SGE.L",
+        "name": "The Sage Group plc",
+        "entry_at": "2026-10-09T09:39:00.279965+01:00",
+        "exit_at": "2026-10-13T09:28:03.909666+01:00",
+        "hold_days": 4,
+        "exit_kind": "post_sale",
+        "return_pct": 0.98,
+        "basis_label": "realized_exit",
+        "framing": "[FTSE control] SGE.L · 2026-10-13 · hold 4d · post_sale\nBought because: Entered target / buy-tier set (control)\nSold because: Left target / buy-tier set (control)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (realized_exit): 0.98%\nContext read-only — not a new veto. influences_live=false",
+        "opened_at": "2026-10-09T09:39:00.279965+01:00",
+        "sold_at": "2026-10-13T09:28:03.909666+01:00",
+        "avg_cost": 1071,
+        "exit_price": 1081.5,
+        "population": "ftse_control_buy_tier_level",
+        "buy_decision": {
+          "code": "enter_target_set",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Entered target / buy-tier set (control)",
+          "side": "buy",
+          "source": "rebalance_log.trade_note",
+          "structured": {
+            "acted_at": "2026-10-09T09:39:00.279965+01:00",
+            "note": "Automated buy"
+          }
+        },
+        "sell_decision": {
+          "code": "left_target_set",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left target / buy-tier set (control)",
+          "side": "sell",
+          "source": "rebalance_log.trade_note",
+          "structured": {
+            "acted_at": "2026-10-13T09:28:03.909666+01:00",
+            "note": "Automated exit — left target set"
+          }
+        },
+        "buy_reason": "Entered target / buy-tier set (control)",
+        "sell_reason": "Left target / buy-tier set (control)",
+        "decision_reasons_join_ok": true,
+        "episode_key": "ftse_control|SGE.L|2026-10-09|2026-10-13",
+        "llm_opinion": "FTSE control closed SGE.L after a 4-day hold (2026-10-09 → 2026-10-13, post_sale): near-flat / small gain (0.98% realized_exit). Rapid entry→exit Bought because: Entered target / buy-tier set (control). Sold because: Left target / buy-tier set (control). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left target / buy-tier set (control)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+          "Short hold with buy-tier / target-set exit: churn may be mechanical identity leave — weigh that before calling the sell premature.",
+          "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 4-day hold, near-flat / small gain (0.98% realized_exit). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "buy_strengths": [
+          "Buy decision is joinable: Entered target / buy-tier set (control) — comments can ground on that trail."
+        ],
+        "buy_weaknesses": [],
+        "sell_strengths": [
+          "Sell decision is joinable: Left target / buy-tier set (control) [left_target_set] — weigh 'premature' claims against this code.",
+          "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+        ],
+        "sell_weaknesses": [
+          "Short hold: check whether exit timing looks premature vs the wider range."
+        ],
+        "learning_point_forward": "Short mechanical leave-buy-tier exits are identity churn, not timing skill — do not harden 'hold longer' from these without a separate twin.",
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "same_day_soft_penalty": false,
+        "dialogue": [
+          {
+            "role": "factory",
+            "kind": "initial_opinion",
+            "text": "FTSE control closed SGE.L after a 4-day hold (2026-10-09 → 2026-10-13, post_sale): near-flat / small gain (0.98% realized_exit). Rapid entry→exit Bought because: Entered target / buy-tier set (control). Sold because: Left target / buy-tier set (control). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left target / buy-tier set (control)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+              "Short hold with buy-tier / target-set exit: churn may be mechanical identity leave — weigh that before calling the sell premature.",
+              "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 4-day hold, near-flat / small gain (0.98% realized_exit). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "buy_strengths": [
+              "Buy decision is joinable: Entered target / buy-tier set (control) — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [],
+            "sell_strengths": [
+              "Sell decision is joinable: Left target / buy-tier set (control) [left_target_set] — weigh 'premature' claims against this code.",
+              "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+            ],
+            "sell_weaknesses": [
+              "Short hold: check whether exit timing looks premature vs the wider range."
+            ],
+            "learning_point_forward": "Short mechanical leave-buy-tier exits are identity churn, not timing skill — do not harden 'hold longer' from these without a separate twin.",
+            "same_day_round_trip": false,
+            "same_day_assessment": "not_applicable",
+            "source": "deterministic_v0",
+            "at": "2026-10-28T09:34:14.167014+00:00",
+            "influences_live": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "9f5a9366-c7ae-488c-99a5-989f7454b5a7",
+      "review_id": "reply:93f08f4e92c7767c",
+      "parent_event_id": "2981891f-c2e8-4065-938f-bd6d94fdb8af",
+      "parent_review_id": "6f3002e28506782b4b38",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Observe-only (no knobs, fills, or live capital; influences_live false — Package M, not Package L auto-tune).\n\nStructured reasons (join_ok): **Buy** — enter_target_set: Entered target / buy-tier set (control) at entry (2026-10-09, rebalance_log). **Sell** — left_target_set: Left target / buy-tier set (control) at exit (2026-10-13, automated exit — left target set). The round trip was a 4-day post_sale hold with ~+0.98% realized_exit; the exit was a mechanical identity leave from the buy-tier/target set, not a discretionary trend or “near highs” sell rule.\n\nYour comment — exit feels premature vs trend and historical highs — is best read on **two horizons**. On the **episode window**, price may still have looked constructive or closer to prior highs when the control book dropped the name; that can feel early if you are judging timing. On the **wider timeframe**, trend and cyclical location (including whether the name was extended vs range) can differ from what the four-day path shows; we did not re-run chart joins here, so we are not asserting specific high percentiles or filing facts — only that “premature vs trend/highs” is a **timing/location** story, while the logged sell reason is **tier membership**, not “fade the trend at highs.”\n\nWeighing your **premature sell** label: against left_target_set, churn this short can be expected control behavior (enter set → leave set) rather than a missed tech trigger. Premature is most actionable when compared to a rule you wanted held longer; here the structured exit explains **why** the system sold even if **where** price sat on a longer TF might still be worth noting in Comment.\n\nPlease **Accept** this framing if it aligns, or **Comment** further (e.g. episode chart + wider TF together, range location after exit) — still observe-only.",
+      "acted_at": "2026-10-28T09:34:19.058910+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
+    },
+    {
+      "event_id": "056c913a-b517-40bd-9bb7-4e02d3159fb7",
+      "review_id": "dcd02f70c7d4b65d4e66",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Good entry, premature exit",
+      "acted_at": "2026-10-28T09:34:23.555077+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:4f7b53dd0631d6ef",
+      "snapshot": {
+        "book_id": "ftse_control",
+        "book_tag": "FTSE control",
+        "model_id": "buy_tier_level",
+        "ticker": "AO.L",
+        "name": "AO World plc",
+        "entry_at": "2026-10-05T09:33:58.165022+01:00",
+        "exit_at": "2026-10-09T09:39:00.279965+01:00",
+        "hold_days": 4,
+        "exit_kind": "post_sale",
+        "return_pct": 2.23,
+        "basis_label": "realized_exit",
+        "framing": "[FTSE control] AO.L · 2026-10-09 · hold 4d · post_sale\nBought because: Entered target / buy-tier set (control)\nSold because: Left target / buy-tier set (control)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (realized_exit): 2.23%\nContext read-only — not a new veto. influences_live=false",
+        "opened_at": "2026-10-05T09:33:58.165022+01:00",
+        "sold_at": "2026-10-09T09:39:00.279965+01:00",
+        "avg_cost": 88.519,
+        "exit_price": 90.492,
+        "population": "ftse_control_buy_tier_level",
+        "buy_decision": {
+          "code": "enter_target_set",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Entered target / buy-tier set (control)",
+          "side": "buy",
+          "source": "rebalance_log.trade_note",
+          "structured": {
+            "acted_at": "2026-10-05T09:33:58.165022+01:00",
+            "note": "Automated buy"
+          }
+        },
+        "sell_decision": {
+          "code": "left_target_set",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left target / buy-tier set (control)",
+          "side": "sell",
+          "source": "rebalance_log.trade_note",
+          "structured": {
+            "acted_at": "2026-10-09T09:39:00.279965+01:00",
+            "note": "Automated exit — left target set"
+          }
+        },
+        "buy_reason": "Entered target / buy-tier set (control)",
+        "sell_reason": "Left target / buy-tier set (control)",
+        "decision_reasons_join_ok": true,
+        "episode_key": "ftse_control|AO.L|2026-10-05|2026-10-09",
+        "llm_opinion": "FTSE control closed AO.L after a 4-day hold (2026-10-05 → 2026-10-09, post_sale): gain (2.23% realized_exit). Rapid entry→exit Bought because: Entered target / buy-tier set (control). Sold because: Left target / buy-tier set (control). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left target / buy-tier set (control)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+          "Short hold with buy-tier / target-set exit: churn may be mechanical identity leave — weigh that before calling the sell premature.",
+          "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 4-day hold, gain (2.23% realized_exit). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "buy_strengths": [
+          "Buy decision is joinable: Entered target / buy-tier set (control) — comments can ground on that trail.",
+          "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+        ],
+        "buy_weaknesses": [],
+        "sell_strengths": [
+          "Sell decision is joinable: Left target / buy-tier set (control) [left_target_set] — weigh 'premature' claims against this code.",
+          "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+        ],
+        "sell_weaknesses": [
+          "Short hold: check whether exit timing looks premature vs the wider range."
+        ],
+        "learning_point_forward": "Short mechanical leave-buy-tier exits are identity churn, not timing skill — do not harden 'hold longer' from these without a separate twin.",
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "same_day_soft_penalty": false,
+        "dialogue": [
+          {
+            "role": "factory",
+            "kind": "initial_opinion",
+            "text": "FTSE control closed AO.L after a 4-day hold (2026-10-05 → 2026-10-09, post_sale): gain (2.23% realized_exit). Rapid entry→exit Bought because: Entered target / buy-tier set (control). Sold because: Left target / buy-tier set (control). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left target / buy-tier set (control)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+              "Short hold with buy-tier / target-set exit: churn may be mechanical identity leave — weigh that before calling the sell premature.",
+              "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 4-day hold, gain (2.23% realized_exit). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "buy_strengths": [
+              "Buy decision is joinable: Entered target / buy-tier set (control) — comments can ground on that trail.",
+              "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+            ],
+            "buy_weaknesses": [],
+            "sell_strengths": [
+              "Sell decision is joinable: Left target / buy-tier set (control) [left_target_set] — weigh 'premature' claims against this code.",
+              "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+            ],
+            "sell_weaknesses": [
+              "Short hold: check whether exit timing looks premature vs the wider range."
+            ],
+            "learning_point_forward": "Short mechanical leave-buy-tier exits are identity churn, not timing skill — do not harden 'hold longer' from these without a separate twin.",
+            "same_day_round_trip": false,
+            "same_day_assessment": "not_applicable",
+            "source": "deterministic_v0",
+            "at": "2026-10-28T09:34:19.077637+00:00",
+            "influences_live": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "bec235be-0834-4a3f-a33e-0e39cb084e9e",
+      "review_id": "reply:4f7b53dd0631d6ef",
+      "parent_event_id": "056c913a-b517-40bd-9bb7-4e02d3159fb7",
+      "parent_review_id": "dcd02f70c7d4b65d4e66",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Observation only — no knobs, fills, or live capital; this reply does not influence live trading.\n\nDual horizon: On the episode window (2026-10-05 → 2026-10-09, 4 days, +2.23% realized_exit), your “good entry” lines up with the logged buy: **Entered target / buy-tier set (control)** (`enter_target_set`, rebalance_log.trade_note). The exit was **Left target / buy-tier set (control)** (`left_target_set`, rebalance_log.trade_note) — a mechanical identity / target-set leave, not a separate timing or technical sell trigger. Against that structured reason, “premature exit” is less about missing a tech signal and more about whether, on a **wider timeframe**, price was still in a favorable cyclical leg (e.g. range location, continuation after exit) that the four-day episode alone cannot show. Short hold plus buy-tier exit often reads as control churn rather than a discretionary early call.\n\nWe have not verified chart or wider TF here; please compare episode path and higher-TF context before Accepting this framing.\n\n**Accept** this reply or **Comment** with what you see on wider TF (range location, post-exit climb, churn).\n\n(Observe / alignment only — influences_live=false; Package M — not Package L auto-tune.)",
+      "acted_at": "2026-10-28T09:34:23.555095+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
+    },
+    {
+      "event_id": "f47e9ad1-3802-442e-bf24-e35eb8d48189",
+      "review_id": "122230a01ad1164c0d6e",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Premature sale around solid support",
+      "acted_at": "2026-10-28T09:34:28.633720+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:8eb5634961cc01e1",
+      "snapshot": {
+        "book_id": "ftse_control",
+        "book_tag": "FTSE control",
+        "model_id": "buy_tier_level",
+        "ticker": "EWG.L",
+        "name": "W.A.G payment solutions plc",
+        "entry_at": "2026-09-16T09:29:14.824618+01:00",
+        "exit_at": "2026-10-09T09:39:00.279965+01:00",
+        "hold_days": 23,
+        "exit_kind": "post_sale",
+        "return_pct": 1.22,
+        "basis_label": "realized_exit",
+        "framing": "[FTSE control] EWG.L · 2026-10-09 · hold 23d · post_sale\nBought because: Entered target / buy-tier set (control)\nSold because: Left target / buy-tier set (control)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (realized_exit): 1.22%\nContext read-only — not a new veto. influences_live=false",
+        "opened_at": "2026-09-16T09:29:14.824618+01:00",
+        "sold_at": "2026-10-09T09:39:00.279965+01:00",
+        "avg_cost": 98.3,
+        "exit_price": 99.4984,
+        "population": "ftse_control_buy_tier_level",
+        "buy_decision": {
+          "code": "enter_target_set",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Entered target / buy-tier set (control)",
+          "side": "buy",
+          "source": "rebalance_log.trade_note",
+          "structured": {
+            "acted_at": "2026-09-16T09:29:14.824618+01:00",
+            "note": "Automated buy"
+          }
+        },
+        "sell_decision": {
+          "code": "left_target_set",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left target / buy-tier set (control)",
+          "side": "sell",
+          "source": "rebalance_log.trade_note",
+          "structured": {
+            "acted_at": "2026-10-09T09:39:00.279965+01:00",
+            "note": "Automated exit — left target set"
+          }
+        },
+        "buy_reason": "Entered target / buy-tier set (control)",
+        "sell_reason": "Left target / buy-tier set (control)",
+        "decision_reasons_join_ok": true,
+        "episode_key": "ftse_control|EWG.L|2026-09-16|2026-10-09",
+        "llm_opinion": "FTSE control closed EWG.L after a 23-day hold (2026-09-16 → 2026-10-09, post_sale): near-flat / small gain (1.22% realized_exit). Bought because: Entered target / buy-tier set (control). Sold because: Left target / buy-tier set (control). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left target / buy-tier set (control)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 23-day hold, near-flat / small gain (1.22% realized_exit). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "buy_strengths": [
+          "Buy decision is joinable: Entered target / buy-tier set (control) — comments can ground on that trail."
+        ],
+        "buy_weaknesses": [],
+        "sell_strengths": [
+          "Sell decision is joinable: Left target / buy-tier set (control) [left_target_set] — weigh 'premature' claims against this code.",
+          "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+        ],
+        "sell_weaknesses": [],
+        "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "same_day_soft_penalty": false,
+        "dialogue": [
+          {
+            "role": "factory",
+            "kind": "initial_opinion",
+            "text": "FTSE control closed EWG.L after a 23-day hold (2026-09-16 → 2026-10-09, post_sale): near-flat / small gain (1.22% realized_exit). Bought because: Entered target / buy-tier set (control). Sold because: Left target / buy-tier set (control). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left target / buy-tier set (control)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 23-day hold, near-flat / small gain (1.22% realized_exit). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "buy_strengths": [
+              "Buy decision is joinable: Entered target / buy-tier set (control) — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [],
+            "sell_strengths": [
+              "Sell decision is joinable: Left target / buy-tier set (control) [left_target_set] — weigh 'premature' claims against this code.",
+              "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+            ],
+            "sell_weaknesses": [],
+            "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+            "same_day_round_trip": false,
+            "same_day_assessment": "not_applicable",
+            "source": "deterministic_v0",
+            "at": "2026-10-28T09:34:23.573485+00:00",
+            "influences_live": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "aa5fe7b9-6fb4-49dd-ade5-69231ce57437",
+      "review_id": "reply:8eb5634961cc01e1",
+      "parent_event_id": "f47e9ad1-3802-442e-bf24-e35eb8d48189",
+      "parent_review_id": "122230a01ad1164c0d6e",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Observe-only alignment (influences_live: false; Package M — no live knobs, fills, or capital changes).\n\nStructured reasons (join_ok): **Buy** — decision_reasons.buy: `enter_target_set` / \"Entered target / buy-tier set (control)\" (2026-09-16, automated buy). **Sell** — decision_reasons.sell: `left_target_set` / \"Left target / buy-tier set (control)\" (2026-10-09, automated exit — left target set). The round trip was a 23-day FTSE control hold with ~1.22% realized_exit; the model’s story is identity in/out of the buy-tier set, not a discretionary “support break” or timing trigger.\n\nYour **“premature sale around solid support”** is best read on **two horizons**. On the **episode window** (Sep 16 → Oct 9), price may still look supported or range-bound — that can make an exit feel early if you’re anchoring on local lows. On a **wider timeframe**, cyclical/trend and rebalance state can diverge from that local picture: the control book sold because the name **left the target set**, which is a mechanical rebalance exit, not proof that support “failed” in a technical sense. “Premature” is most meaningful when compared to an explicit timing or tech rule; here the documented sell reason is tier/identity, so labeling it premature vs support is a chart narrative that sits **alongside** — not a override of — the structured exit.\n\nBefore Accepting this framing, it’s worth checking episode chart and wider TF together (e.g. range location vs climb after exit) so your support read and the buy-tier exit aren’t talking past each other.\n\n**Accept** this reply, or **Comment** with what you see on dual horizons (support hold vs post-exit path) for another factory pass.",
+      "acted_at": "2026-10-28T09:34:28.633739+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
+    },
+    {
+      "event_id": "12c6e0c3-e92b-4308-9f0a-e515294f8d41",
+      "review_id": "b757787de53208a7b4d1",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Premature sale on volatile stock",
+      "acted_at": "2026-10-28T09:34:33.367815+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:1f3db1071630d509",
+      "snapshot": {
+        "book_id": "ftse_control",
+        "book_tag": "FTSE control",
+        "model_id": "buy_tier_level",
+        "ticker": "TRN.L",
+        "name": "Trainline plc",
+        "entry_at": "2026-09-07T09:29:59.366533+01:00",
+        "exit_at": "2026-10-09T09:39:00.279965+01:00",
+        "hold_days": 32,
+        "exit_kind": "post_sale",
+        "return_pct": 7.22,
+        "basis_label": "realized_exit",
+        "framing": "[FTSE control] TRN.L · 2026-10-09 · hold 32d · post_sale\nBought because: Entered target / buy-tier set (control)\nSold because: Left target / buy-tier set (control)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (realized_exit): 7.22%\nContext read-only — not a new veto. influences_live=false",
+        "opened_at": "2026-09-07T09:29:59.366533+01:00",
+        "sold_at": "2026-10-09T09:39:00.279965+01:00",
+        "avg_cost": 193.8,
+        "exit_price": 207.8,
+        "population": "ftse_control_buy_tier_level",
+        "buy_decision": {
+          "code": "enter_target_set",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Entered target / buy-tier set (control)",
+          "side": "buy",
+          "source": "rebalance_log.trade_note",
+          "structured": {
+            "acted_at": "2026-09-07T09:29:59.366533+01:00",
+            "note": "Automated buy"
+          }
+        },
+        "sell_decision": {
+          "code": "left_target_set",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left target / buy-tier set (control)",
+          "side": "sell",
+          "source": "rebalance_log.trade_note",
+          "structured": {
+            "acted_at": "2026-10-09T09:39:00.279965+01:00",
+            "note": "Automated exit — left target set"
+          }
+        },
+        "buy_reason": "Entered target / buy-tier set (control)",
+        "sell_reason": "Left target / buy-tier set (control)",
+        "decision_reasons_join_ok": true,
+        "episode_key": "ftse_control|TRN.L|2026-09-07|2026-10-09",
+        "llm_opinion": "FTSE control closed TRN.L after a 32-day hold (2026-09-07 → 2026-10-09, post_sale): gain (7.22% realized_exit). Bought because: Entered target / buy-tier set (control). Sold because: Left target / buy-tier set (control). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left target / buy-tier set (control)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 32-day hold, gain (7.22% realized_exit). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "buy_strengths": [
+          "Buy decision is joinable: Entered target / buy-tier set (control) — comments can ground on that trail.",
+          "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+        ],
+        "buy_weaknesses": [],
+        "sell_strengths": [
+          "Sell decision is joinable: Left target / buy-tier set (control) [left_target_set] — weigh 'premature' claims against this code.",
+          "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+        ],
+        "sell_weaknesses": [],
+        "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "same_day_soft_penalty": false,
+        "dialogue": [
+          {
+            "role": "factory",
+            "kind": "initial_opinion",
+            "text": "FTSE control closed TRN.L after a 32-day hold (2026-09-07 → 2026-10-09, post_sale): gain (7.22% realized_exit). Bought because: Entered target / buy-tier set (control). Sold because: Left target / buy-tier set (control). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left target / buy-tier set (control)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 32-day hold, gain (7.22% realized_exit). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "buy_strengths": [
+              "Buy decision is joinable: Entered target / buy-tier set (control) — comments can ground on that trail.",
+              "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+            ],
+            "buy_weaknesses": [],
+            "sell_strengths": [
+              "Sell decision is joinable: Left target / buy-tier set (control) [left_target_set] — weigh 'premature' claims against this code.",
+              "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+            ],
+            "sell_weaknesses": [],
+            "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+            "same_day_round_trip": false,
+            "same_day_assessment": "not_applicable",
+            "source": "deterministic_v0",
+            "at": "2026-10-28T09:34:28.652495+00:00",
+            "influences_live": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "9e9215f2-e757-4646-8fd0-c5fa592e33c6",
+      "review_id": "reply:1f3db1071630d509",
+      "parent_event_id": "12c6e0c3-e92b-4308-9f0a-e515294f8d41",
+      "parent_review_id": "b757787de53208a7b4d1",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Observe-only (no knob, fill, or live-capital changes; influences_live stays false — Package M alignment, not Package L auto-tune).\n\nYour “premature sale on volatile stock” is worth weighing on two horizons. On the episode window (2026-09-07 → 2026-10-09, 32 days, +7.22% realized_exit), TRN.L may still have looked “early” if price continued to climb or chop after exit — that’s the pattern to sanity-check on the trade-path chart. On the wider timeframe, volatility alone doesn’t define whether the exit was mistimed; cyclical/trend context can show whether post-exit strength was already in play or mostly noise.\n\nStructured reasons (join_ok true): we bought because decision_reasons.buy — enter_target_set: “Entered target / buy-tier set (control)” (rebalance_log.trade_note, automated buy at entry). We sold because decision_reasons.sell — left_target_set: “Left target / buy-tier set (control)” (rebalance_log.trade_note, automated exit — left target set at exit). That sell is a mechanical identity/set exit for FTSE control, not a discretionary “volatile stock” or technical trigger. “Premature” is most meaningful when compared to a timing/tech rule you expected to hold longer; here the system exited when the name left the buy-tier set, which can feel abrupt on a volatile ticker even when the rule behaved as designed.\n\nIf the missed pattern is post-exit climb or range location, note where price sat vs recent range on both horizons before Accepting this framing — still no changes from this loop.\n\nAccept this reply, or Comment with what you’d want checked next (e.g. post-exit path vs range, or whether buy-tier membership should have stayed true longer — observation only).",
+      "acted_at": "2026-10-28T09:34:33.367839+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
+    },
+    {
+      "event_id": "70bc6e7d-ecc2-44df-9858-d66773e69d72",
+      "review_id": "792a9e0913943ef86884",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Badly timed buy at end of rally beyond previous high",
+      "acted_at": "2026-10-28T09:34:37.490040+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:ae87ba2bccd8ee4c",
+      "snapshot": {
+        "book_id": "n200",
+        "book_tag": "N200",
+        "model_id": "n200",
+        "ticker": "CURY.L",
+        "entry_at": "2026-08-02T12:34:17.581768+00:00",
+        "exit_at": "2026-08-30T06:43:33.462150+00:00",
+        "hold_days": 28,
+        "exit_kind": "post_sale",
+        "return_pct": -10.08,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N200] CURY.L · 2026-08-30 · hold 28d · post_sale\nBought because: Entered buy-tier (new cross)\nSold because: Left buy-tier (identity exit)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -10.08%\nContext read-only — not a new veto. influences_live=false",
+        "opened_at": "2026-08-02T12:34:17.581768+00:00",
+        "sold_at": "2026-08-30T06:43:33.462150+00:00",
+        "registration_id": "strand-b-plain-value-tech-timing-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "enter_buy_tier",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Entered buy-tier (new cross)",
+          "side": "buy",
+          "source": "episode.entry_reason",
+          "structured": {}
+        },
+        "sell_decision": {
+          "code": "leave_buy_tier",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left buy-tier (identity exit)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "leave_buy_tier"
+          }
+        },
+        "buy_reason": "Entered buy-tier (new cross)",
+        "sell_reason": "Left buy-tier (identity exit)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "leave_buy_tier",
+        "entry_reason": "enter_buy_tier",
+        "episode_key": "n200|CURY.L|2026-08-02|2026-08-30",
+        "llm_opinion": "N200 closed CURY.L after a 28-day hold (2026-08-02 → 2026-08-30, post_sale): material loss (-10.08% fair_cost_episode). Bought because: Entered buy-tier (new cross). Sold because: Left buy-tier (identity exit). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left buy-tier (identity exit)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+          "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 28-day hold, material loss (-10.08% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "buy_strengths": [
+          "Buy decision is joinable: Entered buy-tier (new cross) — comments can ground on that trail."
+        ],
+        "buy_weaknesses": [
+          "Material fair-cost loss: pick quality and/or buy timing may be weak — read wider TF before blaming only the sell."
+        ],
+        "sell_strengths": [
+          "Sell decision is joinable: Left buy-tier (identity exit) [leave_buy_tier] — weigh 'premature' claims against this code.",
+          "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+        ],
+        "sell_weaknesses": [
+          "Exit did not prevent a material loss — ask whether sell timing/strategy could have cut earlier without inventing knobs."
+        ],
+        "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "same_day_soft_penalty": false,
+        "dialogue": [
+          {
+            "role": "factory",
+            "kind": "initial_opinion",
+            "text": "N200 closed CURY.L after a 28-day hold (2026-08-02 → 2026-08-30, post_sale): material loss (-10.08% fair_cost_episode). Bought because: Entered buy-tier (new cross). Sold because: Left buy-tier (identity exit). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left buy-tier (identity exit)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+              "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 28-day hold, material loss (-10.08% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "buy_strengths": [
+              "Buy decision is joinable: Entered buy-tier (new cross) — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [
+              "Material fair-cost loss: pick quality and/or buy timing may be weak — read wider TF before blaming only the sell."
+            ],
+            "sell_strengths": [
+              "Sell decision is joinable: Left buy-tier (identity exit) [leave_buy_tier] — weigh 'premature' claims against this code.",
+              "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+            ],
+            "sell_weaknesses": [
+              "Exit did not prevent a material loss — ask whether sell timing/strategy could have cut earlier without inventing knobs."
+            ],
+            "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+            "same_day_round_trip": false,
+            "same_day_assessment": "not_applicable",
+            "source": "deterministic_v0",
+            "at": "2026-10-28T09:34:33.386060+00:00",
+            "influences_live": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "94b0aadd-eec6-41cb-9e7b-bd767f92b048",
+      "review_id": "reply:ae87ba2bccd8ee4c",
+      "parent_event_id": "70bc6e7d-ecc2-44df-9858-d66773e69d72",
+      "parent_review_id": "792a9e0913943ef86884",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Observe-only alignment (influences_live false; Package M — no knob, fill, or live-capital changes). Structured reasons (join_ok): buy — enter_buy_tier / \"Entered buy-tier (new cross)\" at 2026-08-02; sell — leave_buy_tier / \"Left buy-tier (identity exit)\" at 2026-08-30 after 28 days (−10.08% fair_cost_episode). Your note — badly timed buy at the end of a rally beyond the prior high — is a dual-horizon read: on the episode window, entry coincided with a new buy-tier cross, not an explicit “late rally” rule; on a wider TF, end-of-rally / extension above the prior high is the pattern worth checking before Accepting whether the miss was mainly pick quality (entry location) vs hold path. The exit was mechanical identity leave, not a separate tech sell trigger — so “premature sell” does not apply to the sell leg; timing debate here is mostly entry, while the loss still asks pick vs timing vs both (read-only; no Layer reopen from this card). If this framing fits, Accept; otherwise Comment with what the wider TF vs episode chart shows.",
+      "acted_at": "2026-10-28T09:34:37.490058+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
+    },
+    {
+      "event_id": "ad3aea04-7af9-4176-b28f-127ca4af0fda",
+      "review_id": "0338edfc4019c61b7be2",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Poorly timed buy",
+      "acted_at": "2026-10-28T09:34:43.263268+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:e4c4d861a0e9afa4",
+      "snapshot": {
+        "book_id": "n200",
+        "book_tag": "N200",
+        "model_id": "n200",
+        "ticker": "RHIM.L",
+        "entry_at": "2026-08-10T20:14:51.755918+00:00",
+        "exit_at": "2026-09-06T06:47:53.947778+00:00",
+        "hold_days": 27,
+        "exit_kind": "post_sale",
+        "return_pct": -5.93,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N200] RHIM.L · 2026-09-06 · hold 27d · post_sale\nBought because: Entered buy-tier (new cross)\nSold because: Left buy-tier (identity exit)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -5.93%\nContext read-only — not a new veto. influences_live=false",
+        "opened_at": "2026-08-10T20:14:51.755918+00:00",
+        "sold_at": "2026-09-06T06:47:53.947778+00:00",
+        "registration_id": "strand-b-plain-value-tech-timing-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "enter_buy_tier",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Entered buy-tier (new cross)",
+          "side": "buy",
+          "source": "episode.entry_reason",
+          "structured": {}
+        },
+        "sell_decision": {
+          "code": "leave_buy_tier",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left buy-tier (identity exit)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "leave_buy_tier"
+          }
+        },
+        "buy_reason": "Entered buy-tier (new cross)",
+        "sell_reason": "Left buy-tier (identity exit)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "leave_buy_tier",
+        "entry_reason": "enter_buy_tier",
+        "episode_key": "n200|RHIM.L|2026-08-10|2026-09-06",
+        "llm_opinion": "N200 closed RHIM.L after a 27-day hold (2026-08-10 → 2026-09-06, post_sale): material loss (-5.93% fair_cost_episode). Bought because: Entered buy-tier (new cross). Sold because: Left buy-tier (identity exit). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left buy-tier (identity exit)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+          "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 27-day hold, material loss (-5.93% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "buy_strengths": [
+          "Buy decision is joinable: Entered buy-tier (new cross) — comments can ground on that trail."
+        ],
+        "buy_weaknesses": [
+          "Material fair-cost loss: pick quality and/or buy timing may be weak — read wider TF before blaming only the sell."
+        ],
+        "sell_strengths": [
+          "Sell decision is joinable: Left buy-tier (identity exit) [leave_buy_tier] — weigh 'premature' claims against this code.",
+          "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+        ],
+        "sell_weaknesses": [
+          "Exit did not prevent a material loss — ask whether sell timing/strategy could have cut earlier without inventing knobs."
+        ],
+        "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "same_day_soft_penalty": false,
+        "dialogue": [
+          {
+            "role": "factory",
+            "kind": "initial_opinion",
+            "text": "N200 closed RHIM.L after a 27-day hold (2026-08-10 → 2026-09-06, post_sale): material loss (-5.93% fair_cost_episode). Bought because: Entered buy-tier (new cross). Sold because: Left buy-tier (identity exit). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left buy-tier (identity exit)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+              "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 27-day hold, material loss (-5.93% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "buy_strengths": [
+              "Buy decision is joinable: Entered buy-tier (new cross) — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [
+              "Material fair-cost loss: pick quality and/or buy timing may be weak — read wider TF before blaming only the sell."
+            ],
+            "sell_strengths": [
+              "Sell decision is joinable: Left buy-tier (identity exit) [leave_buy_tier] — weigh 'premature' claims against this code.",
+              "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+            ],
+            "sell_weaknesses": [
+              "Exit did not prevent a material loss — ask whether sell timing/strategy could have cut earlier without inventing knobs."
+            ],
+            "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+            "same_day_round_trip": false,
+            "same_day_assessment": "not_applicable",
+            "source": "deterministic_v0",
+            "at": "2026-10-28T09:34:37.508722+00:00",
+            "influences_live": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "bb372376-1aad-4c34-9d3a-1c271f5fbaf6",
+      "review_id": "reply:e4c4d861a0e9afa4",
+      "parent_event_id": "ad3aea04-7af9-4176-b28f-127ca4af0fda",
+      "parent_review_id": "0338edfc4019c61b7be2",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Observe-only alignment (influences_live stays false; no knobs, fills, or live capital; Package M, not Package L auto-tune).\n\nYour note — “Poorly timed buy” — is best read on two horizons: the episode window (2026-08-10 → 2026-09-06, 27 days, −5.93% fair_cost_episode) for the path from entry to exit, and a wider timeframe for cyclical/trend context the episode alone can hide (e.g. range location at entry, whether price continued against you or recovered after exit).\n\nStructured reasons (join_ok): **Buy** — Entered buy-tier (new cross) (`enter_buy_tier`). **Sell** — Left buy-tier (identity exit) (`leave_buy_tier`); that is a mechanical tier/identity exit, not a separate “tech said sell” trigger. So “poor timing” on the buy is a fair question about *when* the new cross fired relative to broader structure — not about the sell being an early discretionary exit.\n\nWeighing your label: if the wider TF shows entry was late in a range or into a fading leg, that supports “poorly timed buy” as pick/timing on entry; if the issue was mostly post-entry drift before tier exit, that splits pick quality vs hold path. The loss is material — worth asking whether the miss was entry timing, entry quality (tier cross in a bad spot), or both; this card does not reopen Layer or change policy.\n\nAccept this framing, or Comment with what you see on episode vs wider TF (range, climb after exit, churn).",
+      "acted_at": "2026-10-28T09:34:43.263286+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
+    },
+    {
+      "event_id": "e8926a42-ff6d-4cd4-bc16-782eb2c98c1a",
+      "review_id": "68983fdd02d85b847295",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Poorly timed buy mid correction",
+      "acted_at": "2026-10-28T09:34:47.072401+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:d03dde2ec504a6b7",
+      "snapshot": {
+        "book_id": "n200",
+        "book_tag": "N200",
+        "model_id": "n200",
+        "ticker": "FOUR.L",
+        "entry_at": "2026-08-16T06:19:37.808906+00:00",
+        "exit_at": "2026-09-06T06:47:53.947778+00:00",
+        "hold_days": 21,
+        "exit_kind": "post_sale",
+        "return_pct": -5.81,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N200] FOUR.L · 2026-09-06 · hold 21d · post_sale\nBought because: Entered buy-tier (new cross)\nSold because: Left buy-tier (identity exit)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -5.81%\nContext read-only — not a new veto. influences_live=false",
+        "opened_at": "2026-08-16T06:19:37.808906+00:00",
+        "sold_at": "2026-09-06T06:47:53.947778+00:00",
+        "registration_id": "strand-b-plain-value-tech-timing-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "enter_buy_tier",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Entered buy-tier (new cross)",
+          "side": "buy",
+          "source": "episode.entry_reason",
+          "structured": {}
+        },
+        "sell_decision": {
+          "code": "leave_buy_tier",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left buy-tier (identity exit)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "leave_buy_tier"
+          }
+        },
+        "buy_reason": "Entered buy-tier (new cross)",
+        "sell_reason": "Left buy-tier (identity exit)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "leave_buy_tier",
+        "entry_reason": "enter_buy_tier",
+        "episode_key": "n200|FOUR.L|2026-08-16|2026-09-06",
+        "llm_opinion": "N200 closed FOUR.L after a 21-day hold (2026-08-16 → 2026-09-06, post_sale): material loss (-5.81% fair_cost_episode). Bought because: Entered buy-tier (new cross). Sold because: Left buy-tier (identity exit). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left buy-tier (identity exit)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+          "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 21-day hold, material loss (-5.81% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "buy_strengths": [
+          "Buy decision is joinable: Entered buy-tier (new cross) — comments can ground on that trail."
+        ],
+        "buy_weaknesses": [
+          "Material fair-cost loss: pick quality and/or buy timing may be weak — read wider TF before blaming only the sell."
+        ],
+        "sell_strengths": [
+          "Sell decision is joinable: Left buy-tier (identity exit) [leave_buy_tier] — weigh 'premature' claims against this code.",
+          "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+        ],
+        "sell_weaknesses": [
+          "Exit did not prevent a material loss — ask whether sell timing/strategy could have cut earlier without inventing knobs."
+        ],
+        "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "same_day_soft_penalty": false,
+        "dialogue": [
+          {
+            "role": "factory",
+            "kind": "initial_opinion",
+            "text": "N200 closed FOUR.L after a 21-day hold (2026-08-16 → 2026-09-06, post_sale): material loss (-5.81% fair_cost_episode). Bought because: Entered buy-tier (new cross). Sold because: Left buy-tier (identity exit). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left buy-tier (identity exit)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+              "Material loss: ask whether the miss was pick quality, timing, or both (read-only; no Layer reopen from this card)."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 21-day hold, material loss (-5.81% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "buy_strengths": [
+              "Buy decision is joinable: Entered buy-tier (new cross) — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [
+              "Material fair-cost loss: pick quality and/or buy timing may be weak — read wider TF before blaming only the sell."
+            ],
+            "sell_strengths": [
+              "Sell decision is joinable: Left buy-tier (identity exit) [leave_buy_tier] — weigh 'premature' claims against this code.",
+              "Mechanical identity / buy-tier leave is an honest sealed exit, not a silent timing skill claim."
+            ],
+            "sell_weaknesses": [
+              "Exit did not prevent a material loss — ask whether sell timing/strategy could have cut earlier without inventing knobs."
+            ],
+            "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+            "same_day_round_trip": false,
+            "same_day_assessment": "not_applicable",
+            "source": "deterministic_v0",
+            "at": "2026-10-28T09:34:43.283322+00:00",
+            "influences_live": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "12b2cdbd-5429-404b-b849-2b46964cd6ef",
+      "review_id": "reply:d03dde2ec504a6b7",
+      "parent_event_id": "e8926a42-ff6d-4cd4-bc16-782eb2c98c1a",
+      "parent_review_id": "68983fdd02d85b847295",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Observe-only (Package M; influences_live stays false — no knobs, fills, or live capital).\n\nStructured path: buy joined as **Entered buy-tier (new cross)** (`enter_buy_tier`); sell joined as **Left buy-tier (identity exit)** (`leave_buy_tier`). The exit was tier/identity mechanics, not a separate tech or range trigger — so “premature sell” framing does not apply here; the open question is entry and path, not a missed sell signal.\n\nYour note — **poorly timed buy mid correction** — fits dual-horizon read: on the **episode window** (2026-08-16 → 2026-09-06, 21d, −5.81% fair_cost_episode) check whether the new cross landed **inside** a corrective leg (range location, momentum vs local structure). On the **wider TF** check whether correction was mid-cycle chop vs trend resumption — context the episode alone can hide. That separates **pick/entry timing** (buy-tier cross during correction) from **hold-to-exit** (identity exit when tier broke), without reopening Layer or changing rules.\n\nMaterial loss: worth naming whether the miss feels mostly **entry timing**, **name/tier quality**, or **both** — still read-only.\n\n**Accept** this framing or **Comment** with what you see on episode chart + wider TF (e.g. cross depth in correction, bounce after exit).",
+      "acted_at": "2026-10-28T09:34:47.072420+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
     }
   ],
   "actioned_review_ids": [
@@ -12035,7 +13268,16 @@
     "6ddeb699276cb8cedaf2",
     "ea740981b9ec2eaef3e0",
     "17c70174f5a9a2376537",
-    "87972bd4ac231f2613f4"
+    "87972bd4ac231f2613f4",
+    "3a419af43a192c435d3f",
+    "17cf5f196fe759033c18",
+    "6f3002e28506782b4b38",
+    "dcd02f70c7d4b65d4e66",
+    "122230a01ad1164c0d6e",
+    "b757787de53208a7b4d1",
+    "792a9e0913943ef86884",
+    "0338edfc4019c61b7be2",
+    "68983fdd02d85b847295"
   ],
   "active_replies": []
 }
