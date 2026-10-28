@@ -965,6 +965,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://links.sgx.com/FileOpen/20250728_1QFY25%20Results_Financial%20Statement.ashx?App=Announcement&FileID=853321",
         "https://links.sgx.com/FileOpen/20241029_2QFY24%20Results_Financial%20Statement.ashx?App=Announcement&FileID=823421",
     ],
+    # sti parked leftover — eng-20261028-05: U14.SI unfetchable_iwb; asia_filings indexed
+    # misattributed U14 sports news and Simply Wall Street shells; seed SGX statutory PDFs
+    # (uol.com.sg IR is Cloudflare-gated).
+    "U14.SI": [
+        "https://links.sgx.com/1.0.0/corporate-announcements/IJ2GH7ZTV024QR4R/881833_UOL%20Group%20Limited%20-%20Annual%20Report%202025.pdf",
+        "https://links.sgx.com/1.0.0/corporate-announcements/KYC2VFOK44U16ZK6/838991_UOL%20Group%20Limited%20-%20Annual%20Report%202024.pdf",
+        "https://links.sgx.com/1.0.0/corporate-announcements/U776Y0C8YROX8M8K/855378_1.%20UOL%201H2025_Final.pdf",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -1250,6 +1258,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
         "Mapletree Industrial",
         "MIT",
     ),
+    # sti U14.SI SGX allowlist — UOL slugs and 1H2025 token need issuer match (fy false-positive).
+    "U14": ("UOL Group", "UOL Group Limited", "UOL"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
     "HM-B": (
@@ -5841,6 +5851,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     # eng-20261023-01: ME8U.SI — 1QFY*/2QFY* FileOpen slugs contain fy token (would classify annual).
     "https://links.sgx.com/FileOpen/20250728_1QFY25%20Results_Financial%20Statement.ashx?App=Announcement&FileID=853321": "interim",
     "https://links.sgx.com/FileOpen/20241029_2QFY24%20Results_Financial%20Statement.ashx?App=Announcement&FileID=823421": "interim",
+    # eng-20261028-05: U14.SI — 1H2025_Final slug has no half-year token (would classify other).
+    "https://links.sgx.com/1.0.0/corporate-announcements/U776Y0C8YROX8M8K/855378_1.%20UOL%201H2025_Final.pdf": "interim",
     # eng-20261004-01: GALP.LS — Inv_4Q25 path contains q2 so would classify interim.
     "https://www.galp.com/corp/Portals/0/Recursos/Inv_4Q25/Results_4Q25.pdf": "annual",
     # eng-20261009-03: JD.L HY27 slug has no half-year token (would classify other).

@@ -8553,6 +8553,67 @@ def test_ir_allowlist_period_classifies_me8u_si_qfy_fileopen_slugs():
     )
 
 
+def test_fetch_filings_ir_allowlist_sti_u14_si_builtins_eng_20261028_05(tmp_path: Path):
+    """eng-20261028-05: sti parked U14.SI — SGX annual/interim statutory PDF seeds."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("U14.SI", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+    urls = [row["url"] for row in rows]
+    assert any("Annual%20Report%202025.pdf" in url for url in urls)
+    assert any("Annual%20Report%202024.pdf" in url for url in urls)
+    assert any("1H2025_Final.pdf" in url for url in urls)
+    assert all("links.sgx.com" in url for url in urls)
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_u14_si_index(tmp_path: Path):
+    """Empty U14.SI filings_index.json must gain IR rows for library sti measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("U14.SI", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] == 3
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) == 3
+    assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_parked_source_hunter_u14_si_sti_has_fetchable_ir():
+    """eng-20261028-05: U14.SI (UOL Group) has live-fetchable SGX statutory PDF filings."""
+    assert "U14.SI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("U14.SI")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("links.sgx.com" in url for url in urls)
+    annual_url = next(url for url in urls if "Annual%20Report%202025.pdf" in url)
+    body = _live_fetch_filing_body(annual_url)
+    if not body:
+        pytest.skip("SGX PDF body fetch unavailable (network) — retry later")
+    assert len(body) >= 50000
+
+
+def test_ir_allowlist_period_classifies_u14_si_1h2025_final_slug():
+    """eng-20261028-05: 1H2025_Final SGX slug must map to interim (not other)."""
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://links.sgx.com/1.0.0/corporate-announcements/U776Y0C8YROX8M8K/855378_1.%20UOL%201H2025_Final.pdf"
+        )
+        == "interim"
+    )
+
+
 def test_parked_source_hunter_skip_0968_hk_hang_seng():
     """eng-20261017-11: 0968.HK leftover IWB is bot-gated TipRanks news, not missing HKEX filings."""
     assert "0968.HK" in PARKED_SOURCE_HUNTER_SKIP
