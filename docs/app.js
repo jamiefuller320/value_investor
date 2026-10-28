@@ -7110,6 +7110,52 @@ function renderObserveInstrumentCard(inst, history) {
         )}</span>`
       )}
       ${settingRow("Verdict", esc(String(metrics.verdict || "—")))}`;
+  } else if (inst.id === "cue_consumer_mft") {
+    const levers = Array.isArray(metrics.mom_levers) ? metrics.mom_levers : [];
+    const leverBits = levers
+      .map((row) => {
+        const score =
+          row.mom_score == null || row.mom_score === ""
+            ? "—"
+            : String(row.mom_score);
+        return `${row.id || "?"}:${score}`;
+      })
+      .join(" · ");
+    const med = metrics.path_median_fair_cost_pct;
+    const medBit =
+      typeof med === "number" && Number.isFinite(med)
+        ? `${(med * 100).toFixed(1)}%`
+        : "—";
+    metricRows = `
+      ${settingRow("Pipeline", esc(String(metrics.pipeline_status || "—")))}
+      ${settingRow(
+        "Open / closed",
+        esc(`${metrics.open_lab_episodes ?? "—"} / ${metrics.closed_lab_episodes ?? "—"}`)
+      )}
+      ${settingRow(
+        "Walker",
+        esc(
+          `${metrics.walker_status || "—"} · cues_accepted=${metrics.cues_accepted ?? "—"}`
+        )
+      )}
+      ${settingRow("Path median (fair-cost)", esc(medBit))}
+      ${settingRow(
+        "Q8B cohort",
+        esc(
+          `proposed=${metrics.q8b_proposed_n ?? "—"} · frozen=${metrics.q8b_frozen_n ?? "—"} · eligible=${metrics.evolutionary_shadows_eligible ?? "—"}`
+        )
+      )}
+      ${settingRow(
+        "MoM levers",
+        `<span title="Month-on-month fair-cost levers (diagnostic until volume).">${esc(
+          leverBits || "—"
+        )}</span>`
+      )}
+      ${settingRow(
+        "Judgment fill",
+        esc(String(metrics.judgment_fill_status || "—"))
+      )}
+      <p class="small muted">Observe-only super book · influences_live=false · declared incomparable · never Package L</p>`;
   } else {
     metricRows = `
       ${settingRow("Dominant gap", esc(`${metrics.dominant_gap_field || "—"} · ${metrics.dominant_gap_count ?? "—"}`))}
@@ -7186,7 +7232,7 @@ function renderObserveUtilizationSection(data, { compact = false } = {}) {
       <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
       ${metaLine}
       ${staleBanner}
-      <p class="small muted">Observe-only P1 instruments (flip-lag + decision-input). Flip-lag factory <code>has_memo</code> joins sibling <code>memo_home_market</code> — empty local home is not unresearched. Trajectory = delta vs last dashboard cycle (lower warn/gap is better). ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Ops runbook</a>` : ""}</p>
+      <p class="small muted">Observe-only instruments (flip-lag + decision-input + cue_consumer_mft L640). Flip-lag factory <code>has_memo</code> joins sibling <code>memo_home_market</code> — empty local home is not unresearched. Trajectory = delta vs last dashboard cycle (lower warn/gap is better on P1 cards; MFT card is activity). ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Ops runbook</a>` : ""}</p>
       <div class="grid observe-instrument-grid" style="margin-top:0.75rem">
         ${cards || '<p class="muted">No instruments in snapshot.</p>'}
       </div>
