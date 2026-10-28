@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-28T18:28:12.926696+00:00`
+Generated: `2026-10-28T21:50:00.414404+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,10 +33,14 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `human`/human PR #1217 `eng-20261028-04` — Close buy-tier overlay wiring gap (`buy_tier_wired_count` 64 vs `buy_tier_count` 73; `wired_missing_committed_verdicts` 1)—ensure committed verdicts publish to
+- `human`/human PR #1216 `eng-20261028-02` — dividend: Implement canonical FCF basis registry (filing OCF−CapEx, screen TTM, company-adjusted/policy primary) with overlay rules that suppress Dividend Growt
+- `parked_hunter`/verified PR #1215 `eng-20261028-05` — Hunt fetchable IR source for parked sti leftover U14.SI
+- `human`/human PR #1209 `eng-20261028-01` — fcf: Implement canonical FCF basis registry (filing OCF−CapEx, screen TTM, company-adjusted/policy primary) with overlay rules that suppress Dividend Growth/FCF
 - `human`/human PR #1210 `eng-20261028-03` — Wire Yahoo (or filing-derived) `operating_cashflow` into `CompanyMetrics` when `financials_annual.json` already has OCF
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 299
+- Occasion count: 301
 - `PR mergeable=CONFLICTING against main` — 7×
 - `merge_conflict:dirty` — 6×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
