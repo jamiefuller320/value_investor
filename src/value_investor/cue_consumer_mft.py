@@ -867,7 +867,7 @@ def fill_judgment_in_the_round(
     # Coverage + fail-closed note.
     unknown_cells: list[str] = []
     cited_cells: list[str] = []
-    for label, block in (("B", judgment.get("buy") or {}), ("S", judgment.get("sell") or {})):
+    for _label, block in (("B", judgment.get("buy") or {}), ("S", judgment.get("sell") or {})):
         if not isinstance(block, dict):
             continue
         for key, cell in block.items():
