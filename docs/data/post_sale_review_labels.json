@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-28T08:05:02.488141+00:00",
+  "updated_at": "2026-10-28T08:43:32.540100+00:00",
   "influences_live": false,
   "observe_only": true,
   "package": "M",
@@ -9631,6 +9631,280 @@
         },
         "episode_key": "n206|RIO.L|2026-09-27|2026-10-11"
       }
+    },
+    {
+      "event_id": "b91c2919-44b8-49c4-9409-642cf2e34f0d",
+      "review_id": "bb4303aab13ca2c1b467",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Good entry, premature sell",
+      "acted_at": "2026-10-28T08:43:18.611303+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:ead92dd9f52e3231",
+      "snapshot": {
+        "book_id": "n206",
+        "book_tag": "N206",
+        "model_id": "n206",
+        "ticker": "ERIC-B.ST",
+        "entry_at": "2026-08-21T21:14:11+00:00",
+        "exit_at": "2026-10-11T06:22:31+00:00",
+        "hold_days": 51,
+        "exit_kind": "post_sale",
+        "return_pct": -1.05,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N206] ERIC-B.ST · 2026-10-11 · hold 51d · post_sale\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): -1.05%\nContext read-only — not a new veto. influences_live=false",
+        "opened_at": "2026-08-21T21:14:11+00:00",
+        "sold_at": "2026-10-11T06:22:31+00:00",
+        "registration_id": "strand-d-plain-ey-identity-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.0763658937394553,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": null,
+            "require_momentum": false
+          }
+        },
+        "sell_decision": {
+          "code": "identity_break_ey_band",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left EY top band (identity break)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "identity_break_ey_band"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "sell_reason": "Left EY top band (identity break)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "identity_break_ey_band",
+        "entry_detail": {
+          "earnings_yield": 0.0763658937394553,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        },
+        "episode_key": "n206|ERIC-B.ST|2026-08-21|2026-10-11",
+        "llm_opinion": "N206 closed ERIC-B.ST after a 51-day hold (2026-08-21 → 2026-10-11, post_sale): small loss (-1.05% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 51-day hold, small loss (-1.05% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "buy_strengths": [
+          "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail."
+        ],
+        "buy_weaknesses": [],
+        "sell_strengths": [
+          "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+        ],
+        "sell_weaknesses": [],
+        "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "same_day_soft_penalty": false,
+        "dialogue": [
+          {
+            "role": "factory",
+            "kind": "initial_opinion",
+            "text": "N206 closed ERIC-B.ST after a 51-day hold (2026-08-21 → 2026-10-11, post_sale): small loss (-1.05% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 51-day hold, small loss (-1.05% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "buy_strengths": [
+              "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [],
+            "sell_strengths": [
+              "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+            ],
+            "sell_weaknesses": [],
+            "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+            "same_day_round_trip": false,
+            "same_day_assessment": "not_applicable",
+            "source": "deterministic_v0",
+            "at": "2026-10-28T08:43:08.369067+00:00",
+            "influences_live": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "8f80919c-adfd-490a-90df-095cfefaee12",
+      "review_id": "reply:ead92dd9f52e3231",
+      "parent_event_id": "b91c2919-44b8-49c4-9409-642cf2e34f0d",
+      "parent_review_id": "bb4303aab13ca2c1b467",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "N206 · ERIC-B.ST · post_sale (51d, fair_cost_episode −1.05%). Observe-only — influences_live false; no knob, fill, or capital changes from this thread (Package M framing, not Package L auto-tune).\n\nEntry alignment: join_ok on buy cites filters_newly_clear — EY top 30%, financial health pass, no momentum gate (episode.entry_detail). That matches your “good entry” read on the structured entry story.\n\n“Premature sell” vs exit mechanics: join_ok on sell cites identity_break_ey_band — Left EY top band (identity break) (episode.exit_reason). That is a mechanical identity / buy-tier exit, not a discretionary timing or technical sell trigger. Calling the sell “premature” only lands if you mean price or pattern continued favorably after exit; it does not contradict the recorded reason, which fired on band membership, not on chart timing alone.\n\nDual horizon (missed-pattern framing): On the episode window, verify path from 2026-08-21 entry through 2026-10-11 exit against the identity-break label. On a wider timeframe, check range location at exit and whether ERIC-B climbed materially after post_sale — context the 51-day slice can hide. I was not given post-exit range percentiles or filing facts here; use chart + TF together before Accepting whether the exit felt early in price terms.\n\nStructured anchors — buy: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sell: Left EY top band (identity break).\n\nAccept this framing, or Comment with what you see on episode vs wider TF (e.g. range location, post-exit climb).",
+      "acted_at": "2026-10-28T08:43:18.611318+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
+    },
+    {
+      "event_id": "1db331fd-971c-4483-92fc-5923a6056e6f",
+      "review_id": "f51788cde9ef2949d360",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Premature sell on strong upward trend",
+      "acted_at": "2026-10-28T08:43:32.539953+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:fd0f1245475e1234",
+      "snapshot": {
+        "book_id": "n201",
+        "book_tag": "N201",
+        "model_id": "n201",
+        "ticker": "COP",
+        "entry_at": "2026-09-18T06:52:39+00:00",
+        "exit_at": "2026-10-09T06:53:03+00:00",
+        "hold_days": 21,
+        "exit_kind": "post_sale",
+        "return_pct": 0.4,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N201] COP · 2026-10-09 · hold 21d · post_sale\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 0.4%\nContext read-only — not a new veto. influences_live=false",
+        "opened_at": "2026-09-18T06:52:39+00:00",
+        "sold_at": "2026-10-09T06:53:03+00:00",
+        "registration_id": "strand-c-short-horizon-value-mom-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.0569862589033906,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": 0.431425051154916,
+            "require_momentum": true
+          }
+        },
+        "sell_decision": {
+          "code": "identity_break_ey_band",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left EY top band (identity break)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "identity_break_ey_band"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+        "sell_reason": "Left EY top band (identity break)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "identity_break_ey_band",
+        "entry_detail": {
+          "earnings_yield": 0.0569862589033906,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": 0.431425051154916,
+          "require_momentum": true
+        },
+        "episode_key": "n201|COP|2026-09-18|2026-10-09",
+        "llm_opinion": "N201 closed COP after a 21-day hold (2026-09-18 → 2026-10-09, post_sale): near-flat / small gain (0.40% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+        ],
+        "chart_annotations": {
+          "episode": "Episode: 21-day hold, near-flat / small gain (0.40% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+        },
+        "opinion_source": "deterministic_v0",
+        "buy_strengths": [
+          "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — comments can ground on that trail."
+        ],
+        "buy_weaknesses": [],
+        "sell_strengths": [
+          "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+        ],
+        "sell_weaknesses": [],
+        "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "same_day_soft_penalty": false,
+        "dialogue": [
+          {
+            "role": "factory",
+            "kind": "initial_opinion",
+            "text": "N201 closed COP after a 21-day hold (2026-09-18 → 2026-10-09, post_sale): near-flat / small gain (0.40% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+            ],
+            "chart_annotations": {
+              "episode": "Episode: 21-day hold, near-flat / small gain (0.40% fair_cost_episode). Confirm entry/exit marks match the sealed/control path.",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide."
+            },
+            "buy_strengths": [
+              "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [],
+            "sell_strengths": [
+              "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+            ],
+            "sell_weaknesses": [],
+            "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+            "same_day_round_trip": false,
+            "same_day_assessment": "not_applicable",
+            "source": "deterministic_v0",
+            "at": "2026-10-28T08:43:18.624939+00:00",
+            "influences_live": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "1725e22f-88e4-4fba-be9d-66f1b99cfc0a",
+      "review_id": "reply:fd0f1245475e1234",
+      "parent_event_id": "1db331fd-971c-4483-92fc-5923a6056e6f",
+      "parent_review_id": "f51788cde9ef2949d360",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Observe-only alignment (no knobs, fills, or live capital; influences_live false; Package M, not Package L auto-tune).\n\nStructured path: **Buy** — filters newly cleared (entry): EY top 30%, FH pass, mom>0 (join_ok). **Sell** — left EY top band (identity break); code identity_break_ey_band (join_ok). That exit is a mechanical identity / buy-tier band rule, not a trend or timing trigger.\n\nYour **“premature sell on strong upward trend”** is best read on **two horizons**: (1) the **21-day episode** (2026-09-18 → 2026-10-09, ~+0.40% fair_cost_episode) for what the model actually saw at exit, and (2) a **wider timeframe** for the post-exit climb and whether price action looked like continuation vs normal cyclical noise the episode window can hide. “Premature” is most comparable when the sell was driven by a timing/tech rule; here the documented reason is **band exit**, so relabeling it as early vs late means weighing your chart read against **membership in the EY top band**, not against momentum alone.\n\nPlease **Accept** this framing or **Comment** with what you see on episode vs wider TF (e.g. range location, climb after exit).",
+      "acted_at": "2026-10-28T08:43:32.539972+00:00",
+      "acted_by": "factory_llm",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "llm",
+      "llm_attempted": true,
+      "llm_ok": true
     }
   ],
   "actioned_review_ids": [
@@ -9713,7 +9987,9 @@
     "9b862ec00fdee48bca49",
     "548bca6abbc7411fc046",
     "3b3495d501a4a928c738",
-    "8fc344de6e7735a03f45"
+    "8fc344de6e7735a03f45",
+    "bb4303aab13ca2c1b467",
+    "f51788cde9ef2949d360"
   ],
   "active_replies": []
 }
