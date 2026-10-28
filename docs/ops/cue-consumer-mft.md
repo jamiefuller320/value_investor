@@ -40,8 +40,8 @@ active-model noise spray?
 | Exit | 63 trading days **or** cue identity break; same-day soft bias on close |
 | Thin emit (Q6B) | Closes-primary ≥**3** citing levers; MoM diagnostic only |
 | Same-day exits | Soft bias / scoreboard penalty; exception `major_error_reverse` with durable cites — **not** a hard ban |
-| Judgment rubric | `judgment_in_the_round_v0` schema; walker stamps **B4** from cue scaffold; full fill = **N228** |
-| Live influence | `influences_live=false` |
+| Judgment rubric | `judgment_in_the_round_v0`; **N228** deterministic cite fill on decide trail (B1–B6 / S1–S6); missing cells stay `unknown`; misfit_evidence when timing wait vs cue or same-day exit without `major_error_reverse` |
+| Live influence | `influences_live=false` (fail-closed; `authorize_judgment_live_influence` always false) |
 | Findings | `auto_fixable=false` |
 | Spend | Investment observe — **does not** steal Data P1 fat slot |
 
@@ -63,16 +63,16 @@ snapshots and records **lab** fixed-stake paper positions:
    ticker (no double-stake on the lab book).
 2. PIT filter via `select_pit_cues` (look-ahead rejected; missing cue stamp
    fail-closed).
-3. Durable open evidence: cue id/ts, pit_ok, judgment checklist with B4 cue
-   cite (remaining B/S cells unknown until N228).
+3. Durable open evidence: cue id/ts, pit_ok, **N228** judgment-in-the-round
+   fill citing screen/cue fields (B1–B6); unknown when cites missing.
 4. Close at hold horizon (63 trading days) or cue identity break; attach
-   same-day soft-bias assessment.
+   same-day soft-bias assessment **and** sell-side checklist cites (S1–S6).
 5. Persist open/closed samples + path scoreboard
    (`fair_cost_episode_pct` median) on `docs/data/cue_consumer_mft_observe.json`.
 
 **Not in v0:** sealed-child spawn (N223), full novelty distance (N226), cull
-factory (N227), rule-aware LLM decide fill (N228), dashboard strip (L640),
-weekday paper-auto track wiring.
+factory (N227), remote LLM voice on the same checklist (optional later),
+dashboard strip (L640), weekday paper-auto track wiring.
 
 Open-position cap (default **30**) limits lab spray; sealed anti-noise caps
 still apply only when spawn is built.
@@ -138,7 +138,7 @@ as of 2026-10-28; keep as reference if a future cohort is proposed).
 | Per-root cap | ≤3 active; cull/replace policy stub | **N227** |
 | Cull / archive | declared criteria stub; cull≠live promote | **N227** / **L631** |
 | Spawn sealed child | scaffold proposal only | **N223** / **L630** |
-| Rule-aware LLM decide | schema stub; walker B4 cue cite only | **N228** |
+| Rule-aware decide + misfit trail | **shipped** deterministic N228 fill on trail | optional remote LLM voice later (still observe-only) |
 | Chart draw tools | not shipped | **N229** |
 | Episode walker / lab paper fills | **shipped** (`mft-episode-walker-v0`) when eligible | dashboard strip **L640**; paper-auto track wiring later |
 | Dashboard strip | not shipped | **L640** |

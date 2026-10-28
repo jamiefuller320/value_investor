@@ -342,11 +342,62 @@ def test_freeze_cohort_dry_run_then_apply():
 
 
 def test_judgment_stub_fail_closed_and_observe_only():
+    from value_investor.cue_consumer_mft import (
+        authorize_judgment_live_influence,
+        fill_judgment_in_the_round,
+        judgment_has_durable_cites,
+    )
+
     stub = judgment_in_the_round_stub()
     assert stub["influences_live"] is False
-    assert stub["deferred_id"] == "N228"
+    assert stub["observe_only"] is True
+    assert stub["fill_status"] == "schema_only"
     assert stub["buy"]["B1"]["unknown"] is True
     assert stub["sell"]["S4"]["cites"] == []
+    assert authorize_judgment_live_influence(stub) is False
+    assert judgment_has_durable_cites(stub) is False
+
+    filled = fill_judgment_in_the_round(
+        side="buy",
+        cue_source_id="n210_ai_filter",
+        clear_note="ai_filter_clear",
+        entry_detail={
+            "cue_source_id": "n210_ai_filter",
+            "signal": "buy",
+            "research_verdict": "accumulate",
+            "conviction_score": 0.72,
+            "timing_signal": "neutral",
+        },
+        row={
+            "passed_families": "cheapness,quality",
+            "models_passed": 8,
+            "timing_signal": "neutral",
+            "price_vs_sma200_pct": -0.05,
+            "sector": "Industrials",
+            "research_confidence": 0.7,
+            "trade_plan_summary": "fixed stake observe",
+        },
+    )
+    assert filled["influences_live"] is False
+    assert filled["fill_status"] == "filled"
+    assert filled["buy"]["B1"]["unknown"] is False
+    assert filled["buy"]["B4"]["unknown"] is False
+    assert "cue_source_id=n210_ai_filter" in filled["buy"]["B4"]["cites"]
+    assert filled["buy"]["B2"]["unknown"] is False
+    assert filled["llm_stance"] == "agree"
+    assert authorize_judgment_live_influence(filled) is False
+    assert judgment_has_durable_cites(filled) is True
+
+    misfit = fill_judgment_in_the_round(
+        side="buy",
+        cue_source_id="n200_raw_buy_tier",
+        clear_note="raw_buy_tier_clear",
+        entry_detail={"timing_signal": "wait", "signal": "buy"},
+        row={"timing_signal": "wait"},
+    )
+    assert misfit["llm_stance"] == "misfit"
+    assert misfit["misfit_evidence"]["decision_code"] == "timing_wait_vs_cue_propose"
+    assert misfit["influences_live"] is False
 
 
 def test_refresh_persists_stores_and_findings(tmp_path: Path):
