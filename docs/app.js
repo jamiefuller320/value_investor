@@ -11907,39 +11907,23 @@ function syncPostSaleQueueOverlay(data) {
   );
   const pending = new Set(Object.keys(pendingPostSaleActions));
   const clearedEpisodes = postSaleActionedEpisodeKeys(labels);
-  const existingReplyParents = new Set(
-    queue.active
-      .filter((row) => row && row.tag === "reply")
-      .map((row) => String((row && row.parent_review_id) || "").trim())
-      .filter(Boolean)
-  );
+  // Active = genuine uncommented exits only. Drop reply:* cards (legacy publish
+  // or optimistic stubs) — factory replies belong in durable history.
   queue.active = queue.active.filter((row) => {
-    const rid = String((row && row.review_id) || "").trim();
+    if (!row || typeof row !== "object") return false;
+    if (String(row.tag || "").toLowerCase() === "reply") return false;
+    if (String(row.review_id || "").startsWith("pending-reply:")) return false;
+    if (String(row.review_id || "").startsWith("reply:")) return false;
+    const rid = String(row.review_id || "").trim();
     if (!rid) return false;
     if (pending.has(rid) || actioned.has(rid)) return false;
-    const ep = String((row && row.episode_key) || "").trim();
-    if (ep && clearedEpisodes.has(ep) && row.tag !== "reply") return false;
+    const ep = String(row.episode_key || "").trim();
+    if (ep && clearedEpisodes.has(ep)) return false;
     return postSaleReviewCardUsable(row);
   });
-  // Comment: keep a visible reply stub (with owner text) until labels catch up.
-  const optimistic = [];
-  for (const [rid, pendingRow] of Object.entries(pendingPostSaleActions)) {
-    if (!pendingRow || String(pendingRow.decision || "").toLowerCase() !== "comment") {
-      continue;
-    }
-    if (existingReplyParents.has(rid)) continue;
-    if (queue.active.some((row) => String(row.parent_review_id || "").trim() === rid)) {
-      continue;
-    }
-    const card = buildOptimisticPostSaleReplyCard(rid, pendingRow);
-    if (card) optimistic.push(card);
-  }
-  if (optimistic.length) {
-    queue.active = optimistic.concat(queue.active);
-  }
   queue.active_count = queue.active.length;
-  queue.new_count = queue.active.filter((row) => row.tag !== "reply").length;
-  queue.reply_count = queue.active.filter((row) => row.tag === "reply").length;
+  queue.new_count = queue.active.length;
+  queue.reply_count = 0;
   const byBook = {};
   for (const row of queue.active) {
     const key = String(row.book_tag || row.book_id || "?");
@@ -12372,7 +12356,7 @@ function renderPostSaleReviews(data) {
           renderPostSaleReviewCard(item, postSaleReviewExpandedId === item.review_id)
         )
         .join("")
-    : `<p class="muted">Active queue empty — all exits Accept/Comment’d, or no recent sealed/control sells.</p>`;
+    : `<p class="muted">Active queue empty — all exits Accept/Comment/Duplicate’d, or no recent sealed/control sells.</p>`;
   const byBook = Object.entries(queue.by_book || {})
     .map(([k, v]) => `${esc(k)} ${v}`)
     .join(" · ");
@@ -12382,7 +12366,7 @@ function renderPostSaleReviews(data) {
   const historyRows = historyEvents.slice(0, 40);
   const historyHtml = historyRows.length
     ? `<div class="psr-history">
-        <h4 class="small">Durable history (cleared from active)</h4>
+        <h4 class="small">Durable history (Accept / Comment / reply — outside active)</h4>
         <ul class="psr-history-list small">
           ${historyRows
             .map((ev) => {
@@ -12425,14 +12409,12 @@ function renderPostSaleReviews(data) {
         </div>
       </div>
       <p class="small muted">
-        Active ${queue.active_count ?? items.length}
-        · new ${queue.new_count ?? "—"}
-        · reply ${queue.reply_count ?? "—"}
+        Active (uncommented) ${queue.active_count ?? items.length}
         · actioned history ${queue.actioned_count ?? "—"}
         · candidates ${queue.coverage?.candidate_exits ?? "—"}
         ${byBook ? `· ${byBook}` : ""}
       </p>
-      <p class="small muted">${esc(sortHint)} Same ticker on N200/N201/N206/… is one card per sealed book — book badge is the model tag, not a duplicate review_id.</p>
+      <p class="small muted">${esc(sortHint)} Same ticker on N200/N201/N206/… is one card per sealed book — book badge is the model tag, not a duplicate review_id. Commented / Accepted / Duplicate’d exits stay in durable history only.</p>
       <p class="small muted">${esc(queue.attention_note || "")}</p>
       <p class="small muted">Package M · influences_live=false · no Package L auto-tune · charts annotated with factory opinion + learning points</p>
       <div class="psr-queue" id="psr-queue">${cards}</div>

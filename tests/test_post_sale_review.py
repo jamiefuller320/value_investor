@@ -395,31 +395,22 @@ def test_accept_clears_active_and_comment_spawns_reply(tmp_path: Path):
         data_dir=data_dir, sealed=_sealed_fixture(), board=_board_fixture()
     )
     assert all(row["review_id"] != control["review_id"] for row in after["active"])
-    reply_rows = [row for row in after["active"] if row["tag"] == "reply"]
-    assert len(reply_rows) == 1
-    assert reply_rows[0]["owner_comment"] == "Missed climbing wider TF"
-    assert reply_rows[0]["llm_opinion"]
-    assert len(reply_rows[0]["dialogue"]) >= 3
+    # Commented episode must not reappear — including as a reply:* card.
+    assert all(row.get("tag") != "reply" for row in after["active"])
+    assert after["reply_count"] == 0
+    assert reply.get("owner_comment") == "Missed climbing wider TF"
+    assert reply.get("llm_opinion")
+    assert len(reply.get("dialogue") or []) >= 3
 
-    # Accept the reply → clears again
-    run_post_sale_review_action(
-        data_dir,
-        review_id=reply_rows[0]["review_id"],
-        decision="accept",
-        tag_at_action="reply",
-        source="test",
-        snapshot=reply_rows[0],
-    )
-    final = build_post_sale_review_queue(
-        data_dir=data_dir, sealed=_sealed_fixture(), board=_board_fixture()
-    )
-    assert final["reply_count"] == 0
     labels = load_post_sale_review_labels(data_dir)
     assert comments_awaiting_reply(labels) == []
+    assert labels.get("active_replies") == []
     kinds = [row["kind"] for row in labels["events"]]
-    assert kinds.count("accept") == 2
+    assert kinds.count("accept") == 1
     assert kinds.count("comment") == 1
     assert kinds.count("reply") == 1
+    # Factory reply is durable history, not an active queue card.
+    assert any(row.get("kind") == "reply" for row in labels["events"])
 
 
 def test_ops_findings_and_refresh(tmp_path: Path):
@@ -482,7 +473,7 @@ def test_initial_opinion_and_llm_reply_fallback():
 
 
 def test_blank_reply_cards_suppressed_from_active(tmp_path: Path):
-    """Unusable ``?`` reply leftovers must not clutter the active queue."""
+    """Legacy ``active_replies`` (blank or usable) must not enter the active queue."""
     labels = {
         "actioned_review_ids": ["parent-ok"],
         "events": [],
@@ -516,9 +507,9 @@ def test_blank_reply_cards_suppressed_from_active(tmp_path: Path):
         board=_board_fixture(),
         labels=labels,
     )
-    reply_ids = {row["review_id"] for row in payload["active"] if row.get("tag") == "reply"}
-    assert "reply:blank" not in reply_ids
-    assert "reply:ok" in reply_ids
+    assert all(row.get("tag") != "reply" for row in payload["active"])
+    assert "reply:blank" not in {row["review_id"] for row in payload["active"]}
+    assert "reply:ok" not in {row["review_id"] for row in payload["active"]}
     assert all(row.get("ticker") not in (None, "", "?") for row in payload["active"])
 
 
@@ -591,17 +582,18 @@ def test_nested_snapshot_batch_preserves_identity(tmp_path: Path):
     )
     assert batch["ok"] is True
     labels = load_post_sale_review_labels(data_dir)
-    assert labels["active_replies"]
-    reply = labels["active_replies"][-1]
-    assert reply.get("ticker") == "BBB.L"
-    assert reply.get("book_tag") or reply.get("book_id")
+    assert labels["active_replies"] == []
+    reply_events = [row for row in labels["events"] if row.get("kind") == "reply"]
+    assert reply_events
+    comment_events = [row for row in labels["events"] if row.get("kind") == "comment"]
+    assert comment_events
+    assert comment_events[-1].get("snapshot", {}).get("ticker") == "BBB.L"
     after = build_post_sale_review_queue(
         data_dir=data_dir, sealed=_sealed_fixture(), board=_board_fixture()
     )
     assert all(row["review_id"] != item["review_id"] for row in after["active"])
-    assert any(
-        row.get("tag") == "reply" and row.get("ticker") == "BBB.L" for row in after["active"]
-    )
+    assert all(row.get("tag") != "reply" for row in after["active"])
+    assert all(row.get("ticker") != "BBB.L" or row.get("tag") != "reply" for row in after["active"])
 
 
 def test_actioned_episode_key_keeps_jitter_fingerprint_cleared(tmp_path: Path):
@@ -636,9 +628,7 @@ def test_actioned_episode_key_keeps_jitter_fingerprint_cleared(tmp_path: Path):
     payload = build_post_sale_review_queue(
         data_dir=tmp_path, sealed=sealed, board=board, labels=labels
     )
-    assert all(
-        row.get("episode_key") != ep or row.get("tag") == "reply" for row in payload["active"]
-    )
+    assert all(row.get("episode_key") != ep for row in payload["active"])
     assert all(row.get("review_id") != item["review_id"] for row in payload["active"])
 
 
@@ -673,10 +663,42 @@ def test_resolve_snapshot_heals_from_labels_when_queue_cleared(tmp_path: Path):
 
 
 def test_reply_rebuild_preserves_comment_dialogue(tmp_path: Path):
-    """Missing learning_points must not wipe owner comment/reply dialogue turns."""
+    """Legacy active_replies must not re-enter active; dialogue stays in history events."""
+    from value_investor.post_sale_review_opinion import extend_dialogue_for_comment_reply
+
+    dialogue = extend_dialogue_for_comment_reply(
+        prior_dialogue=[{"kind": "initial_opinion", "text": "seed"}],
+        item={"ticker": "AAA.L", "book_tag": "N200"},
+        owner_comment="Premature sell",
+        reply_text="Acknowledged premature sell.",
+        reply_kind="deterministic_contextual",
+    )
+    kinds = [str(t.get("kind")) for t in dialogue if isinstance(t, dict)]
+    assert "comment" in kinds
+    assert "reply" in kinds
     labels = {
         "actioned_review_ids": ["parent-1"],
-        "events": [],
+        "events": [
+            {
+                "kind": "comment",
+                "review_id": "parent-1",
+                "text": "Premature sell",
+                "snapshot": {
+                    "ticker": "AAA.L",
+                    "book_id": "n200",
+                    "book_tag": "N200",
+                    "episode_key": "n200|AAA.L|2026-10-01|2026-10-20",
+                    "entry_at": "2026-10-01T10:00:00+00:00",
+                    "exit_at": "2026-10-20T10:00:00+00:00",
+                },
+            },
+            {
+                "kind": "reply",
+                "review_id": "reply:keep",
+                "parent_review_id": "parent-1",
+                "text": "Acknowledged premature sell.",
+            },
+        ],
         "active_replies": [
             {
                 "review_id": "reply:keep",
@@ -685,17 +707,9 @@ def test_reply_rebuild_preserves_comment_dialogue(tmp_path: Path):
                 "ticker": "AAA.L",
                 "book_tag": "N200",
                 "book_id": "n200",
-                "exit_at": "2026-10-20T10:00:00+00:00",
-                "entry_at": "2026-10-01T10:00:00+00:00",
                 "owner_comment": "Premature sell",
                 "reply_text": "Acknowledged premature sell.",
-                "llm_opinion": "",
-                "learning_points": [],
-                "dialogue": [
-                    {"kind": "initial_opinion", "text": "seed"},
-                    {"kind": "comment", "text": "Premature sell"},
-                    {"kind": "reply", "text": "Acknowledged premature sell."},
-                ],
+                "dialogue": dialogue,
             }
         ],
     }
@@ -705,8 +719,60 @@ def test_reply_rebuild_preserves_comment_dialogue(tmp_path: Path):
         board=_board_fixture(),
         labels=labels,
     )
-    reply = next(row for row in payload["active"] if row["review_id"] == "reply:keep")
-    kinds = [str(t.get("kind")) for t in (reply.get("dialogue") or []) if isinstance(t, dict)]
-    assert "comment" in kinds
-    assert "reply" in kinds
-    assert reply.get("owner_comment") == "Premature sell"
+    assert all(row.get("review_id") != "reply:keep" for row in payload["active"])
+    assert all(row.get("tag") != "reply" for row in payload["active"])
+
+
+def test_commented_episode_does_not_reappear_in_active(tmp_path: Path):
+    """Regression: Comment clears active; refresh must not bounce the episode back."""
+    data_dir = tmp_path
+    (data_dir / "sealed_lifecycle.json").write_text("{}", encoding="utf-8")
+    queue = build_post_sale_review_queue(
+        data_dir=data_dir,
+        sealed=_sealed_fixture(),
+        board=_board_fixture(),
+    )
+    item = next(row for row in queue["active"] if row["ticker"] == "AAA.L")
+    rid = item["review_id"]
+    ep = item["episode_key"]
+    result = run_post_sale_review_action(
+        data_dir,
+        review_id=rid,
+        decision="comment",
+        text="Already reviewed this exit",
+        tag_at_action="new",
+        source="test",
+        snapshot=item,
+    )
+    assert result["ok"] is True
+    # Simulate GHA refresh + client overlay inputs: labels catch up, queue rebuilds.
+    refreshed = refresh_post_sale_review_queue(
+        data_dir=data_dir,
+        store_path=data_dir / "post_sale_review_queue.json",
+        persist=True,
+    )
+    assert all(row.get("review_id") != rid for row in refreshed["active"])
+    assert all(row.get("episode_key") != ep for row in refreshed["active"])
+    assert all(row.get("tag") != "reply" for row in refreshed["active"])
+    assert refreshed["reply_count"] == 0
+    labels = load_post_sale_review_labels(data_dir)
+    assert rid in labels["actioned_review_ids"]
+    assert labels.get("active_replies") == []
+    assert any(row.get("kind") == "comment" for row in labels["events"])
+    assert any(row.get("kind") == "reply" for row in labels["events"])
+    # Fingerprint jitter: new review_id, same episode_key — still cleared.
+    jitter_labels = {
+        "actioned_review_ids": list(labels["actioned_review_ids"]),
+        "events": list(labels["events"]),
+        "active_replies": [
+            {"review_id": "reply:legacy", "tag": "reply", "ticker": "AAA.L", "book_tag": "N200"}
+        ],
+    }
+    again = build_post_sale_review_queue(
+        data_dir=data_dir,
+        sealed=_sealed_fixture(),
+        board=_board_fixture(),
+        labels=jitter_labels,
+    )
+    assert all(row.get("episode_key") != ep for row in again["active"])
+    assert all(row.get("tag") != "reply" for row in again["active"])
