@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-27T21:22:23.824532+00:00",
+  "run_at": "2026-10-28T15:10:30.546938+00:00",
   "market_id": "aex",
   "targets": [
     "MT.AS"
@@ -83,7 +83,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-27T21:22:04.842168+00:00",
+    "snapshot_at": "2026-10-28T15:08:33.037644+00:00",
     "market_id": "aex",
     "buy_tier_count": 9,
     "unmeasured_buy_tier": 0,
@@ -115,7 +115,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-27T21:22:18.701506+00:00",
+    "snapshot_at": "2026-10-28T15:08:53.551255+00:00",
     "market_id": "aex",
     "buy_tier_count": 9,
     "unmeasured_buy_tier": 0,
@@ -136,15 +136,15 @@
     "indexed_without_body_by_ticker": {
       "MT.AS": 1
     },
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
-    "effective_indexed_without_body_tickers": [
+    "parked_tickers": [
       "MT.AS"
     ],
-    "ingest_exhausted": false
+    "parked_count": 1,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -155,10 +155,42 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 2,
+    "from_market": "aex",
+    "to_market": "euro_stoxx50",
+    "stream_markets_after": [
+      "euro_stoxx50"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "aex",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "MT.AS"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "euro_stoxx50",
+      "forced": true,
+      "prior_screen_at": "2026-10-27T16:08:07.539980+00:00",
+      "prior_age_days": 1,
+      "run_at": "2026-10-28T15:10:24.881745+00:00",
+      "shortlist_count": 14,
+      "ticker_count": 50
+    },
+    "at": "2026-10-28T15:09:10.472492+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "aex",
-    "assessed_at": "2026-10-27T21:22:05.397937+00:00",
+    "assessed_at": "2026-10-28T15:08:33.586642+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -188,9 +220,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 12.775764870999978,
+  "used_seconds": 19.406991170000026,
   "budget_seconds": 87.5,
-  "leftover_seconds": 74.72423512900002,
+  "leftover_seconds": 68.09300882999997,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -198,11 +230,24 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "aex",
-    "updated_at": "2026-10-27T21:22:18.706426+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-10-28T15:08:53.556365+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "MT.AS",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-28T15:08:53.556365+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 42,
+        "filings_with_body": 41,
+        "indexed_without_body": 1,
+        "thin": false,
+        "source_surface": "euro_filings+ir_allowlist_direct"
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
@@ -210,30 +255,53 @@
     "leftover_tickers": [
       "MT.AS"
     ],
-    "unparked_leftover": [
-      "MT.AS"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/aex/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "aex"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "aex",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "iseq20",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 49,
-    "candidate_count": 45,
+    "candidate_count": 42,
     "skipped_resolved_tickers": [
       "LMT",
       "CRH",
-      "ULTP.L",
       "MER.L",
       "TPT.L",
       "APTD.L",
       "FOXT.L",
+      "ULTP.L",
       "NTR.TO",
       "GIB-A.TO",
       "SU.TO",
@@ -249,8 +317,6 @@
       "ACKB.BR",
       "APAM.AS",
       "0285.HK",
-      "0857.HK",
-      "0288.HK",
       "2331.HK",
       "EVN.VI",
       "WIE.VI"
