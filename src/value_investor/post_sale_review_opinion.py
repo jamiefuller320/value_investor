@@ -14,7 +14,7 @@ import json
 import os
 import re
 from collections.abc import Callable
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime, timedelta
 from typing import Any
 
 from value_investor.cue_consumer_mft import assess_same_day_round_trip
@@ -22,6 +22,13 @@ from value_investor.post_sale_decision_reasons import (
     UNKNOWN_LABEL,
     format_decision_reasons_for_prompt,
 )
+
+# Structured chart marks schema (Package M). Drawn by docs/charts.js.
+CHART_MARKS_SCHEMA_VERSION = 1
+MARK_TONE_WARN = "warn"
+MARK_TONE_WEAK = "weak"
+MARK_TONE_INFO = "info"
+MARK_TONE_GOOD = "good"
 
 LlmCompleteFn = Callable[[str], str]
 
@@ -179,6 +186,256 @@ def _learning_point_forward(
         "Carry one concrete chart/decision pattern forward into the cue-consumer "
         "MFT lesson intake — never auto-apply knobs on sealed books (Package M only)."
     )
+
+
+def _day(value: Any) -> str:
+    text = str(value or "").strip()
+    return text[:10] if len(text) >= 10 else text
+
+
+def _add_calendar_days(iso_day: str, delta: int) -> str:
+    day = _day(iso_day)
+    if not day:
+        return ""
+    try:
+        stamp = date.fromisoformat(day)
+    except ValueError:
+        return day
+    return (stamp + timedelta(days=int(delta))).isoformat()
+
+
+def _mark(
+    *,
+    mark_id: str,
+    pattern: str,
+    mark_type: str,
+    charts: list[str],
+    label: str,
+    tone: str,
+    cite: str,
+    t0: str | None = None,
+    t1: str | None = None,
+    anchor: str | None = None,
+    price: float | None = None,
+    ref: str | None = None,
+) -> dict[str, Any]:
+    row: dict[str, Any] = {
+        "id": mark_id,
+        "pattern": pattern,
+        "type": mark_type,
+        "charts": list(charts),
+        "label": label,
+        "tone": tone,
+        "cite": cite,
+        "influences_live": False,
+    }
+    if t0:
+        row["t0"] = t0
+    if t1:
+        row["t1"] = t1
+    if anchor:
+        row["anchor"] = anchor
+    if isinstance(price, (int, float)):
+        row["price"] = float(price)
+    if ref:
+        row["ref"] = ref
+    return row
+
+
+def build_pattern_marks(
+    item: dict[str, Any],
+    *,
+    short_hold: bool,
+    same_day: bool,
+    same_day_assessment: str,
+    sell_code: str,
+    sell_join_ok: bool,
+    pct: Any,
+    lens: str = "exit",
+) -> list[dict[str, Any]]:
+    """Map autopsy opinion patterns → drawable chart marks (alignment-only).
+
+    Dates/anchors only — never invents support prices. Client may enrich
+    ``range_ref`` / ``ma_context`` labels from the loaded close series.
+    """
+    entry = _day(item.get("entry_at") or item.get("opened_at"))
+    exit_at = _day(item.get("exit_at") or item.get("sold_at"))
+    marks: list[dict[str, Any]] = []
+
+    if lens == "entry":
+        if entry:
+            marks.append(
+                _mark(
+                    mark_id="entry_quality_band",
+                    pattern="entry_quality",
+                    mark_type="entry_band",
+                    charts=["pit", "episode"],
+                    label="Entry quality — judge vs PIT range / thesis",
+                    tone=MARK_TONE_INFO,
+                    cite="lens=entry_blind",
+                    t0=_add_calendar_days(entry, -7) or entry,
+                    t1=entry,
+                    anchor="entry_price",
+                )
+            )
+            marks.append(
+                _mark(
+                    mark_id="entry_range_ref",
+                    pattern="support_context",
+                    mark_type="range_ref",
+                    charts=["pit", "episode"],
+                    label="Entry vs visible range (client %ile)",
+                    tone=MARK_TONE_INFO,
+                    cite="support_context",
+                    t0=None,
+                    t1=entry,
+                    ref="entry",
+                )
+            )
+            marks.append(
+                _mark(
+                    mark_id="entry_ma_context",
+                    pattern="ma_context",
+                    mark_type="ma_context",
+                    charts=["pit", "episode"],
+                    label="Entry vs SMA50/200",
+                    tone=MARK_TONE_INFO,
+                    cite="ma_context",
+                    t0=entry,
+                    t1=entry,
+                    ref="entry",
+                )
+            )
+        return marks[:6]
+
+    # Exit / post-sale dual-horizon
+    if entry and exit_at:
+        marks.append(
+            _mark(
+                mark_id="hold_path",
+                pattern="hold_path",
+                mark_type="region",
+                charts=["episode", "wider_tf"],
+                label="Hold path (entry→exit)",
+                tone=MARK_TONE_INFO,
+                cite="episode_window",
+                t0=entry,
+                t1=exit_at,
+            )
+        )
+
+    if same_day and entry and exit_at:
+        tone = MARK_TONE_GOOD if same_day_assessment == "major_error_reverse" else MARK_TONE_WARN
+        marks.append(
+            _mark(
+                mark_id="same_day_churn",
+                pattern="same_day_churn",
+                mark_type="region",
+                charts=["episode", "wider_tf"],
+                label=(
+                    "Same-day reverse (cited)"
+                    if same_day_assessment == "major_error_reverse"
+                    else "Same-day round-trip (default weakness)"
+                ),
+                tone=tone,
+                cite=f"same_day_assessment={same_day_assessment}",
+                t0=entry,
+                t1=exit_at,
+            )
+        )
+
+    mechanical = sell_join_ok and sell_code in {"leave_buy_tier", "left_target_set"}
+    if short_hold and not same_day and entry and exit_at and not mechanical:
+        post_end = _add_calendar_days(exit_at, 21) or exit_at
+        marks.append(
+            _mark(
+                mark_id="premature_sell_region",
+                pattern="premature_sell",
+                mark_type="post_exit_band",
+                charts=["episode", "wider_tf"],
+                label="Post-exit path — premature sell?",
+                tone=MARK_TONE_WARN,
+                cite="short_hold_non_mechanical",
+                t0=exit_at,
+                t1=post_end,
+            )
+        )
+    elif short_hold and mechanical and entry and exit_at:
+        marks.append(
+            _mark(
+                mark_id="mechanical_short_hold",
+                pattern="mechanical_exit",
+                mark_type="region",
+                charts=["episode"],
+                label="Mechanical leave — not timing skill",
+                tone=MARK_TONE_INFO,
+                cite=f"sell_code={sell_code}",
+                t0=entry,
+                t1=exit_at,
+            )
+        )
+
+    if isinstance(pct, (int, float)) and pct <= -5 and entry and exit_at:
+        marks.append(
+            _mark(
+                mark_id="material_loss_path",
+                pattern="material_loss",
+                mark_type="region",
+                charts=["episode", "wider_tf"],
+                label=f"Material loss path ({pct:.1f}%)",
+                tone=MARK_TONE_WEAK,
+                cite="return_pct<=-5",
+                t0=entry,
+                t1=exit_at,
+            )
+        )
+
+    if entry:
+        marks.append(
+            _mark(
+                mark_id="entry_quality",
+                pattern="entry_quality",
+                mark_type="entry_band",
+                charts=["episode", "wider_tf"],
+                label="Entry quality band",
+                tone=MARK_TONE_INFO,
+                cite="entry_at",
+                t0=_add_calendar_days(entry, -5) or entry,
+                t1=_add_calendar_days(entry, 2) or entry,
+                anchor="entry_price",
+            )
+        )
+        marks.append(
+            _mark(
+                mark_id="entry_range_ref",
+                pattern="support_context",
+                mark_type="range_ref",
+                charts=["wider_tf"],
+                label="Entry vs wider range (support / cyclical location)",
+                tone=MARK_TONE_INFO,
+                cite="support_context",
+                ref="entry",
+            )
+        )
+
+    if exit_at:
+        marks.append(
+            _mark(
+                mark_id="exit_ma_context",
+                pattern="ma_context",
+                mark_type="ma_context",
+                charts=["episode", "wider_tf"],
+                label="Exit vs SMA50/200",
+                tone=MARK_TONE_INFO,
+                cite="ma_context",
+                t0=exit_at,
+                t1=exit_at,
+                ref="exit",
+            )
+        )
+
+    # Soft cap — iPad readability; prefer pattern specificity over spray.
+    return marks[:8]
 
 
 def consider_human_comment(
@@ -366,11 +623,24 @@ def build_initial_opinion(item: dict[str, Any]) -> dict[str, Any]:
         pct=pct,
     )
 
+    marks = build_pattern_marks(
+        item,
+        short_hold=short_hold,
+        same_day=same_day,
+        same_day_assessment=same_day_assessment,
+        sell_code=sell_code,
+        sell_join_ok=sell_join_ok,
+        pct=pct,
+        lens="exit",
+    )
+    mark_labels = [str(row.get("label") or "") for row in marks if row.get("label")]
     chart_annotations = {
+        "schema_version": CHART_MARKS_SCHEMA_VERSION,
         "episode": (
             f"Episode: {hold_bit} hold, {outcome}."
             + (" Same-day round-trip." if same_day else "")
             + " Confirm entry/exit marks match the sealed/control path."
+            + (f" Pattern marks: {'; '.join(mark_labels[:3])}." if mark_labels else "")
         ),
         "wider_tf": (
             "Wider TF: judge range location and post-exit climb/fade that the "
@@ -380,7 +650,9 @@ def build_initial_opinion(item: dict[str, Any]) -> dict[str, Any]:
                 if same_day
                 else ""
             )
+            + " Factory pattern marks illustrate the opinion — agree/disagree on the picture."
         ),
+        "marks": marks,
     }
 
     return {
@@ -682,11 +954,16 @@ def extend_dialogue_for_comment_reply(
 
 
 __all__ = [
+    "CHART_MARKS_SCHEMA_VERSION",
     "HUMAN_CONSIDER_AGREE",
     "HUMAN_CONSIDER_DISAGREE",
     "HUMAN_CONSIDER_PARTIAL",
     "HUMAN_CONSIDER_UNKNOWN",
     "LLM_OPINION_BATCH_CAP",
+    "MARK_TONE_GOOD",
+    "MARK_TONE_INFO",
+    "MARK_TONE_WARN",
+    "MARK_TONE_WEAK",
     "OPINION_SOURCE_DETERMINISTIC",
     "OPINION_SOURCE_LLM",
     "REPLY_SOURCE_DETERMINISTIC",
@@ -696,6 +973,7 @@ __all__ = [
     "build_contextual_reply_text",
     "build_initial_opinion",
     "build_llm_reply_prompt",
+    "build_pattern_marks",
     "consider_human_comment",
     "extend_dialogue_for_comment_reply",
     "generate_factory_reply",

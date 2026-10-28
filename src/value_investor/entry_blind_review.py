@@ -30,6 +30,10 @@ from value_investor.post_sale_decision_reasons import (
     load_control_trade_index,
     load_sealed_episode_indexes,
 )
+from value_investor.post_sale_review_opinion import (
+    CHART_MARKS_SCHEMA_VERSION,
+    build_pattern_marks,
+)
 from value_investor.sealed_lifecycle import SEALED_MODELS
 from value_investor.storage import read_json, write_json
 
@@ -246,8 +250,23 @@ def _attach_entry_blind_opinion(item: dict[str, Any]) -> dict[str, Any]:
     item["learning_point_forward"] = learning
     item["lens_side"] = "entry"
     item["opinion_source"] = "deterministic_entry_blind_v0"
+    marks = build_pattern_marks(
+        item,
+        short_hold=False,
+        same_day=False,
+        same_day_assessment="not_applicable",
+        sell_code="",
+        sell_join_ok=False,
+        pct=None,
+        lens="entry",
+    )
     item["chart_annotations"] = {
-        "pit": "PIT through buy day — forward bars forbidden on entry_blind."
+        "schema_version": CHART_MARKS_SCHEMA_VERSION,
+        "pit": (
+            "PIT through buy day — forward bars forbidden on entry_blind. "
+            "Pattern marks: entry quality / range location / MA context."
+        ),
+        "marks": marks,
     }
     if not item.get("dialogue"):
         item["dialogue"] = [

@@ -212,6 +212,217 @@ function assessmentBandRect(dates, band, xAt, pad) {
     <text x="${x1 + 4}" y="${pad.top + 12}" class="chart-axis-label" style="fill:#64748b">Assessment</text>`;
 }
 
+/** Package M autopsy pattern marks — tone colors (iPad-readable, not live signals). */
+const PATTERN_MARK_TONES = {
+  warn: { fill: "rgba(180, 83, 9, 0.16)", stroke: "#b45309", text: "#9a3412" },
+  weak: { fill: "rgba(179, 58, 58, 0.15)", stroke: "#b33a3a", text: "#9f1239" },
+  info: { fill: "rgba(3, 105, 161, 0.12)", stroke: "#0369a1", text: "#0c4a6e" },
+  good: { fill: "rgba(46, 156, 79, 0.13)", stroke: "#2e9c4f", text: "#166534" },
+};
+
+function patternMarkTone(tone) {
+  return PATTERN_MARK_TONES[tone] || PATTERN_MARK_TONES.info;
+}
+
+function chartKeyForRangeMode(rangeMode, overlays) {
+  if (rangeMode === "wider_tf") return "wider_tf";
+  if (rangeMode === "close_in") {
+    return (overlays && overlays.pattern_chart_key) || "episode";
+  }
+  return "full";
+}
+
+function filterPatternMarks(marks, chartKey) {
+  if (!Array.isArray(marks) || !marks.length) return [];
+  if (!chartKey || chartKey === "full") return marks.slice();
+  return marks.filter((row) => {
+    if (!row || typeof row !== "object") return false;
+    const charts = Array.isArray(row.charts) ? row.charts : ["episode", "wider_tf"];
+    if (charts.includes(chartKey)) return true;
+    // entry_blind pit maps to close_in sleeve; accept episode aliases.
+    if (chartKey === "pit" && (charts.includes("episode") || charts.includes("pit"))) {
+      return true;
+    }
+    if (chartKey === "episode" && charts.includes("pit")) return true;
+    return false;
+  });
+}
+
+function dateIndexOnOrBefore(dates, isoDay) {
+  const target = chartDay(isoDay);
+  if (!target || !dates.length) return -1;
+  let idx = -1;
+  for (let i = 0; i < dates.length; i += 1) {
+    const day = chartDay(dates[i]);
+    if (!day) continue;
+    if (day <= target) idx = i;
+    else break;
+  }
+  if (idx < 0) {
+    const ahead = dates.findIndex((date) => chartDay(date) >= target);
+    return ahead;
+  }
+  return idx;
+}
+
+function resolvePatternMarkPrice(mark, payload) {
+  if (!mark) return null;
+  if (mark.price != null && !Number.isNaN(Number(mark.price))) return Number(mark.price);
+  const anchor = String(mark.anchor || "");
+  if (anchor === "entry_price" && payload._entry_price != null) {
+    return Number(payload._entry_price);
+  }
+  if (anchor === "exit_price" && payload._exit_price != null) {
+    return Number(payload._exit_price);
+  }
+  return null;
+}
+
+function enrichPatternMarkLabel(mark, dates, closes, payload) {
+  const base = String((mark && mark.label) || "").trim() || "Pattern";
+  const type = String((mark && mark.type) || "");
+  const ref = String((mark && mark.ref) || "");
+  if (!dates.length || !closes.length) return base;
+
+  if (type === "range_ref") {
+    const nums = closes
+      .map((v) => (v == null || Number.isNaN(Number(v)) ? null : Number(v)))
+      .filter((v) => v != null);
+    if (nums.length < 3) return base;
+    const lo = Math.min(...nums);
+    const hi = Math.max(...nums);
+    const span = hi - lo || 1;
+    let price = null;
+    if (ref === "exit" && payload._exit_price != null) price = Number(payload._exit_price);
+    else if (payload._entry_price != null) price = Number(payload._entry_price);
+    if (price == null || Number.isNaN(price)) return base;
+    const pctile = Math.round(((price - lo) / span) * 100);
+    const where =
+      pctile <= 20 ? "near range low" : pctile >= 80 ? "near range high" : `~${pctile}th %ile`;
+    return `${base}: ${where}`;
+  }
+
+  if (type === "ma_context") {
+    const day =
+      chartDay(mark.t0) ||
+      (ref === "exit" ? chartDay(payload._sold_at) : chartDay(payload._opened_at));
+    const idx = dateIndexOnOrBefore(dates, day);
+    if (idx < 0) return base;
+    const close = closes[idx] != null ? Number(closes[idx]) : null;
+    const sma50 = Array.isArray(payload.sma50_series)
+      ? Number(payload.sma50_series[idx])
+      : null;
+    const sma200 = Array.isArray(payload.sma200_series)
+      ? Number(payload.sma200_series[idx])
+      : null;
+    const bits = [];
+    if (close != null && !Number.isNaN(close) && sma50 != null && !Number.isNaN(sma50)) {
+      bits.push(close >= sma50 ? "≥ SMA50" : "< SMA50");
+    }
+    if (close != null && !Number.isNaN(close) && sma200 != null && !Number.isNaN(sma200)) {
+      bits.push(close >= sma200 ? "≥ SMA200" : "< SMA200");
+    }
+    return bits.length ? `${base}: ${bits.join(", ")}` : base;
+  }
+  return base;
+}
+
+function renderPatternMarksSvg(marks, dates, closes, xAt, yAt, pad, payload) {
+  if (!Array.isArray(marks) || !marks.length || !dates.length) {
+    return { svg: "", legend: "" };
+  }
+  let labelOffset = 28;
+  const parts = [];
+  const legendBits = [];
+  marks.forEach((mark, index) => {
+    if (!mark || typeof mark !== "object") return;
+    const tone = patternMarkTone(mark.tone);
+    const label = enrichPatternMarkLabel(mark, dates, closes, payload);
+    const type = String(mark.type || "region");
+    legendBits.push(
+      `<span class="chart-legend-item chart-pattern-legend"><span class="chart-legend-swatch" style="background:${
+        tone.stroke
+      }"></span>${esc(label)}</span>`
+    );
+
+    if (
+      type === "region" ||
+      type === "post_exit_band" ||
+      type === "entry_band" ||
+      type === "range_ref"
+    ) {
+      let startIdx = 0;
+      let endIdx = dates.length - 1;
+      if (mark.t0) {
+        const idx = dateIndexOnOrBefore(dates, mark.t0);
+        if (idx >= 0) startIdx = idx;
+      }
+      if (mark.t1) {
+        const idx = dateIndexOnOrBefore(dates, mark.t1);
+        if (idx >= 0) endIdx = idx;
+      }
+      if (type === "range_ref") {
+        // Full visible assessment window — shade lightly + label only.
+        startIdx = 0;
+        endIdx = dates.length - 1;
+      }
+      if (endIdx < startIdx) return;
+      const x1 = xAt(startIdx);
+      const x2 = xAt(endIdx);
+      const w = Math.max(4, x2 - x1);
+      const labelY = pad.top + labelOffset;
+      labelOffset += 14;
+      parts.push(`<rect x="${x1}" y="${pad.top}" width="${w}" height="${pad.plotH}"
+        fill="${tone.fill}" stroke="${tone.stroke}" stroke-width="1" stroke-dasharray="3 3"
+        stroke-opacity="0.55" class="chart-pattern-mark" data-pattern="${esc(
+          String(mark.pattern || "")
+        )}" />
+        <text x="${x1 + 4}" y="${labelY}" class="chart-pattern-mark-label" style="fill:${
+          tone.text
+        }">${esc(label)}</text>`);
+      return;
+    }
+
+    if (type === "hline") {
+      const price = resolvePatternMarkPrice(mark, payload);
+      if (price == null || Number.isNaN(price)) return;
+      const y = yAt(price);
+      const xRight = dates.length ? xAt(dates.length - 1) : pad.left;
+      parts.push(`<line x1="${pad.left}" y1="${y}" x2="${xRight}" y2="${y}"
+        stroke="${tone.stroke}" stroke-width="1.4" stroke-dasharray="4 3"
+        stroke-opacity="0.85" class="chart-pattern-mark" />
+        <text x="${pad.left + 4}" y="${y - 4}" class="chart-pattern-mark-label" style="fill:${
+          tone.text
+        }">${esc(label)}</text>`);
+      return;
+    }
+
+    if (type === "ma_context" || type === "callout") {
+      const day =
+        chartDay(mark.t0) ||
+        chartDay(payload._sold_at) ||
+        chartDay(payload._opened_at) ||
+        chartDay(dates[dates.length - 1]);
+      const idx = dateIndexOnOrBefore(dates, day);
+      if (idx < 0) return;
+      const mx = xAt(idx);
+      const close = closes[idx] != null ? Number(closes[idx]) : null;
+      const my =
+        close != null && !Number.isNaN(close) ? yAt(close) : pad.top + pad.plotH * 0.35;
+      const labelY = Math.max(pad.top + 12, my - 10 - (index % 3) * 12);
+      parts.push(`<circle cx="${mx}" cy="${my}" r="4.5" fill="${tone.stroke}" stroke="#fff"
+        stroke-width="1.25" class="chart-pattern-mark" />
+        <text x="${mx + 6}" y="${labelY}" class="chart-pattern-mark-label" style="fill:${
+          tone.text
+        }">${esc(label)}</text>`);
+    }
+  });
+  return {
+    svg: parts.join(""),
+    legend: legendBits.join(""),
+  };
+}
+
 function volumeBarsSvg(volumes, xAt, volPad, plotW) {
   if (!Array.isArray(volumes) || !volumes.length) return "";
   const nums = volumes
@@ -417,6 +628,15 @@ function renderPriceChartSvg(payload, levelsOverride) {
     )
     .join("")}${smaLegend}${volumeLegend}`;
   const band = assessmentBandRect(dates, payload.assessment_band, xAt, pad);
+  const patternDrawn = renderPatternMarksSvg(
+    payload._pattern_marks || [],
+    dates,
+    closes,
+    xAt,
+    yAt,
+    pad,
+    payload
+  );
   const volumeSvg =
     showVolume && volPad ? volumeBarsSvg(volumes, xAt, volPad, plotW) : "";
   const volumeDivider = showVolume
@@ -424,11 +644,15 @@ function renderPriceChartSvg(payload, levelsOverride) {
         pad.top + plotH + 4
       }" stroke="#e2e8f0" stroke-width="1" />`
     : "";
+  const patternLegend = patternDrawn.legend
+    ? `<div class="chart-pattern-legend-row" aria-label="Factory pattern marks">${patternDrawn.legend}</div>`
+    : "";
 
   return `
     <div class="price-chart-wrap">
-      <svg viewBox="0 0 ${width} ${height}" width="${width}" class="price-chart" role="img" aria-label="Price chart with trade levels">
+      <svg viewBox="0 0 ${width} ${height}" width="${width}" class="price-chart" role="img" aria-label="Price chart with trade levels and factory pattern marks">
         ${band}
+        ${patternDrawn.svg}
         ${grid}
         <polygon points="${areaPoints}" fill="rgba(43,108,176,0.08)"></polygon>
         <polyline fill="none" stroke="#2b6cb0" stroke-width="2.25" points="${linePoints}" />
@@ -442,6 +666,7 @@ function renderPriceChartSvg(payload, levelsOverride) {
         ${xLabels}
       </svg>
       <div class="chart-legend">${legend}</div>
+      ${patternLegend}
     </div>`;
 }
 
@@ -683,6 +908,11 @@ function renderChartBody(payload, report, source, overlays, rangeMode, showVolum
   const levelsBasis = String(payload.levels_basis || "");
   const currency = payload.currency || "GBP";
   const volumeOn = Boolean(showVolume);
+  const chartKey = chartKeyForRangeMode(range, overlays);
+  const patternMarks = filterPatternMarks(
+    overlays && Array.isArray(overlays.pattern_marks) ? overlays.pattern_marks : [],
+    chartKey
+  );
   let levelsHint = "";
   if (asOfLabel) {
     const basisLine =
@@ -721,6 +951,9 @@ function renderChartBody(payload, report, source, overlays, rangeMode, showVolum
         : "Avoid names stay without an entry plan; other screen names get prospective levels on the next chart refresh."
     }</p>`;
   }
+  if (patternMarks.length) {
+    levelsHint += `<p class="small muted">Factory pattern marks (${patternMarks.length}) illustrate the autopsy opinion — Package M alignment only; not live knobs.</p>`;
+  }
   const hasInitial = Boolean(payload.initial_levels);
   const toggle = `
     <div class="chart-level-toggle" role="group" aria-label="Level source">
@@ -736,6 +969,7 @@ function renderChartBody(payload, report, source, overlays, rangeMode, showVolum
     _entry_price: entryPrice,
     _exit_price: exitPrice,
     _show_volume: volumeOn,
+    _pattern_marks: patternMarks,
   };
   const closeCount = Array.isArray(view.dates) ? view.dates.length : 0;
   const clipRange = range === "wider_tf" ? widerTf : closeIn;

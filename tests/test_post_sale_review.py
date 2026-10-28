@@ -339,6 +339,9 @@ def test_build_queue_covers_sealed_and_control(tmp_path: Path):
     assert isinstance(sample["learning_points"], list) and sample["learning_points"]
     assert sample["chart_annotations"]["episode"]
     assert sample["chart_annotations"]["wider_tf"]
+    assert isinstance(sample["chart_annotations"].get("marks"), list)
+    assert sample["chart_annotations"]["marks"]
+    assert sample["chart_annotations"].get("schema_version") == 1
     assert sample["dialogue"][0]["kind"] == "initial_opinion"
     assert sample["influences_live"] is False
 
@@ -441,12 +444,23 @@ def test_initial_opinion_and_llm_reply_fallback():
         "basis_label": "fair_cost_episode",
         "entry_at": "2026-10-16T06:52:34+00:00",
         "exit_at": "2026-10-23T06:52:47+00:00",
+        "sell_decision": {
+            "code": "tech_exit",
+            "label": "Tech / timing exit",
+            "join_ok": True,
+        },
     }
     opinion = build_initial_opinion(item)
     assert opinion["opinion_source"] == OPINION_SOURCE_DETERMINISTIC
     assert opinion["influences_live"] is False
     assert "SHL.AX" in opinion["llm_opinion"]
     assert opinion["learning_points"]
+    marks = opinion["chart_annotations"]["marks"]
+    patterns = {row["pattern"] for row in marks}
+    assert "premature_sell" in patterns or "entry_quality" in patterns
+    assert "ma_context" in patterns
+    assert "support_context" in patterns
+    assert all(row.get("influences_live") is False for row in marks)
 
     def boom(_prompt: str) -> str:
         raise RuntimeError("no llm in unit test")

@@ -16,7 +16,9 @@ outcome fields cannot leak onto the card.
 ## Owner job
 
 1. Open Lifecycle → **Entry blind**.
-2. Review PIT chart (through buy day only) + **bought because** reasons.
+2. Review PIT chart (through buy day only) + **bought because** reasons —
+   factory **pattern marks** (entry quality / range location / MA context) sit
+   on the chart so critique is pictorial, not prose-only.
 3. **Accept** if the blind framing matches; **Comment** on missed entry-lens
    patterns; **Duplicate** for same-pattern cross-book noise.
 4. Never force knobs / fills from this queue.
