@@ -38,13 +38,27 @@ outcome fields cannot leak onto the card.
 **Hard rules:** strip `return_pct` / exit / sell chrome; PIT `end` = buy day;
 `family_id = book\|TICKER\|entry_day`.
 
-## Parked (not in v0)
+## Entry revisit (buy+28d) — shipped
+
+Stage id: **`entry_revisit`**. Unlocks when `entry_blind` is Accept/Comment-actioned
+**and** `asof >= buy_day + 28` calendar days (locked). Shows frozen blind
+summary + path through buy+28d (`still_open` | `already_exited`). Separate
+`review_id` — never rewrites sealed blind Accept/Comment. Not an exit autopsy.
+
+| File | Role |
+|---|---|
+| `docs/data/entry_revisit_review_queue.json` | Active revisit queue |
+| `docs/data/entry_revisit_review_labels.json` | Durable Accept / Comment / reply history |
+
+Lifecycle → **Entry +28d**. CLI: `ftse-entry-revisit-review`. Ops finding:
+**Entry-revisit review queue (observe)** (`auto_fixable=false`).
+
+## Parked
 
 | Stage / stream | Status |
 |---|---|
-| `entry_revisit` at buy+28d | Later (observe scaffold clock noted only) |
-| `exit_blind` / `exit_revisit` | Deferred |
-| Missed-opp auto digest | Deferred |
+| `exit_blind` / `exit_revisit` | Deferred (L642) |
+| Missed-opp auto digest | Deferred (L641/L644) |
 | Full four-stage automation | Deferred |
 
 ## Dashboard bridge
@@ -71,11 +85,11 @@ ftse-entry-blind-review duplicate --review-id …
 
 | Piece | Detail |
 |---|---|
-| Trigger | Daily `collect_ops_findings` → `check_entry_blind_review_queue` |
-| Findings | **Entry-blind review queue (observe)** (info); reply-pending / unreplied Comment warns |
+| Trigger | Daily `collect_ops_findings` → `check_entry_blind_review_queue` + `check_entry_revisit_review_queue` |
+| Findings | **Entry-blind review queue (observe)**; **Entry-revisit review queue (observe)**; reply-pending / unreplied Comment warns |
 | `auto_fixable` | Always `False` |
-| Commit | `entry_blind_review_queue.json` (+ labels) in ops-monitor `GHA_COMMIT_OPTIONAL` |
-| Human gate | Checklist `sunday-entry-blind-reviews` beside post-sale reviews |
+| Commit | blind + revisit queue/labels in ops-monitor `GHA_COMMIT_OPTIONAL` |
+| Human gate | Checklist `sunday-entry-blind-reviews` + `sunday-entry-revisit-reviews` |
 
 ## Forbidden
 

@@ -33,6 +33,9 @@ SUPPORTED_ACTIONS = frozenset(
         "entry-blind-review-ack",
         "entry-blind-review-comment",
         "entry-blind-review-duplicate",
+        "entry-revisit-review-ack",
+        "entry-revisit-review-comment",
+        "entry-revisit-review-duplicate",
     }
 )
 
@@ -53,6 +56,9 @@ ACTION_REPOSITORY_DISPATCH: dict[str, str] = {
     "entry-blind-review-ack": "entry-blind-review-ack",
     "entry-blind-review-comment": "entry-blind-review-ack",
     "entry-blind-review-duplicate": "entry-blind-review-ack",
+    "entry-revisit-review-ack": "entry-revisit-review-ack",
+    "entry-revisit-review-comment": "entry-revisit-review-ack",
+    "entry-revisit-review-duplicate": "entry-revisit-review-ack",
 }
 
 # Git-writing ack/discuss actions: one repository_dispatch per poll batch.
@@ -70,6 +76,9 @@ BATCHABLE_ACK_ACTIONS = frozenset(
         "entry-blind-review-ack",
         "entry-blind-review-comment",
         "entry-blind-review-duplicate",
+        "entry-revisit-review-ack",
+        "entry-revisit-review-comment",
+        "entry-revisit-review-duplicate",
     }
 )
 
@@ -247,11 +256,23 @@ def _command_payload_item(row: dict[str, Any]) -> dict[str, Any]:
     if action:
         item.setdefault("bridge_action", action)
     # Post-sale / entry-blind review: map bridge action → decision when omitted.
-    if action in {"post-sale-review-comment", "entry-blind-review-comment"}:
+    if action in {
+        "post-sale-review-comment",
+        "entry-blind-review-comment",
+        "entry-revisit-review-comment",
+    }:
         item.setdefault("decision", "comment")
-    elif action in {"post-sale-review-duplicate", "entry-blind-review-duplicate"}:
+    elif action in {
+        "post-sale-review-duplicate",
+        "entry-blind-review-duplicate",
+        "entry-revisit-review-duplicate",
+    }:
         item.setdefault("decision", "duplicate")
-    elif action in {"post-sale-review-ack", "entry-blind-review-ack"}:
+    elif action in {
+        "post-sale-review-ack",
+        "entry-blind-review-ack",
+        "entry-revisit-review-ack",
+    }:
         item.setdefault("decision", "accept")
     return item
 

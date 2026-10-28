@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-28T14:45:35+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-28T14:52:07+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -384,6 +384,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L644 | **Missed-opportunity auto digest for blind autopsy / stock choice** | Companion observe stream (auto digest, ops-monitor wired) of the highest-performing not-bought cohort vs lab/buy path. Feeds super-book entry lenses and MoM stock-choice lever — not a manual autopsy of all sealed books. Cap cohort size; alignment-only. | entry_blind v0 ships on lab/interesting OR super-book Q8B cohort freeze completes (whichever first); then design ranking metric + cap |
 | L646 | **cue_consumer_mft weekday paper-auto track wiring** | Lab walker records observe episodes in cue_consumer_mft_observe.json. Optional later: wire a weekday paper-auto track / rebalance-log twin for the lab book without stealing Data P1 or spawning sealed children. | Lab has durable closed episode volume and owner wants weekday paper-auto marks alongside archive walker |
 | L647 | **Remote LLM voice on N228 judgment checklist (still observe-only)** | Deterministic N228 cite fill ships on cue_consumer_mft decide trail. Optional later: remote LLM agree/veto prose on the same B1-B6/S1-S6 checklist with durable cites — influences_live=false until a separate promote gate; never Package L. | Deterministic judgment fill has closed-episode volume and owner asks for LLM voice on lab decide (F1 shadow marks readable) |
+| L648 | **Entry-revisit chart path series on buy+28d cards** | Thin entry_revisit v0 shows textual path status (still_open/already_exited + fair-cost %). Later: mount path_to_plus28 chart series on Lifecycle Entry +28d cards (same dual-horizon style as post-sale, clipped at buy+28d). | entry_revisit queue has regular Sunday volume and owner asks for chart on +28d cards |
 
 ### Universe & data
 

@@ -1,0 +1,206 @@
+name: Entry-revisit review Accept / Comment / Duplicate
+
+# Observe-only alignment labels from Lifecycle → Entry revisit (buy+28d).
+# Dispatched by dashboard-bridge after Supabase dashboard_commands insert.
+# Actions: entry-revisit-review-ack (Accept), entry-revisit-review-comment (Comment),
+# entry-revisit-review-duplicate (Duplicate pattern — clear, no reply).
+# Comment spawns a factory reply stub (tag=reply) when snapshot identity is usable.
+# Never applies knobs, fills, or Package L auto-tune (influences_live=false).
+on:
+  repository_dispatch:
+    types: [entry-revisit-review-ack]
+  workflow_dispatch:
+    inputs:
+      review_id:
+        description: Stable review_id / reply id
+        required: false
+        type: string
+      decision:
+        description: accept | comment | duplicate
+        required: false
+        default: accept
+        type: string
+      text:
+        description: Comment text (required for comment)
+        required: false
+        type: string
+      tag:
+        description: new | reply
+        required: false
+        default: new
+        type: string
+      commands_json:
+        description: Optional JSON array of {review_id,decision,text,tag,command_id}
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: entry-revisit-review-labels
+  cancel-in-progress: false
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Record Accept / Comment batch + refresh queue
+        id: record
+        env:
+          REVIEW_ID: ${{ github.event.client_payload.review_id || github.event.inputs.review_id || '' }}
+          DECISION: ${{ github.event.client_payload.decision || github.event.inputs.decision || 'accept' }}
+          TEXT: ${{ github.event.client_payload.text || github.event.inputs.text || '' }}
+          TAG: ${{ github.event.client_payload.tag || github.event.inputs.tag || 'new' }}
+          COMMAND_ID: ${{ github.event.client_payload.command_id || '' }}
+          COMMANDS_JSON: ${{ toJson(github.event.client_payload.commands) }}
+          INPUT_COMMANDS_JSON: ${{ github.event.inputs.commands_json || '' }}
+          # Opt-in LLM factory reply on Comment (observe-only; fail-closed to contextual stub).
+          FTSE_ENTRY_REVISIT_LLM_REPLY: "1"
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from value_investor.dashboard_bridge import commands_from_client_payload
+          from value_investor.entry_revisit_review_actions import run_entry_revisit_review_action_batch
+
+          items = []
+          raw_batch = os.environ.get("COMMANDS_JSON") or ""
+          if raw_batch and raw_batch not in ("null", "None", ""):
+              try:
+                  parsed = json.loads(raw_batch)
+              except json.JSONDecodeError:
+                  parsed = None
+              if isinstance(parsed, list):
+                  items = [row for row in parsed if isinstance(row, dict)]
+          if not items:
+              input_batch = os.environ.get("INPUT_COMMANDS_JSON") or ""
+              if input_batch.strip():
+                  try:
+                      parsed = json.loads(input_batch)
+                  except json.JSONDecodeError:
+                      parsed = None
+                  if isinstance(parsed, list):
+                      items = [row for row in parsed if isinstance(row, dict)]
+          if not items:
+              items = commands_from_client_payload(
+                  {
+                      "review_id": os.environ.get("REVIEW_ID") or "",
+                      "decision": os.environ.get("DECISION") or "accept",
+                      "text": os.environ.get("TEXT") or "",
+                      "tag": os.environ.get("TAG") or "new",
+                      "command_id": os.environ.get("COMMAND_ID") or "",
+                  }
+              )
+          items = [row for row in items if str(row.get("review_id") or "").strip()]
+          if not items:
+              raise SystemExit("No entry-revisit-review items in payload")
+
+          result = run_entry_revisit_review_action_batch(
+              Path("docs/data"),
+              items,
+              source="dashboard_bridge",
+              acted_by="dashboard",
+          )
+          print(json.dumps(result, indent=2, sort_keys=True, default=str))
+          command_ids = [
+              str(row.get("command_id"))
+              for row in items
+              if str(row.get("command_id") or "").strip()
+          ]
+          Path("/tmp/entry_revisit_review_command_ids.json").write_text(
+              json.dumps(command_ids), encoding="utf-8"
+          )
+          if result.get("errors"):
+              raise SystemExit(f"entry-revisit-review batch had errors: {result['errors']}")
+          PY
+
+      - name: Commit labels + queue
+        id: commit
+        env:
+          COMMIT_MESSAGE: "chore: entry-revisit Accept/Comment from dashboard [skip ci]"
+          GHA_COMMIT_LABEL: entry-revisit-review-ack
+          GHA_COMMIT_REF: main
+          GHA_COMMIT_OWNED: |
+            docs/data/entry_revisit_review_labels.json
+            docs/data/entry_revisit_review_queue.json
+          GHA_COMMIT_PRESERVE_NEWER_GENERATED_AT: "0"
+        run: bash scripts/gha_commit_artifacts.sh
+
+      - name: Mark dashboard commands done
+        if: success()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from value_investor.dashboard_bridge import complete_dashboard_commands
+
+          ids = json.loads(Path("/tmp/entry_revisit_review_command_ids.json").read_text(encoding="utf-8"))
+          if not ids:
+              print("no command_ids to complete")
+          else:
+              result = complete_dashboard_commands(
+                  ids,
+                  status="done",
+                  message="entry-revisit-review-ack committed",
+                  github_run_url=__import__("os").environ.get("GITHUB_RUN_URL"),
+              )
+              print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+
+      - name: Mark dashboard commands failed
+        if: failure()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from value_investor.dashboard_bridge import complete_dashboard_commands
+
+          path = Path("/tmp/entry_revisit_review_command_ids.json")
+          ids = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else []
+          if ids:
+              result = complete_dashboard_commands(
+                  ids,
+                  status="failed",
+                  message="entry-revisit-review-ack workflow failed",
+                  github_run_url=__import__("os").environ.get("GITHUB_RUN_URL"),
+              )
+              print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+
+      - name: Notify dashboard channel
+        if: success()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          python3 - <<'PY'
+          from value_investor.dashboard_bridge import broadcast_dashboard_update
+          broadcast_dashboard_update(
+              event="artifact-updated",
+              payload={"artifact": "entry_revisit_review_queue", "source": "entry-revisit-review-ack"},
+          )
+          PY

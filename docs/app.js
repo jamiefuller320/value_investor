@@ -617,6 +617,8 @@ const DASHBOARD_SIDECARS = [
   ["post_sale_review_labels", "data/post_sale_review_labels.json"],
   ["entry_blind_review_queue", "data/entry_blind_review_queue.json"],
   ["entry_blind_review_labels", "data/entry_blind_review_labels.json"],
+  ["entry_revisit_review_queue", "data/entry_revisit_review_queue.json"],
+  ["entry_revisit_review_labels", "data/entry_revisit_review_labels.json"],
   ["ui_state_reconciliation", "data/ui_state_reconciliation.json"],
   ["universe_filing_archive_status", "data/universe_filing_archive_status.json"],
   ["daily_focus", "data/daily_focus.json"],
@@ -10163,6 +10165,15 @@ function normalizeLifecycleSubpage(value) {
   if (key === "entry-blind" || key === "entry_blind" || key === "entryblind") {
     return "entry-blind";
   }
+  if (
+    key === "entry-revisit" ||
+    key === "entry_revisit" ||
+    key === "entryrevisit" ||
+    key === "buy28" ||
+    key === "buy-28"
+  ) {
+    return "entry-revisit";
+  }
   if (key === "positions" || key === "board" || key === "tiles") return "positions";
   return "positions";
 }
@@ -10333,7 +10344,9 @@ function renderLifecycleSubnav() {
           ? "reviews"
           : lifecycleSubpage === "entry-blind" || lifecycleSubpage === "entry_blind"
             ? "entry-blind"
-            : "positions";
+            : lifecycleSubpage === "entry-revisit" || lifecycleSubpage === "entry_revisit"
+              ? "entry-revisit"
+              : "positions";
   return `<nav class="paper-subnav lifecycle-subnav" aria-label="Lifecycle sections">
     <button type="button" class="paper-subtab${
       sub === "positions" ? " active" : ""
@@ -10350,6 +10363,9 @@ function renderLifecycleSubnav() {
     <button type="button" class="paper-subtab${
       sub === "entry-blind" ? " active" : ""
     }" data-lifecycle-subpage="entry-blind">Entry blind</button>
+    <button type="button" class="paper-subtab${
+      sub === "entry-revisit" ? " active" : ""
+    }" data-lifecycle-subpage="entry-revisit">Entry +28d</button>
   </nav>`;
 }
 
@@ -12857,11 +12873,227 @@ function bindEntryBlindReviewsOnce() {
   });
 }
 
+let entryRevisitReviewExpandedId = null;
+let entryRevisitReviewsBound = false;
+
+function renderEntryRevisitReviewCard(item, expanded) {
+  const tag = String(item.tag || "new");
+  const tagCls = tag === "reply" ? "psr-tag-reply" : "psr-tag-new";
+  const entryDay = String(item.entry_at || "").slice(0, 10) || "—";
+  const bookLabel = String(item.book_tag || item.book_id || "?");
+  const path = item.path_status && typeof item.path_status === "object" ? item.path_status : {};
+  const status = String(path.status || item.episode_status_at_plus28 || "—");
+  const ret = path.fair_cost_return_pct_to_plus28;
+  const retBit =
+    typeof ret === "number" && Number.isFinite(ret)
+      ? `${(ret * 100).toFixed(1)}% to +28d`
+      : "path % n/a";
+  const blindId = String(item.blind_review_id || item.parent_review_id || "—");
+  const framing = String(item.framing || "")
+    .split("\n")
+    .map((line) => `<div>${esc(line)}</div>`)
+    .join("");
+  const detail = expanded
+    ? `<div class="psr-card-detail">
+        <pre class="psr-framing small">${framing}</pre>
+        <p class="small muted">Stage entry_revisit — fixed buy+28d. Blind Accept/Comment immutable. influences_live=false.</p>
+        <p class="small">Blind parent <code>${esc(blindId)}</code> · ${esc(status)} · ${esc(retBit)}</p>
+        <div class="psr-actions">
+          <button type="button" class="btn btn-primary" data-err-accept="${esc(
+            item.review_id
+          )}" data-err-tag="${esc(tag)}">Accept</button>
+          <button type="button" class="btn" data-err-duplicate="${esc(
+            item.review_id
+          )}" data-err-tag="${esc(tag)}">Duplicate</button>
+          <label class="small psr-comment-label">Comment
+            <input type="text" class="psr-comment-input" data-err-comment-input="${esc(
+              item.review_id
+            )}" placeholder="Calibrate blind critique…" />
+          </label>
+          <button type="button" class="btn" data-err-comment="${esc(
+            item.review_id
+          )}" data-err-tag="${esc(tag)}">Comment</button>
+        </div>
+        <p class="small muted" data-err-status="${esc(item.review_id)}" aria-live="polite"></p>
+      </div>`
+    : `<p class="small muted">${esc(status)} · ${esc(retBit)} · blind ${esc(blindId.slice(0, 8))}</p>`;
+  return `<article class="psr-card${expanded ? " is-expanded" : ""}" data-err-card="${esc(
+    item.review_id
+  )}">
+    <button type="button" class="psr-card-head" data-err-expand="${esc(item.review_id)}">
+      <span class="psr-tag ${tagCls}">${esc(tag)}</span>
+      <span class="psr-book">${esc(bookLabel)}</span>
+      <strong class="psr-ticker">${esc(item.ticker || "?")}</strong>
+      <span class="small muted psr-exit-date">bought ${esc(entryDay)}</span>
+      <span class="small muted">entry_revisit</span>
+    </button>
+    ${detail}
+  </article>`;
+}
+
+function renderEntryRevisitReviews(data) {
+  const queue = data.entry_revisit_review_queue;
+  if (!queue) {
+    return `${renderLifecycleSubnav()}
+      <div class="empty-state">Entry-revisit queue not published yet. Wait for ops-monitor or run <code>ftse-entry-revisit-review refresh</code>.</div>`;
+  }
+  const active = Array.isArray(queue.active) ? queue.active : [];
+  const cards = active.length
+    ? active
+        .map((item) =>
+          renderEntryRevisitReviewCard(item, entryRevisitReviewExpandedId === item.review_id)
+        )
+        .join("")
+    : `<p class="muted">Active entry_revisit queue empty — none due past buy+28d with entry_blind Accept/Comment, or all actioned.</p>`;
+  return `
+    ${renderLifecycleSubnav()}
+    <section class="card lifecycle-board-section post-sale-review-section entry-revisit-review-section">
+      <div class="section-head">
+        <div>
+          <h3>Entry revisit (buy+28d)</h3>
+          <p class="small muted">Package M · after entry_blind · frozen blind summary + path through +28d · influences_live=false</p>
+        </div>
+        <div class="small muted">active ${esc(String(queue.active_count ?? active.length))} · actioned ${esc(
+          String(queue.actioned_count ?? 0)
+        )}</div>
+      </div>
+      <div class="psr-card-list">${cards}</div>
+    </section>`;
+}
+
+function afterRenderEntryRevisitReviews(_data) {
+  /* no chart mount in thin v0 — path status is textual */
+}
+
+async function submitEntryRevisitReviewAction({ reviewId, decision, text = "", tag = "new", item }) {
+  const statusEl = document.querySelector(`[data-err-status="${CSS.escape(reviewId)}"]`);
+  if (statusEl) statusEl.textContent = "Saving…";
+  try {
+    const snapshot = item || {};
+    if (typeof queueDashboardCommand === "function" && !window.FTSE_LOCAL_DASHBOARD) {
+      await queueDashboardCommand(
+        decision === "comment"
+          ? "entry-revisit-review-comment"
+          : decision === "duplicate"
+            ? "entry-revisit-review-duplicate"
+            : "entry-revisit-review-ack",
+        {
+          review_id: reviewId,
+          decision,
+          text,
+          tag,
+          snapshot,
+        }
+      );
+      setStatus("Queued entry-revisit action.");
+    } else {
+      const response = await fetch("/api/entry-revisit-review-action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          review_id: reviewId,
+          decision,
+          text,
+          tag,
+          snapshot,
+        }),
+      });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok || body.ok === false) {
+        throw new Error(body.error || `HTTP ${response.status}`);
+      }
+      if (dashboardData && body.queue_path) {
+        /* local serve refreshes queue file; reload soft */
+      }
+      setStatus("Saved locally.");
+    }
+    if (dashboardData && dashboardData.entry_revisit_review_queue) {
+      const q = dashboardData.entry_revisit_review_queue;
+      q.active = (q.active || []).filter((row) => row.review_id !== reviewId);
+      q.active_count = (q.active || []).length;
+    }
+    entryRevisitReviewExpandedId = null;
+    renderLifecycle(dashboardData);
+  } catch (err) {
+    if (statusEl) statusEl.textContent = `Failed: ${err.message || err}`;
+    setStatus(`Failed: ${err.message || err}`);
+  }
+}
+
+function bindEntryRevisitReviewsOnce() {
+  if (entryRevisitReviewsBound) return;
+  entryRevisitReviewsBound = true;
+  const panel = document.getElementById("panel-lifecycle");
+  if (!panel) return;
+  panel.addEventListener("click", (ev) => {
+    const expand = ev.target.closest("[data-err-expand]");
+    if (expand) {
+      const rid = expand.getAttribute("data-err-expand");
+      entryRevisitReviewExpandedId =
+        entryRevisitReviewExpandedId === rid ? null : rid;
+      if (dashboardData) renderLifecycle(dashboardData);
+      return;
+    }
+    const accept = ev.target.closest("[data-err-accept]");
+    if (accept) {
+      const rid = accept.getAttribute("data-err-accept");
+      const item = (
+        ((dashboardData || {}).entry_revisit_review_queue || {}).active || []
+      ).find((row) => row.review_id === rid);
+      void submitEntryRevisitReviewAction({
+        reviewId: rid,
+        decision: "accept",
+        tag: accept.getAttribute("data-err-tag") || "new",
+        item,
+      });
+      return;
+    }
+    const dup = ev.target.closest("[data-err-duplicate]");
+    if (dup) {
+      const rid = dup.getAttribute("data-err-duplicate");
+      const item = (
+        ((dashboardData || {}).entry_revisit_review_queue || {}).active || []
+      ).find((row) => row.review_id === rid);
+      void submitEntryRevisitReviewAction({
+        reviewId: rid,
+        decision: "duplicate",
+        tag: dup.getAttribute("data-err-tag") || "new",
+        item,
+      });
+      return;
+    }
+    const comment = ev.target.closest("[data-err-comment]");
+    if (comment) {
+      const rid = comment.getAttribute("data-err-comment");
+      const input = document.querySelector(
+        `[data-err-comment-input="${CSS.escape(rid)}"]`
+      );
+      const text = input ? String(input.value || "").trim() : "";
+      if (!text) {
+        const statusEl = document.querySelector(`[data-err-status="${CSS.escape(rid)}"]`);
+        if (statusEl) statusEl.textContent = "Comment text required.";
+        return;
+      }
+      const item = (
+        ((dashboardData || {}).entry_revisit_review_queue || {}).active || []
+      ).find((row) => row.review_id === rid);
+      void submitEntryRevisitReviewAction({
+        reviewId: rid,
+        decision: "comment",
+        text,
+        tag: comment.getAttribute("data-err-tag") || "new",
+        item,
+      });
+    }
+  });
+}
+
 function renderLifecycle(data) {
   const panel = document.getElementById("panel-lifecycle");
   if (!panel) return;
   bindLifecyclePanel();
   bindEntryBlindReviewsOnce();
+  bindEntryRevisitReviewsOnce();
   lifecycleSubpage = normalizeLifecycleSubpage(lifecycleSubpage);
 
   if (lifecycleSubpage === "maturity") {
@@ -12887,6 +13119,12 @@ function renderLifecycle(data) {
   if (lifecycleSubpage === "entry-blind") {
     panel.innerHTML = renderEntryBlindReviews(data);
     afterRenderEntryBlindReviews(data);
+    return;
+  }
+
+  if (lifecycleSubpage === "entry-revisit") {
+    panel.innerHTML = renderEntryRevisitReviews(data);
+    afterRenderEntryRevisitReviews(data);
     return;
   }
 
