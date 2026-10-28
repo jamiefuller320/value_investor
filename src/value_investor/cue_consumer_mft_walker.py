@@ -547,8 +547,7 @@ def walk_lab_paper_episodes(
             "open_n": len(open_eps),
             "declared_incomparable": True,
             "note": (
-                "Lab fair-cost episode % only — never credit cue-book historical "
-                "NAV as lab wins."
+                "Lab fair-cost episode % only — never credit cue-book historical NAV as lab wins."
             ),
         },
         "generated_at": when,

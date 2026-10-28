@@ -71,7 +71,10 @@ def test_walker_opens_and_closes_lab_paper_with_durable_evidence():
     assert aaa["influences_live"] is False
     assert aaa["evidence"]["pit_ok"] is True
     assert aaa["evidence"]["judgment_in_the_round"]["buy"]["B4"]["unknown"] is False
-    assert "cue_source_id=n210_ai_filter" in aaa["evidence"]["judgment_in_the_round"]["buy"]["B4"]["cites"]
+    assert (
+        "cue_source_id=n210_ai_filter"
+        in aaa["evidence"]["judgment_in_the_round"]["buy"]["B4"]["cites"]
+    )
     assert aaa["exit_reason"].startswith("identity_break_")
     assert aaa["same_day_assessment"]["hard_ban"] is False
 
@@ -182,9 +185,7 @@ def test_refresh_runs_walker_when_eligible(tmp_path: Path):
         "proposed_cohort_review_ids": ["rev-a"],
         "checkpoint_status": "open",
     }
-    (tmp_path / "cue_consumer_mft_start_gate.json").write_text(
-        json.dumps(gate), encoding="utf-8"
-    )
+    (tmp_path / "cue_consumer_mft_start_gate.json").write_text(json.dumps(gate), encoding="utf-8")
     labels = {
         "actioned_review_ids": ["rev-a"],
         "events": [{"review_id": "rev-a", "kind": "accept"}],

@@ -1116,15 +1116,12 @@ def build_lab_payload(
     if not shadows_ok:
         soft_gaps.insert(
             0,
-            "Episode walker gated — evolutionary_shadows_eligible false "
-            "(Q8B/calendar).",
+            "Episode walker gated — evolutionary_shadows_eligible false (Q8B/calendar).",
         )
     elif not walker_active:
         soft_gaps.insert(0, "Start gate eligible but walker did not activate.")
     if frozen_n == 0 and proposed_n and not shadows_ok:
-        soft_gaps.append(
-            "Owner must confirm freeze of proposed non-mechanical autopsy cohort."
-        )
+        soft_gaps.append("Owner must confirm freeze of proposed non-mechanical autopsy cohort.")
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -1191,9 +1188,7 @@ def build_lab_payload(
             "evolutionary_spawn": False,
             "influences_live": False,
             "rows_considered": int(feed.get("count") or 0),
-            "cues_accepted": (
-                int(walker.get("cues_accepted") or 0) if walker_active else 0
-            ),
+            "cues_accepted": (int(walker.get("cues_accepted") or 0) if walker_active else 0),
             "note": (
                 "Lab paper fills from PIT whitelist cues (fixed-stake v0). "
                 "No sealed spawn; Package L closed; influences_live=false."
@@ -1388,9 +1383,7 @@ def refresh_cue_consumer_mft(
     open_eps = [e for e in (walker.get("open_episodes") or []) if isinstance(e, dict)]
     # Persist compact samples in the store; drop full episode lists from walker blob.
     walker_public = {
-        k: v
-        for k, v in walker.items()
-        if k not in {"closed_episodes", "open_episodes"}
+        k: v for k, v in walker.items() if k not in {"closed_episodes", "open_episodes"}
     }
 
     payload = build_lab_payload(
@@ -1484,9 +1477,7 @@ def ops_findings_from_cue_consumer_mft(payload: dict[str, Any]) -> list[dict[str
         )
     if walker.get("status") == "active":
         path = (
-            walker.get("path_scoreboard")
-            if isinstance(walker.get("path_scoreboard"), dict)
-            else {}
+            walker.get("path_scoreboard") if isinstance(walker.get("path_scoreboard"), dict) else {}
         )
         findings.append(
             {
@@ -1553,9 +1544,7 @@ def format_cue_consumer_mft_text(payload: dict[str, Any]) -> str:
         payload.get("episode_walker") if isinstance(payload.get("episode_walker"), dict) else {}
     )
     path = (
-        payload.get("path_scoreboard")
-        if isinstance(payload.get("path_scoreboard"), dict)
-        else {}
+        payload.get("path_scoreboard") if isinstance(payload.get("path_scoreboard"), dict) else {}
     )
     lines = [
         f"Cue-consumer MFT lab ({payload.get('registration_id')})",
@@ -1565,8 +1554,7 @@ def format_cue_consumer_mft_text(payload: dict[str, Any]) -> str:
         f"  scoreboard: {payload.get('scoreboard_id')} (declared incomparable)",
         f"  closed_lab_episodes: {payload.get('closed_lab_episodes')} "
         f"(open={payload.get('open_lab_episodes', 0)})",
-        f"  walker: {walker.get('status')} "
-        f"(cues_accepted={walker.get('cues_accepted')})",
+        f"  walker: {walker.get('status')} (cues_accepted={walker.get('cues_accepted')})",
         f"  median fair-cost episode %: {path.get('smooth_ret_cohort_median')}",
         f"  start_gate eligible: {payload.get('evolutionary_shadows_eligible')} "
         f"({gate.get('eligibility_reason')})",
