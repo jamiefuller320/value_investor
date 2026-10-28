@@ -182,8 +182,7 @@ def _lab_episode_index(lab: dict[str, Any] | None) -> dict[str, dict[str, Any]]:
         prior = out.get(key)
         # Prefer closed over open when both present.
         if prior is None or (
-            str(row.get("status") or "") == "closed"
-            and str(prior.get("status") or "") != "closed"
+            str(row.get("status") or "") == "closed" and str(prior.get("status") or "") != "closed"
         ):
             out[key] = row
     return out
@@ -230,10 +229,7 @@ def _path_status_for(
         "fair_cost_return_pct_to_plus28": return_pct,
         "exit_at_if_before_plus28": exit_at if status == "already_exited" else None,
         "exit_reason_if_before_plus28": exit_reason if status == "already_exited" else None,
-        "note": (
-            "Fixed buy+28d outcome — not an exit autopsy. "
-            "Blind Accept/Comment stays sealed."
-        ),
+        "note": ("Fixed buy+28d outcome — not an exit autopsy. Blind Accept/Comment stays sealed."),
     }
 
 
@@ -316,9 +312,7 @@ def build_entry_revisit_card(
         return None
 
     blind_id = str(blind_event.get("review_id") or "").strip()
-    rid = review_fingerprint(
-        book_id=book_id, ticker=ticker, entry_at=entry_at, kind=STAGE_ID
-    )
+    rid = review_fingerprint(book_id=book_id, ticker=ticker, entry_at=entry_at, kind=STAGE_ID)
     fam = family_id(book_id=book_id, ticker=ticker, entry_at=entry_at)
     path = _path_status_for(
         book_id=book_id,
@@ -556,9 +550,7 @@ def ops_findings_from_entry_revisit_queue(payload: dict[str, Any] | None) -> lis
                 "severity": "warn",
                 "category": CATEGORY,
                 "title": PENDING_REPLIES_TITLE,
-                "summary": (
-                    f"{replies} entry_revisit reply tag(s) awaiting owner Accept/Comment."
-                ),
+                "summary": (f"{replies} entry_revisit reply tag(s) awaiting owner Accept/Comment."),
                 "auto_fixable": False,
             }
         )
