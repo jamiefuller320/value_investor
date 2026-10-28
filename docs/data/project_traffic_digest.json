@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-28T17:35:16.204610+00:00",
+  "generated_at": "2026-10-28T18:28:12.926696+00:00",
   "role": "end_of_day_project_traffic",
-  "trajectory": "blocked_by_pr_queue",
+  "trajectory": "on_track",
   "pause_active": false,
-  "stuck_pr_count": 1,
+  "stuck_pr_count": 0,
   "achieved": [
     "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
     "FTSE 350 live screen and published dashboard are operational.",
@@ -22,15 +22,7 @@
     "Keep buy-tier filing bodies green; watch memo_recent on holdings∪buy-tier.",
     "Keep library growing offline; defer live universe expansion until stage 2b shows edge."
   ],
-  "actions_taken": [
-    {
-      "kind": "request_conflict_resolve",
-      "detail": "comment posted",
-      "pr_number": 1212,
-      "branch": "cursor/autopsy-llm-chart-annotations-55f5",
-      "applied": true
-    }
-  ],
+  "actions_taken": [],
   "checkpoint_probe": {
     "evidence_rows": [
       {
@@ -94,25 +86,31 @@
         "probe": "ops_status.run_at required for same-day claims"
       },
       {
-        "claim": "Traffic pause_active=False; stuck_pr_count=1",
+        "claim": "Traffic pause_active=False; stuck_pr_count=0",
         "source": "docs/data/engineering_tasks.json#traffic_control",
         "grounded": true,
         "probe": "pause state must match stuck PR classification on this run"
-      },
-      {
-        "claim": "Stuck PR #1212 `cursor/autopsy-llm-chart-annotations-55f5` reasons=['merge_conflict'] mergeable_state=dirty",
-        "source": "github.pulls + check-runs",
-        "grounded": true,
-        "probe": "reasons must be ci_failing and/or merge_conflict"
       }
     ],
     "ungrounded_count": 0,
-    "grounded_count": 12
+    "grounded_count": 11
   },
-  "merges_today": [],
+  "merges_today": [
+    {
+      "task_id": "eng-20261028-03",
+      "title": "Wire Yahoo (or filing-derived) `operating_cashflow` into `CompanyMetrics` when `financials_annual.json` already has OCF",
+      "area": "ingest",
+      "pr_number": 1210,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1210",
+      "merged_at": "2026-10-28T18:18:55.362530+00:00",
+      "merge_class": "human",
+      "auto_merge": false,
+      "independently_verified": false
+    }
+  ],
   "verified_merges_today": [],
   "pr_fix_common_issues": {
-    "occasion_count": 298,
+    "occasion_count": 299,
     "by_reason": [
       {
         "failure_reason": "PR mergeable=CONFLICTING against main",
@@ -243,7 +241,7 @@
     "by_kind": [
       {
         "kind": "ci_check",
-        "count": 156
+        "count": 157
       },
       {
         "kind": "merge_conflict",
@@ -253,7 +251,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 292
+        "count": 293
       },
       {
         "source": "traffic_controller",
