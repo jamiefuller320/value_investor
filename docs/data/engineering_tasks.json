@@ -582,7 +582,18 @@
         "narrow_split_count": 2,
         "narrow_topics": [
           "fcf"
-        ]
+        ],
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20261028-01",
+        "verified_at": "2026-10-28T18:48:06.980701+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_pipeline.py",
+            "tests/test_summary.py"
+          ],
+          "output_tail": "........................................................................ [ 23%]\n........................................................................ [ 47%]\n........................................................................ [ 71%]\n........................................................................ [ 95%]\n.............                                                            [100%]\n=============================== warnings summary ===============================\ntests/test_pipeline.py::test_enrich_universe_with_filing_metrics_extracts_adjusted_eps_growth\ntests/test_pipeline.py::test_enrich_universe_with_filing_metrics_extracts_basic_eps_growth\ntests/test_pipeline.py::test_enrich_universe_with_filing_metrics_extracts_diluted_eps_growth\ntests/test_pipeline.py::test_fcf_overlay_models_exclude_divergent_screen_ttm\ntests/test_pipeline.py::test_suppress_fcf_yield_passes_skips_when_company_fcf_is_canonical\n  /home/runner/work/value_investor/value_investor/src/value_investor/scoring/fcf.py:3690: Pandas4Warning: Setting a value on a DataFrame via .at with a key that does not exist in the index is deprecated and will raise a KeyError in a future version. Use .loc instead.\n    out.at[index, \"earnings_growth\"] = filing_growth\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n301 passed, 5 warnings in 21.90s"
+        }
       },
       "acceptance_criteria": [
         "Export or overlay behaviour is covered by a unit test",
@@ -607,11 +618,13 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "branch_name": "cursor/eng-20261028-01-1de3",
       "pr_number": 1209,
       "no_diff_count": 0,
-      "completed_at": "2026-10-28T13:20:18.112640+00:00"
+      "completed_at": "2026-10-28T13:20:18.112640+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1209",
+      "merged_at": "2026-10-28T18:48:06.983986+00:00"
     },
     {
       "id": "eng-20261028-02",
@@ -14687,7 +14700,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-10-28T18:31:54.719494+00:00",
+    "evaluated_at": "2026-10-28T18:51:57.926959+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
