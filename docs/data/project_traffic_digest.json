@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-28T12:32:31.027101+00:00",
+  "generated_at": "2026-10-28T17:35:16.204610+00:00",
   "role": "end_of_day_project_traffic",
-  "trajectory": "on_track",
+  "trajectory": "blocked_by_pr_queue",
   "pause_active": false,
-  "stuck_pr_count": 0,
+  "stuck_pr_count": 1,
   "achieved": [
     "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
     "FTSE 350 live screen and published dashboard are operational.",
@@ -22,7 +22,15 @@
     "Keep buy-tier filing bodies green; watch memo_recent on holdings∪buy-tier.",
     "Keep library growing offline; defer live universe expansion until stage 2b shows edge."
   ],
-  "actions_taken": [],
+  "actions_taken": [
+    {
+      "kind": "request_conflict_resolve",
+      "detail": "comment posted",
+      "pr_number": 1212,
+      "branch": "cursor/autopsy-llm-chart-annotations-55f5",
+      "applied": true
+    }
+  ],
   "checkpoint_probe": {
     "evidence_rows": [
       {
@@ -74,7 +82,7 @@
         "probe": "human_gate block is structural, not free text"
       },
       {
-        "claim": "Queue health overall=idle; headline=Queue and hunter idle.",
+        "claim": "Queue health overall=active; headline=Agent lane active.",
         "source": "docs/data/queue_health.json",
         "grounded": true,
         "probe": "queue_health.overall must be set by refresh_queue_health_ui"
@@ -86,14 +94,20 @@
         "probe": "ops_status.run_at required for same-day claims"
       },
       {
-        "claim": "Traffic pause_active=False; stuck_pr_count=0",
+        "claim": "Traffic pause_active=False; stuck_pr_count=1",
         "source": "docs/data/engineering_tasks.json#traffic_control",
         "grounded": true,
         "probe": "pause state must match stuck PR classification on this run"
+      },
+      {
+        "claim": "Stuck PR #1212 `cursor/autopsy-llm-chart-annotations-55f5` reasons=['merge_conflict'] mergeable_state=dirty",
+        "source": "github.pulls + check-runs",
+        "grounded": true,
+        "probe": "reasons must be ci_failing and/or merge_conflict"
       }
     ],
     "ungrounded_count": 0,
-    "grounded_count": 11
+    "grounded_count": 12
   },
   "merges_today": [],
   "verified_merges_today": [],
@@ -117,6 +131,21 @@
         ]
       },
       {
+        "failure_reason": "merge_conflict:dirty",
+        "count": 6,
+        "sources": {
+          "traffic_controller": 6
+        },
+        "recent_prs": [
+          994,
+          993,
+          1017,
+          1135,
+          1198,
+          1212
+        ]
+      },
+      {
         "failure_reason": "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main",
         "count": 5,
         "sources": {
@@ -130,30 +159,15 @@
       },
       {
         "failure_reason": "validate check failed",
-        "count": 5,
+        "count": 4,
         "sources": {
-          "human_request": 5
+          "human_request": 4
         },
         "recent_prs": [
           831,
           873,
           893,
-          1056,
-          1207
-        ]
-      },
-      {
-        "failure_reason": "merge_conflict:dirty",
-        "count": 5,
-        "sources": {
-          "traffic_controller": 5
-        },
-        "recent_prs": [
-          994,
-          993,
-          1017,
-          1135,
-          1198
+          1056
         ]
       },
       {
@@ -229,21 +243,21 @@
     "by_kind": [
       {
         "kind": "ci_check",
-        "count": 157
+        "count": 156
       },
       {
         "kind": "merge_conflict",
-        "count": 141
+        "count": 142
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 293
+        "count": 292
       },
       {
         "source": "traffic_controller",
-        "count": 5
+        "count": 6
       }
     ]
   },

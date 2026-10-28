@@ -1,8 +1,8 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-28T07:52:33.377233+00:00`
-Trajectory: **on_track**
-Dispatch pause: **inactive** (stuck PRs: 0)
+Generated: `2026-10-28T17:35:16.204610+00:00`
+Trajectory: **blocked_by_pr_queue**
+Dispatch pause: **inactive** (stuck PRs: 1)
 
 ## Achieved (grounded)
 - Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.
@@ -16,7 +16,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - Published screen bundle dated 2026-09-27 — confirm Sunday refresh.
 
 ## Checkpoint probe
-- Grounded rows: 11; ungrounded: 0
+- Grounded rows: 12; ungrounded: 0
 - [ok] Stage 0 (UK quant core): complete _(source: docs/data/project_progress.json)_
 - [ok] Stage 1 (Decision-review learning): in_progress _(source: docs/data/project_progress.json)_
 - [ok] Stage 2b (Primary learning track): in_progress _(source: docs/data/project_progress.json)_
@@ -25,41 +25,27 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
-- [ok] Queue health overall=idle; headline=Queue and hunter idle. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-10-28T02:31:53.685749+00:00 _(source: docs/data/ops_status.json)_
-- [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
+- [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
+- [ok] Ops monitor overall=warn at 2026-10-28T07:46:47.134172+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Traffic pause_active=False; stuck_pr_count=1 _(source: docs/data/engineering_tasks.json#traffic_control)_
+- [ok] Stuck PR #1212 `cursor/autopsy-llm-chart-annotations-55f5` reasons=['merge_conflict'] mergeable_state=dirty _(source: github.pulls + check-runs)_
 
 ## Traffic actions
-- _(none)_
+- `request_conflict_resolve` PR #1212 — comment posted (applied)
 
 ## Merges today (monitor independent verify)
 - _(none merged today)_
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 295
+- Occasion count: 298
 - `PR mergeable=CONFLICTING against main` — 7×
+- `merge_conflict:dirty` — 6×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
-- `merge_conflict:dirty` — 5×
 - `validate check failed` — 4×
 - `validate job failed` — 3×
 - `validate failed` — 3×
 - `deferred-ideas.json conflict after L516 merge` — 3×
 - `ruff_format` — 2×
-
-## Ops-monitor email handoff
-- Email subject: `FTSE Ops Monitor — WARN`
-- Findings: 11 (open=11, resolved=0)
-- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN FTSE decision-input utilization gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Price-only excess misstates track performance — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Two-lot retention beats full exit in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Primary book trails its control on total return — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Decision-review knobs saturated at bounds — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Paper book would halt on drawdown or concentration — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Deferred idea triggers unreadable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Deferred idea triggers name frozen books — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
