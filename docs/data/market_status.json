@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-27T21:24:41.999980+00:00",
+  "generated_at": "2026-10-28T07:28:50.734366+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -74,7 +74,7 @@
       "1": "sti",
       "2": "aex"
     },
-    "equal_support_generated_at": "2026-10-27T20:08:11.332485+00:00"
+    "equal_support_generated_at": "2026-10-28T06:16:47.444404+00:00"
   },
   "markets": [
     {
@@ -881,8 +881,8 @@
       "sprint_progress": {
         "window_days": 2,
         "run_count": 6,
-        "targets": 33,
-        "improved": 16,
+        "targets": 45,
+        "improved": 20,
         "improved_tickers": [
           "MT.AS",
           "ABI.BR",
@@ -894,9 +894,10 @@
           "BOL.ST",
           "TEL2-B.ST",
           "NOVN.SW",
-          "TTE.PA"
+          "TTE.PA",
+          "SGO.PA"
         ],
-        "last_run_at": "2026-10-27T13:28:35.055983+00:00",
+        "last_run_at": "2026-10-28T07:26:59.330115+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -1555,7 +1556,7 @@
         "hold_near_buy_count": 9,
         "not_buy_tier_count": 24,
         "never_buy_tier_count": 21,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
@@ -1564,11 +1565,11 @@
           "S58.SI",
           "5E2.SI",
           "H78.SI",
+          "ME8U.SI",
           "D01.SI",
           "U11.SI",
           "C09.SI",
-          "C6L.SI",
-          "G13.SI"
+          "C6L.SI"
         ]
       },
       "sprint_progress": {
@@ -11485,11 +11486,11 @@
         "acted": true,
         "last_run_at": "2026-10-25T07:06:13.126589+00:00",
         "holdings": 28,
-        "nav": 494.32,
-        "cash": -0.0,
+        "nav": 497.42,
+        "cash": 0.0,
         "contributed_capital": 1000.0,
         "weekday_batch_count": 52,
-        "epoch0_batch_count": 26
+        "epoch0_batch_count": 25
       },
       "equal_support": {
         "present": true,
@@ -11904,6 +11905,19 @@
               "buy_tier_level_gbp_fx_warped": 494.32
             },
             "market": 1000.12
+          },
+          {
+            "date": "2026-10-28",
+            "held": 981.06,
+            "nav": 981.06,
+            "held_stock": 981.06,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 497.42
+            },
+            "market": 1000.12
           }
         ],
         "series": [
@@ -11943,11 +11957,11 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 43
+            "point_count": 44
           }
         ],
         "last": {
-          "date": "2026-10-27",
+          "date": "2026-10-28",
           "held": 981.06,
           "market": 1000.12,
           "nav": 981.06,
