@@ -395,16 +395,27 @@ def freeze_start_cohort(
     return result
 
 
+def _judgment_cell(
+    *,
+    answer: Any = None,
+    confidence: str | None = None,
+    cites: list[str] | None = None,
+    unknown: bool | None = None,
+) -> dict[str, Any]:
+    cite_list = [str(c).strip() for c in (cites or []) if str(c).strip()]
+    is_unknown = bool(unknown) if unknown is not None else (answer is None and not cite_list)
+    return {
+        "answer": None if is_unknown and answer is None else answer,
+        "confidence": confidence,
+        "cites": cite_list,
+        "unknown": is_unknown,
+    }
+
+
 def judgment_in_the_round_stub() -> dict[str, Any]:
-    """Observe-only checklist schema (design lock) — N228 fills later."""
-    buy = {
-        key: {"answer": None, "confidence": None, "cites": [], "unknown": True}
-        for key in ("B1", "B2", "B3", "B4", "B5", "B6")
-    }
-    sell = {
-        key: {"answer": None, "confidence": None, "cites": [], "unknown": True}
-        for key in ("S1", "S2", "S3", "S4", "S5", "S6")
-    }
+    """Empty observe-only checklist schema (fail-closed; no live influence)."""
+    buy = {key: _judgment_cell(unknown=True) for key in ("B1", "B2", "B3", "B4", "B5", "B6")}
+    sell = {key: _judgment_cell(unknown=True) for key in ("S1", "S2", "S3", "S4", "S5", "S6")}
     return {
         "rubric_id": JUDGMENT_RUBRIC_ID,
         "influences_live": False,
@@ -415,12 +426,467 @@ def judgment_in_the_round_stub() -> dict[str, Any]:
         "rule_candidates": [],
         "llm_stance": None,
         "misfit_evidence": None,
-        "deferred_id": "N228",
+        "fill_status": "schema_only",
+        "fill_source": None,
         "note": (
-            "Schema stub only — deterministic/LLM fill + misfit trail remain "
-            "N228. Missing cites fail-close influence."
+            "Schema stub — use fill_judgment_in_the_round for durable cites. "
+            "Missing cites fail-close influence (influences_live=false)."
         ),
     }
+
+
+def _finite_float(value: Any) -> float | None:
+    if value is None:
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    if number != number:  # NaN
+        return None
+    return number
+
+
+def _row_cite(row: dict[str, Any], key: str) -> str | None:
+    if key not in row:
+        return None
+    value = row.get(key)
+    if value is None:
+        return None
+    if isinstance(value, float) and value != value:
+        return None
+    text = str(value).strip()
+    if not text or text.lower() == "nan":
+        return None
+    if len(text) > 160:
+        text = text[:157] + "..."
+    return f"{key}={text}"
+
+
+def authorize_judgment_live_influence(judgment: dict[str, Any] | None) -> bool:
+    """Fail-closed: lab judgment never authorizes live capital influence.
+
+    Even a fully cited checklist stays observe-only on ``cue_consumer_mft``.
+    """
+    if not isinstance(judgment, dict):
+        return False
+    if judgment.get("influences_live") is True:
+        # Hard strip path — never honor a true flag on this instrument.
+        return False
+    if judgment.get("observe_only") is False:
+        return False
+    return False
+
+
+def judgment_has_durable_cites(judgment: dict[str, Any] | None) -> bool:
+    """True when at least one buy/sell cell carries a non-empty cite list."""
+    if not isinstance(judgment, dict):
+        return False
+    for side in ("buy", "sell"):
+        block = judgment.get(side) or {}
+        if not isinstance(block, dict):
+            continue
+        for cell in block.values():
+            if isinstance(cell, dict) and any(str(c).strip() for c in (cell.get("cites") or [])):
+                return True
+    return False
+
+
+def fill_judgment_in_the_round(
+    *,
+    side: str = "buy",
+    cue_source_id: str | None = None,
+    clear_note: str | None = None,
+    entry_detail: dict[str, Any] | None = None,
+    row: dict[str, Any] | None = None,
+    exit_reason: str | None = None,
+    hold_trading_days: int | None = None,
+    same_day_assessment: dict[str, Any] | None = None,
+    return_pct: float | None = None,
+    autopsy_alignment_rows: list[dict[str, Any]] | None = None,
+    hold_policy_days: int = 63,
+    base: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Deterministic N228 enrich: cite screen/cue/exit fields into the checklist.
+
+    Observe-only. Missing fields stay ``unknown`` (fail-closed). Never sets
+    ``influences_live=true``. Rules remain scaffold/propose; misfits emit
+    structured ``misfit_evidence`` rather than silent knobs.
+    """
+    judgment = base if isinstance(base, dict) else judgment_in_the_round_stub()
+    # Always clone so callers cannot mutate a shared stub.
+    judgment = json.loads(json.dumps(judgment))
+    judgment["influences_live"] = False
+    judgment["observe_only"] = True
+    judgment["rules_role"] = "scaffold_propose"
+    judgment["fill_source"] = "deterministic_n228_v0"
+    judgment.pop("deferred_id", None)
+
+    detail = entry_detail if isinstance(entry_detail, dict) else {}
+    screen = row if isinstance(row, dict) else {}
+    cue_id = str(cue_source_id or detail.get("cue_source_id") or "").strip() or None
+    note = str(clear_note or "").strip() or None
+
+    buy = judgment.setdefault("buy", {})
+    sell = judgment.setdefault("sell", {})
+
+    if side in {"buy", "both"}:
+        # B1 — fundamentals / bind cheapness (screen families + research).
+        b1_cites: list[str] = []
+        for key in (
+            "passed_families",
+            "models_passed",
+            "weighted_model_score",
+            "research_verdict",
+            "fcf_basis_overlay",
+            "earnings_basis_overlay",
+            "data_quality_score",
+        ):
+            cite = _row_cite(screen, key)
+            if cite:
+                b1_cites.append(cite)
+        verdict = detail.get("research_verdict")
+        if verdict is not None and not any(c.startswith("research_verdict=") for c in b1_cites):
+            b1_cites.append(f"research_verdict={verdict}")
+        families = str(screen.get("passed_families") or "").lower()
+        if b1_cites:
+            cheap = "cheapness" in families or "cheap" in families
+            answer = "screen_families_include_cheapness" if cheap else "fundamentals_cited_partial"
+            buy["B1"] = _judgment_cell(
+                answer=answer,
+                confidence="medium" if cheap else "low",
+                cites=b1_cites,
+                unknown=False,
+            )
+        else:
+            buy["B1"] = _judgment_cell(unknown=True)
+
+        # B2 — technicals / timing at entry.
+        b2_cites: list[str] = []
+        timing = detail.get("timing_signal")
+        if timing is None:
+            timing = screen.get("timing_signal")
+        if timing is not None and str(timing).strip() and str(timing).lower() != "nan":
+            b2_cites.append(f"timing_signal={timing}")
+        for key in ("timing_score", "price_vs_sma200_pct", "volume_ratio_20", "signal_trend"):
+            cite = _row_cite(screen, key)
+            if cite:
+                b2_cites.append(cite)
+        if b2_cites:
+            timing_txt = str(timing or "").strip().lower()
+            if timing_txt == "wait":
+                answer_b2 = "timing_wait_not_ideal"
+                conf_b2 = "low"
+            elif timing_txt in {"buy", "enter", "ok", "neutral"}:
+                answer_b2 = f"timing_{timing_txt}_cited"
+                conf_b2 = "medium" if timing_txt != "neutral" else "low"
+            else:
+                answer_b2 = "technicals_cited"
+                conf_b2 = "low"
+            buy["B2"] = _judgment_cell(
+                answer=answer_b2, confidence=conf_b2, cites=b2_cites, unknown=False
+            )
+        else:
+            buy["B2"] = _judgment_cell(unknown=True)
+
+        # B3 — market / peer context (thin: sector + weeks_at_signal).
+        b3_cites: list[str] = []
+        for key in ("sector", "weeks_at_signal", "market_id", "market"):
+            cite = _row_cite(screen, key)
+            if cite:
+                b3_cites.append(cite)
+        if b3_cites:
+            buy["B3"] = _judgment_cell(
+                answer="sector_context_cited",
+                confidence="low",
+                cites=b3_cites,
+                unknown=False,
+            )
+        else:
+            buy["B3"] = _judgment_cell(unknown=True)
+
+        # B4 — registered rule / cue proposes (scaffold).
+        b4_cites: list[str] = []
+        if cue_id:
+            b4_cites.append(f"cue_source_id={cue_id}")
+        b4_cites.append(f"cue_whitelist_id={CUE_WHITELIST_ID}")
+        if note:
+            b4_cites.append(f"clear_note={note}")
+        signal = detail.get("signal") or screen.get("signal")
+        if signal is not None and str(signal).strip():
+            b4_cites.append(f"signal={signal}")
+        adjusted = detail.get("adjusted_signal") or screen.get("adjusted_signal")
+        if adjusted is not None and str(adjusted).strip():
+            b4_cites.append(f"adjusted_signal={adjusted}")
+        if cue_id:
+            buy["B4"] = _judgment_cell(
+                answer="cue_whitelist_proposes",
+                confidence="medium" if note and "clear" in note else "low",
+                cites=b4_cites,
+                unknown=False,
+            )
+        else:
+            buy["B4"] = _judgment_cell(unknown=True)
+
+        judgment["rule_candidates"] = (
+            [
+                {
+                    "rule_id": cue_id,
+                    "role": "scaffold_propose",
+                    "cue_whitelist_id": CUE_WHITELIST_ID,
+                    "clear_note": note,
+                }
+            ]
+            if cue_id
+            else []
+        )
+
+        # B5 — confidence + why.
+        b5_cites: list[str] = []
+        conviction = _finite_float(detail.get("conviction_score"))
+        if conviction is None:
+            conviction = _finite_float(screen.get("conviction_score"))
+        if conviction is not None:
+            b5_cites.append(f"conviction_score={conviction}")
+        research_conf = _finite_float(screen.get("research_confidence"))
+        if research_conf is not None:
+            b5_cites.append(f"research_confidence={research_conf}")
+        if verdict is not None:
+            b5_cites.append(f"research_verdict={verdict}")
+        if b5_cites:
+            if conviction is not None and conviction >= 0.6 and str(verdict) == "accumulate":
+                answer_b5 = "high_conviction_accumulate"
+                conf_b5 = "high"
+            elif conviction is not None and conviction >= 0.4:
+                answer_b5 = "moderate_conviction"
+                conf_b5 = "medium"
+            else:
+                answer_b5 = "low_or_partial_conviction"
+                conf_b5 = "low"
+            buy["B5"] = _judgment_cell(
+                answer=answer_b5, confidence=conf_b5, cites=b5_cites, unknown=False
+            )
+        else:
+            buy["B5"] = _judgment_cell(unknown=True)
+
+        # B6 — mitigate if wrong (pre-declared exit family / trade plan cites).
+        b6_cites = [
+            f"hold_policy_trading_days={hold_policy_days}",
+            "exit_family=hold_trading_days_or_identity_break",
+            "sizing=fixed_stake_v0",
+        ]
+        plan = _row_cite(screen, "trade_plan_summary")
+        if plan:
+            b6_cites.append(plan)
+        for key in ("tactical_stop_loss", "tactical_take_profit"):
+            cite = _row_cite(screen, key)
+            if cite:
+                b6_cites.append(cite)
+        for feed_row in (autopsy_alignment_rows or [])[:3]:
+            if not isinstance(feed_row, dict):
+                continue
+            forward = str(feed_row.get("learning_point_forward") or "").strip()
+            rid = str(feed_row.get("review_id") or "").strip()
+            if forward and rid:
+                b6_cites.append(f"autopsy_learning_point_forward:{rid}={forward[:120]}")
+        buy["B6"] = _judgment_cell(
+            answer="predeclared_hold_or_identity_break_within_fixed_stake",
+            confidence="medium",
+            cites=b6_cites,
+            unknown=False,
+        )
+
+    if side in {"sell", "both"}:
+        exit_txt = str(exit_reason or "").strip()
+        same_day = same_day_assessment if isinstance(same_day_assessment, dict) else {}
+
+        # S1 — thesis still valid?
+        s1_cites: list[str] = []
+        if exit_txt:
+            s1_cites.append(f"exit_reason={exit_txt}")
+        if cue_id:
+            s1_cites.append(f"entry_cue_source_id={cue_id}")
+        if note:
+            s1_cites.append(f"entry_clear_note={note}")
+        if s1_cites:
+            if exit_txt.startswith("identity_break"):
+                answer_s1 = "entry_identity_broken"
+            elif exit_txt == "hold_trading_days":
+                answer_s1 = "hold_horizon_reached_thesis_timebox"
+            else:
+                answer_s1 = "exit_reason_cited"
+            sell["S1"] = _judgment_cell(
+                answer=answer_s1, confidence="medium", cites=s1_cites, unknown=False
+            )
+        else:
+            sell["S1"] = _judgment_cell(unknown=True)
+
+        # S2 — target realistic now? (fair-cost path cite when closed).
+        s2_cites: list[str] = []
+        ret = _finite_float(return_pct)
+        if ret is not None:
+            s2_cites.append(f"fair_cost_return_pct={ret}")
+        if hold_trading_days is not None:
+            s2_cites.append(f"hold_trading_days={hold_trading_days}")
+        if s2_cites:
+            sell["S2"] = _judgment_cell(
+                answer="path_cited_at_exit",
+                confidence="low",
+                cites=s2_cites,
+                unknown=False,
+            )
+        else:
+            sell["S2"] = _judgment_cell(unknown=True)
+
+        # S3 — market agree with trajectory?
+        s3_cites: list[str] = []
+        if ret is not None:
+            s3_cites.append(f"fair_cost_return_pct={ret}")
+            s3_cites.append(
+                "path_sign=" + ("positive" if ret > 0 else "negative" if ret < 0 else "flat")
+            )
+        if same_day.get("same_calendar_day") is not None:
+            s3_cites.append(f"same_calendar_day={same_day.get('same_calendar_day')}")
+        if s3_cites:
+            sell["S3"] = _judgment_cell(
+                answer="exit_path_cited",
+                confidence="low",
+                cites=s3_cites,
+                unknown=False,
+            )
+        else:
+            sell["S3"] = _judgment_cell(unknown=True)
+
+        # S4 — registered exit rule fires?
+        s4_cites: list[str] = []
+        if exit_txt:
+            s4_cites.append(f"exit_reason={exit_txt}")
+            s4_cites.append("rules_role=scaffold_propose")
+        if s4_cites:
+            sell["S4"] = _judgment_cell(
+                answer="registered_lab_exit_rule_fires",
+                confidence="medium",
+                cites=s4_cites,
+                unknown=False,
+            )
+        else:
+            sell["S4"] = _judgment_cell(unknown=True)
+
+        # S5 — confidence + why.
+        s5_cites: list[str] = []
+        if exit_txt:
+            s5_cites.append(f"exit_reason={exit_txt}")
+        if same_day:
+            s5_cites.append(f"same_day_soft_bias={same_day.get('soft_bias')}")
+            s5_cites.append(f"same_day_hard_ban={same_day.get('hard_ban')}")
+            if same_day.get("exception"):
+                s5_cites.append(f"same_day_exception={same_day.get('exception')}")
+        if s5_cites:
+            conf_s5 = "low" if same_day.get("same_calendar_day") else "medium"
+            sell["S5"] = _judgment_cell(
+                answer="exit_confidence_from_rule_and_same_day_policy",
+                confidence=conf_s5,
+                cites=s5_cites,
+                unknown=False,
+            )
+        else:
+            sell["S5"] = _judgment_cell(unknown=True)
+
+        # S6 — mitigate.
+        s6_cites = [
+            "sizing=fixed_stake_v0",
+            "observe_only=true",
+            "package_l=false",
+        ]
+        if hold_trading_days is not None:
+            s6_cites.append(f"hold_trading_days={hold_trading_days}")
+        for feed_row in (autopsy_alignment_rows or [])[:3]:
+            if not isinstance(feed_row, dict):
+                continue
+            forward = str(feed_row.get("learning_point_forward") or "").strip()
+            rid = str(feed_row.get("review_id") or "").strip()
+            if forward and rid:
+                s6_cites.append(f"autopsy_learning_point_forward:{rid}={forward[:120]}")
+        sell["S6"] = _judgment_cell(
+            answer="fixed_stake_close_plus_hold_counterfactual_trail",
+            confidence="medium",
+            cites=s6_cites,
+            unknown=False,
+        )
+
+    # Stance + misfit trail (deterministic agree/veto within rule set).
+    misfit: dict[str, Any] | None = None
+    stance = "agree"
+    timing_val = (
+        str((entry_detail or {}).get("timing_signal") or (row or {}).get("timing_signal") or "")
+        .strip()
+        .lower()
+    )
+    if side in {"buy", "both"} and timing_val == "wait" and cue_id:
+        stance = "misfit"
+        misfit = {
+            "rule_id": cue_id,
+            "decision_code": "timing_wait_vs_cue_propose",
+            "cite": [
+                f"timing_signal={timing_val}",
+                f"cue_source_id={cue_id}",
+            ],
+            "why_unfit": (
+                "Whitelist cue proposes entry while timing_signal=wait — "
+                "record misfit for future experimental timing rule; do not "
+                "silently invent live knobs."
+            ),
+            "proposed_experiment_hint": "entry_lens_timing_wait_gate",
+        }
+    if side in {"sell", "both"} and isinstance(same_day_assessment, dict):
+        if same_day_assessment.get("same_calendar_day") and not same_day_assessment.get(
+            "major_error_reverse"
+        ):
+            stance = "misfit" if stance == "agree" else stance
+            misfit = {
+                "rule_id": str(exit_reason or "same_day_exit"),
+                "decision_code": "same_day_exit_without_major_error_reverse",
+                "cite": [
+                    f"same_calendar_day={same_day_assessment.get('same_calendar_day')}",
+                    f"exit_reason={exit_reason}",
+                ],
+                "why_unfit": (
+                    "Same-calendar-day exit without durable major_error_reverse "
+                    "evidence — soft-bias misfit for sell_timing lever."
+                ),
+                "proposed_experiment_hint": "sell_lens_same_day_bias",
+            }
+
+    judgment["llm_stance"] = stance
+    judgment["misfit_evidence"] = misfit
+
+    # Coverage + fail-closed note.
+    unknown_cells: list[str] = []
+    cited_cells: list[str] = []
+    for _label, block in (("B", judgment.get("buy") or {}), ("S", judgment.get("sell") or {})):
+        if not isinstance(block, dict):
+            continue
+        for key, cell in block.items():
+            if not isinstance(cell, dict):
+                continue
+            name = str(key)
+            if cell.get("unknown"):
+                unknown_cells.append(name)
+            elif cell.get("cites"):
+                cited_cells.append(name)
+
+    judgment["fill_status"] = "filled" if cited_cells else "schema_only"
+    judgment["cells_cited"] = cited_cells
+    judgment["cells_unknown"] = unknown_cells
+    judgment["influences_live"] = False
+    judgment["note"] = (
+        "N228 deterministic judgment-in-the-round fill on decide trail. "
+        "Rules scaffold/propose; missing cells stay unknown; "
+        "authorize_judgment_live_influence always false."
+    )
+    # Belt-and-braces: never allow influence even if a caller flipped flags.
+    assert authorize_judgment_live_influence(judgment) is False
+    return judgment
 
 
 def build_autopsy_alignment_feed(
@@ -1111,7 +1577,8 @@ def build_lab_payload(
         "Do not back-label cue-book NAV as lab wins.",
         "Do not open Package L on sealed; cull ≠ live promote.",
         "Sealed spawn / novelty / cull remain N223/N226/N227 — lab fills only in v0.",
-        "N228 judgment fill still stubbed (B4 cue cite only on walker opens).",
+        "N228 judgment fill is deterministic cite enrich (not live LLM API); "
+        "influences_live=false forever on this lab until a separate promote gate.",
     ]
     if not shadows_ok:
         soft_gaps.insert(
@@ -1122,6 +1589,20 @@ def build_lab_payload(
         soft_gaps.insert(0, "Start gate eligible but walker did not activate.")
     if frozen_n == 0 and proposed_n and not shadows_ok:
         soft_gaps.append("Owner must confirm freeze of proposed non-mechanical autopsy cohort.")
+
+    # Representative judgment trail: prefer a closed/open episode evidence block.
+    judgment_payload = judgment_in_the_round_stub()
+    for sample in list(closed[:1]) + list(open_eps[:1]):
+        if not isinstance(sample, dict):
+            continue
+        ev = sample.get("evidence") if isinstance(sample.get("evidence"), dict) else {}
+        j = ev.get("judgment_in_the_round")
+        if isinstance(j, dict) and j.get("fill_status") == "filled":
+            judgment_payload = j
+            break
+    judgment_payload = dict(judgment_payload)
+    judgment_payload["influences_live"] = False
+    judgment_payload["observe_only"] = True
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -1176,7 +1657,7 @@ def build_lab_payload(
                 else "PIT selection stub — short whitelist only; no look-ahead."
             ),
         },
-        "judgment_in_the_round": judgment_in_the_round_stub(),
+        "judgment_in_the_round": judgment_payload,
         "autopsy_alignment_feed": feed,
         "observe_shadow_pass": {
             "kind": (
@@ -1243,9 +1724,13 @@ def build_lab_payload(
             "N227": "full per-root cap + cull/replace factory",
             "L630": "lineage fork markers on real spawns",
             "L631": "archive frozen cull losers",
-            "N228": "rule-aware LLM decide + misfit evidence trail",
+            "N228": "shipped_deterministic_fill_v0",
             "N229": "human chart draw tools (keep deferred)",
             "L640": "dashboard / observe-utilization strip",
+            "N228_llm_api": (
+                "optional later: remote LLM agree/veto voice on the same "
+                "checklist — still influences_live=false until promote gate"
+            ),
         },
         "soft_gaps": soft_gaps,
         "ops_doc": str(DEFAULT_OPS_DOC),
@@ -1372,6 +1857,7 @@ def refresh_cue_consumer_mft(
             knob_epoch_started_at=epoch_at,
             lab_arm_marker_id=LAB_ARM_MARKER_ID,
             generated_at=when,
+            autopsy_alignment_rows=list(feed.get("rows") or []),
         )
     else:
         walker = gated_walker_payload(
@@ -1606,6 +2092,9 @@ __all__ = [
     "format_cue_consumer_mft_text",
     "freeze_start_cohort",
     "heal_q8b_cohort_ghosts",
+    "authorize_judgment_live_influence",
+    "fill_judgment_in_the_round",
+    "judgment_has_durable_cites",
     "judgment_in_the_round_stub",
     "novelty_fingerprint",
     "novelty_gate_stub",

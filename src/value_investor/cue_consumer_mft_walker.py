@@ -32,7 +32,8 @@ from value_investor.cue_consumer_mft import (
     REGISTRATION_ID,
     TUNE_SPEC_ID,
     assess_same_day_round_trip,
-    judgment_in_the_round_stub,
+    authorize_judgment_live_influence,
+    fill_judgment_in_the_round,
     select_pit_cues,
 )
 from value_investor.market_trading_costs import (
@@ -250,8 +251,11 @@ def _entry_evidence(
     decision_ts: str,
     clear_note: str,
     detail: dict[str, Any],
+    row: dict[str, Any] | None = None,
+    autopsy_alignment_rows: list[dict[str, Any]] | None = None,
+    hold_policy_days: int = HOLD_TRADING_DAYS,
 ) -> dict[str, Any]:
-    """Durable open evidence — judgment schema present; N228 fill still deferred."""
+    """Durable open evidence — N228 judgment-in-the-round fill (observe-only)."""
     pit = select_pit_cues(
         [
             {
@@ -263,29 +267,17 @@ def _entry_evidence(
         ],
         decision_ts=decision_ts,
     )
-    judgment = judgment_in_the_round_stub()
-    # B4: registered rule/cue proposes — cite the whitelist cue (scaffold only).
-    judgment["buy"]["B4"] = {
-        "answer": "cue_whitelist_proposes",
-        "confidence": "low",
-        "cites": [
-            f"cue_source_id={cue_source_id}",
-            f"cue_whitelist_id={CUE_WHITELIST_ID}",
-            f"clear_note={clear_note}",
-        ],
-        "unknown": False,
-    }
-    judgment["rule_candidates"] = [
-        {
-            "rule_id": cue_source_id,
-            "role": "scaffold_propose",
-            "cue_whitelist_id": CUE_WHITELIST_ID,
-        }
-    ]
-    judgment["note"] = (
-        "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay "
-        "unknown until N228 rule-aware LLM decide fill. influences_live=false."
+    judgment = fill_judgment_in_the_round(
+        side="buy",
+        cue_source_id=cue_source_id,
+        clear_note=clear_note,
+        entry_detail=detail,
+        row=row,
+        autopsy_alignment_rows=autopsy_alignment_rows,
+        hold_policy_days=hold_policy_days,
     )
+    assert judgment["influences_live"] is False
+    assert authorize_judgment_live_influence(judgment) is False
     return {
         "pit_selected": pit,
         "pit_ok": bool(pit),
@@ -295,6 +287,40 @@ def _entry_evidence(
         "influences_live": False,
         "observe_only": True,
     }
+
+
+def _attach_exit_judgment(
+    evidence: dict[str, Any],
+    *,
+    exit_reason: str | None,
+    hold_trading_days: int | None,
+    same_day_assessment: dict[str, Any] | None,
+    return_pct: float | None,
+    autopsy_alignment_rows: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Enrich open evidence with sell-side checklist cites at close.
+
+    Sell fill only — preserves the richer buy cites stamped at open.
+    """
+    prior = evidence.get("judgment_in_the_round")
+    detail = evidence.get("entry_detail") if isinstance(evidence.get("entry_detail"), dict) else {}
+    judgment = fill_judgment_in_the_round(
+        side="sell",
+        cue_source_id=str(detail.get("cue_source_id") or "") or None,
+        clear_note=str(evidence.get("clear_note") or "") or None,
+        entry_detail=detail,
+        exit_reason=exit_reason,
+        hold_trading_days=hold_trading_days,
+        same_day_assessment=same_day_assessment,
+        return_pct=return_pct,
+        autopsy_alignment_rows=autopsy_alignment_rows,
+        base=prior if isinstance(prior, dict) else None,
+    )
+    out = dict(evidence)
+    out["judgment_in_the_round"] = judgment
+    out["influences_live"] = False
+    out["observe_only"] = True
+    return out
 
 
 @dataclass(frozen=True)
@@ -342,11 +368,13 @@ def walk_lab_paper_episodes(
     knob_epoch_started_at: str | None = None,
     lab_arm_marker_id: str = LAB_ARM_MARKER_ID,
     generated_at: str | None = None,
+    autopsy_alignment_rows: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Walk archive snapshots → lab open/closed fixed-stake paper episodes."""
     cfg = cfg or WalkerConfig()
     when = generated_at or datetime.now(UTC).isoformat()
     epoch_at = knob_epoch_started_at or when
+    alignment_rows = [row for row in (autopsy_alignment_rows or []) if isinstance(row, dict)]
 
     closed: list[dict[str, Any]] = []
     open_eps: list[dict[str, Any]] = []
@@ -405,6 +433,9 @@ def walk_lab_paper_episodes(
                 decision_ts=decision_ts,
                 clear_note=note,
                 detail=detail,
+                row=row,
+                autopsy_alignment_rows=alignment_rows,
+                hold_policy_days=cfg.hold_trading_days,
             )
             if not evidence.get("pit_ok"):
                 skipped_soft_gap += 1
@@ -482,6 +513,15 @@ def walk_lab_paper_episodes(
                 exit_at=exit_at,
                 hold_days=hold_days,
             )
+            closed_ret = round(stake["return_pct"], 6)
+            closed_evidence = _attach_exit_judgment(
+                evidence,
+                exit_reason=exit_reason,
+                hold_trading_days=hold_days,
+                same_day_assessment=same_day,
+                return_pct=closed_ret,
+                autopsy_alignment_rows=alignment_rows,
+            )
             closed.append(
                 {
                     **base,
@@ -489,7 +529,7 @@ def walk_lab_paper_episodes(
                     "exit_run_at": exit_at,
                     "hold_trading_days": hold_days,
                     "exit_reason": exit_reason,
-                    "return_pct": round(stake["return_pct"], 6),
+                    "return_pct": closed_ret,
                     "pnl_local_report_only": round(stake["pnl_local"], 6),
                     "return_pct_stress_report_only": round(
                         episode_return(
@@ -501,6 +541,7 @@ def walk_lab_paper_episodes(
                         6,
                     ),
                     "same_day_assessment": same_day,
+                    "evidence": closed_evidence,
                     "levers_cited": ["stock_choice", "buy_timing", "sell_timing"],
                 }
             )

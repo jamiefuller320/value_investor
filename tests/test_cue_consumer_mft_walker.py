@@ -70,11 +70,14 @@ def test_walker_opens_and_closes_lab_paper_with_durable_evidence():
     assert aaa["book_kind"] == "lab_paper"
     assert aaa["influences_live"] is False
     assert aaa["evidence"]["pit_ok"] is True
-    assert aaa["evidence"]["judgment_in_the_round"]["buy"]["B4"]["unknown"] is False
-    assert (
-        "cue_source_id=n210_ai_filter"
-        in aaa["evidence"]["judgment_in_the_round"]["buy"]["B4"]["cites"]
-    )
+    judgment = aaa["evidence"]["judgment_in_the_round"]
+    assert judgment["influences_live"] is False
+    assert judgment["fill_status"] == "filled"
+    assert judgment["buy"]["B4"]["unknown"] is False
+    assert "cue_source_id=n210_ai_filter" in judgment["buy"]["B4"]["cites"]
+    assert judgment["buy"]["B5"]["unknown"] is False  # conviction + verdict cites
+    assert judgment["sell"]["S4"]["unknown"] is False  # exit rule cite on close
+    assert judgment["sell"]["S1"]["unknown"] is False
     assert aaa["exit_reason"].startswith("identity_break_")
     assert aaa["same_day_assessment"]["hard_ban"] is False
 
