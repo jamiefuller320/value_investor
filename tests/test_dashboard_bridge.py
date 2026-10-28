@@ -347,9 +347,13 @@ def test_process_pending_batches_each_ack_action_separately(monkeypatch) -> None
         "entry-blind-review-ack",
         "entry-blind-review-comment",
         "entry-blind-review-duplicate",
+        "entry-revisit-review-ack",
+        "entry-revisit-review-comment",
+        "entry-revisit-review-duplicate",
     }
     assert "post-sale-review-duplicate" in SUPPORTED_ACTIONS
     assert "entry-blind-review-ack" in SUPPORTED_ACTIONS
+    assert "entry-revisit-review-ack" in SUPPORTED_ACTIONS
 
 
 def test_commands_from_client_payload_prefers_batch() -> None:

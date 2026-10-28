@@ -669,7 +669,7 @@ def build_entry_blind_review_queue(
             "pit_before_days": PIT_BEFORE_DAYS,
             "just_bought_days": JUST_BOUGHT_DAYS,
             "active_attention_cap": int(active_cap),
-            "entry_revisit_days": 28,  # scaffold note only — not enabled in v0
+            "entry_revisit_days": 28,  # sibling stage: entry_revisit queue
         },
         "coverage": {
             "candidate_buys": len(candidates),
@@ -707,8 +707,8 @@ def build_entry_blind_review_queue(
         "active": capped,
         "unreplied_comments": len(awaiting),
         "history_event_count": len(labels_store.get("events") or []),
-        "stages_enabled": [STAGE_ID],
-        "stages_parked": ["entry_revisit", "exit_blind", "exit_revisit"],
+        "stages_enabled": [STAGE_ID, "entry_revisit"],
+        "stages_parked": ["exit_blind", "exit_revisit"],
     }
 
 

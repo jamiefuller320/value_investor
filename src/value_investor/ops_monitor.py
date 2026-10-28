@@ -2587,6 +2587,55 @@ def check_entry_blind_review_queue(
     ]
 
 
+def check_entry_revisit_review_queue(
+    *,
+    data_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only Package M: entry_revisit at fixed buy+28d after entry_blind.
+
+    Writes ``docs/data/entry_revisit_review_queue.json``. Labels in
+    ``entry_revisit_review_labels.json``. Requires prior entry_blind
+    Accept/Comment and buy_day+28d. Never rewrites blind labels; never knobs
+    (``auto_fixable=False``). See docs/ops/entry-blind-review.md.
+    """
+    from value_investor.entry_revisit_review import (
+        DEFAULT_DATA_DIR,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_findings_from_entry_revisit_queue,
+        refresh_entry_revisit_review_queue,
+    )
+
+    try:
+        payload = refresh_entry_revisit_review_queue(
+            data_dir=Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "Entry-revisit review queue (observe)"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+        for finding in ops_findings_from_entry_revisit_queue(payload)
+    ]
+
+
 def check_cue_consumer_mft(
     *,
     output_dir: Path | None = None,
@@ -4301,6 +4350,7 @@ def collect_ops_findings(
     findings.extend(check_post_sell_cue_digest())
     findings.extend(check_post_sale_review_queue())
     findings.extend(check_entry_blind_review_queue())
+    findings.extend(check_entry_revisit_review_queue())
     findings.extend(check_cue_consumer_mft())
     findings.extend(check_n200_tech_timing_observe())
     findings.extend(check_n201_value_mom_observe())
