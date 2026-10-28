@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-28T23:05:16.886083+00:00",
+  "generated_at": "2026-10-28T23:19:40.610192+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1201,7 +1201,7 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-10-28T16:40:14.882026+00:00",
-    "queue_ui_updated_at": "2026-10-28T23:05:16.377313+00:00",
+    "queue_ui_updated_at": "2026-10-28T23:19:40.033817+00:00",
     "task_count": 224,
     "status": {
       "open_count": 0,
@@ -1351,7 +1351,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-10-28T23:05:16.886083+00:00",
+    "generated_at": "2026-10-28T23:19:40.610192+00:00",
     "overall": "idle",
     "headline": "Queue and hunter idle.",
     "merge_lane": {
@@ -1384,7 +1384,7 @@
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-10-28T23:05:15.237778+00:00"
+      "evaluated_at": "2026-10-28T23:19:38.907163+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1721,7 +1721,7 @@
     "library_stall_parks": [],
     "observe_utilization": {
       "schema_version": 1,
-      "generated_at": "2026-10-28T23:05:16.796023+00:00",
+      "generated_at": "2026-10-28T23:19:40.520038+00:00",
       "observe_only": true,
       "headline": "2 observe utilization warn(s) — cohorts need attention.",
       "surface_freshness": "fresh",
@@ -1731,7 +1731,7 @@
         "improving": 0,
         "worsening": 0,
         "flat": 5,
-        "unknown": 0,
+        "unknown": 1,
         "history_points": 28,
         "note": "Deltas vs prior dashboard cycle (warn/gap counts; lower is better). Raw instrument stores commit with ops-monitor (L460)."
       },
@@ -1830,9 +1830,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 15.3h ago.",
+            "detail": "Last refresh 15.6h ago.",
             "as_of": "2026-10-28T07:46:48.620312+00:00",
-            "age_hours": 15.31,
+            "age_hours": 15.55,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -1872,9 +1872,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 15.3h ago.",
+            "detail": "Last refresh 15.5h ago.",
             "as_of": "2026-10-28T07:47:09.107719+00:00",
-            "age_hours": 15.3,
+            "age_hours": 15.54,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2046,9 +2046,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 15.3h ago.",
+            "detail": "Last refresh 15.5h ago.",
             "as_of": "2026-10-28T07:47:09.321070+00:00",
-            "age_hours": 15.3,
+            "age_hours": 15.54,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2082,9 +2082,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 15.3h ago.",
+            "detail": "Last refresh 15.5h ago.",
             "as_of": "2026-10-28T07:47:09.482233+00:00",
-            "age_hours": 15.3,
+            "age_hours": 15.54,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2118,9 +2118,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 15.3h ago.",
+            "detail": "Last refresh 15.5h ago.",
             "as_of": "2026-10-28T07:47:09.485069+00:00",
-            "age_hours": 15.3,
+            "age_hours": 15.54,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2129,6 +2129,77 @@
             "direction": "flat",
             "label": "Unchanged vs last cycle",
             "prior_value": 0,
+            "prior_at": "2026-10-28T02:36:23.241346+00:00"
+          }
+        },
+        {
+          "id": "cue_consumer_mft",
+          "title": "Cue-consumer MFT (super book)",
+          "finding_title": "Cue-consumer MFT episode walker (lab paper fills)",
+          "observe_only": true,
+          "influences_live": false,
+          "warn_active": false,
+          "severity": "ok",
+          "finding_summary": "Lab arm marker mft-lab-arm-epoch0-v0 at 2026-10-26T15:09:45.669837+00:00; epoch 2026-10-26T02:32:51.639849+00:00; tune_spec=mft-tune-spec-epoch0-v0. Observe shadow pass runs (autopsy alignment feed + judgment schema stub). No fills; evolutionary shadows still gated by Q8B/calendar.",
+          "metrics": {
+            "pipeline_status": "episode_walker_active",
+            "open_lab_episodes": 30,
+            "closed_lab_episodes": 87,
+            "walker_status": "active",
+            "cues_accepted": 117,
+            "path_median_fair_cost_pct": 0.021263,
+            "evolutionary_shadows_eligible": true,
+            "q8b_proposed_n": 78,
+            "q8b_frozen_n": 78,
+            "q8b_owner_freeze_pending": false,
+            "mom_levers": [
+              {
+                "id": "stock_choice",
+                "mom_score": null,
+                "status": "diagnostic_partial"
+              },
+              {
+                "id": "buy_timing",
+                "mom_score": null,
+                "status": "diagnostic_partial"
+              },
+              {
+                "id": "buy_strategy",
+                "mom_score": null,
+                "status": "diagnostic_partial"
+              },
+              {
+                "id": "sell_timing",
+                "mom_score": null,
+                "status": "diagnostic_partial"
+              },
+              {
+                "id": "sell_strategy",
+                "mom_score": null,
+                "status": "diagnostic_partial"
+              }
+            ],
+            "judgment_fill_status": null,
+            "declared_incomparable": true
+          },
+          "primary_metric": "open_lab_episodes",
+          "primary_value": 30,
+          "primary_label": "Open lab episodes (closed=87)",
+          "freshness": {
+            "state": "fresh",
+            "label": "Fresh",
+            "detail": "Last refresh 10.5h ago.",
+            "as_of": "2026-10-28T12:47:47.405334+00:00",
+            "age_hours": 10.53,
+            "store_lag_hours": null,
+            "stale_after_hours": 30.0
+          },
+          "trajectory_note": "Activity delta vs prior cycle — not a warn/gap instrument; rising open/closed is expected while the walker runs.",
+          "trajectory": {
+            "delta": null,
+            "direction": "unknown",
+            "label": "No prior cycle",
+            "prior_value": null,
             "prior_at": "2026-10-28T02:36:23.241346+00:00"
           }
         }
@@ -2891,7 +2962,7 @@
           }
         },
         {
-          "at": "2026-10-28T23:05:16.796023+00:00",
+          "at": "2026-10-28T23:19:40.520038+00:00",
           "buy_tier_flip_lag": {
             "primary_value": 25,
             "warn_active": true,
@@ -2916,13 +2987,18 @@
             "primary_value": 0,
             "warn_active": false,
             "freshness_state": "fresh"
+          },
+          "cue_consumer_mft": {
+            "primary_value": 30,
+            "warn_active": false,
+            "freshness_state": "fresh"
           }
         }
       ]
     },
     "lifecycle_maturity_trajectory": {
       "schema_version": 1,
-      "generated_at": "2026-10-28T23:05:16.806008+00:00",
+      "generated_at": "2026-10-28T23:19:40.530643+00:00",
       "observe_only": true,
       "instrument_id": "lifecycle_maturity_trajectory",
       "separation": {
@@ -3034,10 +3110,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3137,10 +3213,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3240,10 +3316,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3343,10 +3419,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3446,10 +3522,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3549,10 +3625,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3652,10 +3728,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3755,10 +3831,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3858,10 +3934,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3961,10 +4037,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4064,10 +4140,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4167,10 +4243,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4270,10 +4346,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4373,10 +4449,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4476,10 +4552,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4579,10 +4655,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4682,10 +4758,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4785,10 +4861,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4888,10 +4964,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4991,10 +5067,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -5094,10 +5170,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -5197,10 +5273,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -5300,10 +5376,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 11.4h ago.",
+            "detail": "Board last refresh 11.6h ago.",
             "as_of": "2026-10-28T11:42:15.308429+00:00",
-            "store_as_of": "2026-10-28T23:05:16.806008+00:00",
-            "age_hours": 11.38,
+            "store_as_of": "2026-10-28T23:19:40.530643+00:00",
+            "age_hours": 11.62,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -10993,7 +11069,7 @@
           }
         },
         {
-          "at": "2026-10-28T23:05:16.806008+00:00",
+          "at": "2026-10-28T23:19:40.530643+00:00",
           "ftse350": {
             "primary_value": 39.68,
             "early_share": 0.3968,
@@ -11206,7 +11282,7 @@
     },
     "n200_pipeline_health": {
       "schema_version": 2,
-      "generated_at": "2026-10-28T23:05:16.826468+00:00",
+      "generated_at": "2026-10-28T23:19:40.550493+00:00",
       "observe_only": true,
       "influences_live": false,
       "not_alpha_signal": true,
@@ -11248,9 +11324,9 @@
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
-        "detail": "Last refresh 15.3h ago.",
+        "detail": "Last refresh 15.5h ago.",
         "as_of": "2026-10-28T07:47:34.484215+00:00",
-        "age_hours": 15.3,
+        "age_hours": 15.54,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -11259,13 +11335,13 @@
         "ops_check_ok": true,
         "ops_finding_present": true,
         "ops_run_at": "2026-10-28T07:46:47.134172+00:00",
-        "detail": "Observe refresh path looks alive. Ops finding: N200 tech-timing observe refreshed Last refresh 15.3h ago. Entry lever win; exit lever lose (fair costs; independent of path P&L)."
+        "detail": "Observe refresh path looks alive. Ops finding: N200 tech-timing observe refreshed Last refresh 15.5h ago. Entry lever win; exit lever lose (fair costs; independent of path P&L)."
       },
       "ops_doc": "docs/ops/n200-tech-timing-observe.md"
     },
     "n201_pipeline_health": {
       "schema_version": 1,
-      "generated_at": "2026-10-28T23:05:16.827295+00:00",
+      "generated_at": "2026-10-28T23:19:40.551329+00:00",
       "observe_only": true,
       "influences_live": false,
       "not_alpha_signal": true,
@@ -11298,9 +11374,9 @@
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
-        "detail": "Last refresh 15.3h ago.",
+        "detail": "Last refresh 15.5h ago.",
         "as_of": "2026-10-28T07:48:29.785398+00:00",
-        "age_hours": 15.28,
+        "age_hours": 15.52,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -11309,13 +11385,13 @@
         "ops_check_ok": true,
         "ops_finding_present": true,
         "ops_run_at": "2026-10-28T07:46:47.134172+00:00",
-        "detail": "Ops finding: N201 value-mom observe refreshed Last refresh 15.3h ago."
+        "detail": "Ops finding: N201 value-mom observe refreshed Last refresh 15.5h ago."
       },
       "ops_doc": "docs/ops/n201-value-mom-observe.md"
     },
     "n210_pipeline_health": {
       "schema_version": 1,
-      "generated_at": "2026-10-28T23:05:16.828284+00:00",
+      "generated_at": "2026-10-28T23:19:40.552229+00:00",
       "observe_only": true,
       "influences_live": false,
       "not_alpha_signal": true,
@@ -11365,9 +11441,9 @@
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
-        "detail": "Last refresh 15.3h ago.",
+        "detail": "Last refresh 15.5h ago.",
         "as_of": "2026-10-28T07:48:29.954181+00:00",
-        "age_hours": 15.28,
+        "age_hours": 15.52,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -11376,13 +11452,13 @@
         "ops_check_ok": true,
         "ops_finding_present": true,
         "ops_run_at": "2026-10-28T07:46:47.134172+00:00",
-        "detail": "Ops finding: N210 AI-judgment observe refreshed Last refresh 15.3h ago."
+        "detail": "Ops finding: N210 AI-judgment observe refreshed Last refresh 15.5h ago."
       },
       "ops_doc": "docs/ops/n210-ai-judgment-observe.md"
     },
     "n206_pipeline_health": {
       "schema_version": 1,
-      "generated_at": "2026-10-28T23:05:16.828639+00:00",
+      "generated_at": "2026-10-28T23:19:40.552565+00:00",
       "observe_only": true,
       "influences_live": false,
       "not_alpha_signal": true,
@@ -11419,9 +11495,9 @@
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
-        "detail": "Last refresh 15.3h ago.",
+        "detail": "Last refresh 15.5h ago.",
         "as_of": "2026-10-28T07:48:37.617702+00:00",
-        "age_hours": 15.28,
+        "age_hours": 15.52,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -11430,13 +11506,13 @@
         "ops_check_ok": true,
         "ops_finding_present": true,
         "ops_run_at": "2026-10-28T07:46:47.134172+00:00",
-        "detail": "Ops finding: N206 plain-EY observe refreshed Last refresh 15.3h ago."
+        "detail": "Ops finding: N206 plain-EY observe refreshed Last refresh 15.5h ago."
       },
       "ops_doc": "docs/ops/n206-plain-ey-observe.md"
     },
     "ingest_occupancy": {
       "schema_version": 1,
-      "generated_at": "2026-10-28T23:05:16.910096+00:00",
+      "generated_at": "2026-10-28T23:19:40.633668+00:00",
       "focus_market": "euro_depth",
       "dispatch_mode": "sprint",
       "should_run_sprint_ingest": true,
