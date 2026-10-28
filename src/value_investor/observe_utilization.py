@@ -27,6 +27,7 @@ DEFAULT_DECISION_INPUT_PATH = Path("docs/data/decision_input_inventory.json")
 DEFAULT_SHARD_NAV_FX_PATH = Path("docs/data/shard_nav_fx_warp.json")
 DEFAULT_ARCHIVE_MISS_PATH = Path("docs/data/universe_filing_archive_miss_rate.json")
 DEFAULT_COMBINED_TAGGED_PATH = Path("docs/data/combined_tagged_learning.json")
+DEFAULT_CUE_CONSUMER_MFT_PATH = Path("docs/data/cue_consumer_mft_observe.json")
 
 SCHEMA_VERSION = 1
 # Ops-monitor runs ~2×/day; past this the surface is obviously stale.
@@ -42,6 +43,8 @@ DECISION_INPUT_FINDING_TITLE = "FTSE decision-input utilization gap"
 SHARD_NAV_FX_FINDING_TITLE = "Shard NAV FX unit mismatch"
 ARCHIVE_MISS_FINDING_TITLE = "Universe archive body-miss rate elevated"
 COMBINED_TAGGED_FINDING_TITLE = "Combined tagged learning store stale"
+CUE_CONSUMER_MFT_FINDING_TITLE = "Cue-consumer MFT episode walker (lab paper fills)"
+CUE_CONSUMER_MFT_ARMED_TITLE = "Cue-consumer MFT lab armed (observe)"
 
 _WARN_COUNT_RE = re.compile(r"^(\d+)\s+recent buy-tier flip", re.I)
 _GAP_COUNT_RE = re.compile(r"(\d+)\s+of\s+\d+\s+names", re.I)
@@ -470,6 +473,111 @@ def _combined_tagged_instrument(
     }
 
 
+def _cue_consumer_mft_instrument(
+    *,
+    store: dict[str, Any] | None,
+    finding: dict[str, Any] | None,
+    armed_finding: dict[str, Any] | None,
+    now: datetime,
+    ops_run_at: datetime | None,
+    stale_after_hours: float,
+    store_lag_warn_hours: float,
+) -> dict[str, Any]:
+    """L640 — lab open/closed + MoM lever visibility without hunting JSON."""
+    as_of = _parse_dt((store or {}).get("generated_at") or (store or {}).get("lab_armed_at"))
+    freshness = _freshness_block(
+        as_of=as_of,
+        now=now,
+        ops_run_at=ops_run_at,
+        stale_after_hours=stale_after_hours,
+        store_lag_warn_hours=store_lag_warn_hours,
+        present=store is not None,
+    )
+    open_n = (store or {}).get("open_lab_episodes")
+    closed_n = (store or {}).get("closed_lab_episodes")
+    try:
+        open_i = int(open_n) if open_n is not None else None
+    except (TypeError, ValueError):
+        open_i = None
+    try:
+        closed_i = int(closed_n) if closed_n is not None else None
+    except (TypeError, ValueError):
+        closed_i = None
+
+    levers_raw = (store or {}).get("mom_levers") or []
+    lever_rows: list[dict[str, Any]] = []
+    if isinstance(levers_raw, list):
+        for row in levers_raw:
+            if not isinstance(row, dict):
+                continue
+            lever_rows.append(
+                {
+                    "id": row.get("id"),
+                    "mom_score": row.get("mom_score"),
+                    "status": row.get("status"),
+                }
+            )
+
+    path_board = (store or {}).get("path_scoreboard") or {}
+    if not isinstance(path_board, dict):
+        path_board = {}
+    walker = (store or {}).get("episode_walker") or {}
+    if not isinstance(walker, dict):
+        walker = {}
+    gate = (store or {}).get("start_gate_cohort") or {}
+    if not isinstance(gate, dict):
+        gate = {}
+
+    pipeline = str((store or {}).get("pipeline_status") or "")
+    warn_active = finding is not None and str((finding or {}).get("severity") or "") in {
+        "warn",
+        "fail",
+        "error",
+    }
+    # Prefer walker finding summary; fall back to armed.
+    finding_summary = (finding or {}).get("summary") or (armed_finding or {}).get("summary")
+
+    return {
+        "id": "cue_consumer_mft",
+        "title": "Cue-consumer MFT (super book)",
+        "finding_title": CUE_CONSUMER_MFT_FINDING_TITLE,
+        "observe_only": True,
+        "influences_live": False,
+        "warn_active": bool(warn_active),
+        "severity": (finding or {}).get("severity")
+        if finding
+        else ("ok" if store is not None else "warn"),
+        "finding_summary": finding_summary,
+        "metrics": {
+            "pipeline_status": pipeline or None,
+            "open_lab_episodes": open_i,
+            "closed_lab_episodes": closed_i,
+            "walker_status": walker.get("status"),
+            "cues_accepted": walker.get("cues_accepted"),
+            "path_median_fair_cost_pct": path_board.get("smooth_ret_cohort_median"),
+            "evolutionary_shadows_eligible": (store or {}).get("evolutionary_shadows_eligible"),
+            "q8b_proposed_n": gate.get("proposed_n"),
+            "q8b_frozen_n": gate.get("frozen_n"),
+            "q8b_owner_freeze_pending": gate.get("owner_freeze_pending"),
+            "mom_levers": lever_rows,
+            "judgment_fill_status": ((store or {}).get("judgment_in_the_round") or {}).get(
+                "fill_status"
+            ),
+            "declared_incomparable": (store or {}).get("declared_incomparable"),
+        },
+        "primary_metric": "open_lab_episodes",
+        "primary_value": open_i,
+        "primary_label": (
+            f"Open lab episodes (closed={closed_i if closed_i is not None else '—'})"
+        ),
+        "freshness": freshness,
+        "trajectory_note": (
+            "Activity delta vs prior cycle — not a warn/gap instrument; "
+            "rising open/closed is expected while the walker runs."
+        ),
+    }
+
+
 def _history_point(instruments: list[dict[str, Any]], *, now: datetime) -> dict[str, Any]:
     point: dict[str, Any] = {"at": now.isoformat()}
     for inst in instruments:
@@ -526,6 +634,7 @@ def build_observe_utilization_snapshot(
     shard_nav_fx_path: Path = DEFAULT_SHARD_NAV_FX_PATH,
     archive_miss_path: Path = DEFAULT_ARCHIVE_MISS_PATH,
     combined_tagged_path: Path = DEFAULT_COMBINED_TAGGED_PATH,
+    cue_consumer_mft_path: Path = DEFAULT_CUE_CONSUMER_MFT_PATH,
     ops_status_path: Path = DEFAULT_OPS_STATUS_PATH,
     prior_path: Path = DEFAULT_STORE_PATH,
     now: datetime | None = None,
@@ -542,6 +651,7 @@ def build_observe_utilization_snapshot(
     shard_fx_store = _safe_read(Path(shard_nav_fx_path))
     archive_miss_store = _safe_read(Path(archive_miss_path))
     combined_store = _safe_read(Path(combined_tagged_path))
+    mft_store = _safe_read(Path(cue_consumer_mft_path))
     prior = _safe_read(Path(prior_path))
 
     instruments = [
@@ -580,6 +690,15 @@ def build_observe_utilization_snapshot(
         _combined_tagged_instrument(
             store=combined_store,
             finding=findings.get(COMBINED_TAGGED_FINDING_TITLE),
+            now=clock,
+            ops_run_at=ops_run_at,
+            stale_after_hours=stale_after_hours,
+            store_lag_warn_hours=store_lag_warn_hours,
+        ),
+        _cue_consumer_mft_instrument(
+            store=mft_store,
+            finding=findings.get(CUE_CONSUMER_MFT_FINDING_TITLE),
+            armed_finding=findings.get(CUE_CONSUMER_MFT_ARMED_TITLE),
             now=clock,
             ops_run_at=ops_run_at,
             stale_after_hours=stale_after_hours,
@@ -668,6 +787,7 @@ def refresh_observe_utilization(
     shard_nav_fx_path: Path = DEFAULT_SHARD_NAV_FX_PATH,
     archive_miss_path: Path = DEFAULT_ARCHIVE_MISS_PATH,
     combined_tagged_path: Path = DEFAULT_COMBINED_TAGGED_PATH,
+    cue_consumer_mft_path: Path = DEFAULT_CUE_CONSUMER_MFT_PATH,
     ops_status_path: Path = DEFAULT_OPS_STATUS_PATH,
     now: datetime | None = None,
 ) -> dict[str, Any]:
@@ -679,6 +799,7 @@ def refresh_observe_utilization(
         shard_nav_fx_path=shard_nav_fx_path,
         archive_miss_path=archive_miss_path,
         combined_tagged_path=combined_tagged_path,
+        cue_consumer_mft_path=cue_consumer_mft_path,
         ops_status_path=ops_status_path,
         prior_path=store_path,
         now=now,
@@ -691,9 +812,12 @@ def refresh_observe_utilization(
 __all__ = [
     "ARCHIVE_MISS_FINDING_TITLE",
     "COMBINED_TAGGED_FINDING_TITLE",
+    "CUE_CONSUMER_MFT_ARMED_TITLE",
+    "CUE_CONSUMER_MFT_FINDING_TITLE",
     "DECISION_INPUT_FINDING_TITLE",
     "DEFAULT_ARCHIVE_MISS_PATH",
     "DEFAULT_COMBINED_TAGGED_PATH",
+    "DEFAULT_CUE_CONSUMER_MFT_PATH",
     "DEFAULT_DECISION_INPUT_PATH",
     "DEFAULT_FLIP_LAG_PATH",
     "DEFAULT_OPS_STATUS_PATH",

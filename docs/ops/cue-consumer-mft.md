@@ -72,7 +72,7 @@ snapshots and records **lab** fixed-stake paper positions:
 
 **Not in v0:** sealed-child spawn (N223), full novelty distance (N226), cull
 factory (N227), remote LLM voice on the same checklist (optional later),
-dashboard strip (L640), weekday paper-auto track wiring.
+weekday paper-auto track wiring.
 
 Open-position cap (default **30**) limits lab spray; sealed anti-noise caps
 still apply only when spawn is built.
@@ -140,8 +140,8 @@ as of 2026-10-28; keep as reference if a future cohort is proposed).
 | Spawn sealed child | scaffold proposal only | **N223** / **L630** |
 | Rule-aware decide + misfit trail | **shipped** deterministic N228 fill on trail | optional remote LLM voice later (still observe-only) |
 | Chart draw tools | not shipped | **N229** |
-| Episode walker / lab paper fills | **shipped** (`mft-episode-walker-v0`) when eligible | dashboard strip **L640**; paper-auto track wiring later |
-| Dashboard strip | not shipped | **L640** |
+| Episode walker / lab paper fills | **shipped** (`mft-episode-walker-v0`) when eligible | paper-auto track wiring later |
+| Dashboard strip | **shipped** (observe-utilization `cue_consumer_mft` card — open/closed + MoM) | — |
 
 ## Automation
 
