@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-28T07:53:22.033871+00:00",
+  "updated_at": "2026-10-28T07:54:36.774265+00:00",
   "influences_live": false,
   "observe_only": true,
   "package": "M",
@@ -8311,6 +8311,140 @@
       "reply_kind": "llm",
       "llm_attempted": true,
       "llm_ok": true
+    },
+    {
+      "event_id": "2ed06e8b-6788-4c51-ab83-bc564fa19e27",
+      "review_id": "0794e48f5691d3b040b8",
+      "parent_event_id": null,
+      "kind": "accept",
+      "tag_at_action": "new",
+      "text": "",
+      "acted_at": "2026-10-28T07:54:36.762813+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "snapshot": {
+        "book_id": "n206",
+        "book_tag": "N206",
+        "model_id": "n206",
+        "ticker": "BF-B",
+        "entry_at": "2026-07-18T12:36:13+00:00",
+        "exit_at": "2026-10-16T06:52:34+00:00",
+        "hold_days": 90,
+        "exit_kind": "just_sold",
+        "return_pct": 9.85,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N206] BF-B · 2026-10-16 · hold 90d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 9.85%\nContext read-only — not a new veto. influences_live=false",
+        "opened_at": "2026-07-18T12:36:13+00:00",
+        "sold_at": "2026-10-16T06:52:34+00:00",
+        "registration_id": "strand-d-plain-ey-identity-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.0589936358255607,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": null,
+            "require_momentum": false
+          }
+        },
+        "sell_decision": {
+          "code": "identity_break_ey_band",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left EY top band (identity break)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "identity_break_ey_band"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "sell_reason": "Left EY top band (identity break)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "identity_break_ey_band",
+        "entry_detail": {
+          "earnings_yield": 0.0589936358255607,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "require_momentum": false
+        },
+        "episode_key": "n206|BF-B|2026-07-18|2026-10-16"
+      }
+    },
+    {
+      "event_id": "8adbf096-9238-47f4-aa75-5fa696897aa3",
+      "review_id": "9c89d3ce5e7f6abdc4c6",
+      "parent_event_id": null,
+      "kind": "accept",
+      "tag_at_action": "new",
+      "text": "",
+      "acted_at": "2026-10-28T07:54:36.774208+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "snapshot": {
+        "book_id": "n201",
+        "book_tag": "N201",
+        "model_id": "n201",
+        "ticker": "ERIC-B.ST",
+        "entry_at": "2026-08-14T15:46:25+00:00",
+        "exit_at": "2026-10-15T06:52:45+00:00",
+        "hold_days": 62,
+        "exit_kind": "just_sold",
+        "return_pct": 8.39,
+        "basis_label": "fair_cost_episode",
+        "framing": "[N201] ERIC-B.ST · 2026-10-15 · hold 62d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 8.39%\nContext read-only — not a new veto. influences_live=false",
+        "opened_at": "2026-08-14T15:46:25+00:00",
+        "sold_at": "2026-10-15T06:52:45+00:00",
+        "registration_id": "strand-c-short-horizon-value-mom-v0",
+        "population": "sealed_lifecycle",
+        "buy_decision": {
+          "code": "filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "earnings_yield": 0.0755992640260448,
+            "financial_health_pass": true,
+            "in_ey_top30_local": true,
+            "momentum_12_1": 0.388313056044563,
+            "require_momentum": true
+          }
+        },
+        "sell_decision": {
+          "code": "identity_break_ey_band",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Left EY top band (identity break)",
+          "side": "sell",
+          "source": "episode.exit_reason",
+          "structured": {
+            "raw": "identity_break_ey_band"
+          }
+        },
+        "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+        "sell_reason": "Left EY top band (identity break)",
+        "decision_reasons_join_ok": true,
+        "exit_reason": "identity_break_ey_band",
+        "entry_detail": {
+          "earnings_yield": 0.0755992640260448,
+          "financial_health_pass": true,
+          "in_ey_top30_local": true,
+          "momentum_12_1": 0.388313056044563,
+          "require_momentum": true
+        },
+        "episode_key": "n201|ERIC-B.ST|2026-08-14|2026-10-15"
+      }
     }
   ],
   "actioned_review_ids": [
@@ -8381,7 +8515,9 @@
     "74a698a8bef4ae4de961",
     "3b1792dc7002a471b4ff",
     "2de75781c561b78a70f5",
-    "bc115d77ff084a1e5f1f"
+    "bc115d77ff084a1e5f1f",
+    "0794e48f5691d3b040b8",
+    "9c89d3ce5e7f6abdc4c6"
   ],
   "active_replies": []
 }
