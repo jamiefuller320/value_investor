@@ -1,12 +1,12 @@
 {
-  "run_at": "2026-10-27T07:46:58.798802+00:00",
+  "run_at": "2026-10-28T02:31:53.685749+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "26 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, euro_stoxx50, ftse350, ftse_mib (+3 more): ftse_mib/LTMC.MI (no_key_bodies, 367.78h since flip), hang_seng/0001.HK (no_memo, 367.78h since flip), aex/MT.AS (no_memo, 319.78h since flip), aex/PRX.AS (no_memo, 319.78h since flip), euro_depth/PRX.AS (no_memo, 319.78h since flip), tsx60/ABX.TO (no_key_bodies, 319.78h since flip), tsx60/SAP.TO (no_key_bodies, 319.78h since flip), tsx60/TECK-B.TO (no_key_bodies, 319.78h since flip), euro_depth/WIE.VI (no_key_bodies, 295.78h since flip), nasdaq100/AMAT (no_memo, 295.78h since flip) (+16 more). Blocking: no_key_bodies=8, no_memo=18.",
+      "summary": "25 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, euro_stoxx50, ftse350, hang_seng (+2 more): hang_seng/0001.HK (no_memo, 386.53h since flip), aex/MT.AS (no_memo, 338.53h since flip), aex/PRX.AS (no_memo, 338.53h since flip), euro_depth/PRX.AS (no_memo, 338.53h since flip), tsx60/ABX.TO (no_key_bodies, 338.53h since flip), tsx60/SAP.TO (no_key_bodies, 338.53h since flip), tsx60/TECK-B.TO (no_key_bodies, 338.53h since flip), euro_depth/WIE.VI (no_key_bodies, 314.53h since flip), nasdaq100/AMAT (no_memo, 314.53h since flip), asx200/CLW.AX (no_memo, 290.53h since flip) (+15 more). Blocking: no_key_bodies=7, no_memo=18.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -24,7 +24,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Price-only excess misstates track performance",
-      "summary": "Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_fair: published -18.9% vs total-return -9.1% (clean epoch, dividends £0.00); buy_tier_matched30_fair: published +0.4% vs total-return -1.7% (lifetime, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.",
+      "summary": "Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_fair: published -19.5% vs total-return -10.7% (clean epoch, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -33,7 +33,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Longer holds beat live exit buffer in replay",
-      "summary": "Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: ai_judgment_fair: exit_confirm_screens 10 vs live 2 +6.8% over 34 passes (18 vs 35 trades; realised median hold 6.0d); buy_tier_level: exit_confirm_screens 20 vs live 2 +1.9% over 34 passes (84 vs 131 trades; realised median hold 16.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.",
+      "summary": "Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: ai_judgment_fair: exit_confirm_screens 10 vs live 2 +7.1% over 35 passes (18 vs 37 trades; realised median hold 5.0d); buy_tier_level: exit_confirm_screens 20 vs live 2 +1.9% over 35 passes (84 vs 131 trades; realised median hold 16.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -51,16 +51,7 @@
       "severity": "info",
       "category": "research",
       "title": "Post-sale review queue (observe)",
-      "summary": "Active post-sale reviews: 215 (new=208, reply=7); actioned history=29; candidates sealed+control=442. Accept/Comment observe-only (influences_live=false).",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "research",
-      "title": "Post-sale review reply tags awaiting owner",
-      "summary": "7 reply-tagged item(s) await owner Accept/Comment on the factory response (alignment only).",
+      "summary": "Active uncommented post-sale reviews: 182; actioned history=58; candidates sealed+control=442. Accept/Comment/Duplicate observe-only (influences_live=false).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -114,7 +105,7 @@
       "severity": "info",
       "category": "research",
       "title": "N201 value-mom observe refreshed",
-      "summary": "strand-c-short-horizon-value-mom-v0: 129 completed episodes over 14 weeks; entries/week=9.214; smooth_ret_cohort_median=0.020216 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.005007; stress_3pct_report_only=-0.039041; skipped_missing_entry_fields=78362. Observe-only — launch-queue waiter; no live writes (F8).",
+      "summary": "strand-c-short-horizon-value-mom-v0: 129 completed episodes over 14 weeks; entries/week=9.214; smooth_ret_cohort_median=0.020216 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.005007; stress_3pct_report_only=-0.039041; skipped_missing_entry_fields=78478. Observe-only — launch-queue waiter; no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -177,7 +168,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Two-lot retention beats full exit in replay",
-      "summary": "buy_tier_level: core_kept beats full exit by +1.8% over 34 passes (2026-09-07 to 2026-10-26; core value £860.96, rank exits 22 vs full exit). Observe-only. Do not edit buy_tier_level. See docs/ops/two-lot-replay.md.",
+      "summary": "buy_tier_level: core_kept beats full exit by +2.0% over 35 passes (2026-09-07 to 2026-10-27; core value £863.7, rank exits 22 vs full exit). Observe-only. Do not edit buy_tier_level. See docs/ops/two-lot-replay.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -204,7 +195,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Primary book trails its control on total return",
-      "summary": "ai_judgment_fair total return -9.5% vs buy_tier_level +0.7% since 2026-09-07 (-10.2%). The primary's filter is costing return against the unfiltered buy tier. Observe-only: do not change the primary from this alone. See docs/ops/assessment-scoreboard.md.",
+      "summary": "ai_judgment_fair total return -10.4% vs buy_tier_level +0.7% since 2026-09-07 (-11.1%). The primary's filter is costing return against the unfiltered buy tier. Observe-only: do not change the primary from this alone. See docs/ops/assessment-scoreboard.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -222,7 +213,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Paper book would halt on drawdown or concentration",
-      "summary": "Observe-only. Books were not frozen or flattened. rules: drawdown 42% ≥ 20% | ai_judgment: drawdown 39% ≥ 20% | ai_judgment_calibrated: drawdown 27% ≥ 20% | ai_judgment_calibrated_r2: drawdown 24% ≥ 20% | ai_judgment_calibrated_r3: drawdown 24% ≥ 20% | ai_judgment_exclusion_u4: drawdown 25% ≥ 20%. See docs/ops/paper-halt.md.",
+      "summary": "Observe-only. Books were not frozen or flattened. rules: drawdown 42% ≥ 20% | ai_judgment: drawdown 39% ≥ 20% | ai_judgment_calibrated: drawdown 27% ≥ 20% | ai_judgment_calibrated_r2: drawdown 24% ≥ 20% | ai_judgment_calibrated_r3: drawdown 24% ≥ 20% | ai_judgment_exclusion_u4: drawdown 25% ≥ 20% | ai_judgment_fair: drawdown 20% ≥ 20%. See docs/ops/paper-halt.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -246,25 +237,18 @@
       "action_taken": null
     }
   ],
-  "auto_fixes": [
-    {
-      "action": "market_eng_gap_burndown",
-      "detail": "gap_closure_compile for smi → eng-20261027-02"
-    }
-  ],
-  "drafted_task_ids": [
-    "eng-20261027-02"
-  ],
+  "auto_fixes": [],
+  "drafted_task_ids": [],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": false,
+      "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-10-27T07:21:36+00:00",
-      "last_success_run_id": 40466645215,
-      "age_hours": 0.5,
+      "last_success_at": "2026-10-28T02:23:13+00:00",
+      "last_success_run_id": 40620615132,
+      "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -273,11 +257,11 @@
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "past_email_ready": true,
+      "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-26T17:29:38+00:00",
-      "last_success_run_id": 40369125754,
-      "age_hours": 14.3,
+      "last_success_at": "2026-10-27T16:45:16+00:00",
+      "last_success_run_id": 40544003085,
+      "age_hours": 9.8,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -288,9 +272,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 26,
-      "last_success_at": "2026-10-27T07:15:33+00:00",
-      "last_success_run_id": 40466039555,
-      "age_hours": 0.6,
+      "last_success_at": "2026-10-28T02:15:33+00:00",
+      "last_success_run_id": 40619864176,
+      "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -301,11 +285,11 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-10-27T07:40:39+00:00",
-      "last_success_run_id": 40468550770,
-      "age_hours": 0.2,
+      "last_success_at": "2026-10-28T02:31:03+00:00",
+      "last_success_run_id": 40621399173,
+      "age_hours": 0.0,
       "stale": false,
-      "recent_failures_24h": 0,
+      "recent_failures_24h": 2,
       "unresolved_failures_12h": 0
     },
     {
@@ -314,9 +298,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-26T14:26:41+00:00",
-      "last_success_run_id": 40339701843,
-      "age_hours": 17.4,
+      "last_success_at": "2026-10-27T13:26:29+00:00",
+      "last_success_run_id": 40512048828,
+      "age_hours": 13.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -329,7 +313,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-25T13:15:18+00:00",
       "last_success_run_id": 40196767619,
-      "age_hours": 42.6,
+      "age_hours": 61.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -342,7 +326,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-25T06:21:44+00:00",
       "last_success_run_id": 40168813911,
-      "age_hours": 49.5,
+      "age_hours": 68.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -355,7 +339,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-25T07:30:46+00:00",
       "last_success_run_id": 40173044626,
-      "age_hours": 48.3,
+      "age_hours": 67.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -368,7 +352,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-25T07:30:47+00:00",
       "last_success_run_id": 40173045676,
-      "age_hours": 48.3,
+      "age_hours": 67.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -381,7 +365,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-25T16:36:57+00:00",
       "last_success_run_id": 40212525776,
-      "age_hours": 39.2,
+      "age_hours": 57.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -392,9 +376,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-26T11:27:08+00:00",
-      "last_success_run_id": 40315163278,
-      "age_hours": 20.4,
+      "last_success_at": "2026-10-27T10:50:28+00:00",
+      "last_success_run_id": 40491579965,
+      "age_hours": 15.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -405,9 +389,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-27T02:30:43+00:00",
-      "last_success_run_id": 40438848710,
-      "age_hours": 5.3,
+      "last_success_at": "2026-10-27T18:40:10+00:00",
+      "last_success_run_id": 40562108771,
+      "age_hours": 7.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -417,7 +401,7 @@
     "open_count": 0,
     "pr_open_count": 0,
     "parked_count": 1,
-    "merged_count": 175,
+    "merged_count": 176,
     "failed_count": 0,
     "next_task_id": null,
     "in_flight_branch": null,
@@ -426,7 +410,7 @@
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": true,
+  "should_dispatch_engineering": false,
   "email_deferred": false,
   "email_defer_reasons": []
 }
