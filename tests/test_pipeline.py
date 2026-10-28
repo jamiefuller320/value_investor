@@ -5197,6 +5197,39 @@ def test_enrich_universe_preserves_jsg_style_divergent_screen_ttm(tmp_path: Path
     assert row["fcf_divergence_flagged"] is True
 
 
+def test_dividend_yield_family_suppressed_from_fcf_basis_registry_only():
+    """Registry-only export rows must fail-closed without top-level filing_aligned on ``fcf``."""
+    from value_investor.scoring.dividend_yield_overlay import (
+        dividend_yield_family_fcf_basis_suppressed,
+        enforce_dividend_yield_family_in_snapshot,
+    )
+
+    snapshot = {
+        "ticker": "JSG.L",
+        "passed_families": "cheapness,quality,dividend,garp,risk",
+        "families_passed": 5,
+        "fcf_definition_divergence": True,
+        "fcf": {
+            "fcf_basis_registry": {
+                "filing_aligned": 100_600_000.0,
+                "screen_ttm": 27_400_000.0,
+                "selected_fcf": 100_600_000.0,
+                "selected_basis": "filing_aligned",
+                "currency": "GBP",
+            },
+            "currency": "GBP",
+        },
+    }
+    assert dividend_yield_family_fcf_basis_suppressed(ticker="JSG.L", row=snapshot)
+    enforced = enforce_dividend_yield_family_in_snapshot(snapshot)
+    assert enforced["fcf"]["fcf_basis_registry"]["filing_aligned"] == pytest.approx(
+        100_600_000.0,
+    )
+    assert enforced["fcf"]["fcf_basis_registry"]["screen_ttm"] == pytest.approx(27_400_000.0)
+    assert "dividend" not in str(enforced.get("passed_families") or "")
+    assert enforced.get("families_passed") == 4
+
+
 def test_write_screening_snapshot_jsg_style_strips_dividend_family_credit(tmp_path: Path):
     """Export must not keep dividend family when filing FCF and screen TTM disagree."""
     _jsg_style_research_sources(tmp_path)

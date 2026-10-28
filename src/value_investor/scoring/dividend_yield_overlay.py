@@ -9,7 +9,9 @@ import pandas as pd
 
 from value_investor.scoring.fcf import (
     _float_or_none,
+    build_fcf_basis_registry,
     fcf_yield_pass_suppressed,
+    finalize_fcf_basis_bundle,
     high_dividend_yield_pass_suppressed,
     reconcile_fcf_for_ticker,
     screen_ttm_from_row,
@@ -36,6 +38,36 @@ def _row_as_series(row: pd.Series | dict[str, Any] | None) -> pd.Series:
     return pd.Series(row)
 
 
+def _hydrate_fcf_bundle_from_basis_registry(bundle: dict[str, Any]) -> dict[str, Any]:
+    """Merge canonical ``fcf_basis_registry`` fields into overlay suppression inputs."""
+    out = dict(bundle)
+    registry = out.get("fcf_basis_registry")
+    if not isinstance(registry, dict):
+        registry = build_fcf_basis_registry(out)
+        if registry.get("selected_fcf") is not None or registry.get("filing_aligned") is not None:
+            out["fcf_basis_registry"] = registry
+    else:
+        registry = dict(registry)
+
+    for key in ("filing_aligned", "screen_ttm", "company_adjusted"):
+        if out.get(key) is None and registry.get(key) is not None:
+            out[key] = registry[key]
+    selected = _float_or_none(registry.get("selected_fcf"))
+    if selected is not None:
+        out["canonical"] = selected
+    elif out.get("canonical") is None and out.get("filing_aligned") is not None:
+        out["canonical"] = out["filing_aligned"]
+    primary = _float_or_none(registry.get("primary_fcf"))
+    if primary is not None and out.get("primary_fcf") is None:
+        out["primary_fcf"] = primary
+    basis = registry.get("primary_fcf_basis") or registry.get("selected_basis")
+    if basis and not out.get("primary_fcf_basis"):
+        out["primary_fcf_basis"] = basis
+    if registry.get("currency") and not out.get("currency"):
+        out["currency"] = registry["currency"]
+    return out
+
+
 def _fcf_bundle_from_row(
     row: pd.Series,
     *,
@@ -44,19 +76,20 @@ def _fcf_bundle_from_row(
 ) -> dict[str, Any]:
     nested = row.get("fcf")
     if isinstance(nested, dict) and nested:
-        return dict(nested)
+        return _hydrate_fcf_bundle_from_basis_registry(dict(nested))
     screen_ttm = screen_ttm_from_row(row)
     if ticker and output_dir is not None:
-        return reconcile_fcf_for_ticker(
+        bundle = reconcile_fcf_for_ticker(
             ticker,
             screen_ttm=screen_ttm,
             output_dir=output_dir,
         )
+        return _hydrate_fcf_bundle_from_basis_registry(bundle)
     filing_aligned = _float_or_none(row.get("free_cashflow"))
     key_metrics = row.get("key_metrics")
     if filing_aligned is None and isinstance(key_metrics, dict):
         filing_aligned = _float_or_none(key_metrics.get("FCF"))
-    return {
+    bundle = {
         "filing_aligned": filing_aligned,
         "screen_ttm": screen_ttm,
         "canonical": filing_aligned,
@@ -70,6 +103,7 @@ def _fcf_bundle_from_row(
             row.get("ttm_suppressed_screen_filing_mismatch")
         ),
     }
+    return _hydrate_fcf_bundle_from_basis_registry(bundle)
 
 
 def dividend_yield_family_fcf_basis_suppressed(
@@ -162,6 +196,14 @@ def enforce_dividend_yield_family_in_snapshot(
 ) -> dict[str, Any]:
     """Drop dividend-family credit when FCF yield basis is unresolved on export rows."""
     updated = dict(snapshot)
+    fcf_raw = updated.get("fcf")
+    if isinstance(fcf_raw, dict):
+        from value_investor.scoring.fcf import surface_primary_fcf_on_overlay_record
+
+        hydrated = finalize_fcf_basis_bundle(
+            _hydrate_fcf_bundle_from_basis_registry(dict(fcf_raw)),
+        )
+        updated = surface_primary_fcf_on_overlay_record(updated, fcf_bundle=hydrated)
     if not dividend_yield_family_fcf_basis_suppressed(
         ticker=str(updated.get("ticker") or ""),
         row=updated,
