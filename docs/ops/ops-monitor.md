@@ -39,9 +39,10 @@ lane change and readiness gate (see N152 / P1 pin rules).
 
 **Shipped above the bar:**
 
-- **L461** — instrument-specific **Observe utilization** dashboard on Queue &
+- **L461 / L640** — instrument-specific **Observe utilization** dashboard on Queue &
   hunter + Analysis (`docs/data/observe_utilization.json`), with freshness /
-  staleness banners and trajectory deltas vs last cycle.
+  trajectory, staleness banners, and (L640) a cue_consumer_mft card for open/closed
+  episodes + MoM lever stubs without hunting JSON.
 - **L460** — raw instrument stores (`buy_tier_flip_lag.json`,
   `decision_input_inventory.json`, `p1_first_run_pin.json`,
   `universe_filing_archive_miss_rate.json`) in
