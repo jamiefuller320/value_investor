@@ -325,11 +325,7 @@ def build_pattern_marks(
         )
 
     if same_day and entry and exit_at:
-        tone = (
-            MARK_TONE_GOOD
-            if same_day_assessment == "major_error_reverse"
-            else MARK_TONE_WARN
-        )
+        tone = MARK_TONE_GOOD if same_day_assessment == "major_error_reverse" else MARK_TONE_WARN
         marks.append(
             _mark(
                 mark_id="same_day_churn",
@@ -644,11 +640,7 @@ def build_initial_opinion(item: dict[str, Any]) -> dict[str, Any]:
             f"Episode: {hold_bit} hold, {outcome}."
             + (" Same-day round-trip." if same_day else "")
             + " Confirm entry/exit marks match the sealed/control path."
-            + (
-                f" Pattern marks: {'; '.join(mark_labels[:3])}."
-                if mark_labels
-                else ""
-            )
+            + (f" Pattern marks: {'; '.join(mark_labels[:3])}." if mark_labels else "")
         ),
         "wider_tf": (
             "Wider TF: judge range location and post-exit climb/fade that the "
