@@ -1096,6 +1096,162 @@ def test_eng_20261011_03_ingest_backfills_ocf_from_cashflow_metrics_json(
     assert fetched.data_sources.get("operating_cashflow") == "yahoo_financials_annual"
 
 
+def test_eng_20261028_03_supplement_backfills_ocf_from_sec_companyfacts(tmp_path: Path):
+    """Regression: filed SEC XBRL OCF fills CompanyMetrics when Yahoo annual rows omit it."""
+    from value_investor.research.sec_companyfacts import SOURCE_FILENAME, build_companyfacts_source
+
+    sources = tmp_path / "research" / "CCEP.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "CCEP.L",
+        "cash_flow": {
+            "2025": {"Free Cash Flow": 1_680_000_000.0, "Capital Expenditure": -920_000_000.0}
+        },
+        "cashflow_metrics": {"free_cashflow": 1_680_000_000.0},
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    sec_payload = {
+        "facts": {
+            "us-gaap": {
+                "NetCashProvidedByUsedInOperatingActivities": {
+                    "units": {
+                        "USD": [
+                            {
+                                "start": "2024-01-01",
+                                "end": "2024-12-31",
+                                "val": 2_600_000_000.0,
+                                "form": "10-K",
+                                "fp": "FY",
+                                "filed": "2025-02-15",
+                                "accn": "prior",
+                            },
+                            {
+                                "start": "2025-01-01",
+                                "end": "2025-12-31",
+                                "val": 2_800_000_000.0,
+                                "form": "10-K",
+                                "fp": "FY",
+                                "filed": "2026-02-15",
+                                "accn": "latest",
+                            },
+                        ]
+                    }
+                },
+                "PaymentsToAcquirePropertyPlantAndEquipment": {
+                    "units": {
+                        "USD": [
+                            {
+                                "start": "2025-01-01",
+                                "end": "2025-12-31",
+                                "val": 920_000_000.0,
+                                "form": "10-K",
+                                "fp": "FY",
+                                "filed": "2026-02-15",
+                                "accn": "latest",
+                            }
+                        ]
+                    }
+                },
+            }
+        }
+    }
+    companyfacts = build_companyfacts_source(sec_payload, ticker="CCEP.L", cik=123)
+    (sources / SOURCE_FILENAME).write_text(json.dumps(companyfacts), encoding="utf-8")
+
+    metrics = CompanyMetrics(
+        ticker="CCEP.L", operating_cashflow=None, free_cashflow=1_680_000_000.0
+    )
+    filled = supplement_company_metrics_cashflow(
+        metrics,
+        sources_dir=sources,
+        allow_live_fetch=False,
+    )
+    assert filled == ["operating_cashflow"]
+    assert metrics.operating_cashflow == pytest.approx(2_800_000_000.0)
+    assert metrics.data_sources.get("operating_cashflow") == "yahoo_financials_annual"
+
+
+def test_eng_20261028_03_refresh_sources_mirrors_filing_ocf_onto_financials(tmp_path: Path):
+    """Ingest refresh must persist filing-derived OCF on financials_annual for fetch backfill."""
+    from value_investor.research.sec_companyfacts import SOURCE_FILENAME, build_companyfacts_source
+
+    sources = tmp_path / "research" / "CCEP.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "CCEP.L",
+        "cash_flow": {"2025": {"Free Cash Flow": 1_680_000_000.0}},
+        "cashflow_metrics": {},
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    sec_payload = {
+        "facts": {
+            "us-gaap": {
+                "NetCashProvidedByUsedInOperatingActivities": {
+                    "units": {
+                        "USD": [
+                            {
+                                "start": "2025-01-01",
+                                "end": "2025-12-31",
+                                "val": 2_800_000_000.0,
+                                "form": "10-K",
+                                "fp": "FY",
+                                "filed": "2026-02-15",
+                                "accn": "latest",
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+    (sources / SOURCE_FILENAME).write_text(
+        json.dumps(build_companyfacts_source(sec_payload, ticker="CCEP.L", cik=123)),
+        encoding="utf-8",
+    )
+
+    result = refresh_sources_yahoo_cashflow_metrics(ticker="CCEP.L", sources_dir=sources)
+    assert result["updated"] is True
+    stored = json.loads((sources / "financials_annual.json").read_text(encoding="utf-8"))
+    assert stored["cashflow_metrics"]["operating_cashflow"] == pytest.approx(2_800_000_000.0)
+
+
+def test_eng_20261028_03_pick_financials_prefers_payload_with_ocf_when_supplied_stale(
+    tmp_path: Path, monkeypatch
+):
+    """When caller passes stale financials, still prefer a cached JSON that has OCF."""
+    monkeypatch.chdir(tmp_path)
+    output_sources = tmp_path / "output" / "research" / "MEGP.L" / "sources"
+    output_sources.mkdir(parents=True)
+    stale = {
+        "ticker": "MEGP.L",
+        "cash_flow": {"2025": {"Free Cash Flow": 25_153_000.0}},
+        "cashflow_metrics": {},
+    }
+    (output_sources / "financials_annual.json").write_text(json.dumps(stale), encoding="utf-8")
+
+    committed = tmp_path / "docs" / "data" / "research" / "MEGP.L" / "sources"
+    committed.mkdir(parents=True)
+    good = {
+        "ticker": "MEGP.L",
+        "cashflow_metrics": {
+            "operating_cashflow": 90_762_000.0,
+            "free_cashflow": 25_153_000.0,
+        },
+    }
+    (committed / "financials_annual.json").write_text(json.dumps(good), encoding="utf-8")
+
+    metrics = CompanyMetrics(ticker="MEGP.L", operating_cashflow=None, free_cashflow=None)
+    filled = supplement_company_metrics_cashflow(
+        metrics,
+        financials=stale,
+        output_dir=Path("output"),
+        allow_live_fetch=False,
+    )
+    assert filled == ["operating_cashflow", "free_cashflow"]
+    assert metrics.operating_cashflow == pytest.approx(90_762_000.0)
+
+
 def test_fetch_annual_financials_includes_cashflow_metrics(monkeypatch):
     cashflow_df = pd.DataFrame(
         {"2024": [90_800_000.0, 55_000_000.0]},

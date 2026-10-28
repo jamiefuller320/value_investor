@@ -11733,14 +11733,25 @@ def refresh_sources_yahoo_cashflow_metrics(
         return {"updated": False, "note": "financials_annual_invalid", "ticker": normalized}
 
     extracted = extract_cashflow_metrics_from_annual_financials(financials)
-    if not extracted:
-        return {"updated": False, "note": "no_cashflow_rows", "ticker": normalized}
-
     existing_metrics = dict(financials.get("cashflow_metrics") or {})
     merged_metrics = dict(existing_metrics)
-    for key, value in extracted.items():
+    for key, value in (extracted or {}).items():
         if value is not None:
             merged_metrics[key] = value
+    for key, value in _filing_derived_cashflow_metrics(sources_dir).items():
+        if merged_metrics.get(key) is None:
+            merged_metrics[key] = value
+
+    if not any(
+        merged_metrics.get(key) is not None
+        for key in (
+            "operating_cashflow",
+            "free_cashflow",
+            "operating_cashflow_prev",
+            "free_cashflow_prev",
+        )
+    ):
+        return {"updated": False, "note": "no_cashflow_rows", "ticker": normalized}
 
     financials_updated = merged_metrics != existing_metrics
     if financials_updated:
@@ -11784,22 +11795,82 @@ def _default_research_sources_dir(ticker: str, output_dir: Path | None = None) -
     return base / "research" / ticker.strip().upper() / "sources"
 
 
+def _coerce_cashflow_metric_number(value: Any) -> float | None:
+    if value is None:
+        return None
+    if isinstance(value, dict):
+        value = value.get("value")
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    if number != number:  # NaN
+        return None
+    return number
+
+
+def _filing_derived_cashflow_metrics(sources_dir: Path | None) -> dict[str, float]:
+    """Read filed OCF/FCF from ``sec_companyfacts.json`` when Yahoo annual rows omit them."""
+    if sources_dir is None:
+        return {}
+    from value_investor.research.sec_companyfacts import load_companyfacts_source
+
+    payload = load_companyfacts_source(Path(sources_dir))
+    if not payload:
+        return {}
+
+    metrics: dict[str, float] = {}
+    latest = payload.get("latest") or {}
+    ocf = _coerce_cashflow_metric_number(latest.get("operating_cashflow"))
+    if ocf is not None:
+        metrics["operating_cashflow"] = ocf
+    fcf = latest.get("free_cashflow")
+    if isinstance(fcf, (int, float)) and fcf == fcf:
+        metrics["free_cashflow"] = float(fcf)
+
+    annual = payload.get("annual") or []
+    if len(annual) > 1:
+        prior = annual[1]
+        ocf_prev = _coerce_cashflow_metric_number(prior.get("operating_cashflow"))
+        if ocf_prev is not None:
+            metrics["operating_cashflow_prev"] = ocf_prev
+        fcf_prev = prior.get("free_cashflow")
+        if isinstance(fcf_prev, (int, float)) and fcf_prev == fcf_prev:
+            metrics["free_cashflow_prev"] = float(fcf_prev)
+    return metrics
+
+
 def _financials_with_merged_yahoo_cashflow(
     financials: dict[str, Any],
+    *,
+    sources_dir: Path | None = None,
 ) -> dict[str, Any]:
-    """Ensure ``cashflow_metrics`` reflects Yahoo ``cash_flow`` rows for fetch backfill."""
-    from value_investor.research.ingest import extract_cashflow_metrics_from_annual_financials
-
-    extracted = extract_cashflow_metrics_from_annual_financials(financials)
-    if not extracted:
-        return financials
+    """Ensure ``cashflow_metrics`` reflects Yahoo rows and filing-derived OCF for fetch backfill."""
+    from value_investor.research.ingest import (
+        CASHFLOW_METRIC_KEYS,
+        extract_cashflow_metrics_from_annual_financials,
+    )
 
     merged_metrics = dict(financials.get("cashflow_metrics") or {})
     changed = False
-    for key, value in extracted.items():
+
+    extracted = extract_cashflow_metrics_from_annual_financials(financials)
+    for key, value in (extracted or {}).items():
         if value is not None and merged_metrics.get(key) != value:
             merged_metrics[key] = value
             changed = True
+
+    for key in CASHFLOW_METRIC_KEYS:
+        top = _coerce_cashflow_metric_number(financials.get(key))
+        if top is not None and merged_metrics.get(key) is None:
+            merged_metrics[key] = top
+            changed = True
+
+    for key, value in _filing_derived_cashflow_metrics(sources_dir).items():
+        if merged_metrics.get(key) is None:
+            merged_metrics[key] = value
+            changed = True
+
     if not changed:
         return financials
 
@@ -11874,32 +11945,35 @@ def _pick_financials_for_cashflow_backfill(
         apply_cashflow_metrics_fallback,
     )
 
-    if financials is not None:
-        return _financials_with_merged_yahoo_cashflow(financials)
-
     resolved_ticker = ticker or getattr(metrics, "ticker", None)
-    if not resolved_ticker:
-        return None
-
     needed = [key for key in CASHFLOW_METRIC_KEYS if getattr(metrics, key, None) is None]
     if not needed:
-        return None
+        if financials is None:
+            return None
+        return _financials_with_merged_yahoo_cashflow(financials, sources_dir=sources_dir)
 
     best: dict[str, Any] | None = None
     best_score = -1
     seen_payloads: set[int] = set()
+    candidates: list[dict[str, Any]] = []
+    if financials is not None:
+        candidates.append(financials)
+    if resolved_ticker:
+        candidates.extend(
+            _iter_financials_annual_payloads(
+                str(resolved_ticker),
+                output_dir=output_dir,
+                sources_dir=sources_dir,
+            )
+        )
 
-    for raw in _iter_financials_annual_payloads(
-        str(resolved_ticker),
-        output_dir=output_dir,
-        sources_dir=sources_dir,
-    ):
+    for raw in candidates:
         payload_id = id(raw)
         if payload_id in seen_payloads:
             continue
         seen_payloads.add(payload_id)
 
-        merged = _financials_with_merged_yahoo_cashflow(raw)
+        merged = _financials_with_merged_yahoo_cashflow(raw, sources_dir=sources_dir)
         probe = dict.fromkeys(CASHFLOW_METRIC_KEYS)
         apply_cashflow_metrics_fallback(probe, merged)
         score = sum(1 for key in needed if probe.get(key) is not None)
