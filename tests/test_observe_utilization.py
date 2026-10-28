@@ -7,6 +7,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from value_investor.observe_utilization import (
+    CUE_CONSUMER_MFT_FINDING_TITLE,
     DECISION_INPUT_FINDING_TITLE,
     FLIP_LAG_FINDING_TITLE,
     SHARD_NAV_FX_FINDING_TITLE,
@@ -18,6 +19,26 @@ from value_investor.storage import write_json
 
 def _write(path: Path, payload: dict) -> None:
     write_json(path, payload, compact=False)
+
+
+def _quiet_mft(now: datetime) -> dict:
+    return {
+        "generated_at": (now - timedelta(hours=1)).isoformat(),
+        "pipeline_status": "episode_walker_active",
+        "open_lab_episodes": 30,
+        "closed_lab_episodes": 87,
+        "evolutionary_shadows_eligible": True,
+        "declared_incomparable": True,
+        "influences_live": False,
+        "episode_walker": {"status": "active", "cues_accepted": 117},
+        "path_scoreboard": {"smooth_ret_cohort_median": 0.021},
+        "start_gate_cohort": {"proposed_n": 0, "frozen_n": 12, "owner_freeze_pending": False},
+        "mom_levers": [
+            {"id": "stock_choice", "mom_score": None, "status": "diagnostic_partial"},
+            {"id": "buy_timing", "mom_score": None, "status": "diagnostic_partial"},
+        ],
+        "judgment_in_the_round": {"fill_status": "filled"},
+    }
 
 
 def _quiet_combined(now: datetime) -> dict:
@@ -138,6 +159,8 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
     _write(shard_fx_path, _quiet_shard_fx(now))
     _write(archive_miss_path, _quiet_archive_miss(now))
     _write(combined_path, _quiet_combined(now))
+    mft_path = tmp_path / "cue_consumer_mft_observe.json"
+    _write(mft_path, _quiet_mft(now))
     _write(
         ops_path,
         {
@@ -153,6 +176,11 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
                     "title": DECISION_INPUT_FINDING_TITLE,
                     "severity": "warn",
                     "summary": "Dominant gap memo_recent: 40 of 50 names…",
+                },
+                {
+                    "title": CUE_CONSUMER_MFT_FINDING_TITLE,
+                    "severity": "info",
+                    "summary": "Walker active; open=30 closed=87.",
                 },
             ],
         },
@@ -203,6 +231,7 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
         shard_nav_fx_path=shard_fx_path,
         archive_miss_path=archive_miss_path,
         combined_tagged_path=combined_path,
+        cue_consumer_mft_path=mft_path,
         ops_status_path=ops_path,
         now=now,
     )
@@ -214,6 +243,13 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
     assert "shard_nav_fx_warp" in by_id
     assert "universe_filing_archive_miss_rate" in by_id
     assert "combined_tagged_learning" in by_id
+    assert "cue_consumer_mft" in by_id
+    mft = by_id["cue_consumer_mft"]
+    assert mft["warn_active"] is False
+    assert mft["primary_value"] == 30
+    assert mft["metrics"]["closed_lab_episodes"] == 87
+    assert mft["metrics"]["mom_levers"][0]["id"] == "stock_choice"
+    assert mft["influences_live"] is False
     assert by_id["combined_tagged_learning"]["warn_active"] is False
     assert by_id["universe_filing_archive_miss_rate"]["warn_active"] is False
     assert flip["warn_active"] is True
@@ -253,6 +289,7 @@ def test_observe_utilization_stale_and_missing(tmp_path: Path):
         shard_nav_fx_path=tmp_path / "missing_fx.json",
         archive_miss_path=tmp_path / "missing_archive_miss.json",
         combined_tagged_path=tmp_path / "missing_combined.json",
+        cue_consumer_mft_path=tmp_path / "missing_mft.json",
         ops_status_path=ops_path,
         prior_path=tmp_path / "missing.json",
         now=now,
@@ -263,6 +300,7 @@ def test_observe_utilization_stale_and_missing(tmp_path: Path):
     assert by_id["shard_nav_fx_warp"]["freshness"]["state"] == "missing"
     assert by_id["universe_filing_archive_miss_rate"]["freshness"]["state"] == "missing"
     assert by_id["combined_tagged_learning"]["freshness"]["state"] == "missing"
+    assert by_id["cue_consumer_mft"]["freshness"]["state"] == "missing"
     assert snap["surface_freshness"] == "degraded"
     assert snap["warn_instrument_count"] >= 1
 
@@ -325,6 +363,10 @@ def test_observe_utilization_store_lag_vs_ops(tmp_path: Path):
             "summary": {"source_records_missing_market_id": 0, "closed_count": 0, "warn": False},
         },
     )
+    mft_path = tmp_path / "mft.json"
+    quiet = _quiet_mft(now - timedelta(hours=19))
+    quiet["generated_at"] = (now - timedelta(hours=20)).isoformat()
+    _write(mft_path, quiet)
     _write(ops_path, {"run_at": (now - timedelta(hours=1)).isoformat(), "findings": []})
 
     snap = build_observe_utilization_snapshot(
@@ -333,6 +375,7 @@ def test_observe_utilization_store_lag_vs_ops(tmp_path: Path):
         shard_nav_fx_path=shard_fx_path,
         archive_miss_path=archive_miss_path,
         combined_tagged_path=combined_path,
+        cue_consumer_mft_path=mft_path,
         ops_status_path=ops_path,
         prior_path=tmp_path / "prior.json",
         now=now,
@@ -408,6 +451,10 @@ def test_observe_utilization_co_committed_stores_are_fresh(tmp_path: Path):
             "summary": {"source_records_missing_market_id": 0, "closed_count": 0, "warn": False},
         },
     )
+    mft_path = tmp_path / "mft.json"
+    quiet = _quiet_mft(as_of)
+    quiet["generated_at"] = as_of.isoformat()
+    _write(mft_path, quiet)
     # ops_status run_at a few minutes after store refresh (same job) — not lagging.
     _write(ops_path, {"run_at": (now - timedelta(minutes=2)).isoformat(), "findings": []})
 
@@ -417,6 +464,7 @@ def test_observe_utilization_co_committed_stores_are_fresh(tmp_path: Path):
         shard_nav_fx_path=shard_fx_path,
         archive_miss_path=archive_miss_path,
         combined_tagged_path=combined_path,
+        cue_consumer_mft_path=mft_path,
         ops_status_path=ops_path,
         prior_path=tmp_path / "prior.json",
         now=now,
@@ -427,3 +475,4 @@ def test_observe_utilization_co_committed_stores_are_fresh(tmp_path: Path):
     assert all(row["freshness"]["state"] == "fresh" for row in snap["instruments"])
     assert "lag" not in snap["headline"].lower()
     assert SHARD_NAV_FX_FINDING_TITLE
+    assert any(row["id"] == "cue_consumer_mft" for row in snap["instruments"])
