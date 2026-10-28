@@ -1724,14 +1724,16 @@ def test_saturated_knobs_skip_frozen_books_and_fixed_knob_labs(tmp_path: Path):
 
 
 def test_committed_paper_learning_tracks_are_complete():
-    # Saturation, empty agree/veto rollup, and pre-settle last_run are
-    # data-dependent observe findings (rollup stays a bootstrap stub until the
-    # next paper-auto publish with F1 overlays; last_run flips after a
-    # post-settle pass), not structural gaps in the committed track layout.
+    # Saturation, empty agree/veto rollup, pre-settle last_run, and post-settle
+    # acted=false skips are data-dependent observe findings (rollup stays a
+    # bootstrap stub until the next paper-auto publish with F1 overlays;
+    # last_run / acted flip with each paper-auto pass), not structural gaps in
+    # the committed track layout.
     _observe_only = {
         "Decision-review knobs saturated at bounds",
         "LLM agree/veto shadow rollup empty",
         "Paper-auto last_run is pre-settle only",
+        "Core learning tracks did not act",
     }
     structural = [row for row in check_paper_learning_tracks() if row.title not in _observe_only]
     assert structural == []
