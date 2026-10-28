@@ -11954,6 +11954,32 @@ function syncPostSaleQueueOverlay(data) {
   queue.by_book = byBook;
 }
 
+function postSalePatternMarks(item) {
+  const annotations = (item && item.chart_annotations) || {};
+  return Array.isArray(annotations.marks) ? annotations.marks : [];
+}
+
+function renderPatternMarkChips(marks, chartKey) {
+  if (!Array.isArray(marks) || !marks.length) return "";
+  const filtered = marks.filter((row) => {
+    if (!row || typeof row !== "object") return false;
+    if (!chartKey) return true;
+    const charts = Array.isArray(row.charts) ? row.charts : ["episode", "wider_tf"];
+    return charts.includes(chartKey) || (chartKey === "pit" && charts.includes("episode"));
+  });
+  if (!filtered.length) return "";
+  return `<ul class="psr-pattern-marks" aria-label="Factory pattern marks">
+    ${filtered
+      .map((row) => {
+        const tone = String(row.tone || "info");
+        return `<li class="psr-pattern-mark psr-pattern-${esc(tone)}" title="${esc(
+          String(row.cite || row.pattern || "")
+        )}">${esc(String(row.label || row.pattern || "mark"))}</li>`;
+      })
+      .join("")}
+  </ul>`;
+}
+
 function postSaleReviewOverlays(item) {
   return {
     close_in: item.close_in || (item.charts && item.charts.episode) || null,
@@ -11962,6 +11988,8 @@ function postSaleReviewOverlays(item) {
     sold_at: item.sold_at || item.exit_at || null,
     book_cost: item.avg_cost != null ? item.avg_cost : null,
     exit_price: item.exit_price != null ? item.exit_price : null,
+    pattern_marks: postSalePatternMarks(item),
+    pattern_chart_key: "episode",
   };
 }
 
@@ -12232,6 +12260,7 @@ function renderPostSaleReviewCard(item, expanded) {
   const showName =
     item.name && String(item.name).trim() && String(item.name).trim() !== String(item.ticker || "");
   const annotations = item.chart_annotations || {};
+  const patternMarks = postSalePatternMarks(item);
   const episodeNote = annotations.episode
     ? `<p class="small muted psr-chart-annotation">${esc(annotations.episode)}</p>`
     : "";
@@ -12265,11 +12294,12 @@ function renderPostSaleReviewCard(item, expanded) {
         ${renderPostSaleDecisionReasons(item)}
         <pre class="psr-framing small">${framing}</pre>
         ${renderPostSaleDialogue(item)}
-        <p class="small muted">Episode window + wider TF — owner verifies both. Mini dialogue: opinion → Comment → reply. influences_live=false.</p>
+        <p class="small muted">Episode window + wider TF — owner verifies both (pattern marks map factory opinion onto the chart). Mini dialogue: opinion → Comment → reply. influences_live=false.</p>
         <div class="psr-dual-charts">
           <div>
             <h4 class="small">Episode</h4>
             ${episodeNote}
+            ${renderPatternMarkChips(patternMarks, "episode")}
             <div class="psr-chart" data-psr-chart="episode" data-psr-id="${esc(
               item.review_id
             )}"></div>
@@ -12277,6 +12307,7 @@ function renderPostSaleReviewCard(item, expanded) {
           <div>
             <h4 class="small">Wider TF</h4>
             ${widerNote}
+            ${renderPatternMarkChips(patternMarks, "wider_tf")}
             <div class="psr-chart" data-psr-chart="wider" data-psr-id="${esc(
               item.review_id
             )}"></div>
@@ -12438,7 +12469,7 @@ function renderPostSaleReviews(data) {
       </p>
       <p class="small muted">${esc(sortHint)} Same ticker on N200/N201/N206/… is one card per sealed book — book badge is the model tag, not a duplicate review_id. Commented / Accepted / Duplicate’d exits stay in durable history only.</p>
       <p class="small muted">${esc(queue.attention_note || "")}</p>
-      <p class="small muted">Package M · influences_live=false · no Package L auto-tune · charts annotated with factory opinion + learning points</p>
+      <p class="small muted">Package M · influences_live=false · no Package L auto-tune · charts annotated with factory opinion, learning points, and pattern marks</p>
       <div class="psr-queue" id="psr-queue">${cards}</div>
       ${historyHtml}
     </section>`;
@@ -12556,6 +12587,7 @@ function renderEntryBlindReviewCard(item, expanded) {
     .split("\n")
     .map((line) => `<div>${esc(line)}</div>`)
     .join("");
+  const pitMarks = postSalePatternMarks(item);
   const pitNote =
     item.chart_annotations && item.chart_annotations.pit
       ? `<p class="small muted psr-chart-annotation">${esc(item.chart_annotations.pit)}</p>`
@@ -12565,11 +12597,12 @@ function renderEntryBlindReviewCard(item, expanded) {
     ? `<div class="psr-card-detail">
         ${renderEntryBlindBuyReason(item)}
         <pre class="psr-framing small">${framing}</pre>
-        <p class="small muted">Stage entry_blind — PIT through buy day only. No post-fill path / no realized %. influences_live=false.</p>
+        <p class="small muted">Stage entry_blind — PIT through buy day only. Pattern marks: entry quality / range / MA. No post-fill path / no realized %. influences_live=false.</p>
         <div class="psr-dual-charts">
           <div>
             <h4 class="small">PIT (to buy day)</h4>
             ${pitNote}
+            ${renderPatternMarkChips(pitMarks, "pit")}
             <div class="psr-chart" data-ebr-chart="pit" data-ebr-id="${esc(
               item.review_id
             )}"></div>
@@ -12702,10 +12735,16 @@ async function afterRenderEntryBlindReviews(data) {
       null,
       { ticker: item.ticker, name: item.name || item.ticker },
       {
-        episode: pitWin
+        close_in: pitWin
           ? { start: pitWin.start, end: pitWin.end, markers: [] }
           : null,
-        wider: null,
+        wider_tf: null,
+        opened_at: item.entry_at || null,
+        sold_at: null,
+        book_cost: item.avg_cost != null ? item.avg_cost : null,
+        exit_price: null,
+        pattern_marks: postSalePatternMarks(item),
+        pattern_chart_key: "pit",
       }
     );
   }

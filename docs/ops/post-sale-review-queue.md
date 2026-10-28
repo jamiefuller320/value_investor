@@ -116,6 +116,13 @@ same-day round-trip soft bias (`same_day_round_trip` /
 durable cites — not a hard ban). Batch LLM prose upgrade of initial opinions is
 deferred (**L627**).
 
+**Pattern marks (chart annotations):** `chart_annotations.marks[]` maps the
+factory opinion onto drawable dual-horizon overlays (hold path, same-day band,
+premature post-exit region, material-loss path, entry-quality band, wider-range
+`range_ref`, exit `ma_context`). Dashboard `charts.js` paints them; client may
+enrich range/MA labels from loaded closes. Alignment-only — never live knobs /
+Package L. Caps ≤8 marks per card (iPad-first).
+
 **Factory reply** on Comment: opt-in LLM via `FTSE_POST_SALE_LLM_REPLY=1` on the
 ack workflow (fail-closed to contextual deterministic). Deterministic path
 **considers** the owner Comment (`human_comment_consideration`: agree / partial /

@@ -492,6 +492,10 @@ def test_autopsy_voice_enrich_l633_and_same_day():
         "same-day" in opinion["learning_point_forward"].lower()
     )
     assert "Same-day" in opinion["chart_annotations"]["episode"]
+    marks = opinion["chart_annotations"]["marks"]
+    assert isinstance(marks, list) and marks
+    assert any(row.get("pattern") == "same_day_churn" for row in marks)
+    assert all(row.get("influences_live") is False for row in marks)
     assert opinion["influences_live"] is False
 
     considered = consider_human_comment(

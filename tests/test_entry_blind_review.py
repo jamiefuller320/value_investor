@@ -150,6 +150,10 @@ def test_build_queue_strips_returns_and_prefers_lab(tmp_path: Path):
         pit = (row.get("charts") or {}).get("pit") or {}
         assert pit.get("end") == str(row.get("entry_at") or "")[:10]
         assert pit.get("forbidden_forward_path") is True
+        marks = (row.get("chart_annotations") or {}).get("marks") or []
+        assert isinstance(marks, list) and marks
+        assert any(m.get("pattern") == "entry_quality" for m in marks)
+        assert all(m.get("influences_live") is False for m in marks)
 
 
 def test_accept_clears_active(tmp_path: Path):
