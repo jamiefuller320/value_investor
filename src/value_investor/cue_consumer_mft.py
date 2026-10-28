@@ -47,6 +47,7 @@ COHORT_EXIT_REASON_PREFIXES = ("identity_break", "quality_break")
 PIPELINE_STATUS_SKELETON = "skeleton_registered"
 PIPELINE_STATUS_ARMED = "armed_observe_awaiting_q8b"
 PIPELINE_STATUS_SHADOWS_OK = "armed_observe_q8b_eligible"
+PIPELINE_STATUS_WALKER = "episode_walker_active"
 LAB_ARM_MARKER_ID = "mft-lab-arm-epoch0-v0"
 JUDGMENT_RUBRIC_ID = "judgment_in_the_round_v0"
 AUTOPSY_FEED_CAP = 25
@@ -56,6 +57,7 @@ STORE_FAILED_TITLE = "Cue-consumer MFT lab failed"
 START_GATE_ELIGIBLE_TITLE = "Cue-consumer MFT start gate eligible (evolutionary shadows)"
 LAB_ARMED_TITLE = "Cue-consumer MFT lab armed (observe)"
 COHORT_FREEZE_PROPOSED_TITLE = "Cue-consumer MFT Q8B cohort freeze proposed — owner confirm"
+WALKER_FINDING_TITLE = "Cue-consumer MFT episode walker (lab paper fills)"
 CATEGORY = "research"
 
 DEFAULT_OUTPUT_DIR = Path("docs/data")
@@ -1036,19 +1038,29 @@ def build_lab_payload(
     knob_epoch_started_at: str | None = None,
     lab_armed_at: str | None = None,
     closed_lab_episodes: list[dict[str, Any]] | None = None,
+    open_lab_episodes: list[dict[str, Any]] | None = None,
     active_children: list[dict[str, Any]] | None = None,
     autopsy_alignment_feed: dict[str, Any] | None = None,
     start_gate_store: dict[str, Any] | None = None,
+    episode_walker: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Build observe store payload (armed observe — no live fills / no episode walker)."""
+    """Build observe store payload (armed observe + optional lab paper walker)."""
     when = generated_at or _utcnow()
     epoch_at = knob_epoch_started_at or when
     armed_at = lab_armed_at or when
     closed = [e for e in (closed_lab_episodes or []) if isinstance(e, dict)]
+    open_eps = [e for e in (open_lab_episodes or []) if isinstance(e, dict)]
     children = [c for c in (active_children or []) if isinstance(c, dict)]
     gate_store = start_gate_store if isinstance(start_gate_store, dict) else {}
     shadows_ok = bool(start_gate_eval.get("eligible"))
-    pipeline_status = PIPELINE_STATUS_SHADOWS_OK if shadows_ok else PIPELINE_STATUS_ARMED
+    walker = episode_walker if isinstance(episode_walker, dict) else {}
+    walker_active = str(walker.get("status") or "") == "active"
+    if walker_active:
+        pipeline_status = PIPELINE_STATUS_WALKER
+    elif shadows_ok:
+        pipeline_status = PIPELINE_STATUS_SHADOWS_OK
+    else:
+        pipeline_status = PIPELINE_STATUS_ARMED
     sample_proposal = build_hardened_proposal_stub(
         levers_touched=["sell_timing"],
         tune_spec_id=TUNE_SPEC_ID,
@@ -1069,11 +1081,12 @@ def build_lab_payload(
 
     levers_board = []
     for lever in MOM_LEVERS:
+        status = "awaiting_lab_closes" if not closed else "diagnostic_partial"
         levers_board.append(
             {
                 **lever,
                 "mom_score": None,
-                "status": "awaiting_lab_closes",
+                "status": status,
                 "diagnostic_only_until_volume": True,
             }
         )
@@ -1082,6 +1095,36 @@ def build_lab_payload(
         [x for x in (gate_store.get("proposed_cohort_review_ids") or []) if str(x).strip()]
     )
     frozen_n = len([x for x in (gate_store.get("cohort_review_ids") or []) if str(x).strip()])
+    path_board = (
+        walker.get("path_scoreboard")
+        if isinstance(walker.get("path_scoreboard"), dict)
+        else {
+            "unit": "fair_cost_episode_pct",
+            "smooth_ret_cohort_median": None,
+            "completed_n": len(closed),
+            "open_n": len(open_eps),
+            "declared_incomparable": True,
+        }
+    )
+
+    soft_gaps = [
+        "Do not back-label cue-book NAV as lab wins.",
+        "Do not open Package L on sealed; cull ≠ live promote.",
+        "Sealed spawn / novelty / cull remain N223/N226/N227 — lab fills only in v0.",
+        "N228 judgment fill still stubbed (B4 cue cite only on walker opens).",
+    ]
+    if not shadows_ok:
+        soft_gaps.insert(
+            0,
+            "Episode walker gated — evolutionary_shadows_eligible false "
+            "(Q8B/calendar).",
+        )
+    elif not walker_active:
+        soft_gaps.insert(0, "Start gate eligible but walker did not activate.")
+    if frozen_n == 0 and proposed_n and not shadows_ok:
+        soft_gaps.append(
+            "Owner must confirm freeze of proposed non-mechanical autopsy cohort."
+        )
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -1106,8 +1149,8 @@ def build_lab_payload(
             "steals_data_p1_fat_slot": False,
             "fail_closed_if_would_steal_p1": True,
             "note": (
-                "Lab refresh/arm is JSON observe-only — never claims the Data "
-                "P1 ingest fat slot / fourth equal sprint."
+                "Lab refresh/arm + walker are JSON observe-only — never claim "
+                "the Data P1 ingest fat slot / fourth equal sprint."
             ),
         },
         "sizing": {
@@ -1128,27 +1171,59 @@ def build_lab_payload(
             "cue_whitelist_id": CUE_WHITELIST_ID,
             "whitelist": list(CUE_WHITELIST),
             "pit_rule": "cue_ts_lte_decision_ts",
-            "stub": True,
-            "note": "PIT selection stub — short whitelist only; no look-ahead.",
+            "stub": False if walker_active else True,
+            "note": (
+                "PIT short whitelist; walker consumes progressive cue clears "
+                "from archive screens when eligible."
+                if walker_active
+                else "PIT selection stub — short whitelist only; no look-ahead."
+            ),
         },
         "judgment_in_the_round": judgment_in_the_round_stub(),
         "autopsy_alignment_feed": feed,
         "observe_shadow_pass": {
-            "kind": "autopsy_alignment_plus_judgment_schema",
-            "fills": False,
+            "kind": (
+                "lab_paper_episode_walker"
+                if walker_active
+                else "autopsy_alignment_plus_judgment_schema"
+            ),
+            "fills": bool(walker_active),
             "evolutionary_spawn": False,
             "influences_live": False,
             "rows_considered": int(feed.get("count") or 0),
-            "note": (
-                "Observe shadow hook: Package M learning_point_forward feed + "
-                "judgment checklist schema. No paper fills; no sealed spawn "
-                "until Q8B + novelty/cap (N223/N226/N227)."
+            "cues_accepted": (
+                int(walker.get("cues_accepted") or 0) if walker_active else 0
             ),
+            "note": (
+                "Lab paper fills from PIT whitelist cues (fixed-stake v0). "
+                "No sealed spawn; Package L closed; influences_live=false."
+                if walker_active
+                else (
+                    "Observe shadow hook: Package M learning_point_forward feed + "
+                    "judgment checklist schema. Walker waits on Q8B/calendar."
+                )
+            ),
+        },
+        "episode_walker": {
+            "walker_marker_id": walker.get("walker_marker_id"),
+            "status": walker.get("status") or "absent",
+            "reason": walker.get("reason"),
+            "cues_considered": walker.get("cues_considered"),
+            "cues_accepted": walker.get("cues_accepted"),
+            "skipped_at_open_cap": walker.get("skipped_at_open_cap"),
+            "hold_trading_days": walker.get("hold_trading_days"),
+            "max_open_positions": walker.get("max_open_positions"),
+            "path_scoreboard": path_board,
+            "evolutionary_spawn": False,
+            "package_l": False,
         },
         "mom_levers": levers_board,
         "same_day_policy": SAME_DAY_POLICY,
         "closed_lab_episodes": len(closed),
+        "open_lab_episodes": len(open_eps),
         "closed_episodes_sample": closed[:10],
+        "open_episodes_sample": open_eps[:10],
+        "path_scoreboard": path_board,
         "active_sealed_children": len(children),
         "active_children_sample": children[:10],
         "thin_emit": {
@@ -1175,14 +1250,9 @@ def build_lab_payload(
             "L631": "archive frozen cull losers",
             "N228": "rule-aware LLM decide + misfit evidence trail",
             "N229": "human chart draw tools (keep deferred)",
+            "L640": "dashboard / observe-utilization strip",
         },
-        "soft_gaps": [
-            "Armed observe — still no episode walker / no live cue fills.",
-            "Do not back-label cue-book NAV as lab wins.",
-            "Do not open Package L on sealed; cull ≠ live promote.",
-            "Evolutionary shadows wait on Q8B start gate (or calendar fallback).",
-            "Owner must confirm freeze of proposed non-mechanical autopsy cohort.",
-        ],
+        "soft_gaps": soft_gaps,
         "ops_doc": str(DEFAULT_OPS_DOC),
     }
 
@@ -1291,15 +1361,56 @@ def refresh_cue_consumer_mft(
     }
 
     feed = build_autopsy_alignment_feed(queue)
+    epoch_at = str(prior_epoch) if prior_epoch else when
+
+    # Lab paper episode walker — only when Q8B/calendar eligible. No sealed spawn.
+    from value_investor.backtest import load_run_snapshots
+    from value_investor.cue_consumer_mft_walker import (
+        gated_walker_payload,
+        walk_lab_paper_episodes,
+    )
+
+    if start_eval.get("eligible"):
+        snapshots = load_run_snapshots(data_dir)
+        walker = walk_lab_paper_episodes(
+            snapshots,
+            knob_epoch_started_at=epoch_at,
+            lab_arm_marker_id=LAB_ARM_MARKER_ID,
+            generated_at=when,
+        )
+    else:
+        walker = gated_walker_payload(
+            reason=str(start_eval.get("eligibility_reason") or "start_gate_not_eligible"),
+            generated_at=when,
+        )
+
+    closed_eps = [e for e in (walker.get("closed_episodes") or []) if isinstance(e, dict)]
+    open_eps = [e for e in (walker.get("open_episodes") or []) if isinstance(e, dict)]
+    # Persist compact samples in the store; drop full episode lists from walker blob.
+    walker_public = {
+        k: v
+        for k, v in walker.items()
+        if k not in {"closed_episodes", "open_episodes"}
+    }
+
     payload = build_lab_payload(
         start_gate_eval=start_eval,
         generated_at=when,
-        knob_epoch_started_at=str(prior_epoch) if prior_epoch else when,
+        knob_epoch_started_at=epoch_at,
         lab_armed_at=str(prior_armed) if prior_armed else when,
+        closed_lab_episodes=closed_eps,
+        open_lab_episodes=open_eps,
         autopsy_alignment_feed=feed,
         start_gate_store=gate_store,
+        episode_walker=walker_public,
     )
     registration = build_registration_payload()
+    if payload.get("pipeline_status") == PIPELINE_STATUS_WALKER:
+        registration["pipeline_status"] = PIPELINE_STATUS_WALKER
+        registration["walker_marker_id"] = walker.get("walker_marker_id")
+        registration["status"] = "observe_lab_walker_active"
+    elif start_eval.get("eligible"):
+        registration["pipeline_status"] = PIPELINE_STATUS_SHADOWS_OK
 
     if persist:
         store.parent.mkdir(parents=True, exist_ok=True)
@@ -1320,6 +1431,9 @@ def ops_findings_from_cue_consumer_mft(payload: dict[str, Any]) -> list[dict[str
         if isinstance(payload.get("start_gate_cohort"), dict)
         else {}
     )
+    walker = (
+        payload.get("episode_walker") if isinstance(payload.get("episode_walker"), dict) else {}
+    )
     findings: list[dict[str, Any]] = [
         {
             "severity": "info",
@@ -1329,6 +1443,7 @@ def ops_findings_from_cue_consumer_mft(payload: dict[str, Any]) -> list[dict[str
                 f"Lab {LAB_ID} ({REGISTRATION_ID}) armed/refreshed; "
                 f"pipeline={payload.get('pipeline_status')}; "
                 f"closed_lab_episodes={payload.get('closed_lab_episodes', 0)}; "
+                f"open_lab_episodes={payload.get('open_lab_episodes', 0)}; "
                 f"start_gate_eligible={bool(payload.get('evolutionary_shadows_eligible'))} "
                 f"({gate.get('eligibility_reason')}). "
                 "Observe-only; influences_live=false; declared incomparable; "
@@ -1340,7 +1455,19 @@ def ops_findings_from_cue_consumer_mft(payload: dict[str, Any]) -> list[dict[str
     if payload.get("lab_armed_at") and payload.get("pipeline_status") in {
         PIPELINE_STATUS_ARMED,
         PIPELINE_STATUS_SHADOWS_OK,
+        PIPELINE_STATUS_WALKER,
     }:
+        fill_note = (
+            f"Lab paper walker active "
+            f"(open={payload.get('open_lab_episodes', 0)}, "
+            f"closed={payload.get('closed_lab_episodes', 0)}); "
+            "no sealed spawn."
+            if payload.get("pipeline_status") == PIPELINE_STATUS_WALKER
+            else (
+                "Observe shadow pass runs (autopsy alignment feed + judgment "
+                "schema stub). Walker waits on Q8B/calendar."
+            )
+        )
         findings.append(
             {
                 "severity": "info",
@@ -1350,9 +1477,30 @@ def ops_findings_from_cue_consumer_mft(payload: dict[str, Any]) -> list[dict[str
                     f"Lab arm marker {LAB_ARM_MARKER_ID} at "
                     f"{payload.get('lab_armed_at')}; epoch "
                     f"{(payload.get('mid_flight_tune') or {}).get('knob_epoch_started_at')}; "
-                    f"tune_spec={TUNE_SPEC_ID}. Observe shadow pass runs "
-                    "(autopsy alignment feed + judgment schema stub). No fills; "
-                    "evolutionary shadows still gated by Q8B/calendar."
+                    f"tune_spec={TUNE_SPEC_ID}. {fill_note}"
+                ),
+                "auto_fixable": False,
+            }
+        )
+    if walker.get("status") == "active":
+        path = (
+            walker.get("path_scoreboard")
+            if isinstance(walker.get("path_scoreboard"), dict)
+            else {}
+        )
+        findings.append(
+            {
+                "severity": "info",
+                "category": CATEGORY,
+                "title": WALKER_FINDING_TITLE,
+                "summary": (
+                    f"Walker {walker.get('walker_marker_id')} recorded lab paper "
+                    f"fills: open={payload.get('open_lab_episodes', 0)} "
+                    f"closed={payload.get('closed_lab_episodes', 0)}; "
+                    f"cues_accepted={walker.get('cues_accepted')}; "
+                    f"median_fair_cost_episode_pct={path.get('smooth_ret_cohort_median')}. "
+                    "Fixed-stake v0; influences_live=false; declared incomparable; "
+                    "no sealed spawn / no Package L; does not steal Data P1."
                 ),
                 "auto_fixable": False,
             }
@@ -1401,13 +1549,25 @@ def format_cue_consumer_mft_text(payload: dict[str, Any]) -> str:
         if isinstance(payload.get("start_gate_cohort"), dict)
         else {}
     )
+    walker = (
+        payload.get("episode_walker") if isinstance(payload.get("episode_walker"), dict) else {}
+    )
+    path = (
+        payload.get("path_scoreboard")
+        if isinstance(payload.get("path_scoreboard"), dict)
+        else {}
+    )
     lines = [
         f"Cue-consumer MFT lab ({payload.get('registration_id')})",
         f"  status: {payload.get('status')} / {payload.get('pipeline_status')}",
         f"  lab_armed_at: {payload.get('lab_armed_at')}",
         f"  influences_live: {payload.get('influences_live')}",
         f"  scoreboard: {payload.get('scoreboard_id')} (declared incomparable)",
-        f"  closed_lab_episodes: {payload.get('closed_lab_episodes')}",
+        f"  closed_lab_episodes: {payload.get('closed_lab_episodes')} "
+        f"(open={payload.get('open_lab_episodes', 0)})",
+        f"  walker: {walker.get('status')} "
+        f"(cues_accepted={walker.get('cues_accepted')})",
+        f"  median fair-cost episode %: {path.get('smooth_ret_cohort_median')}",
         f"  start_gate eligible: {payload.get('evolutionary_shadows_eligible')} "
         f"({gate.get('eligibility_reason')})",
         f"  cohort proposed/frozen: {cohort.get('proposed_n')}/{cohort.get('frozen_n')} "
@@ -1435,6 +1595,8 @@ __all__ = [
     "LAB_ID",
     "PER_ROOT_ACTIVE_CAP",
     "PIPELINE_STATUS_ARMED",
+    "PIPELINE_STATUS_SHADOWS_OK",
+    "PIPELINE_STATUS_WALKER",
     "REGISTRATION_ID",
     "SCOREBOARD_ID",
     "START_CHECKPOINT_ID",
@@ -1442,6 +1604,7 @@ __all__ = [
     "STORE_FAILED_TITLE",
     "THIN_EMIT_MIN_CLOSES",
     "TUNE_SPEC_ID",
+    "WALKER_FINDING_TITLE",
     "assess_same_day_round_trip",
     "build_autopsy_alignment_feed",
     "build_hardened_proposal_stub",

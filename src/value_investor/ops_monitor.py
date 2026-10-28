@@ -2596,9 +2596,10 @@ def check_cue_consumer_mft(
     """Observe-only Package M: cue-consumer mid-flight-tune lab (super book).
 
     Writes ``docs/data/cue_consumer_mft_observe.json`` (+ registration + start
-    gate). Declared-incomparable fixed-stake skeleton; ``influences_live=false``.
-    Never changes books or knobs (``auto_fixable=False``).
-    See docs/ops/cue-consumer-mft.md.
+    gate). When Q8B/calendar eligible, runs the lab paper episode walker
+    (fixed-stake fills on the lab book only — no sealed spawn). Declared
+    incomparable; ``influences_live=false``. Never changes live books or knobs
+    (``auto_fixable=False``). See docs/ops/cue-consumer-mft.md.
     """
     from value_investor.cue_consumer_mft import (
         DEFAULT_OUTPUT_DIR,

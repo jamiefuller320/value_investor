@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-28T11:13:29.930330+00:00",
+  "generated_at": "2026-10-28T12:47:47.405334+00:00",
   "lab_id": "cue_consumer_mft",
   "registration_id": "cue-consumer-mft-v0",
   "evolutionary_root_id": "cue-consumer-mft-root-v0",
   "deferred_id": "N222",
   "status": "observe_lab_armed",
-  "pipeline_status": "armed_observe_q8b_eligible",
+  "pipeline_status": "episode_walker_active",
   "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
   "lab_armed_at": "2026-10-26T15:09:45.669837+00:00",
   "observe_only": true,
@@ -20,7 +20,7 @@
     "lane": "investment_observe",
     "steals_data_p1_fat_slot": false,
     "fail_closed_if_would_steal_p1": true,
-    "note": "Lab refresh/arm is JSON observe-only — never claims the Data P1 ingest fat slot / fourth equal sprint."
+    "note": "Lab refresh/arm + walker are JSON observe-only — never claim the Data P1 ingest fat slot / fourth equal sprint."
   },
   "sizing": {
     "mode": "fixed_stake",
@@ -59,8 +59,8 @@
       }
     ],
     "pit_rule": "cue_ts_lte_decision_ts",
-    "stub": true,
-    "note": "PIT selection stub — short whitelist only; no look-ahead."
+    "stub": false,
+    "note": "PIT short whitelist; walker consumes progressive cue clears from archive screens when eligible."
   },
   "judgment_in_the_round": {
     "rubric_id": "judgment_in_the_round_v0",
@@ -160,12 +160,33 @@
     "note": "Autopsy learning_point_forward informs the lab observe trail. Does not auto-tune sealed books or open Package L."
   },
   "observe_shadow_pass": {
-    "kind": "autopsy_alignment_plus_judgment_schema",
-    "fills": false,
+    "kind": "lab_paper_episode_walker",
+    "fills": true,
     "evolutionary_spawn": false,
     "influences_live": false,
     "rows_considered": 0,
-    "note": "Observe shadow hook: Package M learning_point_forward feed + judgment checklist schema. No paper fills; no sealed spawn until Q8B + novelty/cap (N223/N226/N227)."
+    "cues_accepted": 117,
+    "note": "Lab paper fills from PIT whitelist cues (fixed-stake v0). No sealed spawn; Package L closed; influences_live=false."
+  },
+  "episode_walker": {
+    "walker_marker_id": "mft-episode-walker-v0",
+    "status": "active",
+    "reason": null,
+    "cues_considered": 179,
+    "cues_accepted": 117,
+    "skipped_at_open_cap": 62,
+    "hold_trading_days": 63,
+    "max_open_positions": 30,
+    "path_scoreboard": {
+      "unit": "fair_cost_episode_pct",
+      "smooth_ret_cohort_median": 0.021263,
+      "completed_n": 87,
+      "open_n": 30,
+      "declared_incomparable": true,
+      "note": "Lab fair-cost episode % only — never credit cue-book historical NAV as lab wins."
+    },
+    "evolutionary_spawn": false,
+    "package_l": false
   },
   "mom_levers": [
     {
@@ -173,7 +194,7 @@
       "definition": "Accepted vs skipped PIT cues; fair-cost forward %",
       "not": "cue-book path %; live NAV",
       "mom_score": null,
-      "status": "awaiting_lab_closes",
+      "status": "diagnostic_partial",
       "diagnostic_only_until_volume": true
     },
     {
@@ -181,7 +202,7 @@
       "definition": "vs immediate-on-cue; fair-cost delta",
       "not": "watermark brackets (N217)",
       "mom_score": null,
-      "status": "awaiting_lab_closes",
+      "status": "diagnostic_partial",
       "diagnostic_only_until_volume": true
     },
     {
@@ -189,7 +210,7 @@
       "definition": "Single-shot vs scale-in within fixed stake",
       "not": "DCA / cash drag (later twins)",
       "mom_score": null,
-      "status": "awaiting_lab_closes",
+      "status": "diagnostic_partial",
       "diagnostic_only_until_volume": true
     },
     {
@@ -197,7 +218,7 @@
       "definition": "vs registered hold counterfactuals; default bias against same-calendar-day exit",
       "not": "N200 leave-tier as this lab's skill; same-day without error evidence",
       "mom_score": null,
-      "status": "awaiting_lab_closes",
+      "status": "diagnostic_partial",
       "diagnostic_only_until_volume": true
     },
     {
@@ -205,7 +226,7 @@
       "definition": "Rule-family by epoch; fair-cost; same-day exit allowed only as major_error_reverse with durable cites",
       "not": "Hard live veto; Package L; silent same-day churn",
       "mom_score": null,
-      "status": "awaiting_lab_closes",
+      "status": "diagnostic_partial",
       "diagnostic_only_until_volume": true
     }
   ],
@@ -220,8 +241,3210 @@
       "sell_strategy"
     ]
   },
-  "closed_lab_episodes": 0,
-  "closed_episodes_sample": [],
+  "closed_lab_episodes": 87,
+  "open_lab_episodes": 30,
+  "closed_episodes_sample": [
+    {
+      "episode_id": "48a095d3e2e8bfda8fa0",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "ABF.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "ABF.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.3075,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "closed",
+      "exit_run_at": "2026-08-30T06:43:33.462150+00:00",
+      "hold_trading_days": 20,
+      "exit_reason": "identity_break_not_buy_tier",
+      "return_pct": -0.02227,
+      "pnl_local_report_only": -2.227048,
+      "return_pct_stress_report_only": -0.07677,
+      "same_day_assessment": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": []
+      },
+      "levers_cited": [
+        "stock_choice",
+        "buy_timing",
+        "sell_timing"
+      ]
+    },
+    {
+      "episode_id": "bb5f68d8032714b79d25",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "AEP.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "AEP.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "strong_buy",
+          "adjusted_signal": "strong_buy",
+          "research_verdict": null,
+          "conviction_score": 0.4869,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "closed",
+      "exit_run_at": "2026-09-14T08:59:59.089330+00:00",
+      "hold_trading_days": 29,
+      "exit_reason": "identity_break_timing_wait",
+      "return_pct": 0.080138,
+      "pnl_local_report_only": 8.013775,
+      "return_pct_stress_report_only": 0.025638,
+      "same_day_assessment": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": []
+      },
+      "levers_cited": [
+        "stock_choice",
+        "buy_timing",
+        "sell_timing"
+      ]
+    },
+    {
+      "episode_id": "b7eb4d564f2362d87a93",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "ASHM.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "ASHM.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.3619,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "closed",
+      "exit_run_at": "2026-08-09T05:44:10.639418+00:00",
+      "hold_trading_days": 5,
+      "exit_reason": "identity_break_not_buy_tier",
+      "return_pct": 0.082678,
+      "pnl_local_report_only": 8.267836,
+      "return_pct_stress_report_only": 0.028178,
+      "same_day_assessment": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": []
+      },
+      "levers_cited": [
+        "stock_choice",
+        "buy_timing",
+        "sell_timing"
+      ]
+    },
+    {
+      "episode_id": "65b484cd6709d362b9d9",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "BME.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "BME.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.4278,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "closed",
+      "exit_run_at": "2026-08-09T05:44:10.639418+00:00",
+      "hold_trading_days": 5,
+      "exit_reason": "identity_break_timing_wait",
+      "return_pct": 0.050205,
+      "pnl_local_report_only": 5.020527,
+      "return_pct_stress_report_only": -0.004295,
+      "same_day_assessment": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": []
+      },
+      "levers_cited": [
+        "stock_choice",
+        "buy_timing",
+        "sell_timing"
+      ]
+    },
+    {
+      "episode_id": "1414831f0ba7934e72c0",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "BOY.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "BOY.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.3248,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "closed",
+      "exit_run_at": "2026-08-09T05:44:10.639418+00:00",
+      "hold_trading_days": 5,
+      "exit_reason": "identity_break_not_buy_tier",
+      "return_pct": 0.260244,
+      "pnl_local_report_only": 26.024394,
+      "return_pct_stress_report_only": 0.205744,
+      "same_day_assessment": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": []
+      },
+      "levers_cited": [
+        "stock_choice",
+        "buy_timing",
+        "sell_timing"
+      ]
+    },
+    {
+      "episode_id": "c064bf7f0d17f4e27f29",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "BREE.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "BREE.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "strong_buy",
+          "adjusted_signal": "strong_buy",
+          "research_verdict": null,
+          "conviction_score": 0.3969,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "closed",
+      "exit_run_at": "2026-08-19T10:24:14.725305+00:00",
+      "hold_trading_days": 12,
+      "exit_reason": "identity_break_timing_wait",
+      "return_pct": 0.050693,
+      "pnl_local_report_only": 5.069337,
+      "return_pct_stress_report_only": -0.003807,
+      "same_day_assessment": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": []
+      },
+      "levers_cited": [
+        "stock_choice",
+        "buy_timing",
+        "sell_timing"
+      ]
+    },
+    {
+      "episode_id": "dd03ea352877f781a9e6",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "BT-A.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "BT-A.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.3793,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "closed",
+      "exit_run_at": "2026-09-21T16:54:50.935061+00:00",
+      "hold_trading_days": 34,
+      "exit_reason": "identity_break_timing_wait",
+      "return_pct": -0.016429,
+      "pnl_local_report_only": -1.642895,
+      "return_pct_stress_report_only": -0.070929,
+      "same_day_assessment": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": []
+      },
+      "levers_cited": [
+        "stock_choice",
+        "buy_timing",
+        "sell_timing"
+      ]
+    },
+    {
+      "episode_id": "34286aeabf9ed39783c9",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "BTRW.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "BTRW.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.3057,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "closed",
+      "exit_run_at": "2026-08-04T08:38:47.304498+00:00",
+      "hold_trading_days": 1,
+      "exit_reason": "identity_break_not_buy_tier",
+      "return_pct": 0.031663,
+      "pnl_local_report_only": 3.16634,
+      "return_pct_stress_report_only": -0.022837,
+      "same_day_assessment": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": []
+      },
+      "levers_cited": [
+        "stock_choice",
+        "buy_timing",
+        "sell_timing"
+      ]
+    },
+    {
+      "episode_id": "4699cf92a725656eef2e",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "BWY.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "BWY.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.2583,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "closed",
+      "exit_run_at": "2026-08-16T06:19:37.808906+00:00",
+      "hold_trading_days": 10,
+      "exit_reason": "identity_break_not_buy_tier",
+      "return_pct": 0.092086,
+      "pnl_local_report_only": 9.208551,
+      "return_pct_stress_report_only": 0.037586,
+      "same_day_assessment": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": []
+      },
+      "levers_cited": [
+        "stock_choice",
+        "buy_timing",
+        "sell_timing"
+      ]
+    },
+    {
+      "episode_id": "a7ccf8702b67a435cafd",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "BYIT.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "BYIT.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.3792,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "closed",
+      "exit_run_at": "2026-10-25T07:32:00.532121+00:00",
+      "hold_trading_days": 59,
+      "exit_reason": "identity_break_timing_wait",
+      "return_pct": 0.12474,
+      "pnl_local_report_only": 12.473956,
+      "return_pct_stress_report_only": 0.07024,
+      "same_day_assessment": {
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "soft_penalty": false,
+        "hard_ban": false,
+        "evidence_cites": []
+      },
+      "levers_cited": [
+        "stock_choice",
+        "buy_timing",
+        "sell_timing"
+      ]
+    }
+  ],
+  "open_episodes_sample": [
+    {
+      "episode_id": "644c0706a7083cbc8b6f",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "ABDN.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "ABDN.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.3041,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "open",
+      "open_mark_return": -0.109407,
+      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
+      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+    },
+    {
+      "episode_id": "b19215bc1dff1afb6493",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "ALFA.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "ALFA.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.3743,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "open",
+      "open_mark_return": 0.056771,
+      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
+      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+    },
+    {
+      "episode_id": "841d57066b62c9d38df2",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "BKG.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "BKG.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.2949,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "open",
+      "open_mark_return": -0.003786,
+      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
+      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+    },
+    {
+      "episode_id": "ed0160d4ec2c5e0d7756",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "BOWL.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "BOWL.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.3516,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "open",
+      "open_mark_return": -0.051034,
+      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
+      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+    },
+    {
+      "episode_id": "fa28375b758c96947f58",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "CNA.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "CNA.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.3407,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "open",
+      "open_mark_return": -0.03421,
+      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
+      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+    },
+    {
+      "episode_id": "b940c9eed0bbd4818170",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "DATA.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "DATA.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.3961,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "open",
+      "open_mark_return": -0.193394,
+      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
+      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+    },
+    {
+      "episode_id": "ac5413e55e7d3ef9efb1",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "DOM.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "DOM.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "strong_buy",
+          "adjusted_signal": "strong_buy",
+          "research_verdict": null,
+          "conviction_score": 0.3267,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "open",
+      "open_mark_return": 0.071958,
+      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
+      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+    },
+    {
+      "episode_id": "a10451851a629f197e13",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "GEN.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "GEN.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "strong_buy",
+          "adjusted_signal": "strong_buy",
+          "research_verdict": null,
+          "conviction_score": 0.4068,
+          "timing_signal": "accumulate"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "open",
+      "open_mark_return": -0.069659,
+      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
+      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+    },
+    {
+      "episode_id": "b54c5a5c4b7852d5069a",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "GSK.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "GSK.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.4138,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "open",
+      "open_mark_return": -0.024915,
+      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
+      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+    },
+    {
+      "episode_id": "4a66d98f166cf45638be",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "HIK.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+      "decision_ts": "2026-08-02T12:34:17.581768+00:00",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-epoch0-v0",
+      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-08-02T12:34:17.581768+00:00",
+            "ticker": "HIK.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "strong_buy",
+          "adjusted_signal": "buy",
+          "research_verdict": null,
+          "conviction_score": 0.5193,
+          "timing_signal": "neutral"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "low",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "B6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0"
+            }
+          ],
+          "llm_stance": null,
+          "misfit_evidence": null,
+          "deferred_id": "N228",
+          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "open",
+      "open_mark_return": 0.051913,
+      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
+      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+    }
+  ],
+  "path_scoreboard": {
+    "unit": "fair_cost_episode_pct",
+    "smooth_ret_cohort_median": 0.021263,
+    "completed_n": 87,
+    "open_n": 30,
+    "declared_incomparable": true,
+    "note": "Lab fair-cost episode % only — never credit cue-book historical NAV as lab wins."
+  },
   "active_sealed_children": 0,
   "active_children_sample": [],
   "thin_emit": {
@@ -238,11 +3461,11 @@
       "novelty_fingerprint": "d5de1f32bad4aa9707cc",
       "falsify_or_incorporate_note": "Skeleton hygiene example — replace with real incorporate/falsify note before any spawn candidate.",
       "thin_emit_readiness": {
-        "soft_ready": false,
+        "soft_ready": true,
         "closes_primary": true,
         "min_closes": 3,
-        "closed_episodes_citing_levers": 0,
-        "closes_ok": false,
+        "closed_episodes_citing_levers": 87,
+        "closes_ok": true,
         "proposal_hygiene_ok": true,
         "mom_window_complete": null,
         "mom_role": "optional_diagnostic_companion",
@@ -328,14 +3551,14 @@
     "L630": "lineage fork markers on real spawns",
     "L631": "archive frozen cull losers",
     "N228": "rule-aware LLM decide + misfit evidence trail",
-    "N229": "human chart draw tools (keep deferred)"
+    "N229": "human chart draw tools (keep deferred)",
+    "L640": "dashboard / observe-utilization strip"
   },
   "soft_gaps": [
-    "Armed observe — still no episode walker / no live cue fills.",
     "Do not back-label cue-book NAV as lab wins.",
     "Do not open Package L on sealed; cull ≠ live promote.",
-    "Evolutionary shadows wait on Q8B start gate (or calendar fallback).",
-    "Owner must confirm freeze of proposed non-mechanical autopsy cohort."
+    "Sealed spawn / novelty / cull remain N223/N226/N227 — lab fills only in v0.",
+    "N228 judgment fill still stubbed (B4 cue cite only on walker opens)."
   ],
   "ops_doc": "docs/ops/cue-consumer-mft.md"
 }
