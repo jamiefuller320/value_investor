@@ -746,10 +746,114 @@ def _actioned_review_ids(labels: dict[str, Any] | None) -> set[str]:
     return actioned
 
 
+def _usable_active_review_ids(queue: dict[str, Any] | None) -> set[str]:
+    """Active queue ids the dashboard can render (ticker + book present).
+
+    Matches ``postSaleReviewCardUsable`` in ``docs/app.js`` — blank/? cards are
+    invisible to the owner even when still listed in ``active``.
+    """
+    usable: set[str] = set()
+    if not isinstance(queue, dict):
+        return usable
+    for row in queue.get("active") or []:
+        if not isinstance(row, dict):
+            continue
+        rid = str(row.get("review_id") or "").strip()
+        if not rid:
+            continue
+        ticker = str(row.get("ticker") or "").strip()
+        book = str(row.get("book_tag") or row.get("book_id") or "").strip()
+        if not ticker or ticker == "?" or not book or book == "?":
+            continue
+        usable.add(rid)
+    return usable
+
+
+def classify_cohort_remaining(
+    remaining: list[str],
+    *,
+    queue: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Split gate remaining into renderable-active vs ghosts (not UI-visible)."""
+    rem = [str(x).strip() for x in remaining if str(x).strip()]
+    usable = _usable_active_review_ids(queue)
+    in_active = [rid for rid in rem if rid in usable]
+    ghosts = [rid for rid in rem if rid not in usable]
+    return {
+        "remaining_in_active": in_active,
+        "remaining_in_active_n": len(in_active),
+        "remaining_ghosts": ghosts,
+        "remaining_ghosts_n": len(ghosts),
+    }
+
+
+def heal_q8b_cohort_ghosts(
+    data_dir: Path,
+    *,
+    start_gate: dict[str, Any] | None,
+    labels: dict[str, Any] | None,
+    queue: dict[str, Any] | None,
+    source: str = "q8b_start_gate_ghost_heal",
+    acted_by: str = "ops_heal",
+) -> dict[str, Any]:
+    """Durable Duplicate-clear frozen cohort ids the owner cannot see on the list.
+
+    Ghosts = checkpoint remaining that are absent from the usable active queue
+    (ENI/STR/LOGN pattern: left active unlabeled, or blank/? unrenderable cards).
+    Does **not** auto-clear unique usable active episodes — those need owner
+    Accept/Comment/Duplicate or an explicit ops clear.
+    """
+    from value_investor.post_sale_review_labels import record_duplicate
+
+    gate = start_gate if isinstance(start_gate, dict) else {}
+    cohort = [str(x).strip() for x in (gate.get("cohort_review_ids") or []) if str(x).strip()]
+    actioned = _actioned_review_ids(labels)
+    remaining = [rid for rid in cohort if rid not in actioned]
+    classified = classify_cohort_remaining(remaining, queue=queue)
+    ghosts = list(classified.get("remaining_ghosts") or [])
+    cleared: list[str] = []
+    errors: list[dict[str, str]] = []
+    active_by_id = {
+        str(row.get("review_id") or "").strip(): row
+        for row in ((queue or {}).get("active") or [])
+        if isinstance(row, dict) and str(row.get("review_id") or "").strip()
+    }
+    note = (
+        "Q8B ghost clear: frozen cohort id not renderable on autopsy list "
+        "(absent from usable active queue); durable Duplicate so checkpoint "
+        "cannot remain pointing at an invisible card. No fabricated "
+        "Accept/Comment text."
+    )
+    for rid in ghosts:
+        snap = active_by_id.get(rid) if rid in active_by_id else {"review_id": rid}
+        try:
+            record_duplicate(
+                Path(data_dir),
+                review_id=rid,
+                tag_at_action="new",
+                note=note,
+                source=source,
+                acted_by=acted_by,
+                snapshot=snap if isinstance(snap, dict) else {"review_id": rid},
+            )
+            cleared.append(rid)
+        except Exception as exc:  # noqa: BLE001 — heal must not abort refresh
+            errors.append({"review_id": rid, "error": str(exc)})
+    return {
+        "ghosts_found": ghosts,
+        "ghosts_found_n": len(ghosts),
+        "cleared": cleared,
+        "cleared_n": len(cleared),
+        "errors": errors,
+        "remaining_in_active_n": int(classified.get("remaining_in_active_n") or 0),
+    }
+
+
 def evaluate_start_gate(
     *,
     start_gate: dict[str, Any] | None,
     labels: dict[str, Any] | None = None,
+    queue: dict[str, Any] | None = None,
     today: date | None = None,
 ) -> dict[str, Any]:
     """Q8B practical lock: named open-autopsy cohort checkpoint.
@@ -772,10 +876,12 @@ def evaluate_start_gate(
     status = str(gate.get("checkpoint_status") or "open").strip().lower()
     actioned = _actioned_review_ids(labels)
     remaining = [rid for rid in cohort if rid not in actioned]
+    classified = classify_cohort_remaining(remaining, queue=queue)
     cohort_complete = bool(cohort) and not remaining
     if status in {"complete", "completed", "done"} and gate.get("completed_at"):
         cohort_complete = True
         remaining = []
+        classified = classify_cohort_remaining([], queue=queue)
 
     today_d = today or datetime.now(UTC).date()
     fallback_d = date.fromisoformat(CALENDAR_FALLBACK)
@@ -800,6 +906,10 @@ def evaluate_start_gate(
         "cohort_actioned": len(cohort) - len(remaining),
         "cohort_remaining_n": len(remaining),
         "cohort_remaining": remaining[:20],
+        "cohort_remaining_in_active": list(classified.get("remaining_in_active") or [])[:20],
+        "cohort_remaining_in_active_n": int(classified.get("remaining_in_active_n") or 0),
+        "cohort_remaining_ghosts": list(classified.get("remaining_ghosts") or [])[:20],
+        "cohort_remaining_ghosts_n": int(classified.get("remaining_ghosts_n") or 0),
         "cohort_complete": cohort_complete,
         "calendar_fallback": CALENDAR_FALLBACK,
         "calendar_ok": calendar_ok,
@@ -812,6 +922,8 @@ def evaluate_start_gate(
             "each id is Accept/Comment-actioned in post_sale_review_labels "
             "(actioned_review_ids + events.kind) — new just_sold refill of the "
             "active queue does not reopen the checkpoint. "
+            "Remaining ids absent from the usable active autopsy list are ghosts "
+            "(auto Duplicate-healed on refresh). "
             f"Alternate: on_or_after {CALENDAR_FALLBACK}."
         ),
         "evolutionary_shadows_note": (
@@ -1140,7 +1252,22 @@ def refresh_cue_consumer_mft(
             "excludes": proposal.get("excludes"),
         }
 
-    start_eval = evaluate_start_gate(start_gate=gate_store, labels=labels, today=today)
+    # Durable heal first: frozen cohort ids invisible on the autopsy list must
+    # not keep the start gate open (ENI/STR/LOGN ghost pattern).
+    ghost_heal = heal_q8b_cohort_ghosts(
+        data_dir,
+        start_gate=gate_store,
+        labels=labels,
+        queue=queue,
+    )
+    if int(ghost_heal.get("cleared_n") or 0) > 0:
+        labels = _safe_read(
+            Path(labels_path) if labels_path is not None else DEFAULT_LABELS_PATH
+        )
+
+    start_eval = evaluate_start_gate(
+        start_gate=gate_store, labels=labels, queue=queue, today=today
+    )
     gate_store["generated_at"] = when
     gate_store["checkpoint_id"] = gate_store.get("checkpoint_id") or START_CHECKPOINT_ID
     gate_store["cohort_selection_id"] = gate_store.get("cohort_selection_id") or COHORT_SELECTION_ID
@@ -1156,6 +1283,11 @@ def refresh_cue_consumer_mft(
             else len(start_eval.get("cohort_remaining") or [])
         ),
         "cohort_actioned": int(start_eval.get("cohort_actioned") or 0),
+        "cohort_remaining_in_active_n": int(
+            start_eval.get("cohort_remaining_in_active_n") or 0
+        ),
+        "cohort_remaining_ghosts_n": int(start_eval.get("cohort_remaining_ghosts_n") or 0),
+        "ghost_heal_cleared_n": int(ghost_heal.get("cleared_n") or 0),
         "calendar_ok": start_eval["calendar_ok"],
         "proposed_n": len(
             [x for x in (gate_store.get("proposed_cohort_review_ids") or []) if str(x).strip()]
@@ -1321,12 +1453,14 @@ __all__ = [
     "build_hardened_proposal_stub",
     "build_lab_payload",
     "build_registration_payload",
+    "classify_cohort_remaining",
     "concurrent_cap_stub",
     "cull_stub",
     "default_start_gate_payload",
     "evaluate_start_gate",
     "format_cue_consumer_mft_text",
     "freeze_start_cohort",
+    "heal_q8b_cohort_ghosts",
     "judgment_in_the_round_stub",
     "novelty_fingerprint",
     "novelty_gate_stub",

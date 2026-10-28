@@ -102,7 +102,9 @@ Blank ``?`` identity cards are fail-closed out of `active`; legacy
 `active_replies` are cleared on refresh. Bridge flattens **slim** identity
 (+ `episode_key`) onto the command payload. Soft reload and full page
 refresh keep clears via session + `localStorage` until labels/queue catch
-up. Cleared **`episode_key`** (calendar day) also stays out when board chips
+up (**max 2h** without durable catch-up — then the card resurfaces so a stuck
+optimistic clear cannot hide a Q8B remainder while the start gate still counts
+it). Cleared **`episode_key`** (calendar day) also stays out when board chips
 rewrite entry/exit seconds (new `review_id`, same episode).
 
 **Initial opinion** on every card is structured deterministic v0 (`opinion_source=

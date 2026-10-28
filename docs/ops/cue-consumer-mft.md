@@ -79,13 +79,21 @@ Prefs: prefer identity-break / non-mechanical over blanket max-days / leave-buy-
    `ftse-cue-consumer-mft freeze-cohort --apply` (copies proposed →
    `cohort_review_ids`). Rebuild first with `propose-cohort` if the set should
    shrink/change.
-3. Checkpoint **completes** when every frozen id is Accept/Comment-actioned in
+3. Checkpoint **completes** when every frozen id is Accept/Comment/Duplicate-actioned in
    `post_sale_review_labels.json` — joined via canonical `actioned_review_ids`
    **and** top-level `events[].kind` (`accept` / `comment` / `duplicate`) — even
    if new sells refill the active queue. The UI **Interesting** sort is only an
    attention order; the gate still requires the **full frozen cohort**, not the
    Interesting-first subset alone.
-4. Alternate calendar: `on_or_after` **2026-12-01**.
+4. **Ghost heal (refresh):** frozen remaining ids absent from the *usable* active
+   autopsy queue (left the list unlabeled, or blank/`?` unrenderable cards) are
+   durable **Duplicate**-cleared on `ftse-cue-consumer-mft refresh` /
+   ops-monitor so the gate cannot stay open pointing at invisible cards
+   (ENI/STR/LOGN pattern). Unique usable active remainders still need owner
+   Accept/Comment/Duplicate. Client optimistic clears expire after **2h** without
+   labels catch-up so a stuck `pendingPostSaleActions` overlay cannot hide a
+   card while the gate still counts it.
+5. Alternate calendar: `on_or_after` **2026-12-01**.
 
 Human task: `adhoc-cue-consumer-mft-start-gate`.
 
