@@ -1977,4 +1977,167 @@ def reconcile_committed_research_index(
     }
 
 
+_BUY_TIER_SIGNALS = frozenset({"strong_buy", "buy"})
+
+
+def research_overlay_cohesion_metrics(
+    *,
+    data_dir: Path,
+    latest_path: Path | None = None,
+    committed_root: Path | None = None,
+) -> dict[str, Any]:
+    """
+    Compare committed memo verdicts against ``latest.json`` report overlay fields.
+
+    Mirrors the apply-layer counts in ``system_gap_analysis``. Committed names
+    that dropped out of the current screen universe are tracked separately — they
+    cannot receive ``research_verdict`` on ``reports[]`` until the name re-enters.
+    """
+    from value_investor.storage import read_json
+
+    data_dir = Path(data_dir)
+    latest_path = Path(latest_path or data_dir / "latest.json")
+    committed_root = Path(committed_root or data_dir / "research")
+
+    reports: list[dict[str, Any]] = []
+    if latest_path.is_file():
+        payload = read_json(latest_path)
+        if isinstance(payload, dict):
+            reports = [row for row in (payload.get("reports") or []) if isinstance(row, dict)]
+
+    report_tickers = {
+        _research_ticker_key(row.get("ticker")) for row in reports if row.get("ticker")
+    }
+    wired_tickers = {
+        _research_ticker_key(row.get("ticker"))
+        for row in reports
+        if row.get("ticker") and str(row.get("research_verdict") or "").strip()
+    }
+    buy_tier = [
+        row for row in reports if str(row.get("signal") or "").strip().lower() in _BUY_TIER_SIGNALS
+    ]
+    buy_tier_wired = [row for row in buy_tier if str(row.get("research_verdict") or "").strip()]
+    buy_tier_unwired = [
+        _research_ticker_key(row.get("ticker"))
+        for row in buy_tier
+        if not str(row.get("research_verdict") or "").strip()
+    ]
+
+    verdict_tickers: set[str] = set()
+    if committed_root.is_dir():
+        for path in sorted(committed_root.glob("*/research.json")):
+            meta = read_json(path)
+            if not isinstance(meta, dict):
+                continue
+            ticker = _research_ticker_key(meta.get("ticker") or path.parent.name)
+            if str(meta.get("research_verdict") or "").strip():
+                verdict_tickers.add(ticker)
+
+    in_universe = verdict_tickers & report_tickers
+    off_universe = sorted(verdict_tickers - report_tickers)
+    committed_not_wired_in_universe = sorted(in_universe - wired_tickers)
+    buy_unwired_with_committed = [
+        ticker for ticker in buy_tier_unwired if ticker in verdict_tickers
+    ]
+
+    return {
+        "buy_tier_count": len(buy_tier),
+        "buy_tier_wired_count": len(buy_tier_wired),
+        "wired_verdict_count": len(wired_tickers),
+        "committed_with_verdict": len(verdict_tickers),
+        "committed_in_universe": len(in_universe),
+        "off_universe_committed_verdicts": off_universe,
+        "off_universe_committed_count": len(off_universe),
+        "committed_not_wired_in_universe": committed_not_wired_in_universe,
+        "wired_missing_committed_verdicts_in_universe": len(committed_not_wired_in_universe),
+        "buy_tier_unwired_with_committed_verdict": buy_unwired_with_committed,
+        "cohesive": not committed_not_wired_in_universe and not buy_unwired_with_committed,
+    }
+
+
+def reconcile_committed_research_overlay(
+    *,
+    data_dir: Path,
+    latest_path: Path | None = None,
+    committed_root: Path | None = None,
+    output_dir: Path | None = None,
+    tickers: list[str] | None = None,
+) -> dict[str, Any]:
+    """
+    Re-apply committed memo verdicts onto ``latest.json`` reports when publish lagged.
+
+    Pairs with ``reconcile_committed_research_index`` so ingest-improvement closes
+    both the dashboard ``research[]`` index and the screen overlay on ``reports[]``.
+    """
+    from value_investor.research.overlay_refresh import refresh_dashboard_bundle
+
+    data_dir = Path(data_dir)
+    latest_path = Path(latest_path or data_dir / "latest.json")
+    committed_root = Path(committed_root or data_dir / "research")
+    output_dir = Path(output_dir or Path("output"))
+
+    before = research_overlay_cohesion_metrics(
+        data_dir=data_dir,
+        latest_path=latest_path,
+        committed_root=committed_root,
+    )
+    unwired = list(before.get("committed_not_wired_in_universe") or [])
+    if tickers:
+        wanted = {_research_ticker_key(t) for t in tickers if str(t).strip()}
+        unwired = [t for t in unwired if t in wanted]
+
+    refreshed = False
+    documents_applied = 0
+    if unwired and latest_path.is_file():
+        documents_applied = refresh_dashboard_bundle(
+            latest_path,
+            output_dir=output_dir,
+            committed_dir=committed_root,
+        )
+        refreshed = True
+
+    after = research_overlay_cohesion_metrics(
+        data_dir=data_dir,
+        latest_path=latest_path,
+        committed_root=committed_root,
+    )
+    return {
+        **after,
+        "refreshed": refreshed,
+        "documents_applied": documents_applied,
+        "overlay_targets": unwired,
+    }
+
+
+def reconcile_committed_research_publish(
+    *,
+    data_dir: Path,
+    dest_dir: Path = Path("docs"),
+    latest_path: Path | None = None,
+    committed_root: Path | None = None,
+    output_dir: Path | None = None,
+    tickers: list[str] | None = None,
+) -> dict[str, Any]:
+    """Union index gaps and refresh report overlay for the same ticker set."""
+    data_dir = Path(data_dir)
+    latest_path = Path(latest_path or data_dir / "latest.json")
+    committed_root = Path(committed_root or data_dir / "research")
+
+    index = reconcile_committed_research_index(
+        data_dir=data_dir,
+        dest_dir=dest_dir,
+        latest_path=latest_path,
+        committed_root=committed_root,
+        tickers=tickers,
+    )
+    overlay = reconcile_committed_research_overlay(
+        data_dir=data_dir,
+        latest_path=latest_path,
+        committed_root=committed_root,
+        output_dir=output_dir,
+        tickers=tickers,
+    )
+    return {"index": index, "overlay": overlay}
+
+
 install_fetch_cashflow_fallback()
