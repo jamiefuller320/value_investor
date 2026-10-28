@@ -551,11 +551,7 @@ def fill_judgment_in_the_round(
         families = str(screen.get("passed_families") or "").lower()
         if b1_cites:
             cheap = "cheapness" in families or "cheap" in families
-            answer = (
-                "screen_families_include_cheapness"
-                if cheap
-                else "fundamentals_cited_partial"
-            )
+            answer = "screen_families_include_cheapness" if cheap else "fundamentals_cited_partial"
             buy["B1"] = _judgment_cell(
                 answer=answer,
                 confidence="medium" if cheap else "low",
@@ -821,11 +817,11 @@ def fill_judgment_in_the_round(
     # Stance + misfit trail (deterministic agree/veto within rule set).
     misfit: dict[str, Any] | None = None
     stance = "agree"
-    timing_val = str(
-        (entry_detail or {}).get("timing_signal")
-        or (row or {}).get("timing_signal")
-        or ""
-    ).strip().lower()
+    timing_val = (
+        str((entry_detail or {}).get("timing_signal") or (row or {}).get("timing_signal") or "")
+        .strip()
+        .lower()
+    )
     if side in {"buy", "both"} and timing_val == "wait" and cue_id:
         stance = "misfit"
         misfit = {

@@ -374,9 +374,7 @@ def walk_lab_paper_episodes(
     cfg = cfg or WalkerConfig()
     when = generated_at or datetime.now(UTC).isoformat()
     epoch_at = knob_epoch_started_at or when
-    alignment_rows = [
-        row for row in (autopsy_alignment_rows or []) if isinstance(row, dict)
-    ]
+    alignment_rows = [row for row in (autopsy_alignment_rows or []) if isinstance(row, dict)]
 
     closed: list[dict[str, Any]] = []
     open_eps: list[dict[str, Any]] = []

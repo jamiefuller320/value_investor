@@ -74,10 +74,7 @@ def test_walker_opens_and_closes_lab_paper_with_durable_evidence():
     assert judgment["influences_live"] is False
     assert judgment["fill_status"] == "filled"
     assert judgment["buy"]["B4"]["unknown"] is False
-    assert (
-        "cue_source_id=n210_ai_filter"
-        in judgment["buy"]["B4"]["cites"]
-    )
+    assert "cue_source_id=n210_ai_filter" in judgment["buy"]["B4"]["cites"]
     assert judgment["buy"]["B5"]["unknown"] is False  # conviction + verdict cites
     assert judgment["sell"]["S4"]["unknown"] is False  # exit rule cite on close
     assert judgment["sell"]["S1"]["unknown"] is False
