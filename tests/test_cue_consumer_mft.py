@@ -172,6 +172,7 @@ def test_q8b_start_gate_named_cohort_not_active_count():
     assert open_eval["mode"] == "q8b_named_cohort_checkpoint"
     assert open_eval["eligible"] is False
     assert open_eval["cohort_remaining"] == ["rev-b"]
+    assert open_eval["cohort_remaining_n"] == 1
     assert open_eval["not_gate"] == "active_count==0_forever_wait_while_just_sold_refills"
 
     # Cohort complete even if a hypothetical active queue would be non-empty.
@@ -190,6 +191,36 @@ def test_q8b_start_gate_named_cohort_not_active_count():
     )
     assert done["eligible"] is True
     assert done["eligibility_reason"] == "named_open_autopsy_cohort_checkpoint_complete"
+
+    # Live Package M shape: actioned_review_ids + events.kind (not history/action).
+    live_shape = evaluate_start_gate(
+        start_gate={
+            "checkpoint_id": START_CHECKPOINT_ID,
+            "cohort_review_ids": ["rev-a", "rev-b", "rev-c"],
+        },
+        labels={
+            "actioned_review_ids": ["rev-a", "rev-b"],
+            "events": [
+                {"review_id": "rev-a", "kind": "accept"},
+                {"review_id": "rev-b", "kind": "comment"},
+                {"review_id": "rev-c", "kind": "reply"},  # reply alone does not clear
+            ],
+        },
+        today=date(2026, 10, 25),
+    )
+    assert live_shape["eligible"] is False
+    assert live_shape["cohort_actioned"] == 2
+    assert live_shape["cohort_remaining_n"] == 1
+    assert live_shape["cohort_remaining"] == ["rev-c"]
+
+    # actioned_review_ids alone is enough (events optional).
+    list_only = evaluate_start_gate(
+        start_gate={"cohort_review_ids": ["rev-a", "rev-b"]},
+        labels={"actioned_review_ids": ["rev-a", "rev-b"], "events": []},
+        today=date(2026, 10, 25),
+    )
+    assert list_only["eligible"] is True
+    assert list_only["cohort_remaining_n"] == 0
 
     # Calendar fallback.
     cal = evaluate_start_gate(

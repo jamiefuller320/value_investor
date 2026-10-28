@@ -80,7 +80,11 @@ Prefs: prefer identity-break / non-mechanical over blanket max-days / leave-buy-
    `cohort_review_ids`). Rebuild first with `propose-cohort` if the set should
    shrink/change.
 3. Checkpoint **completes** when every frozen id is Accept/Comment-actioned in
-   `post_sale_review_labels.json` — even if new sells refill the active queue.
+   `post_sale_review_labels.json` — joined via canonical `actioned_review_ids`
+   **and** top-level `events[].kind` (`accept` / `comment` / `duplicate`) — even
+   if new sells refill the active queue. The UI **Interesting** sort is only an
+   attention order; the gate still requires the **full frozen cohort**, not the
+   Interesting-first subset alone.
 4. Alternate calendar: `on_or_after` **2026-12-01**.
 
 Human task: `adhoc-cue-consumer-mft-start-gate`.
@@ -96,7 +100,7 @@ Human task: `adhoc-cue-consumer-mft-start-gate`.
 | Spawn sealed child | scaffold proposal only | **N223** / **L630** |
 | Rule-aware LLM decide | schema stub only | **N228** |
 | Chart draw tools | not shipped | **N229** |
-| Episode walker / paper fills | not shipped | deferred |
+| Episode walker / paper fills | not shipped | deferred (still parked after Q8B; next eng after gate clears is evolutionary-shadow spawn scaffolding / N223 — not walker fills) |
 
 ## Automation
 
