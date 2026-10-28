@@ -67,7 +67,11 @@ def test_queue_requires_blind_accept_and_clock(tmp_path: Path):
                         "entry_at": "2026-09-01T09:00:00+00:00",
                         "population": "lab",
                         "framing": "blind framing",
-                        "buy_decision": {"label": "enter", "code": "enter_target_set", "join_ok": True},
+                        "buy_decision": {
+                            "label": "enter",
+                            "code": "enter_target_set",
+                            "join_ok": True,
+                        },
                     },
                 }
             ],
