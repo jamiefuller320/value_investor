@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-29T15:25:27.070194+00:00",
+  "generated_at": "2026-10-29T16:46:53.529367+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -74,7 +74,7 @@
       "1": "euro_stoxx50",
       "2": "sp500"
     },
-    "equal_support_generated_at": "2026-10-29T15:17:01.585806+00:00"
+    "equal_support_generated_at": "2026-10-29T15:34:16.406704+00:00"
   },
   "markets": [
     {
@@ -2218,7 +2218,7 @@
       "is_ftse_equivalent": true,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=9)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=12)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": 1,
@@ -2275,18 +2275,16 @@
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 9,
-        "bodies_median": 21.0,
+        "indexed_without_body": 12,
+        "bodies_median": 22.0,
         "coverage_scope": "canonical",
         "ftse_equivalent": true,
         "ingest_exhausted": false,
-        "parked_count": 3,
+        "parked_count": 1,
         "zero_body_tickers": [],
         "thin_body_tickers": [],
         "unmeasured_tickers": [],
         "parked_tickers": [
-          "CRH",
-          "EME",
           "LMT"
         ]
       },
@@ -2346,23 +2344,23 @@
       "sprint_progress": {
         "window_days": 2,
         "run_count": 3,
-        "targets": 14,
-        "improved": 13,
+        "targets": 29,
+        "improved": 27,
         "improved_tickers": [
-          "CINF",
-          "HIG",
-          "PYPL",
-          "GM",
-          "UPS",
-          "HST",
-          "PNR",
-          "BRO",
-          "DG",
-          "DHI",
-          "NWSA",
-          "XYL"
+          "LH",
+          "TXT",
+          "BMY",
+          "LVS",
+          "CTSH",
+          "GEN",
+          "MO",
+          "TROW",
+          "VZ",
+          "INVH",
+          "AOS",
+          "EG"
         ],
-        "last_run_at": "2026-10-29T15:23:36.962714+00:00",
+        "last_run_at": "2026-10-29T16:41:28.215785+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -2376,21 +2374,21 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 9,
+          "indexed_without_body": 12,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 4,
+          "indexed_without_body": 7,
           "filing_gaps": 0
         },
         "remaining": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 9,
+          "indexed_without_body": 12,
           "filing_gaps": 0
         },
         "admission_ready": true,
@@ -2862,7 +2860,7 @@
         "filing_ready": false,
         "span_weeks": 14.71,
         "unique_days": 48,
-        "leftover": 9,
+        "leftover": 12,
         "steps": [
           {
             "id": "start",
