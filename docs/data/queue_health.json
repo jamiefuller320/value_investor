@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-28T11:41:42.886937+00:00",
-  "overall": "active",
-  "headline": "Agent lane active.",
+  "generated_at": "2026-10-29T02:39:36.657292+00:00",
+  "overall": "idle",
+  "headline": "Queue and hunter idle.",
   "merge_lane": {
     "state": "idle",
     "idle": true,
@@ -14,35 +14,35 @@
     "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
   },
   "agent_lane": {
-    "state": "running",
-    "idle": false,
-    "running": true,
+    "state": "idle",
+    "idle": true,
+    "running": false,
     "blocked": false,
-    "should_dispatch": true,
+    "should_dispatch": false,
     "pause_active": false,
     "traffic_pause_active": false,
     "attention_parked_count": 0,
-    "open_count": 4,
+    "open_count": 0,
     "pr_open_count": 0,
-    "dispatch_eligible_count": 4,
+    "dispatch_eligible_count": 0,
     "blocked_task_count": 0,
-    "next_task_id": "eng-20261028-01",
-    "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
-    "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+    "next_task_id": null,
+    "reason": "no open engineering tasks in queue",
+    "detail": "No open engineering tasks — queue is idle."
   },
   "queue_clearing": {
     "pause_active": false,
     "attention_parked_count": 0,
-    "evaluated_at": "2026-10-28T10:21:19.898066+00:00"
+    "evaluated_at": "2026-10-29T02:37:43.710503+00:00"
   },
   "traffic_control": {
     "pause_active": false,
     "stuck_pr_count": 0,
     "pause_reasons": [],
-    "evaluated_at": "2026-10-28T07:50:54.942274+00:00"
+    "evaluated_at": "2026-10-29T02:37:43.746983+00:00"
   },
   "ops_monitor": {
-    "run_at": "2026-10-28T07:46:47.134172+00:00",
+    "run_at": "2026-10-29T02:32:04.697322+00:00",
     "overall": "warn",
     "should_dispatch_engineering": false
   },
@@ -52,39 +52,28 @@
     "timezone": "UTC",
     "history_days": 14,
     "today": {
-      "date": "2026-10-28",
+      "date": "2026-10-29",
       "merged_total": 0,
       "merged_auto": 0,
       "merged_manual": 0,
       "verified": 0,
-      "fix_interventions": 1,
-      "fix_ci_check": 0,
-      "fix_merge_conflict": 1,
-      "fix_ci_and_merge": 0
-    },
-    "yesterday": {
-      "date": "2026-10-27",
-      "merged_total": 2,
-      "merged_auto": 0,
-      "merged_manual": 2,
-      "verified": 2,
       "fix_interventions": 0,
       "fix_ci_check": 0,
       "fix_merge_conflict": 0,
       "fix_ci_and_merge": 0
     },
+    "yesterday": {
+      "date": "2026-10-28",
+      "merged_total": 5,
+      "merged_auto": 0,
+      "merged_manual": 5,
+      "verified": 1,
+      "fix_interventions": 6,
+      "fix_ci_check": 2,
+      "fix_merge_conflict": 4,
+      "fix_ci_and_merge": 0
+    },
     "history": [
-      {
-        "date": "2026-10-15",
-        "merged_total": 6,
-        "merged_auto": 0,
-        "merged_manual": 6,
-        "verified": 4,
-        "fix_interventions": 5,
-        "fix_ci_check": 5,
-        "fix_merge_conflict": 0,
-        "fix_ci_and_merge": 0
-      },
       {
         "date": "2026-10-16",
         "merged_total": 1,
@@ -219,56 +208,100 @@
       },
       {
         "date": "2026-10-28",
+        "merged_total": 5,
+        "merged_auto": 0,
+        "merged_manual": 5,
+        "verified": 1,
+        "fix_interventions": 6,
+        "fix_ci_check": 2,
+        "fix_merge_conflict": 4,
+        "fix_ci_and_merge": 0
+      },
+      {
+        "date": "2026-10-29",
         "merged_total": 0,
         "merged_auto": 0,
         "merged_manual": 0,
         "verified": 0,
-        "fix_interventions": 1,
+        "fix_interventions": 0,
         "fix_ci_check": 0,
-        "fix_merge_conflict": 1,
+        "fix_merge_conflict": 0,
         "fix_ci_and_merge": 0
       }
     ],
     "merges_today": [],
     "merges_yesterday": [
       {
-        "task_id": "eng-20261027-02",
-        "title": "Close library ingest gaps for smi / PGHN.SW (chain 2/3: 0/0 improved, run igc-20261003-02)",
+        "task_id": "eng-20261028-04",
+        "title": "Close buy-tier overlay wiring gap (`buy_tier_wired_count` 64 vs `buy_tier_count` 73; `wired_missing_committed_verdicts` 1)—ensure committed verdicts publish to",
         "area": "ingest",
-        "pr_number": 1204,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1204",
-        "merged_at": "2026-10-27T08:22:23.873681+00:00",
-        "merge_class": "ingest_narrow",
+        "pr_number": 1217,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1217",
+        "merged_at": "2026-10-28T20:19:22.842808+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20261028-02",
+        "title": "dividend: Implement canonical FCF basis registry (filing OCF−CapEx, screen TTM, company-adjusted/policy primary) with overlay rules that suppress Dividend Growt",
+        "area": "scoring",
+        "pr_number": 1216,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1216",
+        "merged_at": "2026-10-28T19:52:20.369911+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20261028-05",
+        "title": "Hunt fetchable IR source for parked sti leftover U14.SI",
+        "area": "ingest",
+        "pr_number": 1215,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1215",
+        "merged_at": "2026-10-28T19:48:37.422146+00:00",
+        "merge_class": "parked_hunter",
         "auto_merge": false,
         "independently_verified": true
       },
       {
-        "task_id": "eng-20261027-01",
-        "title": "Close library ingest gaps for smi / PGHN.SW (chain 1/3: 0/0 improved, run igc-20261003-02)",
-        "area": "ingest",
-        "pr_number": 1203,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1203",
-        "merged_at": "2026-10-27T03:11:11.322530+00:00",
-        "merge_class": "ingest_narrow",
+        "task_id": "eng-20261028-01",
+        "title": "fcf: Implement canonical FCF basis registry (filing OCF−CapEx, screen TTM, company-adjusted/policy primary) with overlay rules that suppress Dividend Growth/FCF",
+        "area": "scoring",
+        "pr_number": 1209,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1209",
+        "merged_at": "2026-10-28T18:48:06.983986+00:00",
+        "merge_class": "human",
         "auto_merge": false,
-        "independently_verified": true
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20261028-03",
+        "title": "Wire Yahoo (or filing-derived) `operating_cashflow` into `CompanyMetrics` when `financials_annual.json` already has OCF",
+        "area": "ingest",
+        "pr_number": 1210,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1210",
+        "merged_at": "2026-10-28T18:18:55.362530+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
       }
     ]
   },
   "library_stall_parks": [],
   "observe_utilization": {
     "schema_version": 1,
-    "generated_at": "2026-10-28T11:41:42.793166+00:00",
+    "generated_at": "2026-10-29T02:39:36.596831+00:00",
     "observe_only": true,
-    "headline": "2 observe utilization warn(s) — cohorts need attention.",
+    "headline": "2 warn instrument(s); improving vs last cycle on 1.",
     "surface_freshness": "fresh",
-    "ops_run_at": "2026-10-28T07:46:47.134172+00:00",
+    "ops_run_at": "2026-10-29T02:32:04.697322+00:00",
     "warn_instrument_count": 2,
     "trajectory_summary": {
-      "improving": 0,
+      "improving": 1,
       "worsening": 0,
-      "flat": 5,
-      "unknown": 0,
+      "flat": 4,
+      "unknown": 1,
       "history_points": 28,
       "note": "Deltas vs prior dashboard cycle (warn/gap counts; lower is better). Raw instrument stores commit with ops-monitor (L460)."
     },
@@ -280,12 +313,12 @@
         "observe_only": true,
         "warn_active": true,
         "severity": "warn",
-        "finding_summary": "25 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, euro_stoxx50, ftse350, hang_seng (+2 more): hang_seng/0001.HK (no_memo, 391.78h since flip), aex/MT.AS (no_memo, 343.78h since flip), aex/PRX.AS (no_memo, 343.78h since flip), euro_depth/PRX.AS (no_memo, 343.78h since flip), tsx60/ABX.TO (no_key_bodies, 343.78h since flip), tsx60/SAP.TO (no_key_bodies, 343.78h since flip), tsx60/TECK-B.TO (no_key_bodies, 343.78h since flip), euro_depth/WIE.VI (no_key_bodies, 319.78h since flip), nasdaq100/AMAT (no_memo, 319.78h since flip), asx200/CLW.AX (no_memo, 295.78h since flip) (+15 more). Blocking: no_key_bodies=7, no_memo=18.",
+        "finding_summary": "25 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, euro_stoxx50, ftse350, hang_seng (+2 more): hang_seng/0001.HK (no_memo, 410.54h since flip), aex/MT.AS (no_memo, 362.54h since flip), aex/PRX.AS (no_memo, 362.54h since flip), euro_depth/PRX.AS (no_memo, 362.54h since flip), tsx60/ABX.TO (no_key_bodies, 362.54h since flip), tsx60/SAP.TO (no_key_bodies, 362.54h since flip), tsx60/TECK-B.TO (no_key_bodies, 362.54h since flip), euro_depth/WIE.VI (no_key_bodies, 338.54h since flip), nasdaq100/AMAT (no_memo, 338.54h since flip), asx200/CLW.AX (no_memo, 314.54h since flip) (+15 more). Blocking: no_key_bodies=7, no_memo=18.",
         "metrics": {
           "warn_not_usable": 25,
           "open_not_usable": 35,
-          "cohort_count": 178,
-          "usable_in_window": 143,
+          "cohort_count": 173,
+          "usable_in_window": 138,
           "market_count": 23,
           "blocking_stage_counts": {
             "no_accumulate_verdict": 10,
@@ -301,7 +334,7 @@
               "blocking_stage": "no_memo",
               "has_memo": false,
               "memo_home_market": null,
-              "hours_since_flip": 391.78
+              "hours_since_flip": 410.54
             },
             {
               "ticker": "MT.AS",
@@ -309,7 +342,7 @@
               "blocking_stage": "no_memo",
               "has_memo": false,
               "memo_home_market": null,
-              "hours_since_flip": 343.78
+              "hours_since_flip": 362.54
             },
             {
               "ticker": "PRX.AS",
@@ -317,7 +350,7 @@
               "blocking_stage": "no_memo",
               "has_memo": false,
               "memo_home_market": null,
-              "hours_since_flip": 343.78
+              "hours_since_flip": 362.54
             },
             {
               "ticker": "PRX.AS",
@@ -325,7 +358,7 @@
               "blocking_stage": "no_memo",
               "has_memo": false,
               "memo_home_market": null,
-              "hours_since_flip": 343.78
+              "hours_since_flip": 362.54
             },
             {
               "ticker": "ABX.TO",
@@ -333,7 +366,7 @@
               "blocking_stage": "no_key_bodies",
               "has_memo": true,
               "memo_home_market": "tsx60",
-              "hours_since_flip": 343.78
+              "hours_since_flip": 362.54
             },
             {
               "ticker": "SAP.TO",
@@ -341,7 +374,7 @@
               "blocking_stage": "no_key_bodies",
               "has_memo": true,
               "memo_home_market": "tsx60",
-              "hours_since_flip": 343.78
+              "hours_since_flip": 362.54
             },
             {
               "ticker": "TECK-B.TO",
@@ -349,7 +382,7 @@
               "blocking_stage": "no_key_bodies",
               "has_memo": true,
               "memo_home_market": "tsx60",
-              "hours_since_flip": 343.78
+              "hours_since_flip": 362.54
             },
             {
               "ticker": "WIE.VI",
@@ -357,7 +390,7 @@
               "blocking_stage": "no_key_bodies",
               "has_memo": true,
               "memo_home_market": "euro_depth",
-              "hours_since_flip": 319.78
+              "hours_since_flip": 338.54
             }
           ]
         },
@@ -367,9 +400,9 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Last refresh 3.9h ago.",
-          "as_of": "2026-10-28T07:46:48.620312+00:00",
-          "age_hours": 3.92,
+          "detail": "Last refresh 0.1h ago.",
+          "as_of": "2026-10-29T02:32:06.118569+00:00",
+          "age_hours": 0.13,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -388,37 +421,37 @@
         "observe_only": true,
         "warn_active": true,
         "severity": "warn",
-        "finding_summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `memo_recent` missing on 18/73 names (e.g. ATYM.L, EZJ.L, HBR.L, HTG.L, LRE.L, MAB.L, PRU.L, RKT.L, VLX.L, ABF.L +8 more). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
+        "finding_summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `memo_recent` missing on 14/73 names (e.g. ATYM.L, EZJ.L, HBR.L, HTG.L, LRE.L, MAB.L, PRU.L, RKT.L, VLX.L, BOWL.L +4 more). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
         "metrics": {
           "inventory_count": 73,
-          "fully_ready_count": 55,
-          "names_with_any_gap": 18,
+          "fully_ready_count": 59,
+          "names_with_any_gap": 14,
           "dominant_gap_field": "memo_recent",
-          "dominant_gap_count": 18,
+          "dominant_gap_count": 14,
           "gap_counts": {
             "key_filing_bodies": 0,
             "fcf_basis_bound": 0,
             "overlay_bound": 9,
-            "memo_recent": 18
+            "memo_recent": 14
           },
           "verdict": "memo_recent"
         },
         "primary_metric": "dominant_gap_count",
-        "primary_value": 18,
+        "primary_value": 14,
         "primary_label": "Dominant gap (memo_recent)",
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Last refresh 3.9h ago.",
-          "as_of": "2026-10-28T07:47:09.107719+00:00",
-          "age_hours": 3.91,
+          "detail": "Last refresh 0.1h ago.",
+          "as_of": "2026-10-29T02:32:31.008653+00:00",
+          "age_hours": 0.12,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
         "trajectory": {
-          "delta": 0,
-          "direction": "flat",
-          "label": "Unchanged vs last cycle",
+          "delta": -4,
+          "direction": "improving",
+          "label": "Better since last cycle",
           "prior_value": 18,
           "prior_at": "2026-10-28T02:36:23.241346+00:00"
         }
@@ -583,9 +616,9 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Last refresh 3.9h ago.",
-          "as_of": "2026-10-28T07:47:09.321070+00:00",
-          "age_hours": 3.91,
+          "detail": "Last refresh 0.1h ago.",
+          "as_of": "2026-10-29T02:32:31.370129+00:00",
+          "age_hours": 0.12,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -619,9 +652,9 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Last refresh 3.9h ago.",
-          "as_of": "2026-10-28T07:47:09.482233+00:00",
-          "age_hours": 3.91,
+          "detail": "Last refresh 0.1h ago.",
+          "as_of": "2026-10-29T02:32:31.787951+00:00",
+          "age_hours": 0.12,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -643,7 +676,7 @@
         "finding_summary": null,
         "metrics": {
           "market_count": 23,
-          "open_count": 774,
+          "open_count": 785,
           "closed_count": 0,
           "first_episode_closed_count": 0,
           "source_records_missing_market_id": 0,
@@ -655,9 +688,9 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Last refresh 3.9h ago.",
-          "as_of": "2026-10-28T07:47:09.485069+00:00",
-          "age_hours": 3.91,
+          "detail": "Last refresh 0.1h ago.",
+          "as_of": "2026-10-29T02:32:31.792978+00:00",
+          "age_hours": 0.12,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -666,6 +699,77 @@
           "direction": "flat",
           "label": "Unchanged vs last cycle",
           "prior_value": 0,
+          "prior_at": "2026-10-28T02:36:23.241346+00:00"
+        }
+      },
+      {
+        "id": "cue_consumer_mft",
+        "title": "Cue-consumer MFT (super book)",
+        "finding_title": "Cue-consumer MFT episode walker (lab paper fills)",
+        "observe_only": true,
+        "influences_live": false,
+        "warn_active": false,
+        "severity": "info",
+        "finding_summary": "Walker mft-episode-walker-v0 recorded lab paper fills: open=30 closed=87; cues_accepted=117; median_fair_cost_episode_pct=0.021263. Fixed-stake v0; influences_live=false; declared incomparable; no sealed spawn / no Package L; does not steal Data P1.",
+        "metrics": {
+          "pipeline_status": "episode_walker_active",
+          "open_lab_episodes": 30,
+          "closed_lab_episodes": 87,
+          "walker_status": "active",
+          "cues_accepted": 117,
+          "path_median_fair_cost_pct": 0.021263,
+          "evolutionary_shadows_eligible": true,
+          "q8b_proposed_n": 78,
+          "q8b_frozen_n": 78,
+          "q8b_owner_freeze_pending": false,
+          "mom_levers": [
+            {
+              "id": "stock_choice",
+              "mom_score": null,
+              "status": "diagnostic_partial"
+            },
+            {
+              "id": "buy_timing",
+              "mom_score": null,
+              "status": "diagnostic_partial"
+            },
+            {
+              "id": "buy_strategy",
+              "mom_score": null,
+              "status": "diagnostic_partial"
+            },
+            {
+              "id": "sell_timing",
+              "mom_score": null,
+              "status": "diagnostic_partial"
+            },
+            {
+              "id": "sell_strategy",
+              "mom_score": null,
+              "status": "diagnostic_partial"
+            }
+          ],
+          "judgment_fill_status": "filled",
+          "declared_incomparable": true
+        },
+        "primary_metric": "open_lab_episodes",
+        "primary_value": 30,
+        "primary_label": "Open lab episodes (closed=87)",
+        "freshness": {
+          "state": "fresh",
+          "label": "Fresh",
+          "detail": "Last refresh 0.1h ago.",
+          "as_of": "2026-10-29T02:32:59.181230+00:00",
+          "age_hours": 0.11,
+          "store_lag_hours": null,
+          "stale_after_hours": 30.0
+        },
+        "trajectory_note": "Activity delta vs prior cycle — not a warn/gap instrument; rising open/closed is expected while the walker runs.",
+        "trajectory": {
+          "delta": null,
+          "direction": "unknown",
+          "label": "No prior cycle",
+          "prior_value": null,
           "prior_at": "2026-10-28T02:36:23.241346+00:00"
         }
       }
@@ -1428,14 +1532,14 @@
         }
       },
       {
-        "at": "2026-10-28T11:41:42.793166+00:00",
+        "at": "2026-10-29T02:38:14.731876+00:00",
         "buy_tier_flip_lag": {
           "primary_value": 25,
           "warn_active": true,
           "freshness_state": "fresh"
         },
         "decision_input_inventory": {
-          "primary_value": 18,
+          "primary_value": 14,
           "warn_active": true,
           "freshness_state": "fresh"
         },
@@ -1453,13 +1557,18 @@
           "primary_value": 0,
           "warn_active": false,
           "freshness_state": "fresh"
+        },
+        "cue_consumer_mft": {
+          "primary_value": 30,
+          "warn_active": false,
+          "freshness_state": "fresh"
         }
       }
     ]
   },
   "lifecycle_maturity_trajectory": {
     "schema_version": 1,
-    "generated_at": "2026-10-28T11:41:42.803209+00:00",
+    "generated_at": "2026-10-29T02:39:36.605716+00:00",
     "observe_only": true,
     "instrument_id": "lifecycle_maturity_trajectory",
     "separation": {
@@ -1475,14 +1584,14 @@
     },
     "headline": "Focus EU depth composite (STOXX50 + periphery) still early-lifecycle-heavy (100% just_bought+growth) — expected for young books; not a heal cue.",
     "surface_freshness": "fresh",
-    "ops_run_at": "2026-10-28T07:46:47.134172+00:00",
-    "board_generated_at": "2026-10-28T02:33:50.924191+00:00",
+    "ops_run_at": "2026-10-29T02:32:04.697322+00:00",
+    "board_generated_at": "2026-10-28T11:42:15.308429+00:00",
     "board_path": "docs/data/lifecycle_board.json",
     "market_count": 23,
     "trajectory_summary": {
-      "improving": 0,
+      "improving": 1,
       "worsening": 0,
-      "flat": 23,
+      "flat": 22,
       "unknown": 0,
       "history_points": 28,
       "note": "Deltas vs prior dashboard cycle on early_share % (lower = more mature). UW-by-stage is secondary context; raw column counts are spot only."
@@ -1503,92 +1612,92 @@
         "metrics": {
           "held_count": 63,
           "sold_count": 27,
-          "just_bought_count": 6,
+          "just_bought_count": 5,
           "growth_count": 20,
-          "near_sell_count": 37,
+          "near_sell_count": 38,
           "just_sold_count": 4,
           "post_sale_count": 23,
-          "early_count": 26,
-          "early_share": 0.4127,
-          "near_sell_share": 0.5873,
+          "early_count": 25,
+          "early_share": 0.3968,
+          "near_sell_share": 0.6032,
           "sold_share": 0.3,
           "shares": {
-            "just_bought": 0.0952,
+            "just_bought": 0.0794,
             "growth": 0.3175,
-            "near_sell": 0.5873
+            "near_sell": 0.6032
           },
-          "median_days_held": 50.0,
+          "median_days_held": 51.0,
           "median_days_by_column": {
-            "just_bought": 8.0,
-            "growth": 50.0,
-            "near_sell": 50.0
+            "just_bought": 9.0,
+            "growth": 51.0,
+            "near_sell": 51.0
           },
           "uw_rate_by_column": {
-            "just_bought": 0.8333,
-            "growth": 0.65,
-            "near_sell": 0.3784
+            "just_bought": 0.2,
+            "growth": 0.55,
+            "near_sell": 0.3684
           },
-          "uw_rate_growth": 0.65,
-          "uw_rate_held": 0.5079,
-          "uw_count_held": 32,
+          "uw_rate_growth": 0.55,
+          "uw_rate_held": 0.4127,
+          "uw_count_held": 26,
           "uw_known_held": 63,
           "by_column": {
             "just_bought": {
-              "count": 6,
+              "count": 5,
               "truncated": 0,
-              "median_days_in_column": 8.0,
-              "uw_count": 5,
-              "uw_known": 6,
-              "uw_rate": 0.8333,
-              "shown_with_days": 6
+              "median_days_in_column": 9.0,
+              "uw_count": 1,
+              "uw_known": 5,
+              "uw_rate": 0.2,
+              "shown_with_days": 5
             },
             "growth": {
               "count": 20,
               "truncated": 0,
-              "median_days_in_column": 50.0,
-              "uw_count": 13,
+              "median_days_in_column": 51.0,
+              "uw_count": 11,
               "uw_known": 20,
-              "uw_rate": 0.65,
+              "uw_rate": 0.55,
               "shown_with_days": 20
             },
             "near_sell": {
-              "count": 37,
+              "count": 38,
               "truncated": 0,
-              "median_days_in_column": 50.0,
+              "median_days_in_column": 51.0,
               "uw_count": 14,
-              "uw_known": 37,
-              "uw_rate": 0.3784,
-              "shown_with_days": 37
+              "uw_known": 38,
+              "uw_rate": 0.3684,
+              "shown_with_days": 38
             }
           },
           "shown_truncated": false,
           "underwater_threshold_pct": 0.0,
-          "primary_value_pct": 41.27
+          "primary_value_pct": 39.68
         },
         "primary_metric": "early_share_pct",
-        "primary_value": 41.27,
+        "primary_value": 39.68,
         "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
         "trajectory": {
-          "delta": 0,
-          "direction": "flat",
-          "label": "Unchanged vs last cycle",
+          "delta": -1.59,
+          "direction": "improving",
+          "label": "Better since last cycle (more mature / less UW)",
           "prior_value": 41.27,
           "prior_at": "2026-10-28T02:33:51.189404+00:00"
         },
         "uw_growth_trajectory": {
-          "delta": 0,
-          "direction": "flat",
-          "label": "Unchanged vs last cycle"
+          "delta": -10,
+          "direction": "improving",
+          "label": "Better since last cycle (more mature / less UW)"
         }
       },
       {
@@ -1606,53 +1715,53 @@
         "metrics": {
           "held_count": 40,
           "sold_count": 18,
-          "just_bought_count": 10,
-          "growth_count": 30,
+          "just_bought_count": 7,
+          "growth_count": 33,
           "near_sell_count": 0,
-          "just_sold_count": 7,
-          "post_sale_count": 11,
+          "just_sold_count": 5,
+          "post_sale_count": 13,
           "early_count": 40,
           "early_share": 1.0,
           "near_sell_share": 0.0,
           "sold_share": 0.3103,
           "shares": {
-            "just_bought": 0.25,
-            "growth": 0.75,
+            "just_bought": 0.175,
+            "growth": 0.825,
             "near_sell": 0.0
           },
-          "median_days_held": 44.0,
+          "median_days_held": 45.0,
           "median_days_by_column": {
-            "just_bought": 2.0,
-            "growth": 44.0,
+            "just_bought": 3.0,
+            "growth": 45.0,
             "near_sell": null
           },
           "uw_rate_by_column": {
-            "just_bought": 0.2,
-            "growth": 0.4667,
+            "just_bought": 0.1429,
+            "growth": 0.4545,
             "near_sell": null
           },
-          "uw_rate_growth": 0.4667,
+          "uw_rate_growth": 0.4545,
           "uw_rate_held": 0.4,
           "uw_count_held": 16,
           "uw_known_held": 40,
           "by_column": {
             "just_bought": {
-              "count": 10,
+              "count": 7,
               "truncated": 0,
-              "median_days_in_column": 2.0,
-              "uw_count": 2,
-              "uw_known": 10,
-              "uw_rate": 0.2,
-              "shown_with_days": 10
+              "median_days_in_column": 3.0,
+              "uw_count": 1,
+              "uw_known": 7,
+              "uw_rate": 0.1429,
+              "shown_with_days": 7
             },
             "growth": {
-              "count": 30,
+              "count": 33,
               "truncated": 0,
-              "median_days_in_column": 44.0,
-              "uw_count": 14,
-              "uw_known": 30,
-              "uw_rate": 0.4667,
-              "shown_with_days": 30
+              "median_days_in_column": 45.0,
+              "uw_count": 15,
+              "uw_known": 33,
+              "uw_rate": 0.4545,
+              "shown_with_days": 33
             },
             "near_sell": {
               "count": 0,
@@ -1674,10 +1783,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -1689,9 +1798,9 @@
           "prior_at": "2026-10-28T02:33:51.189404+00:00"
         },
         "uw_growth_trajectory": {
-          "delta": 0,
-          "direction": "flat",
-          "label": "Unchanged vs last cycle"
+          "delta": -1.22,
+          "direction": "improving",
+          "label": "Better since last cycle (more mature / less UW)"
         }
       },
       {
@@ -1723,9 +1832,9 @@
             "growth": 0.375,
             "near_sell": 0.0
           },
-          "median_days_held": 5.5,
+          "median_days_held": 6.5,
           "median_days_by_column": {
-            "just_bought": 2.0,
+            "just_bought": 3.0,
             "growth": 28.0,
             "near_sell": null
           },
@@ -1742,7 +1851,7 @@
             "just_bought": {
               "count": 5,
               "truncated": 0,
-              "median_days_in_column": 2.0,
+              "median_days_in_column": 3.0,
               "uw_count": 1,
               "uw_known": 5,
               "uw_rate": 0.2,
@@ -1777,10 +1886,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -1828,7 +1937,7 @@
           },
           "median_days_held": 33.0,
           "median_days_by_column": {
-            "just_bought": 6.5,
+            "just_bought": 7.5,
             "growth": 33.0,
             "near_sell": null
           },
@@ -1845,7 +1954,7 @@
             "just_bought": {
               "count": 2,
               "truncated": 0,
-              "median_days_in_column": 6.5,
+              "median_days_in_column": 7.5,
               "uw_count": 1,
               "uw_known": 2,
               "uw_rate": 0.5,
@@ -1880,10 +1989,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -1915,8 +2024,8 @@
         "metrics": {
           "held_count": 28,
           "sold_count": 10,
-          "just_bought_count": 10,
-          "growth_count": 18,
+          "just_bought_count": 8,
+          "growth_count": 20,
           "near_sell_count": 0,
           "just_sold_count": 6,
           "post_sale_count": 4,
@@ -1925,43 +2034,43 @@
           "near_sell_share": 0.0,
           "sold_share": 0.2632,
           "shares": {
-            "just_bought": 0.3571,
-            "growth": 0.6429,
+            "just_bought": 0.2857,
+            "growth": 0.7143,
             "near_sell": 0.0
           },
-          "median_days_held": 41.5,
+          "median_days_held": 42.5,
           "median_days_by_column": {
-            "just_bought": 7.0,
-            "growth": 50.0,
+            "just_bought": 3.5,
+            "growth": 51.0,
             "near_sell": null
           },
           "uw_rate_by_column": {
-            "just_bought": 0.4,
-            "growth": 0.6111,
+            "just_bought": 0.25,
+            "growth": 0.65,
             "near_sell": null
           },
-          "uw_rate_growth": 0.6111,
+          "uw_rate_growth": 0.65,
           "uw_rate_held": 0.5357,
           "uw_count_held": 15,
           "uw_known_held": 28,
           "by_column": {
             "just_bought": {
-              "count": 10,
+              "count": 8,
               "truncated": 0,
-              "median_days_in_column": 7.0,
-              "uw_count": 4,
-              "uw_known": 10,
-              "uw_rate": 0.4,
-              "shown_with_days": 10
+              "median_days_in_column": 3.5,
+              "uw_count": 2,
+              "uw_known": 8,
+              "uw_rate": 0.25,
+              "shown_with_days": 8
             },
             "growth": {
-              "count": 18,
+              "count": 20,
               "truncated": 0,
-              "median_days_in_column": 50.0,
-              "uw_count": 11,
-              "uw_known": 18,
-              "uw_rate": 0.6111,
-              "shown_with_days": 18
+              "median_days_in_column": 51.0,
+              "uw_count": 13,
+              "uw_known": 20,
+              "uw_rate": 0.65,
+              "shown_with_days": 20
             },
             "near_sell": {
               "count": 0,
@@ -1983,10 +2092,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -1998,9 +2107,9 @@
           "prior_at": "2026-10-28T02:33:51.189404+00:00"
         },
         "uw_growth_trajectory": {
-          "delta": 0,
-          "direction": "flat",
-          "label": "Unchanged vs last cycle"
+          "delta": 3.89,
+          "direction": "worsening",
+          "label": "Worse since last cycle (earlier / more UW)"
         }
       },
       {
@@ -2035,7 +2144,7 @@
           "median_days_held": 1.0,
           "median_days_by_column": {
             "just_bought": 1.0,
-            "growth": 23.0,
+            "growth": 23.5,
             "near_sell": null
           },
           "uw_rate_by_column": {
@@ -2060,7 +2169,7 @@
             "growth": {
               "count": 2,
               "truncated": 0,
-              "median_days_in_column": 23.0,
+              "median_days_in_column": 23.5,
               "uw_count": 1,
               "uw_known": 2,
               "uw_rate": 0.5,
@@ -2086,10 +2195,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2135,10 +2244,10 @@
             "growth": 0.5,
             "near_sell": 0.0
           },
-          "median_days_held": 14.0,
+          "median_days_held": 14.5,
           "median_days_by_column": {
             "just_bought": 1.0,
-            "growth": 27.0,
+            "growth": 28.0,
             "near_sell": null
           },
           "uw_rate_by_column": {
@@ -2163,7 +2272,7 @@
             "growth": {
               "count": 2,
               "truncated": 0,
-              "median_days_in_column": 27.0,
+              "median_days_in_column": 28.0,
               "uw_count": 1,
               "uw_known": 2,
               "uw_rate": 0.5,
@@ -2189,10 +2298,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2238,10 +2347,10 @@
             "growth": 0.8571,
             "near_sell": 0.0
           },
-          "median_days_held": 20.0,
+          "median_days_held": 21.0,
           "median_days_by_column": {
-            "just_bought": 3.5,
-            "growth": 20.0,
+            "just_bought": 4.5,
+            "growth": 21.0,
             "near_sell": null
           },
           "uw_rate_by_column": {
@@ -2257,7 +2366,7 @@
             "just_bought": {
               "count": 2,
               "truncated": 0,
-              "median_days_in_column": 3.5,
+              "median_days_in_column": 4.5,
               "uw_count": 0,
               "uw_known": 2,
               "uw_rate": 0.0,
@@ -2266,7 +2375,7 @@
             "growth": {
               "count": 12,
               "truncated": 0,
-              "median_days_in_column": 20.0,
+              "median_days_in_column": 21.0,
               "uw_count": 6,
               "uw_known": 12,
               "uw_rate": 0.5,
@@ -2292,10 +2401,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2395,10 +2504,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2444,10 +2553,10 @@
             "growth": 0.6923,
             "near_sell": 0.0
           },
-          "median_days_held": 20.0,
+          "median_days_held": 21.0,
           "median_days_by_column": {
-            "just_bought": 2.0,
-            "growth": 23.0,
+            "just_bought": 3.0,
+            "growth": 24.0,
             "near_sell": null
           },
           "uw_rate_by_column": {
@@ -2463,7 +2572,7 @@
             "just_bought": {
               "count": 4,
               "truncated": 0,
-              "median_days_in_column": 2.0,
+              "median_days_in_column": 3.0,
               "uw_count": 0,
               "uw_known": 4,
               "uw_rate": 0.0,
@@ -2472,7 +2581,7 @@
             "growth": {
               "count": 9,
               "truncated": 0,
-              "median_days_in_column": 23.0,
+              "median_days_in_column": 24.0,
               "uw_count": 2,
               "uw_known": 9,
               "uw_rate": 0.2222,
@@ -2498,10 +2607,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2550,7 +2659,7 @@
           "median_days_held": 1.0,
           "median_days_by_column": {
             "just_bought": 1.0,
-            "growth": 26.0,
+            "growth": 27.0,
             "near_sell": null
           },
           "uw_rate_by_column": {
@@ -2575,7 +2684,7 @@
             "growth": {
               "count": 2,
               "truncated": 0,
-              "median_days_in_column": 26.0,
+              "median_days_in_column": 27.0,
               "uw_count": 0,
               "uw_known": 2,
               "uw_rate": 0.0,
@@ -2601,10 +2710,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2650,9 +2759,9 @@
             "growth": 0.0,
             "near_sell": 0.0
           },
-          "median_days_held": 9.0,
+          "median_days_held": 10.0,
           "median_days_by_column": {
-            "just_bought": 9.0,
+            "just_bought": 10.0,
             "growth": null,
             "near_sell": null
           },
@@ -2669,7 +2778,7 @@
             "just_bought": {
               "count": 2,
               "truncated": 0,
-              "median_days_in_column": 9.0,
+              "median_days_in_column": 10.0,
               "uw_count": 1,
               "uw_known": 2,
               "uw_rate": 0.5,
@@ -2704,10 +2813,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2753,10 +2862,10 @@
             "growth": 0.9412,
             "near_sell": 0.0
           },
-          "median_days_held": 20.0,
+          "median_days_held": 21.0,
           "median_days_by_column": {
-            "just_bought": 6.0,
-            "growth": 20.0,
+            "just_bought": 7.0,
+            "growth": 21.0,
             "near_sell": null
           },
           "uw_rate_by_column": {
@@ -2772,7 +2881,7 @@
             "just_bought": {
               "count": 1,
               "truncated": 0,
-              "median_days_in_column": 6.0,
+              "median_days_in_column": 7.0,
               "uw_count": 1,
               "uw_known": 1,
               "uw_rate": 1.0,
@@ -2781,7 +2890,7 @@
             "growth": {
               "count": 16,
               "truncated": 0,
-              "median_days_in_column": 20.0,
+              "median_days_in_column": 21.0,
               "uw_count": 12,
               "uw_known": 16,
               "uw_rate": 0.75,
@@ -2807,10 +2916,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2856,10 +2965,10 @@
             "growth": 1.0,
             "near_sell": 0.0
           },
-          "median_days_held": 22.0,
+          "median_days_held": 23.0,
           "median_days_by_column": {
             "just_bought": null,
-            "growth": 22.0,
+            "growth": 23.0,
             "near_sell": null
           },
           "uw_rate_by_column": {
@@ -2884,7 +2993,7 @@
             "growth": {
               "count": 5,
               "truncated": 0,
-              "median_days_in_column": 22.0,
+              "median_days_in_column": 23.0,
               "uw_count": 1,
               "uw_known": 5,
               "uw_rate": 0.2,
@@ -2910,10 +3019,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -2961,7 +3070,7 @@
           },
           "median_days_held": 22.0,
           "median_days_by_column": {
-            "just_bought": 6.0,
+            "just_bought": 7.0,
             "growth": 22.0,
             "near_sell": null
           },
@@ -2978,7 +3087,7 @@
             "just_bought": {
               "count": 1,
               "truncated": 0,
-              "median_days_in_column": 6.0,
+              "median_days_in_column": 7.0,
               "uw_count": 1,
               "uw_known": 1,
               "uw_rate": 1.0,
@@ -3013,10 +3122,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3064,7 +3173,7 @@
           },
           "median_days_held": 40.0,
           "median_days_by_column": {
-            "just_bought": 6.0,
+            "just_bought": 7.0,
             "growth": 40.0,
             "near_sell": null
           },
@@ -3081,7 +3190,7 @@
             "just_bought": {
               "count": 9,
               "truncated": 0,
-              "median_days_in_column": 6.0,
+              "median_days_in_column": 7.0,
               "uw_count": 4,
               "uw_known": 9,
               "uw_rate": 0.4444,
@@ -3116,10 +3225,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3165,10 +3274,10 @@
             "growth": 0.8333,
             "near_sell": 0.0
           },
-          "median_days_held": 20.0,
+          "median_days_held": 21.0,
           "median_days_by_column": {
-            "just_bought": 2.0,
-            "growth": 20.0,
+            "just_bought": 3.0,
+            "growth": 21.0,
             "near_sell": null
           },
           "uw_rate_by_column": {
@@ -3184,7 +3293,7 @@
             "just_bought": {
               "count": 2,
               "truncated": 0,
-              "median_days_in_column": 2.0,
+              "median_days_in_column": 3.0,
               "uw_count": 0,
               "uw_known": 2,
               "uw_rate": 0.0,
@@ -3193,7 +3302,7 @@
             "growth": {
               "count": 10,
               "truncated": 0,
-              "median_days_in_column": 20.0,
+              "median_days_in_column": 21.0,
               "uw_count": 5,
               "uw_known": 10,
               "uw_rate": 0.5,
@@ -3219,10 +3328,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3268,10 +3377,10 @@
             "growth": 1.0,
             "near_sell": 0.0
           },
-          "median_days_held": 23.0,
+          "median_days_held": 24.0,
           "median_days_by_column": {
             "just_bought": null,
-            "growth": 23.0,
+            "growth": 24.0,
             "near_sell": null
           },
           "uw_rate_by_column": {
@@ -3296,7 +3405,7 @@
             "growth": {
               "count": 1,
               "truncated": 0,
-              "median_days_in_column": 23.0,
+              "median_days_in_column": 24.0,
               "uw_count": 0,
               "uw_known": 1,
               "uw_rate": 0.0,
@@ -3322,10 +3431,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3357,8 +3466,8 @@
         "metrics": {
           "held_count": 5,
           "sold_count": 0,
-          "just_bought_count": 2,
-          "growth_count": 3,
+          "just_bought_count": 1,
+          "growth_count": 4,
           "near_sell_count": 0,
           "just_sold_count": 0,
           "post_sale_count": 0,
@@ -3367,14 +3476,14 @@
           "near_sell_share": 0.0,
           "sold_share": 0.0,
           "shares": {
-            "just_bought": 0.4,
-            "growth": 0.6,
+            "just_bought": 0.2,
+            "growth": 0.8,
             "near_sell": 0.0
           },
-          "median_days_held": 22.0,
+          "median_days_held": 23.0,
           "median_days_by_column": {
-            "just_bought": 6.5,
-            "growth": 22.0,
+            "just_bought": 0.0,
+            "growth": 23.0,
             "near_sell": null
           },
           "uw_rate_by_column": {
@@ -3388,22 +3497,22 @@
           "uw_known_held": 5,
           "by_column": {
             "just_bought": {
-              "count": 2,
+              "count": 1,
               "truncated": 0,
-              "median_days_in_column": 6.5,
+              "median_days_in_column": 0.0,
               "uw_count": 0,
-              "uw_known": 2,
+              "uw_known": 1,
               "uw_rate": 0.0,
-              "shown_with_days": 2
+              "shown_with_days": 1
             },
             "growth": {
-              "count": 3,
+              "count": 4,
               "truncated": 0,
-              "median_days_in_column": 22.0,
+              "median_days_in_column": 23.0,
               "uw_count": 0,
-              "uw_known": 3,
+              "uw_known": 4,
               "uw_rate": 0.0,
-              "shown_with_days": 3
+              "shown_with_days": 4
             },
             "near_sell": {
               "count": 0,
@@ -3425,10 +3534,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3474,10 +3583,10 @@
             "growth": 0.725,
             "near_sell": 0.0
           },
-          "median_days_held": 22.0,
+          "median_days_held": 23.0,
           "median_days_by_column": {
-            "just_bought": 7.0,
-            "growth": 50.0,
+            "just_bought": 8.0,
+            "growth": 51.0,
             "near_sell": null
           },
           "uw_rate_by_column": {
@@ -3493,7 +3602,7 @@
             "just_bought": {
               "count": 33,
               "truncated": 0,
-              "median_days_in_column": 7.0,
+              "median_days_in_column": 8.0,
               "uw_count": 10,
               "uw_known": 33,
               "uw_rate": 0.303,
@@ -3502,7 +3611,7 @@
             "growth": {
               "count": 87,
               "truncated": 47,
-              "median_days_in_column": 50.0,
+              "median_days_in_column": 51.0,
               "uw_count": 22,
               "uw_known": 40,
               "uw_rate": 0.55,
@@ -3528,10 +3637,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3631,10 +3740,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3666,8 +3775,8 @@
         "metrics": {
           "held_count": 12,
           "sold_count": 7,
-          "just_bought_count": 2,
-          "growth_count": 10,
+          "just_bought_count": 0,
+          "growth_count": 12,
           "near_sell_count": 0,
           "just_sold_count": 2,
           "post_sale_count": 5,
@@ -3676,43 +3785,43 @@
           "near_sell_share": 0.0,
           "sold_share": 0.3684,
           "shares": {
-            "just_bought": 0.1667,
-            "growth": 0.8333,
+            "just_bought": 0.0,
+            "growth": 1.0,
             "near_sell": 0.0
           },
           "median_days_held": 47.0,
           "median_days_by_column": {
-            "just_bought": 13.0,
+            "just_bought": null,
             "growth": 47.0,
             "near_sell": null
           },
           "uw_rate_by_column": {
-            "just_bought": 0.5,
-            "growth": 0.3,
+            "just_bought": null,
+            "growth": 0.3333,
             "near_sell": null
           },
-          "uw_rate_growth": 0.3,
+          "uw_rate_growth": 0.3333,
           "uw_rate_held": 0.3333,
           "uw_count_held": 4,
           "uw_known_held": 12,
           "by_column": {
             "just_bought": {
-              "count": 2,
+              "count": 0,
               "truncated": 0,
-              "median_days_in_column": 13.0,
-              "uw_count": 1,
-              "uw_known": 2,
-              "uw_rate": 0.5,
-              "shown_with_days": 2
+              "median_days_in_column": null,
+              "uw_count": 0,
+              "uw_known": 0,
+              "uw_rate": null,
+              "shown_with_days": 0
             },
             "growth": {
-              "count": 10,
+              "count": 12,
               "truncated": 0,
               "median_days_in_column": 47.0,
-              "uw_count": 3,
-              "uw_known": 10,
-              "uw_rate": 0.3,
-              "shown_with_days": 10
+              "uw_count": 4,
+              "uw_known": 12,
+              "uw_rate": 0.3333,
+              "shown_with_days": 12
             },
             "near_sell": {
               "count": 0,
@@ -3734,10 +3843,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -3749,9 +3858,9 @@
           "prior_at": "2026-10-28T02:33:51.189404+00:00"
         },
         "uw_growth_trajectory": {
-          "delta": 0,
-          "direction": "flat",
-          "label": "Unchanged vs last cycle"
+          "delta": 3.33,
+          "direction": "worsening",
+          "label": "Worse since last cycle (earlier / more UW)"
         }
       },
       {
@@ -3837,10 +3946,10 @@
         "freshness": {
           "state": "fresh",
           "label": "Fresh",
-          "detail": "Board last refresh 9.1h ago.",
-          "as_of": "2026-10-28T02:33:50.924191+00:00",
-          "store_as_of": "2026-10-28T11:41:42.803209+00:00",
-          "age_hours": 9.13,
+          "detail": "Board last refresh 15.0h ago.",
+          "as_of": "2026-10-28T11:42:15.308429+00:00",
+          "store_as_of": "2026-10-29T02:39:36.605716+00:00",
+          "age_hours": 14.96,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -9530,22 +9639,22 @@
         }
       },
       {
-        "at": "2026-10-28T11:41:42.803209+00:00",
+        "at": "2026-10-29T02:34:37.823549+00:00",
         "ftse350": {
-          "primary_value": 41.27,
-          "early_share": 0.4127,
-          "uw_rate_growth": 0.65,
-          "uw_rate_held": 0.5079,
-          "median_days_held": 50.0,
+          "primary_value": 39.68,
+          "early_share": 0.3968,
+          "uw_rate_growth": 0.55,
+          "uw_rate_held": 0.4127,
+          "median_days_held": 51.0,
           "held_count": 63,
           "freshness_state": "fresh"
         },
         "euro_depth": {
           "primary_value": 100.0,
           "early_share": 1.0,
-          "uw_rate_growth": 0.4667,
+          "uw_rate_growth": 0.4545,
           "uw_rate_held": 0.4,
-          "median_days_held": 44.0,
+          "median_days_held": 45.0,
           "held_count": 40,
           "freshness_state": "fresh"
         },
@@ -9554,7 +9663,7 @@
           "early_share": 1.0,
           "uw_rate_growth": 0.0,
           "uw_rate_held": 0.125,
-          "median_days_held": 5.5,
+          "median_days_held": 6.5,
           "held_count": 8,
           "freshness_state": "fresh"
         },
@@ -9570,9 +9679,9 @@
         "asx200": {
           "primary_value": 100.0,
           "early_share": 1.0,
-          "uw_rate_growth": 0.6111,
+          "uw_rate_growth": 0.65,
           "uw_rate_held": 0.5357,
-          "median_days_held": 41.5,
+          "median_days_held": 42.5,
           "held_count": 28,
           "freshness_state": "fresh"
         },
@@ -9590,7 +9699,7 @@
           "early_share": 1.0,
           "uw_rate_growth": 0.5,
           "uw_rate_held": 0.25,
-          "median_days_held": 14.0,
+          "median_days_held": 14.5,
           "held_count": 4,
           "freshness_state": "fresh"
         },
@@ -9599,7 +9708,7 @@
           "early_share": 1.0,
           "uw_rate_growth": 0.5,
           "uw_rate_held": 0.4286,
-          "median_days_held": 20.0,
+          "median_days_held": 21.0,
           "held_count": 14,
           "freshness_state": "fresh"
         },
@@ -9617,7 +9726,7 @@
           "early_share": 1.0,
           "uw_rate_growth": 0.2222,
           "uw_rate_held": 0.1538,
-          "median_days_held": 20.0,
+          "median_days_held": 21.0,
           "held_count": 13,
           "freshness_state": "fresh"
         },
@@ -9635,7 +9744,7 @@
           "early_share": 1.0,
           "uw_rate_growth": null,
           "uw_rate_held": 0.5,
-          "median_days_held": 9.0,
+          "median_days_held": 10.0,
           "held_count": 2,
           "freshness_state": "fresh"
         },
@@ -9644,7 +9753,7 @@
           "early_share": 1.0,
           "uw_rate_growth": 0.75,
           "uw_rate_held": 0.7647,
-          "median_days_held": 20.0,
+          "median_days_held": 21.0,
           "held_count": 17,
           "freshness_state": "fresh"
         },
@@ -9653,7 +9762,7 @@
           "early_share": 1.0,
           "uw_rate_growth": 0.2,
           "uw_rate_held": 0.2,
-          "median_days_held": 22.0,
+          "median_days_held": 23.0,
           "held_count": 5,
           "freshness_state": "fresh"
         },
@@ -9680,7 +9789,7 @@
           "early_share": 1.0,
           "uw_rate_growth": 0.5,
           "uw_rate_held": 0.4167,
-          "median_days_held": 20.0,
+          "median_days_held": 21.0,
           "held_count": 12,
           "freshness_state": "fresh"
         },
@@ -9689,7 +9798,7 @@
           "early_share": 1.0,
           "uw_rate_growth": 0.0,
           "uw_rate_held": 0.0,
-          "median_days_held": 23.0,
+          "median_days_held": 24.0,
           "held_count": 1,
           "freshness_state": "fresh"
         },
@@ -9698,7 +9807,7 @@
           "early_share": 1.0,
           "uw_rate_growth": 0.0,
           "uw_rate_held": 0.0,
-          "median_days_held": 22.0,
+          "median_days_held": 23.0,
           "held_count": 5,
           "freshness_state": "fresh"
         },
@@ -9707,7 +9816,7 @@
           "early_share": 1.0,
           "uw_rate_growth": 0.55,
           "uw_rate_held": 0.4384,
-          "median_days_held": 22.0,
+          "median_days_held": 23.0,
           "held_count": 120,
           "freshness_state": "fresh"
         },
@@ -9723,7 +9832,7 @@
         "tsx60": {
           "primary_value": 100.0,
           "early_share": 1.0,
-          "uw_rate_growth": 0.3,
+          "uw_rate_growth": 0.3333,
           "uw_rate_held": 0.3333,
           "median_days_held": 47.0,
           "held_count": 12,
@@ -9743,26 +9852,26 @@
   },
   "n200_pipeline_health": {
     "schema_version": 2,
-    "generated_at": "2026-10-28T11:41:42.829903+00:00",
+    "generated_at": "2026-10-29T02:39:36.621304+00:00",
     "observe_only": true,
     "influences_live": false,
     "not_alpha_signal": true,
     "not_capital_ready": true,
     "registration_id": "strand-b-plain-value-tech-timing-v0",
     "deferred_id": "N200",
-    "headline": "N200 pipeline functioning — phase 9.636/5.0 entries/week (floor met); volume gate met (106 ep / 11 wk); entry lever win, exit lever lose.",
+    "headline": "N200 pipeline functioning — phase 9.167/5.0 entries/week (floor met); volume gate met (110 ep / 12 wk); entry lever win, exit lever lose.",
     "disclaimer": "Phase floor, volume gate, and per-lever scoreboards measure factory mechanism / lever quality — not alpha or capital readiness (F8). Lever wins are independent of path P&L. Observe-only.",
     "store_present": true,
-    "store_generated_at": "2026-10-28T07:47:34.484215+00:00",
+    "store_generated_at": "2026-10-29T02:32:59.551718+00:00",
     "phase": {
-      "entries_per_week": 9.636,
+      "entries_per_week": 9.167,
       "floor": 5.0,
       "floor_met": true
     },
     "volume_gate": {
       "met": true,
-      "episodes": 106,
-      "weeks": 11,
+      "episodes": 110,
+      "weeks": 12,
       "min_episodes": 24,
       "min_weeks": 8
     },
@@ -9775,19 +9884,19 @@
       "exit_verdict": "lose",
       "entry_control_is_best_feasible": true,
       "exit_control_is_best_feasible": false,
-      "entry_margin_vs_best_alt": 0.023256,
-      "exit_margin_vs_best_alt": -0.008146,
-      "entry_control_smooth_ret_cohort_median": -0.0055,
-      "exit_control_smooth_ret_cohort_median": -0.0055,
-      "path_control_smooth_ret_cohort_median": -0.0055,
+      "entry_margin_vs_best_alt": 0.022403,
+      "exit_margin_vs_best_alt": -0.007124,
+      "entry_control_smooth_ret_cohort_median": -0.004734,
+      "exit_control_smooth_ret_cohort_median": -0.004734,
+      "path_control_smooth_ret_cohort_median": -0.004734,
       "detail": "Entry lever win; exit lever lose (fair costs; independent of path P&L)."
     },
     "freshness": {
       "state": "fresh",
       "label": "Fresh",
-      "detail": "Last refresh 3.9h ago.",
-      "as_of": "2026-10-28T07:47:34.484215+00:00",
-      "age_hours": 3.9,
+      "detail": "Last refresh 0.1h ago.",
+      "as_of": "2026-10-29T02:32:59.551718+00:00",
+      "age_hours": 0.11,
       "store_lag_hours": null,
       "stale_after_hours": 30.0
     },
@@ -9795,14 +9904,14 @@
       "functioning": true,
       "ops_check_ok": true,
       "ops_finding_present": true,
-      "ops_run_at": "2026-10-28T07:46:47.134172+00:00",
-      "detail": "Observe refresh path looks alive. Ops finding: N200 tech-timing observe refreshed Last refresh 3.9h ago. Entry lever win; exit lever lose (fair costs; independent of path P&L)."
+      "ops_run_at": "2026-10-29T02:32:04.697322+00:00",
+      "detail": "Observe refresh path looks alive. Ops finding: N200 tech-timing observe refreshed Last refresh 0.1h ago. Entry lever win; exit lever lose (fair costs; independent of path P&L)."
     },
     "ops_doc": "docs/ops/n200-tech-timing-observe.md"
   },
   "n201_pipeline_health": {
     "schema_version": 1,
-    "generated_at": "2026-10-28T11:41:42.830775+00:00",
+    "generated_at": "2026-10-29T02:39:36.621932+00:00",
     "observe_only": true,
     "influences_live": false,
     "not_alpha_signal": true,
@@ -9811,33 +9920,33 @@
     "launch_queue_waiter": true,
     "registration_id": "strand-c-short-horizon-value-mom-v0",
     "deferred_id": "N201",
-    "headline": "N201 pipeline functioning — phase 9.214/8.0 entries/week; volume met (129 ep / 14 wk); smooth_ret_cohort_median=0.020216.",
+    "headline": "N201 pipeline functioning — phase 9.643/8.0 entries/week; volume met (135 ep / 14 wk); smooth_ret_cohort_median=0.021344.",
     "disclaimer": "Phase floor and volume gate measure factory mechanism throughput — not alpha or capital readiness (F8). Fixed-stake episode % is independent of fund NAV. Observe-only.",
     "store_present": true,
-    "store_generated_at": "2026-10-28T07:48:29.785398+00:00",
+    "store_generated_at": "2026-10-29T02:34:14.602951+00:00",
     "phase": {
-      "entries_per_week": 9.214,
+      "entries_per_week": 9.643,
       "floor": 8.0,
       "floor_met": true
     },
     "volume_gate": {
       "met": true,
-      "episodes": 129,
+      "episodes": 135,
       "weeks": 14,
       "min_episodes": 48,
       "min_weeks": 8
     },
     "path_scoreboard": {
-      "smooth_ret_cohort_median": 0.020216,
-      "patient_hold_excess_report_only": 0.005007,
+      "smooth_ret_cohort_median": 0.021344,
+      "patient_hold_excess_report_only": 0.006135,
       "independent_of_fund_nav": true
     },
     "freshness": {
       "state": "fresh",
       "label": "Fresh",
-      "detail": "Last refresh 3.9h ago.",
-      "as_of": "2026-10-28T07:48:29.785398+00:00",
-      "age_hours": 3.89,
+      "detail": "Last refresh 0.1h ago.",
+      "as_of": "2026-10-29T02:34:14.602951+00:00",
+      "age_hours": 0.09,
       "store_lag_hours": null,
       "stale_after_hours": 30.0
     },
@@ -9845,14 +9954,14 @@
       "functioning": true,
       "ops_check_ok": true,
       "ops_finding_present": true,
-      "ops_run_at": "2026-10-28T07:46:47.134172+00:00",
-      "detail": "Ops finding: N201 value-mom observe refreshed Last refresh 3.9h ago."
+      "ops_run_at": "2026-10-29T02:32:04.697322+00:00",
+      "detail": "Ops finding: N201 value-mom observe refreshed Last refresh 0.1h ago."
     },
     "ops_doc": "docs/ops/n201-value-mom-observe.md"
   },
   "n210_pipeline_health": {
     "schema_version": 1,
-    "generated_at": "2026-10-28T11:41:42.831740+00:00",
+    "generated_at": "2026-10-29T02:39:36.622642+00:00",
     "observe_only": true,
     "influences_live": false,
     "not_alpha_signal": true,
@@ -9863,48 +9972,48 @@
     "b3_epoch": true,
     "registration_id": "strand-e-ai-judgment-fixed-stake-v0",
     "deferred_id": "N210",
-    "headline": "N210 pipeline functioning — phase 0.273/8.0 entries/week; volume not met (3 ep / 11 wk; open=3); smooth_ret_cohort_median=0.007052.",
+    "headline": "N210 pipeline functioning — phase 0.417/8.0 entries/week; volume not met (5 ep / 12 wk; open=1); smooth_ret_cohort_median=0.026937.",
     "disclaimer": "Phase floor and volume gate measure factory mechanism throughput — not alpha or capital readiness (F8). Fixed-stake episode % is independent of fund NAV. Open episodes with 0 completed is honest thin-marks state while the walker runs. Observe-only; never assessment primary crown; matched-30 pots untouched.",
     "store_present": true,
-    "store_generated_at": "2026-10-28T07:48:29.954181+00:00",
+    "store_generated_at": "2026-10-29T02:34:14.842127+00:00",
     "pipeline_status": "episode_walker_active",
     "stub_gone": true,
     "walker_active": true,
     "phase": {
-      "entries_per_week": 0.273,
+      "entries_per_week": 0.417,
       "floor": 8.0,
       "floor_met": false
     },
     "volume_gate": {
       "met": false,
-      "episodes": 3,
-      "open_episodes": 3,
-      "weeks": 11,
+      "episodes": 5,
+      "open_episodes": 1,
+      "weeks": 12,
       "min_episodes": 48,
       "min_weeks": 8
     },
     "path_scoreboard": {
-      "smooth_ret_cohort_median": 0.007052,
-      "unfiltered_buy_tier_excess_report_only": -0.004414,
-      "completed_entry_episodes": 3,
-      "open_entry_episodes": 3,
-      "n": 3,
+      "smooth_ret_cohort_median": 0.026937,
+      "unfiltered_buy_tier_excess_report_only": 0.017409,
+      "completed_entry_episodes": 5,
+      "open_entry_episodes": 1,
+      "n": 5,
       "independent_of_fund_nav": true,
       "companions": {
-        "volume_toward_gate": "3/48",
-        "open_episodes": 3,
-        "calendar_weeks_spanned": 11,
-        "weeks_toward_gate": "11/8",
-        "control_episodes_report_only": 109,
+        "volume_toward_gate": "5/48",
+        "open_episodes": 1,
+        "calendar_weeks_spanned": 12,
+        "weeks_toward_gate": "12/8",
+        "control_episodes_report_only": 116,
         "stress_cost": "report_only"
       }
     },
     "freshness": {
       "state": "fresh",
       "label": "Fresh",
-      "detail": "Last refresh 3.9h ago.",
-      "as_of": "2026-10-28T07:48:29.954181+00:00",
-      "age_hours": 3.89,
+      "detail": "Last refresh 0.1h ago.",
+      "as_of": "2026-10-29T02:34:14.842127+00:00",
+      "age_hours": 0.09,
       "store_lag_hours": null,
       "stale_after_hours": 30.0
     },
@@ -9912,14 +10021,14 @@
       "functioning": true,
       "ops_check_ok": true,
       "ops_finding_present": true,
-      "ops_run_at": "2026-10-28T07:46:47.134172+00:00",
-      "detail": "Ops finding: N210 AI-judgment observe refreshed Last refresh 3.9h ago."
+      "ops_run_at": "2026-10-29T02:32:04.697322+00:00",
+      "detail": "Ops finding: N210 AI-judgment observe refreshed Last refresh 0.1h ago."
     },
     "ops_doc": "docs/ops/n210-ai-judgment-observe.md"
   },
   "n206_pipeline_health": {
     "schema_version": 1,
-    "generated_at": "2026-10-28T11:41:42.832093+00:00",
+    "generated_at": "2026-10-29T02:39:36.622911+00:00",
     "observe_only": true,
     "influences_live": false,
     "not_alpha_signal": true,
@@ -9931,34 +10040,34 @@
     "data_deepen_requested": false,
     "registration_id": "strand-d-plain-ey-identity-v0",
     "deferred_id": "N206",
-    "headline": "N206 pipeline functioning — phase 15.714/8.0 entries/week; volume met (220 ep / 14 wk); smooth_ret_cohort_median=0.01313.",
+    "headline": "N206 pipeline functioning — phase 15.786/8.0 entries/week; volume met (221 ep / 14 wk); smooth_ret_cohort_median=0.013284.",
     "disclaimer": "Phase floor and volume gate measure factory mechanism throughput — not alpha or capital readiness (F8). Fixed-stake episode % is independent of fund NAV. Alone-first (O3). Observe-only; influences_live is false. Not an assessment primary.",
     "store_present": true,
-    "store_generated_at": "2026-10-28T07:48:37.617702+00:00",
+    "store_generated_at": "2026-10-29T02:34:25.616413+00:00",
     "phase": {
-      "entries_per_week": 15.714,
+      "entries_per_week": 15.786,
       "floor": 8.0,
       "floor_met": true
     },
     "volume_gate": {
       "met": true,
-      "episodes": 220,
+      "episodes": 221,
       "weeks": 14,
       "min_episodes": 48,
       "min_weeks": 8
     },
     "path_scoreboard": {
-      "smooth_ret_cohort_median": 0.01313,
-      "cash_excess_report_only": 0.01313,
-      "smooth_ret_cohort_median_stress_report_only": -0.042635,
+      "smooth_ret_cohort_median": 0.013284,
+      "cash_excess_report_only": 0.013284,
+      "smooth_ret_cohort_median_stress_report_only": -0.042502,
       "independent_of_fund_nav": true
     },
     "freshness": {
       "state": "fresh",
       "label": "Fresh",
-      "detail": "Last refresh 3.9h ago.",
-      "as_of": "2026-10-28T07:48:37.617702+00:00",
-      "age_hours": 3.88,
+      "detail": "Last refresh 0.1h ago.",
+      "as_of": "2026-10-29T02:34:25.616413+00:00",
+      "age_hours": 0.09,
       "store_lag_hours": null,
       "stale_after_hours": 30.0
     },
@@ -9966,14 +10075,14 @@
       "functioning": true,
       "ops_check_ok": true,
       "ops_finding_present": true,
-      "ops_run_at": "2026-10-28T07:46:47.134172+00:00",
-      "detail": "Ops finding: N206 plain-EY observe refreshed Last refresh 3.9h ago."
+      "ops_run_at": "2026-10-29T02:32:04.697322+00:00",
+      "detail": "Ops finding: N206 plain-EY observe refreshed Last refresh 0.1h ago."
     },
     "ops_doc": "docs/ops/n206-plain-ey-observe.md"
   },
   "ingest_occupancy": {
     "schema_version": 1,
-    "generated_at": "2026-10-28T11:41:42.917403+00:00",
+    "generated_at": "2026-10-29T02:39:36.670615+00:00",
     "focus_market": "euro_depth",
     "dispatch_mode": "sprint",
     "should_run_sprint_ingest": true,
@@ -9981,11 +10090,11 @@
     "euro_ingest": "sprint",
     "euro_ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=7, indexed_without_body=5)",
     "mismatch": false,
-    "cold_store_gate_at": "2026-10-28T01:06:19.236064+00:00",
+    "cold_store_gate_at": "2026-10-29T01:41:48.622503+00:00",
     "cold_store_focus_pressure_reasons": [],
-    "dispatch_evaluated_at": "2026-10-28T10:25:23.686410+00:00",
+    "dispatch_evaluated_at": "2026-10-28T21:31:23.187074+00:00",
     "spare_should_run_parallel_ingest": true,
-    "eng_open_count": 4,
+    "eng_open_count": 0,
     "auto_fixable": false,
     "note": "Priority slot is occupied only while head_needs_fat_slot is true. Badge/bit mismatch is observe-only."
   }

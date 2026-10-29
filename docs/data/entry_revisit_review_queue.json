@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-29T02:32:59.171452+00:00",
+  "stage": "entry_revisit",
+  "observe_only": true,
+  "influences_live": false,
+  "package": "M",
+  "ops_doc": "docs/ops/entry-blind-review.md",
+  "product_claim": "Fixed buy+28d entry outcome after entry_blind Accept/Comment — frozen blind summary + path through +28d; never rewrites blind labels; never fills or knobs",
+  "learning_question": "At fixed buy+28d, does the realized path confirm, revise, or falsify the sealed blind entry critique — without collapsing into exit autopsy?",
+  "clocks": {
+    "entry_revisit_days": 28,
+    "active_attention_cap": 12,
+    "requires_blind_action": [
+      "accept",
+      "comment"
+    ]
+  },
+  "coverage": {
+    "blind_done_events": 0,
+    "due_candidates": 0,
+    "scope": "lab_and_interesting_after_blind"
+  },
+  "attention_note": "Active cap 12: due after buy+28d and entry_blind Accept/Comment. Blind labels immutable.",
+  "sort_options": [
+    {
+      "id": "interesting",
+      "label": "Interesting"
+    },
+    {
+      "id": "entry_at",
+      "label": "Date"
+    },
+    {
+      "id": "ticker",
+      "label": "Stock"
+    },
+    {
+      "id": "book",
+      "label": "Book"
+    }
+  ],
+  "labels_store": "entry_revisit_review_labels.json",
+  "active_count": 0,
+  "actioned_count": 0,
+  "reply_count": 0,
+  "new_count": 0,
+  "by_book": {},
+  "sort_default": "interesting",
+  "active": [],
+  "unreplied_comments": 0,
+  "history_event_count": 0,
+  "stages_enabled": [
+    "entry_blind",
+    "entry_revisit"
+  ],
+  "stages_parked": [
+    "exit_blind",
+    "exit_revisit"
+  ],
+  "parent_stage": "entry_blind",
+  "labels_heal": {
+    "healed": false,
+    "removed": 0,
+    "path": "docs/data/entry_revisit_review_labels.json"
+  }
+}

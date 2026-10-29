@@ -1,56 +1,55 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-28T11:42:15.104365+00:00",
+  "generated_at": "2026-10-29T02:39:36.849626+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-10-24",
   "counts": {
-    "new_info": 4,
-    "unacked": 3,
-    "acked": 37,
+    "new_info": 3,
+    "unacked": 4,
+    "acked": 38,
     "automated": 20,
-    "human": 44
+    "human": 45
   },
   "tasks": [
     {
-      "id": "sunday-shard-epoch0-watch",
-      "title": "Watch shard epoch-0 and near-miss before forking AI",
-      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "id": "sunday-assessment-scoreboard",
+      "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
+      "summary": "Read docs/data/assessment_scoreboard.json (Analysis → Observe model switcher defaults to Strand A · live): continuity primary ai_judgment_fair (B3 evidentiary-demoted — not adoption/filter-skill truth; see policy_changes.evidentiary_demotion_ai_judgment_fair_v1) vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also matched-30 shadow twins (NAV only vs each other), frozen hold5/graduated final records, knob_calibration_priors readiness (Acknowledge-and-stop when confidence low and score_gap <0.005), buy_cross_archive_review (observe-only), policy_changes, and nest sunday-ai-path-scoreboard as a subsection. Judgment evidence primary is N210 fair-cost episode % (shadow until volume gates). While that demotion stamp is present and primary_track is still ai_judgment_fair, the ops warn Primary book trails its control is not a Push card; the outstanding gap is Later (crown only after shadow volume gates). Approve a promotion only when fair-cost evidence clears gates; do not enlarge the live 3-name book mid-flight; do not back-label its NAV. Calibrated/exclusion/Suite A frozen. N200/N201/N210 are sealed observe-only alone scoreboards — never a second live capital path and never a promote gate from trailing alone (F8).",
       "automated": false,
       "cadence": "sunday",
       "section_id": "sunday",
       "section_title": "Sunday",
-      "doc_path": "docs/ops/market-sharded-learning.md",
-      "doc_anchor": "what-enter-learning-means",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
-      "approval_gate": false,
-      "approval_label": null,
+      "doc_path": "docs/ops/assessment-scoreboard.md",
+      "doc_anchor": "assessment-scoreboard",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#assessment-scoreboard",
+      "approval_gate": true,
+      "approval_label": "Approve promotion",
       "analysis": {
-        "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-10-28T10:26:20.714371+00:00",
-        "fingerprint": "2f9b8b863da0b7c8",
+        "headline": "Assessment scoreboard · primary negative",
+        "updated_at": "2026-10-29T02:35:26.655051+00:00",
+        "fingerprint": "1de0b4a912efa883",
         "bullets": [
-          "euro_depth: phase=3 ai=False knob=False holdings=40",
-          "sti: phase=0 ai=False knob=False holdings=3",
-          "aex: phase=0 ai=False knob=False holdings=8",
-          "aim: phase=0 ai=False knob=False holdings=15",
-          "atx: phase=0 ai=False knob=False holdings=5",
-          "bel20: phase=0 ai=False knob=False holdings=4",
-          "cac40: phase=1 ai=False knob=False holdings=14",
-          "dax: phase=1 ai=False knob=False holdings=10"
+          "ai_judgment_fair: total return -11.6% vs FTAL.L -0.9% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -11.1% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+          "Primary verdict: negative · 90% interval [-1.7399, -0.3565] · excess at 3% stress -0.3805",
+          "vs control buy_tier_level: difference -0.1106 (common window, not significance)",
+          "AI gate binds: False (N189 while it never binds)",
+          "twin ai_judgment_matched30_fair: difference -0.0255 over 8 days",
+          "twin buy_tier_matched30_fair: difference -0.0252 over 8 days",
+          "Policy changes: significance_gate_v1 (2026-10-06), evidentiary_demotion_ai_judgment_fair_v1 (2026-10-15)"
         ],
         "source_keys": [
-          "market_status"
+          "assessment_scoreboard"
         ]
       },
       "ack": {
         "acked": true,
         "stale": true,
-        "acked_at": "2026-10-21T22:54:00.304576+00:00",
+        "acked_at": "2026-10-09T15:43:43.187966+00:00",
         "decision": "ack_observe",
-        "finding_fingerprint": "445acb0f9a3f9032"
+        "finding_fingerprint": "782b2addb6782b0b"
       },
       "sort_bucket": "new_info",
       "auto_ackable": false,
@@ -71,7 +70,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 2 open",
-        "updated_at": "2026-10-28T10:25:16.371069+00:00",
+        "updated_at": "2026-10-28T21:30:51.369790+00:00",
         "fingerprint": "6dda3808006c2a3a",
         "bullets": [
           "Open deviations: 2",
@@ -108,13 +107,13 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-10-28T09:58:51.605727+00:00",
-        "fingerprint": "b25903b4680ed1fc",
+        "updated_at": "2026-10-28T18:43:32.219969+00:00",
+        "fingerprint": "9b5cd21c8f0d3da0",
         "bullets": [
-          "Occasions logged: 296",
+          "Occasions logged: 301",
           "PR mergeable=CONFLICTING against main: 7",
+          "merge_conflict:dirty: 6",
           "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
-          "merge_conflict:dirty: 5",
           "validate check failed: 4",
           "validate job failed: 3"
         ],
@@ -135,50 +134,9 @@
       "ack_sufficient": false
     },
     {
-      "id": "sunday-assessment-scoreboard",
-      "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
-      "summary": "Read docs/data/assessment_scoreboard.json (Analysis → Observe model switcher defaults to Strand A · live): continuity primary ai_judgment_fair (B3 evidentiary-demoted — not adoption/filter-skill truth; see policy_changes.evidentiary_demotion_ai_judgment_fair_v1) vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also matched-30 shadow twins (NAV only vs each other), frozen hold5/graduated final records, knob_calibration_priors readiness (Acknowledge-and-stop when confidence low and score_gap <0.005), buy_cross_archive_review (observe-only), policy_changes, and nest sunday-ai-path-scoreboard as a subsection. Judgment evidence primary is N210 fair-cost episode % (shadow until volume gates). While that demotion stamp is present and primary_track is still ai_judgment_fair, the ops warn Primary book trails its control is not a Push card; the outstanding gap is Later (crown only after shadow volume gates). Approve a promotion only when fair-cost evidence clears gates; do not enlarge the live 3-name book mid-flight; do not back-label its NAV. Calibrated/exclusion/Suite A frozen. N200/N201/N210 are sealed observe-only alone scoreboards — never a second live capital path and never a promote gate from trailing alone (F8).",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/assessment-scoreboard.md",
-      "doc_anchor": "assessment-scoreboard",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#assessment-scoreboard",
-      "approval_gate": true,
-      "approval_label": "Approve promotion",
-      "analysis": {
-        "headline": "Assessment scoreboard · primary negative",
-        "updated_at": "2026-10-28T07:48:48.408140+00:00",
-        "fingerprint": "1de0b4a912efa883",
-        "bullets": [
-          "ai_judgment_fair: total return -11.6% vs FTAL.L -0.9% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -11.1% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
-          "Primary verdict: negative · 90% interval [-1.7399, -0.3565] · excess at 3% stress -0.3805",
-          "vs control buy_tier_level: difference -0.1106 (common window, not significance)",
-          "AI gate binds: False (N189 while it never binds)",
-          "twin ai_judgment_matched30_fair: difference -0.0255 over 8 days",
-          "twin buy_tier_matched30_fair: difference -0.0252 over 8 days",
-          "Policy changes: significance_gate_v1 (2026-10-06), evidentiary_demotion_ai_judgment_fair_v1 (2026-10-15)"
-        ],
-        "source_keys": [
-          "assessment_scoreboard"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": true,
-        "acked_at": "2026-10-09T15:43:43.187966+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "782b2addb6782b0b"
-      },
-      "sort_bucket": "new_info",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "adhoc-cue-consumer-mft-start-gate",
       "title": "Confirm freeze of cue-consumer MFT Q8B non-mechanical autopsy cohort",
-      "summary": "Lab is armed observe-only; evolutionary shadows wait on this gate. Cohort already frozen (open_autopsy_cohort_2026_q4 / non_mechanical_open_autopsy_v0). Checkpoint completes only when EVERY frozen cohort_review_id is Accept/Comment/Duplicate-actioned in post_sale_review_labels (actioned_review_ids + events.kind) — UI Interesting sort is attention order only, not a subset gate; new just_sold refill does not reopen. Alternate calendar 2026-12-01. Still observe-only; no Package L; no strand-A promote.",
+      "summary": "Q8B checkpoint open_autopsy_cohort_2026_q4 is complete (frozen/actioned/remaining cleared 2026-10-28); evolutionary_shadows_eligible=true and the lab paper episode walker runs on daily refresh when eligible. Keep this task as reference if a future named cohort is proposed/frozen. Still observe-only; no Package L; no strand-A promote; walker fills are lab paper only (no sealed spawn).",
       "automated": false,
       "cadence": "ad_hoc",
       "section_id": "ad_hoc",
@@ -209,7 +167,7 @@
     {
       "id": "sunday-entry-blind-reviews",
       "title": "Work entry-blind review queue (lab/interesting buys; PIT only)",
-      "summary": "Sunday nest beside post-sale reviews (Package M v0): open Lifecycle → Entry blind (docs/data/entry_blind_review_queue.json). Critique recent lab / interesting buys with PIT chart through buy day + buy decision reasons only — no post-fill path / realized % / exit chrome. Accept/Comment/Duplicate; actioned clear from active; history in entry_blind_review_labels.json. influences_live=false — never knobs/fills. Ops finding Entry-blind review queue (observe). Exit stages + missed-opp stay parked.",
+      "summary": "Sunday nest beside post-sale reviews (Package M v0): open Lifecycle → Entry blind (docs/data/entry_blind_review_queue.json). Critique recent lab / interesting buys with PIT chart through buy day + buy decision reasons only — no post-fill path / realized % / exit chrome. Accept/Comment/Duplicate; actioned clear from active; history in entry_blind_review_labels.json. influences_live=false — never knobs/fills. Ops finding Entry-blind review queue (observe). Nest neighbor: sunday-entry-revisit-reviews. Exit stages + missed-opp stay parked.",
       "automated": false,
       "cadence": "sunday",
       "section_id": "sunday",
@@ -223,6 +181,37 @@
         "headline": "See runbook for analysis inputs",
         "updated_at": null,
         "fingerprint": "19ca807176f7bed3",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "sunday-entry-revisit-reviews",
+      "title": "Work entry-revisit queue (fixed buy+28d after entry_blind)",
+      "summary": "Sunday nest beside entry-blind (Package M): open Lifecycle → Entry +28d (docs/data/entry_revisit_review_queue.json). Only cards with entry_blind Accept/Comment and asof ≥ buy_day+28. Frozen blind summary + path through +28d (still_open / already_exited). Accept/Comment/Duplicate; never rewrite blind labels; influences_live=false — never knobs/fills / never Package L. Ops finding Entry-revisit review queue (observe).",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/entry-blind-review.md",
+      "doc_anchor": "entry-revisit-buy28d--shipped",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/entry-blind-review.md#entry-revisit-buy28d--shipped",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "cada235b0853521c",
         "bullets": [],
         "source_keys": []
       },
@@ -283,12 +272,12 @@
       "approval_label": null,
       "analysis": {
         "headline": "0 attention-parked eng tasks · quiet (auto-ackable)",
-        "updated_at": "2026-10-28T10:21:19.898066+00:00",
+        "updated_at": "2026-10-29T02:37:43.710503+00:00",
         "fingerprint": "463c1c358411298f",
         "bullets": [
           "Quiet after recover-queue — observe Acknowledge is sufficient (no list-parked triage).",
           "Parked tasks: 1 (attention ~0)",
-          "Queue-clearing pause active: False — evaluated 2026-10-28T10:21:19.898066+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-10-29T02:37:43.710503+00:00",
           "Traffic pause active: False",
           "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)"
         ],
@@ -309,6 +298,48 @@
       "sort_bucket": "acked",
       "auto_ackable": true,
       "ack_sufficient": true
+    },
+    {
+      "id": "sunday-shard-epoch0-watch",
+      "title": "Watch shard epoch-0 and near-miss before forking AI",
+      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Admitted shard epoch-0 watch · 22",
+        "updated_at": "2026-10-28T21:32:24.037878+00:00",
+        "fingerprint": "445acb0f9a3f9032",
+        "bullets": [
+          "euro_depth: phase=3 ai=False knob=False holdings=40",
+          "aex: phase=0 ai=False knob=False holdings=8",
+          "aim: phase=0 ai=False knob=False holdings=15",
+          "atx: phase=0 ai=False knob=False holdings=5",
+          "bel20: phase=0 ai=False knob=False holdings=4",
+          "cac40: phase=1 ai=False knob=False holdings=14",
+          "dax: phase=1 ai=False knob=False holdings=2",
+          "euro_stoxx50: phase=1 ai=False knob=False holdings=13"
+        ],
+        "source_keys": [
+          "market_status"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-10-21T22:54:00.304576+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "445acb0f9a3f9032"
+      },
+      "sort_bucket": "acked",
+      "auto_ackable": false,
+      "ack_sufficient": false
     },
     {
       "id": "sunday-matched30-twins",
@@ -728,7 +759,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-10-28T08:38:26.937066+00:00",
+        "updated_at": "2026-10-28T11:43:28.771487+00:00",
         "fingerprint": "1d374ee9ad0e2d3b",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
@@ -1114,7 +1145,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-10-28T08:38:26.934720+00:00",
+        "updated_at": "2026-10-28T11:43:28.770348+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",
@@ -1552,7 +1583,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Sunday analysis review synthesis",
-        "updated_at": "2026-10-25T08:40:17.426886+00:00",
+        "updated_at": "2026-10-28T11:53:09.861724+00:00",
         "fingerprint": "489f92d878371fa0",
         "bullets": [],
         "source_keys": [
@@ -2193,6 +2224,5 @@
       "auto_ackable": false,
       "ack_sufficient": false
     }
-  ],
-  "path": "docs/data/human_tasks_board.json"
+  ]
 }

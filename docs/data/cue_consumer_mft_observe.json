@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-28T12:47:47.405334+00:00",
+  "generated_at": "2026-10-29T02:32:59.181230+00:00",
   "lab_id": "cue_consumer_mft",
   "registration_id": "cue-consumer-mft-v0",
   "evolutionary_root_id": "cue-consumer-mft-root-v0",
@@ -69,16 +69,24 @@
     "rules_role": "scaffold_propose",
     "buy": {
       "B1": {
-        "answer": null,
-        "confidence": null,
-        "cites": [],
-        "unknown": true
+        "answer": "fundamentals_cited_partial",
+        "confidence": "low",
+        "cites": [
+          "models_passed=9.0",
+          "weighted_model_score=0.5745363636363637",
+          "data_quality_score=1.0"
+        ],
+        "unknown": false
       },
       "B2": {
-        "answer": null,
-        "confidence": null,
-        "cites": [],
-        "unknown": true
+        "answer": "timing_neutral_cited",
+        "confidence": "low",
+        "cites": [
+          "timing_signal=neutral",
+          "timing_score=0.5",
+          "volume_ratio_20=1.5293"
+        ],
+        "unknown": false
       },
       "B3": {
         "answer": null,
@@ -87,67 +95,134 @@
         "unknown": true
       },
       "B4": {
-        "answer": null,
-        "confidence": null,
-        "cites": [],
-        "unknown": true
+        "answer": "cue_whitelist_proposes",
+        "confidence": "medium",
+        "cites": [
+          "cue_source_id=n200_raw_buy_tier",
+          "cue_whitelist_id=mft-short-whitelist-v0",
+          "clear_note=raw_buy_tier_clear",
+          "signal=buy",
+          "adjusted_signal=buy"
+        ],
+        "unknown": false
       },
       "B5": {
-        "answer": null,
-        "confidence": null,
-        "cites": [],
-        "unknown": true
+        "answer": "low_or_partial_conviction",
+        "confidence": "low",
+        "cites": [
+          "conviction_score=0.3075"
+        ],
+        "unknown": false
       },
       "B6": {
-        "answer": null,
-        "confidence": null,
-        "cites": [],
-        "unknown": true
+        "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+        "confidence": "medium",
+        "cites": [
+          "hold_policy_trading_days=63",
+          "exit_family=hold_trading_days_or_identity_break",
+          "sizing=fixed_stake_v0",
+          "trade_plan_summary=Trade plan: core 60% limit £1941.74; tactical 40% limit £1898.50; tactical stop £1841.54, target £2191.35.",
+          "tactical_stop_loss=1841.54",
+          "tactical_take_profit=2191.35",
+          "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+          "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+          "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+        ],
+        "unknown": false
       }
     },
     "sell": {
       "S1": {
-        "answer": null,
-        "confidence": null,
-        "cites": [],
-        "unknown": true
+        "answer": "entry_identity_broken",
+        "confidence": "medium",
+        "cites": [
+          "exit_reason=identity_break_not_buy_tier",
+          "entry_cue_source_id=n200_raw_buy_tier",
+          "entry_clear_note=raw_buy_tier_clear"
+        ],
+        "unknown": false
       },
       "S2": {
-        "answer": null,
-        "confidence": null,
-        "cites": [],
-        "unknown": true
+        "answer": "path_cited_at_exit",
+        "confidence": "low",
+        "cites": [
+          "fair_cost_return_pct=-0.02227",
+          "hold_trading_days=20"
+        ],
+        "unknown": false
       },
       "S3": {
-        "answer": null,
-        "confidence": null,
-        "cites": [],
-        "unknown": true
+        "answer": "exit_path_cited",
+        "confidence": "low",
+        "cites": [
+          "fair_cost_return_pct=-0.02227",
+          "path_sign=negative"
+        ],
+        "unknown": false
       },
       "S4": {
-        "answer": null,
-        "confidence": null,
-        "cites": [],
-        "unknown": true
+        "answer": "registered_lab_exit_rule_fires",
+        "confidence": "medium",
+        "cites": [
+          "exit_reason=identity_break_not_buy_tier",
+          "rules_role=scaffold_propose"
+        ],
+        "unknown": false
       },
       "S5": {
-        "answer": null,
-        "confidence": null,
-        "cites": [],
-        "unknown": true
+        "answer": "exit_confidence_from_rule_and_same_day_policy",
+        "confidence": "medium",
+        "cites": [
+          "exit_reason=identity_break_not_buy_tier",
+          "same_day_soft_bias=None",
+          "same_day_hard_ban=False"
+        ],
+        "unknown": false
       },
       "S6": {
-        "answer": null,
-        "confidence": null,
-        "cites": [],
-        "unknown": true
+        "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+        "confidence": "medium",
+        "cites": [
+          "sizing=fixed_stake_v0",
+          "observe_only=true",
+          "package_l=false",
+          "hold_trading_days=20",
+          "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+          "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+          "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+        ],
+        "unknown": false
       }
     },
-    "rule_candidates": [],
-    "llm_stance": null,
+    "rule_candidates": [
+      {
+        "rule_id": "n200_raw_buy_tier",
+        "role": "scaffold_propose",
+        "cue_whitelist_id": "mft-short-whitelist-v0",
+        "clear_note": "raw_buy_tier_clear"
+      }
+    ],
+    "llm_stance": "agree",
     "misfit_evidence": null,
-    "deferred_id": "N228",
-    "note": "Schema stub only — deterministic/LLM fill + misfit trail remain N228. Missing cites fail-close influence."
+    "fill_status": "filled",
+    "fill_source": "deterministic_n228_v0",
+    "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+    "cells_cited": [
+      "B1",
+      "B2",
+      "B4",
+      "B5",
+      "B6",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "S5",
+      "S6"
+    ],
+    "cells_unknown": [
+      "B3"
+    ]
   },
   "autopsy_alignment_feed": {
     "source": "post_sale_review_queue.active",
@@ -155,8 +230,33 @@
     "role": "alignment_inform_lab_only",
     "auto_tune": false,
     "package_l": false,
-    "count": 0,
-    "rows": [],
+    "count": 3,
+    "rows": [
+      {
+        "review_id": "82039d7b5a0ffd876791",
+        "book_id": "n201",
+        "ticker": "HAL",
+        "exit_reason": "identity_break_ey_band",
+        "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+        "same_day_assessment": "not_applicable"
+      },
+      {
+        "review_id": "c439cfcc4d9261092f31",
+        "book_id": "n206",
+        "ticker": "PMV.AX",
+        "exit_reason": "identity_break_ey_band",
+        "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+        "same_day_assessment": "not_applicable"
+      },
+      {
+        "review_id": "8c67b45375ab2802070d",
+        "book_id": "n206",
+        "ticker": "INTU",
+        "exit_reason": "identity_break_ey_band",
+        "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+        "same_day_assessment": "not_applicable"
+      }
+    ],
     "note": "Autopsy learning_point_forward informs the lab observe trail. Does not auto-tune sealed books or open Package L."
   },
   "observe_shadow_pass": {
@@ -164,7 +264,7 @@
     "fills": true,
     "evolutionary_spawn": false,
     "influences_live": false,
-    "rows_considered": 0,
+    "rows_considered": 3,
     "cues_accepted": 117,
     "note": "Lab paper fills from PIT whitelist cues (fixed-stake v0). No sealed spawn; Package L closed; influences_live=false."
   },
@@ -172,9 +272,9 @@
     "walker_marker_id": "mft-episode-walker-v0",
     "status": "active",
     "reason": null,
-    "cues_considered": 179,
+    "cues_considered": 180,
     "cues_accepted": 117,
-    "skipped_at_open_cap": 62,
+    "skipped_at_open_cap": 63,
     "hold_trading_days": 63,
     "max_open_positions": 30,
     "path_scoreboard": {
@@ -296,16 +396,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=9.0",
+                "weighted_model_score=0.5745363636363637",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.5",
+                "volume_ratio_20=1.5293"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -315,76 +423,133 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.3075"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £1941.74; tactical 40% limit £1898.50; tactical stop £1841.54, target £2191.35.",
+                "tactical_stop_loss=1841.54",
+                "tactical_take_profit=2191.35",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
             "S1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "entry_identity_broken",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "entry_cue_source_id=n200_raw_buy_tier",
+                "entry_clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
             },
             "S2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "path_cited_at_exit",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=-0.02227",
+                "hold_trading_days=20"
+              ],
+              "unknown": false
             },
             "S3": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_path_cited",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=-0.02227",
+                "path_sign=negative"
+              ],
+              "unknown": false
             },
             "S4": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "registered_lab_exit_rule_fires",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "rules_role=scaffold_propose"
+              ],
+              "unknown": false
             },
             "S5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_confidence_from_rule_and_same_day_policy",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "same_day_soft_bias=None",
+                "same_day_hard_ban=False"
+              ],
+              "unknown": false
             },
             "S6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+              "confidence": "medium",
+              "cites": [
+                "sizing=fixed_stake_v0",
+                "observe_only=true",
+                "package_l=false",
+                "hold_trading_days=20",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "rule_candidates": [
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ],
+          "cells_unknown": [
+            "B3"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -463,16 +628,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=18.0",
+                "weighted_model_score=0.7996454545454544",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.625",
+                "volume_ratio_20=1.3015"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -482,76 +655,133 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=strong_buy",
+                "adjusted_signal=strong_buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "moderate_conviction",
+              "confidence": "medium",
+              "cites": [
+                "conviction_score=0.4869"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £164.01; tactical 40% limit £157.16; tactical stop £152.45, target £189.00.",
+                "tactical_stop_loss=152.45",
+                "tactical_take_profit=189.0",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
             "S1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "entry_identity_broken",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "entry_cue_source_id=n200_raw_buy_tier",
+                "entry_clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
             },
             "S2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "path_cited_at_exit",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.080138",
+                "hold_trading_days=29"
+              ],
+              "unknown": false
             },
             "S3": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_path_cited",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.080138",
+                "path_sign=positive"
+              ],
+              "unknown": false
             },
             "S4": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "registered_lab_exit_rule_fires",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "rules_role=scaffold_propose"
+              ],
+              "unknown": false
             },
             "S5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_confidence_from_rule_and_same_day_policy",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "same_day_soft_bias=None",
+                "same_day_hard_ban=False"
+              ],
+              "unknown": false
             },
             "S6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+              "confidence": "medium",
+              "cites": [
+                "sizing=fixed_stake_v0",
+                "observe_only=true",
+                "package_l=false",
+                "hold_trading_days=29",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "rule_candidates": [
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ],
+          "cells_unknown": [
+            "B3"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -630,16 +860,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=12.0",
+                "weighted_model_score=0.6798318181818183",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.625",
+                "volume_ratio_20=0.9442"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -649,76 +887,133 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.3619"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £204.34; tactical 40% limit £196.08; tactical stop £184.19, target £216.72.",
+                "tactical_stop_loss=184.19",
+                "tactical_take_profit=216.72",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
             "S1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "entry_identity_broken",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "entry_cue_source_id=n200_raw_buy_tier",
+                "entry_clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
             },
             "S2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "path_cited_at_exit",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.082678",
+                "hold_trading_days=5"
+              ],
+              "unknown": false
             },
             "S3": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_path_cited",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.082678",
+                "path_sign=positive"
+              ],
+              "unknown": false
             },
             "S4": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "registered_lab_exit_rule_fires",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "rules_role=scaffold_propose"
+              ],
+              "unknown": false
             },
             "S5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_confidence_from_rule_and_same_day_policy",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "same_day_soft_bias=None",
+                "same_day_hard_ban=False"
+              ],
+              "unknown": false
             },
             "S6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+              "confidence": "medium",
+              "cites": [
+                "sizing=fixed_stake_v0",
+                "observe_only=true",
+                "package_l=false",
+                "hold_trading_days=5",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "rule_candidates": [
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ],
+          "cells_unknown": [
+            "B3"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -797,16 +1092,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=7.0",
+                "weighted_model_score=0.5254227272727273",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.375",
+                "volume_ratio_20=0.5738"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -816,76 +1119,133 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "moderate_conviction",
+              "confidence": "medium",
+              "cites": [
+                "conviction_score=0.4278"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £197.83; tactical 40% limit £178.66; tactical stop £173.30, target £233.73.",
+                "tactical_stop_loss=173.3",
+                "tactical_take_profit=233.73",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
             "S1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "entry_identity_broken",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "entry_cue_source_id=n200_raw_buy_tier",
+                "entry_clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
             },
             "S2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "path_cited_at_exit",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.050205",
+                "hold_trading_days=5"
+              ],
+              "unknown": false
             },
             "S3": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_path_cited",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.050205",
+                "path_sign=positive"
+              ],
+              "unknown": false
             },
             "S4": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "registered_lab_exit_rule_fires",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "rules_role=scaffold_propose"
+              ],
+              "unknown": false
             },
             "S5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_confidence_from_rule_and_same_day_policy",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "same_day_soft_bias=None",
+                "same_day_hard_ban=False"
+              ],
+              "unknown": false
             },
             "S6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+              "confidence": "medium",
+              "cites": [
+                "sizing=fixed_stake_v0",
+                "observe_only=true",
+                "package_l=false",
+                "hold_trading_days=5",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "rule_candidates": [
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ],
+          "cells_unknown": [
+            "B3"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -964,16 +1324,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=8.0",
+                "weighted_model_score=0.5487454545454546",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.5",
+                "volume_ratio_20=0.8536"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -983,76 +1351,133 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.3248"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £714.00; tactical 40% limit £637.00; tactical stop £617.89, target £758.62.",
+                "tactical_stop_loss=617.89",
+                "tactical_take_profit=758.62",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
             "S1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "entry_identity_broken",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "entry_cue_source_id=n200_raw_buy_tier",
+                "entry_clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
             },
             "S2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "path_cited_at_exit",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.260244",
+                "hold_trading_days=5"
+              ],
+              "unknown": false
             },
             "S3": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_path_cited",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.260244",
+                "path_sign=positive"
+              ],
+              "unknown": false
             },
             "S4": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "registered_lab_exit_rule_fires",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "rules_role=scaffold_propose"
+              ],
+              "unknown": false
             },
             "S5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_confidence_from_rule_and_same_day_policy",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "same_day_soft_bias=None",
+                "same_day_hard_ban=False"
+              ],
+              "unknown": false
             },
             "S6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+              "confidence": "medium",
+              "cites": [
+                "sizing=fixed_stake_v0",
+                "observe_only=true",
+                "package_l=false",
+                "hold_trading_days=5",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "rule_candidates": [
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ],
+          "cells_unknown": [
+            "B3"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -1131,16 +1556,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=9.0",
+                "weighted_model_score=0.6006545454545454",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.5",
+                "volume_ratio_20=1.2458"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -1150,76 +1583,133 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=strong_buy",
+                "adjusted_signal=strong_buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.3969"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £300.24; tactical 40% limit £288.20; tactical stop £279.55, target £347.55.",
+                "tactical_stop_loss=279.55",
+                "tactical_take_profit=347.55",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
             "S1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "entry_identity_broken",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "entry_cue_source_id=n200_raw_buy_tier",
+                "entry_clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
             },
             "S2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "path_cited_at_exit",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.050693",
+                "hold_trading_days=12"
+              ],
+              "unknown": false
             },
             "S3": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_path_cited",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.050693",
+                "path_sign=positive"
+              ],
+              "unknown": false
             },
             "S4": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "registered_lab_exit_rule_fires",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "rules_role=scaffold_propose"
+              ],
+              "unknown": false
             },
             "S5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_confidence_from_rule_and_same_day_policy",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "same_day_soft_bias=None",
+                "same_day_hard_ban=False"
+              ],
+              "unknown": false
             },
             "S6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+              "confidence": "medium",
+              "cites": [
+                "sizing=fixed_stake_v0",
+                "observe_only=true",
+                "package_l=false",
+                "hold_trading_days=12",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "rule_candidates": [
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ],
+          "cells_unknown": [
+            "B3"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -1298,16 +1788,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=7.0",
+                "weighted_model_score=0.5410727272727271",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.625",
+                "volume_ratio_20=1.1568"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -1317,76 +1815,133 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.3793"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £198.72; tactical 40% limit £187.00; tactical stop £179.64, target £211.37.",
+                "tactical_stop_loss=179.64",
+                "tactical_take_profit=211.37",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
             "S1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "entry_identity_broken",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "entry_cue_source_id=n200_raw_buy_tier",
+                "entry_clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
             },
             "S2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "path_cited_at_exit",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=-0.016429",
+                "hold_trading_days=34"
+              ],
+              "unknown": false
             },
             "S3": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_path_cited",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=-0.016429",
+                "path_sign=negative"
+              ],
+              "unknown": false
             },
             "S4": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "registered_lab_exit_rule_fires",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "rules_role=scaffold_propose"
+              ],
+              "unknown": false
             },
             "S5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_confidence_from_rule_and_same_day_policy",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "same_day_soft_bias=None",
+                "same_day_hard_ban=False"
+              ],
+              "unknown": false
             },
             "S6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+              "confidence": "medium",
+              "cites": [
+                "sizing=fixed_stake_v0",
+                "observe_only=true",
+                "package_l=false",
+                "hold_trading_days=34",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "rule_candidates": [
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ],
+          "cells_unknown": [
+            "B3"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -1465,16 +2020,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=7.0",
+                "weighted_model_score=0.5794227272727274",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.375",
+                "volume_ratio_20=1.5724"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -1484,76 +2047,133 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.3057"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £274.07; tactical 40% limit £268.59; tactical stop £260.53, target £307.96.",
+                "tactical_stop_loss=260.53",
+                "tactical_take_profit=307.96",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
             "S1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "entry_identity_broken",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "entry_cue_source_id=n200_raw_buy_tier",
+                "entry_clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
             },
             "S2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "path_cited_at_exit",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.031663",
+                "hold_trading_days=1"
+              ],
+              "unknown": false
             },
             "S3": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_path_cited",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.031663",
+                "path_sign=positive"
+              ],
+              "unknown": false
             },
             "S4": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "registered_lab_exit_rule_fires",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "rules_role=scaffold_propose"
+              ],
+              "unknown": false
             },
             "S5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_confidence_from_rule_and_same_day_policy",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "same_day_soft_bias=None",
+                "same_day_hard_ban=False"
+              ],
+              "unknown": false
             },
             "S6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+              "confidence": "medium",
+              "cites": [
+                "sizing=fixed_stake_v0",
+                "observe_only=true",
+                "package_l=false",
+                "hold_trading_days=1",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "rule_candidates": [
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ],
+          "cells_unknown": [
+            "B3"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -1632,16 +2252,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=6.0",
+                "weighted_model_score=0.5219545454545454",
+                "data_quality_score=0.9"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.5",
+                "volume_ratio_20=0.5443"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -1651,76 +2279,133 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.2583"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £1899.84; tactical 40% limit £1844.00; tactical stop £1774.09, target £2087.40.",
+                "tactical_stop_loss=1774.09",
+                "tactical_take_profit=2087.4",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
             "S1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "entry_identity_broken",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "entry_cue_source_id=n200_raw_buy_tier",
+                "entry_clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
             },
             "S2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "path_cited_at_exit",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.092086",
+                "hold_trading_days=10"
+              ],
+              "unknown": false
             },
             "S3": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_path_cited",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.092086",
+                "path_sign=positive"
+              ],
+              "unknown": false
             },
             "S4": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "registered_lab_exit_rule_fires",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "rules_role=scaffold_propose"
+              ],
+              "unknown": false
             },
             "S5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_confidence_from_rule_and_same_day_policy",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier",
+                "same_day_soft_bias=None",
+                "same_day_hard_ban=False"
+              ],
+              "unknown": false
             },
             "S6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+              "confidence": "medium",
+              "cites": [
+                "sizing=fixed_stake_v0",
+                "observe_only=true",
+                "package_l=false",
+                "hold_trading_days=10",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "rule_candidates": [
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ],
+          "cells_unknown": [
+            "B3"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -1799,16 +2484,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=7.0",
+                "weighted_model_score=0.5669181818181819",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.375",
+                "volume_ratio_20=0.7252"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -1818,76 +2511,133 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.3792"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £386.64; tactical 40% limit £343.16; tactical stop £332.86, target £420.84.",
+                "tactical_stop_loss=332.86",
+                "tactical_take_profit=420.84",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
             "S1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "entry_identity_broken",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "entry_cue_source_id=n200_raw_buy_tier",
+                "entry_clear_note=raw_buy_tier_clear"
+              ],
+              "unknown": false
             },
             "S2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "path_cited_at_exit",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.12474",
+                "hold_trading_days=59"
+              ],
+              "unknown": false
             },
             "S3": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_path_cited",
+              "confidence": "low",
+              "cites": [
+                "fair_cost_return_pct=0.12474",
+                "path_sign=positive"
+              ],
+              "unknown": false
             },
             "S4": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "registered_lab_exit_rule_fires",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "rules_role=scaffold_propose"
+              ],
+              "unknown": false
             },
             "S5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "exit_confidence_from_rule_and_same_day_policy",
+              "confidence": "medium",
+              "cites": [
+                "exit_reason=identity_break_timing_wait",
+                "same_day_soft_bias=None",
+                "same_day_hard_ban=False"
+              ],
+              "unknown": false
             },
             "S6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fixed_stake_close_plus_hold_counterfactual_trail",
+              "confidence": "medium",
+              "cites": [
+                "sizing=fixed_stake_v0",
+                "observe_only=true",
+                "package_l=false",
+                "hold_trading_days=59",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "rule_candidates": [
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ],
+          "cells_unknown": [
+            "B3"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -1968,16 +2718,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=11.0",
+                "weighted_model_score=0.6577227272727273",
+                "data_quality_score=0.9"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.5",
+                "volume_ratio_20=0.7868"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -1987,25 +2745,39 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.3041"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £238.19; tactical 40% limit £216.52; tactical stop £210.02, target £243.58.",
+                "tactical_stop_loss=210.02",
+                "tactical_take_profit=243.58",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
@@ -2050,13 +2822,31 @@
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6"
+          ],
+          "cells_unknown": [
+            "B3",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -2064,9 +2854,9 @@
       "evolutionary_spawn": false,
       "package_l": false,
       "status": "open",
-      "open_mark_return": -0.109407,
+      "open_mark_return": -0.075699,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+      "open_mark_at": "2026-10-28T10:27:58.820841+00:00"
     },
     {
       "episode_id": "b19215bc1dff1afb6493",
@@ -2120,16 +2910,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=10.0",
+                "weighted_model_score=0.5929090909090908",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.625",
+                "volume_ratio_20=0.7251"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -2139,25 +2937,39 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.3743"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £158.12; tactical 40% limit £154.96; tactical stop £146.18, target £171.99.",
+                "tactical_stop_loss=146.18",
+                "tactical_take_profit=171.99",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
@@ -2202,13 +3014,31 @@
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6"
+          ],
+          "cells_unknown": [
+            "B3",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -2216,9 +3046,9 @@
       "evolutionary_spawn": false,
       "package_l": false,
       "status": "open",
-      "open_mark_return": 0.056771,
+      "open_mark_return": 0.05555,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+      "open_mark_at": "2026-10-28T10:27:58.820841+00:00"
     },
     {
       "episode_id": "841d57066b62c9d38df2",
@@ -2272,16 +3102,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=12.0",
+                "weighted_model_score=0.5968500000000001",
+                "data_quality_score=0.9"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.5",
+                "volume_ratio_20=1.1203"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -2291,25 +3129,39 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.2949"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £3437.76; tactical 40% limit £3230.00; tactical stop £3123.40, target £3675.00.",
+                "tactical_stop_loss=3123.4",
+                "tactical_take_profit=3675.0",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
@@ -2354,13 +3206,31 @@
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6"
+          ],
+          "cells_unknown": [
+            "B3",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -2368,9 +3238,9 @@
       "evolutionary_spawn": false,
       "package_l": false,
       "status": "open",
-      "open_mark_return": -0.003786,
+      "open_mark_return": 0.0145,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+      "open_mark_at": "2026-10-28T10:27:58.820841+00:00"
     },
     {
       "episode_id": "ed0160d4ec2c5e0d7756",
@@ -2424,16 +3294,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=8.0",
+                "weighted_model_score=0.5546727272727272",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.375",
+                "volume_ratio_20=0.3221"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -2443,25 +3321,39 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.3516"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £282.64; tactical 40% limit £270.24; tactical stop £254.78, target £285.65.",
+                "tactical_stop_loss=254.78",
+                "tactical_take_profit=285.65",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
@@ -2506,13 +3398,31 @@
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6"
+          ],
+          "cells_unknown": [
+            "B3",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -2520,9 +3430,9 @@
       "evolutionary_spawn": false,
       "package_l": false,
       "status": "open",
-      "open_mark_return": -0.051034,
+      "open_mark_return": -0.039684,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+      "open_mark_at": "2026-10-28T10:27:58.820841+00:00"
     },
     {
       "episode_id": "fa28375b758c96947f58",
@@ -2576,16 +3486,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=11.0",
+                "weighted_model_score=0.5695227272727273",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.625",
+                "volume_ratio_20=0.737"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -2595,25 +3513,39 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.3407"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £153.45; tactical 40% limit £147.25; tactical stop £138.32, target £176.24.",
+                "tactical_stop_loss=138.32",
+                "tactical_take_profit=176.24",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
@@ -2658,13 +3590,31 @@
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6"
+          ],
+          "cells_unknown": [
+            "B3",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -2672,9 +3622,9 @@
       "evolutionary_spawn": false,
       "package_l": false,
       "status": "open",
-      "open_mark_return": -0.03421,
+      "open_mark_return": -0.041661,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+      "open_mark_at": "2026-10-28T10:27:58.820841+00:00"
     },
     {
       "episode_id": "b940c9eed0bbd4818170",
@@ -2728,16 +3678,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=10.0",
+                "weighted_model_score=0.5822727272727274",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.5",
+                "volume_ratio_20=0.4323"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -2747,25 +3705,39 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.3961"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £78.51; tactical 40% limit £72.70; tactical stop £70.52, target £85.75.",
+                "tactical_stop_loss=70.52",
+                "tactical_take_profit=85.75",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
@@ -2810,13 +3782,31 @@
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6"
+          ],
+          "cells_unknown": [
+            "B3",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -2824,9 +3814,9 @@
       "evolutionary_spawn": false,
       "package_l": false,
       "status": "open",
-      "open_mark_return": -0.193394,
+      "open_mark_return": -0.198438,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+      "open_mark_at": "2026-10-28T10:27:58.820841+00:00"
     },
     {
       "episode_id": "ac5413e55e7d3ef9efb1",
@@ -2880,16 +3870,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=7.0",
+                "weighted_model_score=0.5629545454545455",
+                "data_quality_score=0.9"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.5",
+                "volume_ratio_20=0.8029"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -2899,25 +3897,39 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=strong_buy",
+                "adjusted_signal=strong_buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.3267"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £189.94; tactical 40% limit £185.54; tactical stop £179.73, target £211.47.",
+                "tactical_stop_loss=179.73",
+                "tactical_take_profit=211.47",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
@@ -2962,13 +3974,31 @@
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6"
+          ],
+          "cells_unknown": [
+            "B3",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -2976,9 +4006,9 @@
       "evolutionary_spawn": false,
       "package_l": false,
       "status": "open",
-      "open_mark_return": 0.071958,
+      "open_mark_return": 0.125582,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+      "open_mark_at": "2026-10-28T10:27:58.820841+00:00"
     },
     {
       "episode_id": "a10451851a629f197e13",
@@ -3032,16 +4062,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=10.0",
+                "weighted_model_score=0.6333727272727273",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "technicals_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=accumulate",
+                "timing_score=0.75",
+                "volume_ratio_20=0.5573"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -3051,25 +4089,39 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=strong_buy",
+                "adjusted_signal=strong_buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "moderate_conviction",
+              "confidence": "medium",
+              "cites": [
+                "conviction_score=0.4068"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 65% limit £265.68; tactical 35% limit £248.40; tactical stop £240.95, target £284.76.",
+                "tactical_stop_loss=240.95",
+                "tactical_take_profit=284.76",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
@@ -3114,13 +4166,31 @@
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6"
+          ],
+          "cells_unknown": [
+            "B3",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -3128,9 +4198,9 @@
       "evolutionary_spawn": false,
       "package_l": false,
       "status": "open",
-      "open_mark_return": -0.069659,
+      "open_mark_return": -0.017299,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+      "open_mark_at": "2026-10-28T10:27:58.820841+00:00"
     },
     {
       "episode_id": "b54c5a5c4b7852d5069a",
@@ -3184,16 +4254,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=9.0",
+                "weighted_model_score=0.5345318181818182",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.5",
+                "volume_ratio_20=0.7924"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -3203,25 +4281,39 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "moderate_conviction",
+              "confidence": "medium",
+              "cites": [
+                "conviction_score=0.4138"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £1912.18; tactical 40% limit £1834.92; tactical stop £1723.67, target £1939.67.",
+                "tactical_stop_loss=1723.67",
+                "tactical_take_profit=1939.67",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
@@ -3266,13 +4358,31 @@
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6"
+          ],
+          "cells_unknown": [
+            "B3",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -3280,9 +4390,9 @@
       "evolutionary_spawn": false,
       "package_l": false,
       "status": "open",
-      "open_mark_return": -0.024915,
+      "open_mark_return": -0.064521,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+      "open_mark_at": "2026-10-28T10:27:58.820841+00:00"
     },
     {
       "episode_id": "4a66d98f166cf45638be",
@@ -3336,16 +4446,24 @@
           "rules_role": "scaffold_propose",
           "buy": {
             "B1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "fundamentals_cited_partial",
+              "confidence": "low",
+              "cites": [
+                "models_passed=13.0",
+                "weighted_model_score=0.6473772727272729",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
             },
             "B2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "timing_neutral_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=neutral",
+                "timing_score=0.625",
+                "volume_ratio_20=0.5572"
+              ],
+              "unknown": false
             },
             "B3": {
               "answer": null,
@@ -3355,25 +4473,39 @@
             },
             "B4": {
               "answer": "cue_whitelist_proposes",
-              "confidence": "low",
+              "confidence": "medium",
               "cites": [
                 "cue_source_id=n200_raw_buy_tier",
                 "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear"
+                "clear_note=raw_buy_tier_clear",
+                "signal=strong_buy",
+                "adjusted_signal=buy"
               ],
               "unknown": false
             },
             "B5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "moderate_conviction",
+              "confidence": "medium",
+              "cites": [
+                "conviction_score=0.5193"
+              ],
+              "unknown": false
             },
             "B6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 60% limit £1519.94; tactical 40% limit £1489.54; tactical stop £1414.45, target £1664.25.",
+                "tactical_stop_loss=1414.45",
+                "tactical_take_profit=1664.25",
+                "autopsy_learning_point_forward:82039d7b5a0ffd876791=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
+                "autopsy_learning_point_forward:c439cfcc4d9261092f31=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c",
+                "autopsy_learning_point_forward:8c67b45375ab2802070d=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+              ],
+              "unknown": false
             }
           },
           "sell": {
@@ -3418,13 +4550,31 @@
             {
               "rule_id": "n200_raw_buy_tier",
               "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0"
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
             }
           ],
-          "llm_stance": null,
+          "llm_stance": "agree",
           "misfit_evidence": null,
-          "deferred_id": "N228",
-          "note": "v0 walker stamps B4 from PIT cue scaffold; remaining B/S cells stay unknown until N228 rule-aware LLM decide fill. influences_live=false."
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B4",
+            "B5",
+            "B6"
+          ],
+          "cells_unknown": [
+            "B3",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
         },
         "influences_live": false,
         "observe_only": true
@@ -3432,9 +4582,9 @@
       "evolutionary_spawn": false,
       "package_l": false,
       "status": "open",
-      "open_mark_return": 0.051913,
+      "open_mark_return": 0.067055,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-25T07:32:00.532121+00:00"
+      "open_mark_at": "2026-10-28T10:27:58.820841+00:00"
     }
   ],
   "path_scoreboard": {
@@ -3550,15 +4700,16 @@
     "N227": "full per-root cap + cull/replace factory",
     "L630": "lineage fork markers on real spawns",
     "L631": "archive frozen cull losers",
-    "N228": "rule-aware LLM decide + misfit evidence trail",
+    "N228": "shipped_deterministic_fill_v0",
     "N229": "human chart draw tools (keep deferred)",
-    "L640": "dashboard / observe-utilization strip"
+    "L640": "shipped_observe_utilization_strip",
+    "N228_llm_api": "optional later: remote LLM agree/veto voice on the same checklist — still influences_live=false until promote gate"
   },
   "soft_gaps": [
     "Do not back-label cue-book NAV as lab wins.",
     "Do not open Package L on sealed; cull ≠ live promote.",
     "Sealed spawn / novelty / cull remain N223/N226/N227 — lab fills only in v0.",
-    "N228 judgment fill still stubbed (B4 cue cite only on walker opens)."
+    "N228 judgment fill is deterministic cite enrich (not live LLM API); influences_live=false forever on this lab until a separate promote gate."
   ],
   "ops_doc": "docs/ops/cue-consumer-mft.md"
 }
