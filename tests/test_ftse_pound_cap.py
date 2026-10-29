@@ -63,8 +63,8 @@ def test_ftse350_pound_caps_cover_priced_names():
 
     grow = by_ticker["GROW.L"]
     assert grow.method == "library_gbp_cap"
-    # Library AIM market_cap in GBP (refreshed; was 1_125_576_576).
-    assert grow.cap_gbp == 1_145_278_464
+    # Library AIM market_cap in GBP (refreshed; was 1_145_278_464).
+    assert grow.cap_gbp == 1_177_107_712
 
     for ticker in ("HSBA.L", "AZN.L", "BA.L", "CRDA.L", "PNN.L", "CPG.L"):
         assert by_ticker[ticker].cap_gbp is not None
