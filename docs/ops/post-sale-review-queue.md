@@ -137,7 +137,9 @@ Each mark carries `id`, `pattern`, `type`, `tone`, `label`, `charts[]`, optional
 `t0`/`t1`/`ref`/`anchor`, and always `influences_live=false`. Entry-blind cards
 use the entry lens (`entry_quality` / `support_context` / `ma_context`) — typically
 all `info` (blue). In-plot labels truncate with a full-text tooltip; collide-avoid
-keeps level + pattern text readable on iPad.
+keeps level + pattern text readable on iPad. Pattern chips are **tappable**: short
+inline explain (tone blurb + cite / window) expands on tap; second tap or outside
+collapses — iPad-friendly, not a prose wall.
 
 **Factory reply** on Comment: opt-in LLM via `FTSE_POST_SALE_LLM_REPLY=1` on the
 ack workflow (fail-closed to contextual deterministic). Deterministic path

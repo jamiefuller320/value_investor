@@ -163,7 +163,7 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "staggerLabelYs" in charts_js
     assert "nudgeLevelLabelYs(entries, minGap = 28)" in charts_js or "minGap = 28" in charts_js
     assert "mountDualHorizonCharts" in app
-    assert "autopsy-chart-labels-20261029" in html
+    assert "entry-blind-comment-chips-20261029" in html
     assert "Durable history" in app
     assert "one card per sealed book" in app
     assert "data-psr-duplicate=" in app
@@ -178,7 +178,22 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "psr-comment-preview" in app
     assert "postSaleActionedEpisodeKeys" in app
     assert "psr-comment-preview" in css
-    assert "autopsy-chart-labels-20261029" in html
+    assert "entry-blind-comment-chips-20261029" in html
+    # Entry-blind Comment must use DashboardBridge (not dead ftseDashboardBridge.enqueue).
+    assert "pendingEntryBlindActions" in app
+    assert "syncEntryBlindQueueOverlay" in app
+    assert "PENDING_ENTRY_BLIND_STORAGE_KEY" in app
+    assert "rememberPendingEntryBlindAction" in app
+    # Hosted path must queue via DashboardBridge (dead ftseDashboardBridge.enqueue removed).
+    assert "DashboardBridge.queueCommand" in app
+    assert "entry-blind-review-comment" in app
+    assert "bridge.enqueue" not in app
+    assert 'window.ftseDashboardBridge' not in app
+    assert "data-psr-pattern-chip" in app
+    assert "bindPatternMarkChipsOnce" in app
+    assert "patternMarkExplainText" in app
+    assert "psr-pattern-mark-explain" in css
+    assert "psr-pattern-mark-wrap" in css
     assert 'toLowerCase() === "reply"' in app
     assert "pending-reply:" in app
     assert 'id: "interesting"' in app or "interesting" in app

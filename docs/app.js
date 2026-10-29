@@ -1138,6 +1138,10 @@ async function applyDashboardSidecars(data) {
   if (data.post_sale_review_queue) {
     syncPostSaleQueueOverlay(data);
   }
+  // Entry-blind Accept/Comment/Duplicate — same overlay class as post-sale (#1196/#1205).
+  if (data.entry_blind_review_queue) {
+    syncEntryBlindQueueOverlay(data);
+  }
   return data;
 }
 
@@ -12021,6 +12025,33 @@ function postSalePatternMarks(item) {
   return Array.isArray(annotations.marks) ? annotations.marks : [];
 }
 
+const PATTERN_MARK_TONE_BLURB = {
+  info: "Context — framing / location / MA, not a live signal.",
+  warn: "Caution — same-day weakness or premature-sell band to weigh.",
+  weak: "Material loss path (≤ −5%) — outcome context only.",
+  good: "Cited recovery (e.g. same-day reverse) — still observe-only.",
+};
+
+function patternMarkExplainText(row) {
+  if (!row || typeof row !== "object") return "";
+  const label = String(row.label || row.pattern || "mark").trim();
+  const bits = [label];
+  const tone = String(row.tone || "info");
+  const blurb = PATTERN_MARK_TONE_BLURB[tone];
+  if (blurb) bits.push(blurb);
+  if (row.cite) bits.push(`Cite: ${String(row.cite)}`);
+  if (row.pattern && String(row.pattern) !== label) bits.push(`Pattern: ${row.pattern}`);
+  if (row.type) bits.push(`Mark: ${row.type}`);
+  if (row.t0 || row.t1) {
+    const span = [row.t0, row.t1].filter(Boolean).join(" → ");
+    if (span) bits.push(`Window: ${span}`);
+  }
+  if (row.ref) bits.push(`Ref: ${row.ref}`);
+  if (row.anchor) bits.push(`Anchor: ${row.anchor}`);
+  bits.push("influences_live=false");
+  return bits.join("\n");
+}
+
 function renderPatternMarkChips(marks, chartKey) {
   if (!Array.isArray(marks) || !marks.length) return "";
   const filtered = marks.filter((row) => {
@@ -12032,22 +12063,62 @@ function renderPatternMarkChips(marks, chartKey) {
   if (!filtered.length) return "";
   return `<ul class="psr-pattern-marks" aria-label="Factory pattern marks">
     ${filtered
-      .map((row) => {
+      .map((row, index) => {
         const tone = String(row.tone || "info");
         const label = String(row.label || row.pattern || "mark");
-        const tipBits = [label];
-        if (row.cite) tipBits.push(String(row.cite));
-        if (row.pattern && row.pattern !== label) tipBits.push(`pattern=${row.pattern}`);
-        if (row.type) tipBits.push(`type=${row.type}`);
-        // Tone legend (iPad chips): info=blue context, warn=coral caution,
-        // weak=red loss, good=green recovery cite.
-        tipBits.push(`tone=${tone}`);
-        return `<li class="psr-pattern-mark psr-pattern-${esc(tone)}" title="${esc(
-          tipBits.join(" · ")
-        )}">${esc(label)}</li>`;
+        const markId = String(row.id || row.pattern || `mark-${index}`);
+        const explain = patternMarkExplainText(row);
+        return `<li class="psr-pattern-mark-wrap">
+          <button type="button" class="psr-pattern-mark psr-pattern-${esc(
+            tone
+          )}" data-psr-pattern-chip="${esc(markId)}" aria-expanded="false" title="${esc(
+            "Tap for short explanation"
+          )}">${esc(label)}</button>
+          <div class="psr-pattern-mark-explain" hidden data-psr-pattern-explain="${esc(
+            markId
+          )}">${esc(explain).replace(/\n/g, "<br>")}</div>
+        </li>`;
       })
       .join("")}
   </ul>`;
+}
+
+function collapsePatternMarkExplains(exceptBtn) {
+  document.querySelectorAll("[data-psr-pattern-chip][aria-expanded='true']").forEach((btn) => {
+    if (exceptBtn && btn === exceptBtn) return;
+    btn.setAttribute("aria-expanded", "false");
+    const wrap = btn.closest(".psr-pattern-mark-wrap");
+    const panel = wrap && wrap.querySelector("[data-psr-pattern-explain]");
+    if (panel) panel.hidden = true;
+  });
+}
+
+function bindPatternMarkChipsOnce() {
+  if (window.__ftsePatternMarkChipsBound) return;
+  window.__ftsePatternMarkChipsBound = true;
+  document.addEventListener("click", (ev) => {
+    const chip = ev.target.closest("[data-psr-pattern-chip]");
+    if (chip) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const open = chip.getAttribute("aria-expanded") === "true";
+      collapsePatternMarkExplains(chip);
+      const wrap = chip.closest(".psr-pattern-mark-wrap");
+      const panel = wrap && wrap.querySelector("[data-psr-pattern-explain]");
+      if (!panel) return;
+      if (open) {
+        chip.setAttribute("aria-expanded", "false");
+        panel.hidden = true;
+      } else {
+        chip.setAttribute("aria-expanded", "true");
+        panel.hidden = false;
+      }
+      return;
+    }
+    if (!ev.target.closest(".psr-pattern-mark-wrap")) {
+      collapsePatternMarkExplains();
+    }
+  });
 }
 
 function postSaleReviewOverlays(item) {
@@ -12633,6 +12704,200 @@ async function submitPostSaleReviewAction({ reviewId, decision, text, tag, item 
 let entryBlindReviewSort = "interesting";
 let entryBlindReviewExpandedId = null;
 
+/** Session + localStorage overlay — entry_blind clears survive iPad refresh (#1196/#1205 class). */
+const PENDING_ENTRY_BLIND_STORAGE_KEY = "ftse.pendingEntryBlindActions.v1";
+const PENDING_ENTRY_BLIND_MAX_AGE_MS = 2 * 60 * 60 * 1000;
+const pendingEntryBlindActions = Object.create(null);
+const ENTRY_BLIND_BRIDGE_SNAPSHOT_KEYS = [
+  "book_id",
+  "book_tag",
+  "model_id",
+  "ticker",
+  "name",
+  "entry_at",
+  "opened_at",
+  "family_id",
+  "episode_key",
+  "stage",
+  "buy_decision",
+  "buy_reason",
+  "framing",
+  "population",
+  "registration_id",
+  "decision_reasons_join_ok",
+  "avg_cost",
+];
+
+function loadPendingEntryBlindActionsFromStorage() {
+  try {
+    const raw = localStorage.getItem(PENDING_ENTRY_BLIND_STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return;
+    const cutoff = Date.now() - PENDING_ENTRY_BLIND_MAX_AGE_MS;
+    for (const [rid, row] of Object.entries(parsed)) {
+      if (!rid || !row || typeof row !== "object") continue;
+      const at = Number(row.at) || 0;
+      if (!at || at < cutoff) continue;
+      pendingEntryBlindActions[rid] = row;
+    }
+  } catch {
+    /* ignore quota / private mode */
+  }
+}
+
+function persistPendingEntryBlindActions() {
+  try {
+    localStorage.setItem(
+      PENDING_ENTRY_BLIND_STORAGE_KEY,
+      JSON.stringify(pendingEntryBlindActions)
+    );
+  } catch {
+    /* ignore */
+  }
+}
+
+function pruneStalePendingEntryBlindActions() {
+  const cutoff = Date.now() - PENDING_ENTRY_BLIND_MAX_AGE_MS;
+  let changed = false;
+  for (const rid of Object.keys(pendingEntryBlindActions)) {
+    const row = pendingEntryBlindActions[rid];
+    const at = row && typeof row === "object" ? Number(row.at) || 0 : 0;
+    if (!at || at < cutoff) {
+      delete pendingEntryBlindActions[rid];
+      changed = true;
+    }
+  }
+  if (changed) persistPendingEntryBlindActions();
+}
+
+loadPendingEntryBlindActionsFromStorage();
+
+function slimEntryBlindBridgeSnapshot(item) {
+  const src = item && typeof item === "object" ? item : {};
+  const out = {};
+  for (const key of ENTRY_BLIND_BRIDGE_SNAPSHOT_KEYS) {
+    if (src[key] != null && src[key] !== "") out[key] = src[key];
+  }
+  if (!out.episode_key && (out.family_id || src.family_id)) {
+    out.episode_key = out.family_id || src.family_id;
+  }
+  if (!out.stage) out.stage = "entry_blind";
+  out.outcome_fields_stripped = true;
+  return out;
+}
+
+function rememberPendingEntryBlindAction(reviewId, decision, meta) {
+  const rid = String(reviewId || "").trim();
+  if (!rid) return;
+  const info = meta && typeof meta === "object" ? meta : {};
+  const slim = slimEntryBlindBridgeSnapshot(info.item || info.snapshot || {});
+  pendingEntryBlindActions[rid] = {
+    decision: String(decision || "accept"),
+    at: Date.now(),
+    text: String(info.text || "").trim(),
+    snapshot: slim,
+    episode_key: String(
+      slim.episode_key || slim.family_id || info.episode_key || ""
+    ).trim(),
+  };
+  persistPendingEntryBlindActions();
+}
+
+function entryBlindActionedFamilyKeys(labels) {
+  const out = new Set();
+  const store = labels && typeof labels === "object" ? labels : {};
+  for (const ev of Array.isArray(store.events) ? store.events : []) {
+    if (!ev || typeof ev !== "object") continue;
+    const kind = String(ev.kind || "").toLowerCase();
+    if (kind !== "accept" && kind !== "comment" && kind !== "duplicate") continue;
+    const snap = ev.snapshot && typeof ev.snapshot === "object" ? ev.snapshot : {};
+    const ep = String(snap.episode_key || snap.family_id || "").trim();
+    if (ep) out.add(ep);
+  }
+  for (const row of Object.values(pendingEntryBlindActions)) {
+    if (!row || typeof row !== "object") continue;
+    const ep = String(
+      row.episode_key || (row.snapshot && (row.snapshot.episode_key || row.snapshot.family_id)) || ""
+    ).trim();
+    if (ep) out.add(ep);
+  }
+  return out;
+}
+
+function prunePendingEntryBlindActions(data) {
+  const labels = (data && data.entry_blind_review_labels) || {};
+  const actioned = new Set(
+    (Array.isArray(labels.actioned_review_ids) ? labels.actioned_review_ids : [])
+      .map((id) => String(id || "").trim())
+      .filter(Boolean)
+  );
+  for (const ev of Array.isArray(labels.events) ? labels.events : []) {
+    if (!ev || typeof ev !== "object") continue;
+    const kind = String(ev.kind || "").toLowerCase();
+    if (kind === "accept" || kind === "comment" || kind === "duplicate") {
+      const rid = String(ev.review_id || "").trim();
+      if (rid) actioned.add(rid);
+    }
+  }
+  let changed = false;
+  for (const rid of Object.keys(pendingEntryBlindActions)) {
+    if (actioned.has(rid)) {
+      delete pendingEntryBlindActions[rid];
+      changed = true;
+    }
+  }
+  if (changed) persistPendingEntryBlindActions();
+}
+
+function entryBlindReviewCardUsable(item) {
+  if (!item || typeof item !== "object") return false;
+  const ticker = String(item.ticker || "").trim();
+  if (!ticker || ticker === "?") return false;
+  const book = String(item.book_tag || item.book_id || "").trim();
+  if (!book || book === "?") return false;
+  return true;
+}
+
+function syncEntryBlindQueueOverlay(data) {
+  if (!data || !data.entry_blind_review_queue) return;
+  pruneStalePendingEntryBlindActions();
+  prunePendingEntryBlindActions(data);
+  const queue = data.entry_blind_review_queue;
+  if (!Array.isArray(queue.active)) return;
+  const labels = data.entry_blind_review_labels || {};
+  const actioned = new Set(
+    (Array.isArray(labels.actioned_review_ids) ? labels.actioned_review_ids : [])
+      .map((id) => String(id || "").trim())
+      .filter(Boolean)
+  );
+  const pending = new Set(Object.keys(pendingEntryBlindActions));
+  const clearedFamilies = entryBlindActionedFamilyKeys(labels);
+  queue.active = queue.active.filter((row) => {
+    if (!row || typeof row !== "object") return false;
+    if (String(row.tag || "").toLowerCase() === "reply") return false;
+    if (String(row.review_id || "").startsWith("pending-reply:")) return false;
+    if (String(row.review_id || "").startsWith("reply:")) return false;
+    const rid = String(row.review_id || "").trim();
+    if (!rid) return false;
+    if (pending.has(rid) || actioned.has(rid)) return false;
+    const ep = String(row.episode_key || row.family_id || "").trim();
+    if (ep && clearedFamilies.has(ep)) return false;
+    return entryBlindReviewCardUsable(row);
+  });
+  queue.active_count = queue.active.length;
+  queue.new_count = queue.active.filter(
+    (row) => String(row.tag || "new").toLowerCase() !== "reply"
+  ).length;
+  queue.reply_count = 0;
+  const byBook = {};
+  for (const row of queue.active) {
+    const key = String(row.book_tag || row.book_id || "?");
+    byBook[key] = (byBook[key] || 0) + 1;
+  }
+  queue.by_book = byBook;
+}
+
 function renderEntryBlindBuyReason(item) {
   const buy = item && item.buy_decision && typeof item.buy_decision === "object"
     ? item.buy_decision
@@ -12832,22 +13097,9 @@ async function submitEntryBlindReviewAction({ reviewId, decision, text, tag, ite
         ? "Recording duplicate…"
         : "Recording Accept…"
   );
-  const snap = {
-    book_id: item && item.book_id,
-    book_tag: item && item.book_tag,
-    ticker: item && item.ticker,
-    name: item && item.name,
-    entry_at: item && item.entry_at,
-    family_id: item && item.family_id,
-    episode_key: item && (item.episode_key || item.family_id),
-    stage: "entry_blind",
-    buy_decision: item && item.buy_decision,
-    buy_reason: item && item.buy_reason,
-    framing: item && item.framing,
-    charts: item && item.charts,
-    population: item && item.population,
-    outcome_fields_stripped: true,
-  };
+  const snap = slimEntryBlindBridgeSnapshot(item && typeof item === "object" ? item : {});
+  // Optimistic clear + localStorage before bridge await (same class as post-sale #1196/#1205).
+  rememberPendingEntryBlindAction(reviewId, decision, { text: text || "", item: snap });
   const payload = {
     ...snap,
     review_id: reviewId,
@@ -12857,19 +13109,17 @@ async function submitEntryBlindReviewAction({ reviewId, decision, text, tag, ite
     snapshot: snap,
   };
   try {
-    const bridge =
-      typeof window !== "undefined" && window.ftseDashboardBridge
-        ? window.ftseDashboardBridge
-        : null;
-    if (bridge && typeof bridge.enqueue === "function") {
+    // Must use DashboardBridge.queueCommand — ftseDashboardBridge.enqueue was a dead path
+    // on hosted dashboard, so Comment never hit entry-blind-review-ack.yml.
+    if (window.DashboardBridge && (await window.DashboardBridge.init())) {
       const action =
         decision === "comment"
           ? "entry-blind-review-comment"
           : decision === "duplicate"
             ? "entry-blind-review-duplicate"
             : "entry-blind-review-ack";
-      await bridge.enqueue(action, payload);
-      setStatus("Queued — waiting for git…");
+      await window.DashboardBridge.queueCommand(action, payload);
+      setStatus("Queued — waiting for git commit…");
     } else {
       const response = await fetch("/api/entry-blind-review-action", {
         method: "POST",
@@ -12880,17 +13130,16 @@ async function submitEntryBlindReviewAction({ reviewId, decision, text, tag, ite
       if (!response.ok || body.ok === false) {
         throw new Error(body.error || `HTTP ${response.status}`);
       }
-      setStatus("Recorded locally.");
+      setStatus("Saved locally.");
     }
-    if (dashboardData && dashboardData.entry_blind_review_queue) {
-      const q = dashboardData.entry_blind_review_queue;
-      q.active = (q.active || []).filter((row) => row.review_id !== reviewId);
-      q.active_count = (q.active || []).length;
-    }
-    entryBlindReviewExpandedId = null;
+    if (dashboardData) syncEntryBlindQueueOverlay(dashboardData);
+    if (entryBlindReviewExpandedId === reviewId) entryBlindReviewExpandedId = null;
     if (dashboardData) renderLifecycle(dashboardData);
   } catch (err) {
+    delete pendingEntryBlindActions[String(reviewId || "").trim()];
+    persistPendingEntryBlindActions();
     setStatus(`Failed: ${err.message || err}`);
+    if (dashboardData) renderLifecycle(dashboardData);
   }
 }
 
@@ -13185,6 +13434,7 @@ function renderLifecycle(data) {
   const panel = document.getElementById("panel-lifecycle");
   if (!panel) return;
   bindLifecyclePanel();
+  bindPatternMarkChipsOnce();
   bindEntryBlindReviewsOnce();
   bindEntryRevisitReviewsOnce();
   lifecycleSubpage = normalizeLifecycleSubpage(lifecycleSubpage);

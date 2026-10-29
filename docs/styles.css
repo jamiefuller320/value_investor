@@ -3048,6 +3048,15 @@ tr.selected td {
   min-width: 0;
 }
 
+.psr-pattern-mark-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  max-width: min(100%, 18rem);
+  min-width: 0;
+}
+
 .psr-pattern-mark {
   margin: 0;
   padding: 0.2rem 0.45rem;
@@ -3057,10 +3066,32 @@ tr.selected td {
   border-radius: 0.35rem;
   background: color-mix(in srgb, var(--bg) 88%, #64748b);
   color: var(--text);
-  max-width: min(100%, 16rem);
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  font: inherit;
+  text-align: left;
+}
+
+.psr-pattern-mark[aria-expanded="true"] {
+  outline: 2px solid color-mix(in srgb, var(--border) 40%, #0369a1);
+  outline-offset: 1px;
+}
+
+.psr-pattern-mark-explain {
+  margin: 0;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--text);
+  background: color-mix(in srgb, var(--bg) 92%, #0369a1);
+  border: 1px solid color-mix(in srgb, var(--border) 70%, #0369a1);
+  border-radius: 0.35rem;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .psr-pattern-warn {
