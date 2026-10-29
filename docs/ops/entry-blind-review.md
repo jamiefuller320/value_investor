@@ -73,7 +73,10 @@ Lifecycle → **Entry +28d**. CLI: `ftse-entry-revisit-review`. Ops finding:
 | `entry-blind-review-comment` | Comment (+ text) |
 | `entry-blind-review-duplicate` | Duplicate |
 
-Batch into workflow `entry-blind-review-ack.yml`. Local serve:
+Batch into workflow `entry-blind-review-ack.yml` via **`DashboardBridge.queueCommand`**
+(same bridge as post-sale — not a dead `ftseDashboardBridge.enqueue` path). Optimistic
+clear + `localStorage` overlay (`ftse.pendingEntryBlindActions.v1`) keeps Accept/Comment
+cleared across iPad soft reload until labels/git catch up. Local serve:
 `POST /api/entry-blind-review-action`.
 
 CLI (optional):
