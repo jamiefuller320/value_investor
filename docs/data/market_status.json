@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-29T15:19:03.548603+00:00",
+  "generated_at": "2026-10-29T15:25:27.070194+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -74,7 +74,7 @@
       "1": "euro_stoxx50",
       "2": "sp500"
     },
-    "equal_support_generated_at": "2026-10-29T14:16:56.811928+00:00"
+    "equal_support_generated_at": "2026-10-29T15:17:01.585806+00:00"
   },
   "markets": [
     {
@@ -1618,7 +1618,7 @@
         "hold_near_buy_count": 10,
         "not_buy_tier_count": 36,
         "never_buy_tier_count": 33,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
@@ -2362,7 +2362,7 @@
           "NWSA",
           "XYL"
         ],
-        "last_run_at": "2026-10-29T15:17:11.134193+00:00",
+        "last_run_at": "2026-10-29T15:23:36.962714+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
