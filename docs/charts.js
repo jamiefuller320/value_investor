@@ -49,13 +49,59 @@ function estimateLabelWidth(text) {
   return Math.ceil(String(text).length * 6.4);
 }
 
-function nudgeLevelLabelYs(entries, minGap = 18) {
+/** Truncate chart / pattern labels; full text goes in SVG <title> / HTML title. */
+function truncateChartLabel(text, maxChars = 22) {
+  const raw = String(text || "").trim();
+  if (!raw) return "";
+  if (raw.length <= maxChars) return raw;
+  return `${raw.slice(0, Math.max(1, maxChars - 1)).trimEnd()}…`;
+}
+
+/**
+ * Nudge horizontal-level label Ys so two-line (name + price) stacks do not overlap.
+ * Default gap fits ~11px name + ~10px price with a small breathing room.
+ */
+function nudgeLevelLabelYs(entries, minGap = 28) {
   const sorted = [...entries].sort((a, b) => a.y - b.y);
   for (let i = 1; i < sorted.length; i += 1) {
     const prev = sorted[i - 1];
     const current = sorted[i];
     if (current.y - prev.y < minGap) {
       current.y = prev.y + minGap;
+    }
+  }
+  // Second pass upward so a tall stack near the bottom does not pile on the floor.
+  for (let i = sorted.length - 2; i >= 0; i -= 1) {
+    const next = sorted[i + 1];
+    const current = sorted[i];
+    if (next.y - current.y < minGap) {
+      current.y = next.y - minGap;
+    }
+  }
+  return sorted;
+}
+
+/** Stagger in-plot label Ys (pattern / marker text) inside [minY, maxY]. */
+function staggerLabelYs(entries, minGap = 13, minY = 12, maxY = 200) {
+  if (!entries.length) return entries;
+  const sorted = [...entries].sort((a, b) => a.y - b.y);
+  for (let i = 1; i < sorted.length; i += 1) {
+    if (sorted[i].y - sorted[i - 1].y < minGap) {
+      sorted[i].y = sorted[i - 1].y + minGap;
+    }
+  }
+  if (sorted[sorted.length - 1].y > maxY) {
+    const overflow = sorted[sorted.length - 1].y - maxY;
+    for (const row of sorted) row.y -= overflow;
+  }
+  if (sorted[0].y < minY) {
+    const shift = minY - sorted[0].y;
+    for (const row of sorted) row.y += shift;
+  }
+  // Final downward clamp if still colliding after upward shift.
+  for (let i = 1; i < sorted.length; i += 1) {
+    if (sorted[i].y - sorted[i - 1].y < minGap) {
+      sorted[i].y = sorted[i - 1].y + minGap;
     }
   }
   return sorted;
@@ -157,10 +203,13 @@ function dateMarkerLine(dates, markerDate, xAt, pad, label, labelOffset = 0, col
   }
   const mx = xAt(markerIndex);
   const labelY = pad.top + 14 + labelOffset;
+  const shortLabel = truncateChartLabel(label, 24);
   return `
     <line x1="${mx}" y1="${pad.top}" x2="${mx}" y2="${pad.top + pad.plotH}"
       stroke="${color}" stroke-width="1.5" stroke-dasharray="5 4" stroke-opacity="0.75" />
-    <text x="${mx + 4}" y="${labelY}" class="chart-signal-marker-label" style="fill:${color}">${esc(label)}</text>`;
+    <text x="${mx + 4}" y="${labelY}" class="chart-signal-marker-label" style="fill:${color}"><title>${esc(
+      label
+    )}</title>${esc(shortLabel)}</text>`;
 }
 
 function tradeFillMarker(dates, markerDate, price, xAt, yAt, pad, label, color, labelOffset = 0) {
@@ -179,11 +228,14 @@ function tradeFillMarker(dates, markerDate, price, xAt, yAt, pad, label, color, 
     my != null
       ? `<circle cx="${mx}" cy="${my}" r="5" fill="${color}" stroke="#fff" stroke-width="1.5" />`
       : "";
+  const shortLabel = truncateChartLabel(label, 26);
   return `
     <line x1="${mx}" y1="${pad.top}" x2="${mx}" y2="${pad.top + pad.plotH}"
       stroke="${color}" stroke-width="1.5" stroke-dasharray="5 4" stroke-opacity="0.8" />
     ${point}
-    <text x="${mx + 6}" y="${labelY}" class="chart-signal-marker-label" style="fill:${color}">${esc(label)}</text>`;
+    <text x="${mx + 6}" y="${labelY}" class="chart-signal-marker-label" style="fill:${color}"><title>${esc(
+      label
+    )}</title>${esc(shortLabel)}</text>`;
 }
 
 function assessmentBandRect(dates, band, xAt, pad) {
@@ -331,18 +383,25 @@ function renderPatternMarksSvg(marks, dates, closes, xAt, yAt, pad, payload) {
   if (!Array.isArray(marks) || !marks.length || !dates.length) {
     return { svg: "", legend: "" };
   }
-  let labelOffset = 28;
   const parts = [];
   const legendBits = [];
+  const pendingLabels = [];
+  // Leave room for Bought/Sold marker text (drawn later in the same top strip).
+  const tradeReserve = 36;
+  const labelMinY = pad.top + 12;
+  const labelMaxY = pad.top + Math.min(pad.plotH - 8, tradeReserve + marks.length * 13);
+  const plotRight = pad.left + (typeof pad.plotW === "number" ? pad.plotW : 400);
+
   marks.forEach((mark, index) => {
     if (!mark || typeof mark !== "object") return;
     const tone = patternMarkTone(mark.tone);
     const label = enrichPatternMarkLabel(mark, dates, closes, payload);
+    const shortLabel = truncateChartLabel(label, 20);
     const type = String(mark.type || "region");
     legendBits.push(
-      `<span class="chart-legend-item chart-pattern-legend"><span class="chart-legend-swatch" style="background:${
+      `<span class="chart-legend-item chart-pattern-legend" title="${esc(label)}"><span class="chart-legend-swatch" style="background:${
         tone.stroke
-      }"></span>${esc(label)}</span>`
+      }"></span>${esc(shortLabel)}</span>`
     );
 
     if (
@@ -370,16 +429,20 @@ function renderPatternMarksSvg(marks, dates, closes, xAt, yAt, pad, payload) {
       const x1 = xAt(startIdx);
       const x2 = xAt(endIdx);
       const w = Math.max(4, x2 - x1);
-      const labelY = pad.top + labelOffset;
-      labelOffset += 14;
       parts.push(`<rect x="${x1}" y="${pad.top}" width="${w}" height="${pad.plotH}"
         fill="${tone.fill}" stroke="${tone.stroke}" stroke-width="1" stroke-dasharray="3 3"
         stroke-opacity="0.55" class="chart-pattern-mark" data-pattern="${esc(
           String(mark.pattern || "")
-        )}" />
-        <text x="${x1 + 4}" y="${labelY}" class="chart-pattern-mark-label" style="fill:${
-          tone.text
-        }">${esc(label)}</text>`);
+        )}" />`);
+      pendingLabels.push({
+        kind: "band",
+        x: x1 + 4,
+        y: labelMinY + tradeReserve + index * 2,
+        maxX: Math.min(x1 + w - 4, plotRight - 4),
+        tone,
+        label,
+        shortLabel,
+      });
       return;
     }
 
@@ -390,10 +453,16 @@ function renderPatternMarksSvg(marks, dates, closes, xAt, yAt, pad, payload) {
       const xRight = dates.length ? xAt(dates.length - 1) : pad.left;
       parts.push(`<line x1="${pad.left}" y1="${y}" x2="${xRight}" y2="${y}"
         stroke="${tone.stroke}" stroke-width="1.4" stroke-dasharray="4 3"
-        stroke-opacity="0.85" class="chart-pattern-mark" />
-        <text x="${pad.left + 4}" y="${y - 4}" class="chart-pattern-mark-label" style="fill:${
-          tone.text
-        }">${esc(label)}</text>`);
+        stroke-opacity="0.85" class="chart-pattern-mark" />`);
+      pendingLabels.push({
+        kind: "hline",
+        x: pad.left + 4,
+        y: Math.max(labelMinY, y - 5),
+        maxX: plotRight - 4,
+        tone,
+        label,
+        shortLabel,
+      });
       return;
     }
 
@@ -409,14 +478,37 @@ function renderPatternMarksSvg(marks, dates, closes, xAt, yAt, pad, payload) {
       const close = closes[idx] != null ? Number(closes[idx]) : null;
       const my =
         close != null && !Number.isNaN(close) ? yAt(close) : pad.top + pad.plotH * 0.35;
-      const labelY = Math.max(pad.top + 12, my - 10 - (index % 3) * 12);
       parts.push(`<circle cx="${mx}" cy="${my}" r="4.5" fill="${tone.stroke}" stroke="#fff"
-        stroke-width="1.25" class="chart-pattern-mark" />
-        <text x="${mx + 6}" y="${labelY}" class="chart-pattern-mark-label" style="fill:${
-          tone.text
-        }">${esc(label)}</text>`);
+        stroke-width="1.25" class="chart-pattern-mark" />`);
+      const preferLeft = mx > pad.left + (plotRight - pad.left) * 0.62;
+      pendingLabels.push({
+        kind: "callout",
+        x: preferLeft ? mx - 6 : mx + 6,
+        anchor: preferLeft ? "end" : "start",
+        y: Math.max(labelMinY, my - 10),
+        maxX: plotRight - 4,
+        tone,
+        label,
+        shortLabel,
+      });
     }
   });
+
+  staggerLabelYs(pendingLabels, 13, labelMinY, Math.max(labelMinY + 13, labelMaxY));
+  for (const row of pendingLabels) {
+    let x = row.x;
+    const approxW = estimateLabelWidth(row.shortLabel);
+    if (row.anchor === "end") {
+      x = Math.max(pad.left + 4 + approxW, Math.min(x, row.maxX));
+    } else {
+      x = Math.min(x, Math.max(pad.left + 4, row.maxX - approxW));
+      x = Math.max(pad.left + 4, x);
+    }
+    const anchor = row.anchor === "end" ? ` text-anchor="end"` : "";
+    parts.push(`<text x="${x}" y="${row.y}" class="chart-pattern-mark-label"${anchor} style="fill:${
+      row.tone.text
+    }"><title>${esc(row.label)}</title>${esc(row.shortLabel)}</text>`);
+  }
   return {
     svg: parts.join(""),
     legend: legendBits.join(""),
@@ -475,11 +567,15 @@ function renderPriceChartSvg(payload, levelsOverride) {
   const rightPad = Math.max(168, longestLabel + 28);
   const width = 620 + rightPad;
   const volPane = showVolume ? 72 : 0;
-  const height = 380 + volPane;
-  const pad = { top: 28, right: rightPad, bottom: 42 + volPane, left: 22, plotH: 0 };
+  const patternCount = Array.isArray(payload._pattern_marks) ? payload._pattern_marks.length : 0;
+  // Extra top strip so pattern + Bought/Sold labels are not clipped by the viewBox.
+  const topPad = 28 + Math.min(36, patternCount * 6);
+  const height = 380 + volPane + (topPad - 28);
+  const pad = { top: topPad, right: rightPad, bottom: 42 + volPane, left: 22, plotH: 0, plotW: 0 };
   const plotW = width - pad.left - pad.right;
   const plotH = height - pad.top - pad.bottom;
   pad.plotH = plotH;
+  pad.plotW = plotW;
   const volPad = showVolume
     ? { top: pad.top + plotH + 10, plotH: Math.max(28, volPane - 18) }
     : null;
@@ -532,21 +628,33 @@ function renderPriceChartSvg(payload, levelsOverride) {
     })
   );
 
+  const levelLabelMinY = pad.top + 14;
+  const levelLabelMaxY = pad.top + plotH - 14;
   for (const entry of labelEntries) {
-    entry.y = Math.min(pad.top + plotH - 4, Math.max(pad.top + 12, entry.y));
+    entry.y = Math.min(levelLabelMaxY, Math.max(levelLabelMinY, entry.y));
+  }
+  // Re-nudge after clamp so stacked labels near the floor/ceiling stay readable.
+  nudgeLevelLabelYs(labelEntries, 28);
+  for (const entry of labelEntries) {
+    entry.y = Math.min(levelLabelMaxY, Math.max(levelLabelMinY, entry.y));
   }
 
   const levelLines = labelEntries
     .map(({ style, value, lineY, y }) => {
       const labelX = width - pad.right + 12;
       const priceText = formatChartPrice(value, currency);
+      const tip = `${style.label}: ${priceText}`;
       return `
         <line x1="${pad.left}" y1="${lineY}" x2="${width - pad.right}" y2="${lineY}"
           stroke="${style.color}" stroke-width="1.6" stroke-dasharray="${style.dash}" />
         <line x1="${width - pad.right}" y1="${lineY}" x2="${labelX - 4}" y2="${y - 2}"
           stroke="${style.color}" stroke-width="1" stroke-opacity="0.4" />
-        <text x="${labelX}" y="${y - 5}" class="chart-level-label" fill="${style.color}">${esc(style.label)}</text>
-        <text x="${labelX}" y="${y + 9}" class="chart-level-price" fill="${style.color}">${esc(priceText)}</text>`;
+        <text x="${labelX}" y="${y - 5}" class="chart-level-label" fill="${style.color}"><title>${esc(
+          tip
+        )}</title>${esc(style.label)}</text>
+        <text x="${labelX}" y="${y + 9}" class="chart-level-price" fill="${style.color}"><title>${esc(
+          tip
+        )}</title>${esc(priceText)}</text>`;
     })
     .join("");
 

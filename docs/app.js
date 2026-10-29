@@ -12034,9 +12034,17 @@ function renderPatternMarkChips(marks, chartKey) {
     ${filtered
       .map((row) => {
         const tone = String(row.tone || "info");
+        const label = String(row.label || row.pattern || "mark");
+        const tipBits = [label];
+        if (row.cite) tipBits.push(String(row.cite));
+        if (row.pattern && row.pattern !== label) tipBits.push(`pattern=${row.pattern}`);
+        if (row.type) tipBits.push(`type=${row.type}`);
+        // Tone legend (iPad chips): info=blue context, warn=coral caution,
+        // weak=red loss, good=green recovery cite.
+        tipBits.push(`tone=${tone}`);
         return `<li class="psr-pattern-mark psr-pattern-${esc(tone)}" title="${esc(
-          String(row.cite || row.pattern || "")
-        )}">${esc(String(row.label || row.pattern || "mark"))}</li>`;
+          tipBits.join(" · ")
+        )}">${esc(label)}</li>`;
       })
       .join("")}
   </ul>`;

@@ -116,12 +116,28 @@ same-day round-trip soft bias (`same_day_round_trip` /
 durable cites — not a hard ban). Batch LLM prose upgrade of initial opinions is
 deferred (**L627**).
 
-**Pattern marks (chart annotations):** `chart_annotations.marks[]` maps the
-factory opinion onto drawable dual-horizon overlays (hold path, same-day band,
-premature post-exit region, material-loss path, entry-quality band, wider-range
-`range_ref`, exit `ma_context`). Dashboard `charts.js` paints them; client may
-enrich range/MA labels from loaded closes. Alignment-only — never live knobs /
-Package L. Caps ≤8 marks per card (iPad-first).
+### Pattern marks (chart annotations)
+
+`chart_annotations.marks[]` maps the factory opinion onto drawable dual-horizon
+overlays (hold path, same-day band, premature post-exit region, material-loss
+path, entry-quality band, wider-range `range_ref`, exit `ma_context`). Dashboard
+`charts.js` paints them; client may enrich range/MA labels from loaded closes.
+Alignment-only — never live knobs / Package L. Caps ≤8 marks per card (iPad-first).
+
+**Chip / tone colors (legend + in-plot):**
+
+| Tone | Color | Meaning |
+|---|---|---|
+| `info` | blue | Context / framing (hold path, entry quality, range location, MA context, mechanical leave) |
+| `warn` | coral / amber | Caution (same-day round-trip as default weakness; premature-sell post-exit band) |
+| `weak` | red | Material loss path (≤ −5%) |
+| `good` | green | Same-day reverse cited as major-error recovery |
+
+Each mark carries `id`, `pattern`, `type`, `tone`, `label`, `charts[]`, optional
+`t0`/`t1`/`ref`/`anchor`, and always `influences_live=false`. Entry-blind cards
+use the entry lens (`entry_quality` / `support_context` / `ma_context`) — typically
+all `info` (blue). In-plot labels truncate with a full-text tooltip; collide-avoid
+keeps level + pattern text readable on iPad.
 
 **Factory reply** on Comment: opt-in LLM via `FTSE_POST_SALE_LLM_REPLY=1` on the
 ack workflow (fail-closed to contextual deterministic). Deterministic path
