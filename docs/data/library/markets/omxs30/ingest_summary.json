@@ -1,15 +1,28 @@
 {
-  "run_at": "2026-10-28T14:24:50.369319+00:00",
+  "run_at": "2026-10-29T14:40:58.509374+00:00",
   "market_id": "omxs30",
-  "targets": [],
-  "target_details": [],
+  "targets": [
+    "BOL.ST"
+  ],
+  "target_details": [
+    {
+      "ticker": "BOL.ST",
+      "priority_score": 23.9972,
+      "filings_total": 18,
+      "filings_with_body": 17,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
   "results": [],
   "improved": [],
-  "errors": [],
+  "errors": [
+    "BOL.ST: Failed to perform, curl: (16) Error in the HTTP2 framing layer. See https://curl.se/libcurl/c/libcurl-errors.html first for more details."
+  ],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-28T14:23:38.142313+00:00",
+    "snapshot_at": "2026-10-29T14:39:50.329310+00:00",
     "market_id": "omxs30",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
@@ -35,13 +48,13 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-28T14:24:46.736748+00:00",
+    "snapshot_at": "2026-10-29T14:40:55.605251+00:00",
     "market_id": "omxs30",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 0,
+    "indexed_without_body": 1,
     "bodies_min": 3,
     "bodies_median": 11.5,
     "bodies_max": 17,
@@ -50,14 +63,20 @@
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
     "thin_body_tickers": [],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
+    "indexed_without_body_tickers": [
+      "BOL.ST"
+    ],
+    "indexed_without_body_by_ticker": {
+      "BOL.ST": 1
+    },
     "parked_tickers": [],
     "parked_count": 0,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
+    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body_tickers": [
+      "BOL.ST"
+    ],
     "ingest_exhausted": false
   },
   "stalled": false,
@@ -68,8 +87,8 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 12,
-    "hits": 9,
-    "new_rows_total": 0,
+    "hits": 10,
+    "new_rows_total": 1,
     "curiosity_total": 10,
     "errors": 0,
     "prioritization_weights": {
@@ -86,14 +105,10 @@
   },
   "maintenance_mode": true,
   "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "omxs30"
-  },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "omxs30",
-    "assessed_at": "2026-10-28T14:23:38.684939+00:00",
+    "assessed_at": "2026-10-29T14:39:50.656275+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -114,9 +129,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 67.52982678200001,
+  "used_seconds": 64.61050749499998,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3532.470173218,
+  "leftover_seconds": 3535.389492505,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -124,38 +139,43 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "omxs30",
-    "updated_at": "2026-10-28T14:24:46.740315+00:00",
+    "updated_at": "2026-10-29T14:40:55.607376+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": false,
-    "leftover_tickers": [],
-    "unparked_leftover": [],
+    "had_complete_targets": true,
+    "leftover_tickers": [
+      "BOL.ST"
+    ],
+    "unparked_leftover": [
+      "BOL.ST"
+    ],
     "surface_released": [],
     "path": "docs/data/library/markets/omxs30/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
     "skipped": true,
-    "reason": "true_parity",
+    "reason": "not_exhausted",
     "market_id": "omxs30"
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 49,
-    "candidate_count": 41,
+    "tried_count": 50,
+    "candidate_count": 46,
     "skipped_resolved_tickers": [
       "LMT",
       "CRH",
       "MER.L",
       "TPT.L",
-      "APTD.L",
       "FOXT.L",
       "ULTP.L",
+      "APTD.L",
+      "DFS.L",
       "NTR.TO",
       "GIB-A.TO",
       "SU.TO",
@@ -172,6 +192,8 @@
       "APAM.AS",
       "0285.HK",
       "2331.HK",
+      "0288.HK",
+      "0857.HK",
       "EVN.VI",
       "WIE.VI"
     ],
