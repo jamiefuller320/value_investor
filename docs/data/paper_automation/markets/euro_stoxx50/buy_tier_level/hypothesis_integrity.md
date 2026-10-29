@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-28T08:47:04.748938+00:00
+Track: `buy_tier_level` · updated 2026-10-29T07:37:32.010182+00:00
 
 ## Portfolio loser feedback
 
@@ -8,95 +8,91 @@ Track: `buy_tier_level` · updated 2026-10-28T08:47:04.748938+00:00
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 - Selection feedback:
-  - garp fails more often among losers (100% vs 42%)
+  - garp fails more often among losers (100% vs 50%)
 
 ## Holding reviews
 
-### DTE.DE — intact / hold_tolerate (-5.5%)
+### NOKIA.HE — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### DTE.DE — intact / hold_tolerate (-6.2%)
 - price drawdown alone does not invalidate value thesis
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 40%
+
+### ENI.MI — intact / hold_tolerate (-2.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 60%
+- conviction 75%
 
-### DG.PA — intact / hold_tolerate (-3.0%)
+### DG.PA — intact / hold_tolerate (-1.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 91%
 
-### MUV2.DE — intact / hold_tolerate (+0.0%)
+### MUV2.DE — intact / hold_tolerate (-0.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 57%
+- conviction 62%
 
-### ENI.MI — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 61%
-
-### PRX.AS — intact / hold_tolerate (+0.0%)
-- still buy
-- cheapness family still passes
-- data_quality 1.00
-- conviction 41%
-
-### NOKIA.HE — weakening / watch_review (+0.0%)
-- research verdict caution
-- cheapness family no longer passes
-- conviction 18% below intact floor
-- still buy
-- data_quality 1.00
-
-### SGO.PA — intact / hold_tolerate (+0.9%)
+### SGO.PA — intact / hold_tolerate (+0.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 71%
 
-### MC.PA — intact / hold_tolerate (+0.9%)
+### PRX.AS — intact / hold_tolerate (+0.6%)
+- still buy
+- cheapness family still passes
+- data_quality 1.00
+- conviction 44%
+
+### MC.PA — intact / hold_tolerate (+1.5%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 57%
 
-### DHL.DE — intact / hold_tolerate (+1.9%)
+### AD.AS — intact / hold_tolerate (+2.7%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 47%
+
+### DHL.DE — intact / hold_tolerate (+3.2%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 74%
 
-### AD.AS — intact / hold_tolerate (+3.9%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 63%
-
-### SAN.PA — intact / hold_tolerate (+4.3%)
+### SAN.PA — intact / hold_tolerate (+6.2%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 62%
 
-### ABI.BR — intact / hold_tolerate (+9.7%)
+### ABI.BR — intact / hold_tolerate (+6.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 49%
+- conviction 52%
 
-### TTE.PA — intact / hold_tolerate (+10.6%)
+### TTE.PA — intact / hold_tolerate (+10.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

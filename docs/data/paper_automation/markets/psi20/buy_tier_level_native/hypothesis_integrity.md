@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-25T07:08:41.647148+00:00
+Track: `buy_tier_level_native` · updated 2026-10-29T07:39:09.019342+00:00
 
 ## Portfolio loser feedback
 
@@ -10,13 +10,13 @@ Track: `buy_tier_level_native` · updated 2026-10-25T07:08:41.647148+00:00
 
 ## Holding reviews
 
-### COR.LS — weakening / watch_review (+1.5%)
+### GALP.LS — weakening / watch_review (+0.0%)
+- conviction 27% below intact floor
+- still buy
+- research accumulate
+
+### COR.LS — weakening / watch_review (+0.9%)
 - research verdict caution
 - conviction 33% below intact floor
 - still buy
-- cheapness family still passes
-
-### GALP.LS — weakening / watch_review (+2.9%)
-- left buy tier (hold)
-- research accumulate
 - cheapness family still passes

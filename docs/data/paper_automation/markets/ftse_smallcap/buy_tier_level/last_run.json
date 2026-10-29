@@ -1,15 +1,63 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-28T14:19:16.362155+00:00",
+    "local_time": "2026-10-29T07:37:14.343560+00:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-10-28T08:00:00+00:00",
-    "settle_at": "2026-10-28T09:15:00+00:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-10-29T08:00:00+00:00",
+    "settle_at": "2026-10-29T09:15:00+00:00",
+    "can_act": false,
+    "reason": "before market open"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "040b656a-febc-4d6e-b11f-d7a972375052",
+      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+      "acted_at": "2026-10-29T07:37:14.343560+00:00",
+      "ticker": "CAPD.L",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 1.631425,
+      "price": 116.5,
+      "gross": 190.06,
+      "cost": 0.1,
+      "net_cash": 189.97,
+      "note": "Automated trim",
+      "name": "Capital Limited",
+      "avg_cost_at_exit": 120.173
+    },
+    {
+      "id": "5536a609-57e8-4f33-9893-e0ad06a2e5eb",
+      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+      "acted_at": "2026-10-29T07:37:14.343560+00:00",
+      "ticker": "DFS.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 1.394434,
+      "price": 136.0,
+      "gross": 189.64,
+      "cost": 1.04,
+      "net_cash": -190.69,
+      "note": "Automated buy",
+      "name": "DFS Furniture plc"
+    },
+    {
+      "id": "2fb77084-c42c-44c6-9ddd-2fdca32acc58",
+      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+      "acted_at": "2026-10-29T07:37:14.343560+00:00",
+      "ticker": "SBRE.L",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 1.140572,
+      "price": 168.4,
+      "gross": 192.07,
+      "cost": 0.1,
+      "net_cash": 191.98,
+      "note": "Automated trim",
+      "name": "Sabre Insurance Group plc",
+      "avg_cost_at_exit": 167.492
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +71,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1154.95,
-    "cash": 0.72,
+    "nav": 1146.75,
+    "cash": 191.98,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -36,36 +84,55 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 577.47,
+    "target_sleeve_value": 382.25,
     "targets": [
       {
         "ticker": "CAPD.L",
         "name": "Capital Limited",
         "signal": "strong_buy",
-        "conviction_score": 0.65,
-        "price": 117.5
+        "conviction_score": 0.6733,
+        "price": 116.5
+      },
+      {
+        "ticker": "DFS.L",
+        "name": "DFS Furniture plc",
+        "signal": "strong_buy",
+        "conviction_score": 0.5251,
+        "price": 136.0
       },
       {
         "ticker": "SBRE.L",
         "name": "Sabre Insurance Group plc",
         "signal": "buy",
         "conviction_score": 0.45039999999999997,
-        "price": 169.0
+        "price": 168.4
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "DFS.L",
+        "name": "DFS Furniture plc",
+        "reason": "Top-up to equal weight",
+        "value": 191.98,
+        "price": 136.0,
+        "target_value": 382.25,
+        "conviction_score": 0.5251,
+        "signal": "strong_buy"
+      }
+    ],
     "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "CAPD.L",
         "name": "Capital Limited",
         "reason": "Already near equal-weight target",
-        "value": 577.54,
-        "target_value": 577.47,
-        "conviction_score": 0.65,
+        "value": 382.57,
+        "target_value": 382.25,
+        "conviction_score": 0.6733,
         "signal": "strong_buy"
       },
       {
@@ -73,8 +140,8 @@
         "ticker": "SBRE.L",
         "name": "Sabre Insurance Group plc",
         "reason": "Already near equal-weight target",
-        "value": 576.69,
-        "target_value": 577.47,
+        "value": 382.57,
+        "target_value": 382.25,
         "conviction_score": 0.45039999999999997,
         "signal": "buy"
       }
@@ -85,11 +152,11 @@
         "ticker": "CARD.L",
         "name": "Card Factory plc",
         "signal": "strong_buy",
-        "conviction_score": 0.6804,
+        "conviction_score": 0.6839000000000001,
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); deploy cash into 1 buy(s); leave 2 near-target holding(s)."
   },
   "alerts": [
     {
@@ -98,7 +165,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 117.5,
+      "mark": 116.5,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -109,7 +176,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 169.0,
+      "mark": 168.4,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "DFS.L",
+      "name": "DFS Furniture plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 136.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -130,13 +208,13 @@
       "id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
       "created_at": "2026-09-09T07:23:01.537822+00:00"
     },
-    "cash": 0.72,
+    "cash": 191.98,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
       "CAPD.L": {
         "ticker": "CAPD.L",
-        "shares": 4.915265,
+        "shares": 3.28384,
         "avg_cost": 120.173,
         "name": "Capital Limited",
         "sector": "Basic Materials",
@@ -147,7 +225,7 @@
       },
       "SBRE.L": {
         "ticker": "SBRE.L",
-        "shares": 3.412344,
+        "shares": 2.271772,
         "avg_cost": 167.492,
         "name": "Sabre Insurance Group plc",
         "sector": "Financial Services",
@@ -155,6 +233,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-10-21T08:37:36.497529+01:00"
+      },
+      "DFS.L": {
+        "ticker": "DFS.L",
+        "shares": 1.394434,
+        "avg_cost": 136.0,
+        "name": "DFS Furniture plc",
+        "sector": "Consumer Cyclical",
+        "currency": "GBP",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-10-29T07:37:14.343560+00:00"
       }
     },
     "trades": [
@@ -1993,6 +2082,53 @@
         "net_cash": -287.94,
         "note": "Automated buy",
         "name": "Sabre Insurance Group plc"
+      },
+      {
+        "id": "040b656a-febc-4d6e-b11f-d7a972375052",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-10-29T07:37:14.343560+00:00",
+        "ticker": "CAPD.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 1.631425,
+        "price": 116.5,
+        "gross": 190.06,
+        "cost": 0.1,
+        "net_cash": 189.97,
+        "note": "Automated trim",
+        "name": "Capital Limited",
+        "avg_cost_at_exit": 120.173
+      },
+      {
+        "id": "5536a609-57e8-4f33-9893-e0ad06a2e5eb",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-10-29T07:37:14.343560+00:00",
+        "ticker": "DFS.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 1.394434,
+        "price": 136.0,
+        "gross": 189.64,
+        "cost": 1.04,
+        "net_cash": -190.69,
+        "note": "Automated buy",
+        "name": "DFS Furniture plc"
+      },
+      {
+        "id": "2fb77084-c42c-44c6-9ddd-2fdca32acc58",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-10-29T07:37:14.343560+00:00",
+        "ticker": "SBRE.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 1.140572,
+        "price": 168.4,
+        "gross": 192.07,
+        "cost": 0.1,
+        "net_cash": 191.98,
+        "note": "Automated trim",
+        "name": "Sabre Insurance Group plc",
+        "avg_cost_at_exit": 167.492
       }
     ],
     "equity_curve": [
@@ -2723,9 +2859,25 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-29T07:37:14.343560+00:00",
+        "portfolio_value": 1146.75,
+        "cash": 191.98,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-28T14:19:16.362155+00:00",
+    "last_mark_at": "2026-10-29T07:37:14.343560+00:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -2733,12 +2885,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (3 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "ftse_smallcap",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-28T14:19:16.374362+00:00",
+    "generated_at": "2026-10-29T07:37:14.356276+00:00",
     "observe_only": true,
     "open_count": 25,
     "closed_count": 0,
@@ -2812,12 +2964,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 1
+    "checkpoints_added_this_pass": 2
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-28T14:19:16.376862+00:00",
+    "generated_at": "2026-10-29T07:37:14.358861+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2897,9 +3049,9 @@
     },
     "swap_rotation": {
       "open": {
-        "count": 30,
+        "count": 31,
         "verdicts": {
-          "open": 30
+          "open": 31
         }
       },
       "closed": {
@@ -2909,11 +3061,11 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 2
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -2921,8 +3073,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-28T14:19:16.380440+00:00",
-    "as_of": "2026-10-28T14:19:16.362155+00:00",
+    "updated_at": "2026-10-29T07:37:14.362816+00:00",
+    "as_of": "2026-10-29T07:37:14.343560+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2934,16 +3086,16 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 2,
+    "holding_count": 3,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 2,
+      "intact": 3,
       "weakening": 0,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 2,
+      "holding_count": 3,
       "loser_count": 0,
       "loser_share": 0.0,
       "loser_nav_share": 0.0,
@@ -2963,8 +3115,8 @@
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
         "quality": 0.0,
-        "dividend": 0.5,
-        "garp": 0.5,
+        "dividend": 0.3333,
+        "garp": 0.3333,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -2979,12 +3131,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0222,
-        "mark": 117.5,
+        "unrealized_pct": -0.0306,
+        "mark": 116.5,
         "avg_cost": 120.173,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.65,
+        "conviction_score": 0.6733,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3001,14 +3153,54 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 65%"
+          "conviction 67%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 65%"
+          "conviction 67%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "DFS.L",
+        "name": "DFS Furniture plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 136.0,
+        "avg_cost": 136.0,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.5251,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 53%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 53%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3020,8 +3212,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.009,
-        "mark": 169.0,
+        "unrealized_pct": 0.0054,
+        "mark": 168.4,
         "avg_cost": 167.492,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -3062,7 +3254,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-28T14:19:16.384918+00:00",
+    "generated_at": "2026-10-29T07:37:14.367538+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -3135,8 +3327,8 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-28T14:19:16.393441+00:00",
-    "open_count": 2,
+    "generated_at": "2026-10-29T07:37:14.376609+00:00",
+    "open_count": 3,
     "closed_count": 21,
     "scored_count": 9,
     "scored_count_all": 21,
@@ -3195,14 +3387,14 @@
       "recommit_scored": 12
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 2,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-28T14:19:16.362155+00:00",
+    "generated_at": "2026-10-29T07:37:14.343560+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -3226,10 +3418,10 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 8,
+    "open_count": 9,
     "closed_count": 2,
     "open_by_capital_status": {
-      "on_book": 2,
+      "on_book": 3,
       "off_book": 6,
       "never_funded": 0
     },
@@ -3250,51 +3442,159 @@
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 0,
-      "closed": 2,
-      "tagged_on_book": 0,
+      "opened": 1,
+      "closed": 0,
+      "tagged_on_book": 1,
       "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-28T14:19:16.362155+00:00",
+    "generated_at": "2026-10-29T07:37:14.343560+00:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "evidence_heuristic",
-    "judge_spec_id": "heuristic.v1",
-    "parent_spec_id": null,
+    "judge_backend": "llm",
+    "judge_spec_id": "llm.v1",
+    "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 1,
+    "card_count": 1,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 1,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {},
+    "by_algo_action": {
+      "buy": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
     "disagree_vs_heuristic_count": 0,
-    "cards": [],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
+    "cards": [
+      {
+        "ticker": "DFS.L",
+        "name": "DFS Furniture plc",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Screen signal is strong_buy and still_buyish remains true at decision time.",
+          "Conviction rank 3 with rank_drop 0 indicates no deterioration versus entry rank 3.",
+          "Research verdict accumulate with overlay_bound supports the automated buy selection."
+        ],
+        "evidence": [
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 3
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 3
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-29T07:37:14.343560+00:00",
+        "proposal_id": "buy_tier_level:DFS.L:buy:2026-10-29T07:37:14.343560+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Buy into buyish target set \u2014 agree with algo selection."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      }
+    ],
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
+    "llm_judge": {
+      "attempted": true,
+      "ok": true,
+      "fallback": null,
+      "llm_card_count": 1
+    },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-28T14:19:16.362155+00:00",
+      "generated_at": "2026-10-29T07:37:14.343560+00:00",
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "evidence_heuristic",
-      "judge_spec_id": "heuristic.v1",
-      "parent_spec_id": null,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 1,
       "verdict_counts": {
-        "agree": 0,
+        "agree": 1,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "buy": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -3307,10 +3607,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-28T14:19:16.400528+00:00",
+  "generated_at": "2026-10-29T07:37:18.481821+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

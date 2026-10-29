@@ -52,7 +52,7 @@
       "learning_tracks_churn_health.json"
     ]
   },
-  "updated_at": "2026-10-28T14:20:00.249841+00:00",
+  "updated_at": "2026-10-29T07:38:58.933563+00:00",
   "hold_episodes": [
     {
       "episode_id": "buy_tier_level:OMV.VI:2026-10-04T08:10:11.748086+01:00",
@@ -164,7 +164,7 @@
       "ticker": "WIE.VI",
       "name": "Wienerberger AG",
       "started_at": "2026-10-26T14:19:47.989535+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -198,9 +198,9 @@
       "peak_unrealized_pct": 0.0,
       "trough_unrealized_pct": 0.0,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-29T07:38:58.872894+00:00",
+      "linked_sell_trade_id": "a61fc2ae-571c-4d07-aad8-814a27ac6ff6"
     },
     {
       "episode_id": "buy_tier_level:EVN.VI:2026-10-28T14:20:00.185602+00:00",
@@ -208,7 +208,7 @@
       "ticker": "EVN.VI",
       "name": "EVN AG",
       "started_at": "2026-10-28T14:20:00.185602+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -225,9 +225,9 @@
       "peak_unrealized_pct": 0.0,
       "trough_unrealized_pct": 0.0,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-29T07:38:58.872894+00:00",
+      "linked_sell_trade_id": "91fcd5bb-2229-4820-a13d-fdaea0cb140d",
       "thesis_status_at_start": "broken",
       "recommended_action_at_start": "exit_candidate",
       "thesis_reasons_at_start": [
@@ -242,6 +242,49 @@
       ],
       "research_verdict_at_start": null,
       "unrealized_pct_at_thesis": 0.0
+    },
+    {
+      "episode_id": "buy_tier_level:CAI.VI:2026-10-29T07:38:58.872894+00:00",
+      "track_id": "buy_tier_level",
+      "ticker": "CAI.VI",
+      "name": "CA Immobilien Anlagen AG",
+      "started_at": "2026-10-29T07:38:58.872894+00:00",
+      "status": "open",
+      "stress_triggers": [
+        "underwater"
+      ],
+      "entry_mark": 21.0,
+      "avg_cost": 21.3514,
+      "unrealized_pct_at_start": -0.0165,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "cheapness family no longer passes",
+        "still buy",
+        "research accumulate"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": -0.0165,
+      "screen_signal": "buy",
+      "effective_signal": "buy",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.5716,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0165,
+      "trough_unrealized_pct": -0.0165,
+      "recovered_to_breakeven": null,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
     }
   ],
   "swap_rotations": [
@@ -297,10 +340,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "OMV.VI": 0.0184
+        "OMV.VI": -0.0089
       },
       "buy_returns_since_rotation": {
-        "STR.VI": -0.0282
+        "STR.VI": 0.0141
       },
       "verdict": null,
       "closed_at": null
@@ -357,10 +400,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "OMV.VI": 0.0129
+        "OMV.VI": -0.0142
       },
       "buy_returns_since_rotation": {
-        "STR.VI": -0.0417
+        "STR.VI": 0.0
       },
       "verdict": null,
       "closed_at": null
@@ -448,17 +491,107 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "STR.VI": 0.0,
-        "OMV.VI": 0.0
+        "STR.VI": 0.0436,
+        "OMV.VI": -0.0268
       },
       "buy_returns_since_rotation": {
-        "CAI.VI": 0.0,
+        "CAI.VI": -0.0278,
         "EVN.VI": 0.0,
         "WIE.VI": 0.0
       },
       "verdict": null,
       "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-29T07:38:58.872894+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-29T07:38:58.872894+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "EVN.VI",
+          "price": 29.5,
+          "shares": 6.729998,
+          "gross": 198.53,
+          "cost": 0.35,
+          "avg_cost_at_exit": 29.5,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        },
+        {
+          "ticker": "WIE.VI",
+          "price": 16.0,
+          "shares": 12.408433,
+          "gross": 198.53,
+          "cost": 0.35,
+          "avg_cost_at_exit": 16.0,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "STR.VI",
+          "price": 100.6,
+          "shares": 1.218523,
+          "gross": 122.58,
+          "cost": 0.21
+        },
+        {
+          "ticker": "OMV.VI",
+          "price": 72.75,
+          "shares": 1.87675,
+          "gross": 136.53,
+          "cost": 0.24
+        },
+        {
+          "ticker": "CAI.VI",
+          "price": 21.0,
+          "shares": 6.503124,
+          "gross": 136.57,
+          "cost": 0.24
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "EVN.VI": 0.0,
+        "WIE.VI": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "STR.VI": 0.0,
+        "OMV.VI": 0.0,
+        "CAI.VI": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
     }
   ],
-  "hypothesis_outcome_link_updated_at": "2026-10-28T14:20:00.185602+00:00"
+  "hypothesis_outcome_link_updated_at": "2026-10-29T07:38:58.872894+00:00"
 }

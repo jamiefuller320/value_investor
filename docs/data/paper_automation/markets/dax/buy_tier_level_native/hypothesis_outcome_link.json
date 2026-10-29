@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-10-25T07:07:21.518538+00:00",
+  "generated_at": "2026-10-29T07:38:06.349809+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 2,
+    "closed_total": 3,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 2,
+    "open_with_thesis": 1,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -20,13 +20,13 @@
         "closed_count": 0
       },
       "broken": {
-        "closed_count": 2,
+        "closed_count": 3,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0115,
-        "mean_trough_unrealized_pct": 0.0062,
+        "mean_peak_unrealized_pct": 0.0202,
+        "mean_trough_unrealized_pct": -0.0017,
         "outcome_labels": {
-          "recovered": 2
+          "recovered": 3
         }
       },
       "insufficient_data": {
@@ -55,11 +55,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 2,
+    "hold_closed_with_thesis": 3,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=2 (target >=8)",
-      "hold thesis buckets thin (broken=2; target >=3 each)",
+      "hold closed with thesis=3 (target >=8)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -114,7 +113,7 @@
           "trough_unrealized_pct": -0.0739
         }
       ],
-      "peak_unrealized_pct": 0.0252,
+      "peak_unrealized_pct": 0.0287,
       "trough_unrealized_pct": -0.0739,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -210,7 +209,7 @@
       "ticker": "SIE.DE",
       "name": "Siemens Aktiengesellschaft",
       "started_at": "2026-10-22T08:36:42.356763+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -223,13 +222,22 @@
       "conviction_score": null,
       "exit_streak_at_start": 1,
       "momentum_grace": false,
-      "checkpoints": [],
-      "peak_unrealized_pct": -0.0133,
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-29T07:38:06.339548+00:00",
+          "days_after": 7,
+          "price": 270.05,
+          "unrealized_pct": 0.0377,
+          "peak_unrealized_pct": 0.0377,
+          "trough_unrealized_pct": -0.0175
+        }
+      ],
+      "peak_unrealized_pct": 0.0377,
       "trough_unrealized_pct": -0.0175,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-29T07:38:06.339548+00:00",
+      "linked_sell_trade_id": "e3c1ffb5-ce5a-4898-b446-73ae85415ece",
       "thesis_status_at_start": "broken",
       "recommended_action_at_start": "exit_candidate",
       "thesis_reasons_at_start": [
@@ -297,10 +305,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "G1A.DE": 0.0208
+        "G1A.DE": 0.0201
       },
       "buy_returns_since_rotation": {
-        "FME.DE": 0.107
+        "FME.DE": 0.1108
       },
       "verdict": null,
       "closed_at": null
@@ -355,13 +363,21 @@
           "cost": 0.09
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-29T07:38:06.339548+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0289,
+          "avg_buy_return": 0.0135,
+          "replacement_delta": -0.0154
+        }
+      ],
       "sell_returns_since_rotation": {
-        "FME.DE": 0.0253
+        "FME.DE": 0.0289
       },
       "buy_returns_since_rotation": {
-        "HEN3.DE": -0.0003,
-        "SIE.DE": -0.0133
+        "HEN3.DE": -0.0107,
+        "SIE.DE": 0.0377
       },
       "verdict": null,
       "closed_at": null
@@ -415,11 +431,90 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "HEN3.DE": -0.0003
+        "HEN3.DE": -0.0107
       },
       "buy_returns_since_rotation": {
-        "FME.DE": 0.0327,
-        "SIE.DE": 0.0043
+        "FME.DE": 0.0362,
+        "SIE.DE": 0.0561
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-10-29T07:38:06.339548+00:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-10-29T07:38:06.339548+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "HEI.DE",
+          "price": 147.05,
+          "shares": 1.179561,
+          "gross": 173.45,
+          "cost": 0.04,
+          "avg_cost_at_exit": 147.8,
+          "realized_pct": -0.0051,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0051
+        },
+        {
+          "ticker": "FME.DE",
+          "price": 40.6,
+          "shares": 4.383128,
+          "gross": 177.96,
+          "cost": 0.04,
+          "avg_cost_at_exit": 40.0393,
+          "realized_pct": 0.014,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "research verdict caution",
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "data_quality 1.00"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": 0.014
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "HEN3.DE",
+          "price": 77.88,
+          "shares": 4.509936,
+          "gross": 351.23,
+          "cost": 0.09
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "HEI.DE": 0.0,
+        "FME.DE": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "HEN3.DE": 0.0
       },
       "verdict": null,
       "closed_at": null

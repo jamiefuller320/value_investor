@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `graduated_allocation` · updated 2026-10-25T07:10:19.802182+00:00
+Track: `graduated_allocation` · updated 2026-10-29T07:41:09.865401+00:00
 
 ## Portfolio loser feedback
 
@@ -10,35 +10,35 @@ Track: `graduated_allocation` · updated 2026-10-25T07:10:19.802182+00:00
 
 ## Holding reviews
 
-### UMI.BR — intact / hold_tolerate (-3.6%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 91%
-
-### TEL2-B.ST — intact / hold_tolerate (+0.0%)
+### TEL2-B.ST — intact / hold_tolerate (-1.5%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 73%
 
-### EG7.IR — intact / hold_tolerate (+1.6%)
+### DG.PA — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 90%
+
+### EG7.IR — intact / hold_tolerate (+1.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 73%
+- conviction 74%
 
-### C5H.IR — intact / hold_tolerate (+2.3%)
+### C5H.IR — intact / hold_tolerate (+5.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 79%
 
-### PHIA.AS — intact / hold_tolerate (+7.7%)
+### PHIA.AS — intact / hold_tolerate (+6.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

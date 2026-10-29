@@ -1,94 +1,92 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-25T07:08:55.372839+00:00
+Track: `buy_tier_level_native` · updated 2026-10-29T07:39:22.024611+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **1** / 12 (8% count, 9% NAV)
+- Losers: **0** / 12 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
-- Balancing hint: `tolerate_intact_losers`
+- Balancing hint: `maintain`
 
 ## Holding reviews
 
-### BOL.ST — intact / hold_tolerate (-6.8%)
-- price drawdown alone does not invalidate value thesis
+### BOL.ST — intact / hold_tolerate (-3.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 71%
+- conviction 70%
 
-### SAND.ST — intact / hold_tolerate (-4.4%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 52%
-
-### SKF-B.ST — intact / hold_tolerate (-3.0%)
+### TEL2-B.ST — intact / hold_tolerate (-1.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 77%
+- conviction 85%
 
-### VOLV-B.ST — intact / hold_tolerate (-1.9%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 81%
-
-### TEL2-B.ST — intact / hold_tolerate (-0.4%)
+### VOLV-B.ST — intact / hold_tolerate (-0.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 83%
 
-### NIBE-B.ST — weakening / watch_review (+0.0%)
+### SAND.ST — intact / hold_tolerate (-0.3%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 54%
+
+### LIFCO-B.ST — weakening / watch_review (-0.3%)
+- research verdict neutral
+- still buy
+- cheapness family still passes
+
+### SKF-B.ST — intact / hold_tolerate (+0.2%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 87%
+
+### NIBE-B.ST — weakening / watch_review (+2.7%)
 - research verdict caution
 - cheapness family no longer passes
 - still buy
 - data_quality 1.00
 
-### LIFCO-B.ST — weakening / watch_review (+0.0%)
-- research verdict neutral
-- conviction 34% below intact floor
-- still buy
-- cheapness family still passes
-
-### SKA-B.ST — intact / hold_tolerate (+2.9%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 76%
-
-### ASSA-B.ST — intact / hold_tolerate (+4.7%)
+### SKA-B.ST — intact / hold_tolerate (+5.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 44%
+- conviction 48%
 
-### ESSITY-B.ST — intact / hold_tolerate (+7.5%)
+### ESSITY-B.ST — intact / hold_tolerate (+6.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 59%
 
-### ERIC-B.ST — intact / hold_tolerate (+10.2%)
+### ASSA-B.ST — intact / hold_tolerate (+8.4%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 57%
+- conviction 44%
 
-### HM-B.ST — intact / hold_tolerate (+10.3%)
+### HM-B.ST — intact / hold_tolerate (+11.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 63%
+
+### ERIC-B.ST — intact / hold_tolerate (+14.7%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 56%

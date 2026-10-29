@@ -1,15 +1,31 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-28T14:20:01.064587+00:00",
+    "local_time": "2026-10-29T07:39:12.579418+00:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-10-28T08:00:00+00:00",
-    "settle_at": "2026-10-28T09:15:00+00:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-10-29T08:00:00+00:00",
+    "settle_at": "2026-10-29T09:15:00+00:00",
+    "can_act": false,
+    "reason": "before market open"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "e61cab57-0d48-4832-a278-92fe10466ad8",
+      "fund_id": "b8c90f43-56dd-4880-a7ad-7948bdf1e27e",
+      "acted_at": "2026-10-29T07:39:12.579418+00:00",
+      "ticker": "LOGN.SW",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.000974,
+      "price": 82.02,
+      "gross": 0.08,
+      "cost": 0.0,
+      "net_cash": -0.08,
+      "note": "Automated buy",
+      "name": "Logitech International S.A."
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +39,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1071.03,
-    "cash": 0.08,
+    "nav": 1060.24,
+    "cash": -0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -36,112 +52,109 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 214.21,
+    "target_sleeve_value": 264.96,
     "targets": [
       {
+        "ticker": "LOGN.SW",
+        "name": "Logitech International S.A.",
+        "signal": "buy",
+        "conviction_score": 0.5319,
+        "price": 82.02
+      },
+      {
         "ticker": "PGHN.SW",
         "name": "Partners Group Holding AG",
         "signal": "buy",
         "conviction_score": 0.531,
-        "price": 626.0
+        "price": 644.4
       },
       {
-        "ticker": "LOGN.SW",
-        "name": "Logitech International S.A.",
+        "ticker": "ALC.SW",
+        "name": "Alcon Inc.",
         "signal": "buy",
-        "conviction_score": 0.5119,
-        "price": 91.36
-      },
-      {
-        "ticker": "NOVN.SW",
-        "name": "Novartis AG",
-        "signal": "buy",
-        "conviction_score": 0.38539999999999996,
-        "price": 128.0
+        "conviction_score": 0.35912499999999997,
+        "price": 57.64
       },
       {
         "ticker": "AMRZ.SW",
         "name": "Amrize AG",
         "signal": "buy",
         "conviction_score": 0.33999999999999997,
-        "price": 32.5
-      },
-      {
-        "ticker": "ALC.SW",
-        "name": "Alcon Inc.",
-        "signal": "buy",
-        "conviction_score": 0.3315,
-        "price": 57.94
+        "price": 33.09
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "NOVN.SW",
+        "name": "Novartis AG",
+        "reason": "No longer in the top conviction target set",
+        "shares": 1.673925,
+        "price": 129.22,
+        "value": 216.3
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_buys": [
       {
-        "action": "hold",
+        "action": "buy",
+        "ticker": "LOGN.SW",
+        "name": "Logitech International S.A.",
+        "reason": "Top-up to equal weight",
+        "value": 72.53,
+        "price": 82.02,
+        "target_value": 264.96,
+        "conviction_score": 0.5319,
+        "signal": "buy"
+      },
+      {
+        "action": "buy",
         "ticker": "PGHN.SW",
         "name": "Partners Group Holding AG",
-        "reason": "Already near equal-weight target",
-        "value": 213.91,
-        "target_value": 214.21,
+        "reason": "Top-up to equal weight",
+        "value": 44.77,
+        "price": 644.4,
+        "target_value": 264.96,
         "conviction_score": 0.531,
         "signal": "buy"
       },
       {
-        "action": "hold",
-        "ticker": "LOGN.SW",
-        "name": "Logitech International S.A.",
-        "reason": "Already near equal-weight target",
-        "value": 214.26,
-        "target_value": 214.21,
-        "conviction_score": 0.5119,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "NOVN.SW",
-        "name": "Novartis AG",
-        "reason": "Already near equal-weight target",
-        "value": 214.26,
-        "target_value": 214.21,
-        "conviction_score": 0.38539999999999996,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "AMRZ.SW",
-        "name": "Amrize AG",
-        "reason": "Already near equal-weight target",
-        "value": 214.26,
-        "target_value": 214.21,
-        "conviction_score": 0.33999999999999997,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
+        "action": "buy",
         "ticker": "ALC.SW",
         "name": "Alcon Inc.",
-        "reason": "Already near equal-weight target",
-        "value": 214.25,
-        "target_value": 214.21,
-        "conviction_score": 0.3315,
+        "reason": "Top-up to equal weight",
+        "value": 51.82,
+        "price": 57.64,
+        "target_value": 264.96,
+        "conviction_score": 0.35912499999999997,
+        "signal": "buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "AMRZ.SW",
+        "name": "Amrize AG",
+        "reason": "Top-up to equal weight",
+        "value": 46.81,
+        "price": 33.09,
+        "target_value": 264.96,
+        "conviction_score": 0.33999999999999997,
         "signal": "buy"
       }
     ],
+    "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 5 equal-weight sleeve(s); leave 5 near-target holding(s)."
+    "summary": "Next rebalance would target 4 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 4 buy(s)."
   },
   "alerts": [
     {
       "ticker": "NOVN.SW",
       "name": "Novartis AG",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 128.0,
+      "severity": "watch",
+      "message": "Screen signal is now hold",
+      "mark": 129.22,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -152,7 +165,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 91.36,
+      "mark": 82.02,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -163,7 +176,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 32.5,
+      "mark": 33.09,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -174,7 +187,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 57.94,
+      "mark": 57.64,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -185,7 +198,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 626.0,
+      "mark": 644.4,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -206,7 +219,7 @@
       "id": "b8c90f43-56dd-4880-a7ad-7948bdf1e27e",
       "created_at": "2026-10-05T07:38:15.932776+00:00"
     },
-    "cash": 0.08,
+    "cash": -0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -223,8 +236,8 @@
       },
       "LOGN.SW": {
         "ticker": "LOGN.SW",
-        "shares": 2.345272,
-        "avg_cost": 86.1257,
+        "shares": 2.346246,
+        "avg_cost": 86.124,
         "name": "Logitech International S.A.",
         "sector": "Technology",
         "currency": "CHF",
@@ -484,6 +497,21 @@
         "net_cash": -214.28,
         "note": "Automated buy",
         "name": "Partners Group Holding AG"
+      },
+      {
+        "id": "e61cab57-0d48-4832-a278-92fe10466ad8",
+        "fund_id": "b8c90f43-56dd-4880-a7ad-7948bdf1e27e",
+        "acted_at": "2026-10-29T07:39:12.579418+00:00",
+        "ticker": "LOGN.SW",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.000974,
+        "price": 82.02,
+        "gross": 0.08,
+        "cost": 0.0,
+        "net_cash": -0.08,
+        "note": "Automated buy",
+        "name": "Logitech International S.A."
       }
     ],
     "equity_curve": [
@@ -884,22 +912,41 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-29T07:39:12.579418+00:00",
+        "portfolio_value": 960.04,
+        "cash": -0.0,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "CHF": 0.9055
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-28T14:20:01.064587+00:00",
+    "last_mark_at": "2026-10-29T07:39:12.579418+00:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "NOVN.SW": 1
+      },
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "smi",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-28T14:20:01.190190+00:00",
+    "generated_at": "2026-10-29T07:39:12.654272+00:00",
     "observe_only": true,
     "open_count": 0,
     "closed_count": 0,
@@ -978,7 +1025,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-28T14:20:01.191144+00:00",
+    "generated_at": "2026-10-29T07:39:12.655108+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1034,7 +1081,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 0,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 3,
+      "hold_with_data_quality_count": 4,
       "gaps": [
         "hold_recovery closed episodes=0 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -1043,10 +1090,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 3,
-        "recovered_to_breakeven": 3,
+        "count": 4,
+        "recovered_to_breakeven": 4,
         "close_reasons": {
-          "open": 3
+          "open": 4
         }
       },
       "closed": {
@@ -1066,7 +1113,7 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
@@ -1079,8 +1126,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-28T14:20:01.192447+00:00",
-    "as_of": "2026-10-28T14:20:01.064587+00:00",
+    "updated_at": "2026-10-29T07:39:12.656155+00:00",
+    "as_of": "2026-10-29T07:39:12.579418+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1095,8 +1142,8 @@
     "holding_count": 5,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 3,
-      "weakening": 2,
+      "intact": 2,
+      "weakening": 3,
       "broken": 0,
       "insufficient_data": 0
     },
@@ -1121,9 +1168,9 @@
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
         "quality": 0.4,
-        "dividend": 0.4,
+        "dividend": 0.6,
         "garp": 0.8,
-        "risk": 0.0
+        "risk": 0.2
       },
       "selection_feedback_flags": [],
       "balancing_hint": "maintain",
@@ -1131,14 +1178,55 @@
     },
     "holdings": [
       {
+        "ticker": "LOGN.SW",
+        "name": "Logitech International S.A.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0477,
+        "mark": 82.02,
+        "avg_cost": 86.124,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.5319,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "dividend"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 53%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 53%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "PGHN.SW",
         "name": "Partners Group Holding AG",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 626.0,
+        "unrealized_pct": 0.0294,
+        "mark": 644.4,
         "avg_cost": 626.0,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -1178,8 +1266,8 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0566,
-        "mark": 32.5,
+        "unrealized_pct": 0.0757,
+        "mark": 33.09,
         "avg_cost": 30.76,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -1212,59 +1300,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "LOGN.SW",
-        "name": "Logitech International S.A.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0608,
-        "mark": 91.36,
-        "avg_cost": 86.1257,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5119,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [
-          "dividend"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 51%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 51%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "ALC.SW",
         "name": "Alcon Inc.",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0834,
-        "mark": 57.94,
+        "unrealized_pct": 0.0778,
+        "mark": 57.64,
         "avg_cost": 53.48,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.3315,
+        "conviction_score": 0.3591,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1278,60 +1325,59 @@
         "research_verdict": "caution",
         "reasons": [
           "research verdict caution",
-          "conviction 33% below intact floor",
           "still buy",
           "cheapness family still passes"
         ],
         "intact_reasons": [
           "still buy",
           "cheapness family still passes",
-          "data_quality 1.00"
+          "data_quality 1.00",
+          "conviction 36%"
         ],
         "weaken_reasons": [
-          "research verdict caution",
-          "conviction 33% below intact floor"
+          "research verdict caution"
         ],
         "broken_reasons": []
       },
       {
         "ticker": "NOVN.SW",
         "name": "Novartis AG",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0916,
-        "mark": 128.0,
+        "unrealized_pct": 0.102,
+        "mark": 129.22,
         "avg_cost": 117.26,
-        "signal": "buy",
+        "signal": "hold",
         "timing_signal": "neutral",
-        "conviction_score": 0.3854,
+        "conviction_score": 0.1688,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
-          "quality",
-          "dividend",
-          "risk"
+          "quality"
         ],
         "failed_families": [
-          "garp"
+          "dividend",
+          "garp",
+          "risk"
         ],
         "research_verdict": "accumulate",
         "reasons": [
-          "still buy",
+          "left buy tier (hold)",
+          "conviction 17% below intact floor",
           "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 39%"
+          "cheapness family still passes"
         ],
         "intact_reasons": [
-          "still buy",
           "research accumulate",
           "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 39%"
+          "data_quality 1.00"
         ],
-        "weaken_reasons": [],
+        "weaken_reasons": [
+          "left buy tier (hold)",
+          "conviction 17% below intact floor"
+        ],
         "broken_reasons": []
       }
     ],
@@ -1342,7 +1388,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-28T14:20:01.194058+00:00",
+    "generated_at": "2026-10-29T07:39:12.657530+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1350,7 +1396,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 0,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 3,
+      "open_with_thesis": 4,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -1402,7 +1448,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-28T14:20:01.196944+00:00",
+    "generated_at": "2026-10-29T07:39:12.660078+00:00",
     "open_count": 2,
     "closed_count": 3,
     "scored_count": 3,
@@ -1469,7 +1515,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-28T14:20:01.064587+00:00",
+    "generated_at": "2026-10-29T07:39:12.579418+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1526,42 +1572,160 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-28T14:20:01.064587+00:00",
+    "generated_at": "2026-10-29T07:39:12.579418+00:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "evidence_heuristic",
-    "judge_spec_id": "heuristic.v1",
-    "parent_spec_id": null,
+    "judge_backend": "llm",
+    "judge_spec_id": "llm.v1",
+    "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 1,
+    "card_count": 1,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 1,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {},
+    "by_algo_action": {
+      "buy": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
     "disagree_vs_heuristic_count": 0,
-    "cards": [],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
+    "cards": [
+      {
+        "ticker": "LOGN.SW",
+        "name": "Logitech International S.A.",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Effective screen_signal is buy with still_buyish true; conviction_rank 1 matches entry_rank 1 and rank_drop 0, well inside the hold gate.",
+          "research_verdict accumulate with overlay_bound supports the automated buy; no fcf_basis_overlay flag on the live report."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 1
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 1
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-29T07:39:12.579418+00:00",
+        "proposal_id": "buy_tier_level:LOGN.SW:buy:2026-10-29T07:39:12.579418+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Buy into buyish target set \u2014 agree with algo selection."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      }
+    ],
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
+    "llm_judge": {
+      "attempted": true,
+      "ok": true,
+      "fallback": null,
+      "llm_card_count": 1
+    },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-28T14:20:01.064587+00:00",
+      "generated_at": "2026-10-29T07:39:12.579418+00:00",
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "evidence_heuristic",
-      "judge_spec_id": "heuristic.v1",
-      "parent_spec_id": null,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 1,
       "verdict_counts": {
-        "agree": 0,
+        "agree": 1,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "buy": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -1574,10 +1738,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-28T14:20:01.201616+00:00",
+  "generated_at": "2026-10-29T07:39:16.348235+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
