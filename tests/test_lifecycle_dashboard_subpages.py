@@ -188,7 +188,7 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "DashboardBridge.queueCommand" in app
     assert "entry-blind-review-comment" in app
     assert "bridge.enqueue" not in app
-    assert 'window.ftseDashboardBridge' not in app
+    assert "window.ftseDashboardBridge" not in app
     assert "data-psr-pattern-chip" in app
     assert "bindPatternMarkChipsOnce" in app
     assert "patternMarkExplainText" in app
