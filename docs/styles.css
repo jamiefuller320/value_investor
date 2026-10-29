@@ -3057,8 +3057,10 @@ tr.selected td {
   border-radius: 0.35rem;
   background: color-mix(in srgb, var(--bg) 88%, #64748b);
   color: var(--text);
-  max-width: 100%;
-  overflow-wrap: anywhere;
+  max-width: min(100%, 16rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .psr-pattern-warn {
@@ -3084,6 +3086,7 @@ tr.selected td {
 .chart-pattern-mark-label {
   font-size: 10px;
   font-weight: 600;
+  pointer-events: auto;
 }
 
 .chart-pattern-legend-row {
@@ -3096,6 +3099,10 @@ tr.selected td {
 
 .chart-pattern-legend-row .chart-pattern-legend {
   font-size: 0.78rem;
+  max-width: min(100%, 14rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .psr-history {

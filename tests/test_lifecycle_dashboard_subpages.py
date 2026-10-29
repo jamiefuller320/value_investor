@@ -159,8 +159,11 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     charts_js = Path("docs/charts.js").read_text(encoding="utf-8")
     assert "renderPatternMarksSvg" in charts_js
     assert "filterPatternMarks" in charts_js
+    assert "truncateChartLabel" in charts_js
+    assert "staggerLabelYs" in charts_js
+    assert "nudgeLevelLabelYs(entries, minGap = 28)" in charts_js or "minGap = 28" in charts_js
     assert "mountDualHorizonCharts" in app
-    assert "autopsy-pattern-marks-20261028" in html
+    assert "autopsy-chart-labels-20261029" in html
     assert "Durable history" in app
     assert "one card per sealed book" in app
     assert "data-psr-duplicate=" in app
@@ -175,7 +178,7 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "psr-comment-preview" in app
     assert "postSaleActionedEpisodeKeys" in app
     assert "psr-comment-preview" in css
-    assert "autopsy-pattern-marks-20261028" in html
+    assert "autopsy-chart-labels-20261029" in html
     assert 'toLowerCase() === "reply"' in app
     assert "pending-reply:" in app
     assert 'id: "interesting"' in app or "interesting" in app
