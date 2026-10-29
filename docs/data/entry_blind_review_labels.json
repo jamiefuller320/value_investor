@@ -1,0 +1,376 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-10-29T23:03:20.394002+00:00",
+  "influences_live": false,
+  "observe_only": true,
+  "package": "M",
+  "events": [
+    {
+      "event_id": "09360ef4-9ed3-4c2c-a722-5469ca379eb9",
+      "review_id": "4fee50c330bc92579d76",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "It looks like there is support around this price, but the last rally ended lower than the previous high",
+      "acted_at": "2026-10-29T23:03:20.393427+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:6930b9d4498398c0",
+      "snapshot": {
+        "book_id": "n200",
+        "book_tag": "N200",
+        "model_id": "n200",
+        "ticker": "RIO.L",
+        "entry_at": "2026-10-25T07:32:00.532121+00:00",
+        "opened_at": "2026-10-25T07:32:00.532121+00:00",
+        "framing": "[N200] RIO.L · bought 2026-10-25\nStage: entry_blind (blind entry critique)\nBought because: Entered buy-tier (new cross)\nChart: PIT clip through buy day only — no post-fill path\nOutcome fields stripped — influences_live=false",
+        "population": "sealed_just_bought",
+        "registration_id": "strand-b-plain-value-tech-timing-v0",
+        "buy_decision": {
+          "code": "enter_buy_tier",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "Entered buy-tier (new cross)",
+          "side": "buy",
+          "source": "model_identity.n200",
+          "structured": {
+            "rule": "newly_enters_buy_tier"
+          }
+        },
+        "buy_reason": "Entered buy-tier (new cross)",
+        "decision_reasons_join_ok": true,
+        "family_id": "n200|RIO.L|2026-10-25",
+        "episode_key": "n200|RIO.L|2026-10-25",
+        "stage": "entry_blind",
+        "outcome_fields_stripped": true,
+        "influences_live": false,
+        "observe_only": true,
+        "llm_opinion": "N200 closed RIO.L after a unknown-length hold (2026-10-25 → ?, exit): return n/a (return). Bought because: Entered buy-tier (new cross). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+        ],
+        "chart_annotations": {
+          "schema_version": 1,
+          "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path. Pattern marks: Entry quality band; Entry vs wider range (support / cyclical location).",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide. Factory pattern marks illustrate the opinion — agree/disagree on the picture.",
+          "marks": [
+            {
+              "id": "entry_quality",
+              "pattern": "entry_quality",
+              "type": "entry_band",
+              "charts": [
+                "episode",
+                "wider_tf"
+              ],
+              "label": "Entry quality band",
+              "tone": "info",
+              "cite": "entry_at",
+              "influences_live": false,
+              "t0": "2026-10-20",
+              "t1": "2026-10-27",
+              "anchor": "entry_price"
+            },
+            {
+              "id": "entry_range_ref",
+              "pattern": "support_context",
+              "type": "range_ref",
+              "charts": [
+                "wider_tf"
+              ],
+              "label": "Entry vs wider range (support / cyclical location)",
+              "tone": "info",
+              "cite": "support_context",
+              "influences_live": false,
+              "ref": "entry"
+            }
+          ]
+        },
+        "opinion_source": "deterministic_v0",
+        "buy_strengths": [
+          "Buy decision is joinable: Entered buy-tier (new cross) — comments can ground on that trail."
+        ],
+        "buy_weaknesses": [],
+        "sell_strengths": [
+          "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+        ],
+        "sell_weaknesses": [
+          "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+        ],
+        "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "same_day_soft_penalty": false,
+        "dialogue": [
+          {
+            "role": "factory",
+            "kind": "initial_opinion",
+            "text": "N200 closed RIO.L after a unknown-length hold (2026-10-25 → ?, exit): return n/a (return). Bought because: Entered buy-tier (new cross). Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+            ],
+            "chart_annotations": {
+              "schema_version": 1,
+              "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path. Pattern marks: Entry quality band; Entry vs wider range (support / cyclical location).",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide. Factory pattern marks illustrate the opinion — agree/disagree on the picture.",
+              "marks": [
+                {
+                  "id": "entry_quality",
+                  "pattern": "entry_quality",
+                  "type": "entry_band",
+                  "charts": [
+                    "episode",
+                    "wider_tf"
+                  ],
+                  "label": "Entry quality band",
+                  "tone": "info",
+                  "cite": "entry_at",
+                  "influences_live": false,
+                  "t0": "2026-10-20",
+                  "t1": "2026-10-27",
+                  "anchor": "entry_price"
+                },
+                {
+                  "id": "entry_range_ref",
+                  "pattern": "support_context",
+                  "type": "range_ref",
+                  "charts": [
+                    "wider_tf"
+                  ],
+                  "label": "Entry vs wider range (support / cyclical location)",
+                  "tone": "info",
+                  "cite": "support_context",
+                  "influences_live": false,
+                  "ref": "entry"
+                }
+              ]
+            },
+            "buy_strengths": [
+              "Buy decision is joinable: Entered buy-tier (new cross) — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [],
+            "sell_strengths": [
+              "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+            ],
+            "sell_weaknesses": [
+              "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+            ],
+            "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+            "same_day_round_trip": false,
+            "same_day_assessment": "not_applicable",
+            "source": "deterministic_v0",
+            "at": "2026-10-29T23:03:20.393371+00:00",
+            "influences_live": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "5062d76a-f2e8-43ef-9f07-f9c32e1014fa",
+      "review_id": "reply:6930b9d4498398c0",
+      "parent_event_id": "09360ef4-9ed3-4c2c-a722-5469ca379eb9",
+      "parent_review_id": "4fee50c330bc92579d76",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Acknowledged owner Comment on [N200] RIO.L (hold ?, outcome n/a).\nYou wrote: \"It looks like there is support around this price, but the last rally ended lower than the previous high\"\nStructured decision trail — bought because: Entered buy-tier (new cross); sold because: Unknown — unjoinable (no structured trail).\nConsidered your Comment (partial): Comment recorded and considered against structured buy/sell reasons; factory does not treat Comment as a sealed-knob order.\nDevelopment-loop read (observe / alignment only): dual-horizon charts are the surface for range-location and post-exit path claims; cite the structured buy/sell reasons above (fail-closed when unjoinable) — this card does not force knobs or fills (influences_live=false; Package M — not Package L auto-tune).\nLearning point forward (super-book lane candidate): Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).\nAccept if this reply matches what you see; Comment again to continue the mini dialogue.",
+      "acted_at": "2026-10-29T23:03:20.393431+00:00",
+      "acted_by": "factory_reply",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "deterministic_contextual",
+      "llm_attempted": false,
+      "llm_ok": null
+    },
+    {
+      "event_id": "b4e9b7fd-c6e9-4ac1-9283-b358328e9f62",
+      "review_id": "83b6a5c194d19fabe7fa",
+      "parent_event_id": null,
+      "kind": "comment",
+      "tag_at_action": "new",
+      "text": "Looks like it could be the current support level intersecting with the bottom of the long term upward channel",
+      "acted_at": "2026-10-29T23:03:20.393956+00:00",
+      "acted_by": "dashboard",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_review_id": "reply:5eccdcaa9098ad51",
+      "snapshot": {
+        "book_id": "n210",
+        "book_tag": "N210",
+        "model_id": "n210",
+        "ticker": "CURY.L",
+        "entry_at": "2026-10-25T07:32:00.532121+00:00",
+        "opened_at": "2026-10-25T07:32:00.532121+00:00",
+        "framing": "[N210] CURY.L · bought 2026-10-25\nStage: entry_blind (blind entry critique)\nBought because: AI/filter gates newly cleared (entry): verdict=accumulate\nChart: PIT clip through buy day only — no post-fill path\nOutcome fields stripped — influences_live=false",
+        "population": "sealed_just_bought",
+        "registration_id": "strand-e-ai-judgment-fixed-stake-v0",
+        "buy_decision": {
+          "code": "ai_filters_newly_clear",
+          "influences_live": false,
+          "join_ok": true,
+          "label": "AI/filter gates newly cleared (entry): verdict=accumulate",
+          "side": "buy",
+          "source": "episode.entry_detail",
+          "structured": {
+            "conviction_score": 0.6258,
+            "research_verdict": "accumulate",
+            "timing_signal": "neutral"
+          }
+        },
+        "buy_reason": "AI/filter gates newly cleared (entry): verdict=accumulate",
+        "decision_reasons_join_ok": false,
+        "family_id": "n210|CURY.L|2026-10-25",
+        "episode_key": "n210|CURY.L|2026-10-25",
+        "stage": "entry_blind",
+        "outcome_fields_stripped": true,
+        "influences_live": false,
+        "observe_only": true,
+        "llm_opinion": "N210 closed CURY.L after a unknown-length hold (2026-10-25 → ?, exit): return n/a (return). Bought because: AI/filter gates newly cleared (entry): verdict=accumulate. Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+        "learning_points": [
+          "Verify episode chart and wider TF together before Accepting framing.",
+          "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+          "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+        ],
+        "chart_annotations": {
+          "schema_version": 1,
+          "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path. Pattern marks: Entry quality band; Entry vs wider range (support / cyclical location).",
+          "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide. Factory pattern marks illustrate the opinion — agree/disagree on the picture.",
+          "marks": [
+            {
+              "id": "entry_quality",
+              "pattern": "entry_quality",
+              "type": "entry_band",
+              "charts": [
+                "episode",
+                "wider_tf"
+              ],
+              "label": "Entry quality band",
+              "tone": "info",
+              "cite": "entry_at",
+              "influences_live": false,
+              "t0": "2026-10-20",
+              "t1": "2026-10-27",
+              "anchor": "entry_price"
+            },
+            {
+              "id": "entry_range_ref",
+              "pattern": "support_context",
+              "type": "range_ref",
+              "charts": [
+                "wider_tf"
+              ],
+              "label": "Entry vs wider range (support / cyclical location)",
+              "tone": "info",
+              "cite": "support_context",
+              "influences_live": false,
+              "ref": "entry"
+            }
+          ]
+        },
+        "opinion_source": "deterministic_v0",
+        "buy_strengths": [
+          "Buy decision is joinable: AI/filter gates newly cleared (entry): verdict=accumulate — comments can ground on that trail."
+        ],
+        "buy_weaknesses": [],
+        "sell_strengths": [
+          "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+        ],
+        "sell_weaknesses": [
+          "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+        ],
+        "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+        "same_day_round_trip": false,
+        "same_day_assessment": "not_applicable",
+        "same_day_soft_penalty": false,
+        "dialogue": [
+          {
+            "role": "factory",
+            "kind": "initial_opinion",
+            "text": "N210 closed CURY.L after a unknown-length hold (2026-10-25 → ?, exit): return n/a (return). Bought because: AI/filter gates newly cleared (entry): verdict=accumulate. Sold because: Unknown — unjoinable (no structured trail). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+            "learning_points": [
+              "Verify episode chart and wider TF together before Accepting framing.",
+              "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+              "Ground comments in the structured sell reason (Unknown — unjoinable (no structured trail)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+            ],
+            "chart_annotations": {
+              "schema_version": 1,
+              "episode": "Episode: unknown-length hold, return n/a (return). Confirm entry/exit marks match the sealed/control path. Pattern marks: Entry quality band; Entry vs wider range (support / cyclical location).",
+              "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide. Factory pattern marks illustrate the opinion — agree/disagree on the picture.",
+              "marks": [
+                {
+                  "id": "entry_quality",
+                  "pattern": "entry_quality",
+                  "type": "entry_band",
+                  "charts": [
+                    "episode",
+                    "wider_tf"
+                  ],
+                  "label": "Entry quality band",
+                  "tone": "info",
+                  "cite": "entry_at",
+                  "influences_live": false,
+                  "t0": "2026-10-20",
+                  "t1": "2026-10-27",
+                  "anchor": "entry_price"
+                },
+                {
+                  "id": "entry_range_ref",
+                  "pattern": "support_context",
+                  "type": "range_ref",
+                  "charts": [
+                    "wider_tf"
+                  ],
+                  "label": "Entry vs wider range (support / cyclical location)",
+                  "tone": "info",
+                  "cite": "support_context",
+                  "influences_live": false,
+                  "ref": "entry"
+                }
+              ]
+            },
+            "buy_strengths": [
+              "Buy decision is joinable: AI/filter gates newly cleared (entry): verdict=accumulate — comments can ground on that trail."
+            ],
+            "buy_weaknesses": [],
+            "sell_strengths": [
+              "No strong deterministic sell strength beyond the structured label — owner Comment can add pattern evidence."
+            ],
+            "sell_weaknesses": [
+              "Sell reason unjoinable / unknown — never invent a sell-trigger ID."
+            ],
+            "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+            "same_day_round_trip": false,
+            "same_day_assessment": "not_applicable",
+            "source": "deterministic_v0",
+            "at": "2026-10-29T23:03:20.393905+00:00",
+            "influences_live": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "6bbc7790-9251-4faf-901a-6bef1528e945",
+      "review_id": "reply:5eccdcaa9098ad51",
+      "parent_event_id": "b4e9b7fd-c6e9-4ac1-9283-b358328e9f62",
+      "parent_review_id": "83b6a5c194d19fabe7fa",
+      "kind": "reply",
+      "tag_at_action": "reply",
+      "text": "Acknowledged owner Comment on [N210] CURY.L (hold ?, outcome n/a).\nYou wrote: \"Looks like it could be the current support level intersecting with the bottom of the long term upward channel\"\nStructured decision trail — bought because: AI/filter gates newly cleared (entry): verdict=accumulate; sold because: Unknown — unjoinable (no structured trail).\nConsidered your Comment (partial): Comment recorded and considered against structured buy/sell reasons; factory does not treat Comment as a sealed-knob order.\nDevelopment-loop read (observe / alignment only): dual-horizon charts are the surface for range-location and post-exit path claims; cite the structured buy/sell reasons above (fail-closed when unjoinable) — this card does not force knobs or fills (influences_live=false; Package M — not Package L auto-tune).\nLearning point forward (super-book lane candidate): Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).\nAccept if this reply matches what you see; Comment again to continue the mini dialogue.",
+      "acted_at": "2026-10-29T23:03:20.393959+00:00",
+      "acted_by": "factory_reply",
+      "source": "dashboard_bridge",
+      "influences_live": false,
+      "reply_kind": "deterministic_contextual",
+      "llm_attempted": false,
+      "llm_ok": null
+    }
+  ],
+  "actioned_review_ids": [
+    "4fee50c330bc92579d76",
+    "83b6a5c194d19fabe7fa"
+  ],
+  "active_replies": []
+}
