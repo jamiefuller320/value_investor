@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-28T00:47:34.943678+00:00
+Track: `buy_tier_level` · updated 2026-10-29T00:47:32.284169+00:00
 
 ## Portfolio loser feedback
 
@@ -60,13 +60,10 @@ Track: `buy_tier_level` · updated 2026-10-28T00:47:34.943678+00:00
 - still buy
 - cheapness family still passes
 
-### CQR.AX — intact / hold_tolerate (-9.4%)
-- price drawdown alone does not invalidate value thesis
+### CQR.AX — weakening / watch_review (-9.4%)
+- timing=wait while underwater
 - still strong_buy
 - research accumulate
-- cheapness family still passes
-- data_quality 0.90
-- conviction 82%
 
 ### WHC.AX — weakening / watch_review (-8.0%)
 - conviction 31% below intact floor
