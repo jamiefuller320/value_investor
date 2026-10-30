@@ -7181,6 +7181,114 @@ function renderObserveInstrumentCard(inst, history) {
       ${settingRow("Concurrence mean", esc(conc))}
       ${settingRow("Buy watches armed", esc(String(metrics.buy_watch_armed ?? "—")))}
       <p class="small muted">L652 observe · fixed-stake v0 · concurrence companion only · N241 not_now · never Package L</p>`;
+  } else if (inst.id === "lab_learning_progress") {
+    const levers = Array.isArray(metrics.mom_levers) ? metrics.mom_levers : [];
+    const leverBits = levers
+      .map((row) => {
+        const score =
+          row.mom_score == null || row.mom_score === ""
+            ? "—"
+            : String(row.mom_score);
+        return `${row.id || "?"}:${score}`;
+      })
+      .join(" · ");
+    const med = metrics.lab_median_fair_cost_pct;
+    const medBit =
+      typeof med === "number" && Number.isFinite(med)
+        ? `${(med * 100).toFixed(1)}%`
+        : "—";
+    const enteredBy = metrics.entered_by_lens || {};
+    const enteredBits = Object.keys(enteredBy)
+      .sort()
+      .map((key) => `${key}=${enteredBy[key]}`)
+      .join(" · ");
+    const conc =
+      metrics.concurrence_mean == null || metrics.concurrence_mean === ""
+        ? "—"
+        : String(metrics.concurrence_mean);
+    const ddDepth =
+      metrics.drawdown_depth_median == null || metrics.drawdown_depth_n === 0
+        ? "—"
+        : `${metrics.drawdown_depth_median} (n=${metrics.drawdown_depth_n})`;
+    const ddDur =
+      metrics.drawdown_duration_days_median == null ||
+      metrics.drawdown_duration_n === 0
+        ? "—"
+        : `${metrics.drawdown_duration_days_median}d (n=${metrics.drawdown_duration_n})`;
+    const bands = Array.isArray(metrics.concurrence_fair_cost_bands)
+      ? metrics.concurrence_fair_cost_bands
+      : [];
+    const bandBits = bands
+      .map((row) => {
+        const fc = row.median_fair_cost_episode_pct;
+        const fcBit =
+          typeof fc === "number" && Number.isFinite(fc)
+            ? `${(fc * 100).toFixed(1)}%`
+            : "—";
+        return `c=${row.concurrence}:${fcBit}(n=${row.n})`;
+      })
+      .join(" · ");
+    const had = metrics.had_but_ignored_theme_counts || {};
+    const miss = metrics.missing_that_might_help_theme_counts || {};
+    const hadBits = Object.keys(had)
+      .map((key) => `${key}=${had[key]}`)
+      .join(" · ");
+    const missBits = Object.keys(miss)
+      .map((key) => `${key}=${miss[key]}`)
+      .join(" · ");
+    const gapNote = metrics.outcome_gap_note
+      ? esc(String(metrics.outcome_gap_note))
+      : null;
+    metricRows = `
+      ${settingRow(
+        "Lab (MFT)",
+        esc(
+          `open/closed ${metrics.lab_open ?? "—"} / ${metrics.lab_closed ?? "—"} · median fair-cost ${medBit} · shadows ${metrics.evolutionary_shadows_eligible ?? "—"}`
+        )
+      )}
+      ${settingRow(
+        "MoM levers",
+        `<span title="Month-on-month fair-cost levers (diagnostic until volume).">${esc(
+          leverBits || "—"
+        )}</span>`
+      )}
+      ${settingRow(
+        "Lenses (L652)",
+        esc(
+          `looking ${metrics.lenses_looking ?? "—"} · entered ${metrics.lenses_entered ?? "—"} · abandoned ${metrics.lenses_abandoned ?? "—"} · concurrence ${conc}`
+        )
+      )}
+      ${settingRow(
+        "Entered by lens",
+        esc(enteredBits || "—")
+      )}
+      ${settingRow(
+        "Drawdown (depth / duration)",
+        esc(`${ddDepth} / ${ddDur}`)
+      )}
+      ${settingRow(
+        "Concurrence × outcome",
+        `<span title="${esc(
+          metrics.concurrence_outcome_note || ""
+        )}">${esc(
+          bandBits || `concurrence ${conc} only`
+        )}</span><div class="small muted">${esc(
+          metrics.concurrence_outcome_note || ""
+        )}</div>`
+      )}
+      ${settingRow(
+        "Had but ignored",
+        gapNote && !hadBits
+          ? gapNote
+          : esc(hadBits || "—")
+      )}
+      ${settingRow(
+        "Missing that might help",
+        gapNote && !missBits
+          ? gapNote
+          : esc(missBits || "—")
+      )}
+      <p class="small muted">Weekly learning strip · Package M · fair-cost primary · influences_live=false · N241 not_now · never Package L</p>`;
   } else {
     metricRows = `
       ${settingRow("Dominant gap", esc(`${metrics.dominant_gap_field || "—"} · ${metrics.dominant_gap_count ?? "—"}`))}
@@ -7257,7 +7365,7 @@ function renderObserveUtilizationSection(data, { compact = false } = {}) {
       <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
       ${metaLine}
       ${staleBanner}
-      <p class="small muted">Observe-only instruments (flip-lag + decision-input + cue_consumer_mft L640 + parallel timing lenses L652). Flip-lag factory <code>has_memo</code> joins sibling <code>memo_home_market</code> — empty local home is not unresearched. Trajectory = delta vs last dashboard cycle (lower warn/gap is better on P1 cards; MFT / L652 cards are activity). ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Ops runbook</a>` : ""}</p>
+      <p class="small muted">Observe-only instruments (flip-lag + decision-input + cue_consumer_mft L640 + parallel timing lenses L652 + lab learning progress strip). Flip-lag factory <code>has_memo</code> joins sibling <code>memo_home_market</code> — empty local home is not unresearched. Trajectory = delta vs last dashboard cycle (lower warn/gap is better on P1 cards; MFT / L652 / lab-learning cards are activity / learning-volume). ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Ops runbook</a>` : ""}</p>
       <div class="grid observe-instrument-grid" style="margin-top:0.75rem">
         ${cards || '<p class="muted">No instruments in snapshot.</p>'}
       </div>

@@ -47,9 +47,245 @@ COMBINED_TAGGED_FINDING_TITLE = "Combined tagged learning store stale"
 CUE_CONSUMER_MFT_FINDING_TITLE = "Cue-consumer MFT episode walker (lab paper fills)"
 CUE_CONSUMER_MFT_ARMED_TITLE = "Cue-consumer MFT lab armed (observe)"
 PARALLEL_TIMING_LENSES_FINDING_TITLE = "Parallel timing lenses (observe)"
+LAB_LEARNING_PROGRESS_FINDING_TITLE = "Lab learning progress (observe)"
 
 _WARN_COUNT_RE = re.compile(r"^(\d+)\s+recent buy-tier flip", re.I)
 _GAP_COUNT_RE = re.compile(r"(\d+)\s+of\s+\d+\s+names", re.I)
+
+
+def _finite_float(value: Any) -> float | None:
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        out = float(value)
+    except (TypeError, ValueError):
+        return None
+    if out != out:  # NaN
+        return None
+    return out
+
+
+def _outcome_gap_theme(cite: str) -> str:
+    """Map a deterministic outcome-gap cite to a stable theme bucket."""
+    text = str(cite or "").strip()
+    low = text.lower()
+    if text.startswith("B1") or "judgment.b1" in low or low.startswith("judgment.b1"):
+        return "B1_cheapness"
+    if text.startswith("B2") or "judgment.b2" in low or low.startswith("judgment.b2"):
+        return "B2_technical"
+    if "entry_news" in low or "polarity" in low or "news" in low:
+        return "news_polarity"
+    if "sma" in low or "support" in low:
+        return "sma_level"
+    if "timing" in low or "mom_" in low:
+        return "timing"
+    head = text.split("=", 1)[0].strip()
+    return head[:40] if head else "untyped"
+
+
+def _median(values: list[float]) -> float | None:
+    if not values:
+        return None
+    ordered = sorted(values)
+    mid = len(ordered) // 2
+    if len(ordered) % 2:
+        return round(ordered[mid], 6)
+    return round((ordered[mid - 1] + ordered[mid]) / 2.0, 6)
+
+
+def _aggregate_lab_learning_companions(
+    *,
+    mft_store: dict[str, Any] | None,
+    lenses_store: dict[str, Any] | None,
+) -> dict[str, Any]:
+    """Join MFT + L652 into learning companions; fail-closed ``—`` fields when missing."""
+    mft = mft_store if isinstance(mft_store, dict) else {}
+    lenses = lenses_store if isinstance(lenses_store, dict) else {}
+    summary = lenses.get("summary") if isinstance(lenses.get("summary"), dict) else {}
+
+    open_n = mft.get("open_lab_episodes")
+    closed_n = mft.get("closed_lab_episodes")
+    try:
+        open_i = int(open_n) if open_n is not None else None
+    except (TypeError, ValueError):
+        open_i = None
+    try:
+        closed_i = int(closed_n) if closed_n is not None else None
+    except (TypeError, ValueError):
+        closed_i = None
+
+    path_board = mft.get("path_scoreboard") if isinstance(mft.get("path_scoreboard"), dict) else {}
+    median_fc = _finite_float(path_board.get("smooth_ret_cohort_median"))
+
+    levers_raw = mft.get("mom_levers") or []
+    lever_rows: list[dict[str, Any]] = []
+    if isinstance(levers_raw, list):
+        for row in levers_raw:
+            if not isinstance(row, dict):
+                continue
+            lever_rows.append(
+                {
+                    "id": row.get("id"),
+                    "mom_score": row.get("mom_score"),
+                    "status": row.get("status"),
+                }
+            )
+
+    looking = summary.get("lenses_looking")
+    entered = summary.get("lenses_entered")
+    abandoned = summary.get("lenses_abandoned")
+    try:
+        looking_i = int(looking) if looking is not None else None
+    except (TypeError, ValueError):
+        looking_i = None
+    try:
+        entered_i = int(entered) if entered is not None else None
+    except (TypeError, ValueError):
+        entered_i = None
+    try:
+        abandoned_i = int(abandoned) if abandoned is not None else None
+    except (TypeError, ValueError):
+        abandoned_i = None
+    concurrence_mean = _finite_float(summary.get("concurrence_mean"))
+
+    entered_by_lens: dict[str, int] = {}
+    dd_depths: list[float] = []
+    dd_durs: list[float] = []
+    fair_by_band: dict[int, list[float]] = {}
+    had_themes: dict[str, int] = {}
+    miss_themes: dict[str, int] = {}
+    scored_outcome_reviews = 0
+    lens_fair_cost_n = 0
+    candidates = lenses.get("candidates") if isinstance(lenses.get("candidates"), list) else []
+
+    for cand in candidates:
+        if not isinstance(cand, dict):
+            continue
+        conc_block = cand.get("concurrence") if isinstance(cand.get("concurrence"), dict) else {}
+        conc_n = conc_block.get("count")
+        try:
+            conc_i = int(conc_n) if conc_n is not None else None
+        except (TypeError, ValueError):
+            conc_i = None
+        for lens in cand.get("lenses") or []:
+            if not isinstance(lens, dict):
+                continue
+            lens_id = str(lens.get("lens_id") or "").strip()
+            status = str(lens.get("status") or "").strip()
+            if status == "entered" and lens_id:
+                entered_by_lens[lens_id] = entered_by_lens.get(lens_id, 0) + 1
+            ep = lens.get("episode") if isinstance(lens.get("episode"), dict) else {}
+            dd = _finite_float(ep.get("drawdown_depth"))
+            if dd is not None:
+                dd_depths.append(dd)
+            dd_days = _finite_float(ep.get("drawdown_duration_days"))
+            if dd_days is not None:
+                dd_durs.append(dd_days)
+            fc = _finite_float(ep.get("fair_cost_episode_pct"))
+            if fc is not None:
+                lens_fair_cost_n += 1
+                if conc_i is not None:
+                    fair_by_band.setdefault(conc_i, []).append(fc)
+            orv = (
+                lens.get("outcome_review")
+                if isinstance(lens.get("outcome_review"), dict)
+                else {}
+            )
+            had = (
+                orv.get("had_but_ignored")
+                if isinstance(orv.get("had_but_ignored"), dict)
+                else {}
+            )
+            miss = (
+                orv.get("missing_that_might_help")
+                if isinstance(orv.get("missing_that_might_help"), dict)
+                else {}
+            )
+            if (
+                orv.get("scored_at")
+                or had.get("text")
+                or miss.get("text")
+                or had.get("cites")
+                or miss.get("cites")
+            ):
+                scored_outcome_reviews += 1
+            for cite in had.get("cites") or []:
+                theme = _outcome_gap_theme(str(cite))
+                had_themes[theme] = had_themes.get(theme, 0) + 1
+            for cite in miss.get("cites") or []:
+                theme = _outcome_gap_theme(str(cite))
+                miss_themes[theme] = miss_themes.get(theme, 0) + 1
+
+    concurrence_bands: list[dict[str, Any]] = []
+    for band, vals in sorted(fair_by_band.items()):
+        concurrence_bands.append(
+            {
+                "concurrence": band,
+                "n": len(vals),
+                "median_fair_cost_episode_pct": _median(vals),
+            }
+        )
+    if concurrence_bands:
+        concurrence_outcome_note = (
+            "Fair-cost by concurrence band (observe companion; N241 sizing not_now)."
+            if len(concurrence_bands) >= 2
+            else (
+                "Thin fair-cost×concurrence join (single band) — "
+                "show concurrence mean; thick LQ dashboard parked."
+            )
+        )
+    else:
+        concurrence_outcome_note = (
+            "Concurrence mean only — awaiting fair-cost by concurrence band."
+        )
+
+    if scored_outcome_reviews > 0 or had_themes or miss_themes:
+        gap_note = None
+    else:
+        gap_note = "awaiting scored episodes"
+
+    learning_marks_n = (closed_i or 0) + lens_fair_cost_n
+
+    return {
+        "lab": {
+            "open_lab_episodes": open_i,
+            "closed_lab_episodes": closed_i,
+            "path_median_fair_cost_pct": median_fc,
+            "mom_levers": lever_rows,
+            "evolutionary_shadows_eligible": mft.get("evolutionary_shadows_eligible"),
+            "pipeline_status": mft.get("pipeline_status"),
+            "walker_status": (mft.get("episode_walker") or {}).get("status")
+            if isinstance(mft.get("episode_walker"), dict)
+            else None,
+        },
+        "lenses": {
+            "lenses_looking": looking_i,
+            "lenses_entered": entered_i,
+            "lenses_abandoned": abandoned_i,
+            "concurrence_mean": concurrence_mean,
+            "entered_by_lens": dict(sorted(entered_by_lens.items())),
+            "candidate_count": summary.get("candidate_count"),
+        },
+        "companions": {
+            "drawdown_depth_median": _median(dd_depths),
+            "drawdown_depth_n": len(dd_depths),
+            "drawdown_duration_days_median": _median(dd_durs),
+            "drawdown_duration_n": len(dd_durs),
+            "concurrence_mean": concurrence_mean,
+            "concurrence_fair_cost_bands": concurrence_bands,
+            "concurrence_outcome_note": concurrence_outcome_note,
+            "had_but_ignored_theme_counts": dict(
+                sorted(had_themes.items(), key=lambda kv: (-kv[1], kv[0]))
+            ),
+            "missing_that_might_help_theme_counts": dict(
+                sorted(miss_themes.items(), key=lambda kv: (-kv[1], kv[0]))
+            ),
+            "scored_outcome_reviews": scored_outcome_reviews,
+            "outcome_gap_note": gap_note,
+            "lens_fair_cost_n": lens_fair_cost_n,
+        },
+        "learning_marks_n": learning_marks_n if (mft or lenses) else None,
+    }
 
 
 def _parse_dt(value: Any) -> datetime | None:
@@ -657,6 +893,112 @@ def _parallel_timing_lenses_instrument(
     }
 
 
+def _lab_learning_progress_instrument(
+    *,
+    mft_store: dict[str, Any] | None,
+    lenses_store: dict[str, Any] | None,
+    finding: dict[str, Any] | None,
+    now: datetime,
+    ops_run_at: datetime | None,
+    stale_after_hours: float,
+    store_lag_warn_hours: float,
+) -> dict[str, Any]:
+    """Weekly lab learning strip — MFT + L652 + companions (Package M observe)."""
+    as_candidates: list[datetime | None] = []
+    if isinstance(mft_store, dict):
+        as_candidates.append(
+            _parse_dt(mft_store.get("generated_at") or mft_store.get("lab_armed_at"))
+        )
+    if isinstance(lenses_store, dict):
+        as_candidates.append(
+            _parse_dt(lenses_store.get("generated_at") or lenses_store.get("asof"))
+        )
+    present_ts = [dt for dt in as_candidates if dt is not None]
+    as_of = min(present_ts) if present_ts else None
+    present = mft_store is not None or lenses_store is not None
+    freshness = _freshness_block(
+        as_of=as_of,
+        now=now,
+        ops_run_at=ops_run_at,
+        stale_after_hours=stale_after_hours,
+        store_lag_warn_hours=store_lag_warn_hours,
+        present=present,
+    )
+    rollup = _aggregate_lab_learning_companions(
+        mft_store=mft_store,
+        lenses_store=lenses_store,
+    )
+    primary = rollup.get("learning_marks_n")
+    try:
+        primary_i = int(primary) if primary is not None else None
+    except (TypeError, ValueError):
+        primary_i = None
+
+    warn_active = finding is not None and str((finding or {}).get("severity") or "") in {
+        "warn",
+        "fail",
+        "error",
+    }
+    lab = rollup.get("lab") or {}
+    lenses = rollup.get("lenses") or {}
+    companions = rollup.get("companions") or {}
+    return {
+        "id": "lab_learning_progress",
+        "title": "Lab learning progress",
+        "finding_title": LAB_LEARNING_PROGRESS_FINDING_TITLE,
+        "observe_only": True,
+        "influences_live": False,
+        "package": "M",
+        "warn_active": bool(warn_active),
+        "severity": (finding or {}).get("severity")
+        if finding
+        else ("ok" if present else "warn"),
+        "finding_summary": (finding or {}).get("summary"),
+        "metrics": {
+            "lab_open": lab.get("open_lab_episodes"),
+            "lab_closed": lab.get("closed_lab_episodes"),
+            "lab_median_fair_cost_pct": lab.get("path_median_fair_cost_pct"),
+            "mom_levers": lab.get("mom_levers") or [],
+            "evolutionary_shadows_eligible": lab.get("evolutionary_shadows_eligible"),
+            "lab_pipeline_status": lab.get("pipeline_status"),
+            "lab_walker_status": lab.get("walker_status"),
+            "lenses_looking": lenses.get("lenses_looking"),
+            "lenses_entered": lenses.get("lenses_entered"),
+            "lenses_abandoned": lenses.get("lenses_abandoned"),
+            "concurrence_mean": lenses.get("concurrence_mean"),
+            "entered_by_lens": lenses.get("entered_by_lens") or {},
+            "candidate_count": lenses.get("candidate_count"),
+            "drawdown_depth_median": companions.get("drawdown_depth_median"),
+            "drawdown_depth_n": companions.get("drawdown_depth_n"),
+            "drawdown_duration_days_median": companions.get("drawdown_duration_days_median"),
+            "drawdown_duration_n": companions.get("drawdown_duration_n"),
+            "concurrence_fair_cost_bands": companions.get("concurrence_fair_cost_bands") or [],
+            "concurrence_outcome_note": companions.get("concurrence_outcome_note"),
+            "had_but_ignored_theme_counts": companions.get("had_but_ignored_theme_counts")
+            or {},
+            "missing_that_might_help_theme_counts": companions.get(
+                "missing_that_might_help_theme_counts"
+            )
+            or {},
+            "scored_outcome_reviews": companions.get("scored_outcome_reviews"),
+            "outcome_gap_note": companions.get("outcome_gap_note"),
+            "lens_fair_cost_n": companions.get("lens_fair_cost_n"),
+            "learning_marks_n": primary_i,
+        },
+        "primary_metric": "learning_marks_n",
+        "primary_value": primary_i,
+        "primary_label": (
+            "Learning marks (MFT closed + lens fair-cost episodes)"
+        ),
+        "freshness": freshness,
+        "trajectory_note": (
+            "Learning-volume delta vs prior cycle — rising marks expected while "
+            "the lab/lenses score; not a P1 gap instrument. Fair-cost primary; "
+            "drawdown / concurrence×outcome / gap themes are companions."
+        ),
+    }
+
+
 def _history_point(instruments: list[dict[str, Any]], *, now: datetime) -> dict[str, Any]:
     point: dict[str, Any] = {"at": now.isoformat()}
     for inst in instruments:
@@ -793,6 +1135,15 @@ def build_observe_utilization_snapshot(
             stale_after_hours=stale_after_hours,
             store_lag_warn_hours=store_lag_warn_hours,
         ),
+        _lab_learning_progress_instrument(
+            mft_store=mft_store,
+            lenses_store=lenses_store,
+            finding=findings.get(LAB_LEARNING_PROGRESS_FINDING_TITLE),
+            now=clock,
+            ops_run_at=ops_run_at,
+            stale_after_hours=stale_after_hours,
+            store_lag_warn_hours=store_lag_warn_hours,
+        ),
     ]
 
     history = _append_history(prior, _history_point(instruments, now=clock), now=clock)
@@ -900,6 +1251,53 @@ def refresh_observe_utilization(
     return snapshot
 
 
+def build_lab_learning_progress_finding(
+    *,
+    mft_store: dict[str, Any] | None = None,
+    lenses_store: dict[str, Any] | None = None,
+    cue_consumer_mft_path: Path = DEFAULT_CUE_CONSUMER_MFT_PATH,
+    parallel_timing_lenses_path: Path = DEFAULT_PARALLEL_TIMING_LENSES_PATH,
+) -> dict[str, Any]:
+    """Info finding for the weekly lab learning strip (observe / warn-only)."""
+    mft = mft_store if mft_store is not None else _safe_read(Path(cue_consumer_mft_path))
+    lenses = (
+        lenses_store
+        if lenses_store is not None
+        else _safe_read(Path(parallel_timing_lenses_path))
+    )
+    rollup = _aggregate_lab_learning_companions(mft_store=mft, lenses_store=lenses)
+    lab = rollup.get("lab") or {}
+    lens = rollup.get("lenses") or {}
+    companions = rollup.get("companions") or {}
+    med = lab.get("path_median_fair_cost_pct")
+    med_bit = f"{med:.4f}" if isinstance(med, (int, float)) else "—"
+    had = companions.get("had_but_ignored_theme_counts") or {}
+    miss = companions.get("missing_that_might_help_theme_counts") or {}
+    gap_bit = companions.get("outcome_gap_note") or (
+        f"had_themes={len(had)} miss_themes={len(miss)} "
+        f"scored_reviews={companions.get('scored_outcome_reviews', 0)}"
+    )
+    return {
+        "severity": "info",
+        "category": "research",
+        "title": LAB_LEARNING_PROGRESS_FINDING_TITLE,
+        "summary": (
+            f"Lab learning progress: MFT open/closed="
+            f"{lab.get('open_lab_episodes')} / {lab.get('closed_lab_episodes')}; "
+            f"median fair-cost={med_bit}; shadows_eligible="
+            f"{lab.get('evolutionary_shadows_eligible')}; "
+            f"L652 looking/entered/abandoned="
+            f"{lens.get('lenses_looking')}/{lens.get('lenses_entered')}/"
+            f"{lens.get('lenses_abandoned')}; concurrence_mean="
+            f"{lens.get('concurrence_mean')}; learning_marks="
+            f"{rollup.get('learning_marks_n')}; gaps={gap_bit}. "
+            "Package M observe strip; influences_live=false; never Package L / N241. "
+            "Dashboard: Automation → Observe utilization."
+        ),
+        "auto_fixable": False,
+    }
+
+
 __all__ = [
     "ARCHIVE_MISS_FINDING_TITLE",
     "COMBINED_TAGGED_FINDING_TITLE",
@@ -918,9 +1316,11 @@ __all__ = [
     "DEFAULT_STORE_LAG_WARN_HOURS",
     "DEFAULT_STORE_PATH",
     "FLIP_LAG_FINDING_TITLE",
+    "LAB_LEARNING_PROGRESS_FINDING_TITLE",
     "PARALLEL_TIMING_LENSES_FINDING_TITLE",
     "SCHEMA_VERSION",
     "SHARD_NAV_FX_FINDING_TITLE",
+    "build_lab_learning_progress_finding",
     "build_observe_utilization_snapshot",
     "refresh_observe_utilization",
 ]

@@ -10,8 +10,10 @@ from value_investor.observe_utilization import (
     CUE_CONSUMER_MFT_FINDING_TITLE,
     DECISION_INPUT_FINDING_TITLE,
     FLIP_LAG_FINDING_TITLE,
+    LAB_LEARNING_PROGRESS_FINDING_TITLE,
     PARALLEL_TIMING_LENSES_FINDING_TITLE,
     SHARD_NAV_FX_FINDING_TITLE,
+    build_lab_learning_progress_finding,
     build_observe_utilization_snapshot,
     refresh_observe_utilization,
 )
@@ -60,7 +62,94 @@ def _quiet_parallel_timing_lenses(now: datetime) -> dict:
             "concurrence_mean": 1.0,
             "concurrence_samples": 1,
         },
+        "candidates": [],
     }
+
+
+def _rich_parallel_timing_lenses(now: datetime) -> dict:
+    """Lenses store with scored companions for the lab learning strip."""
+    base = _quiet_parallel_timing_lenses(now)
+    base["candidates"] = [
+        {
+            "candidate_id": "ptl_test_1",
+            "ticker": "AAA.L",
+            "side": "buy",
+            "favourite_lens_id": "buy_support_bounce",
+            "concurrence": {
+                "count": 2,
+                "lens_ids": ["buy_support_bounce", "buy_news_improve_path"],
+                "influences_live": False,
+            },
+            "lenses": [
+                {
+                    "lens_id": "buy_support_bounce",
+                    "status": "entered",
+                    "episode": {
+                        "fair_cost_episode_pct": 0.04,
+                        "drawdown_depth": -0.08,
+                        "drawdown_duration_days": 5,
+                    },
+                    "outcome_review": {
+                        "scored_at": now.date().isoformat(),
+                        "had_but_ignored": {
+                            "text": "PIT info available but not weighted",
+                            "cites": ["B1:cheapness=0.2", "B2:timing_score=0.4"],
+                        },
+                        "missing_that_might_help": {
+                            "text": "Missing news polarity",
+                            "cites": ["entry_news_polarity=no_usable_news"],
+                        },
+                    },
+                },
+                {
+                    "lens_id": "buy_news_improve_path",
+                    "status": "entered",
+                    "episode": {
+                        "fair_cost_episode_pct": 0.02,
+                        "drawdown_depth": None,
+                        "drawdown_duration_days": None,
+                    },
+                    "outcome_review": {
+                        "scored_at": now.date().isoformat(),
+                        "had_but_ignored": {
+                            "text": "unused B1",
+                            "cites": ["B1:cheapness=0.1"],
+                        },
+                        "missing_that_might_help": {
+                            "text": None,
+                            "cites": [],
+                        },
+                    },
+                },
+                {
+                    "lens_id": "buy_cheap_trend_confirm",
+                    "status": "looking",
+                    "episode": {
+                        "fair_cost_episode_pct": None,
+                        "drawdown_depth": None,
+                        "drawdown_duration_days": None,
+                    },
+                    "outcome_review": {
+                        "scored_at": None,
+                        "had_but_ignored": {"text": None, "cites": []},
+                        "missing_that_might_help": {"text": None, "cites": []},
+                    },
+                },
+            ],
+        }
+    ]
+    base["summary"] = {
+        "candidate_count": 1,
+        "buy_candidates": 1,
+        "sell_candidates": 0,
+        "lenses_looking": 1,
+        "lenses_entered": 2,
+        "lenses_abandoned": 0,
+        "buy_watch_armed": 0,
+        "concurrence_mean": 2.0,
+        "concurrence_samples": 1,
+    }
+    return base
 
 
 def _quiet_combined(now: datetime) -> dict:
@@ -275,6 +364,7 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
     assert "combined_tagged_learning" in by_id
     assert "cue_consumer_mft" in by_id
     assert "parallel_timing_lenses" in by_id
+    assert "lab_learning_progress" in by_id
     mft = by_id["cue_consumer_mft"]
     assert mft["warn_active"] is False
     assert mft["primary_value"] == 30
@@ -286,6 +376,12 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
     assert lenses["primary_value"] == 3
     assert lenses["metrics"]["lenses_entered"] == 2
     assert lenses["influences_live"] is False
+    lab = by_id["lab_learning_progress"]
+    assert lab["warn_active"] is False
+    assert lab["influences_live"] is False
+    assert lab["metrics"]["lab_open"] == 30
+    assert lab["metrics"]["lab_closed"] == 87
+    assert lab["primary_value"] == 87  # closed MFT + 0 lens fair-cost in quiet fixture
     assert by_id["combined_tagged_learning"]["warn_active"] is False
     assert by_id["universe_filing_archive_miss_rate"]["warn_active"] is False
     assert flip["warn_active"] is True
@@ -339,6 +435,7 @@ def test_observe_utilization_stale_and_missing(tmp_path: Path):
     assert by_id["combined_tagged_learning"]["freshness"]["state"] == "missing"
     assert by_id["cue_consumer_mft"]["freshness"]["state"] == "missing"
     assert by_id["parallel_timing_lenses"]["freshness"]["state"] == "missing"
+    assert by_id["lab_learning_progress"]["freshness"]["state"] == "missing"
     assert snap["surface_freshness"] == "degraded"
     assert snap["warn_instrument_count"] >= 1
 
@@ -525,3 +622,68 @@ def test_observe_utilization_co_committed_stores_are_fresh(tmp_path: Path):
     assert SHARD_NAV_FX_FINDING_TITLE
     assert any(row["id"] == "cue_consumer_mft" for row in snap["instruments"])
     assert any(row["id"] == "parallel_timing_lenses" for row in snap["instruments"])
+    assert any(row["id"] == "lab_learning_progress" for row in snap["instruments"])
+
+
+def test_lab_learning_progress_companions_and_finding(tmp_path: Path):
+    now = datetime(2026, 10, 30, 12, 0, tzinfo=UTC)
+    mft_path = tmp_path / "mft.json"
+    lenses_path = tmp_path / "lenses.json"
+    ops_path = tmp_path / "ops.json"
+    _write(mft_path, _quiet_mft(now))
+    _write(lenses_path, _rich_parallel_timing_lenses(now))
+    _write(
+        ops_path,
+        {
+            "run_at": (now - timedelta(minutes=10)).isoformat(),
+            "findings": [
+                {
+                    "title": LAB_LEARNING_PROGRESS_FINDING_TITLE,
+                    "severity": "info",
+                    "summary": "Lab learning progress strip refreshed.",
+                }
+            ],
+        },
+    )
+    snap = build_observe_utilization_snapshot(
+        flip_lag_path=tmp_path / "missing_flip.json",
+        decision_input_path=tmp_path / "missing_decision.json",
+        shard_nav_fx_path=tmp_path / "missing_fx.json",
+        archive_miss_path=tmp_path / "missing_archive.json",
+        combined_tagged_path=tmp_path / "missing_combined.json",
+        cue_consumer_mft_path=mft_path,
+        parallel_timing_lenses_path=lenses_path,
+        ops_status_path=ops_path,
+        prior_path=tmp_path / "prior.json",
+        now=now,
+    )
+    by_id = {row["id"]: row for row in snap["instruments"]}
+    lab = by_id["lab_learning_progress"]
+    metrics = lab["metrics"]
+    assert metrics["lab_closed"] == 87
+    assert metrics["lab_median_fair_cost_pct"] == 0.021
+    assert metrics["lenses_entered"] == 2
+    assert metrics["concurrence_mean"] == 2.0
+    assert metrics["entered_by_lens"]["buy_support_bounce"] == 1
+    assert metrics["entered_by_lens"]["buy_news_improve_path"] == 1
+    assert metrics["drawdown_depth_median"] == -0.08
+    assert metrics["drawdown_duration_days_median"] == 5.0
+    assert metrics["lens_fair_cost_n"] == 2
+    assert metrics["learning_marks_n"] == 89  # 87 closed + 2 lens fair-cost
+    assert lab["primary_value"] == 89
+    assert metrics["had_but_ignored_theme_counts"]["B1_cheapness"] == 2
+    assert metrics["missing_that_might_help_theme_counts"]["news_polarity"] == 1
+    assert metrics["outcome_gap_note"] is None
+    assert metrics["concurrence_fair_cost_bands"]
+    assert metrics["concurrence_fair_cost_bands"][0]["concurrence"] == 2
+    assert lab["influences_live"] is False
+
+    finding = build_lab_learning_progress_finding(
+        cue_consumer_mft_path=mft_path,
+        parallel_timing_lenses_path=lenses_path,
+    )
+    assert finding["title"] == LAB_LEARNING_PROGRESS_FINDING_TITLE
+    assert finding["auto_fixable"] is False
+    assert finding["severity"] == "info"
+    assert "influences_live=false" in finding["summary"]
+    assert PARALLEL_TIMING_LENSES_FINDING_TITLE  # imported for wiring sanity
