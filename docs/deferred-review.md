@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-30T08:05:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-30T09:19:28+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -63,6 +63,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20261014-01 | Daily hub: after owner locks attention redesign forks D1-D6 (store docs/daily-hub-attention-redesign.md), ship deterministic status_report + Push 1-3 ranker in daily_focus.json. Drop ritual Focus Accept; bare health_warn email-only. Promote to ftse-defer add only after PR #1082 merges so beachhead can keep L606. | daily-hub, attention, ops-monitor |
 | frag-20261014-02 | Daily hub two-lane: Push fail-closed P1/P2 cited ≤3; Explore labeled not-today with claim+why+falsify, may sit outside North Star/AGENTS, durable→ftse-defer. Forks D1–D7 in store docs/daily-hub-attention-redesign.md. Promote after #1082 (keep L606 for beachhead). | daily-hub, attention, explore, ops-monitor |
 | frag-20261024-01 | Package L not_now: LLM episode debriefs / autopsy auto-tune / Accept→capital. Distinct and ALLOWED later under L623: LLM *reply* text to owner Comments as development-loop response (observe/alignment only). Promote full not_now idea after #1169 clears N-series. Store post-sale-review-dashboard-2026-10-24.md. | package-L, not-now, post-sale, pending-defer |
+| frag-20261030-01 | Owner dialogue also parked: live news trading signals; sentiment API sprawl; restoring NEWS HIGHLIGHTS into scheduled memos as capital path — covered partly by live hard-filter defer; keep as fragment if a separate slim-memo restore fork is ever debated. | news, memo, sentiment, NEWS_HIGHLIGHTS |
 
 ---
 
@@ -265,6 +266,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N232 | **Q8B cohort head-cap / shrink helper beyond sticky propose** | Proposed non-mechanical cohort is ~78 ids. If owner finds that too large for a named checkpoint, add an explicit capped head-slice or book filter on propose-cohort — do not silently auto-shrink. | Owner rejects freeze of full non_mechanical_open_autopsy_v0 set and asks for a smaller named slice |
 | N233 | **Register cue_consumer_mft as paper-automation learning track** | Do not add a fourth equal paper learning track for the super book while observe arm + Q8B gate suffice. Paper-auto registration would risk sprint noise and P1 confusion. | Episode walker proven on observe store and owner explicitly wants paper-auto parity twin |
 | N235 | **Replace MFT thin_emit skeleton hygiene note before first evolutionary spawn** | cue_consumer_mft thin_emit soft_ready=true with scaffold proposal hrp-d5de1f32bad4 still marked skeleton hygiene — first novelty-gated child must wait for a real incorporate/falsify note; N223/N226 remain the spawn/novelty parks. | thin_emit proposal_hygiene carries a non-skeleton falsify_or_incorporate_note and active_sealed_children still 0 |
+| N236 | **MFT B-cell for catalyst/news polarity** | Do not add N228 B7 (or B1/B3 news expansion) until the observe-only entry news polarity cite instrument exists and can supply durable fail-closed cites. Rubric B1-B6 stay screen/cue/exit only. | Entry news polarity cite instrument ships observe-only on buy-day trail (after L225/N90 join) |
+| N237 | **Live news hard-filter / auto-veto on negative news** | Do not wire news polarity, sentiment APIs, or restored NEWS HIGHLIGHTS into live capital path, strand A fills, or Package L. Observe-only polarity cite first; fail-closed missing news must never become a silent veto. Security-ish caution against narrative overfitting and PIT leakage as live gates. | Thick sealed/entry_blind polarity catch-miss evidence plus explicit cold-start/epoch promotion gate — never mid-flight strand A |
 
 ---
 
@@ -543,6 +546,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L606 | **Tiny offline filing-beachhead follow-on archive pilot (no news product)** | After owner forks + L605 gates, optional tiny offline pilot filing_beachhead_followon_archive_v0: one pre-registered theme lexicon; mark filing-visible beachheads with void lookback; score follow-on disclosure rate + long-horizon fair-cost vs same-sector / theme-sector controls; kill pilots/boilerplate; influences_live=false. News/RNS only optional later timing twin. No sealed registration_id, no launch-queue deepen, no live sleeve, no news crawl. | N209 is status now or owner green-lights filings-beachhead archive pilot; forks 1A/5A/6A/7A chosen; challenge beachhead falsifiers accepted; AI path roadmap Phase 5 only after Phase 1 shadow judge path is live or explicitly deferred (docs/ai-path-roadmap.md); still no seal fighting O2 D and no news product; cadence via Sunday deferred triggers + roadmap scoreboard |
 | L636 | **Post-sale autopsy chart volume pane** | Add Yahoo volume (bars or volume_ratio_20 spike markers) under dual-horizon post-sale charts as a human support/sentiment read. Data already fetched as OHLCV but chart JSON persists Close only. Observe-only — never a live fill/knob input. | After CHART_LOOKBACK 1y→2y ships and owner Comments cite volume/support/sentiment at least twice on Package M cards |
 | L645 | **Post-sale further Comment rounds on factory reply cards** | Active queue is uncommented exits only (VI-55). Optional later: a separate history/thread UI to Accept or continue dialogue on factory replies without re-queuing them into the attention list. | Owner asks to resume multi-turn autopsy dialogue after uncommented-only queue has been stable in daily use |
+| L650 | **Entry news polarity cite on buy-day** | Observe-only polarity labels (structural_negative | improvement_path | mixed_or_unclear | no_usable_news) joined from L225 phrase lexicon + N90/N86 event journal onto entry_blind / MFT buy-day trail with durable PIT cites; influences_live=false; fail-closed if missing. Design lock: docs store entry-news-rebound-signal-2026-10-30.md. | entry_blind cohort thick enough for polarity catch/miss vs cheapness+technicals, or after L225/N90 buy-day join design is specified |
 
 ### Ops / reliability
 
@@ -701,6 +705,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | S3 | **Quote special characters in .env** | Unquoted passwords break source .env | When recreating or editing .env locally |
 | N184 | **Pages token guessing from GHA 403** | Do not infer or rotate GitHub Pages tokens from 403 logs. Pages #941 is a different class from workflow_dispatch actions:write. | Pages deploy fails twice consecutively on main for a permissions/token error with a named runbook |
 | L600 | **Grant Workflows permission on WORKFLOW_DISPATCH_PAT for eng-agent workflow edits** | Optional harden: eng-agent cannot push .github/workflows without Workflows scope, which parks workflow_permission tasks. Not required for eng-20261004-06 (fixed by #960 human PR). | Next eng task must edit .github/workflows and would otherwise park workflow_permission |
+| N237 | **Live news hard-filter / auto-veto on negative news** | Do not wire news polarity, sentiment APIs, or restored NEWS HIGHLIGHTS into live capital path, strand A fills, or Package L. Observe-only polarity cite first; fail-closed missing news must never become a silent veto. Security-ish caution against narrative overfitting and PIT leakage as live gates. | Thick sealed/entry_blind polarity catch-miss evidence plus explicit cold-start/epoch promotion gate — never mid-flight strand A |
 
 ---
 
