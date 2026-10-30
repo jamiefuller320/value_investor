@@ -311,11 +311,7 @@ def geometry_unread_banner(geometries: Any) -> str | None:
     if not rows:
         return None
     if readable_geometries(rows):
-        unread = [
-            row
-            for row in rows
-            if isinstance(row, dict) and row.get("readable") is not True
-        ]
+        unread = [row for row in rows if isinstance(row, dict) and row.get("readable") is not True]
         if not unread:
             return None
         return (

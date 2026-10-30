@@ -501,8 +501,7 @@ def consider_human_comment(
                 f"({sell_label}"
                 + (f" [{sell_code}]" if sell_code else "")
                 + ") — agree the chart may show more room; disagree that the sealed "
-                "rule was a free timing choice. Not a knob order."
-                + geo_note
+                "rule was a free timing choice. Not a knob order." + geo_note
             ),
             "influences_live": False,
             "geometry_readable": bool(geometry_prompt),
@@ -513,8 +512,7 @@ def consider_human_comment(
             "stance": HUMAN_CONSIDER_PARTIAL,
             "why": (
                 f"Weigh premature claim against joinable sell reason ({sell_label}). "
-                "Chart critique welcome; Comment is not an auto-tune order."
-                + geo_note
+                "Chart critique welcome; Comment is not an auto-tune order." + geo_note
             ),
             "influences_live": False,
             "geometry_readable": bool(geometry_prompt),
@@ -524,8 +522,7 @@ def consider_human_comment(
         return {
             "stance": HUMAN_CONSIDER_AGREE,
             "why": (
-                "Owner language aligns with Accept-style framing — still observe-only."
-                + geo_note
+                "Owner language aligns with Accept-style framing — still observe-only." + geo_note
             ),
             "influences_live": False,
             "geometry_readable": bool(geometry_prompt),
@@ -536,8 +533,7 @@ def consider_human_comment(
             "stance": HUMAN_CONSIDER_PARTIAL,
             "why": (
                 "Owner pattern critique noted for dual-horizon charts and "
-                "learning_point_forward — considered, not blindly applied."
-                + geo_note
+                "learning_point_forward — considered, not blindly applied." + geo_note
             ),
             "influences_live": False,
             "geometry_readable": bool(geometry_prompt),
@@ -547,8 +543,7 @@ def consider_human_comment(
         "stance": HUMAN_CONSIDER_PARTIAL,
         "why": (
             "Comment recorded and considered against structured buy/sell reasons; "
-            "factory does not treat Comment as a sealed-knob order."
-            + geo_note
+            "factory does not treat Comment as a sealed-knob order." + geo_note
         ),
         "influences_live": False,
         "geometry_readable": bool(geometry_prompt),
@@ -833,9 +828,7 @@ def build_contextual_reply_text(
             for el in geo.get("elements") or []:
                 etype = el.get("type")
                 if etype == "highlight":
-                    lines.append(
-                        f"  · [{chart}] highlight {el.get('t0')} → {el.get('t1')}"
-                    )
+                    lines.append(f"  · [{chart}] highlight {el.get('t0')} → {el.get('t1')}")
                 elif etype == "line":
                     lines.append(
                         f"  · [{chart}] line {el.get('t0')}@{el.get('y0')} → "
