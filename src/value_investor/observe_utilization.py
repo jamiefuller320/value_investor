@@ -186,16 +186,8 @@ def _aggregate_lab_learning_companions(
                 lens_fair_cost_n += 1
                 if conc_i is not None:
                     fair_by_band.setdefault(conc_i, []).append(fc)
-            orv = (
-                lens.get("outcome_review")
-                if isinstance(lens.get("outcome_review"), dict)
-                else {}
-            )
-            had = (
-                orv.get("had_but_ignored")
-                if isinstance(orv.get("had_but_ignored"), dict)
-                else {}
-            )
+            orv = lens.get("outcome_review") if isinstance(lens.get("outcome_review"), dict) else {}
+            had = orv.get("had_but_ignored") if isinstance(orv.get("had_but_ignored"), dict) else {}
             miss = (
                 orv.get("missing_that_might_help")
                 if isinstance(orv.get("missing_that_might_help"), dict)
@@ -235,9 +227,7 @@ def _aggregate_lab_learning_companions(
             )
         )
     else:
-        concurrence_outcome_note = (
-            "Concurrence mean only — awaiting fair-cost by concurrence band."
-        )
+        concurrence_outcome_note = "Concurrence mean only — awaiting fair-cost by concurrence band."
 
     if scored_outcome_reviews > 0 or had_themes or miss_themes:
         gap_note = None
@@ -950,9 +940,7 @@ def _lab_learning_progress_instrument(
         "influences_live": False,
         "package": "M",
         "warn_active": bool(warn_active),
-        "severity": (finding or {}).get("severity")
-        if finding
-        else ("ok" if present else "warn"),
+        "severity": (finding or {}).get("severity") if finding else ("ok" if present else "warn"),
         "finding_summary": (finding or {}).get("summary"),
         "metrics": {
             "lab_open": lab.get("open_lab_episodes"),
@@ -974,8 +962,7 @@ def _lab_learning_progress_instrument(
             "drawdown_duration_n": companions.get("drawdown_duration_n"),
             "concurrence_fair_cost_bands": companions.get("concurrence_fair_cost_bands") or [],
             "concurrence_outcome_note": companions.get("concurrence_outcome_note"),
-            "had_but_ignored_theme_counts": companions.get("had_but_ignored_theme_counts")
-            or {},
+            "had_but_ignored_theme_counts": companions.get("had_but_ignored_theme_counts") or {},
             "missing_that_might_help_theme_counts": companions.get(
                 "missing_that_might_help_theme_counts"
             )
@@ -987,9 +974,7 @@ def _lab_learning_progress_instrument(
         },
         "primary_metric": "learning_marks_n",
         "primary_value": primary_i,
-        "primary_label": (
-            "Learning marks (MFT closed + lens fair-cost episodes)"
-        ),
+        "primary_label": ("Learning marks (MFT closed + lens fair-cost episodes)"),
         "freshness": freshness,
         "trajectory_note": (
             "Learning-volume delta vs prior cycle — rising marks expected while "
@@ -1261,9 +1246,7 @@ def build_lab_learning_progress_finding(
     """Info finding for the weekly lab learning strip (observe / warn-only)."""
     mft = mft_store if mft_store is not None else _safe_read(Path(cue_consumer_mft_path))
     lenses = (
-        lenses_store
-        if lenses_store is not None
-        else _safe_read(Path(parallel_timing_lenses_path))
+        lenses_store if lenses_store is not None else _safe_read(Path(parallel_timing_lenses_path))
     )
     rollup = _aggregate_lab_learning_companions(mft_store=mft, lenses_store=lenses)
     lab = rollup.get("lab") or {}
