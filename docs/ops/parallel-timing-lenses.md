@@ -60,6 +60,9 @@ Compose with Package M autopsy / `learning_point_forward`; **never** Package L.
 - **Entry blind:** compact `parallel_timing_lenses` field on cards (favourite +
   statuses + concurrence) — Lifecycle → Entry blind
 - **Observe utilization:** instrument card on Automation → Queue & hunter
+- **Lab learning progress strip:** combined weekly card (MFT + L652 +
+  companions) on the same Observe utilization surface — fair-cost primary;
+  drawdown / concurrence×outcome / gap-theme companions fail-closed when thin
 
 ## Automation wiring
 

@@ -2674,6 +2674,49 @@ def check_parallel_timing_lenses(
     ]
 
 
+def check_lab_learning_progress(
+    *,
+    data_dir: Path | None = None,
+) -> list[OpsFinding]:
+    """Weekly lab learning strip rollup (MFT + L652 companions) — observe-only.
+
+    Joins existing ``cue_consumer_mft_observe.json`` + ``parallel_timing_lenses.json``
+    into the observe-utilization ``lab_learning_progress`` card. Does not refresh
+    those stores (MFT / L652 checks own that). ``auto_fixable=False``; never
+    Package L / N241. See docs/ops/ops-monitor.md (Observe utilization).
+    """
+    from value_investor.observe_utilization import (
+        LAB_LEARNING_PROGRESS_FINDING_TITLE,
+        build_lab_learning_progress_finding,
+    )
+
+    root = Path(data_dir) if data_dir is not None else Path("docs/data")
+    try:
+        finding = build_lab_learning_progress_finding(
+            cue_consumer_mft_path=root / "cue_consumer_mft_observe.json",
+            parallel_timing_lenses_path=root / "parallel_timing_lenses.json",
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=LAB_LEARNING_PROGRESS_FINDING_TITLE,
+                summary=f"Lab learning progress rollup failed: {exc}",
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or LAB_LEARNING_PROGRESS_FINDING_TITLE),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+    ]
+
+
 def check_entry_revisit_review_queue(
     *,
     data_dir: Path | None = None,
@@ -4436,9 +4479,11 @@ def collect_ops_findings(
     findings.extend(check_hold_period_counterfactual())
     findings.extend(check_post_sell_cue_digest())
     findings.extend(check_post_sale_review_queue())
-    # MFT first → L652 lenses consume lab episodes → entry_blind binds lens summary.
+    # MFT first → L652 lenses consume lab episodes → lab learning strip joins both
+    # → entry_blind binds lens summary.
     findings.extend(check_cue_consumer_mft())
     findings.extend(check_parallel_timing_lenses())
+    findings.extend(check_lab_learning_progress())
     findings.extend(check_entry_blind_review_queue())
     findings.extend(check_entry_news_polarity())
     findings.extend(check_entry_revisit_review_queue())

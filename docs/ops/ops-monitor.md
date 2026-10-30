@@ -39,10 +39,12 @@ lane change and readiness gate (see N152 / P1 pin rules).
 
 **Shipped above the bar:**
 
-- **L461 / L640** — instrument-specific **Observe utilization** dashboard on Queue &
-  hunter + Analysis (`docs/data/observe_utilization.json`), with freshness /
-  trajectory, staleness banners, and (L640) a cue_consumer_mft card for open/closed
-  episodes + MoM lever stubs without hunting JSON.
+- **L461 / L640 / lab learning strip** — instrument-specific **Observe utilization**
+  dashboard on Queue & hunter + Analysis (`docs/data/observe_utilization.json`),
+  with freshness / trajectory, staleness banners, (L640) a cue_consumer_mft card
+  for open/closed episodes + MoM lever stubs, (L652) parallel timing lenses, and
+  a combined **Lab learning progress** strip (fair-cost primary + drawdown /
+  concurrence×outcome / outcome-gap companions; `influences_live=false`).
 - **L460** — raw instrument stores (`buy_tier_flip_lag.json`,
   `decision_input_inventory.json`, `p1_first_run_pin.json`,
   `universe_filing_archive_miss_rate.json`) in
@@ -143,6 +145,13 @@ lane change and readiness gate (see N152 / P1 pin rules).
   observe-utilization instrument card. Finding **Parallel timing lenses
   (observe)** (`auto_fixable=False`). Never Package L / sealed zoo / N241
   sizing. See [parallel-timing-lenses.md](parallel-timing-lenses.md).
+- **Lab learning progress (observe strip)** — `check_lab_learning_progress`
+  joins MFT + L652 into one weekly learning card on Observe utilization
+  (open/closed, median fair-cost, MoM levers, shadows; looking/entered/abandoned
+  + concurrence + per-lens entered; drawdown / concurrence×outcome / gap-theme
+  companions fail-closed to "—" / awaiting). Finding **Lab learning progress
+  (observe)** (`auto_fixable=False`). Rollup only — does not refresh MFT/L652
+  stores. Never Package L / N241.
 - **Cue-consumer MFT lab (super book)** — `check_cue_consumer_mft` arms/refreshes
   the declared-incomparable fixed-stake mid-flight-tune observe lab
   (`cue_consumer_mft`): epoch0 arm marker, Package M autopsy alignment feed,
@@ -489,6 +498,7 @@ archive pack workflow and refreshed at end of ops-monitor. Dashboard: Automation
 | `check_entry_news_polarity` | **Entry news polarity (observe)** | L650 buy-day PIT polarity coverage on entry_blind cards (hard 90d window; discrete labels; cite freshness metadata only). Info finding with usable / `no_usable_news` counts (`auto_fixable=false`). Never live veto. See [entry-news-polarity.md](entry-news-polarity.md) | `docs/data/entry_news_polarity.json` | Live |
 | `check_entry_revisit_review_queue` | **Entry-revisit review queue (observe)** | Fixed buy+28d outcome after entry_blind Accept/Comment: frozen blind summary + path through +28d (`still_open` / `already_exited`); Accept/Comment/Duplicate (`influences_live=false`). Never rewrites blind labels; not an exit autopsy. Warns on unreplied Comments / pending reply tags. See [entry-blind-review.md](entry-blind-review.md#entry-revisit-buy28d--shipped) | `docs/data/entry_revisit_review_queue.json`, `docs/data/entry_revisit_review_labels.json` | Live |
 | `check_parallel_timing_lenses` | **Parallel timing lenses (observe)** | L652 owner-locked buy trio + sell learning quartet + mechanical baseline on shared MFT/entry_blind candidates; daily keep-looking / enter / abandon; concurrence companion; outcome gaps `had_but_ignored` / `missing_that_might_help`; fixed-stake v0 (`influences_live=false`). Never Package L / sealed zoo / N241 sizing. See [parallel-timing-lenses.md](parallel-timing-lenses.md) | `docs/data/parallel_timing_lenses.json` | Live |
+| `check_lab_learning_progress` | **Lab learning progress (observe)** | Weekly Package M learning strip joining MFT + L652 on Observe utilization: lab open/closed + median fair-cost + MoM levers + shadows; lens looking/entered/abandoned + concurrence + per-lens entered; companions (drawdown depth/duration, concurrence×fair-cost bands when present, had_but_ignored / missing theme counts) fail-closed. Info finding only (`auto_fixable=false`); never Package L / N241. | Rollup into `docs/data/observe_utilization.json` (`lab_learning_progress`); reads `cue_consumer_mft_observe.json` + `parallel_timing_lenses.json` | Live |
 | `check_cue_consumer_mft` | **Cue-consumer MFT lab refreshed** / **Cue-consumer MFT lab armed (observe)** / **Cue-consumer MFT Q8B cohort freeze proposed — owner confirm** / **Cue-consumer MFT start gate eligible (evolutionary shadows)** / **Cue-consumer MFT episode walker (lab paper fills)** | Package M super-book observe lab (`cue-consumer-mft-v0`): fixed-stake declared-incomparable mid-flight-tune; lab arm epoch0 + autopsy alignment feed + judgment schema stub; PIT short cue whitelist; Q8B named non-mechanical open-autopsy cohort propose/freeze (+ calendar 2026-12-01); when eligible, lab paper episode walker records observe-only fixed-stake open/close fills (no sealed spawn); Q6B closes-primary thin emit + novelty/cap/cull stubs; same-day soft bias. `influences_live=false`; never Package L / never strand-A promote; does not steal Data P1 fat slot. See [cue-consumer-mft.md](cue-consumer-mft.md) | `docs/data/cue_consumer_mft_observe.json`, `docs/data/cue_consumer_mft_registration.json`, `docs/data/cue_consumer_mft_start_gate.json` | Live |
 | `check_daily_hub_push_empty` | **Daily push suggestions empty while mapped warns open** | Push ranker returned no cards but ops still has mapped human warns (saturated knobs, volume gates, parked eng, …). Observe-only — never invents Push cards or eng-sprays. See [Daily hub attention](#daily-hub-attention) | (derived from `ops_status.json` + push ranker) | Live |
 | `check_hold_period_counterfactual` | **Longer holds beat live exit buffer in replay** | A faithful replay of logged passes (baseline within 1% of logged NAV) with `exit_confirm_screens` 5/10/20 beats the live knob by ≥1pp on a headline track. Observe-only (L531) — no knob edit; next step is a cold-start twin. See [hold-period-counterfactual.md](hold-period-counterfactual.md) | `docs/data/hold_period_counterfactual.json` | Live |

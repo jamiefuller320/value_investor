@@ -152,6 +152,9 @@ as of 2026-10-28; keep as reference if a future cohort is proposed).
   - `docs/data/cue_consumer_mft_registration.json`
   - `docs/data/cue_consumer_mft_start_gate.json`
 - **Sibling:** L652 `docs/data/parallel_timing_lenses.json` (see [parallel-timing-lenses.md](parallel-timing-lenses.md))
+- **Lab learning progress strip:** weekly Observe utilization card joining MFT +
+  L652 companions (`check_lab_learning_progress`; fair-cost primary;
+  `influences_live=false`)
 - **Findings** (`auto_fixable=False`):
   - **Cue-consumer MFT lab refreshed**
   - **Cue-consumer MFT lab armed (observe)**
