@@ -421,9 +421,14 @@ def derive_entry_news_polarity(
             )
             continue
 
-        kind = "journal" if journal_row is not None else (
-            "lexicon" if lex_hit is not None and valence_hint is None and event_type is None
-            else "headline_phrase"
+        kind = (
+            "journal"
+            if journal_row is not None
+            else (
+                "lexicon"
+                if lex_hit is not None and valence_hint is None and event_type is None
+                else "headline_phrase"
+            )
         )
         if event_type is not None and journal_row is None:
             kind = "headline_phrase"
@@ -530,11 +535,7 @@ def build_entry_news_polarity_panel(
         if label not in label_counts:
             label = "no_usable_news"
         label_counts[label] = label_counts.get(label, 0) + 1
-    usable = sum(
-        n
-        for lab, n in label_counts.items()
-        if lab != "no_usable_news"
-    )
+    usable = sum(n for lab, n in label_counts.items() if lab != "no_usable_news")
     return {
         "schema_version": SCHEMA_VERSION,
         "generated_at": datetime.now(tz=UTC).isoformat(),
