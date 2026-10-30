@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-30T12:32:24.163248+00:00`
+Generated: `2026-10-30T17:33:42.700483+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,15 +33,15 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- _(none merged today)_
+- `parked_hunter`/verified PR #1230 `eng-20261030-01` — Hunt fetchable IR source for parked hang_seng leftover 0175.HK
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 306
+- Occasion count: 308
 - `PR mergeable=CONFLICTING against main` — 7×
 - `merge_conflict:dirty` — 6×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
+- `validate failed` — 5×
 - `validate check failed` — 4×
-- `validate failed` — 4×
 - `validate job failed` — 3×
 - `deferred-ideas.json conflict after L516 merge` — 3×
 - `ruff_format` — 2×
