@@ -8694,6 +8694,21 @@ def test_parked_source_hunter_skip_0175_hk_hang_seng():
     assert fetch_filing_body(tipranks) is None
 
 
+def test_parked_source_hunter_skip_0883_hk_hang_seng():
+    """eng-20261030-02: 0883.HK leftover IWB is bot-gated TipRanks news, not missing HKEX filings."""
+    assert "0883.HK" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["0883.HK"]
+    assert "TipRanks" in reason
+    assert "google_news_asia" in reason
+    assert "hkex_direct" in reason
+    assert fetch_filings_ir_allowlist("0883.HK") == []
+    tipranks = (
+        "https://www.tipranks.com/news/company-announcements/"
+        "cnooc-delivers-record-interim-profit-as-production-low-carbon-projects-advance"
+    )
+    assert fetch_filing_body(tipranks) is None
+
+
 def test_fetch_filings_ir_allowlist_1109_hk_builtins_eng_20261018_05(tmp_path: Path):
     """eng-20261018-05: hang_seng parked 1109.HK — HKEX annual/interim statutory PDF seeds."""
     allowlist_path = tmp_path / "ir.json"

@@ -1137,6 +1137,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "interim HKEX PDFs including FY2025 annual report and 2025 interim results "
         "are already bodied."
     ),
+    "0883.HK": (
+        "hang_seng leftover IWB: indexed-without-body row is google_news_asia "
+        "TipRanks company-announcement HTML (403 bot-gate); hkex_direct annual/"
+        "interim HKEX PDFs including FY2025 annual report and Interim Report 2026 "
+        "are already bodied."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
