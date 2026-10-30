@@ -247,6 +247,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "human_task_acks.json" in optional_line
     assert "entry_blind_review_queue.json" in optional_line
     assert "entry_news_polarity.json" in optional_line
+    assert "parallel_timing_lenses.json" in optional_line
     assert "ui_state_reconciliation.json" in optional_line
     assert "daily_focus.json" in optional_line
     assert "gha_failure_triage.json" in optional_line

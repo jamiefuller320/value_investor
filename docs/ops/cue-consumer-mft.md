@@ -142,6 +142,7 @@ as of 2026-10-28; keep as reference if a future cohort is proposed).
 | Chart draw tools | not shipped | **N229** |
 | Episode walker / lab paper fills | **shipped** (`mft-episode-walker-v0`) when eligible | paper-auto track wiring later |
 | Dashboard strip | **shipped** (observe-utilization `cue_consumer_mft` card — open/closed + MoM) | — |
+| Parallel timing lenses (L652) | **shipped** thin observe on shared lab candidates | concurrence / outcome gaps; never Package L |
 
 ## Automation
 
@@ -150,6 +151,7 @@ as of 2026-10-28; keep as reference if a future cohort is proposed).
   - `docs/data/cue_consumer_mft_observe.json`
   - `docs/data/cue_consumer_mft_registration.json`
   - `docs/data/cue_consumer_mft_start_gate.json`
+- **Sibling:** L652 `docs/data/parallel_timing_lenses.json` (see [parallel-timing-lenses.md](parallel-timing-lenses.md))
 - **Findings** (`auto_fixable=False`):
   - **Cue-consumer MFT lab refreshed**
   - **Cue-consumer MFT lab armed (observe)**

@@ -7160,6 +7160,27 @@ function renderObserveInstrumentCard(inst, history) {
         esc(String(metrics.judgment_fill_status || "—"))
       )}
       <p class="small muted">Observe-only super book · influences_live=false · declared incomparable · never Package L</p>`;
+  } else if (inst.id === "parallel_timing_lenses") {
+    const conc =
+      metrics.concurrence_mean == null || metrics.concurrence_mean === ""
+        ? "—"
+        : String(metrics.concurrence_mean);
+    metricRows = `
+      ${settingRow(
+        "Candidates",
+        esc(
+          `buy ${metrics.buy_candidates ?? "—"} · sell ${metrics.sell_candidates ?? "—"} · n=${metrics.candidate_count ?? "—"}`
+        )
+      )}
+      ${settingRow(
+        "Lens statuses",
+        esc(
+          `looking ${metrics.lenses_looking ?? "—"} · entered ${metrics.lenses_entered ?? "—"} · abandoned ${metrics.lenses_abandoned ?? "—"}`
+        )
+      )}
+      ${settingRow("Concurrence mean", esc(conc))}
+      ${settingRow("Buy watches armed", esc(String(metrics.buy_watch_armed ?? "—")))}
+      <p class="small muted">L652 observe · fixed-stake v0 · concurrence companion only · N241 not_now · never Package L</p>`;
   } else {
     metricRows = `
       ${settingRow("Dominant gap", esc(`${metrics.dominant_gap_field || "—"} · ${metrics.dominant_gap_count ?? "—"}`))}
@@ -7236,7 +7257,7 @@ function renderObserveUtilizationSection(data, { compact = false } = {}) {
       <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
       ${metaLine}
       ${staleBanner}
-      <p class="small muted">Observe-only instruments (flip-lag + decision-input + cue_consumer_mft L640). Flip-lag factory <code>has_memo</code> joins sibling <code>memo_home_market</code> — empty local home is not unresearched. Trajectory = delta vs last dashboard cycle (lower warn/gap is better on P1 cards; MFT card is activity). ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Ops runbook</a>` : ""}</p>
+      <p class="small muted">Observe-only instruments (flip-lag + decision-input + cue_consumer_mft L640 + parallel timing lenses L652). Flip-lag factory <code>has_memo</code> joins sibling <code>memo_home_market</code> — empty local home is not unresearched. Trajectory = delta vs last dashboard cycle (lower warn/gap is better on P1 cards; MFT / L652 cards are activity). ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Ops runbook</a>` : ""}</p>
       <div class="grid observe-instrument-grid" style="margin-top:0.75rem">
         ${cards || '<p class="muted">No instruments in snapshot.</p>'}
       </div>
@@ -12722,6 +12743,7 @@ const ENTRY_BLIND_BRIDGE_SNAPSHOT_KEYS = [
   "buy_decision",
   "buy_reason",
   "entry_news_polarity",
+  "parallel_timing_lenses",
   "framing",
   "population",
   "registration_id",
@@ -12952,6 +12974,40 @@ function renderEntryBlindNewsPolarity(item, { expanded } = {}) {
   return `${head}<ul class="psr-news-cites small">${rows}</ul>`;
 }
 
+function renderEntryBlindTimingLenses(item, { expanded } = {}) {
+  const lenses =
+    item && item.parallel_timing_lenses && typeof item.parallel_timing_lenses === "object"
+      ? item.parallel_timing_lenses
+      : null;
+  if (!lenses || !lenses.present) {
+    return `<p class="small muted">Timing lenses — none on this card yet (L652 observe)</p>`;
+  }
+  const fav = String(lenses.favourite_lens_id || "—");
+  const conc =
+    lenses.concurrence_count != null && lenses.concurrence_count !== ""
+      ? String(lenses.concurrence_count)
+      : "—";
+  const head = `<p class="small"><strong>Timing lenses</strong> — fav ${esc(
+    fav
+  )} <span class="muted">[looking ${esc(String(lenses.looking_n ?? "—"))} · entered ${esc(
+    String(lenses.entered_n ?? "—")
+  )} · abandoned ${esc(String(lenses.abandoned_n ?? "—"))} · concurrence ${esc(conc)}]</span></p>`;
+  if (!expanded) return head;
+  const statuses =
+    lenses.lens_statuses && typeof lenses.lens_statuses === "object" ? lenses.lens_statuses : {};
+  const rows = Object.keys(statuses)
+    .map((id) => `<li class="small">${esc(id)} — ${esc(String(statuses[id]))}</li>`)
+    .join("");
+  const concIds = Array.isArray(lenses.concurrence_lens_ids)
+    ? lenses.concurrence_lens_ids.map((id) => esc(String(id))).join(", ")
+    : "";
+  return `${head}${
+    rows ? `<ul class="psr-news-cites small">${rows}</ul>` : ""
+  }<p class="small muted">Concurrence window lenses: ${
+    concIds || "—"
+  }. Observe-only; influences_live=false; N241 risk sizing not_now.</p>`;
+}
+
 function renderEntryBlindReviewCard(item, expanded) {
   const tag = String(item.tag || "new");
   const tagCls = tag === "reply" ? "psr-tag-reply" : "psr-tag-new";
@@ -12971,14 +13027,15 @@ function renderEntryBlindReviewCard(item, expanded) {
   const collapsed = !expanded
     ? `${renderEntryBlindBuyReason(item)}${renderEntryBlindNewsPolarity(item, {
         expanded: false,
-      })}`
+      })}${renderEntryBlindTimingLenses(item, { expanded: false })}`
     : "";
   const detail = expanded
     ? `<div class="psr-card-detail">
         ${renderEntryBlindBuyReason(item)}
         ${renderEntryBlindNewsPolarity(item, { expanded: true })}
+        ${renderEntryBlindTimingLenses(item, { expanded: true })}
         <pre class="psr-framing small">${framing}</pre>
-        <p class="small muted">Stage entry_blind — PIT through buy day only. Pattern marks: entry quality / range / MA. News polarity = L650 observe cites (90d hard window; no fade). No post-fill path / no realized %. influences_live=false.</p>
+        <p class="small muted">Stage entry_blind — PIT through buy day only. Pattern marks: entry quality / range / MA. News polarity = L650 observe cites (90d hard window; no fade). Timing lenses = L652 parallel observe (favourite vs peers; concurrence companion). No post-fill path / no realized %. influences_live=false.</p>
         <div class="psr-dual-charts">
           <div>
             <h4 class="small">PIT (to buy day)</h4>

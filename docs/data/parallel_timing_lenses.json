@@ -1,0 +1,4626 @@
+{
+  "schema_version": 1,
+  "instrument_id": "parallel_timing_lenses",
+  "deferred_id": "L652",
+  "generated_at": "2026-10-30T13:12:25.743753+00:00",
+  "asof": "2026-10-30",
+  "observe_only": true,
+  "influences_live": false,
+  "package": "M",
+  "ops_doc": "docs/ops/parallel-timing-lenses.md",
+  "fixed_stake_units": 100.0,
+  "look_timeout_days": 21,
+  "concurrence_window_days": 1,
+  "catalog": {
+    "buy_learning": [
+      "buy_support_bounce",
+      "buy_news_improve_path",
+      "buy_cheap_trend_confirm"
+    ],
+    "sell_learning": [
+      "sell_target_reached",
+      "sell_thesis_break",
+      "sell_tech_break",
+      "sell_failed_breakout"
+    ],
+    "sell_baseline": "sell_mechanical_leave",
+    "sell_learning_cap": 4,
+    "lenses": {
+      "buy_support_bounce": {
+        "side": "buy",
+        "role": "learning",
+        "name": "Support / technical bounce",
+        "intent": "Enter on plausible support bounce / sensible technical setup",
+        "rule_kind": "stub_technical",
+        "stub_note": "Deterministic stub on B2 / price_vs_sma200_pct / timing_score cites"
+      },
+      "buy_news_improve_path": {
+        "side": "buy",
+        "role": "learning",
+        "name": "News-polarity improvement path",
+        "intent": "Enter when PIT news cites improvement_path as cue (not hard filter)",
+        "rule_kind": "live_join_l650",
+        "stub_note": "Live join to entry_news_polarity.label == improvement_path"
+      },
+      "buy_cheap_trend_confirm": {
+        "side": "buy",
+        "role": "learning",
+        "name": "Cheap + trend confirmation",
+        "intent": "Enter when cheapness holds and trend/momentum confirms",
+        "rule_kind": "stub_cheap_trend",
+        "stub_note": "Deterministic stub: B1 cheapness cite + positive timing/mom cite"
+      },
+      "sell_target_reached": {
+        "side": "sell",
+        "role": "learning",
+        "name": "Target reached",
+        "intent": "Exit when declared target / realism band is hit",
+        "rule_kind": "stub_exit_map",
+        "stub_note": "Stub: exit_reason / S-cell target cite"
+      },
+      "sell_thesis_break": {
+        "side": "sell",
+        "role": "learning",
+        "name": "Thesis break / identity",
+        "intent": "Exit on identity / thesis break evidence",
+        "rule_kind": "stub_exit_map",
+        "stub_note": "Stub: identity_break_* exit_reason map"
+      },
+      "sell_tech_break": {
+        "side": "sell",
+        "role": "learning",
+        "name": "Technical break / support fail",
+        "intent": "Exit when support / trend structure fails",
+        "rule_kind": "stub_tech_exit",
+        "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout"
+      },
+      "sell_failed_breakout": {
+        "side": "sell",
+        "role": "learning",
+        "name": "Failed breakout / resistance reject",
+        "intent": "Take profits when price fails to break resistance ahead of give-back; may arm observe-only buy watch at next level (no auto-fill)",
+        "rule_kind": "stub_failed_breakout",
+        "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
+        "arms_buy_watch": true
+      },
+      "sell_mechanical_leave": {
+        "side": "sell",
+        "role": "baseline",
+        "name": "Mechanical leave (baseline, not lens hero)",
+        "intent": "Max-days / leave-buy-cohort / hard-rule exit — scoreboard baseline",
+        "rule_kind": "baseline_mechanical",
+        "stub_note": "Always recorded beside sell learning cap; never elevated as hero"
+      }
+    },
+    "owner_locked_at": "2026-10-30",
+    "note": "Sell learning cap=4; sell_mechanical_leave sits beside the cap as baseline. No Package L; influences_live=false."
+  },
+  "stub_vs_live": {
+    "buy_news_improve_path": "live_join_l650_entry_news_polarity",
+    "other_buy_lenses": "deterministic_stub",
+    "sell_learning_lenses": "deterministic_stub_exit_map",
+    "sell_mechanical_leave": "baseline_beside_cap",
+    "outcome_review": "deterministic_stub_gaps",
+    "llm": "optional_later"
+  },
+  "summary": {
+    "candidate_count": 20,
+    "buy_candidates": 10,
+    "sell_candidates": 10,
+    "lenses_looking": 58,
+    "lenses_entered": 22,
+    "lenses_abandoned": 0,
+    "buy_watch_armed": 0,
+    "concurrence_mean": 1.1,
+    "concurrence_samples": 20
+  },
+  "candidates": [
+    {
+      "candidate_id": "ptl_9044eaa60eba07c8",
+      "ticker": "ABDN.L",
+      "side": "buy",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "644c0706a7083cbc8b6f",
+      "spawned_at": "2026-08-02",
+      "favourite_lens_id": "buy_support_bounce",
+      "favourite_entry_at": null,
+      "lenses": [
+        {
+          "lens_id": "buy_support_bounce",
+          "name": "Support / technical bounce",
+          "side": "buy",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_technical",
+          "stub_note": "Deterministic stub on B2 / price_vs_sma200_pct / timing_score cites",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5",
+                "B2:volume_ratio_20=0.7868"
+              ],
+              "note": "stub_support_bounce_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_news_improve_path",
+          "name": "News-polarity improvement path",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "live_join_l650",
+          "stub_note": "Live join to entry_news_polarity.label == improvement_path",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "entry_news_polarity.label=mixed_or_unclear",
+                "join=l650_live"
+              ],
+              "note": "l650_label_not_improvement_path",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_cheap_trend_confirm",
+          "name": "Cheap + trend confirmation",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_cheap_trend",
+          "stub_note": "Deterministic stub: B1 cheapness cite + positive timing/mom cite",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "stub_cheap_trend_wait"
+              ],
+              "note": "stub_cheap_trend_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": null,
+        "count": 0,
+        "lens_ids": [],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M"
+    },
+    {
+      "candidate_id": "ptl_c1541ad5cefb44cf",
+      "ticker": "ALFA.L",
+      "side": "buy",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "b19215bc1dff1afb6493",
+      "spawned_at": "2026-08-02",
+      "favourite_lens_id": "buy_support_bounce",
+      "favourite_entry_at": null,
+      "lenses": [
+        {
+          "lens_id": "buy_support_bounce",
+          "name": "Support / technical bounce",
+          "side": "buy",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_technical",
+          "stub_note": "Deterministic stub on B2 / price_vs_sma200_pct / timing_score cites",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.625",
+                "B2:volume_ratio_20=0.7251"
+              ],
+              "note": "stub_support_bounce_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_news_improve_path",
+          "name": "News-polarity improvement path",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "live_join_l650",
+          "stub_note": "Live join to entry_news_polarity.label == improvement_path",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "entry_news_polarity.label=mixed_or_unclear",
+                "join=l650_live"
+              ],
+              "note": "l650_label_not_improvement_path",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_cheap_trend_confirm",
+          "name": "Cheap + trend confirmation",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_cheap_trend",
+          "stub_note": "Deterministic stub: B1 cheapness cite + positive timing/mom cite",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "stub_cheap_trend_wait"
+              ],
+              "note": "stub_cheap_trend_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": null,
+        "count": 0,
+        "lens_ids": [],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M"
+    },
+    {
+      "candidate_id": "ptl_36f23d62fe12adbc",
+      "ticker": "BKG.L",
+      "side": "buy",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "841d57066b62c9d38df2",
+      "spawned_at": "2026-08-02",
+      "favourite_lens_id": "buy_support_bounce",
+      "favourite_entry_at": null,
+      "lenses": [
+        {
+          "lens_id": "buy_support_bounce",
+          "name": "Support / technical bounce",
+          "side": "buy",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_technical",
+          "stub_note": "Deterministic stub on B2 / price_vs_sma200_pct / timing_score cites",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5",
+                "B2:volume_ratio_20=1.1203"
+              ],
+              "note": "stub_support_bounce_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_news_improve_path",
+          "name": "News-polarity improvement path",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "live_join_l650",
+          "stub_note": "Live join to entry_news_polarity.label == improvement_path",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "entry_news_polarity.label=mixed_or_unclear",
+                "join=l650_live"
+              ],
+              "note": "l650_label_not_improvement_path",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_cheap_trend_confirm",
+          "name": "Cheap + trend confirmation",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_cheap_trend",
+          "stub_note": "Deterministic stub: B1 cheapness cite + positive timing/mom cite",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "stub_cheap_trend_wait"
+              ],
+              "note": "stub_cheap_trend_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": null,
+        "count": 0,
+        "lens_ids": [],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M"
+    },
+    {
+      "candidate_id": "ptl_742bbf54b2faa77f",
+      "ticker": "BOWL.L",
+      "side": "buy",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "ed0160d4ec2c5e0d7756",
+      "spawned_at": "2026-08-02",
+      "favourite_lens_id": "buy_support_bounce",
+      "favourite_entry_at": null,
+      "lenses": [
+        {
+          "lens_id": "buy_support_bounce",
+          "name": "Support / technical bounce",
+          "side": "buy",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_technical",
+          "stub_note": "Deterministic stub on B2 / price_vs_sma200_pct / timing_score cites",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.375",
+                "B2:volume_ratio_20=0.3221"
+              ],
+              "note": "stub_support_bounce_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_news_improve_path",
+          "name": "News-polarity improvement path",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "live_join_l650",
+          "stub_note": "Live join to entry_news_polarity.label == improvement_path",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "entry_news_polarity.label=mixed_or_unclear",
+                "join=l650_live"
+              ],
+              "note": "l650_label_not_improvement_path",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_cheap_trend_confirm",
+          "name": "Cheap + trend confirmation",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_cheap_trend",
+          "stub_note": "Deterministic stub: B1 cheapness cite + positive timing/mom cite",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "stub_cheap_trend_wait"
+              ],
+              "note": "stub_cheap_trend_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": null,
+        "count": 0,
+        "lens_ids": [],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M"
+    },
+    {
+      "candidate_id": "ptl_b9db32117fe85059",
+      "ticker": "CNA.L",
+      "side": "buy",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "fa28375b758c96947f58",
+      "spawned_at": "2026-08-02",
+      "favourite_lens_id": "buy_support_bounce",
+      "favourite_entry_at": null,
+      "lenses": [
+        {
+          "lens_id": "buy_support_bounce",
+          "name": "Support / technical bounce",
+          "side": "buy",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_technical",
+          "stub_note": "Deterministic stub on B2 / price_vs_sma200_pct / timing_score cites",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.625",
+                "B2:volume_ratio_20=0.737"
+              ],
+              "note": "stub_support_bounce_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_news_improve_path",
+          "name": "News-polarity improvement path",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "live_join_l650",
+          "stub_note": "Live join to entry_news_polarity.label == improvement_path",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "entry_news_polarity.label=mixed_or_unclear",
+                "join=l650_live"
+              ],
+              "note": "l650_label_not_improvement_path",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_cheap_trend_confirm",
+          "name": "Cheap + trend confirmation",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_cheap_trend",
+          "stub_note": "Deterministic stub: B1 cheapness cite + positive timing/mom cite",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "stub_cheap_trend_wait"
+              ],
+              "note": "stub_cheap_trend_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": null,
+        "count": 0,
+        "lens_ids": [],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M"
+    },
+    {
+      "candidate_id": "ptl_7c85c124fdf3392d",
+      "ticker": "DATA.L",
+      "side": "buy",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "b940c9eed0bbd4818170",
+      "spawned_at": "2026-08-02",
+      "favourite_lens_id": "buy_support_bounce",
+      "favourite_entry_at": null,
+      "lenses": [
+        {
+          "lens_id": "buy_support_bounce",
+          "name": "Support / technical bounce",
+          "side": "buy",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_technical",
+          "stub_note": "Deterministic stub on B2 / price_vs_sma200_pct / timing_score cites",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5",
+                "B2:volume_ratio_20=0.4323"
+              ],
+              "note": "stub_support_bounce_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_news_improve_path",
+          "name": "News-polarity improvement path",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "live_join_l650",
+          "stub_note": "Live join to entry_news_polarity.label == improvement_path",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "entry_news_polarity.label=mixed_or_unclear",
+                "join=l650_live"
+              ],
+              "note": "l650_label_not_improvement_path",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_cheap_trend_confirm",
+          "name": "Cheap + trend confirmation",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_cheap_trend",
+          "stub_note": "Deterministic stub: B1 cheapness cite + positive timing/mom cite",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "stub_cheap_trend_wait"
+              ],
+              "note": "stub_cheap_trend_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": null,
+        "count": 0,
+        "lens_ids": [],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M"
+    },
+    {
+      "candidate_id": "ptl_e1915f4b9cf5e68c",
+      "ticker": "DOM.L",
+      "side": "buy",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "ac5413e55e7d3ef9efb1",
+      "spawned_at": "2026-08-02",
+      "favourite_lens_id": "buy_support_bounce",
+      "favourite_entry_at": null,
+      "lenses": [
+        {
+          "lens_id": "buy_support_bounce",
+          "name": "Support / technical bounce",
+          "side": "buy",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_technical",
+          "stub_note": "Deterministic stub on B2 / price_vs_sma200_pct / timing_score cites",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5",
+                "B2:volume_ratio_20=0.8029"
+              ],
+              "note": "stub_support_bounce_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_news_improve_path",
+          "name": "News-polarity improvement path",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "live_join_l650",
+          "stub_note": "Live join to entry_news_polarity.label == improvement_path",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "entry_news_polarity.label=mixed_or_unclear",
+                "join=l650_live"
+              ],
+              "note": "l650_label_not_improvement_path",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_cheap_trend_confirm",
+          "name": "Cheap + trend confirmation",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_cheap_trend",
+          "stub_note": "Deterministic stub: B1 cheapness cite + positive timing/mom cite",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "stub_cheap_trend_wait"
+              ],
+              "note": "stub_cheap_trend_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": null,
+        "count": 0,
+        "lens_ids": [],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M"
+    },
+    {
+      "candidate_id": "ptl_be8c83f0dbd74670",
+      "ticker": "GEN.L",
+      "side": "buy",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "a10451851a629f197e13",
+      "spawned_at": "2026-08-02",
+      "favourite_lens_id": "buy_news_improve_path",
+      "favourite_entry_at": "2026-08-02",
+      "lenses": [
+        {
+          "lens_id": "buy_support_bounce",
+          "name": "Support / technical bounce",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_technical",
+          "stub_note": "Deterministic stub on B2 / price_vs_sma200_pct / timing_score cites",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "B2:timing_signal=accumulate",
+                "B2:timing_score=0.75",
+                "B2:volume_ratio_20=0.5573"
+              ],
+              "note": "stub_support_bounce_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_news_improve_path",
+          "name": "News-polarity improvement path",
+          "side": "buy",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "live_join_l650",
+          "stub_note": "Live join to entry_news_polarity.label == improvement_path",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "enter",
+              "cites": [
+                "entry_news_polarity.label=improvement_path",
+                "join=l650_live"
+              ],
+              "note": "live_join_l650_improvement_path",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-02",
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_cheap_trend_confirm",
+          "name": "Cheap + trend confirmation",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_cheap_trend",
+          "stub_note": "Deterministic stub: B1 cheapness cite + positive timing/mom cite",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "stub_cheap_trend_wait"
+              ],
+              "note": "stub_cheap_trend_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": "2026-08-02",
+        "count": 1,
+        "lens_ids": [
+          "buy_news_improve_path"
+        ],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M"
+    },
+    {
+      "candidate_id": "ptl_6431b9c7dcf162b7",
+      "ticker": "GSK.L",
+      "side": "buy",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "b54c5a5c4b7852d5069a",
+      "spawned_at": "2026-08-02",
+      "favourite_lens_id": "buy_support_bounce",
+      "favourite_entry_at": null,
+      "lenses": [
+        {
+          "lens_id": "buy_support_bounce",
+          "name": "Support / technical bounce",
+          "side": "buy",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_technical",
+          "stub_note": "Deterministic stub on B2 / price_vs_sma200_pct / timing_score cites",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5",
+                "B2:volume_ratio_20=0.7924"
+              ],
+              "note": "stub_support_bounce_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_news_improve_path",
+          "name": "News-polarity improvement path",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "live_join_l650",
+          "stub_note": "Live join to entry_news_polarity.label == improvement_path",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "entry_news_polarity.label=mixed_or_unclear",
+                "join=l650_live"
+              ],
+              "note": "l650_label_not_improvement_path",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_cheap_trend_confirm",
+          "name": "Cheap + trend confirmation",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_cheap_trend",
+          "stub_note": "Deterministic stub: B1 cheapness cite + positive timing/mom cite",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "stub_cheap_trend_wait"
+              ],
+              "note": "stub_cheap_trend_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": null,
+        "count": 0,
+        "lens_ids": [],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M"
+    },
+    {
+      "candidate_id": "ptl_9f041f8b2d9edd5d",
+      "ticker": "HIK.L",
+      "side": "buy",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "4a66d98f166cf45638be",
+      "spawned_at": "2026-08-02",
+      "favourite_lens_id": "buy_news_improve_path",
+      "favourite_entry_at": "2026-08-02",
+      "lenses": [
+        {
+          "lens_id": "buy_support_bounce",
+          "name": "Support / technical bounce",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_technical",
+          "stub_note": "Deterministic stub on B2 / price_vs_sma200_pct / timing_score cites",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.625",
+                "B2:volume_ratio_20=0.5572"
+              ],
+              "note": "stub_support_bounce_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_news_improve_path",
+          "name": "News-polarity improvement path",
+          "side": "buy",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "live_join_l650",
+          "stub_note": "Live join to entry_news_polarity.label == improvement_path",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "enter",
+              "cites": [
+                "entry_news_polarity.label=improvement_path",
+                "join=l650_live"
+              ],
+              "note": "live_join_l650_improvement_path",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-02",
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "buy_cheap_trend_confirm",
+          "name": "Cheap + trend confirmation",
+          "side": "buy",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_cheap_trend",
+          "stub_note": "Deterministic stub: B1 cheapness cite + positive timing/mom cite",
+          "trail": [
+            {
+              "day": "2026-08-02",
+              "action": "keep_looking",
+              "cites": [
+                "stub_cheap_trend_wait"
+              ],
+              "note": "stub_cheap_trend_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": "2026-08-02",
+        "count": 1,
+        "lens_ids": [
+          "buy_news_improve_path"
+        ],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M"
+    },
+    {
+      "candidate_id": "ptl_b0b2dcfe5e40ca16",
+      "ticker": "ABF.L",
+      "side": "sell",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "48a095d3e2e8bfda8fa0",
+      "spawned_at": "2026-08-30",
+      "favourite_lens_id": "sell_target_reached",
+      "favourite_entry_at": "2026-08-30",
+      "lenses": [
+        {
+          "lens_id": "sell_target_reached",
+          "name": "Target reached",
+          "side": "sell",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: exit_reason / S-cell target cite",
+          "trail": [
+            {
+              "day": "2026-08-30",
+              "action": "enter",
+              "cites": [
+                "B6:trade_plan_summary=Trade plan: core 60% limit £1941.74; tactical 40% limit £1898.50; tactical stop £1841.54, target £2191.35."
+              ],
+              "note": "stub_target_cite",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-30",
+            "exit_at": "2026-08-30",
+            "fair_cost_episode_pct": -0.02227,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_target_reached: B1:models_passed=9.0; B1:weighted_model_score=0.5745363636363637; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=9.0",
+                "B1:weighted_model_score=0.5745363636363637",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-08-30",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_thesis_break",
+          "name": "Thesis break / identity",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: identity_break_* exit_reason map",
+          "trail": [
+            {
+              "day": "2026-08-30",
+              "action": "enter",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier"
+              ],
+              "note": "stub_thesis_break_map",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-30",
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_thesis_break: B1:models_passed=9.0; B1:weighted_model_score=0.5745363636363637; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=9.0",
+                "B1:weighted_model_score=0.5745363636363637",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-08-30",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_tech_break",
+          "name": "Technical break / support fail",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_tech_exit",
+          "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout",
+          "trail": [
+            {
+              "day": "2026-08-30",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_tech_break_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_failed_breakout",
+          "name": "Failed breakout / resistance reject",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_failed_breakout",
+          "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
+          "trail": [
+            {
+              "day": "2026-08-30",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_failed_breakout_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_mechanical_leave",
+          "name": "Mechanical leave (baseline, not lens hero)",
+          "side": "sell",
+          "role": "baseline",
+          "catalog_role": "baseline",
+          "status": "looking",
+          "rule_kind": "baseline_mechanical",
+          "stub_note": "Always recorded beside sell learning cap; never elevated as hero",
+          "trail": [
+            {
+              "day": "2026-08-30",
+              "action": "keep_looking",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier"
+              ],
+              "note": "non_mechanical_exit",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": "2026-08-30",
+        "count": 2,
+        "lens_ids": [
+          "sell_target_reached",
+          "sell_thesis_break"
+        ],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M",
+      "sell_learning_cap": 4,
+      "baseline_beside_cap": "sell_mechanical_leave"
+    },
+    {
+      "candidate_id": "ptl_c740d8c4fc486c93",
+      "ticker": "AEP.L",
+      "side": "sell",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "bb5f68d8032714b79d25",
+      "spawned_at": "2026-09-14",
+      "favourite_lens_id": "sell_target_reached",
+      "favourite_entry_at": "2026-09-14",
+      "lenses": [
+        {
+          "lens_id": "sell_target_reached",
+          "name": "Target reached",
+          "side": "sell",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: exit_reason / S-cell target cite",
+          "trail": [
+            {
+              "day": "2026-09-14",
+              "action": "enter",
+              "cites": [
+                "B6:trade_plan_summary=Trade plan: core 60% limit £164.01; tactical 40% limit £157.16; tactical stop £152.45, target £189.00."
+              ],
+              "note": "stub_target_cite",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-09-14",
+            "exit_at": "2026-09-14",
+            "fair_cost_episode_pct": 0.080138,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_target_reached: B1:models_passed=18.0; B1:weighted_model_score=0.7996454545454544; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=18.0",
+                "B1:weighted_model_score=0.7996454545454544",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.625"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-09-14",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_thesis_break",
+          "name": "Thesis break / identity",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: identity_break_* exit_reason map",
+          "trail": [
+            {
+              "day": "2026-09-14",
+              "action": "enter",
+              "cites": [
+                "exit_reason=identity_break_timing_wait"
+              ],
+              "note": "stub_thesis_break_map",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-09-14",
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_thesis_break: B1:models_passed=18.0; B1:weighted_model_score=0.7996454545454544; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=18.0",
+                "B1:weighted_model_score=0.7996454545454544",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.625"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-09-14",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_tech_break",
+          "name": "Technical break / support fail",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_tech_exit",
+          "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout",
+          "trail": [
+            {
+              "day": "2026-09-14",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_tech_break_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_failed_breakout",
+          "name": "Failed breakout / resistance reject",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_failed_breakout",
+          "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
+          "trail": [
+            {
+              "day": "2026-09-14",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_failed_breakout_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_mechanical_leave",
+          "name": "Mechanical leave (baseline, not lens hero)",
+          "side": "sell",
+          "role": "baseline",
+          "catalog_role": "baseline",
+          "status": "looking",
+          "rule_kind": "baseline_mechanical",
+          "stub_note": "Always recorded beside sell learning cap; never elevated as hero",
+          "trail": [
+            {
+              "day": "2026-09-14",
+              "action": "keep_looking",
+              "cites": [
+                "exit_reason=identity_break_timing_wait"
+              ],
+              "note": "non_mechanical_exit",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": "2026-09-14",
+        "count": 2,
+        "lens_ids": [
+          "sell_target_reached",
+          "sell_thesis_break"
+        ],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M",
+      "sell_learning_cap": 4,
+      "baseline_beside_cap": "sell_mechanical_leave"
+    },
+    {
+      "candidate_id": "ptl_68ab3a38ccc16c07",
+      "ticker": "ASHM.L",
+      "side": "sell",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "b7eb4d564f2362d87a93",
+      "spawned_at": "2026-08-09",
+      "favourite_lens_id": "sell_target_reached",
+      "favourite_entry_at": "2026-08-09",
+      "lenses": [
+        {
+          "lens_id": "sell_target_reached",
+          "name": "Target reached",
+          "side": "sell",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: exit_reason / S-cell target cite",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "enter",
+              "cites": [
+                "B6:trade_plan_summary=Trade plan: core 60% limit £204.34; tactical 40% limit £196.08; tactical stop £184.19, target £216.72."
+              ],
+              "note": "stub_target_cite",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-09",
+            "exit_at": "2026-08-09",
+            "fair_cost_episode_pct": 0.082678,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_target_reached: B1:models_passed=12.0; B1:weighted_model_score=0.6798318181818183; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=12.0",
+                "B1:weighted_model_score=0.6798318181818183",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.625"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-08-09",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_thesis_break",
+          "name": "Thesis break / identity",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: identity_break_* exit_reason map",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "enter",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier"
+              ],
+              "note": "stub_thesis_break_map",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-09",
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_thesis_break: B1:models_passed=12.0; B1:weighted_model_score=0.6798318181818183; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=12.0",
+                "B1:weighted_model_score=0.6798318181818183",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.625"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-08-09",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_tech_break",
+          "name": "Technical break / support fail",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_tech_exit",
+          "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_tech_break_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_failed_breakout",
+          "name": "Failed breakout / resistance reject",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_failed_breakout",
+          "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_failed_breakout_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_mechanical_leave",
+          "name": "Mechanical leave (baseline, not lens hero)",
+          "side": "sell",
+          "role": "baseline",
+          "catalog_role": "baseline",
+          "status": "looking",
+          "rule_kind": "baseline_mechanical",
+          "stub_note": "Always recorded beside sell learning cap; never elevated as hero",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "keep_looking",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier"
+              ],
+              "note": "non_mechanical_exit",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": "2026-08-09",
+        "count": 2,
+        "lens_ids": [
+          "sell_target_reached",
+          "sell_thesis_break"
+        ],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M",
+      "sell_learning_cap": 4,
+      "baseline_beside_cap": "sell_mechanical_leave"
+    },
+    {
+      "candidate_id": "ptl_922708a7a5873bda",
+      "ticker": "BME.L",
+      "side": "sell",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "65b484cd6709d362b9d9",
+      "spawned_at": "2026-08-09",
+      "favourite_lens_id": "sell_target_reached",
+      "favourite_entry_at": "2026-08-09",
+      "lenses": [
+        {
+          "lens_id": "sell_target_reached",
+          "name": "Target reached",
+          "side": "sell",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: exit_reason / S-cell target cite",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "enter",
+              "cites": [
+                "B6:trade_plan_summary=Trade plan: core 60% limit £197.83; tactical 40% limit £178.66; tactical stop £173.30, target £233.73."
+              ],
+              "note": "stub_target_cite",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-09",
+            "exit_at": "2026-08-09",
+            "fair_cost_episode_pct": 0.050205,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_target_reached: B1:models_passed=7.0; B1:weighted_model_score=0.5254227272727273; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=7.0",
+                "B1:weighted_model_score=0.5254227272727273",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.375"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-08-09",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_thesis_break",
+          "name": "Thesis break / identity",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: identity_break_* exit_reason map",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "enter",
+              "cites": [
+                "exit_reason=identity_break_timing_wait"
+              ],
+              "note": "stub_thesis_break_map",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-09",
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_thesis_break: B1:models_passed=7.0; B1:weighted_model_score=0.5254227272727273; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=7.0",
+                "B1:weighted_model_score=0.5254227272727273",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.375"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-08-09",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_tech_break",
+          "name": "Technical break / support fail",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_tech_exit",
+          "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_tech_break_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_failed_breakout",
+          "name": "Failed breakout / resistance reject",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_failed_breakout",
+          "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_failed_breakout_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_mechanical_leave",
+          "name": "Mechanical leave (baseline, not lens hero)",
+          "side": "sell",
+          "role": "baseline",
+          "catalog_role": "baseline",
+          "status": "looking",
+          "rule_kind": "baseline_mechanical",
+          "stub_note": "Always recorded beside sell learning cap; never elevated as hero",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "keep_looking",
+              "cites": [
+                "exit_reason=identity_break_timing_wait"
+              ],
+              "note": "non_mechanical_exit",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": "2026-08-09",
+        "count": 2,
+        "lens_ids": [
+          "sell_target_reached",
+          "sell_thesis_break"
+        ],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M",
+      "sell_learning_cap": 4,
+      "baseline_beside_cap": "sell_mechanical_leave"
+    },
+    {
+      "candidate_id": "ptl_a914b594e625dad2",
+      "ticker": "BOY.L",
+      "side": "sell",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "1414831f0ba7934e72c0",
+      "spawned_at": "2026-08-09",
+      "favourite_lens_id": "sell_target_reached",
+      "favourite_entry_at": "2026-08-09",
+      "lenses": [
+        {
+          "lens_id": "sell_target_reached",
+          "name": "Target reached",
+          "side": "sell",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: exit_reason / S-cell target cite",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "enter",
+              "cites": [
+                "return_pct=0.260244",
+                "stub_target_band"
+              ],
+              "note": "stub_target_return_band",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-09",
+            "exit_at": "2026-08-09",
+            "fair_cost_episode_pct": 0.260244,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_target_reached: B1:models_passed=8.0; B1:weighted_model_score=0.5487454545454546; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=8.0",
+                "B1:weighted_model_score=0.5487454545454546",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-08-09",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_thesis_break",
+          "name": "Thesis break / identity",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: identity_break_* exit_reason map",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "enter",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier"
+              ],
+              "note": "stub_thesis_break_map",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-09",
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_thesis_break: B1:models_passed=8.0; B1:weighted_model_score=0.5487454545454546; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=8.0",
+                "B1:weighted_model_score=0.5487454545454546",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-08-09",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_tech_break",
+          "name": "Technical break / support fail",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_tech_exit",
+          "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_tech_break_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_failed_breakout",
+          "name": "Failed breakout / resistance reject",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_failed_breakout",
+          "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_failed_breakout_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_mechanical_leave",
+          "name": "Mechanical leave (baseline, not lens hero)",
+          "side": "sell",
+          "role": "baseline",
+          "catalog_role": "baseline",
+          "status": "looking",
+          "rule_kind": "baseline_mechanical",
+          "stub_note": "Always recorded beside sell learning cap; never elevated as hero",
+          "trail": [
+            {
+              "day": "2026-08-09",
+              "action": "keep_looking",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier"
+              ],
+              "note": "non_mechanical_exit",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": "2026-08-09",
+        "count": 2,
+        "lens_ids": [
+          "sell_target_reached",
+          "sell_thesis_break"
+        ],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M",
+      "sell_learning_cap": 4,
+      "baseline_beside_cap": "sell_mechanical_leave"
+    },
+    {
+      "candidate_id": "ptl_7bb86a0953163228",
+      "ticker": "BREE.L",
+      "side": "sell",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "c064bf7f0d17f4e27f29",
+      "spawned_at": "2026-08-19",
+      "favourite_lens_id": "sell_target_reached",
+      "favourite_entry_at": "2026-08-19",
+      "lenses": [
+        {
+          "lens_id": "sell_target_reached",
+          "name": "Target reached",
+          "side": "sell",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: exit_reason / S-cell target cite",
+          "trail": [
+            {
+              "day": "2026-08-19",
+              "action": "enter",
+              "cites": [
+                "B6:trade_plan_summary=Trade plan: core 60% limit £300.24; tactical 40% limit £288.20; tactical stop £279.55, target £347.55."
+              ],
+              "note": "stub_target_cite",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-19",
+            "exit_at": "2026-08-19",
+            "fair_cost_episode_pct": 0.050693,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_target_reached: B1:models_passed=9.0; B1:weighted_model_score=0.6006545454545454; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=9.0",
+                "B1:weighted_model_score=0.6006545454545454",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-08-19",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_thesis_break",
+          "name": "Thesis break / identity",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: identity_break_* exit_reason map",
+          "trail": [
+            {
+              "day": "2026-08-19",
+              "action": "enter",
+              "cites": [
+                "exit_reason=identity_break_timing_wait"
+              ],
+              "note": "stub_thesis_break_map",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-19",
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_thesis_break: B1:models_passed=9.0; B1:weighted_model_score=0.6006545454545454; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=9.0",
+                "B1:weighted_model_score=0.6006545454545454",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-08-19",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_tech_break",
+          "name": "Technical break / support fail",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_tech_exit",
+          "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout",
+          "trail": [
+            {
+              "day": "2026-08-19",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_tech_break_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_failed_breakout",
+          "name": "Failed breakout / resistance reject",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_failed_breakout",
+          "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
+          "trail": [
+            {
+              "day": "2026-08-19",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_failed_breakout_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_mechanical_leave",
+          "name": "Mechanical leave (baseline, not lens hero)",
+          "side": "sell",
+          "role": "baseline",
+          "catalog_role": "baseline",
+          "status": "looking",
+          "rule_kind": "baseline_mechanical",
+          "stub_note": "Always recorded beside sell learning cap; never elevated as hero",
+          "trail": [
+            {
+              "day": "2026-08-19",
+              "action": "keep_looking",
+              "cites": [
+                "exit_reason=identity_break_timing_wait"
+              ],
+              "note": "non_mechanical_exit",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": "2026-08-19",
+        "count": 2,
+        "lens_ids": [
+          "sell_target_reached",
+          "sell_thesis_break"
+        ],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M",
+      "sell_learning_cap": 4,
+      "baseline_beside_cap": "sell_mechanical_leave"
+    },
+    {
+      "candidate_id": "ptl_a6eb9fd5c2de3cb1",
+      "ticker": "BT-A.L",
+      "side": "sell",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "dd03ea352877f781a9e6",
+      "spawned_at": "2026-09-21",
+      "favourite_lens_id": "sell_target_reached",
+      "favourite_entry_at": "2026-09-21",
+      "lenses": [
+        {
+          "lens_id": "sell_target_reached",
+          "name": "Target reached",
+          "side": "sell",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: exit_reason / S-cell target cite",
+          "trail": [
+            {
+              "day": "2026-09-21",
+              "action": "enter",
+              "cites": [
+                "B6:trade_plan_summary=Trade plan: core 60% limit £198.72; tactical 40% limit £187.00; tactical stop £179.64, target £211.37."
+              ],
+              "note": "stub_target_cite",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-09-21",
+            "exit_at": "2026-09-21",
+            "fair_cost_episode_pct": -0.016429,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_target_reached: B1:models_passed=7.0; B1:weighted_model_score=0.5410727272727271; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=7.0",
+                "B1:weighted_model_score=0.5410727272727271",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.625"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-09-21",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_thesis_break",
+          "name": "Thesis break / identity",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: identity_break_* exit_reason map",
+          "trail": [
+            {
+              "day": "2026-09-21",
+              "action": "enter",
+              "cites": [
+                "exit_reason=identity_break_timing_wait"
+              ],
+              "note": "stub_thesis_break_map",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-09-21",
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_thesis_break: B1:models_passed=7.0; B1:weighted_model_score=0.5410727272727271; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=7.0",
+                "B1:weighted_model_score=0.5410727272727271",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.625"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-09-21",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_tech_break",
+          "name": "Technical break / support fail",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_tech_exit",
+          "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout",
+          "trail": [
+            {
+              "day": "2026-09-21",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_tech_break_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_failed_breakout",
+          "name": "Failed breakout / resistance reject",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_failed_breakout",
+          "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
+          "trail": [
+            {
+              "day": "2026-09-21",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_failed_breakout_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_mechanical_leave",
+          "name": "Mechanical leave (baseline, not lens hero)",
+          "side": "sell",
+          "role": "baseline",
+          "catalog_role": "baseline",
+          "status": "looking",
+          "rule_kind": "baseline_mechanical",
+          "stub_note": "Always recorded beside sell learning cap; never elevated as hero",
+          "trail": [
+            {
+              "day": "2026-09-21",
+              "action": "keep_looking",
+              "cites": [
+                "exit_reason=identity_break_timing_wait"
+              ],
+              "note": "non_mechanical_exit",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": "2026-09-21",
+        "count": 2,
+        "lens_ids": [
+          "sell_target_reached",
+          "sell_thesis_break"
+        ],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M",
+      "sell_learning_cap": 4,
+      "baseline_beside_cap": "sell_mechanical_leave"
+    },
+    {
+      "candidate_id": "ptl_1daa1ba4e28065e5",
+      "ticker": "BTRW.L",
+      "side": "sell",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "34286aeabf9ed39783c9",
+      "spawned_at": "2026-08-04",
+      "favourite_lens_id": "sell_target_reached",
+      "favourite_entry_at": "2026-08-04",
+      "lenses": [
+        {
+          "lens_id": "sell_target_reached",
+          "name": "Target reached",
+          "side": "sell",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: exit_reason / S-cell target cite",
+          "trail": [
+            {
+              "day": "2026-08-04",
+              "action": "enter",
+              "cites": [
+                "B6:trade_plan_summary=Trade plan: core 60% limit £274.07; tactical 40% limit £268.59; tactical stop £260.53, target £307.96."
+              ],
+              "note": "stub_target_cite",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-04",
+            "exit_at": "2026-08-04",
+            "fair_cost_episode_pct": 0.031663,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_target_reached: B1:models_passed=7.0; B1:weighted_model_score=0.5794227272727274; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=7.0",
+                "B1:weighted_model_score=0.5794227272727274",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.375"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-08-04",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_thesis_break",
+          "name": "Thesis break / identity",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: identity_break_* exit_reason map",
+          "trail": [
+            {
+              "day": "2026-08-04",
+              "action": "enter",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier"
+              ],
+              "note": "stub_thesis_break_map",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-04",
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_thesis_break: B1:models_passed=7.0; B1:weighted_model_score=0.5794227272727274; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=7.0",
+                "B1:weighted_model_score=0.5794227272727274",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.375"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-08-04",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_tech_break",
+          "name": "Technical break / support fail",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_tech_exit",
+          "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout",
+          "trail": [
+            {
+              "day": "2026-08-04",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_tech_break_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_failed_breakout",
+          "name": "Failed breakout / resistance reject",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_failed_breakout",
+          "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
+          "trail": [
+            {
+              "day": "2026-08-04",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_failed_breakout_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_mechanical_leave",
+          "name": "Mechanical leave (baseline, not lens hero)",
+          "side": "sell",
+          "role": "baseline",
+          "catalog_role": "baseline",
+          "status": "looking",
+          "rule_kind": "baseline_mechanical",
+          "stub_note": "Always recorded beside sell learning cap; never elevated as hero",
+          "trail": [
+            {
+              "day": "2026-08-04",
+              "action": "keep_looking",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier"
+              ],
+              "note": "non_mechanical_exit",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": "2026-08-04",
+        "count": 2,
+        "lens_ids": [
+          "sell_target_reached",
+          "sell_thesis_break"
+        ],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M",
+      "sell_learning_cap": 4,
+      "baseline_beside_cap": "sell_mechanical_leave"
+    },
+    {
+      "candidate_id": "ptl_3bd526f21023c4cf",
+      "ticker": "BWY.L",
+      "side": "sell",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "4699cf92a725656eef2e",
+      "spawned_at": "2026-08-16",
+      "favourite_lens_id": "sell_target_reached",
+      "favourite_entry_at": "2026-08-16",
+      "lenses": [
+        {
+          "lens_id": "sell_target_reached",
+          "name": "Target reached",
+          "side": "sell",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: exit_reason / S-cell target cite",
+          "trail": [
+            {
+              "day": "2026-08-16",
+              "action": "enter",
+              "cites": [
+                "B6:trade_plan_summary=Trade plan: core 60% limit £1899.84; tactical 40% limit £1844.00; tactical stop £1774.09, target £2087.40."
+              ],
+              "note": "stub_target_cite",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-16",
+            "exit_at": "2026-08-16",
+            "fair_cost_episode_pct": 0.092086,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_target_reached: B1:models_passed=6.0; B1:weighted_model_score=0.5219545454545454; B1:data_quality_score=0.9",
+              "cites": [
+                "B1:models_passed=6.0",
+                "B1:weighted_model_score=0.5219545454545454",
+                "B1:data_quality_score=0.9",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-08-16",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_thesis_break",
+          "name": "Thesis break / identity",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: identity_break_* exit_reason map",
+          "trail": [
+            {
+              "day": "2026-08-16",
+              "action": "enter",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier"
+              ],
+              "note": "stub_thesis_break_map",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-08-16",
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_thesis_break: B1:models_passed=6.0; B1:weighted_model_score=0.5219545454545454; B1:data_quality_score=0.9",
+              "cites": [
+                "B1:models_passed=6.0",
+                "B1:weighted_model_score=0.5219545454545454",
+                "B1:data_quality_score=0.9",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.5"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-08-16",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_tech_break",
+          "name": "Technical break / support fail",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_tech_exit",
+          "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout",
+          "trail": [
+            {
+              "day": "2026-08-16",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_tech_break_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_failed_breakout",
+          "name": "Failed breakout / resistance reject",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_failed_breakout",
+          "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
+          "trail": [
+            {
+              "day": "2026-08-16",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_failed_breakout_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_mechanical_leave",
+          "name": "Mechanical leave (baseline, not lens hero)",
+          "side": "sell",
+          "role": "baseline",
+          "catalog_role": "baseline",
+          "status": "looking",
+          "rule_kind": "baseline_mechanical",
+          "stub_note": "Always recorded beside sell learning cap; never elevated as hero",
+          "trail": [
+            {
+              "day": "2026-08-16",
+              "action": "keep_looking",
+              "cites": [
+                "exit_reason=identity_break_not_buy_tier"
+              ],
+              "note": "non_mechanical_exit",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": "2026-08-16",
+        "count": 2,
+        "lens_ids": [
+          "sell_target_reached",
+          "sell_thesis_break"
+        ],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M",
+      "sell_learning_cap": 4,
+      "baseline_beside_cap": "sell_mechanical_leave"
+    },
+    {
+      "candidate_id": "ptl_dbe5c2eb954a3b01",
+      "ticker": "BYIT.L",
+      "side": "sell",
+      "shared_from": "cue_consumer_mft",
+      "source_episode_id": "a7ccf8702b67a435cafd",
+      "spawned_at": "2026-10-25",
+      "favourite_lens_id": "sell_target_reached",
+      "favourite_entry_at": "2026-10-25",
+      "lenses": [
+        {
+          "lens_id": "sell_target_reached",
+          "name": "Target reached",
+          "side": "sell",
+          "role": "favourite",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: exit_reason / S-cell target cite",
+          "trail": [
+            {
+              "day": "2026-10-25",
+              "action": "enter",
+              "cites": [
+                "B6:trade_plan_summary=Trade plan: core 60% limit £386.64; tactical 40% limit £343.16; tactical stop £332.86, target £420.84."
+              ],
+              "note": "stub_target_cite",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-10-25",
+            "exit_at": "2026-10-25",
+            "fair_cost_episode_pct": 0.12474,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_target_reached: B1:models_passed=7.0; B1:weighted_model_score=0.5669181818181819; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=7.0",
+                "B1:weighted_model_score=0.5669181818181819",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.375"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-10-25",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_thesis_break",
+          "name": "Thesis break / identity",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "entered",
+          "rule_kind": "stub_exit_map",
+          "stub_note": "Stub: identity_break_* exit_reason map",
+          "trail": [
+            {
+              "day": "2026-10-25",
+              "action": "enter",
+              "cites": [
+                "exit_reason=identity_break_timing_wait"
+              ],
+              "note": "stub_thesis_break_map",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": "2026-10-25",
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": "PIT info available but not weighted by sell_thesis_break: B1:models_passed=7.0; B1:weighted_model_score=0.5669181818181819; B1:data_quality_score=1.0",
+              "cites": [
+                "B1:models_passed=7.0",
+                "B1:weighted_model_score=0.5669181818181819",
+                "B1:data_quality_score=1.0",
+                "B2:timing_signal=neutral",
+                "B2:timing_score=0.375"
+              ]
+            },
+            "missing_that_might_help": {
+              "text": "Missing info that might have helped: no usable PIT news polarity (L650)",
+              "cites": [
+                "entry_news_polarity=no_usable_news"
+              ]
+            },
+            "scored_at": "2026-10-25",
+            "influences_live": false,
+            "package_l": false,
+            "note": "Deterministic stub review — Package M alignment only; never auto-tunes knobs"
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_tech_break",
+          "name": "Technical break / support fail",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_tech_exit",
+          "stub_note": "Stub: adverse SMA / support-fail cite; distinct from failed_breakout",
+          "trail": [
+            {
+              "day": "2026-10-25",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_tech_break_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_failed_breakout",
+          "name": "Failed breakout / resistance reject",
+          "side": "sell",
+          "role": "peer",
+          "catalog_role": "learning",
+          "status": "looking",
+          "rule_kind": "stub_failed_breakout",
+          "stub_note": "Stub: resistance-reject cite; arms buy_watch observe cue only — never auto-fill",
+          "trail": [
+            {
+              "day": "2026-10-25",
+              "action": "keep_looking",
+              "cites": [],
+              "note": "stub_failed_breakout_wait",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        },
+        {
+          "lens_id": "sell_mechanical_leave",
+          "name": "Mechanical leave (baseline, not lens hero)",
+          "side": "sell",
+          "role": "baseline",
+          "catalog_role": "baseline",
+          "status": "looking",
+          "rule_kind": "baseline_mechanical",
+          "stub_note": "Always recorded beside sell learning cap; never elevated as hero",
+          "trail": [
+            {
+              "day": "2026-10-25",
+              "action": "keep_looking",
+              "cites": [
+                "exit_reason=identity_break_timing_wait"
+              ],
+              "note": "non_mechanical_exit",
+              "influences_live": false
+            }
+          ],
+          "episode": {
+            "fixed_stake_units": 100.0,
+            "sizing_mode": "fixed_stake",
+            "scoreboard_unit": "fair_cost_episode_pct",
+            "entry_at": null,
+            "exit_at": null,
+            "fair_cost_episode_pct": null,
+            "drawdown_depth": null,
+            "drawdown_duration_days": null,
+            "independent_of_favourite_nav": true,
+            "influences_live": false
+          },
+          "outcome_review": {
+            "had_but_ignored": {
+              "text": null,
+              "cites": []
+            },
+            "missing_that_might_help": {
+              "text": null,
+              "cites": []
+            },
+            "scored_at": null,
+            "influences_live": false
+          },
+          "buy_watch": null,
+          "influences_live": false
+        }
+      ],
+      "concurrence": {
+        "window_days": 1,
+        "favourite_entry_at": "2026-10-25",
+        "count": 2,
+        "lens_ids": [
+          "sell_target_reached",
+          "sell_thesis_break"
+        ],
+        "influences_live": false,
+        "risk_sizing": false,
+        "n241": "not_now",
+        "note": "Observe companion only — count + which lenses within window of favourite entry; late hits outside window do not inflate concurrence; never sizes risk (N241)"
+      },
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M",
+      "sell_learning_cap": 4,
+      "baseline_beside_cap": "sell_mechanical_leave"
+    }
+  ],
+  "product_claim": "Parallel timing/policy lenses on shared MFT/entry_blind candidates — favourite may enter while peers keep looking daily; fixed-stake v0; concurrence observe companion; influences_live=false; no Package L / no sealed zoo",
+  "learning_question": "Do competing buy/sell timing lenses on a shared candidate improve MoM lever learning (stock choice vs buy/sell timing vs strategy) versus a single-thesis path — without live influence?"
+}

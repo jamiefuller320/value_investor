@@ -10,6 +10,7 @@ from value_investor.observe_utilization import (
     CUE_CONSUMER_MFT_FINDING_TITLE,
     DECISION_INPUT_FINDING_TITLE,
     FLIP_LAG_FINDING_TITLE,
+    PARALLEL_TIMING_LENSES_FINDING_TITLE,
     SHARD_NAV_FX_FINDING_TITLE,
     build_observe_utilization_snapshot,
     refresh_observe_utilization,
@@ -38,6 +39,27 @@ def _quiet_mft(now: datetime) -> dict:
             {"id": "buy_timing", "mom_score": None, "status": "diagnostic_partial"},
         ],
         "judgment_in_the_round": {"fill_status": "filled"},
+    }
+
+
+def _quiet_parallel_timing_lenses(now: datetime) -> dict:
+    return {
+        "generated_at": (now - timedelta(hours=1)).isoformat(),
+        "asof": (now - timedelta(hours=1)).date().isoformat(),
+        "influences_live": False,
+        "observe_only": True,
+        "package": "M",
+        "summary": {
+            "candidate_count": 2,
+            "buy_candidates": 1,
+            "sell_candidates": 1,
+            "lenses_looking": 3,
+            "lenses_entered": 2,
+            "lenses_abandoned": 1,
+            "buy_watch_armed": 0,
+            "concurrence_mean": 1.0,
+            "concurrence_samples": 1,
+        },
     }
 
 
@@ -161,6 +183,8 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
     _write(combined_path, _quiet_combined(now))
     mft_path = tmp_path / "cue_consumer_mft_observe.json"
     _write(mft_path, _quiet_mft(now))
+    lenses_path = tmp_path / "parallel_timing_lenses.json"
+    _write(lenses_path, _quiet_parallel_timing_lenses(now))
     _write(
         ops_path,
         {
@@ -181,6 +205,11 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
                     "title": CUE_CONSUMER_MFT_FINDING_TITLE,
                     "severity": "info",
                     "summary": "Walker active; open=30 closed=87.",
+                },
+                {
+                    "title": PARALLEL_TIMING_LENSES_FINDING_TITLE,
+                    "severity": "info",
+                    "summary": "L652 looking=3 entered=2.",
                 },
             ],
         },
@@ -232,6 +261,7 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
         archive_miss_path=archive_miss_path,
         combined_tagged_path=combined_path,
         cue_consumer_mft_path=mft_path,
+        parallel_timing_lenses_path=lenses_path,
         ops_status_path=ops_path,
         now=now,
     )
@@ -244,12 +274,18 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
     assert "universe_filing_archive_miss_rate" in by_id
     assert "combined_tagged_learning" in by_id
     assert "cue_consumer_mft" in by_id
+    assert "parallel_timing_lenses" in by_id
     mft = by_id["cue_consumer_mft"]
     assert mft["warn_active"] is False
     assert mft["primary_value"] == 30
     assert mft["metrics"]["closed_lab_episodes"] == 87
     assert mft["metrics"]["mom_levers"][0]["id"] == "stock_choice"
     assert mft["influences_live"] is False
+    lenses = by_id["parallel_timing_lenses"]
+    assert lenses["warn_active"] is False
+    assert lenses["primary_value"] == 3
+    assert lenses["metrics"]["lenses_entered"] == 2
+    assert lenses["influences_live"] is False
     assert by_id["combined_tagged_learning"]["warn_active"] is False
     assert by_id["universe_filing_archive_miss_rate"]["warn_active"] is False
     assert flip["warn_active"] is True
@@ -290,6 +326,7 @@ def test_observe_utilization_stale_and_missing(tmp_path: Path):
         archive_miss_path=tmp_path / "missing_archive_miss.json",
         combined_tagged_path=tmp_path / "missing_combined.json",
         cue_consumer_mft_path=tmp_path / "missing_mft.json",
+        parallel_timing_lenses_path=tmp_path / "missing_lenses.json",
         ops_status_path=ops_path,
         prior_path=tmp_path / "missing.json",
         now=now,
@@ -301,6 +338,7 @@ def test_observe_utilization_stale_and_missing(tmp_path: Path):
     assert by_id["universe_filing_archive_miss_rate"]["freshness"]["state"] == "missing"
     assert by_id["combined_tagged_learning"]["freshness"]["state"] == "missing"
     assert by_id["cue_consumer_mft"]["freshness"]["state"] == "missing"
+    assert by_id["parallel_timing_lenses"]["freshness"]["state"] == "missing"
     assert snap["surface_freshness"] == "degraded"
     assert snap["warn_instrument_count"] >= 1
 
@@ -367,6 +405,10 @@ def test_observe_utilization_store_lag_vs_ops(tmp_path: Path):
     quiet = _quiet_mft(now - timedelta(hours=19))
     quiet["generated_at"] = (now - timedelta(hours=20)).isoformat()
     _write(mft_path, quiet)
+    lenses_path = tmp_path / "lenses.json"
+    lenses = _quiet_parallel_timing_lenses(now - timedelta(hours=19))
+    lenses["generated_at"] = (now - timedelta(hours=20)).isoformat()
+    _write(lenses_path, lenses)
     _write(ops_path, {"run_at": (now - timedelta(hours=1)).isoformat(), "findings": []})
 
     snap = build_observe_utilization_snapshot(
@@ -376,6 +418,7 @@ def test_observe_utilization_store_lag_vs_ops(tmp_path: Path):
         archive_miss_path=archive_miss_path,
         combined_tagged_path=combined_path,
         cue_consumer_mft_path=mft_path,
+        parallel_timing_lenses_path=lenses_path,
         ops_status_path=ops_path,
         prior_path=tmp_path / "prior.json",
         now=now,
@@ -455,6 +498,10 @@ def test_observe_utilization_co_committed_stores_are_fresh(tmp_path: Path):
     quiet = _quiet_mft(as_of)
     quiet["generated_at"] = as_of.isoformat()
     _write(mft_path, quiet)
+    lenses_path = tmp_path / "lenses.json"
+    lenses = _quiet_parallel_timing_lenses(as_of)
+    lenses["generated_at"] = as_of.isoformat()
+    _write(lenses_path, lenses)
     # ops_status run_at a few minutes after store refresh (same job) — not lagging.
     _write(ops_path, {"run_at": (now - timedelta(minutes=2)).isoformat(), "findings": []})
 
@@ -465,6 +512,7 @@ def test_observe_utilization_co_committed_stores_are_fresh(tmp_path: Path):
         archive_miss_path=archive_miss_path,
         combined_tagged_path=combined_path,
         cue_consumer_mft_path=mft_path,
+        parallel_timing_lenses_path=lenses_path,
         ops_status_path=ops_path,
         prior_path=tmp_path / "prior.json",
         now=now,
@@ -476,3 +524,4 @@ def test_observe_utilization_co_committed_stores_are_fresh(tmp_path: Path):
     assert "lag" not in snap["headline"].lower()
     assert SHARD_NAV_FX_FINDING_TITLE
     assert any(row["id"] == "cue_consumer_mft" for row in snap["instruments"])
+    assert any(row["id"] == "parallel_timing_lenses" for row in snap["instruments"])

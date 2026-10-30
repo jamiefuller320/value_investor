@@ -31,6 +31,12 @@ from value_investor.entry_news_polarity import (
     persist_entry_news_polarity_panel,
 )
 from value_investor.lifecycle_board import JUST_BOUGHT_DAYS
+from value_investor.parallel_timing_lenses import (
+    STORE_FILENAME as PARALLEL_TIMING_LENSES_STORE,
+)
+from value_investor.parallel_timing_lenses import (
+    bind_parallel_timing_lenses_summary,
+)
 from value_investor.post_sale_decision_reasons import (
     UNKNOWN_LABEL,
     bind_decision_reasons,
@@ -585,6 +591,8 @@ def build_entry_blind_review_queue(
         _lab_buy_items(lab_payload, sealed_indexes=sealed_indexes)
         + _sealed_just_bought_items(sealed_payload, sealed_indexes=sealed_indexes)
     )
+    # L652 compact summary (favourite / statuses / concurrence) — observe only.
+    lenses_store = _safe_read(root / PARALLEL_TIMING_LENSES_STORE)
     for row in candidates:
         bind_entry_news_polarity(
             row,
@@ -592,6 +600,7 @@ def build_entry_blind_review_queue(
             lexicon=lexicon,
             journal_by_ticker=journal_by_ticker,
         )
+        bind_parallel_timing_lenses_summary(row, store=lenses_store)
     # Re-strip after any bind side effects; fail-closed leakage guard.
     candidates = [strip_outcome_fields(row) for row in candidates]
     candidates_by_id = {
@@ -644,6 +653,9 @@ def build_entry_blind_review_queue(
                 journal_by_ticker=journal_by_ticker,
             )
             card = strip_outcome_fields(card)
+        if not card.get("parallel_timing_lenses"):
+            bind_parallel_timing_lenses_summary(card, store=lenses_store)
+            card = strip_outcome_fields(card)
         if not card.get("framing"):
             card["framing"] = _framing_line(card)
         if not card.get("llm_opinion"):
@@ -685,8 +697,9 @@ def build_entry_blind_review_queue(
         "ops_doc": OPS_DOC,
         "product_claim": (
             "Blind entry critique for lab / interesting buys — PIT chart through "
-            "buy day + buy decision reasons + L650 entry news polarity cites; "
-            "Accept/Comment; no post-fill path / no realized %; never fills or knobs"
+            "buy day + buy decision reasons + L650 entry news polarity cites + "
+            "L652 parallel timing lens summary; Accept/Comment; no post-fill path / "
+            "no realized %; never fills or knobs"
         ),
         "learning_question": (
             "Given only information available at / just after the buy, was this a "

@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-30T12:10:13+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-30T13:13:08+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -553,7 +553,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L636 | **Post-sale autopsy chart volume pane** | Add Yahoo volume (bars or volume_ratio_20 spike markers) under dual-horizon post-sale charts as a human support/sentiment read. Data already fetched as OHLCV but chart JSON persists Close only. Observe-only — never a live fill/knob input. | After CHART_LOOKBACK 1y→2y ships and owner Comments cite volume/support/sentiment at least twice on Package M cards |
 | L645 | **Post-sale further Comment rounds on factory reply cards** | Active queue is uncommented exits only (VI-55). Optional later: a separate history/thread UI to Accept or continue dialogue on factory replies without re-queuing them into the attention list. | Owner asks to resume multi-turn autopsy dialogue after uncommented-only queue has been stable in daily use |
 | L651 | **Entry news polarity parametric / exponential influence-fade** | L650 v0 uses a hard 90-calendar-day PIT lookback ending buy-day plus cite freshness bands (recent≤14d / medium≤45d / stale) as display metadata only. Do not add continuous fade scores into the polarity enum, fill weights, or live/lab sizing until entry_blind polarity disagreement marks are thick enough to A/B hard-window vs parametric fade. | entry_blind polarity cohort has thick sealed disagreement marks (human/LLM disagree on structural_negative vs improvement_path) sufficient to test fade vs hard 90d window |
-| L652 | **Observe decision hypothesis slate (buy/sell)** | Parallel timing/policy lenses on shared candidates (owner refine 2026-10-30): after stock choice, favourite may enter while other cited buy/sell lenses keep looking daily until own entry or durable abandon; each learns on own fixed-stake episode marks (fair-cost % + drawdown depth/duration + repeatability) — not one shared NAV. Autopsy companion: PIT freeze + most-correct at buy+28d/exit+28d. Concurrence companion (§10): observe-only count (+ which lenses) in a fixed window of favourite entry / entry day — not a live risk knob (N241). Starter lens catalog still draft for owner lock (§9; ≤4 buy + ≤4 sell). Package M; compose N228; honor N238/N239/N241 / anti-noise ≤3. Design lock: Project store docs/decision-hypothesis-slate-2026-10-30.md §8–§10. | Owner locks §9 starter lens names/rules AND authorizes eng for parallel timing-lens observe loop (daily look/enter/abandon + per-lens scoreboards + concurrence companion) after entry_revisit cohort begins OR thick marks exist; still Package M / influences_live=false. |
 
 ### Ops / reliability
 
