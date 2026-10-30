@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-29T07:36:35.516836+00:00
+Track: `buy_tier_level` · updated 2026-10-30T00:46:52.066657+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **11** / 28 (39% count, 39% NAV)
+- Losers: **11** / 29 (38% count, 39% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -114,6 +114,20 @@ Track: `buy_tier_level` · updated 2026-10-29T07:36:35.516836+00:00
 - still buy
 - cheapness family still passes
 
+### ANN.AX — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 67%
+
+### PMV.AX — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 60%
+
 ### WDS.AX — weakening / watch_review (+1.3%)
 - research verdict caution
 - still buy
@@ -162,13 +176,6 @@ Track: `buy_tier_level` · updated 2026-10-29T07:36:35.516836+00:00
 - conviction 18% below intact floor
 - still buy
 - cheapness family still passes
-
-### IMD.AX — weakening / watch_review (+5.4%)
-- left buy tier (hold)
-- research verdict neutral
-- conviction 24% below intact floor
-- cheapness family still passes
-- data_quality 0.95
 
 ### BPT.AX — weakening / watch_review (+6.9%)
 - research verdict caution
