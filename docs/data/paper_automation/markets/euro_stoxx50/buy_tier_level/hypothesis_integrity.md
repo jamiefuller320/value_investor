@@ -1,19 +1,16 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-29T07:37:32.010182+00:00
+Track: `buy_tier_level` · updated 2026-10-30T08:47:05.742451+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **1** / 13 (8% count, 8% NAV)
+- Losers: **1** / 12 (8% count, 8% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 - Selection feedback:
-  - garp fails more often among losers (100% vs 50%)
+  - garp fails more often among losers (100% vs 45%)
 
 ## Holding reviews
-
-### NOKIA.HE — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
 
 ### DTE.DE — intact / hold_tolerate (-6.2%)
 - price drawdown alone does not invalidate value thesis
@@ -21,7 +18,7 @@ Track: `buy_tier_level` · updated 2026-10-29T07:37:32.010182+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 40%
+- conviction 47%
 
 ### ENI.MI — intact / hold_tolerate (-2.8%)
 - still buy
@@ -69,7 +66,7 @@ Track: `buy_tier_level` · updated 2026-10-29T07:37:32.010182+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 47%
+- conviction 55%
 
 ### DHL.DE — intact / hold_tolerate (+3.2%)
 - still buy
