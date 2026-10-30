@@ -163,7 +163,7 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "staggerLabelYs" in charts_js
     assert "nudgeLevelLabelYs(entries, minGap = 28)" in charts_js or "minGap = 28" in charts_js
     assert "mountDualHorizonCharts" in app
-    assert "entry-blind-comment-chips-20261029" in html
+    assert "l652-timing-lenses-20261030" in html
     assert "Durable history" in app
     assert "one card per sealed book" in app
     assert "data-psr-duplicate=" in app
@@ -178,7 +178,7 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "psr-comment-preview" in app
     assert "postSaleActionedEpisodeKeys" in app
     assert "psr-comment-preview" in css
-    assert "entry-blind-comment-chips-20261029" in html
+    assert "l652-timing-lenses-20261030" in html
     # Entry-blind Comment must use DashboardBridge (not dead ftseDashboardBridge.enqueue).
     assert "pendingEntryBlindActions" in app
     assert "syncEntryBlindQueueOverlay" in app

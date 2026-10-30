@@ -2,9 +2,11 @@
 
 Thin observe-only instrument: **blind entry critique** for lab / interesting
 buys. PIT chart clipped at buy day + buy decision reasons + **L650 entry news
-polarity cites** (hard 90d PIT lookback; fail-closed `no_usable_news`). Accept /
-Comment / Duplicate — same labels pattern as post-sale reviews, **separate**
-stores so outcome fields cannot leak onto the card.
+polarity cites** (hard 90d PIT lookback; fail-closed `no_usable_news`) +
+**L652 parallel timing lens** compact summary (favourite / looking-entered-
+abandoned / concurrence). Accept / Comment / Duplicate — same labels pattern as
+post-sale reviews, **separate** stores so outcome fields cannot leak onto the
+card.
 
 `influences_live=false`. Not Package **L**. Alignment-only.
 
@@ -18,8 +20,9 @@ stores so outcome fields cannot leak onto the card.
 
 1. Open Lifecycle → **Entry blind**.
 2. Review PIT chart (through buy day only) + **bought because** reasons +
-   **news polarity** line (agree/disagree on structural vs improvement cites) —
-   factory **pattern marks** (entry quality / range location / MA context) sit
+   **news polarity** line (agree/disagree on structural vs improvement cites) +
+   **timing lenses** line (L652 favourite vs peers / concurrence — observe only)
+   — factory **pattern marks** (entry quality / range location / MA context) sit
    on the chart so critique is pictorial, not prose-only. Entry-lens chips are
    normally **blue (`info`)** context marks — see tone table in
    [post-sale-review-queue.md](post-sale-review-queue.md#pattern-marks-chart-annotations).
@@ -31,11 +34,13 @@ stores so outcome fields cannot leak onto the card.
 
 | File | Role |
 |---|---|
-| `docs/data/entry_blind_review_queue.json` | Active queue (ops-monitor refresh); cards carry `entry_news_polarity` |
+| `docs/data/entry_blind_review_queue.json` | Active queue (ops-monitor refresh); cards carry `entry_news_polarity` + `parallel_timing_lenses` |
 | `docs/data/entry_blind_review_labels.json` | Durable Accept / Comment / reply history |
 | `docs/data/entry_news_polarity.json` | L650 cohort rollup (usable / label counts) |
+| `docs/data/parallel_timing_lenses.json` | L652 lens episodes / concurrence (bound onto cards) |
 
-News polarity detail: [entry-news-polarity.md](entry-news-polarity.md).
+News polarity detail: [entry-news-polarity.md](entry-news-polarity.md).  
+Timing lenses detail: [parallel-timing-lenses.md](parallel-timing-lenses.md).
 
 ## Coverage (v0)
 

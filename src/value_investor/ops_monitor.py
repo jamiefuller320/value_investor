@@ -2625,6 +2625,55 @@ def check_entry_news_polarity(
     ]
 
 
+def check_parallel_timing_lenses(
+    *,
+    data_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """L652 observe-only: parallel timing lenses on shared MFT/entry_blind candidates.
+
+    Writes ``docs/data/parallel_timing_lenses.json``. Fixed-stake v0; concurrence
+    companion only (N241 not_now); never Package L / sealed zoo / live influence.
+    See docs/ops/parallel-timing-lenses.md.
+    """
+    from value_investor.parallel_timing_lenses import (
+        DEFAULT_DATA_DIR,
+        DEFAULT_STORE_PATH,
+        FINDING_TITLE,
+        ops_findings_from_parallel_timing_lenses,
+        refresh_parallel_timing_lenses,
+    )
+
+    root = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
+    try:
+        payload = refresh_parallel_timing_lenses(
+            data_dir=root,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=FINDING_TITLE,
+                summary=f"Parallel timing lenses refresh failed: {exc}",
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or FINDING_TITLE),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+        for finding in ops_findings_from_parallel_timing_lenses(payload)
+    ]
+
+
 def check_entry_revisit_review_queue(
     *,
     data_dir: Path | None = None,
@@ -4387,10 +4436,12 @@ def collect_ops_findings(
     findings.extend(check_hold_period_counterfactual())
     findings.extend(check_post_sell_cue_digest())
     findings.extend(check_post_sale_review_queue())
+    # MFT first → L652 lenses consume lab episodes → entry_blind binds lens summary.
+    findings.extend(check_cue_consumer_mft())
+    findings.extend(check_parallel_timing_lenses())
     findings.extend(check_entry_blind_review_queue())
     findings.extend(check_entry_news_polarity())
     findings.extend(check_entry_revisit_review_queue())
-    findings.extend(check_cue_consumer_mft())
     findings.extend(check_n200_tech_timing_observe())
     findings.extend(check_n201_value_mom_observe())
     findings.extend(check_n210_ai_judgment_observe())

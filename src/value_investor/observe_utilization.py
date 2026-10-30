@@ -28,6 +28,7 @@ DEFAULT_SHARD_NAV_FX_PATH = Path("docs/data/shard_nav_fx_warp.json")
 DEFAULT_ARCHIVE_MISS_PATH = Path("docs/data/universe_filing_archive_miss_rate.json")
 DEFAULT_COMBINED_TAGGED_PATH = Path("docs/data/combined_tagged_learning.json")
 DEFAULT_CUE_CONSUMER_MFT_PATH = Path("docs/data/cue_consumer_mft_observe.json")
+DEFAULT_PARALLEL_TIMING_LENSES_PATH = Path("docs/data/parallel_timing_lenses.json")
 
 SCHEMA_VERSION = 1
 # Ops-monitor runs ~2×/day; past this the surface is obviously stale.
@@ -45,6 +46,7 @@ ARCHIVE_MISS_FINDING_TITLE = "Universe archive body-miss rate elevated"
 COMBINED_TAGGED_FINDING_TITLE = "Combined tagged learning store stale"
 CUE_CONSUMER_MFT_FINDING_TITLE = "Cue-consumer MFT episode walker (lab paper fills)"
 CUE_CONSUMER_MFT_ARMED_TITLE = "Cue-consumer MFT lab armed (observe)"
+PARALLEL_TIMING_LENSES_FINDING_TITLE = "Parallel timing lenses (observe)"
 
 _WARN_COUNT_RE = re.compile(r"^(\d+)\s+recent buy-tier flip", re.I)
 _GAP_COUNT_RE = re.compile(r"(\d+)\s+of\s+\d+\s+names", re.I)
@@ -578,6 +580,83 @@ def _cue_consumer_mft_instrument(
     }
 
 
+def _parallel_timing_lenses_instrument(
+    *,
+    store: dict[str, Any] | None,
+    finding: dict[str, Any] | None,
+    now: datetime,
+    ops_run_at: datetime | None,
+    stale_after_hours: float,
+    store_lag_warn_hours: float,
+) -> dict[str, Any]:
+    """L652 — looking/entered/abandoned + concurrence (observe-only)."""
+    as_of = _parse_dt((store or {}).get("generated_at") or (store or {}).get("asof"))
+    freshness = _freshness_block(
+        as_of=as_of,
+        now=now,
+        ops_run_at=ops_run_at,
+        stale_after_hours=stale_after_hours,
+        store_lag_warn_hours=store_lag_warn_hours,
+        present=store is not None,
+    )
+    summary = (store or {}).get("summary") if isinstance((store or {}).get("summary"), dict) else {}
+    looking = summary.get("lenses_looking")
+    entered = summary.get("lenses_entered")
+    abandoned = summary.get("lenses_abandoned")
+    try:
+        looking_i = int(looking) if looking is not None else None
+    except (TypeError, ValueError):
+        looking_i = None
+    try:
+        entered_i = int(entered) if entered is not None else None
+    except (TypeError, ValueError):
+        entered_i = None
+    try:
+        abandoned_i = int(abandoned) if abandoned is not None else None
+    except (TypeError, ValueError):
+        abandoned_i = None
+
+    warn_active = finding is not None and str((finding or {}).get("severity") or "") in {
+        "warn",
+        "fail",
+        "error",
+    }
+    return {
+        "id": "parallel_timing_lenses",
+        "title": "Parallel timing lenses (L652)",
+        "finding_title": PARALLEL_TIMING_LENSES_FINDING_TITLE,
+        "observe_only": True,
+        "influences_live": False,
+        "warn_active": bool(warn_active),
+        "severity": (finding or {}).get("severity")
+        if finding
+        else ("ok" if store is not None else "warn"),
+        "finding_summary": (finding or {}).get("summary"),
+        "metrics": {
+            "candidate_count": summary.get("candidate_count"),
+            "buy_candidates": summary.get("buy_candidates"),
+            "sell_candidates": summary.get("sell_candidates"),
+            "lenses_looking": looking_i,
+            "lenses_entered": entered_i,
+            "lenses_abandoned": abandoned_i,
+            "concurrence_mean": summary.get("concurrence_mean"),
+            "buy_watch_armed": summary.get("buy_watch_armed"),
+            "package": (store or {}).get("package"),
+        },
+        "primary_metric": "lenses_looking",
+        "primary_value": looking_i,
+        "primary_label": (
+            f"Lenses looking (entered={entered_i if entered_i is not None else '—'}; "
+            f"abandoned={abandoned_i if abandoned_i is not None else '—'})"
+        ),
+        "freshness": freshness,
+        "trajectory_note": (
+            "Activity delta vs prior cycle — looking→entered/abandoned is expected; "
+            "not a P1 gap instrument."
+        ),
+    }
+
+
 def _history_point(instruments: list[dict[str, Any]], *, now: datetime) -> dict[str, Any]:
     point: dict[str, Any] = {"at": now.isoformat()}
     for inst in instruments:
@@ -635,6 +714,7 @@ def build_observe_utilization_snapshot(
     archive_miss_path: Path = DEFAULT_ARCHIVE_MISS_PATH,
     combined_tagged_path: Path = DEFAULT_COMBINED_TAGGED_PATH,
     cue_consumer_mft_path: Path = DEFAULT_CUE_CONSUMER_MFT_PATH,
+    parallel_timing_lenses_path: Path = DEFAULT_PARALLEL_TIMING_LENSES_PATH,
     ops_status_path: Path = DEFAULT_OPS_STATUS_PATH,
     prior_path: Path = DEFAULT_STORE_PATH,
     now: datetime | None = None,
@@ -652,6 +732,7 @@ def build_observe_utilization_snapshot(
     archive_miss_store = _safe_read(Path(archive_miss_path))
     combined_store = _safe_read(Path(combined_tagged_path))
     mft_store = _safe_read(Path(cue_consumer_mft_path))
+    lenses_store = _safe_read(Path(parallel_timing_lenses_path))
     prior = _safe_read(Path(prior_path))
 
     instruments = [
@@ -699,6 +780,14 @@ def build_observe_utilization_snapshot(
             store=mft_store,
             finding=findings.get(CUE_CONSUMER_MFT_FINDING_TITLE),
             armed_finding=findings.get(CUE_CONSUMER_MFT_ARMED_TITLE),
+            now=clock,
+            ops_run_at=ops_run_at,
+            stale_after_hours=stale_after_hours,
+            store_lag_warn_hours=store_lag_warn_hours,
+        ),
+        _parallel_timing_lenses_instrument(
+            store=lenses_store,
+            finding=findings.get(PARALLEL_TIMING_LENSES_FINDING_TITLE),
             now=clock,
             ops_run_at=ops_run_at,
             stale_after_hours=stale_after_hours,
@@ -788,6 +877,7 @@ def refresh_observe_utilization(
     archive_miss_path: Path = DEFAULT_ARCHIVE_MISS_PATH,
     combined_tagged_path: Path = DEFAULT_COMBINED_TAGGED_PATH,
     cue_consumer_mft_path: Path = DEFAULT_CUE_CONSUMER_MFT_PATH,
+    parallel_timing_lenses_path: Path = DEFAULT_PARALLEL_TIMING_LENSES_PATH,
     ops_status_path: Path = DEFAULT_OPS_STATUS_PATH,
     now: datetime | None = None,
 ) -> dict[str, Any]:
@@ -800,6 +890,7 @@ def refresh_observe_utilization(
         archive_miss_path=archive_miss_path,
         combined_tagged_path=combined_tagged_path,
         cue_consumer_mft_path=cue_consumer_mft_path,
+        parallel_timing_lenses_path=parallel_timing_lenses_path,
         ops_status_path=ops_status_path,
         prior_path=store_path,
         now=now,
@@ -821,11 +912,13 @@ __all__ = [
     "DEFAULT_DECISION_INPUT_PATH",
     "DEFAULT_FLIP_LAG_PATH",
     "DEFAULT_OPS_STATUS_PATH",
+    "DEFAULT_PARALLEL_TIMING_LENSES_PATH",
     "DEFAULT_SHARD_NAV_FX_PATH",
     "DEFAULT_STALE_AFTER_HOURS",
     "DEFAULT_STORE_LAG_WARN_HOURS",
     "DEFAULT_STORE_PATH",
     "FLIP_LAG_FINDING_TITLE",
+    "PARALLEL_TIMING_LENSES_FINDING_TITLE",
     "SCHEMA_VERSION",
     "SHARD_NAV_FX_FINDING_TITLE",
     "build_observe_utilization_snapshot",
