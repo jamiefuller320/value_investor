@@ -26,9 +26,13 @@ card.
    on the chart so critique is pictorial, not prose-only. Entry-lens chips are
    normally **blue (`info`)** context marks — see tone table in
    [post-sale-review-queue.md](post-sale-review-queue.md#pattern-marks-chart-annotations).
-3. **Accept** if the blind framing matches; **Comment** on missed entry-lens
+3. Optional **owner draw** on the PIT pane (N229: highlight / H-line / trend /
+   parallel) — Attach drawings with Comment so the factory reply can read
+   schema-valid `post_hoc_human_geometry` (fail-closed if unread). Entry-revisit
+   has no marks/draw pane yet.
+4. **Accept** if the blind framing matches; **Comment** on missed entry-lens
    patterns; **Duplicate** for same-pattern cross-book noise.
-4. Never force knobs / fills from this queue.
+5. Never force knobs / fills from this queue.
 
 ## Stores
 

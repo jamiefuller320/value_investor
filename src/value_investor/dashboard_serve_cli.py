@@ -292,6 +292,7 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
                         source="dashboard_local",
                         acted_by="dashboard",
                         snapshot=snap if isinstance(snap, dict) else body,
+                        post_hoc_human_geometry=body.get("post_hoc_human_geometry"),
                     )
                 except Exception as exc:  # noqa: BLE001 — surface to UI
                     status, out, ctype = _json_bytes(
@@ -328,6 +329,7 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
                         source="dashboard_local",
                         acted_by="dashboard",
                         snapshot=snap if isinstance(snap, dict) else body,
+                        post_hoc_human_geometry=body.get("post_hoc_human_geometry"),
                     )
                 except Exception as exc:  # noqa: BLE001 — surface to UI
                     status, out, ctype = _json_bytes(

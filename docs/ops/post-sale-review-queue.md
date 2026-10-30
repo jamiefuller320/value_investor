@@ -149,6 +149,22 @@ Package L episode-debrief auto-tune. `learning_point_forward` may feed the
 cue-consumer MFT lab intake when that sleeve is running — see
 [cue-consumer-mft.md](cue-consumer-mft.md).
 
+### Human chart draw (N229)
+
+iPad-first tools on each dual-horizon pane (and entry_blind PIT): **Highlight**
+(time band), **H-line**, **Trend** (two taps), **Parallel** (two taps + offset).
+Drawings are **per chart view** (`episode` / `wider_tf` / `pit`) — not blindly
+shared across panes. Explicit **Attach drawings** on Comment (default on when
+drafts exist); geometry travels as `post_hoc_human_geometry` on the Comment
+event + owner dialogue turn (committed labels JSON — no Supabase).
+
+Factory / LLM reply receives geometry **only when** schema-valid and
+`readable=true` (`src/value_investor/post_hoc_human_geometry.py`). Unread /
+invalid → omit + banner; **never invent levels**. Always `post_hoc=true`,
+`influences_live=false`, `source=owner` — critique-only; not sealed fill features
+or live knobs. Client paints owner marks beside factory `chart_annotations.marks[]`
+with a distinct owner tone. Entry-revisit has no marks pane yet (draw there later).
+
 ## Dashboard bridge
 
 | Action | Decision |

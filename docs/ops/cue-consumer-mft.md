@@ -139,7 +139,7 @@ as of 2026-10-28; keep as reference if a future cohort is proposed).
 | Cull / archive | declared criteria stub; cull≠live promote | **N227** / **L631** |
 | Spawn sealed child | scaffold proposal only | **N223** / **L630** |
 | Rule-aware decide + misfit trail | **shipped** deterministic N228 fill on trail | optional remote LLM voice later (still observe-only) |
-| Chart draw tools | not shipped | **N229** |
+| Chart draw tools | shipped (N229 v0) | post-sale dual-horizon + entry_blind PIT; attach with Comment; fail-closed if unread |
 | Episode walker / lab paper fills | **shipped** (`mft-episode-walker-v0`) when eligible | paper-auto track wiring later |
 | Dashboard strip | **shipped** (observe-utilization `cue_consumer_mft` card — open/closed + MoM) | — |
 | Parallel timing lenses (L652) | **shipped** thin observe on shared lab candidates | concurrence / outcome gaps; never Package L |

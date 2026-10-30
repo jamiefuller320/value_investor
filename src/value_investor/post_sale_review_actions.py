@@ -157,6 +157,7 @@ def run_post_sale_review_action(
     source: str = "dashboard_bridge",
     acted_by: str = "dashboard",
     snapshot: dict[str, Any] | None = None,
+    post_hoc_human_geometry: Any | None = None,
     refresh_queue: bool = True,
 ) -> dict[str, Any]:
     """Record Accept, Comment, or Duplicate. Comment spawns a reply when usable."""
@@ -203,6 +204,7 @@ def run_post_sale_review_action(
             source=source,
             acted_by=acted_by,
             snapshot=snap,
+            post_hoc_human_geometry=post_hoc_human_geometry,
         )
 
     queue_path = None
@@ -253,6 +255,7 @@ def run_post_sale_review_action_batch(
                 source=source,
                 acted_by=acted_by,
                 snapshot=_snapshot_from_payload(raw),
+                post_hoc_human_geometry=raw.get("post_hoc_human_geometry"),
                 refresh_queue=False,
             )
             results.append(
