@@ -40,6 +40,7 @@ _SNAPSHOT_KEYS = (
     "buy_decision",
     "buy_reason",
     "decision_reasons_join_ok",
+    "entry_news_polarity",
     "entry_reason",
     "entry_detail",
     "llm_opinion",

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-30T09:19:28+00:00",
+  "updated_at": "2026-10-30T10:14:08+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -15743,9 +15743,11 @@
         "N90",
         "N228"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-3548f6eb-e9f1-55f5-aad7-e6dd5fa14e70",
-      "added_at": "2026-10-30T09:19:28+00:00"
+      "added_at": "2026-10-30T09:19:28+00:00",
+      "updated_at": "2026-10-30T10:14:08+00:00",
+      "status_note": "Shipped v0 thin observe slice: entry_news_polarity on entry_blind (hard 90d PIT lookback; cite age_days/freshness metadata only; no fade into label/fills). influences_live=false. Parametric fade parked L651. N236/N237 still deferred."
     },
     {
       "id": "N236",
@@ -15783,6 +15785,25 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-3548f6eb-e9f1-55f5-aad7-e6dd5fa14e70",
       "added_at": "2026-10-30T09:19:28+00:00"
+    },
+    {
+      "id": "L651",
+      "category": "later",
+      "section": "research",
+      "title": "Entry news polarity parametric / exponential influence-fade",
+      "summary": "L650 v0 uses a hard 90-calendar-day PIT lookback ending buy-day plus cite freshness bands (recent\u226414d / medium\u226445d / stale) as display metadata only. Do not add continuous fade scores into the polarity enum, fill weights, or live/lab sizing until entry_blind polarity disagreement marks are thick enough to A/B hard-window vs parametric fade.",
+      "revisit_when": "entry_blind polarity cohort has thick sealed disagreement marks (human/LLM disagree on structural_negative vs improvement_path) sufficient to test fade vs hard 90d window",
+      "tags": [
+        "L650",
+        "entry_blind",
+        "news",
+        "polarity",
+        "observe-only",
+        "Package-M"
+      ],
+      "status": "open",
+      "source": "owner mid-build lock 2026-10-30 entry news recency",
+      "added_at": "2026-10-30T10:10:28+00:00"
     }
   ],
   "fragments": [

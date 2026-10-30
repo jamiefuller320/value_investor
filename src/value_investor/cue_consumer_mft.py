@@ -423,6 +423,8 @@ def judgment_in_the_round_stub() -> dict[str, Any]:
         "rules_role": "scaffold_propose",
         "buy": buy,
         "sell": sell,
+        # N236 MFT B-cell (catalyst/news polarity) deferred — polarity instrument is L650
+        # on entry_blind first; do not expand N228 rubric until that cohort is thick.
         "rule_candidates": [],
         "llm_stance": None,
         "misfit_evidence": None,
@@ -430,7 +432,8 @@ def judgment_in_the_round_stub() -> dict[str, Any]:
         "fill_source": None,
         "note": (
             "Schema stub — use fill_judgment_in_the_round for durable cites. "
-            "Missing cites fail-close influence (influences_live=false)."
+            "Missing cites fail-close influence (influences_live=false). "
+            "N236 catalyst/news B-cell parked until L650 entry_blind polarity is thick."
         ),
     }
 

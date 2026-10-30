@@ -12721,6 +12721,7 @@ const ENTRY_BLIND_BRIDGE_SNAPSHOT_KEYS = [
   "stage",
   "buy_decision",
   "buy_reason",
+  "entry_news_polarity",
   "framing",
   "population",
   "registration_id",
@@ -12911,6 +12912,46 @@ function renderEntryBlindBuyReason(item) {
   )} <span class="muted">[${esc(buy.code || "?")}${join}]</span></p>`;
 }
 
+function renderEntryBlindNewsPolarity(item, { expanded } = {}) {
+  const pol =
+    item && item.entry_news_polarity && typeof item.entry_news_polarity === "object"
+      ? item.entry_news_polarity
+      : null;
+  if (!pol) {
+    return `<p class="small muted">News polarity — no_usable_news (fail-closed)</p>`;
+  }
+  const label = String(pol.label || "no_usable_news");
+  const cites = Array.isArray(pol.cites) ? pol.cites : [];
+  const asof = pol.asof ? String(pol.asof).slice(0, 10) : "";
+  const muted = label === "no_usable_news" || !pol.join_ok;
+  const head = muted
+    ? `<p class="small muted"><strong>News polarity</strong> — ${esc(label)}${
+        asof ? ` · asof ${esc(asof)}` : ""
+      }</p>`
+    : `<p class="small"><strong>News polarity</strong> — ${esc(label)} <span class="muted">[${
+        cites.length
+      } cite${cites.length === 1 ? "" : "s"}${asof ? ` · asof ${esc(asof)}` : ""}]</span></p>`;
+  if (!expanded || !cites.length || label === "no_usable_news") {
+    return head;
+  }
+  const rows = cites
+    .slice(0, 5)
+    .map((c) => {
+      if (!c || typeof c !== "object") return "";
+      const title = String(c.title || "").trim() || "(untitled)";
+      const bits = [];
+      if (c.valence_hint) bits.push(String(c.valence_hint));
+      if (c.event_type) bits.push(String(c.event_type));
+      if (c.freshness) bits.push(String(c.freshness));
+      if (c.age_days != null && c.age_days !== "") bits.push(`${c.age_days}d`);
+      const meta = bits.length ? ` <span class="muted">(${esc(bits.join(" · "))})</span>` : "";
+      return `<li class="small">${esc(title)}${meta}</li>`;
+    })
+    .filter(Boolean)
+    .join("");
+  return `${head}<ul class="psr-news-cites small">${rows}</ul>`;
+}
+
 function renderEntryBlindReviewCard(item, expanded) {
   const tag = String(item.tag || "new");
   const tagCls = tag === "reply" ? "psr-tag-reply" : "psr-tag-new";
@@ -12927,12 +12968,17 @@ function renderEntryBlindReviewCard(item, expanded) {
     item.chart_annotations && item.chart_annotations.pit
       ? `<p class="small muted psr-chart-annotation">${esc(item.chart_annotations.pit)}</p>`
       : "";
-  const collapsed = !expanded ? renderEntryBlindBuyReason(item) : "";
+  const collapsed = !expanded
+    ? `${renderEntryBlindBuyReason(item)}${renderEntryBlindNewsPolarity(item, {
+        expanded: false,
+      })}`
+    : "";
   const detail = expanded
     ? `<div class="psr-card-detail">
         ${renderEntryBlindBuyReason(item)}
+        ${renderEntryBlindNewsPolarity(item, { expanded: true })}
         <pre class="psr-framing small">${framing}</pre>
-        <p class="small muted">Stage entry_blind — PIT through buy day only. Pattern marks: entry quality / range / MA. No post-fill path / no realized %. influences_live=false.</p>
+        <p class="small muted">Stage entry_blind — PIT through buy day only. Pattern marks: entry quality / range / MA. News polarity = L650 observe cites (90d hard window; no fade). No post-fill path / no realized %. influences_live=false.</p>
         <div class="psr-dual-charts">
           <div>
             <h4 class="small">PIT (to buy day)</h4>
