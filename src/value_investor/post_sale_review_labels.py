@@ -12,6 +12,10 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from value_investor.post_hoc_human_geometry import (
+    geometry_unread_banner,
+    normalize_post_hoc_human_geometry,
+)
 from value_investor.post_sale_review_opinion import (
     attach_opinion_fields,
     extend_dialogue_for_comment_reply,
@@ -372,12 +376,17 @@ def record_comment(
     reply_stub_text: str | None = None,
     allow_llm_reply: bool | None = None,
     llm_complete: Any | None = None,
+    post_hoc_human_geometry: Any | None = None,
     filename: str = LABELS_FILENAME,
 ) -> dict[str, Any]:
     """Comment (missed pattern). Clears active item and spawns a factory reply.
 
     Reply text prefers LLM when allowed; otherwise contextual deterministic
     (or an explicit ``reply_stub_text`` override for tests).
+
+    Optional ``post_hoc_human_geometry`` (N229) travels with the Comment.
+    Factory / LLM receive geometry only when schema-valid + ``readable``;
+    otherwise fail-closed omit (no invented levels). Always ``influences_live=false``.
     """
     review_id = str(review_id or "").strip()
     if not review_id:
@@ -394,6 +403,11 @@ def record_comment(
     if snap and not snap.get("llm_opinion"):
         attach_opinion_fields(snap)
 
+    geometries = normalize_post_hoc_human_geometry(
+        post_hoc_human_geometry,
+        review_id=review_id,
+    )
+
     if reply_stub_text is not None:
         reply_payload = {
             "text": str(reply_stub_text).strip() or REPLY_STUB_TEXT,
@@ -407,6 +421,7 @@ def record_comment(
             item=snap,
             llm_complete=llm_complete,
             allow_llm=allow_llm_reply,
+            post_hoc_human_geometry=geometries,
         )
 
     comment_at = _utcnow()
@@ -424,6 +439,8 @@ def record_comment(
         "reply_review_id": reply_id,
         "snapshot": snap,
     }
+    if geometries:
+        comment_event["post_hoc_human_geometry"] = geometries
     reply_at = _utcnow()
     reply_event_id = str(uuid.uuid4())
     reply_kind = str(reply_payload.get("reply_kind") or "deterministic_contextual")
@@ -446,6 +463,13 @@ def record_comment(
     }
     if reply_payload.get("llm_error"):
         reply_event["llm_error"] = reply_payload.get("llm_error")
+    if reply_payload.get("human_comment_consideration") is not None:
+        reply_event["human_comment_consideration"] = reply_payload.get(
+            "human_comment_consideration"
+        )
+    unread_banner = geometry_unread_banner(geometries)
+    if unread_banner:
+        reply_event["geometry_unread_banner"] = unread_banner
 
     dialogue = extend_dialogue_for_comment_reply(
         prior_dialogue=snap.get("dialogue") if isinstance(snap.get("dialogue"), list) else None,
@@ -455,6 +479,7 @@ def record_comment(
         reply_kind=reply_kind,
         commented_at=comment_at,
         replied_at=reply_at,
+        post_hoc_human_geometry=geometries or None,
     )
     reply_card = {
         "review_id": reply_id,
@@ -497,6 +522,10 @@ def record_comment(
         "observe_only": True,
         "created_at": reply_event["acted_at"],
     }
+    if geometries:
+        reply_card["post_hoc_human_geometry"] = geometries
+    if unread_banner:
+        reply_card["geometry_unread_banner"] = unread_banner
     events = list(store.get("events") or [])
     events.extend([comment_event, reply_event])
     store["events"] = events

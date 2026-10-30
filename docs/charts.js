@@ -270,6 +270,8 @@ const PATTERN_MARK_TONES = {
   weak: { fill: "rgba(179, 58, 58, 0.15)", stroke: "#b33a3a", text: "#9f1239" },
   info: { fill: "rgba(3, 105, 161, 0.12)", stroke: "#0369a1", text: "#0c4a6e" },
   good: { fill: "rgba(46, 156, 79, 0.13)", stroke: "#2e9c4f", text: "#166534" },
+  // Owner post-hoc geometry (N229) — distinct from factory tones.
+  owner: { fill: "rgba(124, 58, 237, 0.14)", stroke: "#6d28d9", text: "#5b21b6" },
 };
 
 function patternMarkTone(tone) {
@@ -429,9 +431,10 @@ function renderPatternMarksSvg(marks, dates, closes, xAt, yAt, pad, payload) {
       const x1 = xAt(startIdx);
       const x2 = xAt(endIdx);
       const w = Math.max(4, x2 - x1);
+      const ownerCls = String(mark.source || "") === "owner" ? " chart-human-mark" : "";
       parts.push(`<rect x="${x1}" y="${pad.top}" width="${w}" height="${pad.plotH}"
         fill="${tone.fill}" stroke="${tone.stroke}" stroke-width="1" stroke-dasharray="3 3"
-        stroke-opacity="0.55" class="chart-pattern-mark" data-pattern="${esc(
+        stroke-opacity="0.55" class="chart-pattern-mark${ownerCls}" data-pattern="${esc(
           String(mark.pattern || "")
         )}" />`);
       pendingLabels.push({
@@ -451,13 +454,41 @@ function renderPatternMarksSvg(marks, dates, closes, xAt, yAt, pad, payload) {
       if (price == null || Number.isNaN(price)) return;
       const y = yAt(price);
       const xRight = dates.length ? xAt(dates.length - 1) : pad.left;
+      const ownerCls = String(mark.source || "") === "owner" ? " chart-human-mark" : "";
       parts.push(`<line x1="${pad.left}" y1="${y}" x2="${xRight}" y2="${y}"
         stroke="${tone.stroke}" stroke-width="1.4" stroke-dasharray="4 3"
-        stroke-opacity="0.85" class="chart-pattern-mark" />`);
+        stroke-opacity="0.85" class="chart-pattern-mark${ownerCls}" />`);
       pendingLabels.push({
         kind: "hline",
         x: pad.left + 4,
         y: Math.max(labelMinY, y - 5),
+        maxX: plotRight - 4,
+        tone,
+        label,
+        shortLabel,
+      });
+      return;
+    }
+
+    if (type === "trend_line") {
+      const t0 = chartDay(mark.t0);
+      const t1 = chartDay(mark.t1);
+      const y0 = mark.y0 != null ? Number(mark.y0) : null;
+      const y1 = mark.y1 != null ? Number(mark.y1) : null;
+      if (!t0 || !t1 || y0 == null || Number.isNaN(y0) || y1 == null || Number.isNaN(y1)) {
+        return;
+      }
+      const i0 = dateIndexOnOrBefore(dates, t0);
+      const i1 = dateIndexOnOrBefore(dates, t1);
+      if (i0 < 0 || i1 < 0) return;
+      const ownerCls = String(mark.source || "") === "owner" ? " chart-human-mark" : "";
+      parts.push(`<line x1="${xAt(i0)}" y1="${yAt(y0)}" x2="${xAt(i1)}" y2="${yAt(y1)}"
+        stroke="${tone.stroke}" stroke-width="2" stroke-opacity="0.9"
+        class="chart-pattern-mark${ownerCls}" />`);
+      pendingLabels.push({
+        kind: "hline",
+        x: xAt(Math.min(i0, i1)) + 4,
+        y: Math.max(labelMinY, Math.min(yAt(y0), yAt(y1)) - 5),
         maxX: plotRight - 4,
         tone,
         label,
@@ -1017,10 +1048,18 @@ function renderChartBody(payload, report, source, overlays, rangeMode, showVolum
   const currency = payload.currency || "GBP";
   const volumeOn = Boolean(showVolume);
   const chartKey = chartKeyForRangeMode(range, overlays);
-  const patternMarks = filterPatternMarks(
+  const factoryMarks = filterPatternMarks(
     overlays && Array.isArray(overlays.pattern_marks) ? overlays.pattern_marks : [],
     chartKey
   );
+  const humanMarks = filterPatternMarks(
+    overlays && Array.isArray(overlays.human_pattern_marks)
+      ? overlays.human_pattern_marks
+      : [],
+    chartKey
+  );
+  // Compose factory + owner layers; owner marks keep source=owner / tone=owner.
+  const patternMarks = factoryMarks.concat(humanMarks);
   let levelsHint = "";
   if (asOfLabel) {
     const basisLine =
@@ -1059,8 +1098,11 @@ function renderChartBody(payload, report, source, overlays, rangeMode, showVolum
         : "Avoid names stay without an entry plan; other screen names get prospective levels on the next chart refresh."
     }</p>`;
   }
-  if (patternMarks.length) {
-    levelsHint += `<p class="small muted">Factory pattern marks (${patternMarks.length}) illustrate the autopsy opinion — Package M alignment only; not live knobs.</p>`;
+  if (factoryMarks.length || humanMarks.length) {
+    const bits = [];
+    if (factoryMarks.length) bits.push(`factory ${factoryMarks.length}`);
+    if (humanMarks.length) bits.push(`owner ${humanMarks.length}`);
+    levelsHint += `<p class="small muted">Pattern marks (${bits.join(" + ")}) — Package M alignment only; owner drawings are post-hoc critique, not live knobs.</p>`;
   }
   const hasInitial = Boolean(payload.initial_levels);
   const toggle = `
@@ -1154,6 +1196,10 @@ function paintPriceChart(body) {
     state.rangeMode,
     state.showVolume
   );
+  body._plotMetrics = computePriceChartPlotMetrics(state);
+  if (body._humanDraw && body._humanDraw.enabled) {
+    bindHumanChartDraw(body);
+  }
 }
 
 function bindPriceChartBody(body) {
@@ -1518,4 +1564,288 @@ function renderHeldVsMarketChart(payload) {
         ${last.date ? ` · ${esc(last.date)}` : ""}
       </p>
     </div>`;
+}
+
+/** N229 — human post-hoc geometry draw helpers (iPad-first). */
+
+function humanGeometryElementsToMarks(geometries, chartKey) {
+  if (!Array.isArray(geometries) || !geometries.length) return [];
+  const marks = [];
+  for (const geo of geometries) {
+    if (!geo || typeof geo !== "object" || geo.readable === false) continue;
+    const chart = String(geo.chart || chartKey || "");
+    if (chartKey && chart && chart !== chartKey && !(chartKey === "pit" && chart === "episode")) {
+      // Keep when no filter key, else match chart binding.
+      if (chartKey !== "full") continue;
+    }
+    const gid = String(geo.geometry_id || "draft");
+    (geo.elements || []).forEach((el, index) => {
+      if (!el || typeof el !== "object") return;
+      const etype = String(el.type || "");
+      const mid = `owner:${gid}:${index}`;
+      if (etype === "highlight") {
+        marks.push({
+          id: mid,
+          pattern: "owner_highlight",
+          type: "region",
+          charts: [chart || chartKey || "episode"],
+          label: "Owner highlight",
+          tone: "owner",
+          cite: "post_hoc_human_geometry",
+          t0: el.t0,
+          t1: el.t1,
+          source: "owner",
+          post_hoc: true,
+          influences_live: false,
+        });
+      } else if (etype === "line") {
+        marks.push({
+          id: mid,
+          pattern: "owner_line",
+          type: "trend_line",
+          charts: [chart || chartKey || "episode"],
+          label: "Owner line",
+          tone: "owner",
+          cite: "post_hoc_human_geometry",
+          t0: el.t0,
+          t1: el.t1,
+          y0: el.y0,
+          y1: el.y1,
+          source: "owner",
+          post_hoc: true,
+          influences_live: false,
+        });
+      } else if (etype === "parallel_pair") {
+        ["line_a", "line_b"].forEach((key, pi) => {
+          const line = el[key];
+          if (!line || typeof line !== "object") return;
+          marks.push({
+            id: `${mid}:${key}`,
+            pattern: "owner_parallel",
+            type: "trend_line",
+            charts: [chart || chartKey || "episode"],
+            label: pi === 0 ? "Owner parallel a" : "Owner parallel b",
+            tone: "owner",
+            cite: "post_hoc_human_geometry",
+            t0: line.t0,
+            t1: line.t1,
+            y0: line.y0,
+            y1: line.y1,
+            source: "owner",
+            post_hoc: true,
+            influences_live: false,
+          });
+        });
+      }
+    });
+  }
+  return marks;
+}
+
+function computePriceChartPlotMetrics(state) {
+  if (!state || !state.payload) return null;
+  const overlays = state.overlays || {};
+  const payload = state.payload;
+  const closeIn = overlays.close_in || null;
+  const widerTf = overlays.wider_tf || null;
+  const rangeMode = state.rangeMode || "full";
+  const range =
+    rangeMode === "close_in" && closeIn
+      ? "close_in"
+      : rangeMode === "wider_tf" && widerTf
+        ? "wider_tf"
+        : "full";
+  const warmupDays = Number(
+    payload.clip_warmup_calendar_days != null
+      ? payload.clip_warmup_calendar_days
+      : CLIP_WARMUP_CALENDAR_DAYS
+  );
+  const clipOpts =
+    range === "close_in" || range === "wider_tf"
+      ? { warmupCalendarDays: Number.isFinite(warmupDays) ? warmupDays : CLIP_WARMUP_CALENDAR_DAYS }
+      : undefined;
+  const view =
+    range === "close_in"
+      ? clipPriceSeries(payload, closeIn, clipOpts)
+      : range === "wider_tf"
+        ? clipPriceSeries(payload, widerTf, clipOpts)
+        : payload;
+  const dates = Array.isArray(view.dates) ? view.dates : [];
+  const closes = Array.isArray(view.closes) ? view.closes : [];
+  if (!dates.length || dates.length !== closes.length) return null;
+
+  const patternCount = (
+    (overlays.pattern_marks || []).length + (overlays.human_pattern_marks || []).length
+  );
+  const topPad = 28 + Math.min(36, patternCount * 6);
+  const showVolume = Boolean(state.showVolume);
+  const volPane = showVolume ? 72 : 0;
+  const rightPad = 168;
+  const width = 620 + rightPad;
+  const height = 380 + volPane + (topPad - 28);
+  const pad = { top: topPad, right: rightPad, bottom: 42 + volPane, left: 22 };
+  const plotW = width - pad.left - pad.right;
+  const plotH = height - pad.top - pad.bottom;
+  pad.plotH = plotH;
+  pad.plotW = plotW;
+  const minClose = Math.min(...closes.map(Number).filter((v) => !Number.isNaN(v)));
+  const maxClose = Math.max(...closes.map(Number).filter((v) => !Number.isNaN(v)));
+  if (!Number.isFinite(minClose) || !Number.isFinite(maxClose)) return null;
+  const minY = minClose * 0.98;
+  const maxY = maxClose * 1.02;
+  const spanY = maxY - minY || 1;
+  const xAt = (index) => pad.left + (index / Math.max(dates.length - 1, 1)) * plotW;
+  const yAt = (value) => pad.top + plotH - ((value - minY) / spanY) * plotH;
+  const chartKey = chartKeyForRangeMode(range, overlays);
+  return {
+    dates,
+    closes,
+    pad,
+    width,
+    height,
+    minY,
+    maxY,
+    spanY,
+    xAt,
+    yAt,
+    chartKey,
+    range,
+  };
+}
+
+function chartClientToData(body, clientX, clientY) {
+  const metrics = body && body._plotMetrics;
+  const svg = body && body.querySelector("svg.price-chart");
+  if (!metrics || !svg || !metrics.dates.length) return null;
+  const rect = svg.getBoundingClientRect();
+  if (!rect.width || !rect.height) return null;
+  const vbX = ((clientX - rect.left) / rect.width) * metrics.width;
+  const vbY = ((clientY - rect.top) / rect.height) * metrics.height;
+  const { pad, dates, minY, spanY, plotW, plotH } = {
+    pad: metrics.pad,
+    dates: metrics.dates,
+    minY: metrics.minY,
+    spanY: metrics.spanY,
+    plotW: metrics.pad.plotW,
+    plotH: metrics.pad.plotH,
+  };
+  if (vbX < pad.left || vbX > pad.left + plotW || vbY < pad.top || vbY > pad.top + plotH) {
+    return null;
+  }
+  const frac = (vbX - pad.left) / Math.max(plotW, 1);
+  const index = Math.max(
+    0,
+    Math.min(dates.length - 1, Math.round(frac * Math.max(dates.length - 1, 1)))
+  );
+  const price = minY + ((pad.top + plotH - vbY) / Math.max(plotH, 1)) * spanY;
+  return {
+    index,
+    t: chartDay(dates[index]),
+    y: Number(price.toFixed(4)),
+    vbX,
+    vbY,
+  };
+}
+
+function enableHumanChartDraw(body, options) {
+  if (!body) return;
+  const opts = options && typeof options === "object" ? options : {};
+  body._humanDraw = {
+    enabled: true,
+    chartKey: String(opts.chartKey || "episode"),
+    reviewId: String(opts.reviewId || ""),
+    tool: null,
+    pending: [],
+    onChange: typeof opts.onChange === "function" ? opts.onChange : null,
+    getElements: typeof opts.getElements === "function" ? opts.getElements : () => [],
+  };
+  if (body._chartState) paintPriceChart(body);
+}
+
+function setHumanChartDrawTool(body, tool) {
+  if (!body || !body._humanDraw) return;
+  body._humanDraw.tool = tool || null;
+  body._humanDraw.pending = [];
+  const status = body.parentElement && body.parentElement.querySelector("[data-human-draw-status]");
+  if (status) {
+    status.textContent = tool
+      ? `Draw: ${tool} — tap chart (iPad)`
+      : "Draw off";
+  }
+}
+
+function bindHumanChartDraw(body) {
+  const draw = body && body._humanDraw;
+  if (!draw || !draw.enabled) return;
+  const svg = body.querySelector("svg.price-chart");
+  if (!svg || svg.dataset.humanDrawBound === "1") return;
+  svg.dataset.humanDrawBound = "1";
+  svg.classList.add("chart-human-draw-enabled");
+  const onPointer = (event) => {
+    if (!draw.tool) return;
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    const point = chartClientToData(body, event.clientX, event.clientY);
+    if (!point || !point.t) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const tool = draw.tool;
+    draw.pending.push(point);
+    const finish = (element) => {
+      draw.pending = [];
+      if (draw.onChange) draw.onChange({ chartKey: draw.chartKey, element, reviewId: draw.reviewId });
+    };
+    if (tool === "highlight") {
+      if (draw.pending.length >= 2) {
+        const a = draw.pending[0];
+        const b = draw.pending[1];
+        let t0 = a.t;
+        let t1 = b.t;
+        if (t1 < t0) {
+          const tmp = t0;
+          t0 = t1;
+          t1 = tmp;
+        }
+        finish({ type: "highlight", t0, t1, y0: null, y1: null });
+      }
+      return;
+    }
+    if (tool === "hline") {
+      const p = draw.pending[0];
+      const dates = (body._plotMetrics && body._plotMetrics.dates) || [];
+      const t0 = chartDay(dates[0]) || p.t;
+      const t1 = chartDay(dates[dates.length - 1]) || p.t;
+      finish({ type: "line", t0, y0: p.y, t1, y1: p.y });
+      return;
+    }
+    if (tool === "line") {
+      if (draw.pending.length >= 2) {
+        const a = draw.pending[0];
+        const b = draw.pending[1];
+        finish({ type: "line", t0: a.t, y0: a.y, t1: b.t, y1: b.y });
+      }
+      return;
+    }
+    if (tool === "parallel") {
+      // Two taps = line_a; third tap = parallel offset through that price (same slope).
+      if (draw.pending.length === 2) {
+        const status =
+          body.parentElement && body.parentElement.querySelector("[data-human-draw-status]");
+        if (status) status.textContent = "Parallel: tap offset for second line";
+        return;
+      }
+      if (draw.pending.length >= 3) {
+        const a = draw.pending[0];
+        const b = draw.pending[1];
+        const c = draw.pending[2];
+        const dy = b.y - a.y;
+        const offset = c.y - a.y;
+        finish({
+          type: "parallel_pair",
+          line_a: { t0: a.t, y0: a.y, t1: b.t, y1: b.y },
+          line_b: { t0: a.t, y0: a.y + offset, t1: b.t, y1: a.y + offset + dy },
+        });
+      }
+    }
+  };
+  svg.addEventListener("pointerdown", onPointer, { passive: false });
 }

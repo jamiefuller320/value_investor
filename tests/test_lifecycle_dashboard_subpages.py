@@ -159,11 +159,15 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     charts_js = Path("docs/charts.js").read_text(encoding="utf-8")
     assert "renderPatternMarksSvg" in charts_js
     assert "filterPatternMarks" in charts_js
+    assert "enableHumanChartDraw" in charts_js
+    assert "human_pattern_marks" in charts_js or "humanGeometryElementsToMarks" in charts_js
+    assert "post_hoc_human_geometry" in app or "Attach drawings" in app
+    assert "collectHumanGeometryForComment" in app
     assert "truncateChartLabel" in charts_js
     assert "staggerLabelYs" in charts_js
     assert "nudgeLevelLabelYs(entries, minGap = 28)" in charts_js or "minGap = 28" in charts_js
     assert "mountDualHorizonCharts" in app
-    assert "l652-timing-lenses-20261030" in html
+    assert "n229-human-chart-draw-20261030" in html
     assert "Durable history" in app
     assert "one card per sealed book" in app
     assert "data-psr-duplicate=" in app
@@ -178,7 +182,7 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "psr-comment-preview" in app
     assert "postSaleActionedEpisodeKeys" in app
     assert "psr-comment-preview" in css
-    assert "l652-timing-lenses-20261030" in html
+    assert "n229-human-chart-draw-20261030" in html
     # Entry-blind Comment must use DashboardBridge (not dead ftseDashboardBridge.enqueue).
     assert "pendingEntryBlindActions" in app
     assert "syncEntryBlindQueueOverlay" in app

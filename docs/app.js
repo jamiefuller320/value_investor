@@ -12154,6 +12154,87 @@ function postSalePatternMarks(item) {
   return Array.isArray(annotations.marks) ? annotations.marks : [];
 }
 
+/** N229 — in-progress owner drawings keyed by reviewId → chartKey → elements. */
+const humanChartDrafts = Object.create(null);
+
+function humanDraftKey(reviewId) {
+  return String(reviewId || "").trim();
+}
+
+function getHumanChartDraft(reviewId, chartKey) {
+  const rid = humanDraftKey(reviewId);
+  if (!rid) return [];
+  const byChart = humanChartDrafts[rid];
+  if (!byChart || typeof byChart !== "object") return [];
+  const rows = byChart[String(chartKey || "")];
+  return Array.isArray(rows) ? rows.slice() : [];
+}
+
+function setHumanChartDraft(reviewId, chartKey, elements) {
+  const rid = humanDraftKey(reviewId);
+  if (!rid) return;
+  if (!humanChartDrafts[rid]) humanChartDrafts[rid] = Object.create(null);
+  humanChartDrafts[rid][String(chartKey || "")] = Array.isArray(elements)
+    ? elements.slice()
+    : [];
+}
+
+function clearHumanChartDrafts(reviewId) {
+  const rid = humanDraftKey(reviewId);
+  if (rid) delete humanChartDrafts[rid];
+}
+
+function collectHumanGeometryForComment(reviewId) {
+  const rid = humanDraftKey(reviewId);
+  const byChart = humanChartDrafts[rid];
+  if (!byChart) return [];
+  const out = [];
+  const drawnAt = new Date().toISOString();
+  for (const [chart, elements] of Object.entries(byChart)) {
+    if (!Array.isArray(elements) || !elements.length) continue;
+    out.push({
+      geometry_id:
+        typeof crypto !== "undefined" && crypto.randomUUID
+          ? crypto.randomUUID()
+          : `geo-${Date.now()}-${chart}`,
+      review_id: rid,
+      chart,
+      drawn_at: drawnAt,
+      post_hoc: true,
+      elements: elements.slice(),
+      readable: true,
+      influences_live: false,
+      source: "owner",
+    });
+  }
+  return out;
+}
+
+function humanDraftPatternMarks(reviewId) {
+  const geometries = collectHumanGeometryForComment(reviewId);
+  if (typeof humanGeometryElementsToMarks === "function") {
+    return humanGeometryElementsToMarks(geometries, null);
+  }
+  return [];
+}
+
+function renderHumanDrawToolbar(reviewId, chartKey) {
+  const rid = esc(String(reviewId || ""));
+  const ck = esc(String(chartKey || ""));
+  const n = getHumanChartDraft(reviewId, chartKey).length;
+  return `<div class="psr-human-draw" data-human-draw-toolbar="${rid}" data-human-draw-chart="${ck}">
+    <div class="psr-human-draw-tools" role="group" aria-label="Owner chart draw tools">
+      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="highlight" data-psr-draw-rid="${rid}" data-psr-draw-chart="${ck}" title="Tap start then end for a time band">Highlight</button>
+      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="hline" data-psr-draw-rid="${rid}" data-psr-draw-chart="${ck}" title="Tap once for a horizontal level">H-line</button>
+      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="line" data-psr-draw-rid="${rid}" data-psr-draw-chart="${ck}" title="Tap two points for a trend line">Trend</button>
+      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="parallel" data-psr-draw-rid="${rid}" data-psr-draw-chart="${ck}" title="Two taps for line, third for parallel offset">Parallel</button>
+      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="undo" data-psr-draw-rid="${rid}" data-psr-draw-chart="${ck}" title="Remove last drawing on this chart">Undo</button>
+      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="clear" data-psr-draw-rid="${rid}" data-psr-draw-chart="${ck}" title="Clear drawings on this chart">Clear</button>
+    </div>
+    <p class="small muted psr-human-draw-status" data-human-draw-status>Draw off · ${n} on this view · attaches with Comment</p>
+  </div>`;
+}
+
 const PATTERN_MARK_TONE_BLURB = {
   info: "Context — framing / location / MA, not a live signal.",
   warn: "Caution — same-day weakness or premature-sell band to weigh.",
@@ -12251,6 +12332,7 @@ function bindPatternMarkChipsOnce() {
 }
 
 function postSaleReviewOverlays(item) {
+  const rid = item && item.review_id;
   return {
     close_in: item.close_in || (item.charts && item.charts.episode) || null,
     wider_tf: item.wider_tf || (item.charts && item.charts.wider_tf) || null,
@@ -12259,6 +12341,7 @@ function postSaleReviewOverlays(item) {
     book_cost: item.avg_cost != null ? item.avg_cost : null,
     exit_price: item.exit_price != null ? item.exit_price : null,
     pattern_marks: postSalePatternMarks(item),
+    human_pattern_marks: humanDraftPatternMarks(rid),
     pattern_chart_key: "episode",
   };
 }
@@ -12564,12 +12647,13 @@ function renderPostSaleReviewCard(item, expanded) {
         ${renderPostSaleDecisionReasons(item)}
         <pre class="psr-framing small">${framing}</pre>
         ${renderPostSaleDialogue(item)}
-        <p class="small muted">Episode window + wider TF — owner verifies both (pattern marks map factory opinion onto the chart). Mini dialogue: opinion → Comment → reply. influences_live=false.</p>
+        <p class="small muted">Episode window + wider TF — owner verifies both (pattern marks map factory opinion onto the chart). Draw tools are per-view; Attach with Comment (N229). Mini dialogue: opinion → Comment → reply. influences_live=false.</p>
         <div class="psr-dual-charts">
           <div>
             <h4 class="small">Episode</h4>
             ${episodeNote}
             ${renderPatternMarkChips(patternMarks, "episode")}
+            ${renderHumanDrawToolbar(item.review_id, "episode")}
             <div class="psr-chart" data-psr-chart="episode" data-psr-id="${esc(
               item.review_id
             )}"></div>
@@ -12578,6 +12662,7 @@ function renderPostSaleReviewCard(item, expanded) {
             <h4 class="small">Wider TF</h4>
             ${widerNote}
             ${renderPatternMarkChips(patternMarks, "wider_tf")}
+            ${renderHumanDrawToolbar(item.review_id, "wider_tf")}
             <div class="psr-chart" data-psr-chart="wider" data-psr-id="${esc(
               item.review_id
             )}"></div>
@@ -12594,6 +12679,12 @@ function renderPostSaleReviewCard(item, expanded) {
             <input type="text" class="psr-comment-input" data-psr-comment-input="${esc(
               item.review_id
             )}" placeholder="Missed pattern…" />
+          </label>
+          <label class="small psr-attach-draw-label" title="Send drawings with this Comment for the factory reply">
+            <input type="checkbox" class="psr-attach-draw" data-psr-attach-draw="${esc(
+              item.review_id
+            )}" checked />
+            Attach drawings
           </label>
           <button type="button" class="btn" data-psr-comment="${esc(
             item.review_id
@@ -12768,6 +12859,102 @@ async function afterRenderPostSaleReviews(data) {
       postSaleReviewOverlays(item)
     );
   }
+  wireHumanChartDrawOnBody(episode, item.review_id, "episode");
+  wireHumanChartDrawOnBody(wider, item.review_id, "wider_tf");
+}
+
+function wireHumanChartDrawOnBody(body, reviewId, chartKey) {
+  if (!body || typeof enableHumanChartDraw !== "function") return;
+  enableHumanChartDraw(body, {
+    reviewId,
+    chartKey,
+    getElements: () => getHumanChartDraft(reviewId, chartKey),
+    onChange: ({ element }) => {
+      if (!element) return;
+      const cur = getHumanChartDraft(reviewId, chartKey);
+      cur.push(element);
+      setHumanChartDraft(reviewId, chartKey, cur);
+      // Refresh overlays so the new mark paints beside factory marks.
+      if (body._chartState) {
+        const overlays = body._chartState.overlays || {};
+        overlays.human_pattern_marks = humanDraftPatternMarks(reviewId);
+        body._chartState.overlays = overlays;
+        if (typeof paintPriceChart === "function") paintPriceChart(body);
+      }
+      const toolbar = body.parentElement && body.parentElement.querySelector(
+        `[data-human-draw-toolbar][data-human-draw-chart="${CSS.escape(chartKey)}"]`
+      );
+      const status = toolbar && toolbar.querySelector("[data-human-draw-status]");
+      if (status) {
+        status.textContent = `Draw off · ${cur.length} on this view · attaches with Comment`;
+      }
+      if (typeof setHumanChartDrawTool === "function") setHumanChartDrawTool(body, null);
+      toolbar &&
+        toolbar.querySelectorAll(".psr-draw-tool.is-active").forEach((btn) => {
+          btn.classList.remove("is-active");
+        });
+    },
+  });
+}
+
+function bindHumanDrawToolbarsOnce() {
+  if (window.__ftseHumanDrawToolsBound) return;
+  window.__ftseHumanDrawToolsBound = true;
+  document.addEventListener("click", (ev) => {
+    const btn = ev.target.closest("[data-human-draw-tool]");
+    if (!btn) return;
+    const tool = btn.getAttribute("data-human-draw-tool");
+    const rid = btn.getAttribute("data-psr-draw-rid") || btn.getAttribute("data-ebr-draw-rid");
+    const chartKey =
+      btn.getAttribute("data-psr-draw-chart") || btn.getAttribute("data-ebr-draw-chart");
+    if (!rid || !chartKey) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    const chartSel =
+      chartKey === "wider_tf"
+        ? `[data-psr-chart="wider"][data-psr-id="${CSS.escape(rid)}"]`
+        : chartKey === "pit"
+          ? `[data-ebr-chart="pit"][data-ebr-id="${CSS.escape(rid)}"]`
+          : `[data-psr-chart="episode"][data-psr-id="${CSS.escape(rid)}"], [data-ebr-chart="pit"][data-ebr-id="${CSS.escape(rid)}"]`;
+    const body = document.querySelector(chartSel);
+    const toolbar = btn.closest("[data-human-draw-toolbar]");
+    if (tool === "undo") {
+      const cur = getHumanChartDraft(rid, chartKey);
+      cur.pop();
+      setHumanChartDraft(rid, chartKey, cur);
+      if (body && body._chartState) {
+        body._chartState.overlays = body._chartState.overlays || {};
+        body._chartState.overlays.human_pattern_marks = humanDraftPatternMarks(rid);
+        if (typeof paintPriceChart === "function") paintPriceChart(body);
+      }
+      const status = toolbar && toolbar.querySelector("[data-human-draw-status]");
+      if (status) status.textContent = `Draw off · ${cur.length} on this view · attaches with Comment`;
+      return;
+    }
+    if (tool === "clear") {
+      setHumanChartDraft(rid, chartKey, []);
+      if (body && body._chartState) {
+        body._chartState.overlays = body._chartState.overlays || {};
+        body._chartState.overlays.human_pattern_marks = humanDraftPatternMarks(rid);
+        if (typeof paintPriceChart === "function") paintPriceChart(body);
+      }
+      const status = toolbar && toolbar.querySelector("[data-human-draw-status]");
+      if (status) status.textContent = "Draw off · 0 on this view · attaches with Comment";
+      return;
+    }
+    if (!body) return;
+    toolbar &&
+      toolbar.querySelectorAll(".psr-draw-tool.is-active").forEach((el) => {
+        el.classList.remove("is-active");
+      });
+    const active = body._humanDraw && body._humanDraw.tool === tool;
+    if (active) {
+      if (typeof setHumanChartDrawTool === "function") setHumanChartDrawTool(body, null);
+      return;
+    }
+    btn.classList.add("is-active");
+    if (typeof setHumanChartDrawTool === "function") setHumanChartDrawTool(body, tool);
+  });
 }
 
 async function submitPostSaleReviewAction({ reviewId, decision, text, tag, item }) {
@@ -12797,6 +12984,16 @@ async function submitPostSaleReviewAction({ reviewId, decision, text, tag, item 
     tag: tag || "new",
     snapshot: snap,
   };
+  if (decision === "comment") {
+    const attachEl = document.querySelector(
+      `[data-psr-attach-draw="${CSS.escape(reviewId)}"]`
+    );
+    const attach = !attachEl || attachEl.checked;
+    const geometries = attach ? collectHumanGeometryForComment(reviewId) : [];
+    if (geometries.length) {
+      payload.post_hoc_human_geometry = geometries;
+    }
+  }
   try {
     if (window.DashboardBridge && (await window.DashboardBridge.init())) {
       const action =
@@ -12819,6 +13016,7 @@ async function submitPostSaleReviewAction({ reviewId, decision, text, tag, item 
       }
       setStatus("Saved locally.");
     }
+    if (decision === "comment") clearHumanChartDrafts(reviewId);
     if (dashboardData) syncPostSaleQueueOverlay(dashboardData);
     if (postSaleReviewExpandedId === reviewId) postSaleReviewExpandedId = null;
     renderLifecycle(dashboardData);
@@ -13143,12 +13341,16 @@ function renderEntryBlindReviewCard(item, expanded) {
         ${renderEntryBlindNewsPolarity(item, { expanded: true })}
         ${renderEntryBlindTimingLenses(item, { expanded: true })}
         <pre class="psr-framing small">${framing}</pre>
-        <p class="small muted">Stage entry_blind — PIT through buy day only. Pattern marks: entry quality / range / MA. News polarity = L650 observe cites (90d hard window; no fade). Timing lenses = L652 parallel observe (favourite vs peers; concurrence companion). No post-fill path / no realized %. influences_live=false.</p>
+        <p class="small muted">Stage entry_blind — PIT through buy day only. Pattern marks: entry quality / range / MA. Owner draw tools (N229) bind to this PIT view. News polarity = L650 observe cites (90d hard window; no fade). Timing lenses = L652 parallel observe (favourite vs peers; concurrence companion). No post-fill path / no realized %. influences_live=false.</p>
         <div class="psr-dual-charts">
           <div>
             <h4 class="small">PIT (to buy day)</h4>
             ${pitNote}
             ${renderPatternMarkChips(pitMarks, "pit")}
+            ${renderHumanDrawToolbar(item.review_id, "pit").replace(
+              /data-psr-draw-/g,
+              "data-ebr-draw-"
+            )}
             <div class="psr-chart" data-ebr-chart="pit" data-ebr-id="${esc(
               item.review_id
             )}"></div>
@@ -13165,6 +13367,12 @@ function renderEntryBlindReviewCard(item, expanded) {
             <input type="text" class="psr-comment-input" data-ebr-comment-input="${esc(
               item.review_id
             )}" placeholder="Missed entry pattern…" />
+          </label>
+          <label class="small psr-attach-draw-label" title="Send drawings with this Comment">
+            <input type="checkbox" class="psr-attach-draw" data-ebr-attach-draw="${esc(
+              item.review_id
+            )}" checked />
+            Attach drawings
           </label>
           <button type="button" class="btn" data-ebr-comment="${esc(
             item.review_id
@@ -13290,10 +13498,12 @@ async function afterRenderEntryBlindReviews(data) {
         book_cost: item.avg_cost != null ? item.avg_cost : null,
         exit_price: null,
         pattern_marks: postSalePatternMarks(item),
+        human_pattern_marks: humanDraftPatternMarks(item.review_id),
         pattern_chart_key: "pit",
       }
     );
   }
+  wireHumanChartDrawOnBody(pit, item.review_id, "pit");
 }
 
 async function submitEntryBlindReviewAction({ reviewId, decision, text, tag, item }) {
@@ -13319,6 +13529,16 @@ async function submitEntryBlindReviewAction({ reviewId, decision, text, tag, ite
     tag: tag || "new",
     snapshot: snap,
   };
+  if (decision === "comment") {
+    const attachEl = document.querySelector(
+      `[data-ebr-attach-draw="${CSS.escape(reviewId)}"]`
+    );
+    const attach = !attachEl || attachEl.checked;
+    const geometries = attach ? collectHumanGeometryForComment(reviewId) : [];
+    if (geometries.length) {
+      payload.post_hoc_human_geometry = geometries;
+    }
+  }
   try {
     // Must use DashboardBridge.queueCommand — ftseDashboardBridge.enqueue was a dead path
     // on hosted dashboard, so Comment never hit entry-blind-review-ack.yml.
@@ -13343,6 +13563,7 @@ async function submitEntryBlindReviewAction({ reviewId, decision, text, tag, ite
       }
       setStatus("Saved locally.");
     }
+    if (decision === "comment") clearHumanChartDrafts(reviewId);
     if (dashboardData) syncEntryBlindQueueOverlay(dashboardData);
     if (entryBlindReviewExpandedId === reviewId) entryBlindReviewExpandedId = null;
     if (dashboardData) renderLifecycle(dashboardData);
@@ -13449,7 +13670,7 @@ function renderEntryRevisitReviewCard(item, expanded) {
   const detail = expanded
     ? `<div class="psr-card-detail">
         <pre class="psr-framing small">${framing}</pre>
-        <p class="small muted">Stage entry_revisit — fixed buy+28d. Blind Accept/Comment immutable. influences_live=false.</p>
+        <p class="small muted">Stage entry_revisit — fixed buy+28d. Blind Accept/Comment immutable. influences_live=false. Chart draw tools: not on this stage (no marks[] pane yet — use entry_blind PIT / post-sale dual-horizon).</p>
         <p class="small">Blind parent <code>${esc(blindId)}</code> · ${esc(status)} · ${esc(retBit)}</p>
         <div class="psr-actions">
           <button type="button" class="btn btn-primary" data-err-accept="${esc(
@@ -13646,6 +13867,7 @@ function renderLifecycle(data) {
   if (!panel) return;
   bindLifecyclePanel();
   bindPatternMarkChipsOnce();
+  bindHumanDrawToolbarsOnce();
   bindEntryBlindReviewsOnce();
   bindEntryRevisitReviewsOnce();
   lifecycleSubpage = normalizeLifecycleSubpage(lifecycleSubpage);

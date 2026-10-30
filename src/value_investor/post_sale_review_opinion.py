@@ -18,6 +18,11 @@ from datetime import UTC, date, datetime, timedelta
 from typing import Any
 
 from value_investor.cue_consumer_mft import assess_same_day_round_trip
+from value_investor.post_hoc_human_geometry import (
+    geometry_unread_banner,
+    normalize_post_hoc_human_geometry,
+    serialize_geometry_for_prompt,
+)
 from value_investor.post_sale_decision_reasons import (
     UNKNOWN_LABEL,
     format_decision_reasons_for_prompt,
@@ -442,8 +447,13 @@ def consider_human_comment(
     *,
     owner_comment: str,
     item: dict[str, Any] | None = None,
+    post_hoc_human_geometry: Any | None = None,
 ) -> dict[str, Any]:
-    """Deterministic consider (agree/partial/disagree) — never blind-follow (L633)."""
+    """Deterministic consider (agree/partial/disagree) — never blind-follow (L633).
+
+    Readable owner geometry is noted as critique context only; unread geometry
+    is fail-closed omitted (no invented levels). Never influences live.
+    """
     comment = str(owner_comment or "").strip()
     snap = item if isinstance(item, dict) else {}
     reasons = format_decision_reasons_for_prompt(snap)
@@ -451,13 +461,33 @@ def consider_human_comment(
     sell_code = str(reasons["sell"].get("code") or "")
     sell_join = bool(reasons["sell"].get("join_ok"))
     lower = comment.lower()
+    geometries = normalize_post_hoc_human_geometry(
+        post_hoc_human_geometry
+        if post_hoc_human_geometry is not None
+        else (snap.get("post_hoc_human_geometry") if isinstance(snap, dict) else None),
+        review_id=str(snap.get("review_id") or ""),
+    )
+    geometry_prompt = serialize_geometry_for_prompt(geometries)
+    unread = geometry_unread_banner(geometries)
 
     if not comment:
         return {
             "stance": HUMAN_CONSIDER_UNKNOWN,
             "why": "No owner Comment text to weigh.",
             "influences_live": False,
+            "geometry_readable": bool(geometry_prompt),
+            "geometry_unread_banner": unread,
         }
+
+    geo_note = ""
+    if geometry_prompt:
+        n_el = sum(len(g.get("elements") or []) for g in geometry_prompt.get("geometries") or [])
+        geo_note = (
+            f" Owner attached readable post-hoc chart geometry ({n_el} element(s)) "
+            "as critique context only."
+        )
+    elif unread:
+        geo_note = f" {unread}"
 
     premature = any(
         token in lower for token in ("premature", "too early", "sold too soon", "cut short")
@@ -472,8 +502,11 @@ def consider_human_comment(
                 + (f" [{sell_code}]" if sell_code else "")
                 + ") — agree the chart may show more room; disagree that the sealed "
                 "rule was a free timing choice. Not a knob order."
+                + geo_note
             ),
             "influences_live": False,
+            "geometry_readable": bool(geometry_prompt),
+            "geometry_unread_banner": unread,
         }
     if premature and sell_join:
         return {
@@ -481,14 +514,22 @@ def consider_human_comment(
             "why": (
                 f"Weigh premature claim against joinable sell reason ({sell_label}). "
                 "Chart critique welcome; Comment is not an auto-tune order."
+                + geo_note
             ),
             "influences_live": False,
+            "geometry_readable": bool(geometry_prompt),
+            "geometry_unread_banner": unread,
         }
     if any(token in lower for token in ("agree", "looks right", "framing matches")):
         return {
             "stance": HUMAN_CONSIDER_AGREE,
-            "why": "Owner language aligns with Accept-style framing — still observe-only.",
+            "why": (
+                "Owner language aligns with Accept-style framing — still observe-only."
+                + geo_note
+            ),
             "influences_live": False,
+            "geometry_readable": bool(geometry_prompt),
+            "geometry_unread_banner": unread,
         }
     if any(token in lower for token in ("disagree", "wrong", "missed", "bottom of range", "climb")):
         return {
@@ -496,16 +537,22 @@ def consider_human_comment(
             "why": (
                 "Owner pattern critique noted for dual-horizon charts and "
                 "learning_point_forward — considered, not blindly applied."
+                + geo_note
             ),
             "influences_live": False,
+            "geometry_readable": bool(geometry_prompt),
+            "geometry_unread_banner": unread,
         }
     return {
         "stance": HUMAN_CONSIDER_PARTIAL,
         "why": (
             "Comment recorded and considered against structured buy/sell reasons; "
             "factory does not treat Comment as a sealed-knob order."
+            + geo_note
         ),
         "influences_live": False,
+        "geometry_readable": bool(geometry_prompt),
+        "geometry_unread_banner": unread,
     }
 
 
@@ -722,6 +769,7 @@ def build_contextual_reply_text(
     *,
     owner_comment: str,
     item: dict[str, Any] | None = None,
+    post_hoc_human_geometry: Any | None = None,
 ) -> str:
     """Deterministic factory reply that addresses the owner comment (observe)."""
     snap = item if isinstance(item, dict) else {}
@@ -739,7 +787,16 @@ def build_contextual_reply_text(
     sell_label = str(reasons["sell"].get("label") or UNKNOWN_LABEL)
     sell_code = str(reasons["sell"].get("code") or "")
     sell_join = bool(reasons["sell"].get("join_ok"))
-    consideration = consider_human_comment(owner_comment=owner_comment, item=snap)
+    geometries = normalize_post_hoc_human_geometry(
+        post_hoc_human_geometry,
+        review_id=str(snap.get("review_id") or ""),
+    )
+    geometry_prompt = serialize_geometry_for_prompt(geometries)
+    consideration = consider_human_comment(
+        owner_comment=owner_comment,
+        item=snap,
+        post_hoc_human_geometry=geometries,
+    )
     forward = str(snap.get("learning_point_forward") or "").strip()
 
     lines = [
@@ -757,6 +814,43 @@ def build_contextual_reply_text(
         "card does not force knobs or fills "
         "(influences_live=false; Package M — not Package L auto-tune).",
     ]
+    if geometry_prompt:
+        charts = sorted(
+            {
+                str(g.get("chart") or "")
+                for g in (geometry_prompt.get("geometries") or [])
+                if g.get("chart")
+            }
+        )
+        n_el = sum(len(g.get("elements") or []) for g in geometry_prompt.get("geometries") or [])
+        lines.append(
+            "Owner chart geometry (readable, post-hoc critique only): "
+            f"{n_el} element(s) on {', '.join(charts) or 'chart'} — "
+            "weighed as what you marked; not a sealed fill feature."
+        )
+        for geo in geometry_prompt.get("geometries") or []:
+            chart = geo.get("chart")
+            for el in geo.get("elements") or []:
+                etype = el.get("type")
+                if etype == "highlight":
+                    lines.append(
+                        f"  · [{chart}] highlight {el.get('t0')} → {el.get('t1')}"
+                    )
+                elif etype == "line":
+                    lines.append(
+                        f"  · [{chart}] line {el.get('t0')}@{el.get('y0')} → "
+                        f"{el.get('t1')}@{el.get('y1')}"
+                    )
+                elif etype == "parallel_pair":
+                    a = el.get("line_a") or {}
+                    b = el.get("line_b") or {}
+                    lines.append(
+                        f"  · [{chart}] parallel_pair "
+                        f"A {a.get('t0')}@{a.get('y0')}→{a.get('t1')}@{a.get('y1')}; "
+                        f"B {b.get('t0')}@{b.get('y0')}→{b.get('t1')}@{b.get('y1')}"
+                    )
+    elif consideration.get("geometry_unread_banner"):
+        lines.append(str(consideration["geometry_unread_banner"]))
     if forward:
         lines.append(f"Learning point forward (super-book lane candidate): {forward}")
     lines.append(
@@ -817,9 +911,20 @@ def _extract_reply_text(raw: str) -> str:
     return text
 
 
-def build_llm_reply_prompt(*, owner_comment: str, item: dict[str, Any] | None) -> str:
+def build_llm_reply_prompt(
+    *,
+    owner_comment: str,
+    item: dict[str, Any] | None,
+    post_hoc_human_geometry: Any | None = None,
+) -> str:
     snap = item if isinstance(item, dict) else {}
-    payload = {
+    geometries = normalize_post_hoc_human_geometry(
+        post_hoc_human_geometry,
+        review_id=str(snap.get("review_id") or ""),
+    )
+    geometry_prompt = serialize_geometry_for_prompt(geometries)
+    unread = geometry_unread_banner(geometries)
+    payload: dict[str, Any] = {
         "role": "post_sale_review_factory_reply",
         "rules": [
             "Observe / alignment only — never change knobs, fills, or live capital.",
@@ -830,6 +935,10 @@ def build_llm_reply_prompt(*, owner_comment: str, item: dict[str, Any] | None) -
             "sell-trigger IDs, filing facts, or range percentiles you were not given.",
             "Weigh owner labels like 'premature sell' against the structured sell "
             "reason (e.g. leave_buy_tier is mechanical identity exit, not a tech trigger).",
+            "If post_hoc_human_geometry is present, treat elements as owner critique "
+            "overlays only (post-hoc; drawn after the outcome). Never invent missing "
+            "coordinates or treat geometry as PIT sealed fill features.",
+            "If geometry is absent or marked unread, do not invent chart levels.",
             "Invite Accept or further Comment on this reply.",
             'Return JSON only: {"reply": "..."}',
         ],
@@ -849,6 +958,12 @@ def build_llm_reply_prompt(*, owner_comment: str, item: dict[str, Any] | None) -
         },
         "owner_comment": str(owner_comment or "").strip(),
     }
+    # Fail-closed: only attach readable geometry; never invent coords.
+    if geometry_prompt is not None:
+        payload["post_hoc_human_geometry"] = geometry_prompt
+    elif unread:
+        payload["geometry_unread"] = True
+        payload["geometry_unread_banner"] = unread
     return (
         "You write the factory side of a post-sale review mini dialogue.\n"
         "Reply with a single JSON object only.\n\n"
@@ -862,6 +977,7 @@ def generate_factory_reply(
     item: dict[str, Any] | None = None,
     llm_complete: LlmCompleteFn | None = None,
     allow_llm: bool | None = None,
+    post_hoc_human_geometry: Any | None = None,
 ) -> dict[str, Any]:
     """Build factory reply text; try LLM when allowed, else contextual deterministic."""
     if allow_llm is None:
@@ -873,8 +989,20 @@ def generate_factory_reply(
             "yes",
             "on",
         }
-    consideration = consider_human_comment(owner_comment=owner_comment, item=item)
-    fallback = build_contextual_reply_text(owner_comment=owner_comment, item=item)
+    geometries = normalize_post_hoc_human_geometry(
+        post_hoc_human_geometry,
+        review_id=str((item or {}).get("review_id") or "") if isinstance(item, dict) else "",
+    )
+    consideration = consider_human_comment(
+        owner_comment=owner_comment,
+        item=item,
+        post_hoc_human_geometry=geometries,
+    )
+    fallback = build_contextual_reply_text(
+        owner_comment=owner_comment,
+        item=item,
+        post_hoc_human_geometry=geometries,
+    )
     if not allow_llm:
         return {
             "text": fallback,
@@ -886,7 +1014,13 @@ def generate_factory_reply(
 
     complete = llm_complete or _default_llm_complete
     try:
-        raw = complete(build_llm_reply_prompt(owner_comment=owner_comment, item=item))
+        raw = complete(
+            build_llm_reply_prompt(
+                owner_comment=owner_comment,
+                item=item,
+                post_hoc_human_geometry=geometries,
+            )
+        )
         text = _extract_reply_text(raw)
         # Soft guard: refuse live-influence language by appending observe footer
         # if the model omitted it.
@@ -924,6 +1058,7 @@ def extend_dialogue_for_comment_reply(
     reply_kind: str,
     commented_at: str | None = None,
     replied_at: str | None = None,
+    post_hoc_human_geometry: Any | None = None,
 ) -> list[dict[str, Any]]:
     """Append owner comment + factory reply turns to the dialogue thread."""
     base = list(prior_dialogue) if isinstance(prior_dialogue, list) else []
@@ -931,25 +1066,33 @@ def extend_dialogue_for_comment_reply(
         base = seed_dialogue(item)
     now_comment = commented_at or _utcnow()
     now_reply = replied_at or _utcnow()
-    base.append(
-        {
-            "role": "owner",
-            "kind": "comment",
-            "text": str(owner_comment or "").strip(),
-            "at": now_comment,
-            "influences_live": False,
-        }
+    geometries = normalize_post_hoc_human_geometry(
+        post_hoc_human_geometry,
+        review_id=str((item or {}).get("review_id") or "") if isinstance(item, dict) else "",
+        drawn_at=now_comment,
     )
-    base.append(
-        {
-            "role": "factory",
-            "kind": "reply",
-            "text": str(reply_text or "").strip(),
-            "source": str(reply_kind or REPLY_SOURCE_DETERMINISTIC),
-            "at": now_reply,
-            "influences_live": False,
-        }
-    )
+    owner_turn: dict[str, Any] = {
+        "role": "owner",
+        "kind": "comment",
+        "text": str(owner_comment or "").strip(),
+        "at": now_comment,
+        "influences_live": False,
+    }
+    if geometries:
+        owner_turn["post_hoc_human_geometry"] = geometries
+    base.append(owner_turn)
+    reply_turn: dict[str, Any] = {
+        "role": "factory",
+        "kind": "reply",
+        "text": str(reply_text or "").strip(),
+        "source": str(reply_kind or REPLY_SOURCE_DETERMINISTIC),
+        "at": now_reply,
+        "influences_live": False,
+    }
+    unread = geometry_unread_banner(geometries)
+    if unread:
+        reply_turn["geometry_unread_banner"] = unread
+    base.append(reply_turn)
     return base
 
 
