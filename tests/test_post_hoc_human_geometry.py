@@ -56,6 +56,10 @@ def test_normalize_readable_and_marks():
     assert rows[0]["influences_live"] is False
     assert rows[0]["source"] == "owner"
     assert len(rows[0]["elements"]) == 3
+    parallel = next(el for el in rows[0]["elements"] if el["type"] == "parallel_pair")
+    assert "anchors" in parallel
+    assert set(parallel["anchors"]) == {"start", "end", "separation"}
+    assert isinstance(parallel.get("separation"), float)
     prompt = serialize_geometry_for_prompt(rows)
     assert prompt is not None
     assert prompt["influences_live"] is False
@@ -65,6 +69,77 @@ def test_normalize_readable_and_marks():
     assert all(m.get("influences_live") is False for m in marks)
     assert any(m.get("type") == "region" for m in marks)
     assert any(m.get("type") == "trend_line" for m in marks)
+
+
+def test_parallel_pair_three_anchors_normalize():
+    geo = {
+        "chart": "episode",
+        "elements": [
+            {
+                "type": "parallel_pair",
+                "anchors": {
+                    "start": {"t": "2026-09-01", "y": 10.0},
+                    "end": {"t": "2026-09-20", "y": 12.0},
+                    "separation": {"t": "2026-09-10", "y": 9.0},
+                },
+            }
+        ],
+        "readable": True,
+        "post_hoc": True,
+    }
+    rows = normalize_post_hoc_human_geometry([geo], review_id="r")
+    assert rows[0]["readable"] is True
+    el = rows[0]["elements"][0]
+    assert el["type"] == "parallel_pair"
+    assert el["line_a"]["y0"] == 10.0
+    assert el["line_a"]["y1"] == 12.0
+    # Third anchor below primary → negative separation; line_b shifted.
+    assert el["separation"] < 0
+    assert el["line_b"]["y0"] == el["line_a"]["y0"] + el["separation"]
+    assert el["influences_live"] is False if "influences_live" in el else True
+    assert rows[0]["influences_live"] is False
+
+
+def test_parallel_pair_primary_plus_signed_sep():
+    geo = {
+        "chart": "wider_tf",
+        "elements": [
+            {
+                "type": "parallel_pair",
+                "t0": "2026-08-01",
+                "y0": 5.0,
+                "t1": "2026-08-15",
+                "y1": 6.0,
+                "separation": 1.25,
+            }
+        ],
+        "readable": True,
+        "post_hoc": True,
+    }
+    rows = normalize_post_hoc_human_geometry([geo], review_id="r")
+    el = rows[0]["elements"][0]
+    assert el["separation"] == 1.25
+    assert el["line_b"]["y0"] == 6.25
+    assert el["anchors"]["start"]["t"] == "2026-08-01"
+
+
+def test_parallel_pair_invalid_anchors_fail_closed():
+    geo = {
+        "chart": "episode",
+        "elements": [
+            {
+                "type": "parallel_pair",
+                "anchors": {
+                    "start": {"t": "2026-09-01", "y": 10.0},
+                    "end": {"t": "bad", "y": 12.0},
+                    "separation": {"t": "2026-09-10", "y": 9.0},
+                },
+            }
+        ],
+    }
+    rows = normalize_post_hoc_human_geometry([geo], review_id="r")
+    assert rows[0]["readable"] is False
+    assert serialize_geometry_for_prompt(rows) is None
 
 
 def test_fail_closed_invalid_unread():

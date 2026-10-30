@@ -1188,6 +1188,12 @@ function rememberPriceChart(ticker, payload) {
 function paintPriceChart(body) {
   const state = body && body._chartState;
   if (!state) return;
+  // Preserve parallel edit across full SVG rebuild.
+  const priorParallel =
+    body._humanDraw && body._humanDraw.parallelEdit
+      ? JSON.parse(JSON.stringify(body._humanDraw.parallelEdit))
+      : null;
+  const priorTool = body._humanDraw ? body._humanDraw.tool : null;
   body.innerHTML = renderChartBody(
     state.payload,
     state.report || {},
@@ -1198,7 +1204,12 @@ function paintPriceChart(body) {
   );
   body._plotMetrics = computePriceChartPlotMetrics(state);
   if (body._humanDraw && body._humanDraw.enabled) {
+    if (priorParallel) body._humanDraw.parallelEdit = priorParallel;
+    if (priorTool) body._humanDraw.tool = priorTool;
     bindHumanChartDraw(body);
+    if (priorTool === "parallel" && priorParallel) {
+      paintParallelEditOverlay(body);
+    }
   }
 }
 
@@ -1750,28 +1761,305 @@ function chartClientToData(body, clientX, clientY) {
 function enableHumanChartDraw(body, options) {
   if (!body) return;
   const opts = options && typeof options === "object" ? options : {};
+  const prior = body._humanDraw || {};
   body._humanDraw = {
     enabled: true,
-    chartKey: String(opts.chartKey || "episode"),
-    reviewId: String(opts.reviewId || ""),
-    tool: null,
-    pending: [],
-    onChange: typeof opts.onChange === "function" ? opts.onChange : null,
-    getElements: typeof opts.getElements === "function" ? opts.getElements : () => [],
+    chartKey: String(opts.chartKey || prior.chartKey || "episode"),
+    reviewId: String(opts.reviewId || prior.reviewId || ""),
+    tool: prior.tool || null,
+    pending: Array.isArray(prior.pending) ? prior.pending : [],
+    parallelEdit: prior.parallelEdit || null,
+    onChange: typeof opts.onChange === "function" ? opts.onChange : prior.onChange || null,
+    getElements: typeof opts.getElements === "function" ? opts.getElements : prior.getElements || (() => []),
   };
   if (body._chartState) paintPriceChart(body);
 }
 
 function setHumanChartDrawTool(body, tool) {
   if (!body || !body._humanDraw) return;
-  body._humanDraw.tool = tool || null;
-  body._humanDraw.pending = [];
+  const draw = body._humanDraw;
+  // Switching away from parallel with an unfinished edit commits if valid.
+  if (draw.tool === "parallel" && tool !== "parallel" && draw.parallelEdit) {
+    commitParallelEdit(body, { quiet: true });
+  }
+  draw.tool = tool || null;
+  draw.pending = [];
+  if (tool !== "parallel") draw.parallelEdit = null;
   const status = body.parentElement && body.parentElement.querySelector("[data-human-draw-status]");
   if (status) {
-    status.textContent = tool
-      ? `Draw: ${tool} — tap chart (iPad)`
-      : "Draw off";
+    if (tool === "parallel") {
+      status.textContent = "Parallel: drag primary start→end, then drag 3 anchors";
+    } else if (tool) {
+      status.textContent = `Draw: ${tool} — tap chart (iPad)`;
+    } else {
+      status.textContent = "Draw off";
+    }
   }
+  syncParallelDoneButton(body);
+  if (tool === "parallel") {
+    // Ensure overlay layer exists after tool select.
+    const svg = body.querySelector("svg.price-chart");
+    if (svg) ensureParallelEditLayer(svg);
+  } else {
+    clearParallelEditLayer(body);
+  }
+}
+
+function parallelElementFromAnchors(start, end, sep) {
+  if (!start || !end || !sep || !start.t || !end.t || !sep.t) return null;
+  if (start.y == null || end.y == null || sep.y == null) return null;
+  const t0 = start.t;
+  const t1 = end.t;
+  const y0 = Number(start.y);
+  const y1 = Number(end.y);
+  const ys = Number(sep.y);
+  if (!Number.isFinite(y0) || !Number.isFinite(y1) || !Number.isFinite(ys)) return null;
+  if (t0 === t1 && y0 === y1) return null;
+  let yOnPrimary = y0;
+  if (t0 !== t1) {
+    if (sep.t <= t0) yOnPrimary = y0;
+    else if (sep.t >= t1) yOnPrimary = y1;
+    else {
+      // Approximate fraction by vbX when available, else midpoint.
+      if (
+        start.vbX != null &&
+        end.vbX != null &&
+        sep.vbX != null &&
+        end.vbX !== start.vbX
+      ) {
+        const frac = (sep.vbX - start.vbX) / (end.vbX - start.vbX);
+        yOnPrimary = y0 + (y1 - y0) * Math.max(0, Math.min(1, frac));
+      } else {
+        yOnPrimary = (y0 + y1) / 2;
+      }
+    }
+  }
+  const separation = ys - yOnPrimary;
+  return {
+    type: "parallel_pair",
+    anchors: {
+      start: { t: t0, y: y0 },
+      end: { t: t1, y: y1 },
+      separation: { t: sep.t, y: ys },
+    },
+    separation,
+    line_a: { t0, y0, t1, y1 },
+    line_b: { t0, y0: y0 + separation, t1, y1: y1 + separation },
+  };
+}
+
+function clearParallelEditLayer(body) {
+  const svg = body && body.querySelector("svg.price-chart");
+  if (!svg) return;
+  const layer = svg.querySelector("g.chart-human-parallel-edit");
+  if (layer) layer.remove();
+}
+
+function ensureParallelEditLayer(svg) {
+  let layer = svg.querySelector("g.chart-human-parallel-edit");
+  if (layer) return layer;
+  layer = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  layer.setAttribute("class", "chart-human-parallel-edit");
+  layer.innerHTML = `
+    <line class="psr-par-line-a" stroke="#6d28d9" stroke-width="2" stroke-opacity="0.95" />
+    <line class="psr-par-line-b" stroke="#7c3aed" stroke-width="2" stroke-dasharray="5 4" stroke-opacity="0.9" />
+    <circle class="psr-par-anchor" data-anchor="start" r="11" fill="#6d28d9" stroke="#fff" stroke-width="2" />
+    <circle class="psr-par-anchor" data-anchor="end" r="11" fill="#6d28d9" stroke="#fff" stroke-width="2" />
+    <circle class="psr-par-anchor" data-anchor="separation" r="11" fill="#a855f7" stroke="#fff" stroke-width="2" />
+  `;
+  svg.appendChild(layer);
+  return layer;
+}
+
+function dataPointToVb(body, point) {
+  const metrics = body && body._plotMetrics;
+  if (!metrics || !point || !point.t) return null;
+  const idx = dateIndexOnOrBefore(metrics.dates, point.t);
+  if (idx < 0) return null;
+  return { vbX: metrics.xAt(idx), vbY: metrics.yAt(Number(point.y)) };
+}
+
+function ensureParallelSeparationAnchor(body, edit, startVb, endVb) {
+  if (!edit || edit.sep || !body || !body._plotMetrics) return;
+  const metrics = body._plotMetrics;
+  const defaultSepPx = Math.max(
+    18,
+    (metrics.pad && metrics.pad.plotH ? metrics.pad.plotH : 200) * 0.08
+  );
+  const spanY = metrics.spanY || 1;
+  const sepPrice =
+    Number(edit.start.y) +
+    (Number(edit.end.y) - Number(edit.start.y)) * 0.5 -
+    (defaultSepPx / Math.max(metrics.pad.plotH, 1)) * spanY;
+  const midIdx = Math.round(
+    ((edit.start.index != null ? edit.start.index : 0) +
+      (edit.end.index != null ? edit.end.index : 0)) /
+      2
+  );
+  const midT =
+    chartDay(metrics.dates[Math.max(0, Math.min(metrics.dates.length - 1, midIdx))]) ||
+    edit.start.t;
+  const midX = (startVb.vbX + endVb.vbX) / 2;
+  edit.sep = {
+    t: midT,
+    y: Number(sepPrice.toFixed(4)),
+    index: midIdx,
+    vbX: midX,
+    vbY: metrics.yAt(sepPrice),
+  };
+}
+
+function paintParallelEditOverlay(body) {
+  const draw = body && body._humanDraw;
+  const edit = draw && draw.parallelEdit;
+  const svg = body && body.querySelector("svg.price-chart");
+  if (!edit || !svg || !edit.start || !edit.end) {
+    clearParallelEditLayer(body);
+    return;
+  }
+  const layer = ensureParallelEditLayer(svg);
+  const startVb = dataPointToVb(body, edit.start) || { vbX: edit.start.vbX, vbY: edit.start.vbY };
+  const endVb = dataPointToVb(body, edit.end) || { vbX: edit.end.vbX, vbY: edit.end.vbY };
+  if (!startVb || !endVb || startVb.vbX == null || endVb.vbX == null) return;
+  edit.start.vbX = startVb.vbX;
+  edit.start.vbY = startVb.vbY;
+  edit.end.vbX = endVb.vbX;
+  edit.end.vbY = endVb.vbY;
+  if (edit.phase === "editing" && !edit.sep) {
+    ensureParallelSeparationAnchor(body, edit, startVb, endVb);
+  }
+  if (edit.sep) {
+    const sepVb = dataPointToVb(body, edit.sep);
+    if (sepVb) {
+      edit.sep.vbX = sepVb.vbX;
+      edit.sep.vbY = sepVb.vbY;
+    }
+  }
+  const el = edit.sep ? parallelElementFromAnchors(edit.start, edit.end, edit.sep) : null;
+  const a = el ? el.line_a : { t0: edit.start.t, y0: edit.start.y, t1: edit.end.t, y1: edit.end.y };
+  const b = el ? el.line_b : null;
+  const lineA = layer.querySelector(".psr-par-line-a");
+  const lineB = layer.querySelector(".psr-par-line-b");
+  if (lineA && a) {
+    const a0 = dataPointToVb(body, { t: a.t0, y: a.y0 }) || startVb;
+    const a1 = dataPointToVb(body, { t: a.t1, y: a.y1 }) || endVb;
+    if (a0 && a1) {
+      lineA.setAttribute("x1", a0.vbX);
+      lineA.setAttribute("y1", a0.vbY);
+      lineA.setAttribute("x2", a1.vbX);
+      lineA.setAttribute("y2", a1.vbY);
+    }
+  }
+  if (lineB && b) {
+    lineB.style.display = "";
+    const b0 = dataPointToVb(body, { t: b.t0, y: b.y0 });
+    const b1 = dataPointToVb(body, { t: b.t1, y: b.y1 });
+    if (b0 && b1) {
+      lineB.setAttribute("x1", b0.vbX);
+      lineB.setAttribute("y1", b0.vbY);
+      lineB.setAttribute("x2", b1.vbX);
+      lineB.setAttribute("y2", b1.vbY);
+    }
+  } else if (lineB) {
+    lineB.style.display = "none";
+  }
+  const setAnchor = (name, pt) => {
+    const node = layer.querySelector(`[data-anchor="${name}"]`);
+    if (!node) return;
+    if (!pt || pt.vbX == null) {
+      node.style.display = "none";
+      return;
+    }
+    node.style.display = "";
+    node.setAttribute("cx", pt.vbX);
+    node.setAttribute("cy", pt.vbY);
+  };
+  setAnchor("start", edit.start);
+  setAnchor("end", edit.end);
+  setAnchor("separation", edit.sep);
+  syncParallelDoneButton(body);
+}
+
+function syncParallelDoneButton(body) {
+  const toolbar =
+    body &&
+    body.parentElement &&
+    body.parentElement.querySelector("[data-human-draw-toolbar]");
+  if (!toolbar) return;
+  let done = toolbar.querySelector("[data-human-draw-tool='parallel-done']");
+  const draw = body._humanDraw;
+  const editing = draw && draw.tool === "parallel" && draw.parallelEdit && draw.parallelEdit.sep;
+  if (editing) {
+    if (!done) {
+      done = document.createElement("button");
+      done.type = "button";
+      done.className = "btn psr-draw-tool psr-draw-done";
+      done.setAttribute("data-human-draw-tool", "parallel-done");
+      done.setAttribute("data-psr-draw-rid", draw.reviewId);
+      done.setAttribute("data-psr-draw-chart", draw.chartKey);
+      done.setAttribute("data-ebr-draw-rid", draw.reviewId);
+      done.setAttribute("data-ebr-draw-chart", draw.chartKey);
+      done.textContent = "Done";
+      done.title = "Lock parallel with 3 anchors";
+      const tools = toolbar.querySelector(".psr-human-draw-tools");
+      if (tools) tools.appendChild(done);
+    }
+    done.hidden = false;
+  } else if (done) {
+    done.hidden = true;
+  }
+}
+
+function commitParallelEdit(body, { quiet } = {}) {
+  const draw = body && body._humanDraw;
+  if (!draw || !draw.parallelEdit) return false;
+  const edit = draw.parallelEdit;
+  const element = parallelElementFromAnchors(edit.start, edit.end, edit.sep);
+  draw.parallelEdit = null;
+  draw.pending = [];
+  clearParallelEditLayer(body);
+  syncParallelDoneButton(body);
+  if (!element) {
+    if (!quiet) {
+      const status =
+        body.parentElement && body.parentElement.querySelector("[data-human-draw-status]");
+      if (status) status.textContent = "Parallel unread — need 3 valid anchors";
+    }
+    return false;
+  }
+  if (draw.onChange) {
+    draw.onChange({ chartKey: draw.chartKey, element, reviewId: draw.reviewId });
+  }
+  return true;
+}
+
+function hitParallelAnchor(body, clientX, clientY) {
+  const draw = body && body._humanDraw;
+  const edit = draw && draw.parallelEdit;
+  const svg = body && body.querySelector("svg.price-chart");
+  if (!edit || !svg || !edit.sep) return null;
+  const rect = svg.getBoundingClientRect();
+  if (!rect.width || !rect.height) return null;
+  const metrics = body._plotMetrics;
+  const vbX = ((clientX - rect.left) / rect.width) * metrics.width;
+  const vbY = ((clientY - rect.top) / rect.height) * metrics.height;
+  const hitR = 18;
+  const candidates = [
+    ["start", edit.start],
+    ["end", edit.end],
+    ["separation", edit.sep],
+  ];
+  let best = null;
+  let bestDist = hitR;
+  for (const [name, pt] of candidates) {
+    if (!pt || pt.vbX == null) continue;
+    const d = Math.hypot(pt.vbX - vbX, pt.vbY - vbY);
+    if (d <= bestDist) {
+      bestDist = d;
+      best = name;
+    }
+  }
+  return best;
 }
 
 function bindHumanChartDraw(body) {
@@ -1781,14 +2069,62 @@ function bindHumanChartDraw(body) {
   if (!svg || svg.dataset.humanDrawBound === "1") return;
   svg.dataset.humanDrawBound = "1";
   svg.classList.add("chart-human-draw-enabled");
-  const onPointer = (event) => {
+
+  // Restore overlay after repaint if an edit session is live.
+  if (draw.tool === "parallel" && draw.parallelEdit) {
+    paintParallelEditOverlay(body);
+  }
+
+  let dragAnchor = null;
+  let placingPrimary = false;
+
+  const onPointerDown = (event) => {
     if (!draw.tool) return;
     if (event.pointerType === "mouse" && event.button !== 0) return;
+    const tool = draw.tool;
+    if (tool === "parallel") {
+      event.preventDefault();
+      event.stopPropagation();
+      // Drag existing anchors when editing.
+      if (draw.parallelEdit && draw.parallelEdit.sep) {
+        const hit = hitParallelAnchor(body, event.clientX, event.clientY);
+        if (hit) {
+          dragAnchor = hit;
+          try {
+            svg.setPointerCapture(event.pointerId);
+          } catch {
+            /* ignore */
+          }
+          return;
+        }
+      }
+      // Start placing primary (drag start→end).
+      const point = chartClientToData(body, event.clientX, event.clientY);
+      if (!point || !point.t) return;
+      placingPrimary = true;
+      dragAnchor = null;
+      draw.parallelEdit = {
+        start: { ...point },
+        end: { ...point },
+        sep: null,
+        phase: "placing",
+      };
+      paintParallelEditOverlay(body);
+      try {
+        svg.setPointerCapture(event.pointerId);
+      } catch {
+        /* ignore */
+      }
+      const status =
+        body.parentElement && body.parentElement.querySelector("[data-human-draw-status]");
+      if (status) status.textContent = "Parallel: drag to set primary end";
+      return;
+    }
+
     const point = chartClientToData(body, event.clientX, event.clientY);
     if (!point || !point.t) return;
     event.preventDefault();
     event.stopPropagation();
-    const tool = draw.tool;
     draw.pending.push(point);
     const finish = (element) => {
       draw.pending = [];
@@ -1823,29 +2159,62 @@ function bindHumanChartDraw(body) {
         const b = draw.pending[1];
         finish({ type: "line", t0: a.t, y0: a.y, t1: b.t, y1: b.y });
       }
-      return;
-    }
-    if (tool === "parallel") {
-      // Two taps = line_a; third tap = parallel offset through that price (same slope).
-      if (draw.pending.length === 2) {
-        const status =
-          body.parentElement && body.parentElement.querySelector("[data-human-draw-status]");
-        if (status) status.textContent = "Parallel: tap offset for second line";
-        return;
-      }
-      if (draw.pending.length >= 3) {
-        const a = draw.pending[0];
-        const b = draw.pending[1];
-        const c = draw.pending[2];
-        const dy = b.y - a.y;
-        const offset = c.y - a.y;
-        finish({
-          type: "parallel_pair",
-          line_a: { t0: a.t, y0: a.y, t1: b.t, y1: b.y },
-          line_b: { t0: a.t, y0: a.y + offset, t1: b.t, y1: a.y + offset + dy },
-        });
-      }
     }
   };
-  svg.addEventListener("pointerdown", onPointer, { passive: false });
+
+  const onPointerMove = (event) => {
+    if (draw.tool !== "parallel" || !draw.parallelEdit) return;
+    const point = chartClientToData(body, event.clientX, event.clientY);
+    if (!point || !point.t) return;
+    event.preventDefault();
+    if (placingPrimary) {
+      draw.parallelEdit.end = { ...point };
+      paintParallelEditOverlay(body);
+      return;
+    }
+    if (dragAnchor === "start") {
+      draw.parallelEdit.start = { ...point };
+      paintParallelEditOverlay(body);
+    } else if (dragAnchor === "end") {
+      draw.parallelEdit.end = { ...point };
+      paintParallelEditOverlay(body);
+    } else if (dragAnchor === "separation") {
+      draw.parallelEdit.sep = { ...point };
+      paintParallelEditOverlay(body);
+    }
+  };
+
+  const onPointerUp = (event) => {
+    if (draw.tool !== "parallel" || !draw.parallelEdit) {
+      placingPrimary = false;
+      dragAnchor = null;
+      return;
+    }
+    event.preventDefault();
+    if (placingPrimary) {
+      placingPrimary = false;
+      draw.parallelEdit.phase = "editing";
+      ensureParallelSeparationAnchor(
+        body,
+        draw.parallelEdit,
+        { vbX: draw.parallelEdit.start.vbX, vbY: draw.parallelEdit.start.vbY },
+        { vbX: draw.parallelEdit.end.vbX, vbY: draw.parallelEdit.end.vbY }
+      );
+      paintParallelEditOverlay(body);
+      const status =
+        body.parentElement && body.parentElement.querySelector("[data-human-draw-status]");
+      if (status) {
+        status.textContent =
+          "Parallel: drag 3 anchors (start / end / separation) · Done to lock";
+      }
+      dragAnchor = null;
+      return;
+    }
+    dragAnchor = null;
+  };
+
+  svg.addEventListener("pointerdown", onPointerDown, { passive: false });
+  svg.addEventListener("pointermove", onPointerMove, { passive: false });
+  svg.addEventListener("pointerup", onPointerUp, { passive: false });
+  svg.addEventListener("pointercancel", onPointerUp, { passive: false });
 }

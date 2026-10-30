@@ -3119,9 +3119,35 @@ tr.selected td {
   border-color: color-mix(in srgb, var(--border) 55%, #6d28d9);
 }
 
+/* Draw tools glued to the chart pane (not orphaned in card chrome). */
+.psr-chart-draw-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  margin: 0 0 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--border) 70%, #6d28d9);
+  border-radius: 0.4rem;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--bg) 96%, #6d28d9);
+}
+
+.psr-chart-draw-wrap .psr-chart {
+  margin: 0;
+  padding: 0.35rem 0.35rem 0.5rem;
+  touch-action: pan-x pan-y;
+}
+
 .psr-human-draw {
   margin: 0 0 0.45rem;
   min-width: 0;
+}
+
+.psr-human-draw--on-chart {
+  margin: 0;
+  padding: 0.4rem 0.5rem 0.35rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 65%, #6d28d9);
+  background: color-mix(in srgb, var(--bg) 90%, #6d28d9);
 }
 
 .psr-human-draw-tools {
@@ -3144,8 +3170,17 @@ tr.selected td {
   background: color-mix(in srgb, var(--bg) 82%, #6d28d9);
 }
 
+.psr-human-draw-tools .psr-draw-done {
+  font-weight: 600;
+}
+
 .psr-human-draw-status {
   margin: 0;
+}
+
+.psr-par-anchor {
+  cursor: grab;
+  touch-action: none;
 }
 
 .psr-attach-draw-label {

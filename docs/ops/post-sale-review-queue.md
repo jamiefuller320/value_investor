@@ -151,12 +151,16 @@ cue-consumer MFT lab intake when that sleeve is running — see
 
 ### Human chart draw (N229)
 
-iPad-first tools on each dual-horizon pane (and entry_blind PIT): **Highlight**
-(time band), **H-line**, **Trend** (two taps), **Parallel** (two taps + offset).
-Drawings are **per chart view** (`episode` / `wider_tf` / `pit`) — not blindly
-shared across panes. Explicit **Attach drawings** on Comment (default on when
-drafts exist); geometry travels as `post_hoc_human_geometry` on the Comment
-event + owner dialogue turn (committed labels JSON — no Supabase).
+iPad-first tools sit **on each chart pane** (toolbar strip adjacent to the
+plot — not orphaned in card chrome) for dual-horizon + entry_blind PIT:
+**Highlight** (time band), **H-line**, **Trend** (two taps), **Parallel**
+(drag primary, then **3 draggable anchors**: start / end / separation; Done
+locks). Drawings are **per chart view** (`episode` / `wider_tf` / `pit`) — not
+blindly shared across panes. Explicit **Attach drawings** on Comment (default
+on when drafts exist); geometry travels as `post_hoc_human_geometry` on the
+Comment event + owner dialogue turn (committed labels JSON — no Supabase).
+`parallel_pair` encodes `anchors` + signed `separation` and derived
+`line_a`/`line_b` for the agent.
 
 Factory / LLM reply receives geometry **only when** schema-valid and
 `readable=true` (`src/value_investor/post_hoc_human_geometry.py`). Unread /

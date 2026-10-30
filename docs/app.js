@@ -12218,20 +12218,31 @@ function humanDraftPatternMarks(reviewId) {
   return [];
 }
 
-function renderHumanDrawToolbar(reviewId, chartKey) {
+function renderHumanDrawToolbar(reviewId, chartKey, { attrPrefix } = {}) {
   const rid = esc(String(reviewId || ""));
   const ck = esc(String(chartKey || ""));
   const n = getHumanChartDraft(reviewId, chartKey).length;
-  return `<div class="psr-human-draw" data-human-draw-toolbar="${rid}" data-human-draw-chart="${ck}">
-    <div class="psr-human-draw-tools" role="group" aria-label="Owner chart draw tools">
-      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="highlight" data-psr-draw-rid="${rid}" data-psr-draw-chart="${ck}" title="Tap start then end for a time band">Highlight</button>
-      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="hline" data-psr-draw-rid="${rid}" data-psr-draw-chart="${ck}" title="Tap once for a horizontal level">H-line</button>
-      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="line" data-psr-draw-rid="${rid}" data-psr-draw-chart="${ck}" title="Tap two points for a trend line">Trend</button>
-      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="parallel" data-psr-draw-rid="${rid}" data-psr-draw-chart="${ck}" title="Two taps for line, third for parallel offset">Parallel</button>
-      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="undo" data-psr-draw-rid="${rid}" data-psr-draw-chart="${ck}" title="Remove last drawing on this chart">Undo</button>
-      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="clear" data-psr-draw-rid="${rid}" data-psr-draw-chart="${ck}" title="Clear drawings on this chart">Clear</button>
+  // data-psr-draw-* by default; entry_blind uses data-ebr-draw-*.
+  const p = attrPrefix === "ebr" ? "ebr" : "psr";
+  return `<div class="psr-human-draw psr-human-draw--on-chart" data-human-draw-toolbar="${rid}" data-human-draw-chart="${ck}">
+    <div class="psr-human-draw-tools" role="group" aria-label="Owner chart draw tools for this pane">
+      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="highlight" data-${p}-draw-rid="${rid}" data-${p}-draw-chart="${ck}" title="Tap start then end for a time band">Highlight</button>
+      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="hline" data-${p}-draw-rid="${rid}" data-${p}-draw-chart="${ck}" title="Tap once for a horizontal level">H-line</button>
+      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="line" data-${p}-draw-rid="${rid}" data-${p}-draw-chart="${ck}" title="Tap two points for a trend line">Trend</button>
+      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="parallel" data-${p}-draw-rid="${rid}" data-${p}-draw-chart="${ck}" title="Drag primary line, then drag 3 anchors (start / end / separation)">Parallel</button>
+      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="undo" data-${p}-draw-rid="${rid}" data-${p}-draw-chart="${ck}" title="Remove last drawing on this chart">Undo</button>
+      <button type="button" class="btn psr-draw-tool" data-human-draw-tool="clear" data-${p}-draw-rid="${rid}" data-${p}-draw-chart="${ck}" title="Clear drawings on this chart">Clear</button>
     </div>
     <p class="small muted psr-human-draw-status" data-human-draw-status>Draw off · ${n} on this view · attaches with Comment</p>
+  </div>`;
+}
+
+function renderChartWithDrawTools(reviewId, chartKey, chartMountHtml, { attrPrefix } = {}) {
+  return `<div class="psr-chart-draw-wrap" data-psr-chart-draw-wrap="${esc(
+    String(chartKey || "")
+  )}">
+    ${renderHumanDrawToolbar(reviewId, chartKey, { attrPrefix })}
+    ${chartMountHtml}
   </div>`;
 }
 
@@ -12653,19 +12664,25 @@ function renderPostSaleReviewCard(item, expanded) {
             <h4 class="small">Episode</h4>
             ${episodeNote}
             ${renderPatternMarkChips(patternMarks, "episode")}
-            ${renderHumanDrawToolbar(item.review_id, "episode")}
-            <div class="psr-chart" data-psr-chart="episode" data-psr-id="${esc(
-              item.review_id
-            )}"></div>
+            ${renderChartWithDrawTools(
+              item.review_id,
+              "episode",
+              `<div class="psr-chart" data-psr-chart="episode" data-psr-id="${esc(
+                item.review_id
+              )}"></div>`
+            )}
           </div>
           <div>
             <h4 class="small">Wider TF</h4>
             ${widerNote}
             ${renderPatternMarkChips(patternMarks, "wider_tf")}
-            ${renderHumanDrawToolbar(item.review_id, "wider_tf")}
-            <div class="psr-chart" data-psr-chart="wider" data-psr-id="${esc(
-              item.review_id
-            )}"></div>
+            ${renderChartWithDrawTools(
+              item.review_id,
+              "wider_tf",
+              `<div class="psr-chart" data-psr-chart="wider" data-psr-id="${esc(
+                item.review_id
+              )}"></div>`
+            )}
           </div>
         </div>
         <div class="psr-actions">
@@ -12918,7 +12935,25 @@ function bindHumanDrawToolbarsOnce() {
           : `[data-psr-chart="episode"][data-psr-id="${CSS.escape(rid)}"], [data-ebr-chart="pit"][data-ebr-id="${CSS.escape(rid)}"]`;
     const body = document.querySelector(chartSel);
     const toolbar = btn.closest("[data-human-draw-toolbar]");
+    if (tool === "parallel-done") {
+      if (body && typeof commitParallelEdit === "function") {
+        commitParallelEdit(body);
+      }
+      toolbar &&
+        toolbar.querySelectorAll(".psr-draw-tool.is-active").forEach((el) => {
+          el.classList.remove("is-active");
+        });
+      if (body && typeof setHumanChartDrawTool === "function") {
+        setHumanChartDrawTool(body, null);
+      }
+      return;
+    }
     if (tool === "undo") {
+      if (body && body._humanDraw && body._humanDraw.parallelEdit) {
+        body._humanDraw.parallelEdit = null;
+        if (typeof clearParallelEditLayer === "function") clearParallelEditLayer(body);
+        if (typeof syncParallelDoneButton === "function") syncParallelDoneButton(body);
+      }
       const cur = getHumanChartDraft(rid, chartKey);
       cur.pop();
       setHumanChartDraft(rid, chartKey, cur);
@@ -12932,6 +12967,11 @@ function bindHumanDrawToolbarsOnce() {
       return;
     }
     if (tool === "clear") {
+      if (body && body._humanDraw) {
+        body._humanDraw.parallelEdit = null;
+        if (typeof clearParallelEditLayer === "function") clearParallelEditLayer(body);
+        if (typeof syncParallelDoneButton === "function") syncParallelDoneButton(body);
+      }
       setHumanChartDraft(rid, chartKey, []);
       if (body && body._chartState) {
         body._chartState.overlays = body._chartState.overlays || {};
@@ -13347,13 +13387,14 @@ function renderEntryBlindReviewCard(item, expanded) {
             <h4 class="small">PIT (to buy day)</h4>
             ${pitNote}
             ${renderPatternMarkChips(pitMarks, "pit")}
-            ${renderHumanDrawToolbar(item.review_id, "pit").replace(
-              /data-psr-draw-/g,
-              "data-ebr-draw-"
+            ${renderChartWithDrawTools(
+              item.review_id,
+              "pit",
+              `<div class="psr-chart" data-ebr-chart="pit" data-ebr-id="${esc(
+                item.review_id
+              )}"></div>`,
+              { attrPrefix: "ebr" }
             )}
-            <div class="psr-chart" data-ebr-chart="pit" data-ebr-id="${esc(
-              item.review_id
-            )}"></div>
           </div>
         </div>
         <div class="psr-actions">
