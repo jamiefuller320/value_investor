@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-28T14:55:23+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-30T08:05:10+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -264,6 +264,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N231 | **Blanket post-sale autopsy clearance of mechanical exits** | Owner: little value analysing all max-days / leave-buy-cohort exits now; comments largely duplicate. Prefer identity-break and other non-mechanical sells; feed premature-sell and no-support downtrend lessons into super-book lenses. | After identity-break cohort has thick commented marks and super-book judgment checklist is wired; or when mechanical exits show new distinct failure modes. |
 | N232 | **Q8B cohort head-cap / shrink helper beyond sticky propose** | Proposed non-mechanical cohort is ~78 ids. If owner finds that too large for a named checkpoint, add an explicit capped head-slice or book filter on propose-cohort — do not silently auto-shrink. | Owner rejects freeze of full non_mechanical_open_autopsy_v0 set and asks for a smaller named slice |
 | N233 | **Register cue_consumer_mft as paper-automation learning track** | Do not add a fourth equal paper learning track for the super book while observe arm + Q8B gate suffice. Paper-auto registration would risk sprint noise and P1 confusion. | Episode walker proven on observe store and owner explicitly wants paper-auto parity twin |
+| N235 | **Replace MFT thin_emit skeleton hygiene note before first evolutionary spawn** | cue_consumer_mft thin_emit soft_ready=true with scaffold proposal hrp-d5de1f32bad4 still marked skeleton hygiene — first novelty-gated child must wait for a real incorporate/falsify note; N223/N226 remain the spawn/novelty parks. | thin_emit proposal_hygiene carries a non-skeleton falsify_or_incorporate_note and active_sealed_children still 0 |
 
 ---
 
@@ -385,6 +386,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L646 | **cue_consumer_mft weekday paper-auto track wiring** | Lab walker records observe episodes in cue_consumer_mft_observe.json. Optional later: wire a weekday paper-auto track / rebalance-log twin for the lab book without stealing Data P1 or spawning sealed children. | Lab has durable closed episode volume and owner wants weekday paper-auto marks alongside archive walker |
 | L647 | **Remote LLM voice on N228 judgment checklist (still observe-only)** | Deterministic N228 cite fill ships on cue_consumer_mft decide trail. Optional later: remote LLM agree/veto prose on the same B1-B6/S1-S6 checklist with durable cites — influences_live=false until a separate promote gate; never Package L. | Deterministic judgment fill has closed-episode volume and owner asks for LLM voice on lab decide (F1 shadow marks readable) |
 | L648 | **Entry-revisit chart path series on buy+28d cards** | Thin entry_revisit v0 shows textual path status (still_open/already_exited + fair-cost %). Later: mount path_to_plus28 chart series on Lifecycle Entry +28d cards (same dual-horizon style as post-sale, clipped at buy+28d). | entry_revisit queue has regular Sunday volume and owner asks for chart on +28d cards |
+| L649 | **Entry-blind Accept/Comment themes as MFT stock_choice MoM prior** | Once entry_blind has a thicker actioned cohort (beyond today's 12 new / 2 history), roll recurring human themes into cue-consumer MFT stock_choice MoM priors — still observe-only, influences_live=false, no Package L. | entry_blind actioned_history >= 24 and cue_consumer_mft MoM stock_choice leaves diagnostic_partial |
 
 ### Universe & data
 
