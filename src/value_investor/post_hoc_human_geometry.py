@@ -58,6 +58,160 @@ def _normalize_line_endpoints(raw: Any) -> dict[str, Any] | None:
     return {"t0": t0, "y0": y0, "t1": t1, "y1": y1}
 
 
+def _normalize_anchor_point(raw: Any) -> dict[str, Any] | None:
+    """Single chart-native anchor ``{t, y}`` (also accepts t0/y0 aliases)."""
+    if not isinstance(raw, dict):
+        return None
+    t = _iso_day(raw.get("t") if "t" in raw else raw.get("t0"))
+    y = _finite_float(raw.get("y") if "y" in raw else raw.get("y0") or raw.get("price"))
+    if not t or y is None:
+        return None
+    return {"t": t, "y": y}
+
+
+def _parallel_from_anchors(
+    start: dict[str, Any],
+    end: dict[str, Any],
+    separation_anchor: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Build parallel_pair from primary start/end + third separation anchor.
+
+    Separation is the signed price offset of the second line relative to the
+    primary at the separation anchor's time (fail-closed if primary is a
+    zero-length degenerate segment in time+price).
+    """
+    t0, y0 = start["t"], float(start["y"])
+    t1, y1 = end["t"], float(end["y"])
+    ts, ys = separation_anchor["t"], float(separation_anchor["y"])
+    if t0 == t1 and y0 == y1:
+        return None
+    # Interpolate primary y at separation.t (by calendar day order as proxy).
+    if t0 == t1:
+        y_on_primary = y0
+    elif ts <= t0:
+        y_on_primary = y0
+    elif ts >= t1:
+        y_on_primary = y1
+    else:
+        # Linear in day ordinal between t0 and t1.
+        def _day_num(iso: str) -> int:
+            parts = iso.split("-")
+            return int(parts[0]) * 372 + int(parts[1]) * 31 + int(parts[2])
+
+        span = _day_num(t1) - _day_num(t0)
+        if span == 0:
+            y_on_primary = y0
+        else:
+            frac = (_day_num(ts) - _day_num(t0)) / span
+            y_on_primary = y0 + (y1 - y0) * frac
+    separation = ys - y_on_primary
+    line_a = {"t0": t0, "y0": y0, "t1": t1, "y1": y1}
+    line_b = {"t0": t0, "y0": y0 + separation, "t1": t1, "y1": y1 + separation}
+    return {
+        "type": "parallel_pair",
+        "anchors": {
+            "start": {"t": t0, "y": y0},
+            "end": {"t": t1, "y": y1},
+            "separation": {"t": ts, "y": ys},
+        },
+        "separation": separation,
+        "line_a": line_a,
+        "line_b": line_b,
+    }
+
+
+def _parallel_from_primary_and_sep(
+    *,
+    t0: str,
+    y0: float,
+    t1: str,
+    y1: float,
+    separation: float,
+    sep_t: str | None = None,
+) -> dict[str, Any]:
+    mid_t = sep_t or t0
+    mid_y = y0 + (y1 - y0) * 0.5 + separation
+    return {
+        "type": "parallel_pair",
+        "anchors": {
+            "start": {"t": t0, "y": y0},
+            "end": {"t": t1, "y": y1},
+            "separation": {"t": mid_t, "y": mid_y},
+        },
+        "separation": separation,
+        "line_a": {"t0": t0, "y0": y0, "t1": t1, "y1": y1},
+        "line_b": {
+            "t0": t0,
+            "y0": y0 + separation,
+            "t1": t1,
+            "y1": y1 + separation,
+        },
+    }
+
+
+def _normalize_parallel_pair(raw: dict[str, Any]) -> dict[str, Any] | None:
+    """Normalize parallel_pair: 3-anchor form preferred; legacy line_a/line_b ok."""
+    anchors = raw.get("anchors")
+    if isinstance(anchors, dict):
+        start = _normalize_anchor_point(
+            anchors.get("start") or anchors.get("a") or anchors.get("p0")
+        )
+        end = _normalize_anchor_point(anchors.get("end") or anchors.get("b") or anchors.get("p1"))
+        sep = _normalize_anchor_point(
+            anchors.get("separation")
+            or anchors.get("offset")
+            or anchors.get("sep")
+            or anchors.get("p2")
+        )
+        if start and end and sep:
+            built = _parallel_from_anchors(start, end, sep)
+            if built:
+                return built
+        return None
+
+    # Primary segment + signed separation (no third point coords).
+    sep_val = _finite_float(raw.get("separation") if "separation" in raw else raw.get("sep"))
+    primary = _normalize_line_endpoints(raw)
+    if primary is None and sep_val is not None:
+        primary = _normalize_line_endpoints(
+            {
+                "t0": raw.get("t0"),
+                "y0": raw.get("y0"),
+                "t1": raw.get("t1"),
+                "y1": raw.get("y1"),
+            }
+        )
+    if primary is not None and sep_val is not None:
+        return _parallel_from_primary_and_sep(
+            t0=primary["t0"],
+            y0=float(primary["y0"]),
+            t1=primary["t1"],
+            y1=float(primary["y1"]),
+            separation=sep_val,
+            sep_t=_iso_day(raw.get("sep_t")),
+        )
+
+    # Legacy: explicit line_a / line_b (still agent-readable).
+    line_a = _normalize_line_endpoints(raw.get("line_a") or raw.get("a"))
+    line_b = _normalize_line_endpoints(raw.get("line_b") or raw.get("b"))
+    if not line_a or not line_b:
+        return None
+    separation = float(line_b["y0"]) - float(line_a["y0"])
+    mid_t = line_a["t0"]
+    mid_y = float(line_a["y0"]) + (float(line_a["y1"]) - float(line_a["y0"])) * 0.5 + separation
+    return {
+        "type": "parallel_pair",
+        "anchors": {
+            "start": {"t": line_a["t0"], "y": float(line_a["y0"])},
+            "end": {"t": line_a["t1"], "y": float(line_a["y1"])},
+            "separation": {"t": mid_t, "y": mid_y},
+        },
+        "separation": separation,
+        "line_a": line_a,
+        "line_b": line_b,
+    }
+
+
 def _normalize_element(raw: Any) -> dict[str, Any] | None:
     if not isinstance(raw, dict):
         return None
@@ -83,12 +237,7 @@ def _normalize_element(raw: Any) -> dict[str, Any] | None:
         if not line:
             return None
         return {"type": "line", **line}
-    # parallel_pair
-    line_a = _normalize_line_endpoints(raw.get("line_a") or raw.get("a"))
-    line_b = _normalize_line_endpoints(raw.get("line_b") or raw.get("b"))
-    if not line_a or not line_b:
-        return None
-    return {"type": "parallel_pair", "line_a": line_a, "line_b": line_b}
+    return _normalize_parallel_pair(raw)
 
 
 def _coerce_geometry_list(raw: Any) -> list[Any]:
