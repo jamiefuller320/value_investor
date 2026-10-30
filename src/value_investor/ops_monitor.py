@@ -2548,7 +2548,8 @@ def check_entry_blind_review_queue(
 
     Writes ``docs/data/entry_blind_review_queue.json``. Accept/Comment labels live
     in ``entry_blind_review_labels.json`` (dashboard bridge). PIT clip only —
-    no post-fill path / realized %. Never changes books or knobs
+    no post-fill path / realized %. Also binds L650 ``entry_news_polarity`` and
+    persists ``entry_news_polarity.json`` on refresh. Never changes books or knobs
     (``auto_fixable=False``). See docs/ops/entry-blind-review.md.
     """
     from value_investor.entry_blind_review import (
@@ -2584,6 +2585,43 @@ def check_entry_blind_review_queue(
             auto_fixable=bool(finding.get("auto_fixable")),
         )
         for finding in ops_findings_from_entry_blind_queue(payload)
+    ]
+
+
+def check_entry_news_polarity(
+    *,
+    data_dir: Path | None = None,
+) -> list[OpsFinding]:
+    """L650 observe-only: buy-day PIT news polarity coverage on entry_blind.
+
+    Reads ``docs/data/entry_news_polarity.json`` written by entry_blind refresh.
+    Fail-closed info finding if missing. Never auto_fixable / never live veto.
+    See docs/ops/entry-news-polarity.md.
+    """
+    from value_investor.entry_news_polarity import (
+        DEFAULT_DATA_DIR,
+        STORE_FILENAME,
+        ops_findings_from_entry_news_polarity,
+    )
+    from value_investor.storage import read_json
+
+    root = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
+    path = root / STORE_FILENAME
+    payload: dict | None
+    try:
+        raw = read_json(path)
+        payload = raw if isinstance(raw, dict) else None
+    except (OSError, FileNotFoundError, ValueError, TypeError):
+        payload = None
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "Entry news polarity (observe)"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+        for finding in ops_findings_from_entry_news_polarity(payload)
     ]
 
 
@@ -4350,6 +4388,7 @@ def collect_ops_findings(
     findings.extend(check_post_sell_cue_digest())
     findings.extend(check_post_sale_review_queue())
     findings.extend(check_entry_blind_review_queue())
+    findings.extend(check_entry_news_polarity())
     findings.extend(check_entry_revisit_review_queue())
     findings.extend(check_cue_consumer_mft())
     findings.extend(check_n200_tech_timing_observe())

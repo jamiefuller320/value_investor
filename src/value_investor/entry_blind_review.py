@@ -23,6 +23,13 @@ from value_investor.entry_blind_review_labels import (
     load_entry_blind_review_labels,
     prune_active_replies,
 )
+from value_investor.entry_news_polarity import (
+    bind_entry_news_polarity,
+    build_entry_news_polarity_panel,
+    load_journal_events_by_ticker,
+    load_phrase_lexicon,
+    persist_entry_news_polarity_panel,
+)
 from value_investor.lifecycle_board import JUST_BOUGHT_DAYS
 from value_investor.post_sale_decision_reasons import (
     UNKNOWN_LABEL,
@@ -342,6 +349,7 @@ def _base_item(
     item = strip_outcome_fields(item)
     item["framing"] = _framing_line(item)
     _attach_entry_blind_opinion(item)
+    # L650 polarity is bound in build_entry_blind_review_queue (shared lexicon/journal).
     return item
 
 
@@ -569,11 +577,21 @@ def build_entry_blind_review_queue(
     labels_store = labels if labels is not None else load_entry_blind_review_labels(root)
     sealed_indexes = load_sealed_episode_indexes(root)
     control_trades = load_control_trade_index(root)
+    # L650: shared offline news indexes (hard 90d PIT window; no fade into label).
+    lexicon = load_phrase_lexicon(root)
+    journal_by_ticker = load_journal_events_by_ticker(root)
 
     candidates = _dedupe_items(
         _lab_buy_items(lab_payload, sealed_indexes=sealed_indexes)
         + _sealed_just_bought_items(sealed_payload, sealed_indexes=sealed_indexes)
     )
+    for row in candidates:
+        bind_entry_news_polarity(
+            row,
+            data_dir=root,
+            lexicon=lexicon,
+            journal_by_ticker=journal_by_ticker,
+        )
     # Re-strip after any bind side effects; fail-closed leakage guard.
     candidates = [strip_outcome_fields(row) for row in candidates]
     candidates_by_id = {
@@ -618,6 +636,14 @@ def build_entry_blind_review_queue(
                 control_trades=control_trades,
             )
             card = strip_outcome_fields(card)
+        if not card.get("entry_news_polarity"):
+            bind_entry_news_polarity(
+                card,
+                data_dir=root,
+                lexicon=lexicon,
+                journal_by_ticker=journal_by_ticker,
+            )
+            card = strip_outcome_fields(card)
         if not card.get("framing"):
             card["framing"] = _framing_line(card)
         if not card.get("llm_opinion"):
@@ -648,6 +674,7 @@ def build_entry_blind_review_queue(
         by_book[key] = by_book.get(key, 0) + 1
 
     awaiting = comments_awaiting_reply(labels_store)
+    polarity_panel = build_entry_news_polarity_panel(data_dir=root, cards=capped)
     return {
         "schema_version": SCHEMA_VERSION,
         "generated_at": _utcnow().isoformat(),
@@ -658,18 +685,25 @@ def build_entry_blind_review_queue(
         "ops_doc": OPS_DOC,
         "product_claim": (
             "Blind entry critique for lab / interesting buys — PIT chart through "
-            "buy day + buy decision reasons; Accept/Comment; no post-fill path / "
-            "no realized %; never fills or knobs"
+            "buy day + buy decision reasons + L650 entry news polarity cites; "
+            "Accept/Comment; no post-fill path / no realized %; never fills or knobs"
         ),
         "learning_question": (
             "Given only information available at / just after the buy, was this a "
             "sound entry under the intended entry lens / policy?"
         ),
+        "entry_news_polarity_summary": {
+            "cards_with_usable_news": polarity_panel.get("cards_with_usable_news"),
+            "no_usable_news": polarity_panel.get("no_usable_news"),
+            "label_counts": polarity_panel.get("label_counts"),
+            "ops_doc": "docs/ops/entry-news-polarity.md",
+        },
         "clocks": {
             "pit_before_days": PIT_BEFORE_DAYS,
             "just_bought_days": JUST_BOUGHT_DAYS,
             "active_attention_cap": int(active_cap),
             "entry_revisit_days": 28,  # sibling stage: entry_revisit queue
+            "entry_news_polarity_lookback_days": 90,  # L650 hard PIT window
         },
         "coverage": {
             "candidate_buys": len(candidates),
@@ -731,6 +765,13 @@ def refresh_entry_blind_review_queue(
         dest.parent.mkdir(parents=True, exist_ok=True)
         write_json(dest, payload, compact=False)
         payload["path"] = str(dest)
+        # L650 cohort rollup (observe utilization); same daily commit lane.
+        panel = build_entry_news_polarity_panel(
+            data_dir=root,
+            cards=list(payload.get("active") or []),
+        )
+        persist_entry_news_polarity_panel(panel, data_dir=root)
+        payload["entry_news_polarity_path"] = str(root / "entry_news_polarity.json")
     return payload
 
 
