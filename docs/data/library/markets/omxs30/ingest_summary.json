@@ -1,21 +1,97 @@
 {
-  "run_at": "2026-10-29T14:46:24.093371+00:00",
+  "run_at": "2026-10-30T14:33:04.087979+00:00",
   "market_id": "omxs30",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "BOL.ST"
+  ],
+  "target_details": [
+    {
+      "ticker": "BOL.ST",
+      "priority_score": 15.0139,
+      "filings_total": 18,
+      "filings_with_body": 17,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "BOL.ST",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 18,
+        "filings_with_body": 17,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 18,
+        "filings_with_body": 18,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 18,
+        "annual": 11,
+        "interim": 3,
+        "trading_update": 3,
+        "other": 1,
+        "with_body": 18,
+        "period_coverage": {
+          "annual": {
+            "total": 11,
+            "with_body": 11
+          },
+          "interim": {
+            "total": 3,
+            "with_body": 3
+          },
+          "trading_update": {
+            "total": 3,
+            "with_body": 3
+          },
+          "other": {
+            "total": 1,
+            "with_body": 1
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 18,
+        "with_body_after": 18,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "BOL.ST"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-29T14:46:18.631865+00:00",
+    "snapshot_at": "2026-10-30T14:31:39.787062+00:00",
     "market_id": "omxs30",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 0,
+    "indexed_without_body": 1,
     "bodies_min": 3,
     "bodies_median": 11.5,
     "bodies_max": 17,
@@ -24,18 +100,24 @@
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
     "thin_body_tickers": [],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
+    "indexed_without_body_tickers": [
+      "BOL.ST"
+    ],
+    "indexed_without_body_by_ticker": {
+      "BOL.ST": 1
+    },
     "parked_tickers": [],
     "parked_count": 0,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
+    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body_tickers": [
+      "BOL.ST"
+    ],
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-29T14:46:19.507452+00:00",
+    "snapshot_at": "2026-10-30T14:33:04.076220+00:00",
     "market_id": "omxs30",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
@@ -44,7 +126,7 @@
     "indexed_without_body": 0,
     "bodies_min": 3,
     "bodies_median": 11.5,
-    "bodies_max": 17,
+    "bodies_max": 18,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -63,11 +145,30 @@
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 12,
+    "hits": 9,
+    "new_rows_total": 0,
+    "curiosity_total": 10,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "BOL.ST"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
     "skipped": true,
@@ -76,42 +177,49 @@
   },
   "critical_path": {
     "market_id": "omxs30",
-    "assessed_at": "2026-10-29T14:46:19.031162+00:00",
+    "assessed_at": "2026-10-30T14:31:40.468500+00:00",
     "unmeasured": [],
     "zero_body": [],
-    "indexed_without_body": [],
+    "indexed_without_body": [
+      {
+        "ticker": "BOL.ST",
+        "indexed_without_body": 1,
+        "filings_total": 18,
+        "filings_with_body": 17
+      }
+    ],
     "thin_need_discovery": [],
     "thin_need_bodies": [],
-    "primary_blocker": "none",
+    "primary_blocker": "indexed_without_body",
     "force_discovery_scan": false,
-    "auto_pin_tickers": [],
+    "auto_pin_tickers": [
+      "BOL.ST"
+    ],
     "recommended_actions": [
-      "Filing critical path clear — maintenance deepen only"
+      "Prefer indexed-without-body body refetch (1 tickers, top: BOL.ST(1))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 0,
-      "indexed_without_body_rows": 0,
+      "indexed_without_body_tickers": 1,
+      "indexed_without_body_rows": 1,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 0.001030794999991258,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2099.998969205,
+  "used_seconds": 82.92349929500006,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3517.076500705,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "BOL.ST"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "omxs30",
-    "updated_at": "2026-10-29T14:46:19.510377+00:00",
+    "updated_at": "2026-10-30T14:33:04.080161+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -130,39 +238,7 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 50,
-    "candidate_count": 46,
-    "skipped_resolved_tickers": [
-      "LMT",
-      "CRH",
-      "MER.L",
-      "TPT.L",
-      "FOXT.L",
-      "ULTP.L",
-      "APTD.L",
-      "DFS.L",
-      "NTR.TO",
-      "GIB-A.TO",
-      "SU.TO",
-      "BAS.DE",
-      "PDD",
-      "BAS.DE",
-      "DTE.DE",
-      "DTG.DE",
-      "FRE.DE",
-      "HNR1.DE",
-      "MUV2.DE",
-      "PST.MI",
-      "ACKB.BR",
-      "APAM.AS",
-      "0285.HK",
-      "2331.HK",
-      "0288.HK",
-      "0857.HK",
-      "EVN.VI",
-      "WIE.VI"
-    ],
-    "wait_behind_task_id": ""
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20261030-01"
   }
 }

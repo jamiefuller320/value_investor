@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-30T13:50:40.376178+00:00",
+  "generated_at": "2026-10-30T14:37:44.231621+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -74,7 +74,7 @@
       "1": "asx200",
       "2": "sp500"
     },
-    "equal_support_generated_at": "2026-10-30T08:47:09.515003+00:00"
+    "equal_support_generated_at": "2026-10-30T14:16:54.828570+00:00"
   },
   "markets": [
     {
@@ -888,35 +888,36 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 1,
+        "buy_tier_not_now_count": 2,
         "hold_near_buy_count": 50,
-        "not_buy_tier_count": 149,
+        "not_buy_tier_count": 150,
         "never_buy_tier_count": 122,
         "rememo_eligible_count": 0,
-        "first_time_memo_count": 2,
+        "first_time_memo_count": 1,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 1,
+        "buy_tier_not_now_count": 2,
         "hold_near_buy_count": 50,
-        "not_buy_tier_count": 149,
+        "not_buy_tier_count": 150,
         "never_buy_tier_count": 122,
         "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
         "buy_tier_not_now_sample": [
-          "WKL.AS"
+          "PHIA.AS",
+          "UCB.BR"
         ],
         "hold_near_buy_sample": [
           "NOS.LS",
+          "SHELL.AS",
           "AGS.BR",
           "ENI.MI",
           "LIFCO-B.ST",
-          "ASRNL.AS",
+          "MIO.IR",
           "RENE.LS",
-          "MBG.DE",
-          "VIG.VI"
+          "ASRNL.AS"
         ]
       },
       "sprint_progress": {
@@ -1615,19 +1616,19 @@
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 51,
-        "not_buy_tier_count": 166,
-        "never_buy_tier_count": 144,
+        "hold_near_buy_count": 50,
+        "not_buy_tier_count": 165,
+        "never_buy_tier_count": 142,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 2,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 51,
-        "not_buy_tier_count": 166,
-        "never_buy_tier_count": 144,
-        "timing_signal_present": true,
+        "hold_near_buy_count": 50,
+        "not_buy_tier_count": 165,
+        "never_buy_tier_count": 142,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
@@ -1638,9 +1639,9 @@
           "CDA.AX",
           "PRU.AX",
           "LSF.AX",
-          "RIO.AX",
-          "EVN.AX",
-          "SUL.AX"
+          "SHL.AX",
+          "SUL.AX",
+          "RIO.AX"
         ]
       },
       "sprint_progress": {
@@ -2337,33 +2338,42 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 125,
-        "not_buy_tier_count": 361,
-        "never_buy_tier_count": 310,
+        "buy_tier_not_now_count": 8,
+        "hold_near_buy_count": 120,
+        "not_buy_tier_count": 368,
+        "never_buy_tier_count": 308,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 125,
-        "not_buy_tier_count": 361,
-        "never_buy_tier_count": 310,
-        "timing_signal_present": false,
+        "buy_tier_not_now_count": 8,
+        "hold_near_buy_count": 120,
+        "not_buy_tier_count": 368,
+        "never_buy_tier_count": 308,
+        "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [],
+        "buy_tier_not_now_sample": [
+          "ROP",
+          "EOG",
+          "IBM",
+          "APA",
+          "HST",
+          "LDOS",
+          "LMT",
+          "PTC"
+        ],
         "hold_near_buy_sample": [
           "EIX",
           "UHS",
           "HCA",
-          "URI",
-          "HSY",
           "VLTO",
           "NTAP",
-          "ES"
+          "ES",
+          "URI",
+          "DVN"
         ]
       },
       "sprint_progress": {
@@ -3043,7 +3053,7 @@
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 9,
+        "hold_near_buy_count": 8,
         "not_buy_tier_count": 17,
         "never_buy_tier_count": 13,
         "rememo_eligible_count": 0,
@@ -3052,10 +3062,10 @@
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 9,
+        "hold_near_buy_count": 8,
         "not_buy_tier_count": 17,
         "never_buy_tier_count": 13,
-        "timing_signal_present": false,
+        "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
@@ -3063,12 +3073,12 @@
         "hold_near_buy_sample": [
           "PHIA.AS",
           "ASML.AS",
-          "ASM.AS",
+          "KPN.AS",
           "BESI.AS",
           "ASRNL.AS",
           "HEIA.AS",
           "NN.AS",
-          "KPN.AS"
+          "UNA.AS"
         ]
       },
       "sprint_progress": null,
@@ -3660,8 +3670,8 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 1,
-        "hold_near_buy_count": 10,
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 9,
         "not_buy_tier_count": 41,
         "never_buy_tier_count": 37,
         "rememo_eligible_count": 0,
@@ -3669,26 +3679,24 @@
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 1,
-        "hold_near_buy_count": 10,
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 9,
         "not_buy_tier_count": 41,
         "never_buy_tier_count": 37,
         "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [
-          "RWS.L"
-        ],
+        "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "DATA.L",
-          "POLR.L",
           "NICL.L",
+          "POLR.L",
           "GAMA.L",
           "FDEV.L",
           "TRCS.L",
           "UPR.L",
-          "RNWH.L"
+          "ATYM.L"
         ]
       },
       "sprint_progress": null,
@@ -4838,8 +4846,8 @@
         "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "ABI.BR",
-          "UCB.BR",
           "AGS.BR",
+          "UCB.BR",
           "MELE.BR",
           "SOLB.BR"
         ]
@@ -5422,8 +5430,8 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 5,
+        "buy_tier_not_now_count": 1,
+        "hold_near_buy_count": 4,
         "not_buy_tier_count": 26,
         "never_buy_tier_count": 26,
         "rememo_eligible_count": 0,
@@ -5431,21 +5439,22 @@
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 5,
+        "buy_tier_not_now_count": 1,
+        "hold_near_buy_count": 4,
         "not_buy_tier_count": 26,
         "never_buy_tier_count": 26,
         "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [],
+        "buy_tier_not_now_sample": [
+          "PUB.PA"
+        ],
         "hold_near_buy_sample": [
-          "MT.AS",
           "ERF.PA",
           "RNO.PA",
           "ENGI.PA",
-          "DSY.PA"
+          "GLE.PA"
         ]
       },
       "sprint_progress": null,
@@ -6079,8 +6088,8 @@
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 12,
-        "not_buy_tier_count": 29,
+        "hold_near_buy_count": 11,
+        "not_buy_tier_count": 30,
         "never_buy_tier_count": 25,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
@@ -6088,23 +6097,23 @@
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 12,
-        "not_buy_tier_count": 29,
+        "hold_near_buy_count": 11,
+        "not_buy_tier_count": 30,
         "never_buy_tier_count": 25,
-        "timing_signal_present": false,
+        "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
         "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "VNA.DE",
-          "BNR.DE",
           "ENR.DE",
+          "BNR.DE",
+          "MBG.DE",
           "G24.DE",
           "ALV.DE",
           "DBK.DE",
-          "SIE.DE",
-          "MBG.DE"
+          "G1A.DE"
         ]
       },
       "sprint_progress": null,
@@ -6758,8 +6767,8 @@
         "hold_near_buy_sample": [
           "ENGI.PA",
           "ASML.AS",
-          "MBG.DE",
           "ENR.DE",
+          "MBG.DE",
           "BNP.PA",
           "BMW.DE",
           "SAP.DE",
@@ -7394,7 +7403,7 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 0,
+        "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 11,
         "not_buy_tier_count": 32,
         "never_buy_tier_count": 25,
@@ -7403,7 +7412,7 @@
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 0,
+        "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 11,
         "not_buy_tier_count": 32,
         "never_buy_tier_count": 25,
@@ -7411,16 +7420,18 @@
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [],
+        "buy_tier_not_now_sample": [
+          "INW.MI"
+        ],
         "hold_near_buy_sample": [
-          "PRY.MI",
           "HER.MI",
+          "PRY.MI",
           "IG.MI",
           "REC.MI",
           "BMPS.MI",
+          "LDO.MI",
           "TEN.MI",
-          "TIT.MI",
-          "LDO.MI"
+          "TIT.MI"
         ]
       },
       "sprint_progress": null,
@@ -8029,7 +8040,7 @@
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
         "buy_tier_not_now_count": 1,
-        "hold_near_buy_count": 14,
+        "hold_near_buy_count": 15,
         "not_buy_tier_count": 65,
         "never_buy_tier_count": 61,
         "rememo_eligible_count": 0,
@@ -8038,7 +8049,7 @@
       },
       "near_miss": {
         "buy_tier_not_now_count": 1,
-        "hold_near_buy_count": 14,
+        "hold_near_buy_count": 15,
         "not_buy_tier_count": 65,
         "never_buy_tier_count": 61,
         "timing_signal_present": true,
@@ -8756,7 +8767,7 @@
         "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 25,
-        "not_buy_tier_count": 61,
+        "not_buy_tier_count": 63,
         "never_buy_tier_count": 51,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 1,
@@ -8765,7 +8776,7 @@
       "near_miss": {
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 25,
-        "not_buy_tier_count": 61,
+        "not_buy_tier_count": 63,
         "never_buy_tier_count": 51,
         "timing_signal_present": true,
         "observe_only": true,
@@ -8778,8 +8789,8 @@
           "2359.HK",
           "2057.HK",
           "0267.HK",
-          "6690.HK",
           "0322.HK",
+          "6690.HK",
           "1038.HK"
         ]
       },
@@ -9345,33 +9356,35 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 14,
-        "not_buy_tier_count": 30,
+        "buy_tier_not_now_count": 1,
+        "hold_near_buy_count": 12,
+        "not_buy_tier_count": 31,
         "never_buy_tier_count": 29,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 14,
-        "not_buy_tier_count": 30,
+        "buy_tier_not_now_count": 1,
+        "hold_near_buy_count": 12,
+        "not_buy_tier_count": 31,
         "never_buy_tier_count": 29,
         "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [],
+        "buy_tier_not_now_sample": [
+          "REP.MC"
+        ],
         "hold_near_buy_sample": [
-          "ELE.MC",
           "LOG.MC",
           "IAG.MC",
-          "AMS.MC",
           "FDR.MC",
+          "AMS.MC",
           "ENG.MC",
-          "PUIG.MC",
-          "ACS.MC"
+          "ELE.MC",
+          "AENA.MC",
+          "PUIG.MC"
         ]
       },
       "sprint_progress": null,
@@ -9992,8 +10005,8 @@
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 6,
-        "not_buy_tier_count": 18,
+        "hold_near_buy_count": 5,
+        "not_buy_tier_count": 17,
         "never_buy_tier_count": 11,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
@@ -10001,8 +10014,8 @@
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 6,
-        "not_buy_tier_count": 18,
+        "hold_near_buy_count": 5,
+        "not_buy_tier_count": 17,
         "never_buy_tier_count": 11,
         "timing_signal_present": true,
         "observe_only": true,
@@ -10014,7 +10027,6 @@
           "IRES.IR",
           "MIO.IR",
           "KRX.IR",
-          "GL9.IR",
           "A5G.IR"
         ]
       },
@@ -10545,18 +10557,18 @@
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
         "buy_tier_not_now_count": 1,
-        "hold_near_buy_count": 18,
-        "not_buy_tier_count": 61,
-        "never_buy_tier_count": 51,
+        "hold_near_buy_count": 17,
+        "not_buy_tier_count": 64,
+        "never_buy_tier_count": 50,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 1,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 1,
-        "hold_near_buy_count": 18,
-        "not_buy_tier_count": 61,
-        "never_buy_tier_count": 51,
+        "hold_near_buy_count": 17,
+        "not_buy_tier_count": 64,
+        "never_buy_tier_count": 50,
         "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
@@ -10566,13 +10578,13 @@
         ],
         "hold_near_buy_sample": [
           "META",
-          "EXC",
           "AAPL",
+          "EXC",
           "STX",
           "GOOGL",
-          "NVDA",
           "CTAS",
-          "KLAC"
+          "LRCX",
+          "GEHC"
         ]
       },
       "sprint_progress": null,
@@ -11758,8 +11770,8 @@
           "NOS.LS",
           "RENE.LS",
           "NVG.LS",
-          "EDP.LS",
           "SON.LS",
+          "EDP.LS",
           "EGL.LS"
         ]
       },
@@ -12302,35 +12314,36 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 1,
+        "buy_tier_not_now_count": 2,
         "hold_near_buy_count": 18,
-        "not_buy_tier_count": 43,
+        "not_buy_tier_count": 44,
         "never_buy_tier_count": 36,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 1,
+        "buy_tier_not_now_count": 2,
         "hold_near_buy_count": 18,
-        "not_buy_tier_count": 43,
+        "not_buy_tier_count": 44,
         "never_buy_tier_count": 36,
         "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
         "buy_tier_not_now_sample": [
-          "SU.TO"
+          "SU.TO",
+          "CVE.TO"
         ],
         "hold_near_buy_sample": [
           "FFH.TO",
-          "CTC-A.TO",
           "AEM.TO",
+          "CTC-A.TO",
           "QSR.TO",
           "MFC.TO",
-          "PPL.TO",
           "IMO.TO",
-          "BCE.TO"
+          "BCE.TO",
+          "BAM.TO"
         ]
       },
       "sprint_progress": null,
@@ -12948,8 +12961,8 @@
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 5,
-        "not_buy_tier_count": 16,
+        "hold_near_buy_count": 4,
+        "not_buy_tier_count": 15,
         "never_buy_tier_count": 14,
         "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
@@ -12957,8 +12970,8 @@
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 5,
-        "not_buy_tier_count": 16,
+        "hold_near_buy_count": 4,
+        "not_buy_tier_count": 15,
         "never_buy_tier_count": 14,
         "timing_signal_present": true,
         "observe_only": true,
@@ -12969,8 +12982,7 @@
           "LONN.SW",
           "SREN.SW",
           "ZURN.SW",
-          "RO.SW",
-          "GEBN.SW"
+          "RO.SW"
         ]
       },
       "sprint_progress": null,
@@ -13498,7 +13510,7 @@
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 10,
+        "hold_near_buy_count": 12,
         "not_buy_tier_count": 24,
         "never_buy_tier_count": 21,
         "rememo_eligible_count": 0,
@@ -13507,7 +13519,7 @@
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 10,
+        "hold_near_buy_count": 12,
         "not_buy_tier_count": 24,
         "never_buy_tier_count": 21,
         "timing_signal_present": true,
@@ -13520,10 +13532,10 @@
           "5E2.SI",
           "H78.SI",
           "J69U.SI",
-          "C6L.SI",
+          "BUOU.SI",
           "U11.SI",
-          "G13.SI",
-          "C09.SI"
+          "C6L.SI",
+          "F34.SI"
         ]
       },
       "sprint_progress": null,
@@ -14077,7 +14089,7 @@
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 6,
+        "hold_near_buy_count": 7,
         "not_buy_tier_count": 19,
         "never_buy_tier_count": 16,
         "rememo_eligible_count": 0,
@@ -14086,7 +14098,7 @@
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 6,
+        "hold_near_buy_count": 7,
         "not_buy_tier_count": 19,
         "never_buy_tier_count": 16,
         "timing_signal_present": true,
@@ -14096,10 +14108,11 @@
         "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "NMR",
-          "ASX",
           "TSM",
           "INFY",
+          "ASX",
           "UMC",
+          "HMC",
           "TM"
         ]
       },
