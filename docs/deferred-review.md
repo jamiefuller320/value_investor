@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-30T10:14:08+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-30T11:07:46+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -64,6 +64,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20261014-02 | Daily hub two-lane: Push fail-closed P1/P2 cited ≤3; Explore labeled not-today with claim+why+falsify, may sit outside North Star/AGENTS, durable→ftse-defer. Forks D1–D7 in store docs/daily-hub-attention-redesign.md. Promote after #1082 (keep L606 for beachhead). | daily-hub, attention, explore, ops-monitor |
 | frag-20261024-01 | Package L not_now: LLM episode debriefs / autopsy auto-tune / Accept→capital. Distinct and ALLOWED later under L623: LLM *reply* text to owner Comments as development-loop response (observe/alignment only). Promote full not_now idea after #1169 clears N-series. Store post-sale-review-dashboard-2026-10-24.md. | package-L, not-now, post-sale, pending-defer |
 | frag-20261030-01 | Owner dialogue also parked: live news trading signals; sentiment API sprawl; restoring NEWS HIGHLIGHTS into scheduled memos as capital path — covered partly by live hard-filter defer; keep as fragment if a separate slim-memo restore fork is ever debated. | news, memo, sentiment, NEWS_HIGHLIGHTS |
+| frag-20261030-02 | Hypothesis-slate scoring rubric (most_correct vs graded multi-label vs none_clear) still half-formed — pin when eng authorized; prefer single most_correct_item_id + none_clear over multi-winner spray. | hypothesis-slate, scoring-rubric |
 
 ---
 
@@ -268,6 +269,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N235 | **Replace MFT thin_emit skeleton hygiene note before first evolutionary spawn** | cue_consumer_mft thin_emit soft_ready=true with scaffold proposal hrp-d5de1f32bad4 still marked skeleton hygiene — first novelty-gated child must wait for a real incorporate/falsify note; N223/N226 remain the spawn/novelty parks. | thin_emit proposal_hygiene carries a non-skeleton falsify_or_incorporate_note and active_sealed_children still 0 |
 | N236 | **MFT B-cell for catalyst/news polarity** | Do not add N228 B7 (or B1/B3 news expansion) until the observe-only entry news polarity cite instrument exists and can supply durable fail-closed cites. Rubric B1-B6 stay screen/cue/exit only. | Entry news polarity cite instrument ships observe-only on buy-day trail (after L225/N90 join) |
 | N237 | **Live news hard-filter / auto-veto on negative news** | Do not wire news polarity, sentiment APIs, or restored NEWS HIGHLIGHTS into live capital path, strand A fills, or Package L. Observe-only polarity cite first; fail-closed missing news must never become a silent veto. Security-ish caution against narrative overfitting and PIT leakage as live gates. | Thick sealed/entry_blind polarity catch-miss evidence plus explicit cold-start/epoch promotion gate — never mid-flight strand A |
+| N238 | **Auto-promote winning hypothesis slate into fills** | Do not auto-pick the scored most-correct hypothesis into fills, size, veto, or strand A. Slate scoring is Package M alignment only (influences_live=false). Revisit only after thick disagreement/calibration marks + cold-start/epoch readiness (F8). | Thick slate_score cohort + MoM incorporation evidence + explicit owner readiness for live LLM/hypothesis influence (same bar as N173 / llm agree-veto promote). |
+| N239 | **Sealed model zoo per hypothesis / slate winner** | Do not spawn a sealed observe model per competing hypothesis or per winning slate class. Anti-noise ≤3 active children/root still governs; lens/ruleset proposals go through novelty+cull — never one book per story. | Mixable entry/exit lenses + novelty-gated sealed forks (L637) proven useful AND owner explicitly wants hypothesis-class twins — still under anti-noise caps. |
 
 ---
 
@@ -547,6 +550,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L636 | **Post-sale autopsy chart volume pane** | Add Yahoo volume (bars or volume_ratio_20 spike markers) under dual-horizon post-sale charts as a human support/sentiment read. Data already fetched as OHLCV but chart JSON persists Close only. Observe-only — never a live fill/knob input. | After CHART_LOOKBACK 1y→2y ships and owner Comments cite volume/support/sentiment at least twice on Package M cards |
 | L645 | **Post-sale further Comment rounds on factory reply cards** | Active queue is uncommented exits only (VI-55). Optional later: a separate history/thread UI to Accept or continue dialogue on factory replies without re-queuing them into the attention list. | Owner asks to resume multi-turn autopsy dialogue after uncommented-only queue has been stable in daily use |
 | L651 | **Entry news polarity parametric / exponential influence-fade** | L650 v0 uses a hard 90-calendar-day PIT lookback ending buy-day plus cite freshness bands (recent≤14d / medium≤45d / stale) as display metadata only. Do not add continuous fade scores into the polarity enum, fill weights, or live/lab sizing until entry_blind polarity disagreement marks are thick enough to A/B hard-window vs parametric fade. | entry_blind polarity cohort has thick sealed disagreement marks (human/LLM disagree on structural_negative vs improvement_path) sufficient to test fade vs hard 90d window |
+| L652 | **Observe decision hypothesis slate (buy/sell)** | At buy and sell, freeze 2–4 competing short hypotheses with durable cites (PIT); at buy+28d / exit+28d score which slate item was most correct; feed MoM/lenses via learning_point_forward. Observe-only Package M; fail-closed without cites; compose with N228 checklist — do not duplicate. Design lock: Project store docs/decision-hypothesis-slate-2026-10-30.md. | Owner authorizes eng after entry_revisit cohort starts scoring (buy+28d clocks clear on commented entry_blind backlog) OR thick entry_revisit marks exist to attach slate_score. |
 
 ### Ops / reliability
 
