@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-10-29T07:37:32.096610+00:00",
+  "generated_at": "2026-10-30T07:54:06.257255+00:00",
   "stamped_this_pass": {
-    "hold_episodes": 1,
+    "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 5,
+    "closed_total": 6,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 8,
+    "open_with_thesis": 7,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -28,7 +28,14 @@
         }
       },
       "broken": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.1346,
+        "mean_trough_unrealized_pct": 0.1346,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "insufficient_data": {
         "closed_count": 0
@@ -56,10 +63,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 5,
+    "hold_closed_with_thesis": 6,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=5 (target >=8)",
+      "hold closed with thesis=6 (target >=8)",
+      "hold thesis buckets thin (broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -285,7 +293,7 @@
           "trough_unrealized_pct": -0.0412
         }
       ],
-      "peak_unrealized_pct": -0.0181,
+      "peak_unrealized_pct": -0.0113,
       "trough_unrealized_pct": -0.0412,
       "recovered_to_breakeven": null,
       "close_reason": null,
@@ -389,7 +397,7 @@
           "trough_unrealized_pct": -0.0277
         }
       ],
-      "peak_unrealized_pct": 0.0303,
+      "peak_unrealized_pct": 0.0406,
       "trough_unrealized_pct": -0.0277,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -441,7 +449,7 @@
           "trough_unrealized_pct": -0.024
         }
       ],
-      "peak_unrealized_pct": 0.0119,
+      "peak_unrealized_pct": 0.0276,
       "trough_unrealized_pct": -0.024,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -626,7 +634,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": 0.0063,
-      "trough_unrealized_pct": 0.0063,
+      "trough_unrealized_pct": 0.004,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -681,7 +689,7 @@
       "ticker": "NOKIA.HE",
       "name": "Nokia Oyj",
       "started_at": "2026-10-29T08:37:32.079862+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -695,12 +703,12 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": 0.0,
-      "trough_unrealized_pct": 0.0,
+      "peak_unrealized_pct": 0.1346,
+      "trough_unrealized_pct": 0.1346,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-30T08:54:06.239806+01:00",
+      "linked_sell_trade_id": "654f7040-c4c6-487f-b9d4-1052dbaaa591",
       "thesis_status_at_start": "broken",
       "recommended_action_at_start": "exit_candidate",
       "thesis_reasons_at_start": [
@@ -768,10 +776,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "MC.PA": -0.0305
+        "MC.PA": -0.0334
       },
       "buy_returns_since_rotation": {
-        "SAN.PA": 0.0664
+        "SAN.PA": 0.0754
       },
       "verdict": null,
       "closed_at": null
@@ -878,12 +886,12 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "TTE.PA": 0.0464,
+        "TTE.PA": 0.059,
         "WKL.AS": -0.1398,
-        "ABI.BR": 0.0325
+        "ABI.BR": -0.0008
       },
       "buy_returns_since_rotation": {
-        "IFX.DE": -0.0457
+        "IFX.DE": 0.0
       },
       "verdict": null,
       "closed_at": null
@@ -938,10 +946,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "IFX.DE": -0.0457
+        "IFX.DE": 0.0
       },
       "buy_returns_since_rotation": {
-        "DTE.DE": -0.0176
+        "DTE.DE": 0.0012
       },
       "verdict": null,
       "closed_at": null
@@ -1050,13 +1058,13 @@
         "WKL.AS": -0.2031
       },
       "buy_returns_since_rotation": {
-        "DG.PA": 0.0121,
-        "TTE.PA": 0.0334,
-        "DHL.DE": 0.0021,
-        "SGO.PA": 0.0042,
-        "SAN.PA": 0.0264,
-        "DTE.DE": -0.0141,
-        "MC.PA": -0.0093,
+        "DG.PA": 0.021,
+        "TTE.PA": 0.0457,
+        "DHL.DE": 0.0159,
+        "SGO.PA": 0.0274,
+        "SAN.PA": 0.0351,
+        "DTE.DE": 0.0047,
+        "MC.PA": -0.0122,
         "VOW.DE": -0.0202
       },
       "verdict": null,
@@ -1109,13 +1117,21 @@
           "cost": 0.0
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-30T08:54:06.239806+01:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0761,
+          "avg_buy_return": 0.0075,
+          "replacement_delta": -0.0687
+        }
+      ],
       "sell_returns_since_rotation": {
-        "IFX.DE": 0.0269
+        "IFX.DE": 0.0761
       },
       "buy_returns_since_rotation": {
-        "SGO.PA": 0.0036,
-        "AD.AS": -0.0046
+        "SGO.PA": 0.0268,
+        "AD.AS": -0.0119
       },
       "verdict": null,
       "closed_at": null
@@ -1378,20 +1394,70 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "DG.PA": 0.0174,
-        "TTE.PA": 0.0018,
-        "DHL.DE": 0.0126,
-        "SGO.PA": -0.0042,
-        "SAN.PA": 0.0188,
-        "DTE.DE": -0.0083,
-        "MC.PA": 0.0052,
-        "ABI.BR": -0.0313,
-        "AD.AS": -0.0115
+        "DG.PA": 0.0263,
+        "TTE.PA": 0.0138,
+        "DHL.DE": 0.0265,
+        "SGO.PA": 0.0188,
+        "SAN.PA": 0.0274,
+        "DTE.DE": 0.0107,
+        "MC.PA": 0.0022,
+        "ABI.BR": -0.0626,
+        "AD.AS": -0.0187
       },
       "buy_returns_since_rotation": {
-        "MUV2.DE": -0.0032,
+        "MUV2.DE": -0.0004,
         "ENI.MI": -0.0275,
-        "PRX.AS": 0.0063
+        "PRX.AS": 0.004
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-10-30T08:54:06.239806+01:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-10-30T08:54:06.239806+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "NOKIA.HE",
+          "price": 8.362,
+          "shares": 10.793481,
+          "gross": 90.26,
+          "cost": 0.02,
+          "avg_cost_at_exit": 7.37,
+          "realized_pct": 0.1346,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": 0.1346
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "ABI.BR",
+          "price": 70.68,
+          "shares": 0.178705,
+          "gross": 12.63,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "NOKIA.HE": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "ABI.BR": 0.0
       },
       "verdict": null,
       "closed_at": null

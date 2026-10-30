@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-29T07:38:01.674586+00:00
+Track: `buy_tier_level` · updated 2026-10-30T07:54:27.629560+00:00
 
 ## Portfolio loser feedback
 
@@ -10,19 +10,17 @@ Track: `buy_tier_level` · updated 2026-10-29T07:38:01.674586+00:00
 
 ## Holding reviews
 
-### HEI.DE — intact / hold_tolerate (-0.5%)
+### HEN3.DE — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### HEI.DE — intact / hold_tolerate (+2.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 70%
+- conviction 62%
 
-### HEN3.DE — weakening / watch_review (+0.0%)
-- conviction 33% below intact floor
-- still buy
-- research accumulate
-
-### FME.DE — weakening / watch_review (+1.4%)
+### FME.DE — weakening / watch_review (+3.6%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes

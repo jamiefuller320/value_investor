@@ -1,15 +1,47 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-29T07:38:17.348337+00:00",
+    "local_time": "2026-10-30T07:54:30.072054+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-29T08:00:00+00:00",
-    "settle_at": "2026-10-29T09:15:00+00:00",
+    "market_open_at": "2026-10-30T08:00:00+00:00",
+    "settle_at": "2026-10-30T09:15:00+00:00",
     "can_act": false,
     "reason": "before market open"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "c2e93ce9-34c3-42fc-ad21-3094f9c3e34d",
+      "fund_id": "8aa0efa6-316a-4c20-bb5c-761fd26c7b3b",
+      "acted_at": "2026-10-30T07:54:30.072054+00:00",
+      "ticker": "JHD.L",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 0.082685,
+      "price": 135.0,
+      "gross": 11.16,
+      "cost": 0.01,
+      "net_cash": 11.15,
+      "note": "Automated trim",
+      "name": "James Halstead plc",
+      "avg_cost_at_exit": 130.4
+    },
+    {
+      "id": "2fa57612-7150-468e-b8db-c27fa3a6b148",
+      "fund_id": "8aa0efa6-316a-4c20-bb5c-761fd26c7b3b",
+      "acted_at": "2026-10-30T07:54:30.072054+00:00",
+      "ticker": "RWS.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.181635,
+      "price": 144.1,
+      "gross": 26.17,
+      "cost": 0.15,
+      "net_cash": -26.32,
+      "note": "Automated buy",
+      "name": "RWS Holdings plc"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +55,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 925.48,
-    "cash": 15.17,
+    "nav": 919.36,
+    "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -36,21 +68,28 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 61.7,
+    "target_sleeve_value": 57.46,
     "targets": [
       {
         "ticker": "MPE.L",
         "name": "M.P. Evans Group PLC",
         "signal": "strong_buy",
         "conviction_score": 0.7388,
-        "price": 1834.0
+        "price": 1828.0
+      },
+      {
+        "ticker": "TFW.L",
+        "name": "FW Thorpe Plc",
+        "signal": "strong_buy",
+        "conviction_score": 0.6031000000000001,
+        "price": 256.0
       },
       {
         "ticker": "KGH.L",
         "name": "Knights Group Holdings plc",
         "signal": "buy",
         "conviction_score": 0.6017,
-        "price": 164.0
+        "price": 165.0
       },
       {
         "ticker": "ASY.L",
@@ -71,14 +110,7 @@
         "name": "James Halstead plc",
         "signal": "buy",
         "conviction_score": 0.5267,
-        "price": 134.2
-      },
-      {
-        "ticker": "TFW.L",
-        "name": "FW Thorpe Plc",
-        "signal": "strong_buy",
-        "conviction_score": 0.5109,
-        "price": 259.0
+        "price": 135.0
       },
       {
         "ticker": "PEBB.L",
@@ -92,49 +124,56 @@
         "name": "Pan African Resources PLC",
         "signal": "buy",
         "conviction_score": 0.51,
-        "price": 112.0
+        "price": 111.4
       },
       {
         "ticker": "YNGN.L",
         "name": "Young & Co.'s Brewery, P.L.C.",
         "signal": "strong_buy",
         "conviction_score": 0.47651,
-        "price": 768.0
+        "price": 760.0
       },
       {
         "ticker": "CAML.L",
         "name": "Central Asia Metals plc",
         "signal": "strong_buy",
         "conviction_score": 0.4727,
-        "price": 138.6
+        "price": 136.6
       },
       {
         "ticker": "IPX.L",
         "name": "Impax Asset Management Group Plc",
         "signal": "strong_buy",
         "conviction_score": 0.42797499999999994,
-        "price": 93.3
+        "price": 93.0
       },
       {
         "ticker": "DOTD.L",
         "name": "dotdigital Group Plc",
         "signal": "buy",
         "conviction_score": 0.3515,
-        "price": 54.3
+        "price": 52.0
       },
       {
         "ticker": "IGR.L",
         "name": "IG Design Group plc",
         "signal": "buy",
         "conviction_score": 0.243185,
-        "price": 88.0
+        "price": 85.5
+      },
+      {
+        "ticker": "RWS.L",
+        "name": "RWS Holdings plc",
+        "signal": "buy",
+        "conviction_score": 0.24224999999999997,
+        "price": 144.1
       },
       {
         "ticker": "PMI.L",
         "name": "Premier Miton Group plc",
         "signal": "buy",
         "conviction_score": 0.23205,
-        "price": 29.6
+        "price": 29.75
       },
       {
         "ticker": "WJG.L",
@@ -153,114 +192,59 @@
         "action": "hold",
         "ticker": "MPE.L",
         "name": "M.P. Evans Group PLC",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 57.75,
-        "target_value": 61.7,
+        "reason": "Already near equal-weight target",
+        "value": 57.57,
+        "target_value": 57.46,
         "conviction_score": 0.7388,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
-        "ticker": "TFW.L",
-        "name": "FW Thorpe Plc",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 60.52,
-        "target_value": 61.7,
-        "conviction_score": 0.5109,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "PEBB.L",
-        "name": "The Pebble Group plc",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 58.84,
-        "target_value": 61.7,
-        "conviction_score": 0.51,
+        "ticker": "JHD.L",
+        "name": "James Halstead plc",
+        "reason": "Already near equal-weight target",
+        "value": 57.46,
+        "target_value": 57.46,
+        "conviction_score": 0.5267,
         "signal": "buy"
-      },
+      }
+    ],
+    "skipped": [
       {
-        "action": "hold",
-        "ticker": "PAF.L",
-        "name": "Pan African Resources PLC",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 60.26,
-        "target_value": 61.7,
-        "conviction_score": 0.51,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "YNGN.L",
-        "name": "Young & Co.'s Brewery, P.L.C.",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 60.83,
-        "target_value": 61.7,
-        "conviction_score": 0.47651,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
         "ticker": "CAML.L",
         "name": "Central Asia Metals plc",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 53.92,
-        "target_value": 61.7,
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 57.46,
         "conviction_score": 0.4727,
         "signal": "strong_buy"
       },
       {
-        "action": "hold",
-        "ticker": "IPX.L",
-        "name": "Impax Asset Management Group Plc",
-        "reason": "Already near equal-weight target",
-        "value": 61.56,
-        "target_value": 61.7,
-        "conviction_score": 0.42797499999999994,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "DOTD.L",
-        "name": "dotdigital Group Plc",
-        "reason": "Already near equal-weight target",
-        "value": 61.19,
-        "target_value": 61.7,
-        "conviction_score": 0.3515,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
         "ticker": "IGR.L",
         "name": "IG Design Group plc",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 57.41,
-        "target_value": 61.7,
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 57.46,
         "conviction_score": 0.243185,
         "signal": "buy"
       },
       {
-        "action": "hold",
+        "ticker": "RWS.L",
+        "name": "RWS Holdings plc",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 57.46,
+        "conviction_score": 0.24224999999999997,
+        "signal": "buy"
+      },
+      {
         "ticker": "PMI.L",
         "name": "Premier Miton Group plc",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 54.5,
-        "target_value": 61.7,
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 57.46,
         "conviction_score": 0.23205,
         "signal": "buy"
       }
     ],
-    "skipped": [],
-    "waitlisted": [
-      {
-        "ticker": "RWS.L",
-        "name": "RWS Holdings plc",
-        "signal": "buy",
-        "conviction_score": 0.24224999999999997,
-        "reason": "timing_signal=wait \u2014 skipped until timing improves"
-      }
-    ],
-    "summary": "Next rebalance would target 15 equal-weight sleeve(s); leave 10 near-target holding(s)."
+    "waitlisted": [],
+    "summary": "Next rebalance would target 16 equal-weight sleeve(s); leave 2 near-target holding(s)."
   },
   "alerts": [
     {
@@ -269,7 +253,7 @@
       "source": "paper",
       "severity": "watch",
       "message": "Underwater \u2014 re-check hypothesis: research verdict caution; still strong_buy",
-      "mark": 93.3,
+      "mark": 93.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "accumulate"
@@ -280,7 +264,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 134.2,
+      "mark": 135.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -291,7 +275,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 164.0,
+      "mark": 165.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -312,8 +296,8 @@
       "name": "Central Asia Metals plc",
       "source": "paper",
       "severity": "watch",
-      "message": "Underwater \u2014 re-check hypothesis: deep drawdown (-18.7%) \u2014 re-check facts; thesis still intact; price drawdown alone does not invalidate value thesis",
-      "mark": 138.6,
+      "message": "Underwater \u2014 re-check hypothesis: deep drawdown (-19.8%) \u2014 re-check facts; thesis still intact; price drawdown alone does not invalidate value thesis",
+      "mark": 136.6,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -324,7 +308,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 54.3,
+      "mark": 52.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -335,7 +319,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 768.0,
+      "mark": 760.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -368,7 +352,7 @@
       "source": "paper",
       "severity": "watch",
       "message": "Underwater \u2014 re-check hypothesis: research verdict caution; conviction 23% below intact floor",
-      "mark": 29.6,
+      "mark": 29.75,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "accumulate"
@@ -390,7 +374,7 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
-      "mark": 1834.0,
+      "mark": 1828.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -401,7 +385,7 @@
       "source": "paper",
       "severity": "watch",
       "message": "Underwater \u2014 re-check hypothesis: research verdict caution; conviction 24% below intact floor",
-      "mark": 88.0,
+      "mark": 85.5,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -412,7 +396,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 112.0,
+      "mark": 111.4,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -423,7 +407,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 259.0,
+      "mark": 256.0,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "RWS.L",
+      "name": "RWS Holdings plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 144.1,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -444,7 +439,7 @@
       "id": "8aa0efa6-316a-4c20-bb5c-761fd26c7b3b",
       "created_at": "2026-09-24T19:14:20.113736+00:00"
     },
-    "cash": 15.17,
+    "cash": 0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -461,7 +456,7 @@
       },
       "JHD.L": {
         "ticker": "JHD.L",
-        "shares": 0.508325,
+        "shares": 0.42564,
         "avg_cost": 130.4,
         "name": "James Halstead plc",
         "sector": "Industrials",
@@ -612,6 +607,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-10-23T08:32:54.418035+01:00"
+      },
+      "RWS.L": {
+        "ticker": "RWS.L",
+        "shares": 0.181635,
+        "avg_cost": 144.1,
+        "name": "RWS Holdings plc",
+        "sector": "Technology",
+        "currency": "GBP",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-10-30T07:54:30.072054+00:00"
       }
     },
     "trades": [
@@ -1231,6 +1237,37 @@
         "net_cash": -49.42,
         "note": "Automated buy",
         "name": "FW Thorpe Plc"
+      },
+      {
+        "id": "c2e93ce9-34c3-42fc-ad21-3094f9c3e34d",
+        "fund_id": "8aa0efa6-316a-4c20-bb5c-761fd26c7b3b",
+        "acted_at": "2026-10-30T07:54:30.072054+00:00",
+        "ticker": "JHD.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.082685,
+        "price": 135.0,
+        "gross": 11.16,
+        "cost": 0.01,
+        "net_cash": 11.15,
+        "note": "Automated trim",
+        "name": "James Halstead plc",
+        "avg_cost_at_exit": 130.4
+      },
+      {
+        "id": "2fa57612-7150-468e-b8db-c27fa3a6b148",
+        "fund_id": "8aa0efa6-316a-4c20-bb5c-761fd26c7b3b",
+        "acted_at": "2026-10-30T07:54:30.072054+00:00",
+        "ticker": "RWS.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.181635,
+        "price": 144.1,
+        "gross": 26.17,
+        "cost": 0.15,
+        "net_cash": -26.32,
+        "note": "Automated buy",
+        "name": "RWS Holdings plc"
       }
     ],
     "equity_curve": [
@@ -1769,9 +1806,25 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-30T07:54:30.072054+00:00",
+        "portfolio_value": 919.36,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 16,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-29T07:38:17.348337+00:00",
+    "last_mark_at": "2026-10-30T07:54:30.072054+00:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -1779,12 +1832,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (2 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "aim",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-29T07:38:17.360622+00:00",
+    "generated_at": "2026-10-30T07:54:30.085209+00:00",
     "observe_only": true,
     "open_count": 7,
     "closed_count": 0,
@@ -1863,7 +1916,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-29T07:38:17.362177+00:00",
+    "generated_at": "2026-10-30T07:54:30.086675+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1919,7 +1972,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 7,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 22,
+      "hold_with_data_quality_count": 23,
       "gaps": [
         "hold_recovery closed episodes=7 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -1928,10 +1981,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 15,
-        "recovered_to_breakeven": 6,
+        "count": 16,
+        "recovered_to_breakeven": 7,
         "close_reasons": {
-          "open": 15
+          "open": 16
         }
       },
       "closed": {
@@ -1945,9 +1998,9 @@
     },
     "swap_rotation": {
       "open": {
-        "count": 8,
+        "count": 9,
         "verdicts": {
-          "open": 8
+          "open": 9
         }
       },
       "closed": {
@@ -1957,10 +2010,10 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 1,
-      "swap_rotations": 0
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 0
     }
   },
@@ -1969,8 +2022,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-29T07:38:17.364549+00:00",
-    "as_of": "2026-10-29T07:38:17.348337+00:00",
+    "updated_at": "2026-10-30T07:54:30.089182+00:00",
+    "as_of": "2026-10-30T07:54:30.072054+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1982,19 +2035,19 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 15,
+    "holding_count": 16,
     "underwater_count": 8,
     "thesis_status_counts": {
       "intact": 9,
-      "weakening": 6,
+      "weakening": 7,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 15,
+      "holding_count": 16,
       "loser_count": 8,
-      "loser_share": 0.5333,
-      "loser_nav_share": 0.5153,
+      "loser_share": 0.5,
+      "loser_nav_share": 0.5075,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": false,
@@ -2010,9 +2063,9 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.4286,
-        "dividend": 0.2857,
-        "garp": 0.5714,
+        "quality": 0.5,
+        "dividend": 0.375,
+        "garp": 0.625,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -2027,8 +2080,8 @@
         "recommended_action": "watch_review",
         "underwater": true,
         "deep_underwater": true,
-        "unrealized_pct": -0.1866,
-        "mark": 138.6,
+        "unrealized_pct": -0.1984,
+        "mark": 136.6,
         "avg_cost": 170.4,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -2045,7 +2098,7 @@
         ],
         "research_verdict": "accumulate",
         "reasons": [
-          "deep drawdown (-18.7%) \u2014 re-check facts; thesis still intact",
+          "deep drawdown (-19.8%) \u2014 re-check facts; thesis still intact",
           "price drawdown alone does not invalidate value thesis",
           "still strong_buy",
           "research accumulate",
@@ -2069,8 +2122,8 @@
         "recommended_action": "watch_review",
         "underwater": true,
         "deep_underwater": true,
-        "unrealized_pct": -0.1778,
-        "mark": 29.6,
+        "unrealized_pct": -0.1736,
+        "mark": 29.75,
         "avg_cost": 36.0,
         "signal": "buy",
         "timing_signal": "accumulate",
@@ -2110,8 +2163,8 @@
         "recommended_action": "watch_review",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.1385,
-        "mark": 93.3,
+        "unrealized_pct": -0.1413,
+        "mark": 93.0,
         "avg_cost": 108.2997,
         "signal": "strong_buy",
         "timing_signal": "accumulate",
@@ -2144,14 +2197,55 @@
         "broken_reasons": []
       },
       {
+        "ticker": "IGR.L",
+        "name": "IG Design Group plc",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": true,
+        "deep_underwater": false,
+        "unrealized_pct": -0.1141,
+        "mark": 85.5,
+        "avg_cost": 96.5096,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.2432,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "risk"
+        ],
+        "failed_families": [
+          "quality",
+          "dividend",
+          "garp"
+        ],
+        "research_verdict": "caution",
+        "reasons": [
+          "research verdict caution",
+          "conviction 24% below intact floor",
+          "still buy",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "cheapness family still passes",
+          "data_quality 1.00"
+        ],
+        "weaken_reasons": [
+          "research verdict caution",
+          "conviction 24% below intact floor"
+        ],
+        "broken_reasons": []
+      },
+      {
         "ticker": "MPE.L",
         "name": "M.P. Evans Group PLC",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0908,
-        "mark": 1834.0,
+        "unrealized_pct": -0.0937,
+        "mark": 1828.0,
         "avg_cost": 2017.1015,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -2224,47 +2318,6 @@
           "conviction 51%"
         ],
         "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "IGR.L",
-        "name": "IG Design Group plc",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": true,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0882,
-        "mark": 88.0,
-        "avg_cost": 96.5096,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.2432,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "risk"
-        ],
-        "failed_families": [
-          "quality",
-          "dividend",
-          "garp"
-        ],
-        "research_verdict": "caution",
-        "reasons": [
-          "research verdict caution",
-          "conviction 24% below intact floor",
-          "still buy",
-          "cheapness family still passes"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "cheapness family still passes",
-          "data_quality 1.00"
-        ],
-        "weaken_reasons": [
-          "research verdict caution",
-          "conviction 24% below intact floor"
-        ],
         "broken_reasons": []
       },
       {
@@ -2356,8 +2409,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0392,
-        "mark": 112.0,
+        "unrealized_pct": -0.0443,
+        "mark": 111.4,
         "avg_cost": 116.5679,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2397,8 +2450,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.03,
-        "mark": 164.0,
+        "unrealized_pct": -0.0241,
+        "mark": 165.0,
         "avg_cost": 169.0799,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2423,6 +2476,46 @@
         ],
         "intact_reasons": [
           "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 60%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "TFW.L",
+        "name": "FW Thorpe Plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0229,
+        "mark": 256.0,
+        "avg_cost": 262.0,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6031,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 60%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
@@ -2473,43 +2566,44 @@
         "broken_reasons": []
       },
       {
-        "ticker": "TFW.L",
-        "name": "FW Thorpe Plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
+        "ticker": "RWS.L",
+        "name": "RWS Holdings plc",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0115,
-        "mark": 259.0,
-        "avg_cost": 262.0,
-        "signal": "strong_buy",
+        "unrealized_pct": 0.0,
+        "mark": 144.1,
+        "avg_cost": 144.1,
+        "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5109,
-        "data_quality_score": 1.0,
+        "conviction_score": 0.2422,
+        "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
-          "quality",
-          "dividend",
-          "garp",
           "risk"
         ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
+        "failed_families": [
+          "quality",
+          "dividend",
+          "garp"
+        ],
+        "research_verdict": "caution",
         "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 51%"
+          "research verdict caution",
+          "conviction 24% below intact floor",
+          "still buy",
+          "cheapness family still passes"
         ],
         "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
+          "still buy",
           "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 51%"
+          "data_quality 0.95"
         ],
-        "weaken_reasons": [],
+        "weaken_reasons": [
+          "research verdict caution",
+          "conviction 24% below intact floor"
+        ],
         "broken_reasons": []
       },
       {
@@ -2519,8 +2613,8 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0291,
-        "mark": 134.2,
+        "unrealized_pct": 0.0353,
+        "mark": 135.0,
         "avg_cost": 130.4,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2553,54 +2647,14 @@
         "broken_reasons": []
       },
       {
-        "ticker": "YNGN.L",
-        "name": "Young & Co.'s Brewery, P.L.C.",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0847,
-        "mark": 768.0,
-        "avg_cost": 708.0,
-        "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.4765,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "garp"
-        ],
-        "research_verdict": "caution",
-        "reasons": [
-          "research verdict caution",
-          "still strong_buy",
-          "cheapness family still passes"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 48%"
-        ],
-        "weaken_reasons": [
-          "research verdict caution"
-        ],
-        "broken_reasons": []
-      },
-      {
         "ticker": "DOTD.L",
         "name": "dotdigital Group Plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.1116,
-        "mark": 54.3,
+        "unrealized_pct": 0.0645,
+        "mark": 52.0,
         "avg_cost": 48.85,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2632,6 +2686,46 @@
         ],
         "weaken_reasons": [],
         "broken_reasons": []
+      },
+      {
+        "ticker": "YNGN.L",
+        "name": "Young & Co.'s Brewery, P.L.C.",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0734,
+        "mark": 760.0,
+        "avg_cost": 708.0,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.4765,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "caution",
+        "reasons": [
+          "research verdict caution",
+          "still strong_buy",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 48%"
+        ],
+        "weaken_reasons": [
+          "research verdict caution"
+        ],
+        "broken_reasons": []
       }
     ],
     "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
@@ -2641,7 +2735,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-29T07:38:17.367647+00:00",
+    "generated_at": "2026-10-30T07:54:30.092422+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2649,7 +2743,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 7,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 15,
+      "open_with_thesis": 16,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -2709,15 +2803,15 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-29T07:38:17.376658+00:00",
+    "generated_at": "2026-10-30T07:54:30.102629+00:00",
     "open_count": 3,
-    "closed_count": 19,
+    "closed_count": 20,
     "scored_count": 18,
-    "scored_count_all": 19,
-    "recommit_scored_count": 1,
+    "scored_count_all": 20,
+    "recommit_scored_count": 2,
     "entry_kind_counts": {
       "first_entry": 18,
-      "recommit": 1
+      "recommit": 2
     },
     "any_de_risk_count": 17,
     "winning_cadence_counts": {
@@ -2768,17 +2862,17 @@
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
       "first_entry_scored": 18,
-      "recommit_scored": 1
+      "recommit_scored": 2
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
-    "marked_this_pass": 4,
+    "ingested_this_pass": 1,
+    "marked_this_pass": 3,
     "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-29T07:38:17.348337+00:00",
+    "generated_at": "2026-10-30T07:54:30.072054+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2805,8 +2899,8 @@
     "open_count": 17,
     "closed_count": 1,
     "open_by_capital_status": {
-      "on_book": 15,
-      "off_book": 2,
+      "on_book": 16,
+      "off_book": 1,
       "never_funded": 0
     },
     "closed_by_capital_status": {
@@ -2828,14 +2922,14 @@
     "ingested_this_pass": {
       "opened": 0,
       "closed": 0,
-      "tagged_on_book": 0,
+      "tagged_on_book": 1,
       "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-29T07:38:17.348337+00:00",
+    "generated_at": "2026-10-30T07:54:30.072054+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -2843,39 +2937,430 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 5,
+    "card_count": 5,
     "verdict_counts": {
-      "agree": 0,
-      "veto": 0,
+      "agree": 4,
+      "veto": 1,
       "abstain": 0
     },
-    "by_algo_action": {},
-    "disagree_vs_heuristic_count": 0,
-    "cards": [],
+    "by_algo_action": {
+      "rebuy_skip": {
+        "agree": 4,
+        "veto": 0,
+        "abstain": 0
+      },
+      "buy": {
+        "agree": 0,
+        "veto": 1,
+        "abstain": 0
+      }
+    },
+    "disagree_vs_heuristic_count": 1,
+    "cards": [
+      {
+        "ticker": "CAML.L",
+        "name": "Central Asia Metals plc",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "algo_reason cites insufficient cash after higher-conviction fills, a valid rebuy gate.",
+          "still_buyish true with rank_drop 0 and screen_signal strong_buy favor retaining sleeve exposure without forcing a cash-depleting rebuy."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-30T07:54:30.072054+00:00",
+        "proposal_id": "buy_tier_level:CAML.L:rebuy_skip:2026-10-30T07:54:30.072054+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "IGR.L",
+        "name": "IG Design Group plc",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "still_buyish false and screen_signal hold indicate the name is no longer in the buy cohort; skipping rebuy is consistent.",
+          "research_verdict caution and overlay_bound true align with not adding capital here.",
+          "Cash constraint in algo_reason is an additional explicit block."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-30T07:54:30.072054+00:00",
+        "proposal_id": "buy_tier_level:IGR.L:rebuy_skip:2026-10-30T07:54:30.072054+00:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "RWS.L",
+        "name": "RWS Holdings plc",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "still_buyish false with screen_signal hold supports deferring rebuy rather than re-entering at tier rank.",
+          "rank_drop 0 does not override leave-buy-cohort posture given non-buyish screen state.",
+          "Insufficient-cash algo_reason is consistent with prioritizing higher-conviction fills."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-30T07:54:30.072054+00:00",
+        "proposal_id": "buy_tier_level:RWS.L:rebuy_skip:2026-10-30T07:54:30.072054+00:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "PMI.L",
+        "name": "Premier Miton Group plc",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "still_buyish false and screen_signal hold make rebuy_skip aligned with cohort exit semantics.",
+          "research_verdict caution supports withholding incremental buys.",
+          "algo_reason documents cash prioritization after higher-conviction fills."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-30T07:54:30.072054+00:00",
+        "proposal_id": "buy_tier_level:PMI.L:rebuy_skip:2026-10-30T07:54:30.072054+00:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "RWS.L",
+        "name": "RWS Holdings plc",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "veto",
+        "reasons": [
+          "still_buyish false and effective screen_signal hold contradict initiating or adding via automated buy.",
+          "research_verdict caution with bound overlay_bound true argues against fresh buy conviction at this decision.",
+          "rank_drop 0 alone does not justify buy when the screen no longer classifies the name as buyish."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-30T07:54:30.072054+00:00",
+        "proposal_id": "buy_tier_level:RWS.L:buy:2026-10-30T07:54:30.072054+00:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "abstain",
+            "reasons": [
+              "Buy while not buyish \u2014 abstain."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null
+      "fallback": null,
+      "llm_card_count": 5
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-29T07:38:17.348337+00:00",
+      "generated_at": "2026-10-30T07:54:30.072054+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 5,
       "verdict_counts": {
-        "agree": 0,
-        "veto": 0,
+        "agree": 4,
+        "veto": 1,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 4,
+          "veto": 0,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 0,
+          "veto": 1,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -2891,7 +3376,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-29T07:38:17.385279+00:00",
+  "generated_at": "2026-10-30T07:54:36.517622+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

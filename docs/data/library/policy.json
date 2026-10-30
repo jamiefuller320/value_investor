@@ -367,14 +367,14 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 324.4,
-    "estimated_spend_usd_this_week": 29.6,
+    "estimated_spend_usd_this_cycle": 326.0,
+    "estimated_spend_usd_this_week": 31.2,
     "week_id": "2026-W44",
     "cycle_id": "2026-10-d8",
     "weekly_ops_cap_usd": 84.5,
     "weekly_ops_plan_credit_share_cap": 0.15,
     "enforce_weekly_ops_cap": true,
-    "estimated_spend_weekly_ops_usd_this_week": 12.8,
+    "estimated_spend_weekly_ops_usd_this_week": 14.4,
     "note": "Cursor Ultra $200 included pool is surplus-math metadata. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder). Ad-hoc depth passes use ladder.spend_since_checkpoint_usd. Rememo daily cap stays at 3.",
     "cycle_surplus_provisional": {
       "status": "provisional",
@@ -550,7 +550,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-10-30T07:44:30.658229+00:00",
+  "updated_at": "2026-10-30T08:02:05.227498+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -563,7 +563,7 @@
     "psi20"
   ],
   "ingest_parallel_sprint": [
-    "aex"
+    "asx200"
   ],
   "ingest_parallel_sprint_2": [
     "sp500"
@@ -580,10 +580,10 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-10-29T06:53:12.228392+00:00",
+      "run_at": "2026-10-30T06:53:13.306615+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
-      "screen_shortlist": 45,
+      "screen_shortlist": 44,
       "research": {
         "model": "composer-2.5",
         "research_cap": 100,
@@ -618,17 +618,17 @@
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "weekly_ops_cap_usd": 84.5,
-        "estimated_spend_weekly_ops_usd_this_week": 12.4,
+        "estimated_spend_weekly_ops_usd_this_week": 14.4,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_usd_before": 72.5,
+        "remaining_usd_before": 72.1,
         "dedupe": {
-          "already_researched_count": 511,
-          "fresh_skipped_count": 511,
+          "already_researched_count": 512,
+          "fresh_skipped_count": 512,
           "rememo_eligible_count": 0,
           "rememo_eligible_sample": [],
-          "skipped_count": 401,
+          "skipped_count": 384,
           "skipped_sample": [
             {
               "market": "euro_depth",
@@ -692,22 +692,27 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "LOGN.SW",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
               "ticker": "OIZ.IR",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "AED.BR",
+              "ticker": "VOE.VI",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "VOE.VI",
+              "ticker": "LOGN.SW",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "ANDR.VI",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "RAND.AS",
               "reason": "fresh_memo"
             },
             {
@@ -722,12 +727,7 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "RAND.AS",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "AD.AS",
+              "ticker": "SKF-B.ST",
               "reason": "fresh_memo"
             }
           ],
@@ -737,18 +737,46 @@
         "targets": [
           {
             "market": "sp500",
-            "ticker": "NUE",
-            "name": "Nucor Corporation",
+            "ticker": "HSY",
+            "name": "The Hershey Company",
             "signal": "buy",
-            "conviction_score": 0.388
+            "conviction_score": 0.3452
+          },
+          {
+            "market": "asx200",
+            "ticker": "CYL.AX",
+            "name": "Catalyst Metals Limited",
+            "signal": "buy",
+            "conviction_score": 0.2767
+          },
+          {
+            "market": "nasdaq100",
+            "ticker": "TER",
+            "name": "Teradyne, Inc.",
+            "signal": "buy",
+            "conviction_score": 0.2867
+          },
+          {
+            "market": "sp500",
+            "ticker": "MGM",
+            "name": "MGM Resorts International",
+            "signal": "buy",
+            "conviction_score": 0.2263
+          },
+          {
+            "market": "asx200",
+            "ticker": "PLS.AX",
+            "name": "PLS Group Limited",
+            "signal": "buy",
+            "conviction_score": 0.1974
           }
         ],
-        "executed": 1,
-        "created": 1,
+        "executed": 5,
+        "created": 5,
         "updated": 0,
         "errors": [],
-        "estimated_spend_usd": 0.4,
-        "remaining_usd_after": 72.1
+        "estimated_spend_usd": 2.0,
+        "remaining_usd_after": 70.1
       },
       "graduation": {
         "graduated": false,
@@ -846,14 +874,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-10-19T15:39:38.538174+00:00",
-        "parallel_stream": 2,
-        "from_market": "nasdaq100",
-        "to_market": null,
-        "stream_markets_after": [],
-        "ingest_parity_recorded": false
-      },
       {
         "reseeded": true,
         "market_queue_appended": false,
@@ -1487,6 +1507,16 @@
           "aex"
         ],
         "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-10-30T07:58:40.198223+00:00",
+        "parallel_stream": 1,
+        "from_market": "aex",
+        "to_market": "asx200",
+        "stream_markets_after": [
+          "asx200"
+        ],
+        "ingest_parity_recorded": true
       }
     ]
   },
