@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-30T07:48:50.907237+00:00",
+  "generated_at": "2026-10-31T11:31:09.375129+00:00",
   "observe_only": true,
-  "primary_track": "ai_judgment_fair",
-  "control_track": "buy_tier_level",
+  "primary_track": "ai_judgment_matched30_fair",
+  "control_track": "buy_tier_matched30_fair",
   "benchmark": "FTAL.L",
   "stress_cost_per_side": 0.03,
   "sources": {
-    "total_return_view_updated_at": "2026-10-30T07:47:28.805484+00:00",
-    "track_statistics_updated_at": "2026-10-30T07:47:08.046422+00:00",
-    "screen_premise_generated_at": "2026-10-30T07:48:50.234286+00:00",
+    "total_return_view_updated_at": "2026-10-31T07:47:48.065460+00:00",
+    "track_statistics_updated_at": "2026-10-31T07:47:29.874808+00:00",
+    "screen_premise_generated_at": "2026-10-31T07:49:47.864374+00:00",
     "value_factor_base_rate_built_at": "2026-10-07T11:23:16+00:00"
   },
-  "headline": "ai_judgment_fair: total return -10.1% vs FTAL.L -1.5% since 2026-08-26 \u2014 behind the market with 90% confidence. vs buy_tier_level: -9.9% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+  "headline": "ai_judgment_matched30_fair: total return -3.1% vs FTAL.L -0.0% since 2026-10-15 \u2014 too few marks to judge. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
   "value_hurdle": {
     "kind": "published_base_rate",
     "not_a_book": true,
@@ -35,110 +35,34 @@
       "start": 197501,
       "end": 202512
     },
-    "primary_track": "ai_judgment_fair",
-    "primary_excess_total_return": -0.0865,
+    "primary_track": "ai_judgment_matched30_fair",
+    "primary_excess_total_return": -0.031,
     "primary_excess_is_window": "The primary figure is total-return excess over its scored window, not an annualised rate. The premia are full-sample annualised arithmetic percent."
   },
   "tracks": [
     {
-      "track_id": "ai_judgment_fair",
-      "role": "primary",
-      "label": "AI judgment fair-cost lab (Suite B)",
-      "basis": "clean_epoch",
-      "start": "2026-08-26T09:27:36.177488+01:00",
-      "end": "2026-10-29T11:43:22.438689+00:00",
-      "marks": 40,
-      "total_return": -0.1012,
-      "benchmark_total_return": -0.0147,
-      "excess_total_return": -0.0865,
-      "dividends_gbp": 0.0,
-      "excess_total_return_at_stress_cost": -0.3602,
-      "cost_sensitivity": {
-        "trades": 39,
-        "turnover": 10.04,
-        "costs_paid_pct": 0.0275,
-        "costs_at_stress_pct": 0.3012,
-        "extra_drag_at_stress": 0.2737
-      },
-      "statistics": {
-        "status": "ok",
-        "vs": "^FTSE",
-        "annualized_active_return": -0.9234,
-        "ci90": [
-          -1.5395,
-          -0.2569
-        ],
-        "verdict": "negative",
-        "years_to_detect_3pct_edge": 235.33
-      },
-      "ai_gate": {
-        "gate": "research_verdict == accumulate",
-        "min_conviction": 0.6,
-        "buy_tier_pass_share": 0.9049,
-        "binds": false
-      },
-      "configured_buy_cost_pct": 0.00525
-    },
-    {
-      "track_id": "buy_tier_level",
-      "role": "control",
-      "label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
-      "basis": "lifetime",
-      "start": "2026-09-07T09:29:59.366533+01:00",
-      "end": "2026-10-29T11:43:57.722396+00:00",
-      "marks": 37,
-      "total_return": 0.0103,
-      "benchmark_total_return": -0.0096,
-      "excess_total_return": 0.0199,
-      "dividends_gbp": 3.9,
-      "excess_total_return_at_stress_cost": -0.0105,
-      "cost_sensitivity": {
-        "trades": 70,
-        "turnover": 1.109,
-        "costs_paid_pct": 0.0029,
-        "costs_at_stress_pct": 0.0333,
-        "extra_drag_at_stress": 0.0304
-      },
-      "statistics": {
-        "status": "ok",
-        "vs": "^FTSE",
-        "annualized_active_return": 0.1041,
-        "ci90": [
-          -0.2579,
-          0.4592
-        ],
-        "verdict": "indistinguishable_from_noise",
-        "years_to_detect_3pct_edge": 116.75
-      },
-      "ai_gate": {
-        "gate": null,
-        "binds": null
-      },
-      "configured_buy_cost_pct": 0.00525
-    },
-    {
       "track_id": "ai_judgment_matched30_fair",
-      "role": "twin",
+      "role": "primary",
       "label": "AI judgment matched-30 fund twin (B3 shadow)",
       "basis": "lifetime",
       "start": "2026-10-15T10:03:39.502904+00:00",
-      "end": "2026-10-29T11:43:37.620734+00:00",
-      "marks": 10,
-      "total_return": -0.0186,
-      "benchmark_total_return": -0.0031,
-      "excess_total_return": -0.0155,
+      "end": "2026-10-30T11:34:39.025327+00:00",
+      "marks": 11,
+      "total_return": -0.0312,
+      "benchmark_total_return": -0.0002,
+      "excess_total_return": -0.031,
       "dividends_gbp": 0.0,
-      "excess_total_return_at_stress_cost": -0.0831,
+      "excess_total_return_at_stress_cost": -0.1031,
       "cost_sensitivity": {
-        "trades": 60,
-        "turnover": 2.558,
-        "costs_paid_pct": 0.0091,
-        "costs_at_stress_pct": 0.0767,
-        "extra_drag_at_stress": 0.0676
+        "trades": 63,
+        "turnover": 2.739,
+        "costs_paid_pct": 0.0101,
+        "costs_at_stress_pct": 0.0822,
+        "extra_drag_at_stress": 0.0721
       },
       "statistics": {
         "status": "insufficient_data",
-        "periods": 9
+        "periods": 10
       },
       "ai_gate": {
         "gate": "research_verdict == accumulate",
@@ -150,17 +74,17 @@
     },
     {
       "track_id": "buy_tier_matched30_fair",
-      "role": "twin",
+      "role": "control",
       "label": "Buy-tier matched-30 construction control (B3 shadow)",
       "basis": "lifetime",
       "start": "2026-10-15T10:03:40.485384+00:00",
-      "end": "2026-10-29T11:43:47.646434+00:00",
-      "marks": 10,
-      "total_return": -0.0169,
-      "benchmark_total_return": -0.0031,
-      "excess_total_return": -0.0138,
+      "end": "2026-10-30T11:34:55.781108+00:00",
+      "marks": 11,
+      "total_return": -0.0295,
+      "benchmark_total_return": -0.0002,
+      "excess_total_return": -0.0292,
       "dividends_gbp": 0.0,
-      "excess_total_return_at_stress_cost": -0.0689,
+      "excess_total_return_at_stress_cost": -0.0843,
       "cost_sensitivity": {
         "trades": 64,
         "turnover": 2.11,
@@ -170,7 +94,44 @@
       },
       "statistics": {
         "status": "insufficient_data",
-        "periods": 9
+        "periods": 10
+      },
+      "ai_gate": {
+        "gate": null,
+        "binds": null
+      },
+      "configured_buy_cost_pct": 0.00525
+    },
+    {
+      "track_id": "buy_tier_level",
+      "role": "active",
+      "label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+      "basis": "lifetime",
+      "start": "2026-09-07T09:29:59.366533+01:00",
+      "end": "2026-10-30T11:35:12.549005+00:00",
+      "marks": 38,
+      "total_return": 0.0061,
+      "benchmark_total_return": -0.0067,
+      "excess_total_return": 0.0128,
+      "dividends_gbp": 3.9,
+      "excess_total_return_at_stress_cost": -0.0176,
+      "cost_sensitivity": {
+        "trades": 70,
+        "turnover": 1.109,
+        "costs_paid_pct": 0.0029,
+        "costs_at_stress_pct": 0.0333,
+        "extra_drag_at_stress": 0.0304
+      },
+      "statistics": {
+        "status": "ok",
+        "vs": "^FTSE",
+        "annualized_active_return": 0.0547,
+        "ci90": [
+          -0.3512,
+          0.4402
+        ],
+        "verdict": "indistinguishable_from_noise",
+        "years_to_detect_3pct_edge": 116.01
       },
       "ai_gate": {
         "gate": null,
@@ -184,13 +145,13 @@
       "label": "Buy-tier level DCA realism (\u00a3500/mo, Suite B costs, cold-start capital epoch)",
       "basis": "lifetime",
       "start": "2026-09-24T09:30:04.654856+01:00",
-      "end": "2026-10-29T11:44:08.076069+00:00",
-      "marks": 26,
-      "total_return": 0.0206,
-      "benchmark_total_return": 0.0009,
-      "excess_total_return": 0.0198,
+      "end": "2026-10-30T11:35:31.390882+00:00",
+      "marks": 27,
+      "total_return": 0.0149,
+      "benchmark_total_return": 0.0038,
+      "excess_total_return": 0.0112,
       "dividends_gbp": 3.32,
-      "excess_total_return_at_stress_cost": -0.0032,
+      "excess_total_return_at_stress_cost": -0.0118,
       "cost_sensitivity": {
         "trades": 73,
         "turnover": 0.874,
@@ -201,13 +162,13 @@
       "statistics": {
         "status": "ok",
         "vs": "^FTSE",
-        "annualized_active_return": 0.1353,
+        "annualized_active_return": 0.0464,
         "ci90": [
-          -0.3953,
-          0.683
+          -0.364,
+          0.4291
         ],
         "verdict": "indistinguishable_from_noise",
-        "years_to_detect_3pct_edge": 131.14
+        "years_to_detect_3pct_edge": 130.67
       },
       "ai_gate": {
         "gate": null,
@@ -216,15 +177,7 @@
       "configured_buy_cost_pct": 0.00525
     }
   ],
-  "primary_vs_control": {
-    "primary": "ai_judgment_fair",
-    "control": "buy_tier_level",
-    "start": "2026-09-07T09:29:59.366533+01:00",
-    "primary_total_return": -0.0883,
-    "control_total_return": 0.0103,
-    "difference": -0.0986,
-    "note": "Common window, total return. Positive means the primary's filter added value over the unfiltered buy tier. Not yet tested for significance."
-  },
+  "primary_vs_control": null,
   "twins": [
     {
       "track_id": "ai_judgment_matched30_fair",
@@ -239,13 +192,13 @@
       "learning_question": "Does the AI/filter identity, run as a fair-cost ~30-name fund (max_positions=30, sector_cap=0.2), beat a matched top-30 unfiltered buy-tier sleeve on total return? Compare only to buy_tier_matched30_fair \u2014 not to full buy_tier_level (55/120).",
       "readiness_gate": "Shadow until \u226548 closed episodes or \u226526 weekly marks with a usable years_to_detect bar vs buy_tier_matched30_fair on the common window. Do not crown assessment primary from this book alone (B3 / F8).",
       "parent_knobs_changed": [],
-      "common_days": 9,
+      "common_days": 10,
       "status": "ok",
       "window_start": "2026-10-16",
-      "window_end": "2026-10-29",
-      "twin_return": -0.0186,
-      "parent_return": 0.0134,
-      "difference": -0.032,
+      "window_end": "2026-10-30",
+      "twin_return": -0.0312,
+      "parent_return": -0.0154,
+      "difference": -0.0158,
       "basis": "price NAV, flow-adjusted, common marked days"
     },
     {
@@ -265,13 +218,13 @@
       "learning_question": "Matched construction control: unfiltered buy-tier top-30 sleeve at fair costs (same max_positions/sector_cap as ai_judgment_matched30_fair).",
       "readiness_gate": "Construction twin only \u2014 never a filter-skill primary. Keep as matched control for ai_judgment_matched30_fair NAV comparisons.",
       "parent_knobs_changed": [],
-      "common_days": 9,
+      "common_days": 10,
       "status": "ok",
       "window_start": "2026-10-16",
-      "window_end": "2026-10-29",
-      "twin_return": -0.0169,
-      "parent_return": 0.0082,
-      "difference": -0.0252,
+      "window_end": "2026-10-30",
+      "twin_return": -0.0295,
+      "parent_return": 0.004,
+      "difference": -0.0335,
       "basis": "price NAV, flow-adjusted, common marked days"
     }
   ],
@@ -330,6 +283,17 @@
       "trade_count": 39,
       "lifetime_total_return": -0.2377,
       "lifetime_excess_total_return": -0.227
+    },
+    {
+      "track_id": "ai_judgment_fair",
+      "frozen_at": "2026-10-31T11:31:00.121881+00:00",
+      "reason": "Owner lock 2026-10-31: stop 3-name ai_judgment_fair; super-book / matched-30 superseded continuity trading. History kept; no mid-flight knob enlarge.",
+      "superseded_by": "ai_judgment_matched30_fair",
+      "final_nav": 787.37,
+      "final_contributed_capital": 1000.0,
+      "trade_count": 49,
+      "lifetime_total_return": -0.2076,
+      "lifetime_excess_total_return": -0.2169
     },
     {
       "track_id": "ai_judgment_graduated_fair",
@@ -432,6 +396,12 @@
       "effective_at": "2026-10-15T10:03:39.502160+00:00",
       "summary": "B3 evidentiary demotion: ai_judgment_fair (3-name sleeve) is no longer adoption / filter-skill truth. Judgment evidence moves to N210 fixed-stake fair-cost episode %; portfolio continuity via matched-30 fund twin pair. Do not enlarge live max_positions/sector_cap mid-flight. Do not back-label prior 3-name NAV as evidence for the new epoch. F8: trailing primary-vs-control gap never alone applies knobs or fills.",
       "history_note": "Marks and NAV on ai_judgment_fair before and after effective_at remain continuity / observe history. They are underpowered and confounded (sleeve N=3 vs control ~55) and must not be read as filter skill or as evidence for matched-30 / N210 skill. assessment_model.primary_track may still name ai_judgment_fair for product continuity until volume gates; policy_changes.evidentiary_demotion_ai_judgment_fair_v1 is the demotion stamp."
+    },
+    {
+      "id": "stop_ai_judgment_fair_3name_v1",
+      "effective_at": "2026-10-31T11:31:00.121881+00:00",
+      "summary": "Owner lock 2026-10-31: stop ai_judgment_fair (3-name judgment sleeve) entirely. Super-book / matched-30 superseded continuity trading of the underpowered book. Freeze stops weekday paper-auto fills and decision-review applies; history kept. assessment_model primary/control move to the matched-30 filter vs buy-tier pair for product continuity of that comparison \u2014 NOT an evidentiary / adoption crown (B3 not_assessment_primary_until_gates and N210 volume gates still bind). Clears saturated sector_cap warn on the 3-name book without mid-flight enlarge. F8 / no back-label of prior 3-name NAV.",
+      "history_note": "Marks and NAV on ai_judgment_fair through freeze remain continuity history only. Do not read them as filter skill or as evidence for matched-30, N210, or super-book. Do not unfreeze or retune the 3-name book \u2014 twins-over-edits."
     }
   ]
 }

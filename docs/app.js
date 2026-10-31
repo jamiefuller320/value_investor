@@ -12210,6 +12210,40 @@ function collectHumanGeometryForComment(reviewId) {
   return out;
 }
 
+/** Chart mount nodes for a review (post-sale dual-horizon + entry-blind PIT). */
+function chartBodiesForReview(reviewId) {
+  const rid = String(reviewId || "").trim();
+  if (!rid) return [];
+  const escId =
+    typeof CSS !== "undefined" && CSS.escape ? CSS.escape(rid) : rid.replace(/"/g, '\\"');
+  return [
+    ...document.querySelectorAll(`[data-psr-chart][data-psr-id="${escId}"]`),
+    ...document.querySelectorAll(`[data-ebr-chart][data-ebr-id="${escId}"]`),
+  ];
+}
+
+/**
+ * Auto-seal in-progress Parallel edits into humanChartDrafts before Comment.
+ * Drawing-before-Comment is the intended flow — unfinished overlays must not be dropped.
+ */
+function sealOpenHumanDrawEdits(reviewId) {
+  if (typeof commitParallelEdit !== "function") return;
+  for (const body of chartBodiesForReview(reviewId)) {
+    if (body && body._humanDraw && body._humanDraw.parallelEdit) {
+      commitParallelEdit(body, { quiet: true });
+    }
+  }
+}
+
+/**
+ * Comment payload builder: seal open edits, then collect non-empty drafts.
+ * Never gated on an Attach checkbox — Comment must not drop in-memory drawings.
+ */
+function geometryPayloadForComment(reviewId) {
+  sealOpenHumanDrawEdits(reviewId);
+  return collectHumanGeometryForComment(reviewId);
+}
+
 function humanDraftPatternMarks(reviewId) {
   const geometries = collectHumanGeometryForComment(reviewId);
   if (typeof humanGeometryElementsToMarks === "function") {
@@ -12233,7 +12267,7 @@ function renderHumanDrawToolbar(reviewId, chartKey, { attrPrefix } = {}) {
       <button type="button" class="btn psr-draw-tool" data-human-draw-tool="undo" data-${p}-draw-rid="${rid}" data-${p}-draw-chart="${ck}" title="Remove last drawing on this chart">Undo</button>
       <button type="button" class="btn psr-draw-tool" data-human-draw-tool="clear" data-${p}-draw-rid="${rid}" data-${p}-draw-chart="${ck}" title="Clear drawings on this chart">Clear</button>
     </div>
-    <p class="small muted psr-human-draw-status" data-human-draw-status>Draw off · ${n} on this view · attaches with Comment</p>
+    <p class="small muted psr-human-draw-status" data-human-draw-status>Draw off · ${n} on this view · auto-attaches with Comment</p>
   </div>`;
 }
 
@@ -12697,12 +12731,11 @@ function renderPostSaleReviewCard(item, expanded) {
               item.review_id
             )}" placeholder="Missed pattern…" />
           </label>
-          <label class="small psr-attach-draw-label" title="Send drawings with this Comment for the factory reply">
-            <input type="checkbox" class="psr-attach-draw" data-psr-attach-draw="${esc(
-              item.review_id
-            )}" checked />
-            Attach drawings
-          </label>
+          <span class="small muted psr-attach-draw-hint" data-psr-attach-draw-hint="${esc(
+            item.review_id
+          )}" title="In-memory chart drafts seal into the Comment payload automatically">
+            Drawings auto-attach with Comment
+          </span>
           <button type="button" class="btn" data-psr-comment="${esc(
             item.review_id
           )}" data-psr-tag="${esc(tag)}">Comment</button>
@@ -12903,7 +12936,7 @@ function wireHumanChartDrawOnBody(body, reviewId, chartKey) {
       );
       const status = toolbar && toolbar.querySelector("[data-human-draw-status]");
       if (status) {
-        status.textContent = `Draw off · ${cur.length} on this view · attaches with Comment`;
+        status.textContent = `Draw off · ${cur.length} on this view · auto-attaches with Comment`;
       }
       if (typeof setHumanChartDrawTool === "function") setHumanChartDrawTool(body, null);
       toolbar &&
@@ -12963,7 +12996,7 @@ function bindHumanDrawToolbarsOnce() {
         if (typeof paintPriceChart === "function") paintPriceChart(body);
       }
       const status = toolbar && toolbar.querySelector("[data-human-draw-status]");
-      if (status) status.textContent = `Draw off · ${cur.length} on this view · attaches with Comment`;
+      if (status) status.textContent = `Draw off · ${cur.length} on this view · auto-attaches with Comment`;
       return;
     }
     if (tool === "clear") {
@@ -12979,7 +13012,7 @@ function bindHumanDrawToolbarsOnce() {
         if (typeof paintPriceChart === "function") paintPriceChart(body);
       }
       const status = toolbar && toolbar.querySelector("[data-human-draw-status]");
-      if (status) status.textContent = "Draw off · 0 on this view · attaches with Comment";
+      if (status) status.textContent = "Draw off · 0 on this view · auto-attaches with Comment";
       return;
     }
     if (!body) return;
@@ -13025,11 +13058,8 @@ async function submitPostSaleReviewAction({ reviewId, decision, text, tag, item 
     snapshot: snap,
   };
   if (decision === "comment") {
-    const attachEl = document.querySelector(
-      `[data-psr-attach-draw="${CSS.escape(reviewId)}"]`
-    );
-    const attach = !attachEl || attachEl.checked;
-    const geometries = attach ? collectHumanGeometryForComment(reviewId) : [];
+    // Prefer auto-seal of non-empty drafts; never drop in-memory geometry on Comment.
+    const geometries = geometryPayloadForComment(reviewId);
     if (geometries.length) {
       payload.post_hoc_human_geometry = geometries;
     }
@@ -13409,12 +13439,11 @@ function renderEntryBlindReviewCard(item, expanded) {
               item.review_id
             )}" placeholder="Missed entry pattern…" />
           </label>
-          <label class="small psr-attach-draw-label" title="Send drawings with this Comment">
-            <input type="checkbox" class="psr-attach-draw" data-ebr-attach-draw="${esc(
-              item.review_id
-            )}" checked />
-            Attach drawings
-          </label>
+          <span class="small muted psr-attach-draw-hint" data-ebr-attach-draw-hint="${esc(
+            item.review_id
+          )}" title="In-memory chart drafts seal into the Comment payload automatically">
+            Drawings auto-attach with Comment
+          </span>
           <button type="button" class="btn" data-ebr-comment="${esc(
             item.review_id
           )}" data-ebr-tag="${esc(tag)}">Comment</button>
@@ -13571,11 +13600,8 @@ async function submitEntryBlindReviewAction({ reviewId, decision, text, tag, ite
     snapshot: snap,
   };
   if (decision === "comment") {
-    const attachEl = document.querySelector(
-      `[data-ebr-attach-draw="${CSS.escape(reviewId)}"]`
-    );
-    const attach = !attachEl || attachEl.checked;
-    const geometries = attach ? collectHumanGeometryForComment(reviewId) : [];
+    // Prefer auto-seal of non-empty drafts; never drop in-memory geometry on Comment.
+    const geometries = geometryPayloadForComment(reviewId);
     if (geometries.length) {
       payload.post_hoc_human_geometry = geometries;
     }

@@ -1,12 +1,12 @@
 {
-  "run_at": "2026-10-30T07:46:46.493850+00:00",
+  "run_at": "2026-10-31T07:46:59.521268+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "23 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, euro_stoxx50, ftse350, hang_seng (+2 more): hang_seng/0001.HK (no_memo, 439.78h since flip), aex/MT.AS (no_memo, 391.78h since flip), aex/PRX.AS (no_memo, 391.78h since flip), euro_depth/PRX.AS (no_memo, 391.78h since flip), tsx60/ABX.TO (no_key_bodies, 391.78h since flip), tsx60/SAP.TO (no_key_bodies, 391.78h since flip), tsx60/TECK-B.TO (no_key_bodies, 391.78h since flip), euro_depth/WIE.VI (no_key_bodies, 367.78h since flip), nasdaq100/AMAT (no_memo, 367.78h since flip), asx200/CLW.AX (no_memo, 343.78h since flip) (+13 more). Blocking: no_key_bodies=6, no_memo=17.",
+      "summary": "22 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, euro_stoxx50, ftse350, hang_seng (+2 more): hang_seng/0001.HK (no_memo, 463.78h since flip), aex/PRX.AS (no_memo, 415.78h since flip), euro_depth/PRX.AS (no_memo, 415.78h since flip), tsx60/ABX.TO (no_key_bodies, 415.78h since flip), tsx60/SAP.TO (no_key_bodies, 415.78h since flip), tsx60/TECK-B.TO (no_key_bodies, 415.78h since flip), euro_depth/WIE.VI (no_key_bodies, 391.78h since flip), asx200/CLW.AX (no_memo, 367.78h since flip), EZJ.L (no_memo, 319.78h since flip), LRE.L (no_memo, 319.78h since flip) (+12 more). Blocking: no_index=2, no_key_bodies=6, no_memo=14.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -15,7 +15,7 @@
       "severity": "warn",
       "category": "ingest",
       "title": "FTSE decision-input utilization gap",
-      "summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `memo_recent` missing on 14/73 names (e.g. ATYM.L, EZJ.L, HBR.L, HTG.L, LRE.L, MAB.L, PRU.L, RKT.L, VLX.L, BOWL.L +4 more). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
+      "summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `overlay_bound` missing on 9/67 names (e.g. JMAT.L, KIE.L, ATYM.L, EZJ.L, HTG.L, LRE.L, MAB.L, RKT.L, VLX.L). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -24,7 +24,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Price-only excess misstates track performance",
-      "summary": "Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_fair: published -18.8% vs total-return -8.6% (clean epoch, dividends £0.00); buy_tier_matched30_fair: published +0.2% vs total-return -1.4% (lifetime, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.",
+      "summary": "Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_fair: published -19.0% vs total-return -11.5% (clean epoch, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -33,7 +33,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Longer holds beat live exit buffer in replay",
-      "summary": "Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: ai_judgment_fair: exit_confirm_screens 10 vs live 2 +6.8% over 36 passes (18 vs 37 trades; realised median hold 5.0d); buy_tier_level: exit_confirm_screens 10 vs live 2 +1.9% over 36 passes (106 vs 131 trades; realised median hold 16.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.",
+      "summary": "Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: ai_judgment_fair: exit_confirm_screens 10 vs live 2 +7.8% over 37 passes (18 vs 37 trades; realised median hold 5.0d); buy_tier_level: exit_confirm_screens 10 vs live 2 +1.9% over 37 passes (106 vs 131 trades; realised median hold 16.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -51,25 +51,7 @@
       "severity": "info",
       "category": "research",
       "title": "Post-sale review queue (observe)",
-      "summary": "Active uncommented post-sale reviews: 131; actioned history=135; candidates sealed+control=464. Accept/Comment/Duplicate observe-only (influences_live=false).",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "info",
-      "category": "research",
-      "title": "Entry-blind review queue (observe)",
-      "summary": "Active entry_blind reviews: 12 (new=12, reply=0); actioned history=2; candidates=65. PIT-only; influences_live=false.",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "info",
-      "category": "research",
-      "title": "Entry-revisit review queue (observe)",
-      "summary": "Active entry_revisit reviews: 0 (new=0, reply=0); actioned history=0; due_candidates=0. Fixed buy+28d; influences_live=false.",
+      "summary": "Active uncommented post-sale reviews: 144; actioned history=138; candidates sealed+control=479. Accept/Comment/Duplicate observe-only (influences_live=false).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -78,7 +60,7 @@
       "severity": "info",
       "category": "research",
       "title": "Cue-consumer MFT lab refreshed",
-      "summary": "Lab cue_consumer_mft (cue-consumer-mft-v0) armed/refreshed; pipeline=episode_walker_active; closed_lab_episodes=87; open_lab_episodes=30; start_gate_eligible=True (named_open_autopsy_cohort_checkpoint_complete). Observe-only; influences_live=false; declared incomparable; no Package L / no strand-A promote; does not steal Data P1 fat slot.",
+      "summary": "Lab cue_consumer_mft (cue-consumer-mft-v0) armed/refreshed; pipeline=episode_walker_active; closed_lab_episodes=138; open_lab_episodes=30; start_gate_eligible=True (named_open_autopsy_cohort_checkpoint_complete). Observe-only; influences_live=false; declared incomparable; no Package L / no strand-A promote; does not steal Data P1 fat slot.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -87,7 +69,7 @@
       "severity": "info",
       "category": "research",
       "title": "Cue-consumer MFT lab armed (observe)",
-      "summary": "Lab arm marker mft-lab-arm-epoch0-v0 at 2026-10-26T15:09:45.669837+00:00; epoch 2026-10-26T02:32:51.639849+00:00; tune_spec=mft-tune-spec-epoch0-v0. Lab paper walker active (open=30, closed=87); no sealed spawn.",
+      "summary": "Lab arm marker mft-lab-arm-epoch0-v0 at 2026-10-26T15:09:45.669837+00:00; epoch 2026-10-26T02:32:51.639849+00:00; tune_spec=mft-tune-spec-epoch0-v0. Lab paper walker active (open=30, closed=138); no sealed spawn.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -96,7 +78,7 @@
       "severity": "info",
       "category": "research",
       "title": "Cue-consumer MFT episode walker (lab paper fills)",
-      "summary": "Walker mft-episode-walker-v0 recorded lab paper fills: open=30 closed=87; cues_accepted=117; median_fair_cost_episode_pct=0.021263. Fixed-stake v0; influences_live=false; declared incomparable; no sealed spawn / no Package L; does not steal Data P1.",
+      "summary": "Walker mft-episode-walker-v0 recorded lab paper fills: open=30 closed=138; cues_accepted=168; median_fair_cost_episode_pct=0.006624. Fixed-stake v0; influences_live=false; declared incomparable; no sealed spawn / no Package L; does not steal Data P1.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -113,8 +95,53 @@
     {
       "severity": "info",
       "category": "research",
+      "title": "Parallel timing lenses (observe)",
+      "summary": "L652 parallel timing lenses: candidates=34 (buy=20 sell=14); looking=48 entered=38 abandoned=40; concurrence_mean=1.118; buy_watch_armed=0. Observe-only fixed-stake v0; concurrence companion only (N241 not_now); no Package L / no sealed zoo. See docs/ops/parallel-timing-lenses.md.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "Lab learning progress (observe)",
+      "summary": "Lab learning progress: MFT open/closed=30 / 138; median fair-cost=0.0066; shadows_eligible=True; L652 looking/entered/abandoned=48/38/40; concurrence_mean=1.118; learning_marks=152; gaps=had_themes=2 miss_themes=2 scored_reviews=50. Package M observe strip; influences_live=false; never Package L / N241. Dashboard: Automation → Observe utilization.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "Entry-blind review queue (observe)",
+      "summary": "Active entry_blind reviews: 12 (new=12, reply=0); actioned history=18; candidates=61. PIT-only; influences_live=false.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "Entry news polarity (observe)",
+      "summary": "Buy-day PIT polarity on entry_blind: 3/12 cards with usable news cites; 9 no_usable_news. Labels={'improvement_path': 3, 'mixed_or_unclear': 0, 'no_usable_news': 9, 'structural_negative': 0}. Observe-only (influences_live=false); not Package L / not strand-A veto. See docs/ops/entry-news-polarity.md.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "Entry-revisit review queue (observe)",
+      "summary": "Active entry_revisit reviews: 0 (new=0, reply=0); actioned history=0; due_candidates=0. Fixed buy+28d; influences_live=false.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
       "title": "N200 tech-timing observe refreshed",
-      "summary": "strand-b-plain-value-tech-timing-v0: 110 completed episodes over 12 weeks; entries/week=9.167; control smooth_ret_cohort_median=-0.004734 (fair costs primary); entry_lever=win; exit_lever=lose (independent of path P&L); stress_3pct_report_only=-0.059234. Observe-only — no live writes (F8).",
+      "summary": "strand-b-plain-value-tech-timing-v0: 112 completed episodes over 12 weeks; entries/week=9.333; control smooth_ret_cohort_median=-0.003904 (fair costs primary); entry_lever=win; exit_lever=lose (independent of path P&L); stress_3pct_report_only=-0.058404. Observe-only — no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -132,7 +159,7 @@
       "severity": "info",
       "category": "research",
       "title": "N201 value-mom observe refreshed",
-      "summary": "strand-c-short-horizon-value-mom-v0: 141 completed episodes over 14 weeks; entries/week=10.071; smooth_ret_cohort_median=0.022991 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.007192; stress_3pct_report_only=-0.038701; skipped_missing_entry_fields=81173. Observe-only — launch-queue waiter; no live writes (F8).",
+      "summary": "strand-c-short-horizon-value-mom-v0: 145 completed episodes over 14 weeks; entries/week=10.357; smooth_ret_cohort_median=0.038559 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.02276; stress_3pct_report_only=-0.038701; skipped_missing_entry_fields=83174. Observe-only — launch-queue waiter; no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -150,7 +177,7 @@
       "severity": "info",
       "category": "research",
       "title": "N210 AI-judgment observe refreshed",
-      "summary": "N210 (strand-e-ai-judgment-fixed-stake-v0) refreshed; pipeline=episode_walker_active; episodes=5 (open=1); weeks=12; volume_gate_met=False. Observe-only; influences_live=false; matched-30 untouched.",
+      "summary": "N210 (strand-e-ai-judgment-fixed-stake-v0) refreshed; pipeline=episode_walker_active; episodes=5 (open=2); weeks=12; volume_gate_met=False. Observe-only; influences_live=false; matched-30 untouched.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -159,7 +186,7 @@
       "severity": "info",
       "category": "research",
       "title": "N206 plain-EY observe refreshed",
-      "summary": "strand-d-plain-ey-identity-v0: 228 completed episodes over 14 weeks; entries/week=16.286; smooth_ret_cohort_median=0.015209 (fair costs primary; fixed-stake %; independent of fund NAV); cash_excess_report_only=0.015209; stress_3pct_report_only=-0.039246; skipped_missing_entry_fields=0. Observe-only — influences_live false; alone-first; no filing ingest sprint; no live writes (F8).",
+      "summary": "strand-d-plain-ey-identity-v0: 237 completed episodes over 14 weeks; entries/week=16.929; smooth_ret_cohort_median=0.014619 (fair costs primary; fixed-stake %; independent of fund NAV); cash_excess_report_only=0.014619; stress_3pct_report_only=-0.040523; skipped_missing_entry_fields=0. Observe-only — influences_live false; alone-first; no filing ingest sprint; no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -177,7 +204,7 @@
       "severity": "info",
       "category": "research",
       "title": "N215 soft-band technical veto observe refreshed",
-      "summary": "n215-soft-band-veto-v0: N200 closed=110; deep=8 large=7; SOFT_VETO+ catch=2/8 miss=1/7; hard any-of-six catch=5/8 miss=6/7. n215-grind-mid60-pass-v0: N200 catch=3/8 miss=0/7 Δsum=0.704382; N206_post_warm(n>=2026-10-23) closed=8 Δsum=-0.055398. live_veto=False observe_sketch_interesting=False. Observe-only — no live writes (F8).",
+      "summary": "n215-soft-band-veto-v0: N200 closed=112; deep=8 large=7; SOFT_VETO+ catch=2/8 miss=1/7; hard any-of-six catch=5/8 miss=6/7. n215-grind-mid60-pass-v0: N200 catch=3/8 miss=0/7 Δsum=0.704382; N206_post_warm(n>=2026-10-23) closed=12 Δsum=-0.055398. live_veto=False observe_sketch_interesting=False. Observe-only — no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -186,7 +213,7 @@
       "severity": "info",
       "category": "research",
       "title": "N215 reentry observe (WARN+×R1) refreshed",
-      "summary": "n215-reentry-warn-r1-v0: thickened; N200 closed=110; WARN+ gated=35 (large=3 deep=4 posFC=14); large re-admit=3/3 never=0/3; full-gate reentered=18/34 never=16/34; posFC re-admit=10/14; loser_abandon=4/4; path_Δ_med=-0.0522288824940049; N206 holdout WARN+=32 large re-admit=2/3. salvages_sketch=True. Observe-only — no live writes (F8).",
+      "summary": "n215-reentry-warn-r1-v0: thickened; N200 closed=112; WARN+ gated=36 (large=3 deep=4 posFC=15); large re-admit=3/3 never=0/3; full-gate reentered=19/35 never=16/35; posFC re-admit=11/15; loser_abandon=4/4; path_Δ_med=-0.0522288824940049; N206 holdout WARN+=33 large re-admit=3/4. salvages_sketch=True. Observe-only — no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -195,7 +222,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Two-lot retention beats full exit in replay",
-      "summary": "buy_tier_level: core_kept beats full exit by +1.8% over 36 passes (2026-09-07 to 2026-10-29; core value £863.11, rank exits 22 vs full exit). Observe-only. Do not edit buy_tier_level. See docs/ops/two-lot-replay.md.",
+      "summary": "buy_tier_level: core_kept beats full exit by +1.8% over 37 passes (2026-09-07 to 2026-10-30; core value £859.91, rank exits 22 vs full exit). Observe-only. Do not edit buy_tier_level. See docs/ops/two-lot-replay.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -204,7 +231,7 @@
       "severity": "warn",
       "category": "research",
       "title": "SEC filed FCF diverges from Yahoo basis on US buy-tier",
-      "summary": "12 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (13 of 222 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); GM (sp500) FY2025 SEC 17,564M vs Yahoo 1,771M (90%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.",
+      "summary": "13 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (14 of 226 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); GM (sp500) FY2025 SEC 17,564M vs Yahoo 1,771M (90%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -222,7 +249,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Primary book trails its control on total return",
-      "summary": "ai_judgment_fair total return -8.8% vs buy_tier_level +1.0% since 2026-09-07 (-9.9%). The primary's filter is costing return against the unfiltered buy tier. Observe-only: do not change the primary from this alone. See docs/ops/assessment-scoreboard.md.",
+      "summary": "ai_judgment_fair total return -11.4% vs buy_tier_level +0.6% since 2026-09-07 (-12.0%). The primary's filter is costing return against the unfiltered buy tier. Observe-only: do not change the primary from this alone. See docs/ops/assessment-scoreboard.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -240,7 +267,16 @@
       "severity": "warn",
       "category": "paper",
       "title": "Paper book would halt on drawdown or concentration",
-      "summary": "Observe-only. Books were not frozen or flattened. rules: drawdown 42% ≥ 20% | ai_judgment: drawdown 39% ≥ 20% | ai_judgment_calibrated: drawdown 27% ≥ 20% | ai_judgment_calibrated_r2: drawdown 24% ≥ 20% | ai_judgment_calibrated_r3: drawdown 24% ≥ 20% | ai_judgment_exclusion_u4: drawdown 25% ≥ 20%. See docs/ops/paper-halt.md.",
+      "summary": "Observe-only. Books were not frozen or flattened. rules: drawdown 42% ≥ 20% | ai_judgment: drawdown 39% ≥ 20% | ai_judgment_calibrated: drawdown 27% ≥ 20% | ai_judgment_calibrated_r2: drawdown 24% ≥ 20% | ai_judgment_calibrated_r3: drawdown 24% ≥ 20% | ai_judgment_exclusion_u4: drawdown 25% ≥ 20% | ai_judgment_fair: drawdown 21% ≥ 20%. See docs/ops/paper-halt.md.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "observe",
+      "title": "Deferred idea triggers met",
+      "summary": "1 open deferred idea(s) have met their structured trigger: N216 (2026-10-31). Pick up, retarget, or close each with ftse-defer (docs/ops/deferred-triggers.md).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -262,6 +298,24 @@
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "workflows",
+      "title": "Recent workflow failure: CI main nightly",
+      "summary": "1 unresolved failure(s) since last success (runs: 41180916868).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "engineering",
+      "title": "Orphaned pr_open engineering tasks",
+      "summary": "Tasks without matching open PR: eng-20261030-03",
+      "auto_fixable": true,
+      "fixed": false,
+      "action_taken": null
     }
   ],
   "auto_fixes": [],
@@ -270,12 +324,12 @@
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-10-30T07:38:44+00:00",
-      "last_success_run_id": 41021344347,
-      "age_hours": 0.2,
+      "last_success_at": "2026-10-30T23:20:13+00:00",
+      "last_success_run_id": 41143847673,
+      "age_hours": 8.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -286,9 +340,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-29T17:28:43+00:00",
-      "last_success_run_id": 40921696415,
-      "age_hours": 14.3,
+      "last_success_at": "2026-10-30T21:52:48+00:00",
+      "last_success_run_id": 41134237781,
+      "age_hours": 10.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -296,11 +350,11 @@
     {
       "workflow": "engineering-queue.yml",
       "name": "FTSE Engineering Queue",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
-      "max_age_hours": 26,
-      "last_success_at": "2026-10-30T07:32:51+00:00",
-      "last_success_run_id": 41020747587,
+      "max_age_hours": 3,
+      "last_success_at": "2026-10-31T07:34:14+00:00",
+      "last_success_run_id": 41181128210,
       "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
@@ -312,9 +366,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-10-30T07:40:41+00:00",
-      "last_success_run_id": 41021547123,
-      "age_hours": 0.1,
+      "last_success_at": "2026-10-31T07:40:40+00:00",
+      "last_success_run_id": 41181543488,
+      "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -325,12 +379,12 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-29T07:31:03+00:00",
-      "last_success_run_id": 40835933309,
-      "age_hours": 24.3,
+      "last_success_at": "2026-10-30T14:23:52+00:00",
+      "last_success_run_id": 41071317661,
+      "age_hours": 17.4,
       "stale": false,
-      "recent_failures_24h": 0,
-      "unresolved_failures_12h": 0
+      "recent_failures_24h": 1,
+      "unresolved_failures_12h": 1
     },
     {
       "workflow": "analysis-review.yml",
@@ -340,7 +394,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-25T13:15:18+00:00",
       "last_success_run_id": 40196767619,
-      "age_hours": 114.6,
+      "age_hours": 138.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -351,9 +405,9 @@
       "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-10-29T06:52:04+00:00",
-      "last_success_run_id": 40831818650,
-      "age_hours": 24.9,
+      "last_success_at": "2026-10-30T06:52:01+00:00",
+      "last_success_run_id": 41016599902,
+      "age_hours": 25.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -366,7 +420,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-25T07:30:46+00:00",
       "last_success_run_id": 40173044626,
-      "age_hours": 120.3,
+      "age_hours": 144.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -377,9 +431,9 @@
       "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-10-28T10:26:39+00:00",
-      "last_success_run_id": 40672162393,
-      "age_hours": 45.4,
+      "last_success_at": "2026-10-30T21:54:04+00:00",
+      "last_success_run_id": 41134388304,
+      "age_hours": 9.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -392,7 +446,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-25T16:36:57+00:00",
       "last_success_run_id": 40212525776,
-      "age_hours": 111.2,
+      "age_hours": 135.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -400,12 +454,12 @@
     {
       "workflow": "paper-auto.yml",
       "name": "FTSE Paper Automation",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-29T11:42:13+00:00",
-      "last_success_run_id": 40867418326,
-      "age_hours": 20.1,
+      "last_success_at": "2026-10-30T11:33:11+00:00",
+      "last_success_run_id": 41048888291,
+      "age_hours": 20.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -416,8 +470,8 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-30T02:30:44+00:00",
-      "last_success_run_id": 40992114554,
+      "last_success_at": "2026-10-31T02:30:41+00:00",
+      "last_success_run_id": 41160325852,
       "age_hours": 5.3,
       "stale": false,
       "recent_failures_24h": 0,
@@ -426,13 +480,13 @@
   ],
   "queue_status": {
     "open_count": 0,
-    "pr_open_count": 0,
+    "pr_open_count": 1,
     "parked_count": 1,
-    "merged_count": 181,
+    "merged_count": 183,
     "failed_count": 0,
     "next_task_id": null,
     "in_flight_branch": null,
-    "in_flight_pr": null,
+    "in_flight_pr": 1235,
     "spend_since_checkpoint_usd": 10.4,
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false

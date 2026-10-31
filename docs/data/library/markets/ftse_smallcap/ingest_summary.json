@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-30T10:41:26.812783+00:00",
+  "run_at": "2026-10-31T07:41:50.411494+00:00",
   "market_id": "ftse_smallcap",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-30T10:41:15.560128+00:00",
+    "snapshot_at": "2026-10-31T07:41:36.385830+00:00",
     "market_id": "ftse_smallcap",
     "buy_tier_count": 10,
     "unmeasured_buy_tier": 0,
@@ -59,7 +59,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-30T10:41:23.538989+00:00",
+    "snapshot_at": "2026-10-31T07:41:45.892510+00:00",
     "market_id": "ftse_smallcap",
     "buy_tier_count": 10,
     "unmeasured_buy_tier": 0,
@@ -117,7 +117,7 @@
   "discovery_scan": {
     "scanned": 10,
     "hits": 6,
-    "new_rows_total": 0,
+    "new_rows_total": 1,
     "curiosity_total": 6,
     "errors": 0,
     "prioritization_weights": {
@@ -149,7 +149,7 @@
   },
   "critical_path": {
     "market_id": "ftse_smallcap",
-    "assessed_at": "2026-10-30T10:41:16.108799+00:00",
+    "assessed_at": "2026-10-31T07:41:37.174080+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -162,7 +162,7 @@
       {
         "ticker": "APTD.L",
         "indexed_without_body": 6,
-        "filings_total": 118,
+        "filings_total": 119,
         "filings_with_body": 102
       },
       {
@@ -180,8 +180,8 @@
       {
         "ticker": "DFS.L",
         "indexed_without_body": 5,
-        "filings_total": 78,
-        "filings_with_body": 73
+        "filings_total": 74,
+        "filings_with_body": 69
       },
       {
         "ticker": "MER.L",
@@ -221,9 +221,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 6.851919666999947,
+  "used_seconds": 7.920639744000027,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3593.148080333,
+  "leftover_seconds": 3592.0793602559997,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -231,9 +231,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_smallcap",
-    "updated_at": "2026-10-30T10:41:23.542468+00:00",
+    "updated_at": "2026-10-31T07:41:45.897186+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 13,
+    "complete_zero_improve_runs": 14,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -285,18 +285,6 @@
         "source_surface": "uk_rns"
       },
       {
-        "ticker": "CLIG.L",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-10-29T10:43:42.858074+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 58,
-        "filings_with_body": 47,
-        "indexed_without_body": 6,
-        "thin": false,
-        "source_surface": "uk_rns"
-      },
-      {
         "ticker": "DFS.L",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
@@ -312,10 +300,22 @@
         "ticker": "APTD.L",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-10-30T10:41:23.542468+00:00",
+        "parked_at": "2026-10-31T07:41:45.897186+00:00",
         "park_via": "market_wide_zero_improve",
-        "filings_total": 119,
+        "filings_total": 120,
         "filings_with_body": 102,
+        "indexed_without_body": 6,
+        "thin": false,
+        "source_surface": "uk_rns"
+      },
+      {
+        "ticker": "CLIG.L",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-31T07:41:45.897186+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 59,
+        "filings_with_body": 47,
         "indexed_without_body": 6,
         "thin": false,
         "source_surface": "uk_rns"
@@ -372,16 +372,16 @@
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 50,
-    "candidate_count": 44,
+    "candidate_count": 48,
     "skipped_resolved_tickers": [
       "LMT",
+      "CRH",
       "MER.L",
       "TPT.L",
       "FOXT.L",
       "ULTP.L",
       "DFS.L",
       "APTD.L",
-      "NTR.TO",
       "GIB-A.TO",
       "SU.TO",
       "BAS.DE",
@@ -397,10 +397,12 @@
       "PST.MI",
       "ACKB.BR",
       "APAM.AS",
+      "0175.HK",
       "0285.HK",
-      "2331.HK",
       "0288.HK",
       "0857.HK",
+      "0883.HK",
+      "2331.HK",
       "EVN.VI",
       "WIE.VI"
     ],

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-30T23:40:08.564529+00:00",
+  "generated_at": "2026-10-31T07:52:13.675959+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -14,6 +14,47 @@
     "human": 45
   },
   "tasks": [
+    {
+      "id": "sunday-assessment-scoreboard",
+      "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
+      "summary": "Read docs/data/assessment_scoreboard.json (Analysis → Observe model switcher defaults to Strand A · live): continuity primary ai_judgment_fair (B3 evidentiary-demoted — not adoption/filter-skill truth; see policy_changes.evidentiary_demotion_ai_judgment_fair_v1) vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also matched-30 shadow twins (NAV only vs each other), frozen hold5/graduated final records, knob_calibration_priors readiness (Acknowledge-and-stop when confidence low and score_gap <0.005), buy_cross_archive_review (observe-only), policy_changes, and nest sunday-ai-path-scoreboard as a subsection. Judgment evidence primary is N210 fair-cost episode % (shadow until volume gates). While that demotion stamp is present and primary_track is still ai_judgment_fair, the ops warn Primary book trails its control is not a Push card; the outstanding gap is Later (crown only after shadow volume gates). Approve a promotion only when fair-cost evidence clears gates; do not enlarge the live 3-name book mid-flight; do not back-label its NAV. Calibrated/exclusion/Suite A frozen. N200/N201/N210 are sealed observe-only alone scoreboards — never a second live capital path and never a promote gate from trailing alone (F8).",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/assessment-scoreboard.md",
+      "doc_anchor": "assessment-scoreboard",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#assessment-scoreboard",
+      "approval_gate": true,
+      "approval_label": "Approve promotion",
+      "analysis": {
+        "headline": "Assessment scoreboard · primary negative",
+        "updated_at": "2026-10-31T07:49:48.808968+00:00",
+        "fingerprint": "1de0b4a912efa883",
+        "bullets": [
+          "ai_judgment_fair: total return -12.7% vs FTAL.L -1.2% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -12.0% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+          "Primary verdict: negative · 90% interval [-1.7254, -0.3592] · excess at 3% stress -0.3886",
+          "vs control buy_tier_level: difference -0.1203 (common window, not significance)",
+          "AI gate binds: False (N189 while it never binds)",
+          "twin ai_judgment_matched30_fair: difference -0.0158 over 10 days",
+          "twin buy_tier_matched30_fair: difference -0.0335 over 10 days",
+          "Policy changes: significance_gate_v1 (2026-10-06), evidentiary_demotion_ai_judgment_fair_v1 (2026-10-15)"
+        ],
+        "source_keys": [
+          "assessment_scoreboard"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-10-09T15:43:43.187966+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "782b2addb6782b0b"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
     {
       "id": "adhoc-review-ingest-deviations",
       "title": "Review open ingest deviations and reprocess if needed",
@@ -29,7 +70,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 2 open",
-        "updated_at": "2026-10-30T21:12:49.185858+00:00",
+        "updated_at": "2026-10-31T07:43:17.613965+00:00",
         "fingerprint": "6dda3808006c2a3a",
         "bullets": [
           "Open deviations: 2",
@@ -87,47 +128,6 @@
         "acked_at": "2026-10-22T23:04:33.170376+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "807d87df5a91ac47"
-      },
-      "sort_bucket": "new_info",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "sunday-assessment-scoreboard",
-      "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
-      "summary": "Read docs/data/assessment_scoreboard.json (Analysis → Observe model switcher defaults to Strand A · live): continuity primary ai_judgment_fair (B3 evidentiary-demoted — not adoption/filter-skill truth; see policy_changes.evidentiary_demotion_ai_judgment_fair_v1) vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also matched-30 shadow twins (NAV only vs each other), frozen hold5/graduated final records, knob_calibration_priors readiness (Acknowledge-and-stop when confidence low and score_gap <0.005), buy_cross_archive_review (observe-only), policy_changes, and nest sunday-ai-path-scoreboard as a subsection. Judgment evidence primary is N210 fair-cost episode % (shadow until volume gates). While that demotion stamp is present and primary_track is still ai_judgment_fair, the ops warn Primary book trails its control is not a Push card; the outstanding gap is Later (crown only after shadow volume gates). Approve a promotion only when fair-cost evidence clears gates; do not enlarge the live 3-name book mid-flight; do not back-label its NAV. Calibrated/exclusion/Suite A frozen. N200/N201/N210 are sealed observe-only alone scoreboards — never a second live capital path and never a promote gate from trailing alone (F8).",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/assessment-scoreboard.md",
-      "doc_anchor": "assessment-scoreboard",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#assessment-scoreboard",
-      "approval_gate": true,
-      "approval_label": "Approve promotion",
-      "analysis": {
-        "headline": "Assessment scoreboard · primary negative",
-        "updated_at": "2026-10-30T07:48:50.907237+00:00",
-        "fingerprint": "1de0b4a912efa883",
-        "bullets": [
-          "ai_judgment_fair: total return -10.1% vs FTAL.L -1.5% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -9.9% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
-          "Primary verdict: negative · 90% interval [-1.5395, -0.2569] · excess at 3% stress -0.3602",
-          "vs control buy_tier_level: difference -0.0986 (common window, not significance)",
-          "AI gate binds: False (N189 while it never binds)",
-          "twin ai_judgment_matched30_fair: difference -0.032 over 9 days",
-          "twin buy_tier_matched30_fair: difference -0.0252 over 9 days",
-          "Policy changes: significance_gate_v1 (2026-10-06), evidentiary_demotion_ai_judgment_fair_v1 (2026-10-15)"
-        ],
-        "source_keys": [
-          "assessment_scoreboard"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": true,
-        "acked_at": "2026-10-09T15:43:43.187966+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "782b2addb6782b0b"
       },
       "sort_bucket": "new_info",
       "auto_ackable": false,
@@ -272,12 +272,12 @@
       "approval_label": null,
       "analysis": {
         "headline": "0 attention-parked eng tasks · quiet (auto-ackable)",
-        "updated_at": "2026-10-30T21:52:31.300847+00:00",
+        "updated_at": "2026-10-31T07:52:10.957666+00:00",
         "fingerprint": "463c1c358411298f",
         "bullets": [
           "Quiet after recover-queue — observe Acknowledge is sufficient (no list-parked triage).",
           "Parked tasks: 1 (attention ~0)",
-          "Queue-clearing pause active: False — evaluated 2026-10-30T21:52:31.300847+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-10-31T07:52:10.957666+00:00",
           "Traffic pause active: False",
           "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)"
         ],
@@ -314,7 +314,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-10-30T21:14:23.477433+00:00",
+        "updated_at": "2026-10-31T07:44:57.119749+00:00",
         "fingerprint": "445acb0f9a3f9032",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=39",
@@ -759,7 +759,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-10-30T11:35:58.891243+00:00",
+        "updated_at": "2026-10-30T23:41:22.865468+00:00",
         "fingerprint": "1d374ee9ad0e2d3b",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
@@ -1145,7 +1145,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-10-30T11:35:58.888487+00:00",
+        "updated_at": "2026-10-30T23:41:22.864335+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",
@@ -1583,7 +1583,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Sunday analysis review synthesis",
-        "updated_at": "2026-10-28T11:53:09.861724+00:00",
+        "updated_at": "2026-10-30T23:50:28.796056+00:00",
         "fingerprint": "489f92d878371fa0",
         "bullets": [],
         "source_keys": [
@@ -2224,6 +2224,5 @@
       "auto_ackable": false,
       "ack_sufficient": false
     }
-  ],
-  "path": "docs/data/human_tasks_board.json"
+  ]
 }
