@@ -35,6 +35,12 @@ from value_investor.market_trading_costs import (
 from value_investor.paper_fund import BUY_SIGNALS
 from value_investor.research.verdict import coerce_research_verdict
 from value_investor.sealed_lifecycle import with_fair_cost_open_mark
+from value_investor.volume_interestingness import (
+    N210_INTERESTINGNESS_TITLE,
+    VOLUME_THICKNESS_SUMMARY_SUFFIX,
+    evaluate_n210_interestingness,
+    interestingness_finding,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT_DIR = Path("docs/data")
@@ -58,9 +64,10 @@ STUB_PIPELINE_STATUS = "stub_awaiting_episode_walker"
 DEFAULT_STALE_AFTER_HOURS = 30.0
 DEFAULT_STORE_LAG_WARN_HOURS = 2.0
 PIPELINE_HEALTH_DISCLAIMER = (
-    "Phase floor and volume gate measure factory mechanism throughput — "
-    "not alpha or capital readiness (F8). Fixed-stake episode % is "
-    "independent of fund NAV. Open episodes with 0 completed is honest "
+    "Phase floor and sample-thickness volume gate measure factory mechanism "
+    "throughput — not alpha or capital readiness (F8). Alone-path "
+    "interestingness is separate Push/checklist heat. Fixed-stake episode % "
+    "is independent of fund NAV. Open episodes with 0 completed is honest "
     "thin-marks state while the walker runs. Observe-only; never assessment "
     "primary crown; matched-30 pots untouched."
 )
@@ -78,6 +85,7 @@ STRESS_TRADE_COST_PCT = LEGACY_STRESS_TRADE_COST_PCT
 FINDING_TITLE = "N210 AI-judgment observe refreshed"
 STORE_FAILED_TITLE = "N210 AI-judgment observe failed"
 VOLUME_GATE_TITLE = "N210 volume gate ready for review"
+INTERESTINGNESS_TITLE = N210_INTERESTINGNESS_TITLE
 STUB_TITLE = "N210 AI-judgment observe registered (awaiting episode pipeline)"
 
 F9_BIND_FIELDS = (
@@ -772,7 +780,7 @@ def build_n210_observe(
     ):
         markers.append(walker_marker)
 
-    return {
+    out: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "generated_at": generated_at or _utc_now(),
         "registration_id": REGISTRATION_ID,
@@ -809,6 +817,7 @@ def build_n210_observe(
             "min_weeks": cfg.volume_min_weeks,
             "met": volume_gate_met,
             "rule": "both_required",
+            "role": "sample_thickness_pipeline_badge",
         },
         "phase": {
             "entries_per_week": entries_per_week,
@@ -871,6 +880,8 @@ def build_n210_observe(
         ],
         "ops_doc": str(DEFAULT_OPS_DOC),
     }
+    out["interestingness_gate"] = evaluate_n210_interestingness(out)
+    return out
 
 
 def refresh_n210_ai_judgment_observe(
@@ -965,12 +976,21 @@ def ops_findings_from_n210_observe(payload: dict[str, Any]) -> list[dict[str, An
                 "category": "research",
                 "title": VOLUME_GATE_TITLE,
                 "summary": (
-                    f"N210 volume gate met (≥{VOLUME_MIN_EPISODES} episodes and "
-                    f"≥{VOLUME_MIN_WEEKS} weeks). Human review only — no auto-promote (F8)."
+                    f"N210 sample thickness met (≥{VOLUME_MIN_EPISODES} episodes and "
+                    f"≥{VOLUME_MIN_WEEKS} weeks). {VOLUME_THICKNESS_SUMMARY_SUFFIX}"
                 ),
                 "auto_fixable": False,
             }
         )
+    # Always re-evaluate from current path fields (store stamp may lag).
+    interesting_gate = evaluate_n210_interestingness(payload)
+    interesting = interestingness_finding(
+        title=INTERESTINGNESS_TITLE,
+        gate=interesting_gate,
+        strand_note="N210 AI-judgment (matched-30 crown separate).",
+    )
+    if interesting is not None:
+        findings.append(interesting)
     return findings
 
 
@@ -1218,7 +1238,15 @@ def build_n210_pipeline_health_projection(
             "weeks": weeks,
             "min_episodes": volume.get("min_episodes", VOLUME_MIN_EPISODES),
             "min_weeks": volume.get("min_weeks", VOLUME_MIN_WEEKS),
+            "role": "sample_thickness_pipeline_badge",
         },
+        "interestingness_gate": (
+            (payload or {}).get("interestingness_gate")
+            if present and isinstance((payload or {}).get("interestingness_gate"), dict)
+            else evaluate_n210_interestingness(payload or {})
+            if present
+            else {"met": False, "thickness_met": False}
+        ),
         "path_scoreboard": {
             "smooth_ret_cohort_median": path.get("smooth_ret_cohort_median"),
             "unfiltered_buy_tier_excess_report_only": path.get(

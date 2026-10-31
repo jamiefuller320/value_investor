@@ -73,7 +73,9 @@ Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
 
 ## Human volume-gate review
 
-When ops-monitor reports **N200 volume gate ready for review** (episodes≥24 and weeks≥8): open the N200 observe tab / `n200_tech_timing_observe.json`, read path + per-lever brackets at fair costs, and decide only whether a *deliberate* promotion design is warranted later. **No auto-promote** from the info finding (F8). Phase green and lever win/lose are not capital readiness.
+**Sample-thickness** (episodes≥24 and weeks≥8) emits info **N200 volume gate ready for review** as a quiet pipeline badge only — not Push heat.
+
+**Alone-path interestingness** (thickness ∧ fair control median > 0 ∧ exit lever ≠ lose) emits **N200 alone-path interesting — promotion design optional (F8)** and may raise hub Push / checklist heat. Open the N200 observe tab / `n200_tech_timing_observe.json`, read path + per-lever brackets at fair costs, and stamp disposition **`ack` | `no-design` | `design-open`**. **No auto-promote** (F8). Phase green and lever win/lose alone are not capital readiness.
 
 ## Constraints
 

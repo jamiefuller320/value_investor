@@ -35,6 +35,12 @@ from value_investor.market_trading_costs import (
     costs_for_market,
 )
 from value_investor.sealed_lifecycle import with_fair_cost_open_mark
+from value_investor.volume_interestingness import (
+    N201_INTERESTINGNESS_TITLE,
+    VOLUME_THICKNESS_SUMMARY_SUFFIX,
+    evaluate_n201_interestingness,
+    interestingness_finding,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -55,9 +61,10 @@ PIPELINE_HEALTH_SCHEMA_VERSION = 1
 DEFAULT_STALE_AFTER_HOURS = 30.0
 DEFAULT_STORE_LAG_WARN_HOURS = 2.0
 PIPELINE_HEALTH_DISCLAIMER = (
-    "Phase floor and volume gate measure factory mechanism throughput — "
-    "not alpha or capital readiness (F8). Fixed-stake episode % is "
-    "independent of fund NAV. Observe-only."
+    "Phase floor and sample-thickness volume gate measure factory mechanism "
+    "throughput — not alpha or capital readiness (F8). Alone-path "
+    "interestingness is separate Push/checklist heat. Fixed-stake episode % "
+    "is independent of fund NAV. Observe-only."
 )
 
 DEFAULT_MARKET_ID = LIVE_PAPER_MARKET_ID
@@ -157,6 +164,7 @@ LEARNING_QUESTION = (
 FINDING_TITLE = "N201 value-mom observe refreshed"
 STORE_FAILED_TITLE = "N201 value-mom observe failed"
 VOLUME_GATE_TITLE = "N201 volume gate ready for review"
+INTERESTINGNESS_TITLE = N201_INTERESTINGNESS_TITLE
 
 # Soft gaps (MVP): archive history often lacks EY / mom / financial_health fields.
 ELIGIBILITY_MODE = "entry_fields_required_f9_or_pass"
@@ -1176,6 +1184,7 @@ def build_n201_observe(
             "min_episodes": cfg.volume_min_episodes,
             "min_weeks": cfg.volume_min_weeks,
             "met": volume_gate_met,
+            "role": "sample_thickness_pipeline_badge",
         },
         "phase": {
             "entries_per_week": entries_per_week,
@@ -1217,6 +1226,7 @@ def build_n201_observe(
     }
     if panel_coverage is not None:
         out["panel_coverage"] = panel_coverage
+    out["interestingness_gate"] = evaluate_n201_interestingness(out)
     return out
 
 
@@ -1573,7 +1583,7 @@ def _merge_observe_payloads(
     volume_gate_met = completed >= cfg.volume_min_episodes and weeks >= cfg.volume_min_weeks
     phase_ok = entries_per_week is not None and entries_per_week >= cfg.phase_entries_per_week_floor
     base = payloads[0]
-    return {
+    merged: dict[str, Any] = {
         **base,
         "generated_at": generated_at or _utc_now(),
         "snapshot_count": snapshot_count,
@@ -1586,6 +1596,7 @@ def _merge_observe_payloads(
             "min_episodes": cfg.volume_min_episodes,
             "min_weeks": cfg.volume_min_weeks,
             "met": volume_gate_met,
+            "role": "sample_thickness_pipeline_badge",
         },
         "phase": {
             "entries_per_week": entries_per_week,
@@ -1618,6 +1629,8 @@ def _merge_observe_payloads(
             for p in payloads
         ],
     }
+    merged["interestingness_gate"] = evaluate_n201_interestingness(merged)
+    return merged
 
 
 def refresh_n201_value_mom_observe(
@@ -1795,13 +1808,21 @@ def ops_findings_from_n201_observe(payload: dict[str, Any]) -> list[dict[str, An
                 "category": "research",
                 "title": VOLUME_GATE_TITLE,
                 "summary": (
-                    f"Volume gate met (episodes>={VOLUME_MIN_EPISODES} and "
-                    f"weeks>={VOLUME_MIN_WEEKS}). Human may review; "
-                    "no auto-promote."
+                    f"Sample thickness met (episodes>={VOLUME_MIN_EPISODES} and "
+                    f"weeks>={VOLUME_MIN_WEEKS}). {VOLUME_THICKNESS_SUMMARY_SUFFIX}"
                 ),
                 "auto_fixable": False,
             }
         )
+    # Always re-evaluate from current path/phase fields (store stamp may lag).
+    gate = evaluate_n201_interestingness(payload)
+    interesting = interestingness_finding(
+        title=INTERESTINGNESS_TITLE,
+        gate=gate,
+        strand_note="N201 value-mom.",
+    )
+    if interesting is not None:
+        findings.append(interesting)
     return findings
 
 
@@ -2026,7 +2047,15 @@ def build_n201_pipeline_health_projection(
             "weeks": weeks,
             "min_episodes": volume.get("min_episodes", VOLUME_MIN_EPISODES),
             "min_weeks": volume.get("min_weeks", VOLUME_MIN_WEEKS),
+            "role": "sample_thickness_pipeline_badge",
         },
+        "interestingness_gate": (
+            (payload or {}).get("interestingness_gate")
+            if present and isinstance((payload or {}).get("interestingness_gate"), dict)
+            else evaluate_n201_interestingness(payload or {})
+            if present
+            else {"met": False, "thickness_met": False}
+        ),
         "path_scoreboard": {
             "smooth_ret_cohort_median": path.get("smooth_ret_cohort_median"),
             "patient_hold_excess_report_only": path.get("patient_hold_excess_report_only"),
