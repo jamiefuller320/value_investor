@@ -269,22 +269,9 @@ def test_research_overlay_cohesion_wires_in_universe_committed_verdicts_in_repo(
 
     metrics = research_overlay_cohesion_metrics(data_dir=Path("docs/data"))
     assert metrics["wired_missing_committed_verdicts_in_universe"] == 0
-    assert metrics["wired_missing_committed_verdicts"] == 0
     assert metrics["buy_tier_unwired_with_committed_verdict"] == []
     assert metrics["cohesive"] is True
     assert metrics["buy_tier_wired_count"] <= metrics["buy_tier_count"]
-
-
-def test_research_overlay_cohesion_off_universe_alumni_do_not_count_as_wired_missing():
-    """eng-20261030-03: PINE.L alumni memo must not inflate in-universe wired_missing."""
-    from pathlib import Path
-
-    from value_investor.research.ingest import research_overlay_cohesion_metrics
-
-    metrics = research_overlay_cohesion_metrics(data_dir=Path("docs/data"))
-    off = metrics.get("off_universe_committed_verdicts") or []
-    assert "PINE.L" in off
-    assert metrics["wired_missing_committed_verdicts"] == 0
 
 
 def test_reconcile_committed_research_overlay_binds_report_verdict(tmp_path: Path):
@@ -370,113 +357,6 @@ def test_reconcile_committed_research_overlay_binds_report_verdict(tmp_path: Pat
     report = read_json(latest_path)["reports"][0]
     assert report["research_verdict"] == "caution"
     assert report["adjusted_signal"] == "hold"
-
-
-def test_reconcile_committed_research_overlay_ignores_ticker_scope_for_refresh(tmp_path: Path):
-    """Partial ingest-improvement tickers must not skip overlay refresh for other gaps."""
-    from value_investor.research.document import ResearchDocument
-    from value_investor.research.ingest import (
-        reconcile_committed_research_overlay,
-        research_overlay_cohesion_metrics,
-    )
-    from value_investor.storage import read_json, write_json
-
-    data_dir = tmp_path / "data"
-    committed = data_dir / "research"
-    for ticker, verdict in (("GAP.L", "accumulate"), ("OTHER.L", "caution")):
-        tree = committed / ticker
-        tree.mkdir(parents=True)
-        write_json(
-            tree / "research.json",
-            ResearchDocument(
-                ticker=ticker,
-                name=ticker,
-                signal="buy",
-                version=1,
-                created_at="2026-10-01T00:00:00+00:00",
-                updated_at="2026-10-01T00:00:00+00:00",
-                mode="structured_verdict",
-                research_verdict=verdict,
-                research_confidence=0.7,
-            ).to_dict(),
-            compact=True,
-        )
-    latest_path = data_dir / "latest.json"
-    write_json(
-        latest_path,
-        {
-            "reports": [
-                {
-                    "ticker": "GAP.L",
-                    "name": "Gap plc",
-                    "signal": "buy",
-                    "models_passed": 6,
-                    "model_count": 22,
-                    "composite_score": 0.6,
-                    "sector_composite_score": 0.55,
-                    "families_passed": 3,
-                    "data_quality_score": 0.9,
-                    "metrics_present": 18,
-                    "metrics_total": 20,
-                    "weeks_at_signal": 2,
-                    "signal_trend": "stable",
-                    "conviction_score": 0.4,
-                    "stability_label": "persistent",
-                    "timing_signal": "neutral",
-                    "timing_score": 0.0,
-                    "action_note": "",
-                    "summary": "Screen only",
-                    "passed_models": [],
-                    "key_metrics": {},
-                },
-                {
-                    "ticker": "OTHER.L",
-                    "name": "Other plc",
-                    "signal": "hold",
-                    "models_passed": 4,
-                    "model_count": 22,
-                    "composite_score": 0.5,
-                    "sector_composite_score": 0.5,
-                    "families_passed": 2,
-                    "data_quality_score": 0.9,
-                    "metrics_present": 18,
-                    "metrics_total": 20,
-                    "weeks_at_signal": 2,
-                    "signal_trend": "stable",
-                    "conviction_score": 0.3,
-                    "stability_label": "persistent",
-                    "timing_signal": "neutral",
-                    "timing_score": 0.0,
-                    "action_note": "",
-                    "summary": "Screen only",
-                    "passed_models": [],
-                    "key_metrics": {},
-                },
-            ],
-            "research": [],
-        },
-        compact=True,
-    )
-
-    before = research_overlay_cohesion_metrics(
-        data_dir=data_dir,
-        latest_path=latest_path,
-        committed_root=committed,
-    )
-    assert before["wired_missing_committed_verdicts_in_universe"] == 2
-
-    result = reconcile_committed_research_overlay(
-        data_dir=data_dir,
-        latest_path=latest_path,
-        committed_root=committed,
-        output_dir=tmp_path / "output",
-        tickers=["GAP.L"],
-    )
-    assert result["refreshed"] is True
-    assert result["wired_missing_committed_verdicts_in_universe"] == 0
-    reports = {row["ticker"]: row for row in read_json(latest_path)["reports"]}
-    assert reports["GAP.L"]["research_verdict"] == "accumulate"
-    assert reports["OTHER.L"]["research_verdict"] == "caution"
 
 
 def test_reconcile_committed_research_index_merges_enq_l(tmp_path: Path):

@@ -2050,20 +2050,9 @@ def research_overlay_cohesion_metrics(
         "off_universe_committed_count": len(off_universe),
         "committed_not_wired_in_universe": committed_not_wired_in_universe,
         "wired_missing_committed_verdicts_in_universe": len(committed_not_wired_in_universe),
-        # Aligns with system_gaps apply layer when alumni are off the current screen.
-        "wired_missing_committed_verdicts": len(committed_not_wired_in_universe),
         "buy_tier_unwired_with_committed_verdict": buy_unwired_with_committed,
         "cohesive": not committed_not_wired_in_universe and not buy_unwired_with_committed,
     }
-
-
-def _overlay_reconcile_gap_tickers(metrics: dict[str, Any]) -> list[str]:
-    """In-universe committed verdicts that still need a dashboard overlay refresh."""
-    gaps = list(metrics.get("committed_not_wired_in_universe") or [])
-    for ticker in metrics.get("buy_tier_unwired_with_committed_verdict") or []:
-        if ticker not in gaps:
-            gaps.append(ticker)
-    return gaps
 
 
 def reconcile_committed_research_overlay(
@@ -2092,15 +2081,14 @@ def reconcile_committed_research_overlay(
         latest_path=latest_path,
         committed_root=committed_root,
     )
-    gap_tickers = _overlay_reconcile_gap_tickers(before)
-    overlay_targets = list(gap_tickers)
+    unwired = list(before.get("committed_not_wired_in_universe") or [])
     if tickers:
         wanted = {_research_ticker_key(t) for t in tickers if str(t).strip()}
-        overlay_targets = [t for t in gap_tickers if t in wanted]
+        unwired = [t for t in unwired if t in wanted]
 
     refreshed = False
     documents_applied = 0
-    if gap_tickers and latest_path.is_file():
+    if unwired and latest_path.is_file():
         documents_applied = refresh_dashboard_bundle(
             latest_path,
             output_dir=output_dir,
@@ -2117,7 +2105,7 @@ def reconcile_committed_research_overlay(
         **after,
         "refreshed": refreshed,
         "documents_applied": documents_applied,
-        "overlay_targets": overlay_targets,
+        "overlay_targets": unwired,
     }
 
 
@@ -2147,6 +2135,7 @@ def reconcile_committed_research_publish(
         latest_path=latest_path,
         committed_root=committed_root,
         output_dir=output_dir,
+        tickers=tickers,
     )
     return {"index": index, "overlay": overlay}
 
