@@ -14,6 +14,7 @@ from value_investor.market_trading_costs import (
 from value_investor.n200_tech_timing_observe import (
     FAIR_COST_MARKER_ID,
     FINDING_TITLE,
+    INTERESTINGNESS_TITLE,
     PER_LEVER_MARKER_ID,
     PIPELINE_HEALTH_DISCLAIMER,
     REGISTRATION_ID,
@@ -248,6 +249,8 @@ def test_ops_findings_volume_gate():
     titles = {f["title"] for f in findings}
     assert FINDING_TITLE in titles
     assert VOLUME_GATE_TITLE in titles
+    # Exit lose blocks interestingness even when fair median > 0.
+    assert INTERESTINGNESS_TITLE not in titles
     assert all(f["auto_fixable"] is False for f in findings)
     refresh = next(f for f in findings if f["title"] == FINDING_TITLE)
     assert "fair costs primary" in refresh["summary"]
@@ -255,6 +258,21 @@ def test_ops_findings_volume_gate():
     assert "entry_lever=win" in refresh["summary"]
     assert "exit_lever=lose" in refresh["summary"]
     assert "independent of path P&L" in refresh["summary"]
+    thickness = next(f for f in findings if f["title"] == VOLUME_GATE_TITLE)
+    assert "pipeline badge" in thickness["summary"]
+
+
+def test_ops_findings_interestingness_when_exit_not_lose():
+    base = build_n200_observe([])
+    base["volume_gate"] = {"met": True, "min_episodes": 24, "min_weeks": 8}
+    base["path_scoreboard"] = {"control_smooth_ret_cohort_median": 0.01}
+    base["per_lever_scoreboards"] = {"entry_verdict": "win", "exit_verdict": "win"}
+    findings = ops_findings_from_n200_observe(base)
+    titles = {f["title"] for f in findings}
+    assert INTERESTINGNESS_TITLE in titles
+    interesting = next(f for f in findings if f["title"] == INTERESTINGNESS_TITLE)
+    assert "disposition" in interesting["summary"]
+    assert interesting["auto_fixable"] is False
 
 
 def test_registration_payload_seal_fields():

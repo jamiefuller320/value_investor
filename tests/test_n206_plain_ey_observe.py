@@ -13,6 +13,7 @@ from value_investor.n206_plain_ey_observe import (
     FINDING_TITLE,
     FIXED_STAKE_UNITS,
     REGISTRATION_ID,
+    INTERESTINGNESS_TITLE,
     VOLUME_GATE_TITLE,
     build_n206_pipeline_health_projection,
     build_registration_payload,
@@ -116,13 +117,20 @@ def test_findings_are_observe_only_and_volume_gate_does_not_promote():
     scored["completed_entry_episodes"] = 48
     scored["calendar_weeks_spanned"] = 8
     scored["volume_gate"] = {"met": True, "min_episodes": 48, "min_weeks": 8}
+    scored["path_scoreboard"] = {
+        **(scored.get("path_scoreboard") or {}),
+        "smooth_ret_cohort_median": 0.02,
+    }
     findings = ops_findings_from_n206_observe(scored)
     titles = [row["title"] for row in findings]
     assert FINDING_TITLE in titles
     assert VOLUME_GATE_TITLE in titles
+    assert INTERESTINGNESS_TITLE in titles
     assert all(row["auto_fixable"] is False for row in findings)
     assert all(
-        "no auto-promote" in row["summary"] or "no live writes" in row["summary"]
+        "no auto-promote" in row["summary"].lower()
+        or "no live writes" in row["summary"]
+        or "pipeline badge" in row["summary"]
         for row in findings
     )
 

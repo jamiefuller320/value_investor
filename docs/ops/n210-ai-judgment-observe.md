@@ -77,11 +77,14 @@ are honest — not a fail. Not assessment primary; never auto-promote (F8 / B3).
 
 ## Human volume-gate review
 
-When ops marks the volume gate ready: open the observe JSON, read fair-cost
-episode % + companions (N toward gate, weeks, buy-tier excess report-only),
-and decide only whether a deliberate promotion design is warranted later. Do
-**not** promote, do not `decision-review --apply`, and do not open a second
-live capital path (**F8**). Do not crown matched-30 from this card.
+**Sample-thickness** (episodes≥48 and weeks≥8) is a quiet pipeline badge
+(`N210 volume gate ready for review`). **Alone-path interestingness**
+(thickness ∧ fair median > 0) emits **N210 alone-path interesting —
+promotion design optional (F8)** and may raise Push / checklist heat. Open
+the observe JSON, read fair-cost episode % + companions, and stamp
+disposition **`ack` | `no-design` | `design-open`**. Do **not** promote, do
+not `decision-review --apply`, and do not open a second live capital path
+(**F8**). Do not crown matched-30 from this card.
 
 Checklist: `adhoc-n210-volume-gate-review`.
 

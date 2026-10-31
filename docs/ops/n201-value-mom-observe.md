@@ -91,7 +91,9 @@ Fixed-stake `%` is **independent of fund NAV** — cash drag / equal-weight book
 
 ## Human volume-gate review
 
-When ops-monitor reports **N201 volume gate ready for review** (episodes≥48 and weeks≥8): open the N201 observe tab / `n201_value_mom_observe.json`, read fair-cost path median vs patient-hold (report-only), and decide only whether a *deliberate* promotion design is warranted later. **No auto-promote** from the info finding (F8). Launch-queue waiter status is unchanged by this review.
+**Sample-thickness** (episodes≥48 and weeks≥8) is a quiet pipeline badge (`N201 volume gate ready for review`).
+
+**Alone-path interestingness** (thickness ∧ phase floor ∧ fair median > 0 ∧ patient-hold excess > 0) emits **N201 alone-path interesting — promotion design optional (F8)** and may raise Push / checklist heat. Open the N201 observe tab / `n201_value_mom_observe.json`, read fair-cost path median vs patient-hold (report-only), and stamp disposition **`ack` | `no-design` | `design-open`**. Owner 2026-10-31: **design-open** (Project store `n201-promotion-design-pack-2026-10-31.md`). **No auto-promote** (F8). Launch-queue waiter status is unchanged by this review.
 
 ## Constraints
 
