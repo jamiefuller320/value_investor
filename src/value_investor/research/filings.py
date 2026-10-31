@@ -175,6 +175,17 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.henryboot.co.uk/media/fv0nuosu/32326-henry-boot-ar2024-web.pdf",
         "https://www.henryboot.co.uk/media/tqvbhcvt/interim-results-25_main.pdf",
     ],
+    # eng-20261030-03: ftse350 KIE.L buy-tier unwired — no filings index; kier.co.uk statutory PDFs.
+    "KIE.L": [
+        "https://www.kier.co.uk/media/3lvnd42r/kier-ar2025.pdf",
+        "https://www.kier.co.uk/media/a24baq5w/hy25-interim-results.pdf",
+        "https://www.kier.co.uk/media/d5kag4pk/hy26-interim-results.pdf",
+        "https://www.kier.co.uk/media/3j5ht5c5/hy25-presentation-final2.pdf",
+    ],
+    # eng-20261030-03: ftse350 JMAT.L buy-tier unwired — no filings index; matthey.com statutory PDFs.
+    "JMAT.L": [
+        "https://matthey.com/documents/d/guest/jma014_full",
+    ],
     # eng-20261025-05: ftse_smallcap ENQ.L gap-closure had empty IR allowlist; FY/H1 statutory PDFs on enquest.com.
     "ENQ.L": [
         "https://www.enquest.com/fileadmin/content/Annual_Reports/Annual_Report_2025/50243_EnQuest_Annual_Report_2025.pdf",
