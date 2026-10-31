@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-30T19:12:03+00:00",
+  "updated_at": "2026-10-31T09:53:41+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -15924,6 +15924,33 @@
       "status": "open",
       "source": "lab learning progress strip ship 2026-10-30",
       "added_at": "2026-10-30T14:22:44+00:00"
+    },
+    {
+      "id": "L654",
+      "category": "later",
+      "section": "ops",
+      "title": "Refresh test_ftse_gap_scan goldens after CI main nightly drift",
+      "summary": "CI main nightly run 41180916868 failed 7 asserts in tests/test_ftse_gap_scan.py (BAB yield, trust PE/discount goldens, GSK fcf_divergence_flagged). Confirm data drift vs scoring regression, then narrow goldens refresh or draft-ci-fix from saved log \u2014 do not steal P1 overlay PR #1235 merge slot.",
+      "revisit_when": "After eng-20261030-03 / PR #1235 overlay wiring is merged or parked, or when CI main nightly fails again on test_ftse_gap_scan",
+      "tags": [
+        "ci",
+        "gap_scan",
+        "goldens",
+        "ops-monitor"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-7218759d-cb55-536f-b93c-4ac3b6a2b8bb",
+      "added_at": "2026-10-31T09:53:41+00:00",
+      "trigger": {
+        "any": [
+          {
+            "file": "docs/data/ops_status.json",
+            "path": "findings[title=Recent workflow failure: CI main nightly].severity",
+            "op": "==",
+            "value": "warn"
+          }
+        ]
+      }
     }
   ],
   "fragments": [

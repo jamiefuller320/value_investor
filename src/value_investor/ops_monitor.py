@@ -408,7 +408,12 @@ def list_open_pull_requests(
         return []
     owner, name = repo.split("/", 1)
     payload = github_api_get(f"/repos/{owner}/{name}/pulls?state=open&per_page=100", token=token)
-    return list(payload) if isinstance(payload, list) else []
+    rows = list(payload) if isinstance(payload, list) else []
+    # REST payloads use head.ref; gh --json uses headRefName. Normalize so orphan
+    # match / recover-queue see the same shape (engineering_recovery helper).
+    from value_investor.engineering_recovery import _normalize_open_pr_row
+
+    return [_normalize_open_pr_row(row) for row in rows if isinstance(row, dict)]
 
 
 def latest_workflow_run(
@@ -1147,16 +1152,20 @@ def check_workflow_freshness(
     return findings, checks
 
 
+def _open_pr_head_ref(pr: dict[str, Any]) -> str:
+    """Branch tip from gh JSON, workflow snapshots, or GitHub REST ``head.ref``."""
+    from value_investor.engineering_recovery import _normalize_open_pr_row
+
+    return str(_normalize_open_pr_row(pr).get("headRefName") or "").strip()
+
+
 def _is_orphaned_pr_open_task(row: dict[str, Any], open_prs: list[dict[str, Any]] | None) -> bool:
     """True when pr_open has no matching open GitHub PR (or no recorded PR when PR list omitted)."""
     if str(row.get("status") or "") != "pr_open":
         return False
     branch = str(row.get("branch_name") or "").strip()
     if open_prs is not None:
-        if branch and any(
-            str(pr.get("headRefName") or pr.get("head_branch") or "").strip() == branch
-            for pr in open_prs
-        ):
+        if branch and any(_open_pr_head_ref(pr) == branch for pr in open_prs if isinstance(pr, dict)):
             return False
         return True
     if row.get("pr_url") or row.get("pr_number"):

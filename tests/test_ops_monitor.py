@@ -751,6 +751,50 @@ def test_pr_open_with_pr_url_not_orphan_when_open_prs_omitted():
     assert _is_orphaned_pr_open_task(row, [])
 
 
+def test_pr_open_matches_rest_head_ref_and_gh_headRefName():
+    row = {
+        "status": "pr_open",
+        "branch_name": "cursor/eng-20261030-03-1de3",
+    }
+    assert not _is_orphaned_pr_open_task(
+        row, [{"number": 1235, "head": {"ref": "cursor/eng-20261030-03-1de3"}}]
+    )
+    assert not _is_orphaned_pr_open_task(
+        row, [{"number": 1235, "headRefName": "cursor/eng-20261030-03-1de3"}]
+    )
+    assert _is_orphaned_pr_open_task(
+        row, [{"number": 99, "head": {"ref": "cursor/other-1de3"}}]
+    )
+
+
+def test_list_open_pull_requests_normalizes_rest_head_ref(monkeypatch):
+    from value_investor import ops_monitor as om
+
+    monkeypatch.setattr(om, "_github_repo", lambda: "org/repo")
+    monkeypatch.setattr(om, "_github_token", lambda: "tok")
+    monkeypatch.setattr(
+        om,
+        "github_api_get",
+        lambda url, token=None: [
+            {
+                "number": 1235,
+                "html_url": "https://github.com/org/repo/pull/1235",
+                "head": {"ref": "cursor/eng-20261030-03-1de3"},
+                "title": "overlay",
+            }
+        ],
+    )
+    rows = om.list_open_pull_requests()
+    assert rows == [
+        {
+            "headRefName": "cursor/eng-20261030-03-1de3",
+            "number": 1235,
+            "html_url": "https://github.com/org/repo/pull/1235",
+            "url": "https://github.com/org/repo/pull/1235",
+        }
+    ]
+
+
 def test_apply_auto_fixes_marks_orphan_fixed_when_pr_merged(tmp_path: Path):
     from value_investor.engineering_recovery import RecoveryResult
 
