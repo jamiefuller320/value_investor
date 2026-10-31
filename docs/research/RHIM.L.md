@@ -1,6 +1,6 @@
 # RHI Magnesita N.V. (RHIM.L) — Research memo
 
-_Version 4 · Updated 2026-10-07T10:56:03.340255+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-30T23:12:51.782059+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.60
-Rationale: Neutral on hold: filing cheapness/yield unchanged, but FCF-yield models still fail on basis mismatch and a possible Vesuvius bid adds leverage and Takeover Code risk without terms—no clear override of the screen.
+Confidence: 0.58
+Rationale: Neutral on hold: filing cheapness/yield intact and Vesuvius talks advanced (PUSU to 24 Nov), but no firm offer terms, FCF basis mismatch persists, and bid leverage/antitrust risk still block a clear override.
 RiskTags: cyclical, competitive, leverage, pension, key_person, regulatory, liquidity, accounting, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Timing overlay reads **accumulate** (RSI ~55, price above the 200-day); filing c
 29 Sep: parent RNS with Vesuvius on a **possible offer**; media cite advanced talks; Takeover Code **Form 8.3** disclosures on RHIM followed in early Oct.  
 Quant **hold** unchanged (7 weeks): **3/22** models (was 2/22); P/E ~14.5; timing **neutral** (RSI ~50); FCF basis mismatch unchanged (~€268M filing vs ~€214M company-adj).  
 No new parent fundamentals disclosure; cheapness/yield filing narrative otherwise unchanged.
+
+### 2026-10-30T23:12:51.782059+00:00
+27 Oct parent RNS: PUSU deadline extended to 24 Nov 2026; headline agreement on disposal-revenue remedies threshold and a related reverse break fee; Cevian support extended—still Rule 2.4, no firm offer.  
+Quant **hold** unchanged (12 weeks): **3/22** models; P/E ~13.6; yield ~5.6%; timing **neutral** (RSI ~47); FCF basis mismatch unchanged (~€268M filing vs ~€214M company-adj).  
+Commentary on Vesuvius-bid timing and further Takeover Code Form 8.3 disclosures only—no new parent fundamentals.

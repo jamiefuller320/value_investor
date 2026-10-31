@@ -1,6 +1,6 @@
 # Hollywood Bowl Group plc (BOWL.L) — Research memo
 
-_Version 4 · Updated 2026-10-07T10:54:04.359118+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-30T23:00:43.056517+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.76
-Rationale: The 7 Oct FY26 trading RNS supports the buy case on revenue, cash and in-line PBT despite weather; cyclical and structural risks remain until December full results.
+Confidence: 0.74
+Rationale: The Oct FY26 trading RNS still supports the buy screen on revenue and net cash; thin news since then leaves cyclical, leverage and accounting risks open until December results.
 RiskTags: cyclical, competitive, leverage, governance, accounting, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Screen stays buy with accumulate timing; thesis unchanged on May H1 until fresh 
 7 Oct RNS: FY26 trading update — record Group revenue £261.6m (+4.3%), adjusted PBT expected in line with consensus, closing net cash £13.5m despite UK H2 heatwave.
 25 Sep: Simon Dodd appointed independent non-executive director (effective 1 Nov 2026).
 Press and broker notes on resilience and the share move follow the trading statement; full-year results are due in December.
+
+### 2026-10-30T23:00:43.056517+00:00
+No new RNS or trading updates since the 7 Oct FY26 trading statement already reflected in the memo.  
+12 Oct holdings notice only in filings; one secondary Kalkine piece on the year-end trading update, not new company disclosure.  
+December full-year results are still the next material checkpoint; screen and thesis unchanged.

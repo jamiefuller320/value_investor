@@ -1,6 +1,6 @@
 # Imperial Brands PLC (IMB.L) — Research memo
 
-_Version 5 · Updated 2026-10-11T07:58:59.435666+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-10-30T23:38:52.013995+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.70
-Rationale: 8 Oct RNS reiterates FY26 guidance, >£2.2bn FCF and £1.5bn FY27 buyback, but leverage, earnings decline and filing–screen FCF gap still weaken the strong buy case.
+Confidence: 0.68
+Rationale: Oct 8 guidance and buybacks still stand with no new filings, but leverage, EPS decline and filing vs screen TTM FCF gap still temper alignment with the buy screen and wait-for-pullback timing.
 RiskTags: regulatory, leverage, litigation, accounting
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Strong buy screen unchanged (17w, stable); filing vs screen TTM FCF gap (~£3.2b
 8 Oct RNS pre-close trading update: FY26 guidance on track, >£2.2bn FCF, completed £1.45bn buyback and £1.5bn FY27 programme; £750m tranche RNS same day.  
 Secondary coverage (30 Sep–9 Oct) on buyback/dividend/NGP; one piece notes mixed market reaction to the update—no new sourced regulatory or litigation developments.  
 Strong buy screen unchanged (20w, stable); filing vs screen TTM FCF gap (~£3.2bn vs ~£2.5bn) still unresolved.
+
+### 2026-10-30T23:38:52.013995+00:00
+No new filings or RNS since the 8 Oct pre-close update; news since 11 Oct is secondary buyback/dividend commentary only (22–24 Oct).  
+No sourced regulatory or litigation developments in the latest fetch.  
+Buy screen stable (4w, persistent) with wait-for-pullback timing (RSI ~79); filing vs screen TTM FCF gap (~£3.17bn vs ~£2.50bn) still unresolved.

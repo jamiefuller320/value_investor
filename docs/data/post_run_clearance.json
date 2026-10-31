@@ -3,9 +3,9 @@
   "last_run": {
     "schema_version": 1,
     "trigger": "post_run_review_email",
-    "evaluated_at": "2026-10-28T11:53:10.115198+00:00",
+    "evaluated_at": "2026-10-30T23:50:29.060272+00:00",
     "review_source": "output/post_run_review.md",
-    "fingerprint": "253619f951faea595949",
+    "fingerprint": "36009fec7fddbb0dd1d9",
     "skipped": false,
     "skip_reason": null,
     "applied": true,
@@ -16,32 +16,34 @@
     "lane_c_recommended": false,
     "actions": [],
     "queue_before": {
-      "open_count": 4,
+      "open_count": 1,
       "pr_open_count": 0
     },
     "compile_cap_audit": {
-      "candidate_count": 4,
+      "candidate_count": 3,
       "truncated_count": 0,
-      "post_run_plan_beyond_cap": [
-        "Implement canonical FCF basis registry (filing OCF−CapEx, screen TTM, company-adjusted/policy primary) with overlay rules that suppress Dividend Growth/FCF Yiel"
-      ]
+      "post_run_plan_beyond_cap": []
     },
     "plan_alignment": {
       "unlinked_plan_titles": [
-        "Backfill RNS/PDF bodies for buy-tier names with high `indexed_without_body` (IGG.L, IAG.L, BGEO.L, INCH.L)—Investegate/LSE direct fetch, skip Google News wrappers",
-        "Generalise Companies House filed-accounts PDF fetch + text extract for UK listings when annual report bodies missing (pattern from AEP.L/ITV.L backlog samples)",
-        "Implement canonical FCF basis registry (filing OCF−CapEx, screen TTM, company-adjusted/policy primary) with overlay rules that suppress Dividend Growth/FCF Yield until basis is chosen"
+        "Pipeline to fetch and persist RNS/PDF/HTML bodies for all indexed filings missing bodies on buy-tier FTSE names (prioritise IAG.L, BGEO.L, IGG.L, INCH.L, KLR.L indexed_without_body counts)",
+        "Companies House document-api PDF download + text extract path (pattern from backlog ITV.L/AEP.L samples) when LSE/RNS body fetch returns zero",
+        "Backfill `CompanyMetrics` cash-flow fields (e.g. `operating_cashflow`) from Yahoo cash-flow statements when annual JSON already has OCF (MEGP.L-class false negatives)",
+        "Allowlisted IR results-presentation PDF fetch + table extract (HIK.L, MEGP.L backlog pattern) into `filings/bodies/`"
       ],
-      "terminal_only_titles": []
+      "terminal_only_titles": [
+        "Pipeline to fetch and persist RNS/PDF/HTML bodies for all indexed filings missing bodies on buy-tier FTSE names (prioritise IAG.L, BGEO.L, IGG.L, INCH.L, KLR.L indexed_without_body counts)",
+        "Allowlisted IR results-presentation PDF fetch + table extract (HIK.L, MEGP.L backlog pattern) into `filings/bodies/`"
+      ]
     },
     "compile_cap_drain_skipped": "priority engineering queue not empty",
     "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
     "queue_after": {
-      "open_count": 4,
+      "open_count": 1,
       "pr_open_count": 0
     },
     "tasks_added_estimate": 0,
-    "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+    "dispatch_reason": "queue ready — dispatch next open task"
   },
   "runs": [
     {
@@ -505,6 +507,51 @@
       },
       "tasks_added_estimate": 0,
       "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+    },
+    {
+      "schema_version": 1,
+      "trigger": "post_run_review_email",
+      "evaluated_at": "2026-10-30T23:50:29.060272+00:00",
+      "review_source": "output/post_run_review.md",
+      "fingerprint": "36009fec7fddbb0dd1d9",
+      "skipped": false,
+      "skip_reason": null,
+      "applied": true,
+      "lanes": {
+        "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
+      },
+      "should_dispatch_engineering": true,
+      "lane_c_recommended": false,
+      "actions": [],
+      "queue_before": {
+        "open_count": 1,
+        "pr_open_count": 0
+      },
+      "compile_cap_audit": {
+        "candidate_count": 3,
+        "truncated_count": 0,
+        "post_run_plan_beyond_cap": []
+      },
+      "plan_alignment": {
+        "unlinked_plan_titles": [
+          "Pipeline to fetch and persist RNS/PDF/HTML bodies for all indexed filings missing bodies on buy-tier FTSE names (prioritise IAG.L, BGEO.L, IGG.L, INCH.L, KLR.L indexed_without_body counts)",
+          "Companies House document-api PDF download + text extract path (pattern from backlog ITV.L/AEP.L samples) when LSE/RNS body fetch returns zero",
+          "Backfill `CompanyMetrics` cash-flow fields (e.g. `operating_cashflow`) from Yahoo cash-flow statements when annual JSON already has OCF (MEGP.L-class false negatives)",
+          "Allowlisted IR results-presentation PDF fetch + table extract (HIK.L, MEGP.L backlog pattern) into `filings/bodies/`"
+        ],
+        "terminal_only_titles": [
+          "Pipeline to fetch and persist RNS/PDF/HTML bodies for all indexed filings missing bodies on buy-tier FTSE names (prioritise IAG.L, BGEO.L, IGG.L, INCH.L, KLR.L indexed_without_body counts)",
+          "Allowlisted IR results-presentation PDF fetch + table extract (HIK.L, MEGP.L backlog pattern) into `filings/bodies/`"
+        ]
+      },
+      "compile_cap_drain_skipped": "priority engineering queue not empty",
+      "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
+      "queue_after": {
+        "open_count": 1,
+        "pr_open_count": 0
+      },
+      "tasks_added_estimate": 0,
+      "dispatch_reason": "queue ready — dispatch next open task"
     }
   ]
 }

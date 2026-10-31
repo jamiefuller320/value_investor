@@ -1,6 +1,6 @@
 # Smith & Nephew plc (SN.L) — Research memo
 
-_Version 4 · Updated 2026-10-07T10:52:22.032735+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-30T22:58:45.229226+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.65
-Rationale: Filing-backed valuation and health scores still support the buy screen, but recent flow is debt commentary and product GNW with no new accounts, so leverage and CFO succession stay unresolved.
+Confidence: 0.63
+Rationale: Filing-backed valuation still confirms the buy screen; late-Oct operating headlines are uncorroborated commentary, so conviction stays tempered on growth and governance.
 RiskTags: regulatory, competitive, governance, key_person, leverage, cyclical
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Indexed H1 2026 / FY account bodies are still missing; CFO departure remains com
 Late Sep–Oct coverage mostly revisits Sep USD bond pricing, tender outcomes and a note-redemption notice; no new indexed H1 or FY account bodies.
 6 Oct GNW: CARTIHEAL AGILI-C cartilage implant commercially available in Europe; 23 Sep EVOS pelvic launch is product marketing only.
 CFO departure still lacks a named successor; filing-backed buy screen unchanged, with FCF definition mismatch noted on the screen.
+
+### 2026-10-30T22:58:45.229226+00:00
+Since 7 Oct, indexed RNS is limited to the 6 Oct CARTIHEAL Europe GNW and a routine 21 Oct share listing; no new accounts or trading statement.
+Late-Oct headlines (sales outlook, Xodus Medical, ex-div, UK budget) are third-party commentary only and are not corroborated in the filing pack.
+CFO successor still unannounced; filing-backed buy screen unchanged with FCF definition mismatch noted on the screen.

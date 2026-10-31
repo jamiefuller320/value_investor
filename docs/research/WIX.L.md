@@ -1,6 +1,6 @@
 # Wickes Group plc (WIX.L) — Research memo
 
-_Version 4 · Updated 2026-10-07T10:50:50.480703+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-30T22:56:48.085004+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.70
-Rationale: No Wickes RNS since Sep H1; net cash and FY26 PBT guidance unchanged, while screen hold and FCF/leverage gaps leave research neutral on the wait-and-see case.
+Confidence: 0.72
+Rationale: Q3 RNS confirms retail momentum and unchanged ~10% FY26 adjusted PBT guidance; research stays neutral on hold while FCF basis gaps, leverage and overbought timing remain unresolved.
 RiskTags: cyclical, competitive, leverage, governance, accounting, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ No material change.
 No Wickes trading update or results RNS since 14 Sep H1; only routine director declarations (23–25 Sep).  
 News is mostly mis-tagged Wix.com (NASDAQ) options; peer-driven sector commentary and NED Mike Iddon’s B&M appointment are immaterial to the thesis.  
 Quant screen is now **hold** (FCF filing vs TTM mismatch unchanged); interim fundamentals unchanged.
+
+### 2026-10-30T22:56:48.085004+00:00
+20 Oct 2026 Q3 trading update (RNS): group revenue +4.5% in the quarter, retail LFL +5.6%; FY26 adjusted PBT still guided to ~10% growth vs consensus.  
+News since 7 Oct is Kalkine/LSE quote only; no further company disclosures.  
+Quant screen unchanged at **hold** (FCF filing vs TTM gap, wait timing, RSI ~78).

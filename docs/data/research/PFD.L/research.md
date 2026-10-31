@@ -1,6 +1,6 @@
 # Premier Foods plc (PFD.L) — Research memo
 
-_Version 4 · Updated 2026-10-07T11:16:53.936505+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-30T23:27:46.588233+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.67
-Rationale: Research stays neutral on the buy screen: cheapness persists in filings, but weak liquidity, Oct 2026 refi, unresolved FCF/cover definitions and sub-threshold ROE still block a conviction upgrade.
+Rationale: Research remains neutral on the persistent buy screen: filing cheapness holds, but Oct 2026 refinancing, weak liquidity, FCF/cover definition gaps and sub-threshold ROE still block a conviction upgrade.
 RiskTags: customer_concentration, regulatory, pension, competitive, liquidity, leverage
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Neutral research overlay unchanged pending refi progress or the next results/tra
 No results or trading RNS since the 23 Sep refresh; the 2 Oct Total Voting Rights notice is routine admin only.  
 The 7 Oct news batch is syndicated Kalkine/TipRanks commentary plus unrelated “PFD” preferred-ticker noise.  
 The buy screen is stronger (twelfth week, ~71% composite) but refi, liquidity and FCF definition gaps are unchanged—neutral overlay holds.
+
+### 2026-10-30T23:27:46.588233+00:00
+No new results or trading RNS since the 7 Oct refresh; the 2 Oct Total Voting Rights notice remains the only indexed disclosure in the window.  
+The 30 Oct news batch is syndicated Kalkine/Simply Wall St quote pages plus unrelated “PFD” preferred-ticker noise (Kalkine 13 Oct rehashes an earlier quarterly update).  
+Buy screen persists (seventeenth week, ~71% composite) but refi, liquidity and FCF/cover gaps are unchanged—neutral overlay holds.

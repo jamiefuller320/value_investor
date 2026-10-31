@@ -1,6 +1,6 @@
 # Dunelm Group plc (DNLM.L) — Research memo
 
-_Version 4 · Updated 2026-10-07T10:51:54.123878+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-30T22:57:56.212444+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.73
-Rationale: Research stays neutral on the buy case: cheapness on screen persists, but only routine RNS since prelims and FY27 flat PBT plus restructuring risks are unchanged pending Q1.
+Confidence: 0.75
+Rationale: Q1 RNS modestly supports the buy screen (+1.1% sales, FY27 adjusted PBT guide unchanged), but LFL -0.8%, expected H1 PBT below prior year and restructuring spend still cap conviction.
 RiskTags: cyclical, competitive, key_person, leverage, governance
 
 ## Weekly updates
@@ -27,3 +27,8 @@ Q1 FY27 trading update still due 15 October; FY27 flat adjusted PBT and £30–4
 Since 21 Sep, RNS is limited to a 1 Oct Director Declaration (LR 6.4.9: NED Dan Taylor’s external CEO role at Flutter), total voting rights, and PDMR notices.  
 Q1 FY27 trading update is not out yet (prior guidance ~15 October); press is mostly strategy replay and split analyst fair-value views.  
 FY27 broadly flat adjusted PBT and the restructuring narrative are unchanged.
+
+### 2026-10-30T22:57:56.212444+00:00
+15 Oct Q1 trading RNS: sales +1.1% to £433m (soft weather start, stronger exit); LFL -0.8%; gross margin +10bps; FY27 adjusted PBT guide unchanged, H1 PBT expected below prior year.  
+Since 15 Oct, no further material RNS—press is Q1 reaction, analyst views, and UK fiscal commentary.  
+Restructuring and cyclical risks unchanged.

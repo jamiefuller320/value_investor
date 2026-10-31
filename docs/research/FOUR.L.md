@@ -1,6 +1,6 @@
 # 4imprint Group plc (FOUR.L) — Research memo
 
-_Version 4 · Updated 2026-10-07T11:15:52.405794+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-30T23:26:47.533044+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.69
-Rationale: No new RNS; hold at five stable weeks still fits mixed quality metrics and unresolved FCF/dividend definitions, so research neutrally confirms the screen without a stronger exit or add case.
+Confidence: 0.68
+Rationale: No new RNS; buy timing improved on the screen but unresolved FCF/dividend definitions and mixed quality metrics leave research neutral on the buy case.
 RiskTags: cyclical, competitive, accounting, key_person, regulatory
 
 ## Weekly updates
@@ -26,4 +26,9 @@ The filing-led view is unchanged: H1 2026 tariff margin pressure, ~$130m FY2026 
 ### 2026-10-07T11:15:52.405794+00:00
 No new 4imprint RNS or company-specific press in the 7 October news batch (Greggs/Goldman “four” headlines only).
 The quantitative **hold** persists (9/22 models, ~49% composite, five weeks, stable trend).
+The filing-led view is unchanged: H1 2026 tariff margin pressure, ~$130m FY2026 adjusted PBT guidance, and dual FCF/dividend cover definitions.
+
+### 2026-10-30T23:26:47.533044+00:00
+No new 4imprint RNS or company-specific press in the 30 October news batch (false-positive “four” headlines only).  
+The quantitative screen is **buy** (8/22 models, ~50% composite, 3 weeks, stable trend; timing accumulate).  
 The filing-led view is unchanged: H1 2026 tariff margin pressure, ~$130m FY2026 adjusted PBT guidance, and dual FCF/dividend cover definitions.

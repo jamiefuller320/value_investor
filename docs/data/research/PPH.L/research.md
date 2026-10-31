@@ -1,6 +1,6 @@
 # PPHE Hotel Group Limited (PPH.L) — Research memo
 
-_Version 11 · Updated 2026-10-18T08:37:41.673741+00:00 · Mode: structured_verdict_update_
+_Version 12 · Updated 2026-10-30T22:14:18.107894+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.68
-Rationale: Research still confirms the buy screen on cheapness and improved accumulate timing, but without new filings, governance, leverage, liquidity and statutory EPS weakness keep conviction moderated.
+Confidence: 0.70
+Rationale: Q3 RNS supports the buy screen on trading momentum and in-line FY guidance, but leverage, liquidity, governance and weak statutory EPS growth still limit conviction.
 RiskTags: governance, leverage, cyclical, regulatory, accounting, competitive, liquidity, key_person
 
 ## Weekly updates
@@ -63,3 +63,8 @@ No change to the H1 2026 interim anchor or prior governance, leverage, liquidity
 No new RNS or company filings since the 11 October refresh; the 18 October batch is US-ticker options noise, a Pepkor (JSE:PPH) collision, and third-party London/art’otel commentary.  
 The buy screen is now sixteen weeks persistent (7/22 models, stable); timing is accumulate with favourable entry versus prior neutral timing.  
 No change to the H1 2026 interim anchor or prior governance, leverage, liquidity and earnings-basis concerns.
+
+### 2026-10-30T22:14:18.107894+00:00
+29 October Q3 RNS: revenue +5.8%, RevPAR +6.6%; board expects FY 2026 in line with analyst consensus; New York development sale completed with associated debt repaid.  
+Buy screen now nineteen weeks persistent (7/22 models, stable); screen timing is neutral again (prior refresh had accumulate entry).  
+30 October news batch is empty; leverage, liquidity, governance and H1 earnings-basis concerns are unchanged.

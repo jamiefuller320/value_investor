@@ -1,6 +1,6 @@
 # Barclays PLC (BARC.L) — Research memo
 
-_Version 1 · Updated 2026-10-23T12:40:18.796002+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-10-30T22:37:28.460333+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,5 +9,12 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: FY2025 Companies House accounts (EPS 43.8p vs 36.0p, dividend 8.6p, £3.7bn capital return, CET1 14.3%) and Q326 filing support the buy screen on cheapness, earnings and distributions; filing-aligned FY2025 FCF £16.9bn matches the screen,...
+Rationale: FY2025 filing-backed cheapness, earnings and capital return still fit the buy screen; no new disclosures since Q326, but leverage and litigation cap quality conviction.
 RiskTags: regulatory, cyclical, leverage, litigation
+
+## Weekly updates
+
+### 2026-10-30T22:37:28.460333+00:00
+No new Barclays filings or regulatory disclosures in the 23 Oct–30 Oct refresh window.  
+News is commentary-only (post-results scrutiny, rate sensitivity, analyst views) without new facts.  
+Buy screen unchanged at four weeks (7/22 models, ~68% composite); timing neutral vs prior accumulate.

@@ -1,6 +1,6 @@
 # AEP Plantations Plc (AEP.L) — Research memo
 
-_Version 5 · Updated 2026-10-25T07:58:05.559736+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-10-30T22:51:50.492331+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Q3 RNS backs Strong Buy on 9m output and FY guidance; El Niño 2027 yield risk and the post-update sell-off keep a phased accumulate overlay, not full chase.
+Rationale: Q3 RNS still backs Strong Buy on output and FY guidance; oversold screen timing helps, but 2027 weather risk and no new ops news keep a phased accumulate overlay.
 RiskTags: cyclical, regulatory, customer_concentration, competitive, other
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Strong Buy screen unchanged (~77% composite, 23 weeks, stable).
 12 Oct RNS: 9m 2026 trading update and interim dividend (3.73c, unchanged); own FFB and CPO up double digits, board confident on full-year market expectations.  
 RNS flags El Niño/dry weather as a possible drag on 2027 FFB yields; net cash after borrowings $99.0m after Pinago and buybacks; press reported an ~8% share fall on the weather line.  
 Strong Buy screen ~79% composite (3 weeks, stable); 13–23 Oct RNS is buybacks only; later news is mostly US “AEP” ticker/options noise.
+
+### 2026-10-30T22:51:50.492331+00:00
+No new results or trading updates since the 12 Oct Q3 RNS; 26–30 Oct RNS is routine transaction-in-own-shares under the buyback only.  
+26–30 Oct news is US “American Electric Power” and options-page ticker noise—no verified Indonesia operating or policy items.  
+Strong Buy screen ~80% composite (5 weeks, stable); timing overlay Accumulate (RSI oversold, below 200-day MA).
