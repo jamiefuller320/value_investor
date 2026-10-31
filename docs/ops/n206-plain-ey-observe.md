@@ -71,7 +71,7 @@ Fixed-stake `%` is **independent of fund NAV**.
 
 ## Human volume-gate review
 
-When ops-monitor reports **N206 volume gate ready for review** (episodes≥48 and weeks≥8): open the N206 observe tab / `n206_plain_ey_observe.json`, read the fair-cost path median alone, and decide only whether a *deliberate* promotion design is warranted later. **No auto-promote** from the info finding (F8). Do not crown an assessment primary. Do not promote N200, N201, or N210 from this card.
+**Sample-thickness** (episodes≥48 and weeks≥8) is a quiet pipeline badge. **Alone-path interestingness** (thickness ∧ fair median > 0) emits **N206 alone-path interesting — promotion design optional (F8)** and may raise Push heat. Open the N206 observe tab / `n206_plain_ey_observe.json`, read the fair-cost path median alone, and stamp disposition **`ack` | `no-design` | `design-open`**. Alone design optional only — **no assessment-primary crown** (O3). **No auto-promote** (F8). Do not promote N200, N201, or N210 from this card.
 
 ## Constraints
 

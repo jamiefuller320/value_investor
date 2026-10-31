@@ -406,27 +406,30 @@
         },
         {
           "id": "adhoc-n200-n201-volume-gate-review",
-          "title": "Review N200/N201 volume gates when ops-monitor marks ready (no auto-promote)",
-          "summary": "When ops-monitor info findings say N200 and/or N201 volume gate ready for review, open the matching Observe switcher tab (or observe JSON), read fair-cost path/lever brackets, and decide only whether a deliberate promotion design is warranted later. Do not promote, do not decision-review --apply, and do not open a second live capital path (F8).",
+          "title": "Stamp N200/N201 interestingness disposition (ack / no-design / design-open)",
+          "summary": "Heat only when ops-monitor emits alone-path interestingness (not sample-thickness volume-gate-ready noise). Open the matching Observe tab / JSON, read fair-cost path (± levers for N200). Required disposition sink — record exactly one of: ack (seen, no further action), no-design (interesting but park design), design-open (deliberate promotion-*design* pack started; still F8). Owner 2026-10-31: N201 design-open (see Project store n201-promotion-design-pack-2026-10-31.md); N200 not design-eligible while path/exit fail interestingness. Do not promote, do not decision-review --apply, do not open a second live capital path (F8).",
           "automated": false,
           "doc_path": "docs/ops/n200-tech-timing-observe.md",
-          "doc_anchor": "human-volume-gate-review"
+          "doc_anchor": "human-volume-gate-review",
+          "disposition_sink": ["ack", "no-design", "design-open"]
         },
         {
           "id": "adhoc-n206-volume-gate-review",
-          "title": "Review N206 plain-EY volume gate when ops-monitor marks ready (no auto-promote)",
-          "summary": "When ops-monitor says N206 volume gate ready for review, open the N206 Observe tab or docs/data/n206_plain_ey_observe.json, read the fair-cost episode % alone, and decide only whether a deliberate promotion design is warranted later. Do not promote, do not decision-review --apply, and do not crown an assessment primary or promote N200, N201, or N210 from this card (F8 / O3).",
+          "title": "Stamp N206 interestingness disposition (ack / no-design / design-open)",
+          "summary": "Heat only on N206 alone-path interestingness (thickness volume-gate-ready is pipeline badge only). Read fair-cost episode % alone. Required disposition: ack | no-design | design-open. Alone-first (O3): design-open is optional alone design only — never assessment-primary crown; do not promote N200/N201/N210 from this card. Do not promote, do not decision-review --apply (F8).",
           "automated": false,
           "doc_path": "docs/ops/n206-plain-ey-observe.md",
-          "doc_anchor": "human-volume-gate-review"
+          "doc_anchor": "human-volume-gate-review",
+          "disposition_sink": ["ack", "no-design", "design-open"]
         },
         {
           "id": "adhoc-n210-volume-gate-review",
-          "title": "Review N210 AI-judgment volume gate when ops-monitor marks ready (no auto-promote)",
-          "summary": "When ops-monitor says N210 volume gate ready for review, open docs/data/n210_ai_judgment_observe.json, read fair-cost episode % + companions (N toward gate, weeks, buy-tier excess report-only), and decide only whether a deliberate assessment-primary design is warranted later. Do not promote, do not decision-review --apply, do not crown matched-30 as primary from this card (F8 / B3).",
+          "title": "Stamp N210 interestingness disposition (ack / no-design / design-open)",
+          "summary": "Heat only when N210 alone-path interestingness fires (after sample thickness ≥48 eps ∧ ≥8 wk). Read fair-cost episode % + companions. Required disposition: ack | no-design | design-open. Do not promote, do not decision-review --apply, do not crown matched-30 from this card (F8 / B3).",
           "automated": false,
           "doc_path": "docs/ops/n210-ai-judgment-observe.md",
-          "doc_anchor": "human-volume-gate-review"
+          "doc_anchor": "human-volume-gate-review",
+          "disposition_sink": ["ack", "no-design", "design-open"]
         },
         {
           "id": "adhoc-cue-consumer-mft-start-gate",

@@ -28,6 +28,12 @@ from value_investor.market_trading_costs import (
 )
 from value_investor.paper_fund import BUY_SIGNALS
 from value_investor.sealed_lifecycle import with_fair_cost_open_mark
+from value_investor.volume_interestingness import (
+    N200_INTERESTINGNESS_TITLE,
+    VOLUME_THICKNESS_SUMMARY_SUFFIX,
+    evaluate_n200_interestingness,
+    interestingness_finding,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT_DIR = Path("docs/data")
@@ -47,9 +53,10 @@ PER_LEVER_SCOREBOARD_SCHEMA_VERSION = 1
 DEFAULT_STALE_AFTER_HOURS = 30.0
 DEFAULT_STORE_LAG_WARN_HOURS = 2.0
 PIPELINE_HEALTH_DISCLAIMER = (
-    "Phase floor, volume gate, and per-lever scoreboards measure factory "
-    "mechanism / lever quality — not alpha or capital readiness (F8). "
-    "Lever wins are independent of path P&L. Observe-only."
+    "Phase floor, sample-thickness volume gate, and per-lever scoreboards "
+    "measure factory mechanism / lever quality — not alpha or capital "
+    "readiness (F8). Alone-path interestingness is separate Push/checklist "
+    "heat. Lever wins are independent of path P&L. Observe-only."
 )
 
 BRACKET_OFFSETS_DAYS = (-14, 0, 14)
@@ -80,6 +87,7 @@ LEARNING_QUESTION = (
 FINDING_TITLE = "N200 tech-timing observe refreshed"
 STORE_FAILED_TITLE = "N200 tech-timing observe failed"
 VOLUME_GATE_TITLE = "N200 volume gate ready for review"
+INTERESTINGNESS_TITLE = N200_INTERESTINGNESS_TITLE
 
 
 def _utc_now() -> str:
@@ -757,7 +765,7 @@ def build_n200_observe(
     if not any(m.get("marker_id") == per_lever_marker["marker_id"] for m in markers):
         markers.append(per_lever_marker)
 
-    return {
+    out: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "registration_id": REGISTRATION_ID,
         "deferred_id": DEFERRED_ID,
@@ -776,6 +784,7 @@ def build_n200_observe(
             "min_episodes": cfg.volume_min_episodes,
             "min_weeks": cfg.volume_min_weeks,
             "met": volume_gate_met,
+            "role": "sample_thickness_pipeline_badge",
         },
         "phase": {
             "entries_per_week": entries_per_week,
@@ -812,6 +821,8 @@ def build_n200_observe(
         "lifecycle_episodes": _sealed_lifecycle_rows([*episodes, *open_lifecycle]),
         "ops_doc": str(DEFAULT_OPS_DOC),
     }
+    out["interestingness_gate"] = evaluate_n200_interestingness(out)
+    return out
 
 
 def refresh_n200_tech_timing_observe(
@@ -904,13 +915,21 @@ def ops_findings_from_n200_observe(payload: dict[str, Any]) -> list[dict[str, An
                 "category": "research",
                 "title": VOLUME_GATE_TITLE,
                 "summary": (
-                    f"Volume gate met (episodes>={VOLUME_MIN_EPISODES} and "
-                    f"weeks>={VOLUME_MIN_WEEKS}). Human may review brackets; "
-                    "no auto-promote."
+                    f"Sample thickness met (episodes>={VOLUME_MIN_EPISODES} and "
+                    f"weeks>={VOLUME_MIN_WEEKS}). {VOLUME_THICKNESS_SUMMARY_SUFFIX}"
                 ),
                 "auto_fixable": False,
             }
         )
+    # Always re-evaluate from current path/lever fields (store stamp may lag).
+    gate = evaluate_n200_interestingness(payload)
+    interesting = interestingness_finding(
+        title=INTERESTINGNESS_TITLE,
+        gate=gate,
+        strand_note="N200 tech-timing.",
+    )
+    if interesting is not None:
+        findings.append(interesting)
     return findings
 
 
@@ -1249,7 +1268,15 @@ def build_n200_pipeline_health_projection(
             "weeks": weeks,
             "min_episodes": volume.get("min_episodes", VOLUME_MIN_EPISODES),
             "min_weeks": volume.get("min_weeks", VOLUME_MIN_WEEKS),
+            "role": "sample_thickness_pipeline_badge",
         },
+        "interestingness_gate": (
+            (payload or {}).get("interestingness_gate")
+            if present and isinstance((payload or {}).get("interestingness_gate"), dict)
+            else evaluate_n200_interestingness(payload or {})
+            if present
+            else {"met": False, "thickness_met": False}
+        ),
         "per_lever": per_lever,
         "freshness": freshness,
         "pipeline": {

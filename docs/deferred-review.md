@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-31T11:32:33+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-31T18:17:09+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -272,6 +272,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N239 | **Sealed model zoo per hypothesis / slate winner** | Do not spawn a sealed observe model per competing hypothesis or per winning slate class. Anti-noise ≤3 active children/root still governs; lens/ruleset proposals go through novelty+cull — never one book per story. | Mixable entry/exit lenses + novelty-gated sealed forks (L637) proven useful AND owner explicitly wants hypothesis-class twins — still under anti-noise caps. |
 | N240 | **Multi-book NAV compete for shared slate candidates** | Do not stand up multiple capital/fund-NAV books racing the same candidate to claim credit for favourite vs late lens entries. Parallel timing lenses use per-lens fixed-stake episode marks (O3 alone-first) — distinct from N239 sealed-per-hypothesis zoo and from L652 observe lenses. Twins-over-edits if a capital-path experiment is ever wanted. | Thick per-lens episode cohorts + owner explicitly wants a declared-incomparable capital twin race — still not back-label of favourite NAV; still anti-noise caps. |
 | N241 | **Lens-concurrence risk / sizing layer** | Do not use pre-entry / same-window lens concurrence count to size down (concurrence=1), size up (many agree), or hard-avoid singles on live or mid-flight books. Observe-only concurrence companion stays folded into L652 (design lock §10). Risk layer waits thick fair-cost + drawdown marks; if tested, twins-over-edits / cold-start epoch only — never mid-flight rewrite. | Thick L652 per-lens + concurrence companion cohorts show durable correlation with fair-cost / milder drawdowns after liquidity/popularity falsify checks; owner explicitly authorizes a declared twin for sizing — still not strand A mid-flight. |
+| N242 | **Volume-gate-ready finding = thickness only (superseded)** | N200/N201/N206/N210 volume_gate.met (episodes∧weeks) stays as pipeline health; it must not alone raise promotion-design Push. Replaced by alone-path interestingness (fair-cost median > 0 + strand overlays). | Interestingness gate shipped on main; checklist + hub mapper retargeted (owner lock 2026-10-31) |
 
 ---
 
@@ -396,6 +397,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L649 | **Entry-blind Accept/Comment themes as MFT stock_choice MoM prior** | Once entry_blind has a thicker actioned cohort (beyond today's 12 new / 2 history), roll recurring human themes into cue-consumer MFT stock_choice MoM priors — still observe-only, influences_live=false, no Package L. | entry_blind actioned_history >= 24 and cue_consumer_mft MoM stock_choice leaves diagnostic_partial |
 | L653 | **Thick concurrence LQ dashboard (lab learning)** | v0 lab learning strip shows concurrence mean + thin fair-cost-by-band join when data exists; a thick multi-band concurrence×outcome / drawdown LQ dashboard still waits for volume across bands. | L652 has fair-cost marks across ≥2 concurrence bands with enough closed episodes to trust median joins (O3 alone-first framing) |
 | L655 | **Retarget L558 cost-drag recalibration off frozen ai_judgment_fair** | After 2026-10-31 freeze of ai_judgment_fair, L558 still waits on reviews.ai_judgment_fair.significance_gate.passed which decision-review will no longer refresh. Retarget to an active tunable fair-cost book or N210/matched-30 readiness before relying on --apply cost heuristics. | When owner next opens decision-review cost-drag work, or when a tunable fair-cost book exposes significance_gate.passed in learning_tracks_review |
+| L656 | **Post-seal calendar weeks for sealed volume thickness** | Amend calendar_weeks_spanned used in volume thickness to count only snapshots/marks after each strand seal marker so archive-at-seal cannot satisfy the week leg. | Interestingness gate on main; N200 seal marker n200-seal-v0 as test case |
+| L657 | **Drawdown companions on sealed interestingness gate** | Optional harden: require stamped drawdown depth/duration companions on N200–N210 before design-eligible, aligned with lab_learning_progress companions — not peer NAV. | Drawdown companions present on sealed observe stores; owner wants harder design bar |
 
 ### Universe & data
 

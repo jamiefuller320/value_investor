@@ -17,6 +17,7 @@ from value_investor.n201_value_mom_observe import (
     FINDING_TITLE,
     FIXED_STAKE_UNITS,
     HOLD_TRADING_DAYS,
+    INTERESTINGNESS_TITLE,
     PATIENT_HOLD_BASELINE,
     REGISTRATION_ID,
     SEAL_MARKER_ID,
@@ -426,10 +427,13 @@ def test_ops_findings_volume_gate():
     titles = {f["title"] for f in findings}
     assert FINDING_TITLE in titles
     assert VOLUME_GATE_TITLE in titles
+    assert INTERESTINGNESS_TITLE in titles
     assert all(f["auto_fixable"] is False for f in findings)
     refresh = next(f for f in findings if f["title"] == FINDING_TITLE)
     assert "independent of fund NAV" in refresh["summary"]
     assert "fair costs primary" in refresh["summary"]
+    thickness = next(f for f in findings if f["title"] == VOLUME_GATE_TITLE)
+    assert "pipeline badge" in thickness["summary"]
 
 
 def test_pipeline_health_projection():

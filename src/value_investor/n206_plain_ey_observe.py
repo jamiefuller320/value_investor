@@ -59,6 +59,12 @@ from value_investor.n201_value_mom_observe import (
     trading_days_between,
 )
 from value_investor.sealed_lifecycle import with_fair_cost_open_mark
+from value_investor.volume_interestingness import (
+    N206_INTERESTINGNESS_TITLE,
+    VOLUME_THICKNESS_SUMMARY_SUFFIX,
+    evaluate_n206_interestingness,
+    interestingness_finding,
+)
 
 DEFAULT_OUTPUT_DIR = Path("docs/data")
 DEFAULT_STORE_PATH = Path("docs/data/n206_plain_ey_observe.json")
@@ -89,11 +95,13 @@ LEARNING_QUESTION = (
 FINDING_TITLE = "N206 plain-EY observe refreshed"
 STORE_FAILED_TITLE = "N206 plain-EY observe failed"
 VOLUME_GATE_TITLE = "N206 volume gate ready for review"
+INTERESTINGNESS_TITLE = N206_INTERESTINGNESS_TITLE
 
 PIPELINE_HEALTH_DISCLAIMER = (
-    "Phase floor and volume gate measure factory mechanism throughput — "
-    "not alpha or capital readiness (F8). Fixed-stake episode % is "
-    "independent of fund NAV. Alone-first (O3). Observe-only; "
+    "Phase floor and sample-thickness volume gate measure factory mechanism "
+    "throughput — not alpha or capital readiness (F8). Alone-path "
+    "interestingness is separate Push/checklist heat. Fixed-stake episode % "
+    "is independent of fund NAV. Alone-first (O3). Observe-only; "
     "influences_live is false. Not an assessment primary."
 )
 
@@ -487,6 +495,7 @@ def _payload_from_returns(
             "min_episodes": cfg.volume_min_episodes,
             "min_weeks": cfg.volume_min_weeks,
             "met": volume_gate_met,
+            "role": "sample_thickness_pipeline_badge",
         },
         "phase": {
             "entries_per_week": entries_per_week,
@@ -530,6 +539,7 @@ def _payload_from_returns(
     }
     if panel_coverage is not None:
         out["panel_coverage"] = panel_coverage
+    out["interestingness_gate"] = evaluate_n206_interestingness(out)
     return out
 
 
@@ -790,13 +800,22 @@ def ops_findings_from_n206_observe(payload: dict[str, Any]) -> list[dict[str, An
                 "category": "research",
                 "title": VOLUME_GATE_TITLE,
                 "summary": (
-                    f"Volume gate met (episodes>={VOLUME_MIN_EPISODES} and "
-                    f"weeks>={VOLUME_MIN_WEEKS}). Human may review the alone "
-                    "path; no auto-promote and no assessment-primary crown."
+                    f"Sample thickness met (episodes>={VOLUME_MIN_EPISODES} and "
+                    f"weeks>={VOLUME_MIN_WEEKS}). Alone-first; "
+                    f"{VOLUME_THICKNESS_SUMMARY_SUFFIX}"
                 ),
                 "auto_fixable": False,
             }
         )
+    # Always re-evaluate from current path fields (store stamp may lag).
+    gate = evaluate_n206_interestingness(payload)
+    interesting = interestingness_finding(
+        title=INTERESTINGNESS_TITLE,
+        gate=gate,
+        strand_note="N206 plain-EY (alone design optional — no assessment crown).",
+    )
+    if interesting is not None:
+        findings.append(interesting)
     return findings
 
 
@@ -991,7 +1010,15 @@ def build_n206_pipeline_health_projection(
             "weeks": weeks,
             "min_episodes": volume.get("min_episodes", VOLUME_MIN_EPISODES),
             "min_weeks": volume.get("min_weeks", VOLUME_MIN_WEEKS),
+            "role": "sample_thickness_pipeline_badge",
         },
+        "interestingness_gate": (
+            (payload or {}).get("interestingness_gate")
+            if present and isinstance((payload or {}).get("interestingness_gate"), dict)
+            else evaluate_n206_interestingness(payload or {})
+            if present
+            else {"met": False, "thickness_met": False}
+        ),
         "path_scoreboard": {
             "smooth_ret_cohort_median": path.get("smooth_ret_cohort_median"),
             "cash_excess_report_only": path.get("cash_excess_report_only"),

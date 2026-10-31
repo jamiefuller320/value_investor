@@ -56,7 +56,7 @@ def test_push_ranker_maps_findings_and_digest(tmp_path: Path) -> None:
                 },
                 {
                     "severity": "info",
-                    "title": "N200 volume gate ready for review",
+                    "title": "N200 alone-path interesting — promotion design optional (F8)",
                     "auto_fixable": False,
                     "category": "research",
                 },
@@ -624,7 +624,7 @@ def test_b3_demotion_drops_trail_and_demoted_saturation_from_push(tmp_path: Path
                 },
                 {
                     "severity": "info",
-                    "title": "N200 volume gate ready for review",
+                    "title": "N200 alone-path interesting — promotion design optional (F8)",
                     "auto_fixable": False,
                 },
             ],
@@ -646,7 +646,7 @@ def test_b3_demotion_drops_trail_and_demoted_saturation_from_push(tmp_path: Path
     status_titles = [str(row.get("title") or "") for row in report["ops_findings"]]
     assert "Primary book trails its control on total return" not in status_titles
     assert "Decision-review knobs saturated at bounds" not in status_titles
-    assert "N200 volume gate ready for review" in status_titles
+    assert "N200 alone-path interesting — promotion design optional (F8)" in status_titles
     observe = next(row for row in report["rows"] if row["id"] == "non_actionable_observes")
     assert "not Push" in observe["label"] or observe["id"] == "non_actionable_observes"
     assert "b3_evidentiary_demotion" in observe["value"]
