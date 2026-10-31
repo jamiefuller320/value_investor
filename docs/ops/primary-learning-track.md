@@ -13,17 +13,21 @@ Since **2026-10-06** the live FTSE paper root is judged by **one assessment
 model** on a single fair (T212-shaped) cost basis instead of two suites. The
 committed file `docs/data/paper_automation/assessment_model.json` records:
 
-- `primary_track` = **`ai_judgment_fair`** — continuity primary (B3
-  **evidentiary demotion**: not adoption / filter-skill truth; see
-  `policy_changes.evidentiary_demotion_ai_judgment_fair_v1` and
-  [b3-scoreboard-epoch.md](b3-scoreboard-epoch.md));
-- `control_track` = **`buy_tier_level`** — the unfiltered buy-tier book the
-  primary must beat (does the AI/conviction filter add value over the screen?);
+- `primary_track` = **`ai_judgment_matched30_fair`** — continuity primary for the
+  filter-vs-screen comparison after **2026-10-31** stop of the 3-name book
+  (`policy_changes.stop_ai_judgment_fair_3name_v1`). **Not** an evidentiary /
+  adoption crown until matched-30 / N210 volume gates (B3
+  `not_assessment_primary_until_gates`);
+- `control_track` = **`buy_tier_matched30_fair`** — matched top-30 buy-tier twin
+  paired with the filter sleeve (fund NAV compare only within the pair);
+- `buy_tier_level` — still trading as strand-A / diversified diagnostic (not the
+  assessment-model control after the 2026-10-31 switch);
 - `switches` — every primary/control change with its date and reason;
 - `frozen_tracks` — books that stopped trading, each with `frozen_at`, `reason`,
   `superseded_by` and its final NAV, contributed capital, holdings and trade count.
-  B3 also freezes the underpowered 3-name twins `ai_judgment_hold5_fair` and
-  `ai_judgment_graduated_fair`.
+  B3 freezes the underpowered 3-name twins `ai_judgment_hold5_fair` and
+  `ai_judgment_graduated_fair`. Owner lock 2026-10-31 also freezes
+  **`ai_judgment_fair`** (3-name continuity book stopped).
 
 Frozen on 2026-10-06 (history kept, nothing rewritten):
 
@@ -40,17 +44,25 @@ Frozen on 2026-10-07:
 |--------------|-----|---------------|
 | `graduated_allocation` | 3% stress-cost book on the rules screen, outside the assessment model | `ai_judgment_graduated_fair` |
 
-Still trading: `ai_judgment_fair` (continuity primary; evidentiary-demoted),
-`buy_tier_level` (control), `buy_tier_level_dca` (deposit realism), and B3
-shadow matched-30 twins `ai_judgment_matched30_fair` /
-`buy_tier_matched30_fair` ([b3-scoreboard-epoch.md](b3-scoreboard-epoch.md)).
-Judgment observe: N210 ([n210-ai-judgment-observe.md](n210-ai-judgment-observe.md)).
+Still trading: `buy_tier_level` (strand-A diagnostic), `buy_tier_level_dca`
+(deposit realism), and B3 matched-30 twins `ai_judgment_matched30_fair` /
+`buy_tier_matched30_fair` (assessment-model primary/control for continuity —
+not evidentiary crown until gates)
+([b3-scoreboard-epoch.md](b3-scoreboard-epoch.md)). Judgment observe: N210
+([n210-ai-judgment-observe.md](n210-ai-judgment-observe.md)). Super-book lab:
+cue-consumer MFT (observe-only).
 
 Frozen on 2026-10-15 (B3):
 
 | Frozen track | Why | Superseded by |
 |--------------|-----|---------------|
 | `ai_judgment_hold5_fair`, `ai_judgment_graduated_fair` | 3-name twins inherit underpowered parent sleeve | `ai_judgment_matched30_fair` |
+
+Frozen on 2026-10-31 (owner lock — stop 3-name judgment book):
+
+| Frozen track | Why | Superseded by |
+|--------------|-----|---------------|
+| `ai_judgment_fair` | Super-book / matched-30 superseded continuity trading of the underpowered 3-name sleeve; clears saturated `sector_cap` without mid-flight enlarge | `ai_judgment_matched30_fair` |
 
 What freezing does:
 
@@ -79,8 +91,10 @@ twin is parked as **N189**.
 
 | Track | Directory | Decision policy | Role |
 |-------|-----------|-----------------|------|
-| **AI judgment fair** *(primary)* | `docs/data/paper_automation/ai_judgment_fair/` | `adjusted_signal` + `research_verdict=accumulate`, fair costs | Learning book |
-| **Buy-tier level** *(control)* | `docs/data/paper_automation/buy_tier_level/` | Raw screen buy-tier, no conviction/sector cap, fair T212 costs, frozen knobs | Unfiltered buy-tier baseline |
+| **AI judgment matched-30** *(primary continuity)* | `docs/data/paper_automation/ai_judgment_matched30_fair/` | AI/filter knobs; `max_positions=30`; fair costs | Assessment-model primary for filter-vs-screen continuity; **not** adoption crown until gates |
+| **Buy-tier matched-30** *(control continuity)* | `docs/data/paper_automation/buy_tier_matched30_fair/` | Raw buy-tier; same N / sector_cap | Paired control for matched-30 NAV compare only |
+| **Buy-tier level** *(strand A)* | `docs/data/paper_automation/buy_tier_level/` | Raw screen buy-tier, no conviction/sector cap, fair T212 costs, frozen knobs | Diversified diagnostic baseline (still trading) |
+| **AI judgment fair** *(frozen 2026-10-31)* | `docs/data/paper_automation/ai_judgment_fair/` | `adjusted_signal` + `research_verdict=accumulate`, fair costs, N=3 | Former continuity primary; history kept |
 | **Buy-tier level DCA** *(realism)* | `docs/data/paper_automation/buy_tier_level_dca/` | Same level-book policy + £500/mo deposits (cold-start capital epoch) | Household DCA realism; overlays FTSE held-vs-market |
 | Graduated allocation *(frozen)* | `docs/data/paper_automation/graduated_allocation/` | Screen rules + trade-plan starter sizing + harvest skims (`max_positions=4`), 3% stress | Superseded by `ai_judgment_graduated_fair` |
 | AI judgment *(frozen)* | `docs/data/paper_automation/ai_judgment/` | `adjusted_signal` + `research_verdict=accumulate`, 3% stress | Former primary |

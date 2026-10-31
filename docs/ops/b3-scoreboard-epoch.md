@@ -24,14 +24,15 @@
 
 | Field | Value |
 |-------|-------|
-| `primary_track` | Still `ai_judgment_fair` (product continuity) |
-| Policy | `evidentiary_demotion_ai_judgment_fair_v1` in `policy_changes` |
-| Frozen | hold5 + graduated twins → superseded by `ai_judgment_matched30_fair` |
-| Twins (shadow) | `ai_judgment_matched30_fair`, `buy_tier_matched30_fair` |
+| `primary_track` | **`ai_judgment_matched30_fair`** since owner lock **2026-10-31** (was `ai_judgment_fair` for B3 continuity) |
+| `control_track` | **`buy_tier_matched30_fair`** (paired); full `buy_tier_level` still trades as strand-A diagnostic |
+| Policy | `evidentiary_demotion_ai_judgment_fair_v1` (B3) + `stop_ai_judgment_fair_3name_v1` (2026-10-31 freeze) |
+| Frozen | hold5 + graduated twins → `ai_judgment_matched30_fair`; **`ai_judgment_fair` frozen 2026-10-31** (stop continuity trading) |
+| Twins (shadow) | matched-30 pair — assessment-model primary/control for continuity of the comparison; **still not evidentiary crown** until volume/mark gates |
 
-Do **not** switch `primary_track` / `control_track` to the matched-30 pair or
-N210 until volume/mark gates clear. Trailing “primary trails control” remains
-a **known underpowered** observe signal (**F8**).
+Trailing “primary trails control” on the old 3-name sleeve is historical only
+after the freeze (**F8**). Matched-30 / N210 still must not be treated as
+adoption truth until their gates clear.
 
 ## Matched-30 pair
 
