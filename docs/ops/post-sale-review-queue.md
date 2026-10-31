@@ -156,11 +156,12 @@ plot — not orphaned in card chrome) for dual-horizon + entry_blind PIT:
 **Highlight** (time band), **H-line**, **Trend** (two taps), **Parallel**
 (drag primary, then **3 draggable anchors**: start / end / separation; Done
 locks). Drawings are **per chart view** (`episode` / `wider_tf` / `pit`) — not
-blindly shared across panes. Explicit **Attach drawings** on Comment (default
-on when drafts exist); geometry travels as `post_hoc_human_geometry` on the
-Comment event + owner dialogue turn (committed labels JSON — no Supabase).
-`parallel_pair` encodes `anchors` + signed `separation` and derived
-`line_a`/`line_b` for the agent.
+blindly shared across panes. **Drawing before Comment is the intended flow** —
+Comment **auto-seals** open Parallel edits and includes non-empty chart drafts
+as `post_hoc_human_geometry` (no separate Attach click; Undo/Clear still apply).
+Geometry travels on the Comment event + owner dialogue turn (committed labels
+JSON — no Supabase). `parallel_pair` encodes `anchors` + signed `separation`
+and derived `line_a`/`line_b` for the agent.
 
 Factory / LLM reply receives geometry **only when** schema-valid and
 `readable=true` (`src/value_investor/post_hoc_human_geometry.py`). Unread /

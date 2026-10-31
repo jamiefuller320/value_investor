@@ -281,3 +281,80 @@ def test_generate_factory_reply_fail_closed_unread():
     assert "unread" in reply["text"].lower() or "schema-invalid" in reply["text"].lower()
     # No invented prices.
     assert "y0" not in reply["text"]
+
+
+def test_comment_batch_payload_forwards_draft_geometry(tmp_path: Path):
+    """Bridge Comment payload with drafts must reach labels (auto-attach contract)."""
+    from value_investor.post_sale_review_actions import run_post_sale_review_action_batch
+
+    snap = {
+        "book_tag": "N201",
+        "book_id": "n201",
+        "ticker": "STLD",
+        "entry_at": "2026-10-23T00:00:00+00:00",
+        "exit_at": "2026-10-29T00:00:00+00:00",
+        "hold_days": 4,
+        "return_pct": -2.1,
+        "exit_kind": "just_sold",
+        "basis_label": "fair_cost_episode",
+        "buy_decision": {"code": "buy_tier", "label": "Buy tier", "join_ok": True},
+        "sell_decision": {"code": "tech_exit", "label": "Tech", "join_ok": True},
+    }
+    # Shape mirrors docs/app.js geometryPayloadForComment → queueCommand payload.
+    draft_geo = [
+        {
+            "geometry_id": "geo-client-1",
+            "review_id": "psr:stld:1",
+            "chart": "episode",
+            "drawn_at": "2026-10-31T00:00:00+00:00",
+            "post_hoc": True,
+            "elements": [
+                {
+                    "type": "line",
+                    "t0": "2026-10-24",
+                    "y0": 140.0,
+                    "t1": "2026-10-28",
+                    "y1": 135.0,
+                }
+            ],
+            "readable": True,
+            "influences_live": False,
+            "source": "owner",
+        }
+    ]
+    batch = run_post_sale_review_action_batch(
+        tmp_path,
+        [
+            {
+                "review_id": "psr:stld:1",
+                "decision": "comment",
+                "text": "Channel support here",
+                "tag": "new",
+                "snapshot": snap,
+                **snap,
+                "post_hoc_human_geometry": draft_geo,
+                "command_id": "cmd-geo-1",
+            }
+        ],
+        source="dashboard_bridge",
+        acted_by="dashboard",
+    )
+    assert batch["ok"] is True
+    assert batch["results"]
+    labels = (tmp_path / "post_sale_review_labels.json").read_text(encoding="utf-8")
+    assert "post_hoc_human_geometry" in labels
+    assert "Channel support here" in labels
+    assert '"type": "line"' in labels or '"type":"line"' in labels
+
+
+def test_comment_payload_builder_js_auto_includes_drafts():
+    """Regression: Comment path must call geometryPayloadForComment (not Attach-gated)."""
+    app = Path("docs/app.js").read_text(encoding="utf-8")
+    assert "function geometryPayloadForComment(reviewId)" in app
+    assert "function sealOpenHumanDrawEdits(reviewId)" in app
+    assert "commitParallelEdit(body, { quiet: true })" in app
+    # Both post-sale and entry-blind Comment builders.
+    assert app.count("geometryPayloadForComment(reviewId)") >= 2
+    assert "attach ? collectHumanGeometryForComment" not in app
+    assert "data-psr-attach-draw=" not in app
+    assert "data-ebr-attach-draw=" not in app
