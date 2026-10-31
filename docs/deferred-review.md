@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-31T10:09:25+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-31T11:32:33+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -395,6 +395,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L648 | **Entry-revisit chart path series on buy+28d cards** | Thin entry_revisit v0 shows textual path status (still_open/already_exited + fair-cost %). Later: mount path_to_plus28 chart series on Lifecycle Entry +28d cards (same dual-horizon style as post-sale, clipped at buy+28d). | entry_revisit queue has regular Sunday volume and owner asks for chart on +28d cards |
 | L649 | **Entry-blind Accept/Comment themes as MFT stock_choice MoM prior** | Once entry_blind has a thicker actioned cohort (beyond today's 12 new / 2 history), roll recurring human themes into cue-consumer MFT stock_choice MoM priors — still observe-only, influences_live=false, no Package L. | entry_blind actioned_history >= 24 and cue_consumer_mft MoM stock_choice leaves diagnostic_partial |
 | L653 | **Thick concurrence LQ dashboard (lab learning)** | v0 lab learning strip shows concurrence mean + thin fair-cost-by-band join when data exists; a thick multi-band concurrence×outcome / drawdown LQ dashboard still waits for volume across bands. | L652 has fair-cost marks across ≥2 concurrence bands with enough closed episodes to trust median joins (O3 alone-first framing) |
+| L655 | **Retarget L558 cost-drag recalibration off frozen ai_judgment_fair** | After 2026-10-31 freeze of ai_judgment_fair, L558 still waits on reviews.ai_judgment_fair.significance_gate.passed which decision-review will no longer refresh. Retarget to an active tunable fair-cost book or N210/matched-30 readiness before relying on --apply cost heuristics. | When owner next opens decision-review cost-drag work, or when a tunable fair-cost book exposes significance_gate.passed in learning_tracks_review |
 
 ### Universe & data
 

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "primary_track": "ai_judgment_fair",
-  "control_track": "buy_tier_level",
-  "switched_at": "2026-10-06T08:56:59.116671+00:00",
+  "primary_track": "ai_judgment_matched30_fair",
+  "control_track": "buy_tier_matched30_fair",
+  "switched_at": "2026-10-31T11:31:00.121881+00:00",
   "switches": [
     {
       "at": "2026-10-06T08:56:59.116671+00:00",
@@ -15,6 +15,18 @@
         "control": "buy_tier_level"
       },
       "reason": "Amalgamate Suite A/B into one fair-cost assessment model: ai_judgment_fair is primary, buy_tier_level (unfiltered buy tier) is the control. Suite A books and duplicates freeze with their final record; no history is rewritten."
+    },
+    {
+      "at": "2026-10-31T11:31:00.121881+00:00",
+      "from": {
+        "primary": "ai_judgment_fair",
+        "control": "buy_tier_level"
+      },
+      "to": {
+        "primary": "ai_judgment_matched30_fair",
+        "control": "buy_tier_matched30_fair"
+      },
+      "reason": "Stop ai_judgment_fair; move assessment_model primary/control to matched-30 pair for continuity of filter-vs-screen comparison (not evidentiary crown until gates)."
     }
   ],
   "frozen_tracks": {
@@ -93,6 +105,20 @@
         "PPH.L"
       ],
       "trade_count": 39
+    },
+    "ai_judgment_fair": {
+      "frozen_at": "2026-10-31T11:31:00.121881+00:00",
+      "reason": "Owner lock 2026-10-31: stop 3-name ai_judgment_fair; super-book / matched-30 superseded continuity trading. History kept; no mid-flight knob enlarge.",
+      "superseded_by": "ai_judgment_matched30_fair",
+      "final_mark_at": "2026-10-30T11:34:21.975012+00:00",
+      "final_nav": 787.37,
+      "final_contributed_capital": 1000.0,
+      "final_holdings": [
+        "CURY.L",
+        "IGG.L",
+        "PAF.L"
+      ],
+      "trade_count": 49
     },
     "ai_judgment_graduated_fair": {
       "frozen_at": "2026-10-15T10:03:39.502160+00:00",
@@ -440,6 +466,31 @@
           "ai_judgment_hold5_fair",
           "ai_judgment_graduated_fair"
         ]
+      }
+    },
+    {
+      "id": "stop_ai_judgment_fair_3name_v1",
+      "effective_at": "2026-10-31T11:31:00.121881+00:00",
+      "summary": "Owner lock 2026-10-31: stop ai_judgment_fair (3-name judgment sleeve) entirely. Super-book / matched-30 superseded continuity trading of the underpowered book. Freeze stops weekday paper-auto fills and decision-review applies; history kept. assessment_model primary/control move to the matched-30 filter vs buy-tier pair for product continuity of that comparison \u2014 NOT an evidentiary / adoption crown (B3 not_assessment_primary_until_gates and N210 volume gates still bind). Clears saturated sector_cap warn on the 3-name book without mid-flight enlarge. F8 / no back-label of prior 3-name NAV.",
+      "history_note": "Marks and NAV on ai_judgment_fair through freeze remain continuity history only. Do not read them as filter skill or as evidence for matched-30, N210, or super-book. Do not unfreeze or retune the 3-name book \u2014 twins-over-edits.",
+      "audit": {
+        "owner_lock": "2026-10-31",
+        "stopped_track": "ai_judgment_fair",
+        "superseded_by": "ai_judgment_matched30_fair",
+        "new_primary": "ai_judgment_matched30_fair",
+        "new_control": "buy_tier_matched30_fair",
+        "left_running": [
+          "ai_judgment_matched30_fair",
+          "buy_tier_matched30_fair",
+          "buy_tier_level",
+          "buy_tier_level_dca",
+          "n200",
+          "n201",
+          "n206",
+          "n210",
+          "cue_consumer_mft"
+        ],
+        "clears_warn": "Decision-review knobs saturated at bounds (ai_judgment_fair sector_cap)"
       }
     }
   ],
