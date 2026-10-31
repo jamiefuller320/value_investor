@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-31T15:58:11.274965+00:00",
+  "run_at": "2026-10-31T18:01:15.742600+00:00",
   "market_id": "sp500",
   "targets": [
     "LH"
@@ -7,10 +7,10 @@
   "target_details": [
     {
       "ticker": "LH",
-      "priority_score": 15.169699999999999,
+      "priority_score": 14.8197,
       "filings_total": 21,
-      "filings_with_body": 19,
-      "indexed_without_body": 2,
+      "filings_with_body": 20,
+      "indexed_without_body": 1,
       "reason": "indexed_without_body"
     }
   ],
@@ -20,15 +20,15 @@
       "reason": "indexed_without_body",
       "before": {
         "filings_total": 21,
-        "filings_with_body": 19,
-        "indexed_without_body": 2
+        "filings_with_body": 20,
+        "indexed_without_body": 1
       },
       "after": {
         "filings_total": 21,
         "filings_with_body": 20,
         "indexed_without_body": 1
       },
-      "improved": true,
+      "improved": false,
       "regime": "sec_edgar",
       "filings_summary": {
         "total": 21,
@@ -78,20 +78,18 @@
       }
     }
   ],
-  "improved": [
-    "LH"
-  ],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-31T15:57:46.533802+00:00",
+    "snapshot_at": "2026-10-31T18:00:45.893698+00:00",
     "market_id": "sp500",
     "buy_tier_count": 135,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 6,
+    "indexed_without_body": 5,
     "bodies_min": 18,
     "bodies_median": 22,
     "bodies_max": 96,
@@ -108,7 +106,7 @@
     ],
     "indexed_without_body_by_ticker": {
       "EME": 1,
-      "LH": 2,
+      "LH": 1,
       "LMT": 1,
       "CRH": 2
     },
@@ -120,14 +118,14 @@
     "parked_count": 3,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 2,
+    "effective_indexed_without_body": 1,
     "effective_indexed_without_body_tickers": [
       "LH"
     ],
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-31T15:58:06.285828+00:00",
+    "snapshot_at": "2026-10-31T18:01:09.318682+00:00",
     "market_id": "sp500",
     "buy_tier_count": 135,
     "unmeasured_buy_tier": 0,
@@ -180,7 +178,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-10-31T15:57:53.746283+00:00",
+    "assessed_at": "2026-10-31T18:00:55.617912+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -191,16 +189,16 @@
         "filings_with_body": 66
       },
       {
-        "ticker": "LH",
-        "indexed_without_body": 2,
-        "filings_total": 21,
-        "filings_with_body": 19
-      },
-      {
         "ticker": "EME",
         "indexed_without_body": 1,
         "filings_total": 70,
         "filings_with_body": 69
+      },
+      {
+        "ticker": "LH",
+        "indexed_without_body": 1,
+        "filings_total": 21,
+        "filings_with_body": 20
       },
       {
         "ticker": "LMT",
@@ -215,25 +213,25 @@
     "force_discovery_scan": false,
     "auto_pin_tickers": [
       "CRH",
-      "LH",
       "EME",
+      "LH",
       "LMT"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (4 tickers, top: CRH(2), LH(2), EME(1), LMT(1))"
+      "Prefer indexed-without-body body refetch (4 tickers, top: CRH(2), EME(1), LH(1), LMT(1))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 4,
-      "indexed_without_body_rows": 6,
+      "indexed_without_body_rows": 5,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 5.263015295000002,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2094.736984705,
+  "used_seconds": 3.576444046000006,
+  "budget_seconds": 87.5,
+  "leftover_seconds": 83.923555954,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -241,9 +239,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-10-31T15:58:06.295369+00:00",
+    "updated_at": "2026-10-31T18:01:09.331949+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -286,7 +284,7 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": false,
+    "had_complete_targets": true,
     "leftover_tickers": [
       "CRH",
       "EME",
