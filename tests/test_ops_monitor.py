@@ -762,9 +762,7 @@ def test_pr_open_matches_rest_head_ref_and_gh_headRefName():
     assert not _is_orphaned_pr_open_task(
         row, [{"number": 1235, "headRefName": "cursor/eng-20261030-03-1de3"}]
     )
-    assert _is_orphaned_pr_open_task(
-        row, [{"number": 99, "head": {"ref": "cursor/other-1de3"}}]
-    )
+    assert _is_orphaned_pr_open_task(row, [{"number": 99, "head": {"ref": "cursor/other-1de3"}}])
 
 
 def test_list_open_pull_requests_normalizes_rest_head_ref(monkeypatch):

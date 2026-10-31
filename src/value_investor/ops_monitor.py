@@ -1165,7 +1165,9 @@ def _is_orphaned_pr_open_task(row: dict[str, Any], open_prs: list[dict[str, Any]
         return False
     branch = str(row.get("branch_name") or "").strip()
     if open_prs is not None:
-        if branch and any(_open_pr_head_ref(pr) == branch for pr in open_prs if isinstance(pr, dict)):
+        if branch and any(
+            _open_pr_head_ref(pr) == branch for pr in open_prs if isinstance(pr, dict)
+        ):
             return False
         return True
     if row.get("pr_url") or row.get("pr_number"):
