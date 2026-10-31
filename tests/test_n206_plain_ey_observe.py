@@ -12,8 +12,8 @@ from value_investor.n201_value_mom_observe import N201Config
 from value_investor.n206_plain_ey_observe import (
     FINDING_TITLE,
     FIXED_STAKE_UNITS,
-    REGISTRATION_ID,
     INTERESTINGNESS_TITLE,
+    REGISTRATION_ID,
     VOLUME_GATE_TITLE,
     build_n206_pipeline_health_projection,
     build_registration_payload,
