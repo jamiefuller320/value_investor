@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-31T10:02:15+00:00",
+  "updated_at": "2026-10-31T10:09:25+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9357,7 +9357,7 @@
       "section": "learning",
       "title": "Do not execute primary or epoch-0 DCA from EOW cadence agreement alone",
       "summary": "dca_4x_weekly remains the leading overlay cadence and will likely help entry drag, but adoption plan still needs ai_judgment first_entry>=3 (now 2) before any paper execute, and execute is graduated_allocation-only then; primary stays blocked while beat_market is false. Ack is not adopt.",
-      "revisit_when": "entry_dca_adoption_plan out_of_sample_first_entry ready AND dca_4x_weekly is also the control (buy_tier_level) winning cadence, not just the primary's. The execute target graduated_allocation is frozen (2026-10-07), so paper_execute_graduated stays blocked; when met, repoint entry-DCA execute to the fair-cost twin ai_judgment_graduated_fair once it has >=8 marks",
+      "revisit_when": "entry_dca_adoption_plan out_of_sample_first_entry ready AND dca_4x_weekly is also the control (buy_tier_level) winning cadence, not just the primary's. When met, repoint entry-DCA execute to the active fair-cost twin ai_judgment_matched30_fair once it has >=8 marks (primary ai_judgment_fair / control buy_tier_level stay the live path; do not name frozen graduated/hold5 books).",
       "tags": [
         "dca",
         "entry_dca",
@@ -9382,7 +9382,7 @@
           }
         ]
       },
-      "updated_at": "2026-10-07T05:54:21+00:00"
+      "updated_at": "2026-10-31T10:09:25+00:00"
     },
     {
       "id": "N136",
@@ -13015,7 +13015,7 @@
       "section": "learning",
       "title": "Recalibrate decision-review cost-drag thresholds for fair costs",
       "summary": "HIGH_COST_DRAG (4%) and the auto-raise min_conviction rule were tuned on 3% stress books. On fair T212 costs (~0.55% round trip) they rarely fire, so cost-driven proposals are effectively off. Re-derive the thresholds from fair-cost turnover before applies start happening. Replaces L221.",
-      "revisit_when": "significance_gate_v1 first opens on a fair-cost book (ai_judgment_fair or hold5 fair) \u2014 then recalibrate HIGH_COST_DRAG / related heuristics from fair turnover before --apply relies on them",
+      "revisit_when": "significance_gate_v1 first opens on the fair-cost primary ai_judgment_fair \u2014 then recalibrate HIGH_COST_DRAG / related heuristics from fair turnover before --apply relies on them.",
       "tags": [
         "decision-review",
         "costs",
@@ -13031,16 +13031,10 @@
             "path": "reviews.ai_judgment_fair.significance_gate.passed",
             "op": "==",
             "value": true
-          },
-          {
-            "file": "docs/data/paper_automation/learning_tracks_review.json",
-            "path": "reviews.ai_judgment_hold5_fair.significance_gate.passed",
-            "op": "==",
-            "value": true
           }
         ]
       },
-      "updated_at": "2026-10-13T15:12:11+00:00"
+      "updated_at": "2026-10-31T10:09:25+00:00"
     },
     {
       "id": "L559",
@@ -13375,7 +13369,7 @@
       "section": "learning",
       "title": "Do not make rolling profit-taking the value capital path",
       "summary": "Value selection stays the aim. Live books already turn over about 30x a year because rank exits fire after 2 screens (median hold 4 days). L531 replays prefer longer holds, and harvest skims already sit on ai_judgment_graduated_fair. Treating rolling clips as the strategy waits until those twins finish their gates.",
-      "revisit_when": "ai_judgment_hold5_fair and ai_judgment_graduated_fair each have at least 130 common days with ai_judgment_fair on the assessment scoreboard (weekday proxy for their >=26 weekly-screen gates).",
+      "revisit_when": "ai_judgment_matched30_fair has at least 130 common days with the primary on the assessment scoreboard (B3 successor to the frozen hold5/graduated twins; weekday proxy for a thick enough matched-30 epoch before treating rolling profit-taking as the value capital path).",
       "tags": [
         "value",
         "turnover",
@@ -13389,18 +13383,13 @@
         "all": [
           {
             "file": "docs/data/assessment_scoreboard.json",
-            "path": "twins[track_id=ai_judgment_hold5_fair].common_days",
-            "op": ">=",
-            "value": 130
-          },
-          {
-            "file": "docs/data/assessment_scoreboard.json",
-            "path": "twins[track_id=ai_judgment_graduated_fair].common_days",
+            "path": "twins[track_id=ai_judgment_matched30_fair].common_days",
             "op": ">=",
             "value": 130
           }
         ]
-      }
+      },
+      "updated_at": "2026-10-31T10:09:25+00:00"
     },
     {
       "id": "L567",
@@ -13408,7 +13397,7 @@
       "section": "learning",
       "title": "Test core sleeve plus tactical slice as two lots",
       "summary": "compute_trade_plan already splits a buy into a long-term core (about 50-75%) and a tactical dip slice with its own stop and target. The simulator and the frozen technical book apply that stop and target to every share. A later cold start should keep the core through the value thesis and turn only the tactical lot.",
-      "revisit_when": "ai_judgment_hold5_fair and ai_judgment_graduated_fair each have at least 130 common days with ai_judgment_fair. Then one cold start can fund the original core/tactical split as two lots, without editing the primary.",
+      "revisit_when": "ai_judgment_matched30_fair has at least 130 common days with the primary on the assessment scoreboard. Then one cold start can fund core/tactical as two lots against primary ai_judgment_fair / control buy_tier_level, without editing the live books.",
       "tags": [
         "trade-plan",
         "core",
@@ -13422,18 +13411,13 @@
         "all": [
           {
             "file": "docs/data/assessment_scoreboard.json",
-            "path": "twins[track_id=ai_judgment_hold5_fair].common_days",
-            "op": ">=",
-            "value": 130
-          },
-          {
-            "file": "docs/data/assessment_scoreboard.json",
-            "path": "twins[track_id=ai_judgment_graduated_fair].common_days",
+            "path": "twins[track_id=ai_judgment_matched30_fair].common_days",
             "op": ">=",
             "value": 130
           }
         ]
-      }
+      },
+      "updated_at": "2026-10-31T10:09:25+00:00"
     },
     {
       "id": "L568",
