@@ -163,8 +163,14 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "human_pattern_marks" in charts_js or "humanGeometryElementsToMarks" in charts_js
     assert "parallelElementFromAnchors" in charts_js
     assert "commitParallelEdit" in charts_js
-    assert "post_hoc_human_geometry" in app or "Attach drawings" in app
+    assert "post_hoc_human_geometry" in app
     assert "collectHumanGeometryForComment" in app
+    assert "geometryPayloadForComment" in app
+    assert "sealOpenHumanDrawEdits" in app
+    # Comment must auto-include drafts — never gate on Attach checkbox.
+    assert "attach ? collectHumanGeometryForComment" not in app
+    assert "geometryPayloadForComment(reviewId)" in app
+    assert "Drawings auto-attach with Comment" in app
     assert "psr-chart-draw-wrap" in app
     assert "renderChartWithDrawTools" in app
     assert "psr-chart-draw-wrap" in css
@@ -172,7 +178,7 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "staggerLabelYs" in charts_js
     assert "nudgeLevelLabelYs(entries, minGap = 28)" in charts_js or "minGap = 28" in charts_js
     assert "mountDualHorizonCharts" in app
-    assert "n229-parallel-3-anchors-20261030" in html
+    assert "n229-comment-auto-geometry-20261031" in html
     assert "Durable history" in app
     assert "one card per sealed book" in app
     assert "data-psr-duplicate=" in app
@@ -187,7 +193,7 @@ def test_post_sale_review_layout_scrolls_on_tablet() -> None:
     assert "psr-comment-preview" in app
     assert "postSaleActionedEpisodeKeys" in app
     assert "psr-comment-preview" in css
-    assert "n229-parallel-3-anchors-20261030" in html
+    assert "n229-comment-auto-geometry-20261031" in html
     # Entry-blind Comment must use DashboardBridge (not dead ftseDashboardBridge.enqueue).
     assert "pendingEntryBlindActions" in app
     assert "syncEntryBlindQueueOverlay" in app
