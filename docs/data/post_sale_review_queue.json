@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-31T00:03:30.253160+00:00",
+  "generated_at": "2026-10-31T02:32:54.134112+00:00",
   "observe_only": true,
   "influences_live": false,
   "package": "M",
@@ -91,19 +91,1221 @@
     }
   },
   "labels_store": "post_sale_review_labels.json",
-  "active_count": 125,
-  "actioned_count": 142,
+  "active_count": 129,
+  "actioned_count": 138,
   "reply_count": 0,
-  "new_count": 125,
+  "new_count": 129,
   "by_book": {
-    "N206": 61,
-    "N201": 38,
+    "N201": 41,
+    "N206": 62,
     "N210": 2,
     "N200": 16,
     "FTSE control": 8
   },
   "sort_default": "interesting",
   "active": [
+    {
+      "review_id": "ec67152cb38966567073",
+      "review_fingerprint": "ec67152cb38966567073",
+      "episode_key": "n201|QCOM|2026-10-07|2026-10-29",
+      "tag": "new",
+      "book_id": "n201",
+      "book_tag": "N201",
+      "model_id": "n201",
+      "registration_id": "strand-c-short-horizon-value-mom-v0",
+      "ticker": "QCOM",
+      "entry_at": "2026-10-07T15:40:13+00:00",
+      "exit_at": "2026-10-29T06:53:12+00:00",
+      "opened_at": "2026-10-07T15:40:13+00:00",
+      "sold_at": "2026-10-29T06:53:12+00:00",
+      "hold_days": 22,
+      "exit_kind": "just_sold",
+      "return_pct": 2.71,
+      "basis_label": "fair_cost_episode",
+      "close_in": {
+        "days_before": 14,
+        "days_after": 14,
+        "start": "2026-09-23",
+        "end": "2026-11-12"
+      },
+      "wider_tf": {
+        "days_before": 180,
+        "days_after": 90,
+        "start": "2026-04-10",
+        "end": "2027-01-27"
+      },
+      "charts": {
+        "episode": {
+          "days_before": 14,
+          "days_after": 14,
+          "start": "2026-09-23",
+          "end": "2026-11-12"
+        },
+        "wider_tf": {
+          "days_before": 180,
+          "days_after": 90,
+          "start": "2026-04-10",
+          "end": "2027-01-27"
+        }
+      },
+      "avg_cost": null,
+      "exit_price": null,
+      "population": "sealed_lifecycle",
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M",
+      "days_since_exit": 1,
+      "phase_clock": "exit_run_at",
+      "exit_reason": "identity_break_ey_band",
+      "entry_detail": {
+        "earnings_yield": 0.0486650945570087,
+        "in_ey_top30_local": true,
+        "momentum_12_1": 0.04106114468907052,
+        "financial_health_pass": true,
+        "require_momentum": true
+      },
+      "buy_decision": {
+        "side": "buy",
+        "code": "filters_newly_clear",
+        "label": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+        "source": "episode.entry_detail",
+        "join_ok": true,
+        "structured": {
+          "earnings_yield": 0.0486650945570087,
+          "in_ey_top30_local": true,
+          "momentum_12_1": 0.04106114468907052,
+          "financial_health_pass": true,
+          "require_momentum": true
+        },
+        "influences_live": false
+      },
+      "sell_decision": {
+        "side": "sell",
+        "code": "identity_break_ey_band",
+        "label": "Left EY top band (identity break)",
+        "source": "episode.exit_reason",
+        "join_ok": true,
+        "structured": {
+          "raw": "identity_break_ey_band"
+        },
+        "influences_live": false
+      },
+      "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+      "sell_reason": "Left EY top band (identity break)",
+      "decision_reasons_join_ok": true,
+      "framing": "[N201] QCOM · 2026-10-29 · hold 22d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 2.71%\nContext read-only — not a new veto. influences_live=false",
+      "llm_opinion": "N201 closed QCOM after a 22-day hold (2026-10-07 → 2026-10-29, just_sold): gain (2.71% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+      ],
+      "chart_annotations": {
+        "schema_version": 1,
+        "episode": "Episode: 22-day hold, gain (2.71% fair_cost_episode). Confirm entry/exit marks match the sealed/control path. Pattern marks: Hold path (entry→exit); Entry quality band; Entry vs wider range (support / cyclical location).",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide. Factory pattern marks illustrate the opinion — agree/disagree on the picture.",
+        "marks": [
+          {
+            "id": "hold_path",
+            "pattern": "hold_path",
+            "type": "region",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Hold path (entry→exit)",
+            "tone": "info",
+            "cite": "episode_window",
+            "influences_live": false,
+            "t0": "2026-10-07",
+            "t1": "2026-10-29"
+          },
+          {
+            "id": "entry_quality",
+            "pattern": "entry_quality",
+            "type": "entry_band",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Entry quality band",
+            "tone": "info",
+            "cite": "entry_at",
+            "influences_live": false,
+            "t0": "2026-10-02",
+            "t1": "2026-10-09",
+            "anchor": "entry_price"
+          },
+          {
+            "id": "entry_range_ref",
+            "pattern": "support_context",
+            "type": "range_ref",
+            "charts": [
+              "wider_tf"
+            ],
+            "label": "Entry vs wider range (support / cyclical location)",
+            "tone": "info",
+            "cite": "support_context",
+            "influences_live": false,
+            "ref": "entry"
+          },
+          {
+            "id": "exit_ma_context",
+            "pattern": "ma_context",
+            "type": "ma_context",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Exit vs SMA50/200",
+            "tone": "info",
+            "cite": "ma_context",
+            "influences_live": false,
+            "t0": "2026-10-29",
+            "t1": "2026-10-29",
+            "ref": "exit"
+          }
+        ]
+      },
+      "opinion_source": "deterministic_v0",
+      "buy_strengths": [
+        "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — comments can ground on that trail.",
+        "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+      ],
+      "buy_weaknesses": [],
+      "sell_strengths": [
+        "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+      ],
+      "sell_weaknesses": [],
+      "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+      "same_day_round_trip": false,
+      "same_day_assessment": "not_applicable",
+      "same_day_soft_penalty": false,
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "N201 closed QCOM after a 22-day hold (2026-10-07 → 2026-10-29, just_sold): gain (2.71% fair_cost_episode). Bought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit."
+          ],
+          "chart_annotations": {
+            "schema_version": 1,
+            "episode": "Episode: 22-day hold, gain (2.71% fair_cost_episode). Confirm entry/exit marks match the sealed/control path. Pattern marks: Hold path (entry→exit); Entry quality band; Entry vs wider range (support / cyclical location).",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide. Factory pattern marks illustrate the opinion — agree/disagree on the picture.",
+            "marks": [
+              {
+                "id": "hold_path",
+                "pattern": "hold_path",
+                "type": "region",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Hold path (entry→exit)",
+                "tone": "info",
+                "cite": "episode_window",
+                "influences_live": false,
+                "t0": "2026-10-07",
+                "t1": "2026-10-29"
+              },
+              {
+                "id": "entry_quality",
+                "pattern": "entry_quality",
+                "type": "entry_band",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Entry quality band",
+                "tone": "info",
+                "cite": "entry_at",
+                "influences_live": false,
+                "t0": "2026-10-02",
+                "t1": "2026-10-09",
+                "anchor": "entry_price"
+              },
+              {
+                "id": "entry_range_ref",
+                "pattern": "support_context",
+                "type": "range_ref",
+                "charts": [
+                  "wider_tf"
+                ],
+                "label": "Entry vs wider range (support / cyclical location)",
+                "tone": "info",
+                "cite": "support_context",
+                "influences_live": false,
+                "ref": "entry"
+              },
+              {
+                "id": "exit_ma_context",
+                "pattern": "ma_context",
+                "type": "ma_context",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Exit vs SMA50/200",
+                "tone": "info",
+                "cite": "ma_context",
+                "influences_live": false,
+                "t0": "2026-10-29",
+                "t1": "2026-10-29",
+                "ref": "exit"
+              }
+            ]
+          },
+          "buy_strengths": [
+            "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — comments can ground on that trail.",
+            "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+          ],
+          "buy_weaknesses": [],
+          "sell_strengths": [
+            "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+          ],
+          "sell_weaknesses": [],
+          "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
+          "same_day_round_trip": false,
+          "same_day_assessment": "not_applicable",
+          "source": "deterministic_v0",
+          "at": "2026-10-31T02:32:54.103165+00:00",
+          "influences_live": false
+        }
+      ]
+    },
+    {
+      "review_id": "a9e9a3bfae34121a2a50",
+      "review_fingerprint": "a9e9a3bfae34121a2a50",
+      "episode_key": "n201|SNDK|2026-10-23|2026-10-29",
+      "tag": "new",
+      "book_id": "n201",
+      "book_tag": "N201",
+      "model_id": "n201",
+      "registration_id": "strand-c-short-horizon-value-mom-v0",
+      "ticker": "SNDK",
+      "entry_at": "2026-10-23T06:52:47+00:00",
+      "exit_at": "2026-10-29T06:53:12+00:00",
+      "opened_at": "2026-10-23T06:52:47+00:00",
+      "sold_at": "2026-10-29T06:53:12+00:00",
+      "hold_days": 6,
+      "exit_kind": "just_sold",
+      "return_pct": 11.06,
+      "basis_label": "fair_cost_episode",
+      "close_in": {
+        "days_before": 14,
+        "days_after": 14,
+        "start": "2026-10-09",
+        "end": "2026-11-12"
+      },
+      "wider_tf": {
+        "days_before": 180,
+        "days_after": 90,
+        "start": "2026-04-26",
+        "end": "2027-01-27"
+      },
+      "charts": {
+        "episode": {
+          "days_before": 14,
+          "days_after": 14,
+          "start": "2026-10-09",
+          "end": "2026-11-12"
+        },
+        "wider_tf": {
+          "days_before": 180,
+          "days_after": 90,
+          "start": "2026-04-26",
+          "end": "2027-01-27"
+        }
+      },
+      "avg_cost": null,
+      "exit_price": null,
+      "population": "sealed_lifecycle",
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M",
+      "days_since_exit": 1,
+      "phase_clock": "exit_run_at",
+      "exit_reason": "identity_break_ey_band",
+      "entry_detail": {
+        "earnings_yield": 0.05849650983498895,
+        "in_ey_top30_local": true,
+        "momentum_12_1": 9.874408339437306,
+        "financial_health_pass": true,
+        "require_momentum": true
+      },
+      "buy_decision": {
+        "side": "buy",
+        "code": "filters_newly_clear",
+        "label": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+        "source": "episode.entry_detail",
+        "join_ok": true,
+        "structured": {
+          "earnings_yield": 0.05849650983498895,
+          "in_ey_top30_local": true,
+          "momentum_12_1": 9.874408339437306,
+          "financial_health_pass": true,
+          "require_momentum": true
+        },
+        "influences_live": false
+      },
+      "sell_decision": {
+        "side": "sell",
+        "code": "identity_break_ey_band",
+        "label": "Left EY top band (identity break)",
+        "source": "episode.exit_reason",
+        "join_ok": true,
+        "structured": {
+          "raw": "identity_break_ey_band"
+        },
+        "influences_live": false
+      },
+      "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+      "sell_reason": "Left EY top band (identity break)",
+      "decision_reasons_join_ok": true,
+      "framing": "[N201] SNDK · 2026-10-29 · hold 6d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 11.06%\nContext read-only — not a new veto. influences_live=false",
+      "llm_opinion": "N201 closed SNDK after a 6-day hold (2026-10-23 → 2026-10-29, just_sold): gain (11.06% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+        "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+        "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+      ],
+      "chart_annotations": {
+        "schema_version": 1,
+        "episode": "Episode: 6-day hold, gain (11.06% fair_cost_episode). Confirm entry/exit marks match the sealed/control path. Pattern marks: Hold path (entry→exit); Post-exit path — premature sell?; Entry quality band.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide. Factory pattern marks illustrate the opinion — agree/disagree on the picture.",
+        "marks": [
+          {
+            "id": "hold_path",
+            "pattern": "hold_path",
+            "type": "region",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Hold path (entry→exit)",
+            "tone": "info",
+            "cite": "episode_window",
+            "influences_live": false,
+            "t0": "2026-10-23",
+            "t1": "2026-10-29"
+          },
+          {
+            "id": "premature_sell_region",
+            "pattern": "premature_sell",
+            "type": "post_exit_band",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Post-exit path — premature sell?",
+            "tone": "warn",
+            "cite": "short_hold_non_mechanical",
+            "influences_live": false,
+            "t0": "2026-10-29",
+            "t1": "2026-11-19"
+          },
+          {
+            "id": "entry_quality",
+            "pattern": "entry_quality",
+            "type": "entry_band",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Entry quality band",
+            "tone": "info",
+            "cite": "entry_at",
+            "influences_live": false,
+            "t0": "2026-10-18",
+            "t1": "2026-10-25",
+            "anchor": "entry_price"
+          },
+          {
+            "id": "entry_range_ref",
+            "pattern": "support_context",
+            "type": "range_ref",
+            "charts": [
+              "wider_tf"
+            ],
+            "label": "Entry vs wider range (support / cyclical location)",
+            "tone": "info",
+            "cite": "support_context",
+            "influences_live": false,
+            "ref": "entry"
+          },
+          {
+            "id": "exit_ma_context",
+            "pattern": "ma_context",
+            "type": "ma_context",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Exit vs SMA50/200",
+            "tone": "info",
+            "cite": "ma_context",
+            "influences_live": false,
+            "t0": "2026-10-29",
+            "t1": "2026-10-29",
+            "ref": "exit"
+          }
+        ]
+      },
+      "opinion_source": "deterministic_v0",
+      "buy_strengths": [
+        "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — comments can ground on that trail.",
+        "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+      ],
+      "buy_weaknesses": [],
+      "sell_strengths": [
+        "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+      ],
+      "sell_weaknesses": [
+        "Short hold: check whether exit timing looks premature vs the wider range."
+      ],
+      "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+      "same_day_round_trip": false,
+      "same_day_assessment": "not_applicable",
+      "same_day_soft_penalty": false,
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "N201 closed SNDK after a 6-day hold (2026-10-23 → 2026-10-29, just_sold): gain (11.06% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+            "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+            "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+          ],
+          "chart_annotations": {
+            "schema_version": 1,
+            "episode": "Episode: 6-day hold, gain (11.06% fair_cost_episode). Confirm entry/exit marks match the sealed/control path. Pattern marks: Hold path (entry→exit); Post-exit path — premature sell?; Entry quality band.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide. Factory pattern marks illustrate the opinion — agree/disagree on the picture.",
+            "marks": [
+              {
+                "id": "hold_path",
+                "pattern": "hold_path",
+                "type": "region",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Hold path (entry→exit)",
+                "tone": "info",
+                "cite": "episode_window",
+                "influences_live": false,
+                "t0": "2026-10-23",
+                "t1": "2026-10-29"
+              },
+              {
+                "id": "premature_sell_region",
+                "pattern": "premature_sell",
+                "type": "post_exit_band",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Post-exit path — premature sell?",
+                "tone": "warn",
+                "cite": "short_hold_non_mechanical",
+                "influences_live": false,
+                "t0": "2026-10-29",
+                "t1": "2026-11-19"
+              },
+              {
+                "id": "entry_quality",
+                "pattern": "entry_quality",
+                "type": "entry_band",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Entry quality band",
+                "tone": "info",
+                "cite": "entry_at",
+                "influences_live": false,
+                "t0": "2026-10-18",
+                "t1": "2026-10-25",
+                "anchor": "entry_price"
+              },
+              {
+                "id": "entry_range_ref",
+                "pattern": "support_context",
+                "type": "range_ref",
+                "charts": [
+                  "wider_tf"
+                ],
+                "label": "Entry vs wider range (support / cyclical location)",
+                "tone": "info",
+                "cite": "support_context",
+                "influences_live": false,
+                "ref": "entry"
+              },
+              {
+                "id": "exit_ma_context",
+                "pattern": "ma_context",
+                "type": "ma_context",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Exit vs SMA50/200",
+                "tone": "info",
+                "cite": "ma_context",
+                "influences_live": false,
+                "t0": "2026-10-29",
+                "t1": "2026-10-29",
+                "ref": "exit"
+              }
+            ]
+          },
+          "buy_strengths": [
+            "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — comments can ground on that trail.",
+            "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+          ],
+          "buy_weaknesses": [],
+          "sell_strengths": [
+            "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+          ],
+          "sell_weaknesses": [
+            "Short hold: check whether exit timing looks premature vs the wider range."
+          ],
+          "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+          "same_day_round_trip": false,
+          "same_day_assessment": "not_applicable",
+          "source": "deterministic_v0",
+          "at": "2026-10-31T02:32:54.103360+00:00",
+          "influences_live": false
+        }
+      ]
+    },
+    {
+      "review_id": "6823190748fee1c6baf0",
+      "review_fingerprint": "6823190748fee1c6baf0",
+      "episode_key": "n201|STLD|2026-10-23|2026-10-29",
+      "tag": "new",
+      "book_id": "n201",
+      "book_tag": "N201",
+      "model_id": "n201",
+      "registration_id": "strand-c-short-horizon-value-mom-v0",
+      "ticker": "STLD",
+      "entry_at": "2026-10-23T06:52:47+00:00",
+      "exit_at": "2026-10-29T06:53:12+00:00",
+      "opened_at": "2026-10-23T06:52:47+00:00",
+      "sold_at": "2026-10-29T06:53:12+00:00",
+      "hold_days": 6,
+      "exit_kind": "just_sold",
+      "return_pct": 3.86,
+      "basis_label": "fair_cost_episode",
+      "close_in": {
+        "days_before": 14,
+        "days_after": 14,
+        "start": "2026-10-09",
+        "end": "2026-11-12"
+      },
+      "wider_tf": {
+        "days_before": 180,
+        "days_after": 90,
+        "start": "2026-04-26",
+        "end": "2027-01-27"
+      },
+      "charts": {
+        "episode": {
+          "days_before": 14,
+          "days_after": 14,
+          "start": "2026-10-09",
+          "end": "2026-11-12"
+        },
+        "wider_tf": {
+          "days_before": 180,
+          "days_after": 90,
+          "start": "2026-04-26",
+          "end": "2027-01-27"
+        }
+      },
+      "avg_cost": null,
+      "exit_price": null,
+      "population": "sealed_lifecycle",
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M",
+      "days_since_exit": 1,
+      "phase_clock": "exit_run_at",
+      "exit_reason": "identity_break_ey_band",
+      "entry_detail": {
+        "earnings_yield": 0.05644018331094257,
+        "in_ey_top30_local": true,
+        "momentum_12_1": 0.5674014374932146,
+        "financial_health_pass": true,
+        "require_momentum": true
+      },
+      "buy_decision": {
+        "side": "buy",
+        "code": "filters_newly_clear",
+        "label": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+        "source": "episode.entry_detail",
+        "join_ok": true,
+        "structured": {
+          "earnings_yield": 0.05644018331094257,
+          "in_ey_top30_local": true,
+          "momentum_12_1": 0.5674014374932146,
+          "financial_health_pass": true,
+          "require_momentum": true
+        },
+        "influences_live": false
+      },
+      "sell_decision": {
+        "side": "sell",
+        "code": "identity_break_ey_band",
+        "label": "Left EY top band (identity break)",
+        "source": "episode.exit_reason",
+        "join_ok": true,
+        "structured": {
+          "raw": "identity_break_ey_band"
+        },
+        "influences_live": false
+      },
+      "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+      "sell_reason": "Left EY top band (identity break)",
+      "decision_reasons_join_ok": true,
+      "framing": "[N201] STLD · 2026-10-29 · hold 6d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 3.86%\nContext read-only — not a new veto. influences_live=false",
+      "llm_opinion": "N201 closed STLD after a 6-day hold (2026-10-23 → 2026-10-29, just_sold): gain (3.86% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+        "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+        "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+      ],
+      "chart_annotations": {
+        "schema_version": 1,
+        "episode": "Episode: 6-day hold, gain (3.86% fair_cost_episode). Confirm entry/exit marks match the sealed/control path. Pattern marks: Hold path (entry→exit); Post-exit path — premature sell?; Entry quality band.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide. Factory pattern marks illustrate the opinion — agree/disagree on the picture.",
+        "marks": [
+          {
+            "id": "hold_path",
+            "pattern": "hold_path",
+            "type": "region",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Hold path (entry→exit)",
+            "tone": "info",
+            "cite": "episode_window",
+            "influences_live": false,
+            "t0": "2026-10-23",
+            "t1": "2026-10-29"
+          },
+          {
+            "id": "premature_sell_region",
+            "pattern": "premature_sell",
+            "type": "post_exit_band",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Post-exit path — premature sell?",
+            "tone": "warn",
+            "cite": "short_hold_non_mechanical",
+            "influences_live": false,
+            "t0": "2026-10-29",
+            "t1": "2026-11-19"
+          },
+          {
+            "id": "entry_quality",
+            "pattern": "entry_quality",
+            "type": "entry_band",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Entry quality band",
+            "tone": "info",
+            "cite": "entry_at",
+            "influences_live": false,
+            "t0": "2026-10-18",
+            "t1": "2026-10-25",
+            "anchor": "entry_price"
+          },
+          {
+            "id": "entry_range_ref",
+            "pattern": "support_context",
+            "type": "range_ref",
+            "charts": [
+              "wider_tf"
+            ],
+            "label": "Entry vs wider range (support / cyclical location)",
+            "tone": "info",
+            "cite": "support_context",
+            "influences_live": false,
+            "ref": "entry"
+          },
+          {
+            "id": "exit_ma_context",
+            "pattern": "ma_context",
+            "type": "ma_context",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Exit vs SMA50/200",
+            "tone": "info",
+            "cite": "ma_context",
+            "influences_live": false,
+            "t0": "2026-10-29",
+            "t1": "2026-10-29",
+            "ref": "exit"
+          }
+        ]
+      },
+      "opinion_source": "deterministic_v0",
+      "buy_strengths": [
+        "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — comments can ground on that trail.",
+        "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+      ],
+      "buy_weaknesses": [],
+      "sell_strengths": [
+        "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+      ],
+      "sell_weaknesses": [
+        "Short hold: check whether exit timing looks premature vs the wider range."
+      ],
+      "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+      "same_day_round_trip": false,
+      "same_day_assessment": "not_applicable",
+      "same_day_soft_penalty": false,
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "N201 closed STLD after a 6-day hold (2026-10-23 → 2026-10-29, just_sold): gain (3.86% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+            "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+            "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+          ],
+          "chart_annotations": {
+            "schema_version": 1,
+            "episode": "Episode: 6-day hold, gain (3.86% fair_cost_episode). Confirm entry/exit marks match the sealed/control path. Pattern marks: Hold path (entry→exit); Post-exit path — premature sell?; Entry quality band.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide. Factory pattern marks illustrate the opinion — agree/disagree on the picture.",
+            "marks": [
+              {
+                "id": "hold_path",
+                "pattern": "hold_path",
+                "type": "region",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Hold path (entry→exit)",
+                "tone": "info",
+                "cite": "episode_window",
+                "influences_live": false,
+                "t0": "2026-10-23",
+                "t1": "2026-10-29"
+              },
+              {
+                "id": "premature_sell_region",
+                "pattern": "premature_sell",
+                "type": "post_exit_band",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Post-exit path — premature sell?",
+                "tone": "warn",
+                "cite": "short_hold_non_mechanical",
+                "influences_live": false,
+                "t0": "2026-10-29",
+                "t1": "2026-11-19"
+              },
+              {
+                "id": "entry_quality",
+                "pattern": "entry_quality",
+                "type": "entry_band",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Entry quality band",
+                "tone": "info",
+                "cite": "entry_at",
+                "influences_live": false,
+                "t0": "2026-10-18",
+                "t1": "2026-10-25",
+                "anchor": "entry_price"
+              },
+              {
+                "id": "entry_range_ref",
+                "pattern": "support_context",
+                "type": "range_ref",
+                "charts": [
+                  "wider_tf"
+                ],
+                "label": "Entry vs wider range (support / cyclical location)",
+                "tone": "info",
+                "cite": "support_context",
+                "influences_live": false,
+                "ref": "entry"
+              },
+              {
+                "id": "exit_ma_context",
+                "pattern": "ma_context",
+                "type": "ma_context",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Exit vs SMA50/200",
+                "tone": "info",
+                "cite": "ma_context",
+                "influences_live": false,
+                "t0": "2026-10-29",
+                "t1": "2026-10-29",
+                "ref": "exit"
+              }
+            ]
+          },
+          "buy_strengths": [
+            "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — comments can ground on that trail.",
+            "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+          ],
+          "buy_weaknesses": [],
+          "sell_strengths": [
+            "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+          ],
+          "sell_weaknesses": [
+            "Short hold: check whether exit timing looks premature vs the wider range."
+          ],
+          "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+          "same_day_round_trip": false,
+          "same_day_assessment": "not_applicable",
+          "source": "deterministic_v0",
+          "at": "2026-10-31T02:32:54.103491+00:00",
+          "influences_live": false
+        }
+      ]
+    },
+    {
+      "review_id": "e5f43d8d35b04bb78f37",
+      "review_fingerprint": "e5f43d8d35b04bb78f37",
+      "episode_key": "n206|0857.HK|2026-10-23|2026-10-29",
+      "tag": "new",
+      "book_id": "n206",
+      "book_tag": "N206",
+      "model_id": "n206",
+      "registration_id": "strand-d-plain-ey-identity-v0",
+      "ticker": "0857.HK",
+      "entry_at": "2026-10-23T06:52:47+00:00",
+      "exit_at": "2026-10-29T06:53:12+00:00",
+      "opened_at": "2026-10-23T06:52:47+00:00",
+      "sold_at": "2026-10-29T06:53:12+00:00",
+      "hold_days": 6,
+      "exit_kind": "just_sold",
+      "return_pct": 5.77,
+      "basis_label": "fair_cost_episode",
+      "close_in": {
+        "days_before": 14,
+        "days_after": 14,
+        "start": "2026-10-09",
+        "end": "2026-11-12"
+      },
+      "wider_tf": {
+        "days_before": 180,
+        "days_after": 90,
+        "start": "2026-04-26",
+        "end": "2027-01-27"
+      },
+      "charts": {
+        "episode": {
+          "days_before": 14,
+          "days_after": 14,
+          "start": "2026-10-09",
+          "end": "2026-11-12"
+        },
+        "wider_tf": {
+          "days_before": 180,
+          "days_after": 90,
+          "start": "2026-04-26",
+          "end": "2027-01-27"
+        }
+      },
+      "avg_cost": null,
+      "exit_price": null,
+      "population": "sealed_lifecycle",
+      "influences_live": false,
+      "observe_only": true,
+      "package": "M",
+      "days_since_exit": 1,
+      "phase_clock": "exit_run_at",
+      "exit_reason": "identity_break_ey_band",
+      "entry_detail": {
+        "earnings_yield": 0.11162791113034089,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      },
+      "buy_decision": {
+        "side": "buy",
+        "code": "filters_newly_clear",
+        "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "source": "episode.entry_detail",
+        "join_ok": true,
+        "structured": {
+          "earnings_yield": 0.11162791113034089,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "financial_health_pass": true,
+          "require_momentum": false
+        },
+        "influences_live": false
+      },
+      "sell_decision": {
+        "side": "sell",
+        "code": "identity_break_ey_band",
+        "label": "Left EY top band (identity break)",
+        "source": "episode.exit_reason",
+        "join_ok": true,
+        "structured": {
+          "raw": "identity_break_ey_band"
+        },
+        "influences_live": false
+      },
+      "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+      "sell_reason": "Left EY top band (identity break)",
+      "decision_reasons_join_ok": true,
+      "framing": "[N206] 0857.HK · 2026-10-29 · hold 6d · just_sold\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nSold because: Left EY top band (identity break)\nCharts: episode window + wider TF (owner verifies both)\nOutcome (fair_cost_episode): 5.77%\nContext read-only — not a new veto. influences_live=false",
+      "llm_opinion": "N206 closed 0857.HK after a 6-day hold (2026-10-23 → 2026-10-29, just_sold): gain (5.77% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+      "learning_points": [
+        "Verify episode chart and wider TF together before Accepting framing.",
+        "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+        "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+        "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+        "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+      ],
+      "chart_annotations": {
+        "schema_version": 1,
+        "episode": "Episode: 6-day hold, gain (5.77% fair_cost_episode). Confirm entry/exit marks match the sealed/control path. Pattern marks: Hold path (entry→exit); Post-exit path — premature sell?; Entry quality band.",
+        "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide. Factory pattern marks illustrate the opinion — agree/disagree on the picture.",
+        "marks": [
+          {
+            "id": "hold_path",
+            "pattern": "hold_path",
+            "type": "region",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Hold path (entry→exit)",
+            "tone": "info",
+            "cite": "episode_window",
+            "influences_live": false,
+            "t0": "2026-10-23",
+            "t1": "2026-10-29"
+          },
+          {
+            "id": "premature_sell_region",
+            "pattern": "premature_sell",
+            "type": "post_exit_band",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Post-exit path — premature sell?",
+            "tone": "warn",
+            "cite": "short_hold_non_mechanical",
+            "influences_live": false,
+            "t0": "2026-10-29",
+            "t1": "2026-11-19"
+          },
+          {
+            "id": "entry_quality",
+            "pattern": "entry_quality",
+            "type": "entry_band",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Entry quality band",
+            "tone": "info",
+            "cite": "entry_at",
+            "influences_live": false,
+            "t0": "2026-10-18",
+            "t1": "2026-10-25",
+            "anchor": "entry_price"
+          },
+          {
+            "id": "entry_range_ref",
+            "pattern": "support_context",
+            "type": "range_ref",
+            "charts": [
+              "wider_tf"
+            ],
+            "label": "Entry vs wider range (support / cyclical location)",
+            "tone": "info",
+            "cite": "support_context",
+            "influences_live": false,
+            "ref": "entry"
+          },
+          {
+            "id": "exit_ma_context",
+            "pattern": "ma_context",
+            "type": "ma_context",
+            "charts": [
+              "episode",
+              "wider_tf"
+            ],
+            "label": "Exit vs SMA50/200",
+            "tone": "info",
+            "cite": "ma_context",
+            "influences_live": false,
+            "t0": "2026-10-29",
+            "t1": "2026-10-29",
+            "ref": "exit"
+          }
+        ]
+      },
+      "opinion_source": "deterministic_v0",
+      "buy_strengths": [
+        "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail.",
+        "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+      ],
+      "buy_weaknesses": [],
+      "sell_strengths": [
+        "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+      ],
+      "sell_weaknesses": [
+        "Short hold: check whether exit timing looks premature vs the wider range."
+      ],
+      "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+      "same_day_round_trip": false,
+      "same_day_assessment": "not_applicable",
+      "same_day_soft_penalty": false,
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "N206 closed 0857.HK after a 6-day hold (2026-10-23 → 2026-10-29, just_sold): gain (5.77% fair_cost_episode). Rapid entry→exit Bought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Sold because: Left EY top band (identity break). Read episode window for the trade path and wider TF for the cyclical / trend context the episode alone can hide. Observe-only — not a veto.",
+          "learning_points": [
+            "Verify episode chart and wider TF together before Accepting framing.",
+            "Comment on missed patterns (range location, climb after exit, rapid churn) — factory must reply; no knobs/fills from this loop.",
+            "Ground comments in the structured sell reason (Left EY top band (identity break)) — e.g. 'premature' is only meaningful vs a timing/tech trigger, not a buy-tier / identity exit.",
+            "Short hold: check whether exit timing / churn looks premature vs the wider range the owner may see on longer history.",
+            "Small/positive fair-cost on a short hold can still sit at a poor cyclical location on wider TF — flag that pattern in Comment if so."
+          ],
+          "chart_annotations": {
+            "schema_version": 1,
+            "episode": "Episode: 6-day hold, gain (5.77% fair_cost_episode). Confirm entry/exit marks match the sealed/control path. Pattern marks: Hold path (entry→exit); Post-exit path — premature sell?; Entry quality band.",
+            "wider_tf": "Wider TF: judge range location and post-exit climb/fade that the episode sleeve can hide. Factory pattern marks illustrate the opinion — agree/disagree on the picture.",
+            "marks": [
+              {
+                "id": "hold_path",
+                "pattern": "hold_path",
+                "type": "region",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Hold path (entry→exit)",
+                "tone": "info",
+                "cite": "episode_window",
+                "influences_live": false,
+                "t0": "2026-10-23",
+                "t1": "2026-10-29"
+              },
+              {
+                "id": "premature_sell_region",
+                "pattern": "premature_sell",
+                "type": "post_exit_band",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Post-exit path — premature sell?",
+                "tone": "warn",
+                "cite": "short_hold_non_mechanical",
+                "influences_live": false,
+                "t0": "2026-10-29",
+                "t1": "2026-11-19"
+              },
+              {
+                "id": "entry_quality",
+                "pattern": "entry_quality",
+                "type": "entry_band",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Entry quality band",
+                "tone": "info",
+                "cite": "entry_at",
+                "influences_live": false,
+                "t0": "2026-10-18",
+                "t1": "2026-10-25",
+                "anchor": "entry_price"
+              },
+              {
+                "id": "entry_range_ref",
+                "pattern": "support_context",
+                "type": "range_ref",
+                "charts": [
+                  "wider_tf"
+                ],
+                "label": "Entry vs wider range (support / cyclical location)",
+                "tone": "info",
+                "cite": "support_context",
+                "influences_live": false,
+                "ref": "entry"
+              },
+              {
+                "id": "exit_ma_context",
+                "pattern": "ma_context",
+                "type": "ma_context",
+                "charts": [
+                  "episode",
+                  "wider_tf"
+                ],
+                "label": "Exit vs SMA50/200",
+                "tone": "info",
+                "cite": "ma_context",
+                "influences_live": false,
+                "t0": "2026-10-29",
+                "t1": "2026-10-29",
+                "ref": "exit"
+              }
+            ]
+          },
+          "buy_strengths": [
+            "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — comments can ground on that trail.",
+            "Positive fair-cost outcome supports the pick/entry enough for alignment review — still check cyclical location on wider TF."
+          ],
+          "buy_weaknesses": [],
+          "sell_strengths": [
+            "Sell decision is joinable: Left EY top band (identity break) [identity_break_ey_band] — weigh 'premature' claims against this code."
+          ],
+          "sell_weaknesses": [
+            "Short hold: check whether exit timing looks premature vs the wider range."
+          ],
+          "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+          "same_day_round_trip": false,
+          "same_day_assessment": "not_applicable",
+          "source": "deterministic_v0",
+          "at": "2026-10-31T02:32:54.110579+00:00",
+          "influences_live": false
+        }
+      ]
+    },
     {
       "review_id": "92ca56e000ba00e249af",
       "review_fingerprint": "92ca56e000ba00e249af",
@@ -405,7 +1607,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.236974+00:00",
+          "at": "2026-10-31T02:32:54.110644+00:00",
           "influences_live": false
         }
       ]
@@ -715,7 +1917,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.237498+00:00",
+          "at": "2026-10-31T02:32:54.111483+00:00",
           "influences_live": false
         }
       ]
@@ -987,7 +2189,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.237614+00:00",
+          "at": "2026-10-31T02:32:54.111676+00:00",
           "influences_live": false
         }
       ]
@@ -1259,7 +2461,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.237842+00:00",
+          "at": "2026-10-31T02:32:54.112072+00:00",
           "influences_live": false
         }
       ]
@@ -1569,7 +2771,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.238194+00:00",
+          "at": "2026-10-31T02:32:54.113183+00:00",
           "influences_live": false
         }
       ]
@@ -1879,7 +3081,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.238285+00:00",
+          "at": "2026-10-31T02:32:54.113322+00:00",
           "influences_live": false
         }
       ]
@@ -2189,7 +3391,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.203462+00:00",
+          "at": "2026-10-31T02:32:54.102220+00:00",
           "influences_live": false
         }
       ]
@@ -2499,7 +3701,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.237097+00:00",
+          "at": "2026-10-31T02:32:54.110853+00:00",
           "influences_live": false
         }
       ]
@@ -2805,7 +4007,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.245748+00:00",
+          "at": "2026-10-31T02:32:54.124606+00:00",
           "influences_live": false
         }
       ]
@@ -3111,7 +4313,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.245867+00:00",
+          "at": "2026-10-31T02:32:54.124778+00:00",
           "influences_live": false
         }
       ]
@@ -3381,7 +4583,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.232029+00:00",
+          "at": "2026-10-31T02:32:54.103104+00:00",
           "influences_live": false
         }
       ]
@@ -3691,7 +4893,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.243785+00:00",
+          "at": "2026-10-31T02:32:54.121450+00:00",
           "influences_live": false
         }
       ]
@@ -4001,7 +5203,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.203381+00:00",
+          "at": "2026-10-31T02:32:54.102086+00:00",
           "influences_live": false
         }
       ]
@@ -4311,7 +5513,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.203339+00:00",
+          "at": "2026-10-31T02:32:54.102020+00:00",
           "influences_live": false
         }
       ]
@@ -4621,7 +5823,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.231570+00:00",
+          "at": "2026-10-31T02:32:54.102448+00:00",
           "influences_live": false
         }
       ]
@@ -4931,7 +6133,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.231621+00:00",
+          "at": "2026-10-31T02:32:54.102512+00:00",
           "influences_live": false
         }
       ]
@@ -5203,7 +6405,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.231816+00:00",
+          "at": "2026-10-31T02:32:54.102768+00:00",
           "influences_live": false
         }
       ]
@@ -5475,7 +6677,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.231863+00:00",
+          "at": "2026-10-31T02:32:54.102847+00:00",
           "influences_live": false
         }
       ]
@@ -5773,7 +6975,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.197349+00:00",
+          "at": "2026-10-31T02:32:54.094953+00:00",
           "influences_live": false
         }
       ]
@@ -6067,7 +7269,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.197457+00:00",
+          "at": "2026-10-31T02:32:54.095114+00:00",
           "influences_live": false
         }
       ]
@@ -6327,7 +7529,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.197505+00:00",
+          "at": "2026-10-31T02:32:54.095182+00:00",
           "influences_live": false
         }
       ]
@@ -6623,7 +7825,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.197549+00:00",
+          "at": "2026-10-31T02:32:54.095249+00:00",
           "influences_live": false
         }
       ]
@@ -6895,7 +8097,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.237418+00:00",
+          "at": "2026-10-31T02:32:54.111350+00:00",
           "influences_live": false
         }
       ]
@@ -7167,7 +8369,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.231907+00:00",
+          "at": "2026-10-31T02:32:54.102917+00:00",
           "influences_live": false
         }
       ]
@@ -7439,7 +8641,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.231989+00:00",
+          "at": "2026-10-31T02:32:54.103043+00:00",
           "influences_live": false
         }
       ]
@@ -7497,7 +8699,7 @@
       "epoch_join_ok": true,
       "market_id": "ftse350",
       "track_id": "buy_tier_level",
-      "days_since_exit": 9,
+      "days_since_exit": 10,
       "name": "Endeavour Mining plc",
       "buy_decision": {
         "side": "buy",
@@ -7738,7 +8940,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.246035+00:00",
+          "at": "2026-10-31T02:32:54.124956+00:00",
           "influences_live": false
         }
       ]
@@ -7796,7 +8998,7 @@
       "epoch_join_ok": true,
       "market_id": "ftse350",
       "track_id": "buy_tier_level",
-      "days_since_exit": 9,
+      "days_since_exit": 10,
       "name": "RS Group plc",
       "buy_decision": {
         "side": "buy",
@@ -8003,7 +9205,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.246084+00:00",
+          "at": "2026-10-31T02:32:54.125033+00:00",
           "influences_live": false
         }
       ]
@@ -8313,7 +9515,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.238917+00:00",
+          "at": "2026-10-31T02:32:54.114363+00:00",
           "influences_live": false
         }
       ]
@@ -8623,7 +9825,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.238956+00:00",
+          "at": "2026-10-31T02:32:54.114426+00:00",
           "influences_live": false
         }
       ]
@@ -8933,7 +10135,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.238994+00:00",
+          "at": "2026-10-31T02:32:54.114488+00:00",
           "influences_live": false
         }
       ]
@@ -9205,7 +10407,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.239061+00:00",
+          "at": "2026-10-31T02:32:54.114550+00:00",
           "influences_live": false
         }
       ]
@@ -9477,7 +10679,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.239101+00:00",
+          "at": "2026-10-31T02:32:54.114649+00:00",
           "influences_live": false
         }
       ]
@@ -9749,7 +10951,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.239141+00:00",
+          "at": "2026-10-31T02:32:54.114711+00:00",
           "influences_live": false
         }
       ]
@@ -10059,7 +11261,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.239179+00:00",
+          "at": "2026-10-31T02:32:54.114773+00:00",
           "influences_live": false
         }
       ]
@@ -10329,7 +11531,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.239216+00:00",
+          "at": "2026-10-31T02:32:54.114851+00:00",
           "influences_live": false
         }
       ]
@@ -10601,7 +11803,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.239899+00:00",
+          "at": "2026-10-31T02:32:54.115982+00:00",
           "influences_live": false
         }
       ]
@@ -10911,7 +12113,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.240045+00:00",
+          "at": "2026-10-31T02:32:54.116211+00:00",
           "influences_live": false
         }
       ]
@@ -11183,7 +12385,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.240082+00:00",
+          "at": "2026-10-31T02:32:54.116272+00:00",
           "influences_live": false
         }
       ]
@@ -11453,7 +12655,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.240158+00:00",
+          "at": "2026-10-31T02:32:54.116395+00:00",
           "influences_live": false
         }
       ]
@@ -11723,7 +12925,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.240401+00:00",
+          "at": "2026-10-31T02:32:54.116776+00:00",
           "influences_live": false
         }
       ]
@@ -12033,7 +13235,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.240481+00:00",
+          "at": "2026-10-31T02:32:54.116928+00:00",
           "influences_live": false
         }
       ]
@@ -12305,7 +13507,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.240637+00:00",
+          "at": "2026-10-31T02:32:54.117176+00:00",
           "influences_live": false
         }
       ]
@@ -12577,7 +13779,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.240674+00:00",
+          "at": "2026-10-31T02:32:54.117236+00:00",
           "influences_live": false
         }
       ]
@@ -12887,7 +14089,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.240750+00:00",
+          "at": "2026-10-31T02:32:54.117359+00:00",
           "influences_live": false
         }
       ]
@@ -13197,7 +14399,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.240787+00:00",
+          "at": "2026-10-31T02:32:54.117420+00:00",
           "influences_live": false
         }
       ]
@@ -13469,7 +14671,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.240967+00:00",
+          "at": "2026-10-31T02:32:54.117701+00:00",
           "influences_live": false
         }
       ]
@@ -13779,7 +14981,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.241338+00:00",
+          "at": "2026-10-31T02:32:54.118286+00:00",
           "influences_live": false
         }
       ]
@@ -14051,7 +15253,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.241377+00:00",
+          "at": "2026-10-31T02:32:54.118346+00:00",
           "influences_live": false
         }
       ]
@@ -14323,7 +15525,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.241415+00:00",
+          "at": "2026-10-31T02:32:54.118407+00:00",
           "influences_live": false
         }
       ]
@@ -14633,7 +15835,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.241799+00:00",
+          "at": "2026-10-31T02:32:54.119026+00:00",
           "influences_live": false
         }
       ]
@@ -14903,7 +16105,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.241876+00:00",
+          "at": "2026-10-31T02:32:54.119150+00:00",
           "influences_live": false
         }
       ]
@@ -15175,7 +16377,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.241951+00:00",
+          "at": "2026-10-31T02:32:54.119271+00:00",
           "influences_live": false
         }
       ]
@@ -15485,7 +16687,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.242026+00:00",
+          "at": "2026-10-31T02:32:54.119391+00:00",
           "influences_live": false
         }
       ]
@@ -15757,7 +16959,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.242141+00:00",
+          "at": "2026-10-31T02:32:54.119572+00:00",
           "influences_live": false
         }
       ]
@@ -16067,7 +17269,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.242180+00:00",
+          "at": "2026-10-31T02:32:54.119635+00:00",
           "influences_live": false
         }
       ]
@@ -16377,7 +17579,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.242309+00:00",
+          "at": "2026-10-31T02:32:54.119825+00:00",
           "influences_live": false
         }
       ]
@@ -16687,7 +17889,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.242426+00:00",
+          "at": "2026-10-31T02:32:54.120035+00:00",
           "influences_live": false
         }
       ]
@@ -16959,7 +18161,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.242577+00:00",
+          "at": "2026-10-31T02:32:54.120279+00:00",
           "influences_live": false
         }
       ]
@@ -17231,7 +18433,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.243319+00:00",
+          "at": "2026-10-31T02:32:54.120691+00:00",
           "influences_live": false
         }
       ]
@@ -17541,7 +18743,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.243357+00:00",
+          "at": "2026-10-31T02:32:54.120752+00:00",
           "influences_live": false
         }
       ]
@@ -17811,7 +19013,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.243551+00:00",
+          "at": "2026-10-31T02:32:54.121081+00:00",
           "influences_live": false
         }
       ]
@@ -18121,7 +19323,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.243665+00:00",
+          "at": "2026-10-31T02:32:54.121262+00:00",
           "influences_live": false
         }
       ]
@@ -18431,7 +19633,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.243824+00:00",
+          "at": "2026-10-31T02:32:54.121512+00:00",
           "influences_live": false
         }
       ]
@@ -18703,7 +19905,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.243899+00:00",
+          "at": "2026-10-31T02:32:54.121635+00:00",
           "influences_live": false
         }
       ]
@@ -19013,7 +20215,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.243940+00:00",
+          "at": "2026-10-31T02:32:54.121696+00:00",
           "influences_live": false
         }
       ]
@@ -19283,7 +20485,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.244092+00:00",
+          "at": "2026-10-31T02:32:54.121966+00:00",
           "influences_live": false
         }
       ]
@@ -19555,7 +20757,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.244245+00:00",
+          "at": "2026-10-31T02:32:54.122212+00:00",
           "influences_live": false
         }
       ]
@@ -19827,7 +21029,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.244329+00:00",
+          "at": "2026-10-31T02:32:54.122334+00:00",
           "influences_live": false
         }
       ]
@@ -20099,7 +21301,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.244644+00:00",
+          "at": "2026-10-31T02:32:54.122851+00:00",
           "influences_live": false
         }
       ]
@@ -20371,7 +21573,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.244802+00:00",
+          "at": "2026-10-31T02:32:54.123106+00:00",
           "influences_live": false
         }
       ]
@@ -20641,7 +21843,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.245061+00:00",
+          "at": "2026-10-31T02:32:54.123512+00:00",
           "influences_live": false
         }
       ]
@@ -20913,7 +22115,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.245177+00:00",
+          "at": "2026-10-31T02:32:54.123706+00:00",
           "influences_live": false
         }
       ]
@@ -21183,7 +22385,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.245262+00:00",
+          "at": "2026-10-31T02:32:54.123829+00:00",
           "influences_live": false
         }
       ]
@@ -21493,7 +22695,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.245302+00:00",
+          "at": "2026-10-31T02:32:54.123915+00:00",
           "influences_live": false
         }
       ]
@@ -21803,7 +23005,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.245342+00:00",
+          "at": "2026-10-31T02:32:54.123979+00:00",
           "influences_live": false
         }
       ]
@@ -22113,7 +23315,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.245420+00:00",
+          "at": "2026-10-31T02:32:54.124104+00:00",
           "influences_live": false
         }
       ]
@@ -22383,7 +23585,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.245458+00:00",
+          "at": "2026-10-31T02:32:54.124164+00:00",
           "influences_live": false
         }
       ]
@@ -22655,7 +23857,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.245535+00:00",
+          "at": "2026-10-31T02:32:54.124284+00:00",
           "influences_live": false
         }
       ]
@@ -22927,7 +24129,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.245653+00:00",
+          "at": "2026-10-31T02:32:54.124468+00:00",
           "influences_live": false
         }
       ]
@@ -23237,7 +24439,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.232790+00:00",
+          "at": "2026-10-31T02:32:54.104205+00:00",
           "influences_live": false
         }
       ]
@@ -23509,7 +24711,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.232829+00:00",
+          "at": "2026-10-31T02:32:54.104266+00:00",
           "influences_live": false
         }
       ]
@@ -23781,7 +24983,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.232868+00:00",
+          "at": "2026-10-31T02:32:54.104327+00:00",
           "influences_live": false
         }
       ]
@@ -24091,7 +25293,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.232922+00:00",
+          "at": "2026-10-31T02:32:54.104393+00:00",
           "influences_live": false
         }
       ]
@@ -24363,7 +25565,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.233382+00:00",
+          "at": "2026-10-31T02:32:54.105126+00:00",
           "influences_live": false
         }
       ]
@@ -24673,7 +25875,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.233424+00:00",
+          "at": "2026-10-31T02:32:54.105189+00:00",
           "influences_live": false
         }
       ]
@@ -24943,7 +26145,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.233497+00:00",
+          "at": "2026-10-31T02:32:54.105290+00:00",
           "influences_live": false
         }
       ]
@@ -25253,7 +26455,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.233698+00:00",
+          "at": "2026-10-31T02:32:54.105615+00:00",
           "influences_live": false
         }
       ]
@@ -25525,7 +26727,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.233817+00:00",
+          "at": "2026-10-31T02:32:54.105802+00:00",
           "influences_live": false
         }
       ]
@@ -25835,7 +27037,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.233894+00:00",
+          "at": "2026-10-31T02:32:54.105948+00:00",
           "influences_live": false
         }
       ]
@@ -26145,7 +27347,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.233933+00:00",
+          "at": "2026-10-31T02:32:54.106011+00:00",
           "influences_live": false
         }
       ]
@@ -26417,7 +27619,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.234086+00:00",
+          "at": "2026-10-31T02:32:54.106258+00:00",
           "influences_live": false
         }
       ]
@@ -26727,7 +27929,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.234295+00:00",
+          "at": "2026-10-31T02:32:54.106572+00:00",
           "influences_live": false
         }
       ]
@@ -27037,7 +28239,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.234758+00:00",
+          "at": "2026-10-31T02:32:54.107279+00:00",
           "influences_live": false
         }
       ]
@@ -27309,7 +28511,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.234800+00:00",
+          "at": "2026-10-31T02:32:54.107340+00:00",
           "influences_live": false
         }
       ]
@@ -27581,7 +28783,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.235065+00:00",
+          "at": "2026-10-31T02:32:54.107712+00:00",
           "influences_live": false
         }
       ]
@@ -27853,7 +29055,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.235230+00:00",
+          "at": "2026-10-31T02:32:54.107986+00:00",
           "influences_live": false
         }
       ]
@@ -28163,7 +29365,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.235401+00:00",
+          "at": "2026-10-31T02:32:54.108214+00:00",
           "influences_live": false
         }
       ]
@@ -28435,7 +29637,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.235530+00:00",
+          "at": "2026-10-31T02:32:54.108403+00:00",
           "influences_live": false
         }
       ]
@@ -28707,7 +29909,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.235699+00:00",
+          "at": "2026-10-31T02:32:54.108649+00:00",
           "influences_live": false
         }
       ]
@@ -28979,7 +30181,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.235781+00:00",
+          "at": "2026-10-31T02:32:54.108769+00:00",
           "influences_live": false
         }
       ]
@@ -29251,7 +30453,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.236083+00:00",
+          "at": "2026-10-31T02:32:54.109230+00:00",
           "influences_live": false
         }
       ]
@@ -29523,7 +30725,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.236120+00:00",
+          "at": "2026-10-31T02:32:54.109291+00:00",
           "influences_live": false
         }
       ]
@@ -29793,7 +30995,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.236408+00:00",
+          "at": "2026-10-31T02:32:54.109708+00:00",
           "influences_live": false
         }
       ]
@@ -30065,7 +31267,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.236572+00:00",
+          "at": "2026-10-31T02:32:54.110006+00:00",
           "influences_live": false
         }
       ]
@@ -30375,7 +31577,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.236653+00:00",
+          "at": "2026-10-31T02:32:54.110131+00:00",
           "influences_live": false
         }
       ]
@@ -30685,7 +31887,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.236694+00:00",
+          "at": "2026-10-31T02:32:54.110194+00:00",
           "influences_live": false
         }
       ]
@@ -30957,7 +32159,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.236770+00:00",
+          "at": "2026-10-31T02:32:54.110317+00:00",
           "influences_live": false
         }
       ]
@@ -31015,7 +32217,7 @@
       "epoch_join_ok": true,
       "market_id": "ftse350",
       "track_id": "buy_tier_level",
-      "days_since_exit": 16,
+      "days_since_exit": 17,
       "name": "Morgan Advanced Materials plc",
       "buy_decision": {
         "side": "buy",
@@ -31224,7 +32426,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.246936+00:00",
+          "at": "2026-10-31T02:32:54.126063+00:00",
           "influences_live": false
         }
       ]
@@ -31522,7 +32724,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.199909+00:00",
+          "at": "2026-10-31T02:32:54.098895+00:00",
           "influences_live": false
         }
       ]
@@ -31820,7 +33022,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.200349+00:00",
+          "at": "2026-10-31T02:32:54.099554+00:00",
           "influences_live": false
         }
       ]
@@ -31878,7 +33080,7 @@
       "epoch_join_ok": true,
       "market_id": "ftse350",
       "track_id": "buy_tier_level",
-      "days_since_exit": 20,
+      "days_since_exit": 21,
       "name": "BP p.l.c.",
       "buy_decision": {
         "side": "buy",
@@ -32087,7 +33289,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.246220+00:00",
+          "at": "2026-10-31T02:32:54.125512+00:00",
           "influences_live": false
         }
       ]
@@ -32145,7 +33347,7 @@
       "epoch_join_ok": true,
       "market_id": "ftse350",
       "track_id": "buy_tier_level",
-      "days_since_exit": 20,
+      "days_since_exit": 21,
       "name": "Pinewood Technologies Group PLC",
       "buy_decision": {
         "side": "buy",
@@ -32352,7 +33554,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.247152+00:00",
+          "at": "2026-10-31T02:32:54.126758+00:00",
           "influences_live": false
         }
       ]
@@ -32410,7 +33612,7 @@
       "epoch_join_ok": true,
       "market_id": "ftse350",
       "track_id": "buy_tier_level",
-      "days_since_exit": 20,
+      "days_since_exit": 21,
       "name": "Trustpilot Group plc",
       "buy_decision": {
         "side": "buy",
@@ -32619,7 +33821,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.246654+00:00",
+          "at": "2026-10-31T02:32:54.125933+00:00",
           "influences_live": false
         }
       ]
@@ -32677,7 +33879,7 @@
       "epoch_join_ok": true,
       "market_id": "ftse350",
       "track_id": "buy_tier_level",
-      "days_since_exit": 20,
+      "days_since_exit": 21,
       "name": "Vistry Group PLC",
       "buy_decision": {
         "side": "buy",
@@ -32924,7 +34126,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.246612+00:00",
+          "at": "2026-10-31T02:32:54.125863+00:00",
           "influences_live": false
         }
       ]
@@ -32982,7 +34184,7 @@
       "epoch_join_ok": true,
       "market_id": "ftse350",
       "track_id": "buy_tier_level",
-      "days_since_exit": 20,
+      "days_since_exit": 21,
       "name": "Wickes Group plc",
       "buy_decision": {
         "side": "buy",
@@ -33191,7 +34393,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.246772+00:00",
+          "at": "2026-10-31T02:32:54.126366+00:00",
           "influences_live": false
         }
       ]
@@ -33523,7 +34725,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.199832+00:00",
+          "at": "2026-10-31T02:32:54.098748+00:00",
           "influences_live": false
         }
       ]
@@ -33823,7 +35025,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.198098+00:00",
+          "at": "2026-10-31T02:32:54.096102+00:00",
           "influences_live": false
         }
       ]
@@ -34123,7 +35325,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.199986+00:00",
+          "at": "2026-10-31T02:32:54.099026+00:00",
           "influences_live": false
         }
       ]
@@ -34455,7 +35657,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.202892+00:00",
+          "at": "2026-10-31T02:32:54.101301+00:00",
           "influences_live": false
         }
       ]
@@ -34755,7 +35957,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.203115+00:00",
+          "at": "2026-10-31T02:32:54.101660+00:00",
           "influences_live": false
         }
       ]
@@ -35055,7 +36257,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.199948+00:00",
+          "at": "2026-10-31T02:32:54.098963+00:00",
           "influences_live": false
         }
       ]
@@ -35355,7 +36557,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.200062+00:00",
+          "at": "2026-10-31T02:32:54.099149+00:00",
           "influences_live": false
         }
       ]
@@ -35655,7 +36857,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.198359+00:00",
+          "at": "2026-10-31T02:32:54.096470+00:00",
           "influences_live": false
         }
       ]
@@ -35955,7 +37157,7 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.199052+00:00",
+          "at": "2026-10-31T02:32:54.097561+00:00",
           "influences_live": false
         }
       ]
@@ -36255,14 +37457,14 @@
           "same_day_round_trip": false,
           "same_day_assessment": "not_applicable",
           "source": "deterministic_v0",
-          "at": "2026-10-31T00:03:30.199675+00:00",
+          "at": "2026-10-31T02:32:54.098496+00:00",
           "influences_live": false
         }
       ]
     }
   ],
   "unreplied_comments": 0,
-  "history_event_count": 226,
+  "history_event_count": 218,
   "labels_heal": {
     "healed": false,
     "removed": 0,
