@@ -15,20 +15,26 @@ from value_investor.volume_interestingness import (
 
 def test_n200_blocked_by_exit_lose_and_nonpositive_path():
     thick = {"volume_gate": {"met": True}}
-    assert evaluate_n200_interestingness(
-        {
-            **thick,
-            "path_scoreboard": {"control_smooth_ret_cohort_median": 0.01},
-            "per_lever_scoreboards": {"exit_verdict": "lose"},
-        }
-    )["met"] is False
-    assert evaluate_n200_interestingness(
-        {
-            **thick,
-            "path_scoreboard": {"control_smooth_ret_cohort_median": -0.01},
-            "per_lever_scoreboards": {"exit_verdict": "win"},
-        }
-    )["met"] is False
+    assert (
+        evaluate_n200_interestingness(
+            {
+                **thick,
+                "path_scoreboard": {"control_smooth_ret_cohort_median": 0.01},
+                "per_lever_scoreboards": {"exit_verdict": "lose"},
+            }
+        )["met"]
+        is False
+    )
+    assert (
+        evaluate_n200_interestingness(
+            {
+                **thick,
+                "path_scoreboard": {"control_smooth_ret_cohort_median": -0.01},
+                "per_lever_scoreboards": {"exit_verdict": "win"},
+            }
+        )["met"]
+        is False
+    )
     gate = evaluate_n200_interestingness(
         {
             **thick,

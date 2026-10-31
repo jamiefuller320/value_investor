@@ -18,22 +18,13 @@ from typing import Any
 
 SCHEMA_VERSION = 1
 
-N200_INTERESTINGNESS_TITLE = (
-    "N200 alone-path interesting — promotion design optional (F8)"
-)
-N201_INTERESTINGNESS_TITLE = (
-    "N201 alone-path interesting — promotion design optional (F8)"
-)
-N206_INTERESTINGNESS_TITLE = (
-    "N206 alone-path interesting — promotion design optional (F8)"
-)
-N210_INTERESTINGNESS_TITLE = (
-    "N210 alone-path interesting — promotion design optional (F8)"
-)
+N200_INTERESTINGNESS_TITLE = "N200 alone-path interesting — promotion design optional (F8)"
+N201_INTERESTINGNESS_TITLE = "N201 alone-path interesting — promotion design optional (F8)"
+N206_INTERESTINGNESS_TITLE = "N206 alone-path interesting — promotion design optional (F8)"
+N210_INTERESTINGNESS_TITLE = "N210 alone-path interesting — promotion design optional (F8)"
 
 VOLUME_THICKNESS_SUMMARY_SUFFIX = (
-    "Sample-thickness / pipeline badge only — not promotion-design heat. "
-    "No auto-promote (F8)."
+    "Sample-thickness / pipeline badge only — not promotion-design heat. No auto-promote (F8)."
 )
 
 
@@ -84,7 +75,9 @@ def _base(
 def evaluate_n200_interestingness(payload: dict[str, Any]) -> dict[str, Any]:
     """Thickness ∧ fair control median > 0 ∧ exit lever ≠ lose."""
     thick = thickness_met(payload)
-    path = payload.get("path_scoreboard") if isinstance(payload.get("path_scoreboard"), dict) else {}
+    path = (
+        payload.get("path_scoreboard") if isinstance(payload.get("path_scoreboard"), dict) else {}
+    )
     fair = _as_float(path.get("control_smooth_ret_cohort_median"))
     levers = (
         payload.get("per_lever_scoreboards")
@@ -108,7 +101,9 @@ def evaluate_n200_interestingness(payload: dict[str, Any]) -> dict[str, Any]:
 def evaluate_n201_interestingness(payload: dict[str, Any]) -> dict[str, Any]:
     """Thickness ∧ phase floor ∧ fair median > 0 ∧ patient-hold excess > 0."""
     thick = thickness_met(payload)
-    path = payload.get("path_scoreboard") if isinstance(payload.get("path_scoreboard"), dict) else {}
+    path = (
+        payload.get("path_scoreboard") if isinstance(payload.get("path_scoreboard"), dict) else {}
+    )
     phase = payload.get("phase") if isinstance(payload.get("phase"), dict) else {}
     fair = _as_float(path.get("smooth_ret_cohort_median"))
     excess = _as_float(path.get("patient_hold_excess_report_only"))
@@ -136,7 +131,9 @@ def evaluate_n201_interestingness(payload: dict[str, Any]) -> dict[str, Any]:
 def evaluate_n206_interestingness(payload: dict[str, Any]) -> dict[str, Any]:
     """Thickness ∧ fair median > 0; alone-first — never assessment crown."""
     thick = thickness_met(payload)
-    path = payload.get("path_scoreboard") if isinstance(payload.get("path_scoreboard"), dict) else {}
+    path = (
+        payload.get("path_scoreboard") if isinstance(payload.get("path_scoreboard"), dict) else {}
+    )
     fair = _as_float(path.get("smooth_ret_cohort_median"))
     fair_ok = fair is not None and fair > 0.0
     met = thick and fair_ok
@@ -156,7 +153,9 @@ def evaluate_n206_interestingness(payload: dict[str, Any]) -> dict[str, Any]:
 def evaluate_n210_interestingness(payload: dict[str, Any]) -> dict[str, Any]:
     """After thickness: fair median > 0. Matched-30 crown stays on B3 gates."""
     thick = thickness_met(payload)
-    path = payload.get("path_scoreboard") if isinstance(payload.get("path_scoreboard"), dict) else {}
+    path = (
+        payload.get("path_scoreboard") if isinstance(payload.get("path_scoreboard"), dict) else {}
+    )
     fair = _as_float(path.get("smooth_ret_cohort_median"))
     fair_ok = fair is not None and fair > 0.0
     met = thick and fair_ok
