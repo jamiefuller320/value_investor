@@ -6938,6 +6938,28 @@ def test_builtin_ir_allowlist_includes_hoc_l():
     assert "interim" in periods
 
 
+def test_builtin_ir_allowlist_includes_kie_l_and_jmat_l():
+    """eng-20261030-03: buy-tier KIE.L/JMAT.L had no filings index — seed kier.co.uk / matthey.com PDFs."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    kie = _BUILTIN_IR_URLS.get("KIE.L") or []
+    assert any("kier-ar2025.pdf" in url for url in kie)
+    assert any("hy26-interim-results.pdf" in url for url in kie)
+    assert all("kier.co.uk" in url for url in kie)
+    kie_rows = fetch_filings_ir_allowlist("KIE.L")
+    assert len(kie_rows) >= 3
+    assert all(row.get("source") == "ir_allowlist" for row in kie_rows)
+    assert any("kier-ar2025.pdf" in str(row.get("url") or "") for row in kie_rows)
+    assert "interim" in {row.get("period") for row in kie_rows}
+
+    jmat = _BUILTIN_IR_URLS.get("JMAT.L") or []
+    assert any("jma014_full" in url for url in jmat)
+    assert all("matthey.com" in url for url in jmat)
+    jmat_rows = fetch_filings_ir_allowlist("JMAT.L")
+    assert len(jmat_rows) >= 1
+    assert all(row.get("source") == "ir_allowlist" for row in jmat_rows)
+
+
 def test_builtin_ir_allowlist_includes_enq_l():
     """eng-20261025-05: ftse_smallcap ENQ.L had empty IR allowlist (ir_presentation_metrics gap)."""
     from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
