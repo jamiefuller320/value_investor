@@ -135,6 +135,28 @@ def test_findings_are_observe_only_and_volume_gate_does_not_promote():
     )
 
 
+def test_ack_disposition_suppresses_interestingness_finding():
+    scored = score_plain_ey_hold([], cfg=N201Config(fetch_momentum_prices=False))
+    scored["completed_entry_episodes"] = 48
+    scored["calendar_weeks_spanned"] = 8
+    scored["volume_gate"] = {"met": True, "min_episodes": 48, "min_weeks": 8}
+    scored["path_scoreboard"] = {
+        **(scored.get("path_scoreboard") or {}),
+        "smooth_ret_cohort_median": 0.02,
+    }
+    scored["interestingness_disposition"] = {
+        "schema_version": 1,
+        "value": "ack",
+        "stamped_at": "2026-11-01T00:00:00+00:00",
+        "stamped_by": "owner",
+        "not_auto_promote": True,
+        "influences_live": False,
+    }
+    titles = [row["title"] for row in ops_findings_from_n206_observe(scored)]
+    assert INTERESTINGNESS_TITLE not in titles
+    assert VOLUME_GATE_TITLE in titles
+
+
 def test_refresh_persists_registration_without_admitted_panels(tmp_path: Path):
     store = tmp_path / "n206_plain_ey_observe.json"
     reg = tmp_path / "n206_plain_ey_registration.json"

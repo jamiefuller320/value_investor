@@ -5,11 +5,14 @@ from __future__ import annotations
 from value_investor.volume_interestingness import (
     N200_INTERESTINGNESS_TITLE,
     N201_INTERESTINGNESS_TITLE,
+    N206_INTERESTINGNESS_TITLE,
     evaluate_n200_interestingness,
     evaluate_n201_interestingness,
     evaluate_n206_interestingness,
     evaluate_n210_interestingness,
+    interestingness_disposition_value,
     interestingness_finding,
+    stamp_interestingness_disposition,
 )
 
 
@@ -90,3 +93,35 @@ def test_n206_and_n210_fair_median_only_after_thickness():
     assert evaluate_n206_interestingness(thick)["met"] is True
     assert evaluate_n206_interestingness(thick)["not_assessment_primary"] is True
     assert evaluate_n210_interestingness(thick)["met"] is True
+
+
+def test_stamped_disposition_suppresses_interestingness_finding():
+    thick = {
+        "volume_gate": {"met": True},
+        "path_scoreboard": {"smooth_ret_cohort_median": 0.05},
+        "interestingness_disposition": stamp_interestingness_disposition(
+            value="ack",
+            stamped_at="2026-11-01T00:00:00+00:00",
+            note="owner ack",
+        ),
+    }
+    gate = evaluate_n206_interestingness(thick)
+    assert gate["met"] is True
+    assert interestingness_disposition_value(thick) == "ack"
+    assert (
+        interestingness_finding(
+            title=N206_INTERESTINGNESS_TITLE,
+            gate=gate,
+            strand_note="N206.",
+            payload=thick,
+        )
+        is None
+    )
+    assert (
+        interestingness_finding(
+            title=N206_INTERESTINGNESS_TITLE,
+            gate=gate,
+            strand_note="N206.",
+        )
+        is not None
+    )

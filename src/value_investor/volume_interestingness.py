@@ -27,6 +27,50 @@ VOLUME_THICKNESS_SUMMARY_SUFFIX = (
     "Sample-thickness / pipeline badge only — not promotion-design heat. No auto-promote (F8)."
 )
 
+# Checklist disposition_sink values. Once stamped on the observe store, ops
+# stops re-emitting the alone-path interestingness finding (Push heat clears).
+DISPOSITION_KEY = "interestingness_disposition"
+DISPOSITION_VALUES = frozenset({"ack", "no-design", "design-open"})
+
+
+def interestingness_disposition_value(payload: dict[str, Any] | None) -> str | None:
+    """Return stamped disposition when valid, else None."""
+    if not isinstance(payload, dict):
+        return None
+    row = payload.get(DISPOSITION_KEY)
+    if not isinstance(row, dict):
+        return None
+    value = str(row.get("value") or "").strip().lower()
+    return value if value in DISPOSITION_VALUES else None
+
+
+def stamp_interestingness_disposition(
+    *,
+    value: str,
+    stamped_at: str,
+    stamped_by: str = "owner",
+    note: str = "",
+) -> dict[str, Any]:
+    """Build the durable disposition object stored on the observe JSON."""
+    cleaned = str(value or "").strip().lower()
+    if cleaned not in DISPOSITION_VALUES:
+        raise ValueError(
+            f"Unknown interestingness disposition {value!r}; "
+            f"allowed: {sorted(DISPOSITION_VALUES)}"
+        )
+    out: dict[str, Any] = {
+        "schema_version": SCHEMA_VERSION,
+        "value": cleaned,
+        "stamped_at": stamped_at,
+        "stamped_by": str(stamped_by or "owner").strip() or "owner",
+        "not_auto_promote": True,
+        "influences_live": False,
+    }
+    note_clean = str(note or "").strip()
+    if note_clean:
+        out["note"] = note_clean
+    return out
+
 
 def _as_float(value: Any) -> float | None:
     if value is None:
@@ -174,9 +218,16 @@ def interestingness_finding(
     title: str,
     gate: dict[str, Any],
     strand_note: str,
+    payload: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
-    """Build the actionable info finding when interestingness is met."""
+    """Build the actionable info finding when interestingness is met.
+
+    When ``interestingness_disposition`` is already stamped on ``payload``,
+    return None so ops/Push stop re-asking for the same human gate.
+    """
     if not gate.get("met"):
+        return None
+    if interestingness_disposition_value(payload):
         return None
     fair = gate.get("fair_cost_median")
     return {
