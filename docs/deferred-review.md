@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-01T07:47:45+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-01T11:08:41+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -271,6 +271,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N240 | **Multi-book NAV compete for shared slate candidates** | Do not stand up multiple capital/fund-NAV books racing the same candidate to claim credit for favourite vs late lens entries. Parallel timing lenses use per-lens fixed-stake episode marks (O3 alone-first) — distinct from N239 sealed-per-hypothesis zoo and from L652 observe lenses. Twins-over-edits if a capital-path experiment is ever wanted. | Thick per-lens episode cohorts + owner explicitly wants a declared-incomparable capital twin race — still not back-label of favourite NAV; still anti-noise caps. |
 | N241 | **Lens-concurrence risk / sizing layer** | Do not use pre-entry / same-window lens concurrence count to size down (concurrence=1), size up (many agree), or hard-avoid singles on live or mid-flight books. Observe-only concurrence companion stays folded into L652 (design lock §10). Risk layer waits thick fair-cost + drawdown marks; if tested, twins-over-edits / cold-start epoch only — never mid-flight rewrite. | Thick L652 per-lens + concurrence companion cohorts show durable correlation with fair-cost / milder drawdowns after liquidity/popularity falsify checks; owner explicitly authorizes a declared twin for sizing — still not strand A mid-flight. |
 | N242 | **Volume-gate-ready finding = thickness only (superseded)** | N200/N201/N206/N210 volume_gate.met (episodes∧weeks) stays as pipeline health; it must not alone raise promotion-design Push. Replaced by alone-path interestingness (fair-cost median > 0 + strand overlays). | Interestingness gate shipped on main; checklist + hub mapper retargeted (owner lock 2026-10-31) |
+| N243 | **Diagnose Sunday research_docs prefer_first_time miss (0 creates while FTSE no_memo queued)** | 2026-11-01 research_docs_receipt created=0 updated=24; none of the 9 FTSE P1 no_memo buy-tier names (ATYM EZJ HTG JMAT KIE LRE MAB RKT VLX) were touched despite N114 prefer_first_time and cap 12. Slot capacity OK; selection/path failed. Do not widen rememo or add weekday first-memo burst (N155). | Next Sunday research_docs_receipt still shows created=0 while buy_tier_flip_lag warn no_memo FTSE count stays >=9, or inventory overlay_bound gap stays at 9 after that Sunday _(machine-checked)_ |
 
 ---
 

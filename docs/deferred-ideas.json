@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-01T07:47:45+00:00",
+  "updated_at": "2026-11-01T11:08:41+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16014,6 +16014,31 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-7218759d-cb55-536f-b93c-4ac3b6a2b8bb",
       "added_at": "2026-10-31T18:17:09+00:00"
+    },
+    {
+      "id": "N243",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Diagnose Sunday research_docs prefer_first_time miss (0 creates while FTSE no_memo queued)",
+      "summary": "2026-11-01 research_docs_receipt created=0 updated=24; none of the 9 FTSE P1 no_memo buy-tier names (ATYM EZJ HTG JMAT KIE LRE MAB RKT VLX) were touched despite N114 prefer_first_time and cap 12. Slot capacity OK; selection/path failed. Do not widen rememo or add weekday first-memo burst (N155).",
+      "revisit_when": "Next Sunday research_docs_receipt still shows created=0 while buy_tier_flip_lag warn no_memo FTSE count stays >=9, or inventory overlay_bound gap stays at 9 after that Sunday",
+      "tags": [
+        "sunday",
+        "first-memo",
+        "prefer_first_time",
+        "P1",
+        "capacity"
+      ],
+      "status": "open",
+      "source": "factory-capacity-vs-flips-2026-11-01",
+      "added_at": "2026-11-01T11:08:41+00:00",
+      "trigger": {
+        "all": [
+          {
+            "on_or_after": "2026-11-08"
+          }
+        ]
+      }
     }
   ],
   "fragments": [
