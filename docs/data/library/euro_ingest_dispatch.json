@@ -14,7 +14,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-11-01T20:57:28.830683+00:00",
+    "snapshot_at": "2026-11-01T21:17:13.332806+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 44,
     "unmeasured_buy_tier": 0,
@@ -90,7 +90,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-11-01T20:57:28.832155+00:00",
+  "evaluated_at": "2026-11-01T21:17:13.334329+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -157,7 +157,7 @@
         "no benchmark configured for aex"
       ],
       "filing_health": {
-        "snapshot_at": "2026-11-01T20:58:01.859404+00:00",
+        "snapshot_at": "2026-11-01T21:17:36.799986+00:00",
         "market_id": "aex",
         "buy_tier_count": 11,
         "unmeasured_buy_tier": 0,
@@ -203,65 +203,73 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-11-01T20:58:01.859752+00:00",
+      "evaluated_at": "2026-11-01T21:17:36.800496+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "parallel_sprint_2_markets": [
-    "ftse_mib"
+    "us_adr_asia"
   ],
   "parallel_sprint_2_status": [
     {
-      "market_id": "ftse_mib",
+      "market_id": "us_adr_asia",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=3, indexed_without_body=0)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=39)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
       "parked_tickers": [
-        "FCT.MI",
-        "PST.MI"
+        "JD",
+        "PDD",
+        "TME"
       ],
       "phase3_ready": false,
       "current_phase": 0,
       "next_phase": 1,
       "phase_blockers": [
-        "no benchmark configured for ftse_mib"
+        "no benchmark configured for us_adr_asia"
       ],
       "filing_health": {
-        "snapshot_at": "2026-11-01T20:58:02.531627+00:00",
-        "market_id": "ftse_mib",
-        "buy_tier_count": 8,
+        "snapshot_at": "2026-11-01T21:17:37.113589+00:00",
+        "market_id": "us_adr_asia",
+        "buy_tier_count": 6,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 3,
-        "indexed_without_body": 0,
-        "bodies_min": 2,
-        "bodies_median": 3.0,
-        "bodies_max": 52,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 39,
+        "bodies_min": 17,
+        "bodies_median": 33.5,
+        "bodies_max": 36,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
-        "thin_body_tickers": [
-          "PST.MI",
-          "FCT.MI",
-          "IG.MI"
+        "thin_body_tickers": [],
+        "indexed_without_body_tickers": [
+          "TME",
+          "JD",
+          "PDD",
+          "UMC"
         ],
-        "indexed_without_body_tickers": [],
-        "indexed_without_body_by_ticker": {},
+        "indexed_without_body_by_ticker": {
+          "TME": 12,
+          "JD": 9,
+          "PDD": 1,
+          "UMC": 17
+        },
         "parked_tickers": [
-          "FCT.MI",
-          "PST.MI"
+          "JD",
+          "PDD",
+          "TME"
         ],
-        "parked_count": 2,
-        "effective_thin_body_buy_tier": 1,
-        "effective_thin_body_tickers": [
-          "IG.MI"
+        "parked_count": 3,
+        "effective_thin_body_buy_tier": 0,
+        "effective_thin_body_tickers": [],
+        "effective_indexed_without_body": 17,
+        "effective_indexed_without_body_tickers": [
+          "UMC"
         ],
-        "effective_indexed_without_body": 0,
-        "effective_indexed_without_body_tickers": [],
         "ingest_exhausted": false
       },
       "filing_gaps": 0,
@@ -279,14 +287,14 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-11-01T20:58:02.535742+00:00",
+      "evaluated_at": "2026-11-01T21:17:37.113958+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
     "aex",
-    "ftse_mib"
+    "us_adr_asia"
   ],
   "market_queue": [
     "sp500",
@@ -317,7 +325,7 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 20,
+    "hour_utc": 21,
     "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",
@@ -343,7 +351,7 @@
     "aex"
   ],
   "scheduler_stream_2_markets": [
-    "ftse_mib"
+    "us_adr_asia"
   ],
   "should_run_library_maintenance": true
 }

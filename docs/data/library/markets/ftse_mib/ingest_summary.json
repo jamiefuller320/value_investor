@@ -1,23 +1,97 @@
 {
-  "run_at": "2026-10-31T20:19:19.986286+00:00",
+  "run_at": "2026-11-01T21:16:21.079896+00:00",
   "market_id": "ftse_mib",
-  "targets": [],
-  "target_details": [],
-  "results": [],
+  "targets": [
+    "IG.MI"
+  ],
+  "target_details": [
+    {
+      "ticker": "IG.MI",
+      "priority_score": 3.395,
+      "filings_total": 2,
+      "filings_with_body": 2,
+      "indexed_without_body": 0,
+      "reason": "thin_bodies"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "IG.MI",
+      "reason": "thin_bodies",
+      "before": {
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0
+      },
+      "after": {
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0
+      },
+      "improved": false,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 2,
+        "annual": 0,
+        "interim": 0,
+        "trading_update": 0,
+        "other": 2,
+        "with_body": 2,
+        "period_coverage": {
+          "annual": {
+            "total": 0,
+            "with_body": 0
+          },
+          "interim": {
+            "total": 0,
+            "with_body": 0
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 2,
+            "with_body": 2
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 2,
+        "with_body_after": 2,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
   "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-31T20:18:39.866447+00:00",
+    "snapshot_at": "2026-11-01T21:14:56.001426+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 2,
+    "thin_body_buy_tier": 3,
     "indexed_without_body": 0,
     "bodies_min": 2,
-    "bodies_median": 3.5,
+    "bodies_median": 3.0,
     "bodies_max": 52,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -25,7 +99,8 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [
       "PST.MI",
-      "FCT.MI"
+      "FCT.MI",
+      "IG.MI"
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
@@ -34,22 +109,24 @@
       "PST.MI"
     ],
     "parked_count": 2,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
+      "IG.MI"
+    ],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-31T20:19:14.589125+00:00",
+    "snapshot_at": "2026-11-01T21:15:07.535023+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 2,
+    "thin_body_buy_tier": 3,
     "indexed_without_body": 0,
     "bodies_min": 2,
-    "bodies_median": 3.5,
+    "bodies_median": 3.0,
     "bodies_max": 52,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -57,15 +134,17 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [
       "PST.MI",
-      "FCT.MI"
+      "FCT.MI",
+      "IG.MI"
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
     "parked_tickers": [
       "FCT.MI",
+      "IG.MI",
       "PST.MI"
     ],
-    "parked_count": 2,
+    "parked_count": 3,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
@@ -78,50 +157,61 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 8,
-    "hits": 8,
-    "new_rows_total": 0,
-    "curiosity_total": 8,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "PST.MI",
-      "FCT.MI"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
+  "discovery_scan": null,
+  "maintenance_mode": false,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "ftse_mib"
+    "advanced": true,
+    "parallel_stream": 2,
+    "from_market": "ftse_mib",
+    "to_market": "us_adr_asia",
+    "stream_markets_after": [
+      "us_adr_asia"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "ftse_mib",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "FCT.MI",
+        "IG.MI",
+        "PST.MI"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "us_adr_asia",
+      "forced": true,
+      "prior_screen_at": "2026-11-01T06:22:53.052374+00:00",
+      "prior_age_days": 0,
+      "run_at": "2026-11-01T21:16:16.934281+00:00",
+      "shortlist_count": 6,
+      "ticker_count": 24
+    },
+    "at": "2026-11-01T21:15:25.880185+00:00",
+    "ingest_parity_recorded": false
   },
   "critical_path": {
     "market_id": "ftse_mib",
-    "assessed_at": "2026-10-31T20:18:40.360788+00:00",
+    "assessed_at": "2026-11-01T21:14:56.470211+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
     "thin_need_discovery": [
       "PST.MI",
-      "FCT.MI"
+      "FCT.MI",
+      "IG.MI"
     ],
     "thin_need_bodies": [],
     "primary_blocker": "thin_need_discovery",
     "force_discovery_scan": true,
     "auto_pin_tickers": [],
     "recommended_actions": [
-      "Discovery/IR seed for 2 thin ticker(s) that already have bodies for every indexed filing",
+      "Discovery/IR seed for 3 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
@@ -129,13 +219,13 @@
       "zero_body": 0,
       "indexed_without_body_tickers": 0,
       "indexed_without_body_rows": 0,
-      "thin_need_discovery": 2,
+      "thin_need_discovery": 3,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 33.74821236299999,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3566.2517876370002,
+  "used_seconds": 10.534840801000001,
+  "budget_seconds": 87.5,
+  "leftover_seconds": 76.965159199,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -143,9 +233,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_mib",
-    "updated_at": "2026-10-31T20:19:14.596956+00:00",
+    "updated_at": "2026-11-01T21:15:07.542019+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 7,
+    "complete_zero_improve_runs": 8,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -171,6 +261,18 @@
         "indexed_without_body": 0,
         "thin": true,
         "source_surface": "euro_filings+ir_allowlist_direct"
+      },
+      {
+        "ticker": "IG.MI",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-11-01T21:15:07.542019+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true,
+        "source_surface": "euro_filings"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -179,6 +281,7 @@
     "had_complete_targets": true,
     "leftover_tickers": [
       "FCT.MI",
+      "IG.MI",
       "PST.MI"
     ],
     "unparked_leftover": [],
@@ -216,43 +319,18 @@
     "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
-    "compiled_count": 0,
-    "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 50,
-    "candidate_count": 47,
-    "skipped_resolved_tickers": [
-      "LMT",
-      "CRH",
-      "MER.L",
-      "TPT.L",
-      "FOXT.L",
-      "ULTP.L",
-      "DFS.L",
-      "APTD.L",
-      "GIB-A.TO",
-      "SU.TO",
-      "BAS.DE",
-      "IFX.DE",
-      "PDD",
-      "BAS.DE",
-      "DTE.DE",
-      "DTG.DE",
-      "FRE.DE",
-      "HNR1.DE",
-      "MUV2.DE",
-      "HEN3.DE",
-      "PST.MI",
-      "ACKB.BR",
-      "APAM.AS",
-      "0175.HK",
-      "0285.HK",
-      "0857.HK",
-      "0883.HK",
-      "0288.HK",
-      "2331.HK",
-      "EVN.VI",
-      "WIE.VI"
+    "compiled_count": 1,
+    "task_ids": [
+      "eng-20261101-06"
     ],
-    "wait_behind_task_id": ""
+    "task_count": 233,
+    "market_id": "ftse_mib",
+    "hunter_ticker": "IG.MI",
+    "hunter_tickers": [
+      "IG.MI"
+    ],
+    "priority_score": 12.0,
+    "wait_behind_task_id": "",
+    "leftover_key_bodies": false
   }
 }
