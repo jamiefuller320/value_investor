@@ -2157,9 +2157,7 @@ def format_cue_consumer_mft_text(payload: dict[str, Any]) -> str:
     path = (
         payload.get("path_scoreboard") if isinstance(payload.get("path_scoreboard"), dict) else {}
     )
-    mid = (
-        payload.get("mid_flight_tune") if isinstance(payload.get("mid_flight_tune"), dict) else {}
-    )
+    mid = payload.get("mid_flight_tune") if isinstance(payload.get("mid_flight_tune"), dict) else {}
     lines = [
         f"Cue-consumer MFT lab ({payload.get('registration_id')})",
         f"  status: {payload.get('status')} / {payload.get('pipeline_status')}",
