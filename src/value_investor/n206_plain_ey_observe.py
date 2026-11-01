@@ -318,6 +318,7 @@ def score_plain_ey_hold(
             buy_pct, sell_pct = cfg.primary_buy_sell(mid)
             if exit_idx is None:
                 # Display-only open mark from real archive quotes; not path primary.
+                # Keep entry_detail for slim lifecycle / joins before exit (L632).
                 p_entry = _price_at(snapshots, i, ticker)
                 p_mark, mark_at = _latest_quote(snapshots, ticker, from_idx=i)
                 open_lifecycle.append(
@@ -328,6 +329,8 @@ def score_plain_ey_hold(
                             "entry_run_at": snap.run_at,
                             "status": "open",
                             "influences_live": False,
+                            "eligibility": elig_note,
+                            "entry_detail": detail,
                         },
                         entry_price=p_entry,
                         mark_price=p_mark,

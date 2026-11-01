@@ -75,6 +75,8 @@ Fixed-stake `%` is **independent of fund NAV**.
 
 **Owner 2026-11-01:** disposition **`ack`** — seen; no design pack; never crown. While `interestingness_disposition.value` is set, ops-monitor does not re-emit the alone-path interestingness finding and Daily hub Push skips that heat.
 
+**L632 (2026-11-01):** observe refresh / `ftse-lifecycle-exit-reason-backfill` rewrites `lifecycle_episodes` with `exit_reason` on closed rows and `entry_detail` on open+closed so post-sale joins cover the full set (not only `episodes_sample`).
+
 ## Constraints
 
 - Observe-only; `influences_live` false; no live strand A writes; no `--apply`.
