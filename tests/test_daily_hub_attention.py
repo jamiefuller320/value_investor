@@ -852,3 +852,42 @@ def test_n206_interestingness_push_skipped_when_disposition_acked(tmp_path: Path
         row.get("reason") == "interestingness_disposition_stamped"
         for row in push.get("non_actionable_observes") or []
     )
+
+
+def test_n201_interestingness_push_skipped_when_design_open(tmp_path: Path) -> None:
+    _quiet_eng(tmp_path)
+    write_json(
+        tmp_path / "ops_status.json",
+        {
+            "overall": "warn",
+            "findings": [
+                {
+                    "severity": "info",
+                    "category": "research",
+                    "title": "N201 alone-path interesting — promotion design optional (F8)",
+                    "summary": "stamp disposition",
+                }
+            ],
+        },
+        compact=False,
+    )
+    write_json(
+        tmp_path / "n201_value_mom_observe.json",
+        {
+            "interestingness_disposition": {
+                "schema_version": 1,
+                "value": "design-open",
+                "stamped_at": "2026-11-01T11:48:11+00:00",
+                "stamped_by": "owner",
+                "not_auto_promote": True,
+                "influences_live": False,
+            }
+        },
+        compact=False,
+    )
+    push = build_daily_push_suggestions(data_dir=tmp_path)
+    assert not any("N201" in (s.get("title") or "") for s in push["suggestions"])
+    assert any(
+        row.get("reason") == "interestingness_disposition_stamped"
+        for row in push.get("non_actionable_observes") or []
+    )

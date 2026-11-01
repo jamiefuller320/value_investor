@@ -436,6 +436,29 @@ def test_ops_findings_volume_gate():
     assert "pipeline badge" in thickness["summary"]
 
 
+def test_design_open_disposition_suppresses_interestingness_finding():
+    base = build_n201_observe([])
+    base["completed_entry_episodes"] = 50
+    base["calendar_weeks_spanned"] = 10
+    base["volume_gate"] = {"met": True, "min_episodes": 48, "min_weeks": 8}
+    base["phase"] = {"entries_per_week": 9.0, "floor": 8.0, "floor_met": True}
+    base["path_scoreboard"] = {
+        "smooth_ret_cohort_median": 0.01,
+        "patient_hold_excess_report_only": 0.002,
+    }
+    base["interestingness_disposition"] = {
+        "schema_version": 1,
+        "value": "design-open",
+        "stamped_at": "2026-11-01T11:48:11+00:00",
+        "stamped_by": "owner",
+        "not_auto_promote": True,
+        "influences_live": False,
+    }
+    titles = [row["title"] for row in ops_findings_from_n201_observe(base)]
+    assert INTERESTINGNESS_TITLE not in titles
+    assert VOLUME_GATE_TITLE in titles
+
+
 def test_pipeline_health_projection():
     store = {
         "registration_id": REGISTRATION_ID,
