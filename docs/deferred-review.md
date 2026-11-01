@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-01T14:25:19+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-01T22:24:43+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -395,7 +395,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L655 | **Retarget L558 cost-drag recalibration off frozen ai_judgment_fair** | After 2026-10-31 freeze of ai_judgment_fair, L558 still waits on reviews.ai_judgment_fair.significance_gate.passed which decision-review will no longer refresh. Retarget to an active tunable fair-cost book or N210/matched-30 readiness before relying on --apply cost heuristics. | When owner next opens decision-review cost-drag work, or when a tunable fair-cost book exposes significance_gate.passed in learning_tracks_review |
 | L656 | **Post-seal calendar weeks for sealed volume thickness** | Amend calendar_weeks_spanned used in volume thickness to count only snapshots/marks after each strand seal marker so archive-at-seal cannot satisfy the week leg. | Interestingness gate on main; N200 seal marker n200-seal-v0 as test case |
 | L657 | **Drawdown companions on sealed interestingness gate** | Optional harden: require stamped drawdown depth/duration companions on N200–N210 before design-eligible, aligned with lab_learning_progress companions — not peer NAV. | Drawdown companions present on sealed observe stores; owner wants harder design bar |
-| L658 | **Super-book dual-cap open-position twin (50 or 100)** | If denser concurrent lab opens become the learning question, cold-start a declared-incomparable fixed-stake twin with max_open_positions 50 or 100 rather than mid-flight rewrite of cue-consumer-mft epoch-0 density. Twins-over-edits; O3 alone-first; not NAV. | Owner picks fork C after MoM scoring is live, or skipped_at_open_cap stays material while closed volume is already thick |
+| L658 | **Super-book dual-cap open-position twin (50 or 100)** | Cold-start a declared-incomparable fixed-stake dual-cap twin (e.g. 100, or clean 30-vs-50 A/B) rather than further mid-flight density rewrites. Owner already locked same-book epoch-raise 30→50 for lens volume (2026-11-01); twin not used for that fork. Twins-over-edits; O3 alone-first; not NAV. | Owner wants a clean dual-cap A/B after MoM scores non-null (mom_score on stock_choice) OR skipped_at_open_cap stays material (>=40) under cap=50 while closed volume already thick _(machine-checked)_ |
 
 ### Universe & data
 

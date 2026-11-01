@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-01T14:25:19+00:00",
+  "updated_at": "2026-11-01T22:24:43+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16048,8 +16048,8 @@
       "category": "later",
       "section": "learning",
       "title": "Super-book dual-cap open-position twin (50 or 100)",
-      "summary": "If denser concurrent lab opens become the learning question, cold-start a declared-incomparable fixed-stake twin with max_open_positions 50 or 100 rather than mid-flight rewrite of cue-consumer-mft epoch-0 density. Twins-over-edits; O3 alone-first; not NAV.",
-      "revisit_when": "Owner picks fork C after MoM scoring is live, or skipped_at_open_cap stays material while closed volume is already thick",
+      "summary": "Cold-start a declared-incomparable fixed-stake dual-cap twin (e.g. 100, or clean 30-vs-50 A/B) rather than further mid-flight density rewrites. Owner already locked same-book epoch-raise 30\u219250 for lens volume (2026-11-01); twin not used for that fork. Twins-over-edits; O3 alone-first; not NAV.",
+      "revisit_when": "Owner wants a clean dual-cap A/B after MoM scores non-null (mom_score on stock_choice) OR skipped_at_open_cap stays material (>=40) under cap=50 while closed volume already thick",
       "tags": [
         "super-book",
         "twins-over-edits",
@@ -16058,7 +16058,25 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-fd6dcd93-ad7a-50c9-9da3-f80d68247b5e",
-      "added_at": "2026-11-01T14:25:02+00:00"
+      "added_at": "2026-11-01T14:25:02+00:00",
+      "trigger": {
+        "any": [
+          {
+            "file": "docs/data/cue_consumer_mft_observe.json",
+            "path": "mom_levers[id=stock_choice].mom_score",
+            "op": "!=",
+            "value": null
+          },
+          {
+            "file": "docs/data/cue_consumer_mft_observe.json",
+            "path": "episode_walker.skipped_at_open_cap",
+            "op": ">=",
+            "value": 40
+          }
+        ]
+      },
+      "updated_at": "2026-11-01T22:24:43+00:00",
+      "status_note": "2026-11-01: owner locked same-book epoch-raise 30\u219250 (not twin) for lens volume; N245 done. Keep L658 later for a future dual-cap A/B (e.g. 100 twin or clean 30-vs-50 retrospective) \u2014 do not implement twin for this fork."
     },
     {
       "id": "N244",
@@ -16076,7 +16094,29 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-fd6dcd93-ad7a-50c9-9da3-f80d68247b5e",
-      "added_at": "2026-11-01T14:25:19+00:00"
+      "added_at": "2026-11-01T14:25:19+00:00",
+      "updated_at": "2026-11-01T22:24:19+00:00",
+      "status_note": "Keep not_now against mid-flight raise to 100; owner locked 50 only. Epoch-1 is mft-tune-spec-cap50-epoch1-v0."
+    },
+    {
+      "id": "N245",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Super-book mid-flight raise open-cap for lens volume",
+      "summary": "Do not enlarge cue_consumer_mft max_open_positions mid-flight to chase stock-choice/entry/exit lens episode volume. Stubs do not block opens but block learning from them; twins-over-edits prefers a dual-cap observe twin (L658 at 50). Same-book density rewrite mixes MoM windows and raises autopsy load.",
+      "revisit_when": "Only if owner explicitly overrides twins-over-edits for this lab and accepts mixed open-density epochs; otherwise use L658 cold-start twin",
+      "tags": [
+        "super-book",
+        "cue-consumer-mft",
+        "max-open-positions",
+        "twins-over-edits",
+        "lens-volume"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-e51e9e1a-2506-57e6-be8f-433883d39767",
+      "added_at": "2026-11-01T22:04:19+00:00",
+      "updated_at": "2026-11-01T22:24:19+00:00",
+      "status_note": "Owner locked same-book epoch-raise 30\u219250 for lens volume (not twin) 2026-11-01; mid-flight raise executed with new knob_epoch/tune_spec. N244 (\u2192100) stays not_now."
     }
   ],
   "fragments": [
