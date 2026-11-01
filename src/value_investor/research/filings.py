@@ -5356,11 +5356,18 @@ def _ir_allowlist_statutory_rank(row: dict[str, Any]) -> int:
 def _ir_refetch_rank_key(
     row: dict[str, Any],
     *,
-    periods_with_body: set[str],
+    statutory_periods_with_body: set[str],
+    presentation_periods_with_body: set[str],
 ) -> tuple:
     """Prefer current-period IR docs; demote periods that already have a good body."""
     period = str(row.get("period") or "other")
-    occupied_penalty = 1 if period in {"annual", "interim"} and period in periods_with_body else 0
+    if period in {"annual", "interim"}:
+        if _ir_allowlist_statutory_rank(row) == 1:
+            occupied_penalty = 1 if period in presentation_periods_with_body else 0
+        else:
+            occupied_penalty = 1 if period in statutory_periods_with_body else 0
+    else:
+        occupied_penalty = 0
     published = str(row.get("published_at") or "").strip()
     return (
         occupied_penalty,
@@ -5380,15 +5387,26 @@ def _rank_ir_refetch_candidates(
     bodies_dir: Path,
 ) -> list[dict[str, Any]]:
     """Rank IR allowlist refetch candidates; prefer periods without an existing body."""
-    periods_with_body = {
-        str(row.get("period") or "other")
-        for row in ir_rows
-        if str(row.get("period") or "other") in {"annual", "interim"}
-        and row.get("has_body")
-        and not _ir_allowlist_row_needs_body_refetch(row, bodies_dir)
-    }
+    statutory_periods_with_body: set[str] = set()
+    presentation_periods_with_body: set[str] = set()
+    for row in ir_rows:
+        period = str(row.get("period") or "other")
+        if period not in {"annual", "interim"}:
+            continue
+        if not row.get("has_body") or _ir_allowlist_row_needs_body_refetch(row, bodies_dir):
+            continue
+        if _ir_allowlist_statutory_rank(row) == 1:
+            presentation_periods_with_body.add(period)
+        else:
+            statutory_periods_with_body.add(period)
     enriched = [_apply_headline_period(row) for row in missing]
-    enriched.sort(key=lambda row: _ir_refetch_rank_key(row, periods_with_body=periods_with_body))
+    enriched.sort(
+        key=lambda row: _ir_refetch_rank_key(
+            row,
+            statutory_periods_with_body=statutory_periods_with_body,
+            presentation_periods_with_body=presentation_periods_with_body,
+        )
+    )
     return enriched
 
 

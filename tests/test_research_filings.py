@@ -5277,6 +5277,12 @@ def test_refetch_ir_allowlist_filing_bodies_prefers_unfilled_period(tmp_path, mo
         )
 
     monkeypatch.setattr(
+        "value_investor.research.filings.load_ir_url_allowlist",
+        lambda path=None: {
+            "HIK.L": [annual_url, interim_url, spare_annual_url],
+        },
+    )
+    monkeypatch.setattr(
         "value_investor.research.filings._fetch_ir_allowlist_body",
         _fake_ir_fetch,
     )
@@ -5293,6 +5299,154 @@ def test_refetch_ir_allowlist_filing_bodies_prefers_unfilled_period(tmp_path, mo
     )
     assert result["fetched"] == 1
     assert fetched_ids == [_ir_id(interim_url)]
+
+
+def test_eng_20261101_03_refetch_megp_presentation_when_interim_rns_has_body(tmp_path, monkeypatch):
+    """MEGP.L H1 RNS body must not block H1 results-presentation refetch (eng-20261101-03)."""
+    import hashlib
+
+    from value_investor.research.filings import refetch_ir_allowlist_filing_bodies
+
+    rns_url = (
+        "https://me-group.com/wp-content/uploads/2026/07/"
+        "260713-ME-Group-2026-Interim-Results-RNS-FINAL.pdf"
+    )
+    pres_url = (
+        "https://me-group.com/wp-content/uploads/2026/07/"
+        "260713-ME-Group-2026-Interim-Results-Presentation.pdf"
+    )
+    allowlist_path = tmp_path / "ir_urls.json"
+    allowlist_path.write_text(
+        json.dumps({"urls": {"MEGP.L": [rns_url, pres_url]}}),
+        encoding="utf-8",
+    )
+
+    def _ir_id(url: str) -> str:
+        return f"ir_{hashlib.sha256(url.encode()).hexdigest()[:16]}"
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    rns_body = (
+        "ME Group International plc interim results for six months ended 30 April 2026. "
+        "Profit before tax decreased. Proposed interim dividend of 3.60 pence per share."
+        + ("x" * 220)
+    )
+    rns_path = bodies_dir / f"{_ir_id(rns_url)}.txt"
+    rns_path.write_text(rns_body, encoding="utf-8")
+    filings = [
+        {
+            "id": _ir_id(rns_url),
+            "source": "ir_allowlist",
+            "headline": "IR allowlist document — 260713-ME-Group-2026-Interim-Results-RNS-FINAL.pdf",
+            "url": rns_url,
+            "period": "interim",
+            "has_body": True,
+            "body_path": str(rns_path),
+            "body_content_hash": _ir_body_content_hash(rns_body),
+            "priority": 130,
+        },
+        {
+            "id": _ir_id(pres_url),
+            "source": "ir_allowlist",
+            "headline": "IR allowlist document — 260713-ME-Group-2026-Interim-Results-Presentation.pdf",
+            "url": pres_url,
+            "period": "interim",
+            "has_body": False,
+            "body_path": None,
+            "priority": 125,
+        },
+    ]
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"ticker": "MEGP.L", "filings": filings}),
+        encoding="utf-8",
+    )
+    fetched_ids: list[str] = []
+
+    def _fake_ir_fetch(row, **kwargs):
+        fetched_ids.append(str(row.get("id") or ""))
+        return (
+            "ME Group International plc Interim Results H1 2026\nCore Business Activity\n"
+            "Integrated biometric photo identification solutions\n"
+            "£82.7m\n£77.6m\nVENDING REVENUE1\n"
+            "Proposed interim dividend of 3.6 pence per share\n" + ("detail " * 400),
+            "pdf",
+        )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.load_ir_url_allowlist",
+        lambda path=None: {"MEGP.L": [rns_url, pres_url]},
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        _fake_ir_fetch,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "MEGP.L",
+        company_name="ME Group International plc",
+        max_bodies=1,
+        allowlist_path=allowlist_path,
+    )
+    assert result["fetched"] == 1
+    assert fetched_ids == [_ir_id(pres_url)]
+
+
+def test_eng_20261101_03_refetch_ir_presentation_sources_hik_interim_deck(
+    tmp_path: Path, monkeypatch
+):
+    """HIK.L interim results-presentation refetch writes segment/dividend ir_presentation_metrics."""
+    h1_url = (
+        "https://www.hikma.com/media/5nyls5gx/"
+        "hikma-2025-interim-results-presentation-07-aug-2025.pdf"
+    )
+    sample_body = (
+        "Hikma Pharmaceuticals plc H1 2025 interim results presentation\n"
+        "Injectables Branded Hikma Rx\n"
+        "1H24 1H25 segment revenue\n"
+        "683 437 522\n"
+        "Operating cash flow 198 161 USD millions\n"
+        "Proposed interim dividend of 36 cents per share\n" + ("detail " * 400)
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    sources_dir = tmp_path / "sources"
+    sources_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {}}),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.load_ir_url_allowlist",
+        lambda path=None: {"HIK.L": [h1_url]},
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: sample_body if url == h1_url else None,
+    )
+    result = refetch_ir_presentation_sources(
+        filings_dir,
+        ticker="HIK.L",
+        company_name="Hikma Pharmaceuticals PLC",
+        sources_dir=sources_dir,
+        max_bodies=1,
+    )
+    assert result["note"] == "refetch_ir_presentation_sources"
+    assert result["fetched"] >= 1
+    summary = result["ir_presentation_metrics"]
+    assert summary["mandatory"] is True
+    assert (
+        summary["dividend_policy_count"] >= 1
+        or summary["segment_split_count"] >= 1
+        or summary["bridge_count"] >= 1
+    )
+    saved = json.loads((sources_dir / "ir_presentation_metrics.json").read_text(encoding="utf-8"))
+    assert saved["dividend_policy_count"] >= 1
+    assert saved["dividend_policy"][0].get("interim_dividend_cents") == 36.0
 
 
 def test_fetch_document_bytes_skips_partial_download(monkeypatch):
