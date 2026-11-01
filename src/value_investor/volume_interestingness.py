@@ -55,8 +55,7 @@ def stamp_interestingness_disposition(
     cleaned = str(value or "").strip().lower()
     if cleaned not in DISPOSITION_VALUES:
         raise ValueError(
-            f"Unknown interestingness disposition {value!r}; "
-            f"allowed: {sorted(DISPOSITION_VALUES)}"
+            f"Unknown interestingness disposition {value!r}; allowed: {sorted(DISPOSITION_VALUES)}"
         )
     out: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
