@@ -187,6 +187,84 @@ def test_eligible_research_targets_prefers_no_memo_before_cap():
     assert [r.ticker for r in with_prefer] == ["TRST.L", "MEGP.L"]
 
 
+def test_prefer_first_time_includes_raw_buy_when_adjusted_hold():
+    """N243: FCF/overlay adjusted hold must not starve first memos on screen buys."""
+    rememo = _report(
+        ticker="MEGP.L",
+        name="Memo Rememo",
+        signal="buy",
+        data_quality_score=0.9,
+        conviction_score=0.99,
+        composite_score=0.95,
+    )
+    # Buy-tier flip: screen still buy, capital overlay capped to hold (no memo yet).
+    flip_no_memo = _report(
+        ticker="EZJ.L",
+        name="Flip No Memo",
+        signal="buy",
+        data_quality_score=1.0,
+        conviction_score=0.40,
+        composite_score=0.4,
+    )
+    flip_no_memo.adjusted_signal = "hold"
+    flip_no_memo.fcf_basis_overlay = True
+
+    # Without prefer_first_time, adjusted hold excludes the flip from the pool.
+    without = eligible_research_targets(
+        [rememo, flip_no_memo],
+        weekly_cap=2,
+        already_researched={"MEGP.L"},
+        prefer_first_time=False,
+    )
+    assert [r.ticker for r in without] == ["MEGP.L"]
+
+    # With prefer_first_time, raw-signal first memo outranks rememo inside the cap.
+    with_prefer = eligible_research_targets(
+        [rememo, flip_no_memo],
+        weekly_cap=1,
+        already_researched={"MEGP.L"},
+        prefer_first_time=True,
+    )
+    assert [r.ticker for r in with_prefer] == ["EZJ.L"]
+
+    # Cap 2: first-time flip then rememo.
+    both = eligible_research_targets(
+        [rememo, flip_no_memo],
+        weekly_cap=2,
+        already_researched={"MEGP.L"},
+        prefer_first_time=True,
+    )
+    assert [r.ticker for r in both] == ["EZJ.L", "MEGP.L"]
+
+
+def test_prefer_first_time_does_not_rememo_adjusted_hold_without_raw_path():
+    """Already-memo'd names still respect adjusted-signal rememo gating."""
+    capped_with_memo = _report(
+        ticker="RKT.L",
+        name="Capped With Memo",
+        signal="buy",
+        data_quality_score=1.0,
+        conviction_score=0.90,
+        composite_score=0.9,
+    )
+    capped_with_memo.adjusted_signal = "hold"
+    open_buy = _report(
+        ticker="IMB.L",
+        name="Open Buy",
+        signal="buy",
+        data_quality_score=0.8,
+        conviction_score=0.50,
+        composite_score=0.5,
+    )
+    ordered = eligible_research_targets(
+        [capped_with_memo, open_buy],
+        weekly_cap=2,
+        already_researched={"RKT.L", "IMB.L"},
+        prefer_first_time=True,
+    )
+    assert [r.ticker for r in ordered] == ["IMB.L"]
+
+
 def test_eligible_research_targets_rememo_holdings_then_oldest_memo():
     """After prefer-first-time, rememo band: holdings → oldest memo_at → conviction."""
     held_stale = _report(

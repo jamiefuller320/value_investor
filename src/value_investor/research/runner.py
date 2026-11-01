@@ -100,6 +100,30 @@ def _buy_tier_signal(report: CompanyReport) -> str:
     return effective_screen_signal(report.signal, report.adjusted_signal)
 
 
+def _raw_screen_signal(report: CompanyReport) -> str:
+    """Quantitative screen signal only (ignores overlay-adjusted capital caps)."""
+    return str(report.signal or "").strip().lower()
+
+
+def _research_pool_signal(
+    report: CompanyReport,
+    *,
+    already_researched: set[str],
+    prefer_first_time: bool,
+) -> str:
+    """Signal used to decide whether a name may consume a research slot.
+
+    Rememo of already-memo'd names still respects FCF/research ``adjusted_signal``
+    caps via ``_buy_tier_signal``. First-time coverage (no memo yet) uses the raw
+    screen buy-tier so overlay caps — e.g. FCF basis buy→hold — cannot starve the
+    Sunday ``prefer_first_time`` path (N243 / buy-tier flip first memos).
+    """
+    ticker = str(report.ticker or "").strip().upper()
+    if prefer_first_time and ticker and ticker not in already_researched:
+        return _raw_screen_signal(report)
+    return _buy_tier_signal(report)
+
+
 def _fcf_mismatch_unresolved(report: CompanyReport) -> bool:
     """True when filing/screen FCF diverge and no policy FCF is locked.
 
@@ -152,6 +176,9 @@ def eligible_research_targets(
     When ``prefer_first_time`` is True, names with no research memo are ordered
     ahead of rememo/refresh candidates before the cap is applied (N114 parity
     with library ``prefer_first_time_research_queues``). Cap size is unchanged.
+    First-time eligibility also uses the **raw** screen buy/strong_buy signal so
+    FCF-/overlay-adjusted ``hold`` caps cannot exclude buy-tier flips that still
+    need a first memo (N243). Rememo candidates keep adjusted-signal gating.
 
     After first-time preference, already-memo'd refresh candidates can be reordered
     as holdings first, then oldest ``memo_at`` (typically ``updated_at``), then
@@ -161,17 +188,24 @@ def eligible_research_targets(
     if weekly_cap <= 0:
         return []
 
+    already = _normalize_ticker_set(already_researched)
     strong = [
         report
         for report in reports
-        if _buy_tier_signal(report) == "strong_buy"
+        if _research_pool_signal(
+            report, already_researched=already, prefer_first_time=prefer_first_time
+        )
+        == "strong_buy"
         and report.data_quality_score >= MIN_QUALITY_FOR_STRONG_BUY
         and not _fcf_mismatch_unresolved(report)
     ]
     buys = [
         report
         for report in reports
-        if _buy_tier_signal(report) == "buy"
+        if _research_pool_signal(
+            report, already_researched=already, prefer_first_time=prefer_first_time
+        )
+        == "buy"
         and report.data_quality_score >= MIN_QUALITY_FOR_BUY
         and not _fcf_mismatch_unresolved(report)
     ]
@@ -181,10 +215,10 @@ def eligible_research_targets(
     if prefer_first_time:
         from value_investor.library_dedupe import prefer_first_time_reports
 
-        pool = prefer_first_time_reports(pool, already_researched)
+        pool = prefer_first_time_reports(pool, already)
     pool = _order_rememo_band(
         pool,
-        already_researched=already_researched,
+        already_researched=already,
         holdings=holdings,
         memo_at_by_ticker=memo_at_by_ticker,
     )
@@ -270,14 +304,16 @@ def select_research_targets(
 
     By default (``prefer_first_time=True``), active selection puts no-memo
     buy-tier names ahead of rememo of already-memo'd names inside the weekly
-    cap — same structural rule as library Sunday N114. Among already-memo'd
-    actives, rememo order is holdings → oldest memo activity → conviction
-    (P1 memo freshness on the live decision pack). Alumni path is unchanged
-    (already-memo'd drop-offs only). Weekday rememo still cannot create first
-    memos; this only reorders Sunday ``--research-docs`` spend. Cap unchanged.
+    cap — same structural rule as library Sunday N114. First-time slots use the
+    raw screen buy-tier (N243) so overlay-adjusted holds cannot starve flip
+    coverage. Among already-memo'd actives, rememo order is holdings → oldest
+    memo activity → conviction (P1 memo freshness on the live decision pack).
+    Alumni path is unchanged (already-memo'd drop-offs only). Weekday rememo
+    still cannot create first memos; this only reorders Sunday
+    ``--research-docs`` spend. Cap unchanged.
     """
     docs = store.list_documents()
-    already = {doc.ticker for doc in docs}
+    already = {str(doc.ticker or "").strip().upper() for doc in docs if doc.ticker}
     memo_at_by_ticker = _memo_at_by_ticker_from_docs(docs)
     held = holdings if holdings is not None else _default_paper_holdings()
     active = eligible_research_targets(
