@@ -3,9 +3,9 @@
   "last_run": {
     "schema_version": 1,
     "trigger": "post_run_review_email",
-    "evaluated_at": "2026-10-30T23:50:29.060272+00:00",
+    "evaluated_at": "2026-11-01T09:15:59.435136+00:00",
     "review_source": "output/post_run_review.md",
-    "fingerprint": "36009fec7fddbb0dd1d9",
+    "fingerprint": "e50704765482db551ec1",
     "skipped": false,
     "skip_reason": null,
     "applied": true,
@@ -16,34 +16,28 @@
     "lane_c_recommended": false,
     "actions": [],
     "queue_before": {
-      "open_count": 1,
+      "open_count": 4,
       "pr_open_count": 0
     },
     "compile_cap_audit": {
-      "candidate_count": 3,
+      "candidate_count": 4,
       "truncated_count": 0,
       "post_run_plan_beyond_cap": []
     },
     "plan_alignment": {
       "unlinked_plan_titles": [
-        "Pipeline to fetch and persist RNS/PDF/HTML bodies for all indexed filings missing bodies on buy-tier FTSE names (prioritise IAG.L, BGEO.L, IGG.L, INCH.L, KLR.L indexed_without_body counts)",
-        "Companies House document-api PDF download + text extract path (pattern from backlog ITV.L/AEP.L samples) when LSE/RNS body fetch returns zero",
-        "Backfill `CompanyMetrics` cash-flow fields (e.g. `operating_cashflow`) from Yahoo cash-flow statements when annual JSON already has OCF (MEGP.L-class false negatives)",
-        "Allowlisted IR results-presentation PDF fetch + table extract (HIK.L, MEGP.L backlog pattern) into `filings/bodies/`"
+        "Backfill RNS/Investegate/LSE direct bodies for indexed items with `indexed_without_body` > 0 on buy-tier names (IAG.L, INCH.L, BGEO.L, IGG.L, RIO.L)"
       ],
-      "terminal_only_titles": [
-        "Pipeline to fetch and persist RNS/PDF/HTML bodies for all indexed filings missing bodies on buy-tier FTSE names (prioritise IAG.L, BGEO.L, IGG.L, INCH.L, KLR.L indexed_without_body counts)",
-        "Allowlisted IR results-presentation PDF fetch + table extract (HIK.L, MEGP.L backlog pattern) into `filings/bodies/`"
-      ]
+      "terminal_only_titles": []
     },
     "compile_cap_drain_skipped": "priority engineering queue not empty",
     "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
     "queue_after": {
-      "open_count": 1,
+      "open_count": 4,
       "pr_open_count": 0
     },
     "tasks_added_estimate": 0,
-    "dispatch_reason": "queue ready — dispatch next open task"
+    "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
   },
   "runs": [
     {
@@ -552,6 +546,45 @@
       },
       "tasks_added_estimate": 0,
       "dispatch_reason": "queue ready — dispatch next open task"
+    },
+    {
+      "schema_version": 1,
+      "trigger": "post_run_review_email",
+      "evaluated_at": "2026-11-01T09:15:59.435136+00:00",
+      "review_source": "output/post_run_review.md",
+      "fingerprint": "e50704765482db551ec1",
+      "skipped": false,
+      "skip_reason": null,
+      "applied": true,
+      "lanes": {
+        "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
+      },
+      "should_dispatch_engineering": true,
+      "lane_c_recommended": false,
+      "actions": [],
+      "queue_before": {
+        "open_count": 4,
+        "pr_open_count": 0
+      },
+      "compile_cap_audit": {
+        "candidate_count": 4,
+        "truncated_count": 0,
+        "post_run_plan_beyond_cap": []
+      },
+      "plan_alignment": {
+        "unlinked_plan_titles": [
+          "Backfill RNS/Investegate/LSE direct bodies for indexed items with `indexed_without_body` > 0 on buy-tier names (IAG.L, INCH.L, BGEO.L, IGG.L, RIO.L)"
+        ],
+        "terminal_only_titles": []
+      },
+      "compile_cap_drain_skipped": "priority engineering queue not empty",
+      "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
+      "queue_after": {
+        "open_count": 4,
+        "pr_open_count": 0
+      },
+      "tasks_added_estimate": 0,
+      "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     }
   ]
 }

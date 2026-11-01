@@ -3,7 +3,7 @@
   "observe_only": false,
   "experiment_id": "entry_dca_overlay",
   "target_cadence": "dca_4x_weekly",
-  "updated_at": "2026-10-30T23:41:22.864335+00:00",
+  "updated_at": "2026-11-01T09:07:48.388716+00:00",
   "acked": true,
   "execute_started": true,
   "execute_started_at": "2026-09-25T17:56:08.074645+00:00",
@@ -36,31 +36,30 @@
       "title": "Confirm 4× weekly on new first-entry closes (live books)",
       "status": "open",
       "ready": false,
-      "revisit_when": "ai_judgment_fair first_entry>=3, buy_tier_level first_entry>=1, leading still dca_4x_weekly, fair tracks still agree",
+      "revisit_when": "ai_judgment_matched30_fair first_entry>=3, buy_tier_matched30_fair first_entry>=1, leading still dca_4x_weekly, fair tracks still agree",
       "do_not": "Do not treat frozen or calibration books as live-book confirmation",
       "evidence": {
         "live_books": {
-          "primary": "ai_judgment_fair",
-          "control": "buy_tier_level"
+          "primary": "ai_judgment_matched30_fair",
+          "control": "buy_tier_matched30_fair"
         },
         "first_entry_by_track": {
-          "ai_judgment_fair": 11,
-          "buy_tier_level": 76
+          "ai_judgment_matched30_fair": 6,
+          "buy_tier_matched30_fair": 17
         },
         "ack_snapshot": {
-          "ai_judgment_fair": 1,
-          "buy_tier_level": 0
+          "ai_judgment_matched30_fair": 0,
+          "buy_tier_matched30_fair": 0
         },
         "live_winning_cadence": {
-          "ai_judgment_fair": "dca_4x_weekly",
-          "buy_tier_level": "dca_2x_weekly"
+          "ai_judgment_matched30_fair": "dca_4x_weekly",
+          "buy_tier_matched30_fair": "dca_4x_weekly"
         },
         "leading_cadence": "dca_4x_weekly",
         "fair_winning_cadence": {
-          "ai_judgment_fair": "dca_4x_weekly",
+          "ai_judgment_matched30_fair": "dca_4x_weekly",
           "ai_judgment_graduated_fair": "dca_5x_weekday",
           "ai_judgment_hold5_fair": "dca_5x_weekday",
-          "ai_judgment_matched30_fair": "dca_4x_weekly",
           "buy_tier_matched30_fair": "dca_4x_weekly"
         },
         "cadence_stable": true
@@ -89,7 +88,7 @@
       "do_not": "Overlay end-value vs lump-sum is not adoption truth vs ^FTSE",
       "evidence": {
         "beat_market": false,
-        "fair_or_primary_excess_after_costs": -0.1904
+        "fair_or_primary_excess_after_costs": -0.0122
       }
     }
   ],

@@ -1,6 +1,6 @@
 # Trainline plc (TRN.L) — Research memo
 
-_Version 4 · Updated 2026-10-18T09:16:58.899672+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-01T09:05:59.156624+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.64
-Rationale: Research is neutral on hold: buybacks continue but without new disclosures CMA scrutiny and UK consumer weakness from H1 are still unresolved.
+Confidence: 0.63
+Rationale: Research is neutral on hold: buybacks continue but CMA scrutiny, retail-code/ORR uncertainty and UK consumer weakness from H1 are still unresolved without new disclosures.
 RiskTags: regulatory, competitive, leverage, cyclical, governance, key_person, accounting
 
 ## Weekly updates
@@ -27,3 +27,7 @@ Prior themes unchanged: flat net ticket sales, UK consumer pressure, ongoing CMA
 Mid-October press coverage linked a rebound to the rail regulator’s draft retail code; we have no primary filing on outcomes for Trainline.
 Buyback activity reported under the £100m programme (including ~255k shares 28 Sep–2 Oct); Ian Brown is now CEO from 28 Sep.
 No RNS or trading update since the 11 Sep H1 statement; CMA fees probe and UK consumer headwinds remain as flagged.
+
+### 2026-11-01T09:05:59.156624+00:00
+No RNS or trading update since 18 Oct; only routine “Transaction in Own Shares” notices (19 and 26 Oct) under the £100m programme.  
+News flow since mid-October is not Trainline-specific; CMA fees probe, ORR/retail-code uncertainty and H1 UK consumer pressure are unchanged.

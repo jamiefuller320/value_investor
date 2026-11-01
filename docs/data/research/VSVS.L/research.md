@@ -1,6 +1,6 @@
 # Vesuvius plc (VSVS.L) — Research memo
 
-_Version 4 · Updated 2026-10-11T08:18:21.697348+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-01T08:34:03.734863+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.64
-Rationale: A confirmed RHI Magnesita proposal and bid-driven rally favour wait on the hold screen; H1 cyclical and dividend–FCF risks are unchanged, so research neither adds nor cuts conviction.
+Confidence: 0.63
+Rationale: Research confirms hold: no operating RNS since H1, only bid-related disclosures; an unsettled RHI approach plus unchanged cyclical and FCF–dividend risks argue for waiting.
 RiskTags: cyclical, leverage, competitive, litigation, regulatory, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ No material change to Steel execution, MMS integration, or dividend sustainabili
 Vesuvius confirmed an RHI Magnesita takeover proposal in late September; the share price rallied and Takeover Code Form 8.3/8.5 disclosures followed in early October.
 Hold screen unchanged (wait timing, RSI ~71); statutory vs management FCF/dividend cover divergence from the 30 Jul H1 results persists.
 Aberforth Partners reported ~6.9% voting rights (2 Oct); no new trading or results RNS since H1.
+
+### 2026-11-01T08:34:03.734863+00:00
+No trading or results RNS since the 30 Jul H1 release; late-October flow is Takeover Code Form 8.3/8.5 only, including RHI Magnesita holding disclosures.
+October press repeats the RHI Magnesita approach; no firm offer terms appear in sourced company filings.
+Hold screen unchanged; timing is neutral (RSI ~64 vs wait at ~71); statutory vs management FCF–dividend cover divergence is unchanged.

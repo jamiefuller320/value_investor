@@ -1,6 +1,6 @@
 # Keller Group plc (KLR.L) — Research memo
 
-_Version 12 · Updated 2026-10-28T11:08:22.998777+00:00 · Mode: structured_verdict_update_
+_Version 13 · Updated 2026-11-01T07:53:22.793919+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: No post-CMD trading update; October CMD and H1 framing still support the buy screen, with cyclical and medium-term execution risks unchanged.
+Rationale: No post-CMD trading news; October CMD and H1 framing still support the buy screen, with cyclical and medium-term execution risks unchanged.
 RiskTags: cyclical, competitive, liquidity, leverage, pension, regulatory, governance, key_person, litigation, accounting
 
 ## Weekly updates
@@ -68,3 +68,8 @@ Buy screen 13 weeks and stable; RSI ~40, neutral timing; news is CMD and fair-va
 No trading update or results since the 4 August H1 interim results.  
 Since 18 October: routine buyback RNS (20 and 27 October) and a 15 October holding notification; news is CMD follow-up commentary only.  
 Buy screen 15 weeks and stable; RSI ~51, neutral timing.
+
+### 2026-11-01T07:53:22.793919+00:00
+No trading update or results since the 4 August H1 interim results.  
+Since 28 October: no indexed news; last RNS was the 27 October buyback (prior week’s 20 October buyback unchanged).  
+Buy screen 17 weeks and stable; RSI ~51, neutral timing.

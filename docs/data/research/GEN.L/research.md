@@ -1,6 +1,6 @@
 # Genuit Group plc (GEN.L) — Research memo
 
-_Version 9 · Updated 2026-10-25T08:03:53.234673+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-01T07:42:40.221205+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.62
-Rationale: 20 Oct trading update cut FY underlying profit to ~£84m vs ~£91–96m consensus on Heating weakness; FCF, yield and leverage still support value, but the downgrade weakens full strong-buy alignment.
+Rationale: No RNS since the 20 Oct profit guide; screen conviction recovered modestly but Heating weakness still weakens full alignment with strong buy despite FCF, yield and leverage.
 RiskTags: cyclical, competitive, leverage, accounting, other
 
 ## Weekly updates
@@ -53,3 +53,8 @@ RSI ~56; price still marginally below the 200-day MA—the H1 trading picture is
 20 Oct RNS trading update guides FY underlying operating profit to ~£84m (consensus ~£91–96m) on unseasonably warm weather and softer Heating; 9M LFL revenue −4.3%, but cash conversion >90% and leverage ~1.5x.  
 Screen still **strong buy** (10/22, ~79% composite, ~28% conviction, 1w new/improving); Deep Value back on at P/B ~1.0; RSI ~38, price below the 200-day MA.  
 News batch is Gen Digital/Gen Z noise and third-party comment on the warning; routine TR-1 and EBT purchase (23 Oct)—no new company guidance.
+
+### 2026-11-01T07:42:40.221205+00:00
+No trading or results RNS since the 20 Oct trading update; the 1 Nov news batch is Gen Digital, Generation Uranium and options-chart false positives only.  
+Screen remains **strong buy** (9/22, ~79% composite, ~44% conviction, 4w stable); P/B ~1.0 (Deep Value off); RSI ~45, price still below the 200-day MA.  
+Third-party note on a routine 2014 Sharesave allotment (30 Oct) is immaterial—the Oct profit guide is unchanged.

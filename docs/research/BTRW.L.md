@@ -1,6 +1,6 @@
 # Barratt Redrow plc (BTRW.L) — Research memo
 
-_Version 4 · Updated 2026-10-11T08:20:17.935421+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-01T08:35:52.049479+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: medium
 Confidence: 0.63
-Rationale: Net cash and sub-book P/B support a hold, but statutory FCF near £8.7m and unchanged FY27 completion guidance keep cash-quality and cyclical risks live—research is neutral on upgrading the hold case.
+Rationale: Net cash and sub-book P/B still fit a hold, but thin statutory FCF and unchanged FY27 completion guidance leave cyclical and cash-quality risks open—research is neutral on upgrading the hold case.
 RiskTags: regulatory, cyclical, governance, liquidity, accounting, competitive, key_person, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Filings since 15 Sep are results-related, dividend timetable, buybacks and PDMR 
 FY26 Annual Report and Accounts were lodged with the NSM (6 Oct RNS); AGM is set for 4 Nov 2026, with no new trading figures beyond the 16 Sep results.
 Buyback and voting-rights RNS continued through early October; press commentary mostly restates FY26 profit, lean dividend vs buybacks, and FY27 completion guidance.
 No material operational or regulatory change since the 23 Sep refresh.
+
+### 2026-11-01T08:35:52.049479+00:00
+£386m buyback continues via late-October transaction-in-own-shares RNS; syndicated pieces cite share count near 1.38bn.
+Filings since 11 Oct are buybacks, a 16 Oct holdings disclosure, and routine voting-rights notices; AGM remains 4 Nov with no new trading RNS.
+Press mostly replays FY26 results, buyback-versus-dividend framing, and UK housing-policy commentary—no fresh operational metrics.

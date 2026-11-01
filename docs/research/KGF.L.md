@@ -1,6 +1,6 @@
 # Kingfisher plc (KGF.L) — Research memo
 
-_Version 4 · Updated 2026-10-11T08:11:30.903163+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-01T08:22:58.885534+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,9 +8,9 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.67
-Rationale: H1 guidance upgrade and buybacks align with the value screen, but weak B&Q/France, CEO gap and FCF definition noise leave research neutral on the buy case.
-RiskTags: cyclical, competitive, governance, pension, leverage, accounting, key_person
+Confidence: 0.68
+Rationale: Named CEO with home-improvement pedigree closes the leadership gap, but B&Q/France weakness, FCF definition noise and cyclical risks leave research neutral on the buy screen.
+RiskTags: cyclical, competitive, governance, pension, leverage, accounting
 
 ## Weekly updates
 
@@ -28,3 +28,8 @@ Third £50m buyback tranche under way; 17 Sep audit-tender outcome RNS—otherwi
 No new trading statement or guidance since H1; filings since 23 Sep are routine buybacks (incl. 6 Oct), 1 Oct total voting rights and PDMR notices only.  
 Press rehashes H1 uplift, unchanged interim dividend and buyback support; still no named CEO successor.  
 Quant screen buy persists with unchanged FCF/earnings basis warnings—no material change to the neutral research view.
+
+### 2026-11-01T08:22:58.885534+00:00
+13 Oct RNS: Sebastian Gundel (ex-OBI) appointed CEO from 1 Feb 2027; Thierry Garnier to 31 Dec 2026, CFO Bhavesh Mistry interim CEO in Jan 2027.  
+Since 11 Oct, filings are routine buybacks, PDMR notices and 27 Oct ShareSave block admission—no trading update or guidance change.  
+News batch is thin (generic analyst/quote pages); quant buy persists with unchanged FCF/earnings basis warnings.

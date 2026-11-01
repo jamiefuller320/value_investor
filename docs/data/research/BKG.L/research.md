@@ -1,6 +1,6 @@
 # The Berkeley Group Holdings plc (BKG.L) — Research memo
 
-_Version 4 · Updated 2026-10-11T08:24:40.847034+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-01T08:39:50.883910+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Ongoing buybacks support the cheapness screen and capital return, but with no fresh trading update, cyclical, regulatory and litigation overhangs still cap conviction versus the buy signal.
+Rationale: Cheapness and buybacks still fit the buy screen, but this batch has no trading update and unchanged cyclical, regulatory and litigation overhangs, so research neither strengthens nor fully confirms the signal.
 RiskTags: cyclical, regulatory, litigation, competitive, leverage, governance
 
 ## Weekly updates
@@ -28,3 +28,8 @@ June housebuilder litigation and the land-buy pause remain unchanged overhangs.
 Since 23 Sep, RNS and press coverage are mostly routine buybacks and total voting-rights notices (28 Sep–7 Oct); no new trading statement or results.
 Kalkine and TipRanks highlight continued share-count reduction; nothing in this batch changes demand, policy, or litigation narratives.
 June housebuilder litigation and the land-buy pause remain unchanged overhangs.
+
+### 2026-11-01T08:39:50.883910+00:00
+Since 11 Oct, sources are thin: routine TR-1 holding disclosure (28 Oct) and LSE quote pages only; no trading statement or results RNS.
+Mid-Oct buyback commentary repeats share-count reduction already noted in prior weeks.
+June housebuilder litigation and the April land-buy pause are unchanged overhangs.

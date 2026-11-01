@@ -1,6 +1,6 @@
 # Currys plc (CURY.L) — Research memo
 
-_Version 9 · Updated 2026-10-30T22:13:09.917868+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-01T08:01:50.626003+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Strong-buy screen persists (~80%, seventh week), but research still rests on the 10 Sep update; no new disclosures since 28 Oct—cyclical, pension, liquidity and execution risks unchanged.
+Rationale: Research is neutral-to-supportive on the strong-buy screen: fundamentals unchanged since the 10 Sep update, with cyclical, pension, liquidity and execution risks intact.
 RiskTags: cyclical, competitive, pension, leverage, key_person, liquidity, accounting, other
 
 ## Weekly updates
@@ -52,4 +52,9 @@ Press is Yahoo quote-page only; prior cyclical, pension, liquidity and execution
 ### 2026-10-30T22:13:09.917868+00:00
 Strong buy screen persists (~80% composite, seventh week; 10/22 models), with no change to filing-backed fundamentals since the 10 Sep trading update.  
 No new RNS, trading statement or press since the 28 Oct refresh; interims remain due 17 Dec.  
+Prior cyclical, pension, liquidity and execution risks are unchanged.
+
+### 2026-11-01T08:01:50.626003+00:00
+Strong buy screen persists (~81% composite, eighth week; 10/22 models); signal stable.  
+No new RNS, trading statement or press since the 30 Oct refresh; interims remain due 17 Dec.  
 Prior cyclical, pension, liquidity and execution risks are unchanged.

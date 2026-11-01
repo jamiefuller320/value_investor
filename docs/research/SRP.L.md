@@ -1,6 +1,6 @@
 # Serco Group plc (SRP.L) — Research memo
 
-_Version 4 · Updated 2026-10-11T08:22:28.135828+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-01T08:37:29.150055+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.68
-Rationale: Since 23 Sep only buyback and PDMR RNS; FCF filing vs company-adjusted gap unchanged—research is neutral on the screen hold, not a fresh add trigger.
+Confidence: 0.67
+Rationale: Since 11 Oct only buyback RNS; the FCF filing vs company-adjusted gap is unchanged—research is neutral on the screen hold, with wait timing (RSI 75) not a fresh add trigger.
 RiskTags: regulatory, cyclical, customer_concentration, leverage, pension, governance, competitive, accounting
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Trade press repeats defence-linked contract wins and the ongoing 2026 buyback; n
 Since 23 Sep, RNS is limited to share repurchases (through 9 Oct) and one Director/PDMR notice (5 Oct); no trading update or results.  
 Press echoes the 2026 buyback and NNUH order-book commentary; no new filing guidance.  
 Screen remains **hold** (2/22, eight weeks); FCF/earnings basis overlays unchanged.
+
+### 2026-11-01T08:37:29.150055+00:00
+Since 11 Oct, RNS is limited to share repurchases (through 30 Oct, including ~1.33m shares in five days per trade press); no trading update or results.
+Press repeats the 2026 buyback; no new filing guidance.
+Screen remains **hold** (1/22, 13 weeks; timing **wait**, RSI 75); FCF and earnings-basis overlays unchanged.

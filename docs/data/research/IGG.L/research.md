@@ -1,6 +1,6 @@
 # IG Group Holdings plc (IGG.L) — Research memo
 
-_Version 3 · Updated 2026-10-30T22:08:00.218454+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-01T07:57:18.005395+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Filing-aligned FCF and yield still support the buy screen; reported CEO stake increase is mildly supportive, but no new filings and ongoing statutory vs adjusted EPS divergence keep the overlay cautious.
+Rationale: Filing-aligned FCF and yield still support the buy screen at seven weeks; no new disclosures, but Q3 outlook cut and statutory vs adjusted EPS divergence keep the overlay cautious.
 RiskTags: regulatory, cyclical, leverage, competitive, governance
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Screen still buy (five weeks, accumulate timing); filing-backed FCF and yield me
 No new RNS, accounts, or trading statements since the 28 Oct verdict refresh.  
 News is mainly a report of CEO Breon Corcoran increasing his shareholding; otherwise quote pages and old Q3/revenue commentary.  
 Buy screen unchanged (six weeks, neutral timing); filing-backed FCF and yield metrics unchanged; EPS-basis divergence still flagged.
+
+### 2026-11-01T07:57:18.005395+00:00
+No new RNS, accounts, or trading statements since the 30 Oct verdict refresh.  
+News batch since then is empty; no material headlines beyond prior CEO buying commentary.  
+Buy screen still buy (seven weeks, neutral timing); filing-backed FCF and yield unchanged; EPS-basis divergence still flagged.

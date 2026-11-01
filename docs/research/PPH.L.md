@@ -1,6 +1,6 @@
 # PPHE Hotel Group Limited (PPH.L) — Research memo
 
-_Version 12 · Updated 2026-10-30T22:14:18.107894+00:00 · Mode: structured_verdict_update_
+_Version 13 · Updated 2026-11-01T08:02:48.517412+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.70
-Rationale: Q3 RNS supports the buy screen on trading momentum and in-line FY guidance, but leverage, liquidity, governance and weak statutory EPS growth still limit conviction.
+Rationale: Q3 RNS still supports the buy screen on trading and in-line FY guidance, but leverage, liquidity, governance and weak statutory EPS growth continue to limit conviction.
 RiskTags: governance, leverage, cyclical, regulatory, accounting, competitive, liquidity, key_person
 
 ## Weekly updates
@@ -68,3 +68,8 @@ No change to the H1 2026 interim anchor or prior governance, leverage, liquidity
 29 October Q3 RNS: revenue +5.8%, RevPAR +6.6%; board expects FY 2026 in line with analyst consensus; New York development sale completed with associated debt repaid.  
 Buy screen now nineteen weeks persistent (7/22 models, stable); screen timing is neutral again (prior refresh had accumulate entry).  
 30 October news batch is empty; leverage, liquidity, governance and H1 earnings-basis concerns are unchanged.
+
+### 2026-11-01T08:02:48.517412+00:00
+No new RNS or company-specific press since the 30 October refresh; the 1 November news batch is empty.  
+Buy screen is now twenty weeks persistent (7/22 models, stable); timing remains neutral.  
+Q3 trading RNS is still the filing anchor; leverage, governance, liquidity and earnings-basis concerns are unchanged.
