@@ -125,3 +125,31 @@ def test_stamped_disposition_suppresses_interestingness_finding():
         )
         is not None
     )
+
+
+def test_design_open_disposition_suppresses_like_ack():
+    base = {
+        "volume_gate": {"met": True},
+        "phase": {"floor_met": True},
+        "path_scoreboard": {
+            "smooth_ret_cohort_median": 0.03,
+            "patient_hold_excess_report_only": 0.02,
+        },
+        "interestingness_disposition": stamp_interestingness_disposition(
+            value="design-open",
+            stamped_at="2026-11-01T11:48:11+00:00",
+            note="owner design-open",
+        ),
+    }
+    gate = evaluate_n201_interestingness(base)
+    assert gate["met"] is True
+    assert interestingness_disposition_value(base) == "design-open"
+    assert (
+        interestingness_finding(
+            title=N201_INTERESTINGNESS_TITLE,
+            gate=gate,
+            strand_note="N201.",
+            payload=base,
+        )
+        is None
+    )

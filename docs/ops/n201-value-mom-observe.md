@@ -93,7 +93,9 @@ Fixed-stake `%` is **independent of fund NAV** — cash drag / equal-weight book
 
 **Sample-thickness** (episodes≥48 and weeks≥8) is a quiet pipeline badge (`N201 volume gate ready for review`).
 
-**Alone-path interestingness** (thickness ∧ phase floor ∧ fair median > 0 ∧ patient-hold excess > 0) emits **N201 alone-path interesting — promotion design optional (F8)** and may raise Push / checklist heat. Open the N201 observe tab / `n201_value_mom_observe.json`, read fair-cost path median vs patient-hold (report-only), and stamp disposition **`ack` | `no-design` | `design-open`**. Owner 2026-10-31: **design-open** (Project store `n201-promotion-design-pack-2026-10-31.md`). **No auto-promote** (F8). Launch-queue waiter status is unchanged by this review.
+**Alone-path interestingness** (thickness ∧ phase floor ∧ fair median > 0 ∧ patient-hold excess > 0) emits **N201 alone-path interesting — promotion design optional (F8)** and may raise Push / checklist heat. Open the N201 observe tab / `n201_value_mom_observe.json`, read fair-cost path median vs patient-hold (report-only), and stamp disposition **`ack` | `no-design` | `design-open`** on `interestingness_disposition` (preserved across observe refresh). **No auto-promote** (F8). Launch-queue waiter status is unchanged by this review.
+
+**Owner 2026-10-31:** disposition **`design-open`** — deliberate promotion-*design* pack (Project store `n201-promotion-design-pack-2026-10-31.md`; forks locked 2026-11-01). While `interestingness_disposition.value` is set, ops-monitor does not re-emit the alone-path interestingness finding and Daily hub Push skips that heat. Still F8 / launch-queue waiter — stamp is attention only, not twin registration or capital.
 
 ## Constraints
 
