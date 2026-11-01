@@ -630,6 +630,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://lottomaticagroup.com/Lottomaticagroup.com/media/library1_folder/Lottomatica-Annual-Report-2025-ENG.pdf",
         "https://lottomaticagroup.com/Lottomaticagroup.com/media/library_documents/Investors/2025-07-31-Lottomatica-Group-Q2-2025-Results-presentation_vF_1.pdf",
     ],
+    # ftse_mib parked leftover — eng-20261101-06: IG.MI awaiting_periodic_report; ESEF index thin;
+    # italgas.it wp-content FY2025 integrated annual + H1-2025 consolidated interim PDFs.
+    "IG.MI": [
+        "https://www.italgas.it/wp-content/uploads/sites/2/2026/03/2025-Integrated-Annual-Report.pdf",
+        "https://www.italgas.it/wp-content/uploads/sites/2/2025/08/Consolidated-interim-financial-statements-as-at-30-June-2025-.pdf",
+    ],
     # ftse_mib buy-tier deepen — eng-20261005-01 / eng-20261010-02: TEN.MI unmeasured — Yahoo base
     # TEN collides with Tsakos on SEC; pin Tenaris S.A. FY2025 20-F + Q1 2026 FS 6-K (CIK 1190723).
     "TEN.MI": [

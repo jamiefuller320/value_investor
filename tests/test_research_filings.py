@@ -8105,6 +8105,26 @@ def test_fetch_filings_ir_allowlist_ftse_mib_ltmc_mi_builtins_eng_20261017_09(
     assert "Q2-2025-Results-presentation" in interim[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_ftse_mib_ig_mi_builtins_eng_20261101_06(
+    tmp_path: Path,
+):
+    """eng-20261101-06: IG.MI awaiting_periodic_report — italgas.it FY2025 integrated + H1-2025 interim PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("IG.MI", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert {row["period"] for row in rows} == {"annual", "interim"}
+    annual = [row for row in rows if row["period"] == "annual"]
+    assert len(annual) == 1
+    assert "italgas.it" in annual[0]["url"]
+    assert "2025-Integrated-Annual-Report.pdf" in annual[0]["url"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(interim) == 1
+    assert "Consolidated-interim-financial-statements-as-at-30-June-2025" in interim[0]["url"]
+
+
 def test_fetch_filings_ir_allowlist_ftse_mib_fct_mi_builtins_eng_20261017_05(
     tmp_path: Path,
 ):
@@ -13584,6 +13604,28 @@ def test_parked_source_hunter_ltmc_mi_ftse_mib_has_fetchable_ir():
     assert body_i
     assert len(body_i) >= 25000
     valid_i, reason_i = _validate_ir_allowlist_body_content(interim[0], body_i, ticker="LTMC.MI")
+    assert valid_i, reason_i
+
+
+def test_parked_source_hunter_ig_mi_ftse_mib_has_fetchable_ir():
+    """eng-20261101-06: IG.MI italgas.it FY2025 integrated + H1-2025 interim PDFs fetch and validate."""
+    assert "IG.MI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("IG.MI")
+    assert len(rows) == 2
+    annual = [row for row in rows if row["period"] == "annual"]
+    assert len(annual) == 1
+    assert "italgas.it" in annual[0]["url"]
+    body = fetch_filing_body(annual[0]["url"])
+    assert body
+    assert len(body) >= 50000
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], body, ticker="IG.MI")
+    assert valid, reason
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(interim) == 1
+    body_i = fetch_filing_body(interim[0]["url"])
+    assert body_i
+    assert len(body_i) >= 40000
+    valid_i, reason_i = _validate_ir_allowlist_body_content(interim[0], body_i, ticker="IG.MI")
     assert valid_i, reason_i
 
 
