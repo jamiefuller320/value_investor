@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-01T02:34:38.119926+00:00",
+  "generated_at": "2026-11-01T07:49:15.737664+00:00",
   "observe_only": true,
   "open_ideas": 618,
   "with_trigger": 23,
@@ -34,24 +34,6 @@
           "actual": "2026-11-01"
         }
       ]
-    },
-    {
-      "id": "L654",
-      "title": "Refresh test_ftse_gap_scan goldens after CI main nightly drift",
-      "status": "open",
-      "first_met_at": "2026-11-01T02:34:38.119926+00:00",
-      "conditions": [
-        {
-          "condition": {
-            "file": "docs/data/ops_status.json",
-            "path": "findings[title=Recent workflow failure: CI main nightly].severity",
-            "op": "==",
-            "value": "warn"
-          },
-          "state": "met",
-          "actual": "warn"
-        }
-      ]
     }
   ],
   "unknown": [
@@ -73,6 +55,16 @@
       "invalid": false,
       "reasons": [
         "tracks[track_id=ai_judgment_fair].statistics.verdict not in docs/data/assessment_scoreboard.json"
+      ]
+    },
+    {
+      "id": "L654",
+      "title": "Refresh test_ftse_gap_scan goldens after CI main nightly drift",
+      "status": "open",
+      "unknown_since": "2026-11-01T07:49:15.737664+00:00",
+      "invalid": false,
+      "reasons": [
+        "findings[title=Recent workflow failure: CI main nightly].severity not in docs/data/ops_status.json"
       ]
     }
   ],
