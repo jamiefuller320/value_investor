@@ -1,15 +1,80 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-30T18:53:15.153647+11:00",
+    "local_time": "2026-11-01T18:11:19.603384+11:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-10-30T10:00:00+11:00",
-    "settle_at": "2026-10-30T10:30:00+11:00",
+    "market_open_at": "2026-11-01T10:00:00+11:00",
+    "settle_at": "2026-11-01T10:30:00+11:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "7faa1afd-2e60-422c-b496-1147fb963d90",
+      "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+      "acted_at": "2026-11-01T18:11:19.603384+11:00",
+      "ticker": "PRN.AX",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 4.335709,
+      "price": 1.97,
+      "gross": 8.54,
+      "cost": 0.01,
+      "net_cash": 8.53,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Perenti Limited",
+      "avg_cost_at_exit": 1.9,
+      "position_closed": true
+    },
+    {
+      "id": "54f2e116-fccc-4383-8f31-51e269acca35",
+      "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+      "acted_at": "2026-11-01T18:11:19.603384+11:00",
+      "ticker": "ANN.AX",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 0.706688,
+      "price": 45.44,
+      "gross": 32.11,
+      "cost": 0.06,
+      "net_cash": 32.06,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Ansell Limited",
+      "avg_cost_at_exit": 45.12,
+      "position_closed": true
+    },
+    {
+      "id": "ebcf60db-4d7a-45f6-a59c-64b6c62618ff",
+      "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+      "acted_at": "2026-11-01T18:11:19.603384+11:00",
+      "ticker": "PMV.AX",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 2.120078,
+      "price": 13.4,
+      "gross": 28.41,
+      "cost": 0.05,
+      "net_cash": -28.46,
+      "note": "Automated buy",
+      "name": "Premier Investments Limited"
+    },
+    {
+      "id": "9e9ba90c-0ee6-488f-9d4d-2415d446fd01",
+      "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+      "acted_at": "2026-11-01T18:11:19.603384+11:00",
+      "ticker": "CYL.AX",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 3.087288,
+      "price": 3.92,
+      "gross": 12.1,
+      "cost": 0.02,
+      "net_cash": -12.12,
+      "note": "Automated buy",
+      "name": "Catalyst Metals Limited"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +88,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 956.68,
-    "cash": 0.0,
+    "nav": 956.54,
+    "cash": -0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -36,13 +101,13 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 31.89,
+    "target_sleeve_value": 31.88,
     "targets": [
       {
         "ticker": "RRL.AX",
         "name": "Regis Resources Limited",
         "signal": "strong_buy",
-        "conviction_score": 0.8218000000000001,
+        "conviction_score": 0.8158000000000001,
         "price": 6.25
       },
       {
@@ -53,24 +118,31 @@
         "price": 3.72
       },
       {
+        "ticker": "RMD.AX",
+        "name": "ResMed Inc.",
+        "signal": "buy",
+        "conviction_score": 0.7475,
+        "price": 35.51
+      },
+      {
         "ticker": "NEM.AX",
         "name": "Newmont Corporation",
         "signal": "buy",
-        "conviction_score": 0.6194000000000001,
+        "conviction_score": 0.6257,
         "price": 156.12
       },
       {
         "ticker": "FMG.AX",
         "name": "Fortescue Ltd",
         "signal": "strong_buy",
-        "conviction_score": 0.6038,
+        "conviction_score": 0.6127,
         "price": 14.27
       },
       {
         "ticker": "WAF.AX",
         "name": "West African Resources Limited",
         "signal": "strong_buy",
-        "conviction_score": 0.6013000000000001,
+        "conviction_score": 0.5992000000000001,
         "price": 3.3
       },
       {
@@ -86,6 +158,13 @@
         "signal": "buy",
         "conviction_score": 0.5839000000000001,
         "price": 29.41
+      },
+      {
+        "ticker": "ALK.AX",
+        "name": "Alkane Resources Ltd",
+        "signal": "buy",
+        "conviction_score": 0.5799000000000001,
+        "price": 1.605
       },
       {
         "ticker": "BWP.AX",
@@ -116,18 +195,25 @@
         "price": 72.88
       },
       {
-        "ticker": "AMC.AX",
-        "name": "Amcor plc",
-        "signal": "buy",
-        "conviction_score": 0.5244,
-        "price": 66.62
-      },
-      {
         "ticker": "ZIM.AX",
         "name": "Zimplats Holdings Limited",
         "signal": "buy",
-        "conviction_score": 0.5161,
+        "conviction_score": 0.5115000000000001,
         "price": 12.67
+      },
+      {
+        "ticker": "GMD.AX",
+        "name": "Genesis Minerals Limited",
+        "signal": "buy",
+        "conviction_score": 0.48943,
+        "price": 6.45
+      },
+      {
+        "ticker": "AAI.AX",
+        "name": "Alcoa Corporation",
+        "signal": "strong_buy",
+        "conviction_score": 0.48330999999999996,
+        "price": 55.5
       },
       {
         "ticker": "GGP.AX",
@@ -137,32 +223,25 @@
         "price": 9.85
       },
       {
-        "ticker": "GMD.AX",
-        "name": "Genesis Minerals Limited",
+        "ticker": "CYL.AX",
+        "name": "Catalyst Metals Limited",
         "signal": "buy",
-        "conviction_score": 0.48212,
-        "price": 6.45
-      },
-      {
-        "ticker": "AAI.AX",
-        "name": "Alcoa Corporation",
-        "signal": "strong_buy",
-        "conviction_score": 0.47906,
-        "price": 55.5
+        "conviction_score": 0.4411,
+        "price": 3.92
       },
       {
         "ticker": "EBO.AX",
         "name": "EBOS Group Limited",
         "signal": "buy",
-        "conviction_score": 0.4442,
+        "conviction_score": 0.438,
         "price": 16.61
       },
       {
-        "ticker": "ALK.AX",
-        "name": "Alkane Resources Ltd",
+        "ticker": "WGX.AX",
+        "name": "Westgold Resources Limited",
         "signal": "buy",
-        "conviction_score": 0.4438,
-        "price": 1.605
+        "conviction_score": 0.4371,
+        "price": 5.29
       },
       {
         "ticker": "ARB.AX",
@@ -172,11 +251,11 @@
         "price": 16.67
       },
       {
-        "ticker": "RMD.AX",
-        "name": "ResMed Inc.",
+        "ticker": "AMC.AX",
+        "name": "Amcor plc",
         "signal": "buy",
-        "conviction_score": 0.4029,
-        "price": 35.51
+        "conviction_score": 0.4058,
+        "price": 66.62
       },
       {
         "ticker": "WDS.AX",
@@ -186,13 +265,6 @@
         "price": 33.33
       },
       {
-        "ticker": "WGX.AX",
-        "name": "Westgold Resources Limited",
-        "signal": "buy",
-        "conviction_score": 0.3377,
-        "price": 5.29
-      },
-      {
         "ticker": "BPT.AX",
         "name": "Beach Energy Limited",
         "signal": "buy",
@@ -200,11 +272,11 @@
         "price": 0.94
       },
       {
-        "ticker": "CYL.AX",
-        "name": "Catalyst Metals Limited",
+        "ticker": "TUA.AX",
+        "name": "Tuas Limited",
         "signal": "buy",
-        "conviction_score": 0.3267,
-        "price": 3.92
+        "conviction_score": 0.32436,
+        "price": 1.275
       },
       {
         "ticker": "WHC.AX",
@@ -221,11 +293,11 @@
         "price": 45.99
       },
       {
-        "ticker": "TUA.AX",
-        "name": "Tuas Limited",
+        "ticker": "PLS.AX",
+        "name": "PLS Group Limited",
         "signal": "buy",
-        "conviction_score": 0.24327000000000001,
-        "price": 1.275
+        "conviction_score": 0.24352499999999996,
+        "price": 2.64
       },
       {
         "ticker": "SMR.AX",
@@ -238,108 +310,73 @@
         "ticker": "YAL.AX",
         "name": "Yancoal Australia Ltd",
         "signal": "buy",
-        "conviction_score": 0.192185,
+        "conviction_score": 0.18479,
         "price": 6.12
-      },
-      {
-        "ticker": "PLS.AX",
-        "name": "PLS Group Limited",
-        "signal": "buy",
-        "conviction_score": 0.16779,
-        "price": 2.64
       }
     ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "PRN.AX",
-        "name": "Perenti Limited",
-        "reason": "No longer in the top conviction target set",
-        "shares": 4.335709,
-        "price": 1.97,
-        "value": 8.54
-      },
-      {
-        "action": "sell",
-        "ticker": "ANN.AX",
-        "name": "Ansell Limited",
-        "reason": "No longer in the top conviction target set",
-        "shares": 0.706688,
-        "price": 45.44,
-        "value": 32.11
-      }
-    ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
-      {
-        "action": "buy",
-        "ticker": "PMV.AX",
-        "name": "Premier Investments Limited",
-        "reason": "Top-up to equal weight",
-        "value": 28.46,
-        "price": 13.4,
-        "target_value": 31.89,
-        "conviction_score": 0.5919000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "buy",
-        "ticker": "CYL.AX",
-        "name": "Catalyst Metals Limited",
-        "reason": "New sleeve",
-        "value": 12.12,
-        "price": 3.92,
-        "target_value": 31.89,
-        "conviction_score": 0.3267,
-        "signal": "buy"
-      }
-    ],
+    "anticipated_buys": [],
     "anticipated_holds": [
       {
         "action": "hold",
-        "ticker": "WAF.AX",
-        "name": "West African Resources Limited",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 28.47,
-        "target_value": 31.89,
-        "conviction_score": 0.6013000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "AAI.AX",
-        "name": "Alcoa Corporation",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 27.37,
-        "target_value": 31.89,
-        "conviction_score": 0.47906,
+        "ticker": "PMV.AX",
+        "name": "Premier Investments Limited",
+        "reason": "Already near equal-weight target",
+        "value": 31.84,
+        "target_value": 31.88,
+        "conviction_score": 0.5919000000000001,
         "signal": "strong_buy"
       }
     ],
     "skipped": [
       {
-        "ticker": "WHC.AX",
-        "name": "Whitehaven Coal Limited",
+        "ticker": "WAF.AX",
+        "name": "West African Resources Limited",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 31.89,
-        "conviction_score": 0.3067,
+        "target_value": 31.88,
+        "conviction_score": 0.5992000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "ticker": "AAI.AX",
+        "name": "Alcoa Corporation",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 31.88,
+        "conviction_score": 0.48330999999999996,
+        "signal": "strong_buy"
+      },
+      {
+        "ticker": "CYL.AX",
+        "name": "Catalyst Metals Limited",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 31.88,
+        "conviction_score": 0.4411,
         "signal": "buy"
       },
       {
         "ticker": "TUA.AX",
         "name": "Tuas Limited",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 31.89,
-        "conviction_score": 0.24327000000000001,
+        "target_value": 31.88,
+        "conviction_score": 0.32436,
+        "signal": "buy"
+      },
+      {
+        "ticker": "WHC.AX",
+        "name": "Whitehaven Coal Limited",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 31.88,
+        "conviction_score": 0.3067,
         "signal": "buy"
       },
       {
         "ticker": "PLS.AX",
         "name": "PLS Group Limited",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 31.89,
-        "conviction_score": 0.16779,
+        "target_value": 31.88,
+        "conviction_score": 0.24352499999999996,
         "signal": "buy"
       }
     ],
@@ -348,11 +385,11 @@
         "ticker": "ANN.AX",
         "name": "Ansell Limited",
         "signal": "buy",
-        "conviction_score": 0.6665000000000001,
+        "conviction_score": 0.668,
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 30 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 2 buy(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 30 equal-weight sleeve(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -458,8 +495,8 @@
       "ticker": "WGX.AX",
       "name": "Westgold Resources Limited",
       "source": "paper",
-      "severity": "watch",
-      "message": "Underwater \u2014 re-check hypothesis: conviction 34% below intact floor; still buy",
+      "severity": "info",
+      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
       "mark": 5.29,
       "stop_loss": null,
       "take_profit": null,
@@ -642,34 +679,23 @@
       "timing_signal": "neutral"
     },
     {
-      "ticker": "PRN.AX",
-      "name": "Perenti Limited",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Screen signal is now hold",
-      "mark": 1.97,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "neutral"
-    },
-    {
-      "ticker": "ANN.AX",
-      "name": "Ansell Limited",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Technical timing is wait \u2014 avoid adding size",
-      "mark": 45.44,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "wait"
-    },
-    {
       "ticker": "PMV.AX",
       "name": "Premier Investments Limited",
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
       "mark": 13.4,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "CYL.AX",
+      "name": "Catalyst Metals Limited",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 3.92,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -690,7 +716,7 @@
       "id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
       "created_at": "2026-09-07T10:31:58.323814+00:00"
     },
-    "cash": 0.0,
+    "cash": -0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -980,38 +1006,27 @@
         "take_profit": null,
         "opened_at": "2026-10-26T11:47:37.876194+11:00"
       },
-      "PRN.AX": {
-        "ticker": "PRN.AX",
-        "shares": 4.335709,
-        "avg_cost": 1.9,
-        "name": "Perenti Limited",
-        "sector": "Basic Materials",
-        "currency": "AUD",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-10-27T11:47:43.137234+11:00"
-      },
-      "ANN.AX": {
-        "ticker": "ANN.AX",
-        "shares": 0.706688,
-        "avg_cost": 45.12,
-        "name": "Ansell Limited",
-        "sector": "Healthcare",
-        "currency": "AUD",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-10-30T11:46:51.371672+11:00"
-      },
       "PMV.AX": {
         "ticker": "PMV.AX",
-        "shares": 0.255835,
-        "avg_cost": 13.14,
+        "shares": 2.375913,
+        "avg_cost": 13.372,
         "name": "Premier Investments Limited",
         "sector": "Consumer Cyclical",
         "currency": "AUD",
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-10-30T11:46:51.371672+11:00"
+      },
+      "CYL.AX": {
+        "ticker": "CYL.AX",
+        "shares": 3.087288,
+        "avg_cost": 3.92,
+        "name": "Catalyst Metals Limited",
+        "sector": "Basic Materials",
+        "currency": "AUD",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-11-01T18:11:19.603384+11:00"
       }
     },
     "trades": [
@@ -2800,6 +2815,70 @@
         "net_cash": -3.37,
         "note": "Automated buy",
         "name": "Premier Investments Limited"
+      },
+      {
+        "id": "7faa1afd-2e60-422c-b496-1147fb963d90",
+        "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+        "acted_at": "2026-11-01T18:11:19.603384+11:00",
+        "ticker": "PRN.AX",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 4.335709,
+        "price": 1.97,
+        "gross": 8.54,
+        "cost": 0.01,
+        "net_cash": 8.53,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Perenti Limited",
+        "avg_cost_at_exit": 1.9,
+        "position_closed": true
+      },
+      {
+        "id": "54f2e116-fccc-4383-8f31-51e269acca35",
+        "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+        "acted_at": "2026-11-01T18:11:19.603384+11:00",
+        "ticker": "ANN.AX",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.706688,
+        "price": 45.44,
+        "gross": 32.11,
+        "cost": 0.06,
+        "net_cash": 32.06,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Ansell Limited",
+        "avg_cost_at_exit": 45.12,
+        "position_closed": true
+      },
+      {
+        "id": "ebcf60db-4d7a-45f6-a59c-64b6c62618ff",
+        "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+        "acted_at": "2026-11-01T18:11:19.603384+11:00",
+        "ticker": "PMV.AX",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 2.120078,
+        "price": 13.4,
+        "gross": 28.41,
+        "cost": 0.05,
+        "net_cash": -28.46,
+        "note": "Automated buy",
+        "name": "Premier Investments Limited"
+      },
+      {
+        "id": "9e9ba90c-0ee6-488f-9d4d-2415d446fd01",
+        "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+        "acted_at": "2026-11-01T18:11:19.603384+11:00",
+        "ticker": "CYL.AX",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 3.087288,
+        "price": 3.92,
+        "gross": 12.1,
+        "cost": 0.02,
+        "net_cash": -12.12,
+        "note": "Automated buy",
+        "name": "Catalyst Metals Limited"
       }
     ],
     "equity_curve": [
@@ -4084,27 +4163,44 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-01T18:11:19.603384+11:00",
+        "portfolio_value": 501.8,
+        "cash": -0.0,
+        "contributed_capital": 1000.0,
+        "positions": 28,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "AUD": 0.5246
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-30T18:53:15.153647+11:00",
+    "last_mark_at": "2026-11-01T18:11:19.603384+11:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "PRN.AX": 1,
         "ANN.AX": 1
-      },
-      "reentry_cooldown": {}
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (4 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "asx200",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-30T07:53:15.310020+00:00",
+    "generated_at": "2026-11-01T07:11:19.837312+00:00",
     "observe_only": true,
-    "open_count": 38,
+    "open_count": 40,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -4175,13 +4271,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 2,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-30T07:53:15.313138+00:00",
+    "generated_at": "2026-11-01T07:11:19.840395+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -4235,7 +4331,7 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 37,
+      "hold_closed_count": 39,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 62,
       "gaps": [
@@ -4245,26 +4341,26 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 26,
-        "recovered_to_breakeven": 19,
+        "count": 24,
+        "recovered_to_breakeven": 17,
         "close_reasons": {
-          "open": 26
+          "open": 24
         }
       },
       "closed": {
-        "count": 37,
-        "recovered_to_breakeven": 26,
+        "count": 39,
+        "recovered_to_breakeven": 28,
         "close_reasons": {
-          "sold_while_recovered": 26,
+          "sold_while_recovered": 28,
           "sold_while_underwater": 11
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 13,
+        "count": 14,
         "verdicts": {
-          "open": 13
+          "open": 14
         }
       },
       "closed": {
@@ -4273,11 +4369,11 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 2,
-      "swap_rotations": 0
+      "hold_episodes": 0,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 0
     }
   },
@@ -4286,8 +4382,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-30T07:53:15.317836+00:00",
-    "as_of": "2026-10-30T18:53:15.153647+11:00",
+    "updated_at": "2026-11-01T07:11:19.844301+00:00",
+    "as_of": "2026-11-01T18:11:19.603384+11:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -4299,24 +4395,24 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 29,
+    "holding_count": 28,
     "underwater_count": 10,
     "thesis_status_counts": {
       "intact": 17,
-      "weakening": 12,
+      "weakening": 11,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 29,
+      "holding_count": 28,
       "loser_count": 10,
-      "loser_share": 0.3448,
+      "loser_share": 0.3571,
       "loser_nav_share": 0.35,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
-      "within_tolerance": true,
-      "intact_loser_count": 5,
-      "weakening_loser_count": 5,
+      "within_tolerance": false,
+      "intact_loser_count": 6,
+      "weakening_loser_count": 4,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
         "cheapness": 0.0,
@@ -4326,16 +4422,16 @@
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.0,
-        "quality": 0.4211,
-        "dividend": 0.2105,
-        "garp": 0.6316,
+        "cheapness": 0.0556,
+        "quality": 0.3889,
+        "dividend": 0.2222,
+        "garp": 0.5556,
         "risk": 0.0
       },
       "selection_feedback_flags": [
-        "dividend fails more often among losers (60% vs 21%)"
+        "dividend fails more often among losers (60% vs 22%)"
       ],
-      "balancing_hint": "tolerate_intact_losers",
+      "balancing_hint": "trim_weakening_losers",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
@@ -4351,7 +4447,7 @@
         "avg_cost": 16.513,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5161,
+        "conviction_score": 0.5115,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -4376,7 +4472,7 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 52%"
+          "conviction 51%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -4393,7 +4489,7 @@
         "avg_cost": 69.81,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4791,
+        "conviction_score": 0.4833,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -4433,7 +4529,7 @@
         "avg_cost": 7.3493,
         "signal": "strong_buy",
         "timing_signal": "accumulate",
-        "conviction_score": 0.8218,
+        "conviction_score": 0.8158,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -4474,7 +4570,7 @@
         "avg_cost": 3.84,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6013,
+        "conviction_score": 0.5992,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -4507,8 +4603,8 @@
       {
         "ticker": "WGX.AX",
         "name": "Westgold Resources Limited",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
         "unrealized_pct": -0.1333,
@@ -4516,7 +4612,7 @@
         "avg_cost": 6.1036,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.3377,
+        "conviction_score": 0.4371,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -4529,19 +4625,21 @@
         ],
         "research_verdict": "accumulate",
         "reasons": [
-          "conviction 34% below intact floor",
+          "price drawdown alone does not invalidate value thesis",
           "still buy",
-          "research accumulate"
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.95",
+          "conviction 44%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
-          "data_quality 0.95"
+          "data_quality 0.95",
+          "conviction 44%"
         ],
-        "weaken_reasons": [
-          "conviction 34% below intact floor"
-        ],
+        "weaken_reasons": [],
         "broken_reasons": []
       },
       {
@@ -4638,7 +4736,7 @@
         "avg_cost": 7.07,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4821,
+        "conviction_score": 0.4894,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -4658,7 +4756,7 @@
           "still buy",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 48%"
+          "conviction 49%"
         ],
         "weaken_reasons": [
           "research verdict caution"
@@ -4758,7 +4856,7 @@
         "avg_cost": 15.02,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6038,
+        "conviction_score": 0.6127,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -4775,14 +4873,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 60%"
+          "conviction 61%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 60%"
+          "conviction 61%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -4922,7 +5020,7 @@
         "avg_cost": 16.9,
         "signal": "buy",
         "timing_signal": "accumulate",
-        "conviction_score": 0.4442,
+        "conviction_score": 0.438,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -4991,81 +5089,42 @@
         "broken_reasons": []
       },
       {
-        "ticker": "NEM.AX",
-        "name": "Newmont Corporation",
+        "ticker": "CYL.AX",
+        "name": "Catalyst Metals Limited",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.007,
-        "mark": 156.12,
-        "avg_cost": 155.03,
+        "unrealized_pct": 0.0,
+        "mark": 3.92,
+        "avg_cost": 3.92,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6194,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 62%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 62%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "ANN.AX",
-        "name": "Ansell Limited",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0071,
-        "mark": 45.44,
-        "avg_cost": 45.12,
-        "signal": "buy",
-        "timing_signal": "wait",
-        "conviction_score": 0.6665,
+        "conviction_score": 0.4411,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
           "quality",
-          "dividend",
           "garp",
           "risk"
         ],
-        "failed_families": [],
+        "failed_families": [
+          "dividend"
+        ],
         "research_verdict": "accumulate",
         "reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 67%"
+          "conviction 44%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 67%"
+          "conviction 44%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -5077,9 +5136,9 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0198,
+        "unrealized_pct": 0.0021,
         "mark": 13.4,
-        "avg_cost": 13.14,
+        "avg_cost": 13.372,
         "signal": "strong_buy",
         "timing_signal": "neutral",
         "conviction_score": 0.5919,
@@ -5107,6 +5166,46 @@
           "cheapness family still passes",
           "data_quality 0.95",
           "conviction 59%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "NEM.AX",
+        "name": "Newmont Corporation",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.007,
+        "mark": 156.12,
+        "avg_cost": 155.03,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6257,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 63%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 63%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -5190,47 +5289,6 @@
         "broken_reasons": []
       },
       {
-        "ticker": "PRN.AX",
-        "name": "Perenti Limited",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0368,
-        "mark": 1.97,
-        "avg_cost": 1.9,
-        "signal": "hold",
-        "timing_signal": "neutral",
-        "conviction_score": 0.2425,
-        "data_quality_score": 0.95,
-        "passed_families": [
-          "cheapness",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "quality",
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "left buy tier (hold)",
-          "conviction 24% below intact floor",
-          "research accumulate",
-          "cheapness family still passes"
-        ],
-        "intact_reasons": [
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 0.95"
-        ],
-        "weaken_reasons": [
-          "left buy tier (hold)",
-          "conviction 24% below intact floor"
-        ],
-        "broken_reasons": []
-      },
-      {
         "ticker": "CLW.AX",
         "name": "Charter Hall Long WALE REIT",
         "thesis_status": "intact",
@@ -5280,7 +5338,7 @@
         "avg_cost": 5.81,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.1922,
+        "conviction_score": 0.1848,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -5294,7 +5352,7 @@
         "research_verdict": "caution",
         "reasons": [
           "research verdict caution",
-          "conviction 19% below intact floor",
+          "conviction 18% below intact floor",
           "still buy",
           "cheapness family still passes"
         ],
@@ -5305,15 +5363,15 @@
         ],
         "weaken_reasons": [
           "research verdict caution",
-          "conviction 19% below intact floor"
+          "conviction 18% below intact floor"
         ],
         "broken_reasons": []
       },
       {
         "ticker": "AMC.AX",
         "name": "Amcor plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
         "unrealized_pct": 0.0568,
@@ -5321,33 +5379,32 @@
         "avg_cost": 63.04,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5244,
+        "conviction_score": 0.4058,
         "data_quality_score": 1.0,
         "passed_families": [
-          "cheapness",
           "quality",
           "dividend",
           "risk"
         ],
         "failed_families": [
+          "cheapness",
           "garp"
         ],
         "research_verdict": "accumulate",
         "reasons": [
+          "cheapness family no longer passes",
           "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 52%"
+          "research accumulate"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
-          "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 52%"
+          "conviction 41%"
         ],
-        "weaken_reasons": [],
+        "weaken_reasons": [
+          "cheapness family no longer passes"
+        ],
         "broken_reasons": []
       },
       {
@@ -5444,7 +5501,7 @@
         "avg_cost": 1.475,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4438,
+        "conviction_score": 0.5799,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -5461,14 +5518,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 44%"
+          "conviction 58%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 44%"
+          "conviction 58%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -5485,31 +5542,30 @@
         "avg_cost": 31.39,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4029,
+        "conviction_score": 0.7475,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
           "quality",
+          "dividend",
+          "garp",
           "risk"
         ],
-        "failed_families": [
-          "dividend",
-          "garp"
-        ],
+        "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 40%"
+          "conviction 75%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 40%"
+          "conviction 75%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -5522,38 +5578,38 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-30T07:53:15.323736+00:00",
+    "generated_at": "2026-11-01T07:11:19.849314+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 37,
+      "closed_total": 39,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 26,
+      "open_with_thesis": 24,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 31,
-          "recovery_rate": 0.7097,
-          "sold_underwater_rate": 0.2903,
+          "closed_count": 32,
+          "recovery_rate": 0.7188,
+          "sold_underwater_rate": 0.2812,
           "mean_peak_unrealized_pct": 0.0089,
-          "mean_trough_unrealized_pct": -0.0297,
+          "mean_trough_unrealized_pct": -0.0285,
           "outcome_labels": {
-            "recovered": 22,
+            "recovered": 23,
             "sold_underwater": 9
           }
         },
         "broken": {
-          "closed_count": 6,
-          "recovery_rate": 0.6667,
-          "sold_underwater_rate": 0.3333,
-          "mean_peak_unrealized_pct": 0.0077,
-          "mean_trough_unrealized_pct": 0.0077,
+          "closed_count": 7,
+          "recovery_rate": 0.7143,
+          "sold_underwater_rate": 0.2857,
+          "mean_peak_unrealized_pct": 0.0118,
+          "mean_trough_unrealized_pct": 0.0118,
           "outcome_labels": {
-            "recovered": 4,
+            "recovered": 5,
             "sold_underwater": 2
           }
         },
@@ -5583,7 +5639,7 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 37,
+      "hold_closed_with_thesis": 39,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
         "swap sell legs with thesis=0 (target >=5)"
@@ -5597,15 +5653,15 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-30T07:53:15.336625+00:00",
-    "open_count": 11,
-    "closed_count": 27,
+    "generated_at": "2026-11-01T07:11:19.859846+00:00",
+    "open_count": 10,
+    "closed_count": 29,
     "scored_count": 5,
-    "scored_count_all": 27,
-    "recommit_scored_count": 22,
+    "scored_count_all": 29,
+    "recommit_scored_count": 24,
     "entry_kind_counts": {
       "first_entry": 5,
-      "recommit": 22
+      "recommit": 24
     },
     "any_de_risk_count": 3,
     "winning_cadence_counts": {
@@ -5655,17 +5711,17 @@
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
       "first_entry_scored": 5,
-      "recommit_scored": 22
+      "recommit_scored": 24
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 11,
-    "closed_this_pass": 0
+    "closed_this_pass": 2
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-30T18:53:15.153647+11:00",
+    "generated_at": "2026-11-01T18:11:19.603384+11:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -5692,9 +5748,9 @@
     "open_count": 38,
     "closed_count": 1,
     "open_by_capital_status": {
-      "on_book": 29,
-      "off_book": 7,
-      "never_funded": 2
+      "on_book": 28,
+      "off_book": 9,
+      "never_funded": 1
     },
     "closed_by_capital_status": {
       "on_book": 0,
@@ -5713,16 +5769,16 @@
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 2,
+      "opened": 0,
       "closed": 0,
-      "tagged_on_book": 0,
-      "tagged_off_book": 0
+      "tagged_on_book": 1,
+      "tagged_off_book": 2
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-30T18:53:15.153647+11:00",
+    "generated_at": "2026-11-01T18:11:19.603384+11:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -5730,16 +5786,26 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 3,
-    "card_count": 3,
+    "proposal_count": 10,
+    "card_count": 10,
     "verdict_counts": {
-      "agree": 3,
-      "veto": 0,
+      "agree": 9,
+      "veto": 1,
       "abstain": 0
     },
     "by_algo_action": {
       "rebuy_skip": {
-        "agree": 3,
+        "agree": 6,
+        "veto": 0,
+        "abstain": 0
+      },
+      "sell": {
+        "agree": 1,
+        "veto": 1,
+        "abstain": 0
+      },
+      "buy": {
+        "agree": 2,
         "veto": 0,
         "abstain": 0
       }
@@ -5747,15 +5813,93 @@
     "disagree_vs_heuristic_count": 0,
     "cards": [
       {
-        "ticker": "WHC.AX",
-        "name": "Whitehaven Coal Limited",
+        "ticker": "WAF.AX",
+        "name": "West African Resources Limited",
         "algo_action": "rebuy_skip",
         "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
         "reasons": [
-          "algo_reason documents insufficient cash after higher-conviction fills, a legitimate portfolio constraint rather than a thesis exit.",
-          "still_buyish true with screen_signal buy, rank_drop 0, and entry_rank equal to conviction_rank \u2014 no leave-buy-cohort signal.",
-          "research_verdict accumulate with overlay_bound supports continued interest; skip defers sizing rather than contradicting the screen."
+          "Rebuy blocked by explicit cash constraint after higher-conviction fills; name remains strong_buy with rank_drop 0 and still_buyish, so skipping rebuy avoids churn without contradicting buy thesis."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 7
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 7
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-01T18:11:19.603384+11:00",
+        "proposal_id": "buy_tier_level:WAF.AX:rebuy_skip:2026-11-01T18:11:19.603384+11:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "AAI.AX",
+        "name": "Alcoa Corporation",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Insufficient cash is a valid rebuy gate; still_buyish with stable rank (rank_drop 0) supports deferring add rather than forcing a sell."
         ],
         "evidence": [
           {
@@ -5770,16 +5914,78 @@
             "value": "buy"
           },
           {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 26
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
           },
           {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 26
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-01T18:11:19.603384+11:00",
+        "proposal_id": "buy_tier_level:AAI.AX:rebuy_skip:2026-11-01T18:11:19.603384+11:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "CYL.AX",
+        "name": "Catalyst Metals Limited",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Cash constraint rebuy_skip aligns with still_buyish buy signal, accumulate verdict, and zero rank_drop\u2014no evidence to override the skip."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
           },
           {
             "kind": "rank_drop",
@@ -5798,12 +6004,6 @@
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
             "value": true
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
           }
         ],
         "judge_backend": "llm",
@@ -5811,8 +6011,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-30T18:53:15.153647+11:00",
-        "proposal_id": "buy_tier_level:WHC.AX:rebuy_skip:2026-10-30T18:53:15.153647+11:00",
+        "logged_at": "2026-11-01T18:11:19.603384+11:00",
+        "proposal_id": "buy_tier_level:CYL.AX:rebuy_skip:2026-11-01T18:11:19.603384+11:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -5847,9 +6047,7 @@
         "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
         "reasons": [
-          "algo_reason cites cash prioritization to higher-conviction fills; rebuy_skip is consistent with that constraint.",
-          "still_buyish false and screen_signal hold align with not forcing a rebuy when the name is no longer in the buy cohort.",
-          "rank_drop 0 avoids a sell-style veto; research_verdict caution further supports deferring rebuy over churn."
+          "Effective hold and not still_buyish; skipping rebuy under cash pressure is consistent with lower-priority sleeve and caution overlay."
         ],
         "evidence": [
           {
@@ -5862,12 +6060,6 @@
             "source": "candidates",
             "detail": "Effective signal at decision time",
             "value": "hold"
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
           },
           {
             "kind": "research_verdict",
@@ -5887,13 +6079,87 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-30T18:53:15.153647+11:00",
-        "proposal_id": "buy_tier_level:TUA.AX:rebuy_skip:2026-10-30T18:53:15.153647+11:00",
+        "logged_at": "2026-11-01T18:11:19.603384+11:00",
+        "proposal_id": "buy_tier_level:TUA.AX:rebuy_skip:2026-11-01T18:11:19.603384+11:00",
         "meta": {
           "still_buyish": false,
           "rank_drop": 0,
           "rank_drop_exit_min": 3,
           "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "WHC.AX",
+        "name": "Whitehaven Coal Limited",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Rebuy_skip driven by cash allocation; still_buyish buy with rank_drop 0 does not warrant vetoing the skip."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-01T18:11:19.603384+11:00",
+        "proposal_id": "buy_tier_level:WHC.AX:rebuy_skip:2026-11-01T18:11:19.603384+11:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
           "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
           "judge_spec_id": "heuristic.v1",
           "p1_live_inputs": {
@@ -5923,9 +6189,7 @@
         "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
         "reasons": [
-          "Insufficient cash after higher-conviction fills is an explicit, evidence-backed skip reason.",
-          "hold signal and still_buyish false mean rebuy_skip does not fight a still-buyish rebuy case.",
-          "rank_drop 0 and research_verdict caution support agree on skip rather than veto for capacity-bump risk."
+          "Hold signal and still_buyish false with caution; rebuy_skip under cash limits matches reduced cohort priority."
         ],
         "evidence": [
           {
@@ -5938,12 +6202,6 @@
             "source": "candidates",
             "detail": "Effective signal at decision time",
             "value": "hold"
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
           },
           {
             "kind": "research_verdict",
@@ -5963,8 +6221,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-30T18:53:15.153647+11:00",
-        "proposal_id": "buy_tier_level:PLS.AX:rebuy_skip:2026-10-30T18:53:15.153647+11:00",
+        "logged_at": "2026-11-01T18:11:19.603384+11:00",
+        "proposal_id": "buy_tier_level:PLS.AX:rebuy_skip:2026-11-01T18:11:19.603384+11:00",
         "meta": {
           "still_buyish": false,
           "rank_drop": 0,
@@ -5991,6 +6249,326 @@
         },
         "schema_version": 1,
         "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "PRN.AX",
+        "name": "Perenti Limited",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Automated exit for leaving target set; hold screen signal and still_buyish false support decisive leave-buy-cohort sell."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-01T18:11:19.603384+11:00",
+        "proposal_id": "buy_tier_level:PRN.AX:sell:2026-11-01T18:11:19.603384+11:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": null,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "ANN.AX",
+        "name": "Ansell Limited",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "veto",
+        "reasons": [
+          "Sell conflicts with still_buyish buy signal, top-tier conviction rank with rank_drop 0 (below hold gate), and accumulate overlay\u2014capacity-bump churn risk without rank deterioration."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 4
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 4
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.668
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-01T18:11:19.603384+11:00",
+        "proposal_id": "buy_tier_level:ANN.AX:sell:2026-11-01T18:11:19.603384+11:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "veto",
+            "reasons": [
+              "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "PMV.AX",
+        "name": "Premier Investments Limited",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Strong_buy with stable rank, accumulate overlay, and still_buyish true supports automated buy into target set."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 8
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-01T18:11:19.603384+11:00",
+        "proposal_id": "buy_tier_level:PMV.AX:buy:2026-11-01T18:11:19.603384+11:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Buy into buyish target set \u2014 agree with algo selection."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "CYL.AX",
+        "name": "Catalyst Metals Limited",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Buy signal with accumulate verdict and still_buyish true; rank unchanged at entry\u2014consistent with algo buy."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 19
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 19
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-01T18:11:19.603384+11:00",
+        "proposal_id": "buy_tier_level:CYL.AX:buy:2026-11-01T18:11:19.603384+11:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Buy into buyish target set \u2014 agree with algo selection."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
       }
     ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
@@ -5998,33 +6576,45 @@
       "attempted": true,
       "ok": true,
       "fallback": null,
-      "llm_card_count": 3
+      "llm_card_count": 10
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-30T18:53:15.153647+11:00",
+      "generated_at": "2026-11-01T18:11:19.603384+11:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 3,
+      "card_count": 10,
       "verdict_counts": {
-        "agree": 3,
-        "veto": 0,
+        "agree": 9,
+        "veto": 1,
         "abstain": 0
       },
       "by_algo_action": {
         "rebuy_skip": {
-          "agree": 3,
+          "agree": 6,
+          "veto": 0,
+          "abstain": 0
+        },
+        "sell": {
+          "agree": 1,
+          "veto": 1,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 2,
           "veto": 0,
           "abstain": 0
         }
       },
-      "veto_sell_count": 0,
-      "veto_sell_tickers": [],
+      "veto_sell_count": 1,
+      "veto_sell_tickers": [
+        "ANN.AX"
+      ],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -6038,7 +6628,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-30T07:53:21.211491+00:00",
+  "generated_at": "2026-11-01T07:11:25.992145+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

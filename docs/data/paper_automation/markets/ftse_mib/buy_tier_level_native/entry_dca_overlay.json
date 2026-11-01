@@ -1299,7 +1299,7 @@
       "track_id": "buy_tier_level_native",
       "ticker": "INW.MI",
       "started_at": "2026-10-25T07:07:44.959618+00:00",
-      "status": "open",
+      "status": "closed",
       "lifecycle_stage": "starter",
       "entry_kind": "first_entry",
       "entry_price": 7.325,
@@ -1322,6 +1322,185 @@
         {
           "as_of": "2026-10-30T07:54:46.259305+00:00",
           "price": 7.28
+        },
+        {
+          "as_of": "2026-11-01T07:13:10.052366+00:00",
+          "price": 7.355
+        }
+      ],
+      "cadence_scores": [
+        {
+          "id": "lump_sum",
+          "label": "100% at decision",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 1,
+          "avg_fill": 7.325,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": -0.21,
+          "peak_deployed_return": -0.0198,
+          "end_value": 10.6,
+          "end_value_delta": 0.0,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-25T07:07:44.959618+00:00",
+              "price": 7.325
+            }
+          ],
+          "de_risk_gbp": 0.0
+        },
+        {
+          "id": "dca_2x_weekly",
+          "label": "50/50 over 1 week",
+          "scored": true,
+          "tranches_filled": 2,
+          "tranches_target": 2,
+          "avg_fill": 7.34,
+          "fill_advantage_pct": -0.002,
+          "extra_cost": 0.0,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": -0.23,
+          "peak_deployed_return": -0.0218,
+          "end_value": 10.58,
+          "end_value_delta": -0.02,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-25T07:07:44.959618+00:00",
+              "price": 7.325
+            },
+            {
+              "tranche": 2,
+              "as_of": "2026-11-01T07:13:10.052366+00:00",
+              "price": 7.355
+            }
+          ],
+          "de_risk_gbp": -0.02
+        },
+        {
+          "id": "dca_4x_weekly",
+          "label": "25% weekly \u00d7 4",
+          "scored": true,
+          "tranches_filled": 2,
+          "tranches_target": 4,
+          "avg_fill": 7.34,
+          "fill_advantage_pct": -0.002,
+          "extra_cost": 0.0,
+          "leftover_cash": 5.28,
+          "peak_loss_gbp": -0.12,
+          "peak_deployed_return": -0.0218,
+          "end_value": 10.57,
+          "end_value_delta": -0.03,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-25T07:07:44.959618+00:00",
+              "price": 7.325
+            },
+            {
+              "tranche": 2,
+              "as_of": "2026-11-01T07:13:10.052366+00:00",
+              "price": 7.355
+            }
+          ],
+          "de_risk_gbp": 0.09
+        },
+        {
+          "id": "dca_2x_biweekly",
+          "label": "50/50 over 2 weeks",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 7.325,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 5.28,
+          "peak_loss_gbp": -0.1,
+          "peak_deployed_return": -0.0198,
+          "end_value": 10.58,
+          "end_value_delta": -0.02,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-25T07:07:44.959618+00:00",
+              "price": 7.325
+            }
+          ],
+          "de_risk_gbp": 0.11
+        },
+        {
+          "id": "dca_5x_weekday",
+          "label": "20% over 5 weekday marks",
+          "scored": true,
+          "tranches_filled": 5,
+          "tranches_target": 5,
+          "avg_fill": 7.2085,
+          "fill_advantage_pct": 0.0159,
+          "extra_cost": 0.0,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": -0.04,
+          "peak_deployed_return": -0.0099,
+          "end_value": 10.77,
+          "end_value_delta": 0.17,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-25T07:07:44.959618+00:00",
+              "price": 7.325
+            },
+            {
+              "tranche": 2,
+              "as_of": "2026-10-29T07:38:27.753127+00:00",
+              "price": 7.18
+            },
+            {
+              "tranche": 3,
+              "as_of": "2026-10-29T07:38:27.753127+00:00",
+              "price": 7.18
+            },
+            {
+              "tranche": 4,
+              "as_of": "2026-10-29T07:38:27.753127+00:00",
+              "price": 7.18
+            },
+            {
+              "tranche": 5,
+              "as_of": "2026-10-29T07:38:27.753127+00:00",
+              "price": 7.18
+            }
+          ],
+          "de_risk_gbp": 0.17
+        }
+      ],
+      "winning_cadence": "dca_5x_weekday",
+      "winning_end_value_delta": 0.17,
+      "any_de_risk": true,
+      "closed_at": "2026-11-01T07:13:10.052366+00:00",
+      "close_reason": "sold_before_window"
+    },
+    {
+      "id": "buy_tier_level_native:IG.MI:2026-11-01T07:13:10.052366+00:00",
+      "track_id": "buy_tier_level_native",
+      "ticker": "IG.MI",
+      "started_at": "2026-11-01T07:13:10.052366+00:00",
+      "status": "open",
+      "lifecycle_stage": "starter",
+      "entry_kind": "first_entry",
+      "entry_price": 8.948,
+      "notional": 180.18,
+      "shares": 20.135847,
+      "buy_cost_pct": 0.00025,
+      "screen_signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.3792,
+      "data_quality_score": 1.0,
+      "marks": [
+        {
+          "as_of": "2026-11-01T07:13:10.052366+00:00",
+          "price": 8.948
         }
       ]
     }

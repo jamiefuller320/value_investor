@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-10-30T07:53:54.632513+00:00",
-  "as_of": "2026-10-30T07:53:54.612302+00:00",
+  "updated_at": "2026-11-01T07:11:48.142271+00:00",
+  "as_of": "2026-11-01T07:11:48.117541+00:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -16,86 +16,56 @@
     "broken_urgency_boost": 0.28,
     "skip_underwater_urgency_when_intact": true
   },
-  "holding_count": 3,
-  "underwater_count": 0,
+  "holding_count": 2,
+  "underwater_count": 1,
   "thesis_status_counts": {
     "intact": 2,
     "weakening": 0,
-    "broken": 1,
+    "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
-    "holding_count": 3,
-    "loser_count": 0,
-    "loser_share": 0.0,
-    "loser_nav_share": 0.0,
+    "holding_count": 2,
+    "loser_count": 1,
+    "loser_share": 0.5,
+    "loser_nav_share": 0.5004,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
-    "within_tolerance": true,
-    "intact_loser_count": 0,
+    "within_tolerance": false,
+    "intact_loser_count": 1,
     "weakening_loser_count": 0,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
       "quality": 0.0,
-      "dividend": 0.0,
+      "dividend": 1.0,
       "garp": 0.0,
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.3333,
-      "quality": 0.3333,
-      "dividend": 0.6667,
-      "garp": 0.6667,
-      "risk": 0.3333
+      "cheapness": 0.0,
+      "quality": 0.0,
+      "dividend": 0.0,
+      "garp": 1.0,
+      "risk": 0.0
     },
-    "selection_feedback_flags": [],
-    "balancing_hint": "maintain",
+    "selection_feedback_flags": [
+      "dividend fails more often among losers (100% vs 0%)"
+    ],
+    "balancing_hint": "hold_intact_review_selection",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
-    {
-      "ticker": "DFS.L",
-      "name": "DFS.L",
-      "thesis_status": "broken",
-      "recommended_action": "exit_candidate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 136.0,
-      "avg_cost": 136.0,
-      "signal": null,
-      "timing_signal": null,
-      "conviction_score": null,
-      "data_quality_score": null,
-      "passed_families": [],
-      "failed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "research_verdict": null,
-      "reasons": [
-        "cheapness lost and not in buy tier"
-      ],
-      "intact_reasons": [],
-      "weaken_reasons": [],
-      "broken_reasons": [
-        "cheapness lost and not in buy tier"
-      ]
-    },
     {
       "ticker": "CAPD.L",
       "name": "Capital Limited",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0318,
-      "mark": 114.5,
-      "avg_cost": 118.2625,
+      "unrealized_pct": -0.0518,
+      "mark": 112.0,
+      "avg_cost": 118.1188,
       "signal": "strong_buy",
       "timing_signal": "neutral",
       "conviction_score": 0.6733,
@@ -111,6 +81,7 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
+        "price drawdown alone does not invalidate value thesis",
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
@@ -134,12 +105,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0221,
-      "mark": 171.2,
-      "avg_cost": 167.492,
+      "unrealized_pct": 0.0192,
+      "mark": 172.2,
+      "avg_cost": 168.9499,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4315,
+      "conviction_score": 0.4324,
       "data_quality_score": 0.85,
       "passed_families": [
         "cheapness",

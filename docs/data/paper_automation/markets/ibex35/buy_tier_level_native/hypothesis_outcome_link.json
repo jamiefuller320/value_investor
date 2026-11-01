@@ -3,13 +3,13 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-10-30T07:54:41.252027+00:00",
+  "generated_at": "2026-11-01T07:13:00.474156+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 1,
     "closed_unknown_thesis": 0,
     "open_with_thesis": 4,
     "by_thesis_status": {
@@ -17,7 +17,14 @@
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.0641,
+        "mean_trough_unrealized_pct": -0.0313,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "broken": {
         "closed_count": 0
@@ -48,10 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 1,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=1 (target >=8)",
+      "hold thesis buckets thin (weakening=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -174,7 +182,7 @@
           "trough_unrealized_pct": -0.0108
         }
       ],
-      "peak_unrealized_pct": 0.1153,
+      "peak_unrealized_pct": 0.1439,
       "trough_unrealized_pct": -0.0108,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -227,7 +235,7 @@
           "trough_unrealized_pct": 0.0161
         }
       ],
-      "peak_unrealized_pct": 0.0503,
+      "peak_unrealized_pct": 0.073,
       "trough_unrealized_pct": -0.0133,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -240,7 +248,7 @@
       "ticker": "AENA.MC",
       "name": "Aena S.M.E., S.A.",
       "started_at": "2026-10-08T09:50:26.062976+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -281,6 +289,48 @@
       ],
       "peak_unrealized_pct": 0.0641,
       "trough_unrealized_pct": -0.0313,
+      "recovered_to_breakeven": true,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-01T07:13:00.464859+00:00",
+      "linked_sell_trade_id": "3a414182-c932-4952-9b66-b5ccca4a0910"
+    },
+    {
+      "episode_id": "buy_tier_level_native:NTGY.MC:2026-11-01T07:13:00.464859+00:00",
+      "track_id": "buy_tier_level_native",
+      "ticker": "NTGY.MC",
+      "name": "Naturgy Energy Group, S.A.",
+      "started_at": "2026-11-01T07:13:00.464859+00:00",
+      "status": "open",
+      "stress_triggers": [
+        "exit_streak",
+        "signal_downgrade"
+      ],
+      "entry_mark": 29.66,
+      "avg_cost": 29.52,
+      "unrealized_pct_at_start": 0.0047,
+      "thesis_status_at_start": "broken",
+      "recommended_action_at_start": "exit_candidate",
+      "thesis_reasons_at_start": [
+        "cheapness lost and not in buy tier"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "neutral",
+      "unrealized_pct_at_thesis": 0.0047,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.95,
+      "conviction_score": 0.2322,
+      "exit_streak_at_start": 1,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0047,
+      "trough_unrealized_pct": 0.0047,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -347,10 +397,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "GRF.MC": 0.0929
+        "GRF.MC": 0.1236
       },
       "buy_returns_since_rotation": {
-        "SCYR.MC": 0.0129
+        "SCYR.MC": 0.0025
       },
       "verdict": null,
       "closed_at": null
@@ -433,11 +483,69 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "GRF.MC": 0.1145,
-        "SCYR.MC": 0.0256
+        "GRF.MC": 0.1459,
+        "SCYR.MC": 0.015
       },
       "buy_returns_since_rotation": {
-        "AENA.MC": 0.0641
+        "AENA.MC": 0.0578
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-11-01T07:13:00.464859+00:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-11-01T07:13:00.464859+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "AENA.MC",
+          "price": 27.08,
+          "shares": 7.821089,
+          "gross": 211.8,
+          "cost": 0.05,
+          "avg_cost_at_exit": 25.6,
+          "realized_pct": 0.0578,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0578
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "GRF.MC",
+          "price": 10.975,
+          "shares": 11.295325,
+          "gross": 123.97,
+          "cost": 0.03
+        },
+        {
+          "ticker": "SCYR.MC",
+          "price": 4.05,
+          "shares": 21.660008,
+          "gross": 87.72,
+          "cost": 0.02
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "AENA.MC": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "GRF.MC": 0.0,
+        "SCYR.MC": 0.0
       },
       "verdict": null,
       "closed_at": null

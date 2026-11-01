@@ -1,15 +1,80 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-30T08:56:26.221808+01:00",
+    "local_time": "2026-11-01T08:14:34.438084+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-30T09:00:00+01:00",
-    "settle_at": "2026-10-30T09:30:00+01:00",
+    "market_open_at": "2026-11-01T09:00:00+01:00",
+    "settle_at": "2026-11-01T09:30:00+01:00",
     "can_act": false,
     "reason": "before market open"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "9eac6ce4-e610-4793-aea8-2cc3bdc80704",
+      "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
+      "acted_at": "2026-11-01T08:14:34.438084+01:00",
+      "ticker": "TEL2-B.ST",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 1.263316,
+      "price": 159.6,
+      "gross": 201.63,
+      "cost": 0.37,
+      "net_cash": 201.25,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Tele2 AB (publ)",
+      "avg_cost_at_exit": 159.85,
+      "position_closed": true
+    },
+    {
+      "id": "5e411c87-fa91-4db4-ac03-fa208cad1623",
+      "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
+      "acted_at": "2026-11-01T08:14:34.438084+01:00",
+      "ticker": "DG.PA",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 1.886019,
+      "price": 108.6,
+      "gross": 204.82,
+      "cost": 0.38,
+      "net_cash": 204.44,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Vinci SA",
+      "avg_cost_at_exit": 108.65,
+      "position_closed": true
+    },
+    {
+      "id": "2973fd81-d9d2-444c-81ac-c6604940b581",
+      "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
+      "acted_at": "2026-11-01T08:14:34.438084+01:00",
+      "ticker": "UMI.BR",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 11.719167,
+      "price": 17.62,
+      "gross": 206.49,
+      "cost": 0.38,
+      "net_cash": -206.87,
+      "note": "Automated buy",
+      "name": "Umicore SA"
+    },
+    {
+      "id": "bb549adc-9ad0-4052-8023-bea921c6be02",
+      "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
+      "acted_at": "2026-11-01T08:14:34.438084+01:00",
+      "ticker": "TTE.PA",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 2.417087,
+      "price": 85.43,
+      "gross": 206.49,
+      "cost": 0.38,
+      "net_cash": -206.87,
+      "note": "Automated buy",
+      "name": "TotalEnergies SE"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +88,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1031.2,
-    "cash": 14.15,
+    "nav": 1033.6,
+    "cash": 6.1,
     "max_positions": 5,
     "min_conviction": 0.0,
     "sector_cap": 0.3,
@@ -36,21 +101,21 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 206.24,
+    "target_sleeve_value": 206.72,
     "targets": [
       {
-        "ticker": "DG.PA",
-        "name": "Vinci SA",
+        "ticker": "UMI.BR",
+        "name": "Umicore SA",
         "signal": "strong_buy",
-        "conviction_score": 0.9044000000000001,
-        "price": 108.3
+        "conviction_score": 0.9144,
+        "price": 17.62
       },
       {
         "ticker": "C5H.IR",
         "name": "Cairn Homes plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7874000000000001,
-        "price": 2.755
+        "conviction_score": 0.7771,
+        "price": 2.775
       },
       {
         "ticker": "PHIA.AS",
@@ -63,15 +128,15 @@
         "ticker": "EG7.IR",
         "name": "FBD Holdings plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7363000000000001,
-        "price": 19.4
+        "conviction_score": 0.7340000000000001,
+        "price": 19.5
       },
       {
-        "ticker": "TEL2-B.ST",
-        "name": "Tele2 AB (publ)",
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
         "signal": "buy",
-        "conviction_score": 0.7333000000000001,
-        "price": 158.95
+        "conviction_score": 0.7167,
+        "price": 85.43
       }
     ],
     "anticipated_exits": [],
@@ -81,12 +146,12 @@
     "anticipated_holds": [
       {
         "action": "hold",
-        "ticker": "DG.PA",
-        "name": "Vinci SA",
+        "ticker": "UMI.BR",
+        "name": "Umicore SA",
         "reason": "Already near equal-weight target",
-        "value": 204.26,
-        "target_value": 206.24,
-        "conviction_score": 0.9044000000000001,
+        "value": 206.49,
+        "target_value": 206.72,
+        "conviction_score": 0.9144,
         "signal": "strong_buy"
       },
       {
@@ -94,9 +159,9 @@
         "ticker": "C5H.IR",
         "name": "Cairn Homes plc",
         "reason": "Already near equal-weight target",
-        "value": 205.7,
-        "target_value": 206.24,
-        "conviction_score": 0.7874000000000001,
+        "value": 207.2,
+        "target_value": 206.72,
+        "conviction_score": 0.7771,
         "signal": "strong_buy"
       },
       {
@@ -105,7 +170,7 @@
         "name": "Koninklijke Philips N.V.",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 203.72,
-        "target_value": 206.24,
+        "target_value": 206.72,
         "conviction_score": 0.7742,
         "signal": "strong_buy"
       },
@@ -114,19 +179,19 @@
         "ticker": "EG7.IR",
         "name": "FBD Holdings plc",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 202.56,
-        "target_value": 206.24,
-        "conviction_score": 0.7363000000000001,
+        "value": 203.61,
+        "target_value": 206.72,
+        "conviction_score": 0.7340000000000001,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
-        "ticker": "TEL2-B.ST",
-        "name": "Tele2 AB (publ)",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 200.8,
-        "target_value": 206.24,
-        "conviction_score": 0.7333000000000001,
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
+        "reason": "Already near equal-weight target",
+        "value": 206.49,
+        "target_value": 206.72,
+        "conviction_score": 0.7167,
         "signal": "buy"
       }
     ],
@@ -152,7 +217,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 2.755000114440918,
+      "mark": 2.7750000953674316,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -163,29 +228,29 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 19.399999618530273,
+      "mark": 19.5,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
     },
     {
-      "ticker": "TEL2-B.ST",
-      "name": "Tele2 AB (publ)",
+      "ticker": "UMI.BR",
+      "name": "Umicore SA",
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 158.9499969482422,
+      "mark": 17.6200008392334,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
     },
     {
-      "ticker": "DG.PA",
-      "name": "Vinci SA",
+      "ticker": "TTE.PA",
+      "name": "TotalEnergies SE",
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 108.30000305175781,
+      "mark": 85.43000030517578,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -206,7 +271,7 @@
       "id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
       "created_at": "2026-09-09T07:22:16.764847+00:00"
     },
-    "cash": 14.15,
+    "cash": 6.1,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -243,27 +308,27 @@
         "take_profit": null,
         "opened_at": "2026-10-14T10:52:34.521989+02:00"
       },
-      "TEL2-B.ST": {
-        "ticker": "TEL2-B.ST",
-        "shares": 1.263316,
-        "avg_cost": 159.85,
-        "name": "Tele2 AB (publ)",
-        "sector": "Communication Services",
-        "currency": "SEK",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-10-25T08:09:11.858747+01:00"
-      },
-      "DG.PA": {
-        "ticker": "DG.PA",
-        "shares": 1.886019,
-        "avg_cost": 108.65,
-        "name": "Vinci SA",
+      "UMI.BR": {
+        "ticker": "UMI.BR",
+        "shares": 11.719167,
+        "avg_cost": 17.62,
+        "name": "Umicore SA",
         "sector": "Industrials",
         "currency": "EUR",
         "stop_loss": null,
         "take_profit": null,
-        "opened_at": "2026-10-29T08:39:45.897264+01:00"
+        "opened_at": "2026-11-01T08:14:34.438084+01:00"
+      },
+      "TTE.PA": {
+        "ticker": "TTE.PA",
+        "shares": 2.417087,
+        "avg_cost": 85.43,
+        "name": "TotalEnergies SE",
+        "sector": "Energy",
+        "currency": "EUR",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-11-01T08:14:34.438084+01:00"
       }
     },
     "trades": [
@@ -851,6 +916,70 @@
         "net_cash": -205.3,
         "note": "Automated buy",
         "name": "Vinci SA"
+      },
+      {
+        "id": "9eac6ce4-e610-4793-aea8-2cc3bdc80704",
+        "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
+        "acted_at": "2026-11-01T08:14:34.438084+01:00",
+        "ticker": "TEL2-B.ST",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 1.263316,
+        "price": 159.6,
+        "gross": 201.63,
+        "cost": 0.37,
+        "net_cash": 201.25,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Tele2 AB (publ)",
+        "avg_cost_at_exit": 159.85,
+        "position_closed": true
+      },
+      {
+        "id": "5e411c87-fa91-4db4-ac03-fa208cad1623",
+        "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
+        "acted_at": "2026-11-01T08:14:34.438084+01:00",
+        "ticker": "DG.PA",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 1.886019,
+        "price": 108.6,
+        "gross": 204.82,
+        "cost": 0.38,
+        "net_cash": 204.44,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Vinci SA",
+        "avg_cost_at_exit": 108.65,
+        "position_closed": true
+      },
+      {
+        "id": "2973fd81-d9d2-444c-81ac-c6604940b581",
+        "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
+        "acted_at": "2026-11-01T08:14:34.438084+01:00",
+        "ticker": "UMI.BR",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 11.719167,
+        "price": 17.62,
+        "gross": 206.49,
+        "cost": 0.38,
+        "net_cash": -206.87,
+        "note": "Automated buy",
+        "name": "Umicore SA"
+      },
+      {
+        "id": "bb549adc-9ad0-4052-8023-bea921c6be02",
+        "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
+        "acted_at": "2026-11-01T08:14:34.438084+01:00",
+        "ticker": "TTE.PA",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 2.417087,
+        "price": 85.43,
+        "gross": 206.49,
+        "cost": 0.38,
+        "net_cash": -206.87,
+        "note": "Automated buy",
+        "name": "TotalEnergies SE"
       }
     ],
     "equity_curve": [
@@ -1941,24 +2070,62 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-01T08:02:17.652615+01:00",
+        "portfolio_value": 714.25,
+        "cash": 14.15,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83583,
+            "SEK": 0.07574
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-01T08:14:34.438084+01:00",
+        "portfolio_value": 864.92,
+        "cash": 6.1,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83583
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-30T08:56:26.221808+01:00",
+    "last_mark_at": "2026-11-01T08:14:34.438084+01:00",
     "rebalance_state": {
       "exit_streak": {},
-      "reentry_cooldown": {}
+      "reentry_cooldown": {
+        "TEL2-B.ST": 1,
+        "DG.PA": 1
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (4 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "euro_depth",
     "track_id": "rules",
-    "generated_at": "2026-10-30T07:56:35.527279+00:00",
+    "generated_at": "2026-11-01T07:14:45.187536+00:00",
     "observe_only": true,
-    "open_count": 14,
+    "open_count": 16,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -1993,7 +2160,7 @@
       }
     },
     "first_episode": {
-      "open_count": 10,
+      "open_count": 11,
       "closed_count": 0,
       "by_exit_kind": {
         "grace": {
@@ -2029,13 +2196,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 2,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "rules",
-    "generated_at": "2026-10-30T07:56:35.528817+00:00",
+    "generated_at": "2026-11-01T07:14:45.189832+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2089,37 +2256,36 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 14,
+      "hold_closed_count": 16,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 16,
+      "hold_with_data_quality_count": 17,
       "gaps": [
-        "hold_recovery closed episodes=14 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 2,
+        "count": 1,
         "recovered_to_breakeven": 1,
         "close_reasons": {
-          "open": 2
+          "open": 1
         }
       },
       "closed": {
-        "count": 14,
+        "count": 16,
         "recovered_to_breakeven": 11,
         "close_reasons": {
           "sold_while_recovered": 11,
-          "sold_while_underwater": 3
+          "sold_while_underwater": 5
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 11,
+        "count": 12,
         "verdicts": {
-          "open": 11
+          "open": 12
         }
       },
       "closed": {
@@ -2129,7 +2295,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -2141,8 +2307,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "rules",
-    "updated_at": "2026-10-30T07:56:35.530854+00:00",
-    "as_of": "2026-10-30T08:56:26.221808+01:00",
+    "updated_at": "2026-11-01T07:14:45.192467+00:00",
+    "as_of": "2026-11-01T08:14:34.438084+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2193,18 +2359,18 @@
     },
     "holdings": [
       {
-        "ticker": "TEL2-B.ST",
-        "name": "Tele2 AB (publ)",
+        "ticker": "UMI.BR",
+        "name": "Umicore SA",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0056,
-        "mark": 158.95,
-        "avg_cost": 159.85,
-        "signal": "buy",
+        "unrealized_pct": 0.0,
+        "mark": 17.62,
+        "avg_cost": 17.62,
+        "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7333,
+        "conviction_score": 0.9144,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2216,35 +2382,35 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 73%"
+          "conviction 91%"
         ],
         "intact_reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 73%"
+          "conviction 91%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
       },
       {
-        "ticker": "DG.PA",
-        "name": "Vinci SA",
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0032,
-        "mark": 108.3,
-        "avg_cost": 108.65,
-        "signal": "strong_buy",
+        "unrealized_pct": 0.0,
+        "mark": 85.43,
+        "avg_cost": 85.43,
+        "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9044,
+        "conviction_score": 0.7167,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2256,18 +2422,18 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "still strong_buy",
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 90%"
+          "conviction 72%"
         ],
         "intact_reasons": [
-          "still strong_buy",
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 90%"
+          "conviction 72%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2279,12 +2445,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0237,
-        "mark": 19.4,
+        "unrealized_pct": 0.029,
+        "mark": 19.5,
         "avg_cost": 18.95,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7363,
+        "conviction_score": 0.734,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -2300,14 +2466,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 74%"
+          "conviction 73%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 74%"
+          "conviction 73%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2319,12 +2485,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0396,
-        "mark": 2.755,
+        "unrealized_pct": 0.0472,
+        "mark": 2.775,
         "avg_cost": 2.65,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7874,
+        "conviction_score": 0.7771,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2340,14 +2506,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 79%"
+          "conviction 78%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 79%"
+          "conviction 78%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2400,28 +2566,28 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "rules",
-    "generated_at": "2026-10-30T07:56:35.533390+00:00",
+    "generated_at": "2026-11-01T07:14:45.195133+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 14,
+      "closed_total": 16,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 2,
+      "open_with_thesis": 1,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 14,
-          "recovery_rate": 0.7857,
-          "sold_underwater_rate": 0.2143,
-          "mean_peak_unrealized_pct": 0.0159,
-          "mean_trough_unrealized_pct": -0.0084,
+          "closed_count": 16,
+          "recovery_rate": 0.6875,
+          "sold_underwater_rate": 0.3125,
+          "mean_peak_unrealized_pct": 0.0138,
+          "mean_trough_unrealized_pct": -0.0083,
           "outcome_labels": {
             "recovered": 11,
-            "sold_underwater": 3
+            "sold_underwater": 5
           }
         },
         "broken": {
@@ -2453,7 +2619,7 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 14,
+      "hold_closed_with_thesis": 16,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
         "swap sell legs with thesis=0 (target >=5)"
@@ -2467,75 +2633,75 @@
     "schema_version": 1,
     "track_id": "rules",
     "observe_only": true,
-    "generated_at": "2026-10-30T07:56:35.538890+00:00",
+    "generated_at": "2026-11-01T07:14:45.200498+00:00",
     "open_count": 5,
-    "closed_count": 9,
-    "scored_count": 5,
-    "scored_count_all": 9,
-    "recommit_scored_count": 4,
+    "closed_count": 11,
+    "scored_count": 6,
+    "scored_count_all": 11,
+    "recommit_scored_count": 5,
     "entry_kind_counts": {
-      "first_entry": 5,
-      "recommit": 4
+      "first_entry": 6,
+      "recommit": 5
     },
-    "any_de_risk_count": 3,
+    "any_de_risk_count": 4,
     "winning_cadence_counts": {
       "dca_4x_weekly": 1,
-      "dca_5x_weekday": 1,
+      "dca_5x_weekday": 2,
       "dca_2x_weekly": 3
     },
     "cadence_stats": {
       "dca_2x_weekly": {
         "label": "50/50 over 1 week",
-        "scored_episodes": 5,
-        "mean_end_value_delta": -1.236,
-        "mean_de_risk_gbp": 1.138,
-        "de_risk_rate": 0.6,
+        "scored_episodes": 6,
+        "mean_end_value_delta": -1.035,
+        "mean_de_risk_gbp": 0.9733,
+        "de_risk_rate": 0.6667,
         "win_count": 3
       },
       "dca_4x_weekly": {
         "label": "25% weekly \u00d7 4",
-        "scored_episodes": 5,
-        "mean_end_value_delta": -1.53,
-        "mean_de_risk_gbp": 2.024,
-        "de_risk_rate": 0.6,
+        "scored_episodes": 6,
+        "mean_end_value_delta": -1.2517,
+        "mean_de_risk_gbp": 1.9517,
+        "de_risk_rate": 0.6667,
         "win_count": 1
       },
       "dca_2x_biweekly": {
         "label": "50/50 over 2 weeks",
-        "scored_episodes": 5,
-        "mean_end_value_delta": -1.398,
-        "mean_de_risk_gbp": 0.976,
-        "de_risk_rate": 0.4,
+        "scored_episodes": 6,
+        "mean_end_value_delta": -1.1383,
+        "mean_de_risk_gbp": 1.065,
+        "de_risk_rate": 0.5,
         "win_count": 0
       },
       "dca_5x_weekday": {
         "label": "20% over 5 weekday marks",
-        "scored_episodes": 5,
-        "mean_end_value_delta": -1.082,
-        "mean_de_risk_gbp": -0.672,
-        "de_risk_rate": 0.2,
-        "win_count": 1
+        "scored_episodes": 6,
+        "mean_end_value_delta": -0.5417,
+        "mean_de_risk_gbp": -0.1567,
+        "de_risk_rate": 0.3333,
+        "win_count": 2
       }
     },
     "readiness": {
       "ready_for_cadence_analysis": false,
-      "closed_episodes": 5,
+      "closed_episodes": 6,
       "closed_target": 12,
       "tracks_with_closed": 1,
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
-      "first_entry_scored": 5,
-      "recommit_scored": 4
+      "first_entry_scored": 6,
+      "recommit_scored": 5
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 2,
     "marked_this_pass": 5,
-    "closed_this_pass": 0
+    "closed_this_pass": 2
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "rules",
-    "generated_at": "2026-10-30T08:56:26.221808+01:00",
+    "generated_at": "2026-11-01T08:14:34.438084+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2585,14 +2751,14 @@
     "ingested_this_pass": {
       "opened": 0,
       "closed": 0,
-      "tagged_on_book": 0,
-      "tagged_off_book": 0
+      "tagged_on_book": 2,
+      "tagged_off_book": 2
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "rules",
-    "generated_at": "2026-10-30T08:56:26.221808+01:00",
+    "generated_at": "2026-11-01T08:14:34.438084+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -2600,41 +2766,450 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 4,
+    "card_count": 4,
     "verdict_counts": {
-      "agree": 0,
-      "veto": 0,
+      "agree": 2,
+      "veto": 2,
       "abstain": 0
     },
-    "by_algo_action": {},
+    "by_algo_action": {
+      "sell": {
+        "agree": 0,
+        "veto": 2,
+        "abstain": 0
+      },
+      "buy": {
+        "agree": 2,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
     "disagree_vs_heuristic_count": 0,
-    "cards": [],
+    "cards": [
+      {
+        "ticker": "TEL2-B.ST",
+        "name": "Tele2 AB (publ)",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "veto",
+        "reasons": [
+          "Automated exit cites left target set while screen_signal remains buy and still_buyish is true.",
+          "rank_drop is 0 versus hold gate below 3, so conviction rank has not deteriorated since entry (19 vs 19).",
+          "research_verdict accumulate with overlay_bound supports holding rather than churn sell for capacity-bump risk."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 19
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 19
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "rules",
+        "logged_at": "2026-11-01T08:14:34.438084+01:00",
+        "proposal_id": "rules:TEL2-B.ST:sell:2026-11-01T08:14:34.438084+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "veto",
+            "reasons": [
+              "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "veto",
+        "reasons": [
+          "Exit is target-set driven but effective signal is strong_buy and still_buyish remains true.",
+          "rank_drop 0 at conviction rank 2 with entry_rank 2 \u2014 no material rank deterioration.",
+          "High conviction_score with accumulate verdict favors hold over sell-only rebalance churn."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 2
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 2
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.9044000000000001
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "rules",
+        "logged_at": "2026-11-01T08:14:34.438084+01:00",
+        "proposal_id": "rules:DG.PA:sell:2026-11-01T08:14:34.438084+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "veto",
+            "reasons": [
+              "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "UMI.BR",
+        "name": "Umicore SA",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Automated buy aligns with strong_buy screen signal and top conviction_rank 1.",
+          "still_buyish true with rank_drop 0 and research_verdict accumulate.",
+          "overlay_bound confirms research overlay supports the buyish cohort entry."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 1
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 1
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "rules",
+        "logged_at": "2026-11-01T08:14:34.438084+01:00",
+        "proposal_id": "rules:UMI.BR:buy:2026-11-01T08:14:34.438084+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Buy into buyish target set \u2014 agree with algo selection."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Automated buy matches buy screen_signal with still_buyish true.",
+          "conviction_rank 10 stable versus entry_rank 10 (rank_drop 0).",
+          "research_verdict accumulate with overlay_bound supports adding to buyish target set."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 10
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 10
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "rules",
+        "logged_at": "2026-11-01T08:14:34.438084+01:00",
+        "proposal_id": "rules:TTE.PA:buy:2026-11-01T08:14:34.438084+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Buy into buyish target set \u2014 agree with algo selection."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null
+      "fallback": null,
+      "llm_card_count": 4
     },
     "review": {
       "schema_version": 1,
       "track_id": "rules",
-      "generated_at": "2026-10-30T08:56:26.221808+01:00",
+      "generated_at": "2026-11-01T08:14:34.438084+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 4,
       "verdict_counts": {
-        "agree": 0,
-        "veto": 0,
+        "agree": 2,
+        "veto": 2,
         "abstain": 0
       },
-      "by_algo_action": {},
-      "veto_sell_count": 0,
-      "veto_sell_tickers": [],
+      "by_algo_action": {
+        "sell": {
+          "agree": 0,
+          "veto": 2,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 2,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "veto_sell_count": 2,
+      "veto_sell_tickers": [
+        "TEL2-B.ST",
+        "DG.PA"
+      ],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -2648,7 +3223,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-30T07:56:35.549271+00:00",
+  "generated_at": "2026-11-01T07:14:49.500264+00:00",
   "track_id": "rules",
   "track_label": "Screen rules (control)",
   "is_primary_learning_track": false,

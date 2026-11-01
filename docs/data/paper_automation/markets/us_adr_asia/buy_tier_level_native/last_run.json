@@ -1,15 +1,63 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-30T07:55:17.035410+00:00",
+    "local_time": "2026-11-01T07:13:39.411092+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-30T08:00:00+00:00",
-    "settle_at": "2026-10-30T09:15:00+00:00",
+    "market_open_at": "2026-11-01T08:00:00+00:00",
+    "settle_at": "2026-11-01T09:15:00+00:00",
     "can_act": false,
     "reason": "before market open"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "360c2ce7-c6fe-4ed4-a580-4cb8e9d24749",
+      "fund_id": "8884831b-105d-4b66-a095-a5c6bc871dea",
+      "acted_at": "2026-11-01T07:13:39.411092+00:00",
+      "ticker": "SONY",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 7.46749,
+      "price": 25.3,
+      "gross": 188.93,
+      "cost": 0.05,
+      "net_cash": 188.88,
+      "note": "Automated trim",
+      "name": "Sony Group Corporation",
+      "avg_cost_at_exit": 25.3428
+    },
+    {
+      "id": "5ee0bc6a-7af7-4924-b34b-4a05417ddd18",
+      "fund_id": "8884831b-105d-4b66-a095-a5c6bc871dea",
+      "acted_at": "2026-11-01T07:13:39.411092+00:00",
+      "ticker": "WIT",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 99.896485,
+      "price": 2.16,
+      "gross": 215.78,
+      "cost": 0.05,
+      "net_cash": 215.72,
+      "note": "Automated trim",
+      "name": "Wipro Limited",
+      "avg_cost_at_exit": 2.06
+    },
+    {
+      "id": "5e6111c8-acfd-4eab-9c35-755d4666ec7e",
+      "fund_id": "8884831b-105d-4b66-a095-a5c6bc871dea",
+      "acted_at": "2026-11-01T07:13:39.411092+00:00",
+      "ticker": "UMC",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 24.250695,
+      "price": 16.68,
+      "gross": 404.5,
+      "cost": 0.1,
+      "net_cash": -404.6,
+      "note": "Automated buy",
+      "name": "United Microelectronics Corporation"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,7 +71,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1203.44,
+    "nav": 1213.61,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -36,21 +84,28 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 601.72,
+    "target_sleeve_value": 404.54,
     "targets": [
       {
         "ticker": "SONY",
         "name": "Sony Group Corporation",
         "signal": "buy",
-        "conviction_score": 0.6792,
-        "price": 25.47
+        "conviction_score": 0.7083,
+        "price": 25.3
       },
       {
         "ticker": "WIT",
         "name": "Wipro Limited",
         "signal": "strong_buy",
-        "conviction_score": 0.5633,
-        "price": 2.11
+        "conviction_score": 0.62,
+        "price": 2.16
+      },
+      {
+        "ticker": "UMC",
+        "name": "United Microelectronics Corporation",
+        "signal": "buy",
+        "conviction_score": 0.3292,
+        "price": 16.68
       }
     ],
     "anticipated_exits": [],
@@ -63,9 +118,9 @@
         "ticker": "SONY",
         "name": "Sony Group Corporation",
         "reason": "Already near equal-weight target",
-        "value": 597.47,
-        "target_value": 601.72,
-        "conviction_score": 0.6792,
+        "value": 404.56,
+        "target_value": 404.54,
+        "conviction_score": 0.7083,
         "signal": "buy"
       },
       {
@@ -73,15 +128,25 @@
         "ticker": "WIT",
         "name": "Wipro Limited",
         "reason": "Already near equal-weight target",
-        "value": 605.97,
-        "target_value": 601.72,
-        "conviction_score": 0.5633,
+        "value": 404.55,
+        "target_value": 404.54,
+        "conviction_score": 0.62,
         "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "UMC",
+        "name": "United Microelectronics Corporation",
+        "reason": "Already near equal-weight target",
+        "value": 404.5,
+        "target_value": 404.54,
+        "conviction_score": 0.3292,
+        "signal": "buy"
       }
     ],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
   },
   "alerts": [
     {
@@ -90,7 +155,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 25.47,
+      "mark": 25.3,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -101,7 +166,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 2.11,
+      "mark": 2.16,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "UMC",
+      "name": "United Microelectronics Corporation",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 16.68,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -128,7 +204,7 @@
     "holdings": {
       "SONY": {
         "ticker": "SONY",
-        "shares": 23.457825,
+        "shares": 15.990335,
         "avg_cost": 25.3428,
         "name": "Sony Group Corporation",
         "sector": "Technology",
@@ -139,7 +215,7 @@
       },
       "WIT": {
         "ticker": "WIT",
-        "shares": 287.187584,
+        "shares": 187.291099,
         "avg_cost": 2.06,
         "name": "Wipro Limited",
         "sector": "Technology",
@@ -147,6 +223,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-10-29T07:38:54.172478+00:00"
+      },
+      "UMC": {
+        "ticker": "UMC",
+        "shares": 24.250695,
+        "avg_cost": 16.68,
+        "name": "United Microelectronics Corporation",
+        "sector": "Technology",
+        "currency": "USD",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-11-01T07:13:39.411092+00:00"
       }
     },
     "trades": [
@@ -602,6 +689,53 @@
         "net_cash": -591.75,
         "note": "Automated buy",
         "name": "Wipro Limited"
+      },
+      {
+        "id": "360c2ce7-c6fe-4ed4-a580-4cb8e9d24749",
+        "fund_id": "8884831b-105d-4b66-a095-a5c6bc871dea",
+        "acted_at": "2026-11-01T07:13:39.411092+00:00",
+        "ticker": "SONY",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 7.46749,
+        "price": 25.3,
+        "gross": 188.93,
+        "cost": 0.05,
+        "net_cash": 188.88,
+        "note": "Automated trim",
+        "name": "Sony Group Corporation",
+        "avg_cost_at_exit": 25.3428
+      },
+      {
+        "id": "5ee0bc6a-7af7-4924-b34b-4a05417ddd18",
+        "fund_id": "8884831b-105d-4b66-a095-a5c6bc871dea",
+        "acted_at": "2026-11-01T07:13:39.411092+00:00",
+        "ticker": "WIT",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 99.896485,
+        "price": 2.16,
+        "gross": 215.78,
+        "cost": 0.05,
+        "net_cash": 215.72,
+        "note": "Automated trim",
+        "name": "Wipro Limited",
+        "avg_cost_at_exit": 2.06
+      },
+      {
+        "id": "5e6111c8-acfd-4eab-9c35-755d4666ec7e",
+        "fund_id": "8884831b-105d-4b66-a095-a5c6bc871dea",
+        "acted_at": "2026-11-01T07:13:39.411092+00:00",
+        "ticker": "UMC",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 24.250695,
+        "price": 16.68,
+        "gross": 404.5,
+        "cost": 0.1,
+        "net_cash": -404.6,
+        "note": "Automated buy",
+        "name": "United Microelectronics Corporation"
       }
     ],
     "equity_curve": [
@@ -1044,9 +1178,25 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-01T07:13:39.411092+00:00",
+        "portfolio_value": 1213.61,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "USD",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "USD": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-30T07:55:17.035410+00:00",
+    "last_mark_at": "2026-11-01T07:13:39.411092+00:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -1054,12 +1204,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (3 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "us_adr_asia",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-30T07:55:17.040362+00:00",
+    "generated_at": "2026-11-01T07:13:39.415709+00:00",
     "observe_only": true,
     "open_count": 4,
     "closed_count": 0,
@@ -1138,7 +1288,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-30T07:55:17.041399+00:00",
+    "generated_at": "2026-11-01T07:13:39.416843+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1219,9 +1369,9 @@
     },
     "swap_rotation": {
       "open": {
-        "count": 7,
+        "count": 8,
         "verdicts": {
-          "open": 7
+          "open": 8
         }
       },
       "closed": {
@@ -1231,10 +1381,10 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 1
     }
   },
@@ -1243,8 +1393,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-10-30T07:55:17.044738+00:00",
-    "as_of": "2026-10-30T07:55:17.035410+00:00",
+    "updated_at": "2026-11-01T07:13:39.418235+00:00",
+    "as_of": "2026-11-01T07:13:39.411092+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1256,16 +1406,16 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 2,
+    "holding_count": 3,
     "underwater_count": 0,
     "thesis_status_counts": {
       "intact": 1,
-      "weakening": 1,
+      "weakening": 2,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 2,
+      "holding_count": 3,
       "loser_count": 0,
       "loser_share": 0.0,
       "loser_nav_share": 0.0,
@@ -1286,7 +1436,7 @@
         "cheapness": 0.0,
         "quality": 0.0,
         "dividend": 0.0,
-        "garp": 0.5,
+        "garp": 0.6667,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -1301,12 +1451,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.005,
-        "mark": 25.47,
+        "unrealized_pct": -0.0017,
+        "mark": 25.3,
         "avg_cost": 25.3428,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6792,
+        "conviction_score": 0.7083,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1322,16 +1472,56 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 68%"
+          "conviction 71%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 68%"
+          "conviction 71%"
         ],
         "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "UMC",
+        "name": "United Microelectronics Corporation",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 16.68,
+        "avg_cost": 16.68,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.3292,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "conviction 33% below intact floor",
+          "still buy",
+          "research accumulate"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00"
+        ],
+        "weaken_reasons": [
+          "conviction 33% below intact floor"
+        ],
         "broken_reasons": []
       },
       {
@@ -1341,12 +1531,12 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0243,
-        "mark": 2.11,
+        "unrealized_pct": 0.0485,
+        "mark": 2.16,
         "avg_cost": 2.06,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5633,
+        "conviction_score": 0.62,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1367,7 +1557,7 @@
           "still strong_buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 56%"
+          "conviction 62%"
         ],
         "weaken_reasons": [
           "research verdict neutral"
@@ -1382,7 +1572,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-30T07:55:17.046353+00:00",
+    "generated_at": "2026-11-01T07:13:39.420032+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1450,8 +1640,8 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-10-30T07:55:17.048515+00:00",
-    "open_count": 1,
+    "generated_at": "2026-11-01T07:13:39.422415+00:00",
+    "open_count": 2,
     "closed_count": 2,
     "scored_count": 0,
     "scored_count_all": 2,
@@ -1507,14 +1697,14 @@
       "recommit_scored": 2
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 1,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-30T07:55:17.035410+00:00",
+    "generated_at": "2026-11-01T07:13:39.411092+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1541,8 +1731,8 @@
     "open_count": 3,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 2,
-      "off_book": 1,
+      "on_book": 3,
+      "off_book": 0,
       "never_funded": 0
     },
     "closed_by_capital_status": {
@@ -1564,14 +1754,14 @@
     "ingested_this_pass": {
       "opened": 0,
       "closed": 0,
-      "tagged_on_book": 0,
+      "tagged_on_book": 1,
       "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-30T07:55:17.035410+00:00",
+    "generated_at": "2026-11-01T07:13:39.411092+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1579,39 +1769,142 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 1,
+    "card_count": 1,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 1,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {},
+    "by_algo_action": {
+      "buy": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
     "disagree_vs_heuristic_count": 0,
-    "cards": [],
+    "cards": [
+      {
+        "ticker": "UMC",
+        "name": "United Microelectronics Corporation",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Screen signal is buy and still_buyish is true, so the name remains in the buyish cohort at decision time.",
+          "Conviction rank 3 with rank_drop 0 shows no rank slip versus entry (well below the hold gate threshold of 3).",
+          "Research verdict accumulate with overlay_bound aligns with adding to the sleeve rather than deferring."
+        ],
+        "evidence": [
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 3
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 3
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level_native",
+        "logged_at": "2026-11-01T07:13:39.411092+00:00",
+        "proposal_id": "buy_tier_level_native:UMC:buy:2026-11-01T07:13:39.411092+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Buy into buyish target set \u2014 agree with algo selection."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null
+      "fallback": null,
+      "llm_card_count": 1
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-10-30T07:55:17.035410+00:00",
+      "generated_at": "2026-11-01T07:13:39.411092+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 1,
       "verdict_counts": {
-        "agree": 0,
+        "agree": 1,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "buy": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -1627,7 +1920,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-30T07:55:17.052046+00:00",
+  "generated_at": "2026-11-01T07:13:43.233307+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (USD reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,

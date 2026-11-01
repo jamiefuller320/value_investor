@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-30T07:54:01.814184+00:00
+Track: `buy_tier_level` · updated 2026-11-01T07:12:02.803751+00:00
 
 ## Portfolio loser feedback
 
@@ -10,85 +10,82 @@ Track: `buy_tier_level` · updated 2026-10-30T07:54:01.814184+00:00
 
 ## Holding reviews
 
-### DTE.DE — intact / hold_tolerate (-4.5%)
-- still strong_buy
+### DTE.DE — intact / hold_tolerate (-2.7%)
+- still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 54%
+- conviction 39%
 
-### ENI.MI — intact / hold_tolerate (-2.8%)
+### ENI.MI — intact / hold_tolerate (-1.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 74%
 
-### DG.PA — intact / hold_tolerate (-0.5%)
+### DG.PA — intact / hold_tolerate (-0.7%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 91%
 
-### MUV2.DE — intact / hold_tolerate (-0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.90
-- conviction 61%
-
-### PRX.AS — intact / hold_tolerate (+0.4%)
-- still buy
+### PRX.AS — weakening / watch_review (+0.4%)
+- left buy tier (hold)
+- conviction 26% below intact floor
 - cheapness family still passes
 - data_quality 1.00
-- conviction 46%
 
-### MC.PA — intact / hold_tolerate (+1.1%)
+### MUV2.DE — weakening / watch_review (+1.9%)
+- left buy tier (hold)
+- research accumulate
+- cheapness family still passes
+
+### MC.PA — intact / hold_tolerate (+2.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 57%
 
-### AD.AS — intact / hold_tolerate (+2.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 63%
-
-### ABI.BR — intact / hold_tolerate (+2.4%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 52%
-
-### SGO.PA — intact / hold_tolerate (+2.8%)
+### SGO.PA — intact / hold_tolerate (+2.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 71%
 
-### DHL.DE — intact / hold_tolerate (+4.6%)
+### AD.AS — intact / hold_tolerate (+2.7%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 70%
+
+### DHL.DE — intact / hold_tolerate (+4.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 74%
 
-### SAN.PA — intact / hold_tolerate (+7.1%)
+### ABI.BR — weakening / watch_review (+4.3%)
+- left buy tier (hold)
+- conviction 27% below intact floor
+- research accumulate
+- cheapness family still passes
+
+### TTE.PA — intact / hold_tolerate (+8.8%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 81%
+
+### SAN.PA — intact / hold_tolerate (+12.2%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 62%
-
-### TTE.PA — intact / hold_tolerate (+12.1%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 82%
