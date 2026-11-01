@@ -131,7 +131,9 @@ def prefer_first_time_reports(
 
     Shared by library Sunday Layer C (N114) and FTSE ``--research-docs`` /
     ``eligible_research_targets`` so first-time buy-tier fills the weekly cap
-    before high-conviction rememo of already-memo'd names.
+    before high-conviction rememo of already-memo'd names. Callers must also
+    admit raw-signal no-memo buys into the pool when overlays set
+    ``adjusted_signal=hold`` (N243) — reordering alone cannot resurrect excluded names.
     """
     already = {canonical_library_ticker(t) for t in (already_researched or set())}
     first: list[Any] = []

@@ -517,17 +517,22 @@ def run_library_ladder(
         # Skip exact Yahoo-ticker duplicates and *fresh* existing memos. Thin /
         # body-lag memos stay eligible so a new focus market rememos after ingest
         # deepens filings — not only first-time names.
+        already = existing_library_research_tickers(root)
         per_market_reports: dict[str, list[Any]] = {}
         per_market_queues: dict[str, list[Any]] = {}
         for mid, scr in market_screens.items():
             reports = library_research_reports(scr)
             per_market_reports[mid] = reports
             # Oversample per market so dedupe can refill the global cap.
+            # prefer_first_time + already_researched: raw-signal first memos
+            # enter the queue even when FCF/overlay adjusted_signal is hold (N243).
             per_market_queues[mid] = eligible_research_targets(
-                reports, weekly_cap=max(research_cap * 3, research_cap)
+                reports,
+                weekly_cap=max(research_cap * 3, research_cap),
+                already_researched=already,
+                prefer_first_time=True,
             )
 
-        already = existing_library_research_tickers(root)
         per_market_queues = prefer_first_time_research_queues(per_market_queues, already)
         rememo_reasons: dict[str, str] = {}
         if bool((policy.get("ladder") or {}).get("rememo_existing", True)):
