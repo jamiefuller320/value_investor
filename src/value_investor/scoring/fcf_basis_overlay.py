@@ -14,6 +14,7 @@ from value_investor.scoring.fcf import (
     fcf_action_note_mismatch,
     fcf_basis_definition_divergence,
     fcf_filing_screen_mismatch,
+    fcf_universe_divergence_flagged,
     neutral_watchlist_dividend_caution_triggered,
     reconcile_fcf_for_ticker,
     screen_ttm_from_row,
@@ -97,6 +98,24 @@ def action_note_has_fcf_basis_concern(
             screen_ttm=resolved_screen,
         ),
         action_note=action_note,
+    )
+
+
+def resolve_universe_divergence_flagged(
+    fcf_bundle: dict[str, Any],
+    *,
+    screen_ttm: float | None,
+) -> bool:
+    """True when filing, screen TTM, and company-adjusted FCF diverge beyond universe threshold."""
+    if bool(fcf_bundle.get("fcf_divergence_flagged")):
+        return True
+    filing_currency = str(fcf_bundle.get("currency") or "USD")
+    return fcf_universe_divergence_flagged(
+        filing_aligned=_float_or_none(fcf_bundle.get("filing_aligned")),
+        screen_ttm=screen_ttm or _float_or_none(fcf_bundle.get("screen_ttm")),
+        company_adjusted=_float_or_none(fcf_bundle.get("company_adjusted")),
+        filing_currency=filing_currency,
+        company_adjusted_currency=fcf_bundle.get("company_adjusted_currency"),
     )
 
 
@@ -334,11 +353,15 @@ def enrich_signals_with_fcf_basis_overlay(
             else None
         )
 
+        universe_divergence = resolve_universe_divergence_flagged(
+            fcf_bundle,
+            screen_ttm=screen_ttm,
+        )
         triggered, new_adjusted, new_conviction = apply_fcf_basis_overlay_to_signal(
             str(row.get("signal") or "hold"),
             divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
             filing_screen_mismatch=mismatch,
-            universe_divergence_flagged=bool(fcf_bundle.get("fcf_divergence_flagged")),
+            universe_divergence_flagged=universe_divergence,
             action_note_mismatch=action_note_mismatch,
             fcf_yield_unit_fx_error=fcf_yield_unit_fx_error,
             ticker_models=ticker_models,
