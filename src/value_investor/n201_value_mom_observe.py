@@ -1000,6 +1000,8 @@ def build_n201_observe(
             buy_pct, sell_pct = cfg.primary_buy_sell(mid)
             if exit_idx is None:
                 # Display-only open mark from real archive quotes; not path primary.
+                # Keep entry_detail so slim lifecycle / post-sale joins see why we entered
+                # even before exit_reason exists (L632).
                 p_entry = _price_at(snapshots, i, ticker)
                 p_mark, mark_at = _latest_quote(snapshots, ticker, from_idx=i)
                 open_lifecycle.append(
@@ -1010,6 +1012,8 @@ def build_n201_observe(
                             "entry_run_at": snap.run_at,
                             "status": "open",
                             "influences_live": False,
+                            "eligibility": elig_note,
+                            "entry_detail": detail,
                         },
                         entry_price=p_entry,
                         mark_price=p_mark,

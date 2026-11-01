@@ -2,7 +2,7 @@
   "schema_version": 1,
   "registration_id": "strand-d-plain-ey-identity-v0",
   "deferred_id": "N206",
-  "generated_at": "2026-11-01T07:49:03.395194+00:00",
+  "generated_at": "2026-11-01T11:13:11.613743+00:00",
   "observe_only": true,
   "influences_live": false,
   "alone_first": true,
@@ -35,8 +35,8 @@
     "per_market_tables": true,
     "fx_conversion": false
   },
-  "snapshot_count": 969,
-  "completed_entry_episodes": 243,
+  "snapshot_count": 970,
+  "completed_entry_episodes": 244,
   "skipped_missing_entry_fields": 0,
   "skipped_ineligible": 0,
   "skipped_filters": 0,
@@ -49,26 +49,26 @@
     "role": "sample_thickness_pipeline_badge"
   },
   "phase": {
-    "entries_per_week": 16.2,
+    "entries_per_week": 16.267,
     "floor": 8.0,
     "floor_met": true
   },
   "path_scoreboard": {
     "primary": "absolute_smoothed_return_fair_costs",
     "success_metric_id": "smooth_ret_cohort_median",
-    "smooth_ret_cohort_median": 0.013732,
-    "smooth_ret_cohort_median_stress_report_only": -0.041172,
-    "cash_excess_report_only": 0.013732,
+    "smooth_ret_cohort_median": 0.013508,
+    "smooth_ret_cohort_median_stress_report_only": -0.041837,
+    "cash_excess_report_only": 0.013508,
     "market_index_diagnostic": "omitted_no_index_series_on_panels",
-    "n": 243,
+    "n": 244,
     "independent_of_fund_nav": true,
     "alone_first": true,
     "note": "Primary is fair-cost episode % cohort median on fixed-stake patient plain-EY entries. Fund NAV / cash drag not used. Cash excess (median minus 0) and stress 3%/side are report-only. No pairwise versus N200, N201, or N210 (O3)."
   },
   "stress_scoreboard_report_only": {
     "trade_cost_pct_per_side": 0.03,
-    "smooth_ret_cohort_median": -0.041172,
-    "n": 243,
+    "smooth_ret_cohort_median": -0.041837,
+    "n": 244,
     "role": "report_only"
   },
   "launch_queue": {
@@ -488,6 +488,28 @@
       "independent_of_fund_nav": true
     },
     {
+      "ticker": "BWY.L",
+      "market_id": "ftse350",
+      "entry_run_at": "2026-10-30T21:55:18.461452+00:00",
+      "exit_run_at": "2026-11-01T07:33:21.879670+00:00",
+      "hold_trading_days": 1,
+      "exit_reason": "identity_break_ey_band",
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "entry_detail": {
+        "earnings_yield": 0.07518796992481203,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      },
+      "fixed_stake_units": 100.0,
+      "return_pct": -0.0055,
+      "pnl_local_report_only": -0.55,
+      "return_pct_stress_report_only": -0.06,
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true
+    },
+    {
       "ticker": "ACN",
       "market_id": "sp500",
       "entry_run_at": "2026-07-18T12:36:13+00:00",
@@ -616,28 +638,6 @@
       "return_pct": 0.022991,
       "pnl_local_report_only": 2.299095,
       "return_pct_stress_report_only": -0.033509,
-      "scoreboard_unit": "fair_cost_episode_pct",
-      "independent_of_fund_nav": true
-    },
-    {
-      "ticker": "CPRT",
-      "market_id": "sp500",
-      "entry_run_at": "2026-07-18T12:36:13+00:00",
-      "exit_run_at": "2026-08-16T11:58:34+00:00",
-      "hold_trading_days": 20,
-      "exit_reason": "identity_break_ey_band",
-      "eligibility": "eligibility_mode=row_fields_or_pass",
-      "entry_detail": {
-        "earnings_yield": 0.0571938086558253,
-        "in_ey_top30_local": true,
-        "momentum_12_1": null,
-        "financial_health_pass": true,
-        "require_momentum": false
-      },
-      "fixed_stake_units": 100.0,
-      "return_pct": 0.119417,
-      "pnl_local_report_only": 11.941696,
-      "return_pct_stress_report_only": 0.062917,
       "scoreboard_unit": "fair_cost_episode_pct",
       "independent_of_fund_nav": true
     }
@@ -914,13 +914,35 @@
       }
     },
     {
+      "ticker": "BWY.L",
+      "entry_run_at": "2026-10-30T21:55:18.461452+00:00",
+      "exit_run_at": "2026-11-01T07:33:21.879670+00:00",
+      "status": "closed",
+      "fair_cost_return": -0.0055,
+      "exit_reason": "identity_break_ey_band",
+      "entry_detail": {
+        "earnings_yield": 0.07518796992481203,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
+    },
+    {
       "ticker": "AEP.L",
       "entry_run_at": "2026-08-09T05:44:10.639418+00:00",
       "exit_run_at": null,
       "status": "open",
       "open_mark_return": -0.12781,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.09615384615384615,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "BKG.L",
@@ -929,7 +951,14 @@
       "status": "open",
       "open_mark_return": -0.045765,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.09090909090909091,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "CNA.L",
@@ -938,7 +967,14 @@
       "status": "open",
       "open_mark_return": -0.015549,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0970873786407767,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "FSG.L",
@@ -947,7 +983,14 @@
       "status": "open",
       "open_mark_return": -0.068124,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.07936507936507936,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "HIK.L",
@@ -956,7 +999,14 @@
       "status": "open",
       "open_mark_return": 0.0267,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.078125,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "ITV.L",
@@ -965,7 +1015,14 @@
       "status": "open",
       "open_mark_return": -0.119884,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0819672131147541,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "JUP.L",
@@ -974,7 +1031,14 @@
       "status": "open",
       "open_mark_return": 0.071233,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.11764705882352941,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "MEGP.L",
@@ -983,7 +1047,14 @@
       "status": "open",
       "open_mark_return": -0.090606,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1234567901234568,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "MGNS.L",
@@ -992,7 +1063,14 @@
       "status": "open",
       "open_mark_return": -0.119875,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.08547008547008547,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "MONY.L",
@@ -1001,7 +1079,14 @@
       "status": "open",
       "open_mark_return": -0.003514,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.07936507936507936,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "SHEL.L",
@@ -1010,7 +1095,14 @@
       "status": "open",
       "open_mark_return": 0.226079,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1020408163265306,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "TW.L",
@@ -1019,7 +1111,14 @@
       "status": "open",
       "open_mark_return": -0.057783,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.08264462809917356,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "VTY.L",
@@ -1028,7 +1127,14 @@
       "status": "open",
       "open_mark_return": -0.085895,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.14705882352941177,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "PLUS.L",
@@ -1037,7 +1143,14 @@
       "status": "open",
       "open_mark_return": -0.144814,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.07633587786259542,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "FRES.L",
@@ -1046,7 +1159,14 @@
       "status": "open",
       "open_mark_return": -0.256254,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.07633587786259542,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "GNS.L",
@@ -1055,7 +1175,14 @@
       "status": "open",
       "open_mark_return": 0.06018,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.19607843137254904,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "PAF.L",
@@ -1064,7 +1191,14 @@
       "status": "open",
       "open_mark_return": -0.20412,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1020408163265306,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "IGG.L",
@@ -1073,7 +1207,14 @@
       "status": "open",
       "open_mark_return": -0.303141,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.07936507936507936,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "RIO.L",
@@ -1082,16 +1223,14 @@
       "status": "open",
       "open_mark_return": -0.111427,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
-    },
-    {
-      "ticker": "BWY.L",
-      "entry_run_at": "2026-10-30T21:55:18.461452+00:00",
-      "exit_run_at": null,
-      "status": "open",
-      "open_mark_return": -0.0055,
-      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.08064516129032258,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "ACN",
@@ -2165,7 +2304,14 @@
       "status": "open",
       "open_mark_return": -0.152505,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:46+00:00"
+      "open_mark_at": "2026-11-01T07:17:46+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.084103749774455,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "FSLR",
@@ -2174,7 +2320,14 @@
       "status": "open",
       "open_mark_return": -0.162694,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:46+00:00"
+      "open_mark_at": "2026-11-01T07:17:46+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0800790668674622,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "SMCI",
@@ -2183,7 +2336,14 @@
       "status": "open",
       "open_mark_return": -0.133418,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:46+00:00"
+      "open_mark_at": "2026-11-01T07:17:46+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0881964565486045,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "WDC",
@@ -2192,7 +2352,14 @@
       "status": "open",
       "open_mark_return": -0.17439,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:46+00:00"
+      "open_mark_at": "2026-11-01T07:17:46+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0599904855089982,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "MU",
@@ -2201,7 +2368,14 @@
       "status": "open",
       "open_mark_return": -0.180402,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:46+00:00"
+      "open_mark_at": "2026-11-01T07:17:46+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0691977736031529,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "GOOGL",
@@ -2210,7 +2384,14 @@
       "status": "open",
       "open_mark_return": -0.202171,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:46+00:00"
+      "open_mark_at": "2026-11-01T07:17:46+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.057070045548174,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "VLO",
@@ -2219,7 +2400,14 @@
       "status": "open",
       "open_mark_return": -0.065947,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:46+00:00"
+      "open_mark_at": "2026-11-01T07:17:46+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.10314816449904238,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "HON",
@@ -2228,7 +2416,14 @@
       "status": "open",
       "open_mark_return": -0.016252,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:46+00:00"
+      "open_mark_at": "2026-11-01T07:17:46+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.09120506793728704,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "HAL",
@@ -2237,7 +2432,14 @@
       "status": "open",
       "open_mark_return": 0.007965,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:46+00:00"
+      "open_mark_at": "2026-11-01T07:17:46+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.06627516600603581,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "NFLX",
@@ -2246,7 +2448,14 @@
       "status": "open",
       "open_mark_return": -0.002048,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:46+00:00"
+      "open_mark_at": "2026-11-01T07:17:46+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.055815454015461445,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "NUE",
@@ -2255,7 +2464,14 @@
       "status": "open",
       "open_mark_return": 0.004153,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:46+00:00"
+      "open_mark_at": "2026-11-01T07:17:46+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.05776518291402935,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "BSX",
@@ -2264,7 +2480,14 @@
       "status": "open",
       "open_mark_return": -0.0035,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:46+00:00"
+      "open_mark_at": "2026-11-01T07:17:46+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.05645545232927011,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "HII",
@@ -2273,7 +2496,14 @@
       "status": "open",
       "open_mark_return": -0.0035,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:46+00:00"
+      "open_mark_at": "2026-11-01T07:17:46+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.05860262165860304,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "PSX",
@@ -2282,7 +2512,14 @@
       "status": "open",
       "open_mark_return": -0.0035,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:46+00:00"
+      "open_mark_at": "2026-11-01T07:17:46+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.11024291143591612,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "AAI.AX",
@@ -2906,7 +3143,14 @@
       "status": "open",
       "open_mark_return": 0.083205,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1387283204918307,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "WDS.AX",
@@ -2915,7 +3159,14 @@
       "status": "open",
       "open_mark_return": 0.018893,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0616564473160455,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "BWP.AX",
@@ -2924,7 +3175,14 @@
       "status": "open",
       "open_mark_return": -0.022522,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1521739031190932,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "CLW.AX",
@@ -2933,7 +3191,14 @@
       "status": "open",
       "open_mark_return": -0.034839,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1111111111111111,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "EBO.AX",
@@ -2942,7 +3207,14 @@
       "status": "open",
       "open_mark_return": -0.02066,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0644970462287738,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "GGP.AX",
@@ -2951,7 +3223,14 @@
       "status": "open",
       "open_mark_return": -0.159455,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.2073693251828893,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "GMD.AX",
@@ -2960,7 +3239,14 @@
       "status": "open",
       "open_mark_return": -0.220733,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0643203834318153,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "OBM.AX",
@@ -2969,7 +3255,14 @@
       "status": "open",
       "open_mark_return": -0.217336,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0691823873264508,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "S32.AX",
@@ -2978,7 +3271,14 @@
       "status": "open",
       "open_mark_return": -0.167276,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0635838179691938,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "WGX.AX",
@@ -2987,7 +3287,14 @@
       "status": "open",
       "open_mark_return": -0.187142,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0725308644213915,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "NEM.AX",
@@ -2996,7 +3303,14 @@
       "status": "open",
       "open_mark_return": -0.109393,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0629402632073691,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "RIO.AX",
@@ -3005,7 +3319,14 @@
       "status": "open",
       "open_mark_return": -0.094011,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0668642326436666,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "ALK.AX",
@@ -3014,7 +3335,14 @@
       "status": "open",
       "open_mark_return": 0.084636,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.12203389003160067,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "SMR.AX",
@@ -3023,7 +3351,14 @@
       "status": "open",
       "open_mark_return": -0.007406,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.06691194337736586,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "ARB.AX",
@@ -3032,7 +3367,14 @@
       "status": "open",
       "open_mark_return": -0.0029,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.06662665513936697,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "CYL.AX",
@@ -3041,7 +3383,14 @@
       "status": "open",
       "open_mark_return": -0.251101,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.12284069097888675,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "EMR.AX",
@@ -3050,7 +3399,14 @@
       "status": "open",
       "open_mark_return": -0.0035,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.06414473515408592,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "ENI.MI",
@@ -3179,7 +3535,14 @@
       "status": "open",
       "open_mark_return": -0.092096,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1201648228776518,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "SHELL.AS",
@@ -3188,7 +3551,14 @@
       "status": "open",
       "open_mark_return": 0.20484,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0970705185283837,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "BOL.ST",
@@ -3197,7 +3567,14 @@
       "status": "open",
       "open_mark_return": -0.11986,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0790664841601368,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "EVN.VI",
@@ -3206,7 +3583,14 @@
       "status": "open",
       "open_mark_return": 0.060243,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0994671346661664,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "C5H.IR",
@@ -3215,7 +3599,14 @@
       "status": "open",
       "open_mark_return": 0.101878,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0836653383120902,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "STR.VI",
@@ -3224,7 +3615,14 @@
       "status": "open",
       "open_mark_return": 0.047289,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0848074925045018,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "SGO.PA",
@@ -3233,7 +3631,14 @@
       "status": "open",
       "open_mark_return": -0.091334,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0724462340274165,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "OIZ.IR",
@@ -3242,7 +3647,14 @@
       "status": "open",
       "open_mark_return": -0.025651,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0902439112433084,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "OMV.VI",
@@ -3251,7 +3663,14 @@
       "status": "open",
       "open_mark_return": -0.0037,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.08391332827280021,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "CAPD.L",
@@ -3350,7 +3769,14 @@
       "status": "open",
       "open_mark_return": -0.012977,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1139534780367775,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "ABX.TO",
@@ -3509,7 +3935,14 @@
       "status": "open",
       "open_mark_return": -0.044684,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T07:17:55+00:00"
+      "open_mark_at": "2026-11-01T07:17:55+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0593374193871488,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "PRX.AS",
@@ -3893,7 +4326,14 @@
       "status": "open",
       "open_mark_return": -0.125475,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0653044591843864,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "MU",
@@ -3902,7 +4342,14 @@
       "status": "open",
       "open_mark_return": -0.180402,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0691977736031529,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "NFLX",
@@ -3911,7 +4358,14 @@
       "status": "open",
       "open_mark_return": -0.114738,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0455261290844222,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "HON",
@@ -3920,7 +4374,14 @@
       "status": "open",
       "open_mark_return": -0.016252,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.09120506793728704,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "PCAR",
@@ -3929,7 +4390,14 @@
       "status": "open",
       "open_mark_return": -0.008479,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.05116188382353836,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "QCOM",
@@ -3938,7 +4406,14 @@
       "status": "open",
       "open_mark_return": -0.0035,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.05243036775289107,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "SGO.PA",
@@ -4052,7 +4527,14 @@
       "status": "open",
       "open_mark_return": 0.025922,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0786178602797097,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "ABDP.L",
@@ -4316,7 +4798,14 @@
       "status": "open",
       "open_mark_return": -0.067904,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1264912304135919,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "PAF.L",
@@ -4325,7 +4814,14 @@
       "status": "open",
       "open_mark_return": -0.201415,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1001540870629463,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "ASY.L",
@@ -4334,7 +4830,14 @@
       "status": "open",
       "open_mark_return": -0.020993,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0850241519606059,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "PMI.L",
@@ -4343,7 +4846,14 @@
       "status": "open",
       "open_mark_return": -0.138853,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1149537870431865,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "POLR.L",
@@ -4352,7 +4862,14 @@
       "status": "open",
       "open_mark_return": 0.001479,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0784574450348715,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "FDEV.L",
@@ -4361,7 +4878,14 @@
       "status": "open",
       "open_mark_return": -0.002748,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1313320776235618,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "REP.MC",
@@ -4670,7 +5194,14 @@
       "status": "open",
       "open_mark_return": -0.058761,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1408993464383815,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "0066.HK",
@@ -4679,7 +5210,14 @@
       "status": "open",
       "open_mark_return": -0.001393,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1104091420536166,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "2618.HK",
@@ -4688,7 +5226,14 @@
       "status": "open",
       "open_mark_return": -0.195133,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.1095666474742422,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "0857.HK",
@@ -4697,7 +5242,14 @@
       "status": "open",
       "open_mark_return": -0.0038,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.10720887483642606,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "BIDU",
@@ -4856,7 +5408,14 @@
       "status": "open",
       "open_mark_return": -0.069827,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0816326463973349,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "STR.VI",
@@ -4880,7 +5439,14 @@
       "status": "open",
       "open_mark_return": 0.064236,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0998217483040534,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "OMV.VI",
@@ -4889,7 +5455,14 @@
       "status": "open",
       "open_mark_return": -0.0035,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.08391332827280021,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "LOGN.SW",
@@ -4973,7 +5546,14 @@
       "status": "open",
       "open_mark_return": -0.0035,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.05647840325161981,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "ERIC-B.ST",
@@ -5027,7 +5607,14 @@
       "status": "open",
       "open_mark_return": -0.05131,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.0852571393689079,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "EVO.ST",
@@ -5036,7 +5623,14 @@
       "status": "open",
       "open_mark_return": -0.010488,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.07049397241288884,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "C5H.IR",
@@ -5060,7 +5654,14 @@
       "status": "open",
       "open_mark_return": 0.024705,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.105128195424064,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     },
     {
       "ticker": "C5H.IR",
@@ -5069,12 +5670,19 @@
       "status": "open",
       "open_mark_return": 0.020485,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-01T06:22:53+00:00"
+      "open_mark_at": "2026-11-01T06:22:53+00:00",
+      "entry_detail": {
+        "earnings_yield": 0.09225092250922509,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      }
     }
   ],
   "ops_doc": "docs/ops/n206-plain-ey-observe.md",
   "panel_coverage": {
-    "ftse_snapshots": 29,
+    "ftse_snapshots": 30,
     "admitted_loaded": [
       "sp500",
       "asx200",
@@ -5101,7 +5709,7 @@
     ],
     "admitted_missing_or_empty": [],
     "panel_snapshot_counts": {
-      "ftse350": 29,
+      "ftse350": 30,
       "sp500": 68,
       "asx200": 67,
       "euro_depth": 55,
@@ -5134,7 +5742,7 @@
     "schema_version": 1,
     "met": true,
     "thickness_met": true,
-    "fair_cost_median": 0.013732,
+    "fair_cost_median": 0.013508,
     "fair_cost_median_ok": true,
     "rule": "thickness && smooth_ret_cohort_median > 0 (alone; no assessment crown)",
     "not_auto_promote": true,
