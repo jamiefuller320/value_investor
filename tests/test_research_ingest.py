@@ -400,6 +400,120 @@ def test_reconcile_committed_research_index_merges_enq_l(tmp_path: Path):
     assert (tmp_path / "docs" / "research" / "ENQ.L.md").is_file()
 
 
+def test_research_overlay_cohesion_wired_missing_excludes_off_universe(tmp_path: Path):
+    """Off-universe committed verdicts (PINE.L-style) must not count as wired_missing."""
+    from value_investor.research.ingest import research_overlay_cohesion_metrics
+    from value_investor.storage import write_json
+
+    data_dir = tmp_path / "data"
+    committed = data_dir / "research"
+    write_json(
+        committed / "PINE.L" / "research.json",
+        {
+            "ticker": "PINE.L",
+            "name": "Pinewood Technologies Group PLC",
+            "research_verdict": "neutral",
+            "version": 1,
+        },
+        compact=True,
+    )
+    write_json(
+        committed / "ENQ.L" / "research.json",
+        {
+            "ticker": "ENQ.L",
+            "name": "EnQuest PLC",
+            "research_verdict": "caution",
+            "version": 1,
+        },
+        compact=True,
+    )
+    latest_path = data_dir / "latest.json"
+    write_json(
+        latest_path,
+        {
+            "research": [],
+            "reports": [
+                {
+                    "ticker": "ENQ.L",
+                    "name": "EnQuest PLC",
+                    "signal": "buy",
+                    "models_passed": 6,
+                    "model_count": 22,
+                    "composite_score": 0.6,
+                    "sector_composite_score": 0.55,
+                    "families_passed": 3,
+                    "data_quality_score": 0.9,
+                    "metrics_present": 18,
+                    "metrics_total": 20,
+                    "weeks_at_signal": 2,
+                    "signal_trend": "stable",
+                    "conviction_score": 0.4,
+                    "stability_label": "persistent",
+                    "timing_signal": "neutral",
+                    "timing_score": 0.0,
+                    "action_note": "",
+                    "summary": "Screen only",
+                    "passed_models": [],
+                    "key_metrics": {},
+                }
+            ],
+        },
+        compact=True,
+    )
+
+    metrics = research_overlay_cohesion_metrics(
+        data_dir=data_dir,
+        latest_path=latest_path,
+        committed_root=committed,
+    )
+    assert metrics["off_universe_committed_count"] == 1
+    assert metrics["wired_missing_committed_verdicts"] == 1
+    assert metrics["wired_missing_committed_verdicts_in_universe"] == 1
+
+
+@patch("value_investor.research.overlay_refresh.refresh_dashboard_bundle", return_value=1)
+def test_reconcile_committed_research_publish_refreshes_overlay_without_index_scope(
+    mock_refresh, tmp_path: Path
+):
+    """Ingest-improvement index scope must not block full overlay reconcile (eng-20261101-04)."""
+    from value_investor.research.ingest import reconcile_committed_research_publish
+    from value_investor.storage import write_json
+
+    data_dir = tmp_path / "data"
+    committed = data_dir / "research"
+    for ticker, verdict in (("ENQ.L", "caution"), ("OTHER.L", "accumulate")):
+        write_json(
+            committed / ticker / "research.json",
+            {"ticker": ticker, "research_verdict": verdict, "version": 1},
+            compact=True,
+        )
+    latest_path = data_dir / "latest.json"
+    write_json(
+        latest_path,
+        {
+            "research": [],
+            "reports": [
+                {"ticker": "ENQ.L", "signal": "buy"},
+                {"ticker": "OTHER.L", "signal": "buy"},
+            ],
+        },
+        compact=True,
+    )
+
+    result = reconcile_committed_research_publish(
+        data_dir=data_dir,
+        dest_dir=tmp_path / "docs",
+        latest_path=latest_path,
+        committed_root=committed,
+        output_dir=tmp_path / "output",
+        tickers=["ENQ.L"],
+    )
+
+    assert mock_refresh.call_count == 1
+    assert result["overlay"]["refreshed"] is True
+    assert set(result["overlay"]["overlay_targets"]) == {"ENQ.L", "OTHER.L"}
+
+
 @patch("value_investor.research.ingest.fetch_google_news_rss", return_value=[])
 @patch("value_investor.research.ingest.fetch_yfinance_news", return_value=[])
 @patch(
@@ -445,3 +559,47 @@ def test_uk_deepen_ingest_refreshes_listings_before_body_refetch_enq_l(
     assert mock_refresh.call_args.kwargs.get("max_ch_accounts") == 5
     mock_uk_refetch.assert_called_once()
     assert meta["filings_summary"]["total"] >= 3
+
+
+@patch("value_investor.research.ingest.fetch_google_news_rss", return_value=[])
+@patch("value_investor.research.ingest.fetch_yfinance_news", return_value=[])
+@patch(
+    "value_investor.research.ingest.fetch_annual_financials", return_value={"income_statement": {}}
+)
+@patch(
+    "value_investor.research.gap_fill_sources.deepen_thin_filings_if_needed",
+    return_value={"skipped": True},
+)
+@patch("value_investor.research.filings.refetch_uk_primary_filing_bodies")
+@patch("value_investor.research.filings.refresh_uk_filing_listings_into_index")
+@patch("value_investor.research.filings.ingest_filings")
+def test_uk_deepen_refetches_when_statutory_interim_listing_missing(
+    mock_ingest_filings,
+    mock_refresh,
+    mock_uk_refetch,
+    _mock_deepen,
+    _mock_financials,
+    _mock_yf_news,
+    _mock_google_news,
+    tmp_path: Path,
+):
+    """eng-20261101-04: bodied FY without H1 row must trigger UK primary refetch."""
+    mock_ingest_filings.return_value = {
+        "filings_index_path": str(tmp_path / "filings" / "filings_index.json"),
+        "filings_summary": {"total": 1, "annual": 1, "interim": 0, "with_body": 1},
+        "filings_sources": ["companies_house"],
+        "filings_regime": "uk_rns",
+    }
+    mock_refresh.return_value = {"added": 0, "added_interim": 0}
+    mock_uk_refetch.return_value = {"fetched": 1, "with_body_after": 2}
+
+    ingest_research_sources(
+        ticker="KGF.L",
+        company_name="Kingfisher plc",
+        screening_snapshot={"ticker": "KGF.L", "signal": "buy"},
+        sources_dir=tmp_path,
+        market="ftse350",
+        deepen_history=True,
+    )
+
+    mock_uk_refetch.assert_called_once()

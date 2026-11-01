@@ -698,6 +698,97 @@ def test_filing_coverage_kgf_missing_interim_listing_flags_gap(tmp_path: Path):
     assert _has_outstanding_ingest_gap(coverage, ticker="KGF.L")
 
 
+def test_select_ingest_improvement_targets_prioritises_missing_interim_listing(tmp_path: Path):
+    """eng-20261101-04: FY-with-body / no H1 index row must rank for listing refresh."""
+    from value_investor.research.ingest_improvement import (
+        UK_STATUTORY_INTERIM_LISTING_PRIORITY_BONUS,
+    )
+
+    output_dir = tmp_path / "output"
+    filings_dir = output_dir / "research" / "KGF.L" / "sources" / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {
+                    "total": 1,
+                    "annual": 1,
+                    "interim": 0,
+                    "with_body": 1,
+                    "period_coverage": {
+                        "annual": {"total": 1, "with_body": 1},
+                        "interim": {"total": 0, "with_body": 0},
+                    },
+                },
+                "filings": [{"id": "fy", "period": "annual", "has_body": True}],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    targets = select_ingest_improvement_targets(
+        [_report("KGF.L", "Kingfisher plc", signal="buy")],
+        output_dir=output_dir,
+        suggestions_path=tmp_path / "missing.json",
+        max_targets=1,
+        require_outstanding_gaps=True,
+    )
+
+    assert len(targets) == 1
+    assert targets[0].ticker == "KGF.L"
+    assert targets[0].priority_score >= UK_STATUTORY_INTERIM_LISTING_PRIORITY_BONUS
+
+
+def test_select_ingest_improvement_targets_prioritises_buy_tier_overlay_unwired(tmp_path: Path):
+    """Buy-tier rows without research_verdict stay on the deepen queue when coverage is full."""
+    from value_investor.research.ingest_improvement import BUY_TIER_OVERLAY_UNWIRED_PRIORITY_BONUS
+
+    output_dir = tmp_path / "output"
+    filings_dir = output_dir / "research" / "RKT.L" / "sources" / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 2, "annual": 1, "interim": 1, "with_body": 2},
+                "filings": [
+                    {"id": "fy", "period": "annual", "has_body": True},
+                    {"id": "h1", "period": "interim", "has_body": True},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    azn_dir = output_dir / "research" / "AZN.L" / "sources" / "filings"
+    azn_dir.mkdir(parents=True)
+    (azn_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 2, "annual": 1, "interim": 1, "with_body": 2},
+                "filings": [
+                    {"id": "fy", "period": "annual", "has_body": True},
+                    {"id": "h1", "period": "interim", "has_body": True},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    wired = _report("AZN.L", "AstraZeneca", signal="buy")
+    wired.research_verdict = "accumulate"
+    unwired = _report("RKT.L", "Reckitt Benckiser", signal="buy")
+
+    targets = select_ingest_improvement_targets(
+        [unwired, wired],
+        output_dir=output_dir,
+        suggestions_path=tmp_path / "missing.json",
+        max_targets=1,
+    )
+
+    assert len(targets) == 1
+    assert targets[0].ticker == "RKT.L"
+    assert targets[0].priority_score >= BUY_TIER_OVERLAY_UNWIRED_PRIORITY_BONUS
+
+
 def test_select_ingest_improvement_targets_prioritises_thin_filings(tmp_path: Path):
     output_dir = tmp_path / "output"
     suggestions_path = tmp_path / "suggestions.json"
