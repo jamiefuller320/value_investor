@@ -82,6 +82,10 @@ LOW_PENETRATION_BATCH_TICKERS = frozenset(
 )
 LOW_PENETRATION_BATCH_PRIORITY_BONUS = 12.0
 THIN_ZERO_BODY_MEMO_PRIORITY_BONUS = 14.0
+# UK FY indexed without H1 row — listing refresh must run before rememo (eng-20260922-03).
+UK_STATUTORY_INTERIM_LISTING_PRIORITY_BONUS = 6.0
+# Buy-tier screen rows without research_verdict — queue deepen ahead of full-coverage peers.
+BUY_TIER_OVERLAY_UNWIRED_PRIORITY_BONUS = 3.0
 KNOWN_SOURCE_IDS = frozenset(
     {
         "companies_house_accounts",
@@ -474,6 +478,8 @@ def _priority_score(
         score += 4.0
     if coverage["filings_with_body"] == 0 and coverage["filings_total"] > 0:
         score += 50.0
+    if _uk_statutory_interim_listing_missing(coverage, ticker=ticker):
+        score += UK_STATUTORY_INTERIM_LISTING_PRIORITY_BONUS
     for row in suggestions:
         priority = str(row.get("priority") or "").lower()
         if priority == "high":
@@ -520,6 +526,8 @@ def _priority_score_for_report(
         coverage=coverage,
     ):
         score += THIN_ZERO_BODY_MEMO_PRIORITY_BONUS
+    if report.signal in ("strong_buy", "buy") and not str(report.research_verdict or "").strip():
+        score += BUY_TIER_OVERLAY_UNWIRED_PRIORITY_BONUS
     return score
 
 

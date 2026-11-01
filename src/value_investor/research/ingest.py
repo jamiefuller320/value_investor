@@ -1561,9 +1561,16 @@ def ingest_research_sources(
                             pass
                     filings_meta["uk_listing_refresh"] = listing_refresh
 
+                uk_statutory_interim_missing = (
+                    int(summary.get("annual") or 0) >= 1
+                    and int(summary.get("interim") or 0) == 0
+                    and int(summary.get("with_body") or 0) > 0
+                )
                 needs_body_refetch = (
                     int(summary.get("with_body") or 0) == 0 and int(summary.get("total") or 0) > 0
                 ) or int(listing_refresh.get("added") or 0) > 0
+                if uk_statutory_interim_missing:
+                    needs_body_refetch = True
                 if needs_body_refetch:
                     if deepen_history:
                         uk_refetch = refetch_uk_primary_filing_bodies(
@@ -2050,6 +2057,8 @@ def research_overlay_cohesion_metrics(
         "off_universe_committed_count": len(off_universe),
         "committed_not_wired_in_universe": committed_not_wired_in_universe,
         "wired_missing_committed_verdicts_in_universe": len(committed_not_wired_in_universe),
+        # Off-universe committed names (e.g. dropped from FTSE screen) cannot wire on reports[].
+        "wired_missing_committed_verdicts": len(committed_not_wired_in_universe),
         "buy_tier_unwired_with_committed_verdict": buy_unwired_with_committed,
         "cohesive": not committed_not_wired_in_universe and not buy_unwired_with_committed,
     }
@@ -2117,8 +2126,14 @@ def reconcile_committed_research_publish(
     committed_root: Path | None = None,
     output_dir: Path | None = None,
     tickers: list[str] | None = None,
+    overlay_tickers: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Union index gaps and refresh report overlay for the same ticker set."""
+    """
+    Union index gaps and refresh report overlay for committed verdicts.
+
+    ``tickers`` scopes index reconciliation. ``overlay_tickers`` scopes overlay
+    refresh; ``None`` (default) refreshes every in-universe committed-not-wired name.
+    """
     data_dir = Path(data_dir)
     latest_path = Path(latest_path or data_dir / "latest.json")
     committed_root = Path(committed_root or data_dir / "research")
@@ -2135,7 +2150,7 @@ def reconcile_committed_research_publish(
         latest_path=latest_path,
         committed_root=committed_root,
         output_dir=output_dir,
-        tickers=tickers,
+        tickers=overlay_tickers,
     )
     return {"index": index, "overlay": overlay}
 
