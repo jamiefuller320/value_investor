@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "local_date": "2026-10-31",
+  "local_date": "2026-11-01",
   "timezone": "Europe/London",
-  "generated_at": "2026-10-31T07:52:13.851304Z",
+  "generated_at": "2026-11-01T02:38:51.453705Z",
   "refresh_deadline_local": "04:00",
   "stale_for_local_date": false,
   "focus_lines": [
@@ -30,7 +30,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Absolute availability on the serve order — no rememo/ingest spray on a green set; do not steal P1 for N201 or seal D.",
@@ -99,7 +99,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Fat sprint empty — maintenance + spare auto-advance only; no fourth equal sprint; no parallel eng spray from hub ambers.",
@@ -146,7 +146,7 @@
   ],
   "status_report": {
     "schema_version": 1,
-    "local_date": "2026-10-31",
+    "local_date": "2026-11-01",
     "ops_overall": "warn",
     "ops_findings": [
       {
@@ -160,12 +160,6 @@
         "title": "FTSE decision-input utilization gap",
         "auto_fixable": false,
         "category": "ingest"
-      },
-      {
-        "severity": "warn",
-        "title": "Price-only excess misstates track performance",
-        "auto_fixable": false,
-        "category": "paper"
       },
       {
         "severity": "warn",
@@ -199,39 +193,45 @@
       },
       {
         "severity": "warn",
-        "title": "Deferred idea triggers unreadable",
-        "auto_fixable": false,
-        "category": "observe"
-      },
-      {
-        "severity": "warn",
         "title": "Deferred idea triggers name frozen books",
         "auto_fixable": false,
         "category": "observe"
       },
       {
-        "severity": "warn",
-        "title": "Recent workflow failure: CI main nightly",
+        "severity": "info",
+        "title": "Post-sell cue digest (observe)",
         "auto_fixable": false,
-        "category": "workflows"
+        "category": "research"
       },
       {
-        "severity": "warn",
-        "title": "Orphaned pr_open engineering tasks",
-        "auto_fixable": true,
-        "category": "engineering"
+        "severity": "info",
+        "title": "Post-sale review queue (observe)",
+        "auto_fixable": false,
+        "category": "research"
+      },
+      {
+        "severity": "info",
+        "title": "Cue-consumer MFT lab refreshed",
+        "auto_fixable": false,
+        "category": "research"
+      },
+      {
+        "severity": "info",
+        "title": "Cue-consumer MFT lab armed (observe)",
+        "auto_fixable": false,
+        "category": "research"
       }
     ],
-    "scoreboard_headline": "ai_judgment_fair: total return -12.7% vs FTAL.L -1.2% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -12.0% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
-    "primary_track": "ai_judgment_fair",
-    "control_track": "buy_tier_level",
+    "scoreboard_headline": "ai_judgment_matched30_fair: total return -3.1% vs FTAL.L -0.0% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+    "primary_track": "ai_judgment_matched30_fair",
+    "control_track": "buy_tier_matched30_fair",
     "primary_vs_control": {
-      "primary": "ai_judgment_fair",
-      "control": "buy_tier_level",
-      "start": "2026-09-07T09:29:59.366533+01:00",
-      "primary_total_return": -0.1142,
-      "control_total_return": 0.0061,
-      "difference": -0.1203,
+      "primary": "ai_judgment_matched30_fair",
+      "control": "buy_tier_matched30_fair",
+      "start": "2026-10-15T10:03:40.485384+00:00",
+      "primary_total_return": -0.0261,
+      "control_total_return": -0.0295,
+      "difference": 0.0034,
       "note": "Common window, total return. Positive means the primary's filter added value over the unfiltered buy tier. Not yet tested for significance."
     },
     "engineering_open": [
@@ -239,14 +239,9 @@
         "id": "eng-20261018-03",
         "status": "parked",
         "title": "Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)"
-      },
-      {
-        "id": "eng-20261030-03",
-        "status": "pr_open",
-        "title": "Close buy-tier overlay wiring gap (64/73 wired; resolve `wired_missing_committed_verdicts` 1) so committed accumulate memos drive screening overlays consistentl"
       }
     ],
-    "queue_health_headline": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
+    "queue_health_headline": "Queue and hunter idle.",
     "post_run_clearance": {
       "evaluated_at": "2026-10-30T23:50:29.060272+00:00",
       "trigger": "post_run_review_email",
@@ -254,51 +249,64 @@
       "should_dispatch_engineering": true
     },
     "deferred_triggers": {
-      "met_count": 1,
-      "unmet_count": 19,
+      "met_count": 3,
+      "unmet_count": 18,
       "met": [
         {
-          "id": "N216",
-          "title": "Body-fetch pipeline rewrite for euro thin/IWB drain",
+          "id": "L551",
+          "title": "Triage the deferred-ideas backlog (544 open)",
           "status": "open",
-          "first_met_at": "2026-10-31T02:35:48.316349+00:00",
+          "first_met_at": "2026-11-01T02:34:38.119926+00:00",
           "conditions": [
             {
               "condition": {
-                "file": "docs/data/decision_input_inventory.json",
-                "path": "summary.gap_counts.key_filing_bodies",
-                "op": ">",
-                "value": 0
+                "on_or_after": "2026-11-01"
               },
               "state": "met",
-              "actual": 2
-            },
+              "actual": "2026-11-01"
+            }
+          ]
+        },
+        {
+          "id": "L632",
+          "title": "Backfill sealed lifecycle_episodes exit_reason on observe re-score",
+          "status": "open",
+          "first_met_at": "2026-11-01T02:34:38.119926+00:00",
+          "conditions": [
             {
               "condition": {
-                "file": "docs/data/market_status.json",
-                "path": "markets[market_id=euro_depth].filing_health.indexed_without_body",
-                "op": ">",
-                "value": 20
+                "on_or_after": "2026-11-01"
               },
-              "state": "unmet",
-              "actual": 4
-            },
+              "state": "met",
+              "actual": "2026-11-01"
+            }
+          ]
+        },
+        {
+          "id": "L654",
+          "title": "Refresh test_ftse_gap_scan goldens after CI main nightly drift",
+          "status": "open",
+          "first_met_at": "2026-11-01T02:34:38.119926+00:00",
+          "conditions": [
             {
               "condition": {
-                "on_or_after": "2026-11-23"
+                "file": "docs/data/ops_status.json",
+                "path": "findings[title=Recent workflow failure: CI main nightly].severity",
+                "op": "==",
+                "value": "warn"
               },
-              "state": "unmet",
-              "actual": "2026-10-31"
+              "state": "met",
+              "actual": "warn"
             }
           ]
         }
       ],
-      "generated_at": "2026-10-31T07:49:48.855159+00:00"
+      "generated_at": "2026-11-01T02:34:38.119926+00:00"
     },
     "focus_relevant": true,
     "post_sell_cue_digest": {
       "present": true,
-      "generated_at": "2026-10-31T07:47:50.995767+00:00",
+      "generated_at": "2026-11-01T02:32:48.696591+00:00",
       "item_count": 6,
       "timing_cue_count": 4,
       "selection_cue_count": 2,
@@ -311,17 +319,17 @@
       {
         "id": "ops",
         "label": "Ops",
-        "value": "overall=warn; warn:New buy-tier not yet usable; warn:FTSE decision-input utilization gap; warn:Price-only excess misstates track performance; warn:Longer holds beat live exit buffer in replay; warn:Two-lot retention beats full exit in replay"
+        "value": "overall=warn; warn:New buy-tier not yet usable; warn:FTSE decision-input utilization gap; warn:Longer holds beat live exit buffer in replay; warn:Two-lot retention beats full exit in replay; warn:SEC filed FCF diverges from Yahoo basis on US buy-tier"
       },
       {
         "id": "scoreboard",
         "label": "Scoreboard",
-        "value": "ai_judgment_fair: total return -12.7% vs FTAL.L -1.2% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -12.0% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73)."
+        "value": "ai_judgment_matched30_fair: total return -3.1% vs FTAL.L -0.0% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73)."
       },
       {
         "id": "eng",
         "label": "Eng queue",
-        "value": "parked:eng-20261018-03, pr_open:eng-20261030-03"
+        "value": "parked:eng-20261018-03"
       },
       {
         "id": "post_run",
@@ -331,7 +339,7 @@
       {
         "id": "defer",
         "label": "Deferred triggers",
-        "value": "met=1"
+        "value": "met=3"
       },
       {
         "id": "focus_relevance",
@@ -342,27 +350,9 @@
         "id": "post_sell_cue_digest",
         "label": "Post-sell cue digest",
         "value": "4 timing + 2 selection cues; control closed sells=33; current-epoch cue n=33; epoch_unknown=0"
-      },
-      {
-        "id": "non_actionable_observes",
-        "label": "Observe (not Push)",
-        "value": "Primary book trails its control on total return (b3_evidentiary_demotion); Decision-review knobs saturated at bounds (b3_anti_c_no_enlarge)"
       }
     ],
-    "non_actionable_observes": [
-      {
-        "title": "Primary book trails its control on total return",
-        "severity": "warn",
-        "reason": "b3_evidentiary_demotion",
-        "label": "non_actionable_not_push"
-      },
-      {
-        "title": "Decision-review knobs saturated at bounds",
-        "severity": "warn",
-        "reason": "b3_anti_c_no_enlarge",
-        "label": "non_actionable_not_push"
-      }
-    ]
+    "non_actionable_observes": []
   },
   "push_suggestions": {
     "schema_version": 1,
@@ -390,31 +380,31 @@
         "leverage": "Human judgment on existing gate — not a new strand"
       },
       {
-        "id": "push:16aac3fb1a64",
+        "id": "push:97c0c84a041a",
         "lane": "push",
         "priority": 2,
-        "title": "Review N200 volume gate (no auto-promote)",
-        "why_now": "ops finding (info): N200 volume gate ready for review",
+        "title": "N201 interestingness — stamp disposition (no auto-promote)",
+        "why_now": "ops finding (info): N201 alone-path interesting — promotion design optional (F8)",
         "cite": {
           "kind": "ops_finding",
-          "ref": "N200 volume gate ready for review",
+          "ref": "N201 alone-path interesting — promotion design optional (F8)",
           "severity": "info",
           "category": "research"
         },
         "checklist_task_id": "adhoc-n200-n201-volume-gate-review",
         "href": "#automation/human",
-        "doc_path": "docs/ops/n200-tech-timing-observe.md#human-volume-gate-review",
+        "doc_path": "docs/ops/n201-value-mom-observe.md#human-volume-gate-review",
         "leverage": "Human judgment on existing gate — not a new strand"
       },
       {
-        "id": "push:ca2e7bc094ab",
+        "id": "push:c0c2d209905d",
         "lane": "push",
         "priority": 2,
-        "title": "Review N206 plain-EY volume gate (no auto-promote)",
-        "why_now": "ops finding (info): N206 volume gate ready for review",
+        "title": "N206 interestingness — alone design optional (no crown)",
+        "why_now": "ops finding (info): N206 alone-path interesting — promotion design optional (F8)",
         "cite": {
           "kind": "ops_finding",
-          "ref": "N206 volume gate ready for review",
+          "ref": "N206 alone-path interesting — promotion design optional (F8)",
           "severity": "info",
           "category": "research"
         },
@@ -428,33 +418,8 @@
       "Deferred idea triggers met"
     ],
     "push_empty_while_mapped_warns": false,
-    "non_actionable_observes": [
-      {
-        "title": "Decision-review knobs saturated at bounds",
-        "severity": "warn",
-        "reason": "b3_anti_c_no_enlarge",
-        "label": "non_actionable_not_push"
-      },
-      {
-        "title": "Primary book trails its control on total return",
-        "severity": "warn",
-        "reason": "b3_evidentiary_demotion",
-        "label": "non_actionable_not_push"
-      }
-    ],
-    "later_suggestions": [
-      {
-        "id": "later:b3-crown-after-volume-gates",
-        "lane": "later",
-        "timing": "later",
-        "title": "Crown assessment primary only after shadow volume gates",
-        "gap": "Outstanding: N210 fair-cost episode % and the matched-30 pair stay shadow until their volume gates. Do not crown either from the continuity book.",
-        "done": "B3 already demoted ai_judgment_fair as evidentiary primary and spawned those shadows. The total-return trail is not a new judgment.",
-        "not_push": true,
-        "checklist_task_id": "sunday-assessment-scoreboard",
-        "href": "docs/ops/b3-scoreboard-epoch.md"
-      }
-    ]
+    "non_actionable_observes": [],
+    "later_suggestions": []
   },
   "explore_suggestions": {
     "schema_version": 1,
@@ -498,26 +463,8 @@
       }
     ]
   },
-  "later_suggestions": [
-    {
-      "id": "later:b3-crown-after-volume-gates",
-      "lane": "later",
-      "timing": "later",
-      "title": "Crown assessment primary only after shadow volume gates",
-      "gap": "Outstanding: N210 fair-cost episode % and the matched-30 pair stay shadow until their volume gates. Do not crown either from the continuity book.",
-      "done": "B3 already demoted ai_judgment_fair as evidentiary primary and spawned those shadows. The total-return trail is not a new judgment.",
-      "not_push": true,
-      "checklist_task_id": "sunday-assessment-scoreboard",
-      "href": "docs/ops/b3-scoreboard-epoch.md"
-    }
-  ],
-  "relevance_dropped": [
-    {
-      "task_ref": "human:sunday-assessment-scoreboard",
-      "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
-      "reason": "disposition_locked"
-    }
-  ],
+  "later_suggestions": [],
+  "relevance_dropped": [],
   "tasks": [
     {
       "task_ref": "mwarn:dev:dev-euro_depth-WIE.VI-blocker_no_improve",
@@ -553,15 +500,15 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → dismiss",
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "euro_depth · ingest_deviation (focus/priority-slot head) — proposed triage: dismiss. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
           "stage_label": "warn:dismiss",
           "stage_state": "ready",
           "stage_since": "2026-10-27T10:46:58.731148+00:00",
-          "days_in_stage": 4,
-          "stage_duration": "4 days in stage",
+          "days_in_stage": 5,
+          "stage_duration": "5 days in stage",
           "waiting_for": "operator Accept on observe-safe triage",
           "how_achieved": "Accept park/dismiss triage for today",
           "provenance": [
@@ -597,8 +544,8 @@
         "stage_label": "warn:dismiss",
         "stage_state": "ready",
         "stage_since": "2026-10-27T10:46:58.731148+00:00",
-        "days_in_stage": 4,
-        "stage_duration": "4 days in stage",
+        "days_in_stage": 5,
+        "stage_duration": "5 days in stage",
         "waiting_for": "operator Accept on observe-safe triage",
         "how_achieved": "Accept park/dismiss triage for today",
         "provenance": [
@@ -676,15 +623,15 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → dismiss",
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "hang_seng · ingest_deviation (ingest_deviation) — proposed triage: dismiss. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
           "stage_label": "warn:dismiss",
           "stage_state": "ready",
           "stage_since": "2026-10-06T21:33:21.615298+00:00",
-          "days_in_stage": 25,
-          "stage_duration": "25 days in stage",
+          "days_in_stage": 26,
+          "stage_duration": "26 days in stage",
           "waiting_for": "operator Accept on observe-safe triage",
           "how_achieved": "Accept park/dismiss triage for today",
           "provenance": [
@@ -720,8 +667,8 @@
         "stage_label": "warn:dismiss",
         "stage_state": "ready",
         "stage_since": "2026-10-06T21:33:21.615298+00:00",
-        "days_in_stage": 25,
-        "stage_duration": "25 days in stage",
+        "days_in_stage": 26,
+        "stage_duration": "26 days in stage",
         "waiting_for": "operator Accept on observe-safe triage",
         "how_achieved": "Accept park/dismiss triage for today",
         "provenance": [
@@ -766,6 +713,208 @@
       }
     },
     {
+      "task_ref": "human:sunday-assessment-scoreboard",
+      "source": "human_tasks",
+      "work_class": "ops_gate",
+      "task_family": "sunday-assessment-scoreboard",
+      "priority": 12,
+      "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
+      "summary": "Read docs/data/assessment_scoreboard.json (Analysis → Observe model switcher defaults to Strand A · live): continuity primary ai_judgment_fair (B3 evidentiary-demoted — not adoption/filter-skill truth; see policy_changes.evidentiary_demotion_ai_judgment_fair_v1) vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also matched-30 shadow twins (NAV only vs each other), frozen hold5/graduated final records, knob_calibration_priors readiness (Acknowledge-and-stop when confidence low and score_gap <0.005), buy_cross_archive_review (observe-only), policy_changes, and nest sunday-ai-path-scoreboard as a subsection. Judgment evidence primary is N210 fair-cost episode % (shadow until volume gates). While that demotion stamp is present and primary_track is still ai_judgment_fair, the ops warn Primary book trails its control is not a Push card; the outstanding gap is Later (crown only after shadow volume gates). Approve a promotion only when fair-cost evidence clears gates; do not enlarge the live 3-name book mid-flight; do not back-label its NAV. Calibrated/exclusion/Suite A frozen. N200/N201/N210 are sealed observe-only alone scoreboards — never a second live capital path and never a promote gate from trailing alone (F8).",
+      "sort_bucket": "new_info",
+      "closeable": true,
+      "close_action": "human-task-ack",
+      "close_payload": {
+        "task_id": "sunday-assessment-scoreboard",
+        "decision": "ack_observe",
+        "finding_fingerprint": "94066622535964a2"
+      },
+      "href": "#automation/human",
+      "recommendation_id": "rec-7932628f93a3",
+      "status": {
+        "state": "ready",
+        "label": "Proposed",
+        "next_steps": [
+          "Accept runs human-task-ack — never auto-applies knobs, crons, or capital"
+        ],
+        "waiting_on": [
+          {
+            "kind": "external",
+            "ref": null,
+            "detail": "operator Acknowledge (observe-only) or Discuss"
+          }
+        ],
+        "ready": true,
+        "ready_reason": "proposal present · no blockers",
+        "blocked_reason": null,
+        "updated_at": "2026-11-01T02:38:51.453705Z",
+        "updated_by": "morning_builder",
+        "assessment": {
+          "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Assessment scoreboard · primary not scored",
+          "stage_label": "ops_gate:new_info",
+          "stage_state": "ready",
+          "stage_since": null,
+          "days_in_stage": null,
+          "stage_duration": "duration unknown",
+          "waiting_for": "operator Acknowledge (observe-only) or Discuss",
+          "how_achieved": "Accept runs human-task-ack — never auto-applies knobs, crons, or capital",
+          "provenance": [
+            "observe:where",
+            "observe:stage_label",
+            "observe:waiting_for",
+            "observe:how"
+          ],
+          "incomplete_fields": [
+            "stage_duration"
+          ],
+          "observe_only": true
+        }
+      },
+      "human_task": {
+        "id": "sunday-assessment-scoreboard",
+        "sort_bucket": "new_info",
+        "analysis": {
+          "headline": "Assessment scoreboard · primary not scored",
+          "updated_at": "2026-11-01T02:34:38.081074+00:00",
+          "fingerprint": "94066622535964a2",
+          "bullets": [
+            "ai_judgment_matched30_fair: total return -3.1% vs FTAL.L -0.0% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+            "Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1031",
+            "vs control buy_tier_matched30_fair: difference 0.0034 (common window, not significance)",
+            "AI gate binds: False (N189 while it never binds)",
+            "twin ai_judgment_matched30_fair: difference -0.0158 over 10 days",
+            "twin buy_tier_matched30_fair: difference -0.0335 over 10 days",
+            "Policy changes: significance_gate_v1 (2026-10-06), evidentiary_demotion_ai_judgment_fair_v1 (2026-10-15), stop_ai_judgment_fair_3name_v1 (2026-10-31)"
+          ],
+          "source_keys": [
+            "assessment_scoreboard"
+          ]
+        },
+        "ack": {
+          "acked": true,
+          "stale": true,
+          "acked_at": "2026-10-09T15:43:43.187966+00:00",
+          "decision": "ack_observe",
+          "finding_fingerprint": "782b2addb6782b0b"
+        },
+        "approval_gate": true,
+        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#assessment-scoreboard",
+        "cadence": "sunday"
+      },
+      "closed": false,
+      "review_detail": {
+        "headline": "Assessment scoreboard · primary not scored",
+        "updated_at": "2026-11-01T02:34:38.081074+00:00",
+        "fingerprint": "94066622535964a2",
+        "bullets": [
+          "ai_judgment_matched30_fair: total return -3.1% vs FTAL.L -0.0% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+          "Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1031",
+          "vs control buy_tier_matched30_fair: difference 0.0034 (common window, not significance)",
+          "AI gate binds: False (N189 while it never binds)",
+          "twin ai_judgment_matched30_fair: difference -0.0158 over 10 days",
+          "twin buy_tier_matched30_fair: difference -0.0335 over 10 days",
+          "Policy changes: significance_gate_v1 (2026-10-06), evidentiary_demotion_ai_judgment_fair_v1 (2026-10-15), stop_ai_judgment_fair_3name_v1 (2026-10-31)"
+        ],
+        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#assessment-scoreboard",
+        "cadence": "sunday",
+        "source_keys": [
+          "assessment_scoreboard"
+        ],
+        "observe_only": true
+      },
+      "assessment": {
+        "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Assessment scoreboard · primary not scored",
+        "stage_label": "ops_gate:new_info",
+        "stage_state": "ready",
+        "stage_since": null,
+        "days_in_stage": null,
+        "stage_duration": "duration unknown",
+        "waiting_for": "operator Acknowledge (observe-only) or Discuss",
+        "how_achieved": "Accept runs human-task-ack — never auto-applies knobs, crons, or capital",
+        "provenance": [
+          "observe:where",
+          "observe:stage_label",
+          "observe:waiting_for",
+          "observe:how"
+        ],
+        "incomplete_fields": [
+          "stage_duration"
+        ],
+        "observe_only": true
+      },
+      "recommendation": {
+        "id": "rec-7932628f93a3",
+        "task_id": "human:sunday-assessment-scoreboard",
+        "summary": "Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary not scored detail: ai_judgment_matched30_fair: total return -3.1% vs FTAL.L -0.0% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1031; vs control buy_tier_matched30_fair: difference 0.0034 (common window, not significance); AI gate binds: False (N189 while it never binds)",
+        "accept_action": {
+          "kind": "human-task-ack",
+          "payload": {
+            "task_id": "sunday-assessment-scoreboard",
+            "decision": "ack_observe",
+            "finding_fingerprint": "94066622535964a2"
+          }
+        },
+        "discuss_prompt": "Discuss daily recommendation `rec-7932628f93a3` (human task `sunday-assessment-scoreboard`):\nTitle: Read the assessment scoreboard (primary vs control; promotion gate)\nSummary: Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary not scored detail: ai_judgment_matched30_fair: total return -3.1% vs FTAL.L -0.0% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1031; vs control buy_tier_matched30_fair: difference 0.0034 (common window, not significance); AI gate binds: False (N189 while it never binds)\nReview detail:\n- ai_judgment_matched30_fair: total return -3.1% vs FTAL.L -0.0% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).\n- Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1031\n- vs control buy_tier_matched30_fair: difference 0.0034 (common window, not significance)\n- AI gate binds: False (N189 while it never binds)\n- twin ai_judgment_matched30_fair: difference -0.0158 over 10 days\n- twin buy_tier_matched30_fair: difference -0.0335 over 10 days\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Approve gate (observe-only)\n3) Defer / rewrite runbook expectation\n4) Open runbook\n5) Discuss in Project chat\nSay: discuss daily recommendation `rec-7932628f93a3` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "priority": 12,
+        "options": [
+          {
+            "id": "accept",
+            "label": "Accept → Acknowledge (observe-only)",
+            "action": {
+              "kind": "human-task-ack",
+              "payload": {
+                "task_id": "sunday-assessment-scoreboard",
+                "decision": "ack_observe",
+                "finding_fingerprint": "94066622535964a2"
+              }
+            }
+          },
+          {
+            "id": "approve",
+            "label": "Approve gate (observe-only)",
+            "action": {
+              "kind": "human-task-ack",
+              "payload": {
+                "task_id": "sunday-assessment-scoreboard",
+                "decision": "approve",
+                "finding_fingerprint": "94066622535964a2"
+              }
+            }
+          },
+          {
+            "id": "defer",
+            "label": "Defer / rewrite runbook expectation",
+            "action": {
+              "kind": "human-task-ack",
+              "payload": {
+                "task_id": "sunday-assessment-scoreboard",
+                "decision": "defer",
+                "finding_fingerprint": "94066622535964a2"
+              }
+            }
+          },
+          {
+            "id": "runbook",
+            "label": "Open runbook",
+            "action": {
+              "kind": "link_only",
+              "payload": {
+                "href": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#assessment-scoreboard"
+              }
+            }
+          },
+          {
+            "id": "discuss",
+            "label": "Discuss in Project chat",
+            "action": {
+              "kind": "discuss",
+              "payload": {}
+            }
+          }
+        ]
+      }
+    },
+    {
       "task_ref": "human:adhoc-review-ingest-deviations",
       "source": "human_tasks",
       "work_class": "ops_gate",
@@ -799,7 +948,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Ingest deviations · 2 open",
@@ -827,7 +976,7 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "Ingest deviations · 2 open",
-          "updated_at": "2026-10-31T07:43:17.613965+00:00",
+          "updated_at": "2026-10-31T20:25:12.330813+00:00",
           "fingerprint": "6dda3808006c2a3a",
           "bullets": [
             "Open deviations: 2",
@@ -852,7 +1001,7 @@
       "closed": false,
       "review_detail": {
         "headline": "Ingest deviations · 2 open",
-        "updated_at": "2026-10-31T07:43:17.613965+00:00",
+        "updated_at": "2026-10-31T20:25:12.330813+00:00",
         "fingerprint": "6dda3808006c2a3a",
         "bullets": [
           "Open deviations: 2",
@@ -961,10 +1110,10 @@
       "close_payload": {
         "task_id": "monthly-pr-fix-common-issues",
         "decision": "ack_observe",
-        "finding_fingerprint": "4aff757e46329935"
+        "finding_fingerprint": "4265b936189d67bc"
       },
       "href": "#automation/human",
-      "recommendation_id": "rec-a7b14d8c58e0",
+      "recommendation_id": "rec-172da7f63d32",
       "status": {
         "state": "ready",
         "label": "Proposed",
@@ -981,7 +1130,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: PR fix common issues",
@@ -1009,10 +1158,10 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "PR fix common issues",
-          "updated_at": "2026-10-30T19:15:20.987132+00:00",
-          "fingerprint": "4aff757e46329935",
+          "updated_at": "2026-10-31T18:39:57.455320+00:00",
+          "fingerprint": "4265b936189d67bc",
           "bullets": [
-            "Occasions logged: 310",
+            "Occasions logged: 315",
             "PR mergeable=CONFLICTING against main: 7",
             "validate failed: 6",
             "merge_conflict:dirty: 6",
@@ -1038,10 +1187,10 @@
       "closed": false,
       "review_detail": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-10-30T19:15:20.987132+00:00",
-        "fingerprint": "4aff757e46329935",
+        "updated_at": "2026-10-31T18:39:57.455320+00:00",
+        "fingerprint": "4265b936189d67bc",
         "bullets": [
-          "Occasions logged: 310",
+          "Occasions logged: 315",
           "PR mergeable=CONFLICTING against main: 7",
           "validate failed: 6",
           "merge_conflict:dirty: 6",
@@ -1077,19 +1226,19 @@
         "observe_only": true
       },
       "recommendation": {
-        "id": "rec-a7b14d8c58e0",
+        "id": "rec-172da7f63d32",
         "task_id": "human:monthly-pr-fix-common-issues",
         "summary": "Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 310; PR mergeable=CONFLICTING against main: 7; validate failed: 6; merge_conflict:dirty: 6",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 315; PR mergeable=CONFLICTING against main: 7; validate failed: 6; merge_conflict:dirty: 6",
         "accept_action": {
           "kind": "human-task-ack",
           "payload": {
             "task_id": "monthly-pr-fix-common-issues",
             "decision": "ack_observe",
-            "finding_fingerprint": "4aff757e46329935"
+            "finding_fingerprint": "4265b936189d67bc"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-a7b14d8c58e0` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 310; PR mergeable=CONFLICTING against main: 7; validate failed: 6; merge_conflict:dirty: 6\nReview detail:\n- Occasions logged: 310\n- PR mergeable=CONFLICTING against main: 7\n- validate failed: 6\n- merge_conflict:dirty: 6\n- PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5\n- validate check failed: 4\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-a7b14d8c58e0` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "discuss_prompt": "Discuss daily recommendation `rec-172da7f63d32` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 315; PR mergeable=CONFLICTING against main: 7; validate failed: 6; merge_conflict:dirty: 6\nReview detail:\n- Occasions logged: 315\n- PR mergeable=CONFLICTING against main: 7\n- validate failed: 6\n- merge_conflict:dirty: 6\n- PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5\n- validate check failed: 4\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-172da7f63d32` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
         "priority": 14,
         "options": [
           {
@@ -1100,7 +1249,7 @@
               "payload": {
                 "task_id": "monthly-pr-fix-common-issues",
                 "decision": "ack_observe",
-                "finding_fingerprint": "4aff757e46329935"
+                "finding_fingerprint": "4265b936189d67bc"
               }
             }
           },
@@ -1112,7 +1261,7 @@
               "payload": {
                 "task_id": "monthly-pr-fix-common-issues",
                 "decision": "defer",
-                "finding_fingerprint": "4aff757e46329935"
+                "finding_fingerprint": "4265b936189d67bc"
               }
             }
           },
@@ -1171,7 +1320,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -1341,7 +1490,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -1511,7 +1660,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -1681,7 +1830,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -1851,7 +2000,7 @@
         "ready": true,
         "ready_reason": "cited push suggestion",
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "ops finding (warn): Deferred idea triggers met",
@@ -1954,23 +2103,23 @@
       }
     },
     {
-      "task_ref": "push:16aac3fb1a64",
+      "task_ref": "push:97c0c84a041a",
       "source": "daily_push",
       "work_class": "ops_gate",
       "task_family": "daily-push",
       "priority": 20,
-      "title": "Review N200 volume gate (no auto-promote)",
-      "summary": "ops finding (info): N200 volume gate ready for review",
+      "title": "N201 interestingness — stamp disposition (no auto-promote)",
+      "summary": "ops finding (info): N201 alone-path interesting — promotion design optional (F8)",
       "sort_bucket": "push",
       "lane": "push",
       "closeable": true,
       "close_action": "daily-focus-ack",
       "close_payload": {
-        "focus_id": "push:16aac3fb1a64",
+        "focus_id": "push:97c0c84a041a",
         "decision": "accept"
       },
       "href": "#automation/human",
-      "recommendation_id": "rec-61dfeb358039",
+      "recommendation_id": "rec-cbff82451ff1",
       "status": {
         "state": "ready",
         "label": "Push",
@@ -1987,10 +2136,10 @@
         "ready": true,
         "ready_reason": "cited push suggestion",
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
-          "where_we_are": "ops finding (info): N200 volume gate ready for review",
+          "where_we_are": "ops finding (info): N201 alone-path interesting — promotion design optional (F8)",
           "stage_label": "ready",
           "stage_state": "ready",
           "stage_since": null,
@@ -2011,24 +2160,24 @@
       },
       "closed": false,
       "push": {
-        "id": "push:16aac3fb1a64",
+        "id": "push:97c0c84a041a",
         "lane": "push",
         "priority": 2,
-        "title": "Review N200 volume gate (no auto-promote)",
-        "why_now": "ops finding (info): N200 volume gate ready for review",
+        "title": "N201 interestingness — stamp disposition (no auto-promote)",
+        "why_now": "ops finding (info): N201 alone-path interesting — promotion design optional (F8)",
         "cite": {
           "kind": "ops_finding",
-          "ref": "N200 volume gate ready for review",
+          "ref": "N201 alone-path interesting — promotion design optional (F8)",
           "severity": "info",
           "category": "research"
         },
         "checklist_task_id": "adhoc-n200-n201-volume-gate-review",
         "href": "#automation/human",
-        "doc_path": "docs/ops/n200-tech-timing-observe.md#human-volume-gate-review",
+        "doc_path": "docs/ops/n201-value-mom-observe.md#human-volume-gate-review",
         "leverage": "Human judgment on existing gate — not a new strand"
       },
       "assessment": {
-        "where_we_are": "ops finding (info): N200 volume gate ready for review",
+        "where_we_are": "ops finding (info): N201 alone-path interesting — promotion design optional (F8)",
         "stage_label": "ready",
         "stage_state": "ready",
         "stage_since": null,
@@ -2047,19 +2196,19 @@
         "observe_only": true
       },
       "recommendation": {
-        "id": "rec-61dfeb358039",
-        "task_id": "push:16aac3fb1a64",
-        "summary": "Review N200 volume gate (no auto-promote)",
-        "rationale": "ops finding (info): N200 volume gate ready for review",
+        "id": "rec-cbff82451ff1",
+        "task_id": "push:97c0c84a041a",
+        "summary": "N201 interestingness — stamp disposition (no auto-promote)",
+        "rationale": "ops finding (info): N201 alone-path interesting — promotion design optional (F8)",
         "accept_action": {
           "kind": "focus-ack",
           "payload": {
-            "focus_id": "push:16aac3fb1a64",
+            "focus_id": "push:97c0c84a041a",
             "decision": "accept",
             "lane": "push"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-61dfeb358039` (push `push:16aac3fb1a64`):\nReview N200 volume gate (no auto-promote)\nWhy now: ops finding (info): N200 volume gate ready for review\nCite: ops_finding N200 volume gate ready for review\nPush is execution — do not invent a new strand from chat alone.",
+        "discuss_prompt": "Discuss daily recommendation `rec-cbff82451ff1` (push `push:97c0c84a041a`):\nN201 interestingness — stamp disposition (no auto-promote)\nWhy now: ops finding (info): N201 alone-path interesting — promotion design optional (F8)\nCite: ops_finding N201 alone-path interesting — promotion design optional (F8)\nPush is execution — do not invent a new strand from chat alone.",
         "priority": 20,
         "options": [
           {
@@ -2068,7 +2217,7 @@
             "action": {
               "kind": "focus-ack",
               "payload": {
-                "focus_id": "push:16aac3fb1a64",
+                "focus_id": "push:97c0c84a041a",
                 "decision": "accept"
               }
             }
@@ -2079,7 +2228,7 @@
             "action": {
               "kind": "discuss",
               "payload": {
-                "recommendation_id": "rec-61dfeb358039"
+                "recommendation_id": "rec-cbff82451ff1"
               }
             }
           }
@@ -2090,23 +2239,23 @@
       }
     },
     {
-      "task_ref": "push:ca2e7bc094ab",
+      "task_ref": "push:c0c2d209905d",
       "source": "daily_push",
       "work_class": "ops_gate",
       "task_family": "daily-push",
       "priority": 21,
-      "title": "Review N206 plain-EY volume gate (no auto-promote)",
-      "summary": "ops finding (info): N206 volume gate ready for review",
+      "title": "N206 interestingness — alone design optional (no crown)",
+      "summary": "ops finding (info): N206 alone-path interesting — promotion design optional (F8)",
       "sort_bucket": "push",
       "lane": "push",
       "closeable": true,
       "close_action": "daily-focus-ack",
       "close_payload": {
-        "focus_id": "push:ca2e7bc094ab",
+        "focus_id": "push:c0c2d209905d",
         "decision": "accept"
       },
       "href": "#automation/human",
-      "recommendation_id": "rec-f66fe164cce7",
+      "recommendation_id": "rec-ad6e623c2edd",
       "status": {
         "state": "ready",
         "label": "Push",
@@ -2123,10 +2272,10 @@
         "ready": true,
         "ready_reason": "cited push suggestion",
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
-          "where_we_are": "ops finding (info): N206 volume gate ready for review",
+          "where_we_are": "ops finding (info): N206 alone-path interesting — promotion design optional (F8)",
           "stage_label": "ready",
           "stage_state": "ready",
           "stage_since": null,
@@ -2147,14 +2296,14 @@
       },
       "closed": false,
       "push": {
-        "id": "push:ca2e7bc094ab",
+        "id": "push:c0c2d209905d",
         "lane": "push",
         "priority": 2,
-        "title": "Review N206 plain-EY volume gate (no auto-promote)",
-        "why_now": "ops finding (info): N206 volume gate ready for review",
+        "title": "N206 interestingness — alone design optional (no crown)",
+        "why_now": "ops finding (info): N206 alone-path interesting — promotion design optional (F8)",
         "cite": {
           "kind": "ops_finding",
-          "ref": "N206 volume gate ready for review",
+          "ref": "N206 alone-path interesting — promotion design optional (F8)",
           "severity": "info",
           "category": "research"
         },
@@ -2164,7 +2313,7 @@
         "leverage": "Human judgment on existing gate — not a new strand"
       },
       "assessment": {
-        "where_we_are": "ops finding (info): N206 volume gate ready for review",
+        "where_we_are": "ops finding (info): N206 alone-path interesting — promotion design optional (F8)",
         "stage_label": "ready",
         "stage_state": "ready",
         "stage_since": null,
@@ -2183,19 +2332,19 @@
         "observe_only": true
       },
       "recommendation": {
-        "id": "rec-f66fe164cce7",
-        "task_id": "push:ca2e7bc094ab",
-        "summary": "Review N206 plain-EY volume gate (no auto-promote)",
-        "rationale": "ops finding (info): N206 volume gate ready for review",
+        "id": "rec-ad6e623c2edd",
+        "task_id": "push:c0c2d209905d",
+        "summary": "N206 interestingness — alone design optional (no crown)",
+        "rationale": "ops finding (info): N206 alone-path interesting — promotion design optional (F8)",
         "accept_action": {
           "kind": "focus-ack",
           "payload": {
-            "focus_id": "push:ca2e7bc094ab",
+            "focus_id": "push:c0c2d209905d",
             "decision": "accept",
             "lane": "push"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-f66fe164cce7` (push `push:ca2e7bc094ab`):\nReview N206 plain-EY volume gate (no auto-promote)\nWhy now: ops finding (info): N206 volume gate ready for review\nCite: ops_finding N206 volume gate ready for review\nPush is execution — do not invent a new strand from chat alone.",
+        "discuss_prompt": "Discuss daily recommendation `rec-ad6e623c2edd` (push `push:c0c2d209905d`):\nN206 interestingness — alone design optional (no crown)\nWhy now: ops finding (info): N206 alone-path interesting — promotion design optional (F8)\nCite: ops_finding N206 alone-path interesting — promotion design optional (F8)\nPush is execution — do not invent a new strand from chat alone.",
         "priority": 21,
         "options": [
           {
@@ -2204,7 +2353,7 @@
             "action": {
               "kind": "focus-ack",
               "payload": {
-                "focus_id": "push:ca2e7bc094ab",
+                "focus_id": "push:c0c2d209905d",
                 "decision": "accept"
               }
             }
@@ -2215,7 +2364,7 @@
             "action": {
               "kind": "discuss",
               "payload": {
-                "recommendation_id": "rec-f66fe164cce7"
+                "recommendation_id": "rec-ad6e623c2edd"
               }
             }
           }
@@ -2260,7 +2409,7 @@
         "ready": true,
         "ready_reason": "quality-barred explore card",
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Per-lever fair-cost verdicts are independent of path P&L — exit lose + entry win is a factory timing signal, not a book rewrite — Falsify/promote: Volume gate met + thicker closed cohort; promote only via sealed observe design (F8), never mid-flight knob apply",
@@ -2394,7 +2543,7 @@
         "ready": true,
         "ready_reason": "quality-barred explore card",
         "blocked_reason": null,
-        "updated_at": "2026-10-31T07:52:13.851304Z",
+        "updated_at": "2026-11-01T02:38:51.453705Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Live hold/swap probability stays parked until closed cohorts mature — Falsify/promote: ready_for_probability_analysis true with hold+swap closed targets; else keep collecting (L117/N25)",
@@ -2492,125 +2641,6 @@
         "work_class": "surface",
         "task_family": "daily-explore"
       }
-    },
-    {
-      "task_ref": "later:b3-crown-after-volume-gates",
-      "source": "daily_later",
-      "work_class": "surface",
-      "task_family": "daily-later",
-      "priority": 24,
-      "title": "Crown assessment primary only after shadow volume gates",
-      "summary": "Outstanding: N210 fair-cost episode % and the matched-30 pair stay shadow until their volume gates. Do not crown either from the continuity book.",
-      "sort_bucket": "later",
-      "lane": "later",
-      "timing": "later",
-      "label": "later",
-      "closeable": true,
-      "close_action": "daily-focus-ack",
-      "close_payload": {
-        "focus_id": "later:b3-crown-after-volume-gates",
-        "decision": "accept"
-      },
-      "href": "docs/ops/b3-scoreboard-epoch.md",
-      "recommendation_id": "rec-8615d9dd60be",
-      "status": {
-        "state": "waiting",
-        "label": "Later",
-        "next_steps": [
-          "Not today's Push — revisit when the gap's gate is met"
-        ],
-        "waiting_on": [
-          "volume gates"
-        ],
-        "ready": false,
-        "ready_reason": null,
-        "blocked_reason": "tagged later",
-        "updated_at": "2026-10-31T07:52:13.851304Z",
-        "updated_by": "morning_builder",
-        "assessment": {
-          "where_we_are": "Later",
-          "stage_label": "waiting",
-          "stage_state": "waiting",
-          "stage_since": null,
-          "days_in_stage": null,
-          "stage_duration": "duration unknown",
-          "waiting_for": "volume gates",
-          "how_achieved": "Not today's Push — revisit when the gap's gate is met",
-          "provenance": [
-            "status:waiting_on",
-            "status:next_steps",
-            "status:label"
-          ],
-          "incomplete_fields": [
-            "stage_duration"
-          ],
-          "observe_only": true
-        }
-      },
-      "closed": false,
-      "later": {
-        "id": "later:b3-crown-after-volume-gates",
-        "lane": "later",
-        "timing": "later",
-        "title": "Crown assessment primary only after shadow volume gates",
-        "gap": "Outstanding: N210 fair-cost episode % and the matched-30 pair stay shadow until their volume gates. Do not crown either from the continuity book.",
-        "done": "B3 already demoted ai_judgment_fair as evidentiary primary and spawned those shadows. The total-return trail is not a new judgment.",
-        "not_push": true,
-        "checklist_task_id": "sunday-assessment-scoreboard",
-        "href": "docs/ops/b3-scoreboard-epoch.md"
-      },
-      "assessment": {
-        "where_we_are": "Later",
-        "stage_label": "waiting",
-        "stage_state": "waiting",
-        "stage_since": null,
-        "days_in_stage": null,
-        "stage_duration": "duration unknown",
-        "waiting_for": "volume gates",
-        "how_achieved": "Not today's Push — revisit when the gap's gate is met",
-        "provenance": [
-          "status:waiting_on",
-          "status:next_steps",
-          "status:label"
-        ],
-        "incomplete_fields": [
-          "stage_duration"
-        ],
-        "observe_only": true
-      },
-      "recommendation": {
-        "id": "rec-8615d9dd60be",
-        "task_id": "later:b3-crown-after-volume-gates",
-        "summary": "Crown assessment primary only after shadow volume gates",
-        "rationale": "Outstanding: N210 fair-cost episode % and the matched-30 pair stay shadow until their volume gates. Do not crown either from the continuity book.",
-        "accept_action": {
-          "kind": "focus-ack",
-          "payload": {
-            "focus_id": "later:b3-crown-after-volume-gates",
-            "decision": "accept",
-            "lane": "later"
-          }
-        },
-        "discuss_prompt": "Discuss daily recommendation `rec-8615d9dd60be` (later `later:b3-crown-after-volume-gates`):\nCrown assessment primary only after shadow volume gates\nOutstanding: Outstanding: N210 fair-cost episode % and the matched-30 pair stay shadow until their volume gates. Do not crown either from the continuity book.\nAlready done: B3 already demoted ai_judgment_fair as evidentiary primary and spawned those shadows. The total-return trail is not a new judgment.\nLater is not today's Push — do not crown or enlarge from this chip.",
-        "priority": 24,
-        "options": [
-          {
-            "id": "accept",
-            "label": "Accept — noted for later (not today's Push)",
-            "action": {
-              "kind": "focus-ack",
-              "payload": {
-                "focus_id": "later:b3-crown-after-volume-gates",
-                "decision": "accept"
-              }
-            }
-          }
-        ],
-        "lane": "later",
-        "label": "later",
-        "work_class": "surface",
-        "task_family": "daily-later"
-      }
     }
   ],
   "open_task_count": 14,
@@ -2676,6 +2706,78 @@
       "task_family": "market-warning-triage"
     },
     {
+      "id": "rec-7932628f93a3",
+      "task_id": "human:sunday-assessment-scoreboard",
+      "summary": "Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary not scored detail: ai_judgment_matched30_fair: total return -3.1% vs FTAL.L -0.0% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1031; vs control buy_tier_matched30_fair: difference 0.0034 (common window, not significance); AI gate binds: False (N189 while it never binds)",
+      "accept_action": {
+        "kind": "human-task-ack",
+        "payload": {
+          "task_id": "sunday-assessment-scoreboard",
+          "decision": "ack_observe",
+          "finding_fingerprint": "94066622535964a2"
+        }
+      },
+      "discuss_prompt": "Discuss daily recommendation `rec-7932628f93a3` (human task `sunday-assessment-scoreboard`):\nTitle: Read the assessment scoreboard (primary vs control; promotion gate)\nSummary: Review new analysis on “Read the assessment scoreboard (primary vs control; promotion gate)”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Assessment scoreboard · primary not scored detail: ai_judgment_matched30_fair: total return -3.1% vs FTAL.L -0.0% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).; Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1031; vs control buy_tier_matched30_fair: difference 0.0034 (common window, not significance); AI gate binds: False (N189 while it never binds)\nReview detail:\n- ai_judgment_matched30_fair: total return -3.1% vs FTAL.L -0.0% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).\n- Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1031\n- vs control buy_tier_matched30_fair: difference 0.0034 (common window, not significance)\n- AI gate binds: False (N189 while it never binds)\n- twin ai_judgment_matched30_fair: difference -0.0158 over 10 days\n- twin buy_tier_matched30_fair: difference -0.0335 over 10 days\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Approve gate (observe-only)\n3) Defer / rewrite runbook expectation\n4) Open runbook\n5) Discuss in Project chat\nSay: discuss daily recommendation `rec-7932628f93a3` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "priority": 12,
+      "options": [
+        {
+          "id": "accept",
+          "label": "Accept → Acknowledge (observe-only)",
+          "action": {
+            "kind": "human-task-ack",
+            "payload": {
+              "task_id": "sunday-assessment-scoreboard",
+              "decision": "ack_observe",
+              "finding_fingerprint": "94066622535964a2"
+            }
+          }
+        },
+        {
+          "id": "approve",
+          "label": "Approve gate (observe-only)",
+          "action": {
+            "kind": "human-task-ack",
+            "payload": {
+              "task_id": "sunday-assessment-scoreboard",
+              "decision": "approve",
+              "finding_fingerprint": "94066622535964a2"
+            }
+          }
+        },
+        {
+          "id": "defer",
+          "label": "Defer / rewrite runbook expectation",
+          "action": {
+            "kind": "human-task-ack",
+            "payload": {
+              "task_id": "sunday-assessment-scoreboard",
+              "decision": "defer",
+              "finding_fingerprint": "94066622535964a2"
+            }
+          }
+        },
+        {
+          "id": "runbook",
+          "label": "Open runbook",
+          "action": {
+            "kind": "link_only",
+            "payload": {
+              "href": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#assessment-scoreboard"
+            }
+          }
+        },
+        {
+          "id": "discuss",
+          "label": "Discuss in Project chat",
+          "action": {
+            "kind": "discuss",
+            "payload": {}
+          }
+        }
+      ]
+    },
+    {
       "id": "rec-eeeb1a3259f8",
       "task_id": "human:adhoc-review-ingest-deviations",
       "summary": "Review new analysis on “Review open ingest deviations and reprocess if needed”, then Acknowledge (observe-only).",
@@ -2736,19 +2838,19 @@
       ]
     },
     {
-      "id": "rec-a7b14d8c58e0",
+      "id": "rec-172da7f63d32",
       "task_id": "human:monthly-pr-fix-common-issues",
       "summary": "Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 310; PR mergeable=CONFLICTING against main: 7; validate failed: 6; merge_conflict:dirty: 6",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 315; PR mergeable=CONFLICTING against main: 7; validate failed: 6; merge_conflict:dirty: 6",
       "accept_action": {
         "kind": "human-task-ack",
         "payload": {
           "task_id": "monthly-pr-fix-common-issues",
           "decision": "ack_observe",
-          "finding_fingerprint": "4aff757e46329935"
+          "finding_fingerprint": "4265b936189d67bc"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-a7b14d8c58e0` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 310; PR mergeable=CONFLICTING against main: 7; validate failed: 6; merge_conflict:dirty: 6\nReview detail:\n- Occasions logged: 310\n- PR mergeable=CONFLICTING against main: 7\n- validate failed: 6\n- merge_conflict:dirty: 6\n- PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5\n- validate check failed: 4\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-a7b14d8c58e0` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "discuss_prompt": "Discuss daily recommendation `rec-172da7f63d32` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues detail: Occasions logged: 315; PR mergeable=CONFLICTING against main: 7; validate failed: 6; merge_conflict:dirty: 6\nReview detail:\n- Occasions logged: 315\n- PR mergeable=CONFLICTING against main: 7\n- validate failed: 6\n- merge_conflict:dirty: 6\n- PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5\n- validate check failed: 4\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-172da7f63d32` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
       "priority": 14,
       "options": [
         {
@@ -2759,7 +2861,7 @@
             "payload": {
               "task_id": "monthly-pr-fix-common-issues",
               "decision": "ack_observe",
-              "finding_fingerprint": "4aff757e46329935"
+              "finding_fingerprint": "4265b936189d67bc"
             }
           }
         },
@@ -2771,7 +2873,7 @@
             "payload": {
               "task_id": "monthly-pr-fix-common-issues",
               "decision": "defer",
-              "finding_fingerprint": "4aff757e46329935"
+              "finding_fingerprint": "4265b936189d67bc"
             }
           }
         },
@@ -3078,19 +3180,19 @@
       "task_family": "daily-push"
     },
     {
-      "id": "rec-61dfeb358039",
-      "task_id": "push:16aac3fb1a64",
-      "summary": "Review N200 volume gate (no auto-promote)",
-      "rationale": "ops finding (info): N200 volume gate ready for review",
+      "id": "rec-cbff82451ff1",
+      "task_id": "push:97c0c84a041a",
+      "summary": "N201 interestingness — stamp disposition (no auto-promote)",
+      "rationale": "ops finding (info): N201 alone-path interesting — promotion design optional (F8)",
       "accept_action": {
         "kind": "focus-ack",
         "payload": {
-          "focus_id": "push:16aac3fb1a64",
+          "focus_id": "push:97c0c84a041a",
           "decision": "accept",
           "lane": "push"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-61dfeb358039` (push `push:16aac3fb1a64`):\nReview N200 volume gate (no auto-promote)\nWhy now: ops finding (info): N200 volume gate ready for review\nCite: ops_finding N200 volume gate ready for review\nPush is execution — do not invent a new strand from chat alone.",
+      "discuss_prompt": "Discuss daily recommendation `rec-cbff82451ff1` (push `push:97c0c84a041a`):\nN201 interestingness — stamp disposition (no auto-promote)\nWhy now: ops finding (info): N201 alone-path interesting — promotion design optional (F8)\nCite: ops_finding N201 alone-path interesting — promotion design optional (F8)\nPush is execution — do not invent a new strand from chat alone.",
       "priority": 20,
       "options": [
         {
@@ -3099,7 +3201,7 @@
           "action": {
             "kind": "focus-ack",
             "payload": {
-              "focus_id": "push:16aac3fb1a64",
+              "focus_id": "push:97c0c84a041a",
               "decision": "accept"
             }
           }
@@ -3110,7 +3212,7 @@
           "action": {
             "kind": "discuss",
             "payload": {
-              "recommendation_id": "rec-61dfeb358039"
+              "recommendation_id": "rec-cbff82451ff1"
             }
           }
         }
@@ -3120,19 +3222,19 @@
       "task_family": "daily-push"
     },
     {
-      "id": "rec-f66fe164cce7",
-      "task_id": "push:ca2e7bc094ab",
-      "summary": "Review N206 plain-EY volume gate (no auto-promote)",
-      "rationale": "ops finding (info): N206 volume gate ready for review",
+      "id": "rec-ad6e623c2edd",
+      "task_id": "push:c0c2d209905d",
+      "summary": "N206 interestingness — alone design optional (no crown)",
+      "rationale": "ops finding (info): N206 alone-path interesting — promotion design optional (F8)",
       "accept_action": {
         "kind": "focus-ack",
         "payload": {
-          "focus_id": "push:ca2e7bc094ab",
+          "focus_id": "push:c0c2d209905d",
           "decision": "accept",
           "lane": "push"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-f66fe164cce7` (push `push:ca2e7bc094ab`):\nReview N206 plain-EY volume gate (no auto-promote)\nWhy now: ops finding (info): N206 volume gate ready for review\nCite: ops_finding N206 volume gate ready for review\nPush is execution — do not invent a new strand from chat alone.",
+      "discuss_prompt": "Discuss daily recommendation `rec-ad6e623c2edd` (push `push:c0c2d209905d`):\nN206 interestingness — alone design optional (no crown)\nWhy now: ops finding (info): N206 alone-path interesting — promotion design optional (F8)\nCite: ops_finding N206 alone-path interesting — promotion design optional (F8)\nPush is execution — do not invent a new strand from chat alone.",
       "priority": 21,
       "options": [
         {
@@ -3141,7 +3243,7 @@
           "action": {
             "kind": "focus-ack",
             "payload": {
-              "focus_id": "push:ca2e7bc094ab",
+              "focus_id": "push:c0c2d209905d",
               "decision": "accept"
             }
           }
@@ -3152,7 +3254,7 @@
           "action": {
             "kind": "discuss",
             "payload": {
-              "recommendation_id": "rec-f66fe164cce7"
+              "recommendation_id": "rec-ad6e623c2edd"
             }
           }
         }
@@ -3246,39 +3348,6 @@
       "label": "not-today",
       "work_class": "surface",
       "task_family": "daily-explore"
-    },
-    {
-      "id": "rec-8615d9dd60be",
-      "task_id": "later:b3-crown-after-volume-gates",
-      "summary": "Crown assessment primary only after shadow volume gates",
-      "rationale": "Outstanding: N210 fair-cost episode % and the matched-30 pair stay shadow until their volume gates. Do not crown either from the continuity book.",
-      "accept_action": {
-        "kind": "focus-ack",
-        "payload": {
-          "focus_id": "later:b3-crown-after-volume-gates",
-          "decision": "accept",
-          "lane": "later"
-        }
-      },
-      "discuss_prompt": "Discuss daily recommendation `rec-8615d9dd60be` (later `later:b3-crown-after-volume-gates`):\nCrown assessment primary only after shadow volume gates\nOutstanding: Outstanding: N210 fair-cost episode % and the matched-30 pair stay shadow until their volume gates. Do not crown either from the continuity book.\nAlready done: B3 already demoted ai_judgment_fair as evidentiary primary and spawned those shadows. The total-return trail is not a new judgment.\nLater is not today's Push — do not crown or enlarge from this chip.",
-      "priority": 24,
-      "options": [
-        {
-          "id": "accept",
-          "label": "Accept — noted for later (not today's Push)",
-          "action": {
-            "kind": "focus-ack",
-            "payload": {
-              "focus_id": "later:b3-crown-after-volume-gates",
-              "decision": "accept"
-            }
-          }
-        }
-      ],
-      "lane": "later",
-      "label": "later",
-      "work_class": "surface",
-      "task_family": "daily-later"
     }
   ],
   "closed_today": [],
@@ -3286,17 +3355,17 @@
     "focus": 0,
     "market_warnings": 2,
     "gha_failures": 0,
-    "human_new_info": 2,
+    "human_new_info": 3,
     "human_unacked": 4,
     "progress": 0,
     "reconcile": 0,
     "push": 3,
     "explore": 2,
-    "later": 1
+    "later": 0
   },
   "project_sync": {
     "notes_fingerprint": null,
-    "synced_at": "2026-10-31T07:52:13.851304Z",
+    "synced_at": "2026-11-01T02:38:51.453705Z",
     "method": "morning_builder_reads_committed_export_or_manual"
   },
   "illumination_hints": {

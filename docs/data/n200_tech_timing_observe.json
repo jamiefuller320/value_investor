@@ -2,7 +2,7 @@
   "schema_version": 3,
   "registration_id": "strand-b-plain-value-tech-timing-v0",
   "deferred_id": "N200",
-  "generated_at": "2026-10-31T07:47:52.038919+00:00",
+  "generated_at": "2026-11-01T02:32:49.586766+00:00",
   "observe_only": true,
   "influences_live": false,
   "identity_id": "raw_buy_tier",
@@ -26,7 +26,8 @@
   "volume_gate": {
     "min_episodes": 24,
     "min_weeks": 8,
-    "met": true
+    "met": true,
+    "role": "sample_thickness_pipeline_badge"
   },
   "phase": {
     "entries_per_week": 9.333,
@@ -2523,5 +2524,19 @@
       "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
     }
   ],
-  "ops_doc": "docs/ops/n200-tech-timing-observe.md"
+  "ops_doc": "docs/ops/n200-tech-timing-observe.md",
+  "interestingness_gate": {
+    "schema_version": 1,
+    "met": false,
+    "thickness_met": true,
+    "fair_cost_median": -0.003904,
+    "fair_cost_median_ok": false,
+    "rule": "thickness && control_smooth_ret_cohort_median > 0 && exit_lever != lose",
+    "not_auto_promote": true,
+    "influences_live": false,
+    "peer_nav_forbidden": true,
+    "mom_peer_book_forbidden": true,
+    "exit_lever": "lose",
+    "exit_lever_ok": false
+  }
 }

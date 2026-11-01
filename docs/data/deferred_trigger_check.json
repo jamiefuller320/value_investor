@@ -1,85 +1,86 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-31T07:49:48.855159+00:00",
+  "generated_at": "2026-11-01T02:34:38.119926+00:00",
   "observe_only": true,
-  "open_ideas": 614,
+  "open_ideas": 618,
   "with_trigger": 23,
   "met": [
     {
-      "id": "N216",
-      "title": "Body-fetch pipeline rewrite for euro thin/IWB drain",
+      "id": "L551",
+      "title": "Triage the deferred-ideas backlog (544 open)",
       "status": "open",
-      "first_met_at": "2026-10-31T02:35:48.316349+00:00",
+      "first_met_at": "2026-11-01T02:34:38.119926+00:00",
       "conditions": [
         {
           "condition": {
-            "file": "docs/data/decision_input_inventory.json",
-            "path": "summary.gap_counts.key_filing_bodies",
-            "op": ">",
-            "value": 0
+            "on_or_after": "2026-11-01"
           },
           "state": "met",
-          "actual": 2
-        },
+          "actual": "2026-11-01"
+        }
+      ]
+    },
+    {
+      "id": "L632",
+      "title": "Backfill sealed lifecycle_episodes exit_reason on observe re-score",
+      "status": "open",
+      "first_met_at": "2026-11-01T02:34:38.119926+00:00",
+      "conditions": [
         {
           "condition": {
-            "file": "docs/data/market_status.json",
-            "path": "markets[market_id=euro_depth].filing_health.indexed_without_body",
-            "op": ">",
-            "value": 20
+            "on_or_after": "2026-11-01"
           },
-          "state": "unmet",
-          "actual": 4
-        },
+          "state": "met",
+          "actual": "2026-11-01"
+        }
+      ]
+    },
+    {
+      "id": "L654",
+      "title": "Refresh test_ftse_gap_scan goldens after CI main nightly drift",
+      "status": "open",
+      "first_met_at": "2026-11-01T02:34:38.119926+00:00",
+      "conditions": [
         {
           "condition": {
-            "on_or_after": "2026-11-23"
+            "file": "docs/data/ops_status.json",
+            "path": "findings[title=Recent workflow failure: CI main nightly].severity",
+            "op": "==",
+            "value": "warn"
           },
-          "state": "unmet",
-          "actual": "2026-10-31"
+          "state": "met",
+          "actual": "warn"
         }
       ]
     }
   ],
   "unknown": [
     {
-      "id": "L558",
-      "title": "Recalibrate decision-review cost-drag thresholds for fair costs",
+      "id": "N143",
+      "title": "Live universe expansion before stage 2b edge",
       "status": "open",
-      "unknown_since": "2026-10-17T02:33:57.398739+00:00",
+      "unknown_since": "2026-11-01T02:34:38.119926+00:00",
       "invalid": false,
       "reasons": [
-        "reviews.ai_judgment_hold5_fair.significance_gate.passed not in docs/data/paper_automation/learning_tracks_review.json"
+        "tracks[track_id=ai_judgment_fair].statistics.verdict not in docs/data/assessment_scoreboard.json"
       ]
     },
     {
-      "id": "N198",
-      "title": "Do not make rolling profit-taking the value capital path",
+      "id": "N18",
+      "title": "Do not let AI judgment own live capital path yet",
       "status": "open",
-      "unknown_since": "2026-10-16T02:33:42.718648+00:00",
+      "unknown_since": "2026-11-01T02:34:38.119926+00:00",
       "invalid": false,
       "reasons": [
-        "twins[track_id=ai_judgment_hold5_fair].common_days not in docs/data/assessment_scoreboard.json",
-        "twins[track_id=ai_judgment_graduated_fair].common_days not in docs/data/assessment_scoreboard.json"
-      ]
-    },
-    {
-      "id": "L567",
-      "title": "Test core sleeve plus tactical slice as two lots",
-      "status": "open",
-      "unknown_since": "2026-10-16T02:33:42.718648+00:00",
-      "invalid": false,
-      "reasons": [
-        "twins[track_id=ai_judgment_hold5_fair].common_days not in docs/data/assessment_scoreboard.json",
-        "twins[track_id=ai_judgment_graduated_fair].common_days not in docs/data/assessment_scoreboard.json"
+        "tracks[track_id=ai_judgment_fair].statistics.verdict not in docs/data/assessment_scoreboard.json"
       ]
     }
   ],
   "unmet": [
     "N135",
-    "N143",
-    "N18",
-    "L551",
+    "L558",
+    "N198",
+    "L567",
     "L569",
     "N199",
     "L582",
@@ -93,31 +94,119 @@
     "N220",
     "L625",
     "N223",
-    "N227",
-    "L632"
+    "N227"
   ],
   "frozen_mentions": [
+    {
+      "id": "L117",
+      "title": "Hold-to-breakeven vs swap-success exit cohorts",
+      "tracks": [
+        "ai_judgment_fair"
+      ]
+    },
+    {
+      "id": "L365",
+      "title": "Reallocate memo spend into filing-derived machine features first",
+      "tracks": [
+        "ai_judgment_fair"
+      ]
+    },
+    {
+      "id": "L442",
+      "title": "Opportunity-cost rotation instead of always exiting demoted buy-tier",
+      "tracks": [
+        "ai_judgment_fair"
+      ]
+    },
+    {
+      "id": "L445",
+      "title": "Cash buffer sleeve after rank-rotation works",
+      "tracks": [
+        "ai_judgment_fair"
+      ]
+    },
+    {
+      "id": "L475",
+      "title": "Paper-exit model-score quintile attribution (observe)",
+      "tracks": [
+        "ai_judgment_fair"
+      ]
+    },
     {
       "id": "N135",
       "title": "Do not execute primary or epoch-0 DCA from EOW cadence agreement alone",
       "tracks": [
-        "ai_judgment_graduated_fair"
+        "ai_judgment_fair"
       ]
     },
     {
-      "id": "N198",
-      "title": "Do not make rolling profit-taking the value capital path",
+      "id": "N142",
+      "title": "Add more paper tracks before Suite B edge",
       "tracks": [
-        "ai_judgment_graduated_fair",
-        "ai_judgment_hold5_fair"
+        "ai_judgment_fair"
+      ]
+    },
+    {
+      "id": "N143",
+      "title": "Live universe expansion before stage 2b edge",
+      "tracks": [
+        "ai_judgment_fair"
+      ]
+    },
+    {
+      "id": "N163",
+      "title": "MACD golden-cross hard gate on FTSE new buys",
+      "tracks": [
+        "ai_judgment_fair"
+      ]
+    },
+    {
+      "id": "N18",
+      "title": "Do not let AI judgment own live capital path yet",
+      "tracks": [
+        "ai_judgment_fair"
+      ]
+    },
+    {
+      "id": "N36",
+      "title": "Do not auto-promote surviving shadows into ai_judgment",
+      "tracks": [
+        "ai_judgment_fair"
+      ]
+    },
+    {
+      "id": "L511",
+      "title": "LLM agree/veto judge-spec A/B challenger",
+      "tracks": [
+        "ai_judgment_fair"
+      ]
+    },
+    {
+      "id": "L532",
+      "title": "Value-factor control to separate value beta from selection alpha",
+      "tracks": [
+        "ai_judgment_fair"
+      ]
+    },
+    {
+      "id": "L558",
+      "title": "Recalibrate decision-review cost-drag thresholds for fair costs",
+      "tracks": [
+        "ai_judgment_fair"
+      ]
+    },
+    {
+      "id": "N196",
+      "title": "Calibrated / exclusion shadows of the fair primary",
+      "tracks": [
+        "ai_judgment_fair"
       ]
     },
     {
       "id": "L567",
       "title": "Test core sleeve plus tactical slice as two lots",
       "tracks": [
-        "ai_judgment_graduated_fair",
-        "ai_judgment_hold5_fair"
+        "ai_judgment_fair"
       ]
     }
   ],

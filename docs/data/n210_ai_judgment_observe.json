@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-31T07:49:21.948617+00:00",
+  "generated_at": "2026-11-01T02:34:13.039814+00:00",
   "registration_id": "strand-e-ai-judgment-fixed-stake-v0",
   "deferred_id": "N210",
   "status": "sealed_observe_only",
@@ -54,7 +54,8 @@
     "min_episodes": 48,
     "min_weeks": 8,
     "met": false,
-    "rule": "both_required"
+    "rule": "both_required",
+    "role": "sample_thickness_pipeline_badge"
   },
   "phase": {
     "entries_per_week": 0.417,
@@ -385,5 +386,18 @@
     "Do not crown assessment_model primary from this observe (F8 / B3).",
     "Matched-30 pots are untouched \u2014 separate portfolio-shape twin."
   ],
-  "ops_doc": "docs/ops/n210-ai-judgment-observe.md"
+  "ops_doc": "docs/ops/n210-ai-judgment-observe.md",
+  "interestingness_gate": {
+    "schema_version": 1,
+    "met": false,
+    "thickness_met": false,
+    "fair_cost_median": 0.026937,
+    "fair_cost_median_ok": true,
+    "rule": "thickness && smooth_ret_cohort_median > 0 (matched-30 separate)",
+    "not_auto_promote": true,
+    "influences_live": false,
+    "peer_nav_forbidden": true,
+    "mom_peer_book_forbidden": true,
+    "matched30_crown_separate": true
+  }
 }

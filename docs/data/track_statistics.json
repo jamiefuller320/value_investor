@@ -1,25 +1,26 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-31T07:47:29.874808+00:00",
+  "updated_at": "2026-11-01T02:32:22.749973+00:00",
   "observe_only": true,
   "benchmark_ticker": "^FTSE",
   "method": {
     "returns": "flow-adjusted daily-mark NAV returns; benchmark close before mark date",
     "ci": "90% circular block bootstrap (block 5, 2000 resamples) on annualised mean active return",
-    "correction": "Bonferroni across 4 tests at family alpha 0.05 (|t| > 2.50)",
+    "correction": "Bonferroni across 3 tests at family alpha 0.05 (|t| > 2.39)",
     "min_detectable_edge": "2 x tracking error / sqrt(years)",
     "target_edge_annual": 0.03,
     "nav_basis": "equity_curve marks (market prices), not decision-review cost-basis NAV",
     "dividends": "not credited in paper NAV (see L528)"
   },
-  "primary_track": "ai_judgment_fair",
-  "control_track": "buy_tier_level",
+  "primary_track": "ai_judgment_matched30_fair",
+  "control_track": "buy_tier_matched30_fair",
   "excluded_frozen_tracks": [
     "ai_judgment",
     "ai_judgment_calibrated",
     "ai_judgment_calibrated_r2",
     "ai_judgment_calibrated_r3",
     "ai_judgment_exclusion_u4",
+    "ai_judgment_fair",
     "ai_judgment_graduated_fair",
     "ai_judgment_hold5_fair",
     "graduated_allocation",
@@ -29,31 +30,9 @@
     "still_in_buy_set",
     "technical"
   ],
-  "tests_corrected_for": 4,
-  "z_critical": 2.498,
+  "tests_corrected_for": 3,
+  "z_critical": 2.394,
   "tracks": {
-    "ai_judgment_fair": {
-      "status": "ok",
-      "periods": 51,
-      "first_date": "2026-08-10",
-      "last_date": "2026-10-30",
-      "span_days": 81,
-      "periods_per_year": 230.0,
-      "annualized_active_return": -1.0518,
-      "tracking_error": 0.2357,
-      "information_ratio": -4.463,
-      "t_stat": -2.102,
-      "ci_level": 0.9,
-      "ci_annualized_active_return": [
-        -1.7254,
-        -0.3592
-      ],
-      "verdict": "negative",
-      "significant_after_correction": false,
-      "min_detectable_annual_edge": 1.001,
-      "years_to_detect_target_edge": 246.89,
-      "vs": "^FTSE"
-    },
     "ai_judgment_matched30_fair": {
       "status": "insufficient_data",
       "periods": 10,
@@ -113,27 +92,11 @@
   },
   "pairs": {
     "primary_vs_control": {
-      "status": "ok",
-      "periods": 36,
-      "first_date": "2026-09-08",
-      "last_date": "2026-10-30",
-      "span_days": 52,
-      "periods_per_year": 252.9,
-      "annualized_active_return": -0.909,
-      "tracking_error": 0.1642,
-      "information_ratio": -5.537,
-      "t_stat": -2.089,
-      "ci_level": 0.9,
-      "ci_annualized_active_return": [
-        -1.4543,
-        -0.3329
-      ],
-      "verdict": "negative",
-      "significant_after_correction": false,
-      "min_detectable_annual_edge": 0.8702,
-      "years_to_detect_target_edge": 119.77,
-      "left": "ai_judgment_fair",
-      "right": "buy_tier_level"
+      "status": "insufficient_data",
+      "periods": 10,
+      "min_periods": 20,
+      "left": "ai_judgment_matched30_fair",
+      "right": "buy_tier_matched30_fair"
     }
   }
 }
