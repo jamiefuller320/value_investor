@@ -1154,6 +1154,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "interim HKEX PDFs including FY2025 annual report and Interim Report 2026 "
         "are already bodied."
     ),
+    "2020.HK": (
+        "hang_seng leftover IWB: indexed-without-body row is google_news_asia "
+        "scanx.trade misattributed Maxgrow India BSE annual-report news "
+        "(fetch_filing_body None); hkex_direct annual/interim HKEX PDFs including "
+        "FY2025 annual report and results announcement are already bodied."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
