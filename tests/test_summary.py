@@ -5255,6 +5255,109 @@ def test_guard_screening_export_fgp_style_company_adj_from_note():
     assert guarded["fcf"]["company_adjusted"] == pytest.approx(73_800_000.0)
 
 
+def test_resolve_universe_divergence_flagged_from_fcf_bases():
+    from value_investor.scoring.fcf_basis_overlay import resolve_universe_divergence_flagged
+
+    bundle = {
+        "filing_aligned": 362_600_000.0,
+        "screen_ttm": 302_812_512.0,
+        "company_adjusted": 73_800_000.0,
+        "currency": "GBP",
+        "company_adjusted_currency": "GBP",
+    }
+    assert resolve_universe_divergence_flagged(bundle, screen_ttm=302_812_512.0) is True
+    assert (
+        resolve_universe_divergence_flagged(
+            {"filing_aligned": 100.0, "screen_ttm": 100.0, "company_adjusted": 100.0},
+            screen_ttm=100.0,
+        )
+        is False
+    )
+
+
+@pytest.mark.parametrize(
+    ("ticker", "filing", "screen", "company_adj", "note_extra"),
+    [
+        (
+            "FGP.L",
+            362_600_000.0,
+            302_812_512.0,
+            73_800_000.0,
+            "company-adj £73.8M",
+        ),
+        (
+            "IAG.L",
+            3_146_000_000.0,
+            1_088_749_952.0,
+            2_905_000_000.0,
+            "company-adj £2905M",
+        ),
+    ],
+)
+def test_guard_screening_export_fcf_basis_parity_three_way_tickers(
+    ticker: str,
+    filing: float,
+    screen: float,
+    company_adj: float,
+    note_extra: str,
+):
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    snapshot = {
+        "ticker": ticker,
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.53,
+        "fcf_basis_overlay": False,
+        "action_note": "Strong Buy — neutral timing",
+        "free_cashflow": filing,
+        "free_cashflow_screen_ttm": screen,
+        "fcf": {
+            "filing_aligned": filing,
+            "screen_ttm": screen,
+            "company_adjusted": company_adj,
+            "currency": "GBP",
+            "company_adjusted_currency": "GBP",
+        },
+    }
+    guarded = guard_screening_snapshot_export(snapshot)
+    assert guarded["fcf_basis_overlay"] is True
+    assert guarded["adjusted_signal"] == "buy"
+    assert guarded["conviction_score"] == pytest.approx(0.53 * 0.85)
+    note = guarded["action_note"].lower()
+    assert "fcf basis mismatch" in note
+    assert note_extra.split()[0] in note or "company-adj" in note
+
+
+def test_guard_screening_export_megp_style_fcf_basis_parity():
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    snapshot = {
+        "ticker": "MEGP.L",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.53,
+        "fcf_basis_overlay": False,
+        "action_note": "Strong Buy — neutral timing",
+        "free_cashflow": 25_153_000.0,
+        "free_cashflow_screen_ttm": 15_565_750.0,
+        "operating_cashflow": 30_000_000.0,
+        "operating_cashflow_gross": 50_000_000.0,
+        "fcf_dividend_coverage_net": 0.84,
+        "fcf_dividend_coverage_gross": 1.68,
+        "fcf": {
+            "filing_aligned": 25_153_000.0,
+            "screen_ttm": 15_565_750.0,
+            "currency": "GBP",
+        },
+    }
+    guarded = guard_screening_snapshot_export(snapshot)
+    assert guarded["fcf_basis_overlay"] is True
+    assert guarded["adjusted_signal"] == "buy"
+    assert "fcf basis mismatch" in guarded["action_note"].lower()
+    assert guarded["fcf_definition_divergence"] is True
+
+
 def test_guard_screening_export_jd_style_three_way_fcf(tmp_path: Path):
     from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
 
