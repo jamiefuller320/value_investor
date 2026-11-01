@@ -235,6 +235,12 @@ def _aggregate_lab_learning_companions(
         gap_note = "awaiting scored episodes"
 
     learning_marks_n = (closed_i or 0) + lens_fair_cost_n
+    mid = mft.get("mid_flight_tune") if isinstance(mft.get("mid_flight_tune"), dict) else {}
+    walker = mft.get("episode_walker") if isinstance(mft.get("episode_walker"), dict) else {}
+    epoch_hist = mid.get("epoch_history") if isinstance(mid.get("epoch_history"), list) else []
+    max_open = mid.get("max_open_positions")
+    if max_open is None:
+        max_open = walker.get("max_open_positions")
 
     return {
         "lab": {
@@ -244,9 +250,11 @@ def _aggregate_lab_learning_companions(
             "mom_levers": lever_rows,
             "evolutionary_shadows_eligible": mft.get("evolutionary_shadows_eligible"),
             "pipeline_status": mft.get("pipeline_status"),
-            "walker_status": (mft.get("episode_walker") or {}).get("status")
-            if isinstance(mft.get("episode_walker"), dict)
-            else None,
+            "walker_status": walker.get("status"),
+            "max_open_positions": max_open,
+            "knob_epoch_started_at": mid.get("knob_epoch_started_at"),
+            "tune_spec_id": mid.get("tune_spec_id"),
+            "epoch_history_n": len(epoch_hist),
         },
         "lenses": {
             "lenses_looking": looking_i,
@@ -755,6 +763,13 @@ def _cue_consumer_mft_instrument(
     gate = (store or {}).get("start_gate_cohort") or {}
     if not isinstance(gate, dict):
         gate = {}
+    mid = (store or {}).get("mid_flight_tune") or {}
+    if not isinstance(mid, dict):
+        mid = {}
+    epoch_hist = mid.get("epoch_history") if isinstance(mid.get("epoch_history"), list) else []
+    max_open = mid.get("max_open_positions")
+    if max_open is None:
+        max_open = walker.get("max_open_positions")
 
     pipeline = str((store or {}).get("pipeline_status") or "")
     warn_active = finding is not None and str((finding or {}).get("severity") or "") in {
@@ -782,6 +797,11 @@ def _cue_consumer_mft_instrument(
             "closed_lab_episodes": closed_i,
             "walker_status": walker.get("status"),
             "cues_accepted": walker.get("cues_accepted"),
+            "skipped_at_open_cap": walker.get("skipped_at_open_cap"),
+            "max_open_positions": max_open,
+            "knob_epoch_started_at": mid.get("knob_epoch_started_at"),
+            "tune_spec_id": mid.get("tune_spec_id"),
+            "epoch_history_n": len(epoch_hist),
             "path_median_fair_cost_pct": path_board.get("smooth_ret_cohort_median"),
             "evolutionary_shadows_eligible": (store or {}).get("evolutionary_shadows_eligible"),
             "q8b_proposed_n": gate.get("proposed_n"),
@@ -796,12 +816,16 @@ def _cue_consumer_mft_instrument(
         "primary_metric": "open_lab_episodes",
         "primary_value": open_i,
         "primary_label": (
-            f"Open lab episodes (closed={closed_i if closed_i is not None else '—'})"
+            f"Open lab episodes (closed={closed_i if closed_i is not None else '—'}; "
+            f"cap={max_open if max_open is not None else '—'})"
         ),
         "freshness": freshness,
         "trajectory_note": (
             "Activity delta vs prior cycle — not a warn/gap instrument; "
-            "rising open/closed is expected while the walker runs."
+            "rising open/closed is expected while the walker runs. "
+            "Stratify pre/post density via mid_flight_tune.knob_epoch_started_at "
+            "(+ epoch_history); MoM stubs null — do not claim continuous median "
+            "across open-cap epochs."
         ),
     }
 
@@ -950,6 +974,10 @@ def _lab_learning_progress_instrument(
             "evolutionary_shadows_eligible": lab.get("evolutionary_shadows_eligible"),
             "lab_pipeline_status": lab.get("pipeline_status"),
             "lab_walker_status": lab.get("walker_status"),
+            "lab_max_open_positions": lab.get("max_open_positions"),
+            "lab_knob_epoch_started_at": lab.get("knob_epoch_started_at"),
+            "lab_tune_spec_id": lab.get("tune_spec_id"),
+            "lab_epoch_history_n": lab.get("epoch_history_n"),
             "lenses_looking": lenses.get("lenses_looking"),
             "lenses_entered": lenses.get("lenses_entered"),
             "lenses_abandoned": lenses.get("lenses_abandoned"),

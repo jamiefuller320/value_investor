@@ -32,7 +32,11 @@ SCOREBOARD_ID = "incomparable_midflight_tune"
 METRIC_SPEC_ID = "mft-fair-cost-5lever-v0"
 CUE_WHITELIST_ID = "mft-short-whitelist-v0"
 KNOB_SET_ID = "mft-knob-set-v0"
-TUNE_SPEC_ID = "mft-tune-spec-epoch0-v0"
+# Capital / mid-flight tune epoch. Bumped 2026-11-01 with open-cap 30→50
+# (same lab book; owner-locked epoch-raise — not a dual-cap twin).
+TUNE_SPEC_ID = "mft-tune-spec-cap50-epoch1-v0"
+TUNE_SPEC_ID_EPOCH0 = "mft-tune-spec-epoch0-v0"
+OPEN_CAP_EPOCH_RAISE_REASON = "open_cap_raise_30_to_50"
 CULL_SPEC_ID = "mft-cull-spec-v0"
 NOVELTY_SPEC_ID = "mft-novelty-spec-v0"
 FIXED_STAKE_UNITS = 100.0
@@ -1470,6 +1474,7 @@ def build_registration_payload(*, sealed_at: str | None = None) -> dict[str, Any
             "allowed_on": "this_lab_only",
             "knob_epoch_started_at_required": True,
             "tune_spec_id_immutable_prior": True,
+            "max_open_positions": 50,
             "package_l_on_sealed": False,
             "mediation": "human_confirm_q3a",
         },
@@ -1500,6 +1505,97 @@ def build_registration_payload(*, sealed_at: str | None = None) -> dict[str, Any
     }
 
 
+def resolve_lab_knob_epoch(
+    prior: dict[str, Any] | None,
+    *,
+    when: str,
+    tune_spec_id: str = TUNE_SPEC_ID,
+    max_open_positions: int | None = None,
+) -> dict[str, Any]:
+    """Resolve durable mid-flight ``knob_epoch_started_at`` for this lab.
+
+    Matches paper/lab epoch pattern: preserve prior stamp across refresh unless
+    ``tune_spec_id`` or ``max_open_positions`` changed (capital / density epoch).
+    Appends closed epochs to ``epoch_history`` for pre/post stratification
+    (L640 / ops-monitor). Never invents a silent mid-flight rewrite without a
+    new stamp.
+    """
+    from value_investor.cue_consumer_mft_walker import MAX_OPEN_POSITIONS
+
+    target_cap = int(MAX_OPEN_POSITIONS if max_open_positions is None else max_open_positions)
+    prior_tune: str | None = None
+    prior_epoch: str | None = None
+    prior_max_open: int | None = None
+    history: list[dict[str, Any]] = []
+    if isinstance(prior, dict):
+        mid = prior.get("mid_flight_tune")
+        if isinstance(mid, dict):
+            raw_epoch = mid.get("knob_epoch_started_at")
+            if raw_epoch is not None and str(raw_epoch).strip():
+                prior_epoch = str(raw_epoch)
+            raw_tune = mid.get("tune_spec_id")
+            if raw_tune is not None and str(raw_tune).strip():
+                prior_tune = str(raw_tune)
+            raw_cap = mid.get("max_open_positions")
+            if raw_cap is not None:
+                try:
+                    prior_max_open = int(raw_cap)
+                except (TypeError, ValueError):
+                    prior_max_open = None
+            raw_hist = mid.get("epoch_history")
+            if isinstance(raw_hist, list):
+                history = [dict(h) for h in raw_hist if isinstance(h, dict)]
+        if prior_max_open is None:
+            walker = prior.get("episode_walker")
+            if isinstance(walker, dict) and walker.get("max_open_positions") is not None:
+                try:
+                    prior_max_open = int(walker.get("max_open_positions"))
+                except (TypeError, ValueError):
+                    prior_max_open = None
+
+    bumped = False
+    end_reason: str | None = None
+    if prior_tune is not None and prior_tune != tune_spec_id:
+        bumped = True
+        if prior_tune == TUNE_SPEC_ID_EPOCH0 and tune_spec_id == TUNE_SPEC_ID:
+            end_reason = OPEN_CAP_EPOCH_RAISE_REASON
+        else:
+            end_reason = "tune_spec_change"
+    if prior_max_open is not None and prior_max_open != target_cap:
+        bumped = True
+        if end_reason is None:
+            if prior_max_open == 30 and target_cap == 50:
+                end_reason = OPEN_CAP_EPOCH_RAISE_REASON
+            else:
+                end_reason = "max_open_positions_change"
+
+    if bumped:
+        epoch_at = when
+        if prior_epoch:
+            history.append(
+                {
+                    "knob_epoch_started_at": prior_epoch,
+                    "ended_at": when,
+                    "tune_spec_id": prior_tune,
+                    "max_open_positions": prior_max_open,
+                    "end_reason": end_reason or "mid_flight_tune_epoch",
+                }
+            )
+    elif prior_epoch:
+        epoch_at = prior_epoch
+    else:
+        epoch_at = when
+
+    return {
+        "knob_epoch_started_at": epoch_at,
+        "epoch_bumped": bumped,
+        "epoch_history": history,
+        "max_open_positions": target_cap,
+        "prior_knob_epoch_started_at": prior_epoch if bumped else None,
+        "end_reason": end_reason if bumped else None,
+    }
+
+
 def build_lab_payload(
     *,
     start_gate_eval: dict[str, Any],
@@ -1512,8 +1608,12 @@ def build_lab_payload(
     autopsy_alignment_feed: dict[str, Any] | None = None,
     start_gate_store: dict[str, Any] | None = None,
     episode_walker: dict[str, Any] | None = None,
+    epoch_history: list[dict[str, Any]] | None = None,
+    max_open_positions: int | None = None,
 ) -> dict[str, Any]:
     """Build observe store payload (armed observe + optional lab paper walker)."""
+    from value_investor.cue_consumer_mft_walker import MAX_OPEN_POSITIONS
+
     when = generated_at or _utcnow()
     epoch_at = knob_epoch_started_at or when
     armed_at = lab_armed_at or when
@@ -1524,6 +1624,16 @@ def build_lab_payload(
     shadows_ok = bool(start_gate_eval.get("eligible"))
     walker = episode_walker if isinstance(episode_walker, dict) else {}
     walker_active = str(walker.get("status") or "") == "active"
+    open_cap = (
+        int(max_open_positions)
+        if max_open_positions is not None
+        else (
+            int(walker["max_open_positions"])
+            if walker.get("max_open_positions") is not None
+            else int(MAX_OPEN_POSITIONS)
+        )
+    )
+    hist = [dict(h) for h in (epoch_history or []) if isinstance(h, dict)]
     if walker_active:
         pipeline_status = PIPELINE_STATUS_WALKER
     elif shadows_ok:
@@ -1582,6 +1692,8 @@ def build_lab_payload(
         "Sealed spawn / novelty / cull remain N223/N226/N227 — lab fills only in v0.",
         "N228 judgment fill is deterministic cite enrich (not live LLM API); "
         "influences_live=false forever on this lab until a separate promote gate.",
+        "MoM lever stubs still null — do not claim post-cap-raise median continuous "
+        "with epoch-0; stratify on mid_flight_tune.knob_epoch_started_at / epoch_history.",
     ]
     if not shadows_ok:
         soft_gaps.insert(
@@ -1644,9 +1756,15 @@ def build_lab_payload(
             "knob_epoch_started_at": epoch_at,
             "tune_spec_id": TUNE_SPEC_ID,
             "knob_set_id": KNOB_SET_ID,
+            "max_open_positions": open_cap,
+            "epoch_history": hist,
             "allowed_on": "this_lab_only",
             "package_l_on_sealed": False,
             "lab_arm_marker_id": LAB_ARM_MARKER_ID,
+            # Stratify MoM / lens cells by entry_run_at vs knob_epoch_started_at
+            # (and closed rows in epoch_history). Do not treat cohort median as
+            # continuous across an open-cap density epoch.
+            "stratify_field": "knob_epoch_started_at",
         },
         "cue_selection": {
             "cue_whitelist_id": CUE_WHITELIST_ID,
@@ -1769,13 +1887,14 @@ def refresh_cue_consumer_mft(
 
     when = generated_at or _utcnow()
     prior = _safe_read(store) if store.is_file() else None
-    prior_epoch = None
     prior_armed = None
     if isinstance(prior, dict):
-        mid = prior.get("mid_flight_tune")
-        if isinstance(mid, dict):
-            prior_epoch = mid.get("knob_epoch_started_at")
         prior_armed = prior.get("lab_armed_at")
+
+    epoch_resolve = resolve_lab_knob_epoch(prior if isinstance(prior, dict) else None, when=when)
+    epoch_at = str(epoch_resolve["knob_epoch_started_at"])
+    epoch_history = list(epoch_resolve.get("epoch_history") or [])
+    open_cap = int(epoch_resolve["max_open_positions"])
 
     gate_store = _safe_read(gate_path) if gate_path.is_file() else None
     if not isinstance(gate_store, dict):
@@ -1844,11 +1963,11 @@ def refresh_cue_consumer_mft(
     }
 
     feed = build_autopsy_alignment_feed(queue)
-    epoch_at = str(prior_epoch) if prior_epoch else when
 
     # Lab paper episode walker — only when Q8B/calendar eligible. No sealed spawn.
     from value_investor.backtest import load_run_snapshots
     from value_investor.cue_consumer_mft_walker import (
+        WalkerConfig,
         gated_walker_payload,
         walk_lab_paper_episodes,
     )
@@ -1857,6 +1976,7 @@ def refresh_cue_consumer_mft(
         snapshots = load_run_snapshots(data_dir)
         walker = walk_lab_paper_episodes(
             snapshots,
+            cfg=WalkerConfig(max_open_positions=open_cap),
             knob_epoch_started_at=epoch_at,
             lab_arm_marker_id=LAB_ARM_MARKER_ID,
             generated_at=when,
@@ -1885,6 +2005,8 @@ def refresh_cue_consumer_mft(
         autopsy_alignment_feed=feed,
         start_gate_store=gate_store,
         episode_walker=walker_public,
+        epoch_history=epoch_history,
+        max_open_positions=open_cap,
     )
     registration = build_registration_payload()
     if payload.get("pipeline_status") == PIPELINE_STATUS_WALKER:
@@ -2035,6 +2157,9 @@ def format_cue_consumer_mft_text(payload: dict[str, Any]) -> str:
     path = (
         payload.get("path_scoreboard") if isinstance(payload.get("path_scoreboard"), dict) else {}
     )
+    mid = (
+        payload.get("mid_flight_tune") if isinstance(payload.get("mid_flight_tune"), dict) else {}
+    )
     lines = [
         f"Cue-consumer MFT lab ({payload.get('registration_id')})",
         f"  status: {payload.get('status')} / {payload.get('pipeline_status')}",
@@ -2043,6 +2168,9 @@ def format_cue_consumer_mft_text(payload: dict[str, Any]) -> str:
         f"  scoreboard: {payload.get('scoreboard_id')} (declared incomparable)",
         f"  closed_lab_episodes: {payload.get('closed_lab_episodes')} "
         f"(open={payload.get('open_lab_episodes', 0)})",
+        f"  max_open_positions: {mid.get('max_open_positions') or walker.get('max_open_positions')}",
+        f"  knob_epoch_started_at: {mid.get('knob_epoch_started_at')}",
+        f"  tune_spec_id: {mid.get('tune_spec_id')}",
         f"  walker: {walker.get('status')} (cues_accepted={walker.get('cues_accepted')})",
         f"  median fair-cost episode %: {path.get('smooth_ret_cohort_median')}",
         f"  start_gate eligible: {payload.get('evolutionary_shadows_eligible')} "
@@ -2104,6 +2232,7 @@ __all__ = [
     "ops_findings_from_cue_consumer_mft",
     "propose_start_cohort",
     "refresh_cue_consumer_mft",
+    "resolve_lab_knob_epoch",
     "same_day_round_trip",
     "select_pit_cues",
     "thin_emit_readiness",

@@ -48,7 +48,7 @@ from value_investor.sealed_lifecycle import with_fair_cost_open_mark
 WALKER_MARKER_ID = "mft-episode-walker-v0"
 PIPELINE_STATUS_WALKER = "episode_walker_active"
 HOLD_TRADING_DAYS = 63
-MAX_OPEN_POSITIONS = 30
+MAX_OPEN_POSITIONS = 50
 MAX_CLOSED_EPISODES = 500
 MIN_CONVICTION_N210 = 0.6
 DEFAULT_MARKET_ID = LIVE_PAPER_MARKET_ID

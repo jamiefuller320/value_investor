@@ -5,6 +5,7 @@ eligible (2026-10-28).
 **lab_id:** `cue_consumer_mft`  
 **registration_id:** `cue-consumer-mft-v0`  
 **lab_arm_marker_id:** `mft-lab-arm-epoch0-v0`  
+**tune_spec_id:** `mft-tune-spec-cap50-epoch1-v0` (epoch-1 open-cap raise; prior `mft-tune-spec-epoch0-v0`)  
 **walker_marker_id:** `mft-episode-walker-v0`  
 **deferred_id:** `N222` (skeleton + walker shipped; spawn/cull/rule-aware remain deferred)
 
@@ -35,7 +36,8 @@ active-model noise spray?
 | Stake | Fixed **100** local (cash/NAV parked) |
 | Scoreboard | `incomparable_midflight_tune` — MoM on 5 fair-cost levers |
 | Cue selection | Short whitelist, PIT only (`cue_ts ≤ decision_ts`) |
-| Mid-flight markers | `knob_epoch_started_at`, `tune_spec_id`, `lab_arm_marker_id` (lab only) |
+| Mid-flight markers | `knob_epoch_started_at`, `tune_spec_id`, `lab_arm_marker_id` (lab only); closed epochs in `mid_flight_tune.epoch_history` |
+| Open-position cap | **50** concurrent lab opens (`MAX_OPEN_POSITIONS`; epoch-1 raise from 30 on 2026-11-01 — same book, not a dual-cap twin) |
 | Lab paper walker | Progressive PIT cue clears → open/close lab episodes (`mft-episode-walker-v0`) when `evolutionary_shadows_eligible` |
 | Exit | 63 trading days **or** cue identity break; same-day soft bias on close |
 | Thin emit (Q6B) | Closes-primary ≥**3** citing levers; MoM diagnostic only |
@@ -74,8 +76,18 @@ snapshots and records **lab** fixed-stake paper positions:
 factory (N227), remote LLM voice on the same checklist (optional later),
 weekday paper-auto track wiring.
 
-Open-position cap (default **30**) limits lab spray; sealed anti-noise caps
-still apply only when spawn is built.
+Open-position cap (default **50**, raised from **30** on 2026-11-01 with a new
+`tune_spec_id` / `knob_epoch_started_at`) limits lab spray; sealed anti-noise
+caps still apply only when spawn is built. Cap **100** stays parked (`N244`).
+Owner locked same-book epoch-raise for lens volume — do **not** spawn a dual-cap
+twin for this fork (`L658` remains later for other A/B caps).
+
+**Epoch stratification (L640 / scoreboards):** use
+`mid_flight_tune.knob_epoch_started_at` (current) +
+`mid_flight_tune.epoch_history[]` (closed density epochs with `ended_at` /
+`end_reason`). Stratify MoM / fair-cost cells by `entry_run_at` vs that
+boundary. MoM lever stubs are still null — **do not** claim post-raise cohort
+median continuous with epoch-0. `influences_live=false`.
 
 ### How to verify
 
@@ -83,7 +95,8 @@ still apply only when spawn is built.
 ftse-cue-consumer-mft refresh
 # expect pipeline_status=episode_walker_active when start gate eligible
 # open_lab_episodes / closed_lab_episodes > 0 once archive has progressive clears
-python -c "import json; d=json.load(open('docs/data/cue_consumer_mft_observe.json')); print(d['pipeline_status'], d['open_lab_episodes'], d['closed_lab_episodes'], d['episode_walker']['status'])"
+# max_open_positions=50; tune_spec_id=mft-tune-spec-cap50-epoch1-v0
+python -c "import json; d=json.load(open('docs/data/cue_consumer_mft_observe.json')); m=d['mid_flight_tune']; print(d['pipeline_status'], d['open_lab_episodes'], d['closed_lab_episodes'], d['episode_walker']['status'], m.get('max_open_positions'), m.get('tune_spec_id'), m.get('knob_epoch_started_at'))"
 ```
 
 ## Start gate (Q8B)
