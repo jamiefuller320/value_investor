@@ -1,18 +1,18 @@
 {
   "ticker": "MONY.L",
-  "run_at": "2026-09-15T07:43:57.741887+00:00",
-  "attached_at": "2026-09-15T13:23:25.361095+00:00",
-  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
-  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
+  "run_at": "2026-10-30T21:55:18.461452+00:00",
+  "attached_at": "2026-11-01T00:03:52.866076+00:00",
+  "history_run_path": "docs/data/history/run_20261030_215518.json.gz",
+  "history_models_path": "docs/data/history/models_20261030_215518.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 17,
-      "buy": 45,
-      "hold": 144,
-      "avoid": 42
+      "strong_buy": 16,
+      "buy": 51,
+      "hold": 123,
+      "avoid": 58
     },
-    "strong_buy_count": 17,
+    "strong_buy_count": 16,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,7 +20,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "insufficient_data": 102
+      "strong_buy": 18,
+      "buy": 33,
+      "hold": 45,
+      "avoid": 6
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -29,46 +32,69 @@
   },
   "ticker_signal": {
     "ticker": "MONY.L",
-    "signal": "strong_buy",
-    "conviction_score": 0.51116875,
+    "signal": "buy",
+    "conviction_score": 0.30135475,
     "data_quality_score": 1.0,
     "name": "MONY Group plc",
     "sector": "Communication Services",
     "timing_signal": "neutral",
-    "timing_score": 0.625,
-    "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £98.1M | screen TTM (unverified) £80M",
-    "models_passed": 15.0,
-    "weighted_model_score": 0.7079363636363636,
-    "research_verdict": null,
-    "adjusted_signal": "buy",
-    "research_as_of": null,
-    "research_confidence": null,
+    "timing_score": 0.5,
+    "action_note": "Buy — neutral timing | FCF basis mismatch: filing £98.1M | screen TTM £80M | FCF definition divergence",
+    "models_passed": 9.0,
+    "weighted_model_score": 0.6399500000000001,
+    "research_verdict": "accumulate",
+    "adjusted_signal": "hold",
+    "research_as_of": "2026-10-22T12:58:51.144282+00:00",
+    "research_confidence": 0.72,
     "fcf_basis_overlay": true,
+    "media_cyclical_thin_fcf_overlay": false,
+    "advertising_revenue_share": NaN,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": false,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
     "interim_quality_overlay": false,
     "earnings_basis_overlay": false,
     "interim_eps_decline_pct": null,
-    "adjusted_eps_growth_pct": 0.04006377508055835,
+    "adjusted_eps_growth_pct": null,
+    "yahoo_normalized_income_growth_pct": 0.04006377508055835,
     "signal_trend": "stable",
-    "weeks_at_signal": 6,
-    "passed_families": "cheapness,quality,dividend,garp,risk",
-    "price_vs_sma200_pct": 0.07862143532891143,
+    "weeks_at_signal": 4,
+    "passed_families": "cheapness,quality,risk",
+    "price_vs_sma200_pct": 0.11312791380847594,
     "core_order": "limit",
-    "core_limit": 192.95,
+    "core_limit": 192.61,
     "core_allocation_pct": 0.6,
-    "tactical_limit": 180.69,
+    "tactical_limit": 172.8,
     "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 173.93,
-    "tactical_take_profit": 200.38,
-    "trade_plan_summary": "Trade plan: core 60% limit £192.95; tactical 40% limit £180.69; tactical stop £173.93, target £200.38.",
-    "atr_14": 6.412,
-    "volume_ratio_20": 0.0219,
+    "tactical_stop_loss": 167.62,
+    "tactical_take_profit": 217.94,
+    "trade_plan_summary": "Trade plan: core 60% limit £192.61; tactical 40% limit £172.80; tactical stop £167.62, target £217.94.",
+    "atr_14": 7.0076,
+    "volume_ratio_20": 0.9973,
     "operating_cashflow": 107700000.0,
     "operating_cashflow_gross": null,
     "fcf_dividend_coverage_gross": null,
     "fcf_dividend_coverage_net": 1.4663677130044843,
-    "fcf_definition_divergence": false,
+    "fcf_definition_divergence": true,
     "fcf_divergence_flagged": true,
-    "fcf_dividend_coverage": null
+    "fcf_dividend_coverage": {
+      "statutory_ocf_minus_capex": {
+        "label": "Statutory OCF−CapEx",
+        "ratio": 1.4663677130044843
+      },
+      "management_cash_generated_minus_capex": {
+        "label": "Management cash-generated−CapEx",
+        "ratio": null
+      }
+    },
+    "research_prompts": [
+      "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Screen baseline: statutory 1.47×."
+    ],
+    "fcf_three_way_conviction_overlay": false,
+    "profit_to_cash_current_pct": NaN,
+    "profit_to_cash_prior_pct": NaN,
+    "profit_to_cash_yoy_decline_pp": NaN
   },
   "ticker_models": [
     {
@@ -104,14 +130,14 @@
     {
       "ticker": "MONY.L",
       "model_id": "earnings_yield",
-      "passed": true,
-      "score": 0.6834
+      "passed": false,
+      "score": 0.6607
     },
     {
       "ticker": "MONY.L",
       "model_id": "fcf_yield",
-      "passed": true,
-      "score": 0.9835
+      "passed": false,
+      "score": 0.9501
     },
     {
       "ticker": "MONY.L",
@@ -128,8 +154,8 @@
     {
       "ticker": "MONY.L",
       "model_id": "neff_pegy",
-      "passed": true,
-      "score": 0.9816
+      "passed": false,
+      "score": 0.0
     },
     {
       "ticker": "MONY.L",
@@ -152,32 +178,32 @@
     {
       "ticker": "MONY.L",
       "model_id": "high_dividend",
-      "passed": true,
-      "score": 0.9537
+      "passed": false,
+      "score": 0.8745
     },
     {
       "ticker": "MONY.L",
       "model_id": "dividend_growth",
-      "passed": true,
-      "score": 1.0
+      "passed": false,
+      "score": 0.6667
     },
     {
       "ticker": "MONY.L",
       "model_id": "magic_formula",
       "passed": true,
-      "score": 0.8554
+      "score": 0.8477
     },
     {
       "ticker": "MONY.L",
       "model_id": "acquirers_multiple",
       "passed": true,
-      "score": 0.7196
+      "score": 0.7078
     },
     {
       "ticker": "MONY.L",
       "model_id": "dreman_contrarian",
-      "passed": true,
-      "score": 0.6342
+      "passed": false,
+      "score": 0.6035
     },
     {
       "ticker": "MONY.L",
@@ -189,7 +215,7 @@
       "ticker": "MONY.L",
       "model_id": "composite_value",
       "passed": true,
-      "score": 0.6854
+      "score": 0.6901
     },
     {
       "ticker": "MONY.L",
@@ -204,6 +230,6 @@
       "score": 1.0
     }
   ],
-  "models_passed": 15,
+  "models_passed": 9,
   "models_total": 22
 }
