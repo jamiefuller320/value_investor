@@ -711,6 +711,26 @@ def _status_rows(
     return rows
 
 
+# Interestingness Push titles → observe store that may carry a stamped disposition.
+_INTERESTINGNESS_OBSERVE_STORES: dict[str, str] = {
+    "N200 alone-path interesting — promotion design optional (F8)": "n200_tech_timing_observe.json",
+    "N201 alone-path interesting — promotion design optional (F8)": "n201_value_mom_observe.json",
+    "N206 alone-path interesting — promotion design optional (F8)": "n206_plain_ey_observe.json",
+    "N210 alone-path interesting — promotion design optional (F8)": "n210_ai_judgment_observe.json",
+}
+
+
+def interestingness_disposition_blocks_push(data_dir: Path, finding_title: str) -> bool:
+    """True when the observe store already has ack | no-design | design-open."""
+    store_name = _INTERESTINGNESS_OBSERVE_STORES.get(str(finding_title or "").strip())
+    if not store_name:
+        return False
+    from value_investor.volume_interestingness import interestingness_disposition_value
+
+    payload = _safe_read(Path(data_dir) / store_name)
+    return interestingness_disposition_value(payload) is not None
+
+
 def build_daily_push_suggestions(
     data_dir: Path | None = None,
     *,
@@ -755,6 +775,11 @@ def build_daily_push_suggestions(
             continue
         sev = str(finding.get("severity") or "")
         if sev not in {"warn", "fail", "info"}:
+            continue
+        if interestingness_disposition_blocks_push(data_dir, title):
+            non_actionable_observes.append(
+                _non_actionable_observe(finding, reason="interestingness_disposition_stamped")
+            )
             continue
         block_reason = b3_push_block_reason(title, finding, disposition)
         partial = b3_partial_gap(title, finding, disposition)

@@ -657,11 +657,15 @@ def refresh_n206_plain_ey_observe(
     )
 
     prior_markers: list[dict[str, Any]] = []
+    prior_disposition: dict[str, Any] | None = None
     if store.is_file():
         prior = _safe_read_json(store) or {}
         markers = prior.get("change_markers")
         if isinstance(markers, list):
             prior_markers = [m for m in markers if isinstance(m, dict)]
+        raw_disp = prior.get("interestingness_disposition")
+        if isinstance(raw_disp, dict):
+            prior_disposition = raw_disp
 
     ftse_snapshots = enrich_snapshots_from_archives(
         load_run_snapshots(data_dir), data_dir / "archive"
@@ -751,6 +755,10 @@ def refresh_n206_plain_ey_observe(
         panel_coverage=panel_coverage,
         cfg=cfg,
     )
+    # Preserve human interestingness disposition across observe refresh so
+    # ops/Push do not re-ask after owner stamp (ack | no-design | design-open).
+    if prior_disposition is not None:
+        payload["interestingness_disposition"] = prior_disposition
     registration = build_registration_payload()
     if persist:
         store.parent.mkdir(parents=True, exist_ok=True)
@@ -813,6 +821,7 @@ def ops_findings_from_n206_observe(payload: dict[str, Any]) -> list[dict[str, An
         title=INTERESTINGNESS_TITLE,
         gate=gate,
         strand_note="N206 plain-EY (alone design optional — no assessment crown).",
+        payload=payload,
     )
     if interesting is not None:
         findings.append(interesting)
