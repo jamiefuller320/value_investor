@@ -11875,6 +11875,38 @@ def _filing_derived_cashflow_metrics(sources_dir: Path | None) -> dict[str, floa
     return metrics
 
 
+def _load_screening_snapshot_cashflow_metrics(
+    sources_dir: Path | None,
+) -> dict[str, float]:
+    """Read OCF/FCF from ``screening_snapshot.json`` when annual rows omit them."""
+    if sources_dir is None:
+        return {}
+    from value_investor.research.ingest import CASHFLOW_METRIC_KEYS
+    from value_investor.storage import read_json, resolve_json_path
+
+    snapshot_path = sources_dir / "screening_snapshot.json"
+    resolved = resolve_json_path(snapshot_path)
+    if resolved is None:
+        return {}
+    try:
+        snapshot = read_json(resolved)
+    except (OSError, ValueError, TypeError):
+        return {}
+    if not isinstance(snapshot, dict):
+        return {}
+
+    metrics: dict[str, float] = {}
+    nested = snapshot.get("cashflow_metrics")
+    for key in CASHFLOW_METRIC_KEYS:
+        for block in (nested, snapshot):
+            if not isinstance(block, dict):
+                continue
+            coerced = _coerce_cashflow_metric_number(block.get(key))
+            if coerced is not None and key not in metrics:
+                metrics[key] = coerced
+    return metrics
+
+
 def _financials_with_merged_yahoo_cashflow(
     financials: dict[str, Any],
     *,
@@ -11888,6 +11920,22 @@ def _financials_with_merged_yahoo_cashflow(
 
     merged_metrics = dict(financials.get("cashflow_metrics") or {})
     changed = False
+
+    for key in CASHFLOW_METRIC_KEYS:
+        coerced = _coerce_cashflow_metric_number(merged_metrics.get(key))
+        if coerced is None:
+            if key in merged_metrics and merged_metrics[key] is not None:
+                del merged_metrics[key]
+                changed = True
+            continue
+        if merged_metrics.get(key) != coerced:
+            merged_metrics[key] = coerced
+            changed = True
+
+    for key, value in _load_screening_snapshot_cashflow_metrics(sources_dir).items():
+        if merged_metrics.get(key) is None:
+            merged_metrics[key] = value
+            changed = True
 
     extracted = extract_cashflow_metrics_from_annual_financials(financials)
     for key, value in (extracted or {}).items():

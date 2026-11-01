@@ -1252,6 +1252,92 @@ def test_eng_20261028_03_pick_financials_prefers_payload_with_ocf_when_supplied_
     assert metrics.operating_cashflow == pytest.approx(90_762_000.0)
 
 
+def test_eng_20261101_01_supplement_coerces_structured_cashflow_metrics(tmp_path: Path):
+    """Regression: filing-style ``{value: ...}`` OCF in annual JSON fills CompanyMetrics."""
+    sources = tmp_path / "research" / "JSON.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "JSON.L",
+        "cash_flow": {},
+        "cashflow_metrics": {
+            "operating_cashflow": {"value": 90_762_000.0, "concept": "ifrs-full:NetCash"},
+            "free_cashflow": {"value": 25_153_000.0},
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    metrics = CompanyMetrics(ticker="JSON.L", operating_cashflow=None, free_cashflow=None)
+    filled = supplement_company_metrics_cashflow(
+        metrics,
+        sources_dir=sources,
+        allow_live_fetch=False,
+    )
+    assert filled == ["operating_cashflow", "free_cashflow"]
+    assert metrics.operating_cashflow == pytest.approx(90_762_000.0)
+    assert metrics.free_cashflow == pytest.approx(25_153_000.0)
+    assert metrics.data_sources.get("operating_cashflow") == "yahoo_financials_annual"
+
+
+def test_eng_20261101_01_fetch_backfills_ocf_from_screening_snapshot_json(
+    tmp_path: Path, monkeypatch
+):
+    """Regression: cached ``screening_snapshot.json`` OCF backfills fetch when annual rows are empty."""
+    from types import SimpleNamespace
+
+    from value_investor import fetch as fetch_mod
+
+    monkeypatch.chdir(tmp_path)
+    sources = tmp_path / "output" / "research" / "JSON.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "JSON.L",
+        "cash_flow": {"2025": {"Free Cash Flow": 25_153_000.0}},
+        "cashflow_metrics": {},
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    snapshot = {
+        "ticker": "JSON.L",
+        "operating_cashflow": 90_762_000.0,
+        "free_cashflow": 25_153_000.0,
+        "cashflow_metrics": {"operating_cashflow": 90_762_000.0},
+    }
+    (sources / "screening_snapshot.json").write_text(json.dumps(snapshot), encoding="utf-8")
+
+    class DummyTicker:
+        @property
+        def info(self):
+            return {"longName": "JSON Fixture plc", "marketCap": 2_000_000}
+
+        @property
+        def fast_info(self):
+            return SimpleNamespace(market_cap=2_000_000)
+
+        @property
+        def balance_sheet(self):
+            return None
+
+        @property
+        def income_stmt(self):
+            return None
+
+        @property
+        def cashflow(self):
+            return None
+
+        financials = pd.DataFrame()
+        quarterly_financials = None
+
+    fetch_mod.fetch_company_metrics._cashflow_fallback_installed = False  # type: ignore[attr-defined]
+    install_fetch_cashflow_fallback()
+
+    with patch.object(fetch_mod.yf, "Ticker", lambda _sym: DummyTicker()):
+        fetched = fetch_mod.fetch_company_metrics("JSON.L")
+
+    assert fetched.operating_cashflow == pytest.approx(90_762_000.0)
+    assert fetched.free_cashflow == pytest.approx(25_153_000.0)
+    assert fetched.data_sources.get("operating_cashflow") == "yahoo_financials_annual"
+
+
 def test_fetch_annual_financials_includes_cashflow_metrics(monkeypatch):
     cashflow_df = pd.DataFrame(
         {"2024": [90_800_000.0, 55_000_000.0]},
