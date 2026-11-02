@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-11-02T23:46:34.628394+00:00",
+  "compiled_at": "2026-11-02T23:49:14.051219+00:00",
   "run_at": null,
   "task_count": 236,
   "tasks": [
@@ -12218,23 +12218,23 @@
     {
       "id": "eng-20261102-03",
       "area": "ingest",
-      "title": "Hunt fetchable IR source for parked aex leftover SHELL.AS",
-      "summary": "Library market aex (AEX) parked SHELL.AS after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statutory repo",
+      "title": "Hunt fetchable IR source for parked sp500 leftover COR",
+      "summary": "Library market sp500 (S&P 500) parked COR after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statutory rep",
       "priority": "low",
       "priority_score": 12.0,
       "source": "parked_source_hunter",
       "evidence": {
-        "market_id": "aex",
-        "library_market": "aex",
-        "hunter_market_id": "aex",
-        "hunter_ticker": "SHELL.AS",
+        "market_id": "sp500",
+        "library_market": "sp500",
+        "hunter_market_id": "sp500",
+        "hunter_ticker": "COR",
         "parked_reason": "unfetchable_iwb",
         "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
         "universe": "library",
         "doc": "docs/ops/library-ingest-escalation.md"
       },
       "acceptance_criteria": [
-        "Inspect IR / exchange sources for SHELL.AS only — do not invent URLs",
+        "Inspect IR / exchange sources for COR only — do not invent URLs",
         "If a fetchable statutory/IR body exists, add allowlist + regression test",
         "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
         "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
@@ -15444,8 +15444,8 @@
     "cooldown_hours": 12.0
   },
   "micro_compile_source": "parked_source_hunter",
-  "library_market_id": "aex",
-  "hunter_ticker": "SHELL.AS",
+  "library_market_id": "sp500",
+  "hunter_ticker": "COR",
   "source_gap_closure_run_id": "igc-20261026-02",
   "source_trial_id": "igc-20261026-02",
   "source_chain_root_id": "igc-20261026-02"
