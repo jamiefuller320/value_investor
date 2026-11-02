@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "updated_at": "2026-11-01T07:11:57.656338+00:00",
-  "as_of": "2026-11-01T02:11:57.644114-05:00",
+  "updated_at": "2026-11-02T08:03:17.420813+00:00",
+  "as_of": "2026-11-02T03:03:17.407606-05:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -19,9 +19,9 @@
   "holding_count": 15,
   "underwater_count": 3,
   "thesis_status_counts": {
-    "intact": 9,
+    "intact": 8,
     "weakening": 6,
-    "broken": 0,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
@@ -43,17 +43,49 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.1667,
-      "quality": 0.0,
-      "dividend": 0.1667,
+      "cheapness": 0.25,
+      "quality": 0.0833,
+      "dividend": 0.25,
       "garp": 0.4167,
-      "risk": 0.0
+      "risk": 0.1667
     },
     "selection_feedback_flags": [],
     "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
+    {
+      "ticker": "NTR.TO",
+      "name": "NTR.TO",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 96.96,
+      "avg_cost": 96.96,
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "cheapness lost and not in buy tier"
+      ],
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
+    },
     {
       "ticker": "K.TO",
       "name": "Kinross Gold Corporation",
@@ -177,46 +209,6 @@
       "broken_reasons": []
     },
     {
-      "ticker": "NTR.TO",
-      "name": "Nutrien Ltd.",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 96.96,
-      "avg_cost": 96.96,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.3375,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "conviction 34% below intact floor",
-        "still buy",
-        "research accumulate"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "conviction 34% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
       "ticker": "CP.TO",
       "name": "Canadian Pacific Kansas City Limited",
       "thesis_status": "weakening",
@@ -228,7 +220,7 @@
       "avg_cost": 125.33,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.2917,
+      "conviction_score": 0.4317,
       "data_quality_score": 1.0,
       "passed_families": [
         "quality",
@@ -243,18 +235,17 @@
       "reasons": [
         "research verdict neutral",
         "cheapness family no longer passes",
-        "conviction 29% below intact floor",
         "still buy",
         "data_quality 1.00"
       ],
       "intact_reasons": [
         "still buy",
-        "data_quality 1.00"
+        "data_quality 1.00",
+        "conviction 43%"
       ],
       "weaken_reasons": [
         "research verdict neutral",
-        "cheapness family no longer passes",
-        "conviction 29% below intact floor"
+        "cheapness family no longer passes"
       ],
       "broken_reasons": []
     },
@@ -310,7 +301,7 @@
       "avg_cost": 87.86,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4401,
+      "conviction_score": 0.6162,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -330,7 +321,7 @@
         "still strong_buy",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 44%"
+        "conviction 62%"
       ],
       "weaken_reasons": [
         "research verdict neutral"
@@ -349,7 +340,7 @@
       "avg_cost": 77.0234,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5675,
+      "conviction_score": 0.5586,
       "data_quality_score": 1.0,
       "passed_families": [
         "quality",
@@ -370,7 +361,7 @@
         "still buy",
         "research accumulate",
         "data_quality 1.00",
-        "conviction 57%"
+        "conviction 56%"
       ],
       "weaken_reasons": [
         "cheapness family no longer passes"
@@ -380,42 +371,42 @@
     {
       "ticker": "CNR.TO",
       "name": "Canadian National Railway Company",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
       "unrealized_pct": 0.0204,
       "mark": 172.81,
       "avg_cost": 169.3507,
-      "signal": "buy",
+      "signal": "hold",
       "timing_signal": "neutral",
-      "conviction_score": 0.5133,
+      "conviction_score": 0.2547,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
         "quality",
-        "dividend",
-        "risk"
+        "dividend"
       ],
       "failed_families": [
-        "garp"
+        "garp",
+        "risk"
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "still buy",
+        "left buy tier (hold)",
+        "conviction 25% below intact floor",
         "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 51%"
+        "cheapness family still passes"
       ],
       "intact_reasons": [
-        "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 51%"
+        "data_quality 1.00"
       ],
-      "weaken_reasons": [],
+      "weaken_reasons": [
+        "left buy tier (hold)",
+        "conviction 25% below intact floor"
+      ],
       "broken_reasons": []
     },
     {

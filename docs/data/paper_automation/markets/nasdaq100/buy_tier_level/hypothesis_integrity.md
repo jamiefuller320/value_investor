@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-01T07:12:11.621281+00:00
+Track: `buy_tier_level` · updated 2026-11-02T08:03:39.277053+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **8** / 35 (23% count, 20% NAV)
+- Losers: **8** / 33 (24% count, 21% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
@@ -12,7 +12,6 @@ Track: `buy_tier_level` · updated 2026-11-01T07:12:11.621281+00:00
 
 ### SNDK — weakening / watch_review (-24.3%)
 - research verdict caution
-- conviction 30% below intact floor
 - still strong_buy
 - cheapness family still passes
 
@@ -59,7 +58,7 @@ Track: `buy_tier_level` · updated 2026-11-01T07:12:11.621281+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 48%
+- conviction 57%
 
 ### QCOM — weakening / watch_review (-10.8%)
 - research verdict caution
@@ -99,10 +98,12 @@ Track: `buy_tier_level` · updated 2026-11-01T07:12:11.621281+00:00
 - data_quality 1.00
 - conviction 91%
 
-### BKR — weakening / watch_review (-1.9%)
-- conviction 33% below intact floor
+### BKR — intact / hold_tolerate (-1.9%)
 - still strong_buy
 - research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 39%
 
 ### HON — weakening / watch_review (-1.3%)
 - research verdict neutral
@@ -133,9 +134,15 @@ Track: `buy_tier_level` · updated 2026-11-01T07:12:11.621281+00:00
 ### TER — weakening / watch_review (+0.0%)
 - research verdict caution
 - cheapness family no longer passes
-- conviction 35% below intact floor
 - still buy
 - data_quality 1.00
+
+### ROP — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 91%
 
 ### ODFL — intact / hold_tolerate (+0.1%)
 - still buy
@@ -150,19 +157,6 @@ Track: `buy_tier_level` · updated 2026-11-01T07:12:11.621281+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 82%
-
-### ADP — intact / hold_tolerate (+2.7%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 56%
-
-### ADSK — weakening / watch_review (+3.3%)
-- left buy tier (hold)
-- conviction 32% below intact floor
-- research accumulate
-- cheapness family still passes
 
 ### MDLZ — intact / hold_tolerate (+4.1%)
 - still buy
@@ -197,12 +191,6 @@ Track: `buy_tier_level` · updated 2026-11-01T07:12:11.621281+00:00
 - data_quality 1.00
 - conviction 59%
 
-### CCEP — weakening / watch_review (+12.0%)
-- left buy tier (hold)
-- conviction 32% below intact floor
-- research accumulate
-- cheapness family still passes
-
 ### KDP — intact / hold_tolerate (+12.7%)
 - still buy
 - research accumulate
@@ -215,28 +203,28 @@ Track: `buy_tier_level` · updated 2026-11-01T07:12:11.621281+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 38%
+- conviction 37%
 
 ### NXPI — intact / hold_tolerate (+18.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 44%
+- conviction 52%
 
 ### REGN — intact / hold_tolerate (+19.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
-- data_quality 0.95
-- conviction 83%
+- data_quality 1.00
+- conviction 82%
 
 ### GEHC — intact / hold_tolerate (+20.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 56%
+- conviction 69%
 
 ### AMGN — weakening / watch_review (+23.8%)
 - cheapness family no longer passes

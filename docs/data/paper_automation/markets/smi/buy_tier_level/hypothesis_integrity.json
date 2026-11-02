@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-11-01T07:14:02.470551+00:00",
-  "as_of": "2026-11-01T07:14:02.359473+00:00",
+  "updated_at": "2026-11-02T08:05:36.944151+00:00",
+  "as_of": "2026-11-02T08:05:36.814384+00:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -16,19 +16,19 @@
     "broken_urgency_boost": 0.28,
     "skip_underwater_urgency_when_intact": true
   },
-  "holding_count": 5,
+  "holding_count": 4,
   "underwater_count": 1,
   "thesis_status_counts": {
-    "intact": 2,
-    "weakening": 3,
+    "intact": 3,
+    "weakening": 1,
     "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
-    "holding_count": 5,
+    "holding_count": 4,
     "loser_count": 1,
-    "loser_share": 0.2,
-    "loser_nav_share": 0.1719,
+    "loser_share": 0.25,
+    "loser_nav_share": 0.25,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
@@ -44,14 +44,12 @@
     },
     "family_fail_rate_non_losers": {
       "cheapness": 0.0,
-      "quality": 0.5,
-      "dividend": 0.5,
+      "quality": 0.3333,
+      "dividend": 0.6667,
       "garp": 1.0,
       "risk": 0.0
     },
-    "selection_feedback_flags": [
-      "dividend fails more often among losers (100% vs 50%)"
-    ],
+    "selection_feedback_flags": [],
     "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
@@ -63,9 +61,9 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0913,
+      "unrealized_pct": -0.0647,
       "mark": 78.26,
-      "avg_cost": 86.124,
+      "avg_cost": 83.6725,
       "signal": "buy",
       "timing_signal": "neutral",
       "conviction_score": 0.4254,
@@ -105,9 +103,9 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.023,
+      "unrealized_pct": 0.0188,
       "mark": 640.4,
-      "avg_cost": 626.0,
+      "avg_cost": 628.5911,
       "signal": "buy",
       "timing_signal": "neutral",
       "conviction_score": 0.529,
@@ -146,9 +144,9 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.1005,
+      "unrealized_pct": 0.0827,
       "mark": 33.85,
-      "avg_cost": 30.76,
+      "avg_cost": 31.2659,
       "signal": "buy",
       "timing_signal": "neutral",
       "conviction_score": 0.34,
@@ -180,59 +178,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "ALC.SW",
-      "name": "Alcon Inc.",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.1051,
-      "mark": 59.1,
-      "avg_cost": 53.48,
-      "signal": "buy",
-      "timing_signal": "wait",
-      "conviction_score": 0.3315,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "quality",
-        "garp"
-      ],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "conviction 33% below intact floor",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "research verdict caution",
-        "conviction 33% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
       "ticker": "NOVN.SW",
       "name": "Novartis AG",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.1409,
+      "unrealized_pct": 0.1156,
       "mark": 133.78,
-      "avg_cost": 117.26,
+      "avg_cost": 119.9167,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.3331,
+      "conviction_score": 0.3803,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -245,19 +202,20 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "conviction 33% below intact floor",
         "still buy",
-        "research accumulate"
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 38%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00"
+        "data_quality 1.00",
+        "conviction 38%"
       ],
-      "weaken_reasons": [
-        "conviction 33% below intact floor"
-      ],
+      "weaken_reasons": [],
       "broken_reasons": []
     }
   ],

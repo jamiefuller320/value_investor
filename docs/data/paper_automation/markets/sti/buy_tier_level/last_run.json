@@ -1,46 +1,47 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-01T07:13:43.632760+00:00",
+    "local_time": "2026-11-02T08:05:27.921582+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-01T08:00:00+00:00",
-    "settle_at": "2026-11-01T09:15:00+00:00",
+    "market_open_at": "2026-11-02T08:00:00+00:00",
+    "settle_at": "2026-11-02T09:15:00+00:00",
     "can_act": false,
-    "reason": "before market open"
+    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
   "trades": [
     {
-      "id": "06b1e4a3-f7d4-4cd9-ab26-bd7b5f206449",
+      "id": "ff963231-eab5-4f99-9b58-8d870fecce47",
       "fund_id": "48f57b59-59c4-46ca-9a0d-43ee63c1d27c",
-      "acted_at": "2026-11-01T07:13:43.632760+00:00",
-      "ticker": "BUOU.SI",
+      "acted_at": "2026-11-02T08:05:27.921582+00:00",
+      "ticker": "N2IU.SI",
       "side": "sell",
       "sizing_mode": "shares",
-      "shares": 365.427883,
-      "price": 0.895,
-      "gross": 327.06,
-      "cost": 0.57,
-      "net_cash": 326.49,
+      "shares": 143.727881,
+      "price": 1.15,
+      "gross": 165.29,
+      "cost": 0.29,
+      "net_cash": 165.0,
       "note": "Automated exit \u2014 left target set",
-      "name": "Frasers Logistics & Commercial Trust",
-      "avg_cost_at_exit": 0.8786,
+      "name": "Mapletree Pan Asia Commercial Trust",
+      "avg_cost_at_exit": 1.15,
       "position_closed": true
     },
     {
-      "id": "51317519-cdd4-40bd-bf5c-4373a216f25c",
+      "id": "53196fde-639b-4995-bf7c-092ed6b4b57d",
       "fund_id": "48f57b59-59c4-46ca-9a0d-43ee63c1d27c",
-      "acted_at": "2026-11-01T07:13:43.632760+00:00",
+      "acted_at": "2026-11-02T08:05:27.921582+00:00",
       "ticker": "Y92.SI",
-      "side": "buy",
+      "side": "sell",
       "sizing_mode": "cash",
-      "shares": 766.859417,
+      "shares": 778.970392,
       "price": 0.425,
-      "gross": 325.92,
-      "cost": 0.57,
-      "net_cash": -326.49,
-      "note": "Automated buy",
-      "name": "Thai Beverage Public Company Limited"
+      "gross": 331.06,
+      "cost": 0.58,
+      "net_cash": 330.48,
+      "note": "Automated trim",
+      "name": "Thai Beverage Public Company Limited",
+      "avg_cost_at_exit": 0.4249
     }
   ],
   "plan": {
@@ -56,8 +57,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 991.25,
-    "cash": 0.0,
+    "nav": 990.38,
+    "cash": 495.48,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -69,46 +70,54 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 990.96,
+    "target_sleeve_value": 495.19,
     "targets": [
       {
         "ticker": "Y92.SI",
         "name": "Thai Beverage Public Company Limited",
         "signal": "buy",
-        "conviction_score": 0.6552,
+        "conviction_score": 0.7417,
         "price": 0.425
-      }
-    ],
-    "anticipated_exits": [
+      },
       {
-        "action": "sell",
-        "ticker": "N2IU.SI",
-        "name": "Mapletree Pan Asia Commercial Trust",
-        "reason": "No longer in the top conviction target set",
-        "shares": 143.727881,
-        "price": 1.15,
-        "value": 165.29
+        "ticker": "BUOU.SI",
+        "name": "Frasers Logistics & Commercial Trust",
+        "signal": "buy",
+        "conviction_score": 0.29699,
+        "price": 0.895
       }
     ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [
       {
         "action": "buy",
-        "ticker": "Y92.SI",
-        "name": "Thai Beverage Public Company Limited",
-        "reason": "Top-up to equal weight",
-        "value": 165.0,
-        "price": 0.425,
-        "target_value": 990.96,
-        "conviction_score": 0.6552,
+        "ticker": "BUOU.SI",
+        "name": "Frasers Logistics & Commercial Trust",
+        "reason": "New sleeve",
+        "value": 495.19,
+        "price": 0.895,
+        "target_value": 495.19,
+        "conviction_score": 0.29699,
         "signal": "buy"
       }
     ],
-    "anticipated_holds": [],
+    "anticipated_holds": [
+      {
+        "action": "hold",
+        "ticker": "Y92.SI",
+        "name": "Thai Beverage Public Company Limited",
+        "reason": "Already near equal-weight target",
+        "value": 494.9,
+        "target_value": 495.19,
+        "conviction_score": 0.7417,
+        "signal": "buy"
+      }
+    ],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 1 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s)."
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s); deploy cash into 1 buy(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -121,17 +130,6 @@
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
-    },
-    {
-      "ticker": "N2IU.SI",
-      "name": "Mapletree Pan Asia Commercial Trust",
-      "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 1.15,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": null
     }
   ],
   "fund": {
@@ -149,13 +147,13 @@
       "id": "48f57b59-59c4-46ca-9a0d-43ee63c1d27c",
       "created_at": "2026-10-02T15:01:32.485106+00:00"
     },
-    "cash": 0.0,
+    "cash": 495.48,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
       "Y92.SI": {
         "ticker": "Y92.SI",
-        "shares": 1943.444531,
+        "shares": 1164.474139,
         "avg_cost": 0.4249,
         "name": "Thai Beverage Public Company Limited",
         "sector": "Consumer Defensive",
@@ -163,17 +161,6 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-10-02T16:01:32.484974+01:00"
-      },
-      "N2IU.SI": {
-        "ticker": "N2IU.SI",
-        "shares": 143.727881,
-        "avg_cost": 1.15,
-        "name": "Mapletree Pan Asia Commercial Trust",
-        "sector": "Real Estate",
-        "currency": "SGD",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-10-30T07:55:17.933158+00:00"
       }
     },
     "trades": [
@@ -599,6 +586,39 @@
         "net_cash": -326.49,
         "note": "Automated buy",
         "name": "Thai Beverage Public Company Limited"
+      },
+      {
+        "id": "ff963231-eab5-4f99-9b58-8d870fecce47",
+        "fund_id": "48f57b59-59c4-46ca-9a0d-43ee63c1d27c",
+        "acted_at": "2026-11-02T08:05:27.921582+00:00",
+        "ticker": "N2IU.SI",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 143.727881,
+        "price": 1.15,
+        "gross": 165.29,
+        "cost": 0.29,
+        "net_cash": 165.0,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Mapletree Pan Asia Commercial Trust",
+        "avg_cost_at_exit": 1.15,
+        "position_closed": true
+      },
+      {
+        "id": "53196fde-639b-4995-bf7c-092ed6b4b57d",
+        "fund_id": "48f57b59-59c4-46ca-9a0d-43ee63c1d27c",
+        "acted_at": "2026-11-02T08:05:27.921582+00:00",
+        "ticker": "Y92.SI",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 778.970392,
+        "price": 0.425,
+        "gross": 331.06,
+        "cost": 0.58,
+        "net_cash": 330.48,
+        "note": "Automated trim",
+        "name": "Thai Beverage Public Company Limited",
+        "avg_cost_at_exit": 0.4249
       }
     ],
     "equity_curve": [
@@ -1084,15 +1104,30 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-02T08:05:27.921582+00:00",
+        "portfolio_value": 783.83,
+        "cash": 495.48,
+        "contributed_capital": 1000.0,
+        "positions": 1,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "SGD": 0.58263
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-01T07:13:43.632760+00:00",
+    "last_mark_at": "2026-11-02T08:05:27.921582+00:00",
     "rebalance_state": {
-      "exit_streak": {
-        "N2IU.SI": 1
-      },
+      "exit_streak": {},
       "reentry_cooldown": {
-        "BUOU.SI": 1
+        "N2IU.SI": 1
       }
     },
     "settled_corporate_actions": [],
@@ -1103,9 +1138,9 @@
     "schema_version": 2,
     "market_id": "sti",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-01T07:13:43.846709+00:00",
+    "generated_at": "2026-11-02T08:05:28.168676+00:00",
     "observe_only": true,
-    "open_count": 6,
+    "open_count": 7,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -1182,7 +1217,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-01T07:13:43.848019+00:00",
+    "generated_at": "2026-11-02T08:05:28.169777+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1236,28 +1271,28 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 6,
+      "hold_closed_count": 7,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 7,
       "gaps": [
-        "hold_recovery closed episodes=6 (target >=15)",
+        "hold_recovery closed episodes=7 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 2,
-        "recovered_to_breakeven": 2,
+        "count": 1,
+        "recovered_to_breakeven": 1,
         "close_reasons": {
-          "open": 2
+          "open": 1
         }
       },
       "closed": {
-        "count": 6,
-        "recovered_to_breakeven": 6,
+        "count": 7,
+        "recovered_to_breakeven": 7,
         "close_reasons": {
-          "sold_while_recovered": 6
+          "sold_while_recovered": 7
         }
       }
     },
@@ -1275,7 +1310,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 1,
@@ -1287,8 +1322,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-01T07:13:43.849584+00:00",
-    "as_of": "2026-11-01T07:13:43.632760+00:00",
+    "updated_at": "2026-11-02T08:05:28.171139+00:00",
+    "as_of": "2026-11-02T08:05:27.921582+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1300,16 +1335,16 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 2,
+    "holding_count": 1,
     "underwater_count": 0,
     "thesis_status_counts": {
       "intact": 1,
       "weakening": 0,
-      "broken": 1,
+      "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 2,
+      "holding_count": 1,
       "loser_count": 0,
       "loser_share": 0.0,
       "loser_nav_share": 0.0,
@@ -1327,11 +1362,11 @@
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.5,
-        "quality": 0.5,
-        "dividend": 0.5,
-        "garp": 0.5,
-        "risk": 0.5
+        "cheapness": 0.0,
+        "quality": 0.0,
+        "dividend": 0.0,
+        "garp": 0.0,
+        "risk": 0.0
       },
       "selection_feedback_flags": [],
       "balancing_hint": "maintain",
@@ -1339,50 +1374,18 @@
     },
     "holdings": [
       {
-        "ticker": "N2IU.SI",
-        "name": "N2IU.SI",
-        "thesis_status": "broken",
-        "recommended_action": "exit_candidate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 1.15,
-        "avg_cost": 1.15,
-        "signal": null,
-        "timing_signal": null,
-        "conviction_score": null,
-        "data_quality_score": null,
-        "passed_families": [],
-        "failed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "research_verdict": null,
-        "reasons": [
-          "cheapness lost and not in buy tier"
-        ],
-        "intact_reasons": [],
-        "weaken_reasons": [],
-        "broken_reasons": [
-          "cheapness lost and not in buy tier"
-        ]
-      },
-      {
         "ticker": "Y92.SI",
         "name": "Thai Beverage Public Company Limited",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0001,
+        "unrealized_pct": 0.0002,
         "mark": 0.425,
         "avg_cost": 0.4249,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6552,
+        "conviction_score": 0.7417,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1398,14 +1401,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 66%"
+          "conviction 74%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 66%"
+          "conviction 74%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1418,27 +1421,27 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-01T07:13:43.851816+00:00",
+    "generated_at": "2026-11-02T08:05:28.172781+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 6,
+      "closed_total": 7,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 2,
+      "open_with_thesis": 1,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 5,
+          "closed_count": 6,
           "recovery_rate": 1.0,
           "sold_underwater_rate": 0.0,
-          "mean_peak_unrealized_pct": 0.0052,
-          "mean_trough_unrealized_pct": -0.016,
+          "mean_peak_unrealized_pct": 0.0058,
+          "mean_trough_unrealized_pct": -0.0118,
           "outcome_labels": {
-            "recovered": 5
+            "recovered": 6
           }
         },
         "broken": {
@@ -1477,10 +1480,10 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 6,
+      "hold_closed_with_thesis": 7,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold closed with thesis=6 (target >=8)",
+        "hold closed with thesis=7 (target >=8)",
         "hold thesis buckets thin (broken=1; target >=3 each)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
@@ -1493,15 +1496,15 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-01T07:13:43.855412+00:00",
-    "open_count": 1,
-    "closed_count": 7,
+    "generated_at": "2026-11-02T08:05:28.176349+00:00",
+    "open_count": 0,
+    "closed_count": 8,
     "scored_count": 6,
-    "scored_count_all": 7,
-    "recommit_scored_count": 1,
+    "scored_count_all": 8,
+    "recommit_scored_count": 2,
     "entry_kind_counts": {
       "first_entry": 6,
-      "recommit": 1
+      "recommit": 2
     },
     "any_de_risk_count": 3,
     "winning_cadence_counts": {
@@ -1551,17 +1554,17 @@
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
       "first_entry_scored": 6,
-      "recommit_scored": 1
+      "recommit_scored": 2
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
     "marked_this_pass": 1,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-01T07:13:43.632760+00:00",
+    "generated_at": "2026-11-02T08:05:27.921582+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1588,8 +1591,8 @@
     "open_count": 7,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 2,
-      "off_book": 4,
+      "on_book": 1,
+      "off_book": 5,
       "never_funded": 1
     },
     "closed_by_capital_status": {
@@ -1618,7 +1621,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-01T07:13:43.632760+00:00",
+    "generated_at": "2026-11-02T08:05:27.921582+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1626,10 +1629,10 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 2,
-    "card_count": 2,
+    "proposal_count": 1,
+    "card_count": 1,
     "verdict_counts": {
-      "agree": 2,
+      "agree": 1,
       "veto": 0,
       "abstain": 0
     },
@@ -1638,42 +1641,25 @@
         "agree": 1,
         "veto": 0,
         "abstain": 0
-      },
-      "buy": {
-        "agree": 1,
-        "veto": 0,
-        "abstain": 0
       }
     },
     "disagree_vs_heuristic_count": 0,
     "cards": [
       {
-        "ticker": "BUOU.SI",
-        "name": "Frasers Logistics & Commercial Trust",
+        "ticker": "N2IU.SI",
+        "name": "Mapletree Pan Asia Commercial Trust",
         "algo_action": "sell",
         "algo_reason": "Automated exit \u2014 left target set",
         "shadow_verdict": "agree",
         "reasons": [
-          "still_buyish is false, so leaving the buy cohort is decisive and veto-on-sell (capacity-bump while still buyish) does not apply.",
-          "Effective screen_signal is hold with research_verdict caution, consistent with automated exit after leaving the target set rather than holding a buyish name."
+          "Automated exit \u2014 left target set per algo_reason.",
+          "still_buyish is false: name no longer buy/strong_buy on decision screen, so leave-buy-cohort supports sell rather than capacity-bump veto."
         ],
         "evidence": [
           {
             "kind": "algo_reason",
             "source": "plan_or_trade",
             "detail": "Automated exit \u2014 left target set"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "hold"
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "caution"
           },
           {
             "kind": "still_buyish",
@@ -1687,20 +1673,20 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-01T07:13:43.632760+00:00",
-        "proposal_id": "buy_tier_level:BUOU.SI:sell:2026-11-01T07:13:43.632760+00:00",
+        "logged_at": "2026-11-02T08:05:27.921582+00:00",
+        "proposal_id": "buy_tier_level:N2IU.SI:sell:2026-11-02T08:05:27.921582+00:00",
         "meta": {
           "still_buyish": false,
           "rank_drop": null,
           "rank_drop_exit_min": 3,
-          "research_verdict": "caution",
+          "research_verdict": null,
           "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
           "judge_spec_id": "heuristic.v1",
           "p1_live_inputs": {
-            "fcf_basis_overlay": false,
+            "fcf_basis_overlay": null,
             "key_filing_bodies": null,
             "filings_with_body": null,
-            "overlay_bound": true,
+            "overlay_bound": null,
             "interim_eps_decline_pct": null,
             "adjusted_eps_growth_pct": null
           },
@@ -1715,99 +1701,6 @@
         },
         "schema_version": 1,
         "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "Y92.SI",
-        "name": "Thai Beverage Public Company Limited",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "still_buyish true with screen_signal buy and research_verdict accumulate; overlay_bound indicates the research overlay was applied at decision time.",
-          "conviction_rank 1 with rank_drop 0 matches entry_rank 1 \u2014 no rank deterioration versus the hold gate."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 1
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 1
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-01T07:13:43.632760+00:00",
-        "proposal_id": "buy_tier_level:Y92.SI:buy:2026-11-01T07:13:43.632760+00:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Buy into buyish target set \u2014 agree with algo selection."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
       }
     ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
@@ -1815,31 +1708,26 @@
       "attempted": true,
       "ok": true,
       "fallback": null,
-      "llm_card_count": 2
+      "llm_card_count": 1
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-01T07:13:43.632760+00:00",
+      "generated_at": "2026-11-02T08:05:27.921582+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 2,
+      "card_count": 1,
       "verdict_counts": {
-        "agree": 2,
+        "agree": 1,
         "veto": 0,
         "abstain": 0
       },
       "by_algo_action": {
         "sell": {
-          "agree": 1,
-          "veto": 0,
-          "abstain": 0
-        },
-        "buy": {
           "agree": 1,
           "veto": 0,
           "abstain": 0
@@ -1860,7 +1748,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-01T07:13:49.983345+00:00",
+  "generated_at": "2026-11-02T08:05:31.771607+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

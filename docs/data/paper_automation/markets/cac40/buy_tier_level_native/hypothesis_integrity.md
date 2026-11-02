@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-01T07:12:34.936852+00:00
+Track: `buy_tier_level_native` · updated 2026-11-02T08:03:55.503134+00:00
 
 ## Portfolio loser feedback
 
@@ -23,7 +23,7 @@ Track: `buy_tier_level_native` · updated 2026-11-01T07:12:34.936852+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 50%
+- conviction 49%
 
 ### DG.PA — intact / hold_tolerate (-0.4%)
 - still strong_buy
@@ -81,7 +81,7 @@ Track: `buy_tier_level_native` · updated 2026-11-01T07:12:34.936852+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 72%
+- conviction 74%
 
 ### VIE.PA — intact / hold_tolerate (+7.4%)
 - still buy

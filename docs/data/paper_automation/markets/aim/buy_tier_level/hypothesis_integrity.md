@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-01T07:12:51.865805+00:00
+Track: `buy_tier_level` · updated 2026-11-02T08:04:06.209196+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **9** / 17 (53% count, 58% NAV)
+- Losers: **9** / 17 (53% count, 57% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -59,12 +59,10 @@ Track: `buy_tier_level` · updated 2026-11-01T07:12:51.865805+00:00
 - data_quality 1.00
 - conviction 51%
 
-### CAM.L — intact / hold_tolerate (-6.1%)
-- price drawdown alone does not invalidate value thesis
+### CAM.L — weakening / watch_review (-6.1%)
+- research verdict caution
 - still buy
 - cheapness family still passes
-- data_quality 1.00
-- conviction 54%
 
 ### ASY.L — intact / hold_tolerate (-5.6%)
 - price drawdown alone does not invalidate value thesis
@@ -79,7 +77,7 @@ Track: `buy_tier_level` · updated 2026-11-01T07:12:51.865805+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 70%
+- conviction 79%
 
 ### KGH.L — intact / hold_tolerate (-2.4%)
 - still buy
@@ -102,7 +100,7 @@ Track: `buy_tier_level` · updated 2026-11-01T07:12:51.865805+00:00
 
 ### CRW.L — weakening / watch_review (+0.0%)
 - research verdict neutral
-- conviction 28% below intact floor
+- conviction 33% below intact floor
 - still buy
 - cheapness family still passes
 

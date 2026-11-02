@@ -11297,5 +11297,341 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-11-02T08:05:31.775090+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/sti/screen_latest.json",
+      "run_at": "2026-11-02T06:52:57.469775+00:00",
+      "generated_at": "2026-11-02T08:05:27.911097+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-11-02T08:05:27.921582+00:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-11-02T08:00:00+00:00",
+      "settle_at": "2026-11-02T09:15:00+00:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (2 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0018,
+    "candidates": [
+      {
+        "ticker": "Y92.SI",
+        "name": "Thai Beverage Public Company Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7417,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Defensive",
+        "price": 0.425,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "BUOU.SI",
+        "name": "Frasers Logistics & Commercial Trust",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.29699,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Real Estate",
+        "price": 0.895,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "Y92.SI",
+        "name": "Thai Beverage Public Company Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7417,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Defensive",
+        "price": 0.425,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "BUOU.SI",
+        "name": "Frasers Logistics & Commercial Trust",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.29699,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Real Estate",
+        "price": 0.895,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.18% / sell 0.18% (legacy symmetric slot 0.18%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 990.38,
+      "cash": 495.48,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 495.19,
+      "targets": [
+        {
+          "ticker": "Y92.SI",
+          "name": "Thai Beverage Public Company Limited",
+          "signal": "buy",
+          "conviction_score": 0.7417,
+          "price": 0.425
+        },
+        {
+          "ticker": "BUOU.SI",
+          "name": "Frasers Logistics & Commercial Trust",
+          "signal": "buy",
+          "conviction_score": 0.29699,
+          "price": 0.895
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "BUOU.SI",
+          "name": "Frasers Logistics & Commercial Trust",
+          "reason": "New sleeve",
+          "value": 495.19,
+          "price": 0.895,
+          "target_value": 495.19,
+          "conviction_score": 0.29699,
+          "signal": "buy"
+        }
+      ],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "Y92.SI",
+          "name": "Thai Beverage Public Company Limited",
+          "reason": "Already near equal-weight target",
+          "value": 494.9,
+          "target_value": 495.19,
+          "conviction_score": 0.7417,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 2 equal-weight sleeve(s); deploy cash into 1 buy(s); leave 1 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "ff963231-eab5-4f99-9b58-8d870fecce47",
+        "fund_id": "48f57b59-59c4-46ca-9a0d-43ee63c1d27c",
+        "acted_at": "2026-11-02T08:05:27.921582+00:00",
+        "ticker": "N2IU.SI",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 143.727881,
+        "price": 1.15,
+        "gross": 165.29,
+        "cost": 0.29,
+        "net_cash": 165.0,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Mapletree Pan Asia Commercial Trust",
+        "avg_cost_at_exit": 1.15,
+        "position_closed": true
+      },
+      {
+        "id": "53196fde-639b-4995-bf7c-092ed6b4b57d",
+        "fund_id": "48f57b59-59c4-46ca-9a0d-43ee63c1d27c",
+        "acted_at": "2026-11-02T08:05:27.921582+00:00",
+        "ticker": "Y92.SI",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 778.970392,
+        "price": 0.425,
+        "gross": 331.06,
+        "cost": 0.58,
+        "net_cash": 330.48,
+        "note": "Automated trim",
+        "name": "Thai Beverage Public Company Limited",
+        "avg_cost_at_exit": 0.4249
+      }
+    ],
+    "nav_before": 991.25,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "Y92.SI",
+        "shares": 1943.444531,
+        "avg_cost": 0.4249,
+        "sector": "Consumer Defensive",
+        "name": "Thai Beverage Public Company Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "N2IU.SI",
+        "shares": 143.727881,
+        "avg_cost": 1.15,
+        "sector": "Real Estate",
+        "name": "Mapletree Pan Asia Commercial Trust",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "N2IU.SI": 1
+      },
+      "reentry_cooldown": {
+        "BUOU.SI": 1
+      }
+    },
+    "nav_after": 990.38,
+    "cash_after": 495.48,
+    "holdings_after": [
+      {
+        "ticker": "Y92.SI",
+        "shares": 1164.474139,
+        "avg_cost": 0.4249,
+        "sector": "Consumer Defensive",
+        "name": "Thai Beverage Public Company Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "N2IU.SI": 1
+      }
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
+      "verdict_counts": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": [
+        {
+          "ticker": "N2IU.SI",
+          "name": "Mapletree Pan Asia Commercial Trust",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Automated exit \u2014 left target set per algo_reason.",
+            "still_buyish is false: name no longer buy/strong_buy on decision screen, so leave-buy-cohort supports sell rather than capacity-bump veto."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-11-02T08:05:27.921582+00:00",
+          "proposal_id": "buy_tier_level:N2IU.SI:sell:2026-11-02T08:05:27.921582+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
+    }
   }
 ]

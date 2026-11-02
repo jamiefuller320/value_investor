@@ -1,30 +1,23 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-01T07:14:12.275184+00:00
+Track: `buy_tier_level` · updated 2026-11-02T08:05:59.245282+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 3 (0% count, 0% NAV)
+- Losers: **0** / 2 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
 ## Holding reviews
 
-### OIZ.IR — intact / hold_tolerate (+2.5%)
+### OIZ.IR — intact / hold_tolerate (+1.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 55%
+- conviction 63%
 
-### GL9.IR — weakening / watch_review (+3.0%)
-- left buy tier (hold)
-- research verdict neutral
-- conviction 31% below intact floor
-- cheapness family still passes
-- data_quality 1.00
-
-### C5H.IR — intact / hold_tolerate (+5.0%)
+### C5H.IR — intact / hold_tolerate (+3.4%)
 - still buy
 - research accumulate
 - cheapness family still passes

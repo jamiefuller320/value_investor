@@ -3,38 +3,38 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-11-01T07:12:06.183893+00:00",
+  "generated_at": "2026-11-02T08:03:27.417795+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 6,
+    "closed_total": 8,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 8,
+    "open_with_thesis": 6,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 5,
-        "recovery_rate": 0.8,
-        "sold_underwater_rate": 0.2,
-        "mean_peak_unrealized_pct": 0.0628,
-        "mean_trough_unrealized_pct": -0.002,
+        "closed_count": 6,
+        "recovery_rate": 0.8333,
+        "sold_underwater_rate": 0.1667,
+        "mean_peak_unrealized_pct": 0.0707,
+        "mean_trough_unrealized_pct": -0.01,
         "outcome_labels": {
-          "recovered": 4,
+          "recovered": 5,
           "sold_underwater": 1
         }
       },
       "broken": {
-        "closed_count": 1,
+        "closed_count": 2,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.1346,
-        "mean_trough_unrealized_pct": 0.1346,
+        "mean_peak_unrealized_pct": 0.0766,
+        "mean_trough_unrealized_pct": 0.0766,
         "outcome_labels": {
-          "recovered": 1
+          "recovered": 2
         }
       },
       "insufficient_data": {
@@ -63,11 +63,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 6,
+    "hold_closed_with_thesis": 8,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=6 (target >=8)",
-      "hold thesis buckets thin (broken=1; target >=3 each)",
+      "hold thesis buckets thin (broken=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -186,7 +185,7 @@
       "ticker": "ABI.BR",
       "name": "Anheuser-Busch InBev SA/NV",
       "started_at": "2026-09-29T09:24:18.241445+02:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -236,9 +235,9 @@
       "peak_unrealized_pct": 0.1101,
       "trough_unrealized_pct": -0.0501,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-02T09:03:27.401823+01:00",
+      "linked_sell_trade_id": "479bf8ae-26f4-4094-95da-6c5278881f16"
     },
     {
       "episode_id": "buy_tier_level_native:DG.PA:2026-09-30T09:26:44.209718+02:00",
@@ -739,7 +738,7 @@
       "ticker": "MUV2.DE",
       "name": "M\u00fcnchener R\u00fcckversicherungs-Gesellschaft Aktiengesellschaft in M\u00fcnchen",
       "started_at": "2026-11-01T08:12:06.170056+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -771,9 +770,9 @@
       "peak_unrealized_pct": 0.0187,
       "trough_unrealized_pct": 0.0187,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-02T09:03:27.401823+01:00",
+      "linked_sell_trade_id": "266a9a55-09c4-4068-abaa-ef69be2f9174"
     }
   ],
   "swap_rotations": [
@@ -1524,6 +1523,188 @@
       },
       "buy_returns_since_rotation": {
         "ABI.BR": 0.0181
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-11-02T09:03:27.401823+01:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-11-02T09:03:27.401823+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "ABI.BR",
+          "price": 71.96,
+          "shares": 1.23431,
+          "gross": 88.82,
+          "cost": 0.02,
+          "avg_cost_at_exit": 68.7753,
+          "realized_pct": 0.0463,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0463
+        },
+        {
+          "ticker": "MUV2.DE",
+          "price": 567.0,
+          "shares": 0.142971,
+          "gross": 81.06,
+          "cost": 0.02,
+          "avg_cost_at_exit": 556.6,
+          "realized_pct": 0.0187,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0187
+        },
+        {
+          "ticker": "DG.PA",
+          "price": 108.6,
+          "shares": 0.108146,
+          "gross": 11.74,
+          "cost": 0.0,
+          "avg_cost_at_exit": 109.2307,
+          "realized_pct": -0.0058,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0058
+        },
+        {
+          "ticker": "TTE.PA",
+          "price": 85.43,
+          "shares": 0.137478,
+          "gross": 11.74,
+          "cost": 0.0,
+          "avg_cost_at_exit": 78.5266,
+          "realized_pct": 0.0879,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0879
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "DHL.DE",
+          "price": 58.68,
+          "shares": 0.319838,
+          "gross": 18.77,
+          "cost": 0.0
+        },
+        {
+          "ticker": "ENI.MI",
+          "price": 27.135,
+          "shares": 1.016869,
+          "gross": 27.59,
+          "cost": 0.01
+        },
+        {
+          "ticker": "SGO.PA",
+          "price": 67.88,
+          "shares": 0.367644,
+          "gross": 24.96,
+          "cost": 0.01
+        },
+        {
+          "ticker": "AD.AS",
+          "price": 32.75,
+          "shares": 0.825451,
+          "gross": 27.03,
+          "cost": 0.01
+        },
+        {
+          "ticker": "SAN.PA",
+          "price": 79.74,
+          "shares": 0.251614,
+          "gross": 20.06,
+          "cost": 0.01
+        },
+        {
+          "ticker": "MC.PA",
+          "price": 387.0,
+          "shares": 0.065286,
+          "gross": 25.27,
+          "cost": 0.01
+        },
+        {
+          "ticker": "DTE.DE",
+          "price": 26.09,
+          "shares": 0.911124,
+          "gross": 23.77,
+          "cost": 0.01
+        },
+        {
+          "ticker": "PRX.AS",
+          "price": 34.29,
+          "shares": 0.753212,
+          "gross": 25.83,
+          "cost": 0.01
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "ABI.BR": 0.0,
+        "MUV2.DE": 0.0,
+        "DG.PA": 0.0,
+        "TTE.PA": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "DHL.DE": 0.0,
+        "ENI.MI": 0.0,
+        "SGO.PA": 0.0,
+        "AD.AS": 0.0,
+        "SAN.PA": 0.0,
+        "MC.PA": 0.0,
+        "DTE.DE": 0.0,
+        "PRX.AS": 0.0
       },
       "verdict": null,
       "closed_at": null

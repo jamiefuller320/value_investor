@@ -1,33 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-01T08:15:16.314413+01:00",
+    "local_time": "2026-11-02T09:07:26.289489+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-01T09:00:00+01:00",
-    "settle_at": "2026-11-01T09:30:00+01:00",
+    "market_open_at": "2026-11-02T09:00:00+01:00",
+    "settle_at": "2026-11-02T09:30:00+01:00",
     "can_act": false,
-    "reason": "before market open"
+    "reason": "waiting for open settle (30 min after 09:00 Europe/Paris)"
   },
-  "trades": [
-    {
-      "id": "c988c289-ab19-40bd-8b37-beded3f0ac88",
-      "fund_id": "209e7801-81df-4109-938c-1715d2dcffbd",
-      "acted_at": "2026-11-01T08:15:16.314413+01:00",
-      "ticker": "TEL2-B.ST",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 1.285928,
-      "price": 159.6,
-      "gross": 205.23,
-      "cost": 0.38,
-      "net_cash": 204.85,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Tele2 AB (publ)",
-      "avg_cost_at_exit": 159.85,
-      "position_closed": true
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -87,11 +69,11 @@
         "price": 19.5
       },
       {
-        "ticker": "TTE.PA",
-        "name": "TotalEnergies SE",
+        "ticker": "AD.AS",
+        "name": "Koninklijke Ahold Delhaize N.V.",
         "signal": "buy",
-        "conviction_score": 0.7167,
-        "price": 85.43
+        "conviction_score": 0.7095,
+        "price": 32.75
       }
     ],
     "anticipated_exits": [],
@@ -139,11 +121,11 @@
         "signal": "strong_buy"
       },
       {
-        "ticker": "TTE.PA",
-        "name": "TotalEnergies SE",
+        "ticker": "AD.AS",
+        "name": "Koninklijke Ahold Delhaize N.V.",
         "reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
         "target_value": 208.74,
-        "conviction_score": 0.7167,
+        "conviction_score": 0.7095,
         "signal": "buy"
       }
     ],
@@ -1268,14 +1250,46 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-02T08:50:04.533119+01:00",
+        "portfolio_value": 905.87,
+        "cash": 210.65,
+        "contributed_capital": 1000.0,
+        "positions": 4,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83453
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-02T09:07:26.289489+01:00",
+        "portfolio_value": 905.95,
+        "cash": 210.65,
+        "contributed_capital": 1000.0,
+        "positions": 4,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83462
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-01T08:15:16.314413+01:00",
+    "last_mark_at": "2026-11-02T09:07:26.289489+01:00",
     "rebalance_state": {
       "exit_streak": {},
-      "reentry_cooldown": {
-        "TEL2-B.ST": 2
-      },
+      "reentry_cooldown": {},
       "entry_candidate_rank": {
         "DG.PA": 1,
         "PHIA.AS": 5,
@@ -1295,12 +1309,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (1 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "euro_depth",
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-11-01T07:15:24.695498+00:00",
+    "generated_at": "2026-11-02T08:07:41.155894+00:00",
     "observe_only": true,
     "open_count": 7,
     "closed_count": 0,
@@ -1373,13 +1387,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
+    "ingested_this_pass": 0,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-11-01T07:15:24.696715+00:00",
+    "generated_at": "2026-11-02T08:07:41.156961+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1485,8 +1499,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "still_in_buy_set",
-    "updated_at": "2026-11-01T07:15:24.698209+00:00",
-    "as_of": "2026-11-01T08:15:16.314413+01:00",
+    "updated_at": "2026-11-02T08:07:41.158295+00:00",
+    "as_of": "2026-11-02T09:07:26.289489+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1704,7 +1718,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-11-01T07:15:24.700253+00:00",
+    "generated_at": "2026-11-02T08:07:41.160010+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1772,7 +1786,7 @@
     "schema_version": 1,
     "track_id": "still_in_buy_set",
     "observe_only": true,
-    "generated_at": "2026-11-01T07:15:24.704194+00:00",
+    "generated_at": "2026-11-02T08:07:41.164056+00:00",
     "open_count": 3,
     "closed_count": 8,
     "scored_count": 8,
@@ -1835,13 +1849,13 @@
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
-    "marked_this_pass": 4,
-    "closed_this_pass": 1
+    "marked_this_pass": 3,
+    "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-11-01T08:15:16.314413+01:00",
+    "generated_at": "2026-11-02T09:07:26.289489+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1892,13 +1906,13 @@
       "opened": 0,
       "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 1
+      "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "still_in_buy_set",
-    "generated_at": "2026-11-01T08:15:16.314413+01:00",
+    "generated_at": "2026-11-02T09:07:26.289489+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1906,21 +1920,16 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 3,
-    "card_count": 3,
+    "proposal_count": 2,
+    "card_count": 2,
     "verdict_counts": {
-      "agree": 3,
+      "agree": 2,
       "veto": 0,
       "abstain": 0
     },
     "by_algo_action": {
       "rebuy_skip": {
         "agree": 2,
-        "veto": 0,
-        "abstain": 0
-      },
-      "sell": {
-        "agree": 1,
         "veto": 0,
         "abstain": 0
       }
@@ -1934,9 +1943,9 @@
         "algo_reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
         "shadow_verdict": "agree",
         "reasons": [
-          "Still-in-candidates rebuy block matches name never leaving the buy pool since exit.",
-          "strong_buy with rank_drop 0 (rank 6 vs entry 6) and still_buyish true \u2014 no capacity-bump case for forced rebuy.",
-          "Research accumulate with overlay_bound supports skipping churn rebuy."
+          "Still-in-candidates rebuy block in algo_reason matches skipping re-entry while the name never left the buy pool.",
+          "still_buyish true with screen_signal strong_buy, rank_drop 0 versus entry_rank, and research_verdict accumulate \u2014 no leave-buy-cohort signal.",
+          "Rebuy_skip is consistent with low-churn policy when conviction_rank equals entry_rank and overlay_bound holds."
         ],
         "evidence": [
           {
@@ -1992,8 +2001,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "still_in_buy_set",
-        "logged_at": "2026-11-01T08:15:16.314413+01:00",
-        "proposal_id": "still_in_buy_set:EG7.IR:rebuy_skip:2026-11-01T08:15:16.314413+01:00",
+        "logged_at": "2026-11-02T09:07:26.289489+01:00",
+        "proposal_id": "still_in_buy_set:EG7.IR:rebuy_skip:2026-11-02T09:07:26.289489+01:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -2022,15 +2031,15 @@
         "parent_spec_id": "heuristic.v1"
       },
       {
-        "ticker": "TTE.PA",
-        "name": "TotalEnergies SE",
+        "ticker": "AD.AS",
+        "name": "Koninklijke Ahold Delhaize N.V.",
         "algo_action": "rebuy_skip",
         "algo_reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
         "shadow_verdict": "agree",
         "reasons": [
-          "Same still-in-candidates rebuy block as algo_reason \u2014 consistent with pool membership.",
-          "buy signal, rank_drop 0, still_buyish true \u2014 rebuy skip aligns with low-churn still-buyish posture.",
-          "accumulate verdict and overlay_bound do not contradict skip."
+          "Still-in-candidates rebuy block in algo_reason justifies not rebuying while the name remained in candidates since exit.",
+          "still_buyish true with screen_signal buy, rank_drop 0, and research_verdict accumulate \u2014 rank unchanged from entry_rank.",
+          "Skipping rebuy aligns with explicit pool membership rule rather than a decisive exit from the buy cohort."
         ],
         "evidence": [
           {
@@ -2048,13 +2057,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 10
+            "value": 11
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 10
+            "value": 11
           },
           {
             "kind": "rank_drop",
@@ -2073,12 +2082,6 @@
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
             "value": true
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
           }
         ],
         "judge_backend": "llm",
@@ -2086,8 +2089,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "still_in_buy_set",
-        "logged_at": "2026-11-01T08:15:16.314413+01:00",
-        "proposal_id": "still_in_buy_set:TTE.PA:rebuy_skip:2026-11-01T08:15:16.314413+01:00",
+        "logged_at": "2026-11-02T09:07:26.289489+01:00",
+        "proposal_id": "still_in_buy_set:AD.AS:rebuy_skip:2026-11-02T09:07:26.289489+01:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -2114,88 +2117,6 @@
         },
         "schema_version": 1,
         "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "TEL2-B.ST",
-        "name": "Tele2 AB (publ)",
-        "algo_action": "sell",
-        "algo_reason": "Automated exit \u2014 left target set",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Automated exit for left target set is supported by rank_drop 13 (entry_rank 6 \u2192 conviction_rank 19), well above hold gate < 3.",
-          "Large rank deterioration makes cohort leave decisive despite still_buyish and buy screen_signal.",
-          "Not a capacity-bump veto case \u2014 rank_drop is sufficient to agree with sell."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated exit \u2014 left target set"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 19
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 6
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 13
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "still_in_buy_set",
-        "logged_at": "2026-11-01T08:15:16.314413+01:00",
-        "proposal_id": "still_in_buy_set:TEL2-B.ST:sell:2026-11-01T08:15:16.314413+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 13,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Rank drop 13 \u2265 3 \u2014 cohort leave looks decisive."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
       }
     ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
@@ -2203,32 +2124,27 @@
       "attempted": true,
       "ok": true,
       "fallback": null,
-      "llm_card_count": 3
+      "llm_card_count": 2
     },
     "review": {
       "schema_version": 1,
       "track_id": "still_in_buy_set",
-      "generated_at": "2026-11-01T08:15:16.314413+01:00",
+      "generated_at": "2026-11-02T09:07:26.289489+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 3,
+      "card_count": 2,
       "verdict_counts": {
-        "agree": 3,
+        "agree": 2,
         "veto": 0,
         "abstain": 0
       },
       "by_algo_action": {
         "rebuy_skip": {
           "agree": 2,
-          "veto": 0,
-          "abstain": 0
-        },
-        "sell": {
-          "agree": 1,
           "veto": 0,
           "abstain": 0
         }
@@ -2248,7 +2164,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-01T07:15:28.737234+00:00",
+  "generated_at": "2026-11-02T08:07:47.098050+00:00",
   "track_id": "still_in_buy_set",
   "track_label": "Still-in-buy-set hold twin (rank-drop<3, never-left-candidates, CD2; Suite A)",
   "is_primary_learning_track": false,

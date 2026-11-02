@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-01T07:13:58.405876+00:00
+Track: `buy_tier_level_native` · updated 2026-11-02T08:05:35.864162+00:00
 
 ## Portfolio loser feedback
 
@@ -24,14 +24,16 @@ Track: `buy_tier_level_native` · updated 2026-11-01T07:13:58.405876+00:00
 - data_quality 1.00
 - conviction 75%
 
-### ANDR.VI — weakening / watch_review (+0.0%)
-- conviction 34% below intact floor
+### ANDR.VI — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 39%
 
 ### OMV.VI — intact / hold_tolerate (+5.9%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 42%
+- conviction 50%

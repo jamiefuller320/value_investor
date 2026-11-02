@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-11-01T07:14:16.895994+00:00",
+  "generated_at": "2026-11-02T08:06:04.393625+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 3,
+    "closed_total": 4,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -27,14 +27,14 @@
         }
       },
       "broken": {
-        "closed_count": 2,
-        "recovery_rate": 0.5,
-        "sold_underwater_rate": 0.5,
-        "mean_peak_unrealized_pct": -0.0142,
-        "mean_trough_unrealized_pct": -0.0142,
+        "closed_count": 3,
+        "recovery_rate": 0.6667,
+        "sold_underwater_rate": 0.3333,
+        "mean_peak_unrealized_pct": 0.0007,
+        "mean_trough_unrealized_pct": -0.0088,
         "outcome_labels": {
           "sold_underwater": 1,
-          "recovered": 1
+          "recovered": 2
         }
       },
       "insufficient_data": {
@@ -63,11 +63,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 3,
+    "hold_closed_with_thesis": 4,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=3 (target >=8)",
-      "hold thesis buckets thin (weakening=1, broken=2; target >=3 each)",
+      "hold closed with thesis=4 (target >=8)",
+      "hold thesis buckets thin (weakening=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -313,7 +313,7 @@
       "ticker": "GL9.IR",
       "name": "Glanbia plc",
       "started_at": "2026-10-22T08:37:41.277664+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -339,9 +339,9 @@
       "peak_unrealized_pct": 0.0306,
       "trough_unrealized_pct": 0.002,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-02T08:06:04.385490+00:00",
+      "linked_sell_trade_id": "4905e001-521e-4379-a0f7-f674cd1c6983",
       "thesis_status_at_start": "broken",
       "recommended_action_at_start": "exit_candidate",
       "thesis_reasons_at_start": [
@@ -625,6 +625,64 @@
       },
       "buy_returns_since_rotation": {
         "GL9.IR": 0.0126
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-11-02T08:06:04.385490+00:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-11-02T08:06:04.385490+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "GL9.IR",
+          "price": 20.86,
+          "shares": 17.02855,
+          "gross": 355.22,
+          "cost": 0.09,
+          "avg_cost_at_exit": 20.2526,
+          "realized_pct": 0.03,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "neutral",
+          "unrealized_pct_at_thesis": 0.03
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.775,
+          "shares": 59.714674,
+          "gross": 165.71,
+          "cost": 0.04
+        },
+        {
+          "ticker": "OIZ.IR",
+          "price": 4.01,
+          "shares": 47.214406,
+          "gross": 189.33,
+          "cost": 0.05
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "GL9.IR": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0,
+        "OIZ.IR": 0.0
       },
       "verdict": null,
       "closed_at": null

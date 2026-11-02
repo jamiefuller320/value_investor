@@ -1,18 +1,18 @@
 # Hypothesis outcome link
 
-Track: `buy_tier_level` · 2026-11-01T07:12:02.807329+00:00
+Track: `buy_tier_level` · 2026-11-02T08:03:18.443088+00:00
 
 ## Readiness
 
 - Ready for thesis outcome analysis: **False**
-- Closed hold episodes with thesis: 10
+- Closed hold episodes with thesis: 12
 - Swap sell legs with thesis: 0
 - Gap: swap sell legs with thesis=0 (target >=5)
 
 ## Hold recovery by thesis
 
-- **weakening** (n=7): recovery 86%, sold underwater 14%, mean peak +6.6%
-- **broken** (n=3): recovery 100%, sold underwater 0%, mean peak +0.9%
+- **weakening** (n=8): recovery 88%, sold underwater 12%, mean peak +7.1%
+- **broken** (n=4): recovery 100%, sold underwater 0%, mean peak +1.1%
 
 ## Swap rotation by sell thesis
 

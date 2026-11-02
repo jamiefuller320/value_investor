@@ -15531,5 +15531,645 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-11-02T08:04:32.005928+00:00",
+    "track_id": "buy_tier_level_native",
+    "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ibex35/screen_latest.json",
+      "run_at": "2026-11-02T06:52:57.469775+00:00",
+      "generated_at": "2026-11-02T08:04:14.923639+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-11-02T08:04:25.154384+00:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-11-02T08:00:00+00:00",
+      "settle_at": "2026-11-02T09:15:00+00:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (3 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0003,
+    "candidates": [
+      {
+        "ticker": "REP.MC",
+        "name": "Repsol, S.A.",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.495125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Energy",
+        "price": 30.73,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "GRF.MC",
+        "name": "Grifols, S.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5955,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 10.975,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "SCYR.MC",
+        "name": "Sacyr, S.A.",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.43877,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 4.05,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "NTGY.MC",
+        "name": "Naturgy Energy Group, S.A.",
+        "signal": "hold",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.2786,
+        "data_quality_score": 0.95,
+        "timing_signal": "neutral",
+        "sector": "Utilities",
+        "price": 29.66,
+        "research_verdict": "neutral",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "REP.MC",
+        "name": "Repsol, S.A.",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.495125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Energy",
+        "price": 30.73,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "GRF.MC",
+        "name": "Grifols, S.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5955,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 10.975,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "SCYR.MC",
+        "name": "Sacyr, S.A.",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.43877,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 4.05,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "NTGY.MC",
+        "name": "Naturgy Energy Group, S.A.",
+        "signal": "hold",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.2786,
+        "data_quality_score": 0.95,
+        "timing_signal": "neutral",
+        "sector": "Utilities",
+        "price": 29.66,
+        "research_verdict": "neutral",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.03% / sell 0.03% (legacy symmetric slot 0.03%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1060.19,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 353.4,
+      "targets": [
+        {
+          "ticker": "GRF.MC",
+          "name": "Grifols, S.A.",
+          "signal": "buy",
+          "conviction_score": 0.5955,
+          "price": 10.975
+        },
+        {
+          "ticker": "REP.MC",
+          "name": "Repsol, S.A.",
+          "signal": "strong_buy",
+          "conviction_score": 0.495125,
+          "price": 30.73
+        },
+        {
+          "ticker": "SCYR.MC",
+          "name": "Sacyr, S.A.",
+          "signal": "buy",
+          "conviction_score": 0.43877,
+          "price": 4.05
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "GRF.MC",
+          "name": "Grifols, S.A.",
+          "reason": "Already near equal-weight target",
+          "value": 353.42,
+          "target_value": 353.4,
+          "conviction_score": 0.5955,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "REP.MC",
+          "name": "Repsol, S.A.",
+          "reason": "Already near equal-weight target",
+          "value": 353.38,
+          "target_value": 353.4,
+          "conviction_score": 0.495125,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "SCYR.MC",
+          "name": "Sacyr, S.A.",
+          "reason": "Already near equal-weight target",
+          "value": 353.39,
+          "target_value": 353.4,
+          "conviction_score": 0.43877,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "290e67c3-90a3-4af0-99bc-75b2a054eeff",
+        "fund_id": "3584ff55-6111-4b75-8da7-74f0672551bb",
+        "acted_at": "2026-11-02T08:04:25.154384+00:00",
+        "ticker": "NTGY.MC",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 6.806016,
+        "price": 29.66,
+        "gross": 201.87,
+        "cost": 0.05,
+        "net_cash": 201.82,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Naturgy Energy Group, S.A.",
+        "avg_cost_at_exit": 29.52,
+        "position_closed": true
+      },
+      {
+        "id": "fb7566da-58c8-4441-a0eb-8f0aaf4d87ba",
+        "fund_id": "3584ff55-6111-4b75-8da7-74f0672551bb",
+        "acted_at": "2026-11-02T08:04:25.154384+00:00",
+        "ticker": "REP.MC",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 4.533827,
+        "price": 30.73,
+        "gross": 139.32,
+        "cost": 0.03,
+        "net_cash": -139.36,
+        "note": "Automated buy",
+        "name": "Repsol, S.A."
+      },
+      {
+        "id": "213399e3-8819-4bf0-a0fe-1f25f643b48c",
+        "fund_id": "3584ff55-6111-4b75-8da7-74f0672551bb",
+        "acted_at": "2026-11-02T08:04:25.154384+00:00",
+        "ticker": "SCYR.MC",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 15.41754,
+        "price": 4.05,
+        "gross": 62.44,
+        "cost": 0.02,
+        "net_cash": -62.46,
+        "note": "Automated buy",
+        "name": "Sacyr, S.A."
+      }
+    ],
+    "nav_before": 1060.29,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "GRF.MC",
+        "shares": 32.202033,
+        "avg_cost": 10.1277,
+        "sector": "Healthcare",
+        "name": "Grifols, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "SCYR.MC",
+        "shares": 71.840424,
+        "avg_cost": 4.043,
+        "sector": "Industrials",
+        "name": "Sacyr, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "NTGY.MC",
+        "shares": 6.806016,
+        "avg_cost": 29.52,
+        "sector": "Utilities",
+        "name": "Naturgy Energy Group, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "REP.MC",
+        "shares": 6.965653,
+        "avg_cost": 28.64,
+        "sector": "Energy",
+        "name": "Repsol, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "NTGY.MC": 1
+      },
+      "reentry_cooldown": {
+        "AENA.MC": 1
+      }
+    },
+    "nav_after": 1060.19,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "GRF.MC",
+        "shares": 32.202033,
+        "avg_cost": 10.1277,
+        "sector": "Healthcare",
+        "name": "Grifols, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "SCYR.MC",
+        "shares": 87.257964,
+        "avg_cost": 4.0442,
+        "sector": "Industrials",
+        "name": "Sacyr, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "REP.MC",
+        "shares": 11.49948,
+        "avg_cost": 29.464,
+        "sector": "Energy",
+        "name": "Repsol, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "NTGY.MC": 1
+      }
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
+      "verdict_counts": {
+        "agree": 2,
+        "veto": 0,
+        "abstain": 1
+      },
+      "cards": [
+        {
+          "ticker": "NTGY.MC",
+          "name": "Naturgy Energy Group, S.A.",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "still_buyish is false \u2014 name no longer buy/strong_buy on the decision screen.",
+            "Effective screen_signal is hold, consistent with leaving the buy cohort.",
+            "Algo_reason documents automated exit after leaving the target set."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-02T08:04:25.154384+00:00",
+          "proposal_id": "buy_tier_level_native:NTGY.MC:sell:2026-11-02T08:04:25.154384+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "neutral",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "REP.MC",
+          "name": "Repsol, S.A.",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "still_buyish is true with effective screen_signal buy.",
+            "rank_drop is 0 versus entry_rank \u2014 no material rank deterioration.",
+            "Research overlay is bound (overlay_bound true) despite caution verdict."
+          ],
+          "evidence": [
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 2
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 2
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-02T08:04:25.154384+00:00",
+          "proposal_id": "buy_tier_level_native:REP.MC:buy:2026-11-02T08:04:25.154384+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Buy into buyish target set \u2014 agree with algo selection."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "SCYR.MC",
+          "name": "Sacyr, S.A.",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "abstain",
+          "reasons": [
+            "still_buyish is false while algo proposes buy \u2014 not aligned with buy-cohort membership.",
+            "Effective screen_signal is hold, not buy/strong_buy.",
+            "Research verdict is caution with overlay_bound true; insufficient basis to agree or veto without inventing adjusted entry rules."
+          ],
+          "evidence": [
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 3
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-02T08:04:25.154384+00:00",
+          "proposal_id": "buy_tier_level_native:SCYR.MC:buy:2026-11-02T08:04:25.154384+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "abstain",
+              "reasons": [
+                "Buy while not buyish \u2014 abstain."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
+    }
   }
 ]

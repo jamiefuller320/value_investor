@@ -1,59 +1,59 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-01T07:12:56.058892+00:00",
+    "local_time": "2026-11-02T08:04:14.936984+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-01T08:00:00+00:00",
-    "settle_at": "2026-11-01T09:15:00+00:00",
+    "market_open_at": "2026-11-02T08:00:00+00:00",
+    "settle_at": "2026-11-02T09:15:00+00:00",
     "can_act": false,
-    "reason": "before market open"
+    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
   "trades": [
     {
-      "id": "4edd2ea2-5c45-4642-84d0-2f7bfc668f90",
+      "id": "5edc05a0-88f6-41ef-a635-0a7092113bab",
       "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
-      "acted_at": "2026-11-01T07:12:56.058892+00:00",
-      "ticker": "AENA.MC",
+      "acted_at": "2026-11-02T08:04:14.936984+00:00",
+      "ticker": "NTGY.MC",
       "side": "sell",
       "sizing_mode": "shares",
-      "shares": 7.782068,
-      "price": 27.08,
-      "gross": 210.74,
-      "cost": 0.37,
-      "net_cash": 210.37,
+      "shares": 6.764606,
+      "price": 29.66,
+      "gross": 200.64,
+      "cost": 0.35,
+      "net_cash": 200.29,
       "note": "Automated exit \u2014 left target set",
-      "name": "Aena S.M.E., S.A.",
-      "avg_cost_at_exit": 25.6,
+      "name": "Naturgy Energy Group, S.A.",
+      "avg_cost_at_exit": 29.52,
       "position_closed": true
     },
     {
-      "id": "fd2c3e7a-c227-4d30-a755-dc60d383b563",
+      "id": "cce11f8b-8de1-468a-be45-140608891aa0",
       "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
-      "acted_at": "2026-11-01T07:12:56.058892+00:00",
-      "ticker": "GRF.MC",
+      "acted_at": "2026-11-02T08:04:14.936984+00:00",
+      "ticker": "REP.MC",
       "side": "buy",
       "sizing_mode": "cash",
-      "shares": 11.209607,
-      "price": 10.975,
-      "gross": 123.03,
-      "cost": 0.22,
-      "net_cash": -123.24,
+      "shares": 4.490923,
+      "price": 30.73,
+      "gross": 138.01,
+      "cost": 0.24,
+      "net_cash": -138.25,
       "note": "Automated buy",
-      "name": "Grifols, S.A."
+      "name": "Repsol, S.A."
     },
     {
-      "id": "28b20c40-8186-457d-9dba-14f29e87f6ee",
+      "id": "fbd62dff-aef6-4cf3-aa21-7fcc718b1956",
       "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
-      "acted_at": "2026-11-01T07:12:56.058892+00:00",
+      "acted_at": "2026-11-02T08:04:14.936984+00:00",
       "ticker": "SCYR.MC",
       "side": "buy",
       "sizing_mode": "cash",
-      "shares": 21.475719,
+      "shares": 15.291641,
       "price": 4.05,
-      "gross": 86.98,
-      "cost": 0.15,
-      "net_cash": -87.13,
+      "gross": 61.93,
+      "cost": 0.11,
+      "net_cash": -62.04,
       "note": "Automated buy",
       "name": "Sacyr, S.A."
     }
@@ -71,8 +71,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1054.12,
-    "cash": 0.0,
+    "nav": 1053.42,
+    "cash": -0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -84,7 +84,7 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 351.26,
+    "target_sleeve_value": 351.14,
     "targets": [
       {
         "ticker": "GRF.MC",
@@ -94,57 +94,24 @@
         "price": 10.975
       },
       {
+        "ticker": "REP.MC",
+        "name": "Repsol, S.A.",
+        "signal": "strong_buy",
+        "conviction_score": 0.495125,
+        "price": 30.73
+      },
+      {
         "ticker": "SCYR.MC",
         "name": "Sacyr, S.A.",
         "signal": "buy",
         "conviction_score": 0.43877,
         "price": 4.05
-      },
-      {
-        "ticker": "REP.MC",
-        "name": "Repsol, S.A.",
-        "signal": "strong_buy",
-        "conviction_score": 0.409615,
-        "price": 30.73
       }
     ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "NTGY.MC",
-        "name": "Naturgy Energy Group, S.A.",
-        "reason": "No longer in the top conviction target set",
-        "shares": 6.764606,
-        "price": 29.66,
-        "value": 200.64
-      }
-    ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
-      {
-        "action": "buy",
-        "ticker": "SCYR.MC",
-        "name": "Sacyr, S.A.",
-        "reason": "Top-up to equal weight",
-        "value": 62.06,
-        "price": 4.05,
-        "target_value": 351.26,
-        "conviction_score": 0.43877,
-        "signal": "buy"
-      },
-      {
-        "action": "buy",
-        "ticker": "REP.MC",
-        "name": "Repsol, S.A.",
-        "reason": "Top-up to equal weight",
-        "value": 138.22,
-        "price": 30.73,
-        "target_value": 351.26,
-        "conviction_score": 0.409615,
-        "signal": "strong_buy"
-      }
-    ],
+    "anticipated_buys": [],
     "anticipated_holds": [
       {
         "action": "hold",
@@ -152,14 +119,34 @@
         "name": "Grifols, S.A.",
         "reason": "Already near equal-weight target",
         "value": 351.28,
-        "target_value": 351.26,
+        "target_value": 351.14,
         "conviction_score": 0.5955,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "REP.MC",
+        "name": "Repsol, S.A.",
+        "reason": "Already near equal-weight target",
+        "value": 351.02,
+        "target_value": 351.14,
+        "conviction_score": 0.495125,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "SCYR.MC",
+        "name": "Sacyr, S.A.",
+        "reason": "Already near equal-weight target",
+        "value": 351.12,
+        "target_value": 351.14,
+        "conviction_score": 0.43877,
         "signal": "buy"
       }
     ],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s); leave 1 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
   },
   "alerts": [
     {
@@ -180,17 +167,6 @@
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
       "mark": 4.05,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "neutral"
-    },
-    {
-      "ticker": "NTGY.MC",
-      "name": "Naturgy Energy Group, S.A.",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Screen signal is now hold",
-      "mark": 29.66,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -222,7 +198,7 @@
       "id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
       "created_at": "2026-09-27T07:04:22.383152+00:00"
     },
-    "cash": 0.0,
+    "cash": -0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -239,8 +215,8 @@
       },
       "SCYR.MC": {
         "ticker": "SCYR.MC",
-        "shares": 71.405651,
-        "avg_cost": 4.043,
+        "shares": 86.697292,
+        "avg_cost": 4.0442,
         "name": "Sacyr, S.A.",
         "sector": "Industrials",
         "currency": "EUR",
@@ -248,21 +224,10 @@
         "take_profit": null,
         "opened_at": "2026-09-29T08:24:21.696800+01:00"
       },
-      "NTGY.MC": {
-        "ticker": "NTGY.MC",
-        "shares": 6.764606,
-        "avg_cost": 29.52,
-        "name": "Naturgy Energy Group, S.A.",
-        "sector": "Utilities",
-        "currency": "EUR",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-10-07T17:34:47.483492+01:00"
-      },
       "REP.MC": {
         "ticker": "REP.MC",
-        "shares": 6.931633,
-        "avg_cost": 28.64,
+        "shares": 11.422556,
+        "avg_cost": 29.4617,
         "name": "Repsol, S.A.",
         "sector": "Energy",
         "currency": "EUR",
@@ -518,6 +483,53 @@
         "gross": 86.98,
         "cost": 0.15,
         "net_cash": -87.13,
+        "note": "Automated buy",
+        "name": "Sacyr, S.A."
+      },
+      {
+        "id": "5edc05a0-88f6-41ef-a635-0a7092113bab",
+        "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
+        "acted_at": "2026-11-02T08:04:14.936984+00:00",
+        "ticker": "NTGY.MC",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 6.764606,
+        "price": 29.66,
+        "gross": 200.64,
+        "cost": 0.35,
+        "net_cash": 200.29,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Naturgy Energy Group, S.A.",
+        "avg_cost_at_exit": 29.52,
+        "position_closed": true
+      },
+      {
+        "id": "cce11f8b-8de1-468a-be45-140608891aa0",
+        "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
+        "acted_at": "2026-11-02T08:04:14.936984+00:00",
+        "ticker": "REP.MC",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 4.490923,
+        "price": 30.73,
+        "gross": 138.01,
+        "cost": 0.24,
+        "net_cash": -138.25,
+        "note": "Automated buy",
+        "name": "Repsol, S.A."
+      },
+      {
+        "id": "fbd62dff-aef6-4cf3-aa21-7fcc718b1956",
+        "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
+        "acted_at": "2026-11-02T08:04:14.936984+00:00",
+        "ticker": "SCYR.MC",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 15.291641,
+        "price": 4.05,
+        "gross": 61.93,
+        "cost": 0.11,
+        "net_cash": -62.04,
         "note": "Automated buy",
         "name": "Sacyr, S.A."
       }
@@ -1090,15 +1102,30 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-02T08:04:14.936984+00:00",
+        "portfolio_value": 879.15,
+        "cash": -0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83457
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-01T07:12:56.058892+00:00",
+    "last_mark_at": "2026-11-02T08:04:14.936984+00:00",
     "rebalance_state": {
-      "exit_streak": {
-        "NTGY.MC": 1
-      },
+      "exit_streak": {},
       "reentry_cooldown": {
-        "AENA.MC": 1
+        "NTGY.MC": 1
       }
     },
     "settled_corporate_actions": [],
@@ -1109,9 +1136,9 @@
     "schema_version": 2,
     "market_id": "ibex35",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-01T07:12:56.173507+00:00",
+    "generated_at": "2026-11-02T08:04:15.068320+00:00",
     "observe_only": true,
-    "open_count": 1,
+    "open_count": 2,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -1146,7 +1173,7 @@
       }
     },
     "first_episode": {
-      "open_count": 1,
+      "open_count": 2,
       "closed_count": 0,
       "by_exit_kind": {
         "grace": {
@@ -1188,7 +1215,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-01T07:12:56.174605+00:00",
+    "generated_at": "2026-11-02T08:04:15.069222+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1242,36 +1269,36 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 1,
+      "hold_closed_count": 2,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 5,
       "gaps": [
-        "hold_recovery closed episodes=1 (target >=15)",
+        "hold_recovery closed episodes=2 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 4,
-        "recovered_to_breakeven": 4,
+        "count": 3,
+        "recovered_to_breakeven": 3,
         "close_reasons": {
-          "open": 4
+          "open": 3
         }
       },
       "closed": {
-        "count": 1,
-        "recovered_to_breakeven": 1,
+        "count": 2,
+        "recovered_to_breakeven": 2,
         "close_reasons": {
-          "sold_while_recovered": 1
+          "sold_while_recovered": 2
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 3,
+        "count": 4,
         "verdicts": {
-          "open": 3
+          "open": 4
         }
       },
       "closed": {
@@ -1280,12 +1307,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -1293,8 +1320,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-01T07:12:56.175865+00:00",
-    "as_of": "2026-11-01T07:12:56.058892+00:00",
+    "updated_at": "2026-11-02T08:04:15.070314+00:00",
+    "as_of": "2026-11-02T08:04:14.936984+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1306,16 +1333,16 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 4,
+    "holding_count": 3,
     "underwater_count": 0,
     "thesis_status_counts": {
       "intact": 1,
-      "weakening": 3,
+      "weakening": 2,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 4,
+      "holding_count": 3,
       "loser_count": 0,
       "loser_share": 0.0,
       "loser_nav_share": 0.0,
@@ -1334,10 +1361,10 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.5,
+        "quality": 0.6667,
         "dividend": 0.0,
-        "garp": 0.25,
-        "risk": 0.25
+        "garp": 0.0,
+        "risk": 0.0
       },
       "selection_feedback_flags": [],
       "balancing_hint": "maintain",
@@ -1351,9 +1378,9 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0017,
+        "unrealized_pct": 0.0014,
         "mark": 4.05,
-        "avg_cost": 4.043,
+        "avg_cost": 4.0442,
         "signal": "buy",
         "timing_signal": "neutral",
         "conviction_score": 0.4388,
@@ -1385,60 +1412,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "NTGY.MC",
-        "name": "Naturgy Energy Group, S.A.",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0047,
-        "mark": 29.66,
-        "avg_cost": 29.52,
-        "signal": "hold",
-        "timing_signal": "neutral",
-        "conviction_score": 0.2322,
-        "data_quality_score": 0.95,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend"
-        ],
-        "failed_families": [
-          "garp",
-          "risk"
-        ],
-        "research_verdict": "neutral",
-        "reasons": [
-          "left buy tier (hold)",
-          "research verdict neutral",
-          "conviction 23% below intact floor",
-          "cheapness family still passes",
-          "data_quality 0.95"
-        ],
-        "intact_reasons": [
-          "cheapness family still passes",
-          "data_quality 0.95"
-        ],
-        "weaken_reasons": [
-          "left buy tier (hold)",
-          "research verdict neutral",
-          "conviction 23% below intact floor"
-        ],
-        "broken_reasons": []
-      },
-      {
         "ticker": "REP.MC",
         "name": "Repsol, S.A.",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.073,
+        "unrealized_pct": 0.043,
         "mark": 30.73,
-        "avg_cost": 28.64,
+        "avg_cost": 29.4617,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4096,
+        "conviction_score": 0.4951,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1458,7 +1443,7 @@
           "still strong_buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 41%"
+          "conviction 50%"
         ],
         "weaken_reasons": [
           "research verdict caution"
@@ -1514,15 +1499,15 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-01T07:12:56.177573+00:00",
+    "generated_at": "2026-11-02T08:04:15.071725+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 1,
+      "closed_total": 2,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 4,
+      "open_with_thesis": 3,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -1538,7 +1523,14 @@
           }
         },
         "broken": {
-          "closed_count": 0
+          "closed_count": 1,
+          "recovery_rate": 1.0,
+          "sold_underwater_rate": 0.0,
+          "mean_peak_unrealized_pct": 0.0047,
+          "mean_trough_unrealized_pct": 0.0047,
+          "outcome_labels": {
+            "recovered": 1
+          }
         },
         "insufficient_data": {
           "closed_count": 0
@@ -1566,11 +1558,11 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 1,
+      "hold_closed_with_thesis": 2,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold closed with thesis=1 (target >=8)",
-        "hold thesis buckets thin (weakening=1; target >=3 each)",
+        "hold closed with thesis=2 (target >=8)",
+        "hold thesis buckets thin (weakening=1, broken=1; target >=3 each)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
       "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -1582,7 +1574,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-01T07:12:56.180473+00:00",
+    "generated_at": "2026-11-02T08:04:15.074610+00:00",
     "open_count": 0,
     "closed_count": 5,
     "scored_count": 5,
@@ -1650,7 +1642,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-01T07:12:56.058892+00:00",
+    "generated_at": "2026-11-02T08:04:14.936984+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1677,8 +1669,8 @@
     "open_count": 5,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 4,
-      "off_book": 1,
+      "on_book": 3,
+      "off_book": 2,
       "never_funded": 0
     },
     "closed_by_capital_status": {
@@ -1707,7 +1699,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-01T07:12:56.058892+00:00",
+    "generated_at": "2026-11-02T08:04:14.936984+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1719,8 +1711,8 @@
     "card_count": 3,
     "verdict_counts": {
       "agree": 2,
-      "veto": 0,
-      "abstain": 1
+      "veto": 1,
+      "abstain": 0
     },
     "by_algo_action": {
       "sell": {
@@ -1730,21 +1722,22 @@
       },
       "buy": {
         "agree": 1,
-        "veto": 0,
-        "abstain": 1
+        "veto": 1,
+        "abstain": 0
       }
     },
-    "disagree_vs_heuristic_count": 0,
+    "disagree_vs_heuristic_count": 1,
     "cards": [
       {
-        "ticker": "AENA.MC",
-        "name": "Aena S.M.E., S.A.",
+        "ticker": "NTGY.MC",
+        "name": "Naturgy Energy Group, S.A.",
         "algo_action": "sell",
         "algo_reason": "Automated exit \u2014 left target set",
         "shadow_verdict": "agree",
         "reasons": [
-          "still_buyish is false \u2014 name no longer buy/strong_buy on the decision screen, so leaving the target set is consistent with cohort exit.",
-          "Effective screen_signal is hold, not buyish, supporting a decisive leave-buy-cohort read despite research_verdict accumulate with overlay_bound."
+          "still_buyish is false, so the name is not in the buy/strong_buy cohort and leaving the target set is consistent with the algo exit.",
+          "Effective screen_signal is hold rather than buy, supporting a decisive leave-buy-cohort read rather than a capacity-bump hold.",
+          "Sell veto preference applies when still_buyish with insufficient rank_drop; still_buyish is false here."
         ],
         "evidence": [
           {
@@ -1759,22 +1752,10 @@
             "value": "hold"
           },
           {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
             "kind": "still_buyish",
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
             "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
           }
         ],
         "judge_backend": "llm",
@@ -1782,13 +1763,13 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-01T07:12:56.058892+00:00",
-        "proposal_id": "buy_tier_level:AENA.MC:sell:2026-11-01T07:12:56.058892+00:00",
+        "logged_at": "2026-11-02T08:04:14.936984+00:00",
+        "proposal_id": "buy_tier_level:NTGY.MC:sell:2026-11-02T08:04:14.936984+00:00",
         "meta": {
           "still_buyish": false,
           "rank_drop": null,
           "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
+          "research_verdict": "neutral",
           "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
           "judge_spec_id": "heuristic.v1",
           "p1_live_inputs": {
@@ -1812,15 +1793,15 @@
         "parent_spec_id": "heuristic.v1"
       },
       {
-        "ticker": "GRF.MC",
-        "name": "Grifols, S.A.",
+        "ticker": "REP.MC",
+        "name": "Repsol, S.A.",
         "algo_action": "buy",
         "algo_reason": "Automated buy",
         "shadow_verdict": "agree",
         "reasons": [
-          "screen_signal is buy and still_buyish is true \u2014 selection aligns with the buyish target set.",
-          "conviction_rank 1 with rank_drop 0 and entry_rank 1 indicates no material rank deterioration at entry.",
-          "research_verdict accumulate with overlay_bound supports the automated buy."
+          "Effective screen_signal is buy and still_buyish is true, matching automated buy into the buyish target set.",
+          "rank_drop is 0 with conviction_rank equal to entry_rank, so no rank deterioration against the hold gate.",
+          "Research overlay is bound; caution is noted but does not contradict the buyish screen state."
         ],
         "evidence": [
           {
@@ -1838,13 +1819,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 1
+            "value": 2
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 1
+            "value": 2
           },
           {
             "kind": "rank_drop",
@@ -1856,7 +1837,7 @@
             "kind": "research_verdict",
             "source": "candidates",
             "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
+            "value": "caution"
           },
           {
             "kind": "still_buyish",
@@ -1876,13 +1857,13 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-01T07:12:56.058892+00:00",
-        "proposal_id": "buy_tier_level:GRF.MC:buy:2026-11-01T07:12:56.058892+00:00",
+        "logged_at": "2026-11-02T08:04:14.936984+00:00",
+        "proposal_id": "buy_tier_level:REP.MC:buy:2026-11-02T08:04:14.936984+00:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
           "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
+          "research_verdict": "caution",
           "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
           "judge_spec_id": "heuristic.v1",
           "p1_live_inputs": {
@@ -1910,10 +1891,11 @@
         "name": "Sacyr, S.A.",
         "algo_action": "buy",
         "algo_reason": "Automated buy",
-        "shadow_verdict": "abstain",
+        "shadow_verdict": "veto",
         "reasons": [
-          "still_buyish is false while algo_action is buy \u2014 effective screen_signal is hold, not buy.",
-          "research_verdict is caution with overlay_bound; evidence is insufficient to agree or veto without inventing beyond provided kinds."
+          "Effective screen_signal is hold while the algo proposes buy, conflicting with buyish entry expectations.",
+          "still_buyish is false, so the name is not buy/strong_buy on the decision screen despite the buy action.",
+          "Automated buy is not supported by the cited screen and derived buyish flags; research_verdict caution adds further friction."
         ],
         "evidence": [
           {
@@ -1926,18 +1908,6 @@
             "source": "candidates",
             "detail": "Effective signal at decision time",
             "value": "hold"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 2
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
           },
           {
             "kind": "research_verdict",
@@ -1963,8 +1933,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-01T07:12:56.058892+00:00",
-        "proposal_id": "buy_tier_level:SCYR.MC:buy:2026-11-01T07:12:56.058892+00:00",
+        "logged_at": "2026-11-02T08:04:14.936984+00:00",
+        "proposal_id": "buy_tier_level:SCYR.MC:buy:2026-11-02T08:04:14.936984+00:00",
         "meta": {
           "still_buyish": false,
           "rank_drop": 0,
@@ -2003,7 +1973,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-01T07:12:56.058892+00:00",
+      "generated_at": "2026-11-02T08:04:14.936984+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
@@ -2013,8 +1983,8 @@
       "card_count": 3,
       "verdict_counts": {
         "agree": 2,
-        "veto": 0,
-        "abstain": 1
+        "veto": 1,
+        "abstain": 0
       },
       "by_algo_action": {
         "sell": {
@@ -2024,8 +1994,8 @@
         },
         "buy": {
           "agree": 1,
-          "veto": 0,
-          "abstain": 1
+          "veto": 1,
+          "abstain": 0
         }
       },
       "veto_sell_count": 0,
@@ -2043,7 +2013,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-01T07:13:00.444699+00:00",
+  "generated_at": "2026-11-02T08:04:25.131939+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

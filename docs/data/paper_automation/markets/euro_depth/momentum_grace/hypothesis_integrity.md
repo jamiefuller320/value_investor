@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `momentum_grace` · updated 2026-11-01T07:15:39.601706+00:00
+Track: `momentum_grace` · updated 2026-11-02T08:08:02.145060+00:00
 
 ## Portfolio loser feedback
 
@@ -17,12 +17,12 @@ Track: `momentum_grace` · updated 2026-11-01T07:15:39.601706+00:00
 - data_quality 1.00
 - conviction 91%
 
-### TTE.PA — intact / hold_tolerate (+0.0%)
+### AD.AS — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 72%
+- conviction 71%
 
 ### EG7.IR — intact / hold_tolerate (+2.9%)
 - still strong_buy

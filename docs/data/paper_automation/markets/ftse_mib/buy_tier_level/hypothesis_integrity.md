@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-01T07:13:05.639424+00:00
+Track: `buy_tier_level` · updated 2026-11-02T08:04:32.810664+00:00
 
 ## Portfolio loser feedback
 
@@ -15,7 +15,7 @@ Track: `buy_tier_level` · updated 2026-11-01T07:13:05.639424+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 38%
+- conviction 51%
 
 ### MONC.MI — intact / hold_tolerate (+1.1%)
 - still strong_buy

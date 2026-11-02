@@ -264,6 +264,10 @@
         {
           "as_of": "2026-11-01T07:13:19.310009+00:00",
           "price": 34.29
+        },
+        {
+          "as_of": "2026-11-02T08:04:54.765693+00:00",
+          "price": 34.29
         }
       ]
     },
@@ -625,6 +629,10 @@
         {
           "as_of": "2026-11-01T07:13:19.310009+00:00",
           "price": 48.68
+        },
+        {
+          "as_of": "2026-11-02T08:04:54.765693+00:00",
+          "price": 48.68
         }
       ]
     },
@@ -806,7 +814,7 @@
       "track_id": "buy_tier_level_native",
       "ticker": "WKL.AS",
       "started_at": "2026-10-30T07:54:51.630603+00:00",
-      "status": "open",
+      "status": "closed",
       "lifecycle_stage": "recommit",
       "entry_kind": "recommit",
       "entry_price": 84.7,
@@ -825,8 +833,149 @@
         {
           "as_of": "2026-11-01T07:13:19.310009+00:00",
           "price": 87.0
+        },
+        {
+          "as_of": "2026-11-02T08:04:54.765693+00:00",
+          "price": 87.0
         }
-      ]
+      ],
+      "cadence_scores": [
+        {
+          "id": "lump_sum",
+          "label": "100% at decision",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 1,
+          "avg_fill": 84.7,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": 0.0,
+          "peak_deployed_return": 0.0,
+          "end_value": 143.83,
+          "end_value_delta": 0.0,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-30T07:54:51.630603+00:00",
+              "price": 84.7
+            }
+          ],
+          "de_risk_gbp": 0.0
+        },
+        {
+          "id": "dca_2x_weekly",
+          "label": "50/50 over 1 week",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 84.7,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 70.02,
+          "peak_loss_gbp": 0.0,
+          "peak_deployed_return": 0.0,
+          "end_value": 141.93,
+          "end_value_delta": -1.9,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-30T07:54:51.630603+00:00",
+              "price": 84.7
+            }
+          ],
+          "de_risk_gbp": 0.0
+        },
+        {
+          "id": "dca_4x_weekly",
+          "label": "25% weekly \u00d7 4",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 4,
+          "avg_fill": 84.7,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 105.02,
+          "peak_loss_gbp": 0.0,
+          "peak_deployed_return": 0.0,
+          "end_value": 140.98,
+          "end_value_delta": -2.85,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-30T07:54:51.630603+00:00",
+              "price": 84.7
+            }
+          ],
+          "de_risk_gbp": 0.0
+        },
+        {
+          "id": "dca_2x_biweekly",
+          "label": "50/50 over 2 weeks",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 84.7,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 70.02,
+          "peak_loss_gbp": 0.0,
+          "peak_deployed_return": 0.0,
+          "end_value": 141.93,
+          "end_value_delta": -1.9,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-30T07:54:51.630603+00:00",
+              "price": 84.7
+            }
+          ],
+          "de_risk_gbp": 0.0
+        },
+        {
+          "id": "dca_5x_weekday",
+          "label": "20% over 5 weekday marks",
+          "scored": true,
+          "tranches_filled": 4,
+          "tranches_target": 5,
+          "avg_fill": 86.4134,
+          "fill_advantage_pct": -0.0202,
+          "extra_cost": 0.02,
+          "leftover_cash": 28.01,
+          "peak_loss_gbp": -2.22,
+          "peak_deployed_return": -0.0198,
+          "end_value": 140.77,
+          "end_value_delta": -3.06,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-10-30T07:54:51.630603+00:00",
+              "price": 84.7
+            },
+            {
+              "tranche": 2,
+              "as_of": "2026-11-01T07:13:19.310009+00:00",
+              "price": 87.0
+            },
+            {
+              "tranche": 3,
+              "as_of": "2026-11-01T07:13:19.310009+00:00",
+              "price": 87.0
+            },
+            {
+              "tranche": 4,
+              "as_of": "2026-11-02T08:04:54.765693+00:00",
+              "price": 87.0
+            }
+          ],
+          "de_risk_gbp": -2.22
+        }
+      ],
+      "winning_cadence": "dca_2x_weekly",
+      "winning_end_value_delta": -1.9,
+      "any_de_risk": false,
+      "closed_at": "2026-11-02T08:04:54.765693+00:00",
+      "close_reason": "sold_before_window"
     },
     {
       "id": "buy_tier_level_native:ADYEN.AS:2026-10-30T07:54:51.630603+00:00",
@@ -852,6 +1001,10 @@
         {
           "as_of": "2026-11-01T07:13:19.310009+00:00",
           "price": 826.9
+        },
+        {
+          "as_of": "2026-11-02T08:04:54.765693+00:00",
+          "price": 826.9
         }
       ]
     },
@@ -875,6 +1028,33 @@
         {
           "as_of": "2026-11-01T07:13:19.310009+00:00",
           "price": 1412.8
+        },
+        {
+          "as_of": "2026-11-02T08:04:54.765693+00:00",
+          "price": 1412.8
+        }
+      ]
+    },
+    {
+      "id": "buy_tier_level_native:KPN.AS:2026-11-02T08:04:54.765693+00:00",
+      "track_id": "buy_tier_level_native",
+      "ticker": "KPN.AS",
+      "started_at": "2026-11-02T08:04:54.765693+00:00",
+      "status": "open",
+      "lifecycle_stage": "recommit",
+      "entry_kind": "recommit",
+      "entry_price": 4.334,
+      "notional": 111.51,
+      "shares": 25.728099,
+      "buy_cost_pct": 0.00025,
+      "screen_signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4597,
+      "data_quality_score": 1.0,
+      "marks": [
+        {
+          "as_of": "2026-11-02T08:04:54.765693+00:00",
+          "price": 4.334
         }
       ]
     }

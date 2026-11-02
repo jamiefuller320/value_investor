@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-01T07:14:07.155035+00:00
+Track: `buy_tier_level_native` · updated 2026-11-02T08:05:53.668954+00:00
 
 ## Portfolio loser feedback
 
@@ -61,7 +61,7 @@ Track: `buy_tier_level_native` · updated 2026-11-01T07:14:07.155035+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 58%
+- conviction 67%
 
 ### ESSITY-B.ST — intact / hold_tolerate (+8.8%)
 - still buy
