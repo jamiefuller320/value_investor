@@ -7225,6 +7225,23 @@ def test_enq_l_fy_results_headline_classified_as_annual():
     assert classify_filing_period(headline) == "annual"
 
 
+def test_builtin_ir_allowlist_includes_ezj_l():
+    """eng-20261102-01: ftse350 EZJ.L intensive pin had empty IR allowlist (0 refetch)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("EZJ.L") or []
+    assert any("easyJetARA25_DIGITAL_sm.pdf" in url for url in urls)
+    assert any("FY25-RNS.pdf" in url for url in urls)
+    assert any("HY26-Combined-RNS-FINAL.pdf" in url for url in urls)
+    assert all("q4cdn.com" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("EZJ.L")
+    assert len(rows) >= 4
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    periods = {row.get("period") for row in rows}
+    assert "annual" in periods
+    assert "interim" in periods
+
+
 def test_builtin_ir_allowlist_includes_g1a_de():
     """DAX spare unmeasured G1A.DE needs GEA Group IR seeds (empty discovery)."""
     from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
