@@ -1,15 +1,91 @@
 {
-  "run_at": "2026-11-01T13:39:45.194460+00:00",
+  "run_at": "2026-11-02T17:32:27.721033+00:00",
   "market_id": "iseq20",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "C5H.IR"
+  ],
+  "target_details": [
+    {
+      "ticker": "C5H.IR",
+      "priority_score": 16.990299999999998,
+      "filings_total": 78,
+      "filings_with_body": 70,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "C5H.IR",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 78,
+        "filings_with_body": 70,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 77,
+        "filings_with_body": 77,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 78,
+        "annual": 2,
+        "interim": 2,
+        "trading_update": 2,
+        "other": 72,
+        "with_body": 77,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 1
+          },
+          "interim": {
+            "total": 2,
+            "with_body": 2
+          },
+          "trading_update": {
+            "total": 2,
+            "with_body": 2
+          },
+          "other": {
+            "total": 50,
+            "with_body": 50
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 77,
+        "with_body_after": 77,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 1,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "C5H.IR"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-01T13:39:33.561310+00:00",
+    "snapshot_at": "2026-11-02T17:31:09.395992+00:00",
     "market_id": "iseq20",
     "buy_tier_count": 2,
     "unmeasured_buy_tier": 0,
@@ -35,7 +111,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-01T13:39:45.186190+00:00",
+    "snapshot_at": "2026-11-02T17:32:21.599835+00:00",
     "market_id": "iseq20",
     "buy_tier_count": 2,
     "unmeasured_buy_tier": 0,
@@ -43,8 +119,8 @@
     "thin_body_buy_tier": 0,
     "indexed_without_body": 0,
     "bodies_min": 5,
-    "bodies_median": 37.5,
-    "bodies_max": 70,
+    "bodies_median": 41.0,
+    "bodies_max": 77,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -93,7 +169,7 @@
   },
   "critical_path": {
     "market_id": "iseq20",
-    "assessed_at": "2026-11-01T13:39:33.754096+00:00",
+    "assessed_at": "2026-11-02T17:31:09.684695+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -114,9 +190,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 11.211766609000051,
+  "used_seconds": 71.62437184600003,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3588.788233391,
+  "leftover_seconds": 3528.375628154,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -124,9 +200,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "iseq20",
-    "updated_at": "2026-11-01T13:39:45.188242+00:00",
+    "updated_at": "2026-11-02T17:32:21.602678+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 3,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -145,7 +221,41 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261101-05"
+    "reason": "no parked leftover tickers remaining for hunter",
+    "tried_count": 52,
+    "candidate_count": 48,
+    "skipped_resolved_tickers": [
+      "CRH",
+      "MER.L",
+      "TPT.L",
+      "DFS.L",
+      "APTD.L",
+      "FOXT.L",
+      "ULTP.L",
+      "GIB-A.TO",
+      "NTR.TO",
+      "SU.TO",
+      "BAS.DE",
+      "IFX.DE",
+      "PDD",
+      "BAS.DE",
+      "DTE.DE",
+      "DTG.DE",
+      "FRE.DE",
+      "HNR1.DE",
+      "MUV2.DE",
+      "HEN3.DE",
+      "PST.MI",
+      "ACKB.BR",
+      "APAM.AS",
+      "0285.HK",
+      "0857.HK",
+      "0288.HK",
+      "2331.HK",
+      "0883.HK",
+      "EVN.VI",
+      "WIE.VI"
+    ],
+    "wait_behind_task_id": ""
   }
 }
