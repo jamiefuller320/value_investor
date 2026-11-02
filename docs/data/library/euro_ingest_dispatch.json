@@ -2,7 +2,7 @@
   "market_id": "euro_depth",
   "focus_market": "euro_depth",
   "mode": "sprint",
-  "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=8, indexed_without_body=5)",
+  "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=8, indexed_without_body=9)",
   "ingest_parity_met": false,
   "ingest_exhausted": false,
   "ingest_sprint_complete": false,
@@ -14,16 +14,16 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-11-02T08:11:17.931638+00:00",
+    "snapshot_at": "2026-11-02T10:28:44.344551+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 45,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 8,
-    "indexed_without_body": 5,
+    "indexed_without_body": 9,
     "bodies_min": 1,
     "bodies_median": 4,
-    "bodies_max": 135,
+    "bodies_max": 137,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -43,6 +43,7 @@
       "WIE.VI",
       "ESSITY-B.ST",
       "UCB.BR",
+      "SHELL.AS",
       "MT.AS"
     ],
     "indexed_without_body_by_ticker": {
@@ -50,6 +51,7 @@
       "WIE.VI": 1,
       "ESSITY-B.ST": 1,
       "UCB.BR": 1,
+      "SHELL.AS": 4,
       "MT.AS": 1
     },
     "parked_tickers": [],
@@ -65,21 +67,22 @@
       "IFX.DE",
       "DQ7A.IR"
     ],
-    "effective_indexed_without_body": 5,
+    "effective_indexed_without_body": 9,
     "effective_indexed_without_body_tickers": [
       "EVN.VI",
       "WIE.VI",
       "ESSITY-B.ST",
       "UCB.BR",
+      "SHELL.AS",
       "MT.AS"
     ],
     "ingest_exhausted": false
   },
   "filing_gaps": 0,
   "max_daily_successes": 4,
-  "max_targets": 13,
-  "priority_slot_width": 13,
-  "priority_slot_unfilled": 13,
+  "max_targets": 17,
+  "priority_slot_width": 17,
+  "priority_slot_unfilled": 17,
   "priority_slot_ceiling": 24,
   "cron_morning": true,
   "cron_afternoon": true,
@@ -90,7 +93,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-11-02T08:11:17.933751+00:00",
+  "evaluated_at": "2026-11-02T10:28:44.346003+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -157,7 +160,7 @@
         "no benchmark configured for aex"
       ],
       "filing_health": {
-        "snapshot_at": "2026-11-02T08:11:43.124121+00:00",
+        "snapshot_at": "2026-11-02T10:29:17.183087+00:00",
         "market_id": "aex",
         "buy_tier_count": 11,
         "unmeasured_buy_tier": 0,
@@ -203,7 +206,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-11-02T08:11:43.124711+00:00",
+      "evaluated_at": "2026-11-02T10:29:17.183602+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -231,7 +234,7 @@
         "no benchmark configured for us_adr_asia"
       ],
       "filing_health": {
-        "snapshot_at": "2026-11-02T08:11:43.453952+00:00",
+        "snapshot_at": "2026-11-02T10:29:17.626383+00:00",
         "market_id": "us_adr_asia",
         "buy_tier_count": 6,
         "unmeasured_buy_tier": 0,
@@ -287,7 +290,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-11-02T08:11:43.454343+00:00",
+      "evaluated_at": "2026-11-02T10:29:17.626768+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -325,11 +328,11 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 8,
-    "skip_stream_2_now": true,
+    "hour_utc": 10,
+    "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",
-    "reason": "Head euro_depth still has filing gaps; stream 2 yields hour 08:00 UTC to the priority slot.",
+    "reason": "Head euro_depth still has filing gaps; spare width is each strand's unfilled names capped by host budget left and time left.",
     "config": {
       "enabled": true,
       "stream_1_target_fraction": 0.5,
