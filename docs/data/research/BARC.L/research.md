@@ -1,6 +1,6 @@
 # Barclays PLC (BARC.L) — Research memo
 
-_Version 3 · Updated 2026-11-01T08:11:03.255244+00:00 · Mode: structured_verdict_update_
+_Version 1 · Updated 2026-11-02T12:08:23.989205+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,17 +9,5 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: FY2025 filing-backed cheapness still fits the buy screen; no new disclosures this week, while leverage and litigation cap quality conviction.
-RiskTags: regulatory, cyclical, leverage, litigation
-
-## Weekly updates
-
-### 2026-10-30T22:37:28.460333+00:00
-No new Barclays filings or regulatory disclosures in the 23 Oct–30 Oct refresh window.  
-News is commentary-only (post-results scrutiny, rate sensitivity, analyst views) without new facts.  
-Buy screen unchanged at four weeks (7/22 models, ~68% composite); timing neutral vs prior accumulate.
-
-### 2026-11-01T08:11:03.255244+00:00
-No new Barclays filings or regulatory disclosures in the 30 Oct–1 Nov refresh window.  
-News is commentary-only (post-close focus piece) without new facts.  
-Buy screen unchanged at five weeks (7/22 models, ~68% composite); timing still neutral vs prior accumulate.
+Rationale: FY2025 filing-backed valuation (P/E ~8, P/B ~0.9, ~22% basic EPS growth) supports the buy screen; Q3 2026 filings confirm momentum, but bank leverage, motor-finance litigation and quality-model failures cap conviction.
+RiskTags: regulatory, leverage, litigation, cyclical
