@@ -193,6 +193,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.enquest.com/fileadmin/content/press_release_pdfs/2026/EnQuest_2025_Full_Year_Results_vFinal.pdf",
         "https://www.enquest.com/fileadmin/content/press_release_pdfs/2026/EnQuest_HY26_Results_Combined_vF.pdf",
     ],
+    # eng-20261102-01: ftse350 EZJ.L gap-closure had empty IR allowlist (0 refetch); Q4 CDN issuer PDFs.
+    "EZJ.L": [
+        "https://s203.q4cdn.com/522538739/files/doc_financials/2025/ar/easyJetARA25_DIGITAL_sm.pdf",
+        "https://s203.q4cdn.com/522538739/files/doc_financials/2025/q4/FY25-RNS.pdf",
+        "https://s203.q4cdn.com/522538739/files/doc_financials/2025/q4/FY25-Investor-Presentation-vf.pdf",
+        "https://s203.q4cdn.com/522538739/files/doc_financials/2026/q2/1-HY26-Combined-RNS-FINAL.pdf",
+        "https://s203.q4cdn.com/522538739/files/doc_financials/2026/q2/3-H126-Investor-Presentation-vf.pdf",
+    ],
     # ftse_smallcap IWB blocker — MER.L parked unfetchable_iwb; CH PDFs fail but mearsgroup.co.uk statutory PDFs fetch.
     "MER.L": [
         "https://www.mearsgroup.co.uk/media/jc1hix2m/mears-group-plc-annual-report-and-accounts-2025.pdf",
