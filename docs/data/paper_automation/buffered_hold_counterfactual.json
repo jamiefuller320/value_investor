@@ -2,17 +2,21 @@
   "scope": "buffered_hold_counterfactual_multi",
   "observe_only": true,
   "lookback_days": 7,
-  "as_of": "2026-11-02T08:44:11.493731+00:00",
+  "as_of": "2026-11-02T13:49:40.136754+00:00",
   "tracks": {
     "ai_judgment_matched30_fair": {
       "scope": "buffered_hold_counterfactual",
       "observe_only": true,
       "track_id": "ai_judgment_matched30_fair",
       "lookback_days": 7,
-      "as_of": "2026-11-02T08:44:11.470293+00:00",
+      "as_of": "2026-11-02T13:49:40.112563+00:00",
       "churn_context": {
-        "exit_streak": {},
-        "buffered_holdings": 0,
+        "exit_streak": {
+          "DSCV.L": 1,
+          "ICG.L": 1,
+          "CCC.L": 1
+        },
+        "buffered_holdings": 3,
         "full_exits_in_window": 4,
         "log_entries_in_window": 4
       },
@@ -31,27 +35,27 @@
             "candidate_source": "auto"
           },
           "used_screen_buy_tier_pool": false,
-          "log_entries_total": 16,
+          "log_entries_total": 17,
           "log_entries_replayed": 4,
           "lookback_days": 7,
-          "replay_from": "2026-10-26T11:28:45.589507+00:00",
-          "replay_to": "2026-10-30T11:34:39.025327+00:00",
-          "simulated_nav": 951.11,
-          "baseline_nav": 968.33,
-          "simulated_return": -0.0178,
-          "simulated_total_costs": 6.13,
-          "simulated_cost_drag": 0.0061,
-          "simulated_trade_count": 39,
+          "replay_from": "2026-10-27T10:51:56.689688+00:00",
+          "replay_to": "2026-11-02T13:48:42.601819+00:00",
+          "simulated_nav": 963.21,
+          "baseline_nav": 972.22,
+          "simulated_return": -0.0093,
+          "simulated_total_costs": 3.61,
+          "simulated_cost_drag": 0.0036,
+          "simulated_trade_count": 37,
           "used_logged_knobs": false,
           "held_price_fills": 0,
           "held_price_avg_cost_fallbacks": 0,
           "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
-          "actual_nav": 968.78,
-          "actual_return_over_window": 0.0005,
-          "actual_total_costs_over_window": 2.71,
+          "actual_nav": 964.12,
+          "actual_return_over_window": -0.0083,
+          "actual_total_costs_over_window": 2.72,
           "actual_cost_drag_over_window": 0.0027,
-          "return_delta_vs_actual": -0.0182,
-          "cost_drag_delta_vs_actual": -0.0034
+          "return_delta_vs_actual": -0.0009,
+          "cost_drag_delta_vs_actual": -0.0009
         },
         "2": {
           "scope": "rebalance_log_replay",
@@ -67,26 +71,26 @@
             "candidate_source": "auto"
           },
           "used_screen_buy_tier_pool": false,
-          "log_entries_total": 16,
+          "log_entries_total": 17,
           "log_entries_replayed": 4,
           "lookback_days": 7,
-          "replay_from": "2026-10-26T11:28:45.589507+00:00",
-          "replay_to": "2026-10-30T11:34:39.025327+00:00",
-          "simulated_nav": 968.74,
-          "baseline_nav": 968.33,
-          "simulated_return": 0.0004,
-          "simulated_total_costs": 2.74,
+          "replay_from": "2026-10-27T10:51:56.689688+00:00",
+          "replay_to": "2026-11-02T13:48:42.601819+00:00",
+          "simulated_nav": 964.07,
+          "baseline_nav": 972.22,
+          "simulated_return": -0.0084,
+          "simulated_total_costs": 2.75,
           "simulated_cost_drag": 0.0027,
-          "simulated_trade_count": 32,
+          "simulated_trade_count": 33,
           "used_logged_knobs": false,
           "held_price_fills": 0,
           "held_price_avg_cost_fallbacks": 0,
           "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
-          "actual_nav": 968.78,
-          "actual_return_over_window": 0.0005,
-          "actual_total_costs_over_window": 2.71,
+          "actual_nav": 964.12,
+          "actual_return_over_window": -0.0083,
+          "actual_total_costs_over_window": 2.72,
           "actual_cost_drag_over_window": 0.0027,
-          "return_delta_vs_actual": -0.0,
+          "return_delta_vs_actual": -0.0001,
           "cost_drag_delta_vs_actual": -0.0
         }
       },
@@ -95,10 +99,10 @@
           1,
           2
         ],
-        "trade_count_delta_lower_minus_higher": 7,
-        "cost_drag_delta_lower_minus_higher": 0.0034,
-        "return_delta_lower_minus_higher": -0.0182,
-        "return_delta_vs_actual_lower_minus_higher": -0.0182
+        "trade_count_delta_lower_minus_higher": 4,
+        "cost_drag_delta_lower_minus_higher": 0.0009,
+        "return_delta_lower_minus_higher": -0.0009,
+        "return_delta_vs_actual_lower_minus_higher": -0.0008
       },
       "limitations": "Observe-only replay of logged passes in the lookback window; does not mutate live exit_confirm_screens. Lower screen count exits sooner (more churn); higher count buffers longer."
     },
@@ -107,10 +111,17 @@
       "observe_only": true,
       "track_id": "buy_tier_matched30_fair",
       "lookback_days": 7,
-      "as_of": "2026-11-02T08:44:11.492775+00:00",
+      "as_of": "2026-11-02T13:49:40.135745+00:00",
       "churn_context": {
-        "exit_streak": {},
-        "buffered_holdings": 0,
+        "exit_streak": {
+          "GFRD.L": 1,
+          "DSCV.L": 1,
+          "ICG.L": 1,
+          "HBR.L": 1,
+          "HTG.L": 1,
+          "CCC.L": 1
+        },
+        "buffered_holdings": 6,
         "full_exits_in_window": 5,
         "log_entries_in_window": 4
       },
@@ -129,27 +140,27 @@
             "candidate_source": "auto"
           },
           "used_screen_buy_tier_pool": true,
-          "log_entries_total": 16,
+          "log_entries_total": 17,
           "log_entries_replayed": 4,
           "lookback_days": 7,
-          "replay_from": "2026-10-26T11:29:08.502750+00:00",
-          "replay_to": "2026-10-30T11:34:55.781108+00:00",
-          "simulated_nav": 972.8,
-          "baseline_nav": 977.69,
-          "simulated_return": -0.005,
-          "simulated_total_costs": 1.65,
-          "simulated_cost_drag": 0.0016,
-          "simulated_trade_count": 18,
+          "replay_from": "2026-10-27T10:52:09.861834+00:00",
+          "replay_to": "2026-11-02T13:48:56.578841+00:00",
+          "simulated_nav": 966.62,
+          "baseline_nav": 980.5,
+          "simulated_return": -0.0142,
+          "simulated_total_costs": 2.01,
+          "simulated_cost_drag": 0.002,
+          "simulated_trade_count": 22,
           "used_logged_knobs": false,
           "held_price_fills": 0,
           "held_price_avg_cost_fallbacks": 0,
           "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
-          "actual_nav": 970.54,
-          "actual_return_over_window": -0.0073,
+          "actual_nav": 968.36,
+          "actual_return_over_window": -0.0124,
           "actual_total_costs_over_window": 0.9,
           "actual_cost_drag_over_window": 0.0009,
-          "return_delta_vs_actual": 0.0023,
-          "cost_drag_delta_vs_actual": -0.0007
+          "return_delta_vs_actual": -0.0018,
+          "cost_drag_delta_vs_actual": -0.0011
         },
         "2": {
           "scope": "rebalance_log_replay",
@@ -165,14 +176,14 @@
             "candidate_source": "auto"
           },
           "used_screen_buy_tier_pool": true,
-          "log_entries_total": 16,
+          "log_entries_total": 17,
           "log_entries_replayed": 4,
           "lookback_days": 7,
-          "replay_from": "2026-10-26T11:29:08.502750+00:00",
-          "replay_to": "2026-10-30T11:34:55.781108+00:00",
-          "simulated_nav": 970.51,
-          "baseline_nav": 977.69,
-          "simulated_return": -0.0073,
+          "replay_from": "2026-10-27T10:52:09.861834+00:00",
+          "replay_to": "2026-11-02T13:48:56.578841+00:00",
+          "simulated_nav": 968.33,
+          "baseline_nav": 980.5,
+          "simulated_return": -0.0124,
           "simulated_total_costs": 0.92,
           "simulated_cost_drag": 0.0009,
           "simulated_trade_count": 10,
@@ -180,8 +191,8 @@
           "held_price_fills": 0,
           "held_price_avg_cost_fallbacks": 0,
           "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
-          "actual_nav": 970.54,
-          "actual_return_over_window": -0.0073,
+          "actual_nav": 968.36,
+          "actual_return_over_window": -0.0124,
           "actual_total_costs_over_window": 0.9,
           "actual_cost_drag_over_window": 0.0009,
           "return_delta_vs_actual": -0.0,
@@ -193,10 +204,10 @@
           1,
           2
         ],
-        "trade_count_delta_lower_minus_higher": 8,
-        "cost_drag_delta_lower_minus_higher": 0.0007,
-        "return_delta_lower_minus_higher": 0.0023,
-        "return_delta_vs_actual_lower_minus_higher": 0.0023
+        "trade_count_delta_lower_minus_higher": 12,
+        "cost_drag_delta_lower_minus_higher": 0.0011,
+        "return_delta_lower_minus_higher": -0.0018,
+        "return_delta_vs_actual_lower_minus_higher": -0.0018
       },
       "limitations": "Observe-only replay of logged passes in the lookback window; does not mutate live exit_confirm_screens. Lower screen count exits sooner (more churn); higher count buffers longer."
     }
@@ -204,8 +215,12 @@
   "summary": {
     "ai_judgment_matched30_fair": {
       "churn_context": {
-        "exit_streak": {},
-        "buffered_holdings": 0,
+        "exit_streak": {
+          "DSCV.L": 1,
+          "ICG.L": 1,
+          "CCC.L": 1
+        },
+        "buffered_holdings": 3,
         "full_exits_in_window": 4,
         "log_entries_in_window": 4
       },
@@ -214,17 +229,24 @@
           1,
           2
         ],
-        "trade_count_delta_lower_minus_higher": 7,
-        "cost_drag_delta_lower_minus_higher": 0.0034,
-        "return_delta_lower_minus_higher": -0.0182,
-        "return_delta_vs_actual_lower_minus_higher": -0.0182
+        "trade_count_delta_lower_minus_higher": 4,
+        "cost_drag_delta_lower_minus_higher": 0.0009,
+        "return_delta_lower_minus_higher": -0.0009,
+        "return_delta_vs_actual_lower_minus_higher": -0.0008
       },
       "logged_exit_confirm_screens": 2
     },
     "buy_tier_matched30_fair": {
       "churn_context": {
-        "exit_streak": {},
-        "buffered_holdings": 0,
+        "exit_streak": {
+          "GFRD.L": 1,
+          "DSCV.L": 1,
+          "ICG.L": 1,
+          "HBR.L": 1,
+          "HTG.L": 1,
+          "CCC.L": 1
+        },
+        "buffered_holdings": 6,
         "full_exits_in_window": 5,
         "log_entries_in_window": 4
       },
@@ -233,10 +255,10 @@
           1,
           2
         ],
-        "trade_count_delta_lower_minus_higher": 8,
-        "cost_drag_delta_lower_minus_higher": 0.0007,
-        "return_delta_lower_minus_higher": 0.0023,
-        "return_delta_vs_actual_lower_minus_higher": 0.0023
+        "trade_count_delta_lower_minus_higher": 12,
+        "cost_drag_delta_lower_minus_higher": 0.0011,
+        "return_delta_lower_minus_higher": -0.0018,
+        "return_delta_vs_actual_lower_minus_higher": -0.0018
       },
       "logged_exit_confirm_screens": 2
     }
