@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-01T07:47:31.343580+00:00",
+  "generated_at": "2026-11-02T02:32:58.932314+00:00",
   "lab_id": "cue_consumer_mft",
   "registration_id": "cue-consumer-mft-v0",
   "evolutionary_root_id": "cue-consumer-mft-root-v0",
@@ -29,12 +29,23 @@
     "scoreboard_unit": "fair_cost_episode_pct"
   },
   "mid_flight_tune": {
-    "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
-    "tune_spec_id": "mft-tune-spec-epoch0-v0",
+    "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
+    "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
     "knob_set_id": "mft-knob-set-v0",
+    "max_open_positions": 50,
+    "epoch_history": [
+      {
+        "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+        "ended_at": "2026-11-02T02:32:58.932314+00:00",
+        "tune_spec_id": "mft-tune-spec-epoch0-v0",
+        "max_open_positions": 30,
+        "end_reason": "open_cap_raise_30_to_50"
+      }
+    ],
     "allowed_on": "this_lab_only",
     "package_l_on_sealed": false,
-    "lab_arm_marker_id": "mft-lab-arm-epoch0-v0"
+    "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+    "stratify_field": "knob_epoch_started_at"
   },
   "cue_selection": {
     "cue_whitelist_id": "mft-short-whitelist-v0",
@@ -124,9 +135,9 @@
           "trade_plan_summary=Trade plan: core 60% limit £238.19; tactical 40% limit £216.52; tactical stop £210.02, target £243.58.",
           "tactical_stop_loss=210.02",
           "tactical_take_profit=243.58",
-          "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-          "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-          "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+          "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+          "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+          "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
         ],
         "unknown": false
       }
@@ -187,9 +198,9 @@
           "observe_only=true",
           "package_l=false",
           "hold_trading_days=63",
-          "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-          "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-          "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+          "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+          "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+          "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
         ],
         "unknown": false
       }
@@ -232,6 +243,102 @@
     "package_l": false,
     "count": 25,
     "rows": [
+      {
+        "review_id": "ccd536f7a536a96f7e6b",
+        "book_id": "n206",
+        "ticker": "BWY.L",
+        "exit_reason": "identity_break_ey_band",
+        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+        "same_day_assessment": "not_applicable"
+      },
+      {
+        "review_id": "7a21254f22bdffc3dc0e",
+        "book_id": "n201",
+        "ticker": "BF-B",
+        "exit_reason": "identity_break_ey_band",
+        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+        "same_day_assessment": "not_applicable"
+      },
+      {
+        "review_id": "e136e4594234d60f7e98",
+        "book_id": "n201",
+        "ticker": "CSC.AX",
+        "exit_reason": "identity_break_ey_band",
+        "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+        "same_day_assessment": "not_applicable"
+      },
+      {
+        "review_id": "11cea194bf8a03bf97fc",
+        "book_id": "n201",
+        "ticker": "META",
+        "exit_reason": "identity_break_ey_band",
+        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+        "same_day_assessment": "not_applicable"
+      },
+      {
+        "review_id": "120b5c80d71f27815856",
+        "book_id": "n201",
+        "ticker": "SNDK",
+        "exit_reason": "quality_break_financial_health",
+        "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+        "same_day_assessment": "not_applicable"
+      },
+      {
+        "review_id": "e7afbc3aab7054a5da58",
+        "book_id": "n201",
+        "ticker": "SNDK",
+        "exit_reason": "quality_break_financial_health",
+        "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+        "same_day_assessment": "not_applicable"
+      },
+      {
+        "review_id": "1d431135d5249af8ac49",
+        "book_id": "n206",
+        "ticker": "ACN",
+        "exit_reason": "identity_break_ey_band",
+        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+        "same_day_assessment": "not_applicable"
+      },
+      {
+        "review_id": "01b6f5fefd90fd008723",
+        "book_id": "n206",
+        "ticker": "BF-B",
+        "exit_reason": "identity_break_ey_band",
+        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+        "same_day_assessment": "not_applicable"
+      },
+      {
+        "review_id": "1a191a3b7c0be984de87",
+        "book_id": "n206",
+        "ticker": "CSC.AX",
+        "exit_reason": "identity_break_ey_band",
+        "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+        "same_day_assessment": "not_applicable"
+      },
+      {
+        "review_id": "771c937ecf66f4e2fdc8",
+        "book_id": "n206",
+        "ticker": "META",
+        "exit_reason": "identity_break_ey_band",
+        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+        "same_day_assessment": "not_applicable"
+      },
+      {
+        "review_id": "8eea0a1fe3ade5b4ddc0",
+        "book_id": "n206",
+        "ticker": "SNDK",
+        "exit_reason": "quality_break_financial_health",
+        "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+        "same_day_assessment": "not_applicable"
+      },
+      {
+        "review_id": "5b2451283bc1855b5dab",
+        "book_id": "n206",
+        "ticker": "SNDK",
+        "exit_reason": "quality_break_financial_health",
+        "learning_point_forward": "Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-consumer lab.",
+        "same_day_assessment": "not_applicable"
+      },
       {
         "review_id": "4b9c3617d2ae793ac945",
         "book_id": "n201",
@@ -335,102 +442,6 @@
         "exit_reason": "identity_break_ey_band",
         "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
         "same_day_assessment": "not_applicable"
-      },
-      {
-        "review_id": "6823190748fee1c6baf0",
-        "book_id": "n201",
-        "ticker": "STLD",
-        "exit_reason": "identity_break_ey_band",
-        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-        "same_day_assessment": "not_applicable"
-      },
-      {
-        "review_id": "e5f43d8d35b04bb78f37",
-        "book_id": "n206",
-        "ticker": "0857.HK",
-        "exit_reason": "identity_break_ey_band",
-        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-        "same_day_assessment": "not_applicable"
-      },
-      {
-        "review_id": "92ca56e000ba00e249af",
-        "book_id": "n206",
-        "ticker": "ACN",
-        "exit_reason": "identity_break_ey_band",
-        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-        "same_day_assessment": "not_applicable"
-      },
-      {
-        "review_id": "a680d571979c14bca3e4",
-        "book_id": "n206",
-        "ticker": "EMR.AX",
-        "exit_reason": "identity_break_ey_band",
-        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-        "same_day_assessment": "not_applicable"
-      },
-      {
-        "review_id": "8f522de3669916307aad",
-        "book_id": "n206",
-        "ticker": "GLE.L",
-        "exit_reason": "identity_break_ey_band",
-        "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
-        "same_day_assessment": "not_applicable"
-      },
-      {
-        "review_id": "dd8e775419ce900c1933",
-        "book_id": "n206",
-        "ticker": "QCOM",
-        "exit_reason": "identity_break_ey_band",
-        "learning_point_forward": "Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on sealed books (Package M only).",
-        "same_day_assessment": "not_applicable"
-      },
-      {
-        "review_id": "e1181b2d42f2acf09686",
-        "book_id": "n206",
-        "ticker": "SNDK",
-        "exit_reason": "identity_break_ey_band",
-        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-        "same_day_assessment": "not_applicable"
-      },
-      {
-        "review_id": "d40791b8f6b3510fcb9b",
-        "book_id": "n206",
-        "ticker": "STLD",
-        "exit_reason": "identity_break_ey_band",
-        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-        "same_day_assessment": "not_applicable"
-      },
-      {
-        "review_id": "f297d069f1842d964458",
-        "book_id": "n201",
-        "ticker": "ATYM.L",
-        "exit_reason": "identity_break_ey_band",
-        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-        "same_day_assessment": "not_applicable"
-      },
-      {
-        "review_id": "b7743a3f00b083d796ec",
-        "book_id": "n206",
-        "ticker": "ATYM.L",
-        "exit_reason": "identity_break_ey_band",
-        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-        "same_day_assessment": "not_applicable"
-      },
-      {
-        "review_id": "f17938145e674bb18958",
-        "book_id": "n210",
-        "ticker": "GFRD.L",
-        "exit_reason": "identity_break_not_buy_tier",
-        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-        "same_day_assessment": "not_applicable"
-      },
-      {
-        "review_id": "39c98597fa0d6799ad22",
-        "book_id": "n210",
-        "ticker": "PAF.L",
-        "exit_reason": "identity_break_conviction_below_floor",
-        "learning_point_forward": "Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
-        "same_day_assessment": "not_applicable"
       }
     ],
     "note": "Autopsy learning_point_forward informs the lab observe trail. Does not auto-tune sealed books or open Package L."
@@ -441,23 +452,23 @@
     "evolutionary_spawn": false,
     "influences_live": false,
     "rows_considered": 25,
-    "cues_accepted": 168,
+    "cues_accepted": 187,
     "note": "Lab paper fills from PIT whitelist cues (fixed-stake v0). No sealed spawn; Package L closed; influences_live=false."
   },
   "episode_walker": {
     "walker_marker_id": "mft-episode-walker-v0",
     "status": "active",
     "reason": null,
-    "cues_considered": 185,
-    "cues_accepted": 168,
-    "skipped_at_open_cap": 17,
+    "cues_considered": 187,
+    "cues_accepted": 187,
+    "skipped_at_open_cap": 0,
     "hold_trading_days": 63,
-    "max_open_positions": 30,
+    "max_open_positions": 50,
     "path_scoreboard": {
       "unit": "fair_cost_episode_pct",
-      "smooth_ret_cohort_median": 0.006624,
-      "completed_n": 138,
-      "open_n": 30,
+      "smooth_ret_cohort_median": 0.00489,
+      "completed_n": 147,
+      "open_n": 40,
       "declared_incomparable": true,
       "note": "Lab fair-cost episode % only — never credit cue-book historical NAV as lab wins."
     },
@@ -517,8 +528,8 @@
       "sell_strategy"
     ]
   },
-  "closed_lab_episodes": 138,
-  "open_lab_episodes": 30,
+  "closed_lab_episodes": 147,
+  "open_lab_episodes": 40,
   "closed_episodes_sample": [
     {
       "episode_id": "644c0706a7083cbc8b6f",
@@ -541,8 +552,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -627,9 +638,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £238.19; tactical 40% limit £216.52; tactical stop £210.02, target £243.58.",
                 "tactical_stop_loss=210.02",
                 "tactical_take_profit=243.58",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -690,9 +701,9 @@
                 "observe_only=true",
                 "package_l=false",
                 "hold_trading_days=63",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -773,8 +784,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -859,9 +870,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £1941.74; tactical 40% limit £1898.50; tactical stop £1841.54, target £2191.35.",
                 "tactical_stop_loss=1841.54",
                 "tactical_take_profit=2191.35",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -922,9 +933,9 @@
                 "observe_only=true",
                 "package_l=false",
                 "hold_trading_days=20",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -1005,8 +1016,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -1091,9 +1102,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £164.01; tactical 40% limit £157.16; tactical stop £152.45, target £189.00.",
                 "tactical_stop_loss=152.45",
                 "tactical_take_profit=189.0",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -1154,9 +1165,9 @@
                 "observe_only=true",
                 "package_l=false",
                 "hold_trading_days=29",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -1237,8 +1248,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -1323,9 +1334,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £158.12; tactical 40% limit £154.96; tactical stop £146.18, target £171.99.",
                 "tactical_stop_loss=146.18",
                 "tactical_take_profit=171.99",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -1386,9 +1397,9 @@
                 "observe_only=true",
                 "package_l=false",
                 "hold_trading_days=63",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -1469,8 +1480,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -1555,9 +1566,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £204.34; tactical 40% limit £196.08; tactical stop £184.19, target £216.72.",
                 "tactical_stop_loss=184.19",
                 "tactical_take_profit=216.72",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -1618,9 +1629,9 @@
                 "observe_only=true",
                 "package_l=false",
                 "hold_trading_days=5",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -1701,8 +1712,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -1787,9 +1798,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £3437.76; tactical 40% limit £3230.00; tactical stop £3123.40, target £3675.00.",
                 "tactical_stop_loss=3123.4",
                 "tactical_take_profit=3675.0",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -1850,9 +1861,9 @@
                 "observe_only=true",
                 "package_l=false",
                 "hold_trading_days=63",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -1933,8 +1944,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -2019,9 +2030,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £197.83; tactical 40% limit £178.66; tactical stop £173.30, target £233.73.",
                 "tactical_stop_loss=173.3",
                 "tactical_take_profit=233.73",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -2082,9 +2093,9 @@
                 "observe_only=true",
                 "package_l=false",
                 "hold_trading_days=5",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -2165,8 +2176,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -2251,9 +2262,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £282.64; tactical 40% limit £270.24; tactical stop £254.78, target £285.65.",
                 "tactical_stop_loss=254.78",
                 "tactical_take_profit=285.65",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -2314,9 +2325,9 @@
                 "observe_only=true",
                 "package_l=false",
                 "hold_trading_days=63",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -2397,8 +2408,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -2483,9 +2494,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £714.00; tactical 40% limit £637.00; tactical stop £617.89, target £758.62.",
                 "tactical_stop_loss=617.89",
                 "tactical_take_profit=758.62",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -2546,9 +2557,9 @@
                 "observe_only=true",
                 "package_l=false",
                 "hold_trading_days=5",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -2629,8 +2640,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -2715,9 +2726,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £300.24; tactical 40% limit £288.20; tactical stop £279.55, target £347.55.",
                 "tactical_stop_loss=279.55",
                 "tactical_take_profit=347.55",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -2778,9 +2789,9 @@
                 "observe_only=true",
                 "package_l=false",
                 "hold_trading_days=12",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -2843,198 +2854,6 @@
   ],
   "open_episodes_sample": [
     {
-      "episode_id": "cdf24bb55f9e479ab75b",
-      "lab_id": "cue_consumer_mft",
-      "registration_id": "cue-consumer-mft-v0",
-      "book_kind": "lab_paper",
-      "ticker": "CURY.L",
-      "market_id": "ftse350",
-      "cue_source_id": "n200_raw_buy_tier",
-      "cue_whitelist_id": "mft-short-whitelist-v0",
-      "cue_ts": "2026-08-04T08:38:47.304498+00:00",
-      "decision_ts": "2026-08-04T08:38:47.304498+00:00",
-      "entry_run_at": "2026-08-04T08:38:47.304498+00:00",
-      "fixed_stake_units": 100.0,
-      "sizing_mode": "fixed_stake",
-      "scoreboard_unit": "fair_cost_episode_pct",
-      "independent_of_fund_nav": true,
-      "influences_live": false,
-      "observe_only": true,
-      "declared_incomparable": true,
-      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
-      "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
-      "judgment_rubric_id": "judgment_in_the_round_v0",
-      "evidence": {
-        "pit_selected": [
-          {
-            "cue_source_id": "n200_raw_buy_tier",
-            "cue_ts": "2026-08-04T08:38:47.304498+00:00",
-            "ticker": "CURY.L",
-            "clear_note": "raw_buy_tier_clear",
-            "pit_ok": true,
-            "cue_whitelist_id": "mft-short-whitelist-v0"
-          }
-        ],
-        "pit_ok": true,
-        "clear_note": "raw_buy_tier_clear",
-        "entry_detail": {
-          "cue_source_id": "n200_raw_buy_tier",
-          "signal": "buy",
-          "adjusted_signal": "buy",
-          "research_verdict": null,
-          "conviction_score": 0.4177,
-          "timing_signal": "neutral"
-        },
-        "judgment_in_the_round": {
-          "rubric_id": "judgment_in_the_round_v0",
-          "influences_live": false,
-          "observe_only": true,
-          "rules_role": "scaffold_propose",
-          "buy": {
-            "B1": {
-              "answer": "fundamentals_cited_partial",
-              "confidence": "low",
-              "cites": [
-                "models_passed=13.0",
-                "weighted_model_score=0.7056",
-                "data_quality_score=1.0"
-              ],
-              "unknown": false
-            },
-            "B2": {
-              "answer": "timing_neutral_cited",
-              "confidence": "low",
-              "cites": [
-                "timing_signal=neutral",
-                "timing_score=0.375",
-                "volume_ratio_20=0.0208"
-              ],
-              "unknown": false
-            },
-            "B3": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
-            },
-            "B4": {
-              "answer": "cue_whitelist_proposes",
-              "confidence": "medium",
-              "cites": [
-                "cue_source_id=n200_raw_buy_tier",
-                "cue_whitelist_id=mft-short-whitelist-v0",
-                "clear_note=raw_buy_tier_clear",
-                "signal=buy",
-                "adjusted_signal=buy"
-              ],
-              "unknown": false
-            },
-            "B5": {
-              "answer": "moderate_conviction",
-              "confidence": "medium",
-              "cites": [
-                "conviction_score=0.4177"
-              ],
-              "unknown": false
-            },
-            "B6": {
-              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
-              "confidence": "medium",
-              "cites": [
-                "hold_policy_trading_days=63",
-                "exit_family=hold_trading_days_or_identity_break",
-                "sizing=fixed_stake_v0",
-                "trade_plan_summary=Trade plan: core 60% limit £157.08; tactical 40% limit £141.12; tactical stop £136.89, target £171.68.",
-                "tactical_stop_loss=136.89",
-                "tactical_take_profit=171.68",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
-              ],
-              "unknown": false
-            }
-          },
-          "sell": {
-            "S1": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
-            },
-            "S2": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
-            },
-            "S3": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
-            },
-            "S4": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
-            },
-            "S5": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
-            },
-            "S6": {
-              "answer": null,
-              "confidence": null,
-              "cites": [],
-              "unknown": true
-            }
-          },
-          "rule_candidates": [
-            {
-              "rule_id": "n200_raw_buy_tier",
-              "role": "scaffold_propose",
-              "cue_whitelist_id": "mft-short-whitelist-v0",
-              "clear_note": "raw_buy_tier_clear"
-            }
-          ],
-          "llm_stance": "agree",
-          "misfit_evidence": null,
-          "fill_status": "filled",
-          "fill_source": "deterministic_n228_v0",
-          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
-          "cells_cited": [
-            "B1",
-            "B2",
-            "B4",
-            "B5",
-            "B6"
-          ],
-          "cells_unknown": [
-            "B3",
-            "S1",
-            "S2",
-            "S3",
-            "S4",
-            "S5",
-            "S6"
-          ]
-        },
-        "influences_live": false,
-        "observe_only": true
-      },
-      "evolutionary_spawn": false,
-      "package_l": false,
-      "status": "open",
-      "open_mark_return": -0.126032,
-      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
-    },
-    {
       "episode_id": "e33c0459c9f3115ad372",
       "lab_id": "cue_consumer_mft",
       "registration_id": "cue-consumer-mft-v0",
@@ -3055,8 +2874,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -3141,9 +2960,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £833.04; tactical 40% limit £816.38; tactical stop £791.89, target £936.08.",
                 "tactical_stop_loss=791.89",
                 "tactical_take_profit=936.08",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -3224,7 +3043,7 @@
       "status": "open",
       "open_mark_return": -0.032982,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00"
     },
     {
       "episode_id": "f935c6e51f8025ccae1f",
@@ -3247,8 +3066,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -3333,9 +3152,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £929.94; tactical 40% limit £911.34; tactical stop £884.00, target £1100.40.",
                 "tactical_stop_loss=884.0",
                 "tactical_take_profit=1100.4",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -3416,7 +3235,7 @@
       "status": "open",
       "open_mark_return": -0.060844,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00"
     },
     {
       "episode_id": "ab5d87d27ef21a5ca18f",
@@ -3439,8 +3258,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -3525,9 +3344,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £320.18; tactical 40% limit £313.78; tactical stop £304.37, target £378.21.",
                 "tactical_stop_loss=304.37",
                 "tactical_take_profit=378.21",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -3608,7 +3427,7 @@
       "status": "open",
       "open_mark_return": -0.089342,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00"
     },
     {
       "episode_id": "3ae745820446571d6a6a",
@@ -3631,8 +3450,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -3723,9 +3542,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £1510.74; tactical 40% limit £1449.70; tactical stop £1361.80, target £1590.68.",
                 "tactical_stop_loss=1361.8",
                 "tactical_take_profit=1590.68",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -3806,7 +3625,7 @@
       "status": "open",
       "open_mark_return": -0.000244,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00"
     },
     {
       "episode_id": "33d94864012e997476a7",
@@ -3829,8 +3648,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -3921,9 +3740,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £2028.37; tactical 40% limit £1953.77; tactical stop £1849.05, target £2175.60.",
                 "tactical_stop_loss=1849.05",
                 "tactical_take_profit=2175.6",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -4004,7 +3823,7 @@
       "status": "open",
       "open_mark_return": -0.077653,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00"
     },
     {
       "episode_id": "a72f02d070e8b818ff44",
@@ -4027,8 +3846,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -4119,9 +3938,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £193.45; tactical 40% limit £185.63; tactical stop £174.37, target £196.22.",
                 "tactical_stop_loss=174.37",
                 "tactical_take_profit=196.22",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -4202,7 +4021,7 @@
       "status": "open",
       "open_mark_return": 0.034418,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00"
     },
     {
       "episode_id": "7db5a77d4c41136a4f55",
@@ -4225,8 +4044,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -4319,9 +4138,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £2821.24; tactical 40% limit £2764.81; tactical stop £2681.87, target £3164.70.",
                 "tactical_stop_loss=2681.87",
                 "tactical_take_profit=3164.7",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -4402,7 +4221,7 @@
       "status": "open",
       "open_mark_return": -0.263961,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00"
     },
     {
       "episode_id": "5bc2835b88582a3b736a",
@@ -4425,8 +4244,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -4519,9 +4338,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £2140.38; tactical 40% limit £2053.90; tactical stop £1929.37, target £2221.28.",
                 "tactical_stop_loss=1929.37",
                 "tactical_take_profit=2221.28",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -4602,7 +4421,7 @@
       "status": "open",
       "open_mark_return": 0.06018,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00"
     },
     {
       "episode_id": "5e42c6658d18b2e3bd60",
@@ -4625,8 +4444,8 @@
       "declared_incomparable": true,
       "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
       "walker_marker_id": "mft-episode-walker-v0",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "judgment_rubric_id": "judgment_in_the_round_v0",
       "evidence": {
         "pit_selected": [
@@ -4719,9 +4538,9 @@
                 "trade_plan_summary=Trade plan: core 60% limit £824.67; tactical 40% limit £791.35; tactical stop £743.37, target £852.10.",
                 "tactical_stop_loss=743.37",
                 "tactical_take_profit=852.1",
-                "autopsy_learning_point_forward:4b9c3617d2ae793ac945=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:abdeec3faf99fd8d83b6=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se",
-                "autopsy_learning_point_forward:29fb4dfd462974a722ed=Carry one concrete chart/decision pattern forward into the cue-consumer MFT lesson intake — never auto-apply knobs on se"
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
               ],
               "unknown": false
             }
@@ -4802,14 +4621,214 @@
       "status": "open",
       "open_mark_return": 0.092939,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-10-30T21:55:18.461452+00:00"
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00"
+    },
+    {
+      "episode_id": "6c64012675b17548932c",
+      "lab_id": "cue_consumer_mft",
+      "registration_id": "cue-consumer-mft-v0",
+      "book_kind": "lab_paper",
+      "ticker": "RNK.L",
+      "market_id": "ftse350",
+      "cue_source_id": "n200_raw_buy_tier",
+      "cue_whitelist_id": "mft-short-whitelist-v0",
+      "cue_ts": "2026-09-12T11:21:34.513768+00:00",
+      "decision_ts": "2026-09-12T11:21:34.513768+00:00",
+      "entry_run_at": "2026-09-12T11:21:34.513768+00:00",
+      "fixed_stake_units": 100.0,
+      "sizing_mode": "fixed_stake",
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false,
+      "observe_only": true,
+      "declared_incomparable": true,
+      "lab_arm_marker_id": "mft-lab-arm-epoch0-v0",
+      "walker_marker_id": "mft-episode-walker-v0",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
+      "judgment_rubric_id": "judgment_in_the_round_v0",
+      "evidence": {
+        "pit_selected": [
+          {
+            "cue_source_id": "n200_raw_buy_tier",
+            "cue_ts": "2026-09-12T11:21:34.513768+00:00",
+            "ticker": "RNK.L",
+            "clear_note": "raw_buy_tier_clear",
+            "pit_ok": true,
+            "cue_whitelist_id": "mft-short-whitelist-v0"
+          }
+        ],
+        "pit_ok": true,
+        "clear_note": "raw_buy_tier_clear",
+        "entry_detail": {
+          "cue_source_id": "n200_raw_buy_tier",
+          "signal": "buy",
+          "adjusted_signal": "hold",
+          "research_verdict": null,
+          "conviction_score": 0.334815,
+          "timing_signal": "accumulate"
+        },
+        "judgment_in_the_round": {
+          "rubric_id": "judgment_in_the_round_v0",
+          "influences_live": false,
+          "observe_only": true,
+          "rules_role": "scaffold_propose",
+          "buy": {
+            "B1": {
+              "answer": "screen_families_include_cheapness",
+              "confidence": "medium",
+              "cites": [
+                "passed_families=cheapness,quality,dividend,garp,risk",
+                "models_passed=9.0",
+                "weighted_model_score=0.6641181818181817",
+                "fcf_basis_overlay=True",
+                "earnings_basis_overlay=False",
+                "data_quality_score=1.0"
+              ],
+              "unknown": false
+            },
+            "B2": {
+              "answer": "technicals_cited",
+              "confidence": "low",
+              "cites": [
+                "timing_signal=accumulate",
+                "timing_score=0.875",
+                "price_vs_sma200_pct=-0.10832790435782591",
+                "volume_ratio_20=1.4103",
+                "signal_trend=improving"
+              ],
+              "unknown": false
+            },
+            "B3": {
+              "answer": "sector_context_cited",
+              "confidence": "low",
+              "cites": [
+                "sector=Consumer Cyclical",
+                "weeks_at_signal=1"
+              ],
+              "unknown": false
+            },
+            "B4": {
+              "answer": "cue_whitelist_proposes",
+              "confidence": "medium",
+              "cites": [
+                "cue_source_id=n200_raw_buy_tier",
+                "cue_whitelist_id=mft-short-whitelist-v0",
+                "clear_note=raw_buy_tier_clear",
+                "signal=buy",
+                "adjusted_signal=hold"
+              ],
+              "unknown": false
+            },
+            "B5": {
+              "answer": "low_or_partial_conviction",
+              "confidence": "low",
+              "cites": [
+                "conviction_score=0.334815"
+              ],
+              "unknown": false
+            },
+            "B6": {
+              "answer": "predeclared_hold_or_identity_break_within_fixed_stake",
+              "confidence": "medium",
+              "cites": [
+                "hold_policy_trading_days=63",
+                "exit_family=hold_trading_days_or_identity_break",
+                "sizing=fixed_stake_v0",
+                "trade_plan_summary=Trade plan: core 75% at market (~£87.10); tactical 25% limit £82.74; tactical stop £73.34, target £98.82.",
+                "tactical_stop_loss=73.34",
+                "tactical_take_profit=98.82",
+                "autopsy_learning_point_forward:ccd536f7a536a96f7e6b=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:7a21254f22bdffc3dc0e=Short-hold exits need wider-TF range-location critique before treating fair-cost as timing proof.",
+                "autopsy_learning_point_forward:e136e4594234d60f7e98=Material-loss autopsies should separate stock choice vs buy/sell timing before any mid-flight tune proposal on the cue-c"
+              ],
+              "unknown": false
+            }
+          },
+          "sell": {
+            "S1": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S2": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S3": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S4": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S5": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            },
+            "S6": {
+              "answer": null,
+              "confidence": null,
+              "cites": [],
+              "unknown": true
+            }
+          },
+          "rule_candidates": [
+            {
+              "rule_id": "n200_raw_buy_tier",
+              "role": "scaffold_propose",
+              "cue_whitelist_id": "mft-short-whitelist-v0",
+              "clear_note": "raw_buy_tier_clear"
+            }
+          ],
+          "llm_stance": "agree",
+          "misfit_evidence": null,
+          "fill_status": "filled",
+          "fill_source": "deterministic_n228_v0",
+          "note": "N228 deterministic judgment-in-the-round fill on decide trail. Rules scaffold/propose; missing cells stay unknown; authorize_judgment_live_influence always false.",
+          "cells_cited": [
+            "B1",
+            "B2",
+            "B3",
+            "B4",
+            "B5",
+            "B6"
+          ],
+          "cells_unknown": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
+        },
+        "influences_live": false,
+        "observe_only": true
+      },
+      "evolutionary_spawn": false,
+      "package_l": false,
+      "status": "open",
+      "open_mark_return": -0.041091,
+      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
+      "open_mark_at": "2026-11-01T07:33:21.879670+00:00"
     }
   ],
   "path_scoreboard": {
     "unit": "fair_cost_episode_pct",
-    "smooth_ret_cohort_median": 0.006624,
-    "completed_n": 138,
-    "open_n": 30,
+    "smooth_ret_cohort_median": 0.00489,
+    "completed_n": 147,
+    "open_n": 40,
     "declared_incomparable": true,
     "note": "Lab fair-cost episode % only — never credit cue-book historical NAV as lab wins."
   },
@@ -4821,8 +4840,8 @@
     "scaffold_proposal": {
       "proposal_id": "hrp-d5de1f32bad4",
       "kind": "hardened_ruleset_proposal",
-      "tune_spec_id": "mft-tune-spec-epoch0-v0",
-      "knob_epoch_started_at": "2026-10-26T02:32:51.639849+00:00",
+      "tune_spec_id": "mft-tune-spec-cap50-epoch1-v0",
+      "knob_epoch_started_at": "2026-11-02T02:32:58.932314+00:00",
       "levers_touched": [
         "sell_timing"
       ],
@@ -4832,7 +4851,7 @@
         "soft_ready": true,
         "closes_primary": true,
         "min_closes": 3,
-        "closed_episodes_citing_levers": 138,
+        "closed_episodes_citing_levers": 147,
         "closes_ok": true,
         "proposal_hygiene_ok": true,
         "mom_window_complete": null,
@@ -4927,7 +4946,8 @@
     "Do not back-label cue-book NAV as lab wins.",
     "Do not open Package L on sealed; cull ≠ live promote.",
     "Sealed spawn / novelty / cull remain N223/N226/N227 — lab fills only in v0.",
-    "N228 judgment fill is deterministic cite enrich (not live LLM API); influences_live=false forever on this lab until a separate promote gate."
+    "N228 judgment fill is deterministic cite enrich (not live LLM API); influences_live=false forever on this lab until a separate promote gate.",
+    "MoM lever stubs still null — do not claim post-cap-raise median continuous with epoch-0; stratify on mid_flight_tune.knob_epoch_started_at / epoch_history."
   ],
   "ops_doc": "docs/ops/cue-consumer-mft.md"
 }

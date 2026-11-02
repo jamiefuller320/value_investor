@@ -1,21 +1,12 @@
 {
-  "run_at": "2026-11-01T07:46:46.170263+00:00",
+  "run_at": "2026-11-02T02:32:03.745543+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
       "category": "ingest",
-      "title": "Ingest loop hit runtime cutoff",
-      "summary": "Last run deferred 26 ticker(s) after completing 12 (per_ticker_budget) — backlog resume or chained chunk should drain remainder.",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "20 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, euro_depth, ftse350, hang_seng, tsx60: hang_seng/0001.HK (no_memo, 487.78h since flip), aex/PRX.AS (no_memo, 439.78h since flip), euro_depth/PRX.AS (no_memo, 439.78h since flip), tsx60/ABX.TO (no_key_bodies, 439.78h since flip), tsx60/SAP.TO (no_key_bodies, 439.78h since flip), tsx60/TECK-B.TO (no_key_bodies, 439.78h since flip), euro_depth/WIE.VI (no_key_bodies, 415.78h since flip), asx200/CLW.AX (no_memo, 391.78h since flip), EZJ.L (no_memo, 343.78h since flip), LRE.L (no_memo, 343.78h since flip) (+10 more). Blocking: no_key_bodies=6, no_memo=14.",
+      "summary": "24 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, asx200, atx, euro_depth, ftse350, ftse_mib (+2 more): hang_seng/0001.HK (no_memo, 506.53h since flip), aex/PRX.AS (no_memo, 458.53h since flip), euro_depth/PRX.AS (no_memo, 458.53h since flip), tsx60/ABX.TO (no_key_bodies, 458.53h since flip), tsx60/SAP.TO (no_key_bodies, 458.53h since flip), tsx60/TECK-B.TO (no_key_bodies, 458.53h since flip), euro_depth/WIE.VI (no_key_bodies, 434.53h since flip), asx200/CLW.AX (no_memo, 410.53h since flip), EZJ.L (no_memo, 362.53h since flip), LRE.L (no_memo, 362.53h since flip) (+14 more). Blocking: no_index=1, no_key_bodies=8, no_memo=15.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -24,7 +15,7 @@
       "severity": "warn",
       "category": "ingest",
       "title": "FTSE decision-input utilization gap",
-      "summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `overlay_bound` missing on 9/70 names (e.g. ATYM.L, EZJ.L, HTG.L, JMAT.L, KIE.L, LRE.L, MAB.L, RKT.L, VLX.L). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
+      "summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `overlay_bound` missing on 8/68 names (e.g. ATYM.L, EZJ.L, JMAT.L, KIE.L, LRE.L, MAB.L, RKT.L, VLX.L). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -51,7 +42,7 @@
       "severity": "info",
       "category": "research",
       "title": "Post-sale review queue (observe)",
-      "summary": "Active uncommented post-sale reviews: 140; actioned history=138; candidates sealed+control=479. Accept/Comment/Duplicate observe-only (influences_live=false).",
+      "summary": "Active uncommented post-sale reviews: 152; actioned history=138; candidates sealed+control=491. Accept/Comment/Duplicate observe-only (influences_live=false).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -60,7 +51,7 @@
       "severity": "info",
       "category": "research",
       "title": "Cue-consumer MFT lab refreshed",
-      "summary": "Lab cue_consumer_mft (cue-consumer-mft-v0) armed/refreshed; pipeline=episode_walker_active; closed_lab_episodes=138; open_lab_episodes=30; start_gate_eligible=True (named_open_autopsy_cohort_checkpoint_complete). Observe-only; influences_live=false; declared incomparable; no Package L / no strand-A promote; does not steal Data P1 fat slot.",
+      "summary": "Lab cue_consumer_mft (cue-consumer-mft-v0) armed/refreshed; pipeline=episode_walker_active; closed_lab_episodes=147; open_lab_episodes=40; start_gate_eligible=True (named_open_autopsy_cohort_checkpoint_complete). Observe-only; influences_live=false; declared incomparable; no Package L / no strand-A promote; does not steal Data P1 fat slot.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -69,7 +60,7 @@
       "severity": "info",
       "category": "research",
       "title": "Cue-consumer MFT lab armed (observe)",
-      "summary": "Lab arm marker mft-lab-arm-epoch0-v0 at 2026-10-26T15:09:45.669837+00:00; epoch 2026-10-26T02:32:51.639849+00:00; tune_spec=mft-tune-spec-epoch0-v0. Lab paper walker active (open=30, closed=138); no sealed spawn.",
+      "summary": "Lab arm marker mft-lab-arm-epoch0-v0 at 2026-10-26T15:09:45.669837+00:00; epoch 2026-11-02T02:32:58.932314+00:00; tune_spec=mft-tune-spec-cap50-epoch1-v0. Lab paper walker active (open=40, closed=147); no sealed spawn.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -78,7 +69,7 @@
       "severity": "info",
       "category": "research",
       "title": "Cue-consumer MFT episode walker (lab paper fills)",
-      "summary": "Walker mft-episode-walker-v0 recorded lab paper fills: open=30 closed=138; cues_accepted=168; median_fair_cost_episode_pct=0.006624. Fixed-stake v0; influences_live=false; declared incomparable; no sealed spawn / no Package L; does not steal Data P1.",
+      "summary": "Walker mft-episode-walker-v0 recorded lab paper fills: open=40 closed=147; cues_accepted=187; median_fair_cost_episode_pct=0.00489. Fixed-stake v0; influences_live=false; declared incomparable; no sealed spawn / no Package L; does not steal Data P1.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -96,7 +87,7 @@
       "severity": "info",
       "category": "research",
       "title": "Parallel timing lenses (observe)",
-      "summary": "L652 parallel timing lenses: candidates=34 (buy=20 sell=14); looking=48 entered=38 abandoned=40; concurrence_mean=1.118; buy_watch_armed=0. Observe-only fixed-stake v0; concurrence companion only (N241 not_now); no Package L / no sealed zoo. See docs/ops/parallel-timing-lenses.md.",
+      "summary": "L652 parallel timing lenses: candidates=35 (buy=21 sell=14); looking=50 entered=39 abandoned=40; concurrence_mean=1.114; buy_watch_armed=0. Observe-only fixed-stake v0; concurrence companion only (N241 not_now); no Package L / no sealed zoo. See docs/ops/parallel-timing-lenses.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -105,7 +96,7 @@
       "severity": "info",
       "category": "research",
       "title": "Lab learning progress (observe)",
-      "summary": "Lab learning progress: MFT open/closed=30 / 138; median fair-cost=0.0066; shadows_eligible=True; L652 looking/entered/abandoned=48/38/40; concurrence_mean=1.118; learning_marks=152; gaps=had_themes=2 miss_themes=2 scored_reviews=50. Package M observe strip; influences_live=false; never Package L / N241. Dashboard: Automation → Observe utilization.",
+      "summary": "Lab learning progress: MFT open/closed=40 / 147; median fair-cost=0.0049; shadows_eligible=True; L652 looking/entered/abandoned=50/39/40; concurrence_mean=1.114; learning_marks=161; gaps=had_themes=2 miss_themes=2 scored_reviews=50. Package M observe strip; influences_live=false; never Package L / N241. Dashboard: Automation → Observe utilization.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -114,7 +105,7 @@
       "severity": "info",
       "category": "research",
       "title": "Entry-blind review queue (observe)",
-      "summary": "Active entry_blind reviews: 12 (new=12, reply=0); actioned history=18; candidates=61. PIT-only; influences_live=false.",
+      "summary": "Active entry_blind reviews: 12 (new=12, reply=0); actioned history=18; candidates=57. PIT-only; influences_live=false.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -123,7 +114,7 @@
       "severity": "info",
       "category": "research",
       "title": "Entry news polarity (observe)",
-      "summary": "Buy-day PIT polarity on entry_blind: 3/12 cards with usable news cites; 9 no_usable_news. Labels={'improvement_path': 3, 'mixed_or_unclear': 0, 'no_usable_news': 9, 'structural_negative': 0}. Observe-only (influences_live=false); not Package L / not strand-A veto. See docs/ops/entry-news-polarity.md.",
+      "summary": "Buy-day PIT polarity on entry_blind: 2/12 cards with usable news cites; 10 no_usable_news. Labels={'improvement_path': 2, 'mixed_or_unclear': 0, 'no_usable_news': 10, 'structural_negative': 0}. Observe-only (influences_live=false); not Package L / not strand-A veto. See docs/ops/entry-news-polarity.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -159,7 +150,7 @@
       "severity": "info",
       "category": "research",
       "title": "N201 value-mom observe refreshed",
-      "summary": "strand-c-short-horizon-value-mom-v0: 150 completed episodes over 15 weeks; entries/week=10.0; smooth_ret_cohort_median=0.035395 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.020776; stress_3pct_report_only=-0.039381; skipped_missing_entry_fields=85602. Observe-only — launch-queue waiter; no live writes (F8).",
+      "summary": "strand-c-short-horizon-value-mom-v0: 150 completed episodes over 15 weeks; entries/week=10.0; smooth_ret_cohort_median=0.035395 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.020776; stress_3pct_report_only=-0.039381; skipped_missing_entry_fields=85946. Observe-only — launch-queue waiter; no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -176,17 +167,8 @@
     {
       "severity": "info",
       "category": "research",
-      "title": "N201 alone-path interesting — promotion design optional (F8)",
-      "summary": "N201 value-mom. Alone-path interestingness met (fair_cost_median=0.035395; rule=thickness && phase_floor_met && smooth_ret_cohort_median > 0 && patient_hold_excess_report_only > 0). Human may open a deliberate promotion-*design* dialogue and must stamp disposition ack | no-design | design-open. No auto-promote, no decision-review --apply, no second live path (F8).",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "info",
-      "category": "research",
       "title": "N210 AI-judgment observe refreshed",
-      "summary": "N210 (strand-e-ai-judgment-fixed-stake-v0) refreshed; pipeline=episode_walker_active; episodes=5 (open=2); weeks=12; volume_gate_met=False. Observe-only; influences_live=false; matched-30 untouched.",
+      "summary": "N210 (strand-e-ai-judgment-fixed-stake-v0) refreshed; pipeline=episode_walker_active; episodes=5 (open=3); weeks=12; volume_gate_met=False. Observe-only; influences_live=false; matched-30 untouched.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -195,7 +177,7 @@
       "severity": "info",
       "category": "research",
       "title": "N206 plain-EY observe refreshed",
-      "summary": "strand-d-plain-ey-identity-v0: 243 completed episodes over 15 weeks; entries/week=16.2; smooth_ret_cohort_median=0.013732 (fair costs primary; fixed-stake %; independent of fund NAV); cash_excess_report_only=0.013732; stress_3pct_report_only=-0.041172; skipped_missing_entry_fields=0. Observe-only — influences_live false; alone-first; no filing ingest sprint; no live writes (F8).",
+      "summary": "strand-d-plain-ey-identity-v0: 244 completed episodes over 15 weeks; entries/week=16.267; smooth_ret_cohort_median=0.013508 (fair costs primary; fixed-stake %; independent of fund NAV); cash_excess_report_only=0.013508; stress_3pct_report_only=-0.041837; skipped_missing_entry_fields=0. Observe-only — influences_live false; alone-first; no filing ingest sprint; no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -212,17 +194,8 @@
     {
       "severity": "info",
       "category": "research",
-      "title": "N206 alone-path interesting — promotion design optional (F8)",
-      "summary": "N206 plain-EY (alone design optional — no assessment crown). Alone-path interestingness met (fair_cost_median=0.013732; rule=thickness && smooth_ret_cohort_median > 0 (alone; no assessment crown)). Human may open a deliberate promotion-*design* dialogue and must stamp disposition ack | no-design | design-open. No auto-promote, no decision-review --apply, no second live path (F8).",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "info",
-      "category": "research",
       "title": "N215 soft-band technical veto observe refreshed",
-      "summary": "n215-soft-band-veto-v0: N200 closed=112; deep=8 large=7; SOFT_VETO+ catch=2/8 miss=1/7; hard any-of-six catch=5/8 miss=6/7. n215-grind-mid60-pass-v0: N200 catch=3/8 miss=0/7 Δsum=0.704382; N206_post_warm(n>=2026-10-23) closed=16 Δsum=-0.055398. live_veto=False observe_sketch_interesting=False. Observe-only — no live writes (F8).",
+      "summary": "n215-soft-band-veto-v0: N200 closed=112; deep=8 large=7; SOFT_VETO+ catch=2/8 miss=1/7; hard any-of-six catch=5/8 miss=6/7. n215-grind-mid60-pass-v0: N200 catch=3/8 miss=0/7 Δsum=0.704382; N206_post_warm(n>=2026-10-23) closed=17 Δsum=-0.049898. live_veto=False observe_sketch_interesting=False. Observe-only — no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -271,38 +244,27 @@
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "observe",
-      "title": "Deferred idea triggers met",
-      "summary": "2 open deferred idea(s) have met their structured trigger: L551 (2026-11-01), L632 (2026-11-01). Pick up, retarget, or close each with ftse-defer (docs/ops/deferred-triggers.md).",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "observe",
-      "title": "Deferred idea triggers name frozen books",
-      "summary": "16 open idea(s) wait on a frozen book that will never change: L117 (ai_judgment_fair); L365 (ai_judgment_fair); L442 (ai_judgment_fair); L445 (ai_judgment_fair); L475 (ai_judgment_fair); N135 (ai_judgment_fair); N142 (ai_judgment_fair); N143 (ai_judgment_fair); N163 (ai_judgment_fair); N18 (ai_judgment_fair); N36 (ai_judgment_fair); L511 (ai_judgment_fair); L532 (ai_judgment_fair); L558 (ai_judgment_fair); N196 (ai_judgment_fair); L567 (ai_judgment_fair). Retarget revisit_when to the primary/control or close.",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
     }
   ],
-  "auto_fixes": [],
-  "drafted_task_ids": [],
+  "auto_fixes": [
+    {
+      "action": "market_eng_gap_burndown",
+      "detail": "gap_closure_compile for sti → eng-20261102-02"
+    }
+  ],
+  "drafted_task_ids": [
+    "eng-20261102-02"
+  ],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": false,
+      "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-11-01T04:03:15+00:00",
-      "last_success_run_id": 41271549694,
-      "age_hours": 3.8,
+      "last_success_at": "2026-11-02T02:21:54+00:00",
+      "last_success_run_id": 41377326133,
+      "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -311,11 +273,11 @@
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "past_email_ready": true,
+      "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-01T06:20:28+00:00",
-      "last_success_run_id": 41280430308,
-      "age_hours": 1.5,
+      "last_success_at": "2026-11-01T17:56:23+00:00",
+      "last_success_run_id": 41334001592,
+      "age_hours": 8.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -323,12 +285,12 @@
     {
       "workflow": "engineering-queue.yml",
       "name": "FTSE Engineering Queue",
-      "expected_today": false,
+      "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 26,
-      "last_success_at": "2026-10-31T19:07:52+00:00",
-      "last_success_run_id": 41232739647,
-      "age_hours": 12.7,
+      "last_success_at": "2026-11-02T02:15:33+00:00",
+      "last_success_run_id": 41376742601,
+      "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -339,8 +301,8 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-11-01T07:40:41+00:00",
-      "last_success_run_id": 41285742502,
+      "last_success_at": "2026-11-02T02:30:58+00:00",
+      "last_success_run_id": 41378144001,
       "age_hours": 0.1,
       "stale": false,
       "recent_failures_24h": 0,
@@ -352,9 +314,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-31T13:45:22+00:00",
-      "last_success_run_id": 41206997016,
-      "age_hours": 18.1,
+      "last_success_at": "2026-11-01T14:24:02+00:00",
+      "last_success_run_id": 41315999082,
+      "age_hours": 12.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -362,12 +324,12 @@
     {
       "workflow": "analysis-review.yml",
       "name": "Modelling analysis review",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-10-25T13:15:18+00:00",
-      "last_success_run_id": 40196767619,
-      "age_hours": 162.6,
+      "last_success_at": "2026-11-01T15:19:29+00:00",
+      "last_success_run_id": 41320639954,
+      "age_hours": 11.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -375,12 +337,12 @@
     {
       "workflow": "library-grow.yml",
       "name": "FTSE Library Ladder",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
       "last_success_at": "2026-11-01T06:21:50+00:00",
       "last_success_run_id": 41280528288,
-      "age_hours": 1.5,
+      "age_hours": 20.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -388,12 +350,12 @@
     {
       "workflow": "library-model-review.yml",
       "name": "Library model review",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
       "last_success_at": "2026-11-01T07:31:52+00:00",
       "last_success_run_id": 41285148221,
-      "age_hours": 0.3,
+      "age_hours": 19.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -401,12 +363,12 @@
     {
       "workflow": "email-report.yml",
       "name": "Email report",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-10-30T21:54:04+00:00",
-      "last_success_run_id": 41134388304,
-      "age_hours": 33.9,
+      "last_success_at": "2026-11-01T07:31:53+00:00",
+      "last_success_run_id": 41285149439,
+      "age_hours": 19.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -414,12 +376,12 @@
     {
       "workflow": "data-backup.yml",
       "name": "FTSE Data Backup",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-10-25T16:36:57+00:00",
-      "last_success_run_id": 40212525776,
-      "age_hours": 159.2,
+      "last_success_at": "2026-11-01T17:59:16+00:00",
+      "last_success_run_id": 41334234519,
+      "age_hours": 8.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -427,12 +389,12 @@
     {
       "workflow": "paper-auto.yml",
       "name": "FTSE Paper Automation",
-      "expected_today": false,
+      "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
       "last_success_at": "2026-10-30T11:33:11+00:00",
       "last_success_run_id": 41048888291,
-      "age_hours": 44.3,
+      "age_hours": 63.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -443,9 +405,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-01T02:30:43+00:00",
-      "last_success_run_id": 41265501900,
-      "age_hours": 5.3,
+      "last_success_at": "2026-11-01T18:24:14+00:00",
+      "last_success_run_id": 41336439171,
+      "age_hours": 8.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -455,7 +417,7 @@
     "open_count": 0,
     "pr_open_count": 0,
     "parked_count": 1,
-    "merged_count": 184,
+    "merged_count": 191,
     "failed_count": 0,
     "next_task_id": null,
     "in_flight_branch": null,
@@ -464,7 +426,7 @@
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": false,
+  "should_dispatch_engineering": true,
   "email_deferred": false,
   "email_defer_reasons": []
 }
