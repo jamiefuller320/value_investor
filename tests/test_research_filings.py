@@ -8913,6 +8913,84 @@ def test_ir_allowlist_period_classifies_u14_si_1h2025_final_slug():
     )
 
 
+def test_filing_source_surface_u14_si_ir_allowlist_direct_eng_20261102_02():
+    """eng-20261102-02: sti U14.SI parked at asia_filings must gain ir_allowlist_direct surface."""
+    from value_investor.research.filings import filing_source_surface, ir_allowlist_direct_eligible
+
+    assert ir_allowlist_direct_eligible("U14.SI")
+    assert filing_source_surface("sti", "U14.SI") == "asia_filings+ir_allowlist_direct"
+
+
+def test_load_exhaustion_releases_parked_u14_si_ir_surface_eng_20261102_02(tmp_path: Path):
+    """eng-20261102-02: sti U14.SI unparks when IR allowlist direct surface ships."""
+    from value_investor.library_ingest_exhaustion import load_ingest_exhaustion
+    from value_investor.storage import write_json
+
+    write_json(
+        tmp_path / "markets" / "sti" / "ingest_exhaustion.json",
+        {
+            "market_id": "sti",
+            "exhausted": True,
+            "parked": [
+                {
+                    "ticker": "U14.SI",
+                    "reason": "unfetchable_iwb",
+                    "source_surface": "asia_filings",
+                },
+                {
+                    "ticker": "D05.SI",
+                    "reason": "unfetchable_iwb",
+                    "source_surface": "asia_filings",
+                },
+            ],
+        },
+        compact=False,
+    )
+    payload = load_ingest_exhaustion("sti", library_root=tmp_path)
+    assert "U14.SI" in payload["surface_released"]
+    assert [row["ticker"] for row in payload["parked"]] == ["D05.SI"]
+    assert payload["exhausted"] is False
+
+
+@patch("value_investor.research.filings._fetch_ir_allowlist_body")
+def test_refetch_ir_allowlist_u14_si_statutory_eng_20261102_02(mock_fetch, tmp_path: Path):
+    """eng-20261102-02: U14.SI SGX allowlist rows must refetch for gap-closure stats."""
+    mock_fetch.return_value = (
+        "UOL Group Limited consolidated revenue profit cash flow annual report " * 40,
+        "pdf",
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_cdb04db911a0eed6",
+                        "source": "ir_allowlist",
+                        "url": "https://links.sgx.com/1.0.0/corporate-announcements/IJ2GH7ZTV024QR4R/881833_UOL%20Group%20Limited%20-%20Annual%20Report%202025.pdf",
+                        "period": "annual",
+                        "has_body": False,
+                    }
+                ],
+                "summary": {"with_body": 0, "total": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        ticker="U14.SI",
+        company_name="UOL Group Limited",
+        max_bodies=3,
+    )
+    assert result["attempted"] >= 1
+    assert result["fetched"] >= 1
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert payload["filings"][0].get("has_body") is True
+
+
 def test_parked_source_hunter_skip_0968_hk_hang_seng():
     """eng-20261017-11: 0968.HK leftover IWB is bot-gated TipRanks news, not missing HKEX filings."""
     assert "0968.HK" in PARKED_SOURCE_HUNTER_SKIP
