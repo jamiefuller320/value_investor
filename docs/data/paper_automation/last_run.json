@@ -1,13 +1,13 @@
 {
-  "acted": true,
+  "acted": false,
   "gate": {
-    "local_time": "2026-10-30T11:34:21.975012+00:00",
+    "local_time": "2026-11-02T08:43:27.384812+00:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-10-30T08:00:00+00:00",
-    "settle_at": "2026-10-30T09:15:00+00:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-11-02T08:00:00+00:00",
+    "settle_at": "2026-11-02T09:15:00+00:00",
+    "can_act": false,
+    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
   "trades": [],
   "plan": {
@@ -15,17 +15,17 @@
       "Universe: only strong_buy / buy names from the latest screen.",
       "Timing filter: names with timing_signal=wait are excluded from new buys.",
       "Conviction floor: min_conviction=0.60.",
-      "Sector cap: at most 1 name(s) per known sector (cap=20%).",
-      "Ranking: highest conviction_score first, keep at most 3 names.",
+      "Sector cap: at most 6 name(s) per known sector (cap=20%).",
+      "Ranking: highest conviction_score first, keep at most 30 names.",
       "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
       "Costs: buy 0.53% / sell 0.03% (legacy symmetric slot 0.28%).",
       "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 787.37,
-    "cash": 6.17,
-    "max_positions": 3,
+    "nav": 960.99,
+    "cash": 2.26,
+    "max_positions": 30,
     "min_conviction": 0.6,
     "sector_cap": 0.2,
     "skip_timing_wait": true,
@@ -36,80 +36,304 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 262.46,
+    "target_sleeve_value": 96.1,
     "targets": [
-      {
-        "ticker": "CURY.L",
-        "name": "Currys plc",
-        "signal": "strong_buy",
-        "conviction_score": 1.0,
-        "price": 144.4
-      },
       {
         "ticker": "PAF.L",
         "name": "Pan African Resources PLC",
         "signal": "strong_buy",
-        "conviction_score": 1.0,
-        "price": 106.6
+        "conviction_score": 0.9125000000000002,
+        "price": 103.5106
+      },
+      {
+        "ticker": "CURY.L",
+        "name": "Currys plc",
+        "signal": "strong_buy",
+        "conviction_score": 0.8232000000000002,
+        "price": 145.8
+      },
+      {
+        "ticker": "GSK.L",
+        "name": "GSK plc",
+        "signal": "buy",
+        "conviction_score": 0.7965000000000001,
+        "price": 1837.0
+      },
+      {
+        "ticker": "PPH.L",
+        "name": "PPHE Hotel Group Limited",
+        "signal": "buy",
+        "conviction_score": 0.7375000000000002,
+        "price": 1550.0
       },
       {
         "ticker": "IGG.L",
         "name": "IG Group Holdings plc",
         "signal": "buy",
-        "conviction_score": 1.0,
-        "price": 961.2492
+        "conviction_score": 0.7331000000000002,
+        "price": 934.5
+      },
+      {
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "signal": "buy",
+        "conviction_score": 0.7143000000000002,
+        "price": 3186.0
+      },
+      {
+        "ticker": "FRES.L",
+        "name": "Fresnillo plc",
+        "signal": "buy",
+        "conviction_score": 0.6928000000000002,
+        "price": 2246.0
+      },
+      {
+        "ticker": "COST.L",
+        "name": "Costain Group PLC",
+        "signal": "buy",
+        "conviction_score": 0.6817000000000002,
+        "price": 253.5
+      },
+      {
+        "ticker": "GEN.L",
+        "name": "Genuit Group plc",
+        "signal": "strong_buy",
+        "conviction_score": 0.6437,
+        "price": 261.8
+      },
+      {
+        "ticker": "SCT.L",
+        "name": "Softcat plc",
+        "signal": "buy",
+        "conviction_score": 0.6380000000000001,
+        "price": 1630.0
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_buys": [
       {
-        "action": "hold",
-        "ticker": "CURY.L",
-        "name": "Currys plc",
-        "reason": "Already near equal-weight target",
-        "value": 262.71,
-        "target_value": 262.46,
-        "conviction_score": 1.0,
-        "signal": "strong_buy"
-      },
+        "action": "buy",
+        "ticker": "GSK.L",
+        "name": "GSK plc",
+        "reason": "New sleeve",
+        "value": 2.26,
+        "price": 1837.0,
+        "target_value": 96.1,
+        "conviction_score": 0.7965000000000001,
+        "signal": "buy"
+      }
+    ],
+    "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "PAF.L",
         "name": "Pan African Resources PLC",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 253.61,
-        "target_value": 262.46,
-        "conviction_score": 1.0,
+        "value": 56.45,
+        "target_value": 96.1,
+        "conviction_score": 0.9125000000000002,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
+        "ticker": "CURY.L",
+        "name": "Currys plc",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 61.19,
+        "target_value": 96.1,
+        "conviction_score": 0.8232000000000002,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "OSB.L",
+        "name": "OSB Group Plc",
+        "reason": "Hold buffer \u2014 outside target set (1/2 screen(s) before exit)",
+        "value": 59.42,
+        "conviction_score": null,
+        "signal": null
+      },
+      {
+        "action": "hold",
+        "ticker": "BGEO.L",
+        "name": "Lion Finance Group PLC",
+        "reason": "Hold buffer \u2014 outside target set (1/2 screen(s) before exit)",
+        "value": 58.72,
+        "conviction_score": null,
+        "signal": null
+      },
+      {
+        "action": "hold",
+        "ticker": "ICG.L",
+        "name": "ICG plc",
+        "reason": "Hold buffer \u2014 outside target set (1/2 screen(s) before exit)",
+        "value": 62.46,
+        "conviction_score": null,
+        "signal": null
+      },
+      {
+        "action": "hold",
+        "ticker": "NWG.L",
+        "name": "NatWest Group plc",
+        "reason": "Hold buffer \u2014 outside target set (1/2 screen(s) before exit)",
+        "value": 59.47,
+        "conviction_score": null,
+        "signal": null
+      },
+      {
+        "action": "hold",
+        "ticker": "BARC.L",
+        "name": "Barclays PLC",
+        "reason": "Hold buffer \u2014 outside target set (1/2 screen(s) before exit)",
+        "value": 59.61,
+        "conviction_score": null,
+        "signal": null
+      },
+      {
+        "action": "hold",
+        "ticker": "VCT.L",
+        "name": "Victrex plc",
+        "reason": "Hold buffer \u2014 outside target set (1/2 screen(s) before exit)",
+        "value": 61.49,
+        "conviction_score": null,
+        "signal": null
+      },
+      {
+        "action": "hold",
+        "ticker": "CCC.L",
+        "name": "Computacenter plc",
+        "reason": "Hold buffer \u2014 outside target set (1/2 screen(s) before exit)",
+        "value": 57.88,
+        "conviction_score": null,
+        "signal": null
+      },
+      {
+        "action": "hold",
+        "ticker": "DSCV.L",
+        "name": "discoverIE Group plc",
+        "reason": "Hold buffer \u2014 outside target set (1/2 screen(s) before exit)",
+        "value": 60.59,
+        "conviction_score": null,
+        "signal": null
+      }
+    ],
+    "skipped": [
+      {
+        "ticker": "PPH.L",
+        "name": "PPHE Hotel Group Limited",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 96.1,
+        "conviction_score": 0.7375000000000002,
+        "signal": "buy"
+      },
+      {
         "ticker": "IGG.L",
         "name": "IG Group Holdings plc",
-        "reason": "Already near equal-weight target",
-        "value": 264.87,
-        "target_value": 262.46,
-        "conviction_score": 1.0,
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 96.1,
+        "conviction_score": 0.7331000000000002,
+        "signal": "buy"
+      },
+      {
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 96.1,
+        "conviction_score": 0.7143000000000002,
+        "signal": "buy"
+      },
+      {
+        "ticker": "FRES.L",
+        "name": "Fresnillo plc",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 96.1,
+        "conviction_score": 0.6928000000000002,
+        "signal": "buy"
+      },
+      {
+        "ticker": "COST.L",
+        "name": "Costain Group PLC",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 96.1,
+        "conviction_score": 0.6817000000000002,
+        "signal": "buy"
+      },
+      {
+        "ticker": "GEN.L",
+        "name": "Genuit Group plc",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 96.1,
+        "conviction_score": 0.6437,
+        "signal": "strong_buy"
+      },
+      {
+        "ticker": "SCT.L",
+        "name": "Softcat plc",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 96.1,
+        "conviction_score": 0.6380000000000001,
         "signal": "buy"
       }
     ],
-    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    "summary": "Next rebalance would target 10 equal-weight sleeve(s); deploy cash into 1 buy(s); leave 10 near-target holding(s)."
   },
   "alerts": [
+    {
+      "ticker": "PPH.L",
+      "name": "PPHE Hotel Group Limited",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 1550.0,
+      "stop_loss": 1336.82,
+      "take_profit": 1617.84,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 3186.0,
+      "stop_loss": 2477.29,
+      "take_profit": 3363.12,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 253.5,
+      "stop_loss": 199.19,
+      "take_profit": 268.92,
+      "timing_signal": "insufficient_data"
+    },
     {
       "ticker": "CURY.L",
       "name": "Currys plc",
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 144.39999389648438,
-      "stop_loss": 135.2,
-      "take_profit": 163.62,
+      "mark": 145.8000030517578,
+      "stop_loss": 129.04,
+      "take_profit": 156.17,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "FRES.L",
+      "name": "Fresnillo plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
+      "mark": 2246.0,
+      "stop_loss": 2060.55,
+      "take_profit": 2884.72,
       "timing_signal": "insufficient_data"
     },
     {
@@ -117,10 +341,10 @@
       "name": "Pan African Resources PLC",
       "source": "paper",
       "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 106.5999984741211,
-      "stop_loss": 106.11,
-      "take_profit": 128.41,
+      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
+      "mark": 103.5105972290039,
+      "stop_loss": 96.29,
+      "take_profit": 123.26,
       "timing_signal": "insufficient_data"
     },
     {
@@ -129,848 +353,1303 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 961.2492065429688,
+      "mark": 934.5,
       "stop_loss": 835.73,
       "take_profit": 1221.29,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "DSCV.L",
+      "name": "discoverIE Group plc",
+      "source": "paper",
+      "severity": "watch",
+      "message": "Screen signal is now hold",
+      "mark": 829.0,
+      "stop_loss": 677.3,
+      "take_profit": 853.2,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "VCT.L",
+      "name": "Victrex plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 907.0,
+      "stop_loss": 695.67,
+      "take_profit": 963.36,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "ICG.L",
+      "name": "ICG plc",
+      "source": "paper",
+      "severity": "watch",
+      "message": "Screen signal is now hold",
+      "mark": 1872.0,
+      "stop_loss": 1600.07,
+      "take_profit": 1936.44,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "BGEO.L",
+      "name": "Lion Finance Group PLC",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 12040.0,
+      "stop_loss": 10762.34,
+      "take_profit": 13296.69,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "GEN.L",
+      "name": "Genuit Group plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 261.79998779296875,
+      "stop_loss": 226.49,
+      "take_profit": 274.1,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "CCC.L",
+      "name": "Computacenter plc",
+      "source": "paper",
+      "severity": "watch",
+      "message": "Screen signal is now hold",
+      "mark": 4916.0,
+      "stop_loss": 4011.3,
+      "take_profit": 5292.25,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "CCC.L",
+      "name": "Computacenter plc",
+      "source": "paper",
+      "severity": "watch",
+      "message": "Underwater \u2014 re-check hypothesis: left buy tier (hold); conviction 35% below intact floor",
+      "mark": 4916.0,
+      "stop_loss": 4011.3,
+      "take_profit": 5292.25,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "OSB.L",
+      "name": "OSB Group Plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 478.6000061035156,
+      "stop_loss": 431.03,
+      "take_profit": 521.64,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "BARC.L",
+      "name": "Barclays PLC",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 414.8500061035156,
+      "stop_loss": 363.21,
+      "take_profit": 465.79,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "NWG.L",
+      "name": "NatWest Group plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 578.0,
+      "stop_loss": 559.89,
+      "take_profit": 678.74,
       "timing_signal": "insufficient_data"
     }
   ],
   "fund": {
     "config": {
-      "name": "AI judgment fair-cost lab (Suite B)",
+      "name": "AI judgment matched-30 fund twin (B3 shadow)",
       "mode": "automated",
       "initial_cash": 1000.0,
       "monthly_deposit": 0.0,
       "trade_cost_pct": 0.0027500000000000003,
       "buy_cost_pct": 0.00525,
       "sell_cost_pct": 0.00025,
-      "max_positions": 3,
+      "max_positions": 30,
       "reporting_currency": "GBP",
       "hedge_assumption": "none",
-      "id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-      "created_at": "2026-09-01T14:23:57.454226+00:00"
+      "id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+      "created_at": "2026-10-15T10:03:39.502904+00:00"
     },
-    "cash": 6.17,
+    "cash": 2.26,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
+      "PPH.L": {
+        "ticker": "PPH.L",
+        "shares": 0.039894,
+        "avg_cost": 1457.1934,
+        "name": "PPHE Hotel Group Limited",
+        "sector": "Consumer Cyclical",
+        "currency": "GBP",
+        "stop_loss": 1336.82,
+        "take_profit": 1617.84,
+        "opened_at": "2026-10-16T09:27:55.394926+01:00"
+      },
+      "KLR.L": {
+        "ticker": "KLR.L",
+        "shares": 0.019454,
+        "avg_cost": 3074.3939,
+        "name": "Keller Group plc",
+        "sector": "Industrials",
+        "currency": "GBP",
+        "stop_loss": 2477.29,
+        "take_profit": 3363.12,
+        "opened_at": "2026-10-16T09:27:55.394926+01:00"
+      },
+      "COST.L": {
+        "ticker": "COST.L",
+        "shares": 0.236902,
+        "avg_cost": 252.7742,
+        "name": "Costain Group PLC",
+        "sector": "Industrials",
+        "currency": "GBP",
+        "stop_loss": 199.19,
+        "take_profit": 268.92,
+        "opened_at": "2026-10-16T09:27:55.394926+01:00"
+      },
       "CURY.L": {
         "ticker": "CURY.L",
-        "shares": 1.819349,
-        "avg_cost": 148.0,
+        "shares": 0.419681,
+        "avg_cost": 150.1362,
         "name": "Currys plc",
         "sector": "Consumer Cyclical",
         "currency": "GBP",
-        "stop_loss": 135.2,
-        "take_profit": 163.62,
-        "opened_at": "2026-10-22T09:50:33.447773+01:00"
+        "stop_loss": 129.04,
+        "take_profit": 156.17,
+        "opened_at": "2026-10-16T09:27:55.394926+01:00"
+      },
+      "FRES.L": {
+        "ticker": "FRES.L",
+        "shares": 0.025769,
+        "avg_cost": 2578.7498,
+        "name": "Fresnillo plc",
+        "sector": "Basic Materials",
+        "currency": "GBP",
+        "stop_loss": 2060.55,
+        "take_profit": 2884.72,
+        "opened_at": "2026-10-16T09:27:55.394926+01:00"
       },
       "PAF.L": {
         "ticker": "PAF.L",
-        "shares": 2.37908,
-        "avg_cost": 110.965,
+        "shares": 0.545395,
+        "avg_cost": 117.0283,
         "name": "Pan African Resources PLC",
         "sector": "Basic Materials",
         "currency": "GBP",
-        "stop_loss": 106.11,
-        "take_profit": 128.41,
-        "opened_at": "2026-10-22T09:50:33.447773+01:00"
+        "stop_loss": 96.29,
+        "take_profit": 123.26,
+        "opened_at": "2026-10-16T09:27:55.394926+01:00"
       },
       "IGG.L": {
         "ticker": "IGG.L",
-        "shares": 0.27555,
-        "avg_cost": 960.5,
+        "shares": 0.062482,
+        "avg_cost": 973.6736,
         "name": "IG Group Holdings plc",
         "sector": "Financial Services",
         "currency": "GBP",
         "stop_loss": 835.73,
         "take_profit": 1221.29,
-        "opened_at": "2026-10-27T10:51:39.207405+00:00"
+        "opened_at": "2026-10-16T09:27:55.394926+01:00"
+      },
+      "DSCV.L": {
+        "ticker": "DSCV.L",
+        "shares": 0.073093,
+        "avg_cost": 814.7619,
+        "name": "discoverIE Group plc",
+        "sector": "Technology",
+        "currency": "GBP",
+        "stop_loss": 677.3,
+        "take_profit": 853.2,
+        "opened_at": "2026-10-16T09:27:55.394926+01:00"
+      },
+      "VCT.L": {
+        "ticker": "VCT.L",
+        "shares": 0.067798,
+        "avg_cost": 927.0841,
+        "name": "Victrex plc",
+        "sector": "Basic Materials",
+        "currency": "GBP",
+        "stop_loss": 695.67,
+        "take_profit": 963.36,
+        "opened_at": "2026-10-16T09:27:55.394926+01:00"
+      },
+      "ICG.L": {
+        "ticker": "ICG.L",
+        "shares": 0.033364,
+        "avg_cost": 1764.2632,
+        "name": "ICG plc",
+        "sector": "Financial Services",
+        "currency": "GBP",
+        "stop_loss": 1600.07,
+        "take_profit": 1936.44,
+        "opened_at": "2026-10-20T09:27:52.188491+01:00"
+      },
+      "BGEO.L": {
+        "ticker": "BGEO.L",
+        "shares": 0.004877,
+        "avg_cost": 12154.6917,
+        "name": "Lion Finance Group PLC",
+        "sector": "Financial Services",
+        "currency": "GBP",
+        "stop_loss": 10762.34,
+        "take_profit": 13296.69,
+        "opened_at": "2026-10-20T09:27:52.188491+01:00"
+      },
+      "GEN.L": {
+        "ticker": "GEN.L",
+        "shares": 0.23419,
+        "avg_cost": 256.9529,
+        "name": "Genuit Group plc",
+        "sector": "Industrials",
+        "currency": "GBP",
+        "stop_loss": 226.49,
+        "take_profit": 274.1,
+        "opened_at": "2026-10-22T09:50:54.473573+01:00"
+      },
+      "CCC.L": {
+        "ticker": "CCC.L",
+        "shares": 0.011773,
+        "avg_cost": 5185.0,
+        "name": "Computacenter plc",
+        "sector": "Technology",
+        "currency": "GBP",
+        "stop_loss": 4011.3,
+        "take_profit": 5292.25,
+        "opened_at": "2026-10-29T11:43:37.620734+00:00"
+      },
+      "OSB.L": {
+        "ticker": "OSB.L",
+        "shares": 0.12416,
+        "avg_cost": 485.6,
+        "name": "OSB Group Plc",
+        "sector": "Financial Services",
+        "currency": "GBP",
+        "stop_loss": 431.03,
+        "take_profit": 521.64,
+        "opened_at": "2026-10-30T11:34:39.025327+00:00"
+      },
+      "BARC.L": {
+        "ticker": "BARC.L",
+        "shares": 0.143689,
+        "avg_cost": 419.6,
+        "name": "Barclays PLC",
+        "sector": "Financial Services",
+        "currency": "GBP",
+        "stop_loss": 363.21,
+        "take_profit": 465.79,
+        "opened_at": "2026-10-30T11:34:39.025327+00:00"
+      },
+      "NWG.L": {
+        "ticker": "NWG.L",
+        "shares": 0.102888,
+        "avg_cost": 586.0,
+        "name": "NatWest Group plc",
+        "sector": "Financial Services",
+        "currency": "GBP",
+        "stop_loss": 559.89,
+        "take_profit": 678.74,
+        "opened_at": "2026-10-30T11:34:39.025327+00:00"
       }
     },
     "trades": [
       {
-        "id": "725f25ff-d273-4b5c-845f-fb009bb54e80",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-08-10T09:26:57.780475+01:00",
-        "ticker": "FGP.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 5.276488,
-        "price": 184.0,
-        "gross": 970.87,
-        "cost": 29.13,
-        "net_cash": -1000.0,
-        "note": "Automated buy",
-        "name": "FirstGroup plc"
-      },
-      {
-        "id": "14f44493-808e-47cd-b27b-3ba57eeb1240",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-08-14T09:27:20.279983+01:00",
-        "ticker": "FGP.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 5.276488,
-        "price": 184.0,
-        "gross": 970.87,
-        "cost": 29.13,
-        "net_cash": 941.75,
-        "note": "Automated exit \u2014 left target set",
-        "name": "FirstGroup plc",
-        "avg_cost_at_exit": 184.0,
-        "position_closed": true
-      },
-      {
-        "id": "4f2cfd82-3bfb-4bf6-a48b-8fd56239d7ae",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-08-19T10:00:13.599366+01:00",
-        "ticker": "MEGP.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 2.596196,
-        "price": 117.392,
-        "gross": 304.77,
-        "cost": 9.14,
-        "net_cash": -313.92,
-        "note": "Automated buy",
-        "name": "ME Group International plc"
-      },
-      {
-        "id": "53b56a38-4cde-4907-878b-e5c354af7bbf",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-08-19T10:00:13.599366+01:00",
-        "ticker": "AEP.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 1.579133,
-        "price": 193.0,
-        "gross": 304.77,
-        "cost": 9.14,
-        "net_cash": -313.92,
-        "note": "Automated buy",
-        "name": "AEP Plantations Plc"
-      },
-      {
-        "id": "dd709d9a-218b-4701-80e8-08be1040026f",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-08-19T10:00:13.599366+01:00",
-        "ticker": "IMB.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 0.118866,
-        "price": 2564.0,
-        "gross": 304.77,
-        "cost": 9.14,
-        "net_cash": -313.92,
-        "note": "Automated buy",
-        "name": "Imperial Brands PLC"
-      },
-      {
-        "id": "34e96a56-7e0c-4500-b2c4-3b5399a8baa6",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-08-21T09:27:13.383131+01:00",
-        "ticker": "IMB.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 0.118866,
-        "price": 2510.0,
-        "gross": 298.35,
-        "cost": 8.95,
-        "net_cash": 289.4,
-        "note": "Automated exit \u2014 left target set",
-        "name": "Imperial Brands PLC",
-        "avg_cost_at_exit": 2564.0,
-        "position_closed": true
-      },
-      {
-        "id": "27604c54-0137-4532-b016-b0c46b9c25cf",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-08-21T09:27:13.383131+01:00",
-        "ticker": "SN.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 0.266832,
-        "price": 1053.0,
-        "gross": 280.97,
-        "cost": 8.43,
-        "net_cash": -289.4,
-        "note": "Automated buy",
-        "name": "Smith & Nephew plc"
-      },
-      {
-        "id": "53f8b650-3133-4a03-80bb-e8717f1ae602",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-08-25T09:27:10.998440+01:00",
-        "ticker": "SN.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 0.266832,
-        "price": 1071.5,
-        "gross": 285.91,
-        "cost": 8.58,
-        "net_cash": 277.33,
-        "note": "Automated exit \u2014 left target set",
-        "name": "Smith & Nephew plc",
-        "avg_cost_at_exit": 1053.0,
-        "position_closed": true
-      },
-      {
-        "id": "431927a1-72bd-4933-961b-27d6a7d8cb60",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-08-25T09:27:10.998440+01:00",
-        "ticker": "MEGP.L",
-        "side": "sell",
-        "sizing_mode": "cash",
-        "shares": 0.193468,
-        "price": 125.4,
-        "gross": 24.26,
-        "cost": 0.73,
-        "net_cash": 23.53,
-        "note": "Automated trim",
-        "name": "ME Group International plc",
-        "avg_cost_at_exit": 117.392
-      },
-      {
-        "id": "853ffd72-c29a-4395-b0dd-727e95e7b1df",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-08-25T09:27:10.998440+01:00",
-        "ticker": "IMB.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 0.115729,
-        "price": 2524.0349,
-        "gross": 292.1,
-        "cost": 8.76,
-        "net_cash": -300.87,
-        "note": "Automated buy",
-        "name": "Imperial Brands PLC"
-      },
-      {
-        "id": "1184aff8-b8f6-43bb-9860-c2d0c2f414ca",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-08T09:28:59.812113+01:00",
-        "ticker": "MEGP.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 2.402728,
-        "price": 122.1387,
-        "gross": 293.47,
-        "cost": 0.07,
-        "net_cash": 293.39,
-        "note": "Automated exit \u2014 left target set",
-        "name": "ME Group International plc",
-        "avg_cost_at_exit": 117.392,
-        "position_closed": true
-      },
-      {
-        "id": "76bb957a-7568-45df-9f10-aa8a89ab27ef",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-08T09:28:59.812113+01:00",
-        "ticker": "AEP.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 1.579133,
-        "price": 196.8,
-        "gross": 310.77,
-        "cost": 0.08,
-        "net_cash": 310.7,
-        "note": "Automated exit \u2014 left target set",
-        "name": "AEP Plantations Plc",
-        "avg_cost_at_exit": 193.0,
-        "position_closed": true
-      },
-      {
-        "id": "c08b8a88-0560-4c13-8fda-42d0d7f96b21",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-08T09:28:59.812113+01:00",
-        "ticker": "MGNS.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 0.07124,
-        "price": 4152.0,
-        "gross": 295.79,
-        "cost": 1.55,
-        "net_cash": -297.34,
-        "note": "Automated buy",
-        "name": "Morgan Sindall Group plc"
-      },
-      {
-        "id": "6fcd0464-c4ed-41a0-865a-7cc936710f6b",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-08T09:28:59.812113+01:00",
-        "ticker": "SN.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 0.277344,
-        "price": 1066.5,
-        "gross": 295.79,
-        "cost": 1.55,
-        "net_cash": -297.34,
-        "note": "Automated buy",
-        "name": "Smith & Nephew plc"
-      },
-      {
-        "id": "f603abf4-a1c5-4c3e-a493-e7a56d756090",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-10T09:29:13.404510+01:00",
-        "ticker": "IMB.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 0.115729,
-        "price": 2449.0,
-        "gross": 283.42,
-        "cost": 0.07,
-        "net_cash": 283.35,
-        "note": "Automated exit \u2014 left target set",
-        "name": "Imperial Brands PLC",
-        "avg_cost_at_exit": 2524.0349,
-        "position_closed": true
-      },
-      {
-        "id": "5e8f7e1e-541f-4c57-87b1-0405922135c1",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-10T09:29:13.404510+01:00",
-        "ticker": "MGNS.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 0.07124,
-        "price": 4038.0,
-        "gross": 287.67,
-        "cost": 0.07,
-        "net_cash": 287.6,
-        "note": "Automated exit \u2014 left target set",
-        "name": "Morgan Sindall Group plc",
-        "avg_cost_at_exit": 4152.0,
-        "position_closed": true
-      },
-      {
-        "id": "21068621-83d1-4ba4-9d2d-2024ebcc50a2",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-10T09:29:13.404510+01:00",
-        "ticker": "SN.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 0.277344,
-        "price": 1021.5,
-        "gross": 283.31,
-        "cost": 0.07,
-        "net_cash": 283.24,
-        "note": "Automated exit \u2014 left target set",
-        "name": "Smith & Nephew plc",
-        "avg_cost_at_exit": 1066.5,
-        "position_closed": true
-      },
-      {
-        "id": "73bc927e-3afc-4ccc-bf0d-737fbe087de4",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-10T09:29:13.404510+01:00",
-        "ticker": "KLR.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 0.096094,
-        "price": 2980.0,
-        "gross": 286.36,
-        "cost": 1.5,
-        "net_cash": -287.86,
-        "note": "Automated buy",
-        "name": "Keller Group plc"
-      },
-      {
-        "id": "beb56e61-ef44-4aad-be96-def139620a2a",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-10T09:29:13.404510+01:00",
-        "ticker": "DSCV.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 0.369021,
-        "price": 776.0,
-        "gross": 286.36,
-        "cost": 1.5,
-        "net_cash": -287.86,
-        "note": "Automated buy",
-        "name": "discoverIE Group plc"
-      },
-      {
-        "id": "df0c2dfd-14b6-4ee0-91c9-4b66adc2cef2",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-10T09:29:13.404510+01:00",
-        "ticker": "JD.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 3.560011,
-        "price": 80.438,
-        "gross": 286.36,
-        "cost": 1.5,
-        "net_cash": -287.86,
-        "note": "Automated buy",
-        "name": "JD Sports Fashion Plc"
-      },
-      {
-        "id": "1cff82b0-a42e-4483-8bad-05f585168522",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-16T09:28:52.150564+01:00",
-        "ticker": "JD.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 3.560011,
-        "price": 75.24,
-        "gross": 267.86,
-        "cost": 0.07,
-        "net_cash": 267.79,
-        "note": "Automated exit \u2014 left target set",
-        "name": "JD Sports Fashion Plc",
-        "avg_cost_at_exit": 80.438,
-        "position_closed": true
-      },
-      {
-        "id": "024edf93-4f0c-4009-87e2-4748b91339c5",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-16T09:28:52.150564+01:00",
-        "ticker": "KLR.L",
-        "side": "sell",
-        "sizing_mode": "cash",
-        "shares": 0.003666,
-        "price": 3040.0,
-        "gross": 11.14,
-        "cost": 0.0,
-        "net_cash": 11.14,
-        "note": "Automated trim",
-        "name": "Keller Group plc",
-        "avg_cost_at_exit": 2980.0
-      },
-      {
-        "id": "fe67909b-828e-4628-bc89-d5332f003e5e",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-16T09:28:52.150564+01:00",
-        "ticker": "CURY.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 1.863485,
-        "price": 148.9,
-        "gross": 277.47,
-        "cost": 1.46,
-        "net_cash": -278.93,
-        "note": "Automated buy",
-        "name": "Currys plc"
-      },
-      {
-        "id": "a51e8bc0-2969-453b-9178-b769e6a7a7e5",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-23T09:29:34.000190+01:00",
-        "ticker": "DSCV.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 0.369021,
-        "price": 818.0,
-        "gross": 301.86,
-        "cost": 0.08,
-        "net_cash": 301.78,
-        "note": "Automated exit \u2014 left target set",
-        "name": "discoverIE Group plc",
-        "avg_cost_at_exit": 776.0,
-        "position_closed": true
-      },
-      {
-        "id": "3b741d62-80f0-475b-84b2-22921dbfad90",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-23T09:29:34.000190+01:00",
-        "ticker": "CURY.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 1.863485,
-        "price": 146.8,
-        "gross": 273.56,
-        "cost": 0.07,
-        "net_cash": 273.49,
-        "note": "Automated exit \u2014 left target set",
-        "name": "Currys plc",
-        "avg_cost_at_exit": 148.9,
-        "position_closed": true
-      },
-      {
-        "id": "f75f81da-25e1-4342-a550-66de1a73cb51",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-23T09:29:34.000190+01:00",
+        "id": "183f62db-3560-48ca-8df8-a7cdbd181164",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-16T09:27:55.394926+01:00",
         "ticker": "PPH.L",
         "side": "buy",
         "sizing_mode": "cash",
-        "shares": 0.187371,
-        "price": 1550.0,
-        "gross": 290.43,
-        "cost": 1.52,
-        "net_cash": -291.95,
-        "note": "Automated buy",
-        "name": "PPHE Hotel Group Limited"
-      },
-      {
-        "id": "62d94a31-4868-4ddc-bd12-92aedd486cbd",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-23T09:29:34.000190+01:00",
-        "ticker": "PAF.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 2.187821,
-        "price": 128.8245,
-        "gross": 281.84,
-        "cost": 1.48,
-        "net_cash": -283.32,
-        "note": "Automated buy",
-        "name": "Pan African Resources PLC"
-      },
-      {
-        "id": "584b33a1-c1de-436e-99d1-32a57040a01d",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-25T09:29:40.571454+01:00",
-        "ticker": "PAF.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 2.187821,
-        "price": 123.7,
-        "gross": 270.63,
-        "cost": 0.07,
-        "net_cash": 270.57,
-        "note": "Automated exit \u2014 left target set",
-        "name": "Pan African Resources PLC",
-        "avg_cost_at_exit": 128.8245,
-        "position_closed": true
-      },
-      {
-        "id": "f5831a63-5cd5-46f3-b31f-4d6a8c2d349c",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-25T09:29:40.571454+01:00",
-        "ticker": "KLR.L",
-        "side": "sell",
-        "sizing_mode": "cash",
-        "shares": 0.005371,
-        "price": 3320.0,
-        "gross": 17.83,
-        "cost": 0.0,
-        "net_cash": 17.83,
-        "note": "Automated trim",
-        "name": "Keller Group plc",
-        "avg_cost_at_exit": 2980.0
-      },
-      {
-        "id": "6f7f099c-142b-48ad-9910-1206701c4daa",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-25T09:29:40.571454+01:00",
-        "ticker": "BP.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 0.512938,
-        "price": 559.3,
-        "gross": 286.89,
-        "cost": 1.51,
-        "net_cash": -288.39,
-        "note": "Automated buy",
-        "name": "BP p.l.c."
-      },
-      {
-        "id": "f0cffc63-29ce-41a3-809b-c8ed56b31cb6",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-29T09:28:46.543552+01:00",
-        "ticker": "BP.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 0.512938,
-        "price": 557.2,
-        "gross": 285.81,
-        "cost": 0.07,
-        "net_cash": 285.74,
-        "note": "Automated exit \u2014 left target set",
-        "name": "BP p.l.c.",
-        "avg_cost_at_exit": 559.3,
-        "position_closed": true
-      },
-      {
-        "id": "4be7c888-a9bf-47b6-a0a3-7648442f61ec",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-29T09:28:46.543552+01:00",
-        "ticker": "KLR.L",
-        "side": "sell",
-        "sizing_mode": "cash",
-        "shares": 0.003053,
-        "price": 3408.7739,
-        "gross": 10.41,
-        "cost": 0.0,
-        "net_cash": 10.41,
-        "note": "Automated trim",
-        "name": "Keller Group plc",
-        "avg_cost_at_exit": 2980.0
-      },
-      {
-        "id": "8c5bda1d-a1f9-424c-871e-fd63790d4ba6",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-09-29T09:28:46.543552+01:00",
-        "ticker": "PAF.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 2.406896,
-        "price": 118.35,
-        "gross": 284.86,
-        "cost": 1.5,
-        "net_cash": -286.35,
-        "note": "Automated buy",
-        "name": "Pan African Resources PLC"
-      },
-      {
-        "id": "4c56e988-c1b2-4212-8347-c5ed53869ea5",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-02T09:28:55.610032+01:00",
-        "ticker": "PPH.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 0.00658,
-        "price": 1480.0,
-        "gross": 9.74,
-        "cost": 0.05,
-        "net_cash": -9.79,
-        "note": "Automated buy",
-        "name": "PPHE Hotel Group Limited"
-      },
-      {
-        "id": "ca46783a-267e-4230-b3f2-03134104c475",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-09T09:38:19.178249+01:00",
-        "ticker": "PAF.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 2.406896,
-        "price": 117.593,
-        "gross": 283.03,
-        "cost": 0.07,
-        "net_cash": 282.96,
-        "note": "Automated exit \u2014 left target set",
-        "name": "Pan African Resources PLC",
-        "avg_cost_at_exit": 118.35,
-        "position_closed": true
-      },
-      {
-        "id": "079c4f8e-41e8-44e6-9210-759b5c02d6c8",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-09T09:38:19.178249+01:00",
-        "ticker": "FRES.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 0.098876,
-        "price": 2780.189,
-        "gross": 274.89,
-        "cost": 1.44,
-        "net_cash": -276.34,
-        "note": "Automated buy",
-        "name": "Fresnillo plc"
-      },
-      {
-        "id": "058634a0-0b62-49e8-82f8-4bc326013af7",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-16T09:27:33.907941+01:00",
-        "ticker": "PPH.L",
-        "side": "sell",
-        "sizing_mode": "cash",
-        "shares": 0.00704,
+        "shares": 0.057488,
         "price": 1442.0,
-        "gross": 10.15,
-        "cost": 0.0,
-        "net_cash": 10.15,
-        "note": "Automated trim",
-        "name": "PPHE Hotel Group Limited",
-        "avg_cost_at_exit": 1547.6251
+        "gross": 82.9,
+        "cost": 0.44,
+        "net_cash": -83.33,
+        "note": "Automated buy",
+        "name": "PPHE Hotel Group Limited"
       },
       {
-        "id": "824c0f0d-0479-4e3b-b3e0-1d1e96fcfc54",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-16T09:27:33.907941+01:00",
+        "id": "2215ec10-2219-42d5-9b7b-c862bd0ff04f",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-16T09:27:55.394926+01:00",
         "ticker": "KLR.L",
         "side": "buy",
         "sizing_mode": "cash",
-        "shares": 0.004516,
+        "shares": 0.027233,
         "price": 3044.0,
-        "gross": 13.75,
-        "cost": 0.07,
-        "net_cash": -13.82,
+        "gross": 82.9,
+        "cost": 0.44,
+        "net_cash": -83.33,
         "note": "Automated buy",
         "name": "Keller Group plc"
       },
       {
-        "id": "3dbc8666-6393-489a-93ba-8b0e6ee4a743",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-20T09:27:35.249582+01:00",
-        "ticker": "KLR.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 0.08852,
-        "price": 3114.0,
-        "gross": 275.65,
-        "cost": 0.07,
-        "net_cash": 275.58,
-        "note": "Automated exit \u2014 left target set",
-        "name": "Keller Group plc",
-        "avg_cost_at_exit": 2983.2654,
-        "position_closed": true
+        "id": "6b7450c8-f508-4e31-973e-80c05ce05474",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-16T09:27:55.394926+01:00",
+        "ticker": "COST.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.331592,
+        "price": 250.0,
+        "gross": 82.9,
+        "cost": 0.44,
+        "net_cash": -83.33,
+        "note": "Automated buy",
+        "name": "Costain Group PLC"
       },
       {
-        "id": "9b6d8890-ff3f-481c-bc8b-7ca6a8c43869",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-20T09:27:35.249582+01:00",
+        "id": "4d791ac8-fca0-43ee-89e9-1636b3a7e7aa",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-16T09:27:55.394926+01:00",
         "ticker": "GFRD.L",
         "side": "buy",
         "sizing_mode": "cash",
-        "shares": 0.405248,
-        "price": 667.0,
-        "gross": 270.3,
-        "cost": 1.42,
-        "net_cash": -271.72,
+        "shares": 0.122849,
+        "price": 674.797,
+        "gross": 82.9,
+        "cost": 0.44,
+        "net_cash": -83.33,
         "note": "Automated buy",
         "name": "Galliford Try Holdings plc"
       },
       {
-        "id": "67c34cef-0230-4533-83e7-e9e06472975e",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-20T09:27:35.249582+01:00",
-        "ticker": "FRES.L",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 0.002574,
-        "price": 2637.0,
-        "gross": 6.79,
-        "cost": 0.04,
-        "net_cash": -6.82,
-        "note": "Automated buy",
-        "name": "Fresnillo plc"
-      },
-      {
-        "id": "eb61844e-0aaa-4393-8efb-1599fc8e3810",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-22T09:50:33.447773+01:00",
-        "ticker": "PPH.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 0.186911,
-        "price": 1502.0,
-        "gross": 280.74,
-        "cost": 0.07,
-        "net_cash": 280.67,
-        "note": "Automated exit \u2014 left target set",
-        "name": "PPHE Hotel Group Limited",
-        "avg_cost_at_exit": 1547.6251,
-        "position_closed": true
-      },
-      {
-        "id": "7fbfa3e1-da85-46bc-aed0-7889e9c5a1bb",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-22T09:50:33.447773+01:00",
-        "ticker": "FRES.L",
-        "side": "sell",
-        "sizing_mode": "shares",
-        "shares": 0.10145,
-        "price": 2518.0039,
-        "gross": 255.45,
-        "cost": 0.06,
-        "net_cash": 255.39,
-        "note": "Automated exit \u2014 left target set",
-        "name": "Fresnillo plc",
-        "avg_cost_at_exit": 2776.5563,
-        "position_closed": true
-      },
-      {
-        "id": "6ed57aa4-0c37-4125-ae16-3dd8c941560a",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-22T09:50:33.447773+01:00",
+        "id": "289287aa-1a82-4a38-af90-3b0da265ffb5",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-16T09:27:55.394926+01:00",
         "ticker": "CURY.L",
         "side": "buy",
         "sizing_mode": "cash",
-        "shares": 1.819349,
-        "price": 148.0,
-        "gross": 269.26,
-        "cost": 1.41,
-        "net_cash": -270.68,
+        "shares": 0.546101,
+        "price": 151.8,
+        "gross": 82.9,
+        "cost": 0.44,
+        "net_cash": -83.33,
         "note": "Automated buy",
         "name": "Currys plc"
       },
       {
-        "id": "db5678e1-a0ea-475e-8302-67c6ef6d7cb7",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-22T09:50:33.447773+01:00",
+        "id": "fcb9e785-e277-4070-9b48-730ab3e635b3",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-16T09:27:55.394926+01:00",
+        "ticker": "FRES.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.030749,
+        "price": 2696.0,
+        "gross": 82.9,
+        "cost": 0.44,
+        "net_cash": -83.33,
+        "note": "Automated buy",
+        "name": "Fresnillo plc"
+      },
+      {
+        "id": "d2d20807-8271-4739-a401-4aa9460dacfa",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-16T09:27:55.394926+01:00",
+        "ticker": "GEN.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.290463,
+        "price": 285.4,
+        "gross": 82.9,
+        "cost": 0.44,
+        "net_cash": -83.33,
+        "note": "Automated buy",
+        "name": "Genuit Group plc"
+      },
+      {
+        "id": "112ea523-1af5-4e6c-8826-674e14936207",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-16T09:27:55.394926+01:00",
         "ticker": "PAF.L",
         "side": "buy",
         "sizing_mode": "cash",
-        "shares": 2.37908,
-        "price": 110.965,
-        "gross": 263.99,
-        "cost": 1.39,
-        "net_cash": -265.38,
+        "shares": 0.691394,
+        "price": 119.9,
+        "gross": 82.9,
+        "cost": 0.44,
+        "net_cash": -83.33,
         "note": "Automated buy",
         "name": "Pan African Resources PLC"
       },
       {
-        "id": "edec0ada-f813-42ea-a1bf-06d8c464e0ac",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-23T09:27:48.390714+01:00",
-        "ticker": "GFRD.L",
+        "id": "3532659b-2a7a-4b15-9bfc-a2887bd3070e",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-16T09:27:55.394926+01:00",
+        "ticker": "IGG.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.084806,
+        "price": 977.5,
+        "gross": 82.9,
+        "cost": 0.44,
+        "net_cash": -83.33,
+        "note": "Automated buy",
+        "name": "IG Group Holdings plc"
+      },
+      {
+        "id": "5af325f8-6948-4dbf-9f70-da1a7e8797f3",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-16T09:27:55.394926+01:00",
+        "ticker": "DSCV.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.101715,
+        "price": 815.0,
+        "gross": 82.9,
+        "cost": 0.44,
+        "net_cash": -83.33,
+        "note": "Automated buy",
+        "name": "discoverIE Group plc"
+      },
+      {
+        "id": "b2e437ad-6507-483a-a3f6-195e7cd05324",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-16T09:27:55.394926+01:00",
+        "ticker": "VCT.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.088519,
+        "price": 936.5,
+        "gross": 82.9,
+        "cost": 0.44,
+        "net_cash": -83.33,
+        "note": "Automated buy",
+        "name": "Victrex plc"
+      },
+      {
+        "id": "c8b4aedd-f105-4dae-b042-e43de6e21389",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-16T09:27:55.394926+01:00",
+        "ticker": "CCC.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.015866,
+        "price": 5225.0,
+        "gross": 82.9,
+        "cost": 0.44,
+        "net_cash": -83.33,
+        "note": "Automated buy",
+        "name": "Computacenter plc"
+      },
+      {
+        "id": "5aca6014-08af-4011-8563-bbe245b4155b",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-20T09:27:52.188491+01:00",
+        "ticker": "GEN.L",
         "side": "sell",
         "sizing_mode": "shares",
-        "shares": 0.405248,
-        "price": 668.0,
-        "gross": 270.71,
-        "cost": 0.07,
-        "net_cash": 270.64,
+        "shares": 0.290463,
+        "price": 243.38,
+        "gross": 70.69,
+        "cost": 0.02,
+        "net_cash": 70.68,
         "note": "Automated exit \u2014 left target set",
-        "name": "Galliford Try Holdings plc",
-        "avg_cost_at_exit": 667.0,
+        "name": "Genuit Group plc",
+        "avg_cost_at_exit": 285.4,
         "position_closed": true
       },
       {
-        "id": "ecfc1126-8a74-4801-8dff-9e73dd896537",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-23T09:27:48.390714+01:00",
+        "id": "4439e0ec-abc3-4135-a0b3-a1a504d11861",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-20T09:27:52.188491+01:00",
+        "ticker": "CCC.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.015866,
+        "price": 4908.0,
+        "gross": 77.87,
+        "cost": 0.02,
+        "net_cash": 77.85,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Computacenter plc",
+        "avg_cost_at_exit": 5225.0,
+        "position_closed": true
+      },
+      {
+        "id": "706d504d-18de-46ac-838d-5794e7ef0391",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-20T09:27:52.188491+01:00",
+        "ticker": "ICG.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.045821,
+        "price": 1750.0,
+        "gross": 80.19,
+        "cost": 0.42,
+        "net_cash": -80.61,
+        "note": "Automated buy",
+        "name": "ICG plc"
+      },
+      {
+        "id": "30c8bca6-bd58-4692-82d5-36a538d1db90",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-20T09:27:52.188491+01:00",
         "ticker": "BGEO.L",
         "side": "buy",
         "sizing_mode": "cash",
-        "shares": 0.021819,
-        "price": 12150.0,
-        "gross": 265.1,
-        "cost": 1.39,
-        "net_cash": -266.5,
+        "shares": 0.00557,
+        "price": 12130.0,
+        "gross": 67.56,
+        "cost": 0.35,
+        "net_cash": -67.92,
         "note": "Automated buy",
         "name": "Lion Finance Group PLC"
       },
       {
-        "id": "bcb6c67c-44c9-4739-974d-d59e784b856c",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-27T10:51:39.207405+00:00",
-        "ticker": "BGEO.L",
+        "id": "d51cfedb-0661-4206-994e-672ace6167ed",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-21T09:27:51.079402+01:00",
+        "ticker": "CURY.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.136928,
+        "price": 149.0,
+        "gross": 20.4,
+        "cost": 0.01,
+        "net_cash": 20.4,
+        "note": "Automated trim",
+        "name": "Currys plc",
+        "avg_cost_at_exit": 151.8
+      },
+      {
+        "id": "bde3623f-10cf-450c-a684-7b5a9cdc30c9",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-21T09:27:51.079402+01:00",
+        "ticker": "PAF.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.16672,
+        "price": 116.2,
+        "gross": 19.37,
+        "cost": 0.0,
+        "net_cash": 19.37,
+        "note": "Automated trim",
+        "name": "Pan African Resources PLC",
+        "avg_cost_at_exit": 119.9
+      },
+      {
+        "id": "7a1f5713-b75f-490b-84de-c69330cb1625",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-21T09:27:51.079402+01:00",
+        "ticker": "GFRD.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.032795,
+        "price": 677.0,
+        "gross": 22.2,
+        "cost": 0.01,
+        "net_cash": 22.2,
+        "note": "Automated trim",
+        "name": "Galliford Try Holdings plc",
+        "avg_cost_at_exit": 674.797
+      },
+      {
+        "id": "ccd988fd-eec0-4112-b997-880e3bd7d8f3",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-21T09:27:51.079402+01:00",
+        "ticker": "KLR.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.008139,
+        "price": 3192.9099,
+        "gross": 25.99,
+        "cost": 0.01,
+        "net_cash": 25.98,
+        "note": "Automated trim",
+        "name": "Keller Group plc",
+        "avg_cost_at_exit": 3044.0
+      },
+      {
+        "id": "6fe67882-d94e-4a34-9b8d-9193a5f1006a",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-21T09:27:51.079402+01:00",
+        "ticker": "PPH.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.016516,
+        "price": 1488.0,
+        "gross": 24.58,
+        "cost": 0.01,
+        "net_cash": 24.57,
+        "note": "Automated trim",
+        "name": "PPHE Hotel Group Limited",
+        "avg_cost_at_exit": 1442.0
+      },
+      {
+        "id": "8c3717a5-f407-4e01-ae9c-74eb01ff029f",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-21T09:27:51.079402+01:00",
+        "ticker": "FRES.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.007655,
+        "price": 2640.0,
+        "gross": 20.21,
+        "cost": 0.01,
+        "net_cash": 20.21,
+        "note": "Automated trim",
+        "name": "Fresnillo plc",
+        "avg_cost_at_exit": 2696.0
+      },
+      {
+        "id": "544f0d22-bba5-4f91-8cc2-4b31e5af3b72",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-21T09:27:51.079402+01:00",
+        "ticker": "COST.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.090619,
+        "price": 253.0,
+        "gross": 22.93,
+        "cost": 0.01,
+        "net_cash": 22.92,
+        "note": "Automated trim",
+        "name": "Costain Group PLC",
+        "avg_cost_at_exit": 250.0
+      },
+      {
+        "id": "eaa8d1b8-6355-45a7-a014-d7dc7a32f8a7",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-21T09:27:51.079402+01:00",
+        "ticker": "IGG.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.019523,
+        "price": 933.9,
+        "gross": 18.23,
+        "cost": 0.0,
+        "net_cash": 18.23,
+        "note": "Automated trim",
+        "name": "IG Group Holdings plc",
+        "avg_cost_at_exit": 977.5
+      },
+      {
+        "id": "d9024ae6-041a-4a49-89b5-eef83b6c914c",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-21T09:27:51.079402+01:00",
+        "ticker": "DSCV.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.02598,
+        "price": 805.0,
+        "gross": 20.91,
+        "cost": 0.01,
+        "net_cash": 20.91,
+        "note": "Automated trim",
+        "name": "discoverIE Group plc",
+        "avg_cost_at_exit": 815.0
+      },
+      {
+        "id": "e35a316e-0d69-4d63-8f48-fa76a685f530",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-21T09:27:51.079402+01:00",
+        "ticker": "ICG.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.011589,
+        "price": 1781.0,
+        "gross": 20.64,
+        "cost": 0.01,
+        "net_cash": 20.64,
+        "note": "Automated trim",
+        "name": "ICG plc",
+        "avg_cost_at_exit": 1750.0
+      },
+      {
+        "id": "5bf4d811-5e4b-45e5-a8aa-ccaae6e8280c",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-21T09:27:51.079402+01:00",
+        "ticker": "VCT.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.021816,
+        "price": 914.0,
+        "gross": 19.94,
+        "cost": 0.0,
+        "net_cash": 19.93,
+        "note": "Automated trim",
+        "name": "Victrex plc",
+        "avg_cost_at_exit": 936.5
+      },
+      {
+        "id": "57348120-70ec-4a6b-b53b-b31e9c33cad0",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-21T09:27:51.079402+01:00",
+        "ticker": "OSB.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.126599,
+        "price": 479.1,
+        "gross": 60.65,
+        "cost": 0.32,
+        "net_cash": -60.97,
+        "note": "Automated buy",
+        "name": "OSB Group Plc"
+      },
+      {
+        "id": "5883d058-fae4-4039-99a2-409e805fb664",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-21T09:27:51.079402+01:00",
+        "ticker": "NWG.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.0943,
+        "price": 643.2,
+        "gross": 60.65,
+        "cost": 0.32,
+        "net_cash": -60.97,
+        "note": "Automated buy",
+        "name": "NatWest Group plc"
+      },
+      {
+        "id": "76fffdd6-6fe2-4915-b3db-5b0f539d0c7b",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-21T09:27:51.079402+01:00",
+        "ticker": "BARC.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.145295,
+        "price": 417.45,
+        "gross": 60.65,
+        "cost": 0.32,
+        "net_cash": -60.97,
+        "note": "Automated buy",
+        "name": "Barclays PLC"
+      },
+      {
+        "id": "25a471ea-eefc-47ae-84c0-a158992f408e",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-22T09:50:54.473573+01:00",
+        "ticker": "GEN.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.206151,
+        "price": 253.0,
+        "gross": 52.16,
+        "cost": 0.27,
+        "net_cash": -52.43,
+        "note": "Automated buy",
+        "name": "Genuit Group plc"
+      },
+      {
+        "id": "70aaeb03-b81d-4aab-b6ce-605b3138d5a9",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "GFRD.L",
         "side": "sell",
         "sizing_mode": "shares",
-        "shares": 0.021819,
-        "price": 12290.0,
-        "gross": 268.16,
-        "cost": 0.07,
-        "net_cash": 268.09,
+        "shares": 0.090054,
+        "price": 707.0,
+        "gross": 63.67,
+        "cost": 0.02,
+        "net_cash": 63.65,
         "note": "Automated exit \u2014 left target set",
-        "name": "Lion Finance Group PLC",
-        "avg_cost_at_exit": 12150.0,
+        "name": "Galliford Try Holdings plc",
+        "avg_cost_at_exit": 674.797,
         "position_closed": true
       },
       {
-        "id": "473351d6-3a5c-4c80-8315-60b051ec5b93",
-        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
-        "acted_at": "2026-10-27T10:51:39.207405+00:00",
+        "id": "d0808d6f-a7e8-48f6-9ba5-298980696397",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "OSB.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.126599,
+        "price": 486.4,
+        "gross": 61.58,
+        "cost": 0.02,
+        "net_cash": 61.56,
+        "note": "Automated exit \u2014 left target set",
+        "name": "OSB Group Plc",
+        "avg_cost_at_exit": 479.1,
+        "position_closed": true
+      },
+      {
+        "id": "9b64efdb-5b18-4b96-a69b-d6b8bffba151",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "NWG.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.0943,
+        "price": 636.2,
+        "gross": 59.99,
+        "cost": 0.01,
+        "net_cash": 59.98,
+        "note": "Automated exit \u2014 left target set",
+        "name": "NatWest Group plc",
+        "avg_cost_at_exit": 643.2,
+        "position_closed": true
+      },
+      {
+        "id": "0fc7c7cf-17de-408d-9a7a-0e09089fa16e",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "BARC.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.145295,
+        "price": 418.15,
+        "gross": 60.76,
+        "cost": 0.02,
+        "net_cash": 60.74,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Barclays PLC",
+        "avg_cost_at_exit": 417.45,
+        "position_closed": true
+      },
+      {
+        "id": "5d94abe0-e9bf-46d6-9cbb-b80ae7b88e39",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "CURY.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.146846,
+        "price": 145.5,
+        "gross": 21.37,
+        "cost": 0.11,
+        "net_cash": -21.48,
+        "note": "Automated buy",
+        "name": "Currys plc"
+      },
+      {
+        "id": "b533d19c-69bb-4f92-bacd-d1f492af0b73",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "PAF.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.211368,
+        "price": 109.9,
+        "gross": 23.23,
+        "cost": 0.12,
+        "net_cash": -23.35,
+        "note": "Automated buy",
+        "name": "Pan African Resources PLC"
+      },
+      {
+        "id": "51d6e07f-c783-4e38-bd23-283e6be0d23a",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "PPH.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.012754,
+        "price": 1506.0,
+        "gross": 19.21,
+        "cost": 0.1,
+        "net_cash": -19.31,
+        "note": "Automated buy",
+        "name": "PPHE Hotel Group Limited"
+      },
+      {
+        "id": "5ba0f5cd-e3be-4c4d-980d-097645eae116",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
         "ticker": "IGG.L",
         "side": "buy",
         "sizing_mode": "cash",
-        "shares": 0.27555,
+        "shares": 0.018962,
         "price": 960.5,
-        "gross": 264.67,
-        "cost": 1.39,
-        "net_cash": -266.06,
+        "gross": 18.21,
+        "cost": 0.1,
+        "net_cash": -18.31,
         "note": "Automated buy",
         "name": "IG Group Holdings plc"
+      },
+      {
+        "id": "3ca7e2fa-2ecf-4f73-bec3-67d9834eb5a8",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "KLR.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.006477,
+        "price": 3164.0,
+        "gross": 20.49,
+        "cost": 0.11,
+        "net_cash": -20.6,
+        "note": "Automated buy",
+        "name": "Keller Group plc"
+      },
+      {
+        "id": "38b90051-cadf-489c-be5d-82427ff7c742",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "COST.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.067,
+        "price": 262.752,
+        "gross": 17.6,
+        "cost": 0.09,
+        "net_cash": -17.7,
+        "note": "Automated buy",
+        "name": "Costain Group PLC"
+      },
+      {
+        "id": "84f0eaa6-d8fa-40d0-8699-7d3b9c75aa51",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "FRES.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.011437,
+        "price": 2342.0,
+        "gross": 26.79,
+        "cost": 0.14,
+        "net_cash": -26.93,
+        "note": "Automated buy",
+        "name": "Fresnillo plc"
+      },
+      {
+        "id": "cbb698c8-49ac-4279-8749-f62f0c50ecc1",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "BGEO.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.001016,
+        "price": 12290.0,
+        "gross": 12.49,
+        "cost": 0.07,
+        "net_cash": -12.56,
+        "note": "Automated buy",
+        "name": "Lion Finance Group PLC"
+      },
+      {
+        "id": "383f12e5-b685-41af-ae72-3049c6e22e0d",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "DSCV.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.023665,
+        "price": 814.0,
+        "gross": 19.26,
+        "cost": 0.1,
+        "net_cash": -19.36,
+        "note": "Automated buy",
+        "name": "discoverIE Group plc"
+      },
+      {
+        "id": "8ee9d533-7e84-41d0-800a-10ee66e2df5a",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "ICG.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.010447,
+        "price": 1811.0,
+        "gross": 18.92,
+        "cost": 0.1,
+        "net_cash": -19.02,
+        "note": "Automated buy",
+        "name": "ICG plc"
+      },
+      {
+        "id": "118b5567-3faa-4708-a30b-318a6d82f47e",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "GEN.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.098809,
+        "price": 265.2,
+        "gross": 26.2,
+        "cost": 0.14,
+        "net_cash": -26.34,
+        "note": "Automated buy",
+        "name": "Genuit Group plc"
+      },
+      {
+        "id": "ccb4d4d6-16ed-46bd-abd3-4e27df8ea8cc",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-27T10:51:56.689688+00:00",
+        "ticker": "VCT.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.02319,
+        "price": 900.0,
+        "gross": 20.87,
+        "cost": 0.11,
+        "net_cash": -20.98,
+        "note": "Automated buy",
+        "name": "Victrex plc"
+      },
+      {
+        "id": "e960befb-3991-461c-bdab-a6cc88434b2f",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-29T11:43:37.620734+00:00",
+        "ticker": "CURY.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.136338,
+        "price": 146.2,
+        "gross": 19.93,
+        "cost": 0.0,
+        "net_cash": 19.93,
+        "note": "Automated trim",
+        "name": "Currys plc",
+        "avg_cost_at_exit": 150.1362
+      },
+      {
+        "id": "8afcfaff-0064-4de2-b8e0-145b19d6c03c",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-29T11:43:37.620734+00:00",
+        "ticker": "PAF.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.190647,
+        "price": 112.5,
+        "gross": 21.45,
+        "cost": 0.01,
+        "net_cash": 21.44,
+        "note": "Automated trim",
+        "name": "Pan African Resources PLC",
+        "avg_cost_at_exit": 117.0283
+      },
+      {
+        "id": "32571833-a24f-439d-9ad6-9664fb984705",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-29T11:43:37.620734+00:00",
+        "ticker": "PPH.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.013832,
+        "price": 1538.0,
+        "gross": 21.27,
+        "cost": 0.01,
+        "net_cash": 21.27,
+        "note": "Automated trim",
+        "name": "PPHE Hotel Group Limited",
+        "avg_cost_at_exit": 1457.1934
+      },
+      {
+        "id": "ed7278cd-1188-4330-8d5c-844991020076",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-29T11:43:37.620734+00:00",
+        "ticker": "IGG.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.021763,
+        "price": 982.0,
+        "gross": 21.37,
+        "cost": 0.01,
+        "net_cash": 21.37,
+        "note": "Automated trim",
+        "name": "IG Group Holdings plc",
+        "avg_cost_at_exit": 973.6736
+      },
+      {
+        "id": "bd7f7665-0725-4ef7-b517-bba42b7251af",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-29T11:43:37.620734+00:00",
+        "ticker": "KLR.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.006117,
+        "price": 3154.0,
+        "gross": 19.29,
+        "cost": 0.0,
+        "net_cash": 19.29,
+        "note": "Automated trim",
+        "name": "Keller Group plc",
+        "avg_cost_at_exit": 3074.3939
+      },
+      {
+        "id": "d5d93f7e-ee7d-466c-bdda-8f42d3e8f1f3",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-29T11:43:37.620734+00:00",
+        "ticker": "COST.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.071071,
+        "price": 259.0,
+        "gross": 18.41,
+        "cost": 0.0,
+        "net_cash": 18.4,
+        "note": "Automated trim",
+        "name": "Costain Group PLC",
+        "avg_cost_at_exit": 252.7742
+      },
+      {
+        "id": "b8e02611-ff41-4f0f-a2c5-0656b4e8b946",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-29T11:43:37.620734+00:00",
+        "ticker": "FRES.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.008762,
+        "price": 2381.0,
+        "gross": 20.86,
+        "cost": 0.01,
+        "net_cash": 20.86,
+        "note": "Automated trim",
+        "name": "Fresnillo plc",
+        "avg_cost_at_exit": 2578.7498
+      },
+      {
+        "id": "b46f5f71-8349-4be4-af94-8cc1c14b0824",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-29T11:43:37.620734+00:00",
+        "ticker": "BGEO.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.001709,
+        "price": 12580.0,
+        "gross": 21.49,
+        "cost": 0.01,
+        "net_cash": 21.49,
+        "note": "Automated trim",
+        "name": "Lion Finance Group PLC",
+        "avg_cost_at_exit": 12154.6917
+      },
+      {
+        "id": "50c0ac33-df52-45bc-b682-9d658910c24d",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-29T11:43:37.620734+00:00",
+        "ticker": "DSCV.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.026307,
+        "price": 839.43,
+        "gross": 22.08,
+        "cost": 0.01,
+        "net_cash": 22.08,
+        "note": "Automated trim",
+        "name": "discoverIE Group plc",
+        "avg_cost_at_exit": 814.7619
+      },
+      {
+        "id": "2ee7bee0-4c40-4016-a8e9-66f87bbd028b",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-29T11:43:37.620734+00:00",
+        "ticker": "ICG.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.011315,
+        "price": 1839.0,
+        "gross": 20.81,
+        "cost": 0.01,
+        "net_cash": 20.8,
+        "note": "Automated trim",
+        "name": "ICG plc",
+        "avg_cost_at_exit": 1764.2632
+      },
+      {
+        "id": "55d71867-d055-4811-b0ca-b3887b4990d3",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-29T11:43:37.620734+00:00",
+        "ticker": "GEN.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.07077,
+        "price": 262.0,
+        "gross": 18.54,
+        "cost": 0.0,
+        "net_cash": 18.54,
+        "note": "Automated trim",
+        "name": "Genuit Group plc",
+        "avg_cost_at_exit": 256.9529
+      },
+      {
+        "id": "132a206a-8cc0-434f-b14b-fd04b79c2550",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-29T11:43:37.620734+00:00",
+        "ticker": "VCT.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.022095,
+        "price": 905.0,
+        "gross": 20.0,
+        "cost": 0.0,
+        "net_cash": 19.99,
+        "note": "Automated trim",
+        "name": "Victrex plc",
+        "avg_cost_at_exit": 927.0841
+      },
+      {
+        "id": "721303c3-ddb4-418d-8104-0ca19cdb0cd7",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-29T11:43:37.620734+00:00",
+        "ticker": "CCC.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.011773,
+        "price": 5185.0,
+        "gross": 61.04,
+        "cost": 0.32,
+        "net_cash": -61.36,
+        "note": "Automated buy",
+        "name": "Computacenter plc"
+      },
+      {
+        "id": "795f0d3a-e9ec-4782-9c8e-f72f2f7b95dc",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-30T11:34:39.025327+00:00",
+        "ticker": "OSB.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.12416,
+        "price": 485.6,
+        "gross": 60.29,
+        "cost": 0.32,
+        "net_cash": -60.61,
+        "note": "Automated buy",
+        "name": "OSB Group Plc"
+      },
+      {
+        "id": "6cd3b493-8551-40a0-a2c4-5c390edaf52c",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-30T11:34:39.025327+00:00",
+        "ticker": "BARC.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.143689,
+        "price": 419.6,
+        "gross": 60.29,
+        "cost": 0.32,
+        "net_cash": -60.61,
+        "note": "Automated buy",
+        "name": "Barclays PLC"
+      },
+      {
+        "id": "0c839f3c-1066-4d2b-972f-8f50a3d67f84",
+        "fund_id": "3509e6ff-2425-48fb-b06f-815c84f7ce80",
+        "acted_at": "2026-10-30T11:34:39.025327+00:00",
+        "ticker": "NWG.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.102888,
+        "price": 586.0,
+        "gross": 60.29,
+        "cost": 0.32,
+        "net_cash": -60.61,
+        "note": "Automated buy",
+        "name": "NatWest Group plc"
       }
     ],
     "equity_curve": [
       {
-        "at": "2026-07-25T06:44:21.534427+01:00",
+        "at": "2026-10-15T10:03:39.502904+00:00",
         "portfolio_value": 1000.0,
         "cash": 1000.0,
         "contributed_capital": 1000.0,
@@ -979,98 +1658,138 @@
         "hedge_assumption": "none",
         "fx": {
           "rates": {
+            "GBP": 1.0,
+            "USD": 0.75407,
+            "EUR": 0.84585,
+            "AUD": 0.5211,
+            "CAD": 0.5304,
+            "HKD": 0.09603,
+            "SGD": 0.58782,
+            "CHF": 0.9087,
+            "SEK": 0.07536
+          },
+          "issues": []
+        },
+        "note": "Fund opened"
+      },
+      {
+        "at": "2026-10-16T09:27:55.394926+01:00",
+        "portfolio_value": 994.78,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 12,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
             "GBP": 1.0
           },
           "issues": []
         },
-        "note": "Automated rebalance (no targets)"
+        "note": "Automated rebalance"
       },
       {
-        "at": "2026-08-10T09:26:57.780475+01:00",
+        "at": "2026-10-19T12:08:47.564770+01:00",
+        "portfolio_value": 996.67,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 12,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-20T09:27:52.188491+01:00",
+        "portfolio_value": 966.51,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 12,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-21T09:27:51.079402+01:00",
+        "portfolio_value": 974.54,
+        "cash": 52.43,
+        "contributed_capital": 1000.0,
+        "positions": 15,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-22T09:50:54.473573+01:00",
+        "portfolio_value": 971.08,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 16,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-23T09:28:04.670911+01:00",
+        "portfolio_value": 957.61,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 16,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-26T11:28:45.589507+00:00",
+        "portfolio_value": 968.33,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 16,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-27T10:51:56.689688+00:00",
         "portfolio_value": 970.87,
-        "cash": -0.0,
-        "contributed_capital": 1000.0,
-        "positions": 1,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-08-12T10:36:21.733736+01:00",
-        "portfolio_value": 970.87,
-        "cash": -0.0,
-        "contributed_capital": 1000.0,
-        "positions": 1,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance (no targets)"
-      },
-      {
-        "at": "2026-08-14T09:27:20.279983+01:00",
-        "portfolio_value": 941.75,
-        "cash": 941.75,
-        "contributed_capital": 1000.0,
-        "positions": 0,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance (no targets)"
-      },
-      {
-        "at": "2026-08-17T09:27:20.569663+01:00",
-        "portfolio_value": 941.75,
-        "cash": 941.75,
-        "contributed_capital": 1000.0,
-        "positions": 0,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance (no targets)"
-      },
-      {
-        "at": "2026-08-18T09:27:41.106930+01:00",
-        "portfolio_value": 941.75,
-        "cash": 941.75,
-        "contributed_capital": 1000.0,
-        "positions": 0,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance (no targets)"
-      },
-      {
-        "at": "2026-08-19T10:00:13.599366+01:00",
-        "portfolio_value": 914.32,
         "cash": 0.0,
         "contributed_capital": 1000.0,
-        "positions": 3,
+        "positions": 12,
         "reporting_currency": "GBP",
         "hedge_assumption": "none",
         "fx": {
@@ -1082,11 +1801,11 @@
         "note": "Automated rebalance"
       },
       {
-        "at": "2026-08-20T09:27:04.138844+01:00",
-        "portfolio_value": 906.24,
-        "cash": 0.0,
+        "at": "2026-10-29T11:43:37.620734+00:00",
+        "portfolio_value": 981.41,
+        "cash": 184.09,
         "contributed_capital": 1000.0,
-        "positions": 3,
+        "positions": 13,
         "reporting_currency": "GBP",
         "hedge_assumption": "none",
         "fx": {
@@ -1098,699 +1817,11 @@
         "note": "Automated rebalance"
       },
       {
-        "at": "2026-08-21T09:27:13.383131+01:00",
-        "portfolio_value": 892.57,
-        "cash": 0.0,
+        "at": "2026-10-30T11:34:39.025327+00:00",
+        "portfolio_value": 968.79,
+        "cash": 2.26,
         "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-08-24T09:27:16.669932+01:00",
-        "portfolio_value": 911.95,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-08-25T09:27:10.998440+01:00",
-        "portfolio_value": 896.6,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-08-26T09:27:36.177488+01:00",
-        "portfolio_value": 901.66,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-08-28T09:27:12.906113+01:00",
-        "portfolio_value": 908.18,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-08-31T09:28:00.257630+01:00",
-        "portfolio_value": 907.78,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-01T09:27:42.628249+01:00",
-        "portfolio_value": 906.18,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-07T09:29:26.606028+01:00",
-        "portfolio_value": 900.76,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-08T09:28:59.812113+01:00",
-        "portfolio_value": 888.92,
-        "cash": 9.41,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-09T09:30:34.672630+01:00",
-        "portfolio_value": 877.27,
-        "cash": 9.41,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-10T09:29:13.404510+01:00",
-        "portfolio_value": 859.08,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-11T09:30:32.025616+01:00",
-        "portfolio_value": 852.83,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-14T09:29:14.851070+01:00",
-        "portfolio_value": 842.3,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-16T09:28:52.150564+01:00",
-        "portfolio_value": 841.49,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-17T09:30:28.255143+01:00",
-        "portfolio_value": 848.38,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-18T09:30:41.907017+01:00",
-        "portfolio_value": 853.1,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-22T09:29:04.914874+01:00",
-        "portfolio_value": 871.68,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-23T09:29:34.000190+01:00",
-        "portfolio_value": 872.85,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-24T09:29:20.430728+01:00",
-        "portfolio_value": 863.25,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-25T09:29:40.571454+01:00",
-        "portfolio_value": 865.59,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-28T09:28:57.388710+01:00",
-        "portfolio_value": 875.57,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-29T09:28:46.543552+01:00",
-        "portfolio_value": 857.56,
-        "cash": 9.79,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-09-30T09:29:29.872766+01:00",
-        "portfolio_value": 861.93,
-        "cash": 9.79,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-01T09:28:21.594314+01:00",
-        "portfolio_value": 851.28,
-        "cash": 9.79,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-02T09:28:55.610032+01:00",
-        "portfolio_value": 861.95,
-        "cash": -0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-05T09:33:38.397772+01:00",
-        "portfolio_value": 855.8,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-06T09:38:58.488349+01:00",
-        "portfolio_value": 848.44,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-07T09:27:59.653817+01:00",
-        "portfolio_value": 837.46,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-08T10:11:32.446480+01:00",
-        "portfolio_value": 817.54,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-09T09:38:19.178249+01:00",
-        "portfolio_value": 827.57,
-        "cash": 6.63,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-12T09:36:51.849888+01:00",
-        "portfolio_value": 834.06,
-        "cash": 6.63,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-13T09:27:25.750633+01:00",
-        "portfolio_value": 842.01,
-        "cash": 6.63,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-14T10:18:14.203408+01:00",
-        "portfolio_value": 819.74,
-        "cash": 6.63,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-15T09:36:04.262749+01:00",
-        "portfolio_value": 799.66,
-        "cash": 6.63,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-16T09:27:33.907941+01:00",
-        "portfolio_value": 808.51,
-        "cash": 2.96,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-19T12:08:33.152839+01:00",
-        "portfolio_value": 818.9,
-        "cash": 2.96,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-20T09:27:35.249582+01:00",
-        "portfolio_value": 813.7,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-21T09:27:35.510370+01:00",
-        "portfolio_value": 820.3,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-22T09:50:33.447773+01:00",
-        "portfolio_value": 809.23,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-23T09:27:48.390714+01:00",
-        "portfolio_value": 798.1,
-        "cash": 4.14,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-26T11:28:22.549653+00:00",
-        "portfolio_value": 804.18,
-        "cash": 4.14,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-27T10:51:39.207405+00:00",
-        "portfolio_value": 796.78,
-        "cash": 6.17,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-29T11:43:22.438689+00:00",
-        "portfolio_value": 810.4,
-        "cash": 6.17,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-10-30T11:34:21.975012+00:00",
-        "portfolio_value": 787.37,
-        "cash": 6.17,
-        "contributed_capital": 1000.0,
-        "positions": 3,
+        "positions": 16,
         "reporting_currency": "GBP",
         "hedge_assumption": "none",
         "fx": {
@@ -1802,7 +1833,7 @@
         "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-30T11:34:21.975012+00:00",
+    "last_mark_at": "2026-10-30T11:34:39.025327+00:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -1810,14 +1841,14 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "waiting for open settle (75 min after 08:00 Europe/London)",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "ftse350",
-    "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-30T11:34:38.863977+00:00",
+    "track_id": "ai_judgment_matched30_fair",
+    "generated_at": "2026-11-02T08:43:41.729773+00:00",
     "observe_only": true,
-    "open_count": 19,
+    "open_count": 6,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -1852,7 +1883,7 @@
       }
     },
     "first_episode": {
-      "open_count": 16,
+      "open_count": 6,
       "closed_count": 0,
       "by_exit_kind": {
         "grace": {
@@ -1893,8 +1924,8 @@
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
-    "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-30T11:34:38.865814+00:00",
+    "track_id": "ai_judgment_matched30_fair",
+    "generated_at": "2026-11-02T08:43:41.731373+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1948,36 +1979,37 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 16,
+      "hold_closed_count": 6,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 18,
+      "hold_with_data_quality_count": 20,
       "gaps": [
+        "hold_recovery closed episodes=6 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 2,
-        "recovered_to_breakeven": 1,
+        "count": 14,
+        "recovered_to_breakeven": 6,
         "close_reasons": {
-          "open": 2
+          "open": 14
         }
       },
       "closed": {
-        "count": 16,
-        "recovered_to_breakeven": 7,
+        "count": 6,
+        "recovered_to_breakeven": 4,
         "close_reasons": {
-          "sold_while_underwater": 9,
-          "sold_while_recovered": 7
+          "sold_while_recovered": 4,
+          "sold_while_underwater": 2
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 12,
+        "count": 4,
         "verdicts": {
-          "open": 12
+          "open": 4
         }
       },
       "closed": {
@@ -1986,11 +2018,11 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 3,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 3,
       "swap_rotations": 0
     }
   },
@@ -1998,9 +2030,9 @@
     "schema_version": 1,
     "scope": "hypothesis_integrity",
     "observe_only": true,
-    "track_id": "ai_judgment_fair",
-    "updated_at": "2026-10-30T11:34:38.867748+00:00",
-    "as_of": "2026-10-30T11:34:21.975012+00:00",
+    "track_id": "ai_judgment_matched30_fair",
+    "updated_at": "2026-11-02T08:43:41.733890+00:00",
+    "as_of": "2026-11-02T08:43:27.384812+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2012,57 +2044,138 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 3,
-    "underwater_count": 0,
+    "holding_count": 16,
+    "underwater_count": 3,
     "thesis_status_counts": {
-      "intact": 3,
-      "weakening": 0,
-      "broken": 0,
+      "intact": 13,
+      "weakening": 2,
+      "broken": 1,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 3,
-      "loser_count": 0,
-      "loser_share": 0.0,
-      "loser_nav_share": 0.0,
+      "holding_count": 16,
+      "loser_count": 3,
+      "loser_share": 0.1875,
+      "loser_nav_share": 0.1796,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
-      "intact_loser_count": 0,
-      "weakening_loser_count": 0,
+      "intact_loser_count": 2,
+      "weakening_loser_count": 1,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
         "cheapness": 0.0,
-        "quality": 0.0,
-        "dividend": 0.0,
-        "garp": 0.0,
+        "quality": 0.3333,
+        "dividend": 0.3333,
+        "garp": 0.6667,
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.0,
-        "quality": 0.0,
-        "dividend": 0.0,
-        "garp": 0.3333,
+        "cheapness": 0.0769,
+        "quality": 0.3846,
+        "dividend": 0.0769,
+        "garp": 0.9231,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
-      "balancing_hint": "maintain",
+      "balancing_hint": "tolerate_intact_losers",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
+      {
+        "ticker": "DSCV.L",
+        "name": "discoverIE Group plc",
+        "thesis_status": "broken",
+        "recommended_action": "exit_candidate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0175,
+        "mark": 829.0,
+        "avg_cost": 814.7619,
+        "signal": "hold",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.3257,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "quality",
+          "risk"
+        ],
+        "failed_families": [
+          "cheapness",
+          "dividend",
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "cheapness lost and not in buy tier"
+        ],
+        "intact_reasons": [
+          "research accumulate",
+          "data_quality 1.00"
+        ],
+        "weaken_reasons": [
+          "left buy tier (hold)",
+          "conviction 33% below intact floor"
+        ],
+        "broken_reasons": [
+          "cheapness lost and not in buy tier"
+        ]
+      },
+      {
+        "ticker": "FRES.L",
+        "name": "Fresnillo plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": true,
+        "deep_underwater": false,
+        "unrealized_pct": -0.129,
+        "mark": 2246.0,
+        "avg_cost": 2578.7498,
+        "signal": "buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.6928,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "price drawdown alone does not invalidate value thesis",
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 69%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 69%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
       {
         "ticker": "PAF.L",
         "name": "Pan African Resources PLC",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
-        "underwater": false,
+        "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0393,
-        "mark": 106.6,
-        "avg_cost": 110.965,
+        "unrealized_pct": -0.1155,
+        "mark": 103.5106,
+        "avg_cost": 117.0283,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 1.0,
+        "conviction_score": 0.9125,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2074,18 +2187,100 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
+          "price drawdown alone does not invalidate value thesis",
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 100%"
+          "conviction 91%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 100%"
+          "conviction 91%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "CCC.L",
+        "name": "Computacenter plc",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": true,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0519,
+        "mark": 4916.0,
+        "avg_cost": 5185.0,
+        "signal": "hold",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.3477,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "risk"
+        ],
+        "failed_families": [
+          "quality",
+          "dividend",
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "left buy tier (hold)",
+          "conviction 35% below intact floor",
+          "research accumulate",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00"
+        ],
+        "weaken_reasons": [
+          "left buy tier (hold)",
+          "conviction 35% below intact floor"
+        ],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "IGG.L",
+        "name": "IG Group Holdings plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0402,
+        "mark": 934.5,
+        "avg_cost": 973.6736,
+        "signal": "buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.7331,
+        "data_quality_score": 0.9,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.90",
+          "conviction 73%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.90",
+          "conviction 73%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2097,12 +2292,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0243,
-        "mark": 144.4,
-        "avg_cost": 148.0,
+        "unrealized_pct": -0.0289,
+        "mark": 145.8,
+        "avg_cost": 150.1362,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 1.0,
+        "conviction_score": 0.8232,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2119,54 +2314,423 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 100%"
+          "conviction 82%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 100%"
+          "conviction 82%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
       },
       {
-        "ticker": "IGG.L",
-        "name": "IG Group Holdings plc",
+        "ticker": "VCT.L",
+        "name": "Victrex plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0008,
-        "mark": 961.2492,
-        "avg_cost": 960.5,
+        "unrealized_pct": -0.0217,
+        "mark": 907.0,
+        "avg_cost": 927.0841,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 1.0,
-        "data_quality_score": 0.9,
+        "conviction_score": 0.523,
+        "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
-          "quality",
           "dividend",
-          "garp",
           "risk"
         ],
-        "failed_families": [],
+        "failed_families": [
+          "quality",
+          "garp"
+        ],
         "research_verdict": "accumulate",
         "reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
-          "data_quality 0.90",
-          "conviction 100%"
+          "data_quality 0.95",
+          "conviction 52%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
-          "data_quality 0.90",
-          "conviction 100%"
+          "data_quality 0.95",
+          "conviction 52%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "OSB.L",
+        "name": "OSB Group Plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0144,
+        "mark": 478.6,
+        "avg_cost": 485.6,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.5694,
+        "data_quality_score": 0.75,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "quality",
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.75",
+          "conviction 57%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.75",
+          "conviction 57%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "NWG.L",
+        "name": "NatWest Group plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0137,
+        "mark": 578.0,
+        "avg_cost": 586.0,
+        "signal": "buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.5113,
+        "data_quality_score": 0.75,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "quality",
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.75",
+          "conviction 51%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.75",
+          "conviction 51%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "BARC.L",
+        "name": "Barclays PLC",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0113,
+        "mark": 414.85,
+        "avg_cost": 419.6,
+        "signal": "buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.4906,
+        "data_quality_score": 0.75,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "quality",
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.75",
+          "conviction 49%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.75",
+          "conviction 49%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "BGEO.L",
+        "name": "Lion Finance Group PLC",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0094,
+        "mark": 12040.0,
+        "avg_cost": 12154.6917,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.5676,
+        "data_quality_score": 0.7,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.70",
+          "conviction 57%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.70",
+          "conviction 57%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "COST.L",
+        "name": "Costain Group PLC",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0029,
+        "mark": 253.5,
+        "avg_cost": 252.7742,
+        "signal": "buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.6817,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 68%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 68%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "GEN.L",
+        "name": "Genuit Group plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0189,
+        "mark": 261.8,
+        "avg_cost": 256.9529,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.6437,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "quality",
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 64%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 64%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0363,
+        "mark": 3186.0,
+        "avg_cost": 3074.3939,
+        "signal": "buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.7143,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 71%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 71%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "ICG.L",
+        "name": "ICG plc",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0611,
+        "mark": 1872.0,
+        "avg_cost": 1764.2632,
+        "signal": "hold",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.4533,
+        "data_quality_score": 0.85,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "left buy tier (hold)",
+          "research accumulate",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.85",
+          "conviction 45%"
+        ],
+        "weaken_reasons": [
+          "left buy tier (hold)"
+        ],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "PPH.L",
+        "name": "PPHE Hotel Group Limited",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0637,
+        "mark": 1550.0,
+        "avg_cost": 1457.1934,
+        "signal": "buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.7375,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 74%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 74%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2178,33 +2742,40 @@
     "schema_version": 1,
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
-    "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-30T11:34:38.870441+00:00",
+    "track_id": "ai_judgment_matched30_fair",
+    "generated_at": "2026-11-02T08:43:41.737020+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 16,
+      "closed_total": 6,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 2,
+      "open_with_thesis": 14,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 16,
-          "recovery_rate": 0.4375,
-          "sold_underwater_rate": 0.5625,
-          "mean_peak_unrealized_pct": 0.0164,
-          "mean_trough_unrealized_pct": -0.0241,
+          "closed_count": 5,
+          "recovery_rate": 0.8,
+          "sold_underwater_rate": 0.2,
+          "mean_peak_unrealized_pct": 0.018,
+          "mean_trough_unrealized_pct": -0.0376,
           "outcome_labels": {
-            "sold_underwater": 9,
-            "recovered": 7
+            "recovered": 4,
+            "sold_underwater": 1
           }
         },
         "broken": {
-          "closed_count": 0
+          "closed_count": 1,
+          "recovery_rate": 0.0,
+          "sold_underwater_rate": 1.0,
+          "mean_peak_unrealized_pct": -0.0249,
+          "mean_trough_unrealized_pct": -0.0607,
+          "outcome_labels": {
+            "sold_underwater": 1
+          }
         },
         "insufficient_data": {
           "closed_count": 0
@@ -2232,9 +2803,11 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 16,
+      "hold_closed_with_thesis": 6,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
+        "hold closed with thesis=6 (target >=8)",
+        "hold thesis buckets thin (broken=1; target >=3 each)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
       "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -2244,77 +2817,77 @@
   },
   "entry_dca_overlay_review": {
     "schema_version": 1,
-    "track_id": "ai_judgment_fair",
+    "track_id": "ai_judgment_matched30_fair",
     "observe_only": true,
-    "generated_at": "2026-10-30T11:34:38.875504+00:00",
-    "open_count": 3,
-    "closed_count": 13,
-    "scored_count": 11,
-    "scored_count_all": 13,
-    "recommit_scored_count": 2,
+    "generated_at": "2026-11-02T08:43:41.745856+00:00",
+    "open_count": 16,
+    "closed_count": 6,
+    "scored_count": 6,
+    "scored_count_all": 6,
+    "recommit_scored_count": 0,
     "entry_kind_counts": {
-      "first_entry": 11,
-      "recommit": 2
+      "first_entry": 6,
+      "recommit": 0
     },
-    "any_de_risk_count": 9,
+    "any_de_risk_count": 5,
     "winning_cadence_counts": {
-      "dca_4x_weekly": 7,
-      "dca_5x_weekday": 2,
-      "dca_2x_weekly": 2
+      "dca_2x_weekly": 2,
+      "dca_4x_weekly": 3,
+      "dca_5x_weekday": 1
     },
     "cadence_stats": {
       "dca_2x_weekly": {
         "label": "50/50 over 1 week",
-        "scored_episodes": 11,
-        "mean_end_value_delta": 1.7573,
-        "mean_de_risk_gbp": 2.3055,
-        "de_risk_rate": 0.7273,
+        "scored_episodes": 6,
+        "mean_end_value_delta": 1.4417,
+        "mean_de_risk_gbp": 1.7317,
+        "de_risk_rate": 0.8333,
         "win_count": 2
       },
       "dca_4x_weekly": {
         "label": "25% weekly \u00d7 4",
-        "scored_episodes": 11,
-        "mean_end_value_delta": 2.5464,
-        "mean_de_risk_gbp": 4.1118,
-        "de_risk_rate": 0.7273,
-        "win_count": 7
+        "scored_episodes": 6,
+        "mean_end_value_delta": 1.7967,
+        "mean_de_risk_gbp": 2.6067,
+        "de_risk_rate": 0.8333,
+        "win_count": 3
       },
       "dca_2x_biweekly": {
         "label": "50/50 over 2 weeks",
-        "scored_episodes": 11,
-        "mean_end_value_delta": 1.8355,
-        "mean_de_risk_gbp": 3.1109,
-        "de_risk_rate": 0.7273,
+        "scored_episodes": 6,
+        "mean_end_value_delta": 1.075,
+        "mean_de_risk_gbp": 1.7417,
+        "de_risk_rate": 0.8333,
         "win_count": 0
       },
       "dca_5x_weekday": {
         "label": "20% over 5 weekday marks",
-        "scored_episodes": 11,
-        "mean_end_value_delta": 1.5191,
-        "mean_de_risk_gbp": 2.5255,
-        "de_risk_rate": 0.7273,
-        "win_count": 2
+        "scored_episodes": 6,
+        "mean_end_value_delta": 0.3533,
+        "mean_de_risk_gbp": 0.6567,
+        "de_risk_rate": 0.6667,
+        "win_count": 1
       }
     },
     "readiness": {
       "ready_for_cadence_analysis": false,
-      "closed_episodes": 11,
+      "closed_episodes": 6,
       "closed_target": 12,
       "tracks_with_closed": 1,
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
-      "first_entry_scored": 11,
-      "recommit_scored": 2
+      "first_entry_scored": 6,
+      "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
-    "marked_this_pass": 3,
+    "marked_this_pass": 16,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
-    "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-30T11:34:21.975012+00:00",
+    "track_id": "ai_judgment_matched30_fair",
+    "generated_at": "2026-11-02T08:43:27.384812+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2338,12 +2911,12 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 29,
+    "open_count": 33,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 3,
+      "on_book": 16,
       "off_book": 1,
-      "never_funded": 25
+      "never_funded": 16
     },
     "closed_by_capital_status": {
       "on_book": 0,
@@ -2362,7 +2935,7 @@
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 0,
+      "opened": 3,
       "closed": 0,
       "tagged_on_book": 0,
       "tagged_off_book": 0
@@ -2370,8 +2943,8 @@
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
-    "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-30T11:34:21.975012+00:00",
+    "track_id": "ai_judgment_matched30_fair",
+    "generated_at": "2026-11-02T08:43:27.384812+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -2379,34 +2952,794 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 7,
+    "card_count": 7,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 7,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {},
+    "by_algo_action": {
+      "rebuy_skip": {
+        "agree": 7,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
     "disagree_vs_heuristic_count": 0,
-    "cards": [],
+    "cards": [
+      {
+        "ticker": "PPH.L",
+        "name": "PPHE Hotel Group Limited",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 4
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 4
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.7375000000000002
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "filing_presence",
+            "source": "candidates",
+            "detail": "Key filing bodies / body count on disk at decision time",
+            "value": {
+              "key_filing_bodies": true,
+              "filings_with_body": 58,
+              "has_index": true
+            }
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "ai_judgment_matched30_fair",
+        "logged_at": "2026-11-02T08:43:27.384812+00:00",
+        "proposal_id": "ai_judgment_matched30_fair:PPH.L:rebuy_skip:2026-11-02T08:43:27.384812+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": true,
+            "filings_with_body": 58,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "IGG.L",
+        "name": "IG Group Holdings plc",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 5
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 5
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.7331000000000002
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "filing_presence",
+            "source": "candidates",
+            "detail": "Key filing bodies / body count on disk at decision time",
+            "value": {
+              "key_filing_bodies": true,
+              "filings_with_body": 54,
+              "has_index": true
+            }
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          },
+          {
+            "kind": "adjusted_eps_growth_pct",
+            "source": "candidates",
+            "detail": "Filing-body adjusted EPS growth on the live report at decision time",
+            "value": 0.21
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "ai_judgment_matched30_fair",
+        "logged_at": "2026-11-02T08:43:27.384812+00:00",
+        "proposal_id": "ai_judgment_matched30_fair:IGG.L:rebuy_skip:2026-11-02T08:43:27.384812+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": true,
+            "filings_with_body": 54,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": 0.21
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 6
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 6
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.7143000000000002
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "filing_presence",
+            "source": "candidates",
+            "detail": "Key filing bodies / body count on disk at decision time",
+            "value": {
+              "key_filing_bodies": true,
+              "filings_with_body": 76,
+              "has_index": true
+            }
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "ai_judgment_matched30_fair",
+        "logged_at": "2026-11-02T08:43:27.384812+00:00",
+        "proposal_id": "ai_judgment_matched30_fair:KLR.L:rebuy_skip:2026-11-02T08:43:27.384812+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": true,
+            "filings_with_body": 76,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "FRES.L",
+        "name": "Fresnillo plc",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 7
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 7
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.6928000000000002
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "filing_presence",
+            "source": "candidates",
+            "detail": "Key filing bodies / body count on disk at decision time",
+            "value": {
+              "key_filing_bodies": true,
+              "filings_with_body": 62,
+              "has_index": true
+            }
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          },
+          {
+            "kind": "adjusted_eps_growth_pct",
+            "source": "candidates",
+            "detail": "Filing-body adjusted EPS growth on the live report at decision time",
+            "value": -0.5770000000000001
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "ai_judgment_matched30_fair",
+        "logged_at": "2026-11-02T08:43:27.384812+00:00",
+        "proposal_id": "ai_judgment_matched30_fair:FRES.L:rebuy_skip:2026-11-02T08:43:27.384812+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": true,
+            "filings_with_body": 62,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": -0.5770000000000001
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "COST.L",
+        "name": "Costain Group PLC",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 8
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 8
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.6817000000000002
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "filing_presence",
+            "source": "candidates",
+            "detail": "Key filing bodies / body count on disk at decision time",
+            "value": {
+              "key_filing_bodies": true,
+              "filings_with_body": 93,
+              "has_index": true
+            }
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "ai_judgment_matched30_fair",
+        "logged_at": "2026-11-02T08:43:27.384812+00:00",
+        "proposal_id": "ai_judgment_matched30_fair:COST.L:rebuy_skip:2026-11-02T08:43:27.384812+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": true,
+            "filings_with_body": 93,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "GEN.L",
+        "name": "Genuit Group plc",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 9
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 9
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.6437
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "filing_presence",
+            "source": "candidates",
+            "detail": "Key filing bodies / body count on disk at decision time",
+            "value": {
+              "key_filing_bodies": true,
+              "filings_with_body": 70,
+              "has_index": true
+            }
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "ai_judgment_matched30_fair",
+        "logged_at": "2026-11-02T08:43:27.384812+00:00",
+        "proposal_id": "ai_judgment_matched30_fair:GEN.L:rebuy_skip:2026-11-02T08:43:27.384812+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": true,
+            "filings_with_body": 70,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "SCT.L",
+        "name": "Softcat plc",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 10
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 10
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.6380000000000001
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "filing_presence",
+            "source": "candidates",
+            "detail": "Key filing bodies / body count on disk at decision time",
+            "value": {
+              "key_filing_bodies": true,
+              "filings_with_body": 65,
+              "has_index": true
+            }
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "ai_judgment_matched30_fair",
+        "logged_at": "2026-11-02T08:43:27.384812+00:00",
+        "proposal_id": "ai_judgment_matched30_fair:SCT.L:rebuy_skip:2026-11-02T08:43:27.384812+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": true,
+            "filings_with_body": 65,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
-      "track_id": "ai_judgment_fair",
-      "generated_at": "2026-10-30T11:34:21.975012+00:00",
+      "track_id": "ai_judgment_matched30_fair",
+      "generated_at": "2026-11-02T08:43:27.384812+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 7,
       "verdict_counts": {
-        "agree": 0,
+        "agree": 7,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 7,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -2422,9 +3755,9 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-30T11:34:38.879199+00:00",
-  "track_id": "ai_judgment_fair",
-  "track_label": "AI judgment fair-cost lab (Suite B)",
+  "generated_at": "2026-11-02T08:43:41.755944+00:00",
+  "track_id": "ai_judgment_matched30_fair",
+  "track_label": "AI judgment matched-30 fund twin (B3 shadow)",
   "is_primary_learning_track": true,
   "selection": {
     "skip_timing_wait": true,
@@ -2441,5 +3774,5 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false
   },
-  "mirrored_from_track": "ai_judgment_fair"
+  "mirrored_from_track": "ai_judgment_matched30_fair"
 }

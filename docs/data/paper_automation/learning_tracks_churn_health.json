@@ -1,15 +1,16 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-30T11:35:55.296738+00:00",
+  "generated_at": "2026-11-02T08:44:11.434930+00:00",
   "lookback_days": 7,
-  "primary_learning_track": "ai_judgment_fair",
-  "control_track": "buy_tier_level",
+  "primary_learning_track": "ai_judgment_matched30_fair",
+  "control_track": "buy_tier_matched30_fair",
   "excluded_frozen_tracks": [
     "ai_judgment",
     "ai_judgment_calibrated",
     "ai_judgment_calibrated_r2",
     "ai_judgment_calibrated_r3",
     "ai_judgment_exclusion_u4",
+    "ai_judgment_fair",
     "ai_judgment_graduated_fair",
     "ai_judgment_hold5_fair",
     "graduated_allocation",
@@ -30,7 +31,7 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-10-30T11:35:54.993183+00:00",
+        "reviewed_at": "2026-11-02T08:44:11.276714+00:00",
         "applied": false,
         "enough_history": true,
         "cost_drag": 0.0084,
@@ -46,7 +47,7 @@
         "proposed_changes": {},
         "reasons": [
           "No knob change warranted from current reviewed outcomes.",
-          "Total-return epoch vs FTAL.L needs two marks since 2026-10-30T11:35:54.993183+00:00; price excess is recorded and not used for proposals."
+          "Total-return epoch vs FTAL.L needs two marks since 2026-11-02T08:44:11.276714+00:00; price excess is recorded and not used for proposals."
         ]
       },
       "rebalance_state": {
@@ -55,11 +56,11 @@
         "buffered_holdings": 0
       },
       "last_run": {
-        "acted": true,
-        "note": "Rebalanced after open settle (0 trade(s)).",
+        "acted": false,
+        "note": "waiting for open settle (75 min after 08:00 Europe/London)",
         "trade_count": 0,
         "duplicate_day_skip": false,
-        "buffer_holds_planned": 0,
+        "buffer_holds_planned": 7,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
@@ -83,13 +84,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-10-30T11:35:55.068233+00:00",
+        "reviewed_at": "2026-11-02T08:44:11.352780+00:00",
         "applied": false,
         "enough_history": true,
-        "cost_drag": 0.0065,
+        "cost_drag": 0.0049,
         "total_costs": 9.8,
         "trade_count": 129,
-        "excess_after_costs": -0.0052,
+        "excess_after_costs": -0.0048,
         "knobs_after": {
           "max_positions": 120,
           "skip_timing_wait": true,
@@ -99,7 +100,7 @@
         "proposed_changes": {},
         "reasons": [
           "No knob change warranted from current reviewed outcomes.",
-          "Total-return epoch vs FTAL.L needs two marks since 2026-10-30T11:35:55.068233+00:00; price excess is recorded and not used for proposals."
+          "Total-return epoch vs FTAL.L needs two marks since 2026-11-02T08:44:11.352780+00:00; price excess is recorded and not used for proposals."
         ]
       },
       "rebalance_state": {
@@ -108,11 +109,11 @@
         "buffered_holdings": 0
       },
       "last_run": {
-        "acted": true,
-        "note": "Rebalanced after open settle (0 trade(s)).",
+        "acted": false,
+        "note": "waiting for open settle (75 min after 08:00 Europe/London)",
         "trade_count": 0,
         "duplicate_day_skip": false,
-        "buffer_holds_planned": 0,
+        "buffer_holds_planned": 10,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
@@ -126,9 +127,9 @@
         "adjacent_flip_count": 0
       }
     },
-    "ai_judgment_fair": {
-      "track_id": "ai_judgment_fair",
-      "output_dir": "output/paper_automation/ai_judgment_fair",
+    "ai_judgment_matched30_fair": {
+      "track_id": "ai_judgment_matched30_fair",
+      "output_dir": "output/paper_automation/ai_judgment_matched30_fair",
       "is_primary_learning_track": true,
       "guards": {
         "exit_confirm_screens": 2,
@@ -136,61 +137,7 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-10-30T11:35:55.210151+00:00",
-        "applied": false,
-        "enough_history": true,
-        "cost_drag": 0.1459,
-        "total_costs": 145.93,
-        "trade_count": 49,
-        "excess_after_costs": -0.1904,
-        "knobs_after": {
-          "max_positions": 3,
-          "skip_timing_wait": true,
-          "min_conviction": 0.6,
-          "sector_cap": 0.2
-        },
-        "proposed_changes": {},
-        "reasons": [
-          "No knob change warranted from current reviewed outcomes.",
-          "Total-return epoch vs FTAL.L needs two marks since 2026-10-30T11:35:55.210151+00:00; price excess is recorded and not used for proposals.",
-          "Saturated at bound (rule still fires, no step left): sector_cap (lower, at 0.2; max sector weight 34% with 3 positions)."
-        ]
-      },
-      "rebalance_state": {
-        "exit_streak": {},
-        "reentry_cooldown": {},
-        "buffered_holdings": 0
-      },
-      "last_run": {
-        "acted": true,
-        "note": "Rebalanced after open settle (0 trade(s)).",
-        "trade_count": 0,
-        "duplicate_day_skip": false,
-        "buffer_holds_planned": 0,
-        "reentry_skips_planned": 0,
-        "same_trading_day_as_as_of": true
-      },
-      "trades_last_7d": {
-        "total": 2,
-        "buys": 1,
-        "sells": 1,
-        "trims": 0,
-        "full_exits": 1,
-        "adjacent_side_flips": [],
-        "adjacent_flip_count": 0
-      }
-    },
-    "ai_judgment_matched30_fair": {
-      "track_id": "ai_judgment_matched30_fair",
-      "output_dir": "output/paper_automation/ai_judgment_matched30_fair",
-      "is_primary_learning_track": false,
-      "guards": {
-        "exit_confirm_screens": 2,
-        "reentry_cooldown_screens": 1,
-        "min_rebalance_notional_gbp": 10.0
-      },
-      "decision_review": {
-        "reviewed_at": "2026-10-30T11:35:55.277820+00:00",
+        "reviewed_at": "2026-11-02T08:44:11.414461+00:00",
         "applied": false,
         "enough_history": true,
         "cost_drag": 0.0101,
@@ -206,7 +153,7 @@
         "proposed_changes": {},
         "reasons": [
           "No knob change warranted from current reviewed outcomes.",
-          "Total-return epoch vs FTAL.L needs two marks since 2026-10-30T11:35:55.277820+00:00; price excess is recorded and not used for proposals."
+          "Total-return epoch vs FTAL.L needs two marks since 2026-11-02T08:44:11.414461+00:00; price excess is recorded and not used for proposals."
         ]
       },
       "rebalance_state": {
@@ -215,11 +162,11 @@
         "buffered_holdings": 0
       },
       "last_run": {
-        "acted": true,
-        "note": "Rebalanced after open settle (3 trade(s)).",
-        "trade_count": 3,
+        "acted": false,
+        "note": "waiting for open settle (75 min after 08:00 Europe/London)",
+        "trade_count": 0,
         "duplicate_day_skip": false,
-        "buffer_holds_planned": 0,
+        "buffer_holds_planned": 8,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
@@ -243,7 +190,7 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-10-30T11:35:55.290520+00:00",
+        "reviewed_at": "2026-11-02T08:44:11.428811+00:00",
         "applied": false,
         "enough_history": true,
         "cost_drag": 0.0082,
@@ -259,7 +206,7 @@
         "proposed_changes": {},
         "reasons": [
           "No knob change warranted from current reviewed outcomes.",
-          "Total-return epoch vs FTAL.L needs two marks since 2026-10-30T11:35:55.290520+00:00; price excess is recorded and not used for proposals."
+          "Total-return epoch vs FTAL.L needs two marks since 2026-11-02T08:44:11.428811+00:00; price excess is recorded and not used for proposals."
         ]
       },
       "rebalance_state": {
@@ -268,11 +215,11 @@
         "buffered_holdings": 0
       },
       "last_run": {
-        "acted": true,
-        "note": "Rebalanced after open settle (0 trade(s)).",
+        "acted": false,
+        "note": "waiting for open settle (75 min after 08:00 Europe/London)",
         "trade_count": 0,
         "duplicate_day_skip": false,
-        "buffer_holds_planned": 0,
+        "buffer_holds_planned": 6,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
@@ -287,12 +234,5 @@
       }
     }
   },
-  "alerts": [
-    {
-      "severity": "watch",
-      "track": "ai_judgment_fair",
-      "title": "Elevated primary-track cost drag",
-      "summary": "cost_drag=14.6% — review churn guards and selectivity."
-    }
-  ]
+  "alerts": []
 }
