@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-01T22:24:43+00:00",
+  "updated_at": "2026-11-02T11:39:37+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -12546,16 +12546,39 @@
       "section": "learning",
       "title": "Cold-start hold-buffer twin (exit_confirm_screens 5) on fair-cost books",
       "summary": "L531 replay: on faithful windows exit_confirm_screens 5 beats live 2 by +5.8pp (ai_judgment_fair) and +7.4pp (rules_fair) over 19 passes, mostly from avoided rank-flip exits rather than cost. Next step is a cold-start twin with a frozen epoch, not a live knob edit.",
-      "revisit_when": "Hold-period finding persists on both fair-cost books for 4+ weekly refreshes, or at the next Suite A/B policy epoch",
+      "revisit_when": "Hold-period warn persists on buy_tier_matched30_fair across \u22654 weekly ops refreshes AND ai_judgment_matched30_fair best_variant delta_vs_baseline also \u22651pp (both matched-30 books), or owner opens a matched-30 hold-buffer cold-start design pack. Do not revive frozen ai_judgment_hold5_fair; do not edit live exit_confirm_screens.",
       "tags": [
         "turnover",
         "holding-period",
         "twin"
       ],
-      "status": "now",
+      "status": "open",
       "source": "L531 hold-period counterfactual (agent, 2026-10-06)",
       "added_at": "2026-10-06T03:06:48+00:00",
-      "updated_at": "2026-10-06T10:45:01+00:00"
+      "updated_at": "2026-11-02T11:39:37+00:00",
+      "status_note": "2026-11-02 hold-buffer/two-lot brief: status now was from pre-stop both-book edge on ai_judgment_fair/rules_fair. B3 froze hold5; assessment primary/control are matched-30. Today finding fires only on buy_tier_matched30_fair (+1.64pp / 10 passes); ai_judgment_matched30_fair ~flat. Keep as open twin candidate \u2014 do not spawn or edit live exit_confirm mid-flight.",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/hold_period_counterfactual.json",
+            "path": "tracks.buy_tier_matched30_fair.best_variant.delta_vs_baseline",
+            "op": ">=",
+            "value": 0.01
+          },
+          {
+            "file": "docs/data/hold_period_counterfactual.json",
+            "path": "tracks.ai_judgment_matched30_fair.best_variant.delta_vs_baseline",
+            "op": ">=",
+            "value": 0.01
+          },
+          {
+            "file": "docs/data/assessment_scoreboard.json",
+            "path": "twins[track_id=ai_judgment_matched30_fair].common_days",
+            "op": ">=",
+            "value": 26
+          }
+        ]
+      }
     },
     {
       "id": "L542",
@@ -16117,6 +16140,51 @@
       "added_at": "2026-11-01T22:04:19+00:00",
       "updated_at": "2026-11-01T22:24:19+00:00",
       "status_note": "Owner locked same-book epoch-raise 30\u219250 for lens volume (not twin) 2026-11-01; mid-flight raise executed with new knob_epoch/tune_spec. N244 (\u2192100) stays not_now."
+    },
+    {
+      "id": "N246",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not raise live exit buffers or wire two-lot from standing replay warns",
+      "summary": "Ops standing paper warns (longer holds beat exit buffer; two-lot core_kept beats full exit) are observe-only hypotheses under fair costs. Prefer cold-start twins behind L541/L567 gates. Never mid-flight edit strand-A or matched-30 exit_confirm_screens, and never wire core/tactical two-lot into live buy_tier_level fills from these deltas alone (twins-over-edits, F8).",
+      "revisit_when": "Owner explicitly locks a matched-30 hold-buffer cold-start (L541) or two-lot cold-start (L567) after thickness gates \u2014 still as observe twin, not a live knob edit.",
+      "tags": [
+        "hold-buffer",
+        "two-lot",
+        "exit-confirm",
+        "twins-over-edits",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "docs/hold-buffer-two-lot-2026-11-02.md / cursor project brief 2026-11-02",
+      "added_at": "2026-11-02T11:39:37+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/assessment_scoreboard.json",
+            "path": "twins[track_id=ai_judgment_matched30_fair].common_days",
+            "op": ">=",
+            "value": 130
+          }
+        ]
+      }
+    },
+    {
+      "id": "L659",
+      "category": "later",
+      "section": "learning",
+      "title": "Matched-30 hold-buffer twin design pack (dialogue before spawn)",
+      "summary": "If owner wants an instrument before L541 both-book trigger fires: pin LQ (does exit_confirm 10 on buy_tier_matched30_fair improve fair-cost path vs live buffer 2?), freeze markers/epoch, fixed-stake or fund twin explicit, O3 alone-first. Do not treat one-sided 10-pass +1.6pp as adoption; do not edit live knobs.",
+      "revisit_when": "Owner asks for a hold-buffer design pack, or L541 structured trigger met on matched-30 pair.",
+      "tags": [
+        "hold-buffer",
+        "design-pack",
+        "matched-30",
+        "dialogue-instrument"
+      ],
+      "status": "open",
+      "source": "docs/hold-buffer-two-lot-2026-11-02.md / cursor project brief 2026-11-02",
+      "added_at": "2026-11-02T11:39:37+00:00"
     }
   ],
   "fragments": [
