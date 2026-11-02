@@ -2,7 +2,7 @@
   "schema_version": 1,
   "instrument_id": "parallel_timing_lenses",
   "deferred_id": "L652",
-  "generated_at": "2026-11-02T02:32:59.259788+00:00",
+  "generated_at": "2026-11-02T07:47:40.336004+00:00",
   "asof": "2026-11-02",
   "observe_only": true,
   "influences_live": false,
@@ -107,9 +107,9 @@
     "candidate_count": 35,
     "buy_candidates": 21,
     "sell_candidates": 14,
-    "lenses_looking": 50,
+    "lenses_looking": 48,
     "lenses_entered": 39,
-    "lenses_abandoned": 40,
+    "lenses_abandoned": 42,
     "buy_watch_armed": 0,
     "concurrence_mean": 1.114,
     "concurrence_samples": 35
@@ -1811,7 +1811,7 @@
           "side": "buy",
           "role": "peer",
           "catalog_role": "learning",
-          "status": "looking",
+          "status": "abandoned",
           "rule_kind": "stub_technical",
           "stub_note": "Deterministic stub on B2 / price_vs_sma200_pct / timing_score cites",
           "trail": [
@@ -1824,6 +1824,13 @@
                 "B2:price_vs_sma200_pct=-0.10832790435782591"
               ],
               "note": "stub_support_bounce_wait",
+              "influences_live": false
+            },
+            {
+              "day": "2026-11-02",
+              "action": "abandon",
+              "cites": [],
+              "note": "look_timeout_21d",
               "influences_live": false
             }
           ],
@@ -1860,7 +1867,7 @@
           "side": "buy",
           "role": "peer",
           "catalog_role": "learning",
-          "status": "looking",
+          "status": "abandoned",
           "rule_kind": "live_join_l650",
           "stub_note": "Live join to entry_news_polarity.label == improvement_path",
           "trail": [
@@ -1872,6 +1879,13 @@
                 "join=l650_live"
               ],
               "note": "l650_label_not_improvement_path",
+              "influences_live": false
+            },
+            {
+              "day": "2026-11-02",
+              "action": "abandon",
+              "cites": [],
+              "note": "look_timeout_21d",
               "influences_live": false
             }
           ],
