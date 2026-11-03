@@ -3006,6 +3006,37 @@ def check_two_lot_replay(
     return findings
 
 
+def check_t212_catalogue_freshness(
+    *,
+    library_root: Path | None = None,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Warn when the committed T212 instrument catalogue is older than 14 days (L665).
+
+    Observe-only — overlay rebuild is owned by t212-catalogue-refresh.yml.
+    """
+    from value_investor.t212_coverage import (
+        DEFAULT_LIBRARY_ROOT,
+        assess_t212_catalogue_freshness,
+        ops_findings_from_t212_catalogue_freshness,
+    )
+
+    root = Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT
+    if not root.exists():
+        return []
+    assessment = assess_t212_catalogue_freshness(root, now=now)
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+        for finding in ops_findings_from_t212_catalogue_freshness(assessment)
+    ]
+
+
 def check_sec_companyfacts_coverage(
     *,
     library_root: Path | None = None,
@@ -4629,6 +4660,7 @@ def collect_ops_findings(
     findings.extend(check_hkex_direct_coverage())
     findings.extend(check_amf_direct_coverage())
     findings.extend(check_cision_direct_coverage())
+    findings.extend(check_t212_catalogue_freshness())
     findings.extend(check_lifecycle_maturity_trajectory())
     findings.extend(check_ui_state_reconciliation())
     findings.extend(check_gha_failure_triage())
