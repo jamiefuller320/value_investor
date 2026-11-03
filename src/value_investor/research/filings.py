@@ -397,6 +397,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.asm.com/media/3skhiimk/asm-2025-annual-report.pdf",
         "https://www.asm.com/media/3xpkxmck/statutory-interim-report-2025-text.pdf",
     ],
+    # aex parked leftover — eng-20261103-01: SHELL.AS unfetchable_iwb; SEC FY2025 20-F + Q1 2026
+    # quarterly 6-K fetch; shellq* slug needs Shell issuer tokens for IR title gate.
+    "SHELL.AS": [
+        "https://www.sec.gov/Archives/edgar/data/1306965/000162828026017024/shel-20251231.htm",
+        "https://www.sec.gov/Archives/edgar/data/1306965/000162828026031628/shellq120266-k.htm",
+    ],
     "POST.VI": [
         "https://assets.post.at/-/media/Dokumente/En/Investor-Relations/Geschaefts--und-Nachhaltigkeitsberichte/AustrianPost_Annual_Report_2025.pdf",
     ],
@@ -1277,6 +1283,9 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "NOVN": ("Novartis", "Novartis AG"),
     # aex MT.AS — mt-* SEC slugs lack issuer tokens for _ir_body_title_tokens_match.
     "MT": ("ArcelorMittal",),
+    # aex SHELL.AS — shellq* SEC slugs lack issuer tokens for _ir_body_title_tokens_match.
+    "SHELL": ("Shell plc", "Shell"),
+    "SHEL": ("Shell plc", "Shell"),
     "RO": ("Roche Holding AG", "Roche"),
     "PGHN": ("Partners Group", "Partners Group Holding AG"),
     "NTR": ("Nutrien", "Nutrien Ltd."),

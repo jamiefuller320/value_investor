@@ -7997,6 +7997,50 @@ def test_fetch_filings_ir_allowlist_aex_asm_as_builtins_eng_20261021_02(tmp_path
     assert sum(1 for row in rows if row["period"] == "interim") == 1
 
 
+def test_fetch_filings_ir_allowlist_aex_shell_as_builtins_eng_20261103_01(tmp_path: Path):
+    """eng-20261103-01: SHELL.AS unfetchable_iwb — SEC FY2025 20-F + Q1 2026 quarterly 6-K."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("SHELL.AS", path=allowlist_path)
+    assert len(rows) >= 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any(url.endswith("shel-20251231.htm") for url in urls)
+    assert any("shellq120266-k.htm" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") >= 1
+    assert sum(1 for row in rows if row["period"] == "interim") >= 1
+
+
+def test_parked_source_hunter_shell_as_aex_has_fetchable_ir():
+    """eng-20261103-01: SHELL.AS has live SEC FY2025 20-F and Q1 2026 quarterly 6-K bodies."""
+    assert "SHELL.AS" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("SHELL.AS")
+    annual = next(
+        row
+        for row in rows
+        if row["period"] == "annual" and row["url"].endswith("shel-20251231.htm")
+    )
+    body = _live_fetch_filing_body(annual["url"])
+    if not body:
+        pytest.skip("SEC.gov body fetch unavailable (rate-limit / network) — retry later")
+    assert len(body) > 5000
+    assert "form 20-f" in body.lower() or "annual report" in body.lower()
+    valid, reason = _validate_ir_allowlist_body_content(annual, body, ticker="SHELL.AS")
+    assert valid, reason
+    interim = next(
+        row for row in rows if row["period"] == "interim" and "shellq120266-k.htm" in row["url"]
+    )
+    interim_body = _live_fetch_filing_body(interim["url"])
+    if not interim_body:
+        pytest.skip("SEC.gov body fetch unavailable (rate-limit / network) — retry later")
+    assert len(interim_body) > 5000
+    valid_i, reason_i = _validate_ir_allowlist_body_content(
+        interim, interim_body, ticker="SHELL.AS"
+    )
+    assert valid_i, reason_i
+
+
 def test_parked_source_hunter_asm_as_aex_has_fetchable_ir():
     """eng-20261021-02: ASM.AS has live asm.com FY2025 annual report PDF body."""
     assert "ASM.AS" not in PARKED_SOURCE_HUNTER_SKIP
