@@ -13322,6 +13322,24 @@ def test_parked_source_hunter_skip_ccep_nasdaq100():
     assert fetch_filing_body("https://www.coca-colaep.com/en/investors") is None
 
 
+def test_parked_source_hunter_skip_cor_sp500():
+    """eng-20261102-03: COR leftover IWB is Investegate epic collision + Item 7.01 8-K, not missing 10-K/10-Q."""
+    assert "COR" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["COR"]
+    assert "Corpus Resources" in reason
+    assert "COR collision" in reason
+    assert "7.01" in reason
+    assert "8-K" in reason
+    assert "substantiveness" in reason
+    assert "10-K/10-Q" in reason
+    assert "sec_edgar" in reason
+    assert fetch_filings_ir_allowlist("COR") == []
+    reg_fd_8k = (
+        "https://www.sec.gov/Archives/edgar/data/1140859/000110465926094676/tm2622984d1_8k.htm"
+    )
+    assert fetch_filing_body(reg_fd_8k) is None
+
+
 def test_parked_source_hunter_skip_tri_nasdaq100():
     """eng-20260919-10: TRI leftover IWB is SEC 6-K cover HTML, not missing 40-F/interim packs."""
     assert "TRI" in PARKED_SOURCE_HUNTER_SKIP
