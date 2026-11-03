@@ -8,11 +8,13 @@ from pathlib import Path
 
 import pytest
 
+from value_investor.operating_decline_gate import EPS_INTERIM_DROP_PCT
 from value_investor.ops_monitor import check_sector_headwind_gate
 from value_investor.sector_headwind_gate import (
     COVERAGE_GAP_TITLE,
     FINDING_TITLE,
     PRICE_BREADTH_HEADWIND,
+    SCREEN_EARNINGS_GROWTH_DECLINE_PCT,
     assess_sector,
     ops_findings_from_sector_headwind_gate,
     refresh_sector_headwind_gate,
@@ -64,6 +66,7 @@ def test_sound_sector_has_complete_price_and_earnings_coverage():
     assert result["metrics"]["price_below_sma200_share"] == 0.0
     assert result["metrics"]["sector_return_126d"] > 0
     assert result["metrics"]["earnings_declining_share"] == 0.0
+    assert result["metrics"]["earnings_component"] == "screen_fields_fallback"
     assert result["metrics"]["operating_decline_component_available"] is False
     assert {row["code"] for row in result["reasons"]} == {
         "NO_BROAD_HEADWIND",
@@ -89,10 +92,10 @@ def test_price_breadth_and_negative_126d_trend_create_headwind():
     assert "PRICE_BREADTH_AND_TREND_HEADWIND" in {row["code"] for row in result["reasons"]}
 
 
-def test_earnings_breadth_creates_headwind():
+def test_material_screen_field_fallback_creates_headwind_at_thresholds():
     members = _members()
-    members[0]["interim_eps_decline_pct"] = 0.04
-    members[1]["adjusted_eps_growth_pct"] = -0.02
+    members[0]["interim_eps_decline_pct"] = EPS_INTERIM_DROP_PCT
+    members[1]["adjusted_eps_growth_pct"] = SCREEN_EARNINGS_GROWTH_DECLINE_PCT
 
     result = assess_sector(
         members,
@@ -102,11 +105,30 @@ def test_earnings_breadth_creates_headwind():
     )
 
     assert result["verdict"] == "headwind"
+    assert result["metrics"]["earnings_component"] == "screen_fields_fallback"
     assert result["metrics"]["earnings_declining_share"] == 0.5
     assert "EARNINGS_BREADTH_HEADWIND" in {row["code"] for row in result["reasons"]}
 
 
-def test_operating_decline_store_breadth_creates_headwind():
+def test_screen_field_fallback_ignores_immaterial_changes():
+    members = _members()
+    members[0]["interim_eps_decline_pct"] = EPS_INTERIM_DROP_PCT - 0.001
+    members[1]["yahoo_normalized_income_growth_pct"] = SCREEN_EARNINGS_GROWTH_DECLINE_PCT + 0.001
+    members[2]["adjusted_eps_growth_pct"] = SCREEN_EARNINGS_GROWTH_DECLINE_PCT + 0.001
+
+    result = assess_sector(
+        members,
+        charts=_charts(members),
+        decline_verdicts=None,
+        as_of="2025-09-30",
+    )
+
+    assert result["verdict"] == "sound"
+    assert result["metrics"]["earnings_component"] == "screen_fields_fallback"
+    assert result["metrics"]["earnings_declining_share"] == 0.0
+
+
+def test_operating_decline_store_is_primary_earnings_component():
     members = _members()
     names = {
         row["ticker"]: {"verdict": "declining" if index < 2 else "clear"}
@@ -121,8 +143,76 @@ def test_operating_decline_store_breadth_creates_headwind():
     )
 
     assert result["verdict"] == "headwind"
+    assert result["metrics"]["earnings_component"] == "operating_decline_store"
+    assert result["metrics"]["earnings_declining_share"] == 0.5
     assert result["metrics"]["operating_declining_share"] == 0.5
     assert "OPERATING_DECLINE_BREADTH_HEADWIND" in {row["code"] for row in result["reasons"]}
+    assert "OPERATING_DECLINE_STORE_UNAVAILABLE" not in {row["code"] for row in result["reasons"]}
+
+
+def test_store_primary_does_not_apply_raw_screen_proxy():
+    members = _members()
+    for member in members:
+        member["interim_eps_decline_pct"] = 0.50
+        member["yahoo_normalized_income_growth_pct"] = -0.50
+    names = {row["ticker"]: {"verdict": "clear"} for row in members}
+
+    result = assess_sector(
+        members,
+        charts=_charts(members),
+        decline_verdicts={"names": names},
+        as_of="2025-09-30",
+    )
+
+    assert result["verdict"] == "sound"
+    assert result["metrics"]["earnings_component"] == "operating_decline_store"
+    assert result["metrics"]["earnings_declining_share"] == 0.0
+    assert result["metrics"]["earnings_fields_used"] == []
+    assert "EARNINGS_BREADTH_HEADWIND" not in {row["code"] for row in result["reasons"]}
+
+
+def test_thin_store_uses_screen_field_fallback_without_unavailable_reason():
+    members = _members()
+    members[0]["interim_eps_decline_pct"] = EPS_INTERIM_DROP_PCT
+    members[1]["yahoo_normalized_income_growth_pct"] = SCREEN_EARNINGS_GROWTH_DECLINE_PCT
+    names = {members[0]["ticker"]: {"verdict": "clear"}}
+
+    result = assess_sector(
+        members,
+        charts=_charts(members),
+        decline_verdicts={"names": names},
+        as_of="2025-09-30",
+    )
+
+    codes = {row["code"] for row in result["reasons"]}
+    assert result["verdict"] == "headwind"
+    assert result["metrics"]["earnings_component"] == "screen_fields_fallback"
+    assert "OPERATING_DECLINE_STORE_THIN_FALLBACK" in codes
+    assert "OPERATING_DECLINE_STORE_UNAVAILABLE" not in codes
+
+
+def test_insufficient_decline_verdicts_are_excluded_from_store_coverage():
+    members = _members(5)
+    names = {
+        members[0]["ticker"]: {"verdict": "declining"},
+        members[1]["ticker"]: {"verdict": "declining"},
+        members[2]["ticker"]: {"verdict": "clear"},
+        members[3]["ticker"]: {"verdict": "clear"},
+        members[4]["ticker"]: {"verdict": "insufficient_data"},
+    }
+
+    result = assess_sector(
+        members,
+        charts=_charts(members),
+        decline_verdicts={"names": names},
+        as_of="2025-09-30",
+    )
+
+    assert result["verdict"] == "headwind"
+    assert result["metrics"]["earnings_component"] == "operating_decline_store"
+    assert result["metrics"]["operating_decline_member_count"] == 4
+    assert result["metrics"]["operating_decline_coverage_share"] == 0.8
+    assert result["metrics"]["earnings_declining_share"] == 0.5
 
 
 @pytest.mark.parametrize(
@@ -181,6 +271,7 @@ def test_absent_decline_store_is_cited_but_does_not_prevent_sound():
     )
 
     assert result["verdict"] == "sound"
+    assert result["metrics"]["earnings_component"] == "screen_fields_fallback"
     assert "OPERATING_DECLINE_STORE_UNAVAILABLE" in {row["code"] for row in result["reasons"]}
 
 
@@ -218,6 +309,10 @@ def test_refresh_persists_store_shape_from_tmp_inputs(tmp_path: Path):
     assert payload["summary"]["chart_file_coverage_share"] == 1.0
     assert payload["summary"]["buy_tier_names"] == 1
     assert payload["sectors"]["ftse350:Industrials"]["verdict"] == "sound"
+    assert (
+        payload["sectors"]["ftse350:Industrials"]["metrics"]["earnings_component"]
+        == "screen_fields_fallback"
+    )
     assert payload["sectors"]["ftse350:Industrials"]["members"] == [
         "T0.L",
         "T1.L",

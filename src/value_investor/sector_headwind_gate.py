@@ -10,6 +10,8 @@ from pathlib import Path
 from statistics import fmean
 from typing import Any
 
+from value_investor.operating_decline_gate import EPS_INTERIM_DROP_PCT
+
 DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
 DEFAULT_CHARTS_DIR = Path("docs/data/charts")
 DEFAULT_DECLINE_STORE = Path("docs/data/operating_decline_gate.json")
@@ -22,6 +24,7 @@ PRICE_BREADTH_HEADWIND = 0.65
 SECTOR_RETURN_126D_HEADWIND = -0.10
 EARNINGS_BREADTH_HEADWIND = 0.50
 DECLINE_BREADTH_HEADWIND = 0.50
+SCREEN_EARNINGS_GROWTH_DECLINE_PCT = -0.05
 RETURN_LOOKBACK_63D = 63
 RETURN_LOOKBACK_126D = 126
 TRAILING_HIGH_LOOKBACK = 252
@@ -153,8 +156,8 @@ def _earnings_decline(row: dict[str, Any]) -> tuple[bool | None, list[str]]:
     if not observed:
         return None, []
     declining = any(
-        (field == "interim_eps_decline_pct" and value > 0)
-        or (field != "interim_eps_decline_pct" and value < 0)
+        (field == "interim_eps_decline_pct" and value >= EPS_INTERIM_DROP_PCT)
+        or (field != "interim_eps_decline_pct" and value <= SCREEN_EARNINGS_GROWTH_DECLINE_PCT)
         for field, value in observed
     )
     return declining, [field for field, _ in observed]
@@ -191,6 +194,8 @@ def assess_sector(
         "sector_return_126d_headwind": SECTOR_RETURN_126D_HEADWIND,
         "earnings_breadth_headwind": EARNINGS_BREADTH_HEADWIND,
         "decline_breadth_headwind": DECLINE_BREADTH_HEADWIND,
+        "interim_eps_decline_member": EPS_INTERIM_DROP_PCT,
+        "screen_earnings_growth_decline_member": SCREEN_EARNINGS_GROWTH_DECLINE_PCT,
     }
     if total < MIN_MEMBERS_WITH_DATA:
         return {
@@ -205,6 +210,7 @@ def assess_sector(
             "metrics": {
                 "member_count": total,
                 "as_of": cutoff.isoformat(),
+                "earnings_component": "unavailable",
                 "thresholds": thresholds,
             },
         }
@@ -234,20 +240,6 @@ def assess_sector(
     drawdown_1y, drawdown_count, drawdown_days = _equal_weight_drawdown(all_series)
     trend_available = return_126d is not None and _coverage_ok(return_126d_count, total)
 
-    earnings_count = 0
-    earnings_declining = 0
-    earnings_fields: set[str] = set()
-    for member in members:
-        declining, fields = _earnings_decline(member)
-        if declining is None:
-            continue
-        earnings_count += 1
-        earnings_declining += int(declining)
-        earnings_fields.update(fields)
-    earnings_breadth = earnings_declining / earnings_count if earnings_count else None
-    earnings_coverage = earnings_count / total
-    earnings_available = _coverage_ok(earnings_count, total)
-
     decline_names = _decline_names(decline_verdicts)
     decline_count = 0
     decline_declining = 0
@@ -258,13 +250,39 @@ def assess_sector(
             if not isinstance(row, dict):
                 continue
             verdict = str(row.get("verdict") or "")
-            if verdict not in {"clear", "declining", "insufficient_data"}:
+            if verdict not in {"clear", "declining"}:
                 continue
             decline_count += 1
             decline_declining += int(verdict == "declining")
     decline_breadth = decline_declining / decline_count if decline_count else None
     decline_coverage = decline_count / total
     decline_available = decline_names is not None and _coverage_ok(decline_count, total)
+
+    earnings_count = 0
+    earnings_declining = 0
+    earnings_fields: set[str] = set()
+    earnings_breadth: float | None = None
+    earnings_coverage = 0.0
+    earnings_available = False
+    if decline_available:
+        earnings_component = "operating_decline_store"
+        earnings_count = decline_count
+        earnings_declining = decline_declining
+        earnings_breadth = decline_breadth
+        earnings_coverage = decline_coverage
+        earnings_available = True
+    else:
+        for member in members:
+            declining, fields = _earnings_decline(member)
+            if declining is None:
+                continue
+            earnings_count += 1
+            earnings_declining += int(declining)
+            earnings_fields.update(fields)
+        earnings_breadth = earnings_declining / earnings_count if earnings_count else None
+        earnings_coverage = earnings_count / total
+        earnings_available = _coverage_ok(earnings_count, total)
+        earnings_component = "screen_fields_fallback" if earnings_available else "unavailable"
 
     price_trigger = bool(
         price_available
@@ -279,12 +297,6 @@ def assess_sector(
         and earnings_breadth is not None
         and earnings_breadth >= EARNINGS_BREADTH_HEADWIND
     )
-    decline_trigger = bool(
-        decline_available
-        and decline_breadth is not None
-        and decline_breadth >= DECLINE_BREADTH_HEADWIND
-    )
-
     if price_trigger:
         reasons.append(
             _reason(
@@ -296,7 +308,7 @@ def assess_sector(
                 "docs/data/charts/{TICKER}.json dates/closes/sma200_series",
             )
         )
-    if earnings_trigger:
+    if earnings_trigger and earnings_component == "screen_fields_fallback":
         reasons.append(
             _reason(
                 "EARNINGS_BREADTH_HEADWIND",
@@ -304,7 +316,7 @@ def assess_sector(
                 "docs/data/latest.json reports[] earnings breadth fields",
             )
         )
-    if decline_trigger:
+    if earnings_trigger and earnings_component == "operating_decline_store":
         reasons.append(
             _reason(
                 "OPERATING_DECLINE_BREADTH_HEADWIND",
@@ -336,21 +348,40 @@ def assess_sector(
         reasons.append(
             _reason(
                 "OPERATING_DECLINE_STORE_UNAVAILABLE",
-                "Optional operating-decline breadth was not available; it did not create a pass.",
+                "Operating-decline breadth was unavailable; material screen fields were the fallback.",
                 "docs/data/operating_decline_gate.json",
             )
         )
+    elif not decline_available:
+        reasons.append(
+            _reason(
+                "OPERATING_DECLINE_STORE_THIN_FALLBACK",
+                (
+                    f"Operating-decline coverage was {decline_count}/{total}; "
+                    "material screen fields were the fallback."
+                ),
+                "docs/data/operating_decline_gate.json names[].verdict",
+            )
+        )
 
-    if price_trigger or earnings_trigger or decline_trigger:
+    if price_trigger or earnings_trigger:
         verdict = "headwind"
     elif not missing_core:
         verdict = "sound"
+        earnings_source = (
+            "docs/data/operating_decline_gate.json names[].verdict"
+            if earnings_component == "operating_decline_store"
+            else "docs/data/latest.json reports[] earnings breadth fields"
+        )
         reasons.insert(
             0,
             _reason(
                 "NO_BROAD_HEADWIND",
-                "Price breadth/trend and earnings breadth stay below headwind thresholds.",
-                "docs/data/latest.json; docs/data/charts/{TICKER}.json",
+                (
+                    "Price breadth/trend and the selected earnings/operating breadth "
+                    "stay below headwind thresholds."
+                ),
+                f"docs/data/charts/{{TICKER}}.json; {earnings_source}",
             ),
         )
     else:
@@ -380,6 +411,7 @@ def assess_sector(
             "earnings_declining_count": earnings_declining,
             "earnings_member_count": earnings_count,
             "earnings_coverage_share": round(earnings_coverage, 6),
+            "earnings_component": earnings_component,
             "earnings_declining_share": (
                 round(earnings_breadth, 6) if earnings_breadth is not None else None
             ),
@@ -390,7 +422,8 @@ def assess_sector(
             "operating_declining_share": (
                 round(decline_breadth, 6) if decline_breadth is not None else None
             ),
-            "operating_decline_component_available": decline_names is not None,
+            "operating_decline_store_present": decline_names is not None,
+            "operating_decline_component_available": decline_available,
             "thresholds": thresholds,
         },
     }

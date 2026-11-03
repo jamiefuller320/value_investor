@@ -42,8 +42,8 @@ def _format_text(payload: dict[str, Any], selected: tuple[str, dict[str, Any]] |
             f"return_63d={metrics.get('sector_return_63d')} "
             f"return_126d={metrics.get('sector_return_126d')} "
             f"drawdown_1y={metrics.get('sector_drawdown_from_1y_high')}\n"
-            f"  earnings_declining={metrics.get('earnings_declining_share')} "
-            f"operating_declining={metrics.get('operating_declining_share')}\n"
+            f"  earnings_component={metrics.get('earnings_component')} "
+            f"declining_share={metrics.get('earnings_declining_share')}\n"
         )
     summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
     return (

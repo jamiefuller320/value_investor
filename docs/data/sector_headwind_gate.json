@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-03T17:08:53.990574+00:00",
+  "generated_at": "2026-11-03T17:26:30.138252+00:00",
   "as_of": "2026-11-01",
   "observe_only": true,
   "influences_live": false,
@@ -13,17 +13,17 @@
   },
   "summary": {
     "sectors": 13,
-    "sound": 8,
-    "headwind": 3,
+    "sound": 10,
+    "headwind": 1,
     "insufficient_data": 2,
     "buy_tier_names": 65,
-    "buy_tier_in_headwind_sector": 11,
+    "buy_tier_in_headwind_sector": 0,
     "buy_tier_sectors": 11,
     "buy_tier_sectors_insufficient_data": 1,
     "report_names": 248,
     "names_with_chart_file": 248,
     "chart_file_coverage_share": 1.0,
-    "operating_decline_store_available": false
+    "operating_decline_store_available": true
   },
   "sectors": {
     "ftse350:Agriculture/Commodities": {
@@ -40,13 +40,16 @@
       "metrics": {
         "member_count": 1,
         "as_of": "2026-11-01",
+        "earnings_component": "unavailable",
         "thresholds": {
           "minimum_members_with_data": 4,
           "minimum_coverage_share": 0.6,
           "price_breadth_headwind": 0.65,
           "sector_return_126d_headwind": -0.1,
           "earnings_breadth_headwind": 0.5,
-          "decline_breadth_headwind": 0.5
+          "decline_breadth_headwind": 0.5,
+          "interim_eps_decline_member": 0.1,
+          "screen_earnings_growth_decline_member": -0.05
         }
       },
       "members": [
@@ -59,17 +62,12 @@
     "ftse350:Basic Materials": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "verdict": "headwind",
+      "verdict": "sound",
       "reasons": [
         {
-          "code": "EARNINGS_BREADTH_HEADWIND",
-          "detail": "50.0% of 18 covered members show decline.",
-          "source": "docs/data/latest.json reports[] earnings breadth fields"
-        },
-        {
-          "code": "OPERATING_DECLINE_STORE_UNAVAILABLE",
-          "detail": "Optional operating-decline breadth was not available; it did not create a pass.",
-          "source": "docs/data/operating_decline_gate.json"
+          "code": "NO_BROAD_HEADWIND",
+          "detail": "Price breadth/trend and the selected earnings/operating breadth stay below headwind thresholds.",
+          "source": "docs/data/charts/{TICKER}.json; docs/data/operating_decline_gate.json names[].verdict"
         }
       ],
       "metrics": {
@@ -86,26 +84,27 @@
         "sector_drawdown_from_1y_high": -0.137348,
         "sector_drawdown_member_count": 18,
         "sector_drawdown_lookback_trading_days": 252,
-        "earnings_declining_count": 9,
-        "earnings_member_count": 18,
-        "earnings_coverage_share": 1.0,
-        "earnings_declining_share": 0.5,
-        "earnings_fields_used": [
-          "adjusted_eps_growth_pct",
-          "yahoo_normalized_income_growth_pct"
-        ],
-        "operating_declining_count": 0,
-        "operating_decline_member_count": 0,
-        "operating_decline_coverage_share": 0.0,
-        "operating_declining_share": null,
-        "operating_decline_component_available": false,
+        "earnings_declining_count": 3,
+        "earnings_member_count": 16,
+        "earnings_coverage_share": 0.888889,
+        "earnings_component": "operating_decline_store",
+        "earnings_declining_share": 0.1875,
+        "earnings_fields_used": [],
+        "operating_declining_count": 3,
+        "operating_decline_member_count": 16,
+        "operating_decline_coverage_share": 0.888889,
+        "operating_declining_share": 0.1875,
+        "operating_decline_store_present": true,
+        "operating_decline_component_available": true,
         "thresholds": {
           "minimum_members_with_data": 4,
           "minimum_coverage_share": 0.6,
           "price_breadth_headwind": 0.65,
           "sector_return_126d_headwind": -0.1,
           "earnings_breadth_headwind": 0.5,
-          "decline_breadth_headwind": 0.5
+          "decline_breadth_headwind": 0.5,
+          "interim_eps_decline_member": 0.1,
+          "screen_earnings_growth_decline_member": -0.05
         }
       },
       "members": [
@@ -153,13 +152,16 @@
       "metrics": {
         "member_count": 1,
         "as_of": "2026-11-01",
+        "earnings_component": "unavailable",
         "thresholds": {
           "minimum_members_with_data": 4,
           "minimum_coverage_share": 0.6,
           "price_breadth_headwind": 0.65,
           "sector_return_126d_headwind": -0.1,
           "earnings_breadth_headwind": 0.5,
-          "decline_breadth_headwind": 0.5
+          "decline_breadth_headwind": 0.5,
+          "interim_eps_decline_member": 0.1,
+          "screen_earnings_growth_decline_member": -0.05
         }
       },
       "members": [
@@ -174,13 +176,8 @@
       "reasons": [
         {
           "code": "NO_BROAD_HEADWIND",
-          "detail": "Price breadth/trend and earnings breadth stay below headwind thresholds.",
-          "source": "docs/data/latest.json; docs/data/charts/{TICKER}.json"
-        },
-        {
-          "code": "OPERATING_DECLINE_STORE_UNAVAILABLE",
-          "detail": "Optional operating-decline breadth was not available; it did not create a pass.",
-          "source": "docs/data/operating_decline_gate.json"
+          "detail": "Price breadth/trend and the selected earnings/operating breadth stay below headwind thresholds.",
+          "source": "docs/data/charts/{TICKER}.json; docs/data/operating_decline_gate.json names[].verdict"
         }
       ],
       "metrics": {
@@ -197,26 +194,27 @@
         "sector_drawdown_from_1y_high": -0.081705,
         "sector_drawdown_member_count": 16,
         "sector_drawdown_lookback_trading_days": 252,
-        "earnings_declining_count": 6,
+        "earnings_declining_count": 4,
         "earnings_member_count": 16,
         "earnings_coverage_share": 1.0,
-        "earnings_declining_share": 0.375,
-        "earnings_fields_used": [
-          "adjusted_eps_growth_pct",
-          "yahoo_normalized_income_growth_pct"
-        ],
-        "operating_declining_count": 0,
-        "operating_decline_member_count": 0,
-        "operating_decline_coverage_share": 0.0,
-        "operating_declining_share": null,
-        "operating_decline_component_available": false,
+        "earnings_component": "operating_decline_store",
+        "earnings_declining_share": 0.25,
+        "earnings_fields_used": [],
+        "operating_declining_count": 4,
+        "operating_decline_member_count": 16,
+        "operating_decline_coverage_share": 1.0,
+        "operating_declining_share": 0.25,
+        "operating_decline_store_present": true,
+        "operating_decline_component_available": true,
         "thresholds": {
           "minimum_members_with_data": 4,
           "minimum_coverage_share": 0.6,
           "price_breadth_headwind": 0.65,
           "sector_return_126d_headwind": -0.1,
           "earnings_breadth_headwind": 0.5,
-          "decline_breadth_headwind": 0.5
+          "decline_breadth_headwind": 0.5,
+          "interim_eps_decline_member": 0.1,
+          "screen_earnings_growth_decline_member": -0.05
         }
       },
       "members": [
@@ -250,13 +248,8 @@
       "reasons": [
         {
           "code": "NO_BROAD_HEADWIND",
-          "detail": "Price breadth/trend and earnings breadth stay below headwind thresholds.",
-          "source": "docs/data/latest.json; docs/data/charts/{TICKER}.json"
-        },
-        {
-          "code": "OPERATING_DECLINE_STORE_UNAVAILABLE",
-          "detail": "Optional operating-decline breadth was not available; it did not create a pass.",
-          "source": "docs/data/operating_decline_gate.json"
+          "detail": "Price breadth/trend and the selected earnings/operating breadth stay below headwind thresholds.",
+          "source": "docs/data/charts/{TICKER}.json; docs/data/operating_decline_gate.json names[].verdict"
         }
       ],
       "metrics": {
@@ -273,27 +266,27 @@
         "sector_drawdown_from_1y_high": -0.004604,
         "sector_drawdown_member_count": 45,
         "sector_drawdown_lookback_trading_days": 252,
-        "earnings_declining_count": 17,
-        "earnings_member_count": 44,
-        "earnings_coverage_share": 0.977778,
-        "earnings_declining_share": 0.386364,
-        "earnings_fields_used": [
-          "adjusted_eps_growth_pct",
-          "interim_eps_decline_pct",
-          "yahoo_normalized_income_growth_pct"
-        ],
-        "operating_declining_count": 0,
-        "operating_decline_member_count": 0,
-        "operating_decline_coverage_share": 0.0,
-        "operating_declining_share": null,
-        "operating_decline_component_available": false,
+        "earnings_declining_count": 10,
+        "earnings_member_count": 43,
+        "earnings_coverage_share": 0.955556,
+        "earnings_component": "operating_decline_store",
+        "earnings_declining_share": 0.232558,
+        "earnings_fields_used": [],
+        "operating_declining_count": 10,
+        "operating_decline_member_count": 43,
+        "operating_decline_coverage_share": 0.955556,
+        "operating_declining_share": 0.232558,
+        "operating_decline_store_present": true,
+        "operating_decline_component_available": true,
         "thresholds": {
           "minimum_members_with_data": 4,
           "minimum_coverage_share": 0.6,
           "price_breadth_headwind": 0.65,
           "sector_return_126d_headwind": -0.1,
           "earnings_breadth_headwind": 0.5,
-          "decline_breadth_headwind": 0.5
+          "decline_breadth_headwind": 0.5,
+          "interim_eps_decline_member": 0.1,
+          "screen_earnings_growth_decline_member": -0.05
         }
       },
       "members": [
@@ -367,13 +360,8 @@
       "reasons": [
         {
           "code": "NO_BROAD_HEADWIND",
-          "detail": "Price breadth/trend and earnings breadth stay below headwind thresholds.",
-          "source": "docs/data/latest.json; docs/data/charts/{TICKER}.json"
-        },
-        {
-          "code": "OPERATING_DECLINE_STORE_UNAVAILABLE",
-          "detail": "Optional operating-decline breadth was not available; it did not create a pass.",
-          "source": "docs/data/operating_decline_gate.json"
+          "detail": "Price breadth/trend and the selected earnings/operating breadth stay below headwind thresholds.",
+          "source": "docs/data/charts/{TICKER}.json; docs/data/operating_decline_gate.json names[].verdict"
         }
       ],
       "metrics": {
@@ -390,26 +378,27 @@
         "sector_drawdown_from_1y_high": 0.0,
         "sector_drawdown_member_count": 20,
         "sector_drawdown_lookback_trading_days": 252,
-        "earnings_declining_count": 9,
+        "earnings_declining_count": 3,
         "earnings_member_count": 20,
         "earnings_coverage_share": 1.0,
-        "earnings_declining_share": 0.45,
-        "earnings_fields_used": [
-          "adjusted_eps_growth_pct",
-          "yahoo_normalized_income_growth_pct"
-        ],
-        "operating_declining_count": 0,
-        "operating_decline_member_count": 0,
-        "operating_decline_coverage_share": 0.0,
-        "operating_declining_share": null,
-        "operating_decline_component_available": false,
+        "earnings_component": "operating_decline_store",
+        "earnings_declining_share": 0.15,
+        "earnings_fields_used": [],
+        "operating_declining_count": 3,
+        "operating_decline_member_count": 20,
+        "operating_decline_coverage_share": 1.0,
+        "operating_declining_share": 0.15,
+        "operating_decline_store_present": true,
+        "operating_decline_component_available": true,
         "thresholds": {
           "minimum_members_with_data": 4,
           "minimum_coverage_share": 0.6,
           "price_breadth_headwind": 0.65,
           "sector_return_126d_headwind": -0.1,
           "earnings_breadth_headwind": 0.5,
-          "decline_breadth_headwind": 0.5
+          "decline_breadth_headwind": 0.5,
+          "interim_eps_decline_member": 0.1,
+          "screen_earnings_growth_decline_member": -0.05
         }
       },
       "members": [
@@ -444,17 +433,12 @@
     "ftse350:Energy": {
       "market": "ftse350",
       "sector": "Energy",
-      "verdict": "headwind",
+      "verdict": "sound",
       "reasons": [
         {
-          "code": "EARNINGS_BREADTH_HEADWIND",
-          "detail": "75.0% of 8 covered members show decline.",
-          "source": "docs/data/latest.json reports[] earnings breadth fields"
-        },
-        {
-          "code": "OPERATING_DECLINE_STORE_UNAVAILABLE",
-          "detail": "Optional operating-decline breadth was not available; it did not create a pass.",
-          "source": "docs/data/operating_decline_gate.json"
+          "code": "NO_BROAD_HEADWIND",
+          "detail": "Price breadth/trend and the selected earnings/operating breadth stay below headwind thresholds.",
+          "source": "docs/data/charts/{TICKER}.json; docs/data/operating_decline_gate.json names[].verdict"
         }
       ],
       "metrics": {
@@ -471,25 +455,27 @@
         "sector_drawdown_from_1y_high": -0.01405,
         "sector_drawdown_member_count": 8,
         "sector_drawdown_lookback_trading_days": 252,
-        "earnings_declining_count": 6,
-        "earnings_member_count": 8,
-        "earnings_coverage_share": 1.0,
-        "earnings_declining_share": 0.75,
-        "earnings_fields_used": [
-          "yahoo_normalized_income_growth_pct"
-        ],
-        "operating_declining_count": 0,
-        "operating_decline_member_count": 0,
-        "operating_decline_coverage_share": 0.0,
-        "operating_declining_share": null,
-        "operating_decline_component_available": false,
+        "earnings_declining_count": 3,
+        "earnings_member_count": 7,
+        "earnings_coverage_share": 0.875,
+        "earnings_component": "operating_decline_store",
+        "earnings_declining_share": 0.428571,
+        "earnings_fields_used": [],
+        "operating_declining_count": 3,
+        "operating_decline_member_count": 7,
+        "operating_decline_coverage_share": 0.875,
+        "operating_declining_share": 0.428571,
+        "operating_decline_store_present": true,
+        "operating_decline_component_available": true,
         "thresholds": {
           "minimum_members_with_data": 4,
           "minimum_coverage_share": 0.6,
           "price_breadth_headwind": 0.65,
           "sector_return_126d_headwind": -0.1,
           "earnings_breadth_headwind": 0.5,
-          "decline_breadth_headwind": 0.5
+          "decline_breadth_headwind": 0.5,
+          "interim_eps_decline_member": 0.1,
+          "screen_earnings_growth_decline_member": -0.05
         }
       },
       "members": [
@@ -514,13 +500,8 @@
       "reasons": [
         {
           "code": "NO_BROAD_HEADWIND",
-          "detail": "Price breadth/trend and earnings breadth stay below headwind thresholds.",
-          "source": "docs/data/latest.json; docs/data/charts/{TICKER}.json"
-        },
-        {
-          "code": "OPERATING_DECLINE_STORE_UNAVAILABLE",
-          "detail": "Optional operating-decline breadth was not available; it did not create a pass.",
-          "source": "docs/data/operating_decline_gate.json"
+          "detail": "Price breadth/trend and the selected earnings/operating breadth stay below headwind thresholds.",
+          "source": "docs/data/charts/{TICKER}.json; docs/data/operating_decline_gate.json names[].verdict"
         }
       ],
       "metrics": {
@@ -537,26 +518,27 @@
         "sector_drawdown_from_1y_high": -0.052865,
         "sector_drawdown_member_count": 51,
         "sector_drawdown_lookback_trading_days": 252,
-        "earnings_declining_count": 11,
-        "earnings_member_count": 49,
-        "earnings_coverage_share": 0.960784,
-        "earnings_declining_share": 0.22449,
-        "earnings_fields_used": [
-          "adjusted_eps_growth_pct",
-          "yahoo_normalized_income_growth_pct"
-        ],
-        "operating_declining_count": 0,
-        "operating_decline_member_count": 0,
-        "operating_decline_coverage_share": 0.0,
-        "operating_declining_share": null,
-        "operating_decline_component_available": false,
+        "earnings_declining_count": 9,
+        "earnings_member_count": 44,
+        "earnings_coverage_share": 0.862745,
+        "earnings_component": "operating_decline_store",
+        "earnings_declining_share": 0.204545,
+        "earnings_fields_used": [],
+        "operating_declining_count": 9,
+        "operating_decline_member_count": 44,
+        "operating_decline_coverage_share": 0.862745,
+        "operating_declining_share": 0.204545,
+        "operating_decline_store_present": true,
+        "operating_decline_component_available": true,
         "thresholds": {
           "minimum_members_with_data": 4,
           "minimum_coverage_share": 0.6,
           "price_breadth_headwind": 0.65,
           "sector_return_126d_headwind": -0.1,
           "earnings_breadth_headwind": 0.5,
-          "decline_breadth_headwind": 0.5
+          "decline_breadth_headwind": 0.5,
+          "interim_eps_decline_member": 0.1,
+          "screen_earnings_growth_decline_member": -0.05
         }
       },
       "members": [
@@ -632,13 +614,8 @@
       "reasons": [
         {
           "code": "NO_BROAD_HEADWIND",
-          "detail": "Price breadth/trend and earnings breadth stay below headwind thresholds.",
-          "source": "docs/data/latest.json; docs/data/charts/{TICKER}.json"
-        },
-        {
-          "code": "OPERATING_DECLINE_STORE_UNAVAILABLE",
-          "detail": "Optional operating-decline breadth was not available; it did not create a pass.",
-          "source": "docs/data/operating_decline_gate.json"
+          "detail": "Price breadth/trend and the selected earnings/operating breadth stay below headwind thresholds.",
+          "source": "docs/data/charts/{TICKER}.json; docs/data/operating_decline_gate.json names[].verdict"
         }
       ],
       "metrics": {
@@ -655,26 +632,27 @@
         "sector_drawdown_from_1y_high": -0.017524,
         "sector_drawdown_member_count": 11,
         "sector_drawdown_lookback_trading_days": 252,
-        "earnings_declining_count": 3,
+        "earnings_declining_count": 0,
         "earnings_member_count": 10,
         "earnings_coverage_share": 0.909091,
-        "earnings_declining_share": 0.3,
-        "earnings_fields_used": [
-          "adjusted_eps_growth_pct",
-          "yahoo_normalized_income_growth_pct"
-        ],
+        "earnings_component": "operating_decline_store",
+        "earnings_declining_share": 0.0,
+        "earnings_fields_used": [],
         "operating_declining_count": 0,
-        "operating_decline_member_count": 0,
-        "operating_decline_coverage_share": 0.0,
-        "operating_declining_share": null,
-        "operating_decline_component_available": false,
+        "operating_decline_member_count": 10,
+        "operating_decline_coverage_share": 0.909091,
+        "operating_declining_share": 0.0,
+        "operating_decline_store_present": true,
+        "operating_decline_component_available": true,
         "thresholds": {
           "minimum_members_with_data": 4,
           "minimum_coverage_share": 0.6,
           "price_breadth_headwind": 0.65,
           "sector_return_126d_headwind": -0.1,
           "earnings_breadth_headwind": 0.5,
-          "decline_breadth_headwind": 0.5
+          "decline_breadth_headwind": 0.5,
+          "interim_eps_decline_member": 0.1,
+          "screen_earnings_growth_decline_member": -0.05
         }
       },
       "members": [
@@ -704,13 +682,8 @@
       "reasons": [
         {
           "code": "NO_BROAD_HEADWIND",
-          "detail": "Price breadth/trend and earnings breadth stay below headwind thresholds.",
-          "source": "docs/data/latest.json; docs/data/charts/{TICKER}.json"
-        },
-        {
-          "code": "OPERATING_DECLINE_STORE_UNAVAILABLE",
-          "detail": "Optional operating-decline breadth was not available; it did not create a pass.",
-          "source": "docs/data/operating_decline_gate.json"
+          "detail": "Price breadth/trend and the selected earnings/operating breadth stay below headwind thresholds.",
+          "source": "docs/data/charts/{TICKER}.json; docs/data/operating_decline_gate.json names[].verdict"
         }
       ],
       "metrics": {
@@ -727,27 +700,27 @@
         "sector_drawdown_from_1y_high": -0.022512,
         "sector_drawdown_member_count": 51,
         "sector_drawdown_lookback_trading_days": 252,
-        "earnings_declining_count": 24,
-        "earnings_member_count": 49,
-        "earnings_coverage_share": 0.960784,
-        "earnings_declining_share": 0.489796,
-        "earnings_fields_used": [
-          "adjusted_eps_growth_pct",
-          "interim_eps_decline_pct",
-          "yahoo_normalized_income_growth_pct"
-        ],
-        "operating_declining_count": 0,
-        "operating_decline_member_count": 0,
-        "operating_decline_coverage_share": 0.0,
-        "operating_declining_share": null,
-        "operating_decline_component_available": false,
+        "earnings_declining_count": 12,
+        "earnings_member_count": 47,
+        "earnings_coverage_share": 0.921569,
+        "earnings_component": "operating_decline_store",
+        "earnings_declining_share": 0.255319,
+        "earnings_fields_used": [],
+        "operating_declining_count": 12,
+        "operating_decline_member_count": 47,
+        "operating_decline_coverage_share": 0.921569,
+        "operating_declining_share": 0.255319,
+        "operating_decline_store_present": true,
+        "operating_decline_component_available": true,
         "thresholds": {
           "minimum_members_with_data": 4,
           "minimum_coverage_share": 0.6,
           "price_breadth_headwind": 0.65,
           "sector_return_126d_headwind": -0.1,
           "earnings_breadth_headwind": 0.5,
-          "decline_breadth_headwind": 0.5
+          "decline_breadth_headwind": 0.5,
+          "interim_eps_decline_member": 0.1,
+          "screen_earnings_growth_decline_member": -0.05
         }
       },
       "members": [
@@ -824,17 +797,12 @@
     "ftse350:Real Estate": {
       "market": "ftse350",
       "sector": "Real Estate",
-      "verdict": "sound",
+      "verdict": "headwind",
       "reasons": [
         {
-          "code": "NO_BROAD_HEADWIND",
-          "detail": "Price breadth/trend and earnings breadth stay below headwind thresholds.",
-          "source": "docs/data/latest.json; docs/data/charts/{TICKER}.json"
-        },
-        {
-          "code": "OPERATING_DECLINE_STORE_UNAVAILABLE",
-          "detail": "Optional operating-decline breadth was not available; it did not create a pass.",
-          "source": "docs/data/operating_decline_gate.json"
+          "code": "OPERATING_DECLINE_BREADTH_HEADWIND",
+          "detail": "50.0% of 4 covered members are declining.",
+          "source": "docs/data/operating_decline_gate.json names[].verdict"
         }
       ],
       "metrics": {
@@ -851,25 +819,27 @@
         "sector_drawdown_from_1y_high": -0.077323,
         "sector_drawdown_member_count": 4,
         "sector_drawdown_lookback_trading_days": 252,
-        "earnings_declining_count": 0,
+        "earnings_declining_count": 2,
         "earnings_member_count": 4,
         "earnings_coverage_share": 1.0,
-        "earnings_declining_share": 0.0,
-        "earnings_fields_used": [
-          "yahoo_normalized_income_growth_pct"
-        ],
-        "operating_declining_count": 0,
-        "operating_decline_member_count": 0,
-        "operating_decline_coverage_share": 0.0,
-        "operating_declining_share": null,
-        "operating_decline_component_available": false,
+        "earnings_component": "operating_decline_store",
+        "earnings_declining_share": 0.5,
+        "earnings_fields_used": [],
+        "operating_declining_count": 2,
+        "operating_decline_member_count": 4,
+        "operating_decline_coverage_share": 1.0,
+        "operating_declining_share": 0.5,
+        "operating_decline_store_present": true,
+        "operating_decline_component_available": true,
         "thresholds": {
           "minimum_members_with_data": 4,
           "minimum_coverage_share": 0.6,
           "price_breadth_headwind": 0.65,
           "sector_return_126d_headwind": -0.1,
           "earnings_breadth_headwind": 0.5,
-          "decline_breadth_headwind": 0.5
+          "decline_breadth_headwind": 0.5,
+          "interim_eps_decline_member": 0.1,
+          "screen_earnings_growth_decline_member": -0.05
         }
       },
       "members": [
@@ -887,13 +857,8 @@
       "reasons": [
         {
           "code": "NO_BROAD_HEADWIND",
-          "detail": "Price breadth/trend and earnings breadth stay below headwind thresholds.",
-          "source": "docs/data/latest.json; docs/data/charts/{TICKER}.json"
-        },
-        {
-          "code": "OPERATING_DECLINE_STORE_UNAVAILABLE",
-          "detail": "Optional operating-decline breadth was not available; it did not create a pass.",
-          "source": "docs/data/operating_decline_gate.json"
+          "detail": "Price breadth/trend and the selected earnings/operating breadth stay below headwind thresholds.",
+          "source": "docs/data/charts/{TICKER}.json; docs/data/operating_decline_gate.json names[].verdict"
         }
       ],
       "metrics": {
@@ -910,26 +875,27 @@
         "sector_drawdown_from_1y_high": -0.033834,
         "sector_drawdown_member_count": 13,
         "sector_drawdown_lookback_trading_days": 252,
-        "earnings_declining_count": 2,
-        "earnings_member_count": 11,
-        "earnings_coverage_share": 0.846154,
-        "earnings_declining_share": 0.181818,
-        "earnings_fields_used": [
-          "adjusted_eps_growth_pct",
-          "yahoo_normalized_income_growth_pct"
-        ],
-        "operating_declining_count": 0,
-        "operating_decline_member_count": 0,
-        "operating_decline_coverage_share": 0.0,
-        "operating_declining_share": null,
-        "operating_decline_component_available": false,
+        "earnings_declining_count": 1,
+        "earnings_member_count": 12,
+        "earnings_coverage_share": 0.923077,
+        "earnings_component": "operating_decline_store",
+        "earnings_declining_share": 0.083333,
+        "earnings_fields_used": [],
+        "operating_declining_count": 1,
+        "operating_decline_member_count": 12,
+        "operating_decline_coverage_share": 0.923077,
+        "operating_declining_share": 0.083333,
+        "operating_decline_store_present": true,
+        "operating_decline_component_available": true,
         "thresholds": {
           "minimum_members_with_data": 4,
           "minimum_coverage_share": 0.6,
           "price_breadth_headwind": 0.65,
           "sector_return_126d_headwind": -0.1,
           "earnings_breadth_headwind": 0.5,
-          "decline_breadth_headwind": 0.5
+          "decline_breadth_headwind": 0.5,
+          "interim_eps_decline_member": 0.1,
+          "screen_earnings_growth_decline_member": -0.05
         }
       },
       "members": [
@@ -956,17 +922,12 @@
     "ftse350:Utilities": {
       "market": "ftse350",
       "sector": "Utilities",
-      "verdict": "headwind",
+      "verdict": "sound",
       "reasons": [
         {
-          "code": "EARNINGS_BREADTH_HEADWIND",
-          "detail": "50.0% of 8 covered members show decline.",
-          "source": "docs/data/latest.json reports[] earnings breadth fields"
-        },
-        {
-          "code": "OPERATING_DECLINE_STORE_UNAVAILABLE",
-          "detail": "Optional operating-decline breadth was not available; it did not create a pass.",
-          "source": "docs/data/operating_decline_gate.json"
+          "code": "NO_BROAD_HEADWIND",
+          "detail": "Price breadth/trend and the selected earnings/operating breadth stay below headwind thresholds.",
+          "source": "docs/data/charts/{TICKER}.json; docs/data/operating_decline_gate.json names[].verdict"
         }
       ],
       "metrics": {
@@ -984,24 +945,26 @@
         "sector_drawdown_member_count": 9,
         "sector_drawdown_lookback_trading_days": 252,
         "earnings_declining_count": 4,
-        "earnings_member_count": 8,
-        "earnings_coverage_share": 0.888889,
-        "earnings_declining_share": 0.5,
-        "earnings_fields_used": [
-          "yahoo_normalized_income_growth_pct"
-        ],
-        "operating_declining_count": 0,
-        "operating_decline_member_count": 0,
-        "operating_decline_coverage_share": 0.0,
-        "operating_declining_share": null,
-        "operating_decline_component_available": false,
+        "earnings_member_count": 9,
+        "earnings_coverage_share": 1.0,
+        "earnings_component": "operating_decline_store",
+        "earnings_declining_share": 0.444444,
+        "earnings_fields_used": [],
+        "operating_declining_count": 4,
+        "operating_decline_member_count": 9,
+        "operating_decline_coverage_share": 1.0,
+        "operating_declining_share": 0.444444,
+        "operating_decline_store_present": true,
+        "operating_decline_component_available": true,
         "thresholds": {
           "minimum_members_with_data": 4,
           "minimum_coverage_share": 0.6,
           "price_breadth_headwind": 0.65,
           "sector_return_126d_headwind": -0.1,
           "earnings_breadth_headwind": 0.5,
-          "decline_breadth_headwind": 0.5
+          "decline_breadth_headwind": 0.5,
+          "interim_eps_decline_member": 0.1,
+          "screen_earnings_growth_decline_member": -0.05
         }
       },
       "members": [
@@ -1029,92 +992,92 @@
     "AAL.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "AMRQ.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "ANTO.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "ATYM.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "BREE.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "CRDA.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "EDV.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "ELM.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "FRES.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "GLEN.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "HOC.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "JMAT.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "MNDI.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "MNO.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "PAF.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "RIO.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "VCT.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "VSVS.L": {
       "market": "ftse350",
       "sector": "Basic Materials",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "ALW.L": {
       "market": "ftse350",
@@ -1529,42 +1492,42 @@
     "BP.L": {
       "market": "ftse350",
       "sector": "Energy",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "DCC.L": {
       "market": "ftse350",
       "sector": "Energy",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "ENOG.L": {
       "market": "ftse350",
       "sector": "Energy",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "ENQ.L": {
       "market": "ftse350",
       "sector": "Energy",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "HBR.L": {
       "market": "ftse350",
       "sector": "Energy",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "HTG.L": {
       "market": "ftse350",
       "sector": "Energy",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "ITH.L": {
       "market": "ftse350",
       "sector": "Energy",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "SHEL.L": {
       "market": "ftse350",
       "sector": "Energy",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "3IN.L": {
       "market": "ftse350",
@@ -2134,22 +2097,22 @@
     "GRI.L": {
       "market": "ftse350",
       "sector": "Real Estate",
-      "sector_verdict": "sound"
+      "sector_verdict": "headwind"
     },
     "IWG.L": {
       "market": "ftse350",
       "sector": "Real Estate",
-      "sector_verdict": "sound"
+      "sector_verdict": "headwind"
     },
     "SRE.L": {
       "market": "ftse350",
       "sector": "Real Estate",
-      "sector_verdict": "sound"
+      "sector_verdict": "headwind"
     },
     "SVS.L": {
       "market": "ftse350",
       "sector": "Real Estate",
-      "sector_verdict": "sound"
+      "sector_verdict": "headwind"
     },
     "ALFA.L": {
       "market": "ftse350",
@@ -2219,47 +2182,47 @@
     "CNA.L": {
       "market": "ftse350",
       "sector": "Utilities",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "DRX.L": {
       "market": "ftse350",
       "sector": "Utilities",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "MTLN.L": {
       "market": "ftse350",
       "sector": "Utilities",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "NG.L": {
       "market": "ftse350",
       "sector": "Utilities",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "PNN.L": {
       "market": "ftse350",
       "sector": "Utilities",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "SSE.L": {
       "market": "ftse350",
       "sector": "Utilities",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "SVT.L": {
       "market": "ftse350",
       "sector": "Utilities",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "TEP.L": {
       "market": "ftse350",
       "sector": "Utilities",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     },
     "UU.L": {
       "market": "ftse350",
       "sector": "Utilities",
-      "sector_verdict": "headwind"
+      "sector_verdict": "sound"
     }
   }
 }

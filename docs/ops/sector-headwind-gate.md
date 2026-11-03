@@ -33,18 +33,22 @@ All chart observations are filtered to dates on or before the store's
 |---|---|---|
 | Price breadth | Share of members whose latest close is below the 200-trading-day average | At least 65%, together with the 126d trend threshold |
 | Sector trend | Equal-weight member return over about 63 and 126 trading days; current drawdown from the trailing 252-trading-day sector high is diagnostic | 126d return below -10%, together with price breadth |
-| Earnings breadth | Share with a positive `interim_eps_decline_pct`, negative `yahoo_normalized_income_growth_pct`, or negative `adjusted_eps_growth_pct` | At least 50% |
-| Operating-decline breadth | Share with `verdict: declining` in the optional operating-decline store | At least 50% |
+| Earnings/operating breadth (primary) | Share with `verdict: declining` in the operating-decline store; only `clear` and `declining` verdicts count as covered evidence | At least 50% |
+| Screen-fields fallback | Used only when operating-decline coverage is missing or thin: `interim_eps_decline_pct` ≥10%, `yahoo_normalized_income_growth_pct` ≤-5%, or `adjusted_eps_growth_pct` ≤-5% | At least 50% |
 
-The operating-decline component is optional while package 1.1 lands. Its
-absence is cited and never manufactures a pass.
+There is one definition of declining when the operating-decline store has
+sufficient coverage: its per-name verdict. The screen-fields rule is only a
+materiality-based fallback. It imports the operating gate's 10% interim-EPS
+threshold rather than defining another threshold. Missing or
+`insufficient_data` operating verdicts are not evidence and do not enter the
+coverage denominator.
 
 ## Verdict rule
 
 - `headwind`: price breadth and 126d trend jointly cross their thresholds, or
-  either available earnings/operating-decline breadth reaches 50%.
-- `sound`: price breadth, 126d trend and earnings breadth all meet minimum
-  coverage, and no headwind rule fires.
+  the selected earnings/operating breadth reaches 50%.
+- `sound`: price breadth, 126d trend and the selected earnings/operating
+  component all meet minimum coverage, and no headwind rule fires.
 - `insufficient_data`: no headwind is established and a core component lacks
   minimum coverage. This is fail-closed and is not a pass.
 
@@ -55,9 +59,9 @@ set the v0 verdict.
 
 | Path | Use |
 |---|---|
-| `docs/data/latest.json` → `reports` | FTSE membership, sector, buy tier and earnings breadth |
+| `docs/data/latest.json` → `reports` | FTSE membership, sector, buy tier and fallback earnings breadth |
 | `docs/data/charts/{TICKER}.json` | PIT close, SMA200 and trend history |
-| `docs/data/operating_decline_gate.json` | Optional per-name operating-decline verdict |
+| `docs/data/operating_decline_gate.json` | Primary per-name operating-decline verdict |
 | `docs/data/sector_headwind_gate.json` | Persisted sector and name projection |
 
 The store includes sector reasons, coverage and trend metrics, member and
@@ -66,8 +70,9 @@ the ops-monitor `GHA_COMMIT_OPTIONAL` lane.
 
 ## Automation and findings
 
-Daily ops-monitor calls `check_sector_headwind_gate` and refreshes the store.
-It emits:
+Daily ops-monitor refreshes `check_operating_decline_gate` first, then calls
+`check_sector_headwind_gate`, so the sector gate consumes the newly refreshed
+per-name verdicts. It emits:
 
 - **Sector headwind gate refreshed (observe)** with verdict counts, named
   headwind sectors and buy-tier exposure.
