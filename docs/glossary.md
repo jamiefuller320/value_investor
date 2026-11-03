@@ -67,7 +67,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | maintenance ingest threshold | Same completion bar as sprint ingest complete: raw filing parity or exhausted parked thin and IWB leftovers. | [`AGENTS.md`](../AGENTS.md) |
 | market_queue | Committed ordered list of index slices progressing through ingest cascade and epoch-0 admission. | [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md) |
 | memo freshness | Research memo recency bind field so decisions do not rely on stale write-ups. | [`ops/data-pillar-priorities.md`](ops/data-pillar-priorities.md) |
-| N1 | Deferred idea: widen universe first was rejected as learning bottleneck versus data quality. | [`deferred-review.md`](deferred-review.md) |
+| N1 | Queued idea: widen the stock universe first (AIM, Europe, worldwide); held back because data quality, not universe size, is the bottleneck. | [`deferred-review.md`](deferred-review.md) |
 | N2 | Deferred idea: evolutionary parallel sims deferred because sparse history overfits before costs. | [`deferred-review.md`](deferred-review.md) |
 | N138 | Deferred idea: park off-buy-tier zero-filing memos until a explicit revisit trigger fires. | [`deferred-review.md`](deferred-review.md) |
 | N200 | Sealed observe strand B: plain-value identity with technical entry and exit timing brackets on archive history. | [`ops/n200-tech-timing-observe.md`](ops/n200-tech-timing-observe.md) |
@@ -83,6 +83,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | point-in-time history | Historical records stamped as known on each date so later data cannot leak into past decisions. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | raw_buy_tier | Buy-tier membership from the screen without timing or overlay filters applied. | [`ops/n200-tech-timing-observe.md`](ops/n200-tech-timing-observe.md) |
 | readiness gate | Explicit thickness or volume bar that must clear before promoting an experiment to adoption truth. | [`AGENTS.md`](../AGENTS.md) |
+| recovery hold | Strategy rule: a position bought too early is held for recovery, not sold on a price drop, until it recovers or the thesis breaks. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | rememo | Scheduled refresh of existing research memos under caps, distinct from first-time research on new names. | [`ops/structured-verdict-slim.md`](ops/structured-verdict-slim.md) |
 | richness before breadth | Live screener stays narrow and high quality while other markets grow offline in the library first. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | screen-lite | Offline quant screen and archived signals for library markets without changing the live FTSE screener. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
@@ -90,8 +91,9 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | shadow judge | Observe-only evaluation path that must not override replay, sealed observe, or ingest-head priority rules. | [`AGENTS.md`](../AGENTS.md) |
 | so-what --apply | Gap-closure workflow that turns analysis themes into pinned ingest or promotion actions when appropriate. | [`ops/so-what-gap-closure.md`](ops/so-what-gap-closure.md) |
 | sprint_ingest_complete | Ingest head finished: raw parity on filing counts or thin and IWB leftovers parked with a usable set remaining. | [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md) |
-| strand A | Live FTSE capital and primary learning path on the buy-tier-level and matched assessment tracks today. | [`ops/primary-learning-track.md`](ops/primary-learning-track.md) |
+| strand A | The main FTSE paper-trading path: the buy-tier-level book and the matched assessment books. No real money is invested. | [`ops/primary-learning-track.md`](ops/primary-learning-track.md) |
 | strong_buy | Strongest screen buy signal within the value set alongside ordinary `buy`. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
+| thesis break | The reason for owning a name has failed: operating decline, a sector headwind, a screen `avoid` signal, or a research `pass`. Ends a recovery hold. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | three-lane model | Post-run clearance policy: ingest factory lane, engineering queue lane, and narrative refresh lane. | [`ops/post-run-improvement-clearance.md`](ops/post-run-improvement-clearance.md) |
 | twin | Parallel book or metric path with frozen registration used to compare policy without editing the live book. | [`AGENTS.md`](../AGENTS.md) |
 | waiters | Sealed strategies in the launch queue not yet at the head for incremental Data deepen work. | [`ops/data-pillar-priorities.md`](ops/data-pillar-priorities.md) |
