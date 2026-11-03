@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-11-02T08:05:27.359525+00:00",
-  "as_of": "2026-11-02T08:05:27.231249+00:00",
+  "updated_at": "2026-11-03T14:17:36.066027+00:00",
+  "as_of": "2026-11-03T14:17:35.918431+00:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -19,9 +19,9 @@
   "holding_count": 3,
   "underwater_count": 0,
   "thesis_status_counts": {
-    "intact": 2,
+    "intact": 1,
     "weakening": 1,
-    "broken": 0,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
@@ -43,17 +43,49 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
-      "quality": 0.0,
-      "dividend": 0.0,
+      "cheapness": 0.3333,
+      "quality": 0.3333,
+      "dividend": 0.3333,
       "garp": 0.6667,
-      "risk": 0.0
+      "risk": 0.3333
     },
     "selection_feedback_flags": [],
     "balancing_hint": "maintain",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
+    {
+      "ticker": "UMC",
+      "name": "UMC",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 16.68,
+      "avg_cost": 16.68,
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "cheapness lost and not in buy tier"
+      ],
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
+    },
     {
       "ticker": "SONY",
       "name": "Sony Group Corporation",
@@ -90,47 +122,6 @@
         "cheapness family still passes",
         "data_quality 1.00",
         "conviction 71%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "UMC",
-      "name": "United Microelectronics Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 16.68,
-      "avg_cost": 16.68,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.4408,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 44%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 44%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []

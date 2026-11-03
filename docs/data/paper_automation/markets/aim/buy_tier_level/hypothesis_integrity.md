@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-02T08:04:06.209196+00:00
+Track: `buy_tier_level` · updated 2026-11-03T14:17:29.650869+00:00
 
 ## Portfolio loser feedback
 
@@ -100,7 +100,6 @@ Track: `buy_tier_level` · updated 2026-11-02T08:04:06.209196+00:00
 
 ### CRW.L — weakening / watch_review (+0.0%)
 - research verdict neutral
-- conviction 33% below intact floor
 - still buy
 - cheapness family still passes
 

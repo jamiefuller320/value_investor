@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-02T08:04:50.156097+00:00
+Track: `buy_tier_level` · updated 2026-11-03T14:17:32.365448+00:00
 
 ## Portfolio loser feedback
 
@@ -9,6 +9,12 @@ Track: `buy_tier_level` · updated 2026-11-02T08:04:50.156097+00:00
 - Balancing hint: `maintain`
 
 ## Holding reviews
+
+### SHELL.AS — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### MT.AS — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### PRX.AS — weakening / watch_review (-4.3%)
 - research verdict caution
@@ -33,19 +39,6 @@ Track: `buy_tier_level` · updated 2026-11-02T08:04:50.156097+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 39%
-
-### MT.AS — weakening / watch_review (+0.6%)
-- research verdict caution
-- conviction 33% below intact floor
-- still buy
-- cheapness family still passes
-
-### SHELL.AS — intact / hold_tolerate (+0.8%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 70%
 
 ### AD.AS — intact / hold_tolerate (+1.1%)
 - still strong_buy
