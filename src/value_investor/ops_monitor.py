@@ -2411,6 +2411,7 @@ def check_operating_decline_gate(
     """Observe-only operating-decline gate (N250): clear / declining / insufficient_data.
 
     Writes ``docs/data/operating_decline_gate.json`` from committed annual statements,
+    interim quarterly series, filing-interim extracts, half-year filing bodies,
     screen-row flags and filings headlines. No network. Never changes books, knobs or
     signals (``auto_fixable=False``). See docs/ops/operating-decline-gate.md.
     """
