@@ -27,9 +27,7 @@ def _write_us_memo(
     sec_capex: float,
     year: str = "2025",
 ) -> Path:
-    ticker_dir = (
-        library_root / "markets" / market_id / "screen" / "research" / ticker
-    )
+    ticker_dir = library_root / "markets" / market_id / "screen" / "research" / ticker
     sources = ticker_dir / "sources"
     sources.mkdir(parents=True)
     (ticker_dir / "research.json").write_text(

@@ -49,9 +49,7 @@ LEARNING_QUESTION = (
     "mismatch flags change on buy-tier memos?"
 )
 EPOCH_ID = "sec-filing-aligned-twin-v0"
-TWIN_FINDING_TITLE = (
-    "SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier"
-)
+TWIN_FINDING_TITLE = "SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier"
 STORE_FAILED_TITLE = "SEC filing_aligned twin observe failed"
 
 
@@ -301,9 +299,7 @@ def refresh_sec_filing_aligned_twin(
 
 def ops_findings_from_sec_filing_aligned_twin(payload: dict[str, Any]) -> list[dict[str, Any]]:
     summary = payload.get("summary") or {}
-    buy_tier = [
-        r for r in payload.get("policy_changed") or [] if r.get("buy_tier")
-    ]
+    buy_tier = [r for r in payload.get("policy_changed") or [] if r.get("buy_tier")]
     if not buy_tier:
         return []
     listed = "; ".join(
