@@ -14475,6 +14475,37 @@ def test_parked_source_hunter_teck_b_to_tsx60_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_tsx60_mg_to_builtins(tmp_path: Path):
+    """Regression: MG.TO leftover — SEC FY2025 AIF/MD&A + Q2 2026 interim EX-99.2 HTML."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("MG.TO", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("d20215dex991.htm" in url for url in urls)
+    assert any("d20215dex992.htm" in url for url in urls)
+    assert any("tm2618646d1_ex99-2.htm" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") >= 2
+    assert sum(1 for row in rows if row["period"] == "interim") >= 1
+    assert len(fetch_filings_ir_allowlist("MGA", path=allowlist_path)) == 3
+
+
+def test_parked_source_hunter_mg_to_tsx60_has_fetchable_ir():
+    """eng-20261103-06: MG.TO has live-fetchable Magna International SEC statutory HTML."""
+    assert "MG.TO" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("MG.TO")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("sec.gov" in url for url in urls)
+    aif_url = next(url for url in urls if "d20215dex991.htm" in url)
+    body = _live_fetch_filing_body(aif_url)
+    if not body:
+        pytest.skip("SEC.gov body fetch unavailable (rate-limit / network) — retry later")
+    assert len(body) >= 50000
+
+
 def test_parked_source_hunter_skip_tri_to_tsx60():
     """eng-20260914-01: TRI.TO leftover IWB is SEC 6-K cover HTML, not missing 40-F/interim."""
     assert "TRI.TO" in PARKED_SOURCE_HUNTER_SKIP
