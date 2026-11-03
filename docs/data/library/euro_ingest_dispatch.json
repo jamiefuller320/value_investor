@@ -14,7 +14,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-11-03T22:11:44.123394+00:00",
+    "snapshot_at": "2026-11-03T22:28:16.109336+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 45,
     "unmeasured_buy_tier": 0,
@@ -90,7 +90,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-11-03T22:11:44.125306+00:00",
+  "evaluated_at": "2026-11-03T22:28:16.110448+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -160,7 +160,7 @@
         "nasdaq100 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-11-03T22:12:03.397880+00:00",
+        "snapshot_at": "2026-11-03T22:28:32.721273+00:00",
         "market_id": "nasdaq100",
         "buy_tier_count": 36,
         "unmeasured_buy_tier": 0,
@@ -210,58 +210,78 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-11-03T22:12:03.399190+00:00",
+      "evaluated_at": "2026-11-03T22:28:32.721847+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "parallel_sprint_2_markets": [
-    "cac40"
+    "sti"
   ],
   "parallel_sprint_2_status": [
     {
-      "market_id": "cac40",
+      "market_id": "sti",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=2)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=3, indexed_without_body=14)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
       "parked_tickers": [],
       "phase3_ready": false,
-      "current_phase": 1,
+      "current_phase": 0,
       "next_phase": 1,
       "phase_blockers": [
-        "cac40 not in ladder.weekly_paper_shard_markets"
+        "no benchmark configured for sti"
       ],
       "filing_health": {
-        "snapshot_at": "2026-11-03T22:12:03.863448+00:00",
-        "market_id": "cac40",
-        "buy_tier_count": 14,
+        "snapshot_at": "2026-11-03T22:28:33.003864+00:00",
+        "market_id": "sti",
+        "buy_tier_count": 7,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 0,
-        "indexed_without_body": 2,
-        "bodies_min": 7,
-        "bodies_median": 11.0,
-        "bodies_max": 126,
+        "thin_body_buy_tier": 3,
+        "indexed_without_body": 14,
+        "bodies_min": 1,
+        "bodies_median": 6,
+        "bodies_max": 12,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
-        "thin_body_tickers": [],
+        "thin_body_tickers": [
+          "J36.SI",
+          "U14.SI",
+          "BS6.SI"
+        ],
         "indexed_without_body_tickers": [
-          "TTE.PA"
+          "J36.SI",
+          "U14.SI",
+          "BS6.SI",
+          "N2IU.SI",
+          "ME8U.SI"
         ],
         "indexed_without_body_by_ticker": {
-          "TTE.PA": 2
+          "J36.SI": 3,
+          "U14.SI": 5,
+          "BS6.SI": 3,
+          "N2IU.SI": 1,
+          "ME8U.SI": 2
         },
         "parked_tickers": [],
         "parked_count": 0,
-        "effective_thin_body_buy_tier": 0,
-        "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 2,
+        "effective_thin_body_buy_tier": 3,
+        "effective_thin_body_tickers": [
+          "J36.SI",
+          "U14.SI",
+          "BS6.SI"
+        ],
+        "effective_indexed_without_body": 14,
         "effective_indexed_without_body_tickers": [
-          "TTE.PA"
+          "J36.SI",
+          "U14.SI",
+          "BS6.SI",
+          "N2IU.SI",
+          "ME8U.SI"
         ],
         "ingest_exhausted": false
       },
@@ -280,14 +300,14 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-11-03T22:12:03.864081+00:00",
+      "evaluated_at": "2026-11-03T22:28:33.004043+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
     "nasdaq100",
-    "cac40"
+    "sti"
   ],
   "market_queue": [
     "sp500",
@@ -344,7 +364,7 @@
     "nasdaq100"
   ],
   "scheduler_stream_2_markets": [
-    "cac40"
+    "sti"
   ],
   "should_run_library_maintenance": true
 }
