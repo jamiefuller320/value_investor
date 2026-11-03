@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-03T18:06:21+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-03T20:21:31+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -405,6 +405,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | L657 | **Drawdown companions on sealed interestingness gate** | Optional harden: require stamped drawdown depth/duration companions on N200–N210 before design-eligible, aligned with lab_learning_progress companions — not peer NAV. | Drawdown companions present on sealed observe stores; owner wants harder design bar |
 | L658 | **Super-book dual-cap open-position twin (50 or 100)** | Cold-start a declared-incomparable fixed-stake dual-cap twin (e.g. 100, or clean 30-vs-50 A/B) rather than further mid-flight density rewrites. Owner already locked same-book epoch-raise 30→50 for lens volume (2026-11-01); twin not used for that fork. Twins-over-edits; O3 alone-first; not NAV. | Owner wants a clean dual-cap A/B after MoM scores non-null (mom_score on stock_choice) OR skipped_at_open_cap stays material (>=40) under cap=50 while closed volume already thick _(machine-checked)_ |
 | L659 | **Matched-30 hold-buffer twin design pack (dialogue before spawn)** | If owner wants an instrument before L541 both-book trigger fires: pin LQ (does exit_confirm 10 on buy_tier_matched30_fair improve fair-cost path vs live buffer 2?), freeze markers/epoch, fixed-stake or fund twin explicit, O3 alone-first. Do not treat one-sided 10-pass +1.6pp as adoption; do not edit live knobs. | Owner asks for a hold-buffer design pack, or L541 structured trigger met on matched-30 pair. |
+| L667 | **Strategy book fills at the next open** | owner-strategy-book-v0 fills at the next stored close because chart files have no opens. When FTSE chart payloads grow an opens array aligned to dates, a new registration can fill at the next open. Do not retune the v0 close-to-close rule. | FTSE chart JSON includes an opens array aligned to dates, and the owner has signed owner-strategy-book-v0. |
 
 ### Universe & data
 
