@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-03T14:02:05+00:00",
+  "updated_at": "2026-11-03T18:06:21+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16244,6 +16244,202 @@
       "added_at": "2026-11-03T13:56:16+00:00",
       "updated_at": "2026-11-03T14:02:05+00:00",
       "status_note": "Shipped: paper-halt + unsettled-CA ops findings exclude assessment_model frozen tracks (#1270 eng)"
+    },
+    {
+      "id": "N248",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Replace paper-NAV proof gate for live capital with replay + implementation gates",
+      "summary": "N13/N14 wait on stages 2-5 'proven in paper', but track_statistics puts years-to-detect a 3%/yr edge at ~110 (tracking error ~16%) and L570/N203 block fresh US holdouts for 5+ years, so the gate is unreachable. Proposal: selection proven on point-in-time replay; forward paper proves implementation (fills, costs, data errors, tracking vs replay); then small live capital under hard limits. Rewrite N13/N14 revisit triggers to those measurable gates.",
+      "revisit_when": "Owner decides the autonomy proof standard, or next PROJECT_OBJECTIVE stage-table revision",
+      "tags": [
+        "governance",
+        "autonomy",
+        "proof-gate",
+        "n13",
+        "n14"
+      ],
+      "status": "open",
+      "source": "Autonomy readiness review 2026-11-03 (cloud agent)",
+      "added_at": "2026-11-03T16:34:20+00:00"
+    },
+    {
+      "id": "N249",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Value-filtered swing twin with recovery-hold fallback",
+      "summary": "Owner strategy (2026-11-03): buy fundamentally cheap names with no operating decline or sector-wide headwind at short-term price lows, sell at short-term highs, and if mis-timed hold for recovery. Live books instead exit on 'left top-N target set' after 2 screens (median hold 5d), never wait for a price low, have no price-high exit, and core_sell_trigger (sell only on hard avoid / research pass) runs only in two_lot_replay. Cold-start one fixed-stake twin: entry on price-low trigger within the value set; exit on short-term-high trigger; if underwater, switch to recovery-hold that exits only on thesis break (operating decline, sector headwind, hard avoid, research pass) or recovery to entry/fair value; cap recovery-hold share of book. Score swing episodes and recovery holds separately (hit rate, gain, time-to-recovery, loss on thesis break). Extends L541/L659 and L652 stub lenses.",
+      "revisit_when": "Owner opens a design pack for the swing twin, or L652 buy_support_bounce / sell_target_reached lenses get real fire rules",
+      "tags": [
+        "swing",
+        "timing",
+        "recovery-hold",
+        "thesis-break",
+        "twin",
+        "l541",
+        "l652"
+      ],
+      "status": "open",
+      "source": "Autonomy readiness review 2026-11-03 (cloud agent)",
+      "added_at": "2026-11-03T16:34:20+00:00"
+    },
+    {
+      "id": "L662",
+      "category": "later",
+      "section": "research",
+      "title": "Structured fair-value range and margin of safety in research memos",
+      "summary": "Memos output verdict/risk/confidence only and prompts forbid price targets, so there is no machine-checkable intrinsic value for entry limits, sizing or valuation-based exits. Add a structured fair-value range (normalised earnings / reverse DCF from filing bodies) and margin of safety, observe-only first and scored vs outcomes. Distinct from N5 (DCF as a screen model).",
+      "revisit_when": "After L528 total-return accounting lands, or when the research gate pass share is reviewed",
+      "tags": [
+        "valuation",
+        "margin-of-safety",
+        "memo",
+        "structured-verdict"
+      ],
+      "status": "open",
+      "source": "Autonomy readiness review 2026-11-03 (cloud agent)",
+      "added_at": "2026-11-03T16:34:21+00:00"
+    },
+    {
+      "id": "L663",
+      "category": "later",
+      "section": "research",
+      "title": "As-of-only instruction in research prompts (LLM knowledge leakage guard)",
+      "summary": "PIT plumbing (timeline, sources_as_of) is strong but prompts never tell the agent to use only facts in the supplied files as of the memo date and ignore parametric knowledge of later events. Add the instruction plus a cheap leak probe on replayed memos so memo-vs-outcome learning is not contaminated.",
+      "revisit_when": "Next research prompt revision or before any memo-vs-outcome calibration study",
+      "tags": [
+        "pit",
+        "lookahead",
+        "llm",
+        "prompt"
+      ],
+      "status": "open",
+      "source": "Autonomy readiness review 2026-11-03 (cloud agent)",
+      "added_at": "2026-11-03T16:34:21+00:00"
+    },
+    {
+      "id": "L664",
+      "category": "later",
+      "section": "research",
+      "title": "Non-US point-in-time out-of-sample screen replay (UK / Europe)",
+      "summary": "hsr-v1 US holdout is spent (N203) and the fresh US holdout waits 5+ years (L570). A survivorship-free PIT panel for UK or Europe would give a new independent out-of-sample test of the frozen screen in the markets actually traded, without re-litigating the US window.",
+      "revisit_when": "Owner approves a licensed non-US PIT fundamentals source, or the autonomy proof-gate decision needs selection evidence",
+      "tags": [
+        "pit",
+        "out-of-sample",
+        "uk",
+        "europe",
+        "replay"
+      ],
+      "status": "open",
+      "source": "Autonomy readiness review 2026-11-03 (cloud agent)",
+      "added_at": "2026-11-03T16:34:21+00:00"
+    },
+    {
+      "id": "L665",
+      "category": "later",
+      "section": "universe",
+      "title": "Scheduled Trading 212 catalogue refresh",
+      "summary": "The T212 instrument catalogue was fetched once on 2026-07-22 (17,328 instruments) and no workflow refreshes it, so overlays and t212-align drift. Add a weekly ops-monitor-visible refresh with a staleness finding.",
+      "revisit_when": "Next t212-align run, L48 mapping work, or catalogue older than 120 days",
+      "tags": [
+        "t212",
+        "catalogue",
+        "schedule",
+        "tradability"
+      ],
+      "status": "open",
+      "source": "Autonomy readiness review 2026-11-03 (cloud agent)",
+      "added_at": "2026-11-03T16:34:21+00:00"
+    },
+    {
+      "id": "L666",
+      "category": "later",
+      "section": "ops",
+      "title": "Plain-English owner brief and codename glossary",
+      "summary": "AGENTS.md, PROJECT_OBJECTIVE.md and docs/ops carry ~241 distinct codenames (L322, F9-B, N200, strand A, epoch-0, B3, Package L...) plus 910 deferred IDs; README facts are stale (20 vs 18 vs 22 models, Monday vs Sunday). Add one plain-English brief of goals, current gates and stage status, plus a generated glossary.",
+      "revisit_when": "Next PROJECT_OBJECTIVE or README revision",
+      "tags": [
+        "governance",
+        "glossary",
+        "readability",
+        "brief"
+      ],
+      "status": "open",
+      "source": "Autonomy readiness review 2026-11-03 (cloud agent)",
+      "added_at": "2026-11-03T16:34:21+00:00"
+    },
+    {
+      "id": "N250",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Operating-performance decline gate on buy-tier entries",
+      "summary": "Owner wants no indication of declining operating performance. Today only narrow overlays exist (interim_quality caps only when quality passes AND interim EPS falls >3% AND FCF cover <1; risk-family vetoes skip when fields are missing). Add an explicit fail-closed gate over the last 2-4 reported periods: revenue, operating margin, EPS and FCF trend, plus profit-warning / guidance-cut detection from RNS and filing bodies. Same gate doubles as the thesis-break exit for recovery holds.",
+      "revisit_when": "Owner prioritises the swing twin (N249), or next strand A policy epoch",
+      "tags": [
+        "operating-decline",
+        "value-trap",
+        "gate",
+        "filings",
+        "rns"
+      ],
+      "status": "open",
+      "source": "Owner strategy clarification 2026-11-03 (cloud agent)",
+      "added_at": "2026-11-03T16:45:01+00:00"
+    },
+    {
+      "id": "N251",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Sector-wide headwind gate (absolute, not sector-relative)",
+      "summary": "Owner wants no sector-wide negative factors. Composite scoring is sector-relative, which ranks the cheapest name in a deteriorating sector highly; macro_context is deliberately not wired into scoring; cyclical overlays are bespoke per-industry keyword rules. Add a sector-level gate: sector index relative strength and drawdown, breadth of peer earnings/margin declines and profit warnings, and commodity/rate sensitivity where relevant. Fail-closed on entry; also a thesis-break trigger for recovery holds.",
+      "revisit_when": "Owner prioritises the swing twin (N249), or the operating-decline gate is designed",
+      "tags": [
+        "sector",
+        "headwind",
+        "regime",
+        "value-trap",
+        "gate"
+      ],
+      "status": "open",
+      "source": "Owner strategy clarification 2026-11-03 (cloud agent)",
+      "added_at": "2026-11-03T16:45:01+00:00"
+    },
+    {
+      "id": "N252",
+      "category": "not_now",
+      "section": "research",
+      "title": "Persist prior-year quarterly income for interim YoY",
+      "summary": "Yahoo quarterly_income on the FTSE screen holds only 3-4 recent periods, so the operating-decline gate cannot compare the latest interim with the same period a year earlier for the 8 buy-tier names that already have a usable series (IAG, BGEO, GSK, ATYM, SHEL, NWG, BARC, BP). Keeping the prior-year quarter would add interim revenue for those 8 and interim EPS for 6.",
+      "revisit_when": "Strategy plan step 1.5 follow-up: next Data package after the operating-decline gate merges, if buy-tier interim revenue coverage is still 0.",
+      "tags": [
+        "interim",
+        "operating-decline",
+        "ingest",
+        "yahoo",
+        "strategy-plan"
+      ],
+      "status": "open",
+      "source": "strategy reorientation plan step 1.5 (Grok diagnosis)",
+      "added_at": "2026-11-03T18:06:21+00:00"
+    },
+    {
+      "id": "N253",
+      "category": "not_now",
+      "section": "research",
+      "title": "Structured half-year revenue and EPS extract",
+      "summary": "48 FTSE buy-tier names have a dated half-year results body, but filing_interim_financials.json highlights are empty, partly because filings index body_path points at output/research while bodies sit at filings/bodies/<basename> (ITV's EPS pair is missed). Fix body path resolution, then extract current-vs-prior-year revenue and EPS levels from those bodies.",
+      "revisit_when": "Strategy plan step 1.5 follow-up: after quarterly history retention, if half-year bodies remain the unused interim source.",
+      "tags": [
+        "interim",
+        "operating-decline",
+        "filings",
+        "ingest",
+        "strategy-plan"
+      ],
+      "status": "open",
+      "source": "strategy reorientation plan step 1.5 (Grok diagnosis)",
+      "added_at": "2026-11-03T18:06:21+00:00"
     }
   ],
   "fragments": [

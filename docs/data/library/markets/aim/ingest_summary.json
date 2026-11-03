@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-03T15:33:15.316985+00:00",
+  "run_at": "2026-11-03T18:31:16.804450+00:00",
   "market_id": "aim",
   "targets": [
     "CAML.L",
@@ -42,7 +42,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-03T15:33:00.806395+00:00",
+    "snapshot_at": "2026-11-03T18:29:20.843723+00:00",
     "market_id": "aim",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
@@ -80,7 +80,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-03T15:33:09.041098+00:00",
+    "snapshot_at": "2026-11-03T18:29:29.778340+00:00",
     "market_id": "aim",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
@@ -105,17 +105,17 @@
       "PAF.L": 1,
       "DOTD.L": 1
     },
-    "parked_tickers": [],
-    "parked_count": 0,
+    "parked_tickers": [
+      "CAML.L",
+      "DOTD.L",
+      "PAF.L"
+    ],
+    "parked_count": 3,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 3,
-    "effective_indexed_without_body_tickers": [
-      "CAML.L",
-      "PAF.L",
-      "DOTD.L"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -126,10 +126,44 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "aim",
+    "to_market": "sp500",
+    "stream_markets_after": [
+      "sp500"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "aim",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "CAML.L",
+        "DOTD.L",
+        "PAF.L"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "sp500",
+      "forced": true,
+      "prior_screen_at": "2026-11-02T20:36:30.828083+00:00",
+      "prior_age_days": 1,
+      "run_at": "2026-11-03T18:31:03.392023+00:00",
+      "shortlist_count": 143,
+      "ticker_count": 503
+    },
+    "at": "2026-11-03T18:29:38.803662+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "aim",
-    "assessed_at": "2026-11-03T15:33:03.025483+00:00",
+    "assessed_at": "2026-11-03T18:29:22.668764+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -173,9 +207,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 3.856264576000001,
+  "used_seconds": 5.302071588999979,
   "budget_seconds": 262.5,
-  "leftover_seconds": 258.643735424,
+  "leftover_seconds": 257.197928411,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -183,11 +217,48 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "aim",
-    "updated_at": "2026-11-03T15:33:09.046020+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-11-03T18:29:29.783180+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "CAML.L",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-03T18:29:29.783180+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 67,
+        "filings_with_body": 65,
+        "indexed_without_body": 1,
+        "thin": false,
+        "source_surface": "uk_rns"
+      },
+      {
+        "ticker": "DOTD.L",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-03T18:29:29.783180+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 56,
+        "filings_with_body": 55,
+        "indexed_without_body": 1,
+        "thin": false,
+        "source_surface": "uk_rns"
+      },
+      {
+        "ticker": "PAF.L",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-03T18:29:29.783180+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 57,
+        "filings_with_body": 55,
+        "indexed_without_body": 1,
+        "thin": false,
+        "source_surface": "uk_rns"
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
@@ -197,57 +268,54 @@
       "DOTD.L",
       "PAF.L"
     ],
-    "unparked_leftover": [
-      "CAML.L",
-      "DOTD.L",
-      "PAF.L"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/aim/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "aim"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "aim",
+    "ingest_exhausted_markets": [
+      "aex",
+      "aim",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "iseq20",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
-    "compiled_count": 0,
-    "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 59,
-    "candidate_count": 48,
-    "skipped_resolved_tickers": [
-      "CRH",
-      "LMT",
-      "TPT.L",
-      "DFS.L",
-      "APTD.L",
-      "ULTP.L",
-      "FOXT.L",
-      "MER.L",
-      "GIB-A.TO",
-      "NTR.TO",
-      "SU.TO",
-      "BAS.DE",
-      "IFX.DE",
-      "PDD",
-      "BAS.DE",
-      "DTE.DE",
-      "DTG.DE",
-      "FRE.DE",
-      "HNR1.DE",
-      "MUV2.DE",
-      "HEN3.DE",
-      "PST.MI",
-      "ACKB.BR",
-      "APAM.AS",
-      "0285.HK",
-      "0857.HK",
-      "0288.HK",
-      "2331.HK",
-      "0883.HK",
-      "EVN.VI",
-      "WIE.VI"
+    "compiled_count": 1,
+    "task_ids": [
+      "eng-20261103-09"
     ],
-    "wait_behind_task_id": ""
+    "task_count": 245,
+    "market_id": "aim",
+    "hunter_ticker": "PAF.L",
+    "hunter_tickers": [
+      "PAF.L"
+    ],
+    "priority_score": 12.0,
+    "wait_behind_task_id": "",
+    "leftover_key_bodies": false
   }
 }

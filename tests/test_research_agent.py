@@ -4,12 +4,34 @@ from pathlib import Path
 from unittest.mock import patch
 
 from value_investor.research.agent import (
+    _initial_prompt,
+    _structured_verdict_prompt,
+    append_point_in_time_memo_discipline,
+    point_in_time_memo_discipline,
     run_gap_fill_research_agent,
     run_initial_research_agent,
     run_weekly_research_update_agent,
 )
 from value_investor.research.document import ResearchDocument
 from value_investor.summary import CompanyReport
+
+
+def test_memo_agent_prompts_include_point_in_time_discipline(tmp_path: Path):
+    as_of = "2026-11-03"
+    rule = point_in_time_memo_discipline(as_of_date=as_of)
+    sources = tmp_path / "sources"
+    sources.mkdir()
+    for raw in (
+        _initial_prompt(ticker="AAA.L", company_name="Alpha PLC", sources_dir=sources),
+        _structured_verdict_prompt(
+            ticker="AAA.L",
+            company_name="Alpha PLC",
+            sources_dir=sources,
+        ),
+    ):
+        prompt = append_point_in_time_memo_discipline(raw, as_of_date=as_of)
+        assert rule in prompt
+        assert append_point_in_time_memo_discipline(prompt, as_of_date=as_of) == prompt
 
 
 def _existing_doc() -> ResearchDocument:
