@@ -1,99 +1,23 @@
 {
-  "run_at": "2026-11-02T10:41:24.192735+00:00",
+  "run_at": "2026-11-03T07:38:12.979303+00:00",
   "market_id": "atx",
-  "targets": [
-    "ANDR.VI"
-  ],
-  "target_details": [
-    {
-      "ticker": "ANDR.VI",
-      "priority_score": 27.045,
-      "filings_total": 3,
-      "filings_with_body": 1,
-      "indexed_without_body": 2,
-      "reason": "indexed_without_body"
-    }
-  ],
-  "results": [
-    {
-      "ticker": "ANDR.VI",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 3,
-        "filings_with_body": 1,
-        "indexed_without_body": 2
-      },
-      "after": {
-        "filings_total": 3,
-        "filings_with_body": 3,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "euro_filings",
-      "filings_summary": {
-        "total": 3,
-        "annual": 1,
-        "interim": 0,
-        "trading_update": 0,
-        "other": 2,
-        "with_body": 3,
-        "period_coverage": {
-          "annual": {
-            "total": 1,
-            "with_body": 1
-          },
-          "interim": {
-            "total": 0,
-            "with_body": 0
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 2,
-            "with_body": 2
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 3,
-        "with_body_after": 3,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 1,
-          "note": "merge_ir_allowlist_filings"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    }
-  ],
-  "improved": [
-    "ANDR.VI"
-  ],
+  "targets": [],
+  "target_details": [],
+  "results": [],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-02T10:40:59.140510+00:00",
+    "snapshot_at": "2026-11-03T07:37:59.032450+00:00",
     "market_id": "atx",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 3,
+    "thin_body_buy_tier": 2,
     "indexed_without_body": 2,
-    "bodies_min": 1,
-    "bodies_median": 2.5,
+    "bodies_min": 2,
+    "bodies_median": 3.0,
     "bodies_max": 4,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -101,8 +25,7 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [
       "WIE.VI",
-      "EVN.VI",
-      "ANDR.VI"
+      "EVN.VI"
     ],
     "indexed_without_body_tickers": [
       "WIE.VI",
@@ -117,16 +40,14 @@
       "WIE.VI"
     ],
     "parked_count": 2,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
-      "ANDR.VI"
-    ],
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-02T10:41:18.401514+00:00",
+    "snapshot_at": "2026-11-03T07:38:12.961747+00:00",
     "market_id": "atx",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
@@ -172,7 +93,7 @@
   "discovery_scan": {
     "scanned": 6,
     "hits": 6,
-    "new_rows_total": 2,
+    "new_rows_total": 0,
     "curiosity_total": 6,
     "errors": 0,
     "prioritization_weights": {
@@ -185,7 +106,6 @@
     "forced_by_critical_path": false,
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
-      "ANDR.VI",
       "EVN.VI",
       "WIE.VI"
     ],
@@ -200,7 +120,7 @@
   },
   "critical_path": {
     "market_id": "atx",
-    "assessed_at": "2026-11-02T10:40:59.527937+00:00",
+    "assessed_at": "2026-11-03T07:37:59.281482+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -217,9 +137,7 @@
         "filings_with_body": 2
       }
     ],
-    "thin_need_discovery": [
-      "ANDR.VI"
-    ],
+    "thin_need_discovery": [],
     "thin_need_bodies": [
       "WIE.VI",
       "EVN.VI"
@@ -232,7 +150,6 @@
     ],
     "recommended_actions": [
       "Prefer indexed-without-body body refetch (2 tickers, top: EVN.VI(1), WIE.VI(1))",
-      "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
@@ -240,13 +157,13 @@
       "zero_body": 0,
       "indexed_without_body_tickers": 2,
       "indexed_without_body_rows": 2,
-      "thin_need_discovery": 1,
+      "thin_need_discovery": 0,
       "thin_need_bodies": 2
     }
   },
-  "used_seconds": 18.482154422000008,
+  "used_seconds": 13.473186476000024,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3581.517845578,
+  "leftover_seconds": 3586.526813524,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -254,9 +171,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "atx",
-    "updated_at": "2026-11-02T10:41:18.408929+00:00",
+    "updated_at": "2026-11-03T07:38:12.969092+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -328,41 +245,7 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 52,
-    "candidate_count": 49,
-    "skipped_resolved_tickers": [
-      "CRH",
-      "MER.L",
-      "TPT.L",
-      "FOXT.L",
-      "ULTP.L",
-      "DFS.L",
-      "APTD.L",
-      "GIB-A.TO",
-      "NTR.TO",
-      "SU.TO",
-      "BAS.DE",
-      "IFX.DE",
-      "PDD",
-      "BAS.DE",
-      "DTE.DE",
-      "DTG.DE",
-      "FRE.DE",
-      "HNR1.DE",
-      "MUV2.DE",
-      "HEN3.DE",
-      "PST.MI",
-      "ACKB.BR",
-      "APAM.AS",
-      "0285.HK",
-      "0857.HK",
-      "0288.HK",
-      "2331.HK",
-      "0883.HK",
-      "EVN.VI",
-      "WIE.VI"
-    ],
-    "wait_behind_task_id": ""
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20261102-03"
   }
 }
