@@ -1,17 +1,14 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-02T08:03:17.326606+00:00
+Track: `buy_tier_level` · updated 2026-11-03T15:20:45.014845+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **3** / 15 (20% count, 21% NAV)
+- Losers: **3** / 13 (23% count, 24% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
-
-### NTR.TO — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
 
 ### K.TO — weakening / watch_review (-26.2%)
 - research verdict neutral
@@ -61,12 +58,6 @@ Track: `buy_tier_level` · updated 2026-11-02T08:03:17.326606+00:00
 - cheapness family no longer passes
 - still buy
 - research accumulate
-
-### CNR.TO — weakening / watch_review (+2.3%)
-- left buy tier (hold)
-- conviction 25% below intact floor
-- research accumulate
-- cheapness family still passes
 
 ### L.TO — intact / hold_tolerate (+2.9%)
 - still buy
