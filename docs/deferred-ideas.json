@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-03T07:53:16+00:00",
+  "updated_at": "2026-11-03T11:27:26+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -12719,9 +12719,11 @@
         "us",
         "scoring"
       ],
-      "status": "open",
+      "status": "done",
       "source": "Agent: L544 SEC companyfacts implementation (Oct 2026)",
-      "added_at": "2026-10-06T09:49:55+00:00"
+      "added_at": "2026-10-06T09:49:55+00:00",
+      "updated_at": "2026-11-03T11:27:18+00:00",
+      "status_note": "Shipped observe twin sec-filing-aligned-twin-v0 (#1267): SEC feeds reconcile_fcf filing_aligned via override; influences_live=false. Live Yahoo path unchanged; live cold-start follow-on opened."
     },
     {
       "id": "L547",
@@ -16203,6 +16205,26 @@
       "status": "open",
       "source": "missing-body-warn-2026-11-03 investigation",
       "added_at": "2026-11-03T07:53:16+00:00"
+    },
+    {
+      "id": "L661",
+      "category": "later",
+      "section": "research",
+      "title": "Live cold-start: promote SEC companyfacts to US filing_aligned",
+      "summary": "L546 shipped the observe twin (sec-filing-aligned-twin-v0) that feeds SEC into reconcile_fcf filing_aligned with influences_live=false. Flipping live Yahoo filing_aligned to SEC would change US shard buy-tier and epoch-0 books \u2014 needs a named cold-start/capital epoch, not a silent edit.",
+      "revisit_when": "sec_filing_aligned_twin.json shows buy-tier policy deltas on four consecutive weekly ops snapshots and coverage stays \u226580%",
+      "tags": [
+        "fcf",
+        "sec",
+        "xbrl",
+        "us",
+        "scoring",
+        "epoch"
+      ],
+      "status": "open",
+      "source": "https://github.com/jamiefuller320/value_investor/pull/1267 L546 observe twin ship",
+      "added_at": "2026-11-03T11:27:18+00:00",
+      "updated_at": "2026-11-03T11:27:26+00:00"
     }
   ],
   "fragments": [
