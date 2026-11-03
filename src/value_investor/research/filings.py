@@ -941,6 +941,23 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/749098/000119312526128771/d20215dex992.htm",
         "https://www.sec.gov/Archives/edgar/data/749098/000110465926088923/tm2618646d1_ex99-2.htm",
     ],
+    # tsx60 buy-tier leftover — eng-20261103-02: ABX.TO no_key_bodies; Barrick Gold SEC FY2025
+    # 40-F AIF exhibit + Q2 2026 interim 6-K EX-99.1/99.2 (live-fetchable HTML).
+    "ABX.TO": [
+        "https://www.sec.gov/Archives/edgar/data/756894/000119312526079253/d833573dex991.htm",
+        "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex991.htm",
+        "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex992.htm",
+    ],
+    "ABX": [
+        "https://www.sec.gov/Archives/edgar/data/756894/000119312526079253/d833573dex991.htm",
+        "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex991.htm",
+        "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex992.htm",
+    ],
+    "GOLD": [
+        "https://www.sec.gov/Archives/edgar/data/756894/000119312526079253/d833573dex991.htm",
+        "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex991.htm",
+        "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex992.htm",
+    ],
     # hang_seng buy-tier deepen — eng-20260930-03: asia_filings Google News miss / zero-body;
     # seed HKEX statutory PDFs and issuer IR mirrors for stalled buy-tier names.
     "1099.HK": [
@@ -1343,6 +1360,9 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     # tsx60 MG.TO — d20215* / tm2618646* SEC slugs lack issuer tokens for IR title gate.
     "MG": ("Magna International", "Magna International Inc."),
     "MGA": ("Magna International", "Magna International Inc."),
+    # tsx60 ABX.TO — d833573* / d67611* SEC slugs lack issuer tokens for IR title gate.
+    "ABX": ("Barrick", "Barrick Gold", "Barrick Gold Corporation"),
+    "GOLD": ("Barrick", "Barrick Gold", "Barrick Gold Corporation"),
     "DNL": ("Dyno Nobel", "Incitec Pivot"),
     "YAL": ("Yancoal", "Yancoal Australia"),
     # asx200 FMG.AX Markit/ASX allowlist PDFs — opaque documentKey URLs need issuer tokens
@@ -6025,6 +6045,10 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.sec.gov/Archives/edgar/data/749098/000119312526128771/d20215dex991.htm": "annual",
     "https://www.sec.gov/Archives/edgar/data/749098/000119312526128771/d20215dex992.htm": "annual",
     "https://www.sec.gov/Archives/edgar/data/749098/000110465926088923/tm2618646d1_ex99-2.htm": "interim",
+    # eng-20261103-02: ABX.TO — FY2025 40-F EX-99.1 + Q2 2026 6-K EX-99.1/99.2 slugs lack period tokens.
+    "https://www.sec.gov/Archives/edgar/data/756894/000119312526079253/d833573dex991.htm": "annual",
+    "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex991.htm": "interim",
+    "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex992.htm": "interim",
 }
 
 
