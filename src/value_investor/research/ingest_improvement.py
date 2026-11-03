@@ -1162,15 +1162,25 @@ def _execute_ingest_improvement_pass(
                 company_name=target.name,
                 ticker=target.ticker,
             )
-            source_meta = ingest_research_sources(
-                ticker=target.ticker,
-                company_name=target.name,
-                screening_snapshot=report.to_dict(),
-                sources_dir=sources_dir,
-                since=None,
-                market=market,
-                deepen_history=True,
-            )
+            source_meta: dict[str, Any] = {}
+            try:
+                source_meta = ingest_research_sources(
+                    ticker=target.ticker,
+                    company_name=target.name,
+                    screening_snapshot=report.to_dict(),
+                    sources_dir=sources_dir,
+                    since=None,
+                    market=market,
+                    deepen_history=True,
+                )
+            except Exception as exc:  # noqa: BLE001 — Yahoo/outage must not skip body refetch
+                message = f"{target.ticker}: source ingest ({exc})"
+                logger.warning(
+                    "Research source ingest failed for %s (continuing to body refetch): %s",
+                    target.ticker,
+                    exc,
+                )
+                summary.errors.append(message)
             inventory = inspect_local_sources(sources_dir)
             ingest_suggestions = suggestions_by_ticker.get(target.ticker.upper(), [])
             before = int(

@@ -1309,6 +1309,69 @@ def test_ingest_improvement_refetches_when_partial_bodies(
     assert summary.results[0]["ch_refetch"]["fetched"] == 1
 
 
+@patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
+@patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
+@patch("value_investor.research.ingest_improvement.ingest_research_sources")
+@patch("value_investor.research.ingest_improvement.sanitize_filings_index")
+@patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
+@patch("value_investor.research.ingest_improvement.refetch_uk_primary_filing_bodies")
+def test_ingest_improvement_refetches_when_source_ingest_raises(
+    mock_primary_refetch,
+    mock_bootstrap,
+    mock_sanitize,
+    mock_ingest_sources,
+    mock_alternate,
+    mock_deepen,
+    tmp_path: Path,
+):
+    """eng-20261103-07: transient Yahoo/source ingest failure must not skip UK body refetch."""
+    output_dir = tmp_path / "output"
+    sources = output_dir / "research" / "ITV.L" / "sources" / "filings"
+    sources.mkdir(parents=True)
+    filings = [{"has_body": True, "period": "annual", "headline": "Full Year Results"}] * 4 + [
+        {"has_body": False, "period": "interim", "headline": "Half Year Results"}
+    ]
+    (sources / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 5, "with_body": 4, "annual": 4, "interim": 1},
+                "filings": filings,
+            }
+        ),
+        encoding="utf-8",
+    )
+    mock_ingest_sources.side_effect = RuntimeError("*** YAHOO! FINANCE IS CURRENTLY DOWN! ***")
+    mock_alternate.return_value = {"fetched": 0}
+    mock_deepen.return_value = {"skipped": True, "reason": "sufficient_bodies"}
+    mock_primary_refetch.return_value = {
+        "companies_house": {"fetched": 0, "with_body_after": 4},
+        "rns": {
+            "investegate": {"fetched": 1, "with_body_after": 5},
+            "ticker_rns": {"fetched": 0, "with_body_after": 5},
+            "fetched": 1,
+            "with_body_before": 4,
+            "with_body_after": 5,
+        },
+        "fetched": 1,
+        "with_body_before": 4,
+        "with_body_after": 5,
+    }
+
+    summary = run_ingest_improvement_pass(
+        reports=[_report("ITV.L", "ITV plc")],
+        output_dir=output_dir,
+        market="ftse350",
+        max_targets=1,
+        pin_tickers=["ITV.L"],
+        suggestions_path=tmp_path / "missing.json",
+    )
+
+    mock_primary_refetch.assert_called_once()
+    assert summary.results
+    assert summary.results[0]["ticker"] == "ITV.L"
+    assert any("YAHOO" in err for err in summary.errors)
+
+
 @patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
 def test_run_ingest_improvement_pass_passes_bootstrap_seed_cap(mock_bootstrap, tmp_path: Path):
     output_dir = tmp_path / "output"

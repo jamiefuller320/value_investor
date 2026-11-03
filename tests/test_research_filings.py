@@ -11160,6 +11160,24 @@ def test_filing_lacks_material_body_excludes_routine_own_shares():
     )
 
 
+def test_filing_lacks_material_body_excludes_itv_total_voting_rights():
+    """eng-20261103-07: ITV.L monthly TVR stub must not block gap-closure verification."""
+    from value_investor.research.filings import filing_lacks_material_body
+
+    assert (
+        filing_lacks_material_body(
+            {
+                "headline": "Total Voting Rights",
+                "url": "https://www.investegate.co.uk/announcement/rns/itv--itv/total-voting-rights/9854135",
+                "source": "investegate_direct",
+                "period": "other",
+                "has_body": False,
+            }
+        )
+        is False
+    )
+
+
 def test_filing_lacks_material_body_excludes_kgf_ceo_appointment():
     """eng-20261023-03: KGF.L CEO appointment RNS must not block gap-closure verification."""
     from value_investor.research.filings import (

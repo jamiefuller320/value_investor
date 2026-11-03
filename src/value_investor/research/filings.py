@@ -2277,9 +2277,11 @@ def drop_index_noise_filing_rows(
 
 
 def _is_routine_own_share_or_pdmr_row(row: dict[str, Any]) -> bool:
-    """Daily buyback / PDMR RNS — not a statutory or material financing gap."""
+    """Daily buyback / PDMR / TVR RNS — not a statutory or material financing gap."""
     headline = _headline_blob(row)
-    return "transaction in own shares" in headline or "director/pdmr" in headline
+    if "transaction in own shares" in headline or "director/pdmr" in headline:
+        return True
+    return "total voting rights" in headline
 
 
 def _is_routine_governance_rns_row(row: dict[str, Any]) -> bool:
