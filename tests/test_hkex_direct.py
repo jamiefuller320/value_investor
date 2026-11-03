@@ -377,7 +377,9 @@ def test_load_exhaustion_releases_parked_names_on_new_fetch_surface(tmp_path: Pa
             {"ticker": "0941.HK", "source_surface": "asia_filings+hkex_direct"},
         ],
     )
-    _write_exhaustion(tmp_path, "sti", [{"ticker": "BUOU.SI"}])
+    # D05.SI has no IR allowlist — stays on plain asia_filings (negative control).
+    # BUOU.SI / U14.SI are allowlisted and ship asia_filings+ir_allowlist_direct.
+    _write_exhaustion(tmp_path, "sti", [{"ticker": "D05.SI"}])
 
     hk = load_ingest_exhaustion("hang_seng", library_root=tmp_path)
     assert hk["surface_released"] == ["2382.HK"]
@@ -386,7 +388,7 @@ def test_load_exhaustion_releases_parked_names_on_new_fetch_surface(tmp_path: Pa
 
     sti = load_ingest_exhaustion("sti", library_root=tmp_path)
     assert sti["surface_released"] == []
-    assert [r["ticker"] for r in sti["parked"]] == ["BUOU.SI"]
+    assert [r["ticker"] for r in sti["parked"]] == ["D05.SI"]
     assert sti["exhausted"] is True
 
 

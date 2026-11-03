@@ -990,9 +990,10 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://links.sgx.com/FileOpen/20250728_1QFY25%20Results_Financial%20Statement.ashx?App=Announcement&FileID=853321",
         "https://links.sgx.com/FileOpen/20241029_2QFY24%20Results_Financial%20Statement.ashx?App=Announcement&FileID=823421",
     ],
-    # sti parked leftover — eng-20261028-05: U14.SI unfetchable_iwb; asia_filings indexed
-    # misattributed U14 sports news and Simply Wall Street shells; seed SGX statutory PDFs
-    # (uol.com.sg IR is Cloudflare-gated).
+    # sti parked leftover — eng-20261028-05 / eng-20261102-02: U14.SI unfetchable_iwb;
+    # asia_filings indexed misattributed U14 sports news and Simply Wall Street shells;
+    # seed SGX statutory PDFs (uol.com.sg IR is Cloudflare-gated). Surface ships as
+    # asia_filings+ir_allowlist_direct so exhaustion releases the parked name for refetch.
     "U14.SI": [
         "https://links.sgx.com/1.0.0/corporate-announcements/IJ2GH7ZTV024QR4R/881833_UOL%20Group%20Limited%20-%20Annual%20Report%202025.pdf",
         "https://links.sgx.com/1.0.0/corporate-announcements/KYC2VFOK44U16ZK6/838991_UOL%20Group%20Limited%20-%20Annual%20Report%202024.pdf",
@@ -3564,7 +3565,7 @@ def resolve_filings_regime(market: str | None, ticker: str) -> str:
 
 
 def ir_allowlist_direct_eligible(ticker: str) -> bool:
-    """True when configured IR allowlist URLs can deepen euro_filings indexed rows."""
+    """True when configured IR allowlist URLs can deepen indexed rows lacking bodies."""
     return bool(fetch_filings_ir_allowlist(ticker))
 
 
@@ -3578,6 +3579,8 @@ def filing_source_surface(market: str | None, ticker: str) -> str:
     regime = resolve_filings_regime(market, ticker)
     if regime == "asia_filings" and is_hkex_ticker(ticker):
         return f"{regime}+hkex_direct"
+    if regime == "asia_filings" and ir_allowlist_direct_eligible(ticker):
+        return f"{regime}+ir_allowlist_direct"
     if regime == "euro_filings" and amf_eligible(ticker):
         return f"{regime}+amf_direct"
     if regime == "euro_filings" and cision_eligible(ticker):
