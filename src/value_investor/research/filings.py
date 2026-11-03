@@ -924,6 +924,23 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/886986/000088698626000004/teck-20251231xexx993mda.htm",
         "https://www.sec.gov/Archives/edgar/data/886986/000095014226002318/eh260819956_ex9901.htm",
     ],
+    # tsx60 buy-tier leftover — eng-20261103-06: MG.TO no_key_bodies; google_news_tsx mis-tags
+    # pharma PR; Magna International SEC FY2025 40-F AIF/MD&A + Q2 2026 interim 6-K EX-99.2 HTML.
+    "MG.TO": [
+        "https://www.sec.gov/Archives/edgar/data/749098/000119312526128771/d20215dex991.htm",
+        "https://www.sec.gov/Archives/edgar/data/749098/000119312526128771/d20215dex992.htm",
+        "https://www.sec.gov/Archives/edgar/data/749098/000110465926088923/tm2618646d1_ex99-2.htm",
+    ],
+    "MG": [
+        "https://www.sec.gov/Archives/edgar/data/749098/000119312526128771/d20215dex991.htm",
+        "https://www.sec.gov/Archives/edgar/data/749098/000119312526128771/d20215dex992.htm",
+        "https://www.sec.gov/Archives/edgar/data/749098/000110465926088923/tm2618646d1_ex99-2.htm",
+    ],
+    "MGA": [
+        "https://www.sec.gov/Archives/edgar/data/749098/000119312526128771/d20215dex991.htm",
+        "https://www.sec.gov/Archives/edgar/data/749098/000119312526128771/d20215dex992.htm",
+        "https://www.sec.gov/Archives/edgar/data/749098/000110465926088923/tm2618646d1_ex99-2.htm",
+    ],
     # hang_seng buy-tier deepen — eng-20260930-03: asia_filings Google News miss / zero-body;
     # seed HKEX statutory PDFs and issuer IR mirrors for stalled buy-tier names.
     "1099.HK": [
@@ -1323,6 +1340,9 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "SU": ("Suncor", "Suncor Energy"),
     # tsx60 SAP.TO — sap* URL tokens collide with SAP SE; Saputo issuer name required.
     "SAP": ("Saputo", "Saputo Inc."),
+    # tsx60 MG.TO — d20215* / tm2618646* SEC slugs lack issuer tokens for IR title gate.
+    "MG": ("Magna International", "Magna International Inc."),
+    "MGA": ("Magna International", "Magna International Inc."),
     "DNL": ("Dyno Nobel", "Incitec Pivot"),
     "YAL": ("Yancoal", "Yancoal Australia"),
     # asx200 FMG.AX Markit/ASX allowlist PDFs — opaque documentKey URLs need issuer tokens
@@ -6001,6 +6021,10 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     # eng-20261103-04: TECK-B.TO — FY2025 MD&A + Q2 2026 6-K EX-99.1 slugs lack annual/interim tokens.
     "https://www.sec.gov/Archives/edgar/data/886986/000088698626000004/teck-20251231xexx993mda.htm": "annual",
     "https://www.sec.gov/Archives/edgar/data/886986/000095014226002318/eh260819956_ex9901.htm": "interim",
+    # eng-20261103-06: MG.TO — FY2025 40-F EX-99.1/99.2 + Q2 2026 6-K EX-99.2 slugs lack period tokens.
+    "https://www.sec.gov/Archives/edgar/data/749098/000119312526128771/d20215dex991.htm": "annual",
+    "https://www.sec.gov/Archives/edgar/data/749098/000119312526128771/d20215dex992.htm": "annual",
+    "https://www.sec.gov/Archives/edgar/data/749098/000110465926088923/tm2618646d1_ex99-2.htm": "interim",
 }
 
 
