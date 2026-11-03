@@ -1,8 +1,8 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-03T07:57:21.814482+00:00`
-Trajectory: **on_track**
-Dispatch pause: **inactive** (stuck PRs: 0)
+Generated: `2026-11-03T12:33:12.454462+00:00`
+Trajectory: **blocked_by_pr_queue**
+Dispatch pause: **active** (stuck PRs: 0)
 
 ## Achieved (grounded)
 - Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.
@@ -25,35 +25,34 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
-- [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-11-03T02:32:08.687820+00:00 _(source: docs/data/ops_status.json)_
-- [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
+- [ok] Queue health overall=idle; headline=Queue and hunter idle. _(source: docs/data/queue_health.json)_
+- [ok] Ops monitor overall=warn at 2026-11-03T07:47:09.251906+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Traffic pause_active=True; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- _(none)_
+- `stop_automation_waste` — signals=1; parked=eng-20261103-07; pause=True (applied)
+- `pause_dispatch` — paused — 0 stuck PR(s); reasons=['automation_waste'] (applied)
 
 ## Merges today (monitor independent verify)
+- `parked_hunter`/verified PR #1269 `eng-20261103-02` — Hunt fetchable IR source for parked tsx60 leftover ABX.TO
+- `parked_hunter`/verified PR #1265 `eng-20261103-06` — Hunt fetchable IR source for parked tsx60 leftover MG.TO
+- `parked_hunter`/verified PR #1264 `eng-20261103-05` — Hunt fetchable IR source for parked asx200 leftover NEM.AX
+- `parked_hunter`/verified PR #1263 `eng-20261103-04` — Hunt fetchable IR source for parked tsx60 leftover TECK-B.TO
+- `parked_hunter`/verified PR #1262 `eng-20261103-03` — Hunt fetchable IR source for parked tsx60 leftover SAP.TO
+- `parked_hunter`/verified PR #1261 `eng-20261103-01` — Hunt fetchable IR source for parked aex leftover SHELL.AS
+- `parked_hunter`/verified PR #1260 `eng-20261102-03` — Hunt fetchable IR source for parked sp500 leftover COR
 - `human`/human PR #1256 `eng-20261102-02` — Close library ingest gaps for sti / U14.SI (chain 1/3: 0/0 improved, run igc-20261026-02)
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 319
+- Occasion count: 322
 - `PR mergeable=CONFLICTING against main` — 7×
 - `validate failed` — 7×
 - `merge_conflict:dirty` — 6×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
-- `validate check failed` — 4×
+- `validate check failed` — 5×
 - `validate job failed` — 3×
 - `deferred-ideas.json conflict after L516 merge` — 3×
 - `ruff_format` — 2×
-
-## Ops-monitor email handoff
-- Email subject: `FTSE Ops Monitor — WARN`
-- Findings: 5 (open=5, resolved=0)
-- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Two-lot retention beats full exit in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Paper book would halt on drawdown or concentration — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**

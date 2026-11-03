@@ -3429,9 +3429,9 @@
       ],
       "auto_merge": false,
       "status": "parked",
-      "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_policy": "preflight_clash",
-      "parked_at": "2026-11-03T12:32:23.370624+00:00"
+      "parked_reason": "automation waste reburn — 7 engineering-agent failure(s) in 6h without an in-flight PR (PM stop_automation_waste)",
+      "parked_policy": "reburn_loop",
+      "parked_at": "2026-11-03T12:33:15.301185+00:00"
     },
     {
       "id": "eng-20261102-02",
@@ -15819,35 +15819,31 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-11-03T02:36:52.029196+00:00",
-    "pause_active": false,
-    "automation_waste_active": false,
+    "evaluated_at": "2026-11-03T12:33:12.454462+00:00",
+    "pause_active": true,
+    "automation_waste_active": true,
     "automation_waste_signals": [
       {
         "kind": "eng_agent_reburn",
         "title": "Automation waste: engineering agent reburn",
         "severity": "fail",
-        "summary": "4 engineering-agent failure(s) in 6h while open task(s) remain (eng-20261013-07, eng-20261013-08, eng-20261013-09) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
+        "summary": "7 engineering-agent failure(s) in 6h while open task(s) remain (eng-20261103-07) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
         "workflow": "engineering-agent.yml",
         "task_ids": [
-          "eng-20261013-07",
-          "eng-20261013-08",
-          "eng-20261013-09"
+          "eng-20261103-07"
         ],
-        "failure_count": 4,
+        "failure_count": 7,
         "window_hours": 6.0,
         "auto_remediable": true,
         "evidence": {
-          "open_count": 3,
+          "open_count": 1,
           "in_flight_pr": null,
           "fail_threshold": 3
         }
       }
     ],
     "automation_waste_parked_task_ids": [
-      "eng-20261013-07",
-      "eng-20261013-08",
-      "eng-20261013-09"
+      "eng-20261103-07"
     ],
     "automation_waste_cleared_at": "2026-10-14T05:22:36.633433+00:00",
     "last_change": {
@@ -15879,8 +15875,11 @@
         "last_head_sha": null
       }
     },
-    "last_action_at": "2026-10-28T17:35:16.204610+00:00",
-    "resumed_at": "2026-10-14T05:22:36.633433+00:00"
+    "last_action_at": "2026-11-03T12:33:12.454462+00:00",
+    "pause_reasons": [
+      "automation_waste"
+    ],
+    "pause_started_at": "2026-11-03T12:33:12.454462+00:00"
   },
   "queue_clearing": {
     "attention_parked_count": 0,
