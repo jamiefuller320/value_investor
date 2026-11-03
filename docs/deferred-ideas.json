@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-03T18:03:46+00:00",
+  "updated_at": "2026-11-03T14:02:05+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16244,40 +16244,6 @@
       "added_at": "2026-11-03T13:56:16+00:00",
       "updated_at": "2026-11-03T14:02:05+00:00",
       "status_note": "Shipped: paper-halt + unsettled-CA ops findings exclude assessment_model frozen tracks (#1270 eng)"
-    },
-    {
-      "id": "N248",
-      "category": "not_now",
-      "section": "research",
-      "title": "Persist prior-year quarterly income for interim YoY",
-      "summary": "Yahoo quarterly_income on the FTSE screen is 3\u20134 recent periods, so the operating-decline gate cannot compare the latest interim to the same period a year earlier for the 8 buy-tier names that already have a usable series (IAG, BGEO, GSK, ATYM, SHEL, NWG, BARC, BP). Keeping that prior-year quarter would add interim revenue for those 8 and interim EPS for the 6 whose latest quarter has an EPS line.",
-      "revisit_when": "When operating-decline gate buy-tier interim revenue coverage is still 0 and quarterly_income for those 8 names still lacks a period within 45 days of a year before the latest.",
-      "tags": [
-        "interim",
-        "operating-decline",
-        "ingest",
-        "yahoo"
-      ],
-      "status": "open",
-      "source": "operating-decline interim gate",
-      "added_at": "2026-11-03T18:03:46+00:00"
-    },
-    {
-      "id": "N249",
-      "category": "not_now",
-      "section": "research",
-      "title": "Structured half-year revenue and EPS extract",
-      "summary": "48 FTSE buy-tier names have a dated half-year results body, but filing_interim_financials.json highlights are empty (ITV's statutory EPS pair is missed because the index body_path points at output/research). The existing prose parsers recover only MEGP and DNLM EPS declines, both under 10%. A current-vs-prior level extract, after fixing body basename resolution, is what would move interim coverage on that set.",
-      "revisit_when": "When buy-tier interim revenue coverage is still 0 after quarterly history is retained, and half-year results bodies remain the unused source.",
-      "tags": [
-        "interim",
-        "operating-decline",
-        "filings",
-        "ingest"
-      ],
-      "status": "open",
-      "source": "operating-decline interim gate",
-      "added_at": "2026-11-03T18:03:46+00:00"
     }
   ],
   "fragments": [
