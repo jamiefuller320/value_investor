@@ -1,99 +1,23 @@
 {
-  "run_at": "2026-11-02T16:39:39.100983+00:00",
+  "run_at": "2026-11-03T13:36:58.045088+00:00",
   "market_id": "ftse_mib",
-  "targets": [
-    "IG.MI"
-  ],
-  "target_details": [
-    {
-      "ticker": "IG.MI",
-      "priority_score": 27.160800000000002,
-      "filings_total": 4,
-      "filings_with_body": 2,
-      "indexed_without_body": 2,
-      "reason": "indexed_without_body"
-    }
-  ],
-  "results": [
-    {
-      "ticker": "IG.MI",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 4,
-        "filings_with_body": 2,
-        "indexed_without_body": 2
-      },
-      "after": {
-        "filings_total": 4,
-        "filings_with_body": 4,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "euro_filings",
-      "filings_summary": {
-        "total": 4,
-        "annual": 2,
-        "interim": 1,
-        "trading_update": 0,
-        "other": 1,
-        "with_body": 4,
-        "period_coverage": {
-          "annual": {
-            "total": 2,
-            "with_body": 2
-          },
-          "interim": {
-            "total": 1,
-            "with_body": 1
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 1,
-            "with_body": 1
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 4,
-        "with_body_after": 4,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 2,
-          "note": "merge_ir_allowlist_filings"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    }
-  ],
-  "improved": [
-    "IG.MI"
-  ],
+  "targets": [],
+  "target_details": [],
+  "results": [],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-02T16:38:37.205302+00:00",
+    "snapshot_at": "2026-11-03T13:36:24.464687+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 3,
+    "thin_body_buy_tier": 2,
     "indexed_without_body": 0,
     "bodies_min": 2,
-    "bodies_median": 3.0,
+    "bodies_median": 3.5,
     "bodies_max": 52,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -101,8 +25,7 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [
       "PST.MI",
-      "FCT.MI",
-      "IG.MI"
+      "FCT.MI"
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
@@ -111,16 +34,14 @@
       "PST.MI"
     ],
     "parked_count": 2,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
-      "IG.MI"
-    ],
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-02T16:39:33.378060+00:00",
+    "snapshot_at": "2026-11-03T13:36:53.269870+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
@@ -160,7 +81,7 @@
   "discovery_scan": {
     "scanned": 8,
     "hits": 8,
-    "new_rows_total": 2,
+    "new_rows_total": 0,
     "curiosity_total": 8,
     "errors": 0,
     "prioritization_weights": {
@@ -174,8 +95,7 @@
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
       "PST.MI",
-      "FCT.MI",
-      "IG.MI"
+      "FCT.MI"
     ],
     "runtime_cutoff": false
   },
@@ -188,21 +108,20 @@
   },
   "critical_path": {
     "market_id": "ftse_mib",
-    "assessed_at": "2026-11-02T16:38:37.904610+00:00",
+    "assessed_at": "2026-11-03T13:36:24.931478+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
     "thin_need_discovery": [
       "PST.MI",
-      "FCT.MI",
-      "IG.MI"
+      "FCT.MI"
     ],
     "thin_need_bodies": [],
     "primary_blocker": "thin_need_discovery",
     "force_discovery_scan": true,
     "auto_pin_tickers": [],
     "recommended_actions": [
-      "Discovery/IR seed for 3 thin ticker(s) that already have bodies for every indexed filing",
+      "Discovery/IR seed for 2 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
@@ -210,13 +129,13 @@
       "zero_body": 0,
       "indexed_without_body_tickers": 0,
       "indexed_without_body_rows": 0,
-      "thin_need_discovery": 3,
+      "thin_need_discovery": 2,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 54.705825833999995,
+  "used_seconds": 27.872536785999984,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3545.294174166,
+  "leftover_seconds": 3572.127463214,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -224,9 +143,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_mib",
-    "updated_at": "2026-11-02T16:39:33.389455+00:00",
+    "updated_at": "2026-11-03T13:36:53.277027+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -263,9 +182,7 @@
       "PST.MI"
     ],
     "unparked_leftover": [],
-    "surface_released": [
-      "IG.MI"
-    ],
+    "surface_released": [],
     "path": "docs/data/library/markets/ftse_mib/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
@@ -301,16 +218,17 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 52,
-    "candidate_count": 49,
+    "tried_count": 59,
+    "candidate_count": 48,
     "skipped_resolved_tickers": [
       "CRH",
+      "LMT",
       "MER.L",
       "TPT.L",
-      "FOXT.L",
-      "ULTP.L",
       "DFS.L",
       "APTD.L",
+      "FOXT.L",
+      "ULTP.L",
       "GIB-A.TO",
       "NTR.TO",
       "SU.TO",
