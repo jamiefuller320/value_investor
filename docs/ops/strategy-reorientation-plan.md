@@ -140,11 +140,17 @@ and the verification commands to run.
 
 ### Model allocation
 
+Owner preference (2026-11-03): use the models included in the Cursor plan
+(Composer, Grok) wherever they can do the job. Other models are the
+exception, used only when a plan-included model has failed a review round on
+the same package, and the status table records why.
+
 | Package type | Model | Why |
 |--------------|-------|-----|
-| Small, well-specified edits (prompt text, workflow, staleness check) | Composer 2.5 | Cheapest first-party model; enough for bounded work |
-| Filter and instrument builds (new module, data joins, tests) | Claude Sonnet 5.5 or GPT-5.6 (high) | Stronger reasoning over unfamiliar data shapes |
-| Registration design, replay methodology, execution-path design | Claude Opus 5.5 | Highest-stakes judgement; reviewed by supervisor and owner |
+| Small, well-specified edits (prompt text, workflow, staleness check, docs) | Composer 2.5 | Plan-included; enough for bounded work |
+| Filter and instrument builds (new module, data joins, diagnosis, tests) | Grok 4.7 (high) | Plan-included; stronger reasoning over unfamiliar data shapes |
+| Registration design, replay methodology, execution-path design | Grok 4.7 (xhigh) | Plan-included; highest-stakes drafts, then supervisor and owner review |
+| Escalation after a failed review round | Claude Sonnet / Opus 5.5 or GPT-5.6 | Only when a plan-included model could not meet the bar |
 | Review and integration | Supervising agent | Single owner of coherence across packages |
 
 At most two implementation agents run at once, on separate branches, to keep
@@ -159,5 +165,6 @@ merge clashes manageable.
 | 1.2 | In review (one change round: decline-gate verdicts are the single definition of "declining"; screen fields are a material-threshold fallback). Stacked on 1.1 | `cursor/sector-headwind-gate-567c` | GPT-5.6 |
 | 1.3 | In review (single choke point; no prompt version or rememo trigger affected) | `cursor/research-as-of-guard-567c` | Composer 2.5 |
 | 1.4 | In review; runs once the owner adds `TRADING212_API_KEY` / `TRADING212_API_SECRET`. Committed catalogue is from 2026-07-22 | `cursor/t212-catalogue-refresh-567c` | Composer 2.5 |
-| 1.5 | Next | — | Claude Sonnet 5.5 |
+| 0.3 | Delegated | `cursor/codename-glossary-567c` | Composer 2.5 |
+| 1.5 | Delegated (diagnose interim coverage; gate reads existing interim sources, live screen fields unchanged). Stacked on 1.1 | `cursor/decline-gate-interim-567c` | Grok 4.7 |
 | Phase 1 gate | Waiting on 1.1–1.2 merge and a week of daily refreshes | — | Owner |
