@@ -123,7 +123,8 @@ Dropped from **scheduled** agent prompts and from **required** parse success:
 Code anchors for today’s essay contract:
 
 - Prompts: `src/value_investor/research/agent.py` (`_initial_prompt`,
-  `_weekly_update_prompt`, `_gap_fill_prompt`)
+  `_weekly_update_prompt`, `_gap_fill_prompt`); every memo agent send appends a
+  **point-in-time rule** (sources-only as of the run date — no model hindsight).
 - Section list: `RESEARCH_SECTIONS` in `src/value_investor/research/document.py`
 - Orchestration: `src/value_investor/research/runner.py` (`run_research_for_strong_buys`,
   `_process_ticker`)

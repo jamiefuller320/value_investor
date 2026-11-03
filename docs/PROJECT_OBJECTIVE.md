@@ -12,6 +12,49 @@ Pipeline stages, canonical stores, and publish projections: [`docs/architecture.
 
 ---
 
+## Investment strategy (owner, 2026-11-03)
+
+This is the strategy the system is being built to run. Learning tracks, filters
+and exits should serve it. Anything that does not is either a control or a
+candidate for retirement. The step-by-step plan for getting there is in
+[`ops/strategy-reorientation-plan.md`](ops/strategy-reorientation-plan.md).
+
+**In one sentence:** buy stocks that are cheap on fundamentals and show no sign
+of declining operating performance or sector-wide trouble, buy them at
+short-term price lows, sell them at short-term highs, and if the timing is
+wrong, hold for recovery as long as the business case still stands.
+
+| Part | Rule | Purpose |
+|------|------|---------|
+| 1. Cheap | The name is in the value set (screen buy tier: `buy` / `strong_buy`). | Downside protection; the reason a mis-timed entry can be held. |
+| 2. Not declining | No sign of declining operating performance: revenue, operating margin, EPS and free cash flow trend over recent reported periods, plus profit warnings and guidance cuts. Fail closed when the data is missing. | Separates cheap-and-sound from cheap-because-failing (value traps). |
+| 3. Sector sound | No sector-wide negative factor: the sector as a whole is not in a broad price or earnings decline. Judged on the sector itself, not by ranking a stock against its peers. | Stops the cheapest name in a falling sector looking attractive. |
+| 4. Entry | Buy names that pass 1–3 at a **short-term price low**. Membership of the value set makes a name eligible; it is not the buy signal. | Timing edge on entry. |
+| 5. Normal exit | Sell at a **short-term price high**. Dropping out of a top-N ranking is **not** an exit signal. | Timing edge on exit; turns over capital. |
+| 6. Recovery hold | If the price falls after entry, hold. Exit a recovery hold only when (a) the price recovers to the exit rule or a recovery target, or (b) the thesis breaks: parts 2 or 3 fail, the screen signal becomes `avoid`, or research says `pass`. A price drop alone is never a sell. | Lets mis-timed entries recover instead of crystallising losses. |
+| 7. Limits | Every recovery hold has a review date and a recovery target (entry price, later a fair-value estimate). Capital in recovery holds is capped as a share of the book, so stuck positions cannot crowd out new entries. | Stops "hold for recovery" turning into holding a deteriorating business. |
+
+**How it is judged:**
+
+- Each trade is an **episode** scored at a fixed stake after fair costs
+  ([`ops/fair-cost-primacy.md`](ops/fair-cost-primacy.md)). Swing episodes
+  (exited at a high) and recovery holds are scored **separately**: hit rate and
+  gain for swings; time to recovery and loss on thesis break for recovery holds.
+- Book-level return versus a total-return benchmark is reported beside the
+  episode scores, but it is not the only proof. A paper book cannot detect a
+  small edge versus an index on a useful timescale
+  ([`ops/historical-screen-replay.md`](ops/historical-screen-replay.md#why)).
+- The cheapness and filter layers (parts 1–3) are proven on point-in-time
+  history where data allows. The timing layer (parts 4–6) is proven per
+  episode, forward and on archive replay.
+
+**What this changes:** existing books exit when a name leaves the top-ranked
+target set. That is not this strategy's exit. Those books remain as controls
+and keep their history. The strategy runs on a **new cold-start book**; live
+books are never rewritten mid-flight.
+
+---
+
 ## North-star stages
 
 Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full automation until the prior stage’s quality bar is met.
@@ -29,6 +72,11 @@ Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full 
 
 ### What “best progress” means now
 
+0. **Reorient toward the [investment strategy](#investment-strategy-owner-2026-11-03)**
+   via the phased plan in [`ops/strategy-reorientation-plan.md`](ops/strategy-reorientation-plan.md).
+   Strategy phases take priority over new observe instruments that do not serve
+   a strategy part. P1 input quality still comes first for names the strategy
+   book holds or will buy.
 1. **Primary learning track (hands-off):** AI quasi-human paper decisions using research available at the time → confirm by **outperformance after costs vs the market** (and vs a rules control book). See [`docs/ops/primary-learning-track.md`](ops/primary-learning-track.md).
 2. **Keep decision-review learning running** — weekday paper-auto + `ftse-decision-review` on both tracks until knobs can apply.
 3. **Optional human packs** — still useful for live capital verification; not the primary improvement loop.

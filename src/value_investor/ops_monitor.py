@@ -2401,6 +2401,61 @@ def check_n215_reentry_observe(
     ]
 
 
+def check_operating_decline_gate(
+    *,
+    output_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+    as_of: str | None = None,
+) -> list[OpsFinding]:
+    """Observe-only operating-decline gate (N250): clear / declining / insufficient_data.
+
+    Writes ``docs/data/operating_decline_gate.json`` from committed annual statements,
+    screen-row flags and filings headlines. No network. Never changes books, knobs or
+    signals (``auto_fixable=False``). See docs/ops/operating-decline-gate.md.
+    """
+    from value_investor.operating_decline_gate import (
+        DEFAULT_LATEST_PATH,
+        DEFAULT_LIBRARY_ROOT,
+        DEFAULT_RESEARCH_ROOT,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_findings_from_operating_decline_gate,
+        refresh_operating_decline_gate,
+    )
+
+    root = Path(output_dir) if output_dir is not None else None
+    try:
+        payload = refresh_operating_decline_gate(
+            latest_path=root / DEFAULT_LATEST_PATH.name if root else DEFAULT_LATEST_PATH,
+            research_root=root / DEFAULT_RESEARCH_ROOT.name if root else DEFAULT_RESEARCH_ROOT,
+            library_root=root / DEFAULT_LIBRARY_ROOT.name if root else DEFAULT_LIBRARY_ROOT,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+            as_of=as_of,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "Operating-decline gate"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+        for finding in ops_findings_from_operating_decline_gate(payload)
+    ]
+
+
 def check_n206_plain_ey_observe(
     *,
     output_dir: Path | None = None,
@@ -4592,6 +4647,7 @@ def collect_ops_findings(
     findings.extend(check_entry_blind_review_queue())
     findings.extend(check_entry_news_polarity())
     findings.extend(check_entry_revisit_review_queue())
+    findings.extend(check_operating_decline_gate())
     findings.extend(check_n200_tech_timing_observe())
     findings.extend(check_n201_value_mom_observe())
     findings.extend(check_n210_ai_judgment_observe())
