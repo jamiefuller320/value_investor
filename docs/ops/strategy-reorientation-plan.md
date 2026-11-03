@@ -48,6 +48,7 @@ it is done. Phase gates are owner decisions, listed in the
 | 1.2 | **Sector headwind gate v0.** Per-sector verdict (`sound` / `headwind` / `insufficient_data`) from sector-wide price breadth and trend (daily charts) and breadth of operating decline among sector members. Judged on the sector as a whole. | N251 | Daily store refreshes; verdict on every sector holding a buy-tier name |
 | 1.3 | **As-of-only research instruction.** Research prompts tell the agent to use only the supplied files as of the memo date. | L663 | Prompt text and test merged |
 | 1.4 | **Scheduled Trading 212 catalogue refresh** plus a staleness finding. | L665 | Weekly workflow runs green with owner-added secrets; overlay refreshed |
+| 1.5 | **Interim results ingestion** for buy-tier names, so the decline gate sees half-year / quarterly revenue and EPS, not only annual statements. Only 3 of 248 FTSE screen rows carry interim EPS today. | N250 | Interim revenue and EPS on most FTSE buy-tier names; gate uses them |
 
 **Phase 1 gate (owner):** review the gate verdicts on a sample of 10 FTSE
 buy-tier names (5 flagged, 5 clear) against the cited evidence. Accept,
@@ -154,7 +155,9 @@ merge clashes manageable.
 | Step | Status | Branch / PR | Model |
 |------|--------|-------------|-------|
 | 0.1, 0.2 | Done | `cursor/autonomy-readiness-review-567c` | Supervisor |
-| 1.1 | Delegated | `cursor/operating-decline-gate-567c` | Claude Sonnet 5.5 |
-| 1.2 | Delegated | `cursor/sector-headwind-gate-567c` | GPT-5.6 |
-| 1.3 | Queued | — | Composer 2.5 |
-| 1.4 | Queued (needs `TRADING212_API_KEY` / `TRADING212_API_SECRET` secrets) | — | Composer 2.5 |
+| 1.1 | In review (one change round: one row label per comparison, freshness counts) | `cursor/operating-decline-gate-567c` | Claude Sonnet 5.5 |
+| 1.2 | In review (one change round: decline-gate verdicts are the single definition of "declining"; screen fields are a material-threshold fallback). Stacked on 1.1 | `cursor/sector-headwind-gate-567c` | GPT-5.6 |
+| 1.3 | In review (single choke point; no prompt version or rememo trigger affected) | `cursor/research-as-of-guard-567c` | Composer 2.5 |
+| 1.4 | In review; runs once the owner adds `TRADING212_API_KEY` / `TRADING212_API_SECRET`. Committed catalogue is from 2026-07-22 | `cursor/t212-catalogue-refresh-567c` | Composer 2.5 |
+| 1.5 | Next | — | Claude Sonnet 5.5 |
+| Phase 1 gate | Waiting on 1.1–1.2 merge and a week of daily refreshes | — | Owner |
