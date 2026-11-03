@@ -1125,6 +1125,14 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "coca-colaep.com IR returns empty and SEC 20-F/HY 6-K filings are already "
         "bodied via sec_edgar."
     ),
+    "COR": (
+        "sp500 leftover IWB: indexed-without-body rows are misattributed Investegate RNS "
+        "for Corpus Resources plc (AIM epic COR collision) plus TR-1/holding-disclosure "
+        "stubs; refetch prunes issuer_mismatch on statutory rows; one Item 7.01 Regulation "
+        "FD 8-K iXBRL primary below the substantiveness gate; investor.cencora.com IR is "
+        "Cloudflare-gated (403) with no static statutory PDF hrefs; 10-K/10-Q are already "
+        "bodied via sec_edgar."
+    ),
     "TRI": (
         "nasdaq100 leftover IWB: eight SEC 6-K cover HTML primaries below the "
         "substantiveness gate; linked EX-99.x exhibits are dividend/notice stubs "
