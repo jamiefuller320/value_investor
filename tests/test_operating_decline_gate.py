@@ -50,6 +50,14 @@ def _filing(headline: str, published_at: str, fid: str = "f1") -> dict:
     return {"id": fid, "headline": headline, "summary": headline, "published_at": published_at}
 
 
+def _raw(income: dict, cash_flow: dict | None = None) -> dict:
+    return {
+        "fetched_at": "2026-10-20T00:00:00+00:00",
+        "income_statement": income,
+        "cash_flow": cash_flow or {},
+    }
+
+
 def _codes(result: dict) -> list[str]:
     return [r["code"] for r in result["reasons"]]
 
@@ -357,6 +365,8 @@ def test_refresh_writes_store_with_contract_shape(tmp_path):
         "insufficient_data": 1,
         "buy_tier_names": 3,
         "buy_tier_covered": 2,
+        "names_with_interim_eps": 0,
+        "latest_fiscal_year_counts": {"2025": 3},
     }
     bad = payload["names"]["BAD.L"]
     assert set(bad) >= {"market", "sector", "signal", "verdict", "reasons", "checks"}
@@ -512,3 +522,145 @@ def test_ops_monitor_check_wraps_findings(tmp_path):
     assert findings[0].title == FINDING_TITLE
     assert findings[0].auto_fixable is False
     assert store.exists()
+
+
+def test_margin_uses_one_operating_income_label_across_years():
+    fin = _raw(
+        {
+            "2025": {"Total Revenue": 1000.0, "Operating Income": 100.0, "EBIT": 300.0},
+            "2024": {"Total Revenue": 1000.0, "EBIT": 150.0},
+        }
+    )
+    margin = _assess(financials=fin)["checks"]["operating_margin"]
+    assert margin["label"] == "EBIT / Total Revenue"
+    assert margin["fired"] is False
+    assert margin["change_pp"] == pytest.approx(0.15)
+
+
+def test_margin_not_evaluable_when_no_single_label_spans_both_years():
+    fin = _raw(
+        {
+            "2025": {"Total Revenue": 1000.0, "Operating Income": 100.0},
+            "2024": {"Total Revenue": 1000.0, "EBIT": 150.0},
+        }
+    )
+    result = _assess(financials=fin)
+    assert result["checks"]["operating_margin"]["evaluable"] is False
+    assert result["verdict"] == "insufficient_data"
+
+
+def test_margin_label_that_reaches_newest_year_beats_stale_preferred_label():
+    fin = _raw(
+        {
+            "2025": {"Total Revenue": 1000.0, "EBIT": 160.0},
+            "2024": {"Total Revenue": 1000.0, "Operating Income": 150.0, "EBIT": 150.0},
+            "2023": {"Total Revenue": 1000.0, "Operating Income": 150.0},
+        }
+    )
+    margin = _assess(financials=fin)["checks"]["operating_margin"]
+    assert margin["label"] == "EBIT / Total Revenue"
+    assert margin["latest_year"] == 2025
+
+
+def test_revenue_does_not_mix_labels_across_years():
+    fin = _raw(
+        {
+            "2025": {"Total Revenue": 800.0, "Operating Income": 120.0},
+            "2024": {"Operating Revenue": 1000.0, "Operating Income": 150.0},
+        }
+    )
+    result = _assess(financials=fin)
+    assert result["checks"]["revenue"]["evaluable"] is False
+    assert "revenue_decline" not in _codes(result)
+
+
+def test_revenue_two_year_rule_stays_on_one_label():
+    fin = _raw(
+        {
+            "2025": {"Total Revenue": 990.0, "Operating Revenue": 990.0, "Operating Income": 150.0},
+            "2024": {
+                "Total Revenue": 995.0,
+                "Operating Revenue": 1000.0,
+                "Operating Income": 150.0,
+            },
+            "2023": {"Operating Revenue": 1020.0},
+        }
+    )
+    revenue = _assess(financials=fin)["checks"]["revenue"]
+    assert revenue["label"] == "Total Revenue"
+    assert revenue["prior_change_pct"] is None
+    assert revenue["fired"] is False
+
+
+def test_eps_does_not_mix_diluted_and_basic():
+    fin = _raw(
+        {
+            "2025": {"Total Revenue": 1000.0, "Operating Income": 150.0, "Diluted EPS": 0.4},
+            "2024": {"Total Revenue": 1000.0, "Operating Income": 150.0, "Basic EPS": 1.0},
+        }
+    )
+    result = _assess(financials=fin)
+    assert result["checks"]["eps_annual"]["evaluable"] is False
+    assert "eps_decline_annual" not in _codes(result)
+
+
+def test_eps_prefers_diluted_when_both_years_have_it():
+    fin = _raw(
+        {
+            "2025": {"Diluted EPS": 1.0, "Basic EPS": 0.4},
+            "2024": {"Diluted EPS": 1.0, "Basic EPS": 1.0},
+        }
+    )
+    eps = _assess(financials=fin)["checks"]["eps_annual"]
+    assert eps["label"] == "Diluted EPS"
+    assert eps["fired"] is False
+
+
+def test_fcf_does_not_mix_direct_and_derived_across_years():
+    cash = {
+        "2025": {
+            "Free Cash Flow": -20.0,
+            "Operating Cash Flow": 100.0,
+            "Capital Expenditure": -90.0,
+        },
+        "2024": {"Operating Cash Flow": 200.0, "Capital Expenditure": -100.0},
+    }
+    fin = _raw({"2025": {"Total Revenue": 1.0}}, cash)
+    fcf = _assess(financials=fin)["checks"]["fcf"]
+    assert fcf["label"] == "Operating Cash Flow + Capital Expenditure"
+    assert fcf["latest"] == pytest.approx(10.0)
+    assert fcf["prior"] == pytest.approx(100.0)
+    assert fcf["fired"] is True
+    assert fcf["strength"] == "soft"
+
+
+def test_fcf_not_evaluable_when_labels_do_not_overlap():
+    cash = {
+        "2025": {"Free Cash Flow": 50.0},
+        "2024": {"Operating Cash Flow": 200.0, "Capital Expenditure": -100.0},
+    }
+    fin = _raw({"2025": {"Total Revenue": 1.0}}, cash)
+    assert _assess(financials=fin)["checks"]["fcf"]["evaluable"] is False
+
+
+def test_summary_reports_interim_and_fiscal_year_coverage(tmp_path):
+    latest, research, store = _build_fixture(tmp_path)
+    data = json.loads(latest.read_text(encoding="utf-8"))
+    data["reports"][3]["interim_eps_decline_pct"] = 0.02
+    latest.write_text(json.dumps(data), encoding="utf-8")
+    payload = refresh_operating_decline_gate(
+        latest_path=latest,
+        research_root=research,
+        store_path=store,
+        library_root=None,
+        as_of=AS_OF,
+    )
+    assert payload["summary"]["names_with_interim_eps"] == 1
+    assert payload["summary"]["latest_fiscal_year_counts"] == {"2025": 3}
+    summary = next(
+        f["summary"]
+        for f in ops_findings_from_operating_decline_gate(payload)
+        if f["title"] == FINDING_TITLE
+    )
+    assert "interim EPS on 1 names" in summary
+    assert "2025:3" in summary

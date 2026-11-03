@@ -57,6 +57,7 @@ EPS_LABELS = ("Diluted EPS", "Basic EPS")
 FCF_LABEL = "Free Cash Flow"
 OPERATING_CASHFLOW_LABEL = "Operating Cash Flow"
 CAPEX_LABEL = "Capital Expenditure"
+FCF_DERIVED_LABEL = f"{OPERATING_CASHFLOW_LABEL} + {CAPEX_LABEL}"
 
 HARD_PHRASES = (
     "profit warning",
@@ -137,8 +138,8 @@ def _pct(value: float) -> str:
     return f"{value * 100:+.1f}%"
 
 
-def _year_series(statement: Any, labels: tuple[str, ...], as_of: date) -> dict[int, float]:
-    """Annual values by fiscal-year int, first available label wins per year."""
+def _year_series(statement: Any, label: str, as_of: date) -> dict[int, float]:
+    """Annual values by fiscal-year int for one row label, finite values only."""
     out: dict[int, float] = {}
     if not isinstance(statement, dict):
         return out
@@ -149,11 +150,9 @@ def _year_series(statement: Any, labels: tuple[str, ...], as_of: date) -> dict[i
             continue
         if year > as_of.year or not isinstance(row, dict):
             continue
-        for label in labels:
-            value = _num(row.get(label))
-            if value is not None:
-                out[year] = value
-                break
+        value = _num(row.get(label))
+        if value is not None:
+            out[year] = value
     return out
 
 
@@ -173,15 +172,38 @@ def _latest_pair(
     return latest, prior, (prior2 if prior else None)
 
 
-def _fcf_series(cash_flow: Any, as_of: date) -> dict[int, float]:
-    direct = _year_series(cash_flow, (FCF_LABEL,), as_of)
-    derived: dict[int, float] = {}
-    ocf = _year_series(cash_flow, (OPERATING_CASHFLOW_LABEL,), as_of)
-    capex = _year_series(cash_flow, (CAPEX_LABEL,), as_of)
-    for year, value in ocf.items():
-        if year in capex and year not in direct:
-            derived[year] = value + capex[year]
-    return {**derived, **direct}
+Candidates = list[tuple[str, dict[int, float]]]
+
+
+def _select_series(candidates: Candidates, as_of: date) -> tuple[str, tuple] | None:
+    """One label for every compared year: first candidate holding the latest and prior year.
+
+    The latest year is the newest year on any candidate, so a preferred label that stops
+    a year early loses to a fallback label that reaches the newest year.
+    """
+    years = [y for _, series in candidates for y in series]
+    if not years:
+        return None
+    latest_year = max(years)
+    for label, series in candidates:
+        if latest_year in series and latest_year - 1 in series:
+            pair = _latest_pair(series, as_of)
+            return None if pair is None else (label, pair)
+    return None
+
+
+def _fcf_candidates(cash_flow: Any, as_of: date) -> Candidates:
+    ocf = _year_series(cash_flow, OPERATING_CASHFLOW_LABEL, as_of)
+    capex = _year_series(cash_flow, CAPEX_LABEL, as_of)
+    derived = {y: ocf[y] + capex[y] for y in ocf if y in capex}
+    return [
+        (FCF_LABEL, _year_series(cash_flow, FCF_LABEL, as_of)),
+        (FCF_DERIVED_LABEL, derived),
+    ]
+
+
+def _label_candidates(statement: Any, labels: tuple[str, ...], as_of: date) -> Candidates:
+    return [(label, _year_series(statement, label, as_of)) for label in labels]
 
 
 def _not_evaluable(why: str) -> dict[str, Any]:
@@ -189,9 +211,10 @@ def _not_evaluable(why: str) -> dict[str, Any]:
 
 
 def _check_revenue(income: Any, as_of: date, source: str) -> tuple[dict, list[dict]]:
-    pair = _latest_pair(_year_series(income, REVENUE_LABELS, as_of), as_of)
-    if pair is None or pair[1] is None:
+    picked = _select_series(_label_candidates(income, REVENUE_LABELS, as_of), as_of)
+    if picked is None or picked[1][1] is None:
         return _not_evaluable("revenue_missing_or_stale"), []
+    label, pair = picked
     (year, latest), prior, prior2 = pair[0], pair[1], pair[2]
     if prior[1] <= 0:
         return _not_evaluable("prior_revenue_non_positive"), []
@@ -220,6 +243,7 @@ def _check_revenue(income: Any, as_of: date, source: str) -> tuple[dict, list[di
         "evaluable": True,
         "fired": bool(reasons),
         "strength": "hard",
+        "label": label,
         "latest_year": year,
         "change_pct": round(change, 4),
         "prior_change_pct": None if prior_change is None else round(prior_change, 4),
@@ -228,12 +252,21 @@ def _check_revenue(income: Any, as_of: date, source: str) -> tuple[dict, list[di
 
 
 def _check_margin(income: Any, as_of: date, source: str) -> tuple[dict, list[dict]]:
-    revenue = _year_series(income, REVENUE_LABELS, as_of)
-    operating = _year_series(income, OPERATING_INCOME_LABELS, as_of)
-    margins = {y: operating[y] / revenue[y] for y in operating if revenue.get(y, 0.0) > 0}
-    pair = _latest_pair(margins, as_of)
-    if pair is None or pair[1] is None:
+    candidates: Candidates = []
+    for revenue_label in REVENUE_LABELS:
+        revenue = _year_series(income, revenue_label, as_of)
+        for operating_label in OPERATING_INCOME_LABELS:
+            operating = _year_series(income, operating_label, as_of)
+            candidates.append(
+                (
+                    f"{operating_label} / {revenue_label}",
+                    {y: operating[y] / revenue[y] for y in operating if revenue.get(y, 0.0) > 0},
+                )
+            )
+    picked = _select_series(candidates, as_of)
+    if picked is None or picked[1][1] is None:
         return _not_evaluable("operating_income_missing_or_stale"), []
+    label, pair = picked
     (year, latest), prior = pair[0], pair[1]
     drop = prior[1] - latest
     reasons: list[dict] = []
@@ -252,6 +285,7 @@ def _check_margin(income: Any, as_of: date, source: str) -> tuple[dict, list[dic
         "evaluable": True,
         "fired": bool(reasons),
         "strength": "hard",
+        "label": label,
         "latest_year": year,
         "latest_margin": round(latest, 4),
         "prior_margin": round(prior[1], 4),
@@ -261,9 +295,10 @@ def _check_margin(income: Any, as_of: date, source: str) -> tuple[dict, list[dic
 
 
 def _check_eps_annual(income: Any, as_of: date, source: str) -> tuple[dict, list[dict]]:
-    pair = _latest_pair(_year_series(income, EPS_LABELS, as_of), as_of)
-    if pair is None or pair[1] is None:
+    picked = _select_series(_label_candidates(income, EPS_LABELS, as_of), as_of)
+    if picked is None or picked[1][1] is None:
         return _not_evaluable("annual_eps_missing_or_stale"), []
+    label, pair = picked
     (year, latest), prior = pair[0], pair[1]
     fell = prior[1] > 0 and latest < prior[1] * (1.0 - EPS_ANNUAL_DROP_PCT)
     reasons: list[dict] = []
@@ -279,6 +314,7 @@ def _check_eps_annual(income: Any, as_of: date, source: str) -> tuple[dict, list
         "evaluable": True,
         "fired": fell,
         "strength": "soft",
+        "label": label,
         "latest_year": year,
         "latest": round(latest, 4),
         "prior": round(prior[1], 4),
@@ -312,9 +348,10 @@ def _check_eps_interim(row: dict) -> tuple[dict, list[dict]]:
 
 
 def _check_fcf(cash_flow: Any, as_of: date, source: str) -> tuple[dict, list[dict]]:
-    pair = _latest_pair(_fcf_series(cash_flow, as_of), as_of)
-    if pair is None or pair[1] is None:
+    picked = _select_series(_fcf_candidates(cash_flow, as_of), as_of)
+    if picked is None or picked[1][1] is None:
         return _not_evaluable("fcf_missing_or_stale"), []
+    label, pair = picked
     (year, latest), prior = pair[0], pair[1]
     reasons: list[dict] = []
     strength = "soft"
@@ -339,6 +376,7 @@ def _check_fcf(cash_flow: Any, as_of: date, source: str) -> tuple[dict, list[dic
         "evaluable": True,
         "fired": bool(reasons),
         "strength": strength if reasons else "soft",
+        "label": label,
         "latest_year": year,
         "latest": round(latest, 2),
         "prior": round(prior[1], 2),
@@ -556,7 +594,7 @@ def _resolve_as_of(as_of: Any) -> date:
     return resolved
 
 
-def _empty_summary() -> dict[str, int]:
+def _empty_summary() -> dict[str, Any]:
     return {
         "names": 0,
         "clear": 0,
@@ -564,6 +602,8 @@ def _empty_summary() -> dict[str, int]:
         "insufficient_data": 0,
         "buy_tier_names": 0,
         "buy_tier_covered": 0,
+        "names_with_interim_eps": 0,
+        "latest_fiscal_year_counts": {},
     }
 
 
@@ -619,6 +659,12 @@ def refresh_operating_decline_gate(
     for entry in names.values():
         summary["names"] += 1
         summary[entry["verdict"]] += 1
+        if entry["checks"]["eps_interim"]["evaluable"]:
+            summary["names_with_interim_eps"] += 1
+        revenue_year = entry["checks"]["revenue"].get("latest_year")
+        if revenue_year is not None:
+            counts = summary["latest_fiscal_year_counts"]
+            counts[str(revenue_year)] = counts.get(str(revenue_year), 0) + 1
         if entry["market"] == LIVE_MARKET_ID and entry["signal"] in BUY_TIER_SIGNALS:
             summary["buy_tier_names"] += 1
             if entry["verdict"] != "insufficient_data":
@@ -656,6 +702,13 @@ def _flagged_buy_tier(payload: dict[str, Any]) -> list[tuple[str, dict]]:
     ]
 
 
+def _fy_counts_text(summary: dict[str, Any]) -> str:
+    counts = summary.get("latest_fiscal_year_counts")
+    if not isinstance(counts, dict) or not counts:
+        return "n/a"
+    return ", ".join(f"{year}:{n}" for year, n in sorted(counts.items(), reverse=True))
+
+
 def ops_findings_from_operating_decline_gate(payload: dict[str, Any]) -> list[dict[str, Any]]:
     """Map the store to ops-monitor finding dicts (observe-only, never auto-fixable)."""
     summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
@@ -681,7 +734,9 @@ def ops_findings_from_operating_decline_gate(payload: dict[str, Any]) -> list[di
                 f"clear {summary.get('clear', 0)}, declining {summary.get('declining', 0)}, "
                 f"insufficient_data {summary.get('insufficient_data', 0)}; "
                 f"FTSE buy-tier covered {covered}/{buy_names}, "
-                f"flagged declining {len(flagged)}"
+                f"flagged declining {len(flagged)}; "
+                f"interim EPS on {summary.get('names_with_interim_eps', 0)} names, "
+                f"latest revenue FY {_fy_counts_text(summary)}"
                 + (f": {flagged_text}{more}" if flagged else "")
                 + ". Observe-only — influences_live false; no book, knob or signal writes."
             ),

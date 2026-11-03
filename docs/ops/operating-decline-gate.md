@@ -41,7 +41,16 @@ Constants are at the top of the module. Annual figures come from the latest repo
 
 Two soft signals together make a name `declining`. Hard checks are the ones that are hard to explain away as noise (a sales drop beyond 5%, margin compression, cash turning negative, the company itself warning). Soft checks are common one-offs (a write-down, a single weak half).
 
-Operating income falls back to `Total Operating Income As Reported`, then `EBIT`. FCF falls back to operating cash flow plus capital expenditure. Banks and insurers often lack operating income; they stay evaluable on EPS.
+Each check compares every year on one row label. The label is the first in the preference list that has a finite value for the newest year and the prior year (revenue also uses the year before when present), and it is recorded as `label` on the check. Labels are never mixed across years: if none spans both years, the check is not evaluable.
+
+| Check | Preference order |
+|---|---|
+| Revenue | `Total Revenue`, `Operating Revenue` |
+| Operating income (margin) | `Operating Income`, `Total Operating Income As Reported`, `EBIT`, each over the revenue label order |
+| EPS | `Diluted EPS`, `Basic EPS` |
+| FCF | `Free Cash Flow`, then operating cash flow plus capital expenditure |
+
+FCF is never taken direct for one year and derived for another. Banks and insurers often lack operating income; they stay evaluable on EPS.
 
 ## Inputs (committed files only, no network)
 
@@ -73,14 +82,15 @@ Because statement files are overwritten on each fetch, a past `as_of` is mainly 
 ```text
 { schema_version: 1, generated_at, as_of, observe_only: true, influences_live: false,
   learning_question,
-  summary: { names, clear, declining, insufficient_data, buy_tier_names, buy_tier_covered },
+  summary: { names, clear, declining, insufficient_data, buy_tier_names, buy_tier_covered,
+             names_with_interim_eps, latest_fiscal_year_counts },
   names: { TICKER: { market, sector, signal, verdict,
                      reasons: [ {code, detail, source} ],
                      checks: { revenue, operating_margin, eps_annual, eps_interim,
                                fcf, dividend, profit_warning } } } }
 ```
 
-`buy_tier_covered` counts FTSE buy-tier names whose verdict is `clear` or `declining`. The sector headwind gate reads this file; keep the keys stable and bump `schema_version` for any change.
+`buy_tier_covered` counts FTSE buy-tier names whose verdict is `clear` or `declining`. `names_with_interim_eps` counts names with an interim EPS comparison on the screen row. `latest_fiscal_year_counts` maps the latest fiscal year used for revenue to the number of names, so stale statements are visible. The sector headwind gate reads this file; keep the keys stable and bump `schema_version` for any change.
 
 Each check carries `evaluable`, `fired`, and `strength` (when evaluable) or `why` (when not), plus the numbers it used. The store is about 750 KB because it keeps every check for every name. Raw store JSON commits with ops-monitor.
 
@@ -90,7 +100,7 @@ Daily `collect_ops_findings` calls `check_operating_decline_gate` (before the ob
 
 | Title | Severity | When |
 |---|---|---|
-| **Operating-decline gate refreshed (observe)** | info | Every run: counts, FTSE buy-tier coverage, and the first five buy-tier names flagged `declining` with reason codes |
+| **Operating-decline gate refreshed (observe)** | info | Every run: counts, FTSE buy-tier coverage, the first five buy-tier names flagged `declining` with reason codes, names with interim EPS, and the latest-fiscal-year spread |
 | **Operating-decline gate coverage gap** | warn | Fewer than 80% of FTSE buy-tier names have a `clear` or `declining` verdict, or no buy-tier names were scored |
 | **Operating-decline gate failed** | warn | The refresh raised (unreadable inputs) |
 
@@ -114,4 +124,10 @@ ftse-operating-decline-gate --json                # full store to stdout
 - Never edits books or knobs; never calls the network.
 - Later use, after the Phase 1 owner gate in the plan: (1) entry filter for the strategy book (only `clear` names are bought); (2) thesis-break trigger for a recovery hold (a held name that turns `declining` ends the hold). The same function serves both, so the hold rule and the entry rule cannot drift apart.
 - Thresholds are v0 defaults. The owner may adjust them once at the Phase 1 gate (logged); do not tune them against outcomes in between.
-- Known limits: annual statements lag by up to a year, so a fresh deterioration shows first through interim flags and headlines; revenue-based checks flag cyclicals and commodity names in a down year (for example oil majors), which matches the owner's "no operating decline" rule but is a known false-positive source for a recovery thesis.
+
+## Known limitations
+
+- **Mostly annual-only.** Interim data is thin (only a handful of FTSE screen rows carry `interim_eps_decline_pct`; see `names_with_interim_eps`). Most verdicts rest on annual statements that can lag by up to a year, so fresh deterioration shows first through headlines. Interim ingestion is a P1 follow-up, not part of this instrument.
+- **Revenue hard checks flag commodity and cyclical names in a down year** (for example oil majors). That matches the owner's "no operating decline" rule but is a known false-positive source for a recovery thesis. The owner decides at the Phase 1 gate whether to adjust.
+- **Headline scan covers only names with a filings index** (about 108 of 248 FTSE names), matches headlines and summaries only, and skips third-party news. Expect low recall on profit warnings.
+- **Statements are overwritten on fetch**, so a past `as_of` fails closed (`financials_fetched_after_as_of`) against current files. Real historical replay needs dated snapshots.
