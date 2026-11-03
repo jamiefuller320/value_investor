@@ -2571,6 +2571,9 @@ def reconcile_fcf(
     bridge_resolved: bool = False,
     screen_ttm_unverified: bool = False,
     screen_ttm_for_policy: float | None = None,
+    filing_aligned_override: float | None = None,
+    filing_aligned_source: str | None = None,
+    fiscal_year_override: str | None = None,
 ) -> dict[str, Any]:
     """
     Pick one canonical FCF from screen TTM, company-adjusted, and filing OCF−CapEx.
@@ -2578,6 +2581,11 @@ def reconcile_fcf(
     Priority: reviewed human bridge policy; else deterministic majority among the
     three bases (discard outlier) with filing-aligned fallback; else cashflow
     metrics / screen TTM. Surfaces all bases plus divergence flags.
+
+    ``filing_aligned_override`` feeds an alternate filing_aligned figure (e.g. SEC
+    companyfacts OCF − PP&E) into the same majority / fallback path. Live call sites
+    omit it so Yahoo annual cash-flow remains the default; the L546 observe twin
+    uses the override with ``influences_live=false``.
     """
     cashflow_metrics = (
         extract_cashflow_metrics_from_annual_financials(financials) if financials else {}
@@ -2585,6 +2593,12 @@ def reconcile_fcf(
     filing_aligned, fiscal_year = (
         compute_filing_aligned_fcf(financials) if financials else (None, None)
     )
+    resolved_filing_source = "yahoo_annual" if filing_aligned is not None else None
+    if filing_aligned_override is not None:
+        filing_aligned = float(filing_aligned_override)
+        resolved_filing_source = str(filing_aligned_source or "override")
+        if fiscal_year_override:
+            fiscal_year = str(fiscal_year_override)
     if financials and screen_ttm_for_policy is None and not screen_ttm_unverified:
         bases = resolve_screen_ttm_bases(
             screen_ttm=screen_ttm,
@@ -2699,6 +2713,7 @@ def reconcile_fcf(
         "screen_ttm_unverified": bool(screen_ttm_unverified),
         "cashflow_metrics_free_cashflow": metrics_fcf,
         "filing_aligned": filing_aligned,
+        "filing_aligned_source": resolved_filing_source,
         "company_adjusted": company_adjusted,
         "company_adjusted_currency": company_adjusted_currency,
         "divergence_flagged": divergence_flagged,

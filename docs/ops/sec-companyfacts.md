@@ -46,8 +46,14 @@ House; no companyfacts call).
 - Gap-fill source map: `inventory.available.sec_companyfacts` when present, and
   `sec_companyfacts` heads the US `planned_alternate_sources` catalog (ranked
   first for FCF / cash / dividend questions).
-- **Not** read by scoring, `reconcile_fcf`, the FCF basis overlay, paper books
-  or decision review.
+- **Live path:** scoring, `reconcile_fcf`, the FCF basis overlay, paper books
+  and decision review still read Yahoo annual cash-flow for `filing_aligned`.
+- **L546 observe twin (shipped):** daily ops-monitor feeds SEC
+  `free_cashflow` into `reconcile_fcf(..., filing_aligned_override=…)` for US
+  memo names and writes `docs/data/sec_filing_aligned_twin.json`, comparing
+  policy FCF / basis / mismatch flags vs the Yahoo path. Epoch id
+  `sec-filing-aligned-twin-v0`. `influences_live=false` — never edits live
+  scoring, overlays, books or memos.
 
 ## Ops findings
 
@@ -60,6 +66,8 @@ compared / diverged counts, top 25 diverged rows).
 | **SEC filed FCF diverges from Yahoo basis on US buy-tier** | info (1–2 names), warn (≥3) | Latest SEC OCF − capex vs Yahoo `filing_aligned` for the same fiscal-year label differ by >25% (`\|sec − yahoo\| / max`) on a buy-tier memo name |
 | **SEC companyfacts coverage below target on US memos** | info | Under 80% of US memo names have the file |
 | **SEC companyfacts coverage observe failed** | warn | The refresh raised |
+| **SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier** | info (1–2 names), warn (≥3) | L546 twin: feeding SEC into `reconcile_fcf` `filing_aligned` would change policy FCF/basis or mismatch flags vs Yahoo on a buy-tier memo (`docs/data/sec_filing_aligned_twin.json`) |
+| **SEC filing_aligned twin observe failed** | warn | The twin refresh raised |
 
 `auto_fixable=False`. Some divergence is definitional: Yahoo capex can include
 capitalised software or intangibles, while this source is PP&E only. Read the
@@ -69,10 +77,14 @@ Coverage still under target a week after merge means the maintenance backfill
 is not running for US markets (check the stagger cursor) or CIKs are not
 resolving (`failed` reasons in the maintenance JSON).
 
-## Promotion gate (not now)
+## Promotion gate (live path still later)
 
-Feeding SEC values into `reconcile_fcf` as the US `filing_aligned` basis would
-change US shard buy-tier and epoch-0 books. That needs its own epoch / twin
-decision, not a silent edit. Parked as a deferred idea with the trigger:
-coverage at or above 80% and the divergence finding naming US buy-tier names
-for several consecutive weeks.
+**Shipped (L546 observe twin):** SEC values already enter the US
+`filing_aligned` *slot* inside `reconcile_fcf` on an observe twin
+(`influences_live=false`). That is the epoch/twin path — not a silent live edit.
+
+**Still later (live cold-start):** flipping live Yahoo `filing_aligned` to SEC
+would change US shard buy-tier and epoch-0 books. Do that only as a named
+cold-start / capital epoch after twin evidence is thick (coverage ≥80% already
+met; prefer several weekly twin snapshots naming buy-tier policy deltas). Follow-on
+defer tracks the live flip.

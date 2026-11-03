@@ -5,9 +5,10 @@ annual operating cash flow, capital expenditure and dividends paid as tagged in
 each 10-K / 20-F / 40-F, with accession number and filed date per value.
 
 This is the US analogue of Companies House iXBRL accounts for the memo FCF
-basis. It is a memo source only: scoring still reads the Yahoo-derived
-``filing_aligned`` basis. ``sec_companyfacts_coverage`` compares the two
-(observe-only) before any promotion into ``reconcile_fcf``.
+basis. Live scoring still reads the Yahoo-derived ``filing_aligned`` basis.
+``sec_companyfacts_coverage`` compares raw SEC vs Yahoo figures (observe-only).
+The L546 twin (``sec_filing_aligned_twin``) feeds SEC into
+``reconcile_fcf(..., filing_aligned_override=…)`` with ``influences_live=false``.
 
 Docs: https://www.sec.gov/search-filings/edgar-application-programming-interfaces
 """

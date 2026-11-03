@@ -3001,6 +3001,58 @@ def check_sec_companyfacts_coverage(
     ]
 
 
+def check_sec_filing_aligned_twin(
+    *,
+    library_root: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only L546: SEC companyfacts as US filing_aligned inside reconcile_fcf.
+
+    Writes ``docs/data/sec_filing_aligned_twin.json``. Twin epoch feeds SEC OCF −
+    PP&E into the filing_aligned slot and compares policy outcomes vs Yahoo.
+    ``influences_live=false`` — never changes live scoring, overlays or books
+    (``auto_fixable=False``).
+    """
+    from value_investor.sec_filing_aligned_twin import (
+        DEFAULT_LIBRARY_ROOT,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_findings_from_sec_filing_aligned_twin,
+        refresh_sec_filing_aligned_twin,
+    )
+
+    root = Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT
+    if not root.exists():
+        return []
+    try:
+        payload = refresh_sec_filing_aligned_twin(
+            root,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+        for finding in ops_findings_from_sec_filing_aligned_twin(payload)
+    ]
+
+
 def check_hkex_direct_coverage(
     *,
     library_root: Path | None = None,
@@ -4506,6 +4558,7 @@ def collect_ops_findings(
     findings.extend(check_n215_reentry_observe())
     findings.extend(check_two_lot_replay())
     findings.extend(check_sec_companyfacts_coverage())
+    findings.extend(check_sec_filing_aligned_twin())
     findings.extend(check_hkex_direct_coverage())
     findings.extend(check_amf_direct_coverage())
     findings.extend(check_cision_direct_coverage())
