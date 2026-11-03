@@ -254,7 +254,8 @@ source so it cannot block higher-priority ingest work.
 
 Buy-tier flip-lag **`no_key_bodies` names that already have memos** use the same
 leftover hunter path (not weekday first-memo / N155, not Sunday research-cap
-changes):
+changes). Hourly `engineering-queue.yml` and post-merge `engineering-auto-merge.yml`
+run this after the default parked-IWB compile:
 
 ```bash
 ftse-library parked-hunter-compile --leftover-key-bodies --allow-behind-open \
@@ -262,7 +263,7 @@ ftse-library parked-hunter-compile --leftover-key-bodies --allow-behind-open \
 ```
 
 `--allow-behind-open` queues them while another hunter is `pr_open` (today:
-YAL.AX / `filings.py`). Clash-aware dispatch waits on overlapping allowlists;
+COR / `filings.py`). Clash-aware dispatch waits on overlapping allowlists;
 priority 12 stays behind P1 Monday slim. Do not unpark `eng-20261004-03`.
 When the priority engineering queue is idle and role-coherence still shows a
 compile-cap backlog, `ftse-engineering try-compile-cap-drain` runs **before**

@@ -121,6 +121,9 @@ jobs:
           # Keep the hunter chain moving without waiting for hourly queue cron
           # (defers automatically while compile-cap drain still has work).
           ftse-library parked-hunter-compile --json | tee /tmp/parked_hunter_compile.json || true
+          # Memo'd buy-tier flip no_key_bodies → same hunter path (factory; prio 12).
+          ftse-library parked-hunter-compile --leftover-key-bodies --allow-behind-open \
+            --max-hunters 9 --json | tee /tmp/leftover_key_bodies_hunter_compile.json || true
 
           if git diff --quiet -- docs/data/engineering_tasks.json; then
             echo "No engineering_tasks.json changes after mark-merged/compile"
