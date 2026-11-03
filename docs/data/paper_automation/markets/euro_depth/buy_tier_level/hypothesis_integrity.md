@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-02T08:08:42.233060+00:00
+Track: `buy_tier_level` · updated 2026-11-03T08:47:14.679047+00:00
 
 ## Portfolio loser feedback
 
@@ -26,7 +26,7 @@ Track: `buy_tier_level` · updated 2026-11-02T08:08:42.233060+00:00
 - cheapness family still passes
 - data_quality 1.00
 
-### BOL.ST — intact / hold_tolerate (-13.7%)
+### BOL.ST — intact / hold_tolerate (-13.8%)
 - price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
@@ -34,7 +34,7 @@ Track: `buy_tier_level` · updated 2026-11-02T08:08:42.233060+00:00
 - data_quality 1.00
 - conviction 66%
 
-### VOLV-B.ST — intact / hold_tolerate (-10.4%)
+### VOLV-B.ST — intact / hold_tolerate (-9.0%)
 - price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
@@ -131,24 +131,17 @@ Track: `buy_tier_level` · updated 2026-11-02T08:08:42.233060+00:00
 - data_quality 1.00
 - conviction 43%
 
-### SKF-B.ST — intact / hold_tolerate (-0.1%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 72%
-
-### BAS.DE — weakening / watch_review (-0.0%)
+### BAS.DE — weakening / watch_review (+0.0%)
 - research verdict caution
 - still buy
 - cheapness family still passes
 
-### KRX.IR — weakening / watch_review (-0.0%)
+### KRX.IR — weakening / watch_review (+0.0%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
 
-### MT.AS — weakening / watch_review (-0.0%)
+### MT.AS — weakening / watch_review (+0.0%)
 - research verdict caution
 - conviction 29% below intact floor
 - still buy
@@ -160,6 +153,13 @@ Track: `buy_tier_level` · updated 2026-11-02T08:08:42.233060+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 68%
+
+### SKF-B.ST — intact / hold_tolerate (+0.4%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 72%
 
 ### WIE.VI — weakening / watch_review (+1.0%)
 - research verdict caution
@@ -201,7 +201,7 @@ Track: `buy_tier_level` · updated 2026-11-02T08:08:42.233060+00:00
 - data_quality 0.95
 - conviction 73%
 
-### TEL2-B.ST — intact / hold_tolerate (+4.5%)
+### TEL2-B.ST — intact / hold_tolerate (+4.6%)
 - still buy
 - research accumulate
 - cheapness family still passes
@@ -229,7 +229,7 @@ Track: `buy_tier_level` · updated 2026-11-02T08:08:42.233060+00:00
 - data_quality 1.00
 - conviction 60%
 
-### SKA-B.ST — intact / hold_tolerate (+6.6%)
+### SKA-B.ST — intact / hold_tolerate (+6.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
@@ -243,19 +243,19 @@ Track: `buy_tier_level` · updated 2026-11-02T08:08:42.233060+00:00
 - data_quality 1.00
 - conviction 72%
 
-### ESSITY-B.ST — intact / hold_tolerate (+6.9%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 53%
-
 ### DHL.DE — intact / hold_tolerate (+7.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 73%
+
+### ESSITY-B.ST — intact / hold_tolerate (+7.2%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 53%
 
 ### SAN.PA — intact / hold_tolerate (+7.8%)
 - still strong_buy
