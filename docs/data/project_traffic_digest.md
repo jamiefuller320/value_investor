@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-03T12:33:12.454462+00:00`
+Generated: `2026-11-03T17:34:37.348435+00:00`
 Trajectory: **blocked_by_pr_queue**
 Dispatch pause: **active** (stuck PRs: 0)
 
@@ -25,13 +25,12 @@ Dispatch pause: **active** (stuck PRs: 0)
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
-- [ok] Queue health overall=idle; headline=Queue and hunter idle. _(source: docs/data/queue_health.json)_
+- [ok] Queue health overall=blocked; headline=Traffic pause — 0 stuck PR(s). project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation _(source: docs/data/queue_health.json)_
 - [ok] Ops monitor overall=warn at 2026-11-03T07:47:09.251906+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=True; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `stop_automation_waste` — signals=1; parked=eng-20261103-07; pause=True (applied)
-- `pause_dispatch` — paused — 0 stuck PR(s); reasons=['automation_waste'] (applied)
+- `stop_automation_waste` — signals=1; parked=eng-20261103-08; pause=True (applied)
 
 ## Merges today (monitor independent verify)
 - `parked_hunter`/verified PR #1269 `eng-20261103-02` — Hunt fetchable IR source for parked tsx60 leftover ABX.TO
