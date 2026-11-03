@@ -13,9 +13,11 @@ See ``docs/ops/operating-decline-gate.md``.
 
 from __future__ import annotations
 
+import calendar
 import csv
 import json
 import math
+import re
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -25,7 +27,7 @@ DEFAULT_RESEARCH_ROOT = Path("docs/data/research")
 DEFAULT_LIBRARY_ROOT = Path("docs/data/library")
 DEFAULT_STORE_PATH = Path("docs/data/operating_decline_gate.json")
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 LIVE_MARKET_ID = "ftse350"
 BUY_TIER_SIGNALS = frozenset({"buy", "strong_buy"})
 
@@ -45,6 +47,10 @@ REVENUE_FLAT_TOLERANCE_PCT = 0.01
 MARGIN_DROP_PP = 0.03
 EPS_ANNUAL_DROP_PCT = 0.20
 EPS_INTERIM_DROP_PCT = 0.10
+INTERIM_REVENUE_DROP_PCT = REVENUE_DROP_PCT
+INTERIM_YOY_WINDOW_DAYS = 45
+INTERIM_MAX_AGE_DAYS = 460
+INTERIM_PUBLICATION_LAG_DAYS = 200
 FCF_SHARP_FALL_PCT = 0.50
 SOFT_SIGNALS_TO_DECLINE = 2
 WARNING_LOOKBACK_DAYS = 180
@@ -52,6 +58,7 @@ COVERAGE_WARN_SHARE = 0.80
 FLAGGED_NAMES_IN_FINDING = 5
 
 REVENUE_LABELS = ("Total Revenue", "Operating Revenue")
+INTERIM_REVENUE_LABELS = ("Total Revenue", "Operating Revenue", "Revenue")
 OPERATING_INCOME_LABELS = ("Operating Income", "Total Operating Income As Reported", "EBIT")
 EPS_LABELS = ("Diluted EPS", "Basic EPS")
 FCF_LABEL = "Free Cash Flow"
@@ -89,6 +96,7 @@ HARD_REASON_CODES = frozenset(
     {
         "revenue_decline",
         "revenue_two_year_decline",
+        "interim_revenue_decline",
         "operating_margin_drop",
         "fcf_turned_negative",
         "profit_warning",
@@ -107,8 +115,27 @@ SOFT_REASON_CODES = frozenset(
 FINANCIAL_CHECKS = frozenset({"revenue", "operating_margin", "eps_annual", "fcf"})
 
 SRC_FINANCIALS = "financials_annual.json"
+SRC_QUARTERLY = "financials_annual.json quarterly_income"
+SRC_FILING_INTERIM = "filing_interim_financials.json"
 SRC_SCREEN_ROW = "latest.json reports"
 SRC_FILINGS = "filings_index.json"
+
+_INTERIM_RESULTS_TOKENS = (
+    "interim results",
+    "interim report",
+    "half-year",
+    "half year",
+    "half-yearly",
+    "half yearly",
+)
+_PERIOD_END_RE = re.compile(
+    r"\b(?:ended|ending|to)\s+(\d{1,2})\s+([A-Za-z]+)\s+(20\d{2})\b",
+    re.IGNORECASE,
+)
+_HIGHLIGHT_EPS_PAIRS = (
+    ("adjusted_eps_pence", "adjusted_eps_pence", "prior_adjusted_eps_pence"),
+    ("statutory_eps_pence", "statutory_eps_pence", "prior_statutory_eps_pence"),
+)
 
 
 def _num(value: Any) -> float | None:
@@ -322,10 +349,173 @@ def _check_eps_annual(income: Any, as_of: date, source: str) -> tuple[dict, list
     return check, reasons
 
 
-def _check_eps_interim(row: dict) -> tuple[dict, list[dict]]:
+def _iso(day: date | None) -> str | None:
+    return None if day is None else day.isoformat()
+
+
+def _interim_stale(day: date, as_of: date) -> bool:
+    return (as_of - day).days > INTERIM_MAX_AGE_DAYS
+
+
+def _month_number(name: str) -> int | None:
+    key = name.strip().lower()
+    for index, full in enumerate(calendar.month_name):
+        if full and full.lower() == key:
+            return index
+    for index, abbr in enumerate(calendar.month_abbr):
+        if abbr and abbr.lower() == key:
+            return index
+    return None
+
+
+def _parse_dmy(day: str, month: str, year: str) -> date | None:
+    month_number = _month_number(month)
+    if month_number is None:
+        return None
+    try:
+        return date(int(year), month_number, int(day))
+    except ValueError:
+        return None
+
+
+def _period_end_near(text: str, published: date) -> date | None:
+    earliest = published - timedelta(days=INTERIM_PUBLICATION_LAG_DAYS)
+    found: list[date] = []
+    for match in _PERIOD_END_RE.finditer(text):
+        parsed = _parse_dmy(match.group(1), match.group(2), match.group(3))
+        if parsed is not None and earliest <= parsed <= published:
+            found.append(parsed)
+    return max(found) if found else None
+
+
+def _rows_by_period(quarterly: Any, as_of: date) -> dict[date, dict]:
+    rows: dict[date, dict] = {}
+    if not isinstance(quarterly, dict):
+        return rows
+    for key, row in quarterly.items():
+        period_end = _to_date(key)
+        if period_end is None or period_end > as_of or not isinstance(row, dict):
+            continue
+        rows[period_end] = row
+    return rows
+
+
+def _latest_interim_period(rows: dict[date, dict]) -> date | None:
+    dated = [
+        period
+        for period, row in rows.items()
+        if any(_num(row.get(label)) is not None for label in (*INTERIM_REVENUE_LABELS, *EPS_LABELS))
+    ]
+    return max(dated) if dated else None
+
+
+def _prior_period(rows: dict[date, dict], latest: date) -> date | None:
+    try:
+        target = latest.replace(year=latest.year - 1)
+    except ValueError:
+        target = latest.replace(year=latest.year - 1, day=28)
+    best: tuple[int, date] | None = None
+    for period in rows:
+        if period >= latest:
+            continue
+        delta = abs((period - target).days)
+        if delta <= INTERIM_YOY_WINDOW_DAYS and (best is None or delta < best[0]):
+            best = (delta, period)
+    return None if best is None else best[1]
+
+
+def _label_on_both(
+    rows: dict[date, dict], latest: date, prior: date, labels: tuple[str, ...]
+) -> tuple[str, float, float] | None:
+    latest_row = rows.get(latest) or {}
+    prior_row = rows.get(prior) or {}
+    for label in labels:
+        current = _num(latest_row.get(label))
+        previous = _num(prior_row.get(label))
+        if current is not None and previous is not None:
+            return label, current, previous
+    return None
+
+
+def _quarterly_yoy(
+    quarterly: Any, labels: tuple[str, ...], as_of: date
+) -> tuple[dict[str, Any] | None, str | None]:
+    """YoY pair for the latest interim period, or a why when the series cannot be compared."""
+    rows = _rows_by_period(quarterly, as_of)
+    latest = _latest_interim_period(rows)
+    if latest is None:
+        return None, None
+    if _interim_stale(latest, as_of):
+        return {"period_end": _iso(latest)}, "interim_stale"
+    prior = _prior_period(rows, latest)
+    if prior is None:
+        return {"period_end": _iso(latest)}, "interim_prior_period_missing"
+    picked = _label_on_both(rows, latest, prior, labels)
+    if picked is None:
+        return {"period_end": _iso(latest), "prior_period_end": _iso(prior)}, (
+            "interim_metric_missing_on_latest_period"
+        )
+    label, current, previous = picked
+    return {
+        "label": label,
+        "latest": current,
+        "prior": previous,
+        "period_end": latest,
+        "prior_period_end": prior,
+        "source": SRC_QUARTERLY,
+    }, None
+
+
+def _published_for_id(filings_index: list | None, source_id: str) -> date | None:
+    if not source_id:
+        return None
+    for item in filings_index or []:
+        if isinstance(item, dict) and str(item.get("id") or "") == source_id:
+            return _to_date(item.get("published_at"))
+    return None
+
+
+def _highlights_eps(
+    filing_interim: dict | None, filings_index: list | None, as_of: date
+) -> dict[str, Any] | None:
+    if not isinstance(filing_interim, dict):
+        return None
+    extracted = _to_date(filing_interim.get("extracted_at"))
+    if extracted is not None and extracted > as_of:
+        return None
+    highlights = filing_interim.get("interim_highlights")
+    if not isinstance(highlights, dict):
+        return None
+    picked: tuple[str, float, float] | None = None
+    for label, current_key, prior_key in _HIGHLIGHT_EPS_PAIRS:
+        current = _num(highlights.get(current_key))
+        previous = _num(highlights.get(prior_key))
+        if current is None or previous is None or previous <= 0:
+            continue
+        picked = (label, current, previous)
+        break
+    if picked is None:
+        return None
+    source_id = str(highlights.get("source_body_id") or "")
+    published = _published_for_id(filings_index, source_id)
+    if published is None or published > as_of or _interim_stale(published, as_of):
+        return None
+    headline = str(highlights.get("headline") or "")
+    return {
+        "label": picked[0],
+        "latest": picked[1],
+        "prior": picked[2],
+        "period_end": _period_end_near(headline, published),
+        "prior_period_end": None,
+        "published_at": published,
+        "source": f"{SRC_FILING_INTERIM}:{source_id}",
+    }
+
+
+def _screen_eps(row: dict) -> tuple[dict, list[dict]] | None:
     decline = _num(row.get("interim_eps_decline_pct"))
     if decline is None:
-        return _not_evaluable("interim_eps_not_on_screen_row"), []
+        return None
     fired = decline >= EPS_INTERIM_DROP_PCT
     reasons = (
         [
@@ -342,7 +532,171 @@ def _check_eps_interim(row: dict) -> tuple[dict, list[dict]]:
         "evaluable": True,
         "fired": fired,
         "strength": "soft",
+        "source": SRC_SCREEN_ROW,
+        "period_end": None,
+        "prior_period_end": None,
         "interim_eps_decline_pct": round(decline, 4),
+    }
+    return check, reasons
+
+
+def _numeric_eps_check(obs: dict[str, Any]) -> tuple[dict, list[dict]]:
+    latest = float(obs["latest"])
+    prior = float(obs["prior"])
+    if prior <= 0:
+        return _not_evaluable("prior_eps_non_positive"), []
+    change = round(latest / prior - 1.0, 4)
+    decline = round(-change, 4)
+    fired = decline >= EPS_INTERIM_DROP_PCT
+    period_end = obs.get("period_end")
+    prior_end = obs.get("prior_period_end")
+    period_text = _iso(period_end) if isinstance(period_end, date) else period_end
+    prior_text = _iso(prior_end) if isinstance(prior_end, date) else prior_end
+    detail = (
+        f"interim {obs['label']} {latest:.4g} vs {prior:.4g} ({_pct(change)}) "
+        f"period {period_text or 'unknown'} vs {prior_text or 'prior interim'}"
+    )
+    reasons = (
+        [{"code": "eps_decline_interim", "detail": detail, "source": obs["source"]}]
+        if fired
+        else []
+    )
+    published = obs.get("published_at")
+    check = {
+        "evaluable": True,
+        "fired": fired,
+        "strength": "soft",
+        "label": obs["label"],
+        "source": obs["source"],
+        "period_end": period_text,
+        "prior_period_end": prior_text,
+        "latest": round(latest, 4),
+        "prior": round(prior, 4),
+        "change_pct": change,
+        "interim_eps_decline_pct": decline,
+    }
+    if isinstance(published, date):
+        check["published_at"] = published.isoformat()
+    elif isinstance(published, str) and published:
+        check["published_at"] = published
+    return check, reasons
+
+
+def _body_eps_check(interim_body: dict | None, as_of: date) -> tuple[dict, list[dict]] | None:
+    if not isinstance(interim_body, dict):
+        return None
+    decline = _num(interim_body.get("decline_pct"))
+    published = _to_date(interim_body.get("published_at"))
+    if (
+        decline is None
+        or published is None
+        or published > as_of
+        or _interim_stale(published, as_of)
+    ):
+        return None
+    period_end = _to_date(interim_body.get("period_end"))
+    if period_end is not None and (period_end > as_of or period_end > published):
+        period_end = None
+    fired = decline >= EPS_INTERIM_DROP_PCT
+    source = str(interim_body.get("source") or "filings body")
+    period_text = _iso(period_end)
+    detail = (
+        f"interim EPS down {decline * 100:.1f}% vs prior-year interim "
+        f"(published {published.isoformat()}"
+        + (f", period {period_text}" if period_text else "")
+        + ")"
+    )
+    reasons = [{"code": "eps_decline_interim", "detail": detail, "source": source}] if fired else []
+    check = {
+        "evaluable": True,
+        "fired": fired,
+        "strength": "soft",
+        "label": "interim filing prose",
+        "source": source,
+        "period_end": period_text,
+        "prior_period_end": None,
+        "published_at": published.isoformat(),
+        "interim_eps_decline_pct": round(decline, 4),
+    }
+    return check, reasons
+
+
+def _check_eps_interim(
+    row: dict,
+    quarterly: Any,
+    filing_interim: dict | None,
+    interim_body: dict | None,
+    filings_index: list | None,
+    as_of: date,
+) -> tuple[dict, list[dict]]:
+    """One interim EPS comparison. The first evaluable source replaces the rest."""
+    observation, why = _quarterly_yoy(quarterly, EPS_LABELS, as_of)
+    if observation is not None and why is None:
+        check, reasons = _numeric_eps_check(observation)
+        if check["evaluable"]:
+            return check, reasons
+    highlights = _highlights_eps(filing_interim, filings_index, as_of)
+    if highlights is not None:
+        check, reasons = _numeric_eps_check(highlights)
+        if check["evaluable"]:
+            return check, reasons
+    body = _body_eps_check(interim_body, as_of)
+    if body is not None:
+        return body
+    screen = _screen_eps(row)
+    if screen is not None:
+        return screen
+    if why is not None:
+        check = _not_evaluable(why)
+        check.update(
+            {key: value for key, value in (observation or {}).items() if value is not None}
+        )
+        check["source"] = SRC_QUARTERLY
+        return check, []
+    return _not_evaluable("interim_eps_not_on_screen_row"), []
+
+
+def _check_interim_revenue(
+    quarterly: Any, as_of: date, financials_note: str | None
+) -> tuple[dict, list[dict]]:
+    observation, why = _quarterly_yoy(quarterly, INTERIM_REVENUE_LABELS, as_of)
+    if why is not None or observation is None:
+        if observation is None and financials_note:
+            return _not_evaluable(financials_note), []
+        if why is None:
+            return _not_evaluable("interim_revenue_missing"), []
+        check = _not_evaluable(why)
+        check.update(observation or {})
+        check["source"] = SRC_QUARTERLY
+        return check, []
+    latest = float(observation["latest"])
+    prior = float(observation["prior"])
+    if prior <= 0:
+        return _not_evaluable("prior_revenue_non_positive"), []
+    change = round(latest / prior - 1.0, 4)
+    period_end = observation["period_end"]
+    prior_end = observation["prior_period_end"]
+    detail = (
+        f"interim {observation['label']} {latest:,.0f} vs {prior:,.0f} ({_pct(change)}) "
+        f"period {period_end.isoformat()} vs {prior_end.isoformat()}"
+    )
+    fired = change < -INTERIM_REVENUE_DROP_PCT
+    reasons = (
+        [{"code": "interim_revenue_decline", "detail": detail, "source": SRC_QUARTERLY}]
+        if fired
+        else []
+    )
+    check = {
+        "evaluable": True,
+        "fired": fired,
+        "strength": "hard",
+        "label": observation["label"],
+        "source": SRC_QUARTERLY,
+        "period_end": period_end.isoformat(),
+        "prior_period_end": prior_end.isoformat(),
+        "latest": round(latest, 2),
+        "prior": round(prior, 2),
+        "change_pct": change,
     }
     return check, reasons
 
@@ -476,18 +830,23 @@ def assess_operating_decline(
     filings_index: list | None,
     *,
     as_of: Any,
+    filing_interim: dict | None = None,
+    interim_body: dict | None = None,
 ) -> dict[str, Any]:
-    """Pure verdict from screen row, annual statements and filings headlines.
+    """Pure verdict from screen row, statements, interim sources and filings headlines.
 
-    Hard checks (any one => ``declining``): revenue fell more than
-    ``REVENUE_DROP_PCT`` or two consecutive annual declines; operating margin fell
-    more than ``MARGIN_DROP_PP``; FCF turned negative after a positive year; a
-    profit warning / guidance cut headline in the lookback window.
+    Hard checks (any one => ``declining``): annual or interim revenue fell by more
+    than ``REVENUE_DROP_PCT`` (interim is year-on-year, not sequential), two
+    consecutive annual declines, operating margin fell more than ``MARGIN_DROP_PP``,
+    FCF turned negative after a positive year, or a profit warning / guidance cut
+    headline in the lookback window.
     Soft checks (``SOFT_SIGNALS_TO_DECLINE`` together => ``declining``): annual
-    EPS fall, interim EPS fall, sharp FCF fall, dividend cut flag, impairment /
-    downgrade headline. ``insufficient_data`` when no adverse signal fired and
-    revenue plus (margin or EPS) could not be evaluated. Only items dated on or
-    before ``as_of`` are used.
+    EPS fall, one interim EPS fall, sharp FCF fall, dividend cut flag, impairment /
+    downgrade headline. Interim EPS uses the first evaluable source only (quarterly
+    series, filing interim highlights, half-year filing prose, then the screen row).
+    ``insufficient_data`` when no adverse signal fired and revenue plus (margin or
+    EPS) could not be evaluated. Only periods and filings dated on or before
+    ``as_of`` are used.
     """
     as_of_date = _to_date(as_of)
     if as_of_date is None:
@@ -497,15 +856,25 @@ def assess_operating_decline(
     statements = usable or {}
     income = statements.get("income_statement")
     cash_flow = statements.get("cash_flow")
+    quarterly = statements.get("quarterly_income")
     source = f"{SRC_FINANCIALS} (as of {as_of_date.isoformat()})"
 
     checks: dict[str, dict[str, Any]] = {}
     reasons: list[dict] = []
     for name, (check, found) in (
         ("revenue", _check_revenue(income, as_of_date, source)),
+        (
+            "interim_revenue",
+            _check_interim_revenue(quarterly, as_of_date, financials_note),
+        ),
         ("operating_margin", _check_margin(income, as_of_date, source)),
         ("eps_annual", _check_eps_annual(income, as_of_date, source)),
-        ("eps_interim", _check_eps_interim(row)),
+        (
+            "eps_interim",
+            _check_eps_interim(
+                row, quarterly, filing_interim, interim_body, filings_index, as_of_date
+            ),
+        ),
         ("fcf", _check_fcf(cash_flow, as_of_date, source)),
         ("dividend", _check_dividend(row)),
         ("profit_warning", _check_warnings(filings_index, as_of_date)),
@@ -555,13 +924,94 @@ def _read_json(path: Path) -> Any:
         return None
 
 
-def _load_sources(sources_dir: Path) -> tuple[dict | None, list | None]:
+def _is_interim_results(item: dict) -> bool:
+    if str(item.get("source") or "").startswith(THIRD_PARTY_NEWS_SOURCE_PREFIXES):
+        return False
+    if str(item.get("period") or "") != "interim" or not item.get("has_body"):
+        return False
+    blob = f"{item.get('headline') or ''} {item.get('url') or ''}".lower()
+    return any(token in blob for token in _INTERIM_RESULTS_TOKENS)
+
+
+def _resolve_filing_body(sources_dir: Path, item: dict) -> Path | None:
+    raw = str(item.get("body_path") or "")
+    bodies = sources_dir / "filings" / "bodies"
+    candidates: list[Path] = []
+    if raw:
+        candidates.append(bodies / Path(raw).name)
+        candidates.append(Path(raw))
+    filing_id = str(item.get("id") or "")
+    if filing_id:
+        candidates.append(bodies / f"{filing_id}.txt")
+    seen: set[Path] = set()
+    for candidate in candidates:
+        if candidate in seen:
+            continue
+        seen.add(candidate)
+        if candidate.is_file():
+            return candidate
+    return None
+
+
+def _interim_body_from_filings(
+    sources_dir: Path, filings: list | None, as_of: date
+) -> dict[str, Any] | None:
+    """Latest dated half-year results body, parsed with the existing EPS-decline reader."""
+    best: tuple[date, dict] | None = None
+    for item in filings or []:
+        if not isinstance(item, dict) or not _is_interim_results(item):
+            continue
+        published = _to_date(item.get("published_at"))
+        if published is None or published > as_of or _interim_stale(published, as_of):
+            continue
+        if best is None or published > best[0]:
+            best = (published, item)
+    if best is None:
+        return None
+    published, item = best
+    path = _resolve_filing_body(sources_dir, item)
+    if path is None:
+        return None
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return None
+    from value_investor.scoring.fcf import parse_interim_eps_decline_pct
+
+    decline = parse_interim_eps_decline_pct(text)
+    if decline is None:
+        return None
+    headline = str(item.get("headline") or "")
+    period_end = _period_end_near(f"{headline}\n{text[:8000]}", published)
+    filing_id = str(item.get("id") or "unknown")
+    return {
+        "decline_pct": decline,
+        "published_at": published.isoformat(),
+        "period_end": _iso(period_end),
+        "source": f"filings/{filing_id}",
+    }
+
+
+def _load_sources(
+    sources_dir: Path, as_of: date
+) -> tuple[dict | None, list | None, dict | None, dict | None]:
     financials = _read_json(sources_dir / "financials_annual.json")
     index = _read_json(sources_dir / "filings" / "filings_index.json")
     filings = index.get("filings") if isinstance(index, dict) else None
+    filings_list = filings if isinstance(filings, list) else None
+    filing_interim = _read_json(sources_dir / "filing_interim_financials.json")
+    if not isinstance(filing_interim, dict):
+        filing_interim = None
+    else:
+        extracted = _to_date(filing_interim.get("extracted_at"))
+        if extracted is not None and extracted > as_of:
+            filing_interim = None
+    body = _interim_body_from_filings(sources_dir, filings_list, as_of)
     return (
         financials if isinstance(financials, dict) else None,
-        filings if isinstance(filings, list) else None,
+        filings_list,
+        filing_interim,
+        body,
     )
 
 
@@ -603,6 +1053,7 @@ def _empty_summary() -> dict[str, Any]:
         "buy_tier_names": 0,
         "buy_tier_covered": 0,
         "names_with_interim_eps": 0,
+        "names_with_interim_revenue": 0,
         "latest_fiscal_year_counts": {},
     }
 
@@ -633,8 +1084,15 @@ def refresh_operating_decline_gate(
         if not ticker or ticker in names:
             return
         scored_row = {} if sanitize else row
-        financials, filings = _load_sources(sources_dir)
-        result = assess_operating_decline(scored_row, financials, filings, as_of=as_of_date)
+        financials, filings, filing_interim, interim_body = _load_sources(sources_dir, as_of_date)
+        result = assess_operating_decline(
+            scored_row,
+            financials,
+            filings,
+            as_of=as_of_date,
+            filing_interim=filing_interim,
+            interim_body=interim_body,
+        )
         names[ticker] = {
             "market": market,
             "sector": str(row.get("sector") or "") or None,
@@ -661,6 +1119,8 @@ def refresh_operating_decline_gate(
         summary[entry["verdict"]] += 1
         if entry["checks"]["eps_interim"]["evaluable"]:
             summary["names_with_interim_eps"] += 1
+        if entry["checks"]["interim_revenue"]["evaluable"]:
+            summary["names_with_interim_revenue"] += 1
         revenue_year = entry["checks"]["revenue"].get("latest_year")
         if revenue_year is not None:
             counts = summary["latest_fiscal_year_counts"]
@@ -736,6 +1196,7 @@ def ops_findings_from_operating_decline_gate(payload: dict[str, Any]) -> list[di
                 f"FTSE buy-tier covered {covered}/{buy_names}, "
                 f"flagged declining {len(flagged)}; "
                 f"interim EPS on {summary.get('names_with_interim_eps', 0)} names, "
+                f"interim revenue on {summary.get('names_with_interim_revenue', 0)} names, "
                 f"latest revenue FY {_fy_counts_text(summary)}"
                 + (f": {flagged_text}{more}" if flagged else "")
                 + ". Observe-only — influences_live false; no book, knob or signal writes."
@@ -784,6 +1245,8 @@ def format_operating_decline_text(payload: dict[str, Any], *, ticker: str | None
         f"declining {summary.get('declining')}, "
         f"insufficient_data {summary.get('insufficient_data')}",
         f"  FTSE buy-tier covered {summary.get('buy_tier_covered')}/{summary.get('buy_tier_names')}",
+        f"  interim comparisons: revenue {summary.get('names_with_interim_revenue', 0)}, "
+        f"EPS {summary.get('names_with_interim_eps', 0)}",
     ]
     for ticker_name, entry in _flagged_buy_tier(payload):
         codes = ", ".join(r["code"] for r in entry.get("reasons") or [])

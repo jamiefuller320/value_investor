@@ -13,7 +13,7 @@ from __future__ import annotations
 import csv
 import logging
 import re
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -308,6 +308,120 @@ def load_catalogue_meta(library_root: Path | None = None) -> dict[str, Any] | No
         return None
     payload = read_json(path)
     return payload if isinstance(payload, dict) else None
+
+
+T212_CATALOGUE_STALE_DAYS = 14
+T212_CATALOGUE_STALE_TITLE = "Trading 212 catalogue stale"
+T212_CATALOGUE_FRESH_TITLE = "Trading 212 catalogue fresh"
+T212_CATALOGUE_REFRESH_WORKFLOW = "t212-catalogue-refresh.yml"
+T212_CATALOGUE_REFRESH_RUNBOOK = "docs/ops/t212-catalogue-refresh.md"
+
+
+def parse_catalogue_fetched_at(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def assess_t212_catalogue_freshness(
+    library_root: Path | None = None,
+    *,
+    now: datetime | None = None,
+    stale_after_days: float = T212_CATALOGUE_STALE_DAYS,
+) -> dict[str, Any]:
+    """Return catalogue age + fresh/stale/missing status for ops-monitor."""
+    now = now or datetime.now(UTC)
+    meta = load_catalogue_meta(library_root)
+    if meta is None:
+        return {
+            "status": "missing",
+            "fetched_at": None,
+            "age_days": None,
+            "stale_after_days": float(stale_after_days),
+            "instrument_count": None,
+            "env": None,
+        }
+    fetched_at = parse_catalogue_fetched_at(str(meta.get("fetched_at") or ""))
+    if fetched_at is None:
+        return {
+            "status": "missing",
+            "fetched_at": meta.get("fetched_at"),
+            "age_days": None,
+            "stale_after_days": float(stale_after_days),
+            "instrument_count": meta.get("instrument_count"),
+            "env": meta.get("env"),
+        }
+    if fetched_at.tzinfo is None:
+        fetched_at = fetched_at.replace(tzinfo=UTC)
+    age = now - fetched_at
+    age_days = age.total_seconds() / 86400.0
+    status = "fresh" if age <= timedelta(days=stale_after_days) else "stale"
+    return {
+        "status": status,
+        "fetched_at": fetched_at.isoformat(),
+        "age_days": round(age_days, 2),
+        "stale_after_days": float(stale_after_days),
+        "instrument_count": meta.get("instrument_count"),
+        "env": meta.get("env"),
+    }
+
+
+def ops_findings_from_t212_catalogue_freshness(assessment: dict[str, Any]) -> list[dict[str, Any]]:
+    status = str(assessment.get("status") or "missing")
+    stale_after = float(assessment.get("stale_after_days") or T212_CATALOGUE_STALE_DAYS)
+    workflow = T212_CATALOGUE_REFRESH_WORKFLOW
+    runbook = T212_CATALOGUE_REFRESH_RUNBOOK
+    if status == "fresh":
+        age = assessment.get("age_days")
+        fetched = assessment.get("fetched_at")
+        return [
+            {
+                "severity": "info",
+                "category": "research",
+                "title": T212_CATALOGUE_FRESH_TITLE,
+                "summary": (
+                    f"Catalogue age {age} days (fetched {fetched}; limit {stale_after:g}d). "
+                    f"Weekly refresh via {workflow}. See {runbook}."
+                ),
+                "auto_fixable": False,
+            }
+        ]
+    if status == "missing":
+        return [
+            {
+                "severity": "warn",
+                "category": "research",
+                "title": T212_CATALOGUE_STALE_TITLE,
+                "summary": (
+                    "Committed catalogue meta is missing or unreadable — the weekly refresh "
+                    f"has never succeeded in git. Add repo secrets TRADING212_API_KEY and "
+                    f"TRADING212_API_SECRET (TRADING212_ENV=live), then workflow_dispatch "
+                    f"{workflow} or wait for Monday 05:00 UTC. Read-only metadata endpoints "
+                    f"only. See {runbook}."
+                ),
+                "auto_fixable": False,
+            }
+        ]
+    age = assessment.get("age_days")
+    fetched = assessment.get("fetched_at")
+    return [
+        {
+            "severity": "warn",
+            "category": "research",
+            "title": T212_CATALOGUE_STALE_TITLE,
+            "summary": (
+                f"Catalogue age {age} days (fetched {fetched}; limit {stale_after:g}d). "
+                f"Run {workflow} (Monday 05:00 UTC when secrets are present) or "
+                "ftse-library t212-catalogue && t212-overlay locally. "
+                f"If the workflow soft-skips, add TRADING212_API_KEY / TRADING212_API_SECRET. "
+                f"See {runbook}."
+            ),
+            "auto_fixable": False,
+        }
+    ]
 
 
 def _pick_instrument(
