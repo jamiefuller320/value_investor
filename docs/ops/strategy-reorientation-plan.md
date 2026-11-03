@@ -48,7 +48,9 @@ it is done. Phase gates are owner decisions, listed in the
 | 1.2 | **Sector headwind gate v0.** Per-sector verdict (`sound` / `headwind` / `insufficient_data`) from sector-wide price breadth and trend (daily charts) and breadth of operating decline among sector members. Judged on the sector as a whole. | N251 | Daily store refreshes; verdict on every sector holding a buy-tier name |
 | 1.3 | **As-of-only research instruction.** Research prompts tell the agent to use only the supplied files as of the memo date. | L663 | Prompt text and test merged |
 | 1.4 | **Scheduled Trading 212 catalogue refresh** plus a staleness finding. | L665 | Weekly workflow runs green with owner-added secrets; overlay refreshed |
-| 1.5 | **Interim results ingestion** for buy-tier names, so the decline gate sees half-year / quarterly revenue and EPS, not only annual statements. Only 3 of 248 FTSE screen rows carry interim EPS today. | N250 | Interim revenue and EPS on most FTSE buy-tier names; gate uses them |
+| 1.5 | **Interim results in the decline gate**: diagnose interim coverage and read existing interim sources directly (live screen fields unchanged). Only 3 of 248 FTSE screen rows carry interim EPS today. | N250 | Diagnosis committed; gate scores year-on-year interim revenue and EPS where sources allow |
+| 1.6 | **Keep prior-year quarters** in the Yahoo quarterly series so year-on-year interim comparisons work (8 buy-tier names already have a short series) | N252 | Interim revenue on those 8 buy-tier names |
+| 1.7 | **Extract half-year revenue and EPS** from the 48 buy-tier half-year results bodies, after fixing filing body path resolution | N253 | Interim revenue and EPS on most FTSE buy-tier names |
 
 **Phase 1 gate (owner):** review the gate verdicts on a sample of 10 FTSE
 buy-tier names (5 flagged, 5 clear) against the cited evidence. Accept,
@@ -165,6 +167,7 @@ merge clashes manageable.
 | 1.2 | In review (one change round: decline-gate verdicts are the single definition of "declining"; screen fields are a material-threshold fallback). Stacked on 1.1 | `cursor/sector-headwind-gate-567c` | GPT-5.6 |
 | 1.3 | In review (single choke point; no prompt version or rememo trigger affected) | `cursor/research-as-of-guard-567c` | Composer 2.5 |
 | 1.4 | In review; runs once the owner adds `TRADING212_API_KEY` / `TRADING212_API_SECRET`. Committed catalogue is from 2026-07-22 | `cursor/t212-catalogue-refresh-567c` | Composer 2.5 |
-| 0.3 | Delegated | `cursor/codename-glossary-567c` | Composer 2.5 |
-| 1.5 | Delegated (diagnose interim coverage; gate reads existing interim sources, live screen fields unchanged). Stacked on 1.1 | `cursor/decline-gate-interim-567c` | Grok 4.7 |
+| 0.3 | In review (supervisor corrected two rows) | `cursor/codename-glossary-567c` | Composer 2.5 |
+| 1.5 | In review. Buy-tier interim coverage did not move (2 of 65): Yahoo series lack the prior-year quarter and half-year bodies are not extracted, hence 1.6 and 1.7. Stacked on 1.1 | `cursor/decline-gate-interim-567c` | Grok 4.7 |
+| 1.6, 1.7 | Next | — | Grok 4.7 |
 | Phase 1 gate | Waiting on 1.1–1.2 merge and a week of daily refreshes | — | Owner |

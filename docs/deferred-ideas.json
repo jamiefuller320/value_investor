@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-03T16:45:01+00:00",
+  "updated_at": "2026-11-03T18:06:21+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16404,6 +16404,42 @@
       "status": "open",
       "source": "Owner strategy clarification 2026-11-03 (cloud agent)",
       "added_at": "2026-11-03T16:45:01+00:00"
+    },
+    {
+      "id": "N252",
+      "category": "not_now",
+      "section": "research",
+      "title": "Persist prior-year quarterly income for interim YoY",
+      "summary": "Yahoo quarterly_income on the FTSE screen holds only 3-4 recent periods, so the operating-decline gate cannot compare the latest interim with the same period a year earlier for the 8 buy-tier names that already have a usable series (IAG, BGEO, GSK, ATYM, SHEL, NWG, BARC, BP). Keeping the prior-year quarter would add interim revenue for those 8 and interim EPS for 6.",
+      "revisit_when": "Strategy plan step 1.5 follow-up: next Data package after the operating-decline gate merges, if buy-tier interim revenue coverage is still 0.",
+      "tags": [
+        "interim",
+        "operating-decline",
+        "ingest",
+        "yahoo",
+        "strategy-plan"
+      ],
+      "status": "open",
+      "source": "strategy reorientation plan step 1.5 (Grok diagnosis)",
+      "added_at": "2026-11-03T18:06:21+00:00"
+    },
+    {
+      "id": "N253",
+      "category": "not_now",
+      "section": "research",
+      "title": "Structured half-year revenue and EPS extract",
+      "summary": "48 FTSE buy-tier names have a dated half-year results body, but filing_interim_financials.json highlights are empty, partly because filings index body_path points at output/research while bodies sit at filings/bodies/<basename> (ITV's EPS pair is missed). Fix body path resolution, then extract current-vs-prior-year revenue and EPS levels from those bodies.",
+      "revisit_when": "Strategy plan step 1.5 follow-up: after quarterly history retention, if half-year bodies remain the unused interim source.",
+      "tags": [
+        "interim",
+        "operating-decline",
+        "filings",
+        "ingest",
+        "strategy-plan"
+      ],
+      "status": "open",
+      "source": "strategy reorientation plan step 1.5 (Grok diagnosis)",
+      "added_at": "2026-11-03T18:06:21+00:00"
     }
   ],
   "fragments": [
