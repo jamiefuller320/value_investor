@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-03T16:16:04.814451+00:00",
+  "run_at": "2026-11-03T18:37:47.937871+00:00",
   "market_id": "asx200",
   "targets": [
     "SMR.AX"
@@ -22,7 +22,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-03T16:15:50.837770+00:00",
+    "snapshot_at": "2026-11-03T18:36:30.753379+00:00",
     "market_id": "asx200",
     "buy_tier_count": 31,
     "unmeasured_buy_tier": 0,
@@ -54,7 +54,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-03T16:15:58.322061+00:00",
+    "snapshot_at": "2026-11-03T18:36:36.705745+00:00",
     "market_id": "asx200",
     "buy_tier_count": 31,
     "unmeasured_buy_tier": 0,
@@ -75,15 +75,15 @@
     "indexed_without_body_by_ticker": {
       "SMR.AX": 1
     },
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
-    "effective_indexed_without_body_tickers": [
+    "parked_tickers": [
       "SMR.AX"
     ],
-    "ingest_exhausted": false
+    "parked_count": 1,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -94,10 +94,42 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 2,
+    "from_market": "asx200",
+    "to_market": "euro_stoxx50",
+    "stream_markets_after": [
+      "euro_stoxx50"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "asx200",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "SMR.AX"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "euro_stoxx50",
+      "forced": true,
+      "prior_screen_at": "2026-11-02T06:52:57.469775+00:00",
+      "prior_age_days": 1,
+      "run_at": "2026-11-03T18:37:46.896039+00:00",
+      "shortlist_count": 12,
+      "ticker_count": 50
+    },
+    "at": "2026-11-03T18:36:39.066460+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "asx200",
-    "assessed_at": "2026-11-03T16:15:54.063051+00:00",
+    "assessed_at": "2026-11-03T18:36:33.039522+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -127,9 +159,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 1.0376230299999918,
+  "used_seconds": 1.313101995000011,
   "budget_seconds": 87.5,
-  "leftover_seconds": 86.46237697000001,
+  "leftover_seconds": 86.18689800499999,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -137,11 +169,24 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "asx200",
-    "updated_at": "2026-11-03T16:15:58.327359+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-11-03T18:36:36.710348+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "SMR.AX",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-03T18:36:36.710348+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 9,
+        "filings_with_body": 8,
+        "indexed_without_body": 1,
+        "thin": false,
+        "source_surface": "asx_announcements"
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
@@ -149,55 +194,54 @@
     "leftover_tickers": [
       "SMR.AX"
     ],
-    "unparked_leftover": [
-      "SMR.AX"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/asx200/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "asx200"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "asx200",
+    "ingest_exhausted_markets": [
+      "aex",
+      "aim",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "iseq20",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
-    "compiled_count": 0,
-    "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 59,
-    "candidate_count": 48,
-    "skipped_resolved_tickers": [
-      "CRH",
-      "LMT",
-      "TPT.L",
-      "DFS.L",
-      "APTD.L",
-      "ULTP.L",
-      "FOXT.L",
-      "MER.L",
-      "GIB-A.TO",
-      "NTR.TO",
-      "SU.TO",
-      "BAS.DE",
-      "IFX.DE",
-      "PDD",
-      "BAS.DE",
-      "DTE.DE",
-      "DTG.DE",
-      "FRE.DE",
-      "HNR1.DE",
-      "MUV2.DE",
-      "HEN3.DE",
-      "PST.MI",
-      "ACKB.BR",
-      "APAM.AS",
-      "0285.HK",
-      "0857.HK",
-      "0288.HK",
-      "2331.HK",
-      "0883.HK",
-      "EVN.VI",
-      "WIE.VI"
+    "compiled_count": 1,
+    "task_ids": [
+      "eng-20261103-09"
     ],
-    "wait_behind_task_id": ""
+    "task_count": 245,
+    "market_id": "asx200",
+    "hunter_ticker": "SMR.AX",
+    "hunter_tickers": [
+      "SMR.AX"
+    ],
+    "priority_score": 12.0,
+    "wait_behind_task_id": "",
+    "leftover_key_bodies": false
   }
 }
