@@ -1,4 +1,4 @@
-"""CLI to append and render parked / later ideas."""
+"""CLI to append and render queued / later ideas (behind P1/P2)."""
 
 from __future__ import annotations
 
@@ -32,19 +32,30 @@ def _parse_trigger(raw: str) -> dict | None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Manage parked/later ideas for periodic review (docs/deferred-ideas.json)"
+        description=(
+            "Manage queued/later ideas for periodic review (docs/deferred-ideas.json). "
+            "Open rows are queued behind P1/P2 — not dropped. "
+            "Use status drop only for rejected / indefinite no."
+        )
     )
     parser.add_argument("--store", type=Path, default=DEFAULT_STORE)
     parser.add_argument("--markdown", type=Path, default=DEFAULT_MARKDOWN)
     sub = parser.add_subparsers(dest="command", required=True)
 
-    add_p = sub.add_parser("add", help="Append a parked idea and refresh markdown")
+    add_p = sub.add_parser(
+        "add",
+        help="Append a queued idea (behind P1/P2) and refresh markdown",
+    )
     add_p.add_argument("--title", required=True)
     add_p.add_argument("--summary", required=True)
     add_p.add_argument(
         "--category",
         choices=["not_now", "later", "security", "both"],
         default="later",
+        help=(
+            "not_now=wanted but do not start yet; later=future enhancement; "
+            "security=hygiene follow-up; both→stored as later"
+        ),
     )
     add_p.add_argument("--revisit-when", default="")
     add_p.add_argument(
@@ -73,7 +84,13 @@ def main(argv: list[str] | None = None) -> int:
         help="List open fragments instead of deferred ideas",
     )
 
-    status_p = sub.add_parser("status", help="Set idea status (open|done|drop|now)")
+    status_p = sub.add_parser(
+        "status",
+        help=(
+            "Set idea status: open (queued), now (do it), done (shipped), "
+            "drop (rejected / indefinite no)"
+        ),
+    )
     status_p.add_argument("idea_id")
     status_p.add_argument("status", choices=["open", "done", "drop", "now"])
     status_p.add_argument("--note", default="", help="Why (stored as status_note)")

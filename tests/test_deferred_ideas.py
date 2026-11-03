@@ -48,7 +48,7 @@ def test_render_includes_not_now_and_security(tmp_path: Path):
         store_path=store,
     )
     text = render_markdown(store_path=store)
-    assert "Not relevant now" in text
+    assert "Queued behind P1/P2" in text
     assert "Widen universe first" in text
     assert "Rotate API key" in text
 

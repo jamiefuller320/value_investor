@@ -1,8 +1,8 @@
-# Parked & later ideas — periodic review
+# Queued & later ideas — periodic review
 
 Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-03T07:53:16+00:00`).
 
-Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
+Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
 **How to use:** Review quarterly (or after ~8–12 weekly archives). Move items to done/drop/now via `ftse-defer status`. _(machine-checked)_ ideas carry a structured trigger that ops-monitor evaluates daily (`ftse-defer triggers`).
 
@@ -69,7 +69,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 
 ---
 
-## Not relevant now (do not start yet)
+## Queued behind P1/P2 (do not start yet)
 
 | # | Idea | Summary | Revisit when |
 |---|------|---------|--------------|

@@ -1,4 +1,4 @@
-"""Append-only store for parked / later ideas (periodic review)."""
+"""Append-only store for queued / later ideas (periodic review behind P1/P2)."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ DEFAULT_STORE = Path("docs/deferred-ideas.json")
 DEFAULT_MARKDOWN = Path("docs/deferred-review.md")
 
 SECTION_LABELS = {
-    "not_now": "Not relevant now (do not start yet)",
+    "not_now": "Queued behind P1/P2 (do not start yet)",
     "learning": "Learning & simulation",
     "universe": "Universe & data",
     "research": "Research & portfolio product",
@@ -268,13 +268,16 @@ def render_markdown(
     updated = store.get("updated_at") or _utcnow()
 
     lines: list[str] = [
-        "# Parked & later ideas — periodic review",
+        "# Queued & later ideas — periodic review",
         "",
         f"Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) "
         f"(updated `{updated}`).",
         "",
-        "Agents append parked ideas with `ftse-defer add …` and scratch fragments with "
-        "`ftse-defer fragment …` (see `AGENTS.md`). "
+        "Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` "
+        "(behind P1 → P2 → higher-priority work) and scratch fragments with "
+        "`ftse-defer fragment …` (see `AGENTS.md` and "
+        "[`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). "
+        "`drop` is for rejected / indefinite no only — not capacity wait. "
         "Do not hand-edit this markdown; edit the JSON store or use the CLI, then "
         "`ftse-defer render`.",
         "",
