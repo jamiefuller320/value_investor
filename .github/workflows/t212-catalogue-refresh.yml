@@ -1,0 +1,72 @@
+name: Trading 212 catalogue refresh
+
+# Weekly refresh of the Trading 212 instrument catalogue and library overlays (L665).
+# Read-only equity metadata endpoints only — never order placement.
+# See docs/ops/t212-catalogue-refresh.md
+on:
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ftse-t212-catalogue-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: bash scripts/gha_pip_install.sh -e .
+
+      - name: Check Trading 212 secrets
+        id: secrets
+        env:
+          TRADING212_API_KEY: ${{ secrets.TRADING212_API_KEY }}
+          TRADING212_API_SECRET: ${{ secrets.TRADING212_API_SECRET }}
+        run: |
+          set -euo pipefail
+          if [ -z "${TRADING212_API_KEY:-}" ] || [ -z "${TRADING212_API_SECRET:-}" ]; then
+            echo "Soft-skip: TRADING212_API_KEY or TRADING212_API_SECRET missing — catalogue not refreshed"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Fetch catalogue and rebuild overlays
+        if: steps.secrets.outputs.ready == 'true'
+        env:
+          TRADING212_API_KEY: ${{ secrets.TRADING212_API_KEY }}
+          TRADING212_API_SECRET: ${{ secrets.TRADING212_API_SECRET }}
+          TRADING212_ENV: live
+        run: |
+          set -euo pipefail
+          ftse-library t212-catalogue --env live --root docs/data/library
+          ftse-library t212-overlay --root docs/data/library
+
+      - name: Sync main before commit
+        if: steps.secrets.outputs.ready == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin main
+
+      - name: Commit catalogue and overlay updates
+        if: steps.secrets.outputs.ready == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: refresh Trading 212 catalogue and overlays [skip ci]"
+          file_pattern: |
+            docs/data/library/t212_coverage/catalogue/**
+            docs/data/library/t212_coverage/by_market/**
+            docs/data/library/t212_coverage/summary.json
+          skip_fetch: false
