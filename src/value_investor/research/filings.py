@@ -1189,6 +1189,11 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "RNS for Bridgepoint Group (UK BPT epic collision); beachenergy.com.au IR "
         "paths 404 and Beach Energy FY26 Markit/ASX statutory PDFs are already bodied."
     ),
+    "SMR.AX": (
+        "asx200 leftover IWB: single indexed-without-body row is Appendix 3A.1 dividend/"
+        "distribution Markit PDF; bodies via asx_direct residual refetch (no IR allowlist "
+        "needed); FY2026 Appendix 4D/H1 and other Markit statutory filings already bodied."
+    ),
     "CCEP": (
         "nasdaq100 leftover IWB: indexed-without-body rows are duplicate investegate_direct "
         "URLs for LSE rns-pdf buyback/PDMR RNS already bodied on the paired row; "

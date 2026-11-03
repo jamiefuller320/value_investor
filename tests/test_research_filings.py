@@ -15389,6 +15389,27 @@ def test_parked_source_hunter_skip_bpt_ax_asx200():
     assert fetch_filings_ir_allowlist("BPT.AX") == []
 
 
+def test_parked_source_hunter_skip_smr_ax_asx200():
+    """eng-20261103-09: SMR.AX leftover IWB is dividend notice; statutory packs already bodied."""
+    assert "SMR.AX" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["SMR.AX"]
+    assert "dividend" in reason.lower() or "Appendix 3A" in reason
+    assert "Appendix 4D" in reason or "statutory" in reason
+    assert "asx_direct" in reason
+    assert fetch_filings_ir_allowlist("SMR.AX") == []
+
+
+def test_smr_ax_iwb_dividend_markit_pdf_live_fetch():
+    """eng-20261103-09: leftover Markit documentKey fetches without IR allowlist."""
+    url = "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03157281-2A1707957"
+    body = fetch_filing_body(url)
+    if not body:
+        pytest.skip("Markit body fetch unavailable — retry later")
+    assert len(body) > 500
+    assert "STANMORE" in body.upper()
+    assert "dividend" in body.lower() or "Appendix 3A" in body
+
+
 def test_parked_source_hunter_bpt_ax_asx200_leftover_is_bridgepoint_rns(monkeypatch):
     """eng-20260916-06: sample leftover Investegate row is Bridgepoint buyback RNS, not Beach Energy.
 
