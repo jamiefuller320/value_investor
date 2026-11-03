@@ -379,6 +379,16 @@ jobs:
       - name: Compile next parked leftover source-hunter
         run: ftse-library parked-hunter-compile --json
 
+      # Flip-lag no_key_bodies (memo already present) — same hunter path, explicit
+      # flag. allow-behind-open so factory key-body leftovers queue while a parked
+      # IWB hunter is pr_open; clash-aware dispatch still serializes filings.py.
+      # docs/ops/library-ingest-escalation.md
+      - name: Compile flip-lag no_key_bodies leftover hunters
+        run: >
+          ftse-library parked-hunter-compile
+          --leftover-key-bodies --allow-behind-open --max-hunters 9 --json
+          || true
+
       # Re-heal merge-sync after drain/compile may have mutated the ledger, and
       # catch PRs that merged while this job was already running.
       - name: Re-heal merge-sync before dispatch

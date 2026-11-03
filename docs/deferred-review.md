@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-02T11:39:37+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-03T07:53:16+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -698,6 +698,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L612 | **Refresh cold-store Ops badge from the live fat-slot bit** | The Automation Ops cold-store card copies the last pack_run gate. After head_needs_fat_slot goes false, that card can keep saying suspend until the next 22:00 pack even though archive_lane_gate would allow. Do not treat the card as the live stop, and do not let the archive run while the bit is true. | head_needs_fat_slot is false and the Ops cold-store card still shows gate suspend with focus_fat_slot_sprint_active from an older pack_run |
 | L614 | **Publish FTSE pound caps observe-only after 1104** | PR 1104 adds compute_ftse350_pound_caps and 150 sourced share counts so 250 of 350 caps are computable. The function is not called by the screen, memos, paper fund, or N200–N210. After it is on main, publish the caps as an observe-only ops finding. Leave historical paper NAV and observe episode marks as they were. | When pull request 1104 is merged to main. |
 | L635 | **Weight-aware pytest sharding for research_filings** | Round-robin by sorted file path moves the huge test_research_filings module (and its live_network tests) between CI shards whenever an earlier test file is added. PR/push CI now skips live_network; consider sharding by collected test count or isolating research_filings so one matrix job cannot absorb disproportionate runtime. | A CI shard without live_network still regularly exceeds ~15 minutes, or nightly live_network shard timeouts become frequent |
+| L660 | **Tag ESEF/statutory IR year-end filings as annual for flip key_bodies** | Factory flip warn no_key_bodies often has bodies already (WIE.VI ESEF, UCB.BR IR statutory PDF) classified as period=other, so annual.with_body stays 0. Revisit period tagging / ESEF year-end → annual so deepen yield clears key_bodies without only hunting new URLs. | After leftover-key-bodies hunter wire merges and euro deepen still leaves memo'd no_key_bodies with ESEF/IR bodies present |
 
 ---
 
