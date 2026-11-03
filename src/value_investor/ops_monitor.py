@@ -3532,7 +3532,12 @@ def check_paper_halt(
     store_path: Path | None = None,
     persist: bool = True,
 ) -> list[OpsFinding]:
-    """Observe-only drawdown and concentration halt. Does not change books."""
+    """Observe-only drawdown and concentration halt. Does not change books.
+
+    Assessment-model frozen tracks stay in ``paper_halt.json`` but are excluded
+    from the ops WARN (history-only books are not actionable heat).
+    """
+    from value_investor.assessment_model import frozen_tracks
     from value_investor.paper_halt import DEFAULT_STORE_PATH, finding_for_halt, refresh_paper_halt
 
     root = Path(paper_root) if paper_root is not None else Path("docs/data/paper_automation")
@@ -3543,7 +3548,7 @@ def check_paper_halt(
         store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
         persist=persist,
     )
-    finding = finding_for_halt(payload)
+    finding = finding_for_halt(payload, exclude_track_ids=set(frozen_tracks(root)))
     if not finding:
         return []
     return [
@@ -3591,7 +3596,10 @@ def check_unsettled_corporate_actions(
     """Warn when a terminal corporate action has no cash amount.
 
     Observe-only. Does not zero the position or rewrite the equity curve.
+    Assessment-model frozen tracks are skipped — unsettled events on history
+    books are not actionable ops heat.
     """
+    from value_investor.assessment_model import frozen_tracks
     from value_investor.corporate_actions import finding_for_funds
     from value_investor.paper_automation import FUND_FILENAME, learning_track_dirs
     from value_investor.paper_fund import PaperFund
@@ -3599,8 +3607,11 @@ def check_unsettled_corporate_actions(
     root = Path(paper_root) if paper_root is not None else Path("docs/data/paper_automation")
     if not root.exists():
         return []
+    frozen = frozen_tracks(root)
     funds: list[tuple[str, PaperFund]] = []
     for track_id, track_dir in learning_track_dirs(root).items():
+        if track_id in frozen:
+            continue
         path = Path(track_dir) / FUND_FILENAME
         if not path.exists():
             continue

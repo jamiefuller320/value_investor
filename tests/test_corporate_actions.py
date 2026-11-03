@@ -1,8 +1,10 @@
 """Paper-ledger settlement of explicit splits, cash bids, and delistings."""
 
+import json
 from datetime import date
 from pathlib import Path
 
+from value_investor.assessment_model import apply_assessment_model
 from value_investor.corporate_actions import (
     FINDING_TITLE,
     apply_corporate_actions,
@@ -146,3 +148,37 @@ def test_settle_reads_the_committed_feed(tmp_path: Path):
     )
     assert result["applied"] == ["bid"]
     assert fund.cash == 1000 - 100 + 110
+
+
+def test_ops_monitor_skips_frozen_tracks_for_unsettled_finding(tmp_path: Path):
+    from value_investor.ops_monitor import check_unsettled_corporate_actions
+    from value_investor.paper_automation import FUND_FILENAME
+
+    paper = tmp_path / "paper_automation"
+    (paper / "buy_tier_level").mkdir(parents=True)
+    (paper / "buy_tier_level_dca").mkdir(parents=True)
+    apply_assessment_model(
+        paper,
+        primary="buy_tier_level",
+        control="buy_tier_level_dca",
+        freeze={"rules": {"reason": "suite A retired", "superseded_by": "buy_tier_level"}},
+        reason="test freeze",
+    )
+    frozen_fund = _fund()
+    apply_corporate_actions(
+        frozen_fund,
+        [
+            {
+                "id": "AAA.L:delist",
+                "ticker": "AAA.L",
+                "type": "delisting",
+                "effective_at": "2026-03-01T08:00:00+00:00",
+            }
+        ],
+        as_of="2026-03-02T08:00:00+00:00",
+    )
+    (paper / FUND_FILENAME).write_text(json.dumps(frozen_fund.to_dict()), encoding="utf-8")
+    (paper / "buy_tier_level" / FUND_FILENAME).write_text(
+        json.dumps(_fund().to_dict()), encoding="utf-8"
+    )
+    assert check_unsettled_corporate_actions(paper_root=paper) == []

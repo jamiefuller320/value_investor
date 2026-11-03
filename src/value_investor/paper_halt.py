@@ -242,8 +242,23 @@ def build_paper_halt(
     }
 
 
-def finding_for_halt(payload: dict[str, Any]) -> dict[str, Any] | None:
-    halted = [row for row in payload.get("tracks") or [] if row.get("would_halt")]
+def finding_for_halt(
+    payload: dict[str, Any],
+    *,
+    exclude_track_ids: set[str] | frozenset[str] | None = None,
+) -> dict[str, Any] | None:
+    """Ops finding for halt breaches on *active* books only.
+
+    ``paper_halt.json`` still records every track (including frozen history).
+    Frozen assessment-model books are excluded from the WARN so Suite A /
+    fair-stop equity curves do not keep the daily monitor lit.
+    """
+    excluded = {str(tid) for tid in (exclude_track_ids or ())}
+    halted = [
+        row
+        for row in payload.get("tracks") or []
+        if row.get("would_halt") and str(row.get("track_id") or "") not in excluded
+    ]
     if not halted:
         return None
     bits = [f"{row['track_id']}: " + "; ".join(row.get("breaches") or []) for row in halted]

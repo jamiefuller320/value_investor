@@ -28,6 +28,11 @@ currency rules.
 
 - **Trigger:** daily ops-monitor `check_paper_halt`.
 - **Store:** `docs/data/paper_halt.json` (optional ops-monitor commit).
-  Marked prices sit beside each fund as `marked_prices.json`.
+  Marked prices sit beside each fund as `marked_prices.json`. The store
+  still lists **every** learning track (including assessment-model frozen
+  history) so drawdown remains inspectable.
 - **Finding:** **Paper book would halt on drawdown or concentration**.
-  `auto_fixable` is false. The summary says the book was not frozen.
+  `auto_fixable` is false. The summary says the book was not frozen or
+  flattened by this check. **Frozen assessment-model tracks are excluded
+  from the WARN** — only active (trading) books light the monitor. An
+  active book that crosses a threshold still warns.

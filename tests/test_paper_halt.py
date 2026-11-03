@@ -1,5 +1,9 @@
 """Observe-only paper halt. The fund is not frozen."""
 
+import json
+from pathlib import Path
+
+from value_investor.assessment_model import apply_assessment_model
 from value_investor.paper_fund import PaperFund, PaperFundConfig
 from value_investor.paper_halt import (
     FINDING_TITLE,
@@ -187,3 +191,93 @@ def test_a_fall_does_not_keep_a_cost_weight_breach():
     halved = evaluate_fund(fund, track_id="rules", prices={"AAA.L": 3})
     assert halved["max_name_weight"] < 0.40
     assert not any("AAA.L" in item for item in halved["breaches"])
+
+
+def _drawdown_fund() -> PaperFund:
+    fund = PaperFund.create(
+        PaperFundConfig(name="Auto", mode="automated", initial_cash=100, trade_cost_pct=0)
+    )
+    fund.buy(
+        ticker="AAA.L",
+        price=10,
+        sizing_mode="shares",
+        amount=6,
+        sector="Banks",
+        acted_at="2026-01-01T00:00:00+00:00",
+    )
+    _marked(fund, [100, 70])
+    return fund
+
+
+def test_finding_excludes_frozen_tracks_but_keeps_active_heat():
+    frozen_fund = _drawdown_fund()
+    active_fund = _drawdown_fund()
+    payload = build_paper_halt(
+        [("rules", frozen_fund), ("buy_tier_level", active_fund)],
+        prices_by_track={},
+    )
+    assert finding_for_halt(payload) is not None
+    assert finding_for_halt(payload, exclude_track_ids={"rules"}) is not None
+    finding = finding_for_halt(payload, exclude_track_ids={"rules"})
+    assert finding is not None
+    assert "buy_tier_level" in finding["summary"]
+    assert "rules:" not in finding["summary"]
+    assert finding_for_halt(payload, exclude_track_ids={"rules", "buy_tier_level"}) is None
+
+
+def test_check_paper_halt_skips_assessment_frozen_books(tmp_path: Path):
+    from value_investor.ops_monitor import check_paper_halt
+    from value_investor.paper_automation import FUND_FILENAME
+
+    paper = tmp_path / "paper_automation"
+    (paper / "buy_tier_level").mkdir(parents=True)
+    (paper / "buy_tier_level_dca").mkdir(parents=True)
+    apply_assessment_model(
+        paper,
+        primary="buy_tier_level",
+        control="buy_tier_level_dca",
+        freeze={"rules": {"reason": "suite A retired", "superseded_by": "buy_tier_level"}},
+        reason="test freeze",
+    )
+    (paper / FUND_FILENAME).write_text(json.dumps(_drawdown_fund().to_dict()), encoding="utf-8")
+    (paper / "buy_tier_level" / FUND_FILENAME).write_text(
+        json.dumps(_drawdown_fund().to_dict()), encoding="utf-8"
+    )
+    store = tmp_path / "paper_halt.json"
+    findings = check_paper_halt(paper_root=paper, store_path=store, persist=True)
+    stored = json.loads(store.read_text(encoding="utf-8"))
+    halted_ids = {row["track_id"] for row in stored["tracks"] if row.get("would_halt")}
+    assert "rules" in halted_ids
+    assert "buy_tier_level" in halted_ids
+    assert len(findings) == 1
+    assert findings[0].title == FINDING_TITLE
+    assert "buy_tier_level" in findings[0].summary
+    assert "rules:" not in findings[0].summary
+
+
+def test_check_paper_halt_silent_when_only_frozen_books_breach(tmp_path: Path):
+    from value_investor.ops_monitor import check_paper_halt
+    from value_investor.paper_automation import FUND_FILENAME
+
+    paper = tmp_path / "paper_automation"
+    (paper / "buy_tier_level").mkdir(parents=True)
+    (paper / "buy_tier_level_dca").mkdir(parents=True)
+    apply_assessment_model(
+        paper,
+        primary="buy_tier_level",
+        control="buy_tier_level_dca",
+        freeze={"rules": {"reason": "suite A retired", "superseded_by": "buy_tier_level"}},
+        reason="test freeze",
+    )
+    (paper / FUND_FILENAME).write_text(json.dumps(_drawdown_fund().to_dict()), encoding="utf-8")
+    quiet = PaperFund.create(
+        PaperFundConfig(name="Auto", mode="automated", initial_cash=1000, trade_cost_pct=0)
+    )
+    _marked(quiet, [1000, 1010])
+    (paper / "buy_tier_level" / FUND_FILENAME).write_text(
+        json.dumps(quiet.to_dict()), encoding="utf-8"
+    )
+    findings = check_paper_halt(
+        paper_root=paper, store_path=tmp_path / "paper_halt.json", persist=True
+    )
+    assert findings == []
