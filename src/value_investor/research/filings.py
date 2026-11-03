@@ -848,6 +848,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03123284-6A1339357",
         "https://announcements.asx.com.au/asxpdf/20251007/pdf/06q63y7tn13n1k.pdf",
     ],
+    # asx200 buy-tier leftover — eng-20261103-05: NEM.AX no_key_bodies; Markit latest-five feed
+    # rolled off FY2025 Form 10-K while 10-Q interim rows bodied; SEC primary HTML fetchable.
+    "NEM.AX": [
+        "https://www.sec.gov/Archives/edgar/data/1164727/000116472726000010/nem-20251231.htm",
+    ],
+    "NEM": [
+        "https://www.sec.gov/Archives/edgar/data/1164727/000116472726000010/nem-20251231.htm",
+    ],
     # tsx60 buy-tier deepen — unmeasured GIB-A.TO (class-share news query + no GIB-A SEC ticker).
     "GIB-A.TO": [
         "https://www.sec.gov/Archives/edgar/data/1061574/000119312525322911/d88305d40f.htm",
@@ -1320,6 +1328,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     # asx200 FMG.AX Markit/ASX allowlist PDFs — opaque documentKey URLs need issuer tokens
     # for _ir_body_title_tokens_match (same pattern as YAL.AX).
     "FMG": ("Fortescue", "Fortescue Ltd"),
+    # asx200 NEM.AX SEC allowlist — nem-* slugs need issuer tokens for IR title gate.
+    "NEM": ("Newmont", "Newmont Corporation"),
     # sti J36.SI SGX allowlist — opaque 877984_JMH.pdf / 853959_JMH.pdf slugs need issuer
     # tokens for _ir_body_title_tokens_match (same pattern as FMG.AX / YAL.AX).
     "J36": ("Jardine Matheson", "Jardine Matheson Holdings"),
