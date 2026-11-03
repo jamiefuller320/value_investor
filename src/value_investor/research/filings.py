@@ -904,6 +904,18 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://saputo.canto.com/direct/document/ktttikfhit00nc426o68h5354i/K7mjvYr4GAkEi4jVcOcEEemI6j0/original?content-type=application%2Fpdf&name=SAP_Annual+Report+2026+ENG.pdf",
         "https://saputo.canto.com/direct/document/revps0nld92avdoqvc7mvpsk7q/Y1MhSkfuMcu9ntY_BvUj7lnKJXc/original?content-type=application%2Fpdf&name=Q4_2026_MD%26A_EN.pdf",
     ],
+    # tsx60 buy-tier leftover — eng-20261103-04: TECK-B.TO no_key_bodies; Teck Resources SEC
+    # FY2025 40-F AIF/MD&A exhibits + Q2 2026 interim results 6-K EX-99.1 (live-fetchable HTML).
+    "TECK-B.TO": [
+        "https://www.sec.gov/Archives/edgar/data/886986/000088698626000004/teck-20251231xexx991aif.htm",
+        "https://www.sec.gov/Archives/edgar/data/886986/000088698626000004/teck-20251231xexx993mda.htm",
+        "https://www.sec.gov/Archives/edgar/data/886986/000095014226002318/eh260819956_ex9901.htm",
+    ],
+    "TECK-B": [
+        "https://www.sec.gov/Archives/edgar/data/886986/000088698626000004/teck-20251231xexx991aif.htm",
+        "https://www.sec.gov/Archives/edgar/data/886986/000088698626000004/teck-20251231xexx993mda.htm",
+        "https://www.sec.gov/Archives/edgar/data/886986/000095014226002318/eh260819956_ex9901.htm",
+    ],
     # hang_seng buy-tier deepen — eng-20260930-03: asia_filings Google News miss / zero-body;
     # seed HKEX statutory PDFs and issuer IR mirrors for stalled buy-tier names.
     "1099.HK": [
@@ -5976,6 +5988,9 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.glanbia.com/sites/glanbia-plc/files/glanbia/investors/results-presentations/2026/Glanbia-HY26-Results.pdf": "interim",
     # eng-20261103-03: SAP.TO — Q4_2026 MD&A Canto slug has no q1/q2/q3 interim token.
     "https://saputo.canto.com/direct/document/revps0nld92avdoqvc7mvpsk7q/Y1MhSkfuMcu9ntY_BvUj7lnKJXc/original?content-type=application%2Fpdf&name=Q4_2026_MD%26A_EN.pdf": "interim",
+    # eng-20261103-04: TECK-B.TO — FY2025 MD&A + Q2 2026 6-K EX-99.1 slugs lack annual/interim tokens.
+    "https://www.sec.gov/Archives/edgar/data/886986/000088698626000004/teck-20251231xexx993mda.htm": "annual",
+    "https://www.sec.gov/Archives/edgar/data/886986/000095014226002318/eh260819956_ex9901.htm": "interim",
 }
 
 

@@ -14415,6 +14415,37 @@ def test_parked_source_hunter_sap_to_tsx60_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_tsx60_teck_b_to_builtins(tmp_path: Path):
+    """Regression: TECK-B.TO leftover — SEC FY2025 AIF/MD&A + Q2 2026 interim EX-99.1 HTML."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("TECK-B.TO", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("xexx991aif.htm" in url for url in urls)
+    assert any("xexx993mda.htm" in url for url in urls)
+    assert any("eh260819956_ex9901.htm" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") >= 2
+    assert sum(1 for row in rows if row["period"] == "interim") >= 1
+    assert len(fetch_filings_ir_allowlist("TECK-B", path=allowlist_path)) == 3
+
+
+def test_parked_source_hunter_teck_b_to_tsx60_has_fetchable_ir():
+    """eng-20261103-04: TECK-B.TO has live-fetchable SEC 40-F / 6-K statutory HTML."""
+    assert "TECK-B.TO" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("TECK-B.TO")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("sec.gov" in url for url in urls)
+    aif_url = next(url for url in urls if "xexx991aif.htm" in url)
+    body = _live_fetch_filing_body(aif_url)
+    if not body:
+        pytest.skip("SEC.gov body fetch unavailable (rate-limit / network) — retry later")
+    assert len(body) >= 50000
+
+
 def test_parked_source_hunter_skip_tri_to_tsx60():
     """eng-20260914-01: TRI.TO leftover IWB is SEC 6-K cover HTML, not missing 40-F/interim."""
     assert "TRI.TO" in PARKED_SOURCE_HUNTER_SKIP
