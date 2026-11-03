@@ -5,6 +5,8 @@
 Ultimate goal: a **self-improving automated global value portfolio**.  
 Interim goal: **high-quality prompts / decision packs** for manual verification and trade actions.
 
+**Investment strategy (owner, 2026-11-03):** buy stocks that are cheap on fundamentals, with no sign of declining operating performance and no sector-wide trouble, at short-term lows; sell at short-term highs; hold mis-timed entries for recovery until the thesis breaks. Rules: [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md#investment-strategy-owner-2026-11-03). Phased plan, delegation rules and supervisor checklist: [`docs/ops/strategy-reorientation-plan.md`](docs/ops/strategy-reorientation-plan.md). New work should name the strategy part it serves.
+
 North-star stages and the “richness before breadth on the live path” rule are in [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md). Pipeline and data-model reference: [`docs/architecture.md`](docs/architecture.md). Keep the live *screener* on FTSE 350 until stage 4; grow other markets via `ftse-library` offline. **Investment capital/decision eligibility** is quality-threshold-driven (**F9-B**): named stocks need filings body, FCF basis, overlay bind, and memo freshness (plus market `sprint_ingest_complete` / `filing_ready` when opening or extending a book) — not FTSE membership. Offline library growth and cascade serialization stay separate from that eligibility gate.
 
 ## Spend priorities (now)
