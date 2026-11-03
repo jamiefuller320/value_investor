@@ -226,6 +226,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "docs/data/n200_tech_timing_registration.json" in text
     assert "docs/data/n201_value_mom_observe.json" in text
     assert "docs/data/n201_value_mom_registration.json" in text
+    assert "docs/data/sector_headwind_gate.json" in text
     assert "docs/data/n206_plain_ey_observe.json" in text
     assert "docs/data/n206_plain_ey_registration.json" in text
     assert "docs/data/n215_technical_veto_observe.json" in text
