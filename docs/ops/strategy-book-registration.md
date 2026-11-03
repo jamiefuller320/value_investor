@@ -53,7 +53,7 @@ v0 is the live FTSE 350 screen only. Chart files for other markets stay out of t
 
 **F9-B, computed the way the inventory does today.** Filing bodies from the filings index meta (`key_bodies`). FCF basis is bound when the screen row's `fcf_basis_overlay` is a boolean. Overlay is bound when a research verdict is present and `adjusted_signal` is set. The memo is recent when its last activity is within 21 days. The forward job computes this at run time from files dated on or before the decision date. The current `decision_input_inventory.json` snapshot is not a history.
 
-`adjusted_signal` is stored on the episode. It does not decide part 1 under the default in section 13. Research `caution` and `neutral` leave the name eligible. A research verdict of `pass` also leaves the name eligible: parts 1–3 do not mention it. The thesis streak in section 5 starts on that run and sells after two confirming runs. The entry is not blocked early.
+`adjusted_signal` is stored on the episode. It does not decide part 1 under the default in section 13. Research `caution` and `neutral` leave the name eligible. A research verdict that `core_sell_reason` treats as failed (`pass`, `sell`, `avoid`, `exit`) makes the name **not eligible**: every fact that is a thesis break in section 5 also blocks entry, so the book never buys a name it would be obliged to sell. (Supervisor review, 2026-11-03.)
 
 **Point in time.** Indicators on session *t* use that ticker's closes up through *t* only. The chart file also holds later closes. The walker slices them off.
 
