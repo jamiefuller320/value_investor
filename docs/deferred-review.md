@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-03T11:27:26+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-03T13:56:16+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -273,6 +273,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | N242 | **Volume-gate-ready finding = thickness only (superseded)** | N200/N201/N206/N210 volume_gate.met (episodes∧weeks) stays as pipeline health; it must not alone raise promotion-design Push. Replaced by alone-path interestingness (fair-cost median > 0 + strand overlays). | Interestingness gate shipped on main; checklist + hub mapper retargeted (owner lock 2026-10-31) |
 | N244 | **Super-book mid-flight raise open-cap to 100** | Advise against enlarging cue_consumer_mft MAX_OPEN_POSITIONS from 30 to 100 mid-flight as a MoM/learning accelerator. Cap binds lightly (~9% skips) but MoM scores are still stub-null; raise would dilute autopsy attention and mix open-density epochs without unlocking lever reads. | After MoM lever scoring is live (non-null mom_score on cue_consumer_mft_observe) and owner still sees stock-choice starvation from skipped_at_open_cap on successive refreshes |
 | N246 | **Do not raise live exit buffers or wire two-lot from standing replay warns** | Ops standing paper warns (longer holds beat exit buffer; two-lot core_kept beats full exit) are observe-only hypotheses under fair costs. Prefer cold-start twins behind L541/L567 gates. Never mid-flight edit strand-A or matched-30 exit_confirm_screens, and never wire core/tactical two-lot into live buy_tier_level fills from these deltas alone (twins-over-edits, F8). | Owner explicitly locks a matched-30 hold-buffer cold-start (L541) or two-lot cold-start (L567) after thickness gates — still as observe twin, not a live knob edit. _(machine-checked)_ |
+| N247 | **Paper-halt finding exclude frozen tracks** | Daily WARN Paper book would halt is entirely driven by already-frozen Suite A / fair-stop books (rules, ai_judgment*, fair). Active matched-30 / buy_tier books are under threshold. Optionally filter assessment_model frozen_tracks out of finding_for_halt so the warn only fires on live trading books; keep full tracks[] in paper_halt.json for history. | Owner wants quieter ops email/Push, or an active (non-frozen) book first crosses 20% drawdown / concentration |
 
 ---
 

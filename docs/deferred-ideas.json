@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-03T11:27:26+00:00",
+  "updated_at": "2026-11-03T13:56:16+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16225,6 +16225,23 @@
       "source": "https://github.com/jamiefuller320/value_investor/pull/1267 L546 observe twin ship",
       "added_at": "2026-11-03T11:27:18+00:00",
       "updated_at": "2026-11-03T11:27:26+00:00"
+    },
+    {
+      "id": "N247",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Paper-halt finding exclude frozen tracks",
+      "summary": "Daily WARN Paper book would halt is entirely driven by already-frozen Suite A / fair-stop books (rules, ai_judgment*, fair). Active matched-30 / buy_tier books are under threshold. Optionally filter assessment_model frozen_tracks out of finding_for_halt so the warn only fires on live trading books; keep full tracks[] in paper_halt.json for history.",
+      "revisit_when": "Owner wants quieter ops email/Push, or an active (non-frozen) book first crosses 20% drawdown / concentration",
+      "tags": [
+        "paper-halt",
+        "ops-monitor",
+        "anti-noise",
+        "frozen"
+      ],
+      "status": "open",
+      "source": "paper-halt-warn-2026-11-03 triage",
+      "added_at": "2026-11-03T13:56:16+00:00"
     }
   ],
   "fragments": [
