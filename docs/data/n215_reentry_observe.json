@@ -3,7 +3,7 @@
   "registration_id": "n215-reentry-warn-r1-v0",
   "pair_id": "WARN+_R1",
   "deferred_id": "N215",
-  "generated_at": "2026-11-02T07:49:11.433781+00:00",
+  "generated_at": "2026-11-03T02:34:46.520871+00:00",
   "observe_only": true,
   "influences_live": false,
   "thickened": true,
@@ -40,8 +40,8 @@
     "warn_plus_large": 3,
     "warn_plus_deep": 4,
     "warn_plus_positive_fc": 15,
-    "N206_holdout_closed": 244,
-    "N206_holdout_warn_plus": 35
+    "N206_holdout_closed": 245,
+    "N206_holdout_warn_plus": 36
   },
   "rollup": {
     "primary_WARN+_R1": {
@@ -4847,8 +4847,8 @@
     "role": "report_only_holdout",
     "never_tune": true,
     "book": "N206",
-    "closed_n": 244,
-    "warn_plus_gated": 35,
+    "closed_n": 245,
+    "warn_plus_gated": 36,
     "soft_plus_gated": 12,
     "warn_plus_large": 4,
     "warn_plus_deep": 4,
@@ -4856,11 +4856,11 @@
     "rollup": {
       "primary_WARN+_R1": {
         "gate": "WARN+",
-        "gated_n": 35,
+        "gated_n": 36,
         "large_winners_gated": 4,
         "deep_losers_gated": 4,
         "positive_fc_gated": 18,
-        "nonpositive_fc_gated": 17,
+        "nonpositive_fc_gated": 18,
         "large_terminal_n": 4,
         "deep_terminal_n": 4,
         "all_terminal_n": 30,
@@ -4903,7 +4903,7 @@
         "nonpositive_fc_abandon_n": 7,
         "nonpositive_fc_re_admit_n": 8,
         "still_monitor_eop_n": 4,
-        "unevaluable_n": 1,
+        "unevaluable_n": 2,
         "large_winner_detail": [
           {
             "ticker": "PSX",
@@ -5678,6 +5678,19 @@
             "reentry_day": "2026-08-17",
             "alt_path_return": -0.07601657601657608,
             "path_cost_delta": -0.059113576016576075
+          },
+          {
+            "ticker": "0857.HK",
+            "book": "N206",
+            "buy_day": "2026-11-01",
+            "soft_band": "WARN",
+            "fair_cost": -0.000103,
+            "bucket": "other",
+            "label": "unevaluable",
+            "sessions_to_outcome": null,
+            "reentry_day": null,
+            "alt_path_return": null,
+            "path_cost_delta": null
           },
           {
             "ticker": "C5H.IR",
@@ -12336,6 +12349,48 @@
         "evaluable": false,
         "label": "not_in_gate",
         "reason": "soft_band_below_WARN"
+      },
+      {
+        "ticker": "0857.HK",
+        "book": "N206",
+        "buy_ts": "2026-11-01T06:22:53+00:00",
+        "buy_day": "2026-11-01",
+        "exit_run_at": "2026-11-02T06:52:57+00:00",
+        "exit_day": "2026-11-02",
+        "fair_cost": -0.000103,
+        "bucket": "other",
+        "registration_id": "n215-reentry-warn-r1-v0",
+        "pair_id": "WARN+_R1",
+        "influences_live": false,
+        "observe_only": true,
+        "soft_band": "WARN",
+        "risk_score": 0.442985,
+        "soft_fail_closed": false,
+        "soft_coverage": true,
+        "in_warn_plus": true,
+        "in_soft_plus": false,
+        "monitor_eligible": true,
+        "evaluable": false,
+        "label": "unevaluable",
+        "reason": "insufficient_forward_bars",
+        "sessions_to_outcome": null,
+        "reentry_day": null,
+        "abandon_day": null,
+        "pre_t0_swing_high": null,
+        "breakout_level": null,
+        "min_drawdown_from_t0": null,
+        "alt_path_return": null,
+        "path_cost_delta": null,
+        "exit_proxy_day": null,
+        "alt_path_detail": null,
+        "walk": {
+          "evaluable": false,
+          "label": "unevaluable",
+          "reason": "insufficient_forward_bars",
+          "forward_bars": 0,
+          "t0_idx": 492,
+          "t0_day": "2026-10-30"
+        }
       },
       {
         "ticker": "BIDU",

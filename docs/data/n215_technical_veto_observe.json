@@ -3,7 +3,7 @@
   "registration_id": "n215-soft-band-veto-v0",
   "recipe_id": "n215-soft-score-recipe-v0",
   "deferred_id": "N215",
-  "generated_at": "2026-11-02T07:49:11.178277+00:00",
+  "generated_at": "2026-11-03T02:34:46.199621+00:00",
   "observe_only": true,
   "influences_live": false,
   "learning_question": "For each pre-registered soft-veto band threshold on sealed N200 closed episodes (charts \u2264 buy_ts), what is catch rate among deep losers (fair-cost \u2264 \u221210%) vs miss rate among large winners (\u2265 +10%)? Companion: risk_score distribution. Observe labels only \u2014 no live gate.",
@@ -64,8 +64,8 @@
   "cohort": {
     "N200_closed": 112,
     "N200_coverage": 110,
-    "N206_closed": 244,
-    "N206_coverage": 233,
+    "N206_closed": 245,
+    "N206_coverage": 234,
     "N210_closed": 5,
     "deep_losers": 8,
     "large_winners": 7,
@@ -193,8 +193,8 @@
         "live_veto": false
       },
       "N206": {
-        "closed": 244,
-        "coverage": 233,
+        "closed": 245,
+        "coverage": 234,
         "fired": 43,
         "deep_catch": "9/30",
         "deep_n": 9,
@@ -202,10 +202,10 @@
         "large_miss": "2/49",
         "large_n": 2,
         "large_total": 49,
-        "base_fc_median": 0.013508,
-        "alt_fc_median": 0.019456,
-        "base_fc_sum": 7.961535,
-        "alt_fc_sum": 8.638544,
+        "base_fc_median": 0.013284,
+        "alt_fc_median": 0.019375,
+        "base_fc_sum": 7.961432,
+        "alt_fc_sum": 8.638441,
         "delta_fc_sum": 0.677009,
         "live_veto": false,
         "role": "full_cohort_contaminated_report_only",
@@ -233,8 +233,8 @@
         "claim_set": false
       },
       "N206_post_warm": {
-        "closed": 17,
-        "coverage": 17,
+        "closed": 18,
+        "coverage": 18,
         "fired": 2,
         "deep_catch": "0/1",
         "deep_n": 0,
@@ -242,10 +242,10 @@
         "large_miss": "0/2",
         "large_n": 0,
         "large_total": 2,
-        "base_fc_median": 0.019609,
-        "alt_fc_median": 0.019609,
-        "base_fc_sum": 0.336725,
-        "alt_fc_sum": 0.286827,
+        "base_fc_median": 0.0174685,
+        "alt_fc_median": 0.0174685,
+        "base_fc_sum": 0.336622,
+        "alt_fc_sum": 0.286724,
         "delta_fc_sum": -0.049898,
         "live_veto": false,
         "role": "n206_warm_claim_set",
@@ -26937,6 +26937,107 @@
         "death_cross": false,
         "lost_200": false,
         "bars": 488,
+        "lookback_used": 126
+      }
+    },
+    {
+      "ticker": "0857.HK",
+      "book": "N206",
+      "buy_ts": "2026-11-01T06:22:53+00:00",
+      "buy_day": "2026-11-01",
+      "fair_cost": -0.000103,
+      "bucket": "other",
+      "recipe_id": "n215-soft-score-recipe-v0",
+      "influences_live": false,
+      "observe_only": true,
+      "coverage": true,
+      "fail_closed": false,
+      "bars_pre_buy": 493,
+      "risk_score": 0.442985,
+      "band": "WARN",
+      "reasons": [
+        "recipe=n215-soft-score-recipe-v0 risk_score=0.4430 band=WARN",
+        "f_elev_abs=1.000\u00d7w0.15\u21920.150",
+        "f_elev_range=1.000\u00d7w0.10\u21920.100",
+        "f_r20=0.801\u00d7w0.10\u21920.080",
+        "f_near_high=0.541\u00d7w0.12\u21920.065",
+        "f_rsi_level=0.599\u00d7w0.08\u21920.048",
+        "twin_peak elev_abs=-0.04642166344294008 elev_range=-0.1548387096774195",
+        "hard_fires=none"
+      ],
+      "cited_features": {
+        "f_elev_abs": 1.0,
+        "f_elev_range": 1.0,
+        "f_near_high": 0.541446,
+        "f_r20": 0.800552,
+        "f_failed_bo": 0.0,
+        "f_rsi_fail": 0.0,
+        "f_rsi_level": 0.599454,
+        "f_death_cross": 0.0,
+        "f_lost_200": 0.0
+      },
+      "feature_contributions": [
+        {
+          "feature": "f_elev_abs",
+          "value": 1.0,
+          "weight": 0.15,
+          "contribution": 0.15
+        },
+        {
+          "feature": "f_elev_range",
+          "value": 1.0,
+          "weight": 0.1,
+          "contribution": 0.1
+        },
+        {
+          "feature": "f_r20",
+          "value": 0.800552,
+          "weight": 0.1,
+          "contribution": 0.080055
+        },
+        {
+          "feature": "f_near_high",
+          "value": 0.541446,
+          "weight": 0.12,
+          "contribution": 0.064974
+        },
+        {
+          "feature": "f_rsi_level",
+          "value": 0.599454,
+          "weight": 0.08,
+          "contribution": 0.047956
+        }
+      ],
+      "hard_fires": {
+        "I01": false,
+        "I02": false,
+        "I05": false,
+        "I07": false,
+        "I08": false,
+        "I10": false
+      },
+      "mid_range_60": 1.0,
+      "grind_mid60_fire": false,
+      "raw": {
+        "t0": 10.82,
+        "dist_abs": 0.045855379188712485,
+        "r20": 0.12008281573498958,
+        "rsi_t0": 67.98360582265086,
+        "mid_range_60": 1.0,
+        "twin": {
+          "i1": 387,
+          "i2": 481,
+          "peak1": 10.28,
+          "peak2": 10.34,
+          "trough": 8.24,
+          "peak_hi": 10.34,
+          "elev_abs": -0.04642166344294008,
+          "elev_range": -0.1548387096774195
+        },
+        "failed_bo": null,
+        "death_cross": false,
+        "lost_200": false,
+        "bars": 493,
         "lookback_used": 126
       }
     },
