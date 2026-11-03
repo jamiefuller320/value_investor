@@ -11921,6 +11921,35 @@ def test_fetch_filings_ir_allowlist_fmg_ax_asx200_iwb_builtin(tmp_path: Path):
     assert "FMG.AX" not in PARKED_SOURCE_HUNTER_SKIP
 
 
+def test_fetch_filings_ir_allowlist_nem_ax_asx200_builtin(tmp_path: Path):
+    """eng-20261103-05: NEM.AX buy-tier no_key_bodies — seed SEC FY2025 Form 10-K HTML."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("NEM.AX", path=allowlist_path)
+    assert len(rows) == 1
+    assert rows[0]["period"] == "annual"
+    assert "nem-20251231.htm" in rows[0]["url"]
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert "NEM.AX" not in PARKED_SOURCE_HUNTER_SKIP
+    assert len(fetch_filings_ir_allowlist("NEM", path=allowlist_path)) == 1
+
+
+def test_parked_source_hunter_nem_ax_asx200_has_fetchable_ir():
+    """eng-20261103-05: NEM.AX leftover — SEC FY2025 10-K primary HTML in _BUILTIN_IR_URLS."""
+    assert "NEM.AX" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("NEM.AX")
+    assert len(rows) == 1
+    assert rows[0]["period"] == "annual"
+    url = rows[0]["url"]
+    assert "sec.gov" in url
+    body = _live_fetch_filing_body(url)
+    if not body:
+        pytest.skip("SEC.gov body fetch unavailable (rate-limit / network) — retry later")
+    assert len(body) >= 50000
+    assert "newmont" in body.lower()
+
+
 def test_parked_source_hunter_fmg_ax_asx200_has_fetchable_ir():
     """eng-20261009-02: FMG.AX leftover IWB — Markit/ASX PDFs in _BUILTIN_IR_URLS."""
     from value_investor.research.filings import _ESEF_ENTITY_SEARCH_ALIASES
