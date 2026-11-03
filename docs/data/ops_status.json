@@ -1,12 +1,12 @@
 {
-  "run_at": "2026-11-03T02:32:08.687820+00:00",
+  "run_at": "2026-11-03T07:47:09.251906+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "7 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across asx200, euro_depth, tsx60: tsx60/ABX.TO (no_key_bodies, 482.54h since flip), tsx60/SAP.TO (no_key_bodies, 482.54h since flip), tsx60/TECK-B.TO (no_key_bodies, 482.54h since flip), euro_depth/WIE.VI (no_key_bodies, 458.54h since flip), asx200/NEM.AX (no_key_bodies, 218.54h since flip), euro_depth/UCB.BR (no_key_bodies, 218.54h since flip), tsx60/MG.TO (no_key_bodies, 50.54h since flip). Blocking: no_key_bodies=7.",
+      "summary": "7 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across asx200, euro_depth, tsx60: tsx60/ABX.TO (no_key_bodies, 487.88h since flip), tsx60/SAP.TO (no_key_bodies, 487.88h since flip), tsx60/TECK-B.TO (no_key_bodies, 487.88h since flip), euro_depth/WIE.VI (no_key_bodies, 463.88h since flip), asx200/NEM.AX (no_key_bodies, 223.88h since flip), euro_depth/UCB.BR (no_key_bodies, 223.88h since flip), tsx60/MG.TO (no_key_bodies, 55.88h since flip). Blocking: no_key_bodies=7.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -33,7 +33,7 @@
       "severity": "info",
       "category": "research",
       "title": "Post-sale review queue (observe)",
-      "summary": "Active uncommented post-sale reviews: 150; actioned history=138; candidates sealed+control=488. Accept/Comment/Duplicate observe-only (influences_live=false).",
+      "summary": "Active uncommented post-sale reviews: 152; actioned history=138; candidates sealed+control=490. Accept/Comment/Duplicate observe-only (influences_live=false).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -96,7 +96,7 @@
       "severity": "info",
       "category": "research",
       "title": "Entry-blind review queue (observe)",
-      "summary": "Active entry_blind reviews: 12 (new=12, reply=0); actioned history=18; candidates=58. PIT-only; influences_live=false.",
+      "summary": "Active entry_blind reviews: 12 (new=12, reply=0); actioned history=18; candidates=63. PIT-only; influences_live=false.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -105,7 +105,7 @@
       "severity": "info",
       "category": "research",
       "title": "Entry news polarity (observe)",
-      "summary": "Buy-day PIT polarity on entry_blind: 3/12 cards with usable news cites; 9 no_usable_news. Labels={'improvement_path': 2, 'mixed_or_unclear': 1, 'no_usable_news': 9, 'structural_negative': 0}. Observe-only (influences_live=false); not Package L / not strand-A veto. See docs/ops/entry-news-polarity.md.",
+      "summary": "Buy-day PIT polarity on entry_blind: 1/12 cards with usable news cites; 11 no_usable_news. Labels={'improvement_path': 1, 'mixed_or_unclear': 0, 'no_usable_news': 11, 'structural_negative': 0}. Observe-only (influences_live=false); not Package L / not strand-A veto. See docs/ops/entry-news-polarity.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -141,7 +141,7 @@
       "severity": "info",
       "category": "research",
       "title": "N201 value-mom observe refreshed",
-      "summary": "strand-c-short-horizon-value-mom-v0: 151 completed episodes over 15 weeks; entries/week=10.067; smooth_ret_cohort_median=0.035395 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.022086; stress_3pct_report_only=-0.040941; skipped_missing_entry_fields=87774. Observe-only — launch-queue waiter; no live writes (F8).",
+      "summary": "strand-c-short-horizon-value-mom-v0: 151 completed episodes over 15 weeks; entries/week=10.067; smooth_ret_cohort_median=0.035395 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.022086; stress_3pct_report_only=-0.040941; skipped_missing_entry_fields=87969. Observe-only — launch-queue waiter; no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -235,10 +235,39 @@
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "engineering",
+      "title": "Orphaned pr_open engineering tasks",
+      "summary": "Tasks without matching open PR: eng-20261102-02",
+      "auto_fixable": true,
+      "fixed": true,
+      "action_taken": "marked merged from GitHub PR: eng-20261102-02"
+    },
+    {
+      "severity": "warn",
+      "category": "engineering",
+      "title": "Engineering queue merge sync lag",
+      "summary": "1 task(s) still open/pr_open after GitHub merge: eng-20261102-02. Handed to project-traffic PM remediation; email only if repair fails.",
+      "auto_fixable": true,
+      "fixed": true,
+      "action_taken": "marked merged from GitHub PR: eng-20261102-02"
     }
   ],
-  "auto_fixes": [],
-  "drafted_task_ids": [],
+  "auto_fixes": [
+    {
+      "action": "recover_engineering_queue",
+      "detail": "marked merged from GitHub PR: eng-20261102-02"
+    },
+    {
+      "action": "market_eng_gap_burndown",
+      "detail": "gap_closure_compile for sti → eng-20261103-01"
+    }
+  ],
+  "drafted_task_ids": [
+    "eng-20261103-01"
+  ],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
@@ -246,9 +275,9 @@
       "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-11-02T20:15:02+00:00",
-      "last_success_run_id": 41517485525,
-      "age_hours": 6.3,
+      "last_success_at": "2026-11-03T07:26:07+00:00",
+      "last_success_run_id": 41596295848,
+      "age_hours": 0.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -257,11 +286,11 @@
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "past_email_ready": false,
+      "past_email_ready": true,
       "max_age_hours": 28,
       "last_success_at": "2026-11-02T20:50:09+00:00",
       "last_success_run_id": 41522820752,
-      "age_hours": 5.7,
+      "age_hours": 11.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -272,9 +301,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 3,
-      "last_success_at": "2026-11-03T02:15:35+00:00",
-      "last_success_run_id": 41564984738,
-      "age_hours": 0.3,
+      "last_success_at": "2026-11-03T07:46:49+00:00",
+      "last_success_run_id": 41598579874,
+      "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -285,8 +314,8 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-11-03T02:30:57+00:00",
-      "last_success_run_id": 41566592738,
+      "last_success_at": "2026-11-03T07:50:42+00:00",
+      "last_success_run_id": 41599010563,
       "age_hours": 0.1,
       "stale": false,
       "recent_failures_24h": 0,
@@ -298,9 +327,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-02T17:17:09+00:00",
-      "last_success_run_id": 41489699784,
-      "age_hours": 9.3,
+      "last_success_at": "2026-11-03T07:31:17+00:00",
+      "last_success_run_id": 41596854008,
+      "age_hours": 0.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -313,7 +342,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-01T15:19:29+00:00",
       "last_success_run_id": 41320639954,
-      "age_hours": 35.3,
+      "age_hours": 40.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -326,7 +355,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-02T06:52:03+00:00",
       "last_success_run_id": 41402633516,
-      "age_hours": 19.7,
+      "age_hours": 25.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -339,7 +368,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-01T07:31:52+00:00",
       "last_success_run_id": 41285148221,
-      "age_hours": 43.1,
+      "age_hours": 48.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -352,7 +381,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-01T07:31:53+00:00",
       "last_success_run_id": 41285149439,
-      "age_hours": 43.1,
+      "age_hours": 48.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -365,7 +394,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-01T17:59:16+00:00",
       "last_success_run_id": 41334234519,
-      "age_hours": 32.6,
+      "age_hours": 37.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -378,7 +407,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-11-02T13:47:15+00:00",
       "last_success_run_id": 41455990473,
-      "age_hours": 12.8,
+      "age_hours": 18.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -389,9 +418,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-02T22:17:35+00:00",
-      "last_success_run_id": 41535996845,
-      "age_hours": 4.3,
+      "last_success_at": "2026-11-03T02:30:47+00:00",
+      "last_success_run_id": 41566573807,
+      "age_hours": 5.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -399,18 +428,18 @@
   ],
   "queue_status": {
     "open_count": 1,
-    "pr_open_count": 1,
+    "pr_open_count": 0,
     "parked_count": 1,
-    "merged_count": 191,
+    "merged_count": 192,
     "failed_count": 0,
     "next_task_id": "eng-20261102-03",
-    "in_flight_branch": "cursor/eng-20261102-02-1de3",
-    "in_flight_pr": 1256,
+    "in_flight_branch": null,
+    "in_flight_pr": null,
     "spend_since_checkpoint_usd": 10.4,
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": false,
+  "should_dispatch_engineering": true,
   "email_deferred": false,
   "email_defer_reasons": []
 }
