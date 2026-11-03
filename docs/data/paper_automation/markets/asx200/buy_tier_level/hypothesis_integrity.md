@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-02T08:02:30.221038+00:00
+Track: `buy_tier_level` · updated 2026-11-03T00:46:53.648084+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **12** / 28 (43% count, 40% NAV)
+- Losers: **12** / 29 (41% count, 40% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 - Selection feedback:
@@ -120,6 +120,13 @@ Track: `buy_tier_level` · updated 2026-11-02T08:02:30.221038+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 64%
+
+### ANN.AX — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 67%
 
 ### MND.AX — intact / hold_tolerate (+0.3%)
 - still buy
