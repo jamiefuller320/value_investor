@@ -1,28 +1,15 @@
 {
-  "run_at": "2026-11-03T10:36:43.411735+00:00",
+  "run_at": "2026-11-03T10:42:41.724095+00:00",
   "market_id": "cac40",
-  "targets": [
-    "TTE.PA"
-  ],
-  "target_details": [
-    {
-      "ticker": "TTE.PA",
-      "priority_score": 27.3851,
-      "filings_total": 129,
-      "filings_with_body": 126,
-      "indexed_without_body": 2,
-      "reason": "indexed_without_body"
-    }
-  ],
+  "targets": [],
+  "target_details": [],
   "results": [],
   "improved": [],
-  "errors": [
-    "TTE.PA: *** YAHOO! FINANCE IS CURRENTLY DOWN! ***"
-  ],
+  "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-03T10:35:46.985467+00:00",
+    "snapshot_at": "2026-11-03T10:42:40.876105+00:00",
     "market_id": "cac40",
     "buy_tier_count": 14,
     "unmeasured_buy_tier": 0,
@@ -48,13 +35,13 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-03T10:36:43.398648+00:00",
+    "snapshot_at": "2026-11-03T10:42:41.709016+00:00",
     "market_id": "cac40",
     "buy_tier_count": 14,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 2,
+    "indexed_without_body": 0,
     "bodies_min": 7,
     "bodies_median": 11.0,
     "bodies_max": 126,
@@ -63,52 +50,33 @@
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
     "thin_body_tickers": [],
-    "indexed_without_body_tickers": [
-      "TTE.PA"
-    ],
-    "indexed_without_body_by_ticker": {
-      "TTE.PA": 2
-    },
+    "indexed_without_body_tickers": [],
+    "indexed_without_body_by_ticker": {},
     "parked_tickers": [],
     "parked_count": 0,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 2,
-    "effective_indexed_without_body_tickers": [
-      "TTE.PA"
-    ],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
     "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": false,
+  "recorded_gap_closure": true,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 14,
-    "hits": 5,
-    "new_rows_total": 2,
-    "curiosity_total": 6,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
+  "discovery_scan": null,
+  "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "cac40"
+  },
   "critical_path": {
     "market_id": "cac40",
-    "assessed_at": "2026-11-03T10:35:47.676107+00:00",
+    "assessed_at": "2026-11-03T10:42:41.283000+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -129,17 +97,19 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 54.96809447199996,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3545.031905528,
+  "used_seconds": 0.00107404899999608,
+  "budget_seconds": 2100.0,
+  "leftover_seconds": 2099.998925951,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": 320.0,
-  "pin_tickers": [],
+  "per_ticker_max_seconds": null,
+  "pin_tickers": [
+    "TTE.PA"
+  ],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "cac40",
-    "updated_at": "2026-11-03T10:36:43.403534+00:00",
+    "updated_at": "2026-11-03T10:42:41.711488+00:00",
     "exhausted": false,
     "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
@@ -147,19 +117,15 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": true,
-    "leftover_tickers": [
-      "TTE.PA"
-    ],
-    "unparked_leftover": [
-      "TTE.PA"
-    ],
+    "had_complete_targets": false,
+    "leftover_tickers": [],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/cac40/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
     "skipped": true,
-    "reason": "not_exhausted",
+    "reason": "true_parity",
     "market_id": "cac40"
   },
   "parked_hunter_compile": {
