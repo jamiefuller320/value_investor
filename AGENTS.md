@@ -2,6 +2,8 @@
 
 ## Project objective
 
+Codenames and jargon: [`docs/glossary.md`](docs/glossary.md).
+
 Ultimate goal: a **self-improving automated global value portfolio**.  
 Interim goal: **high-quality prompts / decision packs** for manual verification and trade actions.
 

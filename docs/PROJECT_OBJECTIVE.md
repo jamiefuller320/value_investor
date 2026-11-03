@@ -1,5 +1,7 @@
 # Project objective & development path
 
+Codenames and jargon: [`glossary.md`](glossary.md).
+
 ## Ultimate goal
 
 Build a **self-improving automated global value stock portfolio**.
