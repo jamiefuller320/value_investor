@@ -33,9 +33,10 @@ utilization audits, and similar surfaces that produce actionable findings.
 Do not promote an observe instrument into auto-fix / eng spray without an explicit
 lane change and readiness gate (see N152 / P1 pin rules).
 
-### Optional (not ship-blocking — park with `ftse-defer`)
+### Optional (not ship-blocking — queue with `ftse-defer`)
 
 - A dedicated workflow beyond the shared ops-monitor cron.
+  (Wanted-but-not-now = queued behind P1/P2; see [priority-queue-wording.md](priority-queue-wording.md).)
 
 **Shipped above the bar:**
 

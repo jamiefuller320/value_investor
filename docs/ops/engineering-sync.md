@@ -7,6 +7,12 @@ supervised engineering agent.
 open tasks. Intensive clearance uses this queue (Lane B) plus ingest (Lane A) per
 [`post-run-improvement-clearance.md`](post-run-improvement-clearance.md).
 
+**`status=parked` ≠ deferred queue:** Eng `parked` means **attention-blocked**
+(preflight clash, workflow permission, CI-red, reburn, unfixable PR, …) and needs
+triage / unpark or cancel. Wanted-but-not-now product ideas use `ftse-defer` **open**
+rows (queued behind P1/P2) — do not call those “parked.” Keep the eng status key;
+see [`priority-queue-wording.md`](priority-queue-wording.md).
+
 ## Problem this solves
 
 When `engineering-queue.yml` dispatches `engineering-agent.yml` with a concrete

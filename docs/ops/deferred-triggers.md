@@ -1,10 +1,14 @@
 # Deferred-idea trigger check
 
+Open deferred ideas are **queued** behind P1 → P2 → higher-priority work (not dropped).
+See [priority-queue-wording.md](priority-queue-wording.md). Historical “parked until…”
+prose on revisit triggers means the same queue wait — soft migration, no mass rewrite.
+
 Deferred ideas carry a free-text `revisit_when`. Free text cannot fire on its own, so
 until now a met trigger was only noticed when someone happened to re-read the idea.
 Two kinds of drift went unseen:
 
-- **Met triggers.** For example, L558 was parked "until a fair book's epoch cost drag
+- **Met triggers.** For example, L558 was queued "until a fair book's epoch cost drag
   exceeds 1%" when `ai_judgment_fair` was already at 1.8%.
 - **Triggers that can never fire.** These wait on a book that has since frozen
   (`still_in_buy_set`, `ai_judgment`). The 2026-10-06 assessment-model triage closed or

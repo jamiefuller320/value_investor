@@ -9,7 +9,10 @@ North-star stages and the “richness before breadth on the live path” rule ar
 
 ## Spend priorities (now)
 
-Prefer work that serves these two, in order. Anything else should be parked with `ftse-defer`, not started.
+Prefer work that serves these two, in order. Anything else that is still **wanted** goes on the
+deferred **queue** with `ftse-defer` (behind P1 → P2 → higher-priority open work) — not started
+today, and **not** treated as dropped. Use `ftse-defer status … drop` only for rejected /
+indefinite-no items. Vocabulary: [`docs/ops/priority-queue-wording.md`](docs/ops/priority-queue-wording.md).
 
 1. **P1 — Investment-demanded input quality (absolute availability).** Raise filings bodies, FCF basis, overlay bind, and memo recency for names Investment actually uses, in serve order: live holdings → **already-running sealed units** (today: FTSE buy-tier for strand A + N200 `raw_buy_tier`) → accepted F3 repairs on those sets → **launch-queue head** (next newly sealed strategy needing incremental Data) → waiters. Newly sealed strategies enter a **launch queue** so their Data deepen / threshold / shortlist demand does **not starve** holdings or running units; they wait unless explicitly re-prioritized. Green inventory on the active set is success — do not invent rememo/ingest spray. Honour Investment why-not / repair negotiation when capacity allows; Data still owns gap closure and never alone applies knobs or fills (**F8**). Extra FTSE ingest on a green set, new paper tracks, and live universe expansion are factory, not foundation. Quiet cold-store archive (**L499** / **L594**) is option value below the launch-queue head — not a daytime equal sprint.
 2. **P2 — Offline ingest cascade.** Serialize one market at a time to the **maintenance ingest threshold** (`sprint_ingest_complete`: raw parity or leftover thin/IWB parked). Priority slot on that head only while `head_needs_fat_slot` is true — width is min(unfilled names, host budget left, names that fit in the time left) for that kind, capped by the job ceiling, and the unused part of the old fixed cap is not reserved. It is an ingest-head rule, not a boss over replay, sealed observe, or the shadow judge; spare streams front-start the next queue names and **auto-advance** when a spare graduates (today: `tsx60` / `ftse_smallcap`). When the head graduates, shift the priority slot and give the graduated market **equivalent resource** (FTSE-volume maintenance + epoch-0 `buy_tier_level` + equal-support near-miss / counterfactual archives). Admitted now: `sp500`, `asx200`. Do **not** pause spare auto-advance; watch shared runner capacity (job timeouts, source rate limits, L323) as more markets join maintenance. Do **not** fork shard AI-judgment or `decision-review --apply` until those books have marks. Do **not** add a fourth equal sprint stream that can starve the current head. See [`docs/ops/market-sharded-learning.md`](docs/ops/market-sharded-learning.md#what-enter-learning-means).
@@ -26,7 +29,7 @@ changes. Keep this loop:
 2. **Prefer one instrument** — often observe-only — over a stack of live tracks.
 3. **Freeze markers / capital epoch** explicitly (widest window, documented twin,
    readiness gate). Mid-flight silent rewrites of live books are not OK.
-4. **Park the rest** with `ftse-defer` so chat does not become the backlog.
+4. **Queue the rest** with `ftse-defer` (behind P1/P2) so chat does not become the backlog.
 
 Also keep:
 
@@ -106,7 +109,7 @@ findings,” or similar:
    queue → narrative refresh).
 2. Align work to **P1** (Investment-demanded bind fields: filings/FCF/overlay/memo
    on holdings ∪ active shortlists ∪ F3 repairs) then **P2** (focus ingest sprint).
-   Defer the rest with `ftse-defer`.
+   Queue the rest with `ftse-defer` (wanted-but-not-now — not drop).
 3. Use **existing batching** — ingest-loop + gap-closure pins, `so-what --apply`,
    compile-cap drain, narrow eng splits, clash-aware max **2** agents — never a
    parallel “clearance queue” or one PR per ticker for shared scoring gaps.
@@ -122,9 +125,14 @@ post-run review (Sunday email bundle and analysis-review follow-up). See
 ingest then body-lag rememo). Off-buy-tier zero-filing memos stay parked (**N138**)
 until the revisit trigger there.
 
-## Parked / later ideas (required)
+## Queued / later ideas (required)
 
-When you give advice that is **not relevant now** or **potentially useful later** (deferred features, premature ideas, “revisit when…”, out-of-scope enhancements), **append it to the deferred-ideas store before ending the turn**:
+When you give advice that is **wanted but not for now** or **potentially useful later**
+(deferred features, premature ideas, “revisit when…”, out-of-scope enhancements), **append
+it to the deferred-ideas store before ending the turn**. That is a **queue behind P1 → P2
+→ higher-priority work**, not a drop. Say “queued,” not “parked,” in triage briefs.
+Reserve `drop` for rejected / indefinite no. (Engineering `status=parked` is a different
+word — attention-blocked eng tasks; see [`docs/ops/priority-queue-wording.md`](docs/ops/priority-queue-wording.md).)
 
 ```bash
 ftse-defer add \
@@ -139,8 +147,10 @@ ftse-defer add \
 
 Rules:
 
-1. Call `ftse-defer add` for each distinct parked idea (the CLI dedupes by title).
-2. Prefer `--category not_now` when explicitly advising against starting now; `--category later` for future enhancements.
+1. Call `ftse-defer add` for each distinct queued idea (the CLI dedupes by title).
+2. Prefer `--category not_now` when capacity/gates say do not start yet (still wanted);
+   `--category later` for future enhancements; `ftse-defer status <ID> drop --note "…"` only
+   when rejected or indefinite no.
 3. Always regenerate is automatic on `add`; use `ftse-defer render` only if you edited `docs/deferred-ideas.json` by hand.
 4. Do **not** hand-edit `docs/deferred-review.md` — it is generated from `docs/deferred-ideas.json`.
 5. If several ideas appear in one answer, add each separately.

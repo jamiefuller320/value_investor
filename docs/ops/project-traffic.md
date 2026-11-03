@@ -109,6 +109,8 @@ Each occasion stores: timestamp, PR, branch, kind (`ci_check` / `merge_conflict`
 `docs/deferred-ideas.json` and `docs/deferred-review.md`. Engineering preflight treats
 those paths like `engineering_tasks.json` (`SHARED_MUTABLE_FILES`) so clash-aware dispatch
 does not start a second agent while an open PR already touches the deferred store.
+Open defer rows are **queued** behind P1/P2 (not dropped); eng `parked` is attention-blocked —
+see [priority-queue-wording.md](priority-queue-wording.md).
 
 **Deferred-ID collisions:** `ftse-defer add` numbers on the branch's own copy, so two
 open branches can mint the same `L…`/`N…` ID. Resolve with one command instead of

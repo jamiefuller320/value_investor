@@ -1,11 +1,12 @@
 ---
-description: Append parked/later ideas via ftse-defer; avoid reading deferred JSON by default
+description: Queue wanted-but-not-now ideas via ftse-defer; avoid reading deferred JSON by default
 alwaysApply: true
 ---
 
-# Deferred ideas
+# Deferred ideas (queued behind P1/P2)
 
-When you recommend something that is **not relevant now** or **useful later**, append it with:
+When you recommend something that is **wanted but not for now** or **useful later**,
+append it with `ftse-defer` — that is a **queue**, not a drop:
 
 ```bash
 ftse-defer add --category not_now|later|security|both --title "…" --summary "…" --revisit-when "…" --section learning|universe|research|ops|not_now|security
@@ -14,9 +15,10 @@ ftse-defer add --category not_now|later|security|both --title "…" --summary "�
 Rules:
 
 - Prefer `ftse-defer add` / `ftse-defer list` / `ftse-defer fragment` over reading `docs/deferred-ideas.json` or `docs/deferred-review.md`.
+- Say **queued behind P1/P2** in triage; reserve **drop** (`ftse-defer status … drop`) for rejected / indefinite no. Eng `status=parked` means attention-blocked — different word (see `docs/ops/priority-queue-wording.md`).
 - Do **not** Grep or Read those deferred files during unrelated work.
 - Read them only when the task is about the deferred store (status changes, horizon scan, bulk review).
 - Do not hand-edit `docs/deferred-review.md`. Deduping is by title. See `AGENTS.md`.
 - Deferred-store merge conflict or failing `ftse-defer check-ids`: `git merge origin/main` then `ftse-defer rebase-ids --base origin/main --apply`. Never hand-renumber IDs.
-- Closing an idea: `ftse-defer status <ID> done|drop --note "why"` so the store keeps the reason.
+- Closing an idea: `ftse-defer status <ID> done|drop --note "why"` so the store keeps the reason (`done` = shipped/resolved; `drop` = rejected / indefinite no).
 - Revisit trigger is a committed number, flag or date: add `--trigger '<json>'` (or `ftse-defer set-trigger`) so ops-monitor flags it when met; name active books, never frozen ones. See `docs/ops/deferred-triggers.md`.
