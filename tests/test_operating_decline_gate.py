@@ -80,6 +80,7 @@ def test_clear_when_all_trends_healthy():
     assert result["reasons"] == []
     assert set(result["checks"]) == {
         "revenue",
+        "interim_revenue",
         "operating_margin",
         "eps_annual",
         "eps_interim",
@@ -88,6 +89,7 @@ def test_clear_when_all_trends_healthy():
         "profit_warning",
     }
     assert result["checks"]["revenue"]["evaluable"] is True
+    assert result["checks"]["interim_revenue"]["evaluable"] is False
     assert result["checks"]["eps_interim"]["evaluable"] is False
 
 
@@ -354,7 +356,7 @@ def test_refresh_writes_store_with_contract_shape(tmp_path):
     )
     on_disk = json.loads(store.read_text(encoding="utf-8"))
     assert on_disk == payload
-    assert payload["schema_version"] == 1
+    assert payload["schema_version"] == 2
     assert payload["as_of"] == AS_OF
     assert payload["observe_only"] is True
     assert payload["influences_live"] is False
@@ -366,6 +368,7 @@ def test_refresh_writes_store_with_contract_shape(tmp_path):
         "buy_tier_names": 3,
         "buy_tier_covered": 2,
         "names_with_interim_eps": 0,
+        "names_with_interim_revenue": 0,
         "latest_fiscal_year_counts": {"2025": 3},
     }
     bad = payload["names"]["BAD.L"]
@@ -663,4 +666,269 @@ def test_summary_reports_interim_and_fiscal_year_coverage(tmp_path):
         if f["title"] == FINDING_TITLE
     )
     assert "interim EPS on 1 names" in summary
+    assert "interim revenue on 0 names" in summary
     assert "2025:3" in summary
+
+
+def _with_quarters(periods: dict[str, dict]) -> dict:
+    fin = _healthy()
+    fin["quarterly_income"] = periods
+    return fin
+
+
+def test_interim_revenue_yoy_drop_is_hard_and_ignores_the_adjacent_quarter():
+    fin = _with_quarters(
+        {
+            "2026-06-30": {"Total Revenue": 90.0, "Diluted EPS": 1.2},
+            "2026-03-31": {"Total Revenue": 40.0, "Diluted EPS": 0.1},
+            "2025-06-30": {"Total Revenue": 100.0, "Diluted EPS": 1.0},
+        }
+    )
+    result = _assess(financials=fin)
+    assert result["verdict"] == "declining"
+    assert "interim_revenue_decline" in _codes(result)
+    assert "revenue_decline" not in _codes(result)
+    check = result["checks"]["interim_revenue"]
+    assert check["source"] == "financials_annual.json quarterly_income"
+    assert check["period_end"] == "2026-06-30"
+    assert check["prior_period_end"] == "2025-06-30"
+    assert check["latest"] == pytest.approx(90.0)
+    assert check["prior"] == pytest.approx(100.0)
+    assert check["label"] == "Total Revenue"
+    assert result["checks"]["eps_interim"]["fired"] is False
+
+
+def test_interim_revenue_flat_to_the_threshold_does_not_fire():
+    fin = _with_quarters(
+        {
+            "2026-06-30": {"Total Revenue": 95.0},
+            "2025-06-30": {"Total Revenue": 100.0},
+        }
+    )
+    result = _assess(financials=fin)
+    assert result["checks"]["interim_revenue"]["fired"] is False
+    assert result["checks"]["interim_revenue"]["change_pct"] == pytest.approx(-0.05)
+    assert result["verdict"] == "clear"
+
+
+def test_interim_series_without_a_prior_year_period_is_not_evaluable():
+    fin = _with_quarters(
+        {
+            "2026-06-30": {"Total Revenue": 50.0, "Diluted EPS": 0.2},
+            "2026-03-31": {"Total Revenue": 100.0, "Diluted EPS": 1.0},
+        }
+    )
+    result = _assess(financials=fin)
+    assert result["checks"]["interim_revenue"]["evaluable"] is False
+    assert result["checks"]["interim_revenue"]["why"] == "interim_prior_period_missing"
+    assert result["checks"]["interim_revenue"]["period_end"] == "2026-06-30"
+    assert result["verdict"] == "clear"
+    assert "interim_revenue_decline" not in _codes(result)
+
+
+def test_interim_eps_does_not_use_an_older_quarter_when_the_latest_lacks_eps():
+    fin = _with_quarters(
+        {
+            "2026-06-30": {"Total Revenue": 110.0},
+            "2026-03-31": {"Total Revenue": 100.0, "Diluted EPS": 0.5},
+            "2025-06-30": {"Total Revenue": 100.0},
+            "2025-03-31": {"Total Revenue": 100.0, "Diluted EPS": 1.0},
+        }
+    )
+    result = _assess(row={"interim_eps_decline_pct": 0.4}, financials=fin)
+    assert result["checks"]["interim_revenue"]["evaluable"] is True
+    assert result["checks"]["interim_revenue"]["fired"] is False
+    assert result["checks"]["eps_interim"]["evaluable"] is True
+    assert result["checks"]["eps_interim"]["source"] == "latest.json reports"
+    assert result["checks"]["eps_interim"]["interim_eps_decline_pct"] == pytest.approx(0.4)
+    assert _codes(result) == ["eps_decline_interim"]
+
+
+def test_quarterly_eps_yoy_replaces_the_screen_row_flag():
+    fin = _with_quarters(
+        {
+            "2026-06-30": {"Total Revenue": 110.0, "Diluted EPS": 1.2},
+            "2025-06-30": {"Total Revenue": 100.0, "Diluted EPS": 1.0},
+        }
+    )
+    result = _assess(row={"interim_eps_decline_pct": 0.5}, financials=fin)
+    assert result["checks"]["eps_interim"]["fired"] is False
+    assert result["checks"]["eps_interim"]["source"] == "financials_annual.json quarterly_income"
+    assert result["checks"]["eps_interim"]["period_end"] == "2026-06-30"
+    assert result["checks"]["eps_interim"]["prior_period_end"] == "2025-06-30"
+    assert _codes(result) == []
+    assert result["verdict"] == "clear"
+
+
+def test_quarterly_eps_drop_at_threshold_is_one_soft_signal():
+    fin = _with_quarters(
+        {
+            "2026-06-30": {"Total Revenue": 110.0, "Diluted EPS": 0.85},
+            "2025-06-30": {"Total Revenue": 100.0, "Diluted EPS": 1.0},
+        }
+    )
+    result = _assess(
+        row={"interim_eps_decline_pct": 0.02, "interim_dividend_cut_flagged": True}, financials=fin
+    )
+    assert result["checks"]["eps_interim"]["interim_eps_decline_pct"] == pytest.approx(0.15)
+    assert _codes(result).count("eps_decline_interim") == 1
+    assert result["verdict"] == "declining"
+    assert set(_codes(result)) == {"eps_decline_interim", "dividend_cut"}
+
+
+def test_periods_after_as_of_are_ignored_for_interim_yoy():
+    fin = _with_quarters(
+        {
+            "2026-12-31": {"Total Revenue": 10.0},
+            "2025-12-31": {"Total Revenue": 100.0},
+            "2026-06-30": {"Total Revenue": 110.0},
+            "2025-06-30": {"Total Revenue": 100.0},
+        }
+    )
+    result = _assess(financials=fin, as_of="2026-11-03")
+    check = result["checks"]["interim_revenue"]
+    assert check["period_end"] == "2026-06-30"
+    assert check["fired"] is False
+    assert result["verdict"] == "clear"
+
+
+def test_filing_interim_highlights_replace_screen_eps():
+    highlights = {
+        "extracted_at": "2026-09-01T00:00:00+00:00",
+        "interim_highlights": {
+            "adjusted_eps_pence": 2.2,
+            "prior_adjusted_eps_pence": 1.8,
+            "source_body_id": "h1",
+            "headline": "Interim Results to 30 June 2026",
+        },
+    }
+    filings = [{"id": "h1", "published_at": "2026-07-31", "headline": "Interim Results"}]
+    result = assess_operating_decline(
+        {"interim_eps_decline_pct": 0.4},
+        _healthy(),
+        filings,
+        as_of=AS_OF,
+        filing_interim=highlights,
+    )
+    check = result["checks"]["eps_interim"]
+    assert check["fired"] is False
+    assert check["source"] == "filing_interim_financials.json:h1"
+    assert check["period_end"] == "2026-06-30"
+    assert check["published_at"] == "2026-07-31"
+    assert _codes(result) == []
+
+
+def test_filing_interim_highlights_after_as_of_fall_back_to_the_screen_row():
+    highlights = {
+        "extracted_at": "2026-12-01T00:00:00+00:00",
+        "interim_highlights": {
+            "adjusted_eps_pence": 1.0,
+            "prior_adjusted_eps_pence": 2.0,
+            "source_body_id": "h1",
+        },
+    }
+    filings = [{"id": "h1", "published_at": "2026-12-01"}]
+    result = assess_operating_decline(
+        {"interim_eps_decline_pct": 0.31},
+        _healthy(),
+        filings,
+        as_of=AS_OF,
+        filing_interim=highlights,
+    )
+    assert result["checks"]["eps_interim"]["source"] == "latest.json reports"
+    assert result["checks"]["eps_interim"]["fired"] is True
+    assert result["verdict"] == "clear"
+
+
+def test_refresh_reads_half_year_body_and_does_not_double_count_screen_eps(tmp_path):
+    latest, research, store = _build_fixture(tmp_path)
+    data = json.loads(latest.read_text(encoding="utf-8"))
+    data["reports"][0]["interim_eps_decline_pct"] = 0.4
+    latest.write_text(json.dumps(data), encoding="utf-8")
+    sources = research / "OKAY.L" / "sources"
+    bodies = sources / "filings" / "bodies"
+    bodies.mkdir(parents=True)
+    (bodies / "h1.txt").write_text(
+        "Interim results for the half year ended 30 June 2026. "
+        "Diluted earnings per share of 6.48 pence, a decline of 12.0%.\n",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "h1",
+                        "period": "interim",
+                        "has_body": True,
+                        "headline": "2026 Interim Results",
+                        "published_at": "2026-08-01",
+                        "body_path": "output/research/OKAY.L/sources/filings/bodies/h1.txt",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = refresh_operating_decline_gate(
+        latest_path=latest,
+        research_root=research,
+        store_path=store,
+        library_root=None,
+        persist=False,
+        as_of=AS_OF,
+    )
+    check = payload["names"]["OKAY.L"]["checks"]["eps_interim"]
+    assert check["evaluable"] is True
+    assert check["fired"] is True
+    assert check["interim_eps_decline_pct"] == pytest.approx(0.12)
+    assert check["source"] == "filings/h1"
+    assert check["period_end"] == "2026-06-30"
+    assert check["published_at"] == "2026-08-01"
+    assert [r["code"] for r in payload["names"]["OKAY.L"]["reasons"]].count(
+        "eps_decline_interim"
+    ) == 1
+    assert payload["names"]["OKAY.L"]["verdict"] == "clear"
+    assert payload["summary"]["names_with_interim_eps"] == 1
+
+
+def test_stale_half_year_body_does_not_replace_a_screen_flag(tmp_path):
+    latest, research, store = _build_fixture(tmp_path)
+    data = json.loads(latest.read_text(encoding="utf-8"))
+    data["reports"][0]["interim_eps_decline_pct"] = 0.25
+    latest.write_text(json.dumps(data), encoding="utf-8")
+    sources = research / "OKAY.L" / "sources"
+    bodies = sources / "filings" / "bodies"
+    bodies.mkdir(parents=True)
+    (bodies / "old.txt").write_text(
+        "Interim results. Diluted earnings per share decline of 40.0%.\n",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "old",
+                        "period": "interim",
+                        "has_body": True,
+                        "headline": "Interim Results",
+                        "published_at": "2024-01-15",
+                        "body_path": str(bodies / "old.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = refresh_operating_decline_gate(
+        latest_path=latest,
+        research_root=research,
+        store_path=store,
+        library_root=None,
+        persist=False,
+        as_of=AS_OF,
+    )
+    check = payload["names"]["OKAY.L"]["checks"]["eps_interim"]
+    assert check["source"] == "latest.json reports"
+    assert check["interim_eps_decline_pct"] == pytest.approx(0.25)
