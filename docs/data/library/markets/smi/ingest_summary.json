@@ -1,28 +1,15 @@
 {
-  "run_at": "2026-11-03T18:05:14.277406+00:00",
+  "run_at": "2026-11-03T18:16:01.754304+00:00",
   "market_id": "smi",
-  "targets": [
-    "NOVN.SW"
-  ],
-  "target_details": [
-    {
-      "ticker": "NOVN.SW",
-      "priority_score": 16.6803,
-      "filings_total": 36,
-      "filings_with_body": 35,
-      "indexed_without_body": 1,
-      "reason": "indexed_without_body"
-    }
-  ],
+  "targets": [],
+  "target_details": [],
   "results": [],
   "improved": [],
-  "errors": [
-    "NOVN.SW: *** YAHOO! FINANCE IS CURRENTLY DOWN! ***"
-  ],
+  "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-03T18:04:50.919668+00:00",
+    "snapshot_at": "2026-11-03T18:15:55.853651+00:00",
     "market_id": "smi",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -48,13 +35,13 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-03T18:05:08.057496+00:00",
+    "snapshot_at": "2026-11-03T18:15:56.483736+00:00",
     "market_id": "smi",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 1,
+    "indexed_without_body": 0,
     "bodies_min": 3,
     "bodies_median": 10,
     "bodies_max": 35,
@@ -63,52 +50,33 @@
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
     "thin_body_tickers": [],
-    "indexed_without_body_tickers": [
-      "NOVN.SW"
-    ],
-    "indexed_without_body_by_ticker": {
-      "NOVN.SW": 1
-    },
+    "indexed_without_body_tickers": [],
+    "indexed_without_body_by_ticker": {},
     "parked_tickers": [],
     "parked_count": 0,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
-    "effective_indexed_without_body_tickers": [
-      "NOVN.SW"
-    ],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
     "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": false,
+  "recorded_gap_closure": true,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 5,
-    "hits": 2,
-    "new_rows_total": 0,
-    "curiosity_total": 2,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
+  "discovery_scan": null,
+  "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "smi"
+  },
   "critical_path": {
     "market_id": "smi",
-    "assessed_at": "2026-11-03T18:04:51.299562+00:00",
+    "assessed_at": "2026-11-03T18:15:56.142829+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -129,17 +97,19 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 16.350813391000003,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3583.649186609,
+  "used_seconds": 0.0014310000000250511,
+  "budget_seconds": 2100.0,
+  "leftover_seconds": 2099.998569,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": 320.0,
-  "pin_tickers": [],
+  "per_ticker_max_seconds": null,
+  "pin_tickers": [
+    "NOVN.SW"
+  ],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "smi",
-    "updated_at": "2026-11-03T18:05:08.060920+00:00",
+    "updated_at": "2026-11-03T18:15:56.496427+00:00",
     "exhausted": false,
     "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
@@ -147,19 +117,15 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": true,
-    "leftover_tickers": [
-      "NOVN.SW"
-    ],
-    "unparked_leftover": [
-      "NOVN.SW"
-    ],
+    "had_complete_targets": false,
+    "leftover_tickers": [],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/smi/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
     "skipped": true,
-    "reason": "not_exhausted",
+    "reason": "true_parity",
     "market_id": "smi"
   },
   "parked_hunter_compile": {
