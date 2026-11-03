@@ -4,7 +4,8 @@
 **Strategy part served:** part 2, "not declining" ([`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md#investment-strategy-owner-2026-11-03); plan step 1.1 in [`strategy-reorientation-plan.md`](strategy-reorientation-plan.md))  
 **Mode:** observe-only. `influences_live` is false. Never edits signals, books, knobs, `max_positions`, `sector_cap` or `decision-review --apply`. Never writes `docs/data/paper_automation`.  
 **Code:** `src/value_investor/operating_decline_gate.py`, CLI `ftse-operating-decline-gate`  
-**Store:** `docs/data/operating_decline_gate.json`
+**Store:** `docs/data/operating_decline_gate.json`  
+**Quarterly history:** [`quarterly-history.md`](quarterly-history.md) — how `quarterly_income` keeps the prior-year quarter
 
 ## Learning question
 
@@ -147,7 +148,7 @@ Counted on the 65 `buy` / `strong_buy` rows in `docs/data/latest.json` (run `202
 
 | What is on disk | Names | What a year-on-year check can use |
 |---|---:|---|
-| `quarterly_income` usable (an EPS or revenue line) | 8 | Nothing yet. Each series is 4 period-ends and none sits within 45 days of a year before the latest. Tickers: IAG, BGEO, GSK, ATYM, SHEL, NWG, BARC, BP |
+| `quarterly_income` usable (an EPS or revenue line) | 8 | 4 now have a same-quarter prior year and evaluable interim revenue, none of which fires: GSK +4.0%, SHEL +36.2%, BARC +2.8%, BP +41.3% (period 2026-09-30 vs 2025-09-30). The latest quarter on those four has no EPS line. IAG, BGEO, ATYM and NWG still have no period within 45 days of a year before the latest; git history never stored that quarter |
 | `quarterly_income` empty | 57 | No Yahoo interim series |
 | `quarterly_income` present but no EPS or revenue label | 0 | — |
 | `filing_interim_financials.json` present | 9 | `interim_highlights` is empty on all 9. ITV alone has trading-update advertising revenue (1,247 vs 1,313). The stored `change_pct` is -66, the £m gap, not a percent. The same update says group revenue +2% YTD, so the gate does not treat advertising revenue as interim group revenue |
@@ -158,19 +159,21 @@ Counted on the 65 `buy` / `strong_buy` rows in `docs/data/latest.json` (run `202
 
 Three of 248 FTSE screen rows carry `interim_eps_decline_pct` (MEGP, DNLM, and PETS, which is `hold`). The statutory highlights parser also matches the ITV half-year body (adjusted EPS 2.2p vs 1.8p), but that extract is not in the committed JSON: the index `body_path` points at `output/research/...` while the file sits under `filings/bodies/` by basename.
 
-After this gate reads those sources, FTSE buy-tier interim coverage is unchanged: EPS 2/65 (the same two names, now cited from the results body) and revenue 0/65. Across all scored names, interim EPS comparisons went from 3 to 26 and interim revenue from 0 to 27, almost all from library `quarterly_income` series that already hold a prior-year period. Four non-buy FTSE names already have that prior-year quarter (TBCG, STAN, ITH, ENOG).
+Before the quarterly backfill, FTSE buy-tier interim coverage was EPS 2/65 (MEGP and DNLM, from the results body) and revenue 0/65. Across all scored names it was interim EPS 26 and interim revenue 27. Four non-buy FTSE names already had a prior-year quarter (TBCG, STAN, ITH, ENOG).
+
+After `ftse-quarterly-backfill --apply` (git history, current values kept) and a gate refresh as of 2026-11-03: FTSE buy-tier interim revenue is 4/65 and interim EPS is still 2/65. FTSE screen interim revenue is 8/248 and interim EPS is 6/248. Across all scored names, interim revenue and interim EPS are both 68. Buy-tier covered stays 62/65. No FTSE verdict changed. Two library names did: FSLR (sp500, `clear` → `declining`) on interim revenue −22.8% for 2026-09-30 vs 2025-09-30, and HRL (sp500, `clear` → `declining`) because interim EPS −66.7% joined an existing annual EPS decline. Store counts moved from clear 549 / declining 191 to clear 547 / declining 193. Details: [`quarterly-history.md`](quarterly-history.md).
 
 ## Known limitations
 
-- **Buy-tier interim coverage is still annual.** The gate now reads interim sources, and the buy-tier set still has no year-on-year revenue pair and only two EPS comparisons, neither of which fires. Most verdicts rest on annual statements. The ingest follow-up is below, not a new job in this instrument.
+- **Buy-tier interim coverage is still mostly annual.** Four buy-tier names now have a year-on-year revenue pair and none of those pairs fire. Interim EPS is still two names, neither of which fires. Most verdicts rest on annual statements.
 - **Revenue hard checks flag commodity and cyclical names in a down year** (for example oil majors). That matches the owner's "no operating decline" rule but is a known false-positive source for a recovery thesis. The owner decides at the Phase 1 gate whether to adjust.
 - **Headline scan covers only names with a filings index** (about 108 of 248 FTSE names), matches headlines and summaries only, and skips third-party news. Expect low recall on profit warnings.
-- **Statements are overwritten on fetch**, so a past `as_of` fails closed (`financials_fetched_after_as_of`) against current files. Real historical replay needs dated snapshots. The same overwrite is why Yahoo `quarterly_income` keeps about four recent periods and drops the quarter a year earlier.
+- **`fetched_at` still moves on a live fetch**, so a past `as_of` fails closed (`financials_fetched_after_as_of`) against current files. Real historical replay needs dated snapshots. Quarterly income and cash flow are no longer replaced wholesale: each fetch merges period ends and keeps up to 12 quarters. See [`quarterly-history.md`](quarterly-history.md).
 
-## Ingest follow-up (not built here)
+## Ingest follow-up
 
-No new fetch and no change to how the screen computes `interim_eps_decline_pct`.
+No new Yahoo fetch and no change to how the screen computes `interim_eps_decline_pct`.
 
-1. **Keep the prior-year quarter in `quarterly_income`.** 19 of 248 FTSE names have a usable series; 4 already contain a same-period prior year, and none of those 4 are buy-tier. Storing that missing quarter would make interim revenue evaluable for the 8 buy-tier names above. Interim EPS would follow for 6 of the 8: BGEO and NWG have no EPS line on the latest quarter, so a longer history does not score EPS until that quarter carries one.
+1. **Keep the prior-year quarter in `quarterly_income`.** Built. The writer merges up to 12 quarters, and `ftse-quarterly-backfill` restored older period ends from git. That made interim revenue evaluable for GSK, SHEL, BARC and BP. It did not make interim EPS evaluable for them: the latest quarter has revenue and no EPS line. IAG, BGEO, ATYM and NWG still lack the prior-year quarter because no committed version of the file contains it (their latest period is 2026-06-30 and the oldest committed period is 2025-09-30). Runbook: [`quarterly-history.md`](quarterly-history.md).
 2. **Resolve half-year body paths and re-extract `filing_interim_financials.json`.** Index paths under `output/research/` miss bodies that exist as `filings/bodies/<basename>`. Re-running the current statutory highlights parser after that fix picks up ITV's EPS pair (a rise, so the soft check would not fire) and, on this buy-tier set, no other results body. It still does not extract revenue.
 3. **Structured current-vs-prior revenue and EPS from the 48 buy-tier half-year results bodies.** That is the coverage ceiling for names Yahoo does not quarter. The prose parsers already in the repo match two EPS declines, both under 10%. A broader extractor has to return levels for one period and the same period a year earlier; a loose "revenue down N%" phrase match is not that. Expected gain is up to those 48 names, and the yield is unproven until the parser is written.

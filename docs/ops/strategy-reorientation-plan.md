@@ -169,5 +169,6 @@ merge clashes manageable.
 | 1.4 | In review; runs once the owner adds `TRADING212_API_KEY` / `TRADING212_API_SECRET`. Committed catalogue is from 2026-07-22 | `cursor/t212-catalogue-refresh-567c` | Composer 2.5 |
 | 0.3 | In review (supervisor corrected two rows) | `cursor/codename-glossary-567c` | Composer 2.5 |
 | 1.5 | In review. Buy-tier interim coverage did not move (2 of 65): Yahoo series lack the prior-year quarter and half-year bodies are not extracted, hence 1.6 and 1.7. Stacked on 1.1 | `cursor/decline-gate-interim-567c` | Grok 4.7 |
-| 1.6, 1.7 | Next | — | Grok 4.7 |
+| 1.6 | In review. Writer merges up to 12 quarters; git backfill gave interim revenue to 4 of the 8 buy-tier names (GSK, SHEL, BARC, BP). IAG, BGEO, ATYM, NWG have no prior-year quarter in git. No FTSE verdict change. Two library verdicts moved to declining (FSLR, HRL) | `cursor/quarterly-history-567c` | Grok 4.7 |
+| 1.7 | Next | — | Grok 4.7 |
 | Phase 1 gate | Waiting on 1.1–1.2 merge and a week of daily refreshes | — | Owner |

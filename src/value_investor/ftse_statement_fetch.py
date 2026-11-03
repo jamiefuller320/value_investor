@@ -2,7 +2,9 @@
 
 ``ingest_research_sources`` already writes ``financials_annual.json`` from
 ``fetch_annual_financials`` (yfinance). A dry run returns that payload and
-writes nothing. Writing persists that same payload; it does not fetch again.
+writes nothing. Writing persists that payload and, when a file is already
+there, merges its quarterly income and cash-flow periods (new rows win).
+It does not fetch again.
 
 A payload with no annual income, balance-sheet, or cash-flow year is recorded
 beside the statement path and is not fetched again. yfinance needs no API key.
@@ -76,14 +78,20 @@ def fetch_one_annual_statement(
 
 
 def write_fetched_statement(result: StatementFetch, sources_dir: Path) -> Path:
-    """Write the dry-run payload. Does not fetch again."""
+    """Write the dry-run payload. Does not fetch again.
 
-    return write_json(
-        Path(sources_dir) / STATEMENT_NAME,
-        result.payload,
-        compact=True,
-        compress=False,
+    Quarterly income and cash-flow periods already in the file are kept.
+    Overlapping periods take the newly fetched row. Other keys are the new payload.
+    """
+
+    from value_investor.quarterly_history_backfill import (
+        load_financials_dict,
+        merge_quarterly_history,
     )
+
+    path = Path(sources_dir) / STATEMENT_NAME
+    payload = merge_quarterly_history(load_financials_dict(path), result.payload)
+    return write_json(path, payload, compact=True, compress=False)
 
 
 def bloomsbury_first(tickers: list[str]) -> list[str]:
