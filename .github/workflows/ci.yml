@@ -70,9 +70,11 @@ jobs:
       matrix:
         shard: [0, 1, 2, 3]
     steps:
+      # Full history took ~22 of the 25 minutes on large-repo checkouts and the
+      # shard was cancelled mid-pytest. Tests needing history build their own repos.
       - uses: actions/checkout@v5
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - uses: actions/setup-python@v6
         with:

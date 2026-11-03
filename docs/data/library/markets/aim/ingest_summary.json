@@ -1,48 +1,15 @@
 {
-  "run_at": "2026-11-03T18:31:16.804450+00:00",
+  "run_at": "2026-11-03T22:01:40.642572+00:00",
   "market_id": "aim",
-  "targets": [
-    "CAML.L",
-    "DOTD.L",
-    "PAF.L"
-  ],
-  "target_details": [
-    {
-      "ticker": "CAML.L",
-      "priority_score": 16.7727,
-      "filings_total": 67,
-      "filings_with_body": 65,
-      "indexed_without_body": 1,
-      "reason": "indexed_without_body"
-    },
-    {
-      "ticker": "DOTD.L",
-      "priority_score": 14.6691,
-      "filings_total": 56,
-      "filings_with_body": 55,
-      "indexed_without_body": 1,
-      "reason": "indexed_without_body"
-    },
-    {
-      "ticker": "PAF.L",
-      "priority_score": 14.924999999999999,
-      "filings_total": 57,
-      "filings_with_body": 55,
-      "indexed_without_body": 1,
-      "reason": "indexed_without_body"
-    }
-  ],
+  "targets": [],
+  "target_details": [],
   "results": [],
   "improved": [],
-  "errors": [
-    "CAML.L: *** YAHOO! FINANCE IS CURRENTLY DOWN! ***",
-    "DOTD.L: *** YAHOO! FINANCE IS CURRENTLY DOWN! ***",
-    "PAF.L: *** YAHOO! FINANCE IS CURRENTLY DOWN! ***"
-  ],
+  "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-03T18:29:20.843723+00:00",
+    "snapshot_at": "2026-11-03T22:01:32.151905+00:00",
     "market_id": "aim",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
@@ -67,20 +34,20 @@
       "PAF.L": 1,
       "DOTD.L": 1
     },
-    "parked_tickers": [],
-    "parked_count": 0,
+    "parked_tickers": [
+      "CAML.L",
+      "DOTD.L",
+      "PAF.L"
+    ],
+    "parked_count": 3,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 3,
-    "effective_indexed_without_body_tickers": [
-      "CAML.L",
-      "PAF.L",
-      "DOTD.L"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-03T18:29:29.778340+00:00",
+    "snapshot_at": "2026-11-03T22:01:40.215784+00:00",
     "market_id": "aim",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
@@ -123,47 +90,38 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 17,
+    "hits": 5,
+    "new_rows_total": 0,
+    "curiosity_total": 5,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "CAML.L",
+      "DOTD.L",
+      "PAF.L"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "advanced": true,
-    "parallel_stream": 1,
-    "from_market": "aim",
-    "to_market": "sp500",
-    "stream_markets_after": [
-      "sp500"
-    ],
-    "parity_event": {
-      "recorded": false,
-      "reason": "ingest_exhausted_leftover_gaps",
-      "market_id": "aim",
-      "ingest_exhausted": true,
-      "exhausted_maintenance_recorded": true,
-      "parked_tickers": [
-        "CAML.L",
-        "DOTD.L",
-        "PAF.L"
-      ],
-      "learning_admitted_changed": false,
-      "learning_admitted": true
-    },
-    "screen_refresh": {
-      "refreshed": true,
-      "market_id": "sp500",
-      "forced": true,
-      "prior_screen_at": "2026-11-02T20:36:30.828083+00:00",
-      "prior_age_days": 1,
-      "run_at": "2026-11-03T18:31:03.392023+00:00",
-      "shortlist_count": 143,
-      "ticker_count": 503
-    },
-    "at": "2026-11-03T18:29:38.803662+00:00",
-    "ingest_parity_recorded": false
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "aim"
   },
   "critical_path": {
     "market_id": "aim",
-    "assessed_at": "2026-11-03T18:29:22.668764+00:00",
+    "assessed_at": "2026-11-03T22:01:33.688263+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -207,9 +165,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 5.302071588999979,
-  "budget_seconds": 262.5,
-  "leftover_seconds": 257.197928411,
+  "used_seconds": 4.983376351999993,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3595.016623648,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -217,9 +175,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "aim",
-    "updated_at": "2026-11-03T18:29:29.783180+00:00",
+    "updated_at": "2026-11-03T22:01:40.219610+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 3,
+    "complete_zero_improve_runs": 4,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -309,10 +267,10 @@
       "eng-20261103-09"
     ],
     "task_count": 245,
-    "market_id": "aim",
-    "hunter_ticker": "PAF.L",
+    "market_id": "asx200",
+    "hunter_ticker": "SMR.AX",
     "hunter_tickers": [
-      "PAF.L"
+      "SMR.AX"
     ],
     "priority_score": 12.0,
     "wait_behind_task_id": "",
