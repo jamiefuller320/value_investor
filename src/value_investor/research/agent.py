@@ -34,6 +34,30 @@ STRUCTURED_VERDICT_MODES = frozenset(
 )
 
 _RESEARCH_WORKER_MARKER = "You are a **research worker**"
+_POINT_IN_TIME_RULE_MARKER = "Point-in-time rule:"
+
+
+def point_in_time_memo_discipline(*, as_of_date: str) -> str:
+    """Memo agent rule: no hindsight beyond supplied sources as of the run date."""
+    return (
+        f"Point-in-time rule: base every statement only on the files supplied for this "
+        f"memo, as of {as_of_date}. Do not use knowledge of events, prices, results or "
+        f"news after that date, or from outside the supplied files. If something material "
+        f"is not in the files, say it is unknown rather than filling it in."
+    )
+
+
+def append_point_in_time_memo_discipline(
+    prompt: str,
+    *,
+    as_of_date: str | None = None,
+) -> str:
+    """Append the point-in-time rule once (used for all memo agent sends)."""
+    if _POINT_IN_TIME_RULE_MARKER in prompt:
+        return prompt
+    run_date = as_of_date or datetime.now(UTC).strftime("%Y-%m-%d")
+    block = point_in_time_memo_discipline(as_of_date=run_date)
+    return f"{prompt.rstrip()}\n\n{block}"
 
 
 def filing_extraction_discipline() -> str:
@@ -500,6 +524,7 @@ def _run_agent_prompt(
     model: str,
     cwd: str | None,
     agent_id: str | None = None,
+    as_of_date: str | None = None,
 ) -> tuple[str, str | None]:
     options = AgentOptions(
         api_key=api_key,
@@ -515,7 +540,10 @@ def _run_agent_prompt(
     else:
         agent = Agent.create(options)
 
-    effective_prompt = _augment_research_worker_prompt(prompt)
+    effective_prompt = append_point_in_time_memo_discipline(
+        _augment_research_worker_prompt(prompt),
+        as_of_date=as_of_date,
+    )
     try:
         result = agent.send(effective_prompt).wait()
     except CursorAgentError as err:
