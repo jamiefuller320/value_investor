@@ -2456,6 +2456,57 @@ def check_operating_decline_gate(
     ]
 
 
+def check_sector_headwind_gate(
+    *,
+    latest_path: Path | None = None,
+    charts_dir: Path | None = None,
+    decline_store: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Refresh the observe-only, point-in-time sector headwind gate."""
+    from value_investor.sector_headwind_gate import (
+        DEFAULT_CHARTS_DIR,
+        DEFAULT_DECLINE_STORE,
+        DEFAULT_LATEST_PATH,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_findings_from_sector_headwind_gate,
+        refresh_sector_headwind_gate,
+    )
+
+    try:
+        payload = refresh_sector_headwind_gate(
+            latest_path=Path(latest_path) if latest_path is not None else DEFAULT_LATEST_PATH,
+            charts_dir=Path(charts_dir) if charts_dir is not None else DEFAULT_CHARTS_DIR,
+            decline_store=(
+                Path(decline_store) if decline_store is not None else DEFAULT_DECLINE_STORE
+            ),
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "Sector headwind gate"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+        for finding in ops_findings_from_sector_headwind_gate(payload)
+    ]
+
+
 def check_n206_plain_ey_observe(
     *,
     output_dir: Path | None = None,
@@ -4617,6 +4668,7 @@ def collect_ops_findings(
     findings.extend(check_entry_news_polarity())
     findings.extend(check_entry_revisit_review_queue())
     findings.extend(check_operating_decline_gate())
+    findings.extend(check_sector_headwind_gate())
     findings.extend(check_n200_tech_timing_observe())
     findings.extend(check_n201_value_mom_observe())
     findings.extend(check_n210_ai_judgment_observe())
