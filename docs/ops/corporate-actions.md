@@ -36,7 +36,8 @@ has (a committed row, or a Yahoo split series someone has chosen to accept).
 - **Trigger:** weekday paper-auto, inside `run_daily_automation`.
 - **Finding:** `check_unsettled_corporate_actions` in daily ops-monitor.
   Title **Paper holding has an unsettled terminal event**. `auto_fixable` is
-  false. The position is not zeroed.
+  false. The position is not zeroed. Assessment-model **frozen** tracks are
+  excluded from the WARN (same frozen-book filter as paper-halt).
 - **CLI:** `PYTHONPATH=src python3 -m value_investor.corporate_actions --fund <automated_fund.json> --events <feed.json>`
 
 Feed shape:
