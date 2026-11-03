@@ -14385,6 +14385,36 @@ def test_parked_source_hunter_su_to_tsx60_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_tsx60_sap_to_builtins(tmp_path: Path):
+    """Regression: SAP.TO leftover — saputo.com Canto annual report + FY26 Q4 MD&A PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("SAP.TO", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("SAP_Annual+Report+2026" in url for url in urls)
+    assert any("Q4_2026_MD" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") >= 1
+    assert sum(1 for row in rows if row["period"] == "interim") >= 1
+    assert len(fetch_filings_ir_allowlist("SAP", path=allowlist_path)) == 2
+
+
+def test_parked_source_hunter_sap_to_tsx60_has_fetchable_ir():
+    """eng-20261103-03: SAP.TO has live-fetchable saputo.canto.com statutory PDFs."""
+    assert "SAP.TO" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("SAP.TO")
+    assert len(rows) == 2
+    urls = [row["url"] for row in rows]
+    assert all("saputo.canto.com" in url for url in urls)
+    annual_url = next(url for url in urls if "Annual+Report+2026" in url)
+    body = _live_fetch_filing_body(annual_url)
+    if not body:
+        pytest.skip("Saputo Canto PDF fetch unavailable — retry later")
+    assert len(body) >= 50000
+
+
 def test_parked_source_hunter_skip_tri_to_tsx60():
     """eng-20260914-01: TRI.TO leftover IWB is SEC 6-K cover HTML, not missing 40-F/interim."""
     assert "TRI.TO" in PARKED_SOURCE_HUNTER_SKIP

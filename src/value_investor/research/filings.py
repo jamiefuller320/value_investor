@@ -894,6 +894,16 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/311337/000155837025010330/su-20250630xex99d1.htm",
         "https://www.sec.gov/Archives/edgar/data/311337/000155837025010330/su-20250630xex99d2.htm",
     ],
+    # tsx60 buy-tier leftover — eng-20261103-03: SAP.TO no_key_bodies; Saputo does not file on SEC.
+    # saputo.com shareholder reports host live-fetchable Canto PDFs (annual + FY26 Q4 MD&A).
+    "SAP.TO": [
+        "https://saputo.canto.com/direct/document/ktttikfhit00nc426o68h5354i/K7mjvYr4GAkEi4jVcOcEEemI6j0/original?content-type=application%2Fpdf&name=SAP_Annual+Report+2026+ENG.pdf",
+        "https://saputo.canto.com/direct/document/revps0nld92avdoqvc7mvpsk7q/Y1MhSkfuMcu9ntY_BvUj7lnKJXc/original?content-type=application%2Fpdf&name=Q4_2026_MD%26A_EN.pdf",
+    ],
+    "SAP": [
+        "https://saputo.canto.com/direct/document/ktttikfhit00nc426o68h5354i/K7mjvYr4GAkEi4jVcOcEEemI6j0/original?content-type=application%2Fpdf&name=SAP_Annual+Report+2026+ENG.pdf",
+        "https://saputo.canto.com/direct/document/revps0nld92avdoqvc7mvpsk7q/Y1MhSkfuMcu9ntY_BvUj7lnKJXc/original?content-type=application%2Fpdf&name=Q4_2026_MD%26A_EN.pdf",
+    ],
     # hang_seng buy-tier deepen — eng-20260930-03: asia_filings Google News miss / zero-body;
     # seed HKEX statutory PDFs and issuer IR mirrors for stalled buy-tier names.
     "1099.HK": [
@@ -1291,6 +1301,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "NTR": ("Nutrien", "Nutrien Ltd."),
     "TRI": ("Thomson Reuters",),
     "SU": ("Suncor", "Suncor Energy"),
+    # tsx60 SAP.TO — sap* URL tokens collide with SAP SE; Saputo issuer name required.
+    "SAP": ("Saputo", "Saputo Inc."),
     "DNL": ("Dyno Nobel", "Incitec Pivot"),
     "YAL": ("Yancoal", "Yancoal Australia"),
     # asx200 FMG.AX Markit/ASX allowlist PDFs — opaque documentKey URLs need issuer tokens
@@ -5962,6 +5974,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.icgam.com/wp-content/uploads/2026/07/j6J3er5HwjJ1-RNS-Q1_FY27-Trading-Statement_vF.pdf": "trading_update",
     # eng-20261022-01: GL9.IR — Glanbia-HY26-Results slug has hy26 before -results (regex needs . or $).
     "https://www.glanbia.com/sites/glanbia-plc/files/glanbia/investors/results-presentations/2026/Glanbia-HY26-Results.pdf": "interim",
+    # eng-20261103-03: SAP.TO — Q4_2026 MD&A Canto slug has no q1/q2/q3 interim token.
+    "https://saputo.canto.com/direct/document/revps0nld92avdoqvc7mvpsk7q/Y1MhSkfuMcu9ntY_BvUj7lnKJXc/original?content-type=application%2Fpdf&name=Q4_2026_MD%26A_EN.pdf": "interim",
 }
 
 
