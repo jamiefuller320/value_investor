@@ -20,6 +20,25 @@ Design pins: Project store `super-book-midflight-tune-2026-10-25.md`,
 `super-book-judgment-in-the-round-2026-10-26.md`,
 `super-book-start-progress-2026-10-26.md`.
 
+## Role under the single track (owner, 2026-11-04)
+
+The strategy book is the project's single track to live capital
+([plan](strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04)).
+This lab's aim, training toward better timing, carries over; its own book does
+not become a route to live, because it tunes itself mid-run and its scores are
+declared incomparable.
+
+| Part of this lab | What happens |
+|------------------|--------------|
+| Lab paper book (buy on the weekly cue, hold 63 trading days or exit on an identity break) | Keeps running unchanged on the FTSE screen as an outside reference. No new knob epochs. |
+| Same policy as a control | The strategy book carries it as its **buy-on-signal control** on the strategy book's own universe ([registration section 8](strategy-book-registration.md#8-scoring)). That is where "does timing add anything?" is answered. |
+| Post-sale reviews, judgment-in-the-round trail, five-lever scoring | Move onto strategy-book closes in plan step 2.4. |
+| Mid-flight tunes and hardened-ruleset proposals | Become inputs to the strategy book's version review. They do not spawn sealed children. |
+| Sealed-child spawn, novelty distance, cull (N223, N226, N227) | Not built while the single-track section holds. |
+
+The open-cap raise to 50 (epoch 1) is the last knob epoch on this lab under
+this decision.
+
 ## Learning question
 
 Given frozen cue-sources, can a declared-incomparable fixed-stake cue-consumer

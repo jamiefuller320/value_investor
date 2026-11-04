@@ -6,8 +6,10 @@ toward an autonomous system that runs the owner's
 Written 2026-11-03 after the autonomy readiness review.
 
 Strategy in one line: buy cheap stocks with no operating decline and no
-sector-wide trouble at short-term lows, sell at short-term highs, and hold
-mis-timed entries for recovery while the business case still stands.
+sector-wide trouble at short-term lows, let a rise run behind a ratcheting
+profit floor, and hold mis-timed entries for recovery up to a fixed wait while
+the business case still stands (exit amended 2026-11-04; see the
+[registration](strategy-book-registration.md#4-exit)).
 
 ## Principles
 
@@ -25,6 +27,77 @@ mis-timed entries for recovery while the business case still stands.
 5. **Stop adding instruments that do not serve a strategy part.** Existing
    observe instruments keep running. New ones need a strategy part in their
    learning question.
+
+## Single track to live (owner, 2026-11-04)
+
+The project settles on one route to live capital, so that improvements arrive
+as versions of one book rather than as a new instrument each month.
+
+1. **One track can reach live capital: the strategy book.** That is
+   `owner-strategy-book-v0` ([registration](strategy-book-registration.md)) and
+   its successor versions. Every other instrument is either a feeder (it
+   produces inputs or proposals for the strategy book) or a control (it gives
+   the strategy book something to beat). Nothing else is promoted toward live.
+2. **Multi-market from v0.** The book reads the FTSE 350 screen and the library
+   screens of every graduated market, with the existing per-name input-quality
+   gate (F9-B). More markets give more closed episodes for the same rules. The
+   live screener stays on the FTSE 350. Library entries need steps 1.8 and 1.9.
+3. **The cue-consumer lab (super book) becomes a feeder and a reference.** Its
+   aim, training toward better timing, is the right one; its design cannot
+   reach live because it tunes itself mid-run and declares its scores
+   incomparable. From now on:
+   - its lab book keeps running unchanged on the FTSE screen as an outside
+     reference ("buy on the weekly cue, hold 63 trading days");
+   - the strategy book carries the same policy as its own buy-on-signal
+     control on the same universe, which answers whether timing adds anything;
+   - its review machinery (post-sale reviews, the judgment-in-the-round trail,
+     five-lever scoring) moves onto strategy-book episodes in step 2.4;
+   - its tune proposals feed the version review below. Sealed-child spawn,
+     novelty distance and cull (N223, N226, N227) are not built while this
+     section holds. See [cue-consumer-mft.md](cue-consumer-mft.md#role-under-the-single-track-owner-2026-11-04).
+4. **Versions, not ideas.** v0 runs to its thickness gate. The version review
+   happens at that gate and then at most once every 26 weeks. Between reviews,
+   up to four sealed **bench** challengers (exit variants or entry filters)
+   are scored daily on the book's own entries, with a 2.5-standard-error bar
+   because several run at once ([registration](strategy-book-registration.md#8-scoring)).
+   At each review the owner may promote **at most one** challenger. The
+   evidence also includes post-sale reviews, five-lever scores, the selection
+   board, the gate-rejected shadows, channel columns (N254), the US rehearsal
+   (step 2.5) and demo-account fills. A promoted challenger becomes a new
+   `registration_id`; the old version is frozen with its history. New bench
+   challengers are sealed only at a review. Ideas that arise between reviews go
+   to the deferred store with the tag `strategy-version-review`; they are not
+   built as instruments.
+5. **No new observe instruments** unless the instrument is a strategy-book
+   component or a step in this plan. When step 2.3 starts, the owner decides
+   which existing observe instruments to freeze. Candidates: N201, N206, the
+   parallel timing lenses (L652) and the super book's unbuilt spawn and cull
+   work. Frozen books keep their history.
+6. **Execution starts early.** Step 5.1 (Trading 212 demo-account mirroring)
+   starts once the forward book is running, not after its gate. It risks no
+   capital, and real fills are part of the Phase 3 proof standard.
+7. **Data priority.** At signature the strategy book takes the head of the
+   launch queue for a narrow scope: filing bodies and memo recency on its
+   universe names that already pass parts 1 and 2 (registration question 7).
+   Holdings and the running units stay ahead of it.
+8. **Learning rate, stated.** Forward evidence is slow. In replays a paired
+   difference of about 2 points per trade took roughly a year of multi-market
+   entries to read clearly, and longer on the FTSE 350 alone. Four things
+   speed it up, in order of effect:
+   - **long history first:** the US point-in-time rehearsal (step 2.5) tests
+     the rules and candidate filters on 25 years, including four market falls,
+     so the forward book confirms instead of searching;
+   - **breadth:** library entries (steps 1.8 and 1.9) multiply the number of
+     trades;
+   - **same-entry comparisons:** bench columns and comparison exits score
+     variants on the same trades, which removes most of the market noise;
+   - **selection is cross-sectional:** each week offers many names to compare
+     side by side, so "which names make the better winners" (the selection
+     board) learns faster than "which timing rule is better".
+   A slow read is expected, not a failure.
+
+Owner decisions under this section (version reviews, the instrument freeze)
+are in the [human tasks checklist](human-tasks-checklist.md#ad-hoc-when-triggered).
 
 ## Phases
 
@@ -51,6 +124,8 @@ it is done. Phase gates are owner decisions, listed in the
 | 1.5 | **Interim results in the decline gate**: diagnose interim coverage and read existing interim sources directly (live screen fields unchanged). Only 3 of 248 FTSE screen rows carry interim EPS today. | N250 | Diagnosis committed; gate scores year-on-year interim revenue and EPS where sources allow |
 | 1.6 | **Keep prior-year quarters** in the Yahoo quarterly series so year-on-year interim comparisons work (8 buy-tier names already have a short series) | N252 | Interim revenue on those 8 buy-tier names |
 | 1.7 | **Extract half-year revenue and EPS** from the 48 buy-tier half-year results bodies, after fixing filing body path resolution | N253 | Interim revenue and EPS on most FTSE buy-tier names |
+| 1.8 | **Sector headwind gate on graduated library markets.** Score each sector within its own market: price breadth and trend from that market's charts, operating-decline breadth from the decline store. Library sector labels come from each market's `latest_signals.csv`; record the label on every refresh so later reads are dated. Same thresholds and fail-closed rules as v0. | N251 | Verdict on every sector holding a buy-tier name in a graduated market |
+| 1.9 | **Input-quality binds (F9-B) for library names.** Compute `key_filing_bodies`, `fcf_basis_bound`, `overlay_bound` and `memo_recent` for library buy-tier names from their research folders, with the same meanings as `decision_input_inventory.py` (library rows carry no `fcf_basis_overlay`, so the FCF bind needs a library definition stated in the runbook). Report-only store plus finding; no rememo or ingest from the finding. | N249 | Four binds on every library buy-tier name in a graduated market |
 
 **Phase 1 gate (owner):** review the gate verdicts on a sample of 10 FTSE
 buy-tier names (5 flagged, 5 clear) against the cited evidence. Accept,
@@ -60,13 +135,18 @@ adjust thresholds once (logged), or reject.
 
 | Step | Deliverable | Deferred | Done when |
 |------|-------------|----------|-----------|
-| 2.1 | **Registration.** Pinned learning question, entry-low and exit-high rules, recovery-hold rules, cap, review date and stake are frozen before scoring. Draft: [`strategy-book-registration.md`](strategy-book-registration.md). | N249 | Registration committed; owner signs off |
-| 2.2 | **Archive replay** of the rules on the daily chart history (about two years, 1,269 tickers), using the value set from archived weekly runs and the Phase 1 gates. Report-only: these names survived to be charted. | N249 | Swing and recovery scoreboards published |
-| 2.3 | **Forward fixed-stake strategy book** on the daily schedule after open settle, with an episode walker. Swing and recovery scored separately. | N249 | Book running; ops-monitor finding; dashboard strip |
+| 2.1 | **Registration.** Pinned learning question, multi-market universe, entry-low rule, checkpoint-ladder exit with the fail-to-launch deadline, comparison exits, gate-rejected shadows, selection board, challenger bench, stake, both controls and the gate are frozen before scoring. Draft: [`strategy-book-registration.md`](strategy-book-registration.md). | N249 | Registration committed; owner signs off |
+| 2.2 | **Archive replay** of the rules on the daily chart history (about two years, 1,269 tickers), using the value set from archived FTSE and library weekly runs and the Phase 1 gates. Report-only: these names survived to be charted. Includes the buy-on-signal control and report-only channel columns (N254). | N249 | Ladder, comparison-exit, shadow, per-market and control boards published |
+| 2.3 | **Forward fixed-stake strategy book** on the daily schedule after open settle, with an episode walker. Floor exits, fail-to-launch sales and thesis breaks scored separately; entry snapshots stored on every episode. FTSE names from the start; library names once 1.8 and 1.9 land. | N249 | Book running; ops-monitor finding; dashboard strip |
+| 2.4 | **Review layer on strategy-book episodes.** Point the post-sale review queue, the judgment-in-the-round trail and five-lever scoring (from the cue-consumer lab) at strategy-book closes. Reviews and lever scores are inputs to the version review, never mid-run tunes. | N222 | Every closed strategy-book episode reaches the review queue; lever scores published |
+| 2.5 | **US point-in-time rehearsal.** Register, then run, the strategy book's rules, comparison exits, shadows, selection board and bench candidates on the licensed survivorship-free US history the historical screen replay already uses (S&P 500 and mid caps, 2000 onward, as-reported fundamentals), with that replay's sealed holdout revealed once. Report-only; US evidence about the method. | N249, L536 | Registration committed before data is bought; one licensed month run and deleted under the licence; development and holdout boards committed |
 
-**Phase 2 gate (owner):** a sample-thickness gate fixed in the registration
-(for example 48 closed episodes over 8 weeks). The strategy book then becomes
-the primary learning track, with the matched-30 books as controls.
+**Phase 2 gate (owner):** the sample-thickness gate fixed in the registration
+(48 counted mature episodes, at most 6 per entry week).
+The strategy book then becomes the primary learning track, with the matched-30
+books as controls. The first version review (see
+[single track to live](#single-track-to-live-owner-2026-11-04)) happens at
+this gate.
 
 ### Phase 3 — Proof and accounting
 
@@ -87,7 +167,7 @@ the primary learning track, with the matched-30 books as controls.
 
 | Step | Deliverable | Deferred | Done when |
 |------|-------------|----------|-----------|
-| 5.1 | Mirror strategy-book orders onto the **Trading 212 demo account** (limit orders at planned levels); record fills against assumed prices | L535 | Measured slippage replaces assumed spread for the book |
+| 5.1 | Mirror strategy-book orders onto the **Trading 212 demo account** (limit orders at planned levels); record fills against assumed prices. Starts once step 2.3 is running, before the Phase 2 gate. | L535 | Measured slippage replaces assumed spread for the book |
 | 5.2 | **Read-only live account sync** (cash, positions) and reconciliation finding | N14 | Daily reconciliation green |
 | 5.3 | **Supervised order drafts**: system proposes, owner approves each order | N14 | Owner approves N consecutive drafts without edits |
 | 5.4 | **Binding kill switch** and position / drawdown limits on the live path | N13 | Tested by drill |
@@ -97,7 +177,7 @@ the primary learning track, with the matched-30 books as controls.
 
 | Step | Deliverable | Deferred |
 |------|-------------|----------|
-| 6.1 | Run the strategy book on admitted markets that pass the input-quality bar | — |
+| 6.1 | Markets that graduate after signature join the strategy book by its universe rule; this step covers markets that need new ingest first (for example `sp400`) | — |
 | 6.2 | Cross-market, currency-neutral ranking into one deployable book | L200 |
 | 6.3 | Extend coverage toward the Trading 212 catalogue (mid / small caps) | L48, L534 |
 
@@ -164,12 +244,14 @@ merge clashes manageable.
 |------|--------|-------------|-------|
 | 0.1, 0.2 | Done | `cursor/autonomy-readiness-review-567c` | Supervisor |
 | 1.1 | Merged (one change round: one row label per comparison, freshness counts) | #1274 | Claude Sonnet 5.5 |
-| 1.2 | In review (one change round: decline-gate verdicts are the single definition of "declining"; screen fields are a material-threshold fallback) | #1278 | GPT-5.6 |
+| 1.2 | Merged 2026-11-04 (one change round: decline-gate verdicts are the single definition of "declining"; screen fields are a material-threshold fallback) | #1278 | GPT-5.6 |
 | 1.3 | Merged (single choke point; no prompt version or rememo trigger affected) | #1273 | Composer 2.5 |
 | 1.4 | Merged; runs once the owner adds `TRADING212_API_KEY` / `TRADING212_API_SECRET`. Committed catalogue is from 2026-07-22 | #1272 | Composer 2.5 |
 | 0.3 | Merged (supervisor corrected two rows) | #1277 | Composer 2.5 |
 | 1.5 | Merged. Buy-tier interim coverage did not move (2 of 65): Yahoo series lack the prior-year quarter and half-year bodies are not extracted, hence 1.6 and 1.7 | #1276 | Grok 4.7 |
-| 1.6 | In review. Writer merges up to 12 quarters; git backfill gave interim revenue to 4 of the 8 buy-tier names (GSK, SHEL, BARC, BP). IAG, BGEO, ATYM, NWG have no prior-year quarter in git. No FTSE verdict change. Two library verdicts moved to declining (FSLR, HRL) | #1281 | Grok 4.7 |
+| 1.6 | Merged 2026-11-04. Writer merges up to 12 quarters; git backfill gave interim revenue to 4 of the 8 buy-tier names (GSK, SHEL, BARC, BP). IAG, BGEO, ATYM, NWG have no prior-year quarter in git. No FTSE verdict change. Two library verdicts moved to declining (FSLR, HRL) | #1281 | Grok 4.7 |
 | 1.7 | Next | — | Grok 4.7 |
-| Phase 1 gate | Waiting on 1.2 merge and a week of daily refreshes | — | Owner |
-| 2.1 | Draft merged; awaiting owner signature and answers to its open questions | #1280 | Grok 4.7 |
+| 1.8, 1.9 | Next after 1.7 (sector gate on graduated markets; F9-B binds for library names). Library entries to the strategy book wait on both | — | Grok 4.7 |
+| Phase 1 gate | Waiting on a week of daily refreshes after the 1.2 merge (2026-11-04), then the owner's signature | — | Owner |
+| 2.1 | Draft merged (#1280); revised for the single track, multi-market universe, capital view and the checkpoint-ladder exit (#1283). Awaiting owner signature and answers to its 9 open questions | #1280, #1283 | Grok 4.7, then supervisor |
+| 2.5 | Next after signature: write the rehearsal registration, then the owner buys one data month | — | Grok 4.7 (xhigh), then supervisor |

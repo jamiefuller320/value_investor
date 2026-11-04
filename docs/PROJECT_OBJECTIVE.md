@@ -23,8 +23,9 @@ candidate for retirement. The step-by-step plan for getting there is in
 
 **In one sentence:** buy stocks that are cheap on fundamentals and show no sign
 of declining operating performance or sector-wide trouble, buy them at
-short-term price lows, sell them at short-term highs, and if the timing is
-wrong, hold for recovery as long as the business case still stands.
+short-term price lows, let a rise run while a ratcheting profit floor keeps
+most of the gain, and if the timing is wrong, hold for recovery while the
+business case still stands, up to a fixed wait for the trade to get going.
 
 | Part | Rule | Purpose |
 |------|------|---------|
@@ -32,16 +33,24 @@ wrong, hold for recovery as long as the business case still stands.
 | 2. Not declining | No sign of declining operating performance: revenue, operating margin, EPS and free cash flow trend over recent reported periods, plus profit warnings and guidance cuts. Fail closed when the data is missing. | Separates cheap-and-sound from cheap-because-failing (value traps). |
 | 3. Sector sound | No sector-wide negative factor: the sector as a whole is not in a broad price or earnings decline. Judged on the sector itself, not by ranking a stock against its peers. | Stops the cheapest name in a falling sector looking attractive. |
 | 4. Entry | Buy names that pass 1–3 at a **short-term price low**. Membership of the value set makes a name eligible; it is not the buy signal. | Timing edge on entry. |
-| 5. Normal exit | Sell at a **short-term price high**. Dropping out of a top-N ranking is **not** an exit signal. | Timing edge on exit; turns over capital. |
-| 6. Recovery hold | If the price falls after entry, hold. Exit a recovery hold only when (a) the price recovers to the exit rule or a recovery target, or (b) the thesis breaks: parts 2 or 3 fail, the screen signal becomes `avoid`, or research says `pass`. A price drop alone is never a sell. | Lets mis-timed entries recover instead of crystallising losses. |
-| 7. Limits | Every recovery hold has a review date and a recovery target (entry price, later a fair-value estimate). Capital in recovery holds is capped as a share of the book, so stuck positions cannot crowd out new entries. | Stops "hold for recovery" turning into holding a deteriorating business. |
+| 5. Normal exit | Once a trade has risen **+10%**, let it run; sell when the price falls back through a **profit floor** that ratchets up behind it (checkpoint ladder). Dropping out of a top-N ranking is **not** an exit signal. | Keeps the gain from a strong rally instead of capping it at the first short-term high. |
+| 6. Recovery hold | If the price falls after entry, hold. A price drop alone is never a sell. A trade that has not reached +10% within a fixed wait (63 trading sessions in v0) is sold to release its capital for fresh entries. The thesis breaking (parts 2 or 3 fail, the screen signal becomes `avoid`, or research says `pass`) ends any position. | Lets mis-timed entries recover, without letting trades that never start tie up capital. |
+| 7. Limits | Every position has review dates and a time cap. The share of the book in recovery holds is reported, and can be capped, so stuck positions cannot crowd out new entries. | Stops "hold for recovery" turning into holding a deteriorating business. |
 
 **How it is judged:**
 
 - Each trade is an **episode** scored at a fixed stake after fair costs
-  ([`ops/fair-cost-primacy.md`](ops/fair-cost-primacy.md)). Swing episodes
-  (exited at a high) and recovery holds are scored **separately**: hit rate and
-  gain for swings; time to recovery and loss on thesis break for recovery holds.
+  ([`ops/fair-cost-primacy.md`](ops/fair-cost-primacy.md)). Floor exits, trades
+  sold at the fixed wait, and thesis breaks are scored **separately**: gain and
+  checkpoint reached for floor exits; loss for trades that never got going;
+  loss on thesis break.
+- Parts 5–7 were amended on 2026-11-04, before the strategy book was signed.
+  The first version sold at the first short-term high, held mis-timed entries
+  until they recovered to the entry price, and capped recovery holds as a share
+  of the book. Replays showed that exit capped typical gains at about +3–4%
+  while recovery holds tied up most of the capital. The strategy book scores
+  the first version's exit beside the amended one on the same entries
+  ([registration](ops/strategy-book-registration.md#4-exit)).
 - Book-level return versus a total-return benchmark is reported beside the
   episode scores, but it is not the only proof. A paper book cannot detect a
   small edge versus an index on a useful timescale
@@ -55,6 +64,13 @@ target set. That is not this strategy's exit. Those books remain as controls
 and keep their history. The strategy runs on a **new cold-start book**; live
 books are never rewritten mid-flight.
 
+**Single track to live (owner, 2026-11-04):** that strategy book is the only
+route to live capital. It reads the FTSE 350 and every graduated library market
+(names still need F9-B), so it gathers evidence faster than a FTSE-only book.
+Other instruments are feeders or controls. Improvements arrive as sealed
+versions of the book at a version review, not as new instruments. Detail:
+[`ops/strategy-reorientation-plan.md`](ops/strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04).
+
 ---
 
 ## North-star stages
@@ -66,10 +82,10 @@ Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full 
 | **0** | UK quant core | FTSE 350 screen, adaptive weights, research memos, paper funds, post-open automation | Weekly archives accumulating; paper-auto + decision packs usable |
 | **1** | Decision-review learning | Automated book learns from its own outcomes after costs | Documented review loop; knobs adjust from reviewed excess returns (`ftse-decision-review`) |
 | **2** | Manual-action excellence | Decision packs good enough for routine human trading *(optional for live capital)* | Stable packs: signal → thesis → levels → size → risks; low false confidence (`decision_pack`) |
-| **2b** | **Primary learning track** *(current focus)* | AI judgment paper book vs market datums | Hands-off: research-gated picks; success = excess after costs vs ^FTSE (+ beat rules control) |
+| **2b** | **Primary learning track** *(current focus)* | The strategy book ([registration](ops/strategy-book-registration.md)), the single track to live. The AI judgment paper book and decision-review knobs continue as feeders and controls | Positive median fair-cost mature episode at the registered gate, then improvement by sealed versions |
 | **3** | Library-ready global data | Multi-market fundamentals/prices grow *offline* without polluting the live screen | Per-market manifests with coverage & freshness metrics; PIT constituent snapshots |
 | **4** | Controlled universe expansion | First non-UK market screened with same quality bar as FTSE 350 | Data-quality and liquidity floors pass; paper track only at first |
-| **5** | Self-improving automation | Portfolio rules improve from walk-forward review (evolution only if history is thick) | Cost-aware fitness; frozen screen signals for counterfactual safety |
+| **5** | Self-improving automation | The strategy book improves through sealed versions: pre-registered challengers scored automatically on the same entries (the bench), owner-stamped promotion at version reviews, candidates screened first on long point-in-time history (step 2.5) | Two completed version reviews before any automatic rule change (evolution only if history is thick); cost-aware fitness; frozen screen signals for counterfactual safety |
 | **6** | Global automated portfolio | Multi-market automated allocation with human override | Capital at risk only after stages 2–5 proven in paper |
 
 ### What “best progress” means now
@@ -79,8 +95,8 @@ Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full 
    Strategy phases take priority over new observe instruments that do not serve
    a strategy part. P1 input quality still comes first for names the strategy
    book holds or will buy.
-1. **Primary learning track (hands-off):** AI quasi-human paper decisions using research available at the time → confirm by **outperformance after costs vs the market** (and vs a rules control book). See [`docs/ops/primary-learning-track.md`](ops/primary-learning-track.md).
-2. **Keep decision-review learning running** — weekday paper-auto + `ftse-decision-review` on both tracks until knobs can apply.
+1. **Primary learning track: the strategy book** (single track to live, owner 2026-11-04). It learns by sealed versions: the challenger bench, the selection board and the gate-rejected shadows feed each version review, and the US point-in-time rehearsal screens candidates on long history first ([plan](ops/strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04)).
+2. **Feeders and controls keep running:** the AI judgment paper book ([`docs/ops/primary-learning-track.md`](ops/primary-learning-track.md)) and weekday paper-auto + `ftse-decision-review`. They inform version reviews; they do not reach live capital by themselves.
 3. **Optional human packs** — still useful for live capital verification; not the primary improvement loop.
 4. **Grow data libraries in the background (P2, cascaded)** — priority slot on one market until maintenance-threshold exhaustion; then **L322 admit** each market to the same epoch-0 standard (maintenance + frozen `buy_tier_level` + near-miss watch + weekday equal-support). That admission is **progressive** (one `market_queue` name at a time through spare sprint streams), not a single flip for every graduated slice. Do not fork shard AI or apply knobs until admitted books have marks. Do **not** add a fourth equal sprint stream. Do not change the live screen. See [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md#progressive-epoch-0-admission).
 5. **Only then** expand live coverage and tighten automation.
