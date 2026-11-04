@@ -172,8 +172,8 @@
     "market_context": "Market-relative results are read beside the verdicts with the plain book's own excess (the value regime). Lagging the market while beating the plain book is a value-regime result, not a rule failure."
   },
   "screen_code_fingerprint": "7a8397337b38df1f4495daad9f575606e89c00ddae07871efba03d9ed14d4ffb",
-  "rule_code_fingerprint": "49b901a70a1554ef5a1f233873cbf347c721be8b5d64a87668bb66dd9a260cdb",
-  "registered_at": "2026-10-26T09:07:06.007598+00:00",
+  "rule_code_fingerprint": "f2cec4597e4afbfeb1a6495ea53663b70cd2ad1dc50a45d768e3e8c6591c4535",
+  "registered_at": "2026-11-04T21:34:08.863477+00:00",
   "exit_rules": {
     "order": "Ordered from quickest to most patient sell; the plateau steps along this order.",
     "tier1": {
@@ -246,6 +246,12 @@
       "before_data": false,
       "change": "Open hrs-v2 after hrs-v1 holdout reveal: screen fingerprint moved with L571 / hsr-v2 dividend-yield unit normalisation. Spent hrs-v1 evidence stays under spent_epochs; do not reattribute.",
       "reason": "hrs-v1 holdout spent on pre-L571 screen fingerprint; reopen for hsr-v2 screen epoch."
+    },
+    {
+      "at": "2026-11-04",
+      "before_data": true,
+      "change": "Fingerprint refresh only. technical_analysis.py now passes each name's daily High and Low to the chart writer (strategy-book channel columns, N254, PR #1292). No screen, trade-plan, tactical or search rule changed.",
+      "reason": "rule_code_fingerprint hashes the whole of technical_analysis.py, so a chart-writing argument breaks the seal. No search has run and no holdout has been revealed."
     }
   ],
   "supersedes": [

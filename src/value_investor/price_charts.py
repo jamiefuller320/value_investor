@@ -129,6 +129,39 @@ def _volume_at(volume: pd.Series | None, sample_index: pd.Index) -> list[float |
     return values
 
 
+def _range_at(
+    raw: pd.Series | None,
+    *,
+    scale: pd.Series,
+    sample_index: pd.Index,
+    closes: list[float],
+    side: str,
+) -> list[float | None]:
+    """Daily high or low at the close timestamps, on the closes' price unit.
+
+    ``scale`` is the per-date factor the close unit fix applied. A high below
+    its close (or a low above it) is a Yahoo glitch; the close bounds it.
+    """
+    if raw is None:
+        return [None] * len(sample_index)
+    clean = raw.dropna()
+    values: list[float | None] = []
+    for stamp, close in zip(sample_index, closes, strict=True):
+        if stamp not in clean.index:
+            values.append(None)
+            continue
+        value = clean.loc[stamp]
+        if isinstance(value, pd.Series):
+            value = value.iloc[-1]
+        factor = scale.get(stamp, 1.0)
+        number = _round_price(float(value) * float(factor))
+        if number is None:
+            values.append(None)
+            continue
+        values.append(max(number, close) if side == "high" else min(number, close))
+    return values
+
+
 def levels_from_trade_plan(
     trade_plan: dict[str, Any] | None,
     *,
@@ -433,11 +466,14 @@ def build_price_chart_payload(
     market: str | None = None,
     held: bool = False,
     volume: pd.Series | None = None,
+    high: pd.Series | None = None,
+    low: pd.Series | None = None,
 ) -> dict[str, Any] | None:
     """Build a compact chart JSON for one ticker.
 
-    ``volumes`` (aligned to ``dates``) is always present for LLM / autopsy
-    context. Dashboard UI toggles volume display off by default.
+    ``volumes``, ``highs`` and ``lows`` (aligned to ``dates``) are always
+    present, ``None`` where the source had no value. Dashboard UI toggles
+    volume display off by default.
     """
     clean = series.dropna()
     if clean.empty:
@@ -448,10 +484,12 @@ def build_price_chart_payload(
         normalize_close_series,
     )
 
+    raw_close = clean.astype("float64")
     clean, unit_norm = normalize_close_series(clean)
     clean = clean.dropna()
     if clean.empty:
         return None
+    unit_scale = (clean / raw_close.reindex(clean.index)).fillna(1.0)
 
     sampled = _downsample(clean)
     dates = [pd.Timestamp(index).strftime("%Y-%m-%d") for index in sampled.index]
@@ -477,6 +515,10 @@ def build_price_chart_payload(
     sma50 = next((value for value in reversed(sma50_series) if value is not None), None)
     sma200 = next((value for value in reversed(sma200_series) if value is not None), None)
     volumes = _volume_at(volume, sampled.index)
+    highs = _range_at(
+        high, scale=unit_scale, sample_index=sampled.index, closes=closes, side="high"
+    )
+    lows = _range_at(low, scale=unit_scale, sample_index=sampled.index, closes=closes, side="low")
 
     as_of_iso = (as_of or datetime.now(UTC)).isoformat()
     # Prefer an explicit streak start; fall back to this screen's as-of date.
@@ -551,6 +593,8 @@ def build_price_chart_payload(
         "dates": dates,
         "closes": closes,
         "volumes": volumes,
+        "highs": highs,
+        "lows": lows,
         "sma50_series": sma50_series,
         "sma200_series": sma200_series,
         "levels": current_levels,
@@ -592,12 +636,15 @@ def write_price_charts_from_history(
     signal_filter: Collection[str] | None = None,
     market: str | None = None,
     volumes: dict[str, pd.Series] | None = None,
+    highs: dict[str, pd.Series] | None = None,
+    lows: dict[str, pd.Series] | None = None,
 ) -> list[Path]:
     """Persist chart payloads for signal rows that have price history.
 
     ``signal_filter`` limits which signals are written. ``None`` writes every
     row with history (used so lifecycle cards beyond buy-tier get charts).
-    Optional ``volumes`` is keyed by ticker (same index family as closes).
+    Optional ``volumes``, ``highs`` and ``lows`` are keyed by ticker (same
+    index family as closes).
     """
     if signals.empty or "ticker" not in signals.columns:
         return []
@@ -608,6 +655,8 @@ def write_price_charts_from_history(
     if parent_history not in dirs:
         dirs.append(parent_history)
     volume_map = volumes or {}
+    high_map = highs or {}
+    low_map = lows or {}
 
     rows = signals
     if signal_filter is not None and "signal" in signals.columns:
@@ -634,6 +683,8 @@ def write_price_charts_from_history(
             snapshot_dirs=dirs,
             market=market,
             volume=volume_map.get(ticker),
+            high=high_map.get(ticker),
+            low=low_map.get(ticker),
         )
         if payload is None:
             continue
@@ -694,12 +745,14 @@ def chart_payload_needs_refresh(
     signal: str | None = None,
     held: bool = False,
 ) -> bool:
-    """True when chart JSON is missing SMA series, volumes, or entry levels."""
+    """True when chart JSON is missing SMA series, volumes, highs/lows, or entry levels."""
     if not isinstance(payload, dict):
         return True
     if "sma50_series" not in payload or "sma200_series" not in payload:
         return True
     if "volumes" not in payload:
+        return True
+    if "highs" not in payload or "lows" not in payload:
         return True
     if str(payload.get("period") or "") != CHART_LOOKBACK_PERIOD:
         return True
@@ -821,6 +874,8 @@ def ensure_price_charts(
             continue
         series = frame["Close"]
         volume = frame["Volume"] if "Volume" in frame.columns else None
+        high = frame["High"] if "High" in frame.columns else None
+        low = frame["Low"] if "Low" in frame.columns else None
         plan = (
             report.get("trade_plan")
             if isinstance(report.get("trade_plan"), dict)
@@ -839,6 +894,8 @@ def ensure_price_charts(
             market=market,
             held=bool(report.get("held")),
             volume=volume,
+            high=high,
+            low=low,
         )
         if payload is None:
             continue
