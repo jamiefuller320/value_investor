@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-03T20:21:31+00:00",
+  "updated_at": "2026-11-04T08:52:32+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16456,6 +16456,40 @@
       "status": "open",
       "source": "docs/ops/strategy-book-registration.md",
       "added_at": "2026-11-03T20:21:31+00:00"
+    },
+    {
+      "id": "N254",
+      "category": "not_now",
+      "section": "research",
+      "title": "Channel diagnostics on strategy book episodes (report-only)",
+      "summary": "Record longer-term channel context on every strategy-book episode at the signal close. Owner view (2026-11-04): the 6-month (126-session) channel is the primary lens for short swings; the 12-month (252-session) pattern is wider context, since shorter channels sit inside longer ones and the longer pattern offers more modest swings. Owner hypothesis: signals the wider market and algorithmic accounts watch can move prices whatever their underlying merit, so include channel definitions traders actually draw (trendlines through swing lows and highs on closes, Bollinger and Donchian bands, 50/200-day averages) beside the log-price regression slope, position in residual standard deviations and fit. Report-only columns on the step 2.2 replay and step 2.3 forward boards; no entry, exit or hold effect on the signed registration. A first replay on today's FTSE buy tier (lookahead, no gates) found no consistent edge on direction; on the 6-month channel, lows at or below the lower band did better than lows still mid-channel.",
+      "revisit_when": "When step 2.2 (archive replay walker) is briefed: fold these columns into its output, 6-month as primary and 12-month as context. Closes-only (no highs or lows stored); refuse thinned charts as the registration already requires.",
+      "tags": [
+        "strategy-book",
+        "technical",
+        "channel",
+        "report-only"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a1a238-a5f9-7c8d-a4b5-41187bce567c",
+      "added_at": "2026-11-04T08:52:32+00:00"
+    },
+    {
+      "id": "L668",
+      "category": "later",
+      "section": "learning",
+      "title": "Channel-filtered strategy book twin (new registration)",
+      "summary": "A twin of the signed strategy book that adds a 6-month channel rule with the 12-month pattern as context, e.g. take short-term lows only at or below the lower band of the 6-month channel, or skip lows inside a falling 6-month channel. Prefer a channel definition other traders also watch (owner hypothesis: widely used signals gain influence because they are used). Must be a new registration_id written before its own scores are read, never an edit of v0. Price channels only filter entries or label context; a falling price still never sells (strategy part 6).",
+      "revisit_when": "Forward strategy book has at least 48 closed episodes over 8 weeks and the report-only 6-month channel columns show a stable difference between buckets (the 12-month view is context, not a second hurdle). Needs chart history beyond the ~559-bar downsample cliff fixed in step 2.3.",
+      "tags": [
+        "strategy-book",
+        "technical",
+        "channel",
+        "twin"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a1a238-a5f9-7c8d-a4b5-41187bce567c",
+      "added_at": "2026-11-04T08:52:32+00:00"
     }
   ],
   "fragments": [
