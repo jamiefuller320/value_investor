@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-03T08:47:16.406176+00:00
+Track: `buy_tier_level` · updated 2026-11-04T08:47:15.211304+00:00
 
 ## Portfolio loser feedback
 
@@ -15,7 +15,7 @@ Track: `buy_tier_level` · updated 2026-11-03T08:47:16.406176+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 46%
+- conviction 53%
 
 ### ENI.MI — intact / hold_tolerate (-1.4%)
 - still buy
@@ -33,7 +33,7 @@ Track: `buy_tier_level` · updated 2026-11-03T08:47:16.406176+00:00
 
 ### PRX.AS — weakening / watch_review (+0.3%)
 - research verdict caution
-- conviction 24% below intact floor
+- conviction 28% below intact floor
 - still buy
 - cheapness family still passes
 
