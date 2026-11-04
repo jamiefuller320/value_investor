@@ -156,9 +156,11 @@ RECOVERY_BUNDLE_WORKFLOWS: frozenset[str] = frozenset(
     }
 )
 # Safe to workflow_dispatch when overdue past email-ready and no run is active.
-# Keep this narrow: weekday live-path recoveries only (not Sunday quiet-bundle children).
+# Keep this narrow: weekday live-path recoveries + daily CI nightly (read-only;
+# not Sunday quiet-bundle children).
 AUTO_DISPATCH_OVERDUE_WORKFLOWS: frozenset[str] = frozenset(
     {
+        "ci-main-nightly.yml",
         "ingest-loop.yml",
         "paper-auto.yml",
     }

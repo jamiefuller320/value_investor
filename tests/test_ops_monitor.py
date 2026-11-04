@@ -440,7 +440,7 @@ def test_check_workflow_freshness_marks_ingest_paper_overdue_auto_fixable_past_r
 
     def fake_latest(workflow_file, **kwargs):
         if (
-            workflow_file in {"ingest-loop.yml", "paper-auto.yml"}
+            workflow_file in {"ci-main-nightly.yml", "ingest-loop.yml", "paper-auto.yml"}
             and kwargs.get("status") == "success"
         ):
             return {"id": 1, "created_at": forty_hours_ago}
@@ -459,8 +459,10 @@ def test_check_workflow_freshness_marks_ingest_paper_overdue_auto_fixable_past_r
 
     ingest = next(row for row in findings if row.title == "Workflow overdue: FTSE Ingest Loop")
     paper = next(row for row in findings if row.title == "Workflow overdue: FTSE Paper Automation")
+    nightly = next(row for row in findings if row.title == "Workflow overdue: CI main nightly")
     assert ingest.auto_fixable is True and ingest.fixed is False
     assert paper.auto_fixable is True and paper.fixed is False
+    assert nightly.auto_fixable is True and nightly.fixed is False
 
 
 def test_apply_auto_fixes_dispatches_overdue_ingest_and_paper():
@@ -481,6 +483,13 @@ def test_apply_auto_fixes_dispatches_overdue_ingest_and_paper():
             summary="No successful run within 28h.",
             auto_fixable=True,
         ),
+        OpsFinding(
+            severity="fail",
+            category="workflows",
+            title="Workflow overdue: CI main nightly",
+            summary="No successful run within 28h.",
+            auto_fixable=True,
+        ),
     ]
     dispatched: list[str] = []
 
@@ -497,7 +506,7 @@ def test_apply_auto_fixes_dispatches_overdue_ingest_and_paper():
     ):
         fixes = apply_auto_fixes(findings, apply=True)
 
-    assert dispatched == ["ingest-loop.yml", "paper-auto.yml"]
+    assert dispatched == ["ingest-loop.yml", "paper-auto.yml", "ci-main-nightly.yml"]
     assert {row["action"] for row in fixes} == {"dispatch_overdue_workflow"}
     assert all(row.fixed for row in findings)
     assert all("dispatched" in (row.action_taken or "") for row in findings)
