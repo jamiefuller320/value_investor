@@ -1,18 +1,18 @@
 {
   "schema_version": 2,
   "broker": "trading212",
-  "as_of": "2026-07-22T07:38:54.348967+00:00",
+  "as_of": "2026-11-04T18:57:37.435584+00:00",
   "policy_as_of": "2026-07-22",
   "catalogue": {
     "schema_version": 1,
-    "fetched_at": "2026-07-22T07:38:49.733883+00:00",
+    "fetched_at": "2026-11-04T18:57:35.197695+00:00",
     "env": "live",
     "source": "https://live.trading212.com",
-    "instrument_count": 17328,
-    "isin_count": 13907,
+    "instrument_count": 18558,
+    "isin_count": 14641,
     "type_counts": {
-      "STOCK": 11173,
-      "ETF": 6133,
+      "STOCK": 12161,
+      "ETF": 6375,
       "WARRANT": 22
     },
     "exchanges_count": 17
@@ -28,7 +28,7 @@
       "ticker_count": 503,
       "tradable_count": 503,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 503,
+      "catalogue_hit_count": 502,
       "phone_only_count": 0,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
@@ -37,13 +37,21 @@
     },
     "euro_stoxx50": {
       "ticker_count": 50,
-      "tradable_count": 49,
-      "tradable_pct": 0.98,
-      "catalogue_hit_count": 22,
+      "tradable_count": 48,
+      "tradable_pct": 0.96,
+      "catalogue_hit_count": 21,
       "phone_only_count": 0,
-      "unknown_venue_count": 0,
+      "unknown_venue_count": 1,
       "curated_exception_count": 1,
       "non_tradable_sample": [
+        {
+          "ticker": "NOKIA.HE",
+          "t212_exchange": null,
+          "ii_exchange": null,
+          "deal_channel": "n/a",
+          "basis": "unknown_venue",
+          "exception_reason": "No T212 catalogue match and Yahoo suffix '.HE' is not on the fallback venue allowlist"
+        },
         {
           "ticker": "NDA-FI.HE",
           "t212_exchange": "Nasdaq Helsinki",
@@ -55,11 +63,39 @@
       ],
       "path": "by_market/euro_stoxx50.csv"
     },
+    "euro_depth": {
+      "ticker_count": 195,
+      "tradable_count": 193,
+      "tradable_pct": 0.9897,
+      "catalogue_hit_count": 116,
+      "phone_only_count": 0,
+      "unknown_venue_count": 1,
+      "curated_exception_count": 1,
+      "non_tradable_sample": [
+        {
+          "ticker": "NOKIA.HE",
+          "t212_exchange": null,
+          "ii_exchange": null,
+          "deal_channel": "n/a",
+          "basis": "unknown_venue",
+          "exception_reason": "No T212 catalogue match and Yahoo suffix '.HE' is not on the fallback venue allowlist"
+        },
+        {
+          "ticker": "NDA-FI.HE",
+          "t212_exchange": "Nasdaq Helsinki",
+          "ii_exchange": "Nasdaq Helsinki",
+          "deal_channel": "n/a",
+          "basis": "exception",
+          "exception_reason": "Nordea Helsinki listing — confirm against T212 catalogue before treating as tradable; kept non-tradable until a catalogue hit exists."
+        }
+      ],
+      "path": "by_market/euro_depth.csv"
+    },
     "asx200": {
       "ticker_count": 200,
       "tradable_count": 200,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 65,
+      "catalogue_hit_count": 68,
       "phone_only_count": 0,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
@@ -67,10 +103,10 @@
       "path": "by_market/asx200.csv"
     },
     "ftse_smallcap": {
-      "ticker_count": 86,
-      "tradable_count": 86,
+      "ticker_count": 83,
+      "tradable_count": 83,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 66,
+      "catalogue_hit_count": 62,
       "phone_only_count": 0,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
@@ -78,10 +114,10 @@
       "path": "by_market/ftse_smallcap.csv"
     },
     "nasdaq100": {
-      "ticker_count": 103,
-      "tradable_count": 103,
+      "ticker_count": 101,
+      "tradable_count": 101,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 103,
+      "catalogue_hit_count": 101,
       "phone_only_count": 0,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
@@ -103,7 +139,7 @@
       "ticker_count": 40,
       "tradable_count": 40,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 18,
+      "catalogue_hit_count": 21,
       "phone_only_count": 0,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
@@ -125,7 +161,7 @@
       "ticker_count": 99,
       "tradable_count": 99,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 57,
+      "catalogue_hit_count": 59,
       "phone_only_count": 0,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
@@ -136,7 +172,7 @@
       "ticker_count": 35,
       "tradable_count": 35,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 19,
+      "catalogue_hit_count": 18,
       "phone_only_count": 0,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
@@ -235,7 +271,7 @@
       "ticker_count": 20,
       "tradable_count": 20,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 15,
+      "catalogue_hit_count": 14,
       "phone_only_count": 0,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
@@ -246,7 +282,7 @@
       "ticker_count": 30,
       "tradable_count": 30,
       "tradable_pct": 1.0,
-      "catalogue_hit_count": 5,
+      "catalogue_hit_count": 6,
       "phone_only_count": 0,
       "unknown_venue_count": 0,
       "curated_exception_count": 0,
@@ -263,6 +299,17 @@
       "curated_exception_count": 0,
       "non_tradable_sample": [],
       "path": "by_market/iseq20.csv"
+    },
+    "sp400": {
+      "ticker_count": 0,
+      "tradable_count": 0,
+      "tradable_pct": 0.0,
+      "catalogue_hit_count": 0,
+      "phone_only_count": 0,
+      "unknown_venue_count": 0,
+      "curated_exception_count": 0,
+      "non_tradable_sample": [],
+      "path": "by_market/sp400.csv"
     }
   },
   "next_slices": [
@@ -395,10 +442,10 @@
     }
   ],
   "totals": {
-    "markets": 21,
-    "tickers": 1546,
-    "tradable": 1545,
-    "catalogue_hits": 1072,
-    "unknown_venue": 0
+    "markets": 23,
+    "tickers": 1736,
+    "tradable": 1732,
+    "catalogue_hits": 1187,
+    "unknown_venue": 2
   }
 }
