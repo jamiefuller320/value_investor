@@ -1,13 +1,13 @@
 # Cencora, Inc. (COR) — Research memo
 
-_Version 1 · Updated 2026-11-02T07:43:29.212704+00:00 · Mode: structured_verdict_
+_Version 1 · Updated 2026-11-04T07:41:41.545358+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
 
 ## RESEARCH VERDICT
-Verdict: caution
+Verdict: accumulate
 Risk: medium
-Confidence: 0.62
-Rationale: FY25 10-K OCF−capex FCF (~$3.2B) covers dividends (~$437M), but the screen’s 73% yield and ~$2.0B policy FCF diverge from filings; leverage, opioid accruals, and failed quality/FCF-yield checks weaken the buy.
-RiskTags: regulatory, litigation, leverage, liquidity, accounting
+Confidence: 0.68
+Rationale: FY2025 10-K XBRL aligns the screen on OCF/FCF ($3.88bn/$3.21bn) with ~7.3× FCF dividend cover, but debt rose with RCA funding, $4.3bn opioid accruals and PharmaLex impairments temper the buy.
+RiskTags: regulatory, litigation, leverage, competitive
