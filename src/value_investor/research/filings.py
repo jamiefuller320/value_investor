@@ -169,6 +169,15 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://images.ctfassets.net/wonkqgvit51x/54xred4udXVr4NktIfZGQd/472c8ba6301bb3a312644b5c78cabc5e/FY25_Trading_Update_FINAL__1_.pdf",
         "https://assets.ctfassets.net/wonkqgvit51x/4Bu64w8O1N70GkDYTswhfX/1271472bb018cd9b1acf95b6d2d72984/Trustpilot_-_H1-26_Results_FINAL.pdf",
     ],
+    # eng-20261103-08: ftse350 BGEO.L gap-closure had 0/0 refetch (empty IR allowlist); lionfinancegroup.uk PDFs.
+    "BGEO.L": [
+        "https://lionfinancegroup.uk/statics/49872-Lion-Finance-Group-AR-25.pdf",
+        "https://lionfinancegroup.uk/statics/Lion-Finance-Group-PLC-4Q25-and-FY25-Results.pdf",
+        "https://lionfinancegroup.uk/statics/Lion-Finance-Group-PLC-4Q25-and-FY25-Results-Presentation-1.pdf",
+        "https://lionfinancegroup.uk/statics/Lion-Finance-Group-PLC-2Q26-and-1H26-Results.pdf",
+        "https://lionfinancegroup.uk/statics/Lion-Finance-Group-PLC-2Q26-and-1H26-Results-Presentation-1.pdf",
+        "https://lionfinancegroup.uk/statics/Lion-Finance-Group-1Q26-Results-1.pdf",
+    ],
     # ftse_smallcap IWB blocker — BOOT.L parked unfetchable_iwb; CH PDFs fail but henryboot.co.uk statutory PDFs fetch.
     "BOOT.L": [
         "https://www.henryboot.co.uk/media/qlhercoe/32783-henry-boot-ar2025-interactive.pdf",
@@ -6049,6 +6058,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.sec.gov/Archives/edgar/data/756894/000119312526079253/d833573dex991.htm": "annual",
     "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex991.htm": "interim",
     "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex992.htm": "interim",
+    # eng-20261103-08: BGEO.L — Lion Finance AR-25 slug uses hyphen (ar-25), not ar25.
+    "https://lionfinancegroup.uk/statics/49872-Lion-Finance-Group-AR-25.pdf": "annual",
 }
 
 

@@ -7225,6 +7225,23 @@ def test_enq_l_fy_results_headline_classified_as_annual():
     assert classify_filing_period(headline) == "annual"
 
 
+def test_builtin_ir_allowlist_includes_bgeo_l():
+    """eng-20261103-08: ftse350 BGEO.L intensive pin had empty IR allowlist (0 refetch)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("BGEO.L") or []
+    assert any("49872-Lion-Finance-Group-AR-25.pdf" in url for url in urls)
+    assert any("4Q25-and-FY25-Results.pdf" in url for url in urls)
+    assert any("2Q26-and-1H26-Results.pdf" in url for url in urls)
+    assert all("lionfinancegroup.uk" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("BGEO.L")
+    assert len(rows) >= 4
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    periods = {row.get("period") for row in rows}
+    assert "annual" in periods
+    assert "interim" in periods
+
+
 def test_builtin_ir_allowlist_includes_ezj_l():
     """eng-20261102-01: ftse350 EZJ.L intensive pin had empty IR allowlist (0 refetch)."""
     from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
