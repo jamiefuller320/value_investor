@@ -7,6 +7,8 @@
 **Strategy spec:** [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md#investment-strategy-owner-2026-11-03)  
 **Human checklist:** `adhoc-strategy-phase-gate` in [`human-tasks-checklist.md`](human-tasks-checklist.md#ad-hoc-when-triggered)
 
+**Revised 2026-11-04 (owner decision, before signature):** the universe is multi-market from v0 (section 2), a buy-on-signal control answers whether timing adds anything (section 8), the thickness gate counts at most 6 episodes per entry week (section 9), and the book asks for the launch-queue head (sections 11 and 13). This book is the single track to live capital ([plan](strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04)).
+
 This document freezes the rules before any score is computed. It does not open a book, write a store, or run a replay. Step 2.2 (archive replay) and step 2.3 (forward book) wait until the owner signs, adjusts a listed number once, or rejects.
 
 Every number in the rule tables is **proposed** unless the row says it is an existing constant that this book stamps unchanged. The owner may change a proposed number once, in the signature note, before any score store exists. After the first score store is committed, section 10 applies.
@@ -17,14 +19,14 @@ No language model chooses an entry, an exit, or a review. The book reads the res
 
 ## 1. Learning question
 
-On FTSE 350 names that pass parts 1–3 and the current F9-B input-quality gate, does a fixed stake bought at the registered short-term low and sold at the registered short-term high — or held under the registered recovery rules — produce a **positive median fair-cost episode return**?
+On FTSE 350 names and names in graduated library markets that pass parts 1–3 and the current F9-B input-quality gate, does a fixed stake bought at the registered short-term low and sold at the registered short-term high — or held under the registered recovery rules — produce a **positive median fair-cost episode return**?
 
 That question is false when, at the thickness gate in section 9, the median fair-cost return across all closed episodes is zero or below. The book then stays observe-only. A different rule is a new `registration_id`. This one is not edited to make the median positive.
 
 Two results sit beside that and still mean stop or redesign, by a new registration:
 
 - The swing-high median is positive and the combined median is zero or below. The recovery holds are what failed. A price stop is not added to this id. A price drop never sells.
-- The forward book has run 26 weeks (proposed) and still has fewer than 48 closed episodes. The rule is too rare on this universe to answer the question. The thresholds stay as written.
+- The forward book has run 26 weeks (proposed) and still has fewer than 48 counted closed episodes (section 9). The rule is too rare on this universe to answer the question. The thresholds stay as written.
 
 A positive median on a thinner sample is not a pass. Forty-eight episodes are a look, not a measurement of a small annual edge. Forward paper evidence cannot resolve a 3% a year edge on a short window ([`historical-screen-replay.md`](historical-screen-replay.md#why) records years-to-detect of 125–900, and about 150 non-overlapping monthly cohorts before a 30-day screen spread is even discussable). Read a pass here as "this sample did not lose after fair costs."
 
@@ -34,20 +36,22 @@ The archive rehearsal in section 9 does not answer the question. It has no point
 
 Parts 1–3 of the strategy, plus the input-quality gate the project already uses for named stocks (F9-B). All of them are true on the decision date. One failure, or a missing input, means the name is not eligible. `insufficient_data` is not a pass.
 
-v0 is the live FTSE 350 screen only. Chart files for other markets stay out of the book. Phase 6 is where admitted markets can join, as a new registration.
+v0 is multi-market (owner, 2026-11-04). It reads the live FTSE 350 screen and the offline library screens of every market that has graduated from its ingest sprint. More markets give more closed episodes for the same rules, so the gate is reached sooner. The live screener itself stays on the FTSE 350; this is an observe book reading screens that already run.
 
 | Check | Proposed value | Why |
 |---|---|---|
-| Universe | FTSE 350 names on the archived or live screen | The live screener stays on the FTSE 350. Charts cover about 1,269 names across markets; those other markets are a later book. |
-| Part 1, cheap | Raw screen `signal` is `buy` or `strong_buy` | The owner's value set. Same pair as `BUY_SIGNALS` in `paper_fund.py`. |
-| Part 2, not declining | Operating-decline verdict `clear` | Gate on main: `operating_decline_gate.py`. `declining` and `insufficient_data` both fail entry. |
-| Part 3, sector sound | Sector verdict `sound` for the sector on that screen row | Gate runbook on `origin/cursor/sector-gate-to-main-567c` (`docs/ops/sector-headwind-gate.md`). The module is not on main yet. `headwind` and `insufficient_data` both fail entry. |
-| F9-B | All four binds true: `key_filing_bodies`, `fcf_basis_bound`, `overlay_bound`, `memo_recent` | Same fields as `decision_input_inventory.py`. Memo age uses the existing 21-day maximum. |
+| Universe | FTSE 350 names on the archived or live screen, plus names on the library screen of any market whose `is_graduated` is true in `docs/data/market_status.json` on the decision date | Investment eligibility is quality-driven (F9-B), not FTSE membership, and a book may only open on a market that has reached `sprint_ingest_complete` ([`AGENTS.md`](../../AGENTS.md#project-objective)). On 2026-11-04, 21 library markets are graduated. A market that graduates later joins by this rule without a new registration; a market that loses the flag stops new entries and keeps its open episodes. |
+| Part 1, cheap | Raw screen `signal` is `buy` or `strong_buy` | The owner's value set. Same pair as `BUY_SIGNALS` in `paper_fund.py`. Library rows carry the same field. |
+| Part 2, not declining | Operating-decline verdict `clear` | Gate on main: `operating_decline_gate.py`. It already scores library names that have research sources. `declining` and `insufficient_data` both fail entry. |
+| Part 3, sector sound | Sector verdict `sound` for the name's sector **within its own market** | Gate on main: `sector_headwind_gate.py` ([runbook](sector-headwind-gate.md)). v0 of the gate scores FTSE sectors only; plan step 1.8 extends it to graduated markets. Until then a library name has no sector verdict and is not eligible. `headwind` and `insufficient_data` both fail entry. |
+| F9-B | All four binds true: `key_filing_bodies`, `fcf_basis_bound`, `overlay_bound`, `memo_recent` | Same fields as `decision_input_inventory.py`. Memo age uses the existing 21-day maximum. The inventory reads FTSE screen rows only, and library rows carry no `fcf_basis_overlay`; plan step 1.9 computes the same four binds for library names from their research folders. Until then a library name fails F9-B. |
 | Missing chart, RSI, or a usable next bar | Not eligible | A rule that cannot be priced is not a trade. |
 
 **Decision date.** For the forward book, the ops-monitor run date (UTC). For the archive, each chart session.
 
-**When a weekly screen may be used.** Screen runs are weekly. A run applies to chart sessions strictly after the run's calendar date. The run dated 2026-11-01 qualifies later sessions. It does not qualify the 2026-10-30 close that had already happened. The latest such run is carried forward until the next one. Leaving the buy tier later does not close an open episode (section 4). It does stop a new entry.
+**Library rows.** Library screen runs (`docs/data/library/markets/<market>/screen/history/run_*.json.gz`) carry `signal`, `adjusted_signal` and `research_verdict` but no `sector`. The only library sector label is the current one in that market's `screen/latest_signals.csv`. v0 treats a library sector label as static, the one approximation of this kind in the book; step 1.8 records the label on every sector-gate refresh so the forward book reads a dated value. Each episode records its `market_id`.
+
+**When a weekly screen may be used.** Screen runs are weekly, for the FTSE screen and for each library market. A run applies to chart sessions strictly after the run's calendar date. The run dated 2026-11-01 qualifies later sessions. It does not qualify the 2026-10-30 close that had already happened. The latest such run is carried forward until the next one. Leaving the buy tier later does not close an open episode (section 4). It does stop a new entry.
 
 **Gates.** A decline or sector verdict applies to sessions strictly after that store's `as_of` date. The name's sector is the sector on the screen run used for that session. A headwind in some other sector does not count. No dated verdict means not eligible.
 
@@ -119,7 +123,7 @@ While the episode is still a swing, session *t* signals an exit when both are tr
 
 The sell fills at the next chart session's close, with the same 5-day gap rule. No next bar means the episode stays open. The scored prices are the two fills.
 
-The cost floor uses the fair FTSE table stamped in section 7. At today's table the round trip is 0.55%, so a fill at 100.00 needs a high of at least 100.55 before a swing exit can signal. The scored return subtracts the same costs again, via the usual episode formula, so a sale exactly at the floor scores about zero. A hit is a positive fair-cost return, which needs a slightly higher sale.
+The cost floor uses the episode's market row stamped in section 7. For a FTSE 350 name at today's table the round trip is 0.55%, so a fill at 100.00 needs a high of at least 100.55 before a swing exit can signal. The scored return subtracts the same costs again, via the usual episode formula, so a sale exactly at the floor scores about zero. A hit is a positive fair-cost return, which needs a slightly higher sale.
 
 A 10-session high under that floor does not sell. If the close is also 8% under the fill, section 5 classifies a recovery hold instead. Between those two bands the episode simply stays a swing until a qualifying high, a recovery trigger, or a thesis break.
 
@@ -131,7 +135,7 @@ The trade plan's take-profit floors (`tactical_target_above_limit` 1.10, `tactic
 | Cost floor | entry fill × (1 + fair buy + fair sell) | A high that does not clear the stamp and the spread is not a completed swing. Rates come from the table in section 7. |
 | What does not exit | Leaving the buy tier, leaving a top-N list, a trade-plan stop, a trade-plan target | Part 5 of the strategy. The control in section 8 keeps the buy-tier exit so the difference can be reported. |
 
-Worked swing. Fill 100. Cost floor 100.55. Session 6 prints a 10-session high at 103. The exit signals. The next close is the sale. Fair-cost return is `sale / 100 - 1 - 0.00525 - 0.00025`.
+Worked swing (FTSE 350 name). Fill 100. Cost floor 100.55. Session 6 prints a 10-session high at 103. The exit signals. The next close is the sale. Fair-cost return is `sale / 100 - 1 - 0.00525 - 0.00025`.
 
 ## 5. Recovery hold
 
@@ -207,28 +211,34 @@ Fixed-stake v0, as in [`fair-cost-primacy.md`](fair-cost-primacy.md#fixed-stake-
 
 | Limit | Proposed value | Why |
 |---|---|---|
-| Stake | 100 GBP per entry | The standing fixed-stake default. FTSE prices are GBP (or a consistent pence series inside one chart; the return is a ratio on that one series). |
+| Stake | 100 units of the listing currency per entry (100 GBP on London names, 100 USD on US names, and so on) | The standing fixed-stake default of 100 local-currency units. Episode percent is a ratio on one chart's series, so currency and pence-versus-pound units do not change it. No FX translation of returns in v0. |
 | Cash | No cash constraint | v0 parks fund construction. The recovery cap below is a count of episodes, not a cash rule. |
 | Open episodes per name | 1 | A second signal while the episode is open is ignored and counted as `already_open_skip`. |
 | Re-entry cooldown | 10 chart sessions after the exit fill | The same length as the entry window, so the sale session's own low cannot buy the name straight back. |
 | Recovery-hold cap | Block new entries when recovery holds are at least 40% of open episodes and at least 5 episodes are open | Part 7. Stuck holds must not keep taking every new low. Below 5 open episodes the ratio is noise (1 of 2 is already 50%). |
 | Cap action | Block, and count `cap_blocked` | Reporting the share without blocking does not do what part 7 asks. A blocked name is not queued. It has to signal again on a later day. |
 | Names signalling on the same day | Take every name that passes | No top-N and no "cheapest first." The cap either allows the whole day or blocks the whole day. |
+| Markets | One pooled book; the cap and the per-name rule apply across all markets | Splitting the cap by market would make a rare-signal market wait on its own count. Per-market boards (section 8) show where the episodes come from. |
 
 The cap is checked on the signal session, before a fill is scheduled. Recovery holds count as open episodes. The denominator is every open episode, swings included.
 
 ## 7. Costs
 
-Primary costs are the fair FTSE 350 row in `market_trading_costs` (`costs_for_market("ftse350")`). The book stamps the table's buy and sell rates into the registration record when it seals. It does not invent a second schedule.
+Primary costs are each episode's own market row in `market_trading_costs` (`costs_for_market(market_id)`). The book stamps every market's buy and sell rates into the registration record when it seals. It does not invent a second schedule. A market that graduates later is stamped from the same table on the day its first episode opens, and the stamp is logged.
 
-Today's table, which a seal on this tree would stamp:
+Today's table, which a seal on this tree would stamp (examples; the seal copies every graduated market):
+
+| Market | Buy | Sell | Round trip | Why |
+|---|---|---|---|---|
+| FTSE 350 | 0.525% | 0.025% | 0.55% | 0.50% UK stamp on the buy plus 0.025% half-spread each side. No FX. |
+| FTSE SmallCap | 0.55% | 0.05% | 0.60% | Stamp plus a wider half-spread. |
+| AIM | 0.575% | 0.075% | 0.65% | Stamp plus the widest UK half-spread. Many AIM shares are stamp-exempt; the table keeps stamp on deliberately until a per-ticker exemption lands, so AIM returns are understated. |
+| S&P 500, Nasdaq-100, ASX 200, TSX 60, DAX | 0.175% | 0.175% | 0.35% | 0.15% Trading 212 FX fee plus 0.025% half-spread each side. No stamp. |
+| Hang Seng | 0.19% | 0.19% | 0.38% | FX fee plus a 0.04% half-spread. |
 
 | Leg | Value | Why |
 |---|---|---|
-| Buy | 0.525% (0.00525) | Existing table: 0.50% UK stamp plus 0.025% half-spread. No FX on a GBP book. |
-| Sell | 0.025% (0.00025) | Existing table: half-spread only. Stamp is on the buy. |
-| Round trip | 0.55% | Sum of the two legs. |
-| Episode return | `exit_fill / entry_fill - 1 - buy - sell` | The same formula as `episode_return` in `n200_tech_timing_observe.py`. |
+| Episode return | `exit_fill / entry_fill - 1 - buy - sell` | The same formula as `episode_return` in `n200_tech_timing_observe.py`, with that market's rates. |
 | Stress | 3% per side (0.03), report-only | `LEGACY_STRESS_TRADE_COST_PCT`. Subtract 0.06 from the gross return. Same role as on N200 and N206: a harsh churn view, not the decision number. |
 
 Stress does not decide the learning question. It is published next to the fair-cost median.
@@ -250,13 +260,20 @@ Open episodes are marked to the latest close for display, fair-cost as if closed
 | Recovery thesis breaks | Count by reason code (`declining`, `headwind`, `screen_avoid`, `research_failed`), median return. | Loss on a broken business, kept off the recovery-success median. |
 | Review exits | Count of `review_insufficient_data` and `review_cap`, with median return. | Included in the overall median. Shown on their own so a time cap is visible. |
 | Stress | The same closed episodes at 3% per side. | Report-only. |
-| Control | Paired episodes below. Difference of medians. | Report-only. No crown. |
+| By market | The overall board for FTSE 350 alone, for each market with at least 10 closed episodes, and for all other markets pooled. | Shows whether one market carries the result. Report-only. |
+| Single-market dependence | Flag `single_market_dependence` when the overall median is above zero but falls to zero or below once the market with the most closed episodes is removed. | The disposition finding carries the flag. It does not fail the question by itself. |
+| Buy-on-signal control | Episodes below. Difference of medians against the overall board, and the same by market. | Answers "does the timing add anything over buying the signal and holding?" Report-only. |
+| Leave-tier control | Paired episodes below. Difference of medians. | Report-only. No crown. |
 
-**Control (report-only).** For each primary entry, a paired episode buys at the same fill. It sells when the raw `signal` has been outside `{buy, strong_buy}` for 2 consecutive archived runs, the live `exit_confirm_screens` value. The sale fills at the next chart close after the confirming run's date, with the 5-day gap rule. Same fair costs. If the name never leaves the buy tier, the control episode stays open and stays out of the control median.
+**Buy-on-signal control (report-only).** On the same universe and the same eligibility rules (section 2, all parts), a control episode opens for every name that is eligible on a screen run after being ineligible, or absent, on that market's previous run. It buys at the next chart close after the run's date, with no timing test. It sells after 63 chart sessions, or when the name has been ineligible on 2 consecutive runs, whichever comes first, at the next chart close. Same market costs, same 5-day gap rule, one open control episode per name. This is the cue-consumer lab's policy (buy on the weekly cue, hold 63 trading days, exit on an identity break) applied to this book's universe, so the two books can be compared without a universe difference. The lab itself keeps running on the FTSE screen as an outside reference ([`cue-consumer-mft.md`](cue-consumer-mft.md#role-under-the-single-track-owner-2026-11-04)).
+
+If the overall median is positive and the buy-on-signal control's median is at least as high, the timing rules added nothing on this sample. The disposition finding states that in plain words. It does not change the learning question.
+
+**Leave-tier control (report-only).** For each primary entry, a paired episode buys at the same fill. It sells when the raw `signal` has been outside `{buy, strong_buy}` for 2 consecutive archived runs, the live `exit_confirm_screens` value. The sale fills at the next chart close after the confirming run's date, with the 5-day gap rule. Same fair costs. If the name never leaves the buy tier, the control episode stays open and stays out of the control median.
 
 That paired exit is the behaviour of `buy_tier_level` and of N200's leave-tier close. It is how this project already turns a buy-tier membership spell into a trade. The strategy book does not use it as an exit. The median difference is context for the owner. Beating the control is not the learning question, and losing to it does not by itself fail the question. Fair-cost primacy already treats control excess as report-only.
 
-The control is not the live book's NAV. Live books have weights, cash, and a 3% stress stamp. Comparing NAVs would mix those choices with the timing rule.
+Neither control is the live book's NAV. Live books have weights, cash, and a 3% stress stamp. Comparing NAVs would mix those choices with the timing rule.
 
 **Archive versus forward.** The boards above are computed separately for the archive rehearsal and for the forward book. The two medians are never averaged. Only the forward book's overall median can meet the thickness gate.
 
@@ -270,11 +287,13 @@ Step 2.2. It rehearses the price rules on history that already exists. It does n
 
 **Value set.** `docs/data/history/run_*.json.gz`, loaded the way N200 loads snapshots (`load_run_snapshots`). This tree has 30 run files, from `run_20260802_123417.json.gz` through `run_20261101_073321.json.gz`. Each has `run_at`, `signals`, and `prices`. The latest signals list has 248 rows, with `signal`, `adjusted_signal`, `research_verdict`, `sector`, `timing_signal`, and the trade-plan levels. Eligibility uses `signal`, `research_verdict`, and `sector` only, and only from a run dated before the session. Fills come from the chart closes. The snapshot `prices` map is a different series and can mix pence with pounds (`yahoo_price_units`). It is not a fill.
 
+Library markets keep their own weekly runs under `docs/data/library/markets/<market>/screen/history/run_*.json.gz`, from 2026-07-18 for the larger markets (for example 69 S&P 500 run files and 68 ASX 200 run files on 2026-11-04). Rows carry `signal`, `adjusted_signal` and `research_verdict`; sector comes from section 2's library rule. A library session uses that market's latest run dated before the session, and only while the market is graduated. Library runs before graduation are rehearsal-only like everything else here.
+
 `docs/data/archive/` holds 23 dashboard bundles dated 2026-08-09 through 2026-11-01 (`2026-11-01.json` is a full publish, with `reports` and `run_at`). It is not a second signal source. A date that exists only there does not create an entry.
 
 **How far back entries can go.** Closes start around 2024-10-30. Buy-tier runs start on 2026-08-02. Entries are allowed only on sessions that have a prior run, so the entry window is about thirteen weeks, not two years. The older closes warm RSI. They are not a hidden two-year test. There is no point-in-time value set for 2024 or 2025 in this repo.
 
-**Gates.** The decline store on main is one snapshot, `as_of` 2026-11-03 (65 buy-tier names, 62 with a `clear` or `declining` verdict). The gate's own runbook says a past `as_of` fails closed, because statement files are overwritten on fetch. The sector gate is not on main. This replay therefore keeps three labelled results, and does not merge them:
+**Gates.** The decline store on main is one snapshot, `as_of` 2026-11-03 (65 buy-tier names, 62 with a `clear` or `declining` verdict). The gate's own runbook says a past `as_of` fails closed, because statement files are overwritten on fetch. The sector gate is on main from 2026-11-04 with FTSE sectors only, also as a single snapshot. This replay therefore keeps three labelled results, and does not merge them:
 
 | Result | What it applies | How to read it |
 |---|---|---|
@@ -304,9 +323,9 @@ Both are required, on the **forward** book only:
 
 | Gate | Proposed value | Why |
 |---|---|---|
-| Closed episodes | at least 48 | The figure named in the phase 2 plan, and the gate already used by N206. N200's 24 is a different instrument (membership spells, easier to accumulate). |
+| Closed episodes | at least 48 **counted** episodes, counting at most 6 closed episodes per ISO entry week | The figure named in the phase 2 plan, and the gate already used by N206. N200's 24 is a different instrument (membership spells, easier to accumulate). A multi-market book takes many entries in one sell-off: in a replay of the price rules across markets, the 5 busiest entry weeks held 19% of all entries. Those trades share one market event and are not 48 separate tests. Six per week means the count needs at least 8 distinct entry weeks. Every closed episode is still scored in the medians; the cap applies to the gate count only. |
 | Calendar span | at least 8 weeks (56 days) from the first entry fill to the latest chart session | Same "and 8 weeks" bar as N200 and N206. Eight weeks with 10 closes is not enough. |
-| What does not count | Archive episodes, the alternative rule, open episodes, `pending_fill` | The gate is about a book that has been trading forward under signed rules. |
+| What does not count | Archive episodes, the alternative rule, either control, open episodes, `pending_fill` | The gate is about a book that has been trading forward under signed rules. |
 
 Until both are true, the result is inconclusive. The entry is not loosened to get to 48 faster.
 
@@ -318,7 +337,7 @@ When both are true, ops-monitor emits an info finding and the owner stamps one d
 | `no-design` | Overall median at or below zero, or the owner rejects the book. | Stays observe-only. A redesigned rule is a new registration. |
 | `ack` | The owner has seen the board and wants no design work. | Stays observe-only. The finding does not re-fire every day once the stamp is set. |
 
-The control difference is on the board the owner reads. It does not choose the row.
+The control differences, the per-market boards and any `single_market_dependence` flag are on the board the owner reads. They do not choose the row.
 
 ## 10. Freeze and markers
 
@@ -334,7 +353,7 @@ The control difference is on the board the owner reads. It does not choose the r
 | Any threshold, the learning question, or which rule is primary | A new `registration_id`. The old scores stay under the old id. |
 | Adopting the alternative as the book | A new `registration_id`. Forbidden on this id. |
 
-**Parameters that stay frozen after the first look at results.** All of them: RSI 35 and RSI 40, the 10-session windows, the 3 percent SMA distance, the 8% recovery band, the 15-session swing limit, the 63-session review, the 4-review cap, the 2-confirm streak, the 10-session cooldown, the 40% recovery share, the 5-episode arming level, the 5-day gap, the 100 GBP stake, the fair-cost formula, the 3% stress view, and the 48 / 8-week gate.
+**Parameters that stay frozen after the first look at results.** All of them: RSI 35 and RSI 40, the 10-session windows, the 3 percent SMA distance, the 8% recovery band, the 15-session swing limit, the 63-session review, the 4-review cap, the 2-confirm streak, the 10-session cooldown, the 40% recovery share, the 5-episode arming level, the 5-day gap, the 100-unit stake, the fair-cost formula and per-market cost stamps, the 3% stress view, the 48 / 8-week gate with its 6-per-week count, the graduated-market universe rule, and both controls.
 
 **No parameter search on this id.** A search was considered and is not registered. The usual holdout would be the most recent six months of entries. The point-in-time value set only starts on 2026-08-02, and the charts used here end on 2026-10-30. That is about thirteen weeks. Six months of entries do not exist, so there is nothing to hold out. Splitting those thirteen weeks in half after seeing the scores is not a holdout.
 
@@ -345,27 +364,33 @@ Any later rule change treats the first **26 weeks** (proposed) of the forward bo
 - Fills at the next open, once chart payloads grow an `opens` array and the archive can see that open. Queued behind P1/P2 as L667.
 - A fair-value recovery target, when phase 4.1 publishes one (L662).
 - Dividend-inclusive episode returns, when phase 3.1 lands.
-- The same rules on an admitted market, in phase 6, with that market's fair cost row.
+
+Successor versions follow the version-review rule in the [plan](strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04): at most one challenger at a time, sealed before its scores are read.
 
 ## 11. Data, compute, and the launch queue
 
-P1 still serves live holdings, then the sealed units already running (strand A buy tier and N200). This book does not ask Data to ingest filings, rememo names, or deepen a shortlist ahead of those. `launch_queue.data_deepen_requested` is false. On the launch queue it is a waiter, the same posture as N206, until the owner explicitly moves it.
+P1 still serves live holdings first, then the sealed units already running (strand A buy tier and N200). Under the default in section 13 (question 7) this book takes the **head of the launch queue** at signature, with `launch_queue.data_deepen_requested` true for a narrow scope: filing bodies and memo recency on names in this book's universe that already pass parts 1 and 2. That is the input-quality work its own eligibility needs. It does not ask for new markets, new ingest sprints, or rememo of names outside that scope, and it never takes capacity ahead of holdings or the running units.
 
-Compute is a walk over the FTSE buy tier (65 names on the 2026-11-03 decline snapshot) and the stored closes. No network, no model call, no new price fetch. Daily ops-monitor is enough.
+The scope matters. On 2026-11-04, 346 library buy-tier names across graduated markets had a research memo folder, but only 48 had memo activity within 21 days (median age 49 days). Without the launch-queue head, most library names stay F9-B failures and the multi-market volume does not arrive. A replay of the price rules alone gave about 20 entries a week across all markets against about 4 on the FTSE 350; the gates and F9-B cut that before any forward trade.
+
+Compute is a walk over the buy tier of every graduated market (65 FTSE names and 346 library names on the 2026-11-03 decline snapshot) and the stored closes. No network, no model call, no new price fetch. Daily ops-monitor is enough.
 
 **Already produced and used.**
 
 - Weekly FTSE screen snapshots since 2026-08-02, including signal, sector, and research verdict.
-- Daily closes for charted names, about two years, enough to warm RSI(14) before that first screen.
-- Operating-decline gate on main, one current snapshot, already in the daily refresh.
-- Fair cost table for `ftse350`.
+- Weekly library screen runs for each graduated market, from 2026-07-18 for the larger ones, with signal and research verdict.
+- Daily closes for charted names, about two years, enough to warm RSI(14) before that first screen. Charts exist for 403 of the 407 buy-tier names across markets.
+- Operating-decline gate on main, one current snapshot, already in the daily refresh, FTSE and library names.
+- Sector headwind gate on main, FTSE sectors, in the daily refresh.
+- Fair cost table for every graduated market.
 - `core_sell_reason` and `thesis_break_confirmed`.
 
 **Not produced, and required before the matching board can be non-empty.**
 
 | Gap | What blocks | What step 2.3 adds |
 |---|---|---|
-| Sector store not on main | Part 3. Forward entries stay at zero without it. | Nothing in this repo until the sector-gate package merges. Then the daily refresh. |
+| Sector gate scores FTSE sectors only | Part 3 for library names. Library entries stay at zero without it. | Nothing here. Plan step 1.8 extends the gate to graduated markets. |
+| F9-B binds not computed for library names | Library names fail F9-B. | Nothing here. Plan step 1.9 computes the four binds from library research folders. |
 | Decline and sector stores are single snapshots | `archive_full_strategy` and any later rebuild of the forward book. | An append-only verdict log, written by the observe job. Not a new ingest. |
 | F9 fields absent on `run_*.json.gz` | Archive cannot apply F9-B. Those episodes stay `f9_unverified`. | Forward book computes the four binds at run time. No backfill. |
 | No screen archive before 2026-08-02 | No two-year test of part 1. | Accept the thirteen-week rehearsal. Do not buy a price history to invent signals. |
@@ -379,6 +404,8 @@ Buy-tier interim coverage is still thin (the decline-gate runbook: interim EPS o
 
 Short brief for the implementer. Still observe-only. Still no live writes.
 
+**Depends on** plan steps 1.8 and 1.9 for library entries. FTSE entries need neither, so the walker may start on FTSE names and pick up library names when those steps land, with a logged marker; the universe rule does not change.
+
 **Modules.** `src/value_investor/strategy_book_observe.py` owns the walker. It calls `technical_analysis._rsi`, `core_sell_reason`, `note_thesis_streak`, `thesis_break_confirmed`, and `episode_return` / `costs_for_market`. It does not call `assign_timing_signal`, `compute_indicators`, or `compute_trade_plan` to decide a trade. CLI `ftse-strategy-book` with `--replay`, `--forward`, `--no-persist`, and `--as-of`. Replay and forward write different stores and never mix medians.
 
 **Stores**, committed by ops-monitor the same way N200 commits (`GHA_COMMIT_OPTIONAL`):
@@ -386,15 +413,15 @@ Short brief for the implementer. Still observe-only. Still no live writes.
 | Path | Role |
 |---|---|
 | `docs/data/strategy_book_registration.json` | Seal copy of this document plus the signature note. |
-| `docs/data/strategy_book_replay.json` | The three archive results and the alternative column. |
-| `docs/data/strategy_book_observe.json` | Forward episodes, boards, disposition, change markers. |
+| `docs/data/strategy_book_replay.json` | The three archive results, the alternative column, and the buy-on-signal control. |
+| `docs/data/strategy_book_observe.json` | Forward episodes, boards (overall, by market, both controls), disposition, change markers. |
 | `docs/data/strategy_book_gate_log.jsonl` | Append-only verdicts the forward job used. |
 
 **Ops-monitor.** `check_strategy_book_observe` inside `collect_ops_findings`, after the decline check and the sector check. `auto_fixable` false. Findings: refreshed (info), failed (warn), thickness gate ready for review (info). A row in [`ops-monitor.md`](ops-monitor.md) points here. The refresh finding names counts and the first few tickers. It does not spray rememo or ingest.
 
 **Dashboard.** An Analysis → Observe strip on the N206 pattern, hash `#analysis/observe/strategy-book`, reading the forward store. A compact queue-health line for phase span, closed count, and freshness. No strand A lifecycle writes. No promote button.
 
-**Tests.** Entry fires only on RSI below 35 and a 10-session low. A buy-tier name with a high RSI does not enter. Leaving the buy tier does not exit. An 8% drop classifies a hold and does not sell. Two `avoid` rows sell; one does not. `insufficient_data` blocks entry and does not, by itself, break a hold mid-way. A gap over 5 days does not fill. Fair-cost math matches `episode_return` on a known pair. Archive output keeps the three result keys separate. A thinned chart is refused.
+**Tests.** Entry fires only on RSI below 35 and a 10-session low. A buy-tier name with a high RSI does not enter. Leaving the buy tier does not exit. An 8% drop classifies a hold and does not sell. Two `avoid` rows sell; one does not. `insufficient_data` blocks entry and does not, by itself, break a hold mid-way. A gap over 5 days does not fill. Fair-cost math matches `episode_return` on a known pair. Archive output keeps the three result keys separate. A thinned chart is refused. Each episode uses its own market's cost row. A library name in a market that is not graduated does not enter. A library run applies only to its own market. The buy-on-signal control opens on a newly eligible name, ignores price timing, and closes at 63 sessions or after 2 ineligible runs. The gate count caps at 6 per entry week while the medians use every closed episode. `single_market_dependence` fires on a constructed case.
 
 **Do not reuse these as the rule.** They conflict with the strategy spec, the chart files, or both.
 
@@ -417,9 +444,9 @@ Short brief for the implementer. Still observe-only. Still no live writes.
 
 ## 13. Open questions
 
-Six decisions. Each default is what this draft seals if the signature note is silent.
+Seven decisions. Each default is what this draft seals if the signature note is silent.
 
-1. **Entry and exit window.** Default: 10 chart sessions for the low and the high. The trade plan's 20-day figure is a limit level, and stacking it on RSI below 35 would make entries rarer on a 65-name buy tier. At signature the owner may set 20 once. After a score store exists, 20 is a new registration.
+1. **Entry and exit window.** Default: 10 chart sessions for the low and the high. The trade plan's 20-day figure is a limit level, and stacking it on RSI below 35 would make entries rarer. At signature the owner may set 20 once. After a score store exists, 20 is a new registration. If 20 is chosen, also drop the 15-session hold trigger (question 3): a replay showed that with 20 sessions and the 15-session trigger, most episodes become recovery holds before a 20-session high is possible and then exit near the entry price.
 
 2. **Which signal is the value set.** Default: raw `signal` in `{buy, strong_buy}`. The owner's part 1 names that value set. `adjusted_signal` is stored and does not gate. Thesis-break `avoid` reads the same raw field, so entry and exit cannot diverge. At signature the owner may switch both reads to `adjusted_signal` once. Switching only one of them is not an option.
 
@@ -429,4 +456,6 @@ Six decisions. Each default is what this draft seals if the signature note is si
 
 5. **Recovery-hold cap.** Default: block new entries at 40% of open episodes, once 5 episodes are open, and publish the blocked count. Report-only would describe crowding and still allow it. At signature the owner may switch the cap to report-only.
 
-6. **When the forward book starts, and on which market.** Default: start the forward book only after the Phase 1 signature, and only once the sector store is refreshing on main. Keep v0 on the FTSE 350. The archive rehearsal of the price rules may run as soon as this registration is signed. It still does not use today's gate verdicts as a pass.
+6. **When the forward book starts, and on which markets.** Default: start the forward book only after the Phase 1 signature, on the multi-market universe of section 2. FTSE names can enter from the start; library names enter once plan steps 1.8 and 1.9 land. The archive rehearsal of the price rules may run as soon as this registration is signed. It still does not use today's gate verdicts as a pass. At signature the owner may instead name a fixed list of markets once.
+
+7. **Launch-queue position.** Default: head of the launch queue at signature, with the narrow data-deepen scope in section 11 (filing bodies and memo recency on universe names that already pass parts 1 and 2), still behind live holdings and the running units. At signature the owner may keep the book as a waiter instead; the library side then stays thin until memos refresh on their own schedule.
