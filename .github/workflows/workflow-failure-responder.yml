@@ -107,18 +107,17 @@ jobs:
           )
           PY
 
-      - name: Sync main before commit
-        if: steps.draft.outputs.changed == 'true'
-        run: git pull --rebase --autostash origin main
-
+      # gha_failure_triage.json is written only when the hub records the run; the
+      # shared helper (L348) skips missing paths, where git add would fail the step.
       - name: Commit drafted workflow-failure task
         if: steps.draft.outputs.changed == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          branch: main
-          commit_message: "chore: record workflow-failure triage [skip ci]"
-          file_pattern: docs/data/engineering_tasks.json docs/data/gha_failure_triage.json
-          skip_fetch: false
+        env:
+          COMMIT_MESSAGE: "chore: record workflow-failure triage [skip ci]"
+          GHA_COMMIT_LABEL: "Workflow-failure triage"
+          GHA_COMMIT_OWNED: |
+            docs/data/engineering_tasks.json
+            docs/data/gha_failure_triage.json
+        run: bash scripts/gha_commit_artifacts.sh
 
       - name: Dispatch engineering queue
         if: steps.draft.outputs.drafted == 'true'
