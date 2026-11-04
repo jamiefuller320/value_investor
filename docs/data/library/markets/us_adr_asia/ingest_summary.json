@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-03T20:22:58.730011+00:00",
+  "run_at": "2026-11-04T18:13:58.566562+00:00",
   "market_id": "us_adr_asia",
   "targets": [],
   "target_details": [],
@@ -9,48 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-03T20:22:57.225854+00:00",
-    "market_id": "us_adr_asia",
-    "buy_tier_count": 6,
-    "unmeasured_buy_tier": 0,
-    "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 0,
-    "indexed_without_body": 39,
-    "bodies_min": 17,
-    "bodies_median": 33.5,
-    "bodies_max": 36,
-    "coverage_scope": "canonical_plus_shards",
-    "ftse_equivalent": false,
-    "unmeasured_tickers": [],
-    "zero_body_tickers": [],
-    "thin_body_tickers": [],
-    "indexed_without_body_tickers": [
-      "TME",
-      "JD",
-      "UMC",
-      "PDD"
-    ],
-    "indexed_without_body_by_ticker": {
-      "TME": 12,
-      "JD": 9,
-      "UMC": 17,
-      "PDD": 1
-    },
-    "parked_tickers": [
-      "JD",
-      "PDD",
-      "TME",
-      "UMC"
-    ],
-    "parked_count": 4,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
-  },
-  "health_after": {
-    "snapshot_at": "2026-11-03T20:22:58.708518+00:00",
+    "snapshot_at": "2026-11-04T18:13:57.104766+00:00",
     "market_id": "us_adr_asia",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
@@ -74,6 +33,47 @@
     "indexed_without_body_by_ticker": {
       "TME": 12,
       "JD": 9,
+      "UMC": 18,
+      "PDD": 1
+    },
+    "parked_tickers": [
+      "JD",
+      "PDD",
+      "TME",
+      "UMC"
+    ],
+    "parked_count": 4,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
+  },
+  "health_after": {
+    "snapshot_at": "2026-11-04T18:13:58.545413+00:00",
+    "market_id": "us_adr_asia",
+    "buy_tier_count": 6,
+    "unmeasured_buy_tier": 0,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 0,
+    "indexed_without_body": 41,
+    "bodies_min": 17,
+    "bodies_median": 33.5,
+    "bodies_max": 36,
+    "coverage_scope": "canonical_plus_shards",
+    "ftse_equivalent": false,
+    "unmeasured_tickers": [],
+    "zero_body_tickers": [],
+    "thin_body_tickers": [],
+    "indexed_without_body_tickers": [
+      "TME",
+      "JD",
+      "UMC",
+      "PDD"
+    ],
+    "indexed_without_body_by_ticker": {
+      "TME": 12,
+      "JD": 10,
       "UMC": 18,
       "PDD": 1
     },
@@ -128,14 +128,14 @@
   },
   "critical_path": {
     "market_id": "us_adr_asia",
-    "assessed_at": "2026-11-03T20:22:57.693026+00:00",
+    "assessed_at": "2026-11-04T18:13:57.554226+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
       {
         "ticker": "UMC",
-        "indexed_without_body": 17,
-        "filings_total": 53,
+        "indexed_without_body": 18,
+        "filings_total": 54,
         "filings_with_body": 36
       },
       {
@@ -168,20 +168,20 @@
       "PDD"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (4 tickers, top: UMC(17), TME(12), JD(9), PDD(1))"
+      "Prefer indexed-without-body body refetch (4 tickers, top: UMC(18), TME(12), JD(9), PDD(1))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 4,
-      "indexed_without_body_rows": 39,
+      "indexed_without_body_rows": 40,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 0.5505000119999295,
+  "used_seconds": 0.5066216309999731,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3599.449499988,
+  "leftover_seconds": 3599.493378369,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -189,23 +189,11 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "us_adr_asia",
-    "updated_at": "2026-11-03T20:22:58.713498+00:00",
+    "updated_at": "2026-11-04T18:13:58.550332+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 4,
+    "complete_zero_improve_runs": 5,
     "min_zero_runs": 3,
     "parked": [
-      {
-        "ticker": "JD",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-10-02T13:50:06.684846+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 35,
-        "filings_with_body": 26,
-        "indexed_without_body": 9,
-        "thin": false,
-        "source_surface": "sec_edgar"
-      },
       {
         "ticker": "PDD",
         "reason": "unfetchable_iwb",
@@ -239,6 +227,18 @@
         "filings_total": 54,
         "filings_with_body": 36,
         "indexed_without_body": 18,
+        "thin": false,
+        "source_surface": "sec_edgar"
+      },
+      {
+        "ticker": "JD",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-04T18:13:58.550332+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 36,
+        "filings_with_body": 26,
+        "indexed_without_body": 10,
         "thin": false,
         "source_surface": "sec_edgar"
       }
@@ -291,6 +291,6 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261103-08"
+    "task_id": "eng-20261104-03"
   }
 }

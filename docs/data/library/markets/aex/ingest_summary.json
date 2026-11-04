@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-03T20:25:05.203249+00:00",
+  "run_at": "2026-11-04T18:15:52.932457+00:00",
   "market_id": "aex",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-03T20:24:31.525333+00:00",
+    "snapshot_at": "2026-11-04T18:15:13.778709+00:00",
     "market_id": "aex",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -44,13 +44,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-03T20:25:05.173569+00:00",
+    "snapshot_at": "2026-11-04T18:15:52.901796+00:00",
     "market_id": "aex",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 6,
+    "indexed_without_body": 7,
     "bodies_min": 3,
     "bodies_median": 4,
     "bodies_max": 43,
@@ -65,7 +65,7 @@
     ],
     "indexed_without_body_by_ticker": {
       "SHELL.AS": 3,
-      "MT.AS": 3
+      "MT.AS": 4
     },
     "parked_tickers": [
       "MT.AS",
@@ -114,7 +114,7 @@
   },
   "critical_path": {
     "market_id": "aex",
-    "assessed_at": "2026-11-03T20:24:32.138328+00:00",
+    "assessed_at": "2026-11-04T18:15:14.371624+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -151,9 +151,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 32.43091739900001,
+  "used_seconds": 37.94304883800004,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3567.569082601,
+  "leftover_seconds": 3562.056951162,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -161,23 +161,11 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "aex",
-    "updated_at": "2026-11-03T20:25:05.183053+00:00",
+    "updated_at": "2026-11-04T18:15:52.910871+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 4,
+    "complete_zero_improve_runs": 5,
     "min_zero_runs": 3,
     "parked": [
-      {
-        "ticker": "MT.AS",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-11-02T23:46:31.279330+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 46,
-        "filings_with_body": 43,
-        "indexed_without_body": 3,
-        "thin": false,
-        "source_surface": "euro_filings+ir_allowlist_direct"
-      },
       {
         "ticker": "SHELL.AS",
         "reason": "unfetchable_iwb",
@@ -187,6 +175,18 @@
         "filings_total": 45,
         "filings_with_body": 42,
         "indexed_without_body": 3,
+        "thin": false,
+        "source_surface": "euro_filings+ir_allowlist_direct"
+      },
+      {
+        "ticker": "MT.AS",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-04T18:15:52.910871+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 47,
+        "filings_with_body": 43,
+        "indexed_without_body": 4,
         "thin": false,
         "source_surface": "euro_filings+ir_allowlist_direct"
       }
@@ -237,6 +237,6 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261103-08"
+    "task_id": "eng-20261104-03"
   }
 }
