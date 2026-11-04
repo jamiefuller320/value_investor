@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-11-04T10:26:18.682989+00:00",
+  "generated_at": "2026-11-04T10:43:31.381656+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -952,23 +952,22 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 4,
-        "targets": 37,
-        "improved": 8,
+        "run_count": 3,
+        "targets": 24,
+        "improved": 5,
         "improved_tickers": [
+          "SHELL.AS",
           "MT.AS",
-          "TTE.PA",
-          "C5H.IR",
-          "SHELL.AS"
+          "TTE.PA"
         ],
         "last_run_at": "2026-11-04T10:23:54.842460+00:00",
         "runtime_cutoff_runs": 0,
-        "error_runs": 1,
+        "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 8,
-          "indexed_without_body": 5,
+          "indexed_without_body": 9,
           "filing_gaps": 0
         },
         "gaps_after": {
@@ -982,7 +981,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 0,
+          "indexed_without_body": -4,
           "filing_gaps": 0
         },
         "remaining": {
@@ -994,13 +993,7 @@
         },
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [
-          {
-            "id": "ingest_errors",
-            "severity": "warn",
-            "summary": "1 ingest run(s) recorded errors: SHELL.AS: Failed to perform, curl: (16) Error in the HTTP2 framing layer. See https://curl.se/libcurl/c/libcurl-errors.h"
-          }
-        ],
+        "admission_warnings": [],
         "sprint_entered_at": null
       },
       "held_vs_market": {
