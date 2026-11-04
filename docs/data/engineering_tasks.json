@@ -12600,7 +12600,21 @@
         "hunter_fix_kinds_attempted": [
           "too_many_urls"
         ],
-        "last_hunter_fix_kind": "too_many_urls"
+        "last_hunter_fix_kind": "too_many_urls",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20261104-03",
+        "verified_at": "2026-11-04T22:20:03.540828+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_research_filings.py",
+            "tests/test_research_ingest.py",
+            "tests/test_gap_fill_deepen.py",
+            "tests/test_ingest_improvement.py",
+            "tests/test_companies_house.py"
+          ],
+          "output_tail": "........................................................................ [ 11%]\n........................................................................ [ 23%]\n........................................................................ [ 34%]\n........................................................................ [ 46%]\n........................................................................ [ 57%]\n........................................................................ [ 69%]\n........................................................................ [ 80%]\n........................................................................ [ 92%]\n.................................................                        [100%]\n=============================== warnings summary ===============================\ntests/test_research_filings.py::test_extract_filing_document_text_ocr_applies_depth_sections\n  /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/fitz/__init__.py:17: FutureWarning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n625 passed, 106 deselected, 1 warning in 217.65s (0:03:37)"
+        }
       },
       "acceptance_criteria": [
         "Inspect IR / exchange sources for CVE.TO only — do not invent URLs",
@@ -12629,11 +12643,14 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20261104-03.md",
       "branch_name": "cursor/eng-20261104-03-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-11-04T18:53:25.466006+00:00"
+      "completed_at": "2026-11-04T18:53:25.466006+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1287",
+      "pr_number": 1287,
+      "merged_at": "2026-11-04T22:20:03.544797+00:00"
     },
     {
       "id": "eng-20261104-01",
@@ -16186,15 +16203,15 @@
     }
   ],
   "ingest_health": {
-    "snapshot_at": "2026-11-03T07:48:28.956638+00:00",
+    "snapshot_at": "2026-11-04T22:16:20.155797+00:00",
     "buy_tier_count": 65,
     "measured_tickers": 65,
     "unmeasured_buy_tier": 0,
     "unmeasured_tickers": [],
     "zero_body_buy_tier": 0,
     "zero_body_tickers": [],
-    "indexed_without_body": 21,
-    "filings_with_body": 5110
+    "indexed_without_body": 12,
+    "filings_with_body": 5279
   },
   "traffic_control": {
     "stuck_pr_count": 0,
@@ -16260,7 +16277,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 2,
-    "evaluated_at": "2026-11-04T21:54:27.440357+00:00",
+    "evaluated_at": "2026-11-04T22:23:25.662726+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -16280,17 +16297,17 @@
   "source_trial_id": "igc-20261005-01",
   "source_chain_root_id": "igc-20261005-01",
   "ingest_health_before": {
-    "snapshot_at": "2026-11-01T09:06:30.791658+00:00",
-    "buy_tier_count": 67,
-    "measured_tickers": 67,
+    "snapshot_at": "2026-11-03T07:48:28.956638+00:00",
+    "buy_tier_count": 65,
+    "measured_tickers": 65,
     "unmeasured_buy_tier": 0,
     "unmeasured_tickers": [],
     "zero_body_buy_tier": 0,
     "zero_body_tickers": [],
-    "indexed_without_body": 8,
-    "filings_with_body": 5341
+    "indexed_without_body": 21,
+    "filings_with_body": 5110
   },
-  "reprioritized_at": "2026-11-03T07:48:28.956961+00:00",
-  "reprioritized_after_task": "eng-20261102-02",
+  "reprioritized_at": "2026-11-04T22:16:20.156034+00:00",
+  "reprioritized_after_task": "eng-20261104-03",
   "ops_monitor_compiled": true
 }
