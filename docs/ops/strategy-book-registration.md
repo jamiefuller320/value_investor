@@ -1,6 +1,6 @@
 # Strategy book registration
 
-**Status: DRAFT — awaiting owner signature (Phase 2 gate).**  
+**Status: DRAFT — open questions answered (owner, 2026-11-04: all defaults); awaiting owner signature (Phase 2 gate).**  
 **registration_id (proposed):** `owner-strategy-book-v0`  
 **Deferred:** N249  
 **Plan step:** 2.1 in [`strategy-reorientation-plan.md`](strategy-reorientation-plan.md)  
@@ -13,13 +13,15 @@
 
 **Learning additions 2026-11-04 (owner decision, before signature):** gate-rejected shadows show whether parts 2 and 3 help, an entry snapshot and selection board show which kinds of name make the better winners, and a challenger bench scores up to four pre-registered variants on the same entries (section 8). A US point-in-time rehearsal on licensed history screens candidates across 25 years before the forward book has to (section 9 and plan step 2.5).
 
+**Memo routine 2026-11-04 (owner decision, before signature):** a name that signals with a stale memo gets a fresh one before its fill, and launched episodes get a fresh memo at each review date (sections 2, 3, 5 and 11). On 2026-11-04 only 48 of 375 library buy-tier names had a memo under 21 days old, so without this most library signals would fail F9-B.
+
 This document freezes the rules before any score is computed. It does not open a book, write a store, or run a replay. Step 2.2 (archive replay) and step 2.3 (forward book) wait until the owner signs, adjusts a listed number once, or rejects.
 
 Every number in the rule tables is **proposed** unless the row says it is an existing constant that this book stamps unchanged. The owner may change a proposed number once, in the signature note, before any score store exists. After the first score store is committed, section 10 applies.
 
 `owner-strategy-book-v0` means this first registration of the owner's seven-part strategy. It is an observe instrument. `influences_live` is false. It does not write strand A, `buy_tier_level`, knobs, or `decision-review --apply`.
 
-No language model chooses an entry, an exit, or a review. The book reads the research verdict already logged on the screen row. A later package that adds a model veto stays a shadow until `authorize_live_llm_influence()` allows it ([`llm-live-path-evidence.md`](llm-live-path-evidence.md)).
+No language model chooses an entry, an exit, or a review. The book reads the research verdict already logged on the screen row, or the signal-day memo described in section 2. That memo comes from the existing research runner; its verdict, rationale and timestamp are stored on the episode. A failed verdict blocks the entry exactly as a logged one would. The model does not pick names, sizes or exits. A later package that adds a model veto stays a shadow until `authorize_live_llm_influence()` allows it ([`llm-live-path-evidence.md`](llm-live-path-evidence.md)).
 
 ## 1. Learning question
 
@@ -61,6 +63,16 @@ v0 is multi-market (owner, 2026-11-04). It reads the live FTSE 350 screen and th
 
 **F9-B, computed the way the inventory does today.** Filing bodies from the filings index meta (`key_bodies`). FCF basis is bound when the screen row's `fcf_basis_overlay` is a boolean. Overlay is bound when a research verdict is present and `adjusted_signal` is set. The memo is recent when its last activity is within 21 days. The forward job computes this at run time from files dated on or before the decision date. The current `decision_input_inventory.json` snapshot is not a history.
 
+**Signal-day memo (owner, 2026-11-04).** The memo bind and the research-verdict block are read at the **fill**, not at the signal close. Everything else in this section is read on the signal session *t*.
+
+- A memo whose last activity is within 21 days of the fill session, and earlier than that session's close in the market's own time zone, meets `memo_recent`. A memo finished after the signal close counts. It is point in time, because it sees nothing after the fill.
+- When a name passes every other check on *t* and its memo is older than 21 days, or missing, the signal-day memo job (section 11) writes a fresh one before the next close.
+- If no qualifying memo exists by the fill session's close, there is no fill. The label is `memo_not_ready`. The signal is not carried to a later bar.
+- If the fresh memo's verdict is one `core_sell_reason` treats as failed, there is no fill. The label is `memo_blocked`, with the verdict and rationale stored.
+- Both labels are counted on the board, by market. Neither opens an episode or a shadow.
+
+The archive has no memos. Archive episodes stay `f9_unverified` as before, and this rule applies to the forward book only.
+
 `adjusted_signal` is stored on the episode. It does not decide part 1 under the default in section 13. Research `caution` and `neutral` leave the name eligible. A research verdict that `core_sell_reason` treats as failed (`pass`, `sell`, `avoid`, `exit`) makes the name **not eligible**: every fact that is a thesis break in section 5 also blocks entry, so the book never buys a name it would be obliged to sell. (Supervisor review, 2026-11-03.)
 
 **Point in time.** Indicators on session *t* use that ticker's closes up through *t* only. The chart file also holds later closes. The walker slices them off.
@@ -100,6 +112,8 @@ The committed charts have dates, closes, volumes, and sampled SMA50 / SMA200. Th
 The entry price of the episode is that next close. The signal close is recorded and is not the fill. A gap up or down is filled and reported. It is not filtered.
 
 No fill when the next stored session is more than **5** calendar days after *t*, or when *t* is the last bar. Five days covers a weekend and a holiday. A longer hole is a missing session. The signal is dropped. It is not filled on a later bar.
+
+No fill when the memo rule in section 2 is not met by the fill session's close (`memo_not_ready`), or when the fresh memo fails (`memo_blocked`).
 
 A forward chart whose latest bar is more than 5 calendar days behind the decision date produces no signal that day. The samples above were built on 2026-11-01 with a last bar of 2026-10-30, so lag of that size is real and must be counted.
 
@@ -224,11 +238,11 @@ On the primary exit the clock starts at the fill. Reviews fall at session index 
 
 | Review | Proposed action | Why |
 |---|---|---|
-| Each review date | Re-read parts 2 and 3, the screen signal, and the research verdict. | 63 trading days is the patient horizon already sealed on N206. Here it is a review spacing, not an automatic sale. |
+| Each review date | Re-read parts 2 and 3, the screen signal, and the research verdict. The signal-day memo job writes a fresh memo for a launched episode whose memo is older than 21 days when it reaches index 63, 126 or 189; the review reads the latest memo earlier than the review session's close. | 63 trading days is the patient horizon already sealed on N206. Here it is a review spacing, not an automatic sale. |
 | Thesis already broken under the streak rule | Exit `thesis_break` at the next close. | The mid-hold rule has already fired, or fires on this read. |
 | Decline is not `clear`, or sector is not `sound`, including missing and `insufficient_data` | Exit `review_insufficient_data` at the next close. | Mid-hold, a one-day gap does not sell. At the review, a long hold needs fresh evidence. A blank file ends the hold. |
 | Screen row missing | Exit `review_insufficient_data`. | There is no current value-set fact. |
-| Research verdict missing, while the gates are `clear` and `sound` and the signal is not `avoid` | Hold stands. | Research `pass` sells. A missing memo does not. Entry already required a fresh memo. |
+| Research verdict missing, while the gates are `clear` and `sound` and the signal is not `avoid` | Hold stands. | Research `pass` sells. A missing or late review memo does not. Entry already required a fresh memo. |
 | Gates `clear` and `sound`, signal not `avoid`, research not failed | Hold stands until the next review, the floor, or the time cap. Record the review. | The business case still stands. |
 | `draft_v0_exit` and `ladder_no_deadline` only: the same, on review 4 | Exit `review_cap` at the next close. | The draft's end to a recovery hold, four reviews or about a year. Section 13 lets the owner replace it with a human hold at signature. |
 
@@ -307,6 +321,7 @@ Episodes younger than 63 sessions are shown, marked to the latest close, fair-co
 | Single-market dependence | Flag `single_market_dependence` when the overall median is above zero but falls to zero or below once the market with the most mature episodes is removed. | The disposition finding carries the flag. It does not fail the question by itself. |
 | Buy-on-signal control | Episodes below. Difference of medians against the overall board, and the same by market. | Answers "does the timing add anything over buying the signal and holding?" Report-only. |
 | Leave-tier control | Paired episodes below. Difference of medians. | Report-only. No crown. |
+| Memo readiness | Signals that passed every other check, split into filled, `memo_not_ready` and `memo_blocked`, by market and by week. Memo spend for the week. | Shows whether the memo routine keeps up and how often a fresh memo vetoes a signal. Report-only. |
 
 **Buy-on-signal control (report-only).** On the same universe and the same eligibility rules (section 2, all parts), a control episode opens for every name that is eligible on a screen run after being ineligible, or absent, on that market's previous run. It buys at the next chart close after the run's date, with no timing test. It sells after 63 chart sessions, or when the name has been ineligible on 2 consecutive runs, whichever comes first, at the next chart close. Same market costs, same 5-day gap rule, one open control episode per name. This is the cue-consumer lab's policy (buy on the weekly cue, hold 63 trading days, exit on an identity break) applied to this book's universe, so the two books can be compared without a universe difference. The lab itself keeps running on the FTSE screen as an outside reference ([`cue-consumer-mft.md`](cue-consumer-mft.md#role-under-the-single-track-owner-2026-11-04)).
 
@@ -327,7 +342,7 @@ That paired exit is the behaviour of `buy_tier_level` and of N200's leave-tier c
 | Value and quality (screen row) | `composite_score`, `signal`, `signal_rank`, `weeks_at_signal`, `signal_trend`, `conviction_score`, `models_passed`, `data_quality_score`, and where the row carries them `fcf_yield`, `ev_ebit`, `earnings_yield_pe`, `roic_proxy`, `profit_margins`, `debt_to_equity`, `revenue_growth`, `earnings_growth`, `market_cap` |
 | Decline gate | Each check's change figures (revenue, operating margin, EPS, FCF) and which soft checks fired |
 | Sector | Sector, the sector gate's breadth and trend inputs, the market |
-| Research | `research_verdict`, `research_confidence`, memo age in days |
+| Research | `research_verdict`, `research_confidence`, memo age in days, and whether the memo was written by the signal-day job |
 | Price (closes up to the signal session) | 60-session volatility, close versus the 200-session average, fall from the 252-session high, 126-session return, position in the 126-session high–low range, 20-session return, RSI(14) |
 
 A feature missing from a row is stored as missing and that episode sits out that feature's fifths. Library rows and FTSE rows carry different screen fields; each feature's board states its coverage.
@@ -448,7 +463,7 @@ The 39-week "too rare" line in section 1 is longer than the 26 weeks first draft
 | Any threshold, the learning question, or which rule is primary | A new `registration_id`. The old scores stay under the old id. |
 | Adopting the alternative as the book | A new `registration_id`. Forbidden on this id. |
 
-**Parameters that stay frozen after the first look at results.** All of them: RSI 35 and RSI 40, the 10-session entry window, the 3 percent SMA distance, the +10% launch, the checkpoint list and floors, the 63-session fail-to-launch deadline, the 252-session time cap, the 63-session review spacing, the 63-session maturity, the 8% recovery label, both comparison exits as written (including the draft's 10-session high, 15-session swing limit, entry-price target and 4-review cap), the 2-confirm streak, the 10-session cooldown, the 40% recovery share and report-only cap, the 5-episode arming level, the 5-day gap, the 100-unit stake, the fair-cost formula and per-market cost stamps, the 3% stress view, the 48-mature-episode gate with its 6-per-week count and the 39-week rarity line, the 26-week interim read, both gate-rejected shadows, the entry snapshot feature list and selection-board method, the bench rules (four slots, 2.5 standard errors, both halves, one promotion per review) and the initial bench, the graduated-market universe rule, both controls, and the capital-view definitions (20 slots, tie order, 15 random orders, buy-and-hold construction).
+**Parameters that stay frozen after the first look at results.** All of them: RSI 35 and RSI 40, the 10-session entry window, the 3 percent SMA distance, the +10% launch, the checkpoint list and floors, the 63-session fail-to-launch deadline, the 252-session time cap, the 63-session review spacing, the 63-session maturity, the 8% recovery label, both comparison exits as written (including the draft's 10-session high, 15-session swing limit, entry-price target and 4-review cap), the 2-confirm streak, the 10-session cooldown, the 40% recovery share and report-only cap, the 5-episode arming level, the 5-day gap, the 100-unit stake, the fair-cost formula and per-market cost stamps, the 3% stress view, the 48-mature-episode gate with its 6-per-week count and the 39-week rarity line, the 26-week interim read, both gate-rejected shadows, the entry snapshot feature list and selection-board method, the bench rules (four slots, 2.5 standard errors, both halves, one promotion per review) and the initial bench, the graduated-market universe rule, the signal-day memo rule (memo before the fill close, no carry-forward after `memo_not_ready`, review-date memos), both controls, and the capital-view definitions (20 slots, tie order, 15 random orders, buy-and-hold construction).
 
 **Chosen after seeing results.** The ladder, its +10% launch and 5-point steps, and the 63-session deadline were picked on 2026-11-04 after replays of the same two years of closes (today's buy tier painted back, no gates). Alternatives tried and not chosen: a 20-session high, a 5% trailing exit, a 5-session-low fade, a 63-session hold, price stops at −15%, staged loser sales, time stops at 30 and 63 sessions on the draft exit, deadlines of 20 and 40 sessions, sales at breakeven after the deadline, staged entries, and a checkpoint continuation model. Those replays are why the owner chose this exit. They are not evidence for it. Only the forward book can be, and the paired `draft_v0_exit` column is there so the forward book can also show if the choice was wrong.
 
@@ -466,11 +481,27 @@ Successor versions follow the version-review rule in the [plan](strategy-reorien
 
 ## 11. Data, compute, and the launch queue
 
-P1 still serves live holdings first, then the sealed units already running (strand A buy tier and N200). Under the default in section 13 (question 7) this book takes the **head of the launch queue** at signature, with `launch_queue.data_deepen_requested` true for a narrow scope: filing bodies and memo recency on names in this book's universe that already pass parts 1 and 2. That is the input-quality work its own eligibility needs. It does not ask for new markets, new ingest sprints, or rememo of names outside that scope, and it never takes capacity ahead of holdings or the running units.
+P1 still serves live holdings first, then the sealed units already running (strand A buy tier and N200). Under the default in section 13 (question 7) this book takes the **head of the launch queue** at signature, with `launch_queue.data_deepen_requested` true for a narrow scope: filing bodies on names in this book's universe that already pass parts 1 and 2, plus the signal-day and review-date memos below. That is the input-quality work its own eligibility needs. It does not ask for new markets, new ingest sprints, or rememo of names outside that scope, and it never takes capacity ahead of holdings or the running units.
 
-The scope matters. On 2026-11-04, 346 library buy-tier names across graduated markets had a research memo folder, but only 48 had memo activity within 21 days (median age 49 days). Without the launch-queue head, most library names stay F9-B failures and the multi-market volume does not arrive. A replay of the price rules alone gave about 20 entries a week across all markets against about 4 on the FTSE 350; the gates and F9-B cut that before any forward trade.
+The scope matters. On 2026-11-04, 346 library buy-tier names across graduated markets had a research memo folder, but only 48 had memo activity within 21 days (median age 49 days). Without the launch-queue head, most library names stay F9-B failures and the multi-market volume does not arrive.
 
-Compute is a walk over the buy tier of every graduated market (65 FTSE names and 346 library names on the 2026-11-03 decline snapshot) and the stored closes. No network, no model call, no new price fetch. Daily ops-monitor is enough.
+**Memo routine (owner, 2026-11-04).** The existing weekday memo refreshes (FTSE, and the admitted library markets) run only when new filing text arrives, and the Sunday ladder adds memos on new strong-buy candidates. None of them refresh a memo because it is old. That keeps FTSE fresh (64 of 65 buy-tier names on 2026-11-04) but not the library side. Three options were weighed:
+
+- keeping every library buy-tier memo under 21 days: about 125 memos a week;
+- refreshing names that are close to a signal: perhaps 10–25 a week, some wasted;
+- **refreshing on the signal itself (chosen):** a daily job writes memos only for names that signalled and need one.
+
+The chosen job:
+
+- **Runs every weekday, at least once after each market's close and before its next close.** It reads the forward walker's signals for that close.
+- **Writes a memo for each signalling name that passes parts 1–3 and the other three F9-B binds**, and whose memo is older than 21 days or missing. A name without filing bodies fails F9-B anyway, so it gets no memo. This is an owner-approved, age-triggered exception, scoped to this book's signals. It does not widen rememo of thin memos elsewhere, and it leaves N138 untouched.
+- **Also writes review-date memos** for launched episodes (section 5).
+- **Uses the existing research runner**, with the as-of-only instruction from plan step 1.3. Spend comes from the `weekly_ops` pool at the estimated $0.40 a memo, with that pool's headroom check.
+- **Costs about 15–20 memos a week** on the replay's signal rate across all markets, about $6–8, plus a few review memos. A signal skipped by the budget check is `memo_not_ready`, never a stale fill.
+
+A replay of the price rules alone gave about 20 entries a week across all markets against about 4 on the FTSE 350; the gates and F9-B cut that before any forward trade.
+
+Compute is a walk over the buy tier of every graduated market (65 FTSE names and 346 library names on the 2026-11-03 decline snapshot) and the stored closes. The walker makes no network or model call and fetches no new prices; daily ops-monitor is enough for it. The signal-day memo job is the book's only model spend.
 
 **Already produced and used.**
 
@@ -487,7 +518,7 @@ Compute is a walk over the buy tier of every graduated market (65 FTSE names and
 | Gap | What blocks | What step 2.3 adds |
 |---|---|---|
 | Sector gate scores FTSE sectors only | Part 3 for library names. Library entries stay at zero without it. | Nothing here. Plan step 1.8 extends the gate to graduated markets. |
-| F9-B binds not computed for library names | Library names fail F9-B. | Nothing here. Plan step 1.9 computes the four binds from library research folders. |
+| F9-B binds not computed for library names | Library names fail F9-B. | Nothing here. Plan step 1.9 computes the four binds from library research folders and adds the signal-day memo job. |
 | Decline and sector stores are single snapshots | `archive_full_strategy` and any later rebuild of the forward book. | An append-only verdict log, written by the observe job. Not a new ingest. |
 | F9 fields absent on `run_*.json.gz` | Archive cannot apply F9-B. Those episodes stay `f9_unverified`. | Forward book computes the four binds at run time. No backfill. |
 | No screen archive before 2026-08-02 | No two-year test of part 1. | Accept the thirteen-week rehearsal. Do not buy a price history to invent signals. |
@@ -503,7 +534,7 @@ Short brief for the implementer. Still observe-only. Still no live writes.
 
 **Depends on** plan steps 1.8 and 1.9 for library entries. FTSE entries need neither, so the walker may start on FTSE names and pick up library names when those steps land, with a logged marker; the universe rule does not change.
 
-**Modules.** `src/value_investor/strategy_book_observe.py` owns the walker. It calls `technical_analysis._rsi`, `core_sell_reason`, `note_thesis_streak`, `thesis_break_confirmed`, and `episode_return` / `costs_for_market`. It does not call `assign_timing_signal`, `compute_indicators`, or `compute_trade_plan` to decide a trade. CLI `ftse-strategy-book` with `--replay`, `--forward`, `--no-persist`, and `--as-of`. Replay and forward write different stores and never mix medians.
+**Modules.** `src/value_investor/strategy_book_observe.py` owns the walker. It calls `technical_analysis._rsi`, `core_sell_reason`, `note_thesis_streak`, `thesis_break_confirmed`, and `episode_return` / `costs_for_market`. It does not call `assign_timing_signal`, `compute_indicators`, or `compute_trade_plan` to decide a trade. The signal-day memo job, `src/value_investor/strategy_book_memo.py`, is a separate scheduled step: it reads the walker's pending signals and review dates, calls the existing research runner (FTSE) or the library rememo target resolver (library names), and writes `docs/data/strategy_book_memo_log.jsonl`. The walker reads the memos it finds. It never waits for or calls the job. CLI `ftse-strategy-book` with `--replay`, `--forward`, `--no-persist`, and `--as-of`. Replay and forward write different stores and never mix medians.
 
 **Stores**, committed by ops-monitor the same way N200 commits (`GHA_COMMIT_OPTIONAL`):
 
@@ -513,12 +544,13 @@ Short brief for the implementer. Still observe-only. Still no live writes.
 | `docs/data/strategy_book_replay.json` | The three archive results, the alternative column, and the buy-on-signal control. |
 | `docs/data/strategy_book_observe.json` | Forward episodes with both comparison exits and their entry snapshots, shadow episodes, bench columns, boards (overall, launch, by market, paired exits, shadows, selection, bench, both controls, capital view), the 26-week interim read, disposition, change markers. |
 | `docs/data/strategy_book_gate_log.jsonl` | Append-only verdicts the forward job used. |
+| `docs/data/strategy_book_memo_log.jsonl` | Append-only signal-day and review-date memo requests: ticker, market, signal or review session, memo finish time, verdict, estimated spend, or the skip reason. |
 
-**Ops-monitor.** `check_strategy_book_observe` inside `collect_ops_findings`, after the decline check and the sector check. `auto_fixable` false. Findings: refreshed (info), failed (warn), 26-week interim read published (info, once), thickness gate ready for review (info). A row in [`ops-monitor.md`](ops-monitor.md) points here. The refresh finding names counts and the first few tickers. It does not spray rememo or ingest.
+**Ops-monitor.** `check_strategy_book_observe` inside `collect_ops_findings`, after the decline check and the sector check. `auto_fixable` false. Findings: refreshed (info), failed (warn), 26-week interim read published (info, once), thickness gate ready for review (info), memo routine falling behind (warn, when `memo_not_ready` exceeds a fifth of a week's otherwise-eligible signals, or the job has not run on a weekday). A row in [`ops-monitor.md`](ops-monitor.md) points here. The refresh finding names counts and the first few tickers. It does not spray rememo or ingest.
 
 **Dashboard.** An Analysis → Observe strip on the N206 pattern, hash `#analysis/observe/strategy-book`, reading the forward store. A compact queue-health line for phase span, mature count, and freshness. No strand A lifecycle writes. No promote button.
 
-**Tests.** Entry fires only on RSI below 35 and a 10-session low. A buy-tier name with a high RSI does not enter. Leaving the buy tier does not exit. A close at +10% launches; the floor is +5%, then rises with each checkpoint and never falls. A close at or below the floor sells at the next close, and a gap fill under the floor is scored as filled. An episode that has not launched sells at session index 63 whatever the price; one that launched on session 62 does not. Session index 252 sells. An 8% drop takes the recovery label and does not sell. Both comparison exits run on every primary entry and never change the primary's entries, cooldown or recovery share; `draft_v0_exit` matches the draft rules on a constructed series. Two `avoid` rows sell; one does not. `insufficient_data` blocks entry and does not, by itself, break a hold mid-way. The decision median counts only mature episodes and values an open launched one at its floor. The interim read's standard error uses entry-week averages. A name with a `declining` verdict opens a decline shadow episode and no book episode. The entry snapshot reads no file dated after the signal session. A filter challenger never opens an episode the book did not open. A bench column cannot be added once the forward store has scores, except through a logged version review. A gap over 5 days does not fill. Fair-cost math matches `episode_return` on a known pair. Archive output keeps the three result keys separate. A thinned chart is refused. Each episode uses its own market's cost row. A library name in a market that is not graduated does not enter. A library run applies only to its own market. The buy-on-signal control opens on a newly eligible name, ignores price timing, and closes at 63 sessions or after 2 ineligible runs. The gate count caps at 6 per entry week while the medians use every mature episode. `single_market_dependence` fires on a constructed case. Capital-days return matches a hand-computed pair. The reference slot book skips a signal when all 20 slots are full and never changes an episode's return. The buy-and-hold reference adds a newly eligible name at an equal stake.
+**Tests.** Entry fires only on RSI below 35 and a 10-session low. A buy-tier name with a high RSI does not enter. Leaving the buy tier does not exit. A close at +10% launches; the floor is +5%, then rises with each checkpoint and never falls. A close at or below the floor sells at the next close, and a gap fill under the floor is scored as filled. An episode that has not launched sells at session index 63 whatever the price; one that launched on session 62 does not. Session index 252 sells. An 8% drop takes the recovery label and does not sell. Both comparison exits run on every primary entry and never change the primary's entries, cooldown or recovery share; `draft_v0_exit` matches the draft rules on a constructed series. Two `avoid` rows sell; one does not. `insufficient_data` blocks entry and does not, by itself, break a hold mid-way. The decision median counts only mature episodes and values an open launched one at its floor. The interim read's standard error uses entry-week averages. A name with a `declining` verdict opens a decline shadow episode and no book episode. The entry snapshot reads no file dated after the signal session. A filter challenger never opens an episode the book did not open. A bench column cannot be added once the forward store has scores, except through a logged version review. A memo finished before the fill session's close meets the memo bind; one finished after it gives `memo_not_ready` and no later fill. A fresh memo with a failed verdict gives `memo_blocked`. The memo job skips a name that fails another F9-B bind and respects the `weekly_ops` headroom check. A gap over 5 days does not fill. Fair-cost math matches `episode_return` on a known pair. Archive output keeps the three result keys separate. A thinned chart is refused. Each episode uses its own market's cost row. A library name in a market that is not graduated does not enter. A library run applies only to its own market. The buy-on-signal control opens on a newly eligible name, ignores price timing, and closes at 63 sessions or after 2 ineligible runs. The gate count caps at 6 per entry week while the medians use every mature episode. `single_market_dependence` fires on a constructed case. Capital-days return matches a hand-computed pair. The reference slot book skips a signal when all 20 slots are full and never changes an episode's return. The buy-and-hold reference adds a newly eligible name at an equal stake.
 
 **Do not reuse these as the rule.** They conflict with the strategy spec, the chart files, or both.
 
@@ -542,6 +574,8 @@ Short brief for the implementer. Still observe-only. Still no live writes.
 ## 13. Open questions
 
 Nine decisions. Each default is what this draft seals if the signature note is silent.
+
+**Answered 2026-11-04 (owner): all nine at their defaults.** On question 2 the owner asked whether full memo coverage would favour `adjusted_signal`. It would not: on 2026-11-04 every FTSE name the adjusted signal removed from the buy tier (37 of 65) was removed by the cash-flow-basis check, not by a memo, and the adjusted signal has no dated history before July 2026. Raw stays. Testing the adjusted signal as a bench filter is queued for a version review (L672). The memo pace question led to the memo routine in section 11.
 
 1. **Entry window.** Default: 10 chart sessions for the low. The trade plan's 20-day figure is a limit level, and stacking it on RSI below 35 would make entries rarer. At signature the owner may set 20 once. After a score store exists, 20 is a new registration. Under the amended exit the window no longer sets the exit; the 10-session high survives only inside `draft_v0_exit`, which stays as drafted whatever is chosen here.
 
