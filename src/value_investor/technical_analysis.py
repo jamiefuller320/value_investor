@@ -746,6 +746,12 @@ def enrich_signals_with_technicals(
         for ticker, frame in price_history.items()
         if "Volume" in frame.columns and not frame["Volume"].dropna().empty
     }
+    high_history = {
+        ticker: frame["High"] for ticker, frame in price_history.items() if "High" in frame.columns
+    }
+    low_history = {
+        ticker: frame["Low"] for ticker, frame in price_history.items() if "Low" in frame.columns
+    }
 
     rows: list[dict[str, Any]] = []
     for ticker in tickers:
@@ -785,6 +791,8 @@ def enrich_signals_with_technicals(
             chart_dir=Path(chart_dir),
             signal_filter=None,
             volumes=volume_history,
+            highs=high_history,
+            lows=low_history,
         )
 
     return enriched

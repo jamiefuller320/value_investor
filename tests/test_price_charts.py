@@ -195,12 +195,28 @@ def test_chart_payload_needs_refresh_and_prospective_helper():
                 "sma200_series": [1],
                 "dates": ["a"],
                 "volumes": [10],
+                "highs": [1],
+                "lows": [1],
                 "period": "2y",
                 "levels": {"core_limit": 1},
             },
             signal="hold",
         )
         is False
+    )
+    assert (
+        chart_payload_needs_refresh(
+            {
+                "sma50_series": [1],
+                "sma200_series": [1],
+                "dates": ["a"],
+                "volumes": [10],
+                "period": "2y",
+                "levels": {"core_limit": 1},
+            },
+            signal="hold",
+        )
+        is True
     )
     assert (
         chart_payload_needs_refresh(
@@ -418,6 +434,8 @@ def _dated_chart(chart_dir: Path, ticker: str, last: str) -> Path:
             "dates": ["2026-10-29", last],
             "closes": [100.0, 101.0],
             "volumes": [1, 1],
+            "highs": [100.0, 101.0],
+            "lows": [100.0, 101.0],
             "sma50_series": [None, None],
             "sma200_series": [None, None],
             "levels": {"core_limit": 95.0},
@@ -469,3 +487,37 @@ def test_chart_last_close_date_reads_last_bar():
     assert chart_last_close_date({"dates": []}) is None
     assert chart_last_close_date(None) is None
     assert chart_last_close_date({"dates": ["junk"]}) is None
+
+
+def test_chart_payload_stores_highs_and_lows_on_the_close_unit():
+    from value_investor.price_charts import build_price_chart_payload
+
+    index = pd.bdate_range("2026-01-01", periods=5)
+    close = pd.Series([100.0, 101.0, 102.0, 103.0, 104.0], index=index)
+    high = pd.Series([101.0, 102.5, 101.0, 104.0, 105.0], index=index)
+    low = pd.Series([99.0, 100.0, 101.5, None, 103.0], index=index)
+    payload = build_price_chart_payload(
+        ticker="AAA.L", name="A", series=close, signal="hold", high=high, low=low
+    )
+    assert payload["highs"] == [101.0, 102.5, 102.0, 104.0, 105.0]
+    assert payload["lows"] == [99.0, 100.0, 101.5, None, 103.0]
+    assert len(payload["highs"]) == len(payload["dates"])
+
+    bare = build_price_chart_payload(ticker="AAA.L", name="A", series=close, signal="hold")
+    assert bare["highs"] == [None] * 5
+    assert bare["lows"] == [None] * 5
+
+
+def test_chart_highs_and_lows_follow_the_close_unit_fix():
+    from value_investor.price_charts import build_price_chart_payload
+
+    index = pd.bdate_range("2026-01-01", periods=6)
+    close = pd.Series([100.0, 101.0, 1.02, 103.0, 104.0, 105.0], index=index)
+    high = pd.Series([101.0, 102.0, 1.03, 104.0, 105.0, 106.0], index=index)
+    low = pd.Series([99.0, 100.0, 1.01, 102.0, 103.0, 104.0], index=index)
+    payload = build_price_chart_payload(
+        ticker="AAA.L", name="A", series=close, signal="hold", high=high, low=low
+    )
+    assert payload["closes"][2] == 102.0
+    assert payload["highs"][2] == 103.0
+    assert payload["lows"][2] == 101.0
