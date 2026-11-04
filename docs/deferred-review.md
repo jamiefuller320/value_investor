@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-04T16:22:02+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-04T18:21:36+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -573,6 +573,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | L662 | **Structured fair-value range and margin of safety in research memos** | Memos output verdict/risk/confidence only and prompts forbid price targets, so there is no machine-checkable intrinsic value for entry limits, sizing or valuation-based exits. Add a structured fair-value range (normalised earnings / reverse DCF from filing bodies) and margin of safety, observe-only first and scored vs outcomes. Distinct from N5 (DCF as a screen model). | After L528 total-return accounting lands, or when the research gate pass share is reviewed |
 | L663 | **As-of-only instruction in research prompts (LLM knowledge leakage guard)** | PIT plumbing (timeline, sources_as_of) is strong but prompts never tell the agent to use only facts in the supplied files as of the memo date and ignore parametric knowledge of later events. Add the instruction plus a cheap leak probe on replayed memos so memo-vs-outcome learning is not contaminated. | Next research prompt revision or before any memo-vs-outcome calibration study |
 | L664 | **Non-US point-in-time out-of-sample screen replay (UK / Europe)** | hsr-v1 US holdout is spent (N203) and the fresh US holdout waits 5+ years (L570). A survivorship-free PIT panel for UK or Europe would give a new independent out-of-sample test of the frozen screen in the markets actually traded, without re-litigating the US window. | Owner approves a licensed non-US PIT fundamentals source, or the autonomy proof-gate decision needs selection evidence |
+| L673 | **Sterling view of non-sterling strategy-book episodes** | Report each non-sterling strategy-book episode converted to GBP at entry and exit fills, beside the local-currency return, so exchange-rate moves over 3–12 month holds are visible before live capital on non-UK names. | Plan step 3.2 (live proof standard) starts |
 
 ### Ops / reliability
 
