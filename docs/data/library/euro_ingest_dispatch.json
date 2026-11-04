@@ -14,7 +14,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-11-04T18:17:13.186543+00:00",
+    "snapshot_at": "2026-11-04T18:21:28.403169+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 45,
     "unmeasured_buy_tier": 0,
@@ -90,7 +90,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-11-04T18:17:13.188227+00:00",
+  "evaluated_at": "2026-11-04T18:21:28.405147+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -139,11 +139,11 @@
     "us_adr_asia"
   ],
   "parallel_sprint_markets": [
-    "nasdaq100"
+    "sp500"
   ],
   "parallel_sprint_status": [
     {
-      "market_id": "nasdaq100",
+      "market_id": "sp500",
       "focus_market": "euro_depth",
       "mode": "sprint",
       "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=9)",
@@ -151,47 +151,59 @@
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
       "parked_tickers": [
-        "PDD"
+        "CRH",
+        "EME",
+        "LH",
+        "LMT"
       ],
       "phase3_ready": false,
       "current_phase": 1,
       "next_phase": 1,
       "phase_blockers": [
-        "nasdaq100 not in ladder.weekly_paper_shard_markets"
+        "sp500 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-11-04T18:17:49.223307+00:00",
-        "market_id": "nasdaq100",
-        "buy_tier_count": 36,
+        "snapshot_at": "2026-11-04T18:21:54.273537+00:00",
+        "market_id": "sp500",
+        "buy_tier_count": 143,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
         "indexed_without_body": 9,
-        "bodies_min": 17,
-        "bodies_median": 22.0,
-        "bodies_max": 95,
-        "coverage_scope": "canonical_plus_shards",
-        "ftse_equivalent": false,
+        "bodies_min": 19,
+        "bodies_median": 22,
+        "bodies_max": 120,
+        "coverage_scope": "canonical",
+        "ftse_equivalent": true,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
         "thin_body_tickers": [],
         "indexed_without_body_tickers": [
-          "TRI",
-          "PDD"
+          "EME",
+          "LH",
+          "LMT",
+          "COR",
+          "CRH"
         ],
         "indexed_without_body_by_ticker": {
-          "TRI": 8,
-          "PDD": 1
+          "EME": 1,
+          "LH": 2,
+          "LMT": 1,
+          "COR": 2,
+          "CRH": 3
         },
         "parked_tickers": [
-          "PDD"
+          "CRH",
+          "EME",
+          "LH",
+          "LMT"
         ],
-        "parked_count": 1,
+        "parked_count": 4,
         "effective_thin_body_buy_tier": 0,
         "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 8,
+        "effective_indexed_without_body": 2,
         "effective_indexed_without_body_tickers": [
-          "TRI"
+          "COR"
         ],
         "ingest_exhausted": false
       },
@@ -210,7 +222,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-11-04T18:17:49.224804+00:00",
+      "evaluated_at": "2026-11-04T18:21:54.279013+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -237,7 +249,7 @@
         "no benchmark configured for sti"
       ],
       "filing_health": {
-        "snapshot_at": "2026-11-04T18:17:49.788712+00:00",
+        "snapshot_at": "2026-11-04T18:21:54.572176+00:00",
         "market_id": "sti",
         "buy_tier_count": 7,
         "unmeasured_buy_tier": 0,
@@ -290,13 +302,13 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-11-04T18:17:49.792561+00:00",
+      "evaluated_at": "2026-11-04T18:21:54.574507+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
-    "nasdaq100",
+    "sp500",
     "sti"
   ],
   "market_queue": [
@@ -351,7 +363,7 @@
     }
   },
   "scheduler_stream_1_markets": [
-    "nasdaq100"
+    "sp500"
   ],
   "scheduler_stream_2_markets": [
     "sti"

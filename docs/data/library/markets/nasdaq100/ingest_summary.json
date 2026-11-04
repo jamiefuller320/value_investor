@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-04T15:56:46.207754+00:00",
+  "run_at": "2026-11-04T18:20:25.808722+00:00",
   "market_id": "nasdaq100",
   "targets": [
     "TRI"
@@ -83,7 +83,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-04T15:56:05.930110+00:00",
+    "snapshot_at": "2026-11-04T18:18:36.208076+00:00",
     "market_id": "nasdaq100",
     "buy_tier_count": 36,
     "unmeasured_buy_tier": 0,
@@ -119,7 +119,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-04T15:56:46.187737+00:00",
+    "snapshot_at": "2026-11-04T18:19:16.349024+00:00",
     "market_id": "nasdaq100",
     "buy_tier_count": 36,
     "unmeasured_buy_tier": 0,
@@ -143,30 +143,62 @@
       "PDD": 1
     },
     "parked_tickers": [
-      "PDD"
-    ],
-    "parked_count": 1,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 8,
-    "effective_indexed_without_body_tickers": [
+      "PDD",
       "TRI"
     ],
-    "ingest_exhausted": false
+    "parked_count": 2,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "nasdaq100",
+    "to_market": "sp500",
+    "stream_markets_after": [
+      "sp500"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "nasdaq100",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "PDD",
+        "TRI"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "sp500",
+      "forced": true,
+      "prior_screen_at": "2026-11-03T18:31:03.392023+00:00",
+      "prior_age_days": 1,
+      "run_at": "2026-11-04T18:20:15.282090+00:00",
+      "shortlist_count": 143,
+      "ticker_count": 503
+    },
+    "at": "2026-11-04T18:19:22.149397+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "nasdaq100",
-    "assessed_at": "2026-11-04T15:56:07.312346+00:00",
+    "assessed_at": "2026-11-04T18:18:37.582142+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -203,21 +235,19 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 37.45307547499999,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2062.546924525,
+  "used_seconds": 37.48711143900002,
+  "budget_seconds": 700.0,
+  "leftover_seconds": 662.512888561,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "TRI"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "nasdaq100",
-    "updated_at": "2026-11-04T15:56:46.192436+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-11-04T18:19:16.353391+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -230,6 +260,18 @@
         "indexed_without_body": 1,
         "thin": false,
         "source_surface": "sec_edgar"
+      },
+      {
+        "ticker": "TRI",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-04T18:19:16.353391+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 103,
+        "filings_with_body": 95,
+        "indexed_without_body": 8,
+        "thin": false,
+        "source_surface": "sec_edgar"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -240,20 +282,79 @@
       "PDD",
       "TRI"
     ],
-    "unparked_leftover": [
-      "TRI"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/nasdaq100/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "nasdaq100"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "nasdaq100",
+    "ingest_exhausted_markets": [
+      "aex",
+      "aim",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "iseq20",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261103-09"
+    "reason": "no parked leftover tickers remaining for hunter",
+    "tried_count": 61,
+    "candidate_count": 53,
+    "skipped_resolved_tickers": [
+      "CRH",
+      "LMT",
+      "TPT.L",
+      "DFS.L",
+      "APTD.L",
+      "ULTP.L",
+      "FOXT.L",
+      "MER.L",
+      "GIB-A.TO",
+      "NTR.TO",
+      "SU.TO",
+      "BAS.DE",
+      "IFX.DE",
+      "PDD",
+      "BAS.DE",
+      "DTE.DE",
+      "DTG.DE",
+      "FRE.DE",
+      "HNR1.DE",
+      "MUV2.DE",
+      "HEN3.DE",
+      "PST.MI",
+      "ACKB.BR",
+      "APAM.AS",
+      "0285.HK",
+      "0857.HK",
+      "0288.HK",
+      "2331.HK",
+      "0883.HK",
+      "EVN.VI",
+      "WIE.VI"
+    ],
+    "wait_behind_task_id": ""
   }
 }
