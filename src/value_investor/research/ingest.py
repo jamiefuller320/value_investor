@@ -22,6 +22,8 @@ import yfinance as yf
 logger = logging.getLogger(__name__)
 
 FINANCIAL_YEARS = 5
+# Fetch window. Stored series can be longer: quarterly_history_backfill keeps
+# QUARTERLY_HISTORY_KEEP periods and TTM consumers still sum this many newest.
 FINANCIAL_QUARTERS = 4
 NEWS_LOOKBACK_DAYS = 365
 GOOGLE_NEWS_MAX_ITEMS = 40
@@ -1397,8 +1399,13 @@ def ingest_research_sources(
 
     financials = fetch_annual_financials(ticker)
     financials_path = sources_dir / "financials_annual.json"
+    from value_investor.quarterly_history_backfill import (
+        load_financials_dict,
+        merge_quarterly_history,
+    )
     from value_investor.storage import read_json, resolve_json_path, write_json
 
+    financials = merge_quarterly_history(load_financials_dict(financials_path), financials)
     write_json(financials_path, financials, compact=True, compress=False)
 
     snapshot_path = sources_dir / "screening_snapshot.json"

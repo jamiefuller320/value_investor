@@ -224,12 +224,13 @@ merge clashes manageable.
 | Step | Status | Branch / PR | Model |
 |------|--------|-------------|-------|
 | 0.1, 0.2 | Done | `cursor/autonomy-readiness-review-567c` | Supervisor |
-| 1.1 | In review (one change round: one row label per comparison, freshness counts) | `cursor/operating-decline-gate-567c` | Claude Sonnet 5.5 |
-| 1.2 | In review (one change round: decline-gate verdicts are the single definition of "declining"; screen fields are a material-threshold fallback). Stacked on 1.1 | `cursor/sector-headwind-gate-567c` | GPT-5.6 |
-| 1.3 | In review (single choke point; no prompt version or rememo trigger affected) | `cursor/research-as-of-guard-567c` | Composer 2.5 |
-| 1.4 | In review; runs once the owner adds `TRADING212_API_KEY` / `TRADING212_API_SECRET`. Committed catalogue is from 2026-07-22 | `cursor/t212-catalogue-refresh-567c` | Composer 2.5 |
-| 0.3 | In review (supervisor corrected two rows) | `cursor/codename-glossary-567c` | Composer 2.5 |
-| 1.5 | In review. Buy-tier interim coverage did not move (2 of 65): Yahoo series lack the prior-year quarter and half-year bodies are not extracted, hence 1.6 and 1.7. Stacked on 1.1 | `cursor/decline-gate-interim-567c` | Grok 4.7 |
-| 1.6, 1.7 | Next | — | Grok 4.7 |
-| Phase 1 gate | Waiting on 1.1–1.2 merge and a week of daily refreshes | — | Owner |
-| 2.1 | Draft in review | `cursor/strategy-book-registration-567c` | Grok 4.7 |
+| 1.1 | Merged (one change round: one row label per comparison, freshness counts) | #1274 | Claude Sonnet 5.5 |
+| 1.2 | In review (one change round: decline-gate verdicts are the single definition of "declining"; screen fields are a material-threshold fallback) | #1278 | GPT-5.6 |
+| 1.3 | Merged (single choke point; no prompt version or rememo trigger affected) | #1273 | Composer 2.5 |
+| 1.4 | Merged; runs once the owner adds `TRADING212_API_KEY` / `TRADING212_API_SECRET`. Committed catalogue is from 2026-07-22 | #1272 | Composer 2.5 |
+| 0.3 | Merged (supervisor corrected two rows) | #1277 | Composer 2.5 |
+| 1.5 | Merged. Buy-tier interim coverage did not move (2 of 65): Yahoo series lack the prior-year quarter and half-year bodies are not extracted, hence 1.6 and 1.7 | #1276 | Grok 4.7 |
+| 1.6 | In review. Writer merges up to 12 quarters; git backfill gave interim revenue to 4 of the 8 buy-tier names (GSK, SHEL, BARC, BP). IAG, BGEO, ATYM, NWG have no prior-year quarter in git. No FTSE verdict change. Two library verdicts moved to declining (FSLR, HRL) | #1281 | Grok 4.7 |
+| 1.7 | Next | — | Grok 4.7 |
+| Phase 1 gate | Waiting on 1.2 merge and a week of daily refreshes | — | Owner |
+| 2.1 | Draft merged; awaiting owner signature and answers to its open questions | #1280 | Grok 4.7 |
