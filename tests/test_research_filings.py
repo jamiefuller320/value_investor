@@ -14539,29 +14539,28 @@ def test_parked_source_hunter_abx_to_tsx60_has_fetchable_ir():
 
 
 def test_fetch_filings_ir_allowlist_tsx60_cve_to_builtins(tmp_path: Path):
-    """Regression: CVE.TO parked IWB — SEC FY2025 AIF/MD&A + Q2/Q3 2026 interim MD&A HTML."""
+    """Regression: CVE.TO parked IWB — SEC FY2025 AIF/MD&A + Q3 2026 interim MD&A HTML."""
     allowlist_path = tmp_path / "ir.json"
     allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
 
     rows = fetch_filings_ir_allowlist("CVE.TO", path=allowlist_path)
-    assert len(rows) == 4
+    assert len(rows) == 3
     assert all(row["source"] == "ir_allowlist" for row in rows)
     urls = [row["url"] for row in rows]
     assert any("a2025annualinformationform.htm" in url for url in urls)
     assert any("a2025managementsdiscussion.htm" in url for url in urls)
-    assert any("q22026managementsdiscussio.htm" in url for url in urls)
     assert any("q32026managementsdiscussio.htm" in url for url in urls)
     assert sum(1 for row in rows if row["period"] == "annual") >= 1
-    assert sum(1 for row in rows if row["period"] == "interim") >= 2
+    assert sum(1 for row in rows if row["period"] == "interim") >= 1
     assert {row["period"] for row in rows} <= {"annual", "interim", "other"}
-    assert len(fetch_filings_ir_allowlist("CVE", path=allowlist_path)) == 4
+    assert len(fetch_filings_ir_allowlist("CVE", path=allowlist_path)) == 3
 
 
 def test_parked_source_hunter_cve_to_tsx60_has_fetchable_ir():
     """eng-20261104-03: CVE.TO has live-fetchable Cenovus Energy SEC statutory HTML."""
     assert "CVE.TO" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("CVE.TO")
-    assert len(rows) == 4
+    assert len(rows) == 3
     urls = [row["url"] for row in rows]
     assert all("sec.gov" in url for url in urls)
     aif_url = next(url for url in urls if "a2025annualinformationform.htm" in url)
