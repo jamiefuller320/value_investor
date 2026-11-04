@@ -225,12 +225,13 @@ merge clashes manageable.
 |------|--------|-------------|-------|
 | 0.1, 0.2 | Done | `cursor/autonomy-readiness-review-567c` | Supervisor |
 | 1.1 | Merged (one change round: one row label per comparison, freshness counts) | #1274 | Claude Sonnet 5.5 |
-| 1.2 | In review (one change round: decline-gate verdicts are the single definition of "declining"; screen fields are a material-threshold fallback) | #1278 | GPT-5.6 |
+| 1.2 | Merged 2026-11-04 (one change round: decline-gate verdicts are the single definition of "declining"; screen fields are a material-threshold fallback) | #1278 | GPT-5.6 |
 | 1.3 | Merged (single choke point; no prompt version or rememo trigger affected) | #1273 | Composer 2.5 |
 | 1.4 | Merged; runs once the owner adds `TRADING212_API_KEY` / `TRADING212_API_SECRET`. Committed catalogue is from 2026-07-22 | #1272 | Composer 2.5 |
 | 0.3 | Merged (supervisor corrected two rows) | #1277 | Composer 2.5 |
 | 1.5 | Merged. Buy-tier interim coverage did not move (2 of 65): Yahoo series lack the prior-year quarter and half-year bodies are not extracted, hence 1.6 and 1.7 | #1276 | Grok 4.7 |
-| 1.6 | In review. Writer merges up to 12 quarters; git backfill gave interim revenue to 4 of the 8 buy-tier names (GSK, SHEL, BARC, BP). IAG, BGEO, ATYM, NWG have no prior-year quarter in git. No FTSE verdict change. Two library verdicts moved to declining (FSLR, HRL) | #1281 | Grok 4.7 |
+| 1.6 | Merged 2026-11-04. Writer merges up to 12 quarters; git backfill gave interim revenue to 4 of the 8 buy-tier names (GSK, SHEL, BARC, BP). IAG, BGEO, ATYM, NWG have no prior-year quarter in git. No FTSE verdict change. Two library verdicts moved to declining (FSLR, HRL) | #1281 | Grok 4.7 |
 | 1.7 | Next | — | Grok 4.7 |
-| Phase 1 gate | Waiting on 1.2 merge and a week of daily refreshes | — | Owner |
-| 2.1 | Draft merged; awaiting owner signature and answers to its open questions | #1280 | Grok 4.7 |
+| 1.8, 1.9 | Next after 1.7 (sector gate on graduated markets; F9-B binds for library names). Library entries to the strategy book wait on both | — | Grok 4.7 |
+| Phase 1 gate | Waiting on a week of daily refreshes after the 1.2 merge (2026-11-04), then the owner's signature | — | Owner |
+| 2.1 | Draft merged (#1280); revised for the single track, multi-market universe, capital view and the checkpoint-ladder exit (#1283). Awaiting owner signature and answers to its 8 open questions | #1280, #1283 | Grok 4.7, then supervisor |
