@@ -65,8 +65,11 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: refresh Trading 212 catalogue and overlays [skip ci]"
-          file_pattern: |
+          # git-auto-commit-action reads file_pattern with `read -r -a`, so only the
+          # first line of a multi-line value is used. Keep every pattern on one line.
+          file_pattern: >-
             docs/data/library/t212_coverage/catalogue/**
             docs/data/library/t212_coverage/by_market/**
             docs/data/library/t212_coverage/summary.json
+            docs/data/library/t212_coverage/README.md
           skip_fetch: false
