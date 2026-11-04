@@ -1,19 +1,63 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-03T07:57:21.425225+00:00",
+  "generated_at": "2026-11-04T02:37:31.091426+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-10-24",
   "counts": {
-    "new_info": 4,
-    "unacked": 4,
-    "acked": 37,
+    "new_info": 5,
+    "unacked": 6,
+    "acked": 36,
     "automated": 20,
-    "human": 45
+    "human": 47
   },
   "tasks": [
+    {
+      "id": "weekday-engineering-parked-backlog-clear",
+      "title": "Clear engineering parked backlog when dispatch pauses",
+      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
+      "automated": false,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/ops-monitor.md",
+      "doc_anchor": "engineering-parked-backlog-clearing",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "2 attention-parked eng tasks",
+        "updated_at": "2026-11-04T02:36:27.469426+00:00",
+        "fingerprint": "700ceb2997ccf801",
+        "bullets": [
+          "Parked tasks: 4 (attention ~2)",
+          "Queue-clearing pause active: False — evaluated 2026-11-04T02:36:27.469426+00:00",
+          "Traffic pause active: True",
+          "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
+          "eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX",
+          "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
+          "eng-20261103-08: Seed IR allowlist for unmeasured/zero-body BGEO.L — empty allowlist after 0-improve pin (igc-20261103-07)"
+        ],
+        "source_keys": [
+          "engineering_tasks"
+        ],
+        "ack_sufficient": false,
+        "auto_ackable": false,
+        "ack_reason": "attention_parked_remaining"
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-10-26T02:39:50.092299+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "463c1c358411298f"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
     {
       "id": "sunday-assessment-scoreboard",
       "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
@@ -29,15 +73,15 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary not scored",
-        "updated_at": "2026-11-03T07:56:01.477809+00:00",
+        "updated_at": "2026-11-04T02:33:55.247361+00:00",
         "fingerprint": "94066622535964a2",
         "bullets": [
-          "ai_judgment_matched30_fair: total return -3.6% vs FTAL.L -0.1% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.1% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
-          "Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1068",
-          "vs control buy_tier_matched30_fair: difference 0.0008 (common window, not significance)",
+          "ai_judgment_matched30_fair: total return -2.6% vs FTAL.L +0.4% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.5% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+          "Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1117",
+          "vs control buy_tier_matched30_fair: difference 0.0054 (common window, not significance)",
           "AI gate binds: False (N189 while it never binds)",
           "twin ai_judgment_matched30_fair: difference -0.0158 over 10 days",
-          "twin buy_tier_matched30_fair: difference -0.0387 over 11 days",
+          "twin buy_tier_matched30_fair: difference -0.041 over 12 days",
           "Policy changes: significance_gate_v1 (2026-10-06), evidentiary_demotion_ai_judgment_fair_v1 (2026-10-15), stop_ai_judgment_fair_3name_v1 (2026-10-31)"
         ],
         "source_keys": [
@@ -70,17 +114,17 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-11-03T07:39:50.896084+00:00",
-        "fingerprint": "84d319ba2391acfa",
+        "updated_at": "2026-11-03T22:28:48.468338+00:00",
+        "fingerprint": "699fd4261e5b4223",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=40",
-          "aim: phase=0 ai=False knob=False holdings=17",
-          "asx200: phase=1 ai=False knob=False holdings=29",
+          "nasdaq100: phase=1 ai=False knob=False holdings=33",
+          "sti: phase=0 ai=False knob=False holdings=6",
           "aex: phase=0 ai=False knob=False holdings=10",
+          "aim: phase=0 ai=False knob=False holdings=17",
           "atx: phase=0 ai=False knob=False holdings=4",
           "bel20: phase=0 ai=False knob=False holdings=2",
-          "cac40: phase=1 ai=False knob=False holdings=14",
-          "dax: phase=1 ai=False knob=False holdings=3"
+          "cac40: phase=1 ai=False knob=False holdings=14"
         ],
         "source_keys": [
           "market_status"
@@ -112,7 +156,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 2 open",
-        "updated_at": "2026-11-03T07:38:53.740170+00:00",
+        "updated_at": "2026-11-03T22:28:13.126133+00:00",
         "fingerprint": "6dda3808006c2a3a",
         "bullets": [
           "Open deviations: 2",
@@ -149,15 +193,15 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-11-02T12:29:58.451177+00:00",
-        "fingerprint": "639580f16bf02bfa",
+        "updated_at": "2026-11-03T19:25:46.676058+00:00",
+        "fingerprint": "4597fa547e309129",
         "bullets": [
-          "Occasions logged: 319",
+          "Occasions logged: 325",
           "PR mergeable=CONFLICTING against main: 7",
           "validate failed: 7",
           "merge_conflict:dirty: 6",
           "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
-          "validate check failed: 4"
+          "validate check failed: 5"
         ],
         "source_keys": [
           "pr_fix_occasions",
@@ -192,6 +236,68 @@
         "headline": "See runbook for analysis inputs",
         "updated_at": null,
         "fingerprint": "030143ecf519b283",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-strategy-phase-gate",
+      "title": "Sign strategy reorientation phase gates",
+      "summary": "At the end of each phase of the strategy reorientation plan, review the evidence the supervising agent presents and sign, adjust once (logged), or reject. Phase 1: check operating-decline and sector-headwind verdicts on 10 FTSE buy-tier names (5 flagged, 5 clear) against cited evidence. Phase 2: sign the strategy-book registration (docs/ops/strategy-book-registration.md) before scoring, then the sample-thickness gate before it becomes the primary learning track. Later phases: new proof standard, demo-to-live execution steps, small live capital. Gates bind books only after sign-off; nothing auto-promotes.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/strategy-reorientation-plan.md",
+      "doc_anchor": "phases",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/strategy-reorientation-plan.md#phases",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "1e0c598ae26cf63f",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-t212-catalogue-secrets",
+      "title": "Add Trading 212 API secrets for the catalogue refresh",
+      "summary": "Add TRADING212_API_KEY and TRADING212_API_SECRET (live-environment read key) as GitHub Actions repository secrets so the scheduled catalogue refresh can run. Read-only instrument endpoints only; no order permissions are needed.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/strategy-reorientation-plan.md",
+      "doc_anchor": "phase-1--filters-and-foundations-observe-only",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/strategy-reorientation-plan.md#phase-1--filters-and-foundations-observe-only",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "671e81a13721c1cb",
         "bullets": [],
         "source_keys": []
       },
@@ -298,48 +404,6 @@
       "sort_bucket": "unacked",
       "auto_ackable": false,
       "ack_sufficient": false
-    },
-    {
-      "id": "weekday-engineering-parked-backlog-clear",
-      "title": "Clear engineering parked backlog when dispatch pauses",
-      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
-      "automated": false,
-      "cadence": "weekday",
-      "section_id": "weekday",
-      "section_title": "Weekday (Mon–Fri)",
-      "doc_path": "docs/ops/ops-monitor.md",
-      "doc_anchor": "engineering-parked-backlog-clearing",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "0 attention-parked eng tasks · quiet (auto-ackable)",
-        "updated_at": "2026-11-03T07:52:46.324515+00:00",
-        "fingerprint": "463c1c358411298f",
-        "bullets": [
-          "Quiet after recover-queue — observe Acknowledge is sufficient (no list-parked triage).",
-          "Parked tasks: 1 (attention ~0)",
-          "Queue-clearing pause active: False — evaluated 2026-11-03T07:52:46.324515+00:00",
-          "Traffic pause active: False",
-          "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)"
-        ],
-        "source_keys": [
-          "engineering_tasks"
-        ],
-        "ack_sufficient": true,
-        "auto_ackable": true,
-        "ack_reason": "quiet_zero_attention_no_pause"
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-10-26T02:39:50.092299+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "463c1c358411298f"
-      },
-      "sort_bucket": "acked",
-      "auto_ackable": true,
-      "ack_sufficient": true
     },
     {
       "id": "sunday-matched30-twins",
@@ -759,7 +823,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-11-02T13:49:43.834689+00:00",
+        "updated_at": "2026-11-03T13:00:36.308591+00:00",
         "fingerprint": "1d374ee9ad0e2d3b",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
@@ -1145,7 +1209,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-11-02T13:49:43.830398+00:00",
+        "updated_at": "2026-11-03T13:00:36.305643+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",
