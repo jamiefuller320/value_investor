@@ -958,6 +958,18 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex991.htm",
         "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex992.htm",
     ],
+    # tsx60 IWB blocker — eng-20261104-03: CVE.TO parked unfetchable_iwb; SEC FY2025 40-F
+    # AIF/MD&A exhibits + Q3 2026 interim MD&A HTML (live-fetchable; cenovus.com IR is JS-only).
+    "CVE.TO": [
+        "https://www.sec.gov/Archives/edgar/data/1475260/000147526026000008/a2025annualinformationform.htm",
+        "https://www.sec.gov/Archives/edgar/data/1475260/000147526026000008/a2025managementsdiscussion.htm",
+        "https://www.sec.gov/Archives/edgar/data/1475260/000147526026000041/q32026managementsdiscussio.htm",
+    ],
+    "CVE": [
+        "https://www.sec.gov/Archives/edgar/data/1475260/000147526026000008/a2025annualinformationform.htm",
+        "https://www.sec.gov/Archives/edgar/data/1475260/000147526026000008/a2025managementsdiscussion.htm",
+        "https://www.sec.gov/Archives/edgar/data/1475260/000147526026000041/q32026managementsdiscussio.htm",
+    ],
     # hang_seng buy-tier deepen — eng-20260930-03: asia_filings Google News miss / zero-body;
     # seed HKEX statutory PDFs and issuer IR mirrors for stalled buy-tier names.
     "1099.HK": [
@@ -1363,6 +1375,9 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     # tsx60 ABX.TO — d833573* / d67611* SEC slugs lack issuer tokens for IR title gate.
     "ABX": ("Barrick", "Barrick Gold", "Barrick Gold Corporation"),
     "GOLD": ("Barrick", "Barrick Gold", "Barrick Gold Corporation"),
+    # tsx60 CVE.TO — a2025annualinformationform / q32026managementsdiscussio SEC slugs
+    # are run-together words, so the IR title gate needs the issuer name.
+    "CVE": ("Cenovus", "Cenovus Energy", "Cenovus Energy Inc."),
     "DNL": ("Dyno Nobel", "Incitec Pivot"),
     "YAL": ("Yancoal", "Yancoal Australia"),
     # asx200 FMG.AX Markit/ASX allowlist PDFs — opaque documentKey URLs need issuer tokens

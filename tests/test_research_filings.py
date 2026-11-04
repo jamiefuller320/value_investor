@@ -14538,6 +14538,56 @@ def test_parked_source_hunter_abx_to_tsx60_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_tsx60_cve_to_builtins(tmp_path: Path):
+    """Regression: CVE.TO parked IWB — SEC FY2025 AIF/MD&A + Q3 2026 interim MD&A HTML."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("CVE.TO", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("a2025annualinformationform.htm" in url for url in urls)
+    assert any("a2025managementsdiscussion.htm" in url for url in urls)
+    assert any("q32026managementsdiscussio.htm" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") >= 1
+    assert sum(1 for row in rows if row["period"] == "interim") >= 1
+    assert {row["period"] for row in rows} <= {"annual", "interim", "other"}
+    assert len(fetch_filings_ir_allowlist("CVE", path=allowlist_path)) == 3
+
+
+def test_parked_source_hunter_cve_to_tsx60_has_fetchable_ir():
+    """eng-20261104-03: CVE.TO has live-fetchable Cenovus Energy SEC statutory HTML."""
+    assert "CVE.TO" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("CVE.TO")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("sec.gov" in url for url in urls)
+    aif_url = next(url for url in urls if "a2025annualinformationform.htm" in url)
+    body = _live_fetch_filing_body(aif_url)
+    if not body:
+        pytest.skip("SEC.gov body fetch unavailable (rate-limit / network) — retry later")
+    assert len(body) >= 50000
+
+
+def test_cve_to_sec_bodies_pass_ir_title_gate_via_issuer_alias():
+    """Run-together SEC slugs carry no issuer token; the Cenovus alias must match the body."""
+    from value_investor.research.filings import (
+        _ESEF_ENTITY_SEARCH_ALIASES,
+        _ir_body_title_tokens_match,
+    )
+
+    assert "Cenovus" in _ESEF_ENTITY_SEARCH_ALIASES["CVE"]
+    row = {
+        "id": "x",
+        "url": "https://www.sec.gov/Archives/edgar/data/1475260/000147526026000008/"
+        "a2025annualinformationform.htm",
+    }
+    body = "ANNUAL INFORMATION FORM Cenovus Energy Inc. For the year ended December 31, 2025"
+    assert _ir_body_title_tokens_match(row, body, ticker="CVE.TO")
+    assert not _ir_body_title_tokens_match(row, "Unrelated issuer annual form", ticker="CVE.TO")
+
+
 def test_parked_source_hunter_skip_tri_to_tsx60():
     """eng-20260914-01: TRI.TO leftover IWB is SEC 6-K cover HTML, not missing 40-F/interim."""
     assert "TRI.TO" in PARKED_SOURCE_HUNTER_SKIP
