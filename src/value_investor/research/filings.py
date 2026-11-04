@@ -2200,6 +2200,8 @@ _INDEX_NOISE_HEADLINE_MARKERS = (
     "yahoo finance",
     "kalkine media",
     "simplywall.st",
+    "simply wall st",
+    "simply wall street",
     "across the markets:",
     "euronext markets",
 )
@@ -2235,6 +2237,8 @@ def _is_index_noise_row(row: dict[str, Any]) -> bool:
     if row.get("has_body"):
         return False
     url = str(row.get("url") or "").lower()
+    if "simplywall.st" in url:
+        return True
     if "news.google.com" in url:
         return True
     # ASX code listing pages (year=2008 etc.), not downloadable announcements.
@@ -3270,6 +3274,13 @@ _VCT_TRUST_HEADLINE = re.compile(
     re.I,
 )
 
+# Short SGX EPICs (U14.SI) collide with youth-sports "U14 league" headlines in Google News.
+_YOUTH_SPORTS_SHORT_EPIC_HEADLINE = re.compile(
+    r"\b(?:u|under)[- ]?\d{1,2}\b.*\b(?:league|cup|blitz|championship|final|gaa|camogie|rugby|schools)\b"
+    r"|\b(?:league|cup|blitz|championship)\b.*\b(?:u|under)[- ]?\d{1,2}\b",
+    re.I,
+)
+
 
 def _issuer_distinctive_tokens(company_name: str) -> list[str]:
     cleaned = _strip_legal_name_noise(company_name)
@@ -3287,10 +3298,13 @@ def _epic_match_is_ambiguous_noise(
     company_name: str,
 ) -> bool:
     """True when an EPIC word-boundary hit is a known homonym (e.g. VCT trust vs Victrex)."""
-    if epic.upper() not in _AMBIGUOUS_UK_EPICS:
-        return False
     lower = (text or "").lower()
     if any(tok in lower for tok in _issuer_distinctive_tokens(company_name)):
+        return False
+    epic_u = epic.upper()
+    if re.fullmatch(r"U\d{1,2}", epic_u) and _YOUTH_SPORTS_SHORT_EPIC_HEADLINE.search(lower):
+        return True
+    if epic_u not in _AMBIGUOUS_UK_EPICS:
         return False
     epic_l = epic.lower()
     # Victrex RNS often ends with " - VCT".
@@ -6833,6 +6847,16 @@ def refetch_ir_allowlist_filing_bodies(
                 item["unfetchable"] = True
                 item["unfetchable_reason"] = "allowlist_removed"
                 item["unfetchable_at"] = datetime.now(UTC).isoformat()
+                stale_marked += 1
+            elif (
+                _is_ir_allowlist_row(item)
+                and url
+                and url in allowlist_urls
+                and item.get("unfetchable")
+            ):
+                item.pop("unfetchable", None)
+                item.pop("unfetchable_reason", None)
+                item.pop("unfetchable_at", None)
                 stale_marked += 1
             refreshed.append(item)
         filings = refreshed

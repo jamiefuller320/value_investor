@@ -33,6 +33,7 @@ from value_investor.research.filings import (
     _ir_allowlist_period_from_url,
     _ir_allowlist_row_needs_body_refetch,
     _ir_body_content_hash,
+    _is_index_noise_row,
     _is_investegate_ai_summary_body,
     _is_other_results_rns_row,
     _is_statutory_results_headline,
@@ -62,6 +63,7 @@ from value_investor.research.filings import (
     fetch_filings_investegate_company,
     fetch_filings_ir_allowlist,
     fetch_rns_filing_body,
+    filing_lacks_material_body,
     filter_misattributed_filings,
     headline_relevant_to_issuer,
     ingest_filings,
@@ -9033,6 +9035,100 @@ def test_refetch_ir_allowlist_u14_si_statutory_eng_20261102_02(mock_fetch, tmp_p
     assert result["fetched"] >= 1
     payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     assert payload["filings"][0].get("has_body") is True
+
+
+def test_headline_relevant_u14_si_rejects_youth_sports_league_eng_20261104_02():
+    """eng-20261104-02: U14.SI epic must not match unrelated youth-sports Google News."""
+    assert not headline_relevant_to_issuer(
+        "Homeland U14 League final results - Midwest Radio",
+        "UOL Group Limited",
+        "U14.SI",
+    )
+    assert headline_relevant_to_issuer(
+        "UOL Group (SGX:U14) Estimates After Its Half-Year Results - Simply Wall Street",
+        "UOL Group Limited",
+        "U14.SI",
+    )
+
+
+def test_index_noise_treats_simplywall_st_urls_eng_20261104_02():
+    """eng-20261104-02: Simply Wall Street shells must not count as indexed-without-body gaps."""
+    row = {
+        "source": "google_news_asia_resolved",
+        "headline": "UOL Group (SGX:U14) Stock Forecast & Analyst Predictions - Simply Wall Street",
+        "url": "https://simplywall.st/stocks/sg/real-estate-management-and-development/sgx-u14/uol-group-shares/future",
+        "has_body": False,
+    }
+    assert _is_index_noise_row(row)
+    assert not filing_lacks_material_body(row)
+
+
+def test_filter_misattributed_filings_drops_u14_si_sports_news_eng_20261104_02():
+    """eng-20261104-02: asia_filings must prune misattributed U14 youth-sports headlines."""
+    rows = [
+        {
+            "id": "sports",
+            "source": "google_news_asia_resolved",
+            "headline": "U14 National Blitz Programme brings season to an exciting close",
+            "url": "https://camogie.ie/news/u14-national-blitz-programme/",
+        },
+        {
+            "id": "ir",
+            "source": "ir_allowlist",
+            "headline": "IR allowlist document — Annual Report 2025.pdf",
+            "url": "https://links.sgx.com/1.0.0/corporate-announcements/IJ2GH7ZTV024QR4R/881833_UOL%20Group%20Limited%20-%20Annual%20Report%202025.pdf",
+        },
+    ]
+    kept = filter_misattributed_filings(
+        rows,
+        company_name="UOL Group Limited",
+        ticker="U14.SI",
+        regime="asia_filings",
+    )
+    assert [row["id"] for row in kept] == ["ir"]
+
+
+@patch("value_investor.research.filings._fetch_ir_allowlist_body")
+def test_refetch_ir_allowlist_clears_stale_unfetchable_eng_20261104_02(mock_fetch, tmp_path: Path):
+    """eng-20261104-02: stale unfetchable flags on active allowlist URLs must retry refetch."""
+    mock_fetch.return_value = (
+        "UOL Group Limited consolidated revenue profit cash flow annual report " * 40,
+        "pdf",
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    url = "https://links.sgx.com/1.0.0/corporate-announcements/IJ2GH7ZTV024QR4R/881833_UOL%20Group%20Limited%20-%20Annual%20Report%202025.pdf"
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_cdb04db911a0eed6",
+                        "source": "ir_allowlist",
+                        "url": url,
+                        "period": "annual",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "ir_allowlist_fetch_failed",
+                    }
+                ],
+                "summary": {"with_body": 0, "total": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        ticker="U14.SI",
+        company_name="UOL Group Limited",
+        max_bodies=3,
+    )
+    assert result["attempted"] >= 1
+    assert result["fetched"] >= 1
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = payload["filings"][0]
+    assert row.get("has_body") is True
+    assert not row.get("unfetchable")
 
 
 def test_parked_source_hunter_skip_0968_hk_hang_seng():
