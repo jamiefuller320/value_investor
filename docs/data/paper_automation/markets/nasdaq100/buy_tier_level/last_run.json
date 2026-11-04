@@ -1,15 +1,31 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-03T10:20:47.761989-05:00",
+    "local_time": "2026-11-04T11:39:36.396416-05:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-11-03T09:30:00-05:00",
-    "settle_at": "2026-11-03T10:00:00-05:00",
+    "market_open_at": "2026-11-04T09:30:00-05:00",
+    "settle_at": "2026-11-04T10:00:00-05:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "60da38e6-980e-45ed-bf00-e0a7b6204473",
+      "fund_id": "e97ef74a-eb76-42af-9436-ace9da81566c",
+      "acted_at": "2026-11-04T11:39:36.396416-05:00",
+      "ticker": "ADP",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.107294,
+      "price": 293.84,
+      "gross": 31.53,
+      "cost": 0.06,
+      "net_cash": -31.58,
+      "note": "Automated buy",
+      "name": "Automatic Data Processing, Inc."
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +39,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1042.22,
-    "cash": 67.47,
+    "nav": 1042.17,
+    "cash": 35.89,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -95,11 +111,11 @@
         "price": 64.94
       },
       {
-        "ticker": "GEHC",
-        "name": "GE HealthCare Technologies Inc.",
-        "signal": "strong_buy",
-        "conviction_score": 0.6885,
-        "price": 76.57
+        "ticker": "TMUS",
+        "name": "T-Mobile US, Inc.",
+        "signal": "buy",
+        "conviction_score": 0.6582,
+        "price": 156.44
       },
       {
         "ticker": "MSFT",
@@ -123,6 +139,13 @@
         "price": 172.56
       },
       {
+        "ticker": "NXPI",
+        "name": "NXP Semiconductors N.V.",
+        "signal": "strong_buy",
+        "conviction_score": 0.5961000000000001,
+        "price": 259.61
+      },
+      {
         "ticker": "FANG",
         "name": "Diamondback Energy, Inc.",
         "signal": "buy",
@@ -137,13 +160,6 @@
         "price": 101.91
       },
       {
-        "ticker": "TMUS",
-        "name": "T-Mobile US, Inc.",
-        "signal": "buy",
-        "conviction_score": 0.5714,
-        "price": 156.44
-      },
-      {
         "ticker": "CSCO",
         "name": "Cisco Systems, Inc.",
         "signal": "buy",
@@ -156,6 +172,13 @@
         "signal": "buy",
         "conviction_score": 0.5602,
         "price": 399.3
+      },
+      {
+        "ticker": "ADP",
+        "name": "Automatic Data Processing, Inc.",
+        "signal": "buy",
+        "conviction_score": 0.5568000000000001,
+        "price": 293.84
       },
       {
         "ticker": "INTU",
@@ -177,13 +200,6 @@
         "signal": "buy",
         "conviction_score": 0.525,
         "price": 278.22
-      },
-      {
-        "ticker": "NXPI",
-        "name": "NXP Semiconductors N.V.",
-        "signal": "strong_buy",
-        "conviction_score": 0.5181,
-        "price": 259.61
       },
       {
         "ticker": "AMGN",
@@ -221,11 +237,25 @@
         "price": 148.13
       },
       {
+        "ticker": "BKR",
+        "name": "Baker Hughes Company",
+        "signal": "strong_buy",
+        "conviction_score": 0.44439999999999996,
+        "price": 55.23
+      },
+      {
         "ticker": "CPRT",
         "name": "Copart, Inc.",
         "signal": "buy",
         "conviction_score": 0.4381,
         "price": 30.13
+      },
+      {
+        "ticker": "SNDK",
+        "name": "Sandisk Corporation",
+        "signal": "strong_buy",
+        "conviction_score": 0.436135,
+        "price": 1150.89
       },
       {
         "ticker": "KDP",
@@ -249,20 +279,6 @@
         "price": 274.37
       },
       {
-        "ticker": "BKR",
-        "name": "Baker Hughes Company",
-        "signal": "strong_buy",
-        "conviction_score": 0.3881,
-        "price": 55.23
-      },
-      {
-        "ticker": "SNDK",
-        "name": "Sandisk Corporation",
-        "signal": "strong_buy",
-        "conviction_score": 0.37383,
-        "price": 1150.89
-      },
-      {
         "ticker": "GILD",
         "name": "Gilead Sciences, Inc.",
         "signal": "buy",
@@ -270,7 +286,17 @@
         "price": 170.68
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "GEHC",
+        "name": "GE HealthCare Technologies Inc.",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.462441,
+        "price": 76.57,
+        "value": 35.41
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
@@ -347,6 +373,16 @@
       },
       {
         "action": "hold",
+        "ticker": "TMUS",
+        "name": "T-Mobile US, Inc.",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 26.06,
+        "target_value": 31.58,
+        "conviction_score": 0.6582,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
         "ticker": "MSFT",
         "name": "Microsoft Corporation",
         "reason": "Top-up below min trade size (\u00a310)",
@@ -387,16 +423,6 @@
       },
       {
         "action": "hold",
-        "ticker": "TMUS",
-        "name": "T-Mobile US, Inc.",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 26.06,
-        "target_value": 31.58,
-        "conviction_score": 0.5714,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
         "ticker": "CSCO",
         "name": "Cisco Systems, Inc.",
         "reason": "Top-up below min trade size (\u00a310)",
@@ -413,6 +439,16 @@
         "value": 30.7,
         "target_value": 31.58,
         "conviction_score": 0.5602,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "ADP",
+        "name": "Automatic Data Processing, Inc.",
+        "reason": "Already near equal-weight target",
+        "value": 31.53,
+        "target_value": 31.58,
+        "conviction_score": 0.5568000000000001,
         "signal": "buy"
       },
       {
@@ -487,6 +523,16 @@
       },
       {
         "action": "hold",
+        "ticker": "BKR",
+        "name": "Baker Hughes Company",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 28.79,
+        "target_value": 31.58,
+        "conviction_score": 0.44439999999999996,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
         "ticker": "CPRT",
         "name": "Copart, Inc.",
         "reason": "Top-up below min trade size (\u00a310)",
@@ -494,6 +540,16 @@
         "target_value": 31.58,
         "conviction_score": 0.4381,
         "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "SNDK",
+        "name": "Sandisk Corporation",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 22.23,
+        "target_value": 31.58,
+        "conviction_score": 0.436135,
+        "signal": "strong_buy"
       },
       {
         "action": "hold",
@@ -514,39 +570,26 @@
         "target_value": 31.58,
         "conviction_score": 0.39677999999999997,
         "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "BKR",
-        "name": "Baker Hughes Company",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 28.79,
-        "target_value": 31.58,
-        "conviction_score": 0.3881,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "SNDK",
-        "name": "Sandisk Corporation",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 22.23,
-        "target_value": 31.58,
-        "conviction_score": 0.37383,
-        "signal": "strong_buy"
       }
     ],
     "skipped": [],
     "waitlisted": [
       {
-        "ticker": "ADP",
-        "name": "Automatic Data Processing, Inc.",
+        "ticker": "GEHC",
+        "name": "GE HealthCare Technologies Inc.",
+        "signal": "strong_buy",
+        "conviction_score": 0.7949,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      },
+      {
+        "ticker": "TRI",
+        "name": "Thomson Reuters Corporation",
         "signal": "buy",
-        "conviction_score": 0.5568000000000001,
+        "conviction_score": 0.6705000000000001,
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 33 equal-weight sleeve(s); leave 26 near-target holding(s)."
+    "summary": "Next rebalance would target 33 equal-weight sleeve(s); sell 1 name(s) that left the set; leave 27 near-target holding(s)."
   },
   "alerts": [
     {
@@ -619,12 +662,12 @@
       "ticker": "GEHC",
       "name": "GE HealthCare Technologies Inc.",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
       "mark": 76.57,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "wait"
     },
     {
       "ticker": "REGN",
@@ -767,7 +810,7 @@
       "mark": 366.11,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "BKNG",
@@ -911,6 +954,17 @@
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
+    },
+    {
+      "ticker": "ADP",
+      "name": "Automatic Data Processing, Inc.",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 293.84,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
     }
   ],
   "fund": {
@@ -928,7 +982,7 @@
       "id": "e97ef74a-eb76-42af-9436-ace9da81566c",
       "created_at": "2026-09-18T00:46:47.721247+00:00"
     },
-    "cash": 67.47,
+    "cash": 35.89,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -1294,6 +1348,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-11-02T03:03:39.125809-05:00"
+      },
+      "ADP": {
+        "ticker": "ADP",
+        "shares": 0.107294,
+        "avg_cost": 293.84,
+        "name": "Automatic Data Processing, Inc.",
+        "sector": "Technology",
+        "currency": "USD",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-11-04T11:39:36.396416-05:00"
       }
     },
     "trades": [
@@ -2617,6 +2682,21 @@
         "net_cash": -31.58,
         "note": "Automated buy",
         "name": "Roper Technologies, Inc."
+      },
+      {
+        "id": "60da38e6-980e-45ed-bf00-e0a7b6204473",
+        "fund_id": "e97ef74a-eb76-42af-9436-ace9da81566c",
+        "acted_at": "2026-11-04T11:39:36.396416-05:00",
+        "ticker": "ADP",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.107294,
+        "price": 293.84,
+        "gross": 31.53,
+        "cost": 0.06,
+        "net_cash": -31.58,
+        "note": "Automated buy",
+        "name": "Automatic Data Processing, Inc."
       }
     ],
     "equity_curve": [
@@ -3357,22 +3437,41 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-04T11:39:36.396416-05:00",
+        "portfolio_value": 783.36,
+        "cash": 35.89,
+        "contributed_capital": 1000.0,
+        "positions": 34,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "USD": 0.74281
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-03T10:20:47.761989-05:00",
+    "last_mark_at": "2026-11-04T11:39:36.396416-05:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "GEHC": 1
+      },
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "nasdaq100",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-03T15:20:47.834090+00:00",
+    "generated_at": "2026-11-04T16:39:36.754684+00:00",
     "observe_only": true,
     "open_count": 23,
     "closed_count": 0,
@@ -3446,12 +3545,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 2
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-03T15:20:47.836460+00:00",
+    "generated_at": "2026-11-04T16:39:36.756592+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -3546,8 +3645,8 @@
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 1
+      "hold_episodes": 1,
+      "swap_rotations": 0
     }
   },
   "hypothesis_integrity": {
@@ -3555,8 +3654,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-03T15:20:47.840772+00:00",
-    "as_of": "2026-11-03T10:20:47.761989-05:00",
+    "updated_at": "2026-11-04T16:39:36.760232+00:00",
+    "as_of": "2026-11-04T11:39:36.396416-05:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -3568,19 +3667,19 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 33,
+    "holding_count": 34,
     "underwater_count": 8,
     "thesis_status_counts": {
-      "intact": 25,
+      "intact": 26,
       "weakening": 8,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 33,
+      "holding_count": 34,
       "loser_count": 8,
-      "loser_share": 0.2424,
-      "loser_nav_share": 0.2104,
+      "loser_share": 0.2353,
+      "loser_nav_share": 0.2038,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
@@ -3595,10 +3694,10 @@
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.08,
-        "quality": 0.12,
-        "dividend": 0.4,
-        "garp": 0.32,
+        "cheapness": 0.0769,
+        "quality": 0.1154,
+        "dividend": 0.3846,
+        "garp": 0.3462,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -3618,7 +3717,7 @@
         "avg_cost": 1519.97,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.3738,
+        "conviction_score": 0.4361,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3639,7 +3738,7 @@
           "still strong_buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 37%"
+          "conviction 44%"
         ],
         "weaken_reasons": [
           "research verdict caution"
@@ -3822,7 +3921,7 @@
         "mark": 366.11,
         "avg_cost": 416.97,
         "signal": "buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.7412,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3864,7 +3963,7 @@
         "avg_cost": 176.26,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5714,
+        "conviction_score": 0.6582,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3881,14 +3980,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 57%"
+          "conviction 66%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 57%"
+          "conviction 66%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -4148,7 +4247,7 @@
         "avg_cost": 56.32,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.3881,
+        "conviction_score": 0.4444,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -4165,14 +4264,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 39%"
+          "conviction 44%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 39%"
+          "conviction 44%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -4416,6 +4515,47 @@
           "cheapness family still passes",
           "data_quality 1.00",
           "conviction 91%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "ADP",
+        "name": "Automatic Data Processing, Inc.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 293.84,
+        "avg_cost": 293.84,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.5568,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 56%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 56%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -4795,7 +4935,7 @@
         "avg_cost": 218.98,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5181,
+        "conviction_score": 0.5961,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -4812,14 +4952,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 52%"
+          "conviction 60%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 52%"
+          "conviction 60%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -4875,8 +5015,8 @@
         "mark": 76.57,
         "avg_cost": 63.49,
         "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.6885,
+        "timing_signal": "wait",
+        "conviction_score": 0.7949,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -4892,14 +5032,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 69%"
+          "conviction 79%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 69%"
+          "conviction 79%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -4952,7 +5092,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-03T15:20:47.846541+00:00",
+    "generated_at": "2026-11-04T16:39:36.764788+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -5025,8 +5165,8 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-03T15:20:47.866401+00:00",
-    "open_count": 9,
+    "generated_at": "2026-11-04T16:39:36.780829+00:00",
+    "open_count": 10,
     "closed_count": 47,
     "scored_count": 43,
     "scored_count_all": 47,
@@ -5087,14 +5227,14 @@
       "recommit_scored": 4
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 9,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-03T10:20:47.761989-05:00",
+    "generated_at": "2026-11-04T11:39:36.396416-05:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -5118,12 +5258,12 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 49,
+    "open_count": 50,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 33,
-      "off_book": 13,
-      "never_funded": 3
+      "on_book": 34,
+      "off_book": 12,
+      "never_funded": 4
     },
     "closed_by_capital_status": {
       "on_book": 0,
@@ -5142,16 +5282,16 @@
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 0,
+      "opened": 1,
       "closed": 0,
-      "tagged_on_book": 0,
+      "tagged_on_book": 1,
       "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-03T10:20:47.761989-05:00",
+    "generated_at": "2026-11-04T11:39:36.396416-05:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -5159,34 +5299,142 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 1,
+    "card_count": 1,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 1,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {},
+    "by_algo_action": {
+      "buy": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
     "disagree_vs_heuristic_count": 0,
-    "cards": [],
+    "cards": [
+      {
+        "ticker": "ADP",
+        "name": "Automatic Data Processing, Inc.",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Buy into buyish target set \u2014 agree with algo selection."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 20
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 20
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.5568000000000001
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-04T11:39:36.396416-05:00",
+        "proposal_id": "buy_tier_level:ADP:buy:2026-11-04T11:39:36.396416-05:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-03T10:20:47.761989-05:00",
+      "generated_at": "2026-11-04T11:39:36.396416-05:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 1,
       "verdict_counts": {
-        "agree": 0,
+        "agree": 1,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "buy": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -5202,7 +5450,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-11-03T15:20:47.891114+00:00",
+  "generated_at": "2026-11-04T16:39:36.801742+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

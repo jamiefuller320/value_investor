@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-03T15:20:47.840772+00:00
+Track: `buy_tier_level` · updated 2026-11-04T16:39:36.760232+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **8** / 33 (24% count, 21% NAV)
+- Losers: **8** / 34 (24% count, 20% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
@@ -58,7 +58,7 @@ Track: `buy_tier_level` · updated 2026-11-03T15:20:47.840772+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 57%
+- conviction 66%
 
 ### QCOM — weakening / watch_review (-10.8%)
 - research verdict caution
@@ -103,7 +103,7 @@ Track: `buy_tier_level` · updated 2026-11-03T15:20:47.840772+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 39%
+- conviction 44%
 
 ### HON — weakening / watch_review (-1.3%)
 - research verdict neutral
@@ -143,6 +143,13 @@ Track: `buy_tier_level` · updated 2026-11-03T15:20:47.840772+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 91%
+
+### ADP — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 56%
 
 ### ODFL — intact / hold_tolerate (+0.1%)
 - still buy
@@ -210,7 +217,7 @@ Track: `buy_tier_level` · updated 2026-11-03T15:20:47.840772+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 52%
+- conviction 60%
 
 ### REGN — intact / hold_tolerate (+19.8%)
 - still strong_buy
@@ -224,7 +231,7 @@ Track: `buy_tier_level` · updated 2026-11-03T15:20:47.840772+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 69%
+- conviction 79%
 
 ### AMGN — weakening / watch_review (+23.8%)
 - cheapness family no longer passes
