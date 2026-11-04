@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import logging
 import re
 from collections.abc import Collection, Iterable
@@ -720,6 +721,17 @@ def chart_payload_needs_refresh(
     return not has_entry
 
 
+def chart_last_close_date(payload: dict[str, Any] | None) -> dt.date | None:
+    """Date of the last close in a chart payload, or None when unreadable."""
+    dates = (payload or {}).get("dates") if isinstance(payload, dict) else None
+    if not dates:
+        return None
+    try:
+        return dt.date.fromisoformat(str(dates[-1])[:10])
+    except ValueError:
+        return None
+
+
 def ensure_price_charts(
     *,
     reports: list[dict[str, Any]],
@@ -729,6 +741,7 @@ def ensure_price_charts(
     fetch: bool = True,
     market: str | None = None,
     refresh_stale: bool = True,
+    closes_through: dt.date | None = None,
 ) -> list[Path]:
     """
     Ensure chart JSON exists for the requested tickers.
@@ -739,6 +752,9 @@ def ensure_price_charts(
 
     When ``refresh_stale`` is true, rebuilds charts that lack SMA series or
     (for non-avoid) buy/target entry levels — market-agnostic schema refresh.
+
+    ``closes_through`` also rebuilds any chart whose last close is earlier than
+    that date. Without it a chart is never refreshed just for being old.
     """
     chart_dir.mkdir(parents=True, exist_ok=True)
     if tickers is None:
@@ -756,12 +772,18 @@ def ensure_price_charts(
     for report in selected:
         path = chart_dir / chart_filename(str(report["ticker"]))
         existing = _existing_chart(chart_dir, str(report["ticker"]))
-        needs = not path.exists() or (
-            refresh_stale
-            and chart_payload_needs_refresh(
-                existing,
-                signal=str(report.get("signal") or "") or None,
-                held=bool(report.get("held")),
+        last_close = chart_last_close_date(existing)
+        behind = closes_through is not None and (last_close is None or last_close < closes_through)
+        needs = (
+            not path.exists()
+            or behind
+            or (
+                refresh_stale
+                and chart_payload_needs_refresh(
+                    existing,
+                    signal=str(report.get("signal") or "") or None,
+                    held=bool(report.get("held")),
+                )
             )
         )
         if needs:

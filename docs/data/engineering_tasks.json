@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-11-04T18:41:34.599391+00:00",
+  "compiled_at": "2026-11-04T20:30:10.908107+00:00",
   "run_at": null,
-  "task_count": 248,
+  "task_count": 249,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -8258,6 +8258,55 @@
       "merged_at": "2026-09-23T14:03:28.833948+00:00"
     },
     {
+      "id": "eng-20261104-04",
+      "area": "ops",
+      "title": "Workflow overdue: CI main nightly",
+      "summary": "No successful run within 28h (last: 2026-11-03T07:31:17+00:00). (category: workflows)",
+      "priority": "medium",
+      "priority_score": 45.0,
+      "source": "ops_monitor",
+      "evidence": {
+        "category": "workflows",
+        "severity": "fail"
+      },
+      "acceptance_criteria": [
+        "Prompt or export change is covered by a parser/unit test",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/automation_status.py",
+        "src/value_investor/email_agent.py",
+        "src/value_investor/ops_monitor.py",
+        "src/value_investor/backtest_health.py",
+        "src/value_investor/engineering_recovery.py",
+        "src/value_investor/engineering_sync.py",
+        "src/value_investor/engineering_pr_notify.py",
+        "src/value_investor/engineering_preflight.py",
+        "src/value_investor/engineering_queue.py",
+        ".github/workflows/ops-monitor.yml",
+        ".github/workflows/engineering-agent.yml",
+        ".github/workflows/engineering-queue.yml",
+        "tests/test_automation_status.py",
+        "tests/test_ops_monitor.py",
+        "tests/test_backtest_health.py",
+        "tests/test_engineering_sync.py",
+        "tests/test_engineering_pr_notify.py",
+        "tests/test_engineering_preflight.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "parked",
+      "parked_reason": "preflight blocked PR open — preflight failed",
+      "parked_policy": "preflight_clash",
+      "parked_at": "2026-11-04T21:23:50.152243+00:00"
+    },
+    {
       "id": "eng-20260918-04",
       "area": "scoring",
       "title": "fcf: Primary dividend-sustainability overlay on statutory FCF/dividend; warn when interim dividend is cut despite high trailing yield pass. [1/2]",
@@ -12579,7 +12628,11 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "open"
+      "status": "pr_open",
+      "result_path": "output/engineering_result_eng-20261104-03.md",
+      "branch_name": "cursor/eng-20261104-03-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-11-04T18:53:25.466006+00:00"
     },
     {
       "id": "eng-20261104-01",
@@ -16145,7 +16198,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-11-04T17:32:59.305864+00:00",
+    "evaluated_at": "2026-11-04T20:30:10.273856+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -16206,7 +16259,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 2,
-    "evaluated_at": "2026-11-04T18:19:50.417449+00:00",
+    "evaluated_at": "2026-11-04T21:21:09.599881+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -16215,8 +16268,8 @@
     "resumed_at": "2026-10-14T07:12:50.922751+00:00"
   },
   "queue_block_notify": {
-    "last_fingerprint": "traffic_pause|project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation",
-    "last_sent_at": "2026-11-04T12:48:45.054955+00:00",
+    "last_fingerprint": "parallel_cap|parallel cap reached — 1 pr_open, 1 agent run(s) (max_parallel=2)",
+    "last_sent_at": "2026-11-04T21:11:48.070068+00:00",
     "cooldown_hours": 12.0
   },
   "micro_compile_source": "parked_source_hunter",
@@ -16237,5 +16290,6 @@
     "filings_with_body": 5341
   },
   "reprioritized_at": "2026-11-03T07:48:28.956961+00:00",
-  "reprioritized_after_task": "eng-20261102-02"
+  "reprioritized_after_task": "eng-20261102-02",
+  "ops_monitor_compiled": true
 }

@@ -30,9 +30,30 @@ Uses existing CLI — no duplicated fetch logic:
 
 1. `ftse-library t212-catalogue --env live --root docs/data/library` — read-only
    `GET /api/v0/equity/metadata/instruments` (+ exchanges when available).
-2. `ftse-library t212-overlay --root docs/data/library` — rebuild per-market overlays.
+2. `ftse-library t212-overlay --root docs/data/library` — rebuild per-market overlays,
+   for every library market and the live FTSE 350 (tickers and names from the
+   latest `docs/data/history/run_*.json.gz` screen).
 
 Never calls order or account-trading endpoints.
+
+## What counts as a catalogue hit
+
+A Yahoo ticker is a `catalogue_hit` (listed) when one of these holds:
+
+1. **ISIN.** Our ISIN equals the instrument's, on any Trading 212 venue. It is the same share.
+2. **Short name on the ticker's own venue.** The venue comes from the Trading 212 ticker:
+   `AAPL_US_EQ` is the US, and a lowercase marker after the symbol names a European line
+   (`VODl_EQ` London, `BAYNd_EQ` Xetra, `ABNa_EQ` Amsterdam, `BNp_EQ` Paris).
+3. **Short name on another venue,** only when the instrument's ISIN is registered in the
+   ticker's home country **and** the company names agree. That keeps Eni (Brussels line),
+   Bank of Ireland (London) and BHP (London) while refusing namesakes: `CSL.AX` is not
+   Carlisle Companies, `T.TO` is not AT&T, `ALL.AX` is not the Australian-registered
+   Atlantic Lithium in London.
+
+A short-name hit on a foreign venue without that confirmation is not a hit. The ticker falls
+through to the venue allowlist (`exchange_allowlist`, assumed), which the strategy book does
+not count as listed. Trading 212 has no ASX, Hong Kong or Singapore venue, so names there are
+listed only through a confirmed line elsewhere.
 
 Committed paths (only when changed):
 

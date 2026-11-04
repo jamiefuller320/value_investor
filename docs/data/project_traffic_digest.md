@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-04T17:32:59.305864+00:00`
+Generated: `2026-11-04T20:30:17.165445+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -30,8 +30,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `stop_automation_waste` — cleared automation-waste hold — no remediable signal (applied)
-- `resume_dispatch` — resumed — no stuck monitored PRs and idle window elapsed (applied)
+- _(none)_
 
 ## Merges today (monitor independent verify)
 - _(none merged today)_
@@ -46,6 +45,21 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `validate job failed` — 3×
 - `deferred-ideas.json conflict after L516 merge` — 3×
 - `ruff_format` — 2×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — FAIL`
+- Findings: 11 (open=11, resolved=0)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Price-only excess misstates track performance — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Sector headwind gate coverage gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Two-lot retention beats full exit in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Recent workflow failure: CI main nightly — planned: `cancel_recovered_workflow_failure` (PM v1: cancel open workflow_failure eng tasks when the workflow has succeeded after the minting failure; else rerun/dispatch / eng draft; no recovered workflow_failure rows to cancel — keep rerun/eng path)
+- [open] FAIL Workflow overdue: CI main nightly — planned: `cancel_recovered_workflow_failure` (PM v1: cancel open workflow_failure eng tasks when the workflow has succeeded after the minting failure; else rerun/dispatch / eng draft; no recovered workflow_failure rows to cancel — keep rerun/eng path)
+- [open] WARN Recent workflow failure: Email report — planned: `cancel_recovered_workflow_failure` (PM v1: cancel open workflow_failure eng tasks when the workflow has succeeded after the minting failure; else rerun/dispatch / eng draft; no recovered workflow_failure rows to cancel — keep rerun/eng path)
+- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
