@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-04T16:40:44.520700+00:00",
+  "run_at": "2026-11-04T16:53:54.316265+00:00",
   "market_id": "sti",
   "targets": [
     "U14.SI"
@@ -7,7 +7,7 @@
   "target_details": [
     {
       "ticker": "U14.SI",
-      "priority_score": 18.0569,
+      "priority_score": 16.0569,
       "filings_total": 14,
       "filings_with_body": 10,
       "indexed_without_body": 4,
@@ -83,7 +83,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-04T16:40:32.843639+00:00",
+    "snapshot_at": "2026-11-04T16:53:44.050188+00:00",
     "market_id": "sti",
     "buy_tier_count": 7,
     "unmeasured_buy_tier": 0,
@@ -122,13 +122,13 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-04T16:40:40.060311+00:00",
+    "snapshot_at": "2026-11-04T16:53:48.236474+00:00",
     "market_id": "sti",
     "buy_tier_count": 7,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 7,
+    "indexed_without_body": 8,
     "bodies_min": 3,
     "bodies_median": 7,
     "bodies_max": 13,
@@ -144,56 +144,35 @@
     ],
     "indexed_without_body_by_ticker": {
       "U14.SI": 4,
-      "N2IU.SI": 1,
+      "N2IU.SI": 2,
       "ME8U.SI": 2
     },
     "parked_tickers": [
-      "ME8U.SI"
+      "ME8U.SI",
+      "N2IU.SI"
     ],
-    "parked_count": 1,
+    "parked_count": 2,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 5,
+    "effective_indexed_without_body": 4,
     "effective_indexed_without_body_tickers": [
-      "U14.SI",
-      "N2IU.SI"
+      "U14.SI"
     ],
     "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": false,
+  "recorded_gap_closure": true,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 7,
-    "hits": 7,
-    "new_rows_total": 0,
-    "curiosity_total": 7,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "U14.SI",
-      "ME8U.SI",
-      "N2IU.SI"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
+  "discovery_scan": null,
+  "maintenance_mode": false,
   "parity_handoff": null,
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "sti",
-    "assessed_at": "2026-11-04T16:40:33.129469+00:00",
+    "assessed_at": "2026-11-04T16:53:44.612959+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -237,17 +216,19 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 6.6077091410000435,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3593.392290859,
+  "used_seconds": 3.0274566749999963,
+  "budget_seconds": 2100.0,
+  "leftover_seconds": 2096.972543325,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": 320.0,
-  "pin_tickers": [],
+  "per_ticker_max_seconds": null,
+  "pin_tickers": [
+    "U14.SI"
+  ],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sti",
-    "updated_at": "2026-11-04T16:40:40.065237+00:00",
+    "updated_at": "2026-11-04T16:53:48.244454+00:00",
     "exhausted": false,
     "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
@@ -263,6 +244,18 @@
         "indexed_without_body": 2,
         "thin": false,
         "source_surface": "asia_filings+ir_allowlist_direct"
+      },
+      {
+        "ticker": "N2IU.SI",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-04T16:28:20.253842+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 13,
+        "filings_with_body": 11,
+        "indexed_without_body": 2,
+        "thin": false,
+        "source_surface": "asia_filings+ir_allowlist_direct"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -275,7 +268,6 @@
       "U14.SI"
     ],
     "unparked_leftover": [
-      "N2IU.SI",
       "U14.SI"
     ],
     "surface_released": [],
@@ -290,8 +282,9 @@
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 61,
-    "candidate_count": 49,
+    "candidate_count": 53,
     "skipped_resolved_tickers": [
+      "CRH",
       "LMT",
       "TPT.L",
       "DFS.L",

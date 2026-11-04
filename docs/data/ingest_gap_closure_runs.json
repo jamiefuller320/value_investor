@@ -24939,7 +24939,7 @@
       "status": "pending_review",
       "title": "Single-ticker library ingest gap-closure pass",
       "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
-      "ticker": "LH",
+      "ticker": "U14.SI",
       "params": {
         "max_targets": 1,
         "max_bodies": 40,
@@ -24947,17 +24947,17 @@
         "require_outstanding_gaps": true,
         "intensive_gap_closure": true,
         "pin_tickers": [
-          "LH"
+          "U14.SI"
         ],
-        "market_id": "sp500",
+        "market_id": "sti",
         "universe": "library",
         "critical_path_blocker": "indexed_without_body"
       },
       "review_trigger": "horizon_scan",
       "chain_root_id": "igc-20261104-03",
       "chain_attempt": 1,
-      "recorded_at": "2026-11-04T16:45:41.632477+00:00",
-      "completed_at": "2026-11-04T16:46:52.620840+00:00",
+      "recorded_at": "2026-11-04T16:53:44.639600+00:00",
+      "completed_at": "2026-11-04T16:55:06.878980+00:00",
       "outcome": {
         "delta_filings_with_body": 0,
         "delta_indexed_without_body": 0,
@@ -24965,13 +24965,85 @@
         "targets_planned": null,
         "targets_completed": null,
         "runtime_cutoff": false,
-        "tickers": [],
-        "results": [],
-        "per_ticker": []
+        "tickers": [
+          "U14.SI"
+        ],
+        "results": [
+          {
+            "ticker": "U14.SI",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 14,
+              "filings_with_body": 10,
+              "indexed_without_body": 4
+            },
+            "after": {
+              "filings_total": 14,
+              "filings_with_body": 10,
+              "indexed_without_body": 4
+            },
+            "improved": false,
+            "regime": "asia_filings",
+            "filings_summary": {
+              "total": 14,
+              "annual": 7,
+              "interim": 3,
+              "trading_update": 0,
+              "other": 4,
+              "with_body": 10,
+              "period_coverage": {
+                "annual": {
+                  "total": 7,
+                  "with_body": 7
+                },
+                "interim": {
+                  "total": 3,
+                  "with_body": 3
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 4,
+                  "with_body": 0
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 10,
+              "with_body_after": 10,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 3,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "U14.SI",
+            "with_body_before": 10,
+            "with_body_after": 10,
+            "improved": false
+          }
+        ]
       },
       "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-11-04T16:46:52.620850+00:00",
+  "updated_at": "2026-11-04T16:55:06.878990+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
