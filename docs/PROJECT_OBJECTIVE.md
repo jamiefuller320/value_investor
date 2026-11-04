@@ -55,6 +55,13 @@ target set. That is not this strategy's exit. Those books remain as controls
 and keep their history. The strategy runs on a **new cold-start book**; live
 books are never rewritten mid-flight.
 
+**Single track to live (owner, 2026-11-04):** that strategy book is the only
+route to live capital. It reads the FTSE 350 and every graduated library market
+(names still need F9-B), so it gathers evidence faster than a FTSE-only book.
+Other instruments are feeders or controls. Improvements arrive as sealed
+versions of the book at a version review, not as new instruments. Detail:
+[`ops/strategy-reorientation-plan.md`](ops/strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04).
+
 ---
 
 ## North-star stages

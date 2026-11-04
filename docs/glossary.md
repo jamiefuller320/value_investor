@@ -34,6 +34,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | ftse-decision-review | Learning loop that reviews automated paper trades for excess after costs and proposes small knob changes. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | ftse-library | Offline CLI for growing market libraries, screen-lite, research ladder, ingest, and shard learning workflows. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | FTSE 350 | Live UK screener universe kept until stage 4; separate from offline multi-market library growth. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
+| graduated market | A library market that has reached its ingest threshold (`is_graduated` / `sprint_ingest_complete` in `market_status.json`); its names may enter the strategy book if they pass F9-B. | [`ops/strategy-book-registration.md`](ops/strategy-book-registration.md) |
 | green inventory | All required bind fields satisfied on the active Investment-demanded name set; success means maintain, not spray rememo or ingest. | [`AGENTS.md`](../AGENTS.md) |
 | head_needs_fat_slot | Boolean ingest-head flag: while true, the cascade head keeps host priority and sized deepen width until parity or exhaustion. | [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md) |
 | idle queue | Engineering task queue with no active work; triggers accelerated narrative refresh after merges. | [`AGENTS.md`](../AGENTS.md) |
@@ -89,13 +90,16 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | screen-lite | Offline quant screen and archived signals for library markets without changing the live FTSE screener. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | sealed unit | Running sealed strategy with its own registration and data SLA, such as strand A buy-tier or N200 observe. | [`AGENTS.md`](../AGENTS.md) |
 | shadow judge | Observe-only evaluation path that must not override replay, sealed observe, or ingest-head priority rules. | [`AGENTS.md`](../AGENTS.md) |
+| single track to live | Owner decision (2026-11-04): the strategy book is the only route to live capital; other instruments are feeders or controls. | [`ops/strategy-reorientation-plan.md`](ops/strategy-reorientation-plan.md) |
 | so-what --apply | Gap-closure workflow that turns analysis themes into pinned ingest or promotion actions when appropriate. | [`ops/so-what-gap-closure.md`](ops/so-what-gap-closure.md) |
 | sprint_ingest_complete | Ingest head finished: raw parity on filing counts or thin and IWB leftovers parked with a usable set remaining. | [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md) |
+| strategy book | The cold-start observe book that runs the owner's seven-part strategy (`owner-strategy-book-v0` and later versions). | [`ops/strategy-book-registration.md`](ops/strategy-book-registration.md) |
 | strand A | The main FTSE paper-trading path: the buy-tier-level book and the matched assessment books. No real money is invested. | [`ops/primary-learning-track.md`](ops/primary-learning-track.md) |
 | strong_buy | Strongest screen buy signal within the value set alongside ordinary `buy`. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | thesis break | The reason for owning a name has failed: operating decline, a sector headwind, a screen `avoid` signal, or a research `pass`. Ends a recovery hold. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | three-lane model | Post-run clearance policy: ingest factory lane, engineering queue lane, and narrative refresh lane. | [`ops/post-run-improvement-clearance.md`](ops/post-run-improvement-clearance.md) |
 | twin | Parallel book or metric path with frozen registration used to compare policy without editing the live book. | [`AGENTS.md`](../AGENTS.md) |
+| version review | The point (at the strategy book's thickness gate, then at most every 26 weeks) where at most one sealed challenger version is chosen from accumulated evidence. | [`ops/strategy-reorientation-plan.md`](ops/strategy-reorientation-plan.md) |
 | waiters | Sealed strategies in the launch queue not yet at the head for incremental Data deepen work. | [`ops/data-pillar-priorities.md`](ops/data-pillar-priorities.md) |
 | weekly_ops | Orchestrator research spend pool cap for Sunday bundle and ladder selective research. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 
