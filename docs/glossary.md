@@ -10,6 +10,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | buy tier | Screen labels `buy` and `strong_buy` that mark the value set a name must sit in for strategy eligibility. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | buy_tier_level | Frozen paper book that holds the current raw buy-tier universe for lifecycle learning and diagnostics. | [`ops/buy-tier-cohort-labs.md`](ops/buy-tier-cohort-labs.md) |
 | capital epoch | A frozen window of capital markers and books; policy experiments start a new epoch instead of rewriting live books mid-flight. | [`AGENTS.md`](../AGENTS.md) |
+| checkpoint ladder | Strategy-book exit: after a close at +10% (launch), a profit floor ratchets up behind each checkpoint (+5% at +10%, +10% at +15%, and so on); a close at or below the floor sells. | [`strategy-book-registration.md`](ops/strategy-book-registration.md#4-exit) |
 | clash-aware | Engineering capacity rule limiting parallel agent work so concurrent changes do not collide. | [`AGENTS.md`](../AGENTS.md) |
 | cold-start | A new sealed book or observe registration that starts fresh history without back-labeling prior marks. | [`AGENTS.md`](../AGENTS.md) |
 | collect_ops_findings | Daily ops-monitor step that gathers health checks and persists them for the dashboard and email. | [`ops/ops-monitor.md`](ops/ops-monitor.md) |
@@ -21,11 +22,12 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | epoch-0 | First admitted learning package for a market: frozen buy-tier-level book, weekday marks, near-miss watch, and equal-support timing. | [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md) |
 | equal-support | After L322 admission, each admitted market gets the same weekday data path: epoch-0 marks, near-miss watch, rememo caps, and maintenance volume. | [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md) |
 | euro_depth | Depth-first EU pilot index slice (STOXX 50 plus periphery) used as offline focus for filings and learning. | [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md) |
-| episode | One round-trip trade scored at fixed stake after fair costs; swing exits and recovery holds are scored separately. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
+| episode | One round-trip trade scored at fixed stake after fair costs; floor exits, fail-to-launch sales and thesis breaks are scored separately. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | fair-cost episode % | Primary success metric: cohort median return per episode after fair trading-cost assumptions, not gross or fund NAV. | [`ops/fair-cost-primacy.md`](ops/fair-cost-primacy.md) |
 | F3 | Accepted Investment repair priorities on holdings and running sealed units; Data accepts or defers them within P1 capacity. | [`ops/data-pillar-priorities.md`](ops/data-pillar-priorities.md) |
 | F8 | Fail-closed governance: green inventory, repair schedules, or observe metrics alone never apply knobs, fills, or live promotion. | [`ops/data-pillar-priorities.md`](ops/data-pillar-priorities.md) |
 | F9-B | Named-stock capital eligibility: filing body, FCF basis, overlay bind, memo freshness, plus market ingest gates when opening a book—not index membership. | [`AGENTS.md`](../AGENTS.md) |
+| fail to launch | Strategy-book exit for a trade that has not closed at +10% within 63 sessions of the fill: sold at the next close whatever the price, to release its capital. | [`strategy-book-registration.md`](ops/strategy-book-registration.md#4-exit) |
 | filing_ready | Market-level gate that filing coverage and trajectory are sufficient before treating shard learning as parity-ready. | [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md) |
 | filings body | Extracted text from regulatory filings stored for research and bind checks, not just filing metadata counts. | [`ops/data-pillar-priorities.md`](ops/data-pillar-priorities.md) |
 | fixed-stake v0 | Default for new observe models: fixed notional per entry, no fund NAV or cash constraints on day one. | [`ops/fair-cost-primacy.md`](ops/fair-cost-primacy.md) |
@@ -67,6 +69,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | llm_agree_veto_shadow | Observe-only pattern where an LLM agrees or vetoes algo proposals before any live hard veto. | [`ops/llm-agree-veto-shadow.md`](ops/llm-agree-veto-shadow.md) |
 | maintenance ingest threshold | Same completion bar as sprint ingest complete: raw filing parity or exhausted parked thin and IWB leftovers. | [`AGENTS.md`](../AGENTS.md) |
 | market_queue | Committed ordered list of index slices progressing through ingest cascade and epoch-0 admission. | [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md) |
+| mature episode | A strategy-book episode whose fill is at least 63 sessions old, so it has either closed or launched; only mature episodes count for the decision median and the thickness gate. | [`strategy-book-registration.md`](ops/strategy-book-registration.md#8-scoring) |
 | memo freshness | Research memo recency bind field so decisions do not rely on stale write-ups. | [`ops/data-pillar-priorities.md`](ops/data-pillar-priorities.md) |
 | N1 | Queued idea: widen the stock universe first (AIM, Europe, worldwide); held back because data quality, not universe size, is the bottleneck. | [`deferred-review.md`](deferred-review.md) |
 | N2 | Deferred idea: evolutionary parallel sims deferred because sparse history overfits before costs. | [`deferred-review.md`](deferred-review.md) |
@@ -84,7 +87,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | point-in-time history | Historical records stamped as known on each date so later data cannot leak into past decisions. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | raw_buy_tier | Buy-tier membership from the screen without timing or overlay filters applied. | [`ops/n200-tech-timing-observe.md`](ops/n200-tech-timing-observe.md) |
 | readiness gate | Explicit thickness or volume bar that must clear before promoting an experiment to adoption truth. | [`AGENTS.md`](../AGENTS.md) |
-| recovery hold | Strategy rule: a position bought too early is held for recovery, not sold on a price drop, until it recovers or the thesis breaks. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
+| recovery hold | Strategy rule: a position bought too early is held for recovery, not sold on a price drop, until it launches, reaches the fail-to-launch wait, or the thesis breaks. In the strategy book the label marks an 8% drop before launch. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | rememo | Scheduled refresh of existing research memos under caps, distinct from first-time research on new names. | [`ops/structured-verdict-slim.md`](ops/structured-verdict-slim.md) |
 | richness before breadth | Live screener stays narrow and high quality while other markets grow offline in the library first. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | screen-lite | Offline quant screen and archived signals for library markets without changing the live FTSE screener. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
@@ -96,7 +99,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | strategy book | The cold-start observe book that runs the owner's seven-part strategy (`owner-strategy-book-v0` and later versions). | [`ops/strategy-book-registration.md`](ops/strategy-book-registration.md) |
 | strand A | The main FTSE paper-trading path: the buy-tier-level book and the matched assessment books. No real money is invested. | [`ops/primary-learning-track.md`](ops/primary-learning-track.md) |
 | strong_buy | Strongest screen buy signal within the value set alongside ordinary `buy`. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
-| thesis break | The reason for owning a name has failed: operating decline, a sector headwind, a screen `avoid` signal, or a research `pass`. Ends a recovery hold. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
+| thesis break | The reason for owning a name has failed: operating decline, a sector headwind, a screen `avoid` signal, or a research `pass`. Ends any strategy-book position. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | three-lane model | Post-run clearance policy: ingest factory lane, engineering queue lane, and narrative refresh lane. | [`ops/post-run-improvement-clearance.md`](ops/post-run-improvement-clearance.md) |
 | twin | Parallel book or metric path with frozen registration used to compare policy without editing the live book. | [`AGENTS.md`](../AGENTS.md) |
 | version review | The point (at the strategy book's thickness gate, then at most every 26 weeks) where at most one sealed challenger version is chosen from accumulated evidence. | [`ops/strategy-reorientation-plan.md`](ops/strategy-reorientation-plan.md) |

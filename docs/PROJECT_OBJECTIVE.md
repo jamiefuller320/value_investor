@@ -23,8 +23,9 @@ candidate for retirement. The step-by-step plan for getting there is in
 
 **In one sentence:** buy stocks that are cheap on fundamentals and show no sign
 of declining operating performance or sector-wide trouble, buy them at
-short-term price lows, sell them at short-term highs, and if the timing is
-wrong, hold for recovery as long as the business case still stands.
+short-term price lows, let a rise run while a ratcheting profit floor keeps
+most of the gain, and if the timing is wrong, hold for recovery while the
+business case still stands, up to a fixed wait for the trade to get going.
 
 | Part | Rule | Purpose |
 |------|------|---------|
@@ -32,16 +33,24 @@ wrong, hold for recovery as long as the business case still stands.
 | 2. Not declining | No sign of declining operating performance: revenue, operating margin, EPS and free cash flow trend over recent reported periods, plus profit warnings and guidance cuts. Fail closed when the data is missing. | Separates cheap-and-sound from cheap-because-failing (value traps). |
 | 3. Sector sound | No sector-wide negative factor: the sector as a whole is not in a broad price or earnings decline. Judged on the sector itself, not by ranking a stock against its peers. | Stops the cheapest name in a falling sector looking attractive. |
 | 4. Entry | Buy names that pass 1–3 at a **short-term price low**. Membership of the value set makes a name eligible; it is not the buy signal. | Timing edge on entry. |
-| 5. Normal exit | Sell at a **short-term price high**. Dropping out of a top-N ranking is **not** an exit signal. | Timing edge on exit; turns over capital. |
-| 6. Recovery hold | If the price falls after entry, hold. Exit a recovery hold only when (a) the price recovers to the exit rule or a recovery target, or (b) the thesis breaks: parts 2 or 3 fail, the screen signal becomes `avoid`, or research says `pass`. A price drop alone is never a sell. | Lets mis-timed entries recover instead of crystallising losses. |
-| 7. Limits | Every recovery hold has a review date and a recovery target (entry price, later a fair-value estimate). Capital in recovery holds is capped as a share of the book, so stuck positions cannot crowd out new entries. | Stops "hold for recovery" turning into holding a deteriorating business. |
+| 5. Normal exit | Once a trade has risen **+10%**, let it run; sell when the price falls back through a **profit floor** that ratchets up behind it (checkpoint ladder). Dropping out of a top-N ranking is **not** an exit signal. | Keeps the gain from a strong rally instead of capping it at the first short-term high. |
+| 6. Recovery hold | If the price falls after entry, hold. A price drop alone is never a sell. A trade that has not reached +10% within a fixed wait (63 trading sessions in v0) is sold to release its capital for fresh entries. The thesis breaking (parts 2 or 3 fail, the screen signal becomes `avoid`, or research says `pass`) ends any position. | Lets mis-timed entries recover, without letting trades that never start tie up capital. |
+| 7. Limits | Every position has review dates and a time cap. The share of the book in recovery holds is reported, and can be capped, so stuck positions cannot crowd out new entries. | Stops "hold for recovery" turning into holding a deteriorating business. |
 
 **How it is judged:**
 
 - Each trade is an **episode** scored at a fixed stake after fair costs
-  ([`ops/fair-cost-primacy.md`](ops/fair-cost-primacy.md)). Swing episodes
-  (exited at a high) and recovery holds are scored **separately**: hit rate and
-  gain for swings; time to recovery and loss on thesis break for recovery holds.
+  ([`ops/fair-cost-primacy.md`](ops/fair-cost-primacy.md)). Floor exits, trades
+  sold at the fixed wait, and thesis breaks are scored **separately**: gain and
+  checkpoint reached for floor exits; loss for trades that never got going;
+  loss on thesis break.
+- Parts 5–7 were amended on 2026-11-04, before the strategy book was signed.
+  The first version sold at the first short-term high, held mis-timed entries
+  until they recovered to the entry price, and capped recovery holds as a share
+  of the book. Replays showed that exit capped typical gains at about +3–4%
+  while recovery holds tied up most of the capital. The strategy book scores
+  the first version's exit beside the amended one on the same entries
+  ([registration](ops/strategy-book-registration.md#4-exit)).
 - Book-level return versus a total-return benchmark is reported beside the
   episode scores, but it is not the only proof. A paper book cannot detect a
   small edge versus an index on a useful timescale

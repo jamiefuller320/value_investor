@@ -9,6 +9,8 @@
 
 **Revised 2026-11-04 (owner decision, before signature):** the universe is multi-market from v0 (section 2), a buy-on-signal control answers whether timing adds anything and a report-only capital view compares capital use and risk with buy-and-hold (section 8), the thickness gate counts at most 6 episodes per entry week (section 9), and the book asks for the launch-queue head (sections 11 and 13). This book is the single track to live capital ([plan](strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04)).
 
+**Exit amended 2026-11-04 (owner decision, before signature):** the primary exit is a checkpoint ladder with a fail-to-launch deadline (section 4). The earlier draft exit (10-session high, recovery target, review cap) and the ladder without the deadline are scored as paired report-only exits on the same entries (section 4). The decision number counts mature episodes, so slow-closing winners cannot flatter it (sections 1 and 9). A paired interim read is published at 26 weeks (section 8). The ladder and the 63-session deadline were chosen after seeing a replay; section 10 records that.
+
 This document freezes the rules before any score is computed. It does not open a book, write a store, or run a replay. Step 2.2 (archive replay) and step 2.3 (forward book) wait until the owner signs, adjusts a listed number once, or rejects.
 
 Every number in the rule tables is **proposed** unless the row says it is an existing constant that this book stamps unchanged. The owner may change a proposed number once, in the signature note, before any score store exists. After the first score store is committed, section 10 applies.
@@ -19,14 +21,14 @@ No language model chooses an entry, an exit, or a review. The book reads the res
 
 ## 1. Learning question
 
-On FTSE 350 names and names in graduated library markets that pass parts 1–3 and the current F9-B input-quality gate, does a fixed stake bought at the registered short-term low and sold at the registered short-term high — or held under the registered recovery rules — produce a **positive median fair-cost episode return**?
+On FTSE 350 names and names in graduated library markets that pass parts 1–3 and the current F9-B input-quality gate, does a fixed stake bought at the registered short-term low and sold under the registered checkpoint ladder — at a profit floor once the trade has launched, or at the fail-to-launch deadline if it never does — produce a **positive median fair-cost episode return**?
 
-That question is false when, at the thickness gate in section 9, the median fair-cost return across all closed episodes is zero or below. The book then stays observe-only. A different rule is a new `registration_id`. This one is not edited to make the median positive.
+That question is false when, at the thickness gate in section 9, the median fair-cost return across all **mature** episodes is zero or below. An episode is mature once its fill is at least 63 chart sessions before the scoring date. By then it has either closed or launched (section 4), so the median cannot be flattered by winners that close early while losers are still open. The book then stays observe-only. A different rule is a new `registration_id`. This one is not edited to make the median positive.
 
 Two results sit beside that and still mean stop or redesign, by a new registration:
 
-- The swing-high median is positive and the combined median is zero or below. The recovery holds are what failed. A price stop is not added to this id. A price drop never sells.
-- The forward book has run 26 weeks (proposed) and still has fewer than 48 counted closed episodes (section 9). The rule is too rare on this universe to answer the question. The thresholds stay as written.
+- The floor-exit median is positive and the overall median is zero or below. The trades that fail to launch are what failed. A price stop is not added to this id.
+- The forward book has run 39 weeks (proposed) and still has fewer than 48 counted mature episodes (section 9). The rule is too rare on this universe to answer the question. The thresholds stay as written.
 
 A positive median on a thinner sample is not a pass. Forty-eight episodes are a look, not a measurement of a small annual edge. Forward paper evidence cannot resolve a 3% a year edge on a short window ([`historical-screen-replay.md`](historical-screen-replay.md#why) records years-to-detect of 125–900, and about 150 non-overlapping monthly cohorts before a 30-day screen spread is even discussable). Read a pass here as "this sample did not lose after fair costs."
 
@@ -110,59 +112,94 @@ RSI(14) below **40**, and the close at least **3 percent** under the 10-session 
 
 This column is the only alternative. There is no grid on 30 / 35 / 40 or on 5 / 10 / 20. It is frozen now, before any replay. It cannot replace the primary on this id, because the archive has no untouched holdout long enough to confirm a switch (section 10).
 
-## 4. Normal exit
+## 4. Exit
 
-The normal exit is a short-term high on a position that has not become a recovery hold. Rank, top-N membership, and leaving `buy` / `strong_buy` do not close the episode. Those exits stay on the control described in section 8.
+Amended 2026-11-04 (owner, before signature). The primary exit lets a trade that has started to rise run until its momentum breaks, keeps most of the gain with a ratcheting profit floor, and releases capital from a trade that never starts. Rank, top-N membership, and leaving `buy` / `strong_buy` do not close the episode. Those exits stay on the control described in section 8.
 
-### Primary exit (proposed)
+All exit tests use closes only, like the entry. Percentages are of the **entry fill**, gross of costs. Every sale fills at the next chart session's close, with the 5-day gap rule from section 3. No next bar means the episode stays open. The scored prices are the two fills.
 
-While the episode is still a swing, session *t* signals an exit when both are true:
+### Primary exit: checkpoint ladder (proposed)
 
-1. The close is the highest close of the 10 chart sessions ending at *t* (ties count).
-2. The close is at least the entry fill times `(1 + buy_cost_pct + sell_cost_pct)`.
+**Launch.** The episode launches on the first close at or above the entry fill times 1.10 (the first checkpoint, +10%).
 
-The sell fills at the next chart session's close, with the same 5-day gap rule. No next bar means the episode stays open. The scored prices are the two fills.
+**Checkpoints and floors.** After launch, each close is compared with the checkpoints +10%, +15%, +20%, +25%, +30%, +40%, +50%, +75% and +100%. The highest checkpoint any close has reached sets the floor:
 
-The cost floor uses the episode's market row stamped in section 7. For a FTSE 350 name at today's table the round trip is 0.55%, so a fill at 100.00 needs a high of at least 100.55 before a swing exit can signal. The scored return subtracts the same costs again, via the usual episode formula, so a sale exactly at the floor scores about zero. A hit is a positive fair-cost return, which needs a slightly higher sale.
+| Highest checkpoint reached on a close | Floor |
+|---|---|
+| +10% | +5% |
+| +15% | +10% |
+| +20% | +15% |
+| +25% | +20% |
+| +30% | +25% |
+| +40% | +30% |
+| +50% | +40% |
+| +75% | +50% |
+| +100% | +75% |
 
-A 10-session high under that floor does not sell. If the close is also 8% under the fill, section 5 classifies a recovery hold instead. Between those two bands the episode simply stays a swing until a qualifying high, a recovery trigger, or a thesis break.
+The floor only rises. Above +100% it stays at +75%.
 
-The trade plan's take-profit floors (`tactical_target_above_limit` 1.10, `tactical_target_above_spot` 1.08, plus a reward-to-risk floor) are pack levels for a tactical slice next to a core holding. They are not this exit. A fixed percent target would replace "sell the short-term high" with a different strategy.
+**Floor exit.** A launched episode signals an exit on the first close at or below the entry fill times `(1 + floor)`. Label `floor_exit`, with the checkpoint reached. A gap can fill the sale under the floor. The fill is scored as it is and the shortfall is reported. It is not topped up.
+
+**Fail to launch.** An episode that has not launched when the session index after the fill reaches **63** (the fill session is index 0) signals an exit on that session, whatever the price. Label `fail_to_launch`. In the replay below, about three quarters of these sales were below the entry fill. This is a time rule, not a price stop: no price level below the entry ever triggers a sale. It replaces the open-ended recovery hold for trades that do not start, so their capital goes to fresh entries.
+
+**Time cap.** An episode still open when the session index reaches **252** (about a year) signals an exit. Label `time_cap`. Part 7 asks that no hold runs without an end.
+
+**Thesis break and reviews.** Section 5 applies to every episode, launched or not.
 
 | Input | Proposed value | Why |
 |---|---|---|
-| High window | 10 chart sessions | Same window as the entry low, so the swing is symmetric. |
-| Cost floor | entry fill × (1 + fair buy + fair sell) | A high that does not clear the stamp and the spread is not a completed swing. Rates come from the table in section 7. |
-| What does not exit | Leaving the buy tier, leaving a top-N list, a trade-plan stop, a trade-plan target | Part 5 of the strategy. The control in section 8 keeps the buy-tier exit so the difference can be reported. |
+| First checkpoint | +10% on a close | In a replay across graduated markets, a trade that had reached +10% reached +15% before falling back to +5% in 65% of 769 cases. The next checkpoint came first in 55–67% of cases at every level up to +40%, so waiting with a floor pays on average. |
+| Step and floor | 5-point steps to +30%, then +40, +50, +75, +100; floor at the previous checkpoint, +5% at the first | Each step is the same size up and down, so the floor keeps the last checkpoint less one step. +5% clears every market's round trip in section 7. |
+| Fail-to-launch deadline | 63 chart sessions after the fill | The patient horizon already sealed on N206. In the replay, cutting after 20 or 40 sessions sold many trades that were about to launch and did worse; 63 did best or near best in both universes. |
+| Time cap | 252 chart sessions after the fill | The same year as the draft's four 63-session reviews. |
+| What does not exit | Leaving the buy tier, leaving a top-N list, a trade-plan stop, a trade-plan target, a price drop below the fill | Part 5. The control in section 8 keeps the buy-tier exit so the difference can be reported. |
 
-Worked swing (FTSE 350 name). Fill 100. Cost floor 100.55. Session 6 prints a 10-session high at 103. The exit signals. The next close is the sale. Fair-cost return is `sale / 100 - 1 - 0.00525 - 0.00025`.
+A checkpoint continuation model (estimating at each checkpoint whether to wait or sell) was tested and is not part of this rule. A simple momentum model trained on the first year never said "sell" on the second year, because every group continued more often than not. It is queued as L670, a challenger for a later version review.
 
-## 5. Recovery hold
+Worked ladder (FTSE 350 name). Fill 100. Session 9 closes at 110.4: launched, floor 105. Session 20 closes at 116: floor 110. Session 26 closes at 109.8, at or below 110: the floor exit signals. The next close, 109.5, is the sale. Fair-cost return is `109.5 / 100 - 1 - 0.00525 - 0.00025` = 8.95%.
 
-A price drop never sells. It changes the label of the episode from swing to recovery hold. The hold then exits only on a recovery target, a thesis break, or the review rule below.
+Worked failure. Fill 100. The best close in 63 sessions is 107.9. On session 63 the close is 96: the fail-to-launch exit signals. The next close, 95.6, is the sale, a fair-cost loss of 4.95%.
 
-### When the swing becomes a hold (proposed)
+**Replay of this exact rule** (2024-10-30 to 2026-10-30 closes, today's buy tier painted back, no gates, no thesis breaks, no dividends, fair costs; median of 15 random funding orders for the 20-slot book):
 
-On session *t*, if the episode is still a swing, it becomes a recovery hold when either is true:
+| | FTSE 350 | All graduated markets |
+|---|---|---|
+| Closed episodes | 243 | 1,432 |
+| Median / mean fair-cost return | +3.6% / +4.8% | +3.4% / +4.3% |
+| Floor exits: count, median | 135, +10.6% | 746, +9.4% |
+| Fail-to-launch exits: count, median | 107, −5.4% | 671, −6.5% |
+| Return per year of capital invested | 20.8% | 18.7% |
+| 20-slot book | 16.1% a year | 19.6% a year |
+| Same rules with the draft exit | 17.8% per capital-year, 5.8% 20-slot | 10.0% per capital-year, −1.9% 20-slot |
 
-- The close is at or below the entry fill times `(1 - 0.08)`.
-- Fifteen chart sessions have passed after the fill session and the episode is still a swing. The fill session is index 0. The classification is evaluated when the session index reaches 15.
+Equal-weight buy-and-hold of the same names made 16.1% a year (FTSE) and 19.5% (all markets) on the same history. These figures choose nothing. They are why the owner picked this exit, which is also why they cannot count as evidence for it (section 10).
 
-The 8% band reuses the distance already encoded as `tactical_target_above_spot` (8% above spot) and the neighbourhood of `support_floor_below_spot` (8% under spot). Here that distance classifies a hold. The trade plan's stop, which sells near that neighbourhood, stays unused.
+### Paired comparison exits (report-only)
 
-The label does not flip back to swing if the price recovers. The exit is then a recovery exit, and the episode is scored on the recovery board.
+Every primary entry also gets two comparison exits at the same fill. They are columns on the same entries, like the leave-tier control. They do not open entries, do not affect the primary's cooldown or cap, and never replace the primary on this id.
 
-### Recovery target (proposed)
+| Column | Rules |
+|---|---|
+| `draft_v0_exit` | The 2026-11-03 draft. While a swing, sell at the next close after a close that is the highest of the 10 sessions ending there and at least the fill times `(1 + buy + sell)`. The swing becomes a recovery hold on a close 8% under the fill, or at session index 15. A recovery hold sells at the next close after a close at or above the entry fill. Reviews every 63 sessions from the recovery classification, with the review table in section 5, and a sale at the fourth review. Thesis breaks as in section 5. |
+| `ladder_no_deadline` | The primary ladder without the fail-to-launch deadline. An episode that has not launched stays open and follows the `draft_v0_exit` review timing (63-session reviews from an 8% or 15-session recovery classification, sale at the fourth). It does not sell at the entry fill. Thesis breaks as in section 5. |
 
-The target is the **entry fill**. A later fair-value estimate is phase 4.1 (L662), not this registration.
+`draft_v0_exit` answers "is the ladder better than the exit first drafted for part 5?" `ladder_no_deadline` answers "what does the 63-session deadline add?"
 
-A recovery hold signals an exit on session *t* when the close is at or above the entry fill. The sell fills at the next close. That sale can still be a small loss after costs, because the target is the gross entry price. The loss is reported. The target is not raised to cover stamp.
+## 5. Thesis break, the recovery label, and reviews
 
-Once the target is the entry fill, a cost-clearing 10-session high is above the target, so the target is reached on the same bar or earlier. The high rule remains in force on a hold so part 5 and part 6 stay explicit. The target is the one that binds.
+A price drop below the fill never sells by itself. Under the primary exit, a trade that has not launched waits until the fail-to-launch deadline, a thesis break, or a review exit.
+
+### The recovery label (proposed)
+
+An episode that has not launched and has closed at or below the entry fill times `(1 - 0.08)` is labelled a recovery hold. The label is for reporting and for the recovery-hold share in section 6. It does not change the exit rule. It does not flip back if the price recovers. If the episode later launches, it keeps the label and also records the launch.
+
+The 8% band reuses the distance already encoded as `tactical_target_above_spot` (8% above spot) and the neighbourhood of `support_floor_below_spot` (8% under spot). The draft's 15-session trigger is dropped from the primary label: under the ladder most trades have not launched after 15 sessions, and that is waiting, not a failed swing. `draft_v0_exit` keeps the 15-session trigger, as drafted.
+
+There is no recovery target on the primary exit. A trade back at its entry price keeps waiting to launch until the deadline. A later fair-value target is phase 4.1 (L662), not this registration.
 
 ### Thesis break (proposed)
 
-The same facts that forbid an entry can end a hold, and they can also end a swing before it ever becomes a hold. One implementation serves both, so the entry rule and the exit rule cannot drift. That is the constraint already written on the operating-decline gate.
+The same facts that forbid an entry can end any episode, launched or not, on the primary and on both comparison exits. One implementation serves entry and exit, so the entry rule and the exit rule cannot drift. That is the constraint already written on the operating-decline gate.
 
 A thesis break is any of:
 
@@ -173,35 +210,37 @@ A thesis break is any of:
 | Screen `signal` is `avoid` | `core_sell_reason` in `core_sell_trigger.py` | Hard avoid. |
 | Research verdict's first token is `pass`, `sell`, `avoid`, or `exit` | `core_sell_reason` | `pass` is this project's do-not-own verdict. |
 
-`insufficient_data`, a missing store, a missing screen row, research `caution`, and research `neutral` are not breaks. A missing row leaves a streak where it is, which is what `note_thesis_streak` already does. `clear` and `sound` reset their own streaks. A one-day gap must not wipe a real decline, and it must not sell the hold.
+`insufficient_data`, a missing store, a missing screen row, research `caution`, and research `neutral` are not breaks. A missing row leaves a streak where it is, which is what `note_thesis_streak` already does. `clear` and `sound` reset their own streaks. A one-day gap must not wipe a real decline, and it must not sell the position.
 
 Confirmation reuses `thesis_break_confirmed` with **2** consecutive observations, the live `DEFAULT_EXIT_CONFIRM_SCREENS`. Streaks are per reason. Screen and research observations are the weekly runs. Gate observations are successive `as_of` dates. Two weekly avoids sell. Two daily `declining` verdicts sell. One of each does not.
 
-When a thesis exit and the recovery target signal on the same session, the label is `thesis_break`. A business that has failed is not scored as a successful recovery, even if the price happens to be back at the fill. The return can still be positive. It stays on the thesis-break slice.
+When a thesis exit and any other exit signal on the same session, the label is `thesis_break`. A business that has failed is not scored as a floor exit or a recovery, even if the price is above the fill. The return can still be positive. It stays on the thesis-break slice.
 
 ### Review date (proposed)
 
-The clock starts on the session that classifies the recovery hold. It does not start at entry. A swing that exits on a high never has a review.
+On the primary exit the clock starts at the fill. Reviews fall at session index 63, 126 and 189. At index 63 an episode that has not launched is already sold by the fail-to-launch deadline, so the reviews read launched episodes. Index 252 is the time cap. On `draft_v0_exit` and `ladder_no_deadline` the clock starts on the recovery classification instead, as drafted.
 
 | Review | Proposed action | Why |
 |---|---|---|
-| 63 chart sessions after classification, and again 63 after each roll | Re-read parts 2 and 3, the screen signal, and the research verdict. | 63 trading days is the patient horizon already sealed on N206. Here it is a review spacing, not an automatic sale. |
+| Each review date | Re-read parts 2 and 3, the screen signal, and the research verdict. | 63 trading days is the patient horizon already sealed on N206. Here it is a review spacing, not an automatic sale. |
 | Thesis already broken under the streak rule | Exit `thesis_break` at the next close. | The mid-hold rule has already fired, or fires on this read. |
 | Decline is not `clear`, or sector is not `sound`, including missing and `insufficient_data` | Exit `review_insufficient_data` at the next close. | Mid-hold, a one-day gap does not sell. At the review, a long hold needs fresh evidence. A blank file ends the hold. |
 | Screen row missing | Exit `review_insufficient_data`. | There is no current value-set fact. |
 | Research verdict missing, while the gates are `clear` and `sound` and the signal is not `avoid` | Hold stands. | Research `pass` sells. A missing memo does not. Entry already required a fresh memo. |
-| Gates `clear` and `sound`, signal not `avoid`, research not failed, and this is review 1, 2, or 3 | Roll the review forward 63 chart sessions. Record the roll. | The business case still stands. Part 6 says hold. |
-| The same, on review 4 | Exit `review_cap` at the next close. | Part 6 names two exits: the recovery target and a thesis break. Part 7 also requires a review date so a hold cannot run without an end. Four reviews is 252 chart sessions, about a year. This third exit is the proposed end. Section 13 lets the owner replace it with a human hold at signature. |
+| Gates `clear` and `sound`, signal not `avoid`, research not failed | Hold stands until the next review, the floor, or the time cap. Record the review. | The business case still stands. |
+| `draft_v0_exit` and `ladder_no_deadline` only: the same, on review 4 | Exit `review_cap` at the next close. | The draft's end to a recovery hold, four reviews or about a year. Section 13 lets the owner replace it with a human hold at signature. |
 
-Worked recovery. Fill 100. Close 91 on session 4. The episode becomes a recovery hold. No sale. Later the close prints 100.2. The target signals. The next close is the sale. If instead the next two decline-gate dates say `declining`, the sale is a thesis break even though the price never returned to 100.
-
-Each session, the walker does these checks in order. The first one that acts ends the session for that name.
+Each session, the primary walker does these checks in order. The first one that acts ends the session for that name.
 
 1. A confirmed thesis break signals an exit. The label is `thesis_break`.
-2. A swing that prints a 10-session high at or above the cost floor signals a swing exit.
-3. A swing that hits the 8% band or the 15-session mark becomes a recovery hold. No order.
-4. A recovery hold whose close is back at the entry fill signals a `recovery_target` exit, unless step 1 already fired.
-5. A review date applies the review table.
+2. The close updates the launch and the highest checkpoint reached.
+3. A launched episode whose close is at or below its floor signals a `floor_exit`.
+4. An episode that has not launched at session index 63 signals `fail_to_launch`.
+5. An episode at session index 252 signals `time_cap`.
+6. A review date applies the review table.
+7. An episode that has not launched and closes 8% or more under the fill takes the recovery label. No order.
+
+The comparison columns run the same thesis-break step first, then their own rules from section 4.
 
 The exit reason is fixed on the signal session. The next close is only the price. A new fact on the fill day does not relabel an exit that was already signalled.
 
@@ -212,15 +251,15 @@ Fixed-stake v0, as in [`fair-cost-primacy.md`](fair-cost-primacy.md#fixed-stake-
 | Limit | Proposed value | Why |
 |---|---|---|
 | Stake | 100 units of the listing currency per entry (100 GBP on London names, 100 USD on US names, and so on) | The standing fixed-stake default of 100 local-currency units. Episode percent is a ratio on one chart's series, so currency and pence-versus-pound units do not change it. No FX translation of returns in v0. |
-| Cash | No cash constraint | v0 parks fund construction. The recovery cap below is a count of episodes, not a cash rule. |
+| Cash | No cash constraint | v0 parks fund construction. The recovery-hold share below is a count of episodes, not a cash rule. |
 | Open episodes per name | 1 | A second signal while the episode is open is ignored and counted as `already_open_skip`. |
 | Re-entry cooldown | 10 chart sessions after the exit fill | The same length as the entry window, so the sale session's own low cannot buy the name straight back. |
-| Recovery-hold cap | Block new entries when recovery holds are at least 40% of open episodes and at least 5 episodes are open | Part 7. Stuck holds must not keep taking every new low. Below 5 open episodes the ratio is noise (1 of 2 is already 50%). |
-| Cap action | Block, and count `cap_blocked` | Reporting the share without blocking does not do what part 7 asks. A blocked name is not queued. It has to signal again on a later day. |
-| Names signalling on the same day | Take every name that passes | No top-N and no "cheapest first." The cap either allows the whole day or blocks the whole day. |
+| Recovery-hold share | Recovery-labelled episodes (section 5) as a share of open episodes, once at least 5 episodes are open; a 40% line is drawn on the board | Part 7. Below 5 open episodes the ratio is noise (1 of 2 is already 50%). |
+| Cap action | Report-only under the amended exit. `cap_would_block` counts the days the share was at or above 40% | The fail-to-launch deadline already ends every trade that has not launched within 63 sessions, so a stuck position cannot crowd out new entries for long. Section 13 (question 5) lets the owner switch the cap to block at signature. A blocked name would not be queued; it would have to signal again on a later day. |
+| Names signalling on the same day | Take every name that passes | No top-N and no "cheapest first." If the owner switches the cap to block, it allows or blocks the whole day. |
 | Markets | One pooled book; the cap and the per-name rule apply across all markets | Splitting the cap by market would make a rare-signal market wait on its own count. Per-market boards (section 8) show where the episodes come from. |
 
-The cap is checked on the signal session, before a fill is scheduled. Recovery holds count as open episodes. The denominator is every open episode, swings included.
+The share is measured on the signal session, before a fill is scheduled. The denominator is every open episode, launched or not.
 
 ## 7. Costs
 
@@ -247,21 +286,23 @@ Dividends are not added. Marks are price returns after trading costs. Total-retu
 
 ## 8. Scoring
 
-The decision number is one median: the fair-cost episode percent of **every closed episode**, swings and recovery holds together. A swing-only median is published beside it and cannot pass the gate on its own.
+The decision number is one median: the fair-cost episode percent of **every mature episode**, all exit reasons together. An episode is mature when its fill is at least 63 chart sessions before the scoring date. A mature episode is either closed, scored at its two fills, or open after launch, scored **at its current floor** as if sold there (fair costs subtracted). The floor is the least a launched trade is still expected to realise; the latest close is published beside it. A floor-exit-only median is published too and cannot pass the gate on its own.
 
-Open episodes are marked to the latest close for display, fair-cost as if closed. They are outside the median. A missing quote leaves the mark blank. It is not filled with zero.
+Episodes younger than 63 sessions are shown, marked to the latest close, fair-cost as if closed. They are outside the median, because the ones that will fail to launch have not had their chance to. A missing quote leaves the mark blank. It is not filled with zero.
 
 | Board | Proposed contents | Why |
 |---|---|---|
-| Overall (primary) | Median fair-cost episode % of all closed episodes. Count. | The learning question. One number, after fair costs. |
-| Swing highs | Count, hit rate (share with fair-cost return above zero), median return, median sessions from entry fill to exit fill. | "Did the short-term high work?" |
-| Swing thesis breaks | Count and median return, separate from swing highs. | A thesis break during the swing is not a successful high and not yet a recovery loss. |
-| Recovery target | Count, median sessions from classification to the target exit fill, median return. | Time to recovery, as the strategy asks. |
-| Recovery thesis breaks | Count by reason code (`declining`, `headwind`, `screen_avoid`, `research_failed`), median return. | Loss on a broken business, kept off the recovery-success median. |
-| Review exits | Count of `review_insufficient_data` and `review_cap`, with median return. | Included in the overall median. Shown on their own so a time cap is visible. |
-| Stress | The same closed episodes at 3% per side. | Report-only. |
-| By market | The overall board for FTSE 350 alone, for each market with at least 10 closed episodes, and for all other markets pooled. | Shows whether one market carries the result. Report-only. |
-| Single-market dependence | Flag `single_market_dependence` when the overall median is above zero but falls to zero or below once the market with the most closed episodes is removed. | The disposition finding carries the flag. It does not fail the question by itself. |
+| Overall (primary) | Median fair-cost episode % of all mature episodes, open launched ones at their floor. Count. The same median with open launched ones at the latest close, beside it. | The learning question. One number, after fair costs. |
+| Launch | Share of mature episodes that launched; median sessions from fill to launch. | "Do the timed entries start to rise?" |
+| Floor exits | Count, median return, and the highest checkpoint reached, as a distribution. Gap shortfall under the floor, summed. | "Does the ladder keep the gains?" |
+| Fail to launch | Count, median return, share below the fill. | The cost of releasing capital at 63 sessions. |
+| Thesis breaks | Count by reason code (`declining`, `headwind`, `screen_avoid`, `research_failed`), median return, split by launched or not. | Loss on a broken business, kept separate. |
+| Review and time-cap exits | Count of `review_insufficient_data` and `time_cap`, with median return. | Included in the overall median. Shown on their own so a time limit is visible. |
+| Recovery label | Count of recovery-labelled episodes, their launch share, and their median return. | Part 6: how often a trade that fell 8% still came good. |
+| Paired exits | For each comparison exit in section 4, the median and mean of the per-entry difference (primary minus comparison) on mature entries, with each open episode valued as above on the primary and at the latest close on the comparison. Standard error from entry-week averages. | Answers "is the ladder better than the draft exit, and what does the deadline add?" on the same trades. Report-only. |
+| Stress | The same mature episodes at 3% per side. | Report-only. |
+| By market | The overall board for FTSE 350 alone, for each market with at least 10 mature episodes, and for all other markets pooled. | Shows whether one market carries the result. Report-only. |
+| Single-market dependence | Flag `single_market_dependence` when the overall median is above zero but falls to zero or below once the market with the most mature episodes is removed. | The disposition finding carries the flag. It does not fail the question by itself. |
 | Buy-on-signal control | Episodes below. Difference of medians against the overall board, and the same by market. | Answers "does the timing add anything over buying the signal and holding?" Report-only. |
 | Leave-tier control | Paired episodes below. Difference of medians. | Report-only. No crown. |
 
@@ -273,15 +314,17 @@ If the overall median is positive and the buy-on-signal control's median is at l
 
 That paired exit is the behaviour of `buy_tier_level` and of N200's leave-tier close. It is how this project already turns a buy-tier membership spell into a trade. The strategy book does not use it as an exit. The median difference is context for the owner. Beating the control is not the learning question, and losing to it does not by itself fail the question. Fair-cost primacy already treats control excess as report-only.
 
+**Interim read at 26 weeks (report-only).** When the forward book has run 26 weeks, ops-monitor publishes the paired-exit board against `draft_v0_exit` as an info finding: the mean per-entry difference, its standard error from entry-week averages, the number of mature entries and entry weeks, and the share of entries where the primary did better. It is an early read of whether the ladder is beating the exit first drafted for part 5. It is not the thickness gate, opens no disposition, and does not change any rule. Trades bought in the same week move together, so the entry-week standard error is the honest one. In a replay with today's buy tier painted back, the ladder led the draft by about 1.5–2 points per entry at 26 weeks across all markets, but the difference was more than two standard errors in only about a fifth of 26-week windows; at 52 weeks it was in about three fifths. Read the 26-week number as direction, not proof.
+
 Neither control is the live book's NAV. Live books have weights, cash, and a 3% stress stamp. Comparing NAVs would mix those choices with the timing rule.
 
-**Capital view (report-only, owner 2026-11-04).** A positive median episode does not show that the book uses capital well. A replay of the price rules alone (today's buy tier painted back, no gates, no dividends) had a +2.1% median FTSE episode over a median of 10 sessions. Return per year of capital actually invested was 18%. A 20-slot book taking signals first come made 4–7% a year. Equal-weight buy-and-hold of the same names made 16% a year. Recovery holds held over 60 days used 55% of the capital-days and lost money in total. These boards make that visible on the real book. None of them is the learning question, and none of them changes a rule:
+**Capital view (report-only, owner 2026-11-04).** A positive median episode does not show that the book uses capital well. A replay of the price rules with the draft exit (today's buy tier painted back, no gates, no dividends) had a +2.1% median FTSE episode over a median of 10 sessions. Return per year of capital actually invested was 18%. A 20-slot book taking signals first come made 4–7% a year. Equal-weight buy-and-hold of the same names made 16% a year. Recovery holds held over 60 days used 55% of the capital-days and lost money in total. The amended exit's replay is in section 4. These boards make that visible on the real book. None of them is the learning question, and none of them changes a rule:
 
 | Board | Proposed contents | Why |
 |---|---|---|
 | Capital-days return | Sum of fair-cost episode returns divided by stake-days, times 365. Overall and by market. Open episodes are marked to the latest close. | Return per year of capital actually invested. Counts how long each stake was tied up, which the median ignores. |
-| Recovery-hold capital share | Share of stake-days spent in recovery holds, and the summed fair-cost return of those episodes. The same for episodes held more than 60 sessions. | Shows whether stuck holds are eating the swing profits. Input to the version review and to questions 3 and 4 at a later registration. |
-| Reference slot book | A 20-slot book that puts 1/20 of its current value into each signal in signal order (ties by ticker), skips a signal when no slot is free, and reinvests proceeds. Daily NAV, annualised return, maximum drawdown, annualised volatility, average idle cash, trades taken and skipped, and the combined P&L of the five worst names as a share of starting capital. | One concrete capital path for the same trades. Equal slots are a fixed reference here, not a sizing decision; fixed-stake v0 still scores episodes. |
+| Recovery-hold capital share | Share of stake-days spent in recovery-labelled episodes and in episodes that had not launched, and the summed fair-cost return of each. The same for episodes held more than 60 sessions. | Shows whether trades waiting to launch are eating the floor-exit profits. Input to the version review. |
+| Reference slot book | A 20-slot book that puts 1/20 of its current value into each signal in signal order (ties by ticker), skips a signal when no slot is free, and reinvests proceeds. Daily NAV, annualised return, maximum drawdown, annualised volatility, average idle cash, trades taken and skipped, and the combined P&L of the five worst names as a share of starting capital. Beside it, the median annualised return over 15 fixed random orders of same-day signals. | One concrete capital path for the same trades. In replays a single funding order moved the FTSE slot book between about 8% and 17% a year, so one order is mostly luck; the random-order median is the steadier figure. Equal slots are a fixed reference here, not a sizing decision; fixed-stake v0 still scores episodes. |
 | Buy-and-hold reference | Equal weight in every name eligible on the book's first day, plus an equal stake in each name on the day it first becomes eligible, held to the scoring date. Same daily NAV, drawdown, volatility and worst-five-names figures. Price only, the same costs once in and once out. | The plain alternative for the same eligible names. It is diversified across all of them, so it tests timing against holding, not one stock pick against another. |
 
 The slot book and the buy-and-hold reference are reported side by side on return and on risk (drawdown, volatility, worst-five-names loss). In the replay above buy-and-hold had the higher return and, across all markets, the lower drawdown and worst-five loss. The capital view lets the forward book confirm or overturn that with the gates applied.
@@ -320,7 +363,9 @@ Library markets keep their own weekly runs under `docs/data/library/markets/<mar
 
 **Dividends and opens.** Still absent, as in sections 3 and 7.
 
-The alternative entry is scored only inside `archive_buy_tier_only`, as its own column, with the primary's exit and recovery rules. It does not share the one-name cap with the primary, because it is not a second book.
+The alternative entry is scored only inside `archive_buy_tier_only`, as its own column, with the primary's exit. It does not share the one-name cap with the primary, because it is not a second book.
+
+**Maturity in the archive.** The entry window is about 63 chart sessions long and the charts end on 2026-10-30, so only the earliest archive entries can be mature. The rehearsal publishes the young board and the paired-exit columns as they stand. It is a smoke test of the walker and the boards, not an early answer.
 
 ### (b) Forward observe book
 
@@ -336,9 +381,9 @@ Both are required, on the **forward** book only:
 
 | Gate | Proposed value | Why |
 |---|---|---|
-| Closed episodes | at least 48 **counted** episodes, counting at most 6 closed episodes per ISO entry week | The figure named in the phase 2 plan, and the gate already used by N206. N200's 24 is a different instrument (membership spells, easier to accumulate). A multi-market book takes many entries in one sell-off: in a replay of the price rules across markets, the 5 busiest entry weeks held 19% of all entries. Those trades share one market event and are not 48 separate tests. Six per week means the count needs at least 8 distinct entry weeks. Every closed episode is still scored in the medians; the cap applies to the gate count only. |
-| Calendar span | at least 8 weeks (56 days) from the first entry fill to the latest chart session | Same "and 8 weeks" bar as N200 and N206. Eight weeks with 10 closes is not enough. |
-| What does not count | Archive episodes, the alternative rule, either control, open episodes, `pending_fill` | The gate is about a book that has been trading forward under signed rules. |
+| Mature episodes | at least 48 **counted** mature episodes (section 8), counting at most 6 per ISO entry week | The figure named in the phase 2 plan, and the gate already used by N206. N200's 24 is a different instrument (membership spells, easier to accumulate). A multi-market book takes many entries in one sell-off: in a replay of the price rules across markets, the 5 busiest entry weeks held 19% of all entries. Those trades share one market event and are not 48 separate tests. Six per week means the count needs at least 8 distinct entry weeks. Every mature episode is still scored in the medians; the cap applies to the gate count only. In a replay of the frozen exit (today's buy tier painted back, no gates), the multi-market book had a median of 76 counted mature episodes after 26 weeks (lowest 53); the FTSE 350 alone had 27 after 26 weeks and 53 after 39. |
+| Calendar span | at least 63 chart sessions from the first entry fill to the latest chart session | Implied by maturity; longer than the "and 8 weeks" bar of N200 and N206. |
+| What does not count | Archive episodes, the alternative rule, either control, both comparison exits, episodes younger than 63 sessions, `pending_fill` | The gate is about a book that has been trading forward under signed rules. |
 
 Until both are true, the result is inconclusive. The entry is not loosened to get to 48 faster.
 
@@ -350,13 +395,15 @@ When both are true, ops-monitor emits an info finding and the owner stamps one d
 | `no-design` | Overall median at or below zero, or the owner rejects the book. | Stays observe-only. A redesigned rule is a new registration. |
 | `ack` | The owner has seen the board and wants no design work. | Stays observe-only. The finding does not re-fire every day once the stamp is set. |
 
-The control differences, the per-market boards, any `single_market_dependence` flag and the capital view are on the board the owner reads. They do not choose the row.
+The control differences, the paired-exit differences, the per-market boards, any `single_market_dependence` flag and the capital view are on the board the owner reads. They do not choose the row.
+
+The 39-week "too rare" line in section 1 is longer than the 26 weeks first drafted because maturity delays every count by 63 sessions, and library entries wait on plan steps 1.8 and 1.9. Until those land the book is FTSE-only in practice, and 26 weeks would almost always trip it.
 
 ## 10. Freeze and markers
 
-**Sealed at signature:** the learning question, the primary entry, the one alternative, the exit, the recovery rules, the limits, the cost formula, the scoring boards, and the thickness gate. Signature writes, in the next package, `docs/data/strategy_book_registration.json` copied from this document plus the owner's note. This draft does not write that file.
+**Sealed at signature:** the learning question, the primary entry, the one alternative, the primary exit, both comparison exits, the recovery label and reviews, the limits, the cost formula, the scoring boards, and the thickness gate. Signature writes, in the next package, `docs/data/strategy_book_registration.json` copied from this document plus the owner's note. This draft does not write that file.
 
-**One adjustment at signature.** The owner may change proposed numbers in the tables, once, in the signature note, before any score store exists. The owner may not add a third entry rule or a price stop.
+**One adjustment at signature.** The owner may change proposed numbers in the tables, once, in the signature note, before any score store exists. The owner may not add a third entry rule, a third exit column, a price stop, or a checkpoint model.
 
 **After the first score store is committed** (`strategy_book_replay.json` or `strategy_book_observe.json`):
 
@@ -366,7 +413,9 @@ The control differences, the per-market boards, any `single_market_dependence` f
 | Any threshold, the learning question, or which rule is primary | A new `registration_id`. The old scores stay under the old id. |
 | Adopting the alternative as the book | A new `registration_id`. Forbidden on this id. |
 
-**Parameters that stay frozen after the first look at results.** All of them: RSI 35 and RSI 40, the 10-session windows, the 3 percent SMA distance, the 8% recovery band, the 15-session swing limit, the 63-session review, the 4-review cap, the 2-confirm streak, the 10-session cooldown, the 40% recovery share, the 5-episode arming level, the 5-day gap, the 100-unit stake, the fair-cost formula and per-market cost stamps, the 3% stress view, the 48 / 8-week gate with its 6-per-week count, the graduated-market universe rule, both controls, and the capital-view definitions (20 slots, tie order, buy-and-hold construction).
+**Parameters that stay frozen after the first look at results.** All of them: RSI 35 and RSI 40, the 10-session entry window, the 3 percent SMA distance, the +10% launch, the checkpoint list and floors, the 63-session fail-to-launch deadline, the 252-session time cap, the 63-session review spacing, the 63-session maturity, the 8% recovery label, both comparison exits as written (including the draft's 10-session high, 15-session swing limit, entry-price target and 4-review cap), the 2-confirm streak, the 10-session cooldown, the 40% recovery share and report-only cap, the 5-episode arming level, the 5-day gap, the 100-unit stake, the fair-cost formula and per-market cost stamps, the 3% stress view, the 48-mature-episode gate with its 6-per-week count and the 39-week rarity line, the 26-week interim read, the graduated-market universe rule, both controls, and the capital-view definitions (20 slots, tie order, 15 random orders, buy-and-hold construction).
+
+**Chosen after seeing results.** The ladder, its +10% launch and 5-point steps, and the 63-session deadline were picked on 2026-11-04 after replays of the same two years of closes (today's buy tier painted back, no gates). Alternatives tried and not chosen: a 20-session high, a 5% trailing exit, a 5-session-low fade, a 63-session hold, price stops at −15%, staged loser sales, time stops at 30 and 63 sessions on the draft exit, deadlines of 20 and 40 sessions, sales at breakeven after the deadline, staged entries, and a checkpoint continuation model. Those replays are why the owner chose this exit. They are not evidence for it. Only the forward book can be, and the paired `draft_v0_exit` column is there so the forward book can also show if the choice was wrong.
 
 **No parameter search on this id.** A search was considered and is not registered. The usual holdout would be the most recent six months of entries. The point-in-time value set only starts on 2026-08-02, and the charts used here end on 2026-10-30. That is about thirteen weeks. Six months of entries do not exist, so there is nothing to hold out. Splitting those thirteen weeks in half after seeing the scores is not a holdout.
 
@@ -427,14 +476,14 @@ Short brief for the implementer. Still observe-only. Still no live writes.
 |---|---|
 | `docs/data/strategy_book_registration.json` | Seal copy of this document plus the signature note. |
 | `docs/data/strategy_book_replay.json` | The three archive results, the alternative column, and the buy-on-signal control. |
-| `docs/data/strategy_book_observe.json` | Forward episodes, boards (overall, by market, both controls, capital view), disposition, change markers. |
+| `docs/data/strategy_book_observe.json` | Forward episodes with both comparison exits, boards (overall, launch, by market, paired exits, both controls, capital view), the 26-week interim read, disposition, change markers. |
 | `docs/data/strategy_book_gate_log.jsonl` | Append-only verdicts the forward job used. |
 
-**Ops-monitor.** `check_strategy_book_observe` inside `collect_ops_findings`, after the decline check and the sector check. `auto_fixable` false. Findings: refreshed (info), failed (warn), thickness gate ready for review (info). A row in [`ops-monitor.md`](ops-monitor.md) points here. The refresh finding names counts and the first few tickers. It does not spray rememo or ingest.
+**Ops-monitor.** `check_strategy_book_observe` inside `collect_ops_findings`, after the decline check and the sector check. `auto_fixable` false. Findings: refreshed (info), failed (warn), 26-week interim read published (info, once), thickness gate ready for review (info). A row in [`ops-monitor.md`](ops-monitor.md) points here. The refresh finding names counts and the first few tickers. It does not spray rememo or ingest.
 
-**Dashboard.** An Analysis → Observe strip on the N206 pattern, hash `#analysis/observe/strategy-book`, reading the forward store. A compact queue-health line for phase span, closed count, and freshness. No strand A lifecycle writes. No promote button.
+**Dashboard.** An Analysis → Observe strip on the N206 pattern, hash `#analysis/observe/strategy-book`, reading the forward store. A compact queue-health line for phase span, mature count, and freshness. No strand A lifecycle writes. No promote button.
 
-**Tests.** Entry fires only on RSI below 35 and a 10-session low. A buy-tier name with a high RSI does not enter. Leaving the buy tier does not exit. An 8% drop classifies a hold and does not sell. Two `avoid` rows sell; one does not. `insufficient_data` blocks entry and does not, by itself, break a hold mid-way. A gap over 5 days does not fill. Fair-cost math matches `episode_return` on a known pair. Archive output keeps the three result keys separate. A thinned chart is refused. Each episode uses its own market's cost row. A library name in a market that is not graduated does not enter. A library run applies only to its own market. The buy-on-signal control opens on a newly eligible name, ignores price timing, and closes at 63 sessions or after 2 ineligible runs. The gate count caps at 6 per entry week while the medians use every closed episode. `single_market_dependence` fires on a constructed case. Capital-days return matches a hand-computed pair. The reference slot book skips a signal when all 20 slots are full and never changes an episode's return. The buy-and-hold reference adds a newly eligible name at an equal stake.
+**Tests.** Entry fires only on RSI below 35 and a 10-session low. A buy-tier name with a high RSI does not enter. Leaving the buy tier does not exit. A close at +10% launches; the floor is +5%, then rises with each checkpoint and never falls. A close at or below the floor sells at the next close, and a gap fill under the floor is scored as filled. An episode that has not launched sells at session index 63 whatever the price; one that launched on session 62 does not. Session index 252 sells. An 8% drop takes the recovery label and does not sell. Both comparison exits run on every primary entry and never change the primary's entries, cooldown or recovery share; `draft_v0_exit` matches the draft rules on a constructed series. Two `avoid` rows sell; one does not. `insufficient_data` blocks entry and does not, by itself, break a hold mid-way. The decision median counts only mature episodes and values an open launched one at its floor. The interim read's standard error uses entry-week averages. A gap over 5 days does not fill. Fair-cost math matches `episode_return` on a known pair. Archive output keeps the three result keys separate. A thinned chart is refused. Each episode uses its own market's cost row. A library name in a market that is not graduated does not enter. A library run applies only to its own market. The buy-on-signal control opens on a newly eligible name, ignores price timing, and closes at 63 sessions or after 2 ineligible runs. The gate count caps at 6 per entry week while the medians use every mature episode. `single_market_dependence` fires on a constructed case. Capital-days return matches a hand-computed pair. The reference slot book skips a signal when all 20 slots are full and never changes an episode's return. The buy-and-hold reference adds a newly eligible name at an equal stake.
 
 **Do not reuse these as the rule.** They conflict with the strategy spec, the chart files, or both.
 
@@ -450,25 +499,27 @@ Short brief for the implementer. Still observe-only. Still no live writes.
 | `price_charts._downsample` | Will thin series past about 559 bars. | A thinned tape silently changes RSI(14). Refuse it. |
 | Live paper books | Exit on rank, size with weights, charge 3% stress, and can prefer `adjusted_signal`. | They remain controls. This book is a cold start. N249 records that live exit as leaving the top-N target set after 2 screens. |
 | L652 `buy_support_bounce` | Fires when price vs SMA200 is between −12% and +3% and timing score is non-negative, or on a technical cite. Stub in `parallel_timing_lenses.py`. | That is "near the 200-day average," not a 10-session closing low. The lens keeps its own store. It is not this entry. |
-| L652 `sell_target_reached` | Maps a target exit, or any return at or above 15%. | A fixed 15% band replaces the short-term high. |
-| L652 `sell_tech_break` | Fires when price vs SMA200 is −8% or worse. | That sells a drop. Part 6 holds the drop. The 8% band in this book only changes the label to recovery hold. |
+| L652 `sell_target_reached` | Maps a target exit, or any return at or above 15%. | A single fixed band sells at the target. The ladder keeps the position past each checkpoint and sells only when the ratcheted floor breaks. |
+| L652 `sell_tech_break` | Fires when price vs SMA200 is −8% or worse. | That sells a drop. Part 6 holds the drop until the fail-to-launch deadline. The 8% band in this book only sets the recovery label. |
 | L652 `sell_mechanical_leave` | Records a leave-buy-tier close. | Same family as the section 8 control. It is not this book's exit. |
 | L541 hold-buffer twin | A longer confirm before the rank exit, on a cold-start fair-cost twin. | A longer wait before a rank sale. This book does not rank-sell. |
 
 ## 13. Open questions
 
-Seven decisions. Each default is what this draft seals if the signature note is silent.
+Eight decisions. Each default is what this draft seals if the signature note is silent.
 
-1. **Entry and exit window.** Default: 10 chart sessions for the low and the high. The trade plan's 20-day figure is a limit level, and stacking it on RSI below 35 would make entries rarer. At signature the owner may set 20 once. After a score store exists, 20 is a new registration. If 20 is chosen, also drop the 15-session hold trigger (question 3): a replay showed that with 20 sessions and the 15-session trigger, most episodes become recovery holds before a 20-session high is possible and then exit near the entry price.
+1. **Entry window.** Default: 10 chart sessions for the low. The trade plan's 20-day figure is a limit level, and stacking it on RSI below 35 would make entries rarer. At signature the owner may set 20 once. After a score store exists, 20 is a new registration. Under the amended exit the window no longer sets the exit; the 10-session high survives only inside `draft_v0_exit`, which stays as drafted whatever is chosen here.
 
 2. **Which signal is the value set.** Default: raw `signal` in `{buy, strong_buy}`. The owner's part 1 names that value set. `adjusted_signal` is stored and does not gate. Thesis-break `avoid` reads the same raw field, so entry and exit cannot diverge. At signature the owner may switch both reads to `adjusted_signal` once. Switching only one of them is not an option.
 
-3. **What starts a recovery hold.** Default: either an 8% drop under the fill or 15 chart sessions after the fill with no exit. At signature the owner may drop the time trigger and keep only the 8% drop. A price stop is not one of the choices.
+3. **What sets the recovery label.** Default on the primary: an 8% drop under the fill before launch. The label sells nothing; it feeds the recovery board and the recovery-hold share. `draft_v0_exit` keeps the draft's 8% or 15-session trigger. A price stop is not one of the choices.
 
-4. **Fourth review.** Default: reviews 1–3 roll 63 sessions when the thesis still stands; review 4 sells at the next close. A human decision on every review would leave episodes open until someone acts, and the thickness gate would wait on that. At signature the owner may replace review 4 with a human hold. The first three reviews stay mechanical either way.
+4. **Time cap.** Default: the primary sells any episode still open at session index 252, and the comparison exits sell at the fourth review, as drafted. A human decision would leave episodes open until someone acts, and the thickness gate would wait on that. At signature the owner may replace the 252-session cap with a human hold. Reviews at 63, 126 and 189 stay mechanical either way.
 
-5. **Recovery-hold cap.** Default: block new entries at 40% of open episodes, once 5 episodes are open, and publish the blocked count. Report-only would describe crowding and still allow it. At signature the owner may switch the cap to report-only.
+5. **Recovery-hold cap.** Default under the amended exit: report-only. The 40% share is drawn on the board and `cap_would_block` counts the days it was reached. The fail-to-launch deadline already ends every trade that has not launched within 63 sessions. At signature the owner may switch the cap to block new entries at 40% of open episodes, once 5 are open. That rule was not in the exit replay.
 
 6. **When the forward book starts, and on which markets.** Default: start the forward book only after the Phase 1 signature, on the multi-market universe of section 2. FTSE names can enter from the start; library names enter once plan steps 1.8 and 1.9 land. The archive rehearsal of the price rules may run as soon as this registration is signed. It still does not use today's gate verdicts as a pass. At signature the owner may instead name a fixed list of markets once.
 
 7. **Launch-queue position.** Default: head of the launch queue at signature, with the narrow data-deepen scope in section 11 (filing bodies and memo recency on universe names that already pass parts 1 and 2), still behind live holdings and the running units. At signature the owner may keep the book as a waiter instead; the library side then stays thin until memos refresh on their own schedule.
+
+8. **Fail-to-launch deadline.** Default: 63 chart sessions, selling at the next close whatever the price. It bounds part 6 ("hold for recovery while the business case stands") at about three months for a trade that never reaches +10%; in the replay about three quarters of these sales were losses, with a median near −6%. The replay found earlier deadlines (20 or 40 sessions) worse. At signature the owner may instead set no deadline. The primary then follows the `ladder_no_deadline` rules (the draft's review cap ends unlaunched trades after about a year), and that column is dropped because it would duplicate the primary. `draft_v0_exit` stays either way.

@@ -6,8 +6,10 @@ toward an autonomous system that runs the owner's
 Written 2026-11-03 after the autonomy readiness review.
 
 Strategy in one line: buy cheap stocks with no operating decline and no
-sector-wide trouble at short-term lows, sell at short-term highs, and hold
-mis-timed entries for recovery while the business case still stands.
+sector-wide trouble at short-term lows, let a rise run behind a ratcheting
+profit floor, and hold mis-timed entries for recovery up to a fixed wait while
+the business case still stands (exit amended 2026-11-04; see the
+[registration](strategy-book-registration.md#4-exit)).
 
 ## Principles
 
