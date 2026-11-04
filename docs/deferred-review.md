@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-04T14:28:41+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-04T16:22:02+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -412,6 +412,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | L669 | **Capital-path twin for the strategy book (float, skim, pacing, funding priority)** | Register a capital-path twin of the strategy book once its own capital view has forward evidence: a cash float sized for clustered signals, skimming profits into a reserve, pacing entries during sell-offs, and a rule for which signals get funded when signals exceed capital. Each is a twin, not a v0 edit. Replay of seven policies on the price-rule trades (lookahead buy tier, no gates) moved FTSE from 5% to 8% a year against 16% for buy-and-hold; across markets the book was nearly always fully invested, so funding priority matters more than float size. | Strategy book thickness gate met and the capital view shows the reference slot book behind the buy-and-hold reference, or idle cash below 10% for most of the forward span (signals oversubscribed). |
 | L670 | **Checkpoint continuation model for strategy book exits (wait/sell at +10/+15/+20%)** | Owner idea: at each profit checkpoint, estimate the chance of a further rise and wait or sell, with a ratcheting floor salvaging the lower checkpoint. 2026-11-04 replay: after +10% the next checkpoint came before the floor in 55-67% of cases at every level, so a ratchet ladder with no model already waits; a trained momentum bucket model never said sell out of sample (buckets 51-77%). Revisit with richer features (channel position, market regime, news) as a version-review challenger, not before. | Strategy book has at least 200 closed episodes that reached +10% with gates in force, and a version review is open |
 | L671 | **Volatility-scaled checkpoints for the strategy-book ladder** | Scale the checkpoint ladder's launch level and floors by each name's 60-day volatility, since the selection replay showed high-volatility dips launch more often; candidate bench challenger, not a rule change. | First strategy-book version review, once the bench has a free slot |
+| L672 | **research_adjusted bench filter for the strategy book** | Bench challenger keeping only entries whose adjusted_signal is buy-tier on the decision date, with the selection board splitting names cut by a caution memo from names cut by the cash-flow-basis check; tests whether the research and FCF overlays pick better winners. Owner kept raw signal at signature (question 2). | First strategy-book version review with a free bench slot |
 
 ### Universe & data
 
