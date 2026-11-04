@@ -14570,6 +14570,24 @@ def test_parked_source_hunter_cve_to_tsx60_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_cve_to_sec_bodies_pass_ir_title_gate_via_issuer_alias():
+    """Run-together SEC slugs carry no issuer token; the Cenovus alias must match the body."""
+    from value_investor.research.filings import (
+        _ESEF_ENTITY_SEARCH_ALIASES,
+        _ir_body_title_tokens_match,
+    )
+
+    assert "Cenovus" in _ESEF_ENTITY_SEARCH_ALIASES["CVE"]
+    row = {
+        "id": "x",
+        "url": "https://www.sec.gov/Archives/edgar/data/1475260/000147526026000008/"
+        "a2025annualinformationform.htm",
+    }
+    body = "ANNUAL INFORMATION FORM Cenovus Energy Inc. For the year ended December 31, 2025"
+    assert _ir_body_title_tokens_match(row, body, ticker="CVE.TO")
+    assert not _ir_body_title_tokens_match(row, "Unrelated issuer annual form", ticker="CVE.TO")
+
+
 def test_parked_source_hunter_skip_tri_to_tsx60():
     """eng-20260914-01: TRI.TO leftover IWB is SEC 6-K cover HTML, not missing 40-F/interim."""
     assert "TRI.TO" in PARKED_SOURCE_HUNTER_SKIP

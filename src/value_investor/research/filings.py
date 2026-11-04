@@ -1375,6 +1375,9 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     # tsx60 ABX.TO — d833573* / d67611* SEC slugs lack issuer tokens for IR title gate.
     "ABX": ("Barrick", "Barrick Gold", "Barrick Gold Corporation"),
     "GOLD": ("Barrick", "Barrick Gold", "Barrick Gold Corporation"),
+    # tsx60 CVE.TO — a2025annualinformationform / q32026managementsdiscussio SEC slugs
+    # are run-together words, so the IR title gate needs the issuer name.
+    "CVE": ("Cenovus", "Cenovus Energy", "Cenovus Energy Inc."),
     "DNL": ("Dyno Nobel", "Incitec Pivot"),
     "YAL": ("Yancoal", "Yancoal Australia"),
     # asx200 FMG.AX Markit/ASX allowlist PDFs — opaque documentKey URLs need issuer tokens
