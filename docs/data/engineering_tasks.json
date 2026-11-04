@@ -12575,9 +12575,9 @@
       ],
       "auto_merge": false,
       "status": "parked",
-      "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_policy": "preflight_clash",
-      "parked_at": "2026-11-04T12:31:53.095607+00:00"
+      "parked_reason": "automation waste reburn — 7 engineering-agent failure(s) in 6h without an in-flight PR (PM stop_automation_waste)",
+      "parked_policy": "reburn_loop",
+      "parked_at": "2026-11-04T12:32:13.381072+00:00"
     },
     {
       "id": "eng-20261103-09",
@@ -16093,20 +16093,20 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-11-04T07:52:38.083514+00:00",
-    "pause_active": false,
-    "automation_waste_active": false,
+    "evaluated_at": "2026-11-04T12:32:11.419903+00:00",
+    "pause_active": true,
+    "automation_waste_active": true,
     "automation_waste_signals": [
       {
         "kind": "eng_agent_reburn",
         "title": "Automation waste: engineering agent reburn",
         "severity": "fail",
-        "summary": "6 engineering-agent failure(s) in 6h while open task(s) remain (eng-20261103-08) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
+        "summary": "7 engineering-agent failure(s) in 6h while open task(s) remain (eng-20261104-01) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
         "workflow": "engineering-agent.yml",
         "task_ids": [
-          "eng-20261103-08"
+          "eng-20261104-01"
         ],
-        "failure_count": 6,
+        "failure_count": 7,
         "window_hours": 6.0,
         "auto_remediable": true,
         "evidence": {
@@ -16117,7 +16117,7 @@
       }
     ],
     "automation_waste_parked_task_ids": [
-      "eng-20261103-08"
+      "eng-20261104-01"
     ],
     "automation_waste_cleared_at": "2026-11-04T07:52:38.083514+00:00",
     "last_change": {
@@ -16149,8 +16149,11 @@
         "last_head_sha": null
       }
     },
-    "last_action_at": "2026-11-04T07:52:38.083514+00:00",
-    "resumed_at": "2026-11-04T07:52:38.083514+00:00"
+    "last_action_at": "2026-11-04T12:32:11.419903+00:00",
+    "pause_reasons": [
+      "automation_waste"
+    ],
+    "pause_started_at": "2026-11-04T12:32:11.419903+00:00"
   },
   "queue_clearing": {
     "attention_parked_count": 1,
