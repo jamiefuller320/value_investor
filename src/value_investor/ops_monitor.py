@@ -3089,6 +3089,29 @@ def check_t212_catalogue_freshness(
     ]
 
 
+def check_chart_high_low_coverage(*, chart_dir: Path | None = None) -> list[OpsFinding]:
+    """Observe-only: how many charts store highs/lows for channel columns (N254)."""
+    from value_investor.channel_diagnostics import (
+        DEFAULT_CHARTS_DIR,
+        chart_high_low_coverage,
+        ops_findings_from_chart_high_low_coverage,
+    )
+
+    root = Path(chart_dir) if chart_dir is not None else Path(DEFAULT_CHARTS_DIR)
+    if not root.exists():
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+        for finding in ops_findings_from_chart_high_low_coverage(chart_high_low_coverage(root))
+    ]
+
+
 def check_sec_companyfacts_coverage(
     *,
     library_root: Path | None = None,
@@ -4714,6 +4737,7 @@ def collect_ops_findings(
     findings.extend(check_amf_direct_coverage())
     findings.extend(check_cision_direct_coverage())
     findings.extend(check_t212_catalogue_freshness())
+    findings.extend(check_chart_high_low_coverage())
     findings.extend(check_lifecycle_maturity_trajectory())
     findings.extend(check_ui_state_reconciliation())
     findings.extend(check_gha_failure_triage())

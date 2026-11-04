@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-04T20:22:00+00:00",
+  "updated_at": "2026-11-04T21:15:25+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16470,9 +16470,11 @@
         "channel",
         "report-only"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-01a1a238-a5f9-7c8d-a4b5-41187bce567c",
-      "added_at": "2026-11-04T08:52:32+00:00"
+      "added_at": "2026-11-04T08:52:32+00:00",
+      "updated_at": "2026-11-04T21:15:25+00:00",
+      "status_note": "Folded into the strategy-book registration section 8 as report-only channel columns (channel_v0, src/value_investor/channel_diagnostics.py); charts now store highs and lows; computed by steps 2.2, 2.3 and 2.5."
     },
     {
       "id": "L668",
@@ -16480,7 +16482,7 @@
       "section": "learning",
       "title": "Channel-filtered strategy book twin (new registration)",
       "summary": "A twin of the signed strategy book that adds a 6-month channel rule with the 12-month pattern as context, e.g. take short-term lows only at or below the lower band of the 6-month channel, or skip lows inside a falling 6-month channel. Prefer a channel definition other traders also watch (owner hypothesis: widely used signals gain influence because they are used). Must be a new registration_id written before its own scores are read, never an edit of v0. Price channels only filter entries or label context; a falling price still never sells (strategy part 6).",
-      "revisit_when": "Forward strategy book has at least 48 closed episodes over 8 weeks and the report-only 6-month channel columns show a stable difference between buckets (the 12-month view is context, not a second hurdle). Needs chart history beyond the ~559-bar downsample cliff fixed in step 2.3.",
+      "revisit_when": "Forward strategy book has at least 48 closed episodes over 8 weeks and the report-only 6-month channel columns show a stable difference between buckets (the 12-month view is context, not a second hurdle). The 2-year chart window covers the 12-month channel; use the frozen channel_v0 columns (registration section 8), with highs and lows.",
       "tags": [
         "strategy-book",
         "technical",
