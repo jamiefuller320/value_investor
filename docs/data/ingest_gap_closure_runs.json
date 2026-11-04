@@ -24824,8 +24824,117 @@
       },
       "trigger": "stall_slowdown",
       "engineering_task_id": "eng-20261104-03"
+    },
+    {
+      "id": "igc-20261104-02",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "TRI",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "TRI"
+        ],
+        "market_id": "nasdaq100",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261104-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-11-04T15:56:07.335389+00:00",
+      "completed_at": "2026-11-04T15:57:33.268996+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "TRI"
+        ],
+        "results": [
+          {
+            "ticker": "TRI",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 103,
+              "filings_with_body": 95,
+              "indexed_without_body": 8
+            },
+            "after": {
+              "filings_total": 103,
+              "filings_with_body": 95,
+              "indexed_without_body": 8
+            },
+            "improved": false,
+            "regime": "sec_edgar",
+            "filings_summary": {
+              "total": 100,
+              "annual": 5,
+              "interim": 47,
+              "trading_update": 8,
+              "other": 40,
+              "with_body": 92,
+              "period_coverage": {
+                "annual": {
+                  "total": 5,
+                  "with_body": 5
+                },
+                "interim": {
+                  "total": 47,
+                  "with_body": 39
+                },
+                "trading_update": {
+                  "total": 8,
+                  "with_body": 8
+                },
+                "other": {
+                  "total": 31,
+                  "with_body": 31
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 95,
+              "with_body_after": 95,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "TRI",
+            "with_body_before": 95,
+            "with_body_after": 95,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-11-04T07:32:57.515043+00:00",
+  "updated_at": "2026-11-04T15:57:33.269009+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
