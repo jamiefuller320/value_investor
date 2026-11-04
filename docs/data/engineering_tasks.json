@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-11-03T22:10:57.808727+00:00",
+  "compiled_at": "2026-11-04T02:37:28.812138+00:00",
   "run_at": null,
-  "task_count": 245,
+  "task_count": 247,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -3354,6 +3354,182 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
+      "id": "eng-20261104-02",
+      "area": "ingest",
+      "title": "Close library ingest gaps for sti / U14.SI (chain 2/3: 0/0 improved, run igc-20261026-02)",
+      "summary": "Ingest gap-closure run igc-20261026-02 (chain root igc-20261026-02, round 2) targeted U14.SI with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20261026-02",
+        "trial_id": "igc-20261026-02",
+        "chain_root_id": "igc-20261026-02",
+        "chain_round": 2,
+        "tickers": [
+          "U14.SI"
+        ],
+        "ticker": "U14.SI",
+        "market_id": "sti",
+        "library_market": "sti",
+        "universe": "library",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": true,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "U14.SI"
+          ],
+          "market_id": "sti",
+          "universe": "library",
+          "critical_path_blocker": "indexed_without_body"
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "U14.SI"
+          ],
+          "market_id": "sti",
+          "universe": "library",
+          "critical_path_blocker": "indexed_without_body"
+        },
+        "compile_reason": "gaps_remain_without_refetch"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for U14.SI",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "cancelled",
+      "parked_reason": "preflight blocked PR open — preflight failed",
+      "parked_policy": "duplicate",
+      "parked_at": "2026-11-04T08:11:08.499945+00:00",
+      "duplicate_of": "eng-20261102-02",
+      "cancelled_at": "2026-11-04T08:18:40.771805+00:00",
+      "cancelled_reason": "tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20261102-02",
+      "cancelled_policy": "superseded_gap_closure"
+    },
+    {
+      "id": "eng-20261023-04",
+      "area": "ingest",
+      "title": "Close library ingest gaps for ftse_mib / TEN.MI (chain 2/3: 0/0 improved, run igc-20261005-01)",
+      "summary": "Ingest gap-closure run igc-20261005-01 (chain root igc-20261005-01, round 2) targeted TEN.MI with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20261005-01",
+        "trial_id": "igc-20261005-01",
+        "chain_root_id": "igc-20261005-01",
+        "chain_round": 2,
+        "tickers": [
+          "TEN.MI"
+        ],
+        "ticker": "TEN.MI",
+        "market_id": "ftse_mib",
+        "library_market": "ftse_mib",
+        "universe": "library",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": true,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "TEN.MI"
+          ],
+          "market_id": "ftse_mib",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "TEN.MI"
+          ],
+          "market_id": "ftse_mib",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
+        },
+        "compile_reason": "gaps_remain_without_refetch"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for TEN.MI",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "cancelled",
+      "parked_reason": "preflight blocked PR open — preflight failed",
+      "parked_at": "2026-10-23T08:08:31.416812+00:00",
+      "parked_policy": "duplicate",
+      "duplicate_of": "eng-20261010-02",
+      "cancelled_reason": "tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20261010-02",
+      "cancelled_at": "2026-10-23T08:18:26.756856+00:00",
+      "cancelled_policy": "superseded_gap_closure"
+    },
+    {
       "id": "eng-20261103-08",
       "area": "ingest",
       "title": "Seed IR allowlist for unmeasured/zero-body BGEO.L — empty allowlist after 0-improve pin (igc-20261103-07)",
@@ -3428,10 +3604,13 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "parked",
-      "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_policy": "preflight_clash",
-      "parked_at": "2026-11-03T23:30:47.834217+00:00"
+      "status": "cancelled",
+      "parked_reason": "automation waste reburn — 6 engineering-agent failure(s) in 6h without an in-flight PR (PM stop_automation_waste)",
+      "parked_policy": "reburn_loop",
+      "parked_at": "2026-11-04T02:36:28.764768+00:00",
+      "cancelled_at": "2026-11-04T09:19:13.831949+00:00",
+      "cancelled_reason": "tier-1 housekeep: gap closed — ticker no longer has outstanding material gaps",
+      "cancelled_policy": "resolved_gap_closure"
     },
     {
       "id": "eng-20261103-07",
@@ -3604,94 +3783,6 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1256",
       "pr_number": 1256,
       "merged_at": "2026-11-03T07:48:16.673997+00:00"
-    },
-    {
-      "id": "eng-20261023-04",
-      "area": "ingest",
-      "title": "Close library ingest gaps for ftse_mib / TEN.MI (chain 2/3: 0/0 improved, run igc-20261005-01)",
-      "summary": "Ingest gap-closure run igc-20261005-01 (chain root igc-20261005-01, round 2) targeted TEN.MI with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
-      "priority": "high",
-      "priority_score": 88.0,
-      "source": "ingest_gap_closure",
-      "evidence": {
-        "gap_closure_run_id": "igc-20261005-01",
-        "trial_id": "igc-20261005-01",
-        "chain_root_id": "igc-20261005-01",
-        "chain_round": 2,
-        "tickers": [
-          "TEN.MI"
-        ],
-        "ticker": "TEN.MI",
-        "market_id": "ftse_mib",
-        "library_market": "ftse_mib",
-        "universe": "library",
-        "rerun_ingest_gap_closure": true,
-        "rerun_ingest_trial": true,
-        "rerun_library_ingest_loop": true,
-        "refetch_attempted": 0,
-        "refetch_fetched": 0,
-        "gap_closure_params": {
-          "max_targets": 1,
-          "max_bodies": 40,
-          "max_runtime_seconds": 2100.0,
-          "require_outstanding_gaps": true,
-          "intensive_gap_closure": true,
-          "pin_tickers": [
-            "TEN.MI"
-          ],
-          "market_id": "ftse_mib",
-          "universe": "library",
-          "critical_path_blocker": "unmeasured"
-        },
-        "trial_params": {
-          "max_targets": 1,
-          "max_bodies": 40,
-          "max_runtime_seconds": 2100.0,
-          "require_outstanding_gaps": true,
-          "intensive_gap_closure": true,
-          "pin_tickers": [
-            "TEN.MI"
-          ],
-          "market_id": "ftse_mib",
-          "universe": "library",
-          "critical_path_blocker": "unmeasured"
-        },
-        "compile_reason": "gaps_remain_without_refetch"
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for TEN.MI",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "cancelled",
-      "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_at": "2026-10-23T08:08:31.416812+00:00",
-      "parked_policy": "duplicate",
-      "duplicate_of": "eng-20261010-02",
-      "cancelled_reason": "tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20261010-02",
-      "cancelled_at": "2026-10-23T08:18:26.756856+00:00",
-      "cancelled_policy": "superseded_gap_closure"
     },
     {
       "id": "eng-20261102-01",
@@ -12439,6 +12530,56 @@
       "merged_at": "2026-10-02T10:55:17.370432+00:00"
     },
     {
+      "id": "eng-20261104-01",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked aim leftover PAF.L",
+      "summary": "Library market aim (AIM (liquid Wikipedia slice)) parked PAF.L after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equ",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "aim",
+        "library_market": "aim",
+        "hunter_market_id": "aim",
+        "hunter_ticker": "PAF.L",
+        "parked_reason": "unfetchable_iwb",
+        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for PAF.L only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "parked",
+      "parked_reason": "automation waste reburn — 7 engineering-agent failure(s) in 6h without an in-flight PR (PM stop_automation_waste)",
+      "parked_policy": "reburn_loop",
+      "parked_at": "2026-11-04T12:32:13.381072+00:00"
+    },
+    {
       "id": "eng-20261103-09",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked asx200 leftover SMR.AX",
@@ -15949,18 +16090,18 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-11-03T22:28:38.008984+00:00",
-    "pause_active": false,
-    "automation_waste_active": false,
+    "evaluated_at": "2026-11-04T12:32:11.419903+00:00",
+    "pause_active": true,
+    "automation_waste_active": true,
     "automation_waste_signals": [
       {
         "kind": "eng_agent_reburn",
         "title": "Automation waste: engineering agent reburn",
         "severity": "fail",
-        "summary": "7 engineering-agent failure(s) in 6h while open task(s) remain (eng-20261103-07) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
+        "summary": "7 engineering-agent failure(s) in 6h while open task(s) remain (eng-20261104-01) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
         "workflow": "engineering-agent.yml",
         "task_ids": [
-          "eng-20261103-07"
+          "eng-20261104-01"
         ],
         "failure_count": 7,
         "window_hours": 6.0,
@@ -15973,9 +16114,9 @@
       }
     ],
     "automation_waste_parked_task_ids": [
-      "eng-20261103-07"
+      "eng-20261104-01"
     ],
-    "automation_waste_cleared_at": "2026-11-03T22:28:38.008984+00:00",
+    "automation_waste_cleared_at": "2026-11-04T07:52:38.083514+00:00",
     "last_change": {
       "resumed": true
     },
@@ -16005,12 +16146,15 @@
         "last_head_sha": null
       }
     },
-    "last_action_at": "2026-11-03T22:28:38.008984+00:00",
-    "resumed_at": "2026-11-03T22:28:38.008984+00:00"
+    "last_action_at": "2026-11-04T12:32:11.419903+00:00",
+    "pause_reasons": [
+      "automation_waste"
+    ],
+    "pause_started_at": "2026-11-04T12:32:11.419903+00:00"
   },
   "queue_clearing": {
     "attention_parked_count": 1,
-    "evaluated_at": "2026-11-03T23:55:28.533789+00:00",
+    "evaluated_at": "2026-11-04T13:20:50.862214+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -16020,15 +16164,15 @@
   },
   "queue_block_notify": {
     "last_fingerprint": "traffic_pause|project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation",
-    "last_sent_at": "2026-11-03T21:44:04.186096+00:00",
+    "last_sent_at": "2026-11-04T12:48:45.054955+00:00",
     "cooldown_hours": 12.0
   },
-  "micro_compile_source": "parked_source_hunter",
-  "library_market_id": "asx200",
-  "hunter_ticker": "SMR.AX",
-  "source_gap_closure_run_id": "igc-20261103-07",
-  "source_trial_id": "igc-20261103-07",
-  "source_chain_root_id": "igc-20261103-07",
+  "micro_compile_source": "ingest_gap_closure",
+  "library_market_id": "aim",
+  "hunter_ticker": "PAF.L",
+  "source_gap_closure_run_id": "igc-20261026-02",
+  "source_trial_id": "igc-20261026-02",
+  "source_chain_root_id": "igc-20261026-02",
   "ingest_health_before": {
     "snapshot_at": "2026-11-01T09:06:30.791658+00:00",
     "buy_tier_count": 67,

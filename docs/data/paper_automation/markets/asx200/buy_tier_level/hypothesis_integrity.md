@@ -1,16 +1,19 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-03T00:46:53.648084+00:00
+Track: `buy_tier_level` · updated 2026-11-04T00:48:10.608063+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **12** / 29 (41% count, 40% NAV)
+- Losers: **11** / 29 (38% count, 36% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 - Selection feedback:
-  - dividend fails more often among losers (67% vs 12%)
+  - dividend fails more often among losers (64% vs 17%)
 
 ## Holding reviews
+
+### SMR.AX — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### ZIM.AX — intact / watch_review (-22.1%)
 - deep drawdown (-22.1%) — re-check facts; thesis still intact
@@ -87,12 +90,6 @@ Track: `buy_tier_level` · updated 2026-11-03T00:46:53.648084+00:00
 - cheapness family still passes
 - data_quality 0.90
 - conviction 81%
-
-### SMR.AX — weakening / watch_review (-5.7%)
-- research verdict caution
-- conviction 22% below intact floor
-- still buy
-- cheapness family still passes
 
 ### FMG.AX — intact / hold_tolerate (-5.0%)
 - still strong_buy

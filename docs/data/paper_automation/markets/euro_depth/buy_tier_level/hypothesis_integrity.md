@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-03T08:47:14.679047+00:00
+Track: `buy_tier_level` · updated 2026-11-04T08:46:57.094425+00:00
 
 ## Portfolio loser feedback
 
@@ -147,6 +147,13 @@ Track: `buy_tier_level` · updated 2026-11-03T08:47:14.679047+00:00
 - still buy
 - cheapness family still passes
 
+### SHELL.AS — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 40%
+
 ### OIZ.IR — intact / hold_tolerate (+0.2%)
 - still strong_buy
 - research accumulate
@@ -270,13 +277,6 @@ Track: `buy_tier_level` · updated 2026-11-03T08:47:14.679047+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 66%
-
-### PHIA.AS — intact / hold_tolerate (+11.3%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 77%
 
 ### ERIC-B.ST — intact / hold_tolerate (+11.7%)
 - still strong_buy

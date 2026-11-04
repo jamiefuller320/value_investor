@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-03T08:47:14.712235+00:00",
+  "generated_at": "2026-11-04T08:46:57.101708+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 30,
+    "closed_total": 31,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 31,
+    "open_with_thesis": 30,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 18,
-        "recovery_rate": 0.8889,
-        "sold_underwater_rate": 0.1111,
-        "mean_peak_unrealized_pct": 0.0544,
-        "mean_trough_unrealized_pct": -0.021,
+        "closed_count": 19,
+        "recovery_rate": 0.8947,
+        "sold_underwater_rate": 0.1053,
+        "mean_peak_unrealized_pct": 0.0576,
+        "mean_trough_unrealized_pct": -0.0214,
         "outcome_labels": {
-          "recovered": 16,
+          "recovered": 17,
           "sold_underwater": 2
         }
       },
@@ -64,7 +64,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 30,
+    "hold_closed_with_thesis": 31,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -361,7 +361,7 @@
       "ticker": "PHIA.AS",
       "name": "Koninklijke Philips N.V.",
       "started_at": "2026-09-13T08:49:29.998772+02:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -411,9 +411,9 @@
       "peak_unrealized_pct": 0.1148,
       "trough_unrealized_pct": -0.0294,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-04T09:46:56.516136+01:00",
+      "linked_sell_trade_id": "812d74be-f0c3-4bf9-8c2a-4a534bb41e57"
     },
     {
       "episode_id": "buy_tier_level:AED.BR:2026-09-13T08:49:29.998772+02:00",
@@ -2383,6 +2383,14 @@
           "unrealized_pct": -0.0246,
           "peak_unrealized_pct": -0.0246,
           "trough_unrealized_pct": -0.0405
+        },
+        {
+          "scored_at": "2026-11-04T09:46:56.516136+01:00",
+          "days_after": 28,
+          "price": 6.86,
+          "unrealized_pct": -0.0087,
+          "peak_unrealized_pct": 0.0043,
+          "trough_unrealized_pct": -0.0405
         }
       ],
       "peak_unrealized_pct": 0.0043,
@@ -2435,6 +2443,14 @@
           "unrealized_pct": -0.0133,
           "peak_unrealized_pct": -0.0084,
           "trough_unrealized_pct": -0.0337
+        },
+        {
+          "scored_at": "2026-11-04T09:46:56.516136+01:00",
+          "days_after": 28,
+          "price": 80.6,
+          "unrealized_pct": -0.0289,
+          "peak_unrealized_pct": -0.0084,
+          "trough_unrealized_pct": -0.0687
         }
       ],
       "peak_unrealized_pct": -0.0084,
@@ -4750,6 +4766,13 @@
           "avg_sell_return": 0.0217,
           "avg_buy_return": 0.0197,
           "replacement_delta": -0.002
+        },
+        {
+          "scored_at": "2026-11-04T09:46:56.516136+01:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0612,
+          "avg_buy_return": 0.061,
+          "replacement_delta": -0.0003
         }
       ],
       "sell_returns_since_rotation": {
@@ -5620,6 +5643,58 @@
         "BAS.DE": 0.0,
         "KRX.IR": 0.0,
         "MT.AS": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-04T09:46:56.516136+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-04T09:46:56.516136+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0019,
+      "sells": [
+        {
+          "ticker": "PHIA.AS",
+          "price": 24.24,
+          "shares": 0.870037,
+          "gross": 21.09,
+          "cost": 0.04,
+          "avg_cost_at_exit": 21.78,
+          "realized_pct": 0.1129,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.1129
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "SHELL.AS",
+          "price": 48.68,
+          "shares": 0.431631,
+          "gross": 21.01,
+          "cost": 0.04
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "PHIA.AS": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "SHELL.AS": 0.0
       },
       "verdict": null,
       "closed_at": null
