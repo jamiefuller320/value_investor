@@ -1,6 +1,6 @@
 # Trading 212 coverage overlay
 
-Tradable north star for offline library markets.
+Tradable north star for library markets and the live FTSE 350 screen.
 
 - `catalogue/` — instruments dump + compact ISIN/shortName index (`ftse-library t212-catalogue`)
 - `policy.json` — suffix↔exchange hints + venue allowlist fallback
