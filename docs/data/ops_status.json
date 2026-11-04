@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-04T13:16:59.050264+00:00",
+  "run_at": "2026-11-04T15:45:41.078688+00:00",
   "overall": "fail",
   "findings": [
     {
@@ -15,7 +15,16 @@
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "2 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across euro_depth: euro_depth/WIE.VI (no_key_bodies, 493.28h since flip), euro_depth/UCB.BR (no_key_bodies, 253.28h since flip). Blocking: no_key_bodies=2.",
+      "summary": "2 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across euro_depth: euro_depth/WIE.VI (no_key_bodies, 495.76h since flip), euro_depth/UCB.BR (no_key_bodies, 255.76h since flip). Blocking: no_key_bodies=2.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "paper",
+      "title": "Price-only excess misstates track performance",
+      "summary": "Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: buy_tier_matched30_fair: published +0.8% vs total-return -0.4% (lifetime, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -24,7 +33,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Longer holds beat live exit buffer in replay",
-      "summary": "Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: buy_tier_matched30_fair: exit_confirm_screens 10 vs live 2 +2.6% over 12 passes (44 vs 76 trades; realised median hold 5.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.",
+      "summary": "Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: buy_tier_matched30_fair: exit_confirm_screens 10 vs live 2 +2.4% over 13 passes (44 vs 76 trades; realised median hold 5.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -132,7 +141,7 @@
       "severity": "info",
       "category": "research",
       "title": "Operating-decline gate refreshed (observe)",
-      "summary": "as_of 2026-11-04: 773 names — clear 549, declining 191, insufficient_data 33; FTSE buy-tier covered 62/65, flagged declining 8; interim EPS on 25 names, interim revenue on 26 names, latest revenue FY 2026:157, 2025:584: CNA.L (revenue_two_year_decline, operating_margin_drop, eps_decline_annual, fcf_sharp_fall); COST.L (revenue_decline, revenue_two_year_decline); FGP.L (revenue_decline); INCH.L (revenue_two_year_decline, eps_decline_annual); LRE.L (operating_margin_drop) (+3 more). Observe-only — influences_live false; no book, knob or signal writes.",
+      "summary": "as_of 2026-11-04: 773 names — clear 547, declining 193, insufficient_data 33; FTSE buy-tier covered 62/65, flagged declining 8; interim EPS on 68 names, interim revenue on 68 names, latest revenue FY 2026:157, 2025:584: CNA.L (revenue_two_year_decline, operating_margin_drop, eps_decline_annual, fcf_sharp_fall); COST.L (revenue_decline, revenue_two_year_decline); FGP.L (revenue_decline); INCH.L (revenue_two_year_decline, eps_decline_annual); LRE.L (operating_margin_drop) (+3 more). Observe-only — influences_live false; no book, knob or signal writes.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -240,7 +249,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Two-lot retention beats full exit in replay",
-      "summary": "buy_tier_level: core_kept beats full exit by +1.9% over 39 passes (2026-09-07 to 2026-11-03; core value £887.54, rank exits 25 vs full exit). Observe-only. Do not edit buy_tier_level. See docs/ops/two-lot-replay.md.",
+      "summary": "buy_tier_level: core_kept beats full exit by +1.8% over 40 passes (2026-09-07 to 2026-11-04; core value £896.31, rank exits 25 vs full exit). Observe-only. Do not edit buy_tier_level. See docs/ops/two-lot-replay.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -267,7 +276,7 @@
       "severity": "warn",
       "category": "research",
       "title": "Trading 212 catalogue stale",
-      "summary": "Catalogue age 105.24 days (fetched 2026-07-22T07:38:49.733883+00:00; limit 14d). Run t212-catalogue-refresh.yml (Monday 05:00 UTC when secrets are present) or ftse-library t212-catalogue && t212-overlay locally. If the workflow soft-skips, add TRADING212_API_KEY / TRADING212_API_SECRET. See docs/ops/t212-catalogue-refresh.md.",
+      "summary": "Catalogue age 105.34 days (fetched 2026-07-22T07:38:49.733883+00:00; limit 14d). Run t212-catalogue-refresh.yml (Monday 05:00 UTC when secrets are present) or ftse-library t212-catalogue && t212-overlay locally. If the workflow soft-skips, add TRADING212_API_KEY / TRADING212_API_SECRET. See docs/ops/t212-catalogue-refresh.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -283,21 +292,12 @@
     },
     {
       "severity": "warn",
-      "category": "paper",
-      "title": "Paper-auto last_run is pre-settle only",
-      "summary": "Committed last_run.json has gate.after_settle=false — orchestrator should re-dispatch a post-settle pass.",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "warn",
       "category": "workflows",
       "title": "Recent workflow failure: FTSE Ingest Loop",
       "summary": "1 unresolved failure(s) since last success (runs: 41811962213).",
       "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
+      "fixed": true,
+      "action_taken": "Recovery run in flight (#41855879474); suppressed from alert"
     },
     {
       "severity": "warn",
@@ -305,8 +305,8 @@
       "title": "Recent workflow failure: CI main nightly",
       "summary": "1 unresolved failure(s) since last success (runs: 41792815289).",
       "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
+      "fixed": true,
+      "action_taken": "Recovery run in flight (#41859602621); suppressed from alert"
     },
     {
       "severity": "fail",
@@ -314,8 +314,8 @@
       "title": "Workflow overdue: CI main nightly",
       "summary": "No successful run within 28h (last: 2026-11-03T07:31:17+00:00).",
       "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
+      "fixed": true,
+      "action_taken": "Recovery run in flight (#41859602621); suppressed from alert"
     },
     {
       "severity": "warn",
@@ -330,10 +330,10 @@
       "severity": "warn",
       "category": "workflows",
       "title": "Recent workflow failure: FTSE Ops Monitor",
-      "summary": "2 unresolved failure(s) since last success (runs: 41808217588, 41794500809).",
+      "summary": "3 unresolved failure(s) since last success (runs: 41836455811, 41808217588, 41794500809).",
       "auto_fixable": false,
       "fixed": true,
-      "action_taken": "Recovery run in flight (#41836455811); suppressed from alert"
+      "action_taken": "Recovery run in flight (#41860831625); suppressed from alert"
     },
     {
       "severity": "warn",
@@ -348,7 +348,7 @@
       "severity": "fail",
       "category": "engineering",
       "title": "Engineering agent sync failures",
-      "summary": "7 engineering-agent failure(s) in the last 6h while open tasks remain and no engineering PR is in flight.",
+      "summary": "3 engineering-agent failure(s) in the last 6h while open tasks remain and no engineering PR is in flight.",
       "auto_fixable": true,
       "fixed": false,
       "action_taken": null
@@ -357,7 +357,7 @@
       "severity": "fail",
       "category": "automation_waste",
       "title": "Automation waste: engineering agent reburn",
-      "summary": "7 engineering-agent failure(s) in 6h while open task(s) remain (eng-20261103-09) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
+      "summary": "3 engineering-agent failure(s) in 6h while open task(s) remain (eng-20261103-09) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
       "auto_fixable": true,
       "fixed": true,
       "action_taken": "signals=1; parked=eng-20261103-09; pause=True"
@@ -384,9 +384,7 @@
       "branch": null
     }
   ],
-  "drafted_task_ids": [
-    "eng-20261104-03"
-  ],
+  "drafted_task_ids": [],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
@@ -396,7 +394,7 @@
       "max_age_hours": 30,
       "last_success_at": "2026-11-04T09:03:59+00:00",
       "last_success_run_id": 41804383432,
-      "age_hours": 4.3,
+      "age_hours": 6.7,
       "stale": false,
       "recent_failures_24h": 1,
       "unresolved_failures_12h": 1
@@ -409,7 +407,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-11-04T13:12:02+00:00",
       "last_success_run_id": 41835922781,
-      "age_hours": 0.1,
+      "age_hours": 2.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -420,9 +418,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 3,
-      "last_success_at": "2026-11-04T12:43:06+00:00",
-      "last_success_run_id": 41831680254,
-      "age_hours": 0.6,
+      "last_success_at": "2026-11-04T14:15:36+00:00",
+      "last_success_run_id": 41845770338,
+      "age_hours": 1.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -433,9 +431,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-11-04T13:10:40+00:00",
-      "last_success_run_id": 41835719975,
-      "age_hours": 0.2,
+      "last_success_at": "2026-11-04T15:40:36+00:00",
+      "last_success_run_id": 41860211306,
+      "age_hours": 0.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -448,7 +446,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-11-03T07:31:17+00:00",
       "last_success_run_id": 41596854008,
-      "age_hours": 29.8,
+      "age_hours": 32.3,
       "stale": true,
       "recent_failures_24h": 1,
       "unresolved_failures_12h": 1
@@ -461,7 +459,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-01T15:19:29+00:00",
       "last_success_run_id": 41320639954,
-      "age_hours": 70.0,
+      "age_hours": 72.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -474,7 +472,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-02T06:52:03+00:00",
       "last_success_run_id": 41402633516,
-      "age_hours": 54.5,
+      "age_hours": 56.9,
       "stale": false,
       "recent_failures_24h": 1,
       "unresolved_failures_12h": 1
@@ -487,7 +485,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-01T07:31:52+00:00",
       "last_success_run_id": 41285148221,
-      "age_hours": 77.8,
+      "age_hours": 80.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -500,7 +498,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-01T07:31:53+00:00",
       "last_success_run_id": 41285149439,
-      "age_hours": 77.8,
+      "age_hours": 80.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -513,7 +511,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-01T17:59:16+00:00",
       "last_success_run_id": 41334234519,
-      "age_hours": 67.4,
+      "age_hours": 69.8,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -526,7 +524,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-11-04T13:13:37+00:00",
       "last_success_run_id": 41836162260,
-      "age_hours": 0.1,
+      "age_hours": 2.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -539,10 +537,10 @@
       "max_age_hours": 28,
       "last_success_at": "2026-11-04T02:30:45+00:00",
       "last_success_run_id": 41761221693,
-      "age_hours": 10.8,
+      "age_hours": 13.3,
       "stale": false,
-      "recent_failures_24h": 2,
-      "unresolved_failures_12h": 2
+      "recent_failures_24h": 3,
+      "unresolved_failures_12h": 3
     }
   ],
   "queue_status": {
