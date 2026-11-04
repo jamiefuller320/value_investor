@@ -247,7 +247,7 @@ merge clashes manageable.
 | 1.2 | Merged 2026-11-04 (one change round: decline-gate verdicts are the single definition of "declining"; screen fields are a material-threshold fallback) | #1278 | GPT-5.6 |
 | 1.3 | Merged (single choke point; no prompt version or rememo trigger affected) | #1273 | Composer 2.5 |
 | 1.4 | Merged. Secrets added; first live refresh 2026-11-04 (18,558 instruments) after the commit-pattern fix (#1286). Venue-aware matching and FTSE 350 overlay in #1289 | #1272 | Composer 2.5 |
-| N254 | Channel column definitions (`channel_v0`) frozen in the registration; charts store highs and lows; the columns are computed by steps 2.2, 2.3 and 2.5 | this PR | Supervisor |
+| N254 | Channel column definitions (`channel_v0`) frozen in the registration; charts store highs and lows; the columns are computed by steps 2.2, 2.3 and 2.5 | #1292 | Supervisor |
 | 0.3 | Merged (supervisor corrected two rows) | #1277 | Composer 2.5 |
 | 1.5 | Merged. Buy-tier interim coverage did not move (2 of 65): Yahoo series lack the prior-year quarter and half-year bodies are not extracted, hence 1.6 and 1.7 | #1276 | Grok 4.7 |
 | 1.6 | Merged 2026-11-04. Writer merges up to 12 quarters; git backfill gave interim revenue to 4 of the 8 buy-tier names (GSK, SHEL, BARC, BP). IAG, BGEO, ATYM, NWG have no prior-year quarter in git. No FTSE verdict change. Two library verdicts moved to declining (FSLR, HRL) | #1281 | Grok 4.7 |
