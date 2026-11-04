@@ -82,10 +82,10 @@ Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full 
 | **0** | UK quant core | FTSE 350 screen, adaptive weights, research memos, paper funds, post-open automation | Weekly archives accumulating; paper-auto + decision packs usable |
 | **1** | Decision-review learning | Automated book learns from its own outcomes after costs | Documented review loop; knobs adjust from reviewed excess returns (`ftse-decision-review`) |
 | **2** | Manual-action excellence | Decision packs good enough for routine human trading *(optional for live capital)* | Stable packs: signal → thesis → levels → size → risks; low false confidence (`decision_pack`) |
-| **2b** | **Primary learning track** *(current focus)* | AI judgment paper book vs market datums | Hands-off: research-gated picks; success = excess after costs vs ^FTSE (+ beat rules control) |
+| **2b** | **Primary learning track** *(current focus)* | The strategy book ([registration](ops/strategy-book-registration.md)), the single track to live. The AI judgment paper book and decision-review knobs continue as feeders and controls | Positive median fair-cost mature episode at the registered gate, then improvement by sealed versions |
 | **3** | Library-ready global data | Multi-market fundamentals/prices grow *offline* without polluting the live screen | Per-market manifests with coverage & freshness metrics; PIT constituent snapshots |
 | **4** | Controlled universe expansion | First non-UK market screened with same quality bar as FTSE 350 | Data-quality and liquidity floors pass; paper track only at first |
-| **5** | Self-improving automation | Portfolio rules improve from walk-forward review (evolution only if history is thick) | Cost-aware fitness; frozen screen signals for counterfactual safety |
+| **5** | Self-improving automation | The strategy book improves through sealed versions: pre-registered challengers scored automatically on the same entries (the bench), owner-stamped promotion at version reviews, candidates screened first on long point-in-time history (step 2.5) | Two completed version reviews before any automatic rule change (evolution only if history is thick); cost-aware fitness; frozen screen signals for counterfactual safety |
 | **6** | Global automated portfolio | Multi-market automated allocation with human override | Capital at risk only after stages 2–5 proven in paper |
 
 ### What “best progress” means now
@@ -95,8 +95,8 @@ Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full 
    Strategy phases take priority over new observe instruments that do not serve
    a strategy part. P1 input quality still comes first for names the strategy
    book holds or will buy.
-1. **Primary learning track (hands-off):** AI quasi-human paper decisions using research available at the time → confirm by **outperformance after costs vs the market** (and vs a rules control book). See [`docs/ops/primary-learning-track.md`](ops/primary-learning-track.md).
-2. **Keep decision-review learning running** — weekday paper-auto + `ftse-decision-review` on both tracks until knobs can apply.
+1. **Primary learning track: the strategy book** (single track to live, owner 2026-11-04). It learns by sealed versions: the challenger bench, the selection board and the gate-rejected shadows feed each version review, and the US point-in-time rehearsal screens candidates on long history first ([plan](ops/strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04)).
+2. **Feeders and controls keep running:** the AI judgment paper book ([`docs/ops/primary-learning-track.md`](ops/primary-learning-track.md)) and weekday paper-auto + `ftse-decision-review`. They inform version reviews; they do not reach live capital by themselves.
 3. **Optional human packs** — still useful for live capital verification; not the primary improvement loop.
 4. **Grow data libraries in the background (P2, cascaded)** — priority slot on one market until maintenance-threshold exhaustion; then **L322 admit** each market to the same epoch-0 standard (maintenance + frozen `buy_tier_level` + near-miss watch + weekday equal-support). That admission is **progressive** (one `market_queue` name at a time through spare sprint streams), not a single flip for every graduated slice. Do not fork shard AI or apply knobs until admitted books have marks. Do **not** add a fourth equal sprint stream. Do not change the live screen. See [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md#progressive-epoch-0-admission).
 5. **Only then** expand live coverage and tighten automation.

@@ -10,6 +10,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | buy tier | Screen labels `buy` and `strong_buy` that mark the value set a name must sit in for strategy eligibility. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | buy_tier_level | Frozen paper book that holds the current raw buy-tier universe for lifecycle learning and diagnostics. | [`ops/buy-tier-cohort-labs.md`](ops/buy-tier-cohort-labs.md) |
 | capital epoch | A frozen window of capital markers and books; policy experiments start a new epoch instead of rewriting live books mid-flight. | [`AGENTS.md`](../AGENTS.md) |
+| challenger bench | Up to four sealed exit or stock-filter variants scored on the same strategy-book entries as the primary; one that clears its pre-registered bar can be promoted into a new registration at a version review. | [`strategy-book-registration.md`](ops/strategy-book-registration.md#8-scoring) |
 | checkpoint ladder | Strategy-book exit: after a close at +10% (launch), a profit floor ratchets up behind each checkpoint (+5% at +10%, +10% at +15%, and so on); a close at or below the floor sells. | [`strategy-book-registration.md`](ops/strategy-book-registration.md#4-exit) |
 | clash-aware | Engineering capacity rule limiting parallel agent work so concurrent changes do not collide. | [`AGENTS.md`](../AGENTS.md) |
 | cold-start | A new sealed book or observe registration that starts fresh history without back-labeling prior marks. | [`AGENTS.md`](../AGENTS.md) |
@@ -36,6 +37,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | ftse-decision-review | Learning loop that reviews automated paper trades for excess after costs and proposes small knob changes. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | ftse-library | Offline CLI for growing market libraries, screen-lite, research ladder, ingest, and shard learning workflows. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | FTSE 350 | Live UK screener universe kept until stage 4; separate from offline multi-market library growth. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
+| gate-rejected shadow | Report-only record of entries the operating-decline or sector-headwind gate refused, scored as if bought, so the gates themselves are tested. | [`strategy-book-registration.md`](ops/strategy-book-registration.md#8-scoring) |
 | graduated market | A library market that has reached its ingest threshold (`is_graduated` / `sprint_ingest_complete` in `market_status.json`); its names may enter the strategy book if they pass F9-B. | [`ops/strategy-book-registration.md`](ops/strategy-book-registration.md) |
 | green inventory | All required bind fields satisfied on the active Investment-demanded name set; success means maintain, not spray rememo or ingest. | [`AGENTS.md`](../AGENTS.md) |
 | head_needs_fat_slot | Boolean ingest-head flag: while true, the cascade head keeps host priority and sized deepen width until parity or exhaustion. | [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md) |
@@ -91,6 +93,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | rememo | Scheduled refresh of existing research memos under caps, distinct from first-time research on new names. | [`ops/structured-verdict-slim.md`](ops/structured-verdict-slim.md) |
 | richness before breadth | Live screener stays narrow and high quality while other markets grow offline in the library first. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | screen-lite | Offline quant screen and archived signals for library markets without changing the live FTSE screener. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
+| selection board | Strategy-book report ranking entries into fifths by each snapshot feature (dip depth, volatility, valuation, quality) and showing launch rate and return per fifth, with week-clustered standard errors. | [`strategy-book-registration.md`](ops/strategy-book-registration.md#8-scoring) |
 | sealed unit | Running sealed strategy with its own registration and data SLA, such as strand A buy-tier or N200 observe. | [`AGENTS.md`](../AGENTS.md) |
 | shadow judge | Observe-only evaluation path that must not override replay, sealed observe, or ingest-head priority rules. | [`AGENTS.md`](../AGENTS.md) |
 | single track to live | Owner decision (2026-11-04): the strategy book is the only route to live capital; other instruments are feeders or controls. | [`ops/strategy-reorientation-plan.md`](ops/strategy-reorientation-plan.md) |
@@ -102,6 +105,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | thesis break | The reason for owning a name has failed: operating decline, a sector headwind, a screen `avoid` signal, or a research `pass`. Ends any strategy-book position. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | three-lane model | Post-run clearance policy: ingest factory lane, engineering queue lane, and narrative refresh lane. | [`ops/post-run-improvement-clearance.md`](ops/post-run-improvement-clearance.md) |
 | twin | Parallel book or metric path with frozen registration used to compare policy without editing the live book. | [`AGENTS.md`](../AGENTS.md) |
+| US point-in-time rehearsal | Plan step 2.5: a one-off replay of the frozen strategy book on licensed US point-in-time data from 2000, with a holdout revealed once; report-only. | [`strategy-book-registration.md`](ops/strategy-book-registration.md#c-us-point-in-time-rehearsal--report-only) |
 | version review | The point (at the strategy book's thickness gate, then at most every 26 weeks) where at most one sealed challenger version is chosen from accumulated evidence. | [`ops/strategy-reorientation-plan.md`](ops/strategy-reorientation-plan.md) |
 | waiters | Sealed strategies in the launch queue not yet at the head for incremental Data deepen work. | [`ops/data-pillar-priorities.md`](ops/data-pillar-priorities.md) |
 | weekly_ops | Orchestrator research spend pool cap for Sunday bundle and ladder selective research. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |

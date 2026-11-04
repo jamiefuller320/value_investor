@@ -56,15 +56,18 @@ as versions of one book rather than as a new instrument each month.
      novelty distance and cull (N223, N226, N227) are not built while this
      section holds. See [cue-consumer-mft.md](cue-consumer-mft.md#role-under-the-single-track-owner-2026-11-04).
 4. **Versions, not ideas.** v0 runs to its thickness gate. The version review
-   happens at that gate and then at most once every 26 weeks. At each review
-   the supervising agent assembles **at most one challenger** from the
-   evidence that has built up: post-sale reviews, five-lever scores, channel
-   columns (N254), demo-account fills. The challenger is a new
-   `registration_id`, sealed before its scores are read, and runs beside the
-   incumbent on the same universe. After the challenger's own gate the owner
-   keeps the better book by the registered metric; the other is frozen with its
-   history. Ideas that arise between reviews go to the deferred store with the
-   tag `strategy-version-review`; they are not built as instruments.
+   happens at that gate and then at most once every 26 weeks. Between reviews,
+   up to four sealed **bench** challengers (exit variants or entry filters)
+   are scored daily on the book's own entries, with a 2.5-standard-error bar
+   because several run at once ([registration](strategy-book-registration.md#8-scoring)).
+   At each review the owner may promote **at most one** challenger. The
+   evidence also includes post-sale reviews, five-lever scores, the selection
+   board, the gate-rejected shadows, channel columns (N254), the US rehearsal
+   (step 2.5) and demo-account fills. A promoted challenger becomes a new
+   `registration_id`; the old version is frozen with its history. New bench
+   challengers are sealed only at a review. Ideas that arise between reviews go
+   to the deferred store with the tag `strategy-version-review`; they are not
+   built as instruments.
 5. **No new observe instruments** unless the instrument is a strategy-book
    component or a step in this plan. When step 2.3 starts, the owner decides
    which existing observe instruments to freeze. Candidates: N201, N206, the
@@ -77,6 +80,21 @@ as versions of one book rather than as a new instrument each month.
    launch queue for a narrow scope: filing bodies and memo recency on its
    universe names that already pass parts 1 and 2 (registration question 7).
    Holdings and the running units stay ahead of it.
+8. **Learning rate, stated.** Forward evidence is slow. In replays a paired
+   difference of about 2 points per trade took roughly a year of multi-market
+   entries to read clearly, and longer on the FTSE 350 alone. Four things
+   speed it up, in order of effect:
+   - **long history first:** the US point-in-time rehearsal (step 2.5) tests
+     the rules and candidate filters on 25 years, including four market falls,
+     so the forward book confirms instead of searching;
+   - **breadth:** library entries (steps 1.8 and 1.9) multiply the number of
+     trades;
+   - **same-entry comparisons:** bench columns and comparison exits score
+     variants on the same trades, which removes most of the market noise;
+   - **selection is cross-sectional:** each week offers many names to compare
+     side by side, so "which names make the better winners" (the selection
+     board) learns faster than "which timing rule is better".
+   A slow read is expected, not a failure.
 
 Owner decisions under this section (version reviews, the instrument freeze)
 are in the [human tasks checklist](human-tasks-checklist.md#ad-hoc-when-triggered).
@@ -117,13 +135,14 @@ adjust thresholds once (logged), or reject.
 
 | Step | Deliverable | Deferred | Done when |
 |------|-------------|----------|-----------|
-| 2.1 | **Registration.** Pinned learning question, multi-market universe, entry-low and exit-high rules, recovery-hold rules, cap, review date, stake, both controls and the gate are frozen before scoring. Draft: [`strategy-book-registration.md`](strategy-book-registration.md). | N249 | Registration committed; owner signs off |
-| 2.2 | **Archive replay** of the rules on the daily chart history (about two years, 1,269 tickers), using the value set from archived FTSE and library weekly runs and the Phase 1 gates. Report-only: these names survived to be charted. Includes the buy-on-signal control and report-only channel columns (N254). | N249 | Swing, recovery, per-market and control boards published |
-| 2.3 | **Forward fixed-stake strategy book** on the daily schedule after open settle, with an episode walker. Swing and recovery scored separately. FTSE names from the start; library names once 1.8 and 1.9 land. | N249 | Book running; ops-monitor finding; dashboard strip |
+| 2.1 | **Registration.** Pinned learning question, multi-market universe, entry-low rule, checkpoint-ladder exit with the fail-to-launch deadline, comparison exits, gate-rejected shadows, selection board, challenger bench, stake, both controls and the gate are frozen before scoring. Draft: [`strategy-book-registration.md`](strategy-book-registration.md). | N249 | Registration committed; owner signs off |
+| 2.2 | **Archive replay** of the rules on the daily chart history (about two years, 1,269 tickers), using the value set from archived FTSE and library weekly runs and the Phase 1 gates. Report-only: these names survived to be charted. Includes the buy-on-signal control and report-only channel columns (N254). | N249 | Ladder, comparison-exit, shadow, per-market and control boards published |
+| 2.3 | **Forward fixed-stake strategy book** on the daily schedule after open settle, with an episode walker. Floor exits, fail-to-launch sales and thesis breaks scored separately; entry snapshots stored on every episode. FTSE names from the start; library names once 1.8 and 1.9 land. | N249 | Book running; ops-monitor finding; dashboard strip |
 | 2.4 | **Review layer on strategy-book episodes.** Point the post-sale review queue, the judgment-in-the-round trail and five-lever scoring (from the cue-consumer lab) at strategy-book closes. Reviews and lever scores are inputs to the version review, never mid-run tunes. | N222 | Every closed strategy-book episode reaches the review queue; lever scores published |
+| 2.5 | **US point-in-time rehearsal.** Register, then run, the strategy book's rules, comparison exits, shadows, selection board and bench candidates on the licensed survivorship-free US history the historical screen replay already uses (S&P 500 and mid caps, 2000 onward, as-reported fundamentals), with that replay's sealed holdout revealed once. Report-only; US evidence about the method. | N249, L536 | Registration committed before data is bought; one licensed month run and deleted under the licence; development and holdout boards committed |
 
 **Phase 2 gate (owner):** the sample-thickness gate fixed in the registration
-(48 counted closed episodes, at most 6 per entry week, over at least 8 weeks).
+(48 counted mature episodes, at most 6 per entry week).
 The strategy book then becomes the primary learning track, with the matched-30
 books as controls. The first version review (see
 [single track to live](#single-track-to-live-owner-2026-11-04)) happens at
@@ -234,4 +253,5 @@ merge clashes manageable.
 | 1.7 | Next | — | Grok 4.7 |
 | 1.8, 1.9 | Next after 1.7 (sector gate on graduated markets; F9-B binds for library names). Library entries to the strategy book wait on both | — | Grok 4.7 |
 | Phase 1 gate | Waiting on a week of daily refreshes after the 1.2 merge (2026-11-04), then the owner's signature | — | Owner |
-| 2.1 | Draft merged (#1280); revised for the single track, multi-market universe, capital view and the checkpoint-ladder exit (#1283). Awaiting owner signature and answers to its 8 open questions | #1280, #1283 | Grok 4.7, then supervisor |
+| 2.1 | Draft merged (#1280); revised for the single track, multi-market universe, capital view and the checkpoint-ladder exit (#1283). Awaiting owner signature and answers to its 9 open questions | #1280, #1283 | Grok 4.7, then supervisor |
+| 2.5 | Next after signature: write the rehearsal registration, then the owner buys one data month | — | Grok 4.7 (xhigh), then supervisor |

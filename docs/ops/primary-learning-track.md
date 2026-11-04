@@ -1,5 +1,7 @@
 # Primary learning track (hands-off)
 
+> **Role since 2026-11-04:** under the [single track to live](strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04), the strategy book is the primary learning track and the only route to live capital. The AI judgment book described here keeps running as a feeder and control; its evidence goes to version reviews. The title is kept for link stability.
+
 ## Idea
 
 Stock-picking decisions are made by an **AI quasi-human** policy using whatever
