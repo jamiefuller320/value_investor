@@ -7,7 +7,7 @@
 **Strategy spec:** [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md#investment-strategy-owner-2026-11-03)  
 **Human checklist:** `adhoc-strategy-phase-gate` in [`human-tasks-checklist.md`](human-tasks-checklist.md#ad-hoc-when-triggered)
 
-**Revised 2026-11-04 (owner decision, before signature):** the universe is multi-market from v0 (section 2), a buy-on-signal control answers whether timing adds anything (section 8), the thickness gate counts at most 6 episodes per entry week (section 9), and the book asks for the launch-queue head (sections 11 and 13). This book is the single track to live capital ([plan](strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04)).
+**Revised 2026-11-04 (owner decision, before signature):** the universe is multi-market from v0 (section 2), a buy-on-signal control answers whether timing adds anything and a report-only capital view compares capital use and risk with buy-and-hold (section 8), the thickness gate counts at most 6 episodes per entry week (section 9), and the book asks for the launch-queue head (sections 11 and 13). This book is the single track to live capital ([plan](strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04)).
 
 This document freezes the rules before any score is computed. It does not open a book, write a store, or run a replay. Step 2.2 (archive replay) and step 2.3 (forward book) wait until the owner signs, adjusts a listed number once, or rejects.
 
@@ -275,6 +275,19 @@ That paired exit is the behaviour of `buy_tier_level` and of N200's leave-tier c
 
 Neither control is the live book's NAV. Live books have weights, cash, and a 3% stress stamp. Comparing NAVs would mix those choices with the timing rule.
 
+**Capital view (report-only, owner 2026-11-04).** A positive median episode does not show that the book uses capital well. A replay of the price rules alone (today's buy tier painted back, no gates, no dividends) had a +2.1% median FTSE episode over a median of 10 sessions. Return per year of capital actually invested was 18%. A 20-slot book taking signals first come made 4–7% a year. Equal-weight buy-and-hold of the same names made 16% a year. Recovery holds held over 60 days used 55% of the capital-days and lost money in total. These boards make that visible on the real book. None of them is the learning question, and none of them changes a rule:
+
+| Board | Proposed contents | Why |
+|---|---|---|
+| Capital-days return | Sum of fair-cost episode returns divided by stake-days, times 365. Overall and by market. Open episodes are marked to the latest close. | Return per year of capital actually invested. Counts how long each stake was tied up, which the median ignores. |
+| Recovery-hold capital share | Share of stake-days spent in recovery holds, and the summed fair-cost return of those episodes. The same for episodes held more than 60 sessions. | Shows whether stuck holds are eating the swing profits. Input to the version review and to questions 3 and 4 at a later registration. |
+| Reference slot book | A 20-slot book that puts 1/20 of its current value into each signal in signal order (ties by ticker), skips a signal when no slot is free, and reinvests proceeds. Daily NAV, annualised return, maximum drawdown, annualised volatility, average idle cash, trades taken and skipped, and the combined P&L of the five worst names as a share of starting capital. | One concrete capital path for the same trades. Equal slots are a fixed reference here, not a sizing decision; fixed-stake v0 still scores episodes. |
+| Buy-and-hold reference | Equal weight in every name eligible on the book's first day, plus an equal stake in each name on the day it first becomes eligible, held to the scoring date. Same daily NAV, drawdown, volatility and worst-five-names figures. Price only, the same costs once in and once out. | The plain alternative for the same eligible names. It is diversified across all of them, so it tests timing against holding, not one stock pick against another. |
+
+The slot book and the buy-and-hold reference are reported side by side on return and on risk (drawdown, volatility, worst-five-names loss). In the replay above buy-and-hold had the higher return and, across all markets, the lower drawdown and worst-five loss. The capital view lets the forward book confirm or overturn that with the gates applied.
+
+Capital policies (a cash float sized for clustered signals, skimming profits into a reserve, pacing entries in a sell-off, choosing which signals to fund when oversubscribed) are not part of v0. They are a capital-path twin under [fixed-stake v0](fair-cost-primacy.md#fixed-stake-v0-default-new-observe--models), registered after the thickness gate. A replay of seven such policies on the same trades moved the FTSE result between 5% and 8% a year and none reached buy-and-hold; across all markets the book was fully invested about 95% of the time, so which signals get funded mattered more than how much float there was.
+
 **Archive versus forward.** The boards above are computed separately for the archive rehearsal and for the forward book. The two medians are never averaged. Only the forward book's overall median can meet the thickness gate.
 
 ## 9. Two evidence tracks
@@ -337,7 +350,7 @@ When both are true, ops-monitor emits an info finding and the owner stamps one d
 | `no-design` | Overall median at or below zero, or the owner rejects the book. | Stays observe-only. A redesigned rule is a new registration. |
 | `ack` | The owner has seen the board and wants no design work. | Stays observe-only. The finding does not re-fire every day once the stamp is set. |
 
-The control differences, the per-market boards and any `single_market_dependence` flag are on the board the owner reads. They do not choose the row.
+The control differences, the per-market boards, any `single_market_dependence` flag and the capital view are on the board the owner reads. They do not choose the row.
 
 ## 10. Freeze and markers
 
@@ -353,7 +366,7 @@ The control differences, the per-market boards and any `single_market_dependence
 | Any threshold, the learning question, or which rule is primary | A new `registration_id`. The old scores stay under the old id. |
 | Adopting the alternative as the book | A new `registration_id`. Forbidden on this id. |
 
-**Parameters that stay frozen after the first look at results.** All of them: RSI 35 and RSI 40, the 10-session windows, the 3 percent SMA distance, the 8% recovery band, the 15-session swing limit, the 63-session review, the 4-review cap, the 2-confirm streak, the 10-session cooldown, the 40% recovery share, the 5-episode arming level, the 5-day gap, the 100-unit stake, the fair-cost formula and per-market cost stamps, the 3% stress view, the 48 / 8-week gate with its 6-per-week count, the graduated-market universe rule, and both controls.
+**Parameters that stay frozen after the first look at results.** All of them: RSI 35 and RSI 40, the 10-session windows, the 3 percent SMA distance, the 8% recovery band, the 15-session swing limit, the 63-session review, the 4-review cap, the 2-confirm streak, the 10-session cooldown, the 40% recovery share, the 5-episode arming level, the 5-day gap, the 100-unit stake, the fair-cost formula and per-market cost stamps, the 3% stress view, the 48 / 8-week gate with its 6-per-week count, the graduated-market universe rule, both controls, and the capital-view definitions (20 slots, tie order, buy-and-hold construction).
 
 **No parameter search on this id.** A search was considered and is not registered. The usual holdout would be the most recent six months of entries. The point-in-time value set only starts on 2026-08-02, and the charts used here end on 2026-10-30. That is about thirteen weeks. Six months of entries do not exist, so there is nothing to hold out. Splitting those thirteen weeks in half after seeing the scores is not a holdout.
 
@@ -414,14 +427,14 @@ Short brief for the implementer. Still observe-only. Still no live writes.
 |---|---|
 | `docs/data/strategy_book_registration.json` | Seal copy of this document plus the signature note. |
 | `docs/data/strategy_book_replay.json` | The three archive results, the alternative column, and the buy-on-signal control. |
-| `docs/data/strategy_book_observe.json` | Forward episodes, boards (overall, by market, both controls), disposition, change markers. |
+| `docs/data/strategy_book_observe.json` | Forward episodes, boards (overall, by market, both controls, capital view), disposition, change markers. |
 | `docs/data/strategy_book_gate_log.jsonl` | Append-only verdicts the forward job used. |
 
 **Ops-monitor.** `check_strategy_book_observe` inside `collect_ops_findings`, after the decline check and the sector check. `auto_fixable` false. Findings: refreshed (info), failed (warn), thickness gate ready for review (info). A row in [`ops-monitor.md`](ops-monitor.md) points here. The refresh finding names counts and the first few tickers. It does not spray rememo or ingest.
 
 **Dashboard.** An Analysis → Observe strip on the N206 pattern, hash `#analysis/observe/strategy-book`, reading the forward store. A compact queue-health line for phase span, closed count, and freshness. No strand A lifecycle writes. No promote button.
 
-**Tests.** Entry fires only on RSI below 35 and a 10-session low. A buy-tier name with a high RSI does not enter. Leaving the buy tier does not exit. An 8% drop classifies a hold and does not sell. Two `avoid` rows sell; one does not. `insufficient_data` blocks entry and does not, by itself, break a hold mid-way. A gap over 5 days does not fill. Fair-cost math matches `episode_return` on a known pair. Archive output keeps the three result keys separate. A thinned chart is refused. Each episode uses its own market's cost row. A library name in a market that is not graduated does not enter. A library run applies only to its own market. The buy-on-signal control opens on a newly eligible name, ignores price timing, and closes at 63 sessions or after 2 ineligible runs. The gate count caps at 6 per entry week while the medians use every closed episode. `single_market_dependence` fires on a constructed case.
+**Tests.** Entry fires only on RSI below 35 and a 10-session low. A buy-tier name with a high RSI does not enter. Leaving the buy tier does not exit. An 8% drop classifies a hold and does not sell. Two `avoid` rows sell; one does not. `insufficient_data` blocks entry and does not, by itself, break a hold mid-way. A gap over 5 days does not fill. Fair-cost math matches `episode_return` on a known pair. Archive output keeps the three result keys separate. A thinned chart is refused. Each episode uses its own market's cost row. A library name in a market that is not graduated does not enter. A library run applies only to its own market. The buy-on-signal control opens on a newly eligible name, ignores price timing, and closes at 63 sessions or after 2 ineligible runs. The gate count caps at 6 per entry week while the medians use every closed episode. `single_market_dependence` fires on a constructed case. Capital-days return matches a hand-computed pair. The reference slot book skips a signal when all 20 slots are full and never changes an episode's return. The buy-and-hold reference adds a newly eligible name at an equal stake.
 
 **Do not reuse these as the rule.** They conflict with the strategy spec, the chart files, or both.
 
