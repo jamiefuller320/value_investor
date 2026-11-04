@@ -2,7 +2,7 @@
   "schema_version": 1,
   "local_date": "2026-11-04",
   "timezone": "Europe/London",
-  "generated_at": "2026-11-04T02:37:31.215025Z",
+  "generated_at": "2026-11-04T07:52:43.279418Z",
   "refresh_deadline_local": "04:00",
   "stale_for_local_date": false,
   "focus_lines": [
@@ -30,7 +30,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Absolute availability on the serve order — no rememo/ingest spray on a green set; do not steal P1 for N201 or seal D.",
@@ -99,7 +99,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Fat sprint empty — maintenance + spare auto-advance only; no fourth equal sprint; no parallel eng spray from hub ambers.",
@@ -147,8 +147,14 @@
   "status_report": {
     "schema_version": 1,
     "local_date": "2026-11-04",
-    "ops_overall": "warn",
+    "ops_overall": "fail",
     "ops_findings": [
+      {
+        "severity": "fail",
+        "title": "Engineering agent sync failures",
+        "auto_fixable": true,
+        "category": "engineering"
+      },
       {
         "severity": "warn",
         "title": "New buy-tier not yet usable",
@@ -194,12 +200,6 @@
       {
         "severity": "warn",
         "title": "Parked engineering tasks need manual review",
-        "auto_fixable": false,
-        "category": "engineering"
-      },
-      {
-        "severity": "warn",
-        "title": "Project traffic pause active",
         "auto_fixable": false,
         "category": "engineering"
       },
@@ -261,7 +261,7 @@
         "title": "Hunt fetchable IR source for parked asx200 leftover SMR.AX"
       }
     ],
-    "queue_health_headline": "Traffic pause — 0 stuck PR(s). project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation",
+    "queue_health_headline": "Agent lane active.",
     "post_run_clearance": {
       "evaluated_at": "2026-11-01T09:15:59.435136+00:00",
       "trigger": "post_run_review_email",
@@ -272,12 +272,12 @@
       "met_count": 0,
       "unmet_count": 21,
       "met": [],
-      "generated_at": "2026-11-04T02:33:55.273671+00:00"
+      "generated_at": "2026-11-04T07:49:39.332585+00:00"
     },
     "focus_relevant": true,
     "post_sell_cue_digest": {
       "present": true,
-      "generated_at": "2026-11-04T02:32:36.256912+00:00",
+      "generated_at": "2026-11-04T07:47:50.091625+00:00",
       "item_count": 6,
       "timing_cue_count": 4,
       "selection_cue_count": 2,
@@ -290,7 +290,7 @@
       {
         "id": "ops",
         "label": "Ops",
-        "value": "overall=warn; warn:New buy-tier not yet usable; warn:Longer holds beat live exit buffer in replay; warn:Two-lot retention beats full exit in replay; warn:SEC filed FCF diverges from Yahoo basis on US buy-tier; warn:SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier"
+        "value": "overall=fail; fail:Engineering agent sync failures; warn:New buy-tier not yet usable; warn:Longer holds beat live exit buffer in replay; warn:Two-lot retention beats full exit in replay; warn:SEC filed FCF diverges from Yahoo basis on US buy-tier"
       },
       {
         "id": "scoreboard",
@@ -442,7 +442,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": "judgment call — Discuss before deepening priority slot",
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "euro_depth · ingest_errors (focus/priority-slot head) — proposed triage: deepen. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
@@ -567,7 +567,7 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → dismiss",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "euro_depth · ingest_deviation (focus/priority-slot head) — proposed triage: dismiss. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
@@ -690,7 +690,7 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → park",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "sti · ingest_errors (spare sprint) — proposed triage: park. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
@@ -815,7 +815,7 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → park",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "sti · no_observe_benchmark (spare sprint) — proposed triage: park. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
@@ -940,7 +940,7 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → park",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "sti · zero_improve_stall (spare sprint) — proposed triage: park. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
@@ -1065,7 +1065,7 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → dismiss",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "hang_seng · ingest_deviation (ingest_deviation) — proposed triage: dismiss. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
@@ -1188,10 +1188,10 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
-          "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: 2 attention-parked eng tasks",
+          "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: 3 attention-parked eng tasks",
           "stage_label": "ops_gate:new_info",
           "stage_state": "ready",
           "stage_since": null,
@@ -1215,13 +1215,13 @@
         "id": "weekday-engineering-parked-backlog-clear",
         "sort_bucket": "new_info",
         "analysis": {
-          "headline": "2 attention-parked eng tasks",
-          "updated_at": "2026-11-04T02:36:27.469426+00:00",
+          "headline": "3 attention-parked eng tasks",
+          "updated_at": "2026-11-04T07:52:38.015681+00:00",
           "fingerprint": "700ceb2997ccf801",
           "bullets": [
-            "Parked tasks: 4 (attention ~2)",
-            "Queue-clearing pause active: False — evaluated 2026-11-04T02:36:27.469426+00:00",
-            "Traffic pause active: True",
+            "Parked tasks: 4 (attention ~3)",
+            "Queue-clearing pause active: False — evaluated 2026-11-04T07:52:38.015681+00:00",
+            "Traffic pause active: False",
             "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
             "eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX",
             "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
@@ -1247,13 +1247,13 @@
       },
       "closed": false,
       "review_detail": {
-        "headline": "2 attention-parked eng tasks",
-        "updated_at": "2026-11-04T02:36:27.469426+00:00",
+        "headline": "3 attention-parked eng tasks",
+        "updated_at": "2026-11-04T07:52:38.015681+00:00",
         "fingerprint": "700ceb2997ccf801",
         "bullets": [
-          "Parked tasks: 4 (attention ~2)",
-          "Queue-clearing pause active: False — evaluated 2026-11-04T02:36:27.469426+00:00",
-          "Traffic pause active: True",
+          "Parked tasks: 4 (attention ~3)",
+          "Queue-clearing pause active: False — evaluated 2026-11-04T07:52:38.015681+00:00",
+          "Traffic pause active: False",
           "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
           "eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX",
           "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
@@ -1267,7 +1267,7 @@
         "observe_only": true
       },
       "assessment": {
-        "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: 2 attention-parked eng tasks",
+        "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: 3 attention-parked eng tasks",
         "stage_label": "ops_gate:new_info",
         "stage_state": "ready",
         "stage_since": null,
@@ -1290,7 +1290,7 @@
         "id": "rec-60d5921c7ad1",
         "task_id": "human:weekday-engineering-parked-backlog-clear",
         "summary": "Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 4 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-04T02:36:27.469426+00:00; Traffic pause active: True; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 3 attention-parked eng tasks detail: Parked tasks: 4 (attention ~3); Queue-clearing pause active: False — evaluated 2026-11-04T07:52:38.015681+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
         "accept_action": {
           "kind": "human-task-ack",
           "payload": {
@@ -1299,7 +1299,7 @@
             "finding_fingerprint": "700ceb2997ccf801"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-60d5921c7ad1` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 4 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-04T02:36:27.469426+00:00; Traffic pause active: True; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 4 (attention ~2)\n- Queue-clearing pause active: False — evaluated 2026-11-04T02:36:27.469426+00:00\n- Traffic pause active: True\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-60d5921c7ad1` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "discuss_prompt": "Discuss daily recommendation `rec-60d5921c7ad1` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 3 attention-parked eng tasks detail: Parked tasks: 4 (attention ~3); Queue-clearing pause active: False — evaluated 2026-11-04T07:52:38.015681+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 4 (attention ~3)\n- Queue-clearing pause active: False — evaluated 2026-11-04T07:52:38.015681+00:00\n- Traffic pause active: False\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-60d5921c7ad1` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
         "priority": 16,
         "options": [
           {
@@ -1381,7 +1381,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Assessment scoreboard · primary not scored",
@@ -1409,7 +1409,7 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "Assessment scoreboard · primary not scored",
-          "updated_at": "2026-11-04T02:33:55.247361+00:00",
+          "updated_at": "2026-11-04T07:49:39.295970+00:00",
           "fingerprint": "94066622535964a2",
           "bullets": [
             "ai_judgment_matched30_fair: total return -2.6% vs FTAL.L +0.4% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.5% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
@@ -1438,7 +1438,7 @@
       "closed": false,
       "review_detail": {
         "headline": "Assessment scoreboard · primary not scored",
-        "updated_at": "2026-11-04T02:33:55.247361+00:00",
+        "updated_at": "2026-11-04T07:49:39.295970+00:00",
         "fingerprint": "94066622535964a2",
         "bullets": [
           "ai_judgment_matched30_fair: total return -2.6% vs FTAL.L +0.4% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.5% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
@@ -1583,7 +1583,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Admitted shard epoch-0 watch · 22",
@@ -1611,7 +1611,7 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "Admitted shard epoch-0 watch · 22",
-          "updated_at": "2026-11-03T22:28:48.468338+00:00",
+          "updated_at": "2026-11-04T07:41:08.096250+00:00",
           "fingerprint": "699fd4261e5b4223",
           "bullets": [
             "euro_depth: phase=3 ai=False knob=False holdings=40",
@@ -1641,7 +1641,7 @@
       "closed": false,
       "review_detail": {
         "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-11-03T22:28:48.468338+00:00",
+        "updated_at": "2026-11-04T07:41:08.096250+00:00",
         "fingerprint": "699fd4261e5b4223",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=40",
@@ -1775,7 +1775,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Ingest deviations · 2 open",
@@ -1803,7 +1803,7 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "Ingest deviations · 2 open",
-          "updated_at": "2026-11-03T22:28:13.126133+00:00",
+          "updated_at": "2026-11-04T07:40:18.676326+00:00",
           "fingerprint": "6dda3808006c2a3a",
           "bullets": [
             "Open deviations: 2",
@@ -1828,7 +1828,7 @@
       "closed": false,
       "review_detail": {
         "headline": "Ingest deviations · 2 open",
-        "updated_at": "2026-11-03T22:28:13.126133+00:00",
+        "updated_at": "2026-11-04T07:40:18.676326+00:00",
         "fingerprint": "6dda3808006c2a3a",
         "bullets": [
           "Open deviations: 2",
@@ -1957,7 +1957,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: PR fix common issues",
@@ -2147,7 +2147,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2317,7 +2317,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2487,7 +2487,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2657,7 +2657,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2827,7 +2827,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2997,7 +2997,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3167,7 +3167,7 @@
         "ready": true,
         "ready_reason": "cited push suggestion",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "ops finding (warn): Parked engineering tasks need manual review",
@@ -3304,7 +3304,7 @@
         "ready": true,
         "ready_reason": "quality-barred explore card",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Per-lever fair-cost verdicts are independent of path P&L — exit lose + entry win is a factory timing signal, not a book rewrite — Falsify/promote: Volume gate met + thicker closed cohort; promote only via sealed observe design (F8), never mid-flight knob apply",
@@ -3438,7 +3438,7 @@
         "ready": true,
         "ready_reason": "quality-barred explore card",
         "blocked_reason": null,
-        "updated_at": "2026-11-04T02:37:31.215025Z",
+        "updated_at": "2026-11-04T07:52:43.279418Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Live hold/swap probability stays parked until closed cohorts mature — Falsify/promote: ready_for_probability_analysis true with hold+swap closed targets; else keep collecting (L117/N25)",
@@ -3724,7 +3724,7 @@
       "id": "rec-60d5921c7ad1",
       "task_id": "human:weekday-engineering-parked-backlog-clear",
       "summary": "Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 4 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-04T02:36:27.469426+00:00; Traffic pause active: True; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 3 attention-parked eng tasks detail: Parked tasks: 4 (attention ~3); Queue-clearing pause active: False — evaluated 2026-11-04T07:52:38.015681+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
       "accept_action": {
         "kind": "human-task-ack",
         "payload": {
@@ -3733,7 +3733,7 @@
           "finding_fingerprint": "700ceb2997ccf801"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-60d5921c7ad1` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 4 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-04T02:36:27.469426+00:00; Traffic pause active: True; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 4 (attention ~2)\n- Queue-clearing pause active: False — evaluated 2026-11-04T02:36:27.469426+00:00\n- Traffic pause active: True\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-60d5921c7ad1` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "discuss_prompt": "Discuss daily recommendation `rec-60d5921c7ad1` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 3 attention-parked eng tasks detail: Parked tasks: 4 (attention ~3); Queue-clearing pause active: False — evaluated 2026-11-04T07:52:38.015681+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 4 (attention ~3)\n- Queue-clearing pause active: False — evaluated 2026-11-04T07:52:38.015681+00:00\n- Traffic pause active: False\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-60d5921c7ad1` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
       "priority": 16,
       "options": [
         {
@@ -4536,7 +4536,7 @@
   },
   "project_sync": {
     "notes_fingerprint": null,
-    "synced_at": "2026-11-04T02:37:31.215025Z",
+    "synced_at": "2026-11-04T07:52:43.279418Z",
     "method": "morning_builder_reads_committed_export_or_manual"
   },
   "illumination_hints": {
