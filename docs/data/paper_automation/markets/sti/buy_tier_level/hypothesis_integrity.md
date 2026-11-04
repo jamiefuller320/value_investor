@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-03T14:17:37.046457+00:00
+Track: `buy_tier_level` · updated 2026-11-04T14:17:16.935021+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 6 (0% count, 0% NAV)
+- Losers: **0** / 7 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
@@ -25,7 +25,7 @@ Track: `buy_tier_level` · updated 2026-11-03T14:17:37.046457+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 38%
+- conviction 44%
 
 ### J36.SI — weakening / watch_review (+0.0%)
 - research verdict caution
@@ -34,7 +34,11 @@ Track: `buy_tier_level` · updated 2026-11-03T14:17:37.046457+00:00
 
 ### BUOU.SI — weakening / watch_review (+0.0%)
 - research verdict caution
-- conviction 30% below intact floor
+- still buy
+- cheapness family still passes
+
+### N2IU.SI — weakening / watch_review (+0.0%)
+- research verdict caution
 - still buy
 - cheapness family still passes
 

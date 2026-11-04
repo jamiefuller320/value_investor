@@ -1,22 +1,23 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-03T14:17:29.650869+00:00
+Track: `buy_tier_level` · updated 2026-11-04T14:17:08.550121+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **9** / 17 (53% count, 57% NAV)
+- Losers: **7** / 17 (41% count, 44% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
 ## Holding reviews
 
-### CAML.L — intact / watch_review (-24.2%)
-- deep drawdown (-24.2%) — re-check facts; thesis still intact
-- price drawdown alone does not invalidate value thesis
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
+### CAML.L — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### DOTD.L — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### PAF.L — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### PMI.L — weakening / watch_review (-18.1%)
 - research verdict caution
@@ -34,14 +35,6 @@ Track: `buy_tier_level` · updated 2026-11-03T14:17:29.650869+00:00
 - conviction 25% below intact floor
 - still buy
 - cheapness family still passes
-
-### PAF.L — intact / hold_tolerate (-10.3%)
-- price drawdown alone does not invalidate value thesis
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 62%
 
 ### MPE.L — intact / hold_tolerate (-10.0%)
 - price drawdown alone does not invalidate value thesis
@@ -107,13 +100,6 @@ Track: `buy_tier_level` · updated 2026-11-03T14:17:29.650869+00:00
 - research verdict neutral
 - still buy
 - cheapness family still passes
-
-### DOTD.L — intact / hold_tolerate (+5.4%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.90
-- conviction 37%
 
 ### YNGN.L — weakening / watch_review (+5.9%)
 - research verdict caution
