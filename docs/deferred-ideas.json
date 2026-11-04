@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-03T20:21:31+00:00",
+  "updated_at": "2026-11-04T08:52:32+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16456,6 +16456,40 @@
       "status": "open",
       "source": "docs/ops/strategy-book-registration.md",
       "added_at": "2026-11-03T20:21:31+00:00"
+    },
+    {
+      "id": "N254",
+      "category": "not_now",
+      "section": "research",
+      "title": "Channel diagnostics on strategy book episodes (report-only)",
+      "summary": "Record longer-term channel context on every strategy-book episode at the signal close: 126- and 252-session log-price regression slope (declining/flat/ascending), position in the channel in residual standard deviations, and channel fit. Report-only columns on the step 2.2 replay and step 2.3 forward boards; no entry, exit or hold effect on the signed registration. A first replay on today's FTSE buy tier (lookahead, no gates) showed no consistent separation: the 6-month and 1-year channels disagreed and buckets were small.",
+      "revisit_when": "When step 2.2 (archive replay walker) is briefed: fold these columns into its output. Closes-only regression; refuse thinned charts as the registration already requires.",
+      "tags": [
+        "strategy-book",
+        "technical",
+        "channel",
+        "report-only"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a1a238-a5f9-7c8d-a4b5-41187bce567c",
+      "added_at": "2026-11-04T08:52:32+00:00"
+    },
+    {
+      "id": "L668",
+      "category": "later",
+      "section": "learning",
+      "title": "Channel-filtered strategy book twin (new registration)",
+      "summary": "A twin of the signed strategy book that adds a long-term channel rule, e.g. skip short-term lows inside a declining 1-year channel, or prefer lows near the lower band of a flat or rising channel. Must be a new registration_id written before its own scores are read, never an edit of v0. Price channels only filter entries or label context; a falling price still never sells (strategy part 6).",
+      "revisit_when": "Forward strategy book has at least 48 closed episodes over 8 weeks and the report-only channel columns show a stable difference between channel buckets on both the 126- and 252-session lookbacks. Needs chart history beyond the ~559-bar downsample cliff fixed in step 2.3.",
+      "tags": [
+        "strategy-book",
+        "technical",
+        "channel",
+        "twin"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a1a238-a5f9-7c8d-a4b5-41187bce567c",
+      "added_at": "2026-11-04T08:52:32+00:00"
     }
   ],
   "fragments": [
