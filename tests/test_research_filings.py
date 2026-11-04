@@ -14316,6 +14316,33 @@ def test_parked_source_hunter_yngn_l_aim_has_fetchable_ir():
     _first_fetchable_allowlist_body(urls)
 
 
+def test_fetch_filings_ir_allowlist_aim_paf_l_builtins(tmp_path: Path):
+    """Regression: PAF.L parked IWB — panafricanresources.com FY2026/2025 IAR + H1 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("PAF.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("integrated-annual-report-2026.pdf" in url for url in urls)
+    assert any("integrated-annual-report-2025.pdf" in url for url in urls)
+    assert any("PAR-unaudited-interim-financial-short-form-31-Dec-2025.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+
+
+def test_parked_source_hunter_paf_l_aim_has_fetchable_ir():
+    """eng-20261104-01: PAF.L has live panafricanresources.com FY2026/2025 IAR + H1 statutory PDFs."""
+    assert "PAF.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("PAF.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("panafricanresources.com/wp-content/uploads" in url for url in urls)
+    assert any("integrated-annual-report-2026.pdf" in url for url in urls)
+    _first_fetchable_allowlist_body(urls)
+
+
 def test_fetch_filings_ir_allowlist_tsx60_cnq_to_builtins(tmp_path: Path):
     """Regression: CNQ.TO parked IWB — cnrl.com AIF PDF that live-fetches."""
     allowlist_path = tmp_path / "ir.json"

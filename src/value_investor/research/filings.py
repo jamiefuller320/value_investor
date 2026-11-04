@@ -279,6 +279,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.youngs.co.uk/wp-content/uploads/2024/09/2024-annual-report-website-01-04-2024.pdf",
         "https://www.youngs.co.uk/wp-content/uploads/2026/04/HY26-Interim-Accounts.pdf",
     ],
+    # aim parked leftover — eng-20261104-01: PAF.L unfetchable_iwb; RNS index misses statutory PDF bodies; panafricanresources.com IR PDFs fetch.
+    "PAF.L": [
+        "https://www.panafricanresources.com/wp-content/uploads/2026/09/Pan-African-Resources-integrated-annual-report-2026.pdf",
+        "https://www.panafricanresources.com/wp-content/uploads/2025/09/Pan-African-Resources-integrated-annual-report-2025.pdf",
+        "https://www.panafricanresources.com/wp-content/uploads/2026/02/PAR-unaudited-interim-financial-short-form-31-Dec-2025.pdf",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
