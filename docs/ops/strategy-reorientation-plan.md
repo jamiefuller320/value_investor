@@ -137,13 +137,13 @@ adjust thresholds once (logged), or reject.
 |------|-------------|----------|-----------|
 | 2.1 | **Registration.** Pinned learning question, multi-market universe, entry-low rule, signal-day memo rule, checkpoint-ladder exit with the fail-to-launch deadline, comparison exits, gate-rejected shadows, selection board, challenger bench, stake, both controls and the gate are frozen before scoring. Draft: [`strategy-book-registration.md`](strategy-book-registration.md). | N249 | Registration committed; owner signs off |
 | 2.2 | **Archive replay** of the rules on the daily chart history (about two years, 1,269 tickers), using the value set from archived FTSE and library weekly runs and the Phase 1 gates. Report-only: these names survived to be charted. Includes the buy-on-signal control and report-only channel columns (N254). | N249 | Ladder, comparison-exit, shadow, per-market and control boards published |
-| 2.3 | **Forward fixed-stake strategy book** on the daily schedule after open settle, with an episode walker. Floor exits, fail-to-launch sales and thesis breaks scored separately; entry snapshots stored on every episode. FTSE names from the start; library names once 1.8 and 1.9 land. | N249 | Book running; ops-monitor finding; dashboard strip |
+| 2.3 | **Forward fixed-stake strategy book** on the daily schedule after open settle, with an episode walker. Floor exits, fail-to-launch sales and thesis breaks scored separately; entry snapshots stored on every episode. Includes the daily close refresh for graduated-market buy tiers, open episodes and benchmark baskets, which runs before the walker. A signal seen after the next close is `late_signal`. Matched excess, Trading 212 listing and regime are recorded on every episode. FTSE names from the start; library names once 1.8 and 1.9 land. | N249 | Book running on closes no more than one session old; ops-monitor finding; dashboard strip |
 | 2.4 | **Review layer on strategy-book episodes.** Point the post-sale review queue, the judgment-in-the-round trail and five-lever scoring (from the cue-consumer lab) at strategy-book closes. Reviews and lever scores are inputs to the version review, never mid-run tunes. | N222 | Every closed strategy-book episode reaches the review queue; lever scores published |
 | 2.5 | **US point-in-time rehearsal.** Register, then run, the strategy book's rules, comparison exits, shadows, selection board and bench candidates on the licensed survivorship-free US history the historical screen replay already uses (S&P 500 and mid caps, 2000 onward, as-reported fundamentals), with that replay's sealed holdout revealed once. Report-only; US evidence about the method. | N249, L536 | Registration committed before data is bought; one licensed month run and deleted under the licence; development and holdout boards committed |
 
 **Phase 2 gate (owner):** the sample-thickness gate fixed in the registration
 (48 counted mature episodes, at most 6 per entry week).
-The strategy book then becomes the primary learning track, with the matched-30
+If the owner stamps `design-open`, which needs both the median fair-cost episode and the median matched excess above zero, the strategy book becomes the primary learning track, with the matched-30
 books as controls. The first version review (see
 [single track to live](#single-track-to-live-owner-2026-11-04)) happens at
 this gate.
@@ -153,7 +153,7 @@ this gate.
 | Step | Deliverable | Deferred | Done when |
 |------|-------------|----------|-----------|
 | 3.1 | **Total-return accounting**: dividends in paper NAV; benchmark matches the universe | L528 | Merged; old marks keep their basis label |
-| 3.2 | **New proof standard** for live capital: point-in-time history for parts 1–3; per-episode evidence for parts 4–6; paper implementation checks (fills, costs, data errors) | N248 | N13 / N14 revisit triggers rewritten; owner signs off |
+| 3.2 | **New proof standard** for live capital: point-in-time history for parts 1–3; per-episode evidence for parts 4–6; paper implementation checks (fills, costs, data errors); matched excess read on the Trading 212-listed subset; a sterling view of non-sterling episodes | N248 | N13 / N14 revisit triggers rewritten; owner signs off |
 | 3.3 | **Non-US point-in-time replay** (UK / Europe) of the filtered value set | L664 | Needs an owner data-licence decision |
 
 ### Phase 4 — Valuation and research focus

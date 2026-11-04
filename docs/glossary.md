@@ -64,6 +64,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | L461 | Deferred idea: dashboard panel for observe-utilization warnings with freshness and trajectory. | [`deferred-review.md`](deferred-review.md) |
 | L499 | Deferred idea: quiet universe-wide filing cold-store archive lane for optional depth without starving P1. | [`deferred-review.md`](deferred-review.md) |
 | L594 | Deferred idea: cold-store option value when multiple strands need different buy-tier shortlists from shared storage. | [`deferred-review.md`](deferred-review.md) |
+| late signal | A strategy-book signal the forward job first saw after the next session had already closed; it is not filled, so every forward fill is one that could have been placed. | [`strategy-book-registration.md`](ops/strategy-book-registration.md#3-entry-rule) |
 | launch queue | Ordered wait list for newly sealed strategies so their Data work does not starve holdings or running units. | [`ops/data-pillar-priorities.md`](ops/data-pillar-priorities.md) |
 | Layer A | Offline library fundamentals layer: constituents, metrics, manifests, and point-in-time snapshots. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | Layer B | Offline screen-lite layer: dated model scores and signal history for library markets. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
@@ -71,6 +72,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | llm_agree_veto_shadow | Observe-only pattern where an LLM agrees or vetoes algo proposals before any live hard veto. | [`ops/llm-agree-veto-shadow.md`](ops/llm-agree-veto-shadow.md) |
 | maintenance ingest threshold | Same completion bar as sprint ingest complete: raw filing parity or exhausted parked thin and IWB leftovers. | [`AGENTS.md`](../AGENTS.md) |
 | market_queue | Committed ordered list of index slices progressing through ingest cascade and epoch-0 admission. | [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md) |
+| matched excess | A strategy-book episode's return minus holding an equal-weight basket of the same market's buy tier over the same dates; its median must be above zero, as well as the episode median, for the book to pass. | [`strategy-book-registration.md`](ops/strategy-book-registration.md#1-learning-question) |
 | mature episode | A strategy-book episode whose fill is at least 63 sessions old, so it has either closed or launched; only mature episodes count for the decision median and the thickness gate. | [`strategy-book-registration.md`](ops/strategy-book-registration.md#8-scoring) |
 | memo freshness | Research memo recency bind field so decisions do not rely on stale write-ups. | [`ops/data-pillar-priorities.md`](ops/data-pillar-priorities.md) |
 | N1 | Queued idea: widen the stock universe first (AIM, Europe, worldwide); held back because data quality, not universe size, is the bottleneck. | [`deferred-review.md`](deferred-review.md) |
