@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-04T18:21:36+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-04T20:22:00+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -440,6 +440,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | L624 | **Archive-lane IR/ASX discover yield (allowlist / hub)** | FTSE and ASX quiet-pack units fail-open empty when IR allowlist discover returns nothing for pilot tickers (no ir_pdf budget burn). Improve archive-lane discover coverage (allowlist breadth, ASX/Companies House path) without a second live crawler or euro/P1 steal. Structural fix preferred over retry queue for these empties. | After #1175 unit_results attribute repeated no_bodies to IR markets on quiet nights, or stage-2 widen is blocked by IR empty yield |
 | L625 | **Cold-store skip-already-packed + rotate pilot tickers** | Assemble currently re-selects the first N universe CSV tickers every night and does not skip existing pack_index hits, so successful SEC/ESEF packs can waste fetch budget on rewrites. For eventual high throughput under higher caps, skip hydrated packs and rotate uncovered tickers within archive budgets — still preemptible, not a fourth equal sprint. | Before or at stage-2 cap widen (max_units>=8 / max_http_fetches>=32), or when unit_results show completed units re-attempted with zero new objects across quiet nights _(machine-checked)_ |
 | L665 | **Scheduled Trading 212 catalogue refresh** | The T212 instrument catalogue was fetched once on 2026-07-22 (17,328 instruments) and no workflow refreshes it, so overlays and t212-align drift. Add a weekly ops-monitor-visible refresh with a staleness finding. | Next t212-align run, L48 mapping work, or catalogue older than 120 days |
+| L674 | **Constituent ISINs for library markets without them (Trading 212 exact matching)** | FTSE MIB, OMX Stockholm, ISEQ and other constituent lists carry no ISINs, so the Trading 212 overlay can only confirm cross-listings by home-country ISIN plus company name; real listings with differing names (Ferrari on NYSE, SEB on Xetra) are recorded not listed. Adding ISINs to constituents makes those hits exact. | The strategy book's tradable-only board is read for a version review or plan step 3.2 (live proof standard), or a market's tradable share matters for admitting it |
 
 ### Research & portfolio product
 
