@@ -21,12 +21,14 @@ from value_investor.data_library import (
     DEFAULT_LIBRARY_ROOT,
     MARKET_REGISTRY,
     load_manifest,
+    manifest_path,
     market_dir,
 )
 from value_investor.storage import read_json, write_json
 
 logger = logging.getLogger(__name__)
 
+FTSE350_MARKET_ID = "ftse350"
 DEFAULT_T212_ROOT = DEFAULT_LIBRARY_ROOT / "t212_coverage"
 # Legacy path kept for one-release reads / migration.
 LEGACY_II_ROOT = DEFAULT_LIBRARY_ROOT / "ii_coverage"
@@ -149,6 +151,117 @@ def parse_t212_ticker(t212_ticker: str) -> tuple[str, str | None, str | None]:
     return text, None, None
 
 
+# Non-US T212 tickers mark the venue with lowercase letters after the symbol
+# (``VODl_EQ`` London, ``BAYNd_EQ`` Xetra, ``ABNa_EQ`` Amsterdam); a trailing
+# digit is a second line on the same venue (``BIRG1l_EQ``, ``RRd1_EQ``).
+T212_LOWERCASE_VENUES: dict[str, str] = {
+    "l": "LSE",
+    "d": "DE",
+    "p": "PA",
+    "s": "SW",
+    "m": "MI",
+    "a": "AS",
+    "e": "MC",
+    "es": "MC",
+    "o": "OL",
+}
+# ISIN country prefixes of companies at home on each Yahoo venue. A short-name
+# hit on another venue counts only when the instrument's ISIN is from here
+# (Eni on a Brussels line, Bank of Ireland in London), not a namesake abroad.
+HOME_ISIN_COUNTRIES: dict[str, frozenset[str]] = {
+    "": frozenset({"US"}),
+    ".L": frozenset({"GB", "JE", "GG", "IM"}),
+    ".DE": frozenset({"DE"}),
+    ".PA": frozenset({"FR"}),
+    ".AS": frozenset({"NL"}),
+    ".BR": frozenset({"BE"}),
+    ".MI": frozenset({"IT"}),
+    ".MC": frozenset({"ES"}),
+    ".IR": frozenset({"IE"}),
+    ".TO": frozenset({"CA"}),
+    ".AX": frozenset({"AU"}),
+    ".HK": frozenset({"HK"}),
+    ".SI": frozenset({"SG"}),
+    ".ST": frozenset({"SE"}),
+    ".SW": frozenset({"CH"}),
+    ".HE": frozenset({"FI"}),
+    ".VI": frozenset({"AT"}),
+    ".LS": frozenset({"PT"}),
+}
+_UPPER_VENUE_RE = re.compile(r"_([A-Z]{2})_EQ$|_EQ_([A-Z]{2})$")
+_LOWER_VENUE_RE = re.compile(r"[A-Z0-9]([a-z]+)\d*_?EQ$")
+
+
+def t212_venue(t212_ticker: str) -> str | None:
+    """Venue code of a T212 ticker (``AAPL_US_EQ`` → ``US``, ``VODl_EQ`` → ``LSE``)."""
+    text = (t212_ticker or "").strip()
+    upper = _UPPER_VENUE_RE.search(text)
+    if upper:
+        return upper.group(1) or upper.group(2)
+    lower = _LOWER_VENUE_RE.search(text)
+    if lower:
+        return T212_LOWERCASE_VENUES.get(lower.group(1))
+    return None
+
+
+def t212_symbol(t212_ticker: str) -> str:
+    """Listing symbol without the venue marker (``BNp_EQ`` → ``BN``, ``AAPL_US_EQ`` → ``AAPL``)."""
+    text = (t212_ticker or "").strip()
+    upper = _UPPER_VENUE_RE.search(text)
+    if upper:
+        return text[: upper.start()].upper()
+    lower = _LOWER_VENUE_RE.search(text)
+    if lower:
+        return text[: lower.start(1)].upper()
+    return parse_t212_ticker(text)[0]
+
+
+_NAME_NOISE = frozenset(
+    {
+        "the",
+        "of",
+        "and",
+        "group",
+        "holdings",
+        "holding",
+        "plc",
+        "ltd",
+        "limited",
+        "inc",
+        "corp",
+        "corporation",
+        "co",
+        "company",
+        "sa",
+        "ag",
+        "nv",
+        "se",
+        "spa",
+        "asa",
+        "ab",
+        "oyj",
+        "class",
+        "a",
+        "b",
+        "adr",
+        "reit",
+    }
+)
+
+
+def _name_tokens(name: str | None) -> list[str]:
+    words = re.findall(r"[a-z0-9]+", str(name or "").lower())
+    return [w for w in words if w not in _NAME_NOISE]
+
+
+def names_agree(ours: str | None, theirs: str | None) -> bool:
+    """True when the first distinctive word of either company name is in the other."""
+    a, b = _name_tokens(ours), _name_tokens(theirs)
+    if not a or not b:
+        return False
+    return a[0] in b or b[0] in a
+
+
 def _suffix_index(policy: dict[str, Any]) -> dict[str, dict[str, Any]]:
     index: dict[str, dict[str, Any]] = {}
     for row in policy.get("exchanges") or []:
@@ -209,8 +322,9 @@ def build_catalogue_index(instruments: list[dict[str, Any]]) -> dict[str, Any]:
             by_isin.setdefault(str(norm["isin"]), []).append(t212)
         if norm.get("shortName"):
             by_short.setdefault(str(norm["shortName"]), []).append(t212)
-        if norm.get("symbol") and norm["symbol"] != norm.get("shortName"):
-            by_short.setdefault(str(norm["symbol"]), []).append(t212)
+        symbol = t212_symbol(t212)
+        if symbol and symbol != norm.get("shortName"):
+            by_short.setdefault(symbol, []).append(t212)
 
     return {
         "schema_version": 1,
@@ -431,7 +545,19 @@ def _pick_instrument(
     yahoo_suf: str,
     policy: dict[str, Any],
     prefer_types: set[str] | None = None,
+    same_security: bool = False,
+    name: str | None = None,
 ) -> dict[str, Any] | None:
+    """Pick one catalogue row for a Yahoo ticker.
+
+    ``same_security`` is true when the candidates share the ticker's ISIN, so a
+    row on another venue is still the same share. Short-name candidates are not:
+    ``CSL`` on the ASX is CSL Ltd, ``CSL_US_EQ`` is Carlisle Companies. They
+    match on the ticker's own venue, or on another venue when the instrument's
+    ISIN is from the ticker's home country and the company names agree
+    (``ALL.AX`` is Aristocrat Leisure; the Australian-registered ``ALL`` in
+    London is Atlantic Lithium).
+    """
     prefer_types = prefer_types or {"STOCK", "ETF"}
     rows = [by_ticker[t] for t in candidates if t in by_ticker]
     if not rows:
@@ -440,20 +566,25 @@ def _pick_instrument(
     if typed:
         rows = typed
 
+    def _best(found: list[dict[str, Any]]) -> dict[str, Any]:
+        stocks = [r for r in found if str(r.get("type") or "").upper() == "STOCK"]
+        return stocks[0] if stocks else found[0]
+
     exch_map = _suffix_exchange_map(policy)
     wanted = {c.upper() for c in exch_map.get(yahoo_suf, [])}
-    if wanted:
-        matched = [r for r in rows if (r.get("exchangeCode") or "").upper() in wanted]
-        if len(matched) == 1:
-            return matched[0]
-        if len(matched) > 1:
-            # Prefer STOCK over ETF when still ambiguous.
-            stocks = [r for r in matched if str(r.get("type") or "").upper() == "STOCK"]
-            return stocks[0] if stocks else matched[0]
-
-    if len(rows) == 1:
-        return rows[0]
-    # Ambiguous across venues — refuse catalogue hit (fall through to allowlist).
+    matched = [r for r in rows if (t212_venue(str(r.get("ticker") or "")) or "") in wanted]
+    if matched:
+        return _best(matched)
+    if same_security:
+        return _best(rows)
+    home = HOME_ISIN_COUNTRIES.get(yahoo_suf, frozenset())
+    domestic = [
+        r
+        for r in rows
+        if str(r.get("isin") or "")[:2].upper() in home and names_agree(name, r.get("name"))
+    ]
+    if domestic:
+        return _best(domestic)
     return None
 
 
@@ -463,6 +594,7 @@ def match_catalogue(
     isin: str | None = None,
     index: dict[str, Any] | None = None,
     policy: dict[str, Any] | None = None,
+    name: str | None = None,
 ) -> dict[str, Any] | None:
     """Return a normalised T212 instrument for a Yahoo ticker, or None."""
     if index is None:
@@ -471,39 +603,54 @@ def match_catalogue(
     by_isin = index.get("by_isin") or {}
     by_short = index.get("by_short_name") or {}
     policy = policy or {}
+    yahoo_suf = yahoo_suffix(ticker)
 
     isin_key = (isin or "").strip().upper()
     if isin_key and isin_key in by_isin:
         picked = _pick_instrument(
             list(by_isin[isin_key]),
             by_ticker,
-            yahoo_suf=yahoo_suffix(ticker),
+            yahoo_suf=yahoo_suf,
             policy=policy,
+            same_security=True,
         )
         if picked:
             return picked
 
+    def _listed_as(key: str, tickers: list[str]) -> list[str]:
+        # Indexes built before t212_symbol() filed BNp_EQ (Danone) under "BNP".
+        return [
+            t
+            for t in tickers
+            if str((by_ticker.get(t) or {}).get("shortName") or "") == key or t212_symbol(t) == key
+        ]
+
+    def _soft(text: str) -> str:
+        return re.sub(r"[^A-Z0-9]", "", text)
+
     epic = yahoo_epic(ticker)
     if epic and epic in by_short:
         picked = _pick_instrument(
-            list(by_short[epic]),
+            _listed_as(epic, list(by_short[epic])),
             by_ticker,
-            yahoo_suf=yahoo_suffix(ticker),
+            yahoo_suf=yahoo_suf,
             policy=policy,
+            name=name,
         )
         if picked:
             return picked
 
     # Soft match: strip punctuation from epic (BRK.B / BRK-B variants).
-    soft = re.sub(r"[^A-Z0-9]", "", epic)
+    soft = _soft(epic)
     if soft and soft != epic:
         for key, tickers in by_short.items():
-            if re.sub(r"[^A-Z0-9]", "", key) == soft:
+            if _soft(key) == soft:
                 picked = _pick_instrument(
-                    list(tickers),
+                    _listed_as(key, list(tickers)),
                     by_ticker,
-                    yahoo_suf=yahoo_suffix(ticker),
+                    yahoo_suf=yahoo_suf,
                     policy=policy,
+                    name=name,
                 )
                 if picked:
                     return picked
@@ -535,7 +682,7 @@ def _overlay_row(
     return {
         "ticker": ticker,
         "market": market_id,
-        "isin": t212_isin or isin,
+        "isin": isin or t212_isin,
         # Canonical Trading 212 fields
         "tradable_on_t212": tradable,
         "t212_ticker": t212_ticker,
@@ -565,6 +712,7 @@ def classify_ticker(
     policy: dict[str, Any] | None = None,
     exceptions: dict[str, dict[str, Any]] | None = None,
     catalogue_index: dict[str, Any] | None = None,
+    name: str | None = None,
 ) -> dict[str, Any]:
     """
     Classify one Yahoo ticker for Trading 212 tradability.
@@ -606,12 +754,13 @@ def classify_ticker(
         isin=isin,
         index=catalogue_index,
         policy=policy,
+        name=name,
     )
     if hit is not None:
         return _overlay_row(
             ticker=key,
             market_id=market_id,
-            isin=hit.get("isin") or isin,
+            isin=isin or hit.get("isin"),
             tradable=True,
             deal_channel="online",
             confidence="verified",
@@ -706,9 +855,36 @@ def _isin_lookup_for_market(library_root: Path, market_id: str) -> dict[str, str
     return out
 
 
+def _names_for_market(library_root: Path, market_id: str) -> dict[str, str]:
+    """Yahoo ticker → company name from constituents (or the FTSE 350 screen)."""
+    if market_id == FTSE350_MARKET_ID:
+        rows: Any = _ftse350_screen_rows(library_root)
+    else:
+        path = market_dir(library_root, market_id) / "constituents" / "latest.json"
+        rows = read_json(path) if path.exists() else []
+    out: dict[str, str] = {}
+    for row in rows if isinstance(rows, list) else []:
+        if isinstance(row, dict) and row.get("ticker") and row.get("name"):
+            out[str(row["ticker"]).strip()] = str(row["name"])
+    return out
+
+
+def _ftse350_screen_rows(library_root: Path) -> list[dict[str, Any]]:
+    """Rows of the latest live FTSE 350 screen snapshot (no library manifest)."""
+    history = Path(library_root).parent / "history"
+    runs = sorted(history.glob("run_*.json.gz")) or sorted(history.glob("run_*.json"))
+    if not runs:
+        return []
+    payload = read_json(runs[-1])
+    rows = payload.get("signals") if isinstance(payload, dict) else None
+    return [row for row in rows or [] if isinstance(row, dict) and row.get("ticker")]
+
+
 def _tickers_for_market(library_root: Path, market_id: str) -> list[str]:
     if market_id not in MARKET_REGISTRY:
         raise ValueError(f"Unknown market {market_id!r}")
+    if market_id == FTSE350_MARKET_ID and not manifest_path(library_root, market_id).exists():
+        return [str(row["ticker"]) for row in _ftse350_screen_rows(library_root)]
     manifest = load_manifest(library_root, market_id)
     tickers = [str(t) for t in (manifest.get("tickers") or []) if t]
     if tickers:
@@ -734,6 +910,7 @@ def build_market_overlay(
     if catalogue_index is None:
         catalogue_index = load_catalogue_index(library_root)
     isins = _isin_lookup_for_market(library_root, market_id)
+    names = _names_for_market(library_root, market_id)
     return [
         classify_ticker(
             ticker,
@@ -742,6 +919,7 @@ def build_market_overlay(
             policy=policy,
             exceptions=exceptions,
             catalogue_index=catalogue_index,
+            name=names.get(ticker),
         )
         for ticker in _tickers_for_market(library_root, market_id)
     ]
@@ -805,9 +983,8 @@ def build_t212_overlays(
     write: bool = True,
 ) -> dict[str, Any]:
     """
-    Build per-market Trading 212 overlays for offline library slices.
-
-    Skips ``ftse350`` by default (live screen path); include explicitly if needed.
+    Build per-market Trading 212 overlays for library markets and the live
+    FTSE 350 screen (tickers from its latest run snapshot).
     """
     library_root = Path(library_root or DEFAULT_LIBRARY_ROOT)
     t212_root = t212_coverage_root(library_root)
@@ -818,7 +995,7 @@ def build_t212_overlays(
     catalogue_meta = load_catalogue_meta(library_root)
 
     if markets is None:
-        markets = [mid for mid in MARKET_REGISTRY if mid != "ftse350"]
+        markets = list(MARKET_REGISTRY)
 
     per_market: dict[str, Any] = {}
     for market_id in markets:
@@ -898,7 +1075,7 @@ def build_t212_overlays(
                 [
                     "# Trading 212 coverage overlay",
                     "",
-                    "Tradable north star for offline library markets.",
+                    "Tradable north star for library markets and the live FTSE 350 screen.",
                     "",
                     "- `catalogue/` — instruments dump + compact ISIN/shortName index "
                     "(`ftse-library t212-catalogue`)",
@@ -1159,6 +1336,7 @@ def annotate_shortlist_rows(
             policy=policy,
             exceptions=exceptions,
             catalogue_index=catalogue_index,
+            name=str(row["name"]) if row.get("name") else None,
         )
         merged = dict(row)
         merged["tradable_on_t212"] = overlay["tradable_on_t212"]
