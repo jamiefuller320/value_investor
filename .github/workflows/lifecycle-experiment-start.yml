@@ -92,18 +92,20 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+      # entry_dca_pending.json exists only once an entry DCA is queued; the helper
+      # skips missing paths, where git add would fail the step.
       - name: Commit dashboard slices
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: lifecycle experiment start graduated execute from dashboard [skip ci]"
-          file_pattern: |
+        env:
+          COMMIT_MESSAGE: "chore: lifecycle experiment start graduated execute from dashboard [skip ci]"
+          GHA_COMMIT_LABEL: "Lifecycle experiment start"
+          GHA_COMMIT_OWNED: |
             docs/data/experiment_starts.json
             docs/data/experiment_assessment.json
             docs/data/entry_dca_adoption_plan.json
             docs/data/lifecycle_board.json
             docs/data/paper_automation/graduated_allocation/config.json
             docs/data/paper_automation/graduated_allocation/entry_dca_pending.json
-          skip_fetch: false
+        run: bash scripts/gha_commit_artifacts.sh
 
       - name: Notify dashboard channel
         env:

@@ -143,14 +143,21 @@ jobs:
           # until archives are thick enough for closed cohorts.
           ftse-exit-timing-archive --output-dir docs/data || true
 
+      # Shared fetch+reset overlay + push retry (L348). Soft-fail instruments may
+      # not write every path; the helper skips missing ones, where git add would
+      # fail the step. Task stores touched by --sync-task-status overlay only when
+      # main has not changed them since checkout.
       - name: Commit knob bootstrap artifacts
         # Persist even when the modelling agent is skipped — otherwise Sunday
         # calibrate/spawn is lost and weekday paper-auto never sees r2/r3.
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: knob bootstrap priors + calibrated shadows [skip ci]"
-          file_pattern: |
-            docs/data/history/run_*.json
+        continue-on-error: true
+        env:
+          COMMIT_MESSAGE: "chore: knob bootstrap priors + calibrated shadows [skip ci]"
+          GHA_COMMIT_LABEL: "Knob bootstrap"
+          GHA_COMMIT_OPTIONAL: |
+            docs/data/analysis_tasks.json
+            docs/data/engineering_tasks.json
+          GHA_COMMIT_OWNED: |
             docs/data/history/run_*.json.gz
             docs/data/paper_automation/knob_calibration_priors.json
             docs/data/paper_automation/calibration_shadow_endurance.json
@@ -185,7 +192,7 @@ jobs:
             docs/data/exit_timing_near_miss.json
             docs/data/exit_timing_near_miss_review.json
             docs/data/exit_timing_reconciliation.json
-          skip_fetch: false
+        run: bash scripts/gha_commit_artifacts.sh
 
       - name: Check analysis inputs
         id: ready
@@ -250,17 +257,17 @@ jobs:
 
       - name: Commit system-gap snapshot
         continue-on-error: true
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: learning-path system gaps [skip ci]"
-          file_pattern: |
+        env:
+          COMMIT_MESSAGE: "chore: learning-path system gaps [skip ci]"
+          GHA_COMMIT_LABEL: "System gaps"
+          GHA_COMMIT_OWNED: |
             docs/data/system_gaps.json
             docs/data/analysis_tasks.json
             docs/data/engineering_tasks.json
             docs/data/post_run_clearance.json
             docs/data/so_what_closure.json
             docs/data/phase_c_readiness.json
-          skip_fetch: false
+        run: bash scripts/gha_commit_artifacts.sh
 
       - name: Run modelling analysis review
         if: steps.ready.outputs.skip != 'true'
@@ -281,7 +288,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: modelling analysis review [skip ci]"
-          file_pattern: |
+          file_pattern: >-
             docs/data/analysis_review.json
             docs/data/analysis_review.md
             docs/data/analysis_tasks.json

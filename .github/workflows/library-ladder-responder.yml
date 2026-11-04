@@ -69,18 +69,15 @@ jobs:
           print(json.dumps(data, indent=2))
           PY
 
-      - name: Sync main before commit
-        if: steps.respond.outputs.should_draft == 'true'
-        run: git pull --rebase --autostash origin main
-
       - name: Commit drafted engineering tasks
         if: steps.respond.outputs.should_draft == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          branch: main
-          commit_message: "chore: draft library ladder recovery task [skip ci]"
-          file_pattern: docs/data/engineering_tasks.json docs/data/library/ladder_responder_log.json
-          skip_fetch: false
+        env:
+          COMMIT_MESSAGE: "chore: draft library ladder recovery task [skip ci]"
+          GHA_COMMIT_LABEL: "Library ladder responder"
+          GHA_COMMIT_OWNED: |
+            docs/data/engineering_tasks.json
+            docs/data/library/ladder_responder_log.json
+        run: bash scripts/gha_commit_artifacts.sh
 
       - name: Dispatch engineering queue
         if: steps.respond.outputs.should_draft == 'true'
