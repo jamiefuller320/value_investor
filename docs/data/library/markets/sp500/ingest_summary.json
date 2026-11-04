@@ -1,24 +1,100 @@
 {
-  "run_at": "2026-11-04T16:45:54.847290+00:00",
+  "run_at": "2026-11-04T20:38:30.496417+00:00",
   "market_id": "sp500",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "COR"
+  ],
+  "target_details": [
+    {
+      "ticker": "COR",
+      "priority_score": 15.142,
+      "filings_total": 69,
+      "filings_with_body": 47,
+      "indexed_without_body": 2,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "COR",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 69,
+        "filings_with_body": 47,
+        "indexed_without_body": 2
+      },
+      "after": {
+        "filings_total": 69,
+        "filings_with_body": 67,
+        "indexed_without_body": 1
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 69,
+        "annual": 8,
+        "interim": 9,
+        "trading_update": 0,
+        "other": 52,
+        "with_body": 57,
+        "period_coverage": {
+          "annual": {
+            "total": 8,
+            "with_body": 8
+          },
+          "interim": {
+            "total": 9,
+            "with_body": 9
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 33,
+            "with_body": 32
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 67,
+        "with_body_after": 67,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "COR"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-04T16:45:34.138376+00:00",
+    "snapshot_at": "2026-11-04T20:37:37.321671+00:00",
     "market_id": "sp500",
     "buy_tier_count": 143,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 6,
+    "indexed_without_body": 9,
     "bodies_min": 19,
     "bodies_median": 22,
-    "bodies_max": 96,
+    "bodies_max": 120,
     "coverage_scope": "canonical",
     "ftse_equivalent": true,
     "unmeasured_tickers": [],
@@ -33,54 +109,10 @@
     ],
     "indexed_without_body_by_ticker": {
       "EME": 1,
-      "LH": 1,
+      "LH": 2,
       "LMT": 1,
-      "COR": 1,
-      "CRH": 2
-    },
-    "parked_tickers": [
-      "COR",
-      "CRH",
-      "EME",
-      "LH",
-      "LMT"
-    ],
-    "parked_count": 5,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
-  },
-  "health_after": {
-    "snapshot_at": "2026-11-04T16:45:49.050748+00:00",
-    "market_id": "sp500",
-    "buy_tier_count": 143,
-    "unmeasured_buy_tier": 0,
-    "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 0,
-    "indexed_without_body": 6,
-    "bodies_min": 19,
-    "bodies_median": 22,
-    "bodies_max": 96,
-    "coverage_scope": "canonical",
-    "ftse_equivalent": true,
-    "unmeasured_tickers": [],
-    "zero_body_tickers": [],
-    "thin_body_tickers": [],
-    "indexed_without_body_tickers": [
-      "EME",
-      "LH",
-      "LMT",
-      "COR",
-      "CRH"
-    ],
-    "indexed_without_body_by_ticker": {
-      "EME": 1,
-      "LH": 1,
-      "LMT": 1,
-      "COR": 1,
-      "CRH": 2
+      "COR": 2,
+      "CRH": 3
     },
     "parked_tickers": [
       "CRH",
@@ -91,16 +123,61 @@
     "parked_count": 4,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body": 2,
     "effective_indexed_without_body_tickers": [
       "COR"
+    ],
+    "ingest_exhausted": false
+  },
+  "health_after": {
+    "snapshot_at": "2026-11-04T20:38:30.469729+00:00",
+    "market_id": "sp500",
+    "buy_tier_count": 143,
+    "unmeasured_buy_tier": 0,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 0,
+    "indexed_without_body": 8,
+    "bodies_min": 19,
+    "bodies_median": 22,
+    "bodies_max": 120,
+    "coverage_scope": "canonical",
+    "ftse_equivalent": true,
+    "unmeasured_tickers": [],
+    "zero_body_tickers": [],
+    "thin_body_tickers": [],
+    "indexed_without_body_tickers": [
+      "EME",
+      "LH",
+      "LMT",
+      "COR",
+      "CRH"
+    ],
+    "indexed_without_body_by_ticker": {
+      "EME": 1,
+      "LH": 2,
+      "LMT": 1,
+      "COR": 1,
+      "CRH": 3
+    },
+    "parked_tickers": [
+      "EME",
+      "LMT"
+    ],
+    "parked_count": 2,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 6,
+    "effective_indexed_without_body_tickers": [
+      "LH",
+      "COR",
+      "CRH"
     ],
     "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": null,
@@ -109,33 +186,33 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-11-04T16:45:41.587332+00:00",
+    "assessed_at": "2026-11-04T20:37:47.946586+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
       {
         "ticker": "CRH",
-        "indexed_without_body": 2,
-        "filings_total": 68,
+        "indexed_without_body": 3,
+        "filings_total": 69,
         "filings_with_body": 66
       },
       {
         "ticker": "COR",
-        "indexed_without_body": 1,
-        "filings_total": 68,
+        "indexed_without_body": 2,
+        "filings_total": 69,
         "filings_with_body": 47
+      },
+      {
+        "ticker": "LH",
+        "indexed_without_body": 2,
+        "filings_total": 22,
+        "filings_with_body": 20
       },
       {
         "ticker": "EME",
         "indexed_without_body": 1,
         "filings_total": 70,
         "filings_with_body": 69
-      },
-      {
-        "ticker": "LH",
-        "indexed_without_body": 1,
-        "filings_total": 21,
-        "filings_with_body": 20
       },
       {
         "ticker": "LMT",
@@ -151,51 +228,37 @@
     "auto_pin_tickers": [
       "CRH",
       "COR",
-      "EME",
       "LH",
+      "EME",
       "LMT"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (5 tickers, top: CRH(2), COR(1), EME(1), LH(1), LMT(1))"
+      "Prefer indexed-without-body body refetch (5 tickers, top: CRH(3), COR(2), LH(2), EME(1), LMT(1))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 5,
-      "indexed_without_body_rows": 6,
+      "indexed_without_body_rows": 9,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 0.0012323880000053578,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2099.998767612,
+  "used_seconds": 32.11963673600002,
+  "budget_seconds": 175.0,
+  "leftover_seconds": 142.88036326399998,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "LH"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-11-04T16:45:49.060375+00:00",
+    "updated_at": "2026-11-04T20:38:30.480031+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
-      {
-        "ticker": "CRH",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-10-30T15:08:40.644031+00:00",
-        "park_via": "straggler_soft_park",
-        "filings_total": 68,
-        "filings_with_body": 66,
-        "indexed_without_body": 2,
-        "thin": false,
-        "source_surface": "sec_edgar"
-      },
       {
         "ticker": "EME",
         "reason": "unfetchable_iwb",
@@ -204,18 +267,6 @@
         "park_via": "straggler_soft_park",
         "filings_total": 70,
         "filings_with_body": 69,
-        "indexed_without_body": 1,
-        "thin": false,
-        "source_surface": "sec_edgar"
-      },
-      {
-        "ticker": "LH",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-10-31T20:22:28.536399+00:00",
-        "park_via": "straggler_soft_park",
-        "filings_total": 21,
-        "filings_with_body": 20,
         "indexed_without_body": 1,
         "thin": false,
         "source_surface": "sec_edgar"
@@ -245,7 +296,9 @@
       "LMT"
     ],
     "unparked_leftover": [
-      "COR"
+      "COR",
+      "CRH",
+      "LH"
     ],
     "surface_released": [],
     "path": "docs/data/library/markets/sp500/ingest_exhaustion.json"
@@ -257,42 +310,7 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 61,
-    "candidate_count": 52,
-    "skipped_resolved_tickers": [
-      "CRH",
-      "LMT",
-      "TPT.L",
-      "DFS.L",
-      "APTD.L",
-      "ULTP.L",
-      "FOXT.L",
-      "MER.L",
-      "GIB-A.TO",
-      "NTR.TO",
-      "SU.TO",
-      "BAS.DE",
-      "IFX.DE",
-      "PDD",
-      "BAS.DE",
-      "DTE.DE",
-      "DTG.DE",
-      "FRE.DE",
-      "HNR1.DE",
-      "MUV2.DE",
-      "HEN3.DE",
-      "PST.MI",
-      "ACKB.BR",
-      "APAM.AS",
-      "0285.HK",
-      "0857.HK",
-      "0288.HK",
-      "2331.HK",
-      "0883.HK",
-      "EVN.VI",
-      "WIE.VI"
-    ],
-    "wait_behind_task_id": ""
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20261104-03"
   }
 }
