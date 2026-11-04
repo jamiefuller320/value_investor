@@ -406,3 +406,66 @@ def test_build_payload_uses_archived_initial_levels(tmp_path: Path):
     assert payload["initial_levels"]["stop_loss"] == 80.0
     assert payload["initial_levels_as_of"] == "2025-06-16"
     assert payload["initial_levels"]["sma50"] is not None
+
+
+def _dated_chart(chart_dir: Path, ticker: str, last: str) -> Path:
+    path = chart_dir / chart_filename(ticker)
+    write_json(
+        path,
+        {
+            "ticker": ticker,
+            "period": "2y",
+            "dates": ["2026-10-29", last],
+            "closes": [100.0, 101.0],
+            "volumes": [1, 1],
+            "sma50_series": [None, None],
+            "sma200_series": [None, None],
+            "levels": {"core_limit": 95.0},
+            "signal": "buy",
+        },
+    )
+    return path
+
+
+def test_ensure_price_charts_rebuilds_charts_behind_closes_through(tmp_path: Path, monkeypatch):
+    from datetime import date
+
+    from value_investor import technical_analysis
+
+    chart_dir = tmp_path / "charts"
+    chart_dir.mkdir()
+    _dated_chart(chart_dir, "OLD.L", "2026-10-30")
+    _dated_chart(chart_dir, "NEW.L", "2026-11-04")
+    fetched: list[list[str]] = []
+
+    def fake_fetch(tickers, period, market=None):
+        fetched.append(list(tickers))
+        return {}
+
+    monkeypatch.setattr(technical_analysis, "fetch_price_history", fake_fetch)
+    reports = [
+        {"ticker": "OLD.L", "signal": "buy", "name": "Old"},
+        {"ticker": "NEW.L", "signal": "buy", "name": "New"},
+    ]
+
+    ensure_price_charts(reports=reports, chart_dir=chart_dir, tickers=["OLD.L", "NEW.L"])
+    assert fetched == []
+
+    ensure_price_charts(
+        reports=reports,
+        chart_dir=chart_dir,
+        tickers=["OLD.L", "NEW.L"],
+        closes_through=date(2026, 11, 4),
+    )
+    assert fetched == [["OLD.L"]]
+
+
+def test_chart_last_close_date_reads_last_bar():
+    from datetime import date
+
+    from value_investor.price_charts import chart_last_close_date
+
+    assert chart_last_close_date({"dates": ["2026-10-29", "2026-10-30"]}) == date(2026, 10, 30)
+    assert chart_last_close_date({"dates": []}) is None
+    assert chart_last_close_date(None) is None
+    assert chart_last_close_date({"dates": ["junk"]}) is None
