@@ -53,9 +53,9 @@ from value_investor.strategy_book_signals import (
 
 # Registration section 11: about $0.40 a memo, from the weekly_ops pool.
 ESTIMATED_MEMO_USD = 0.40
-# Registration section 11: about 15–20 memos a week.
-WEEKLY_MEMO_ESTIMATE_LOW = 15
-WEEKLY_MEMO_ESTIMATE_HIGH = 20
+# Registration section 11: about 25–35 memos a week (owner, 2026-11-05).
+WEEKLY_MEMO_ESTIMATE_LOW = 25
+WEEKLY_MEMO_ESTIMATE_HIGH = 35
 # Registration section 12: memo_not_ready exceeds a fifth of otherwise-eligible signals.
 MEMO_NOT_READY_MAX_SHARE = 0.2
 
