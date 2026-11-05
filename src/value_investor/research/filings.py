@@ -8923,14 +8923,40 @@ def parse_disposal_rns_highlights(body_text: str, *, headline: str = "") -> dict
     return payload
 
 
+def resolve_filing_body_path_for_row(row: dict[str, Any], bodies_dir: Path) -> Path | None:
+    """Find the text for one filings-index row.
+
+    ``body_path`` is often ``output/research/...``, which is not in the repo.
+    The file is kept at ``filings/bodies/<basename>`` or ``filings/bodies/<id>.txt``.
+    The on-disk bodies directory is preferred over a stored path that happens to
+    exist somewhere else.
+    """
+    bodies_dir = Path(bodies_dir)
+    raw = str(row.get("body_path") or "").strip()
+    filing_id = str(row.get("id") or "").strip()
+    candidates: list[Path] = []
+    if raw:
+        name = Path(raw).name
+        if name:
+            candidates.append(bodies_dir / name)
+        candidates.append(Path(raw))
+    if filing_id:
+        candidates.append(bodies_dir / f"{filing_id}.txt")
+    seen: set[Path] = set()
+    for candidate in candidates:
+        if candidate in seen:
+            continue
+        seen.add(candidate)
+        try:
+            if candidate.is_file():
+                return candidate
+        except OSError:
+            continue
+    return None
+
+
 def _resolve_filing_body_path_for_row(row: dict[str, Any], bodies_dir: Path) -> Path | None:
-    body_path = row.get("body_path")
-    if body_path:
-        path = Path(str(body_path))
-        if path.is_file():
-            return path
-    candidate = bodies_dir / f"{row.get('id')}.txt"
-    return candidate if candidate.is_file() else None
+    return resolve_filing_body_path_for_row(row, bodies_dir)
 
 
 def _interim_filing_row_rank(row: dict[str, Any]) -> tuple:
@@ -8941,6 +8967,127 @@ def _interim_filing_row_rank(row: dict[str, Any]) -> tuple:
         statutory,
         str(row.get("published_at") or ""),
     )
+
+
+def _published_date_text(value: Any) -> str:
+    text = str(value or "").strip()
+    return text[:10] if len(text) >= 10 else ""
+
+
+def _reject_period_after_publication(record: dict[str, Any]) -> dict[str, Any]:
+    """A results period that ends after the filing was published is not usable."""
+    period_end = str(record.get("period_end") or "")
+    published = _published_date_text(record.get("published_at"))
+    if period_end and published and period_end > published:
+        record["status"] = "not_extracted"
+        record["why"] = "period_after_publication"
+        record["revenue"] = None
+        record["eps"] = []
+        record["parse_confidence"] = None
+    return record
+
+
+def _half_year_comparison_records(index: dict[str, Any], bodies_dir: Path) -> list[dict[str, Any]]:
+    """One record per half-year results row, newest publication first."""
+    from value_investor.research.half_year_extract import (
+        is_half_year_results_row,
+        parse_half_year_results,
+    )
+
+    records: list[dict[str, Any]] = []
+    for row in index.get("filings") or []:
+        if not isinstance(row, dict) or not is_half_year_results_row(row):
+            continue
+        published = str(row.get("published_at") or "").strip()
+        common = {
+            "source_filing_id": str(row.get("id") or ""),
+            "published_at": published or None,
+            "headline": row.get("headline"),
+        }
+        path = resolve_filing_body_path_for_row(row, bodies_dir)
+        if path is None:
+            records.append(
+                {
+                    "status": "not_extracted",
+                    "why": "body_missing",
+                    "period_end": None,
+                    "prior_period_end": None,
+                    "prior_period_basis": None,
+                    "revenue": None,
+                    "eps": [],
+                    "parse_confidence": None,
+                    "revenue_why": None,
+                    "eps_why": None,
+                    **common,
+                }
+            )
+            continue
+        try:
+            body_text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            records.append(
+                {
+                    "status": "not_extracted",
+                    "why": "body_unreadable",
+                    "period_end": None,
+                    "prior_period_end": None,
+                    "prior_period_basis": None,
+                    "revenue": None,
+                    "eps": [],
+                    "parse_confidence": None,
+                    "revenue_why": None,
+                    "eps_why": None,
+                    **common,
+                }
+            )
+            continue
+        parsed = parse_half_year_results(body_text)
+        parsed.update(common)
+        records.append(_reject_period_after_publication(parsed))
+    records.sort(
+        key=lambda item: (
+            str(item.get("published_at") or ""),
+            str(item.get("source_filing_id") or ""),
+        ),
+        reverse=True,
+    )
+    return records
+
+
+def _newest_extracted_half_year(records: list[dict[str, Any]]) -> dict[str, Any] | None:
+    for record in records:
+        if record.get("status") == "extracted":
+            return record
+    return None
+
+
+def _semantic_interim_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    return {key: value for key, value in payload.items() if key != "extracted_at"}
+
+
+def _store_filing_interim_financials(
+    sources_dir: Path | None, payload: dict[str, Any]
+) -> dict[str, Any]:
+    """Write the extract unless only ``extracted_at`` would change."""
+    if sources_dir is None:
+        return payload
+    from value_investor.storage import write_json
+
+    path = Path(sources_dir) / "filing_interim_financials.json"
+    if path.is_file():
+        try:
+            existing = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError, UnicodeDecodeError):
+            existing = None
+        if isinstance(existing, dict):
+            for key, value in existing.items():
+                if key not in payload and key != "extracted_at":
+                    payload[key] = value
+            if _semantic_interim_payload(existing) == _semantic_interim_payload(payload):
+                payload["extracted_at"] = existing.get("extracted_at", payload["extracted_at"])
+                return payload
+    write_json(path, payload, compact=False, compress=False)
+    return payload
 
 
 def extract_filing_interim_financials(
@@ -8954,8 +9101,6 @@ def extract_filing_interim_financials(
 
     Used when Yahoo quarterly income/cash-flow series are empty (typical UK half-year reporters).
     """
-    from value_investor.storage import write_json
-
     filings_dir = Path(filings_dir)
     index_path = filings_dir / "filings_index.json"
     payload: dict[str, Any] = {
@@ -8964,30 +9109,18 @@ def extract_filing_interim_financials(
         "interim_highlights": None,
         "trading_update_advertising": None,
         "corporate_actions": [],
+        "half_year_comparisons": [],
+        "half_year_comparison": None,
     }
     if not index_path.is_file():
         payload["note"] = "no filings_index.json"
-        if sources_dir is not None:
-            write_json(
-                Path(sources_dir) / "filing_interim_financials.json",
-                payload,
-                compact=False,
-                compress=False,
-            )
-        return payload
+        return _store_filing_interim_financials(sources_dir, payload)
 
     try:
         index = json.loads(index_path.read_text(encoding="utf-8"))
     except (OSError, ValueError, TypeError) as exc:
         payload["note"] = f"unreadable index: {exc}"
-        if sources_dir is not None:
-            write_json(
-                Path(sources_dir) / "filing_interim_financials.json",
-                payload,
-                compact=False,
-                compress=False,
-            )
-        return payload
+        return _store_filing_interim_financials(sources_dir, payload)
 
     bodies_dir = filings_dir / "bodies"
     interim_rows = [
@@ -9069,14 +9202,54 @@ def extract_filing_interim_financials(
                 }
             )
 
-    if sources_dir is not None:
-        write_json(
-            Path(sources_dir) / "filing_interim_financials.json",
-            payload,
-            compact=False,
-            compress=False,
-        )
-    return payload
+    if isinstance(index, dict):
+        comparisons = _half_year_comparison_records(index, bodies_dir)
+        payload["half_year_comparisons"] = comparisons
+        payload["half_year_comparison"] = _newest_extracted_half_year(comparisons)
+    return _store_filing_interim_financials(sources_dir, payload)
+
+
+def backfill_filing_interim_financials(
+    research_root: Path,
+    library_root: Path | None = None,
+) -> dict[str, int]:
+    """Refresh ``filing_interim_financials.json`` for every filings index on disk.
+
+    Covers FTSE research folders and, when ``library_root`` is set, each library
+    market's screen research tree. Unchanged extracts keep their ``extracted_at``.
+    """
+    indexes: list[Path] = []
+    research_root = Path(research_root)
+    if research_root.is_dir():
+        indexes.extend(sorted(research_root.glob("*/sources/filings/filings_index.json")))
+    if library_root is not None:
+        markets = Path(library_root) / "markets"
+        if markets.is_dir():
+            indexes.extend(
+                sorted(markets.glob("*/screen/research/*/sources/filings/filings_index.json"))
+            )
+    written = 0
+    unchanged = 0
+    for index_path in indexes:
+        sources = index_path.parent.parent
+        ticker = sources.parent.name
+        out = sources / "filing_interim_financials.json"
+        before: bytes | None = None
+        if out.is_file():
+            try:
+                before = out.read_bytes()
+            except OSError:
+                before = None
+        extract_filing_interim_financials(index_path.parent, ticker, sources_dir=sources)
+        try:
+            after = out.read_bytes() if out.is_file() else None
+        except OSError:
+            after = None
+        if before is not None and before == after:
+            unchanged += 1
+        else:
+            written += 1
+    return {"indexes": len(indexes), "written": written, "unchanged": unchanged}
 
 
 def extract_ch_annual_year_in_numbers(

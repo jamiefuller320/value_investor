@@ -777,6 +777,7 @@ def attach_filing_interim_financials(
         filing_interim.get("interim_highlights")
         or filing_interim.get("trading_update_advertising")
         or filing_interim.get("corporate_actions")
+        or filing_interim.get("half_year_comparison")
     ):
         updated["filing_interim_financials"] = filing_interim
         updated["filing_interim_financials_source"] = "filings_bodies"

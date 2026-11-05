@@ -649,6 +649,7 @@ def prepare_gap_fill_source_pack(
                 filing_interim_financials.get("trading_update_advertising")
             ),
             "corporate_action_count": len(filing_interim_financials.get("corporate_actions") or []),
+            "has_half_year_comparison": bool(filing_interim_financials.get("half_year_comparison")),
             "path": str(sources_dir / "filing_interim_financials.json"),
         },
         "ch_annual_year_in_numbers": {

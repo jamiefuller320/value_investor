@@ -2414,8 +2414,11 @@ def check_operating_decline_gate(
 
     Writes ``docs/data/operating_decline_gate.json`` from committed annual statements,
     interim quarterly series, filing-interim extracts, half-year filing bodies,
-    screen-row flags and filings headlines. No network. Never changes books, knobs or
-    signals (``auto_fixable=False``). See docs/ops/operating-decline-gate.md.
+    screen-row flags and filings headlines. The same step refreshes
+    ``filing_interim_financials.json`` from those bodies before scoring, so a newly
+    ingested half-year results file is picked up without a separate command. No
+    network. Never changes books, knobs or signals (``auto_fixable=False``). See
+    docs/ops/operating-decline-gate.md.
     """
     from value_investor.operating_decline_gate import (
         DEFAULT_LATEST_PATH,
