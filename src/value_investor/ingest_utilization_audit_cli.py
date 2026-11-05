@@ -1,7 +1,8 @@
 """CLI for buy-tier ingest fragment utilization audit (+ flip→usable lag pin).
 
 Also hosts the observe-only FTSE holdings ∪ buy-tier decision-input inventory
-(``--decision-inputs``) and the time-boxed #953 first-run pin
+(``--decision-inputs``), the graduated-library F9-B binds
+(``--library-decision-inputs``), and the time-boxed #953 first-run pin
 (``--p1-first-run``).
 """
 
@@ -141,6 +142,24 @@ def main(argv: list[str] | None = None) -> int:
         help=(f"Decision-input inventory store path (default: {DEFAULT_DECISION_INPUT_STORE})"),
     )
     parser.add_argument(
+        "--library-decision-inputs",
+        action="store_true",
+        help=(
+            "Observe-only: refresh docs/data/library_decision_input_inventory.json "
+            "for graduated library buy-tier names (filing bodies, FCF basis, "
+            "overlay, memo recency). Does not rememo or ingest"
+        ),
+    )
+    parser.add_argument(
+        "--library-decision-inputs-store",
+        type=Path,
+        default=None,
+        help=(
+            "Library decision-input store path "
+            "(default: docs/data/library_decision_input_inventory.json)"
+        ),
+    )
+    parser.add_argument(
         "--archive-miss-rate",
         action="store_true",
         help=(
@@ -215,12 +234,14 @@ def main(argv: list[str] | None = None) -> int:
     observe_flags = [
         args.flip_lag,
         args.decision_inputs,
+        args.library_decision_inputs,
         args.archive_miss_rate,
         args.p1_first_run,
     ]
     if sum(1 for flag in observe_flags if flag) > 1:
         parser.error(
-            "Use only one of --flip-lag, --decision-inputs, --archive-miss-rate, or --p1-first-run"
+            "Use only one of --flip-lag, --decision-inputs, --library-decision-inputs, "
+            "--archive-miss-rate, or --p1-first-run"
         )
 
     if args.flip_lag:
@@ -264,6 +285,32 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(payload, indent=2))
         else:
             print(format_decision_input_summary(payload))
+        return 0
+
+    if args.library_decision_inputs:
+        from value_investor.library_decision_input_inventory import (
+            DEFAULT_MARKET_STATUS_PATH,
+            format_library_decision_input_summary,
+            run_library_decision_input_inventory,
+        )
+        from value_investor.library_decision_input_inventory import (
+            DEFAULT_STORE_PATH as DEFAULT_LIBRARY_DECISION_STORE,
+        )
+
+        library_store = args.library_decision_inputs_store or DEFAULT_LIBRARY_DECISION_STORE
+        payload = run_library_decision_input_inventory(
+            library_root=args.library_root,
+            market_status_path=DEFAULT_MARKET_STATUS_PATH,
+            store_path=library_store,
+            memo_max_age_days=float(args.memo_max_age_days),
+            persist=not args.no_write,
+        )
+        if not args.no_write:
+            logger.info("Wrote %s", library_store)
+        if args.json:
+            print(json.dumps(payload, indent=2))
+        else:
+            print(format_library_decision_input_summary(payload))
         return 0
 
     if args.archive_miss_rate:

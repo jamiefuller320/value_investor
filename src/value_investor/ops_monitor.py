@@ -1814,6 +1814,64 @@ def check_decision_input_inventory(
     ]
 
 
+def check_library_decision_input_inventory(
+    *,
+    library_root: Path | None = None,
+    market_status_path: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+    as_of: datetime | None = None,
+) -> list[OpsFinding]:
+    """Observe-only F9-B binds for graduated library buy-tier names.
+
+    Refreshes ``docs/data/library_decision_input_inventory.json`` and emits a
+    summary finding. Does not rememo, ingest, or open an engineering task.
+    """
+    from value_investor.library_decision_input_inventory import (
+        DEFAULT_LIBRARY_ROOT,
+        DEFAULT_MARKET_STATUS_PATH,
+        DEFAULT_STORE_PATH,
+        FINDING_TITLE,
+        STORE_FAILED_TITLE,
+        ops_finding_from_library_decision_input_inventory,
+        run_library_decision_input_inventory,
+    )
+
+    path = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
+    try:
+        payload = run_library_decision_input_inventory(
+            library_root=Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT,
+            market_status_path=(
+                Path(market_status_path)
+                if market_status_path is not None
+                else DEFAULT_MARKET_STATUS_PATH
+            ),
+            store_path=path,
+            persist=persist,
+            as_of=as_of,
+        )
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    finding = ops_finding_from_library_decision_input_inventory(payload)
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or FINDING_TITLE),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_p1_first_run_pin(
     *,
     latest_path: Path = DEFAULT_LATEST_PATH,
@@ -4707,6 +4765,7 @@ def collect_ops_findings(
     findings.extend(check_memo_rememo_backlog())
     findings.extend(check_buy_tier_flip_lag(latest_path=latest_path))
     findings.extend(check_decision_input_inventory(latest_path=latest_path))
+    findings.extend(check_library_decision_input_inventory())
     findings.extend(check_p1_first_run_pin(latest_path=latest_path))
     findings.extend(check_universe_filing_archive_miss_rate())
     findings.extend(check_universe_filing_archive_pack_bottleneck())
