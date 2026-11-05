@@ -153,8 +153,24 @@ this gate.
 | Step | Deliverable | Deferred | Done when |
 |------|-------------|----------|-----------|
 | 3.1 | **Total-return accounting**: dividends in paper NAV; benchmark matches the universe | L528 | Merged; old marks keep their basis label |
-| 3.2 | **New proof standard** for live capital: point-in-time history for parts 1–3; per-episode evidence for parts 4–6; paper implementation checks (fills, costs, data errors); matched excess read on the Trading 212-listed subset; a sterling view of non-sterling episodes. The standard must also require: uncertainty from block resampling by entry week (correlated entries are not independent tests); a stated tail and drawdown limit; spread across market regimes and markets (no single regime or market carrying the result); returns in sterling including FX; and a positive result for a cash-constrained slot book in sterling across markets, not only median episodes. The strategy book's thickness gate is not this standard | N248 | N13 / N14 revisit triggers rewritten; owner signs off |
+| 3.2 | **New proof standard** for live capital: point-in-time history for parts 1–3; per-episode evidence for parts 4–6; paper implementation checks (fills, costs, data errors); matched excess read on the Trading 212-listed subset; a sterling view of non-sterling episodes. The standard must also require: uncertainty from block resampling by entry week (correlated entries are not independent tests); a stated tail and drawdown limit; spread across market regimes and markets (no single regime or market carrying the result); returns in sterling including FX; and a positive result for a cash-constrained slot book in sterling across markets, not only median episodes. The strategy book's thickness gate is not this standard. Numbers: [below](#step-32-proof-numbers-proposed-fixed-at-signature) | N248 | N13 / N14 revisit triggers rewritten; owner signs off |
 | 3.3 | **Non-US point-in-time replay** (UK / Europe) of the filtered value set | L664 | Needs an owner data-licence decision |
+
+#### Step 3.2 proof numbers (proposed, fixed at signature)
+
+Owner, 2026-11-05. These are written now so that no forward result is read before they are set. They are proposed, not derived from data. The owner may change them once in the strategy book's signature note; the seal copies them ([registration section 10](strategy-book-registration.md#10-freeze-and-markers)). After that they change only through a new `registration_id`. All are read on the strategy book's forward episodes: counted mature episodes, `provenance_missing` excluded.
+
+| Requirement | Proposed bar |
+|---|---|
+| Uncertainty | The 90% interval of the median matched excess, from 10,000 resamples of whole ISO entry weeks, lies wholly above zero |
+| Tail loss | The 5th-percentile fair-cost episode return is no worse than −20% |
+| Drawdown | The sterling reference slot book's largest peak-to-trough fall is no more than 1.5 times that of the matched buy-tier basket in sterling over the same dates |
+| Market spread | The median matched excess stays above zero with the market holding the most mature episodes removed (no `single_market_dependence` flag) |
+| Regime spread | The median matched excess is at or above zero in both regime halves (above and below the 200-session average), each with at least 12 counted mature episodes; `regime_unknown` episodes sit out |
+| Sterling slot book | The 20-slot reference slot book, in sterling after fair costs and FX, has a positive total return and beats the matched basket in sterling over the same dates |
+| Tradable subset | The median matched excess on `t212_listed` episodes is above zero |
+
+Meeting every bar lets the owner consider step 5.5. It does not open live capital by itself.
 
 ### Phase 4 — Valuation and research focus
 
