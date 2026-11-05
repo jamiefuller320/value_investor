@@ -54,7 +54,9 @@ def _format_text(payload: dict[str, Any], selected: tuple[str, dict[str, Any]] |
             f"return_126d={metrics.get('sector_return_126d')} "
             f"drawdown_1y={metrics.get('sector_drawdown_from_1y_high')}\n"
             f"  earnings_component={metrics.get('earnings_component')} "
-            f"declining_share={metrics.get('earnings_declining_share')}\n"
+            f"declining_share={metrics.get('earnings_declining_share')} "
+            f"earnings_fallback_used={row.get('earnings_fallback_used')} "
+            f"sources={metrics.get('earnings_breadth_sources')}\n"
         )
     summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
     lines = [
@@ -71,6 +73,11 @@ def _format_text(payload: dict[str, Any], selected: tuple[str, dict[str, Any]] |
             f"buy_tier_in_headwind={summary.get('buy_tier_in_headwind_sector')} "
             f"buy_tier_insufficient_data="
             f"{summary.get('buy_tier_in_insufficient_data_sector')}"
+        ),
+        (
+            "  buy_tier_basis="
+            f"{summary.get('buy_tier_by_basis')} "
+            f"earnings_fallback={summary.get('buy_tier_by_earnings_fallback')}"
         ),
         f"  influences_live={payload.get('influences_live')}",
     ]
