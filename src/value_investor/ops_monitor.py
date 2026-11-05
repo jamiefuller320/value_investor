@@ -2588,6 +2588,53 @@ def check_sector_headwind_gate(
     ]
 
 
+def check_strategy_book_memo_job(
+    *,
+    repo_root: Path | None = None,
+    now: datetime | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Signal-day memo job after the decline and sector gates.
+
+    Spend stays off until the registration seal sets ``spend_enabled``.
+    Observe-only (``auto_fixable=False``). Does not rememo or ingest from the
+    finding. See docs/ops/strategy-book-memo-job.md.
+    """
+    from value_investor.strategy_book_memo_job import (
+        TITLE_FAILED,
+        findings_from_memo_job,
+        run_strategy_book_memo_job,
+    )
+
+    moment = now or datetime.now(UTC)
+    try:
+        summary = run_strategy_book_memo_job(
+            repo_root=repo_root,
+            now=moment,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=TITLE_FAILED,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or TITLE_FAILED),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+        for finding in findings_from_memo_job(summary, now=moment)
+    ]
+
+
 def check_n206_plain_ey_observe(
     *,
     output_dir: Path | None = None,
@@ -4805,6 +4852,7 @@ def collect_ops_findings(
     findings.extend(check_entry_revisit_review_queue())
     findings.extend(check_operating_decline_gate())
     findings.extend(check_sector_headwind_gate())
+    findings.extend(check_strategy_book_memo_job())
     findings.extend(check_n200_tech_timing_observe())
     findings.extend(check_n201_value_mom_observe())
     findings.extend(check_n210_ai_judgment_observe())

@@ -575,6 +575,8 @@ The chosen job:
 - **Uses the existing research runner**, with the as-of-only instruction from plan step 1.3. Spend comes from the `weekly_ops` pool at the estimated $0.40 a memo, with that pool's headroom check.
 - **Costs about 15–20 memos a week** on the replay's signal rate across all markets, about $6–8, plus a few review memos. A signal skipped by the budget check is `memo_not_ready`, never a stale fill.
 
+The scheduled job is [`strategy-book-memo-job.md`](strategy-book-memo-job.md). It shares the entry signal with the walker through `strategy_book_signals.py` (the walker is step 2.3 and is not imported here). Model spend stays off until the seal sets `spend_enabled` true in `docs/data/strategy_book_registration.json`.
+
 A replay of the price rules alone gave about 20 entries a week across all markets against about 4 on the FTSE 350; the gates and F9-B cut that before any forward trade.
 
 Compute is a walk over the buy tier of every graduated market (65 FTSE names and 346 library names on the 2026-11-03 decline snapshot) and the stored closes. The walker makes no network or model call and fetches no prices itself. The signal-day memo job is the book's only model spend.

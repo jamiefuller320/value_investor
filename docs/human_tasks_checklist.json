@@ -572,6 +572,14 @@
           "doc_anchor": "phase-2--licensed-data-human-gate"
         },
         {
+          "id": "adhoc-strategy-book-memo-spend",
+          "title": "Turn on strategy-book signal-day memo spend at signature",
+          "summary": "When signing the strategy-book registration, create docs/data/strategy_book_registration.json with a signature (signed_at, signed true, or signature) and set spend_enabled true only if weekly_ops should pay for signal-day and review-date memos. Until that file is signed and the flag is true, the memo job logs dry_run at $0.40 and calls no model. The job never turns spend on by itself.",
+          "automated": false,
+          "doc_path": "docs/ops/strategy-book-memo-job.md",
+          "doc_anchor": "spend-gate"
+        },
+        {
           "id": "adhoc-strategy-phase-gate",
           "title": "Sign strategy reorientation phase gates",
           "summary": "At the end of each phase of the strategy reorientation plan, review the evidence the supervising agent presents and sign, adjust once (logged), or reject. Phase 1: check operating-decline and sector-headwind verdicts on 10 FTSE buy-tier names (5 flagged, 5 clear) against cited evidence. Phase 2: sign the strategy-book registration (docs/ops/strategy-book-registration.md) before scoring, confirming or adjusting once the step 3.2 live proof numbers (docs/ops/strategy-reorientation-plan.md) that the seal copies, then the sample-thickness gate before it becomes the primary learning track. Later phases: new proof standard, demo-to-live execution steps, small live capital. Gates bind books only after sign-off; nothing auto-promotes.",
