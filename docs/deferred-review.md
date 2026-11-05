@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-05T20:07:22+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-05T23:00:28+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -718,6 +718,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | L635 | **Weight-aware pytest sharding for research_filings** | Round-robin by sorted file path moves the huge test_research_filings module (and its live_network tests) between CI shards whenever an earlier test file is added. PR/push CI now skips live_network; consider sharding by collected test count or isolating research_filings so one matrix job cannot absorb disproportionate runtime. | A CI shard without live_network still regularly exceeds ~15 minutes, or nightly live_network shard timeouts become frequent |
 | L660 | **Tag ESEF/statutory IR year-end filings as annual for flip key_bodies** | Factory flip warn no_key_bodies often has bodies already (WIE.VI ESEF, UCB.BR IR statutory PDF) classified as period=other, so annual.with_body stays 0. Revisit period tagging / ESEF year-end → annual so deepen yield clears key_bodies without only hunting new URLs. | After leftover-key-bodies hunter wire merges and euro deepen still leaves memo'd no_key_bodies with ESEF/IR bodies present |
 | L666 | **Plain-English owner brief and codename glossary** | AGENTS.md, PROJECT_OBJECTIVE.md and docs/ops carry ~241 distinct codenames (L322, F9-B, N200, strand A, epoch-0, B3, Package L...) plus 910 deferred IDs; README facts are stale (20 vs 18 vs 22 models, Monday vs Sunday). Add one plain-English brief of goals, current gates and stage status, plus a generated glossary. | Next PROJECT_OBJECTIVE or README revision |
+| L676 | **Re-hash strategy-book gate log at the commit that contains the line** | The daily check compares each stored hash to the commit the run started from. A path that commit does not contain stays pending_commit, because the close refresh writes those bytes earlier in the same run. A later check can re-hash the blob in the commit that first contains the log line. | The first live strategy-book gate-log commit is on main. |
 
 ---
 
