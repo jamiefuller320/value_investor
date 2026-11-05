@@ -40,9 +40,37 @@ RETURN_LOOKBACK_63D = 63
 RETURN_LOOKBACK_126D = 126
 TRAILING_HIGH_LOOKBACK = 252
 BUY_TIER_SIGNALS = frozenset({"buy", "strong_buy"})
+VERDICTS = ("sound", "headwind", "insufficient_data")
+
+# Frozen regional groups for the member-count fallback. A market that is not
+# listed here is never rescored across peers. Only markets graduated at
+# refresh, plus the live FTSE 350, contribute members.
+REGIONAL_GROUPS: dict[str, tuple[str, ...]] = {
+    "uk": ("ftse350", "ftse_smallcap", "aim"),
+    "europe": (
+        "aex",
+        "atx",
+        "bel20",
+        "cac40",
+        "dax",
+        "euro_stoxx50",
+        "ftse_mib",
+        "ibex35",
+        "iseq20",
+        "omxs30",
+        "psi20",
+        "smi",
+    ),
+    "north_america": ("sp500", "nasdaq100", "tsx60"),
+    "asia_pacific": ("hang_seng", "sti", "us_adr_asia", "asx200"),
+}
+REGION_BY_MARKET: dict[str, str] = {
+    market: region for region, markets in REGIONAL_GROUPS.items() for market in markets
+}
 
 FINDING_TITLE = "Sector headwind gate refreshed (observe)"
 COVERAGE_GAP_TITLE = "Sector headwind gate coverage gap"
+FALLBACK_FINDING_TITLE = "Sector headwind gate fallback reliance (observe)"
 STORE_FAILED_TITLE = "Sector headwind gate refresh failed"
 
 
@@ -174,6 +202,33 @@ def _earnings_decline(row: dict[str, Any]) -> tuple[bool | None, list[str]]:
     return declining, [field for field, _ in observed]
 
 
+def _member_library_earnings(
+    member: dict[str, Any],
+    decline_row: Any,
+    *,
+    allow_growth: bool,
+) -> tuple[bool, str, list[str]] | None:
+    """Per-member earnings input for a library or regional score.
+
+    A usable decline-store verdict wins. ``earnings_growth`` is the library
+    screen fallback and is read only when ``allow_growth`` is set. v0 screen
+    fields still count when neither of those is present.
+    """
+    if isinstance(decline_row, dict):
+        verdict = str(decline_row.get("verdict") or "")
+        if verdict in {"clear", "declining"}:
+            return verdict == "declining", "decline_store", []
+    if allow_growth:
+        growth = _finite_float(member.get("earnings_growth"))
+        if growth is not None:
+            declining = growth <= SCREEN_EARNINGS_GROWTH_DECLINE_PCT
+            return declining, "screen_earnings_growth", ["earnings_growth"]
+    declining, fields = _earnings_decline(member)
+    if declining is None:
+        return None
+    return declining, "screen_fields", fields
+
+
 def _decline_names(decline_verdicts: dict[str, Any] | None) -> dict[str, Any] | None:
     if decline_verdicts is None:
         return None
@@ -214,8 +269,17 @@ def assess_sector(
     charts: dict[str, dict[str, Any]],
     decline_verdicts: dict[str, Any] | None,
     as_of: Any,
+    earnings_growth_fallback: bool = False,
+    earnings_growth_tickers: frozenset[str] | None = None,
 ) -> dict[str, Any]:
-    """Return a point-in-time sector verdict without using bars after ``as_of``."""
+    """Return a point-in-time sector verdict without using bars after ``as_of``.
+
+    ``earnings_growth_fallback`` switches library members to a per-name
+    earnings input: decline-store verdict, else ``earnings_growth`` for tickers
+    in ``earnings_growth_tickers``, else the v0 screen fields. The default
+    keeps the FTSE rule (decline store for the whole sector when it covers,
+    otherwise the v0 screen fields only).
+    """
     cutoff = _as_of_date(as_of)
     total = len(members)
     reasons: list[dict[str, str]] = []
@@ -243,6 +307,8 @@ def assess_sector(
                 "member_count": total,
                 "as_of": cutoff.isoformat(),
                 "earnings_component": "unavailable",
+                "earnings_breadth_sources": {"decline_store": 0, "screen_earnings_growth": 0},
+                "earnings_fallback_used": False,
                 "thresholds": thresholds,
             },
         }
@@ -290,20 +356,63 @@ def assess_sector(
     decline_coverage = decline_count / total
     decline_available = decline_names is not None and _coverage_ok(decline_count, total)
 
-    earnings_count = 0
-    earnings_declining = 0
     earnings_fields: set[str] = set()
-    earnings_breadth: float | None = None
-    earnings_coverage = 0.0
-    earnings_available = False
-    if decline_available:
+    earnings_breadth_sources = {"decline_store": 0, "screen_earnings_growth": 0}
+    screen_field_count = 0
+    if earnings_growth_fallback:
+        if earnings_growth_tickers is None:
+            allowed_growth = frozenset(
+                str(member.get("ticker") or "").strip() for member in members
+            )
+        else:
+            allowed_growth = earnings_growth_tickers
+        earnings_declining = 0
+        for member in members:
+            ticker = str(member.get("ticker") or "").strip()
+            decline_row = decline_names.get(ticker) if isinstance(decline_names, dict) else None
+            observed = _member_library_earnings(
+                member,
+                decline_row,
+                allow_growth=bool(ticker) and ticker in allowed_growth,
+            )
+            if observed is None:
+                continue
+            declining, source, fields = observed
+            if source == "decline_store":
+                earnings_breadth_sources["decline_store"] += 1
+            elif source == "screen_earnings_growth":
+                earnings_breadth_sources["screen_earnings_growth"] += 1
+            else:
+                screen_field_count += 1
+            earnings_declining += int(declining)
+            earnings_fields.update(fields)
+        earnings_count = (
+            earnings_breadth_sources["decline_store"]
+            + earnings_breadth_sources["screen_earnings_growth"]
+            + screen_field_count
+        )
+        earnings_breadth = earnings_declining / earnings_count if earnings_count else None
+        earnings_coverage = earnings_count / total
+        earnings_available = _coverage_ok(earnings_count, total)
+        if not earnings_available:
+            earnings_component = "unavailable"
+        elif earnings_breadth_sources["screen_earnings_growth"]:
+            earnings_component = "screen_earnings_growth_fallback"
+        elif screen_field_count:
+            earnings_component = "screen_fields_fallback"
+        else:
+            earnings_component = "operating_decline_store"
+    elif decline_available:
         earnings_component = "operating_decline_store"
         earnings_count = decline_count
         earnings_declining = decline_declining
         earnings_breadth = decline_breadth
         earnings_coverage = decline_coverage
         earnings_available = True
+        earnings_breadth_sources["decline_store"] = decline_count
     else:
+        earnings_count = 0
+        earnings_declining = 0
         for member in members:
             declining, fields = _earnings_decline(member)
             if declining is None:
@@ -315,6 +424,7 @@ def assess_sector(
         earnings_coverage = earnings_count / total
         earnings_available = _coverage_ok(earnings_count, total)
         earnings_component = "screen_fields_fallback" if earnings_available else "unavailable"
+    earnings_fallback_used = earnings_breadth_sources["screen_earnings_growth"] > 0
 
     price_trigger = bool(
         price_available
@@ -356,6 +466,19 @@ def assess_sector(
                 "docs/data/operating_decline_gate.json names[].verdict",
             )
         )
+    if earnings_trigger and earnings_component == "screen_earnings_growth_fallback":
+        reasons.append(
+            _reason(
+                "EARNINGS_BREADTH_HEADWIND",
+                (
+                    f"{earnings_breadth:.1%} of {earnings_count} covered members show decline "
+                    f"(decline_store={earnings_breadth_sources['decline_store']}, "
+                    "screen_earnings_growth="
+                    f"{earnings_breadth_sources['screen_earnings_growth']})."
+                ),
+                "docs/data/library/markets/<market>/screen/latest_signals.csv earnings_growth",
+            )
+        )
 
     missing_core: list[str] = []
     if not price_available:
@@ -385,14 +508,33 @@ def assess_sector(
             )
         )
     elif not decline_available:
+        thin_detail = (
+            f"Operating-decline coverage was {decline_count}/{total}; "
+            "material screen fields were the fallback."
+        )
+        if earnings_fallback_used:
+            thin_detail = (
+                f"Operating-decline coverage was {decline_count}/{total}; "
+                f"{earnings_breadth_sources['screen_earnings_growth']} members used "
+                "earnings_growth."
+            )
         reasons.append(
             _reason(
                 "OPERATING_DECLINE_STORE_THIN_FALLBACK",
-                (
-                    f"Operating-decline coverage was {decline_count}/{total}; "
-                    "material screen fields were the fallback."
-                ),
+                thin_detail,
                 "docs/data/operating_decline_gate.json names[].verdict",
+            )
+        )
+    if earnings_fallback_used:
+        reasons.append(
+            _reason(
+                "SCREEN_EARNINGS_GROWTH_FALLBACK",
+                (
+                    f"{earnings_breadth_sources['screen_earnings_growth']} of {total} members "
+                    "used Yahoo quarterly earnings_growth because the decline store had no "
+                    "usable verdict for them."
+                ),
+                "docs/data/library/markets/<market>/screen/latest_signals.csv earnings_growth",
             )
         )
 
@@ -400,11 +542,14 @@ def assess_sector(
         verdict = "headwind"
     elif not missing_core:
         verdict = "sound"
-        earnings_source = (
-            "docs/data/operating_decline_gate.json names[].verdict"
-            if earnings_component == "operating_decline_store"
-            else "docs/data/latest.json reports[] earnings breadth fields"
-        )
+        if earnings_component == "operating_decline_store":
+            earnings_source = "docs/data/operating_decline_gate.json names[].verdict"
+        elif earnings_component == "screen_earnings_growth_fallback":
+            earnings_source = (
+                "docs/data/library/markets/<market>/screen/latest_signals.csv earnings_growth"
+            )
+        else:
+            earnings_source = "docs/data/latest.json reports[] earnings breadth fields"
         reasons.insert(
             0,
             _reason(
@@ -456,6 +601,8 @@ def assess_sector(
             ),
             "operating_decline_store_present": decline_names is not None,
             "operating_decline_component_available": decline_available,
+            "earnings_breadth_sources": earnings_breadth_sources,
+            "earnings_fallback_used": earnings_fallback_used,
             "thresholds": thresholds,
         },
     }
@@ -617,6 +764,27 @@ def _graduated_library_markets(status: dict[str, Any]) -> tuple[list[str], list[
     return graduated, skipped
 
 
+def _name_entry(
+    *,
+    market: str,
+    sector: str,
+    verdict: str,
+    screen_date: str,
+    earnings_fallback_used: bool,
+    sector_key: str,
+) -> dict[str, Any]:
+    return {
+        "market": market,
+        "sector": sector,
+        "sector_verdict": verdict,
+        "sector_basis": "own_market",
+        "own_market_verdict": verdict,
+        "screen_date": screen_date,
+        "earnings_fallback_used": earnings_fallback_used,
+        "deciding_sector_key": sector_key,
+    }
+
+
 def _project_market(
     *,
     market: str,
@@ -625,8 +793,13 @@ def _project_market(
     decline_payload: dict[str, Any] | None,
     cutoff: date,
     screen_date: date,
+    earnings_growth_fallback: bool = False,
 ) -> tuple[
-    dict[str, dict[str, Any]], dict[str, dict[str, Any]], dict[str, Any], list[dict[str, str]]
+    dict[str, dict[str, Any]],
+    dict[str, dict[str, Any]],
+    dict[str, Any],
+    list[dict[str, str]],
+    dict[str, list[dict[str, Any]]],
 ]:
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
     missing_sector_buy: list[str] = []
@@ -645,25 +818,36 @@ def _project_market(
     buy_insufficient: list[dict[str, Any]] = []
     screen_iso = screen_date.isoformat()
     cutoff_iso = cutoff.isoformat()
+    growth_allowed = earnings_growth_fallback and screen_date <= cutoff
     for sector in sorted(grouped):
         sector_members = grouped[sector]
+        sector_tickers = [str(row.get("ticker") or "").strip() for row in sector_members]
         assessed = assess_sector(
             sector_members,
             charts=charts,
             decline_verdicts=decline_payload,
             as_of=cutoff,
+            earnings_growth_fallback=earnings_growth_fallback,
+            earnings_growth_tickers=(
+                frozenset(ticker for ticker in sector_tickers if ticker)
+                if growth_allowed
+                else frozenset()
+            ),
         )
         key = f"{market}:{sector}"
-        tickers = sorted(str(row["ticker"]).strip() for row in sector_members)
+        tickers = sorted(ticker for ticker in sector_tickers if ticker)
         buy_tier = sorted(
             str(row["ticker"]).strip()
             for row in sector_members
             if str(row.get("signal") or "").lower() in BUY_TIER_SIGNALS
         )
+        fallback_used = bool(assessed.get("metrics", {}).get("earnings_fallback_used"))
         sectors[key] = {
             "market": market,
             "sector": sector,
             "screen_date": screen_iso,
+            "scope": "own_market",
+            "earnings_fallback_used": fallback_used,
             **assessed,
             "members": tickers,
             "buy_tier_members": buy_tier,
@@ -671,15 +855,23 @@ def _project_market(
         why = _insufficient_reasons(assessed) if assessed["verdict"] == "insufficient_data" else []
         if assessed["verdict"] == "insufficient_data":
             buy_insufficient.extend(
-                {"ticker": ticker, "sector": sector, "reasons": why} for ticker in buy_tier
+                {
+                    "ticker": ticker,
+                    "sector": sector,
+                    "reasons": why,
+                    "sector_basis": "own_market",
+                }
+                for ticker in buy_tier
             )
         for ticker in tickers:
-            names[ticker] = {
-                "market": market,
-                "sector": sector,
-                "sector_verdict": assessed["verdict"],
-                "screen_date": screen_iso,
-            }
+            names[ticker] = _name_entry(
+                market=market,
+                sector=sector,
+                verdict=assessed["verdict"],
+                screen_date=screen_iso,
+                earnings_fallback_used=fallback_used,
+                sector_key=key,
+            )
             label_rows.append(
                 {
                     "market": market,
@@ -727,7 +919,9 @@ def _project_market(
         "as_of": cutoff_iso,
         "earnings_inputs": _earnings_input_census(members),
     }
-    return sectors, names, market_summary, label_rows
+    if any(bool(row.get("earnings_fallback_used")) for row in sectors.values()):
+        market_summary["earnings_inputs"]["earnings_growth_used"] = True
+    return sectors, names, market_summary, label_rows, grouped
 
 
 def _last_recorded_labels(path: Path) -> dict[tuple[str, str], str]:
@@ -820,10 +1014,213 @@ def sector_label_as_of(
     return chosen
 
 
+def _is_member_count_failure(assessed: dict[str, Any]) -> bool:
+    """True only for the member-count rule, not chart or breadth coverage."""
+    if assessed.get("verdict") != "insufficient_data":
+        return False
+    return any(
+        isinstance(row, dict) and row.get("code") == "TOO_FEW_SECTOR_MEMBERS"
+        for row in assessed.get("reasons") or []
+    )
+
+
+def _verdict_grid() -> dict[str, int]:
+    return {verdict: 0 for verdict in VERDICTS}
+
+
+def _sum_grids(
+    rows: list[dict[str, Any]],
+    key: str,
+    outer_keys: tuple[str, ...],
+) -> dict[str, dict[str, int]]:
+    total = {outer: _verdict_grid() for outer in outer_keys}
+    for row in rows:
+        part = row.get(key) if isinstance(row.get(key), dict) else {}
+        for outer in outer_keys:
+            src = part.get(outer) if isinstance(part.get(outer), dict) else {}
+            for verdict in VERDICTS:
+                total[outer][verdict] += int(src.get(verdict) or 0)
+    return total
+
+
+def _recompute_buy_tier_summary(
+    summary: dict[str, Any],
+    names: dict[str, dict[str, Any]],
+    own_sectors: dict[str, dict[str, Any]],
+    regional_sectors: dict[str, dict[str, Any]],
+) -> None:
+    """Recount buy-tier names from the verdict in force."""
+    buy_by_verdict = _verdict_grid()
+    by_basis = {"own_market": _verdict_grid(), "regional": _verdict_grid()}
+    by_fallback = {"used": _verdict_grid(), "not_used": _verdict_grid()}
+    insufficient: list[dict[str, Any]] = []
+    for row in own_sectors.values():
+        sector = str(row.get("sector") or "")
+        for ticker in row.get("buy_tier_members") or []:
+            name = names.get(str(ticker))
+            if not isinstance(name, dict):
+                continue
+            verdict = str(name.get("sector_verdict") or "")
+            if verdict not in buy_by_verdict:
+                continue
+            buy_by_verdict[verdict] += 1
+            basis = str(name.get("sector_basis") or "own_market")
+            if basis not in by_basis:
+                basis = "own_market"
+            by_basis[basis][verdict] += 1
+            fallback_key = "used" if name.get("earnings_fallback_used") else "not_used"
+            by_fallback[fallback_key][verdict] += 1
+            if verdict != "insufficient_data":
+                continue
+            if basis == "regional":
+                source = regional_sectors.get(str(name.get("deciding_sector_key") or ""), row)
+            else:
+                source = row
+            insufficient.append(
+                {
+                    "ticker": ticker,
+                    "sector": sector,
+                    "reasons": _insufficient_reasons(source if isinstance(source, dict) else row),
+                    "sector_basis": basis,
+                }
+            )
+    summary["buy_tier_by_verdict"] = buy_by_verdict
+    summary["buy_tier_in_headwind_sector"] = buy_by_verdict["headwind"]
+    summary["buy_tier_in_insufficient_data_sector"] = buy_by_verdict["insufficient_data"]
+    summary["buy_tier_by_basis"] = by_basis
+    summary["buy_tier_by_earnings_fallback"] = by_fallback
+    summary["buy_tier_insufficient_data"] = insufficient
+    if any(bool(name.get("earnings_fallback_used")) for name in names.values()):
+        earnings_inputs = summary.get("earnings_inputs")
+        if isinstance(earnings_inputs, dict):
+            earnings_inputs["earnings_growth_used"] = True
+
+
+def _charts_for(
+    tickers: set[str],
+    chart_cache: dict[str, dict[str, Any] | None],
+) -> dict[str, dict[str, Any]]:
+    loaded: dict[str, dict[str, Any]] = {}
+    for ticker in tickers:
+        cached = chart_cache.get(ticker)
+        if isinstance(cached, dict):
+            loaded[ticker] = cached
+    return loaded
+
+
+def _apply_regional_fallbacks(
+    states: dict[str, dict[str, Any]],
+    *,
+    decline_payload: dict[str, Any] | None,
+    chart_cache: dict[str, dict[str, Any] | None],
+) -> dict[str, dict[str, Any]]:
+    """Rescore sectors that failed only the member-count rule across a region.
+
+    Own-market sector rows stay as scored. Name rows whose own market was too
+    small take the regional verdict as the verdict in force. A market outside
+    ``REGIONAL_GROUPS`` is left on its own-market verdict. A market that was
+    not scored (not graduated, or not the live FTSE 350) contributes no members.
+    """
+    needed: set[tuple[str, str]] = set()
+    for market, state in states.items():
+        region = REGION_BY_MARKET.get(market)
+        if region is None:
+            continue
+        for row in state["sectors"].values():
+            label = str(row.get("sector") or "")
+            if label and _is_member_count_failure(row):
+                needed.add((region, label))
+
+    regional: dict[str, dict[str, Any]] = {}
+    for region, label in sorted(needed):
+        contributors = [
+            market
+            for market in REGIONAL_GROUPS[region]
+            if market in states and label in states[market]["grouped"]
+        ]
+        if not contributors:
+            continue
+        cutoff = min(states[market]["cutoff"] for market in contributors)
+        pooled: list[dict[str, Any]] = []
+        seen: set[str] = set()
+        growth_tickers: set[str] = set()
+        member_count_by_market: dict[str, int] = {}
+        for market in contributors:
+            allow_growth = market != FTSE_MARKET and states[market]["screen_date"] <= cutoff
+            rows = states[market]["grouped"][label]
+            member_count_by_market[market] = len(rows)
+            for row in rows:
+                ticker = str(row.get("ticker") or "").strip()
+                if not ticker or ticker in seen:
+                    continue
+                seen.add(ticker)
+                pooled.append(row)
+                if allow_growth:
+                    growth_tickers.add(ticker)
+        assessed = assess_sector(
+            pooled,
+            charts=_charts_for(seen, chart_cache),
+            decline_verdicts=decline_payload,
+            as_of=cutoff,
+            earnings_growth_fallback=True,
+            earnings_growth_tickers=frozenset(growth_tickers),
+        )
+        key = f"region:{region}:{label}"
+        metrics = assessed.get("metrics") if isinstance(assessed.get("metrics"), dict) else {}
+        fallback_used = bool(metrics.get("earnings_fallback_used"))
+        governed_buy: list[str] = []
+        governed_markets: list[str] = []
+        for market in contributors:
+            own = states[market]["sectors"].get(f"{market}:{label}")
+            if not isinstance(own, dict) or not _is_member_count_failure(own):
+                continue
+            governed_markets.append(market)
+            for ticker in own.get("buy_tier_members") or []:
+                if ticker not in governed_buy:
+                    governed_buy.append(str(ticker))
+            for name in states[market]["names"].values():
+                if name.get("sector") != label:
+                    continue
+                name["sector_verdict"] = assessed["verdict"]
+                name["sector_basis"] = "regional"
+                name["region"] = region
+                name["earnings_fallback_used"] = fallback_used
+                name["deciding_sector_key"] = key
+        regional[key] = {
+            "scope": "regional",
+            "region": region,
+            "sector": label,
+            "market": None,
+            "contributing_markets": contributors,
+            "governed_markets": governed_markets,
+            "member_count_by_market": member_count_by_market,
+            "screen_dates": {
+                market: states[market]["screen_date"].isoformat() for market in contributors
+            },
+            "earnings_fallback_used": fallback_used,
+            **assessed,
+            "members": sorted(seen),
+            "buy_tier_members": sorted(governed_buy),
+        }
+
+    for state in states.values():
+        _recompute_buy_tier_summary(
+            state["summary"],
+            state["names"],
+            state["sectors"],
+            regional,
+        )
+    return regional
+
+
 def _mostly_insufficient_library_markets(sectors: dict[str, Any]) -> list[str]:
     counts: dict[str, list[int]] = {}
-    for row in sectors.values():
-        if not isinstance(row, dict) or not row.get("buy_tier_members"):
+    for key, row in sectors.items():
+        if str(key).startswith("region:"):
+            continue
+        if not isinstance(row, dict) or row.get("scope") == "regional":
+            continue
+        if not row.get("buy_tier_members"):
             continue
         market = str(row.get("market") or FTSE_MARKET)
         if market == FTSE_MARKET:
@@ -854,6 +1251,7 @@ def _overall_summary(
     by_market: dict[str, dict[str, Any]],
     *,
     decline_available: bool,
+    regional_sectors: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     verdicts = ("sound", "headwind", "insufficient_data")
     totals = {verdict: 0 for verdict in verdicts}
@@ -889,6 +1287,23 @@ def _overall_summary(
         "names_with_chart_file": charts,
         "chart_file_coverage_share": round(charts / report_names, 6) if report_names else 0.0,
         "operating_decline_store_available": decline_available,
+        "buy_tier_by_basis": _sum_grids(
+            list(by_market.values()),
+            "buy_tier_by_basis",
+            ("own_market", "regional"),
+        ),
+        "buy_tier_by_earnings_fallback": _sum_grids(
+            list(by_market.values()),
+            "buy_tier_by_earnings_fallback",
+            ("used", "not_used"),
+        ),
+        "regional_sectors": len(regional_sectors or {}),
+        "regional_by_verdict": {
+            verdict: sum(
+                1 for row in (regional_sectors or {}).values() if row.get("verdict") == verdict
+            )
+            for verdict in VERDICTS
+        },
         "by_market": by_market,
     }
 
@@ -908,8 +1323,11 @@ def refresh_sector_headwind_gate(
     """Refresh FTSE 350 and graduated library sectors from point-in-time inputs.
 
     Library markets come from ``is_graduated`` on the market-status file. Each
-    market is scored on its own membership. The flat ``names`` map stays the
-    FTSE projection. ``names_by_market`` holds one verdict per (market, ticker).
+    market is scored on its own membership first. A sector that is
+    ``insufficient_data`` only because it has fewer than four members is
+    rescored across its frozen region. The flat ``names`` map stays the FTSE
+    projection, with the verdict in force. ``names_by_market`` holds one
+    verdict per (market, ticker).
     """
     latest = _read_json(Path(latest_path))
     reports = latest.get("reports")
@@ -927,7 +1345,7 @@ def refresh_sector_headwind_gate(
         [str(row.get("ticker") or "").strip() for row in ftse_members],
         chart_cache,
     )
-    sectors, ftse_names, ftse_summary, label_rows = _project_market(
+    ftse_sectors, ftse_names, ftse_summary, label_rows, ftse_grouped = _project_market(
         market=FTSE_MARKET,
         members=ftse_members,
         charts=ftse_charts,
@@ -935,8 +1353,19 @@ def refresh_sector_headwind_gate(
         cutoff=ftse_cutoff,
         screen_date=ftse_screen,
     )
+    sectors: dict[str, dict[str, Any]] = dict(ftse_sectors)
     by_market = {FTSE_MARKET: ftse_summary}
     names_by_market = {FTSE_MARKET: ftse_names}
+    states: dict[str, dict[str, Any]] = {
+        FTSE_MARKET: {
+            "grouped": ftse_grouped,
+            "sectors": ftse_sectors,
+            "names": ftse_names,
+            "summary": ftse_summary,
+            "cutoff": ftse_cutoff,
+            "screen_date": ftse_screen,
+        }
+    }
     scored_library: list[str] = []
     not_scored: list[dict[str, str]] = []
 
@@ -971,21 +1400,37 @@ def refresh_sector_headwind_gate(
                 [str(row.get("ticker") or "").strip() for row in library_members],
                 chart_cache,
             )
-            market_sectors, market_names, market_summary, market_labels = _project_market(
+            market_sectors, market_names, market_summary, market_labels, grouped = _project_market(
                 market=market,
                 members=library_members,
                 charts=library_charts,
                 decline_payload=decline_payload,
                 cutoff=cutoff,
                 screen_date=screen_date,
+                earnings_growth_fallback=True,
             )
             sectors.update(market_sectors)
             names_by_market[market] = market_names
             by_market[market] = market_summary
             label_rows.extend(market_labels)
             scored_library.append(market)
+            states[market] = {
+                "grouped": grouped,
+                "sectors": market_sectors,
+                "names": market_names,
+                "summary": market_summary,
+                "cutoff": cutoff,
+                "screen_date": screen_date,
+            }
     else:
         not_scored.append({"market": "*", "reason": "market_status_missing"})
+
+    regional_sectors = _apply_regional_fallbacks(
+        states,
+        decline_payload=decline_payload,
+        chart_cache=chart_cache,
+    )
+    sectors.update(regional_sectors)
 
     payload = {
         "schema_version": SCHEMA_VERSION,
@@ -998,10 +1443,14 @@ def refresh_sector_headwind_gate(
             "included": [FTSE_MARKET, *scored_library],
             "admitted_library_markets": scored_library,
             "not_scored": not_scored,
+            "regional_groups": {
+                region: list(markets) for region, markets in REGIONAL_GROUPS.items()
+            },
         },
         "summary": _overall_summary(
             by_market,
             decline_available=decline_payload is not None,
+            regional_sectors=regional_sectors,
         ),
         "sectors": sectors,
         "names": ftse_names,
@@ -1013,6 +1462,27 @@ def refresh_sector_headwind_gate(
         path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
         append_sector_labels(Path(label_history_path), label_rows)
     return payload
+
+
+def _is_own_market_sector(key: str, row: dict[str, Any]) -> bool:
+    if str(key).startswith("region:") or row.get("scope") == "regional":
+        return False
+    return True
+
+
+def _grid_text(grid: Any) -> str:
+    if not isinstance(grid, dict):
+        return "none"
+    parts: list[str] = []
+    for key, counts in grid.items():
+        if not isinstance(counts, dict):
+            continue
+        parts.append(
+            f"{key} sound={int(counts.get('sound') or 0)} "
+            f"headwind={int(counts.get('headwind') or 0)} "
+            f"insufficient_data={int(counts.get('insufficient_data') or 0)}"
+        )
+    return "; ".join(parts) or "none"
 
 
 def _headwind_label(key: str, row: dict[str, Any]) -> str:
@@ -1031,6 +1501,7 @@ def ops_findings_from_sector_headwind_gate(payload: dict[str, Any]) -> list[dict
         _headwind_label(key, row)
         for key, row in sectors.items()
         if isinstance(row, dict)
+        and _is_own_market_sector(key, row)
         and row.get("verdict") == "headwind"
         and str(row.get("market") or FTSE_MARKET) == FTSE_MARKET
     )
@@ -1038,6 +1509,7 @@ def ops_findings_from_sector_headwind_gate(payload: dict[str, Any]) -> list[dict
         _headwind_label(key, row)
         for key, row in sectors.items()
         if isinstance(row, dict)
+        and _is_own_market_sector(key, row)
         and row.get("verdict") == "headwind"
         and str(row.get("market") or "") not in {"", FTSE_MARKET}
     )
@@ -1068,6 +1540,7 @@ def ops_findings_from_sector_headwind_gate(payload: dict[str, Any]) -> list[dict
         str(row.get("sector") or key)
         for key, row in sectors.items()
         if isinstance(row, dict)
+        and _is_own_market_sector(key, row)
         and row.get("verdict") == "insufficient_data"
         and row.get("buy_tier_members")
         and str(row.get("market") or FTSE_MARKET) == FTSE_MARKET
@@ -1097,4 +1570,20 @@ def ops_findings_from_sector_headwind_gate(payload: dict[str, Any]) -> list[dict
                 "auto_fixable": False,
             }
         )
+    findings.append(
+        {
+            "severity": "info",
+            "category": "research",
+            "title": FALLBACK_FINDING_TITLE,
+            "summary": (
+                "Buy-tier names by sector basis: "
+                + _grid_text(summary.get("buy_tier_by_basis"))
+                + ". Buy-tier names by earnings fallback: "
+                + _grid_text(summary.get("buy_tier_by_earnings_fallback"))
+                + ". Signal-risk labels for the strategy book; observe-only; "
+                "influences_live=false; no rememo, ingest, or fetch."
+            ),
+            "auto_fixable": False,
+        }
+    )
     return findings
