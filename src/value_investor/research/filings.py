@@ -201,6 +201,15 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://s203.q4cdn.com/522538739/files/doc_financials/2026/q2/1-HY26-Combined-RNS-FINAL.pdf",
         "https://s203.q4cdn.com/522538739/files/doc_financials/2026/q2/3-H126-Investor-Presentation-vf.pdf",
     ],
+    # eng-20261105-01: ftse350 RKT.L gap-closure had empty IR allowlist (0 refetch); reckitt.com Contentstack CDN.
+    "RKT.L": [
+        "https://eu-assets.contentstack.com/v3/assets/blt93c8bc7a598af9f0/blt3a6f2cd6ab14bf47/69c2b35aa17ac75c0a18f6f2/Reckitt_Annual_Report_and_Accounts_2025_(2).pdf",
+        "https://eu-assets.contentstack.com/v3/assets/blt93c8bc7a598af9f0/blt1a1c57bc86611bdf/69c2a423de510e75f7c99854/reckitt-fy-2025-results-announcement.pdf",
+        "https://eu-assets.contentstack.com/v3/assets/blt93c8bc7a598af9f0/bltff6ca84d2437f204/6989ec3f8b35d03c92ec6c79/reckitt-rns-hy-2025.pdf",
+        "https://eu-assets.contentstack.com/v3/assets/blt93c8bc7a598af9f0/blt95cf941f3c07d9ff/6a6987914fedb5b67f067a59/Reckitt_RNS_H1_2026_Final_Signed.pdf",
+        "https://eu-assets.contentstack.com/v3/assets/blt93c8bc7a598af9f0/blta7c90c34aecde716/699eaa94f855a500087abc10/reckitt-q3-2025-rns.pdf",
+        "https://eu-assets.contentstack.com/v3/assets/blt93c8bc7a598af9f0/blt11d765003a0859f4/6ae03fb7c163f70b4f5cb85f/Reckitt_RNS_Q3_2026.pdf",
+    ],
     # ftse_smallcap IWB blocker — MER.L parked unfetchable_iwb; CH PDFs fail but mearsgroup.co.uk statutory PDFs fetch.
     "MER.L": [
         "https://www.mearsgroup.co.uk/media/jc1hix2m/mears-group-plc-annual-report-and-accounts-2025.pdf",

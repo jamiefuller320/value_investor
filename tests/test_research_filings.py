@@ -7242,6 +7242,24 @@ def test_builtin_ir_allowlist_includes_ezj_l():
     assert "interim" in periods
 
 
+def test_builtin_ir_allowlist_includes_rkt_l():
+    """eng-20261105-01: ftse350 RKT.L intensive pin had empty IR allowlist (0 refetch)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("RKT.L") or []
+    assert any("Reckitt_Annual_Report_and_Accounts_2025" in url for url in urls)
+    assert any("reckitt-fy-2025-results-announcement.pdf" in url for url in urls)
+    assert any("reckitt-rns-hy-2025.pdf" in url for url in urls)
+    assert any("Reckitt_RNS_H1_2026_Final_Signed.pdf" in url for url in urls)
+    assert all("eu-assets.contentstack.com" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("RKT.L")
+    assert len(rows) >= 5
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    periods = {row.get("period") for row in rows}
+    assert "annual" in periods
+    assert "interim" in periods
+
+
 def test_builtin_ir_allowlist_includes_g1a_de():
     """DAX spare unmeasured G1A.DE needs GEA Group IR seeds (empty discovery)."""
     from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
