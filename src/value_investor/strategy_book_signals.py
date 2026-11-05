@@ -48,6 +48,8 @@ from value_investor.strategy_book_rules import (
     RSI_LEVEL,
     RSI_PERIOD,
     STALE_CHART_CALENDAR_DAYS,
+    UnknownMarketClose,
+    session_close,
 )
 from value_investor.technical_analysis import _rsi
 
@@ -206,7 +208,12 @@ def universe_markets(market_status: Path) -> list[str]:
 
 
 def session_end(day: date) -> datetime:
-    """UTC end of the session calendar day. A later timestamp is after *t*."""
+    """UTC end of the calendar day. A date boundary, not an exchange close.
+
+    Point-in-time files (filings index, library screen snapshot, overlay
+    verdicts) dated after this instant are not in force on ``day``. Memo
+    binds and late signals use ``session_close``.
+    """
     return datetime.combine(day, time(23, 59, 59), tzinfo=UTC)
 
 
@@ -699,10 +706,10 @@ def _filing_paths(research_root: Path, ticker: str) -> list[Path]:
 
 
 def _library_snapshot_as_of(session: date) -> datetime:
-    """Close of *t* for the library screen CSV and the FCF source files.
+    """Calendar-day boundary for the library screen CSV and the FCF files.
 
-    A snapshot timestamp after this is not a pass. The forward job reads the
-    snapshots after they refresh and before the next close.
+    A snapshot timestamp after this is not in force on ``session``. This is
+    ``session_end``, not the cash close: the file stamp is a date, not a fill.
     """
     return session_end(session)
 
@@ -716,6 +723,7 @@ def _binds(
     session: date,
     memo_as_of: datetime,
 ) -> tuple[dict[str, Check], list[str]]:
+    # Date boundary for filing and overlay files. The memo clock is ``memo_as_of``.
     as_of = session_end(session)
     paths = [str(path) for path in _filing_paths(research_root, ticker)]
     index = _index_as_of(ticker, research_root=research_root, as_of=as_of)
@@ -867,13 +875,18 @@ def evaluate_ticker(
     next_day, stored_next = _next_session(all_days, session)
     gap_days = (next_day - session).days if stored_next else None
     research_root = research_root_for(paths, market)
+    try:
+        # Section 2: memo_recent is read at the fill session's own close.
+        memo_as_of = session_close(market, next_day)
+    except UnknownMarketClose:
+        memo_as_of = datetime.min.replace(tzinfo=UTC)
     binds, filing_paths = _binds(
         market=market,
         ticker=token,
         row=row or {},
         research_root=research_root,
         session=session,
-        memo_as_of=session_end(next_day),
+        memo_as_of=memo_as_of,
     )
     gap_over = bool(stored_next and gap_days is not None and gap_days > MAX_FILL_GAP_CALENDAR_DAYS)
     # Section 3: a hole longer than 5 calendar days drops the signal. No memo.

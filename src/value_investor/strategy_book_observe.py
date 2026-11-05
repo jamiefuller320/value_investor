@@ -102,13 +102,14 @@ from value_investor.strategy_book_rules import (
     THICKNESS_MIN_SPAN_SESSIONS,
     TIME_CAP_INDEX,
     VALUE_SET_SIGNALS,
+    UnknownMarketClose,
     floor_for_checkpoint,
     highest_checkpoint,
+    session_close,
 )
 from value_investor.strategy_book_signals import (
     chart_is_thinned,
     price_flags,
-    session_end,
 )
 
 # Section 8. Numeric snapshot fields that the selection board splits into fifths.
@@ -362,6 +363,53 @@ def series_refusal(sessions: list[date]) -> str | None:
 def entry_week(day: date) -> str:
     year, week, _weekday = day.isocalendar()
     return f"{year}-W{week:02d}"
+
+
+def _iso_monday(token: str) -> date:
+    year_text, week_text = str(token).split("-W")
+    return date.fromisocalendar(int(year_text), int(week_text), 1)
+
+
+def period_halves(
+    episodes: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Split episodes at the calendar midpoint of their entry weeks.
+
+    The span is every ISO week from the first counted entry week through the
+    last, including weeks with no episode. The midpoint is halfway between
+    those two Mondays. Weeks on or before that midpoint's ISO week are the
+    first half, so an odd span puts the middle week in the first half.
+    One function owns the cut: a different owner choice edits only this body.
+    """
+    dated: list[tuple[str, dict[str, Any]]] = []
+    for episode in episodes:
+        token = episode.get("entry_week")
+        if not token and episode.get("fill_session"):
+            try:
+                token = entry_week(date.fromisoformat(str(episode["fill_session"])[:10]))
+            except ValueError:
+                token = None
+        if not token:
+            continue
+        dated.append((str(token), episode))
+    if not dated:
+        return [], []
+    weeks = sorted({token for token, _episode in dated})
+    first_monday = _iso_monday(weeks[0])
+    last_monday = _iso_monday(weeks[-1])
+    midpoint = first_monday + (last_monday - first_monday) / 2
+    cut = entry_week(midpoint)
+    first = [episode for token, episode in dated if token <= cut]
+    second = [episode for token, episode in dated if token > cut]
+    return first, second
+
+
+def _cash_close(market: str, day: date) -> datetime | None:
+    """Local cash close, or None when the market has no registered close."""
+    try:
+        return session_close(market, day)
+    except UnknownMarketClose:
+        return None
 
 
 def t212_listed(listing: ListingFact | None, entry_day: date) -> bool | str:
@@ -837,7 +885,10 @@ def _pending(name: _Name, column: str) -> bool:
 
 
 def _memo_outcome(spec: NameSpec, fill_session: date) -> tuple[str, MemoFact | None]:
-    cutoff = session_end(fill_session)
+    # Section 2: earlier than the fill session's close in the market's zone.
+    cutoff = _cash_close(spec.market, fill_session)
+    if cutoff is None:
+        return "memo_not_ready", None
     ready = [memo for memo in spec.memos if _aware(memo.finished_at) <= cutoff]
     if not ready:
         return "memo_not_ready", None
@@ -858,7 +909,11 @@ def _is_late(
     seen = spec.signal_seen_at.get(signal_session)
     if seen is None:
         return False
-    return _aware(seen) > session_end(fill_session)
+    # The next session's cash close. An unknown market cannot be filled.
+    cutoff = _cash_close(spec.market, fill_session)
+    if cutoff is None:
+        return True
+    return _aware(seen) > cutoff
 
 
 def _breadth_bucket(sources: dict[str, int] | None) -> str:
@@ -961,8 +1016,10 @@ def _snapshot(
         if isinstance(revenue, dict):
             payload["revenue_change_pct"] = revenue.get("change_pct")
     if memo is not None:
-        age = _memo_age_days(_aware(memo.finished_at), now=session_end(session))
-        payload["memo_age_days"] = age
+        closed_at = _cash_close(spec.market, session)
+        payload["memo_age_days"] = (
+            None if closed_at is None else _memo_age_days(_aware(memo.finished_at), now=closed_at)
+        )
         payload["memo_by_signal_job"] = bool(memo.by_signal_job)
     else:
         payload["memo_age_days"] = None
@@ -1437,8 +1494,9 @@ def _open_position_record(
         data_commit=options.data_commit,
     )
     if memo is not None:
-        position.memo_age_days = _memo_age_days(
-            _aware(memo.finished_at), now=session_end(fill_session)
+        closed_at = _cash_close(position.market, fill_session)
+        position.memo_age_days = (
+            None if closed_at is None else _memo_age_days(_aware(memo.finished_at), now=closed_at)
         )
         position.memo_by_signal_job = bool(memo.by_signal_job)
         position.memo_verdict = memo.verdict
@@ -1646,10 +1704,10 @@ def _fill_entries(
                 else None
             )
             hours = None
-            if seen is not None:
-                hours = (
-                    _aware(seen) - session_end(pending.signal_session)
-                ).total_seconds() / 3600.0
+            closed_at = _cash_close(name.spec.market, session)
+            if seen is not None and closed_at is not None:
+                # Hours after the next session's cash close, the late-signal clock.
+                hours = (_aware(seen) - closed_at).total_seconds() / 3600.0
             events.append(
                 {
                     "kind": "late_signal",
@@ -2483,10 +2541,28 @@ def _single_market_dependence(episodes: list[dict[str, Any]]) -> bool:
     return rest_median is not None and rest_median <= 0
 
 
+def _signed_difference(
+    kept_rows: list[dict[str, Any]], all_rows: list[dict[str, Any]]
+) -> float | None:
+    left = _mean(_decision_values(kept_rows, "decision_return_floor"))
+    right = _mean(_decision_values(all_rows, "decision_return_floor"))
+    if left is None or right is None:
+        return None
+    return left - right
+
+
+def _same_sign(left: float | None, right: float | None) -> bool:
+    if left is None or right is None or left == 0 or right == 0:
+        return False
+    return (left > 0) == (right > 0)
+
+
 def _bench_report(episodes: list[dict[str, Any]]) -> dict[str, Any]:
     primary = _mature_primary(episodes)
     all_returns = _decision_values(primary, "decision_return_floor")
     all_mean = _mean(all_returns)
+    counted_primary = [episode for episode in primary if not episode.get("provenance_missing")]
+    first_half, second_half = period_halves(counted_primary)
     report: dict[str, Any] = {}
     for column in INITIAL_BENCH:
         kept = [episode for episode in primary if (episode.get("bench") or {}).get(column)]
@@ -2500,9 +2576,29 @@ def _bench_report(episodes: list[dict[str, Any]]) -> dict[str, Any]:
         kept_mean = _mean(_decision_values(kept_counted, "decision_return_floor"))
         difference = None if kept_mean is None or all_mean is None else kept_mean - all_mean
         error = entry_week_standard_error(by_week)
-        counted_primary = [episode for episode in primary if not episode.get("provenance_missing")]
         kept_capital = capital_days_return(kept_counted)
         primary_capital = capital_days_return(counted_primary)
+        first_diff = _signed_difference(
+            [episode for episode in first_half if (episode.get("bench") or {}).get(column)],
+            first_half,
+        )
+        second_diff = _signed_difference(
+            [episode for episode in second_half if (episode.get("bench") or {}).get(column)],
+            second_half,
+        )
+        both_halves = _same_sign(first_diff, second_diff)
+        capital_days_met = bool(
+            kept_capital is not None
+            and primary_capital is not None
+            and kept_capital >= primary_capital
+        )
+        count_met = len(kept_counted) >= BENCH_MIN_COUNTED
+        difference_met = bool(
+            difference is not None
+            and error not in (None, 0)
+            and abs(difference) > BENCH_STANDARD_ERRORS * error
+            and difference > 0
+        )
         report[column] = {
             "kept": len(kept),
             "kept_share": None if not primary else len(kept) / len(primary),
@@ -2515,22 +2611,15 @@ def _bench_report(episodes: list[dict[str, Any]]) -> dict[str, Any]:
             "promotion_bar": {
                 "min_counted": BENCH_MIN_COUNTED,
                 "standard_errors": BENCH_STANDARD_ERRORS,
-                "count_met": len(kept_counted) >= BENCH_MIN_COUNTED,
-                "difference_met": bool(
-                    difference is not None
-                    and error not in (None, 0)
-                    and abs(difference) > BENCH_STANDARD_ERRORS * error
-                    and difference > 0
-                ),
-                # "No lower than the primary's" (section 8). Both-halves sign is
-                # not evaluated: the registration does not define the half cut.
-                "capital_days_met": bool(
-                    kept_capital is not None
-                    and primary_capital is not None
-                    and kept_capital >= primary_capital
-                ),
+                "count_met": count_met,
+                "difference_met": difference_met,
+                "both_halves_same_sign": both_halves,
+                "first_half_difference": first_diff,
+                "second_half_difference": second_diff,
+                "capital_days_met": capital_days_met,
                 "kept_capital_days": kept_capital,
                 "primary_capital_days": primary_capital,
+                "met": bool(count_met and difference_met and capital_days_met and both_halves),
             },
         }
     return report
@@ -2892,7 +2981,18 @@ def build_boards(
                 _stress(float(entry), float(entry) * (1.0 + float(episode["floor"])))
             )
     selection_features = NUMERIC_SNAPSHOT_FEATURES + CHANNEL_NUMERIC_FEATURES
-    selection = {feature: _fifths(episodes, feature) for feature in selection_features}
+    counted_for_fifths = [
+        episode for episode in _mature_primary(episodes) if not episode.get("provenance_missing")
+    ]
+    fifth_halves = period_halves(counted_for_fifths)
+    selection = {
+        feature: {
+            "whole": _fifths(counted_for_fifths, feature),
+            "first_half": _fifths(fifth_halves[0], feature),
+            "second_half": _fifths(fifth_halves[1], feature),
+        }
+        for feature in selection_features
+    }
     coverage = {}
     for feature in selection_features:
         have = sum(

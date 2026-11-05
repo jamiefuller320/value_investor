@@ -13,7 +13,7 @@ until ``registration_signed`` is true.
 from __future__ import annotations
 
 import json
-from datetime import date
+from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
 
@@ -37,11 +37,12 @@ from value_investor.strategy_book_rules import (
     LOOKAHEAD_CURRENT_GATES,
     REGISTRATION_ID,
     VALUE_SET_SIGNALS,
+    UnknownMarketClose,
+    session_close,
 )
 from value_investor.strategy_book_signals import (
     _binds,
     parse_day,
-    session_end,
     universe_markets,
 )
 
@@ -265,13 +266,17 @@ def _f9_facts(
                 "research_verdict": latest.research_verdict,
                 **latest.fields,
             }
+        try:
+            memo_as_of = session_close(market, day)
+        except UnknownMarketClose:
+            memo_as_of = datetime.min.replace(tzinfo=UTC)
         binds, _paths = _binds(
             market=market,
             ticker=ticker,
             row=row,
             research_root=research,
             session=day,
-            memo_as_of=session_end(day),
+            memo_as_of=memo_as_of,
         )
         bodies = bool(binds["key_filing_bodies"].passed)
         fcf = bool(binds["fcf_basis_bound"].passed)

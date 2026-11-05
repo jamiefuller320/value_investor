@@ -30,8 +30,10 @@ from value_investor.strategy_book_observe import (
     add_bench_column,
     build_boards,
     capital_days_return,
+    entry_week,
     entry_week_standard_error,
     filter_kept,
+    period_halves,
     walk_book,
 )
 from value_investor.strategy_book_observe_cli import main as observe_main
@@ -69,18 +71,22 @@ from value_investor.strategy_book_rules import (
     LAUNCH_RETURN,
     LOOKAHEAD_CURRENT_GATES,
     LOW_WINDOW_SESSIONS,
+    MARKET_CLOSE_LOCAL,
     MATURITY_SESSIONS,
     MAX_FILL_GAP_CALENDAR_DAYS,
     RECOVERY_DROP,
     REGISTRATION_ID,
     RSI_LEVEL,
+    SLOT_BOOK_RANDOM_SEED,
     SLOT_COUNT,
     STAKE_UNITS,
     T212_CATALOGUE_MAX_AGE_DAYS,
     THICKNESS_MAX_PER_ENTRY_WEEK,
     THICKNESS_MIN_COUNTED,
     TIME_CAP_INDEX,
+    UnknownMarketClose,
     registration_signed,
+    session_close,
 )
 from value_investor.strategy_book_signals import price_flags, session_end
 
@@ -258,6 +264,7 @@ def test_registered_numbers_match_the_text() -> None:
     assert THICKNESS_MAX_PER_ENTRY_WEEK == 6
     assert T212_CATALOGUE_MAX_AGE_DAYS == 35
     assert REGISTRATION_ID == "owner-strategy-book-v0"
+    assert SLOT_BOOK_RANDOM_SEED == 20261104
 
 
 def test_entry_needs_rsi_below_35_and_a_ten_session_low() -> None:
@@ -1168,3 +1175,149 @@ def _gappy_days() -> list[date]:
     days.append(days[-1] + timedelta(days=1))
     days.append(days[-1] + timedelta(days=6))
     return days
+
+
+def _start_so_fill_is(fill: date, index: int = 15) -> date:
+    cursor = fill
+    seen = 0
+    while seen < index:
+        cursor -= timedelta(days=1)
+        if cursor.weekday() < 5:
+            seen += 1
+    return cursor
+
+
+def test_memo_uses_the_local_close_and_an_unknown_market_is_not_ready() -> None:
+    closes = _decline() + [100.0, 104.0]
+    days = _weekdays(len(closes))
+    hk_close = session_close("hang_seng", days[15])
+    before = _spec(closes, market="hang_seng", library=True, graduated=True, memo=False)
+    before.memos = [
+        MemoFact(
+            finished_at=hk_close - timedelta(minutes=30),
+            verdict="hold",
+            rationale="before the HKEX close",
+        )
+    ]
+    assert _one(_walk(before))["memo_verdict"] == "hold"
+    after = _spec(closes, market="hang_seng", library=True, graduated=True, memo=False)
+    after.memos = [
+        MemoFact(
+            finished_at=hk_close + timedelta(minutes=30),
+            verdict="hold",
+            rationale="after the HKEX close",
+        )
+    ]
+    missed = _walk(after)
+    assert _primary(missed) == []
+    assert _kind(missed, "memo_not_ready")
+
+    # 16:00 UTC is 17:00 in BST and 16:00 in GMT. London cash close is 16:30.
+    summer = date(2026, 7, 1)
+    winter = date(2026, 1, 7)
+    assert session_close("ftse350", summer) == datetime(2026, 7, 1, 15, 30, tzinfo=UTC)
+    assert session_close("ftse350", winter) == datetime(2026, 1, 7, 16, 30, tzinfo=UTC)
+    for day, opens in ((summer, False), (winter, True)):
+        spec = _spec(closes, start=_start_so_fill_is(day), memo=False)
+        spec.memos = [
+            MemoFact(
+                finished_at=datetime.combine(day, time(16), tzinfo=UTC),
+                verdict="hold",
+                rationale="sixteen utc",
+            )
+        ]
+        result = _walk(spec)
+        if opens:
+            assert _one(result)["fill_session"] == day.isoformat()
+        else:
+            assert _primary(result) == []
+            assert _kind(result, "memo_not_ready")
+
+    with pytest.raises(UnknownMarketClose):
+        session_close("not_a_market", winter)
+    unknown = _spec(closes, market="not_a_market", library=True, graduated=True)
+    refused = _walk(unknown)
+    assert _primary(refused) == []
+    assert _kind(refused, "memo_not_ready")
+
+
+def test_close_table_covers_the_graduated_markets() -> None:
+    from value_investor.library_decision_input_inventory import graduated_market_ids
+    from value_investor.market_paper_shard import MARKET_SESSION_DEFAULTS
+
+    graduated = set(graduated_market_ids(Path("docs/data/market_status.json")))
+    assert set(MARKET_CLOSE_LOCAL) == graduated | {"ftse350"}
+    assert "euro_depth" not in MARKET_CLOSE_LOCAL
+    assert "sp400" not in MARKET_CLOSE_LOCAL
+    for market_id, (zone, _hhmm) in MARKET_CLOSE_LOCAL.items():
+        if market_id in MARKET_SESSION_DEFAULTS:
+            assert zone == MARKET_SESSION_DEFAULTS[market_id]["timezone"]
+
+
+def _half_episode(day: date, ret: float, *, kept: bool, ticker: str) -> dict:
+    return {
+        "column": COLUMN_PRIMARY,
+        "mature": True,
+        "provenance_missing": False,
+        "market": "ftse350",
+        "ticker": ticker,
+        "entry_week": entry_week(day),
+        "fill_session": day.isoformat(),
+        "signal_session": day.isoformat(),
+        "decision_return_floor": ret,
+        "capital_return": ret,
+        "stake": 100,
+        "held_calendar_days": 10,
+        "bench": {"fcf_agrees": kept, "deep_dip": False, "revenue_growing": False},
+        "status": "closed",
+        "launched": True,
+    }
+
+
+def test_period_halves_put_the_middle_week_in_the_first_half() -> None:
+    start = date.fromisocalendar(2026, 2, 1)
+    even = [
+        _half_episode(start + timedelta(weeks=index), 0.01, kept=True, ticker=f"E{index}")
+        for index in range(4)
+    ]
+    first, second = period_halves(even)
+    assert [row["entry_week"] for row in first] == [
+        entry_week(start + timedelta(weeks=index)) for index in range(2)
+    ]
+    assert [row["entry_week"] for row in second] == [
+        entry_week(start + timedelta(weeks=index)) for index in range(2, 4)
+    ]
+    odd = [
+        _half_episode(start + timedelta(weeks=index), 0.01, kept=True, ticker=f"O{index}")
+        for index in range(5)
+    ]
+    first, second = period_halves(odd)
+    assert [row["ticker"] for row in first] == ["O0", "O1", "O2"]
+    assert [row["ticker"] for row in second] == ["O3", "O4"]
+
+
+def test_bench_promotion_fails_when_the_halves_disagree() -> None:
+    start = date.fromisocalendar(2026, 2, 1)
+    rows: list[dict] = []
+    serial = 0
+    for index in range(20):
+        day = start + timedelta(weeks=index)
+        wobble = 0.002 * ((index % 3) - 1)
+        for _kept in range(4):
+            rows.append(_half_episode(day, 0.20 + wobble, kept=True, ticker=f"K{serial}"))
+            serial += 1
+        if index < 10:
+            for other in range(4):
+                rows.append(_half_episode(day, 0.0, kept=False, ticker=f"A{index}-{other}"))
+        else:
+            rows.append(_half_episode(day, 0.50, kept=False, ticker=f"B{index}"))
+    bar = build_boards(rows)["bench"]["fcf_agrees"]["promotion_bar"]
+    assert bar["count_met"] is True
+    assert bar["difference_met"] is True
+    assert bar["capital_days_met"] is True
+    assert bar["first_half_difference"] > 0
+    assert bar["second_half_difference"] < 0
+    assert bar["both_halves_same_sign"] is False
+    assert bar["met"] is False
+    fifths = build_boards(rows)["selection_fifths"]["composite_score"]
+    assert set(fifths) == {"whole", "first_half", "second_half"}

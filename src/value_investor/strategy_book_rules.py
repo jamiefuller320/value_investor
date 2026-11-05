@@ -6,16 +6,20 @@ Existing project constants that the registration stamps unchanged are imported,
 not re-typed. A signature note may change a proposed number once, in this module,
 before any score store exists.
 
-``SLOT_BOOK_RANDOM_SEED`` is not a registered number. Section 8 says the 15
-funding orders are fixed and does not name a seed. Zero keeps them fixed.
+``SLOT_BOOK_RANDOM_SEED`` is not in the main registration. Section 8 says only
+"15 fixed random orders". The seed is the value the US rehearsal registration
+names, logged as a clarification at signature.
 """
 
 from __future__ import annotations
 
+from datetime import UTC, date, datetime, time
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 from value_investor.decision_input_inventory import DEFAULT_MEMO_MAX_AGE_DAYS
+from value_investor.market_paper_shard import MARKET_SESSION_DEFAULTS
 from value_investor.market_trading_costs import LEGACY_STRESS_TRADE_COST_PCT
 from value_investor.paper_fund import BUY_SIGNALS, DEFAULT_EXIT_CONFIRM_SCREENS
 from value_investor.storage import read_json
@@ -29,6 +33,87 @@ VALUE_SET_SIGNALS = BUY_SIGNALS
 
 # Section 2. Memo age uses the existing 21-day maximum.
 MEMO_MAX_AGE_DAYS = DEFAULT_MEMO_MAX_AGE_DAYS
+
+
+def _session_zone(market_id: str, fallback: str) -> str:
+    """IANA zone from ``MARKET_SESSION_DEFAULTS`` when the shard names one."""
+    row = MARKET_SESSION_DEFAULTS.get(market_id)
+    if not row:
+        return fallback
+    return str(row["timezone"])
+
+
+class UnknownMarketClose(KeyError):
+    """No regular-session close is registered for this market. Fail closed."""
+
+
+# Section 2. Regular cash-session closes. Exchange facts, not strategy numbers.
+# A memo counts only when it is finished earlier than this close in the
+# market's own time zone. ``euro_depth`` and ``sp400`` are not graduated, so
+# they are absent and ``session_close`` refuses them.
+# Zones for sp500, nasdaq100, tsx60, euro_stoxx50, asx200 and ftse_smallcap
+# come from ``MARKET_SESSION_DEFAULTS``.
+MARKET_CLOSE_LOCAL: dict[str, tuple[str, str]] = {
+    # London Stock Exchange cash close 16:30.
+    "ftse350": ("Europe/London", "16:30"),
+    "aim": ("Europe/London", "16:30"),
+    "ftse_smallcap": (_session_zone("ftse_smallcap", "Europe/London"), "16:30"),
+    # NYSE and Nasdaq cash close 16:00.
+    "sp500": (_session_zone("sp500", "America/New_York"), "16:00"),
+    "nasdaq100": (_session_zone("nasdaq100", "America/New_York"), "16:00"),
+    # Curated US ADRs. The venue is New York, not the home exchange.
+    "us_adr_asia": ("America/New_York", "16:00"),
+    # Toronto Stock Exchange cash close 16:00.
+    "tsx60": (_session_zone("tsx60", "America/Toronto"), "16:00"),
+    # ASX cash close 16:00.
+    "asx200": (_session_zone("asx200", "Australia/Sydney"), "16:00"),
+    # HKEX cash close 16:00.
+    "hang_seng": ("Asia/Hong_Kong", "16:00"),
+    # SGX securities market close 17:00.
+    "sti": ("Asia/Singapore", "17:00"),
+    # Euronext Paris, Amsterdam and Brussels cash close 17:30.
+    # EURO STOXX 50 uses the Paris session named in the shard defaults.
+    "cac40": ("Europe/Paris", "17:30"),
+    "aex": ("Europe/Amsterdam", "17:30"),
+    "bel20": ("Europe/Brussels", "17:30"),
+    "euro_stoxx50": (_session_zone("euro_stoxx50", "Europe/Paris"), "17:30"),
+    # Xetra cash close 17:30.
+    "dax": ("Europe/Berlin", "17:30"),
+    # Borsa Italiana cash close 17:30.
+    "ftse_mib": ("Europe/Rome", "17:30"),
+    # BME cash close 17:30.
+    "ibex35": ("Europe/Madrid", "17:30"),
+    # SIX cash close 17:30.
+    "smi": ("Europe/Zurich", "17:30"),
+    # Nasdaq Stockholm cash close 17:30.
+    "omxs30": ("Europe/Stockholm", "17:30"),
+    # Wiener Börse cash close 17:30.
+    "atx": ("Europe/Vienna", "17:30"),
+    # Euronext Dublin cash close 16:30.
+    "iseq20": ("Europe/Dublin", "16:30"),
+    # Euronext Lisbon cash close 16:30.
+    "psi20": ("Europe/Lisbon", "16:30"),
+}
+
+
+def session_close(market: str, day: date) -> datetime:
+    """Cash close of ``day`` as a UTC instant. Unknown markets raise.
+
+    DST follows the IANA zone. This is the memo bind and the late-signal
+    clock. Point-in-time file dating stays on ``session_end``.
+    """
+    row = MARKET_CLOSE_LOCAL.get(str(market or "").strip())
+    if row is None:
+        raise UnknownMarketClose(market)
+    zone_name, hhmm = row
+    hour_text, minute_text = hhmm.split(":")
+    local = datetime.combine(
+        day,
+        time(int(hour_text), int(minute_text)),
+        tzinfo=ZoneInfo(zone_name),
+    )
+    return local.astimezone(UTC)
+
 
 # Section 2. A catalogue older than 35 days on the entry date is ``unknown``.
 T212_CATALOGUE_MAX_AGE_DAYS = 35
@@ -131,9 +216,11 @@ DEEP_DIP_LOOKBACK = 20
 DEEP_DIP_DROP = 0.08
 
 # Section 8. Capital view. 20 slots, ties by ticker, 15 fixed random orders.
+# The main registration does not name a seed. 20261104 is the US rehearsal
+# value, kept as the clarification logged at signature.
 SLOT_COUNT = 20
 SLOT_RANDOM_ORDERS = 15
-SLOT_BOOK_RANDOM_SEED = 0
+SLOT_BOOK_RANDOM_SEED = 20261104
 CAPITAL_YEAR_DAYS = 365
 RECOVERY_CAPITAL_LONG_SESSIONS = 60
 
