@@ -2526,13 +2526,19 @@ def check_sector_headwind_gate(
     charts_dir: Path | None = None,
     decline_store: Path | None = None,
     store_path: Path | None = None,
+    market_status_path: Path | None = None,
+    library_root: Path | None = None,
+    label_history_path: Path | None = None,
     persist: bool = True,
 ) -> list[OpsFinding]:
     """Refresh the observe-only, point-in-time sector headwind gate."""
     from value_investor.sector_headwind_gate import (
         DEFAULT_CHARTS_DIR,
         DEFAULT_DECLINE_STORE,
+        DEFAULT_LABEL_HISTORY,
         DEFAULT_LATEST_PATH,
+        DEFAULT_LIBRARY_ROOT,
+        DEFAULT_MARKET_STATUS,
         DEFAULT_STORE_PATH,
         STORE_FAILED_TITLE,
         ops_findings_from_sector_headwind_gate,
@@ -2547,6 +2553,17 @@ def check_sector_headwind_gate(
                 Path(decline_store) if decline_store is not None else DEFAULT_DECLINE_STORE
             ),
             store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            market_status_path=(
+                Path(market_status_path)
+                if market_status_path is not None
+                else DEFAULT_MARKET_STATUS
+            ),
+            library_root=Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT,
+            label_history_path=(
+                Path(label_history_path)
+                if label_history_path is not None
+                else DEFAULT_LABEL_HISTORY
+            ),
             persist=persist,
         )
     except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
