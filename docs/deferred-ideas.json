@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-05T10:10:10+00:00",
+  "updated_at": "2026-11-05T20:07:22+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -870,7 +870,9 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
-      "added_at": "2026-07-22T07:52:52+00:00"
+      "added_at": "2026-07-22T07:52:52+00:00",
+      "updated_at": "2026-11-05T19:42:56+00:00",
+      "status_note": "2026-11-05: real per-run raw_cost_cents is now logged (docs/ops/agent-token-usage.md). estimated_memo_usd stays the $0.40 ledger until 2\u20133 weeks of measuring. Human task monthly-calibrate-token-usage sets token_usage_weekly_warning_raw_usd from the Cursor usage page. This idea stays open until that comparison also retunes estimated_memo_usd."
     },
     {
       "id": "L53",
@@ -9871,7 +9873,9 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
-      "added_at": "2026-07-22T08:39:38+00:00"
+      "added_at": "2026-07-22T08:39:38+00:00",
+      "updated_at": "2026-11-05T19:42:56+00:00",
+      "status_note": "2026-11-05: Agent.get_usage is a read-only GetUsage unary and now feeds the token ledger (raw vs charged cents). It is not a live credits API and does not replace the estimated-USD weekly_ops cap. Stays open until token_usage_weekly_warning_raw_usd is calibrated against the Cursor usage page."
     },
     {
       "id": "N160",
@@ -16631,6 +16635,23 @@
       "added_at": "2026-11-05T09:51:41+00:00",
       "updated_at": "2026-11-05T10:10:10+00:00",
       "status_note": "Library sector gate uses latest_signals.csv earnings_growth when a member has no decline-store verdict, declining at <= -0.05, and records earnings_fallback_used. Regional member-count fallback is a separate signal-risk label."
+    },
+    {
+      "id": "N256",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Commit agent token-usage log from hunter jobs",
+      "summary": "Hunter-fix commits an allowlisted PR diff and does not push docs/data/agent_usage_log.jsonl to main, so hunter_fix and hunter_verify runs can miss the weekly token ledger.",
+      "revisit_when": "After token_usage_weekly_warning_raw_usd is calibrated, or when hunter agent volume is large enough that missing rows would hide spend",
+      "tags": [
+        "token-usage",
+        "hunter"
+      ],
+      "status": "open",
+      "source": "cursor/agent-token-usage-567c",
+      "added_at": "2026-11-05T19:42:56+00:00",
+      "updated_at": "2026-11-05T20:07:22+00:00",
+      "status_note": "Hunter-fix still commits an allowlisted PR diff and does not push docs/data/agent_usage/ shards to main, so hunter_fix and hunter_verify runs can miss the weekly token ledger."
     }
   ],
   "fragments": [

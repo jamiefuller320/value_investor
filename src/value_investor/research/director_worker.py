@@ -536,6 +536,9 @@ def run_director_plan(
         api_key=api_key,
         model=director_model,
         cwd=cwd,
+        job="director_worker",
+        ticker=report.ticker,
+        pool=SPEND_POOL_AD_HOC,
     )
     try:
         raw = extract_json_object(text)
@@ -571,6 +574,9 @@ def run_worker_task(
         api_key=api_key,
         model=worker_model,
         cwd=cwd,
+        job="director_worker",
+        ticker=report.ticker,
+        pool=SPEND_POOL_AD_HOC,
     )
     try:
         payload = extract_json_object(text)
@@ -613,6 +619,9 @@ def run_director_synthesis(
         api_key=api_key,
         model=director_model,
         cwd=cwd,
+        job="director_worker",
+        ticker=report.ticker,
+        pool=SPEND_POOL_AD_HOC,
     )
     sections = parse_research_sections(text)
     verdict_fields = parse_research_verdict(sections.get("research_verdict", ""))

@@ -12,6 +12,7 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
+from value_investor.agent_usage import prompt_and_record
 from value_investor.analysis_review import (
     _EXPERIMENT_LINE,
     AnalysisTask,
@@ -502,13 +503,16 @@ def run_learning_director(
     write_json(payload_path, payload, compact=True)
 
     try:
-        agent_result = Agent.prompt(
+        agent_result = prompt_and_record(
             _build_learning_director_prompt(payload_path.resolve()),
             AgentOptions(
                 api_key=api_key,
                 model=model,
                 local=LocalAgentOptions(cwd=cwd or os.getcwd()),
             ),
+            job="learning_director",
+            model=model,
+            agent_cls=Agent,
         )
     except CursorAgentError as err:
         raise RuntimeError(f"Learning director agent startup failed: {err.message}") from err

@@ -17,7 +17,23 @@ LIBRARY_INGEST_ARTIFACT_PATHS=(
   docs/data/ingest_gap_closure_runs.json
   docs/data/ingest_deviations.json
   docs/data/market_status.json
+  docs/data/agent_usage
 )
+
+USAGE_DIR="docs/data/agent_usage"
+USAGE_SNAPSHOT=""
+if [ -d "$USAGE_DIR" ]; then
+  USAGE_SNAPSHOT="$(mktemp -d)"
+  cp -a "$USAGE_DIR/." "$USAGE_SNAPSHOT/"
+fi
+
+restore_usage_shards() {
+  git checkout HEAD -- "$USAGE_DIR" 2>/dev/null || true
+  if [ -n "$USAGE_SNAPSHOT" ] && [ -d "$USAGE_SNAPSHOT" ]; then
+    mkdir -p "$USAGE_DIR"
+    cp -a "$USAGE_SNAPSHOT/." "$USAGE_DIR/"
+  fi
+}
 
 git_clean_state() {
   git merge --abort 2>/dev/null || true
@@ -92,6 +108,7 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
     done < "$DIRTY_LIST"
   fi
 
+  restore_usage_shards
   stage_library_ingest_artifacts
   if git diff --cached --quiet; then
     echo "No library ingest artifact changes after sync"

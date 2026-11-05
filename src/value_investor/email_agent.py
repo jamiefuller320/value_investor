@@ -508,6 +508,7 @@ def main(argv: list[str] | None = None) -> int:
                 api_key=args.api_key,
                 model=args.model,
                 top_n=args.top,
+                pool="weekly_ops",
             )
         except RuntimeError as err:
             print(str(err), file=sys.stderr)
@@ -574,6 +575,7 @@ def main(argv: list[str] | None = None) -> int:
                 alumni_cap=(
                     args.alumni_cap if args.alumni_cap is not None else DEFAULT_RESEARCH_ALUMNI_CAP
                 ),
+                spend_pool="weekly_ops",
             )
         except RuntimeError as err:
             print(str(err), file=sys.stderr)
@@ -662,6 +664,7 @@ def main(argv: list[str] | None = None) -> int:
                 max_targets=int(args.gap_fill_cap),
                 market="ftse350",
                 park_suggestions=not bool(args.no_park_gap_suggestions),
+                spend_pool="weekly_ops",
             )
             write_json(
                 args.output_dir / "gap_fill_summary.json",
@@ -704,6 +707,7 @@ def main(argv: list[str] | None = None) -> int:
                 run_at=run_at,
                 deep_analysis=deep_analysis,
                 gap_fill_summary=gap_fill_summary,
+                pool="weekly_ops",
             )
         except RuntimeError as err:
             print(str(err), file=sys.stderr)

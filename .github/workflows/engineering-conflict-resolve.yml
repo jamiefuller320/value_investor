@@ -84,7 +84,8 @@ jobs:
           python3 - <<'PY'
           import os
           from pathlib import Path
-          from cursor_sdk import Agent, AgentOptions, LocalAgentOptions
+          from cursor_sdk import AgentOptions, LocalAgentOptions
+          from value_investor.agent_usage import prompt_and_record
           from value_investor.project_traffic import conflict_resolve_prompt
 
           branch = os.environ["BRANCH"]
@@ -95,13 +96,16 @@ jobs:
           )
           Path("output").mkdir(exist_ok=True)
           Path("output/conflict_resolve_prompt.md").write_text(prompt, encoding="utf-8")
-          result = Agent.prompt(
+          result = prompt_and_record(
               prompt,
               AgentOptions(
                   api_key=os.environ["CURSOR_API_KEY"],
                   model="composer-2.5",
                   local=LocalAgentOptions(cwd=os.getcwd()),
               ),
+              job="conflict_resolve",
+              model="composer-2.5",
+              pool="ad_hoc",
           )
           summary = (result.result or "").strip()
           Path("output/conflict_resolve_result.md").write_text(
@@ -128,6 +132,10 @@ jobs:
           gh auth setup-git
           if git status --porcelain | grep -q .; then
             git add -A
+            # Usage shards are new files for this run. They stay off the PR
+            # branch; ops-monitor's commit-gap finding names this workflow
+            # because nothing pushes docs/data/agent_usage to main from here.
+            git reset HEAD -- docs/data/agent_usage >/dev/null 2>&1 || true
             git commit -m "fix(conflict): resolve merge conflicts with main" || true
           fi
           git push origin "HEAD:$BRANCH"

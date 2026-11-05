@@ -7,8 +7,9 @@ import os
 import sys
 from pathlib import Path
 
-from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
+from cursor_sdk import AgentOptions, CursorAgentError, LocalAgentOptions
 
+from value_investor.agent_usage import prompt_and_record
 from value_investor.pipeline import run_screen, write_outputs
 
 
@@ -68,13 +69,15 @@ def main(argv: list[str] | None = None) -> int:
     prompt = _build_analysis_prompt(signals_path.resolve(), args.top)
 
     try:
-        agent_result = Agent.prompt(
+        agent_result = prompt_and_record(
             prompt,
             AgentOptions(
                 api_key=args.api_key,
                 model=args.model,
                 local=LocalAgentOptions(cwd=os.getcwd()),
             ),
+            job="agent_analyze",
+            model=args.model,
         )
     except CursorAgentError as err:
         print(

@@ -186,6 +186,8 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     assert "GHA_COMMIT_EXCLUDE" in email
     assert "docs/data/ops_status.json" in email
     assert "docs/data/ops_monitor_log.json" in email
+    assert "docs/data/agent_usage_cost_backfill.json" in email
+    assert "docs/data/agent_usage_weekly.json" in email
     assert "docs/data/buy_tier_flip_lag.json" in email
     assert "docs/data/decision_input_inventory.json" in email
     assert "docs/data/p1_first_run_pin.json" in email

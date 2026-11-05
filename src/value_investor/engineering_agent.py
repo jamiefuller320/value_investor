@@ -11,6 +11,7 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
+from value_investor.agent_usage import prompt_and_record
 from value_investor.engineering_tasks import EngineeringTask
 from value_investor.storage import write_json
 
@@ -93,7 +94,7 @@ def run_engineering_agent(
     write_json(payload_path, task.to_dict(), compact=False)
 
     try:
-        agent_result = Agent.prompt(
+        agent_result = prompt_and_record(
             _build_engineering_prompt(
                 task=task,
                 task_path=payload_path.resolve(),
@@ -104,6 +105,10 @@ def run_engineering_agent(
                 model=model,
                 local=LocalAgentOptions(cwd=cwd or os.getcwd()),
             ),
+            job="engineering",
+            model=model,
+            pool="ad_hoc",
+            agent_cls=Agent,
         )
     except CursorAgentError as err:
         raise RuntimeError(f"Engineering agent startup failed: {err.message}") from err

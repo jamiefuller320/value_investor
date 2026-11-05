@@ -17,6 +17,12 @@
 set -euo pipefail
 
 POLICY="${POLICY_PATH:-docs/data/library/policy.json}"
+USAGE_DIR="${USAGE_DIR_PATH:-docs/data/agent_usage}"
+USAGE_SNAPSHOT=""
+if [ -d "$USAGE_DIR" ]; then
+  USAGE_SNAPSHOT="$(mktemp -d)"
+  cp -a "$USAGE_DIR/." "$USAGE_SNAPSHOT/"
+fi
 MAX_ATTEMPTS="${GHA_COMMIT_ATTEMPTS:-5}"
 SLEEP_BASE="${GHA_COMMIT_SLEEP_BASE:-3}"
 RECORD_SPEND_CMD="${RECORD_SPEND_CMD:-ftse-engineering record-spend --json}"
@@ -107,9 +113,19 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
   # shellcheck disable=SC2086
   eval "$RECORD_SPEND_CMD"
 
+  # New shard files only. Copying onto origin/main does not delete shards
+  # another job already pushed, and shards are never rewritten.
+  if [ -n "$USAGE_SNAPSHOT" ]; then
+    mkdir -p "$USAGE_DIR"
+    cp -a "$USAGE_SNAPSHOT/." "$USAGE_DIR/"
+  fi
+
   git add -- "$POLICY"
+  if [ -d "$USAGE_DIR" ]; then
+    git add -- "$USAGE_DIR" || true
+  fi
   if git diff --cached --quiet; then
-    echo "No policy.json spend delta after re-record"
+    echo "No policy.json spend or usage-shard delta after re-record"
     restore_agent_work "$STASH_REF"
     exit 0
   fi

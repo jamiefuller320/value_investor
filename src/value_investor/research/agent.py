@@ -11,6 +11,7 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
+from value_investor.agent_usage import record_agent_usage
 from value_investor.research.document import (
     ResearchDocument,
     parse_research_sections,
@@ -525,6 +526,9 @@ def _run_agent_prompt(
     cwd: str | None,
     agent_id: str | None = None,
     as_of_date: str | None = None,
+    job: str = "research_agent",
+    ticker: str | None = None,
+    pool: str | None = None,
 ) -> tuple[str, str | None]:
     options = AgentOptions(
         api_key=api_key,
@@ -544,17 +548,27 @@ def _run_agent_prompt(
         _augment_research_worker_prompt(prompt),
         as_of_date=as_of_date,
     )
+    result = None
     try:
         result = agent.send(effective_prompt).wait()
     except CursorAgentError as err:
         raise RuntimeError(f"Agent run failed: {err.message}") from err
     finally:
+        run_id = getattr(result, "id", None) if result is not None else None
+        record_agent_usage(
+            agent,
+            job=job,
+            model=model,
+            run_id=run_id if isinstance(run_id, str) else None,
+            ticker=ticker,
+            pool=pool,
+        )
         try:
             agent.close()
         except CursorAgentError:
             pass
 
-    if result.result is None:
+    if result is None or result.result is None:
         raise RuntimeError("Agent returned empty research output")
 
     return result.result.strip(), agent.agent_id
@@ -568,6 +582,8 @@ def run_initial_research_agent(
     model: str = "composer-2.5",
     cwd: str | None = None,
     structured: bool = True,
+    job: str = "research_memo",
+    pool: str | None = None,
 ) -> tuple[ResearchDocument, str | None]:
     """Create a research document. Default Phase B: structured verdict only."""
     if structured:
@@ -591,6 +607,9 @@ def run_initial_research_agent(
         api_key=api_key,
         model=model,
         cwd=cwd,
+        job=job,
+        ticker=report.ticker,
+        pool=pool,
     )
     sections = parse_research_sections(text)
     verdict_fields = parse_research_verdict(sections.get("research_verdict", ""))
@@ -785,6 +804,7 @@ def run_gap_fill_research_agent(
     body_refetch: dict[str, Any] | None = None,
     ch_refetch: dict[str, Any] | None = None,
     structured: bool = True,
+    pool: str | None = None,
 ) -> GapFillAgentResult:
     """Rewrite financial/risk sections to address open qualitative questions."""
     from value_investor.research.gap_fill import gap_fill_ch_refetch_prompt_context
@@ -837,6 +857,9 @@ def run_gap_fill_research_agent(
         model=model,
         cwd=cwd,
         agent_id=existing.agent_id,
+        job="gap_fill",
+        ticker=existing.ticker,
+        pool=pool,
     )
     sections = parse_research_sections(text)
     gap_summary = sections.get("gap_fill_update", "").strip()
@@ -927,6 +950,7 @@ def run_weekly_research_update_agent(
     cwd: str | None = None,
     screen_signal: str | None = None,
     structured: bool = True,
+    pool: str | None = None,
 ) -> ResearchDocument:
     from value_investor.research.gap_fill_sources import parse_question_outcomes
 
@@ -961,6 +985,9 @@ def run_weekly_research_update_agent(
         model=model,
         cwd=cwd,
         agent_id=existing.agent_id,
+        job="research_memo",
+        ticker=existing.ticker,
+        pool=pool,
     )
     sections = parse_research_sections(text)
     update_summary = sections.get("weekly_update", "").strip()

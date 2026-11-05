@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-05T10:10:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-05T20:07:22+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -279,6 +279,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | N251 | **Sector-wide headwind gate (absolute, not sector-relative)** | Owner wants no sector-wide negative factors. Composite scoring is sector-relative, which ranks the cheapest name in a deteriorating sector highly; macro_context is deliberately not wired into scoring; cyclical overlays are bespoke per-industry keyword rules. Add a sector-level gate: sector index relative strength and drawdown, breadth of peer earnings/margin declines and profit warnings, and commodity/rate sensitivity where relevant. Fail-closed on entry; also a thesis-break trigger for recovery holds. | Owner prioritises the swing twin (N249), or the operating-decline gate is designed |
 | N252 | **Persist prior-year quarterly income for interim YoY** | Yahoo quarterly_income on the FTSE screen holds only 3-4 recent periods, so the operating-decline gate cannot compare the latest interim with the same period a year earlier for the 8 buy-tier names that already have a usable series (IAG, BGEO, GSK, ATYM, SHEL, NWG, BARC, BP). Keeping the prior-year quarter would add interim revenue for those 8 and interim EPS for 6. | Strategy plan step 1.5 follow-up: next Data package after the operating-decline gate merges, if buy-tier interim revenue coverage is still 0. |
 | N255 | **Decide live screener scope before non-UK live capital** | The live screener stays FTSE 350 for the existing live paper books, decision packs and the FTSE-only input inventory. The strategy book already reads graduated library screens by rule, with charts as fresh as FTSE's; the remaining gap is research freshness, handled narrowly by the launch-queue head. Before any live capital on non-UK names, decide whether those markets need live-screener treatment (daily refresh, decision packs, inventory coverage) or whether the strategy book's own input-quality path is enough. | Strategy reorientation step 5.1 (Trading 212 demo mirroring) starts with non-UK orders, or the strategy book's Phase 2 gate is met with non-FTSE episodes in the counted 48. |
+| N256 | **Commit agent token-usage log from hunter jobs** | Hunter-fix commits an allowlisted PR diff and does not push docs/data/agent_usage_log.jsonl to main, so hunter_fix and hunter_verify runs can miss the weekly token ledger. | After token_usage_weekly_warning_raw_usd is calibrated, or when hunter agent volume is large enough that missing rows would hide spend |
 
 ---
 

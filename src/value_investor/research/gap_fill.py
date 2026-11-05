@@ -444,6 +444,7 @@ def run_red_flag_gap_fill(
     market: str | None = None,
     park_suggestions: bool = True,
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
+    spend_pool: str | None = None,
 ) -> GapFillSummary:
     """
     Re-ingest sources and run a gap-fill research pass for red-flag targets.
@@ -482,6 +483,7 @@ def run_red_flag_gap_fill(
                     model=model,
                     cwd=cwd,
                     force_initial=True,
+                    spend_pool=spend_pool,
                     run_at=effective_run_at,
                     market=market,
                 )
@@ -531,6 +533,7 @@ def run_red_flag_gap_fill(
                 screen_signal=target.report.signal,
                 ch_refetch=ch_refetch,
                 body_refetch=body_refetch,
+                pool=spend_pool,
             )
             updated = replace(agent_result.document, signal=target.report.signal)
 
@@ -570,6 +573,7 @@ def run_red_flag_gap_fill(
                     follow_up=True,
                     body_refetch=retry_refetch,
                     ch_refetch=ch_refetch,
+                    pool=spend_pool,
                 )
                 updated = replace(follow.document, signal=target.report.signal)
                 agent_result = follow

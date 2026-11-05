@@ -16,6 +16,7 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
+from value_investor.agent_usage import prompt_and_record
 from value_investor.deep_analysis import DeepAnalysis
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH, GapFillSummary
 from value_investor.research.store import ResearchStore
@@ -362,6 +363,7 @@ def run_post_run_review(
     deep_analysis: DeepAnalysis | None = None,
     gap_fill_summary: GapFillSummary | None = None,
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
+    pool: str | None = None,
 ) -> PostRunReview:
     """Run a single agent pass to synthesise weekly weaknesses into an improvement plan."""
     payload = build_post_run_payload(
@@ -387,13 +389,17 @@ def run_post_run_review(
     write_json(payload_path, payload, compact=True)
 
     try:
-        agent_result = Agent.prompt(
+        agent_result = prompt_and_record(
             _build_post_run_prompt(payload_path.resolve()),
             AgentOptions(
                 api_key=api_key,
                 model=model,
                 local=LocalAgentOptions(cwd=cwd or os.getcwd()),
             ),
+            job="post_run_review",
+            model=model,
+            pool=pool,
+            agent_cls=Agent,
         )
     except CursorAgentError as err:
         raise RuntimeError(f"Post-run review agent startup failed: {err.message}") from err

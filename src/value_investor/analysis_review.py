@@ -12,6 +12,7 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
+from value_investor.agent_usage import prompt_and_record
 from value_investor.exit_timing_reconciliation import (
     resolve_live_exit_timing_review,
     write_exit_timing_reconciliation,
@@ -1057,13 +1058,16 @@ def run_analysis_review(
     )
 
     try:
-        agent_result = Agent.prompt(
+        agent_result = prompt_and_record(
             _build_analysis_prompt(payload_path.resolve()),
             AgentOptions(
                 api_key=api_key,
                 model=model,
                 local=LocalAgentOptions(cwd=cwd or os.getcwd()),
             ),
+            job="analysis_review",
+            model=model,
+            agent_cls=Agent,
         )
     except CursorAgentError as err:
         raise RuntimeError(f"Analysis review agent startup failed: {err.message}") from err

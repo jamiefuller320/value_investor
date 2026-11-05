@@ -12,6 +12,7 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
+from value_investor.agent_usage import prompt_and_record
 from value_investor.analysis_review import (
     _ENGINEERING_AREAS,
     _EXPERIMENT_LINE,
@@ -734,13 +735,16 @@ def run_horizon_scan(
     write_json(payload_path, payload, compact=True)
 
     try:
-        agent_result = Agent.prompt(
+        agent_result = prompt_and_record(
             _build_horizon_prompt(payload_path.resolve()),
             AgentOptions(
                 api_key=api_key,
                 model=model,
                 local=LocalAgentOptions(cwd=cwd or os.getcwd()),
             ),
+            job="horizon_scan",
+            model=model,
+            agent_cls=Agent,
         )
     except CursorAgentError as err:
         raise RuntimeError(f"Horizon scan agent startup failed: {err.message}") from err
