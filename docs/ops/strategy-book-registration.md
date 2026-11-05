@@ -24,6 +24,12 @@
 - **Close refresh.** The refresh rebuilds every chart whose last close is behind the latest completed session (`closes_through`). The chart writer's thinning point is not reached by the 2-year download, so that gap row is withdrawn (sections 11 and 12).
 - **Trading 212.** A short-name match on another exchange no longer counts as listed. On the old rule 38 of the ASX's 68 "listed" names were US namesakes. The FTSE 350 now has an overlay (section 2).
 
+**Third pre-signature amendment 2026-11-04 (owner decision, after an outside readiness audit):**
+- **Input provenance.** Every entry, review, exit and version-review record stores the git commit and file paths it read, so a later rebuild can recover the exact inputs (section 9).
+- **Cash-flow agreement.** `adjusted_signal` joins the entry snapshot, and a board splits episodes by whether the adjusted signal also says buy (section 8). The value set stays the raw signal.
+- **US rehearsal window.** The 2013–2025 confirmation window has already been revealed once for the value screen and is planned for two more instruments. The rehearsal must call it reused, not sealed, and widen its confirmation bar for the number of tests (section 9).
+- **Thickness gate wording.** The gate opens design work. It is not the live-capital bar, which is plan step 3.2 (section 9).
+
 **Memo routine 2026-11-04 (owner decision, before signature):** a name that signals with a stale memo gets a fresh one before its fill, and launched episodes get a fresh memo at each review date (sections 2, 3, 5 and 11). On 2026-11-04 only 48 of 375 library buy-tier names had a memo under 21 days old, so without this most library signals would fail F9-B.
 
 This document freezes the rules before any score is computed. It does not open a book, write a store, or run a replay. Step 2.2 (archive replay) and step 2.3 (forward book) wait until the owner signs, adjusts a listed number once, or rejects.
@@ -337,6 +343,7 @@ Episodes younger than 63 sessions are shown, marked to the latest close, fair-co
 | Matched excess (primary) | Median and mean matched excess (section 1) of the same mature episodes, entry-week standard error, the share above zero, and the count of baskets that fell back to the whole screen. The same by market. | The learning question's second number: did the timing beat holding the cheap names? |
 | Tradable on Trading 212 | The overall and matched-excess boards for episodes with `t212_listed` true, beside those with false or `unknown`. | What the owner could actually have traded. Report-only on this id; the live proof standard (plan step 3.2) reads this subset. |
 | Market regime | The overall and matched-excess boards split by whether at least half of the episode's market's charted names closed above their own 200-session average on the signal session. Names with under 200 sessions of history sit out of the count, and a market with fewer than 5 counted names is `regime_unknown`. | A rule that only works in a rising market should show it. In the replay, half the entries fell in the first 200 sessions and had no regime. Report-only. |
+| Cash-flow agreement | The overall and matched-excess boards split by whether the episode's `adjusted_signal` at the signal session is also `buy` or `strong_buy`, beside episodes where it is not and those where it is missing. | The value set is the raw signal (section 13, question 2), but on 2026-11-04 the cash-flow-basis check removed 37 of the 65 FTSE buy-tier names from the adjusted buy tier. This shows whether the book trades worse on names that check calls not cheap. Report-only; it does not gate. |
 | Late signals | `late_signal` count by market and week, with the hours between the signal close and `signal_seen_at`. | Shows whether the daily close refresh keeps the book tradable. |
 | Launch | Share of mature episodes that launched; median sessions from fill to launch. | "Do the timed entries start to rise?" |
 | Floor exits | Count, median return, and the highest checkpoint reached, as a distribution. Gap shortfall under the floor, summed. | "Does the ladder keep the gains?" |
@@ -368,7 +375,7 @@ That paired exit is the behaviour of `buy_tier_level` and of N200's leave-tier c
 
 | Group | Features |
 |---|---|
-| Value and quality (screen row) | `composite_score`, `signal`, `signal_rank`, `weeks_at_signal`, `signal_trend`, `conviction_score`, `models_passed`, `data_quality_score`, and where the row carries them `fcf_yield`, `ev_ebit`, `earnings_yield_pe`, `roic_proxy`, `profit_margins`, `debt_to_equity`, `revenue_growth`, `earnings_growth`, `market_cap` |
+| Value and quality (screen row) | `composite_score`, `signal`, `adjusted_signal`, `signal_rank`, `weeks_at_signal`, `signal_trend`, `conviction_score`, `models_passed`, `data_quality_score`, and where the row carries them `fcf_yield`, `ev_ebit`, `earnings_yield_pe`, `roic_proxy`, `profit_margins`, `debt_to_equity`, `revenue_growth`, `earnings_growth`, `market_cap` |
 | Decline gate | Each check's change figures (revenue, operating margin, EPS, FCF) and which soft checks fired |
 | Sector | Sector, the sector gate's breadth and trend inputs, the market |
 | Research | `research_verdict`, `research_confidence`, memo age in days, and whether the memo was written by the signal-day job |
@@ -460,11 +467,18 @@ The book then runs in daily ops-monitor, after the decline refresh and the secto
 
 Each day the job appends the verdicts it actually used (ticker, `as_of`, decline verdict, sector verdict, signal, research verdict, F9 pass or gap list). The live gate stores are overwritten in place. Without an append-only log, a later rebuild cannot show why a name was eligible. That log is part of step 2.3, not of this draft.
 
+**Input provenance (owner, 2026-11-04, third amendment).** Every entry, review, exit and version-review record in the gate log, the session decision log (section 7) and the memo log also stores `data_commit`: the git commit of the repository the job read its inputs from, taken before it reads any file. It also stores the repo-relative paths of the files it read for that record (screen run, chart, decline store, sector store, research folder or memo). The data files are committed to git, so that commit and those paths recover the exact bytes later, even after the stores are overwritten. A record whose commit cannot be read (a dirty working tree, or no git) is written with `data_commit: null` and that episode is flagged `provenance_missing` on the board. The flag does not block the entry.
+
 ### (c) US point-in-time rehearsal — report-only
 
 Plan step 2.5. The same entry rule, primary exit, comparison exits, gate-rejected shadows, selection board and bench candidates, run on the licensed survivorship-free US history already used by the historical screen replay ([`historical-screen-replay.md`](historical-screen-replay.md)): S&P 500 and US mid-cap members on each date, active and delisted, as-reported trailing fundamentals, and daily total-return closes, 2000 onward. It records the channel columns (section 8), on highs and lows if the licensed data has them and on closes otherwise, so their buckets can be read across several market cycles. The decline gate is computed from those as-reported fundamentals. The sector gate uses price breadth only, because the data keeps no sector history. Research verdicts and F9-B do not exist there.
 
-It has its own registration, written by step 2.5 before any data is bought. It keeps the historical replay's sealed holdout (entries 2013-01 to 2025-09), revealed once: the development years rank features and bench candidates, and the holdout confirms or rejects them. It covers the 2000–02, 2008–09, 2020 and 2022 falls, which two years of rising-market closes cannot. US results are evidence about the method, not proof for this book's universe. It does not answer section 1 and does not count toward the gate. It needs one month of licensed data, an owner decision (`adhoc-strategy-us-pit-rehearsal` in the human checklist).
+It has its own registration, written by step 2.5 before any data is bought. It uses the same split as the historical replay: development entries 2000-01 to 2012-12 rank features and bench candidates, and entries 2013-01 to 2025-09 confirm or reject them, once. **That window is not untouched (owner, 2026-11-04, third amendment).** The hsr-v1 screen replay revealed it on 2026-10-10, and the hsr-v2 screen replay and the hrs-v2 rule search hold it sealed for their own reveals. None of those scored this book's entry rule, exits or gates there. But the value screen's results there are known, and three instruments on one window inflate the chance that one passes by luck. The step 2.5 registration therefore must:
+
+- call the window *reused* for the value screen and *unscored* for this book's rules, not *sealed*;
+- list every other instrument that has revealed or will reveal on it, with its reveal date or status;
+- set the confirmation bar for the number of tests run on that window: the primary and each bench candidate count as one test each, and the 90% interval is widened by a Bonferroni correction over that count (so with 5 tests the confirmation interval is 98%);
+- treat a holdout pass as evidence about the method, never as a pass of section 1. It covers the 2000–02, 2008–09, 2020 and 2022 falls, which two years of rising-market closes cannot. US results are evidence about the method, not proof for this book's universe. It does not answer section 1 and does not count toward the gate. It needs one month of licensed data, an owner decision (`adhoc-strategy-us-pit-rehearsal` in the human checklist).
 
 ### Thickness gate (proposed) and the owner's decision
 
@@ -477,6 +491,8 @@ Both are required, on the **forward** book only:
 | What does not count | Archive episodes, US rehearsal episodes, the alternative rule, either control, both comparison exits, both shadows, bench columns, episodes younger than 63 sessions, `pending_fill` | The gate is about a book that has been trading forward under signed rules. |
 
 Until both are true, the result is inconclusive. The entry is not loosened to get to 48 faster.
+
+**This gate is not the live-capital bar.** Passing it lets the owner open design work on this book. It cannot pass thin regimes, correlated entry weeks or poor tails into live capital. That bar is plan step 3.2, which reads this book's forward boards and adds block-resampled uncertainty, tail and drawdown limits, regime and market spread, sterling returns and a constrained slot-book result.
 
 When both are true, ops-monitor emits an info finding and the owner stamps one disposition. Nothing promotes itself (F8: an observe metric never applies knobs or fills, and it does not flip the primary learning track by itself).
 
@@ -592,7 +608,7 @@ Short brief for the implementer. Still observe-only. Still no live writes.
 | `docs/data/strategy_book_registration.json` | Seal copy of this document plus the signature note. |
 | `docs/data/strategy_book_replay.json` | The three archive results, the alternative column, and the buy-on-signal control. |
 | `docs/data/strategy_book_observe.json` | Forward episodes with both comparison exits and their entry snapshots, shadow episodes, bench columns, boards (overall, launch, by market, paired exits, shadows, selection, bench, both controls, capital view), the 26-week interim read, disposition, change markers. |
-| `docs/data/strategy_book_gate_log.jsonl` | Append-only verdicts the forward job used. |
+| `docs/data/strategy_book_gate_log.jsonl` | Append-only verdicts the forward job used, each with `data_commit` and the input paths (section 9). |
 | `docs/data/strategy_book_memo_log.jsonl` | Append-only signal-day and review-date memo requests: ticker, market, signal or review session, memo finish time, verdict, estimated spend, or the skip reason. |
 
 **Ops-monitor.** `check_strategy_book_observe` inside `collect_ops_findings`, after the decline check and the sector check. `auto_fixable` false. Findings: refreshed (info), failed (warn), 26-week interim read published (info, once), thickness gate ready for review (info), memo routine falling behind (warn, when `memo_not_ready` exceeds a fifth of a week's otherwise-eligible signals, or the job has not run on a weekday), closes stale (warn, when more than a tenth of a graduated market's buy tier is more than one trading session behind after the refresh), late signals (warn, when `late_signal` exceeds a tenth of a week's signals), and Trading 212 catalogue stale (warn, over 35 days). A row in [`ops-monitor.md`](ops-monitor.md) points here. The refresh finding names counts and the first few tickers. It does not spray rememo or ingest.

@@ -4305,7 +4305,7 @@ const INVESTMENT_MODELS = [
     opsDoc: "docs/ops/assessment-scoreboard.md",
     emptyHint: "Assessment scoreboard publishes with daily ops-monitor.",
     blurb:
-      "Sole live / capital path until promote (F5). Assessment scoreboard + paper tracks — not an observe seal.",
+      "Current paper book (control). The only route to live capital is the strategy book (F5). Assessment scoreboard + paper tracks — not an observe seal.",
   },
   {
     id: "n200",
@@ -4456,7 +4456,7 @@ function renderAnalysisSubnav(activeId) {
   </nav>
   <p class="small muted analysis-ia-contract" style="margin:0.35rem 0 0.75rem">
     Analysis is a review surface — use the <strong>model switcher</strong> under Observe to flip
-    Strand A (live capital) vs sealed observe models (N200 / N201 / N210). ≤1 live path (F5);
+    Strand A (current paper book) vs sealed observe models (N200 / N201 / N210). ≤1 live path: the strategy book (F5);
     observe views never imply a second capital book. Dense Sunday tables default-collapsed;
     full pipeline cards also live on Automation → Queue.
   </p>`;
@@ -4562,7 +4562,7 @@ function renderInvestmentModelSwitcher(activeModelId) {
       <div class="investment-model-switcher-head">
         <h3 class="investment-model-switcher-title">Investment model</h3>
         <p class="small muted" style="margin:0">
-          Switch scoreboards — <strong>one live capital path</strong> (Strand A);
+          Switch scoreboards — <strong>one live capital path</strong> (the strategy book, once signed); Strand A is the current paper book and a control;
           N200 / N201 / N206 / N210 are sealed observe-only (alone-first; never auto-promote).
         </p>
       </div>
@@ -6250,7 +6250,7 @@ function renderStrandALifecycleMonitor(data) {
         <span class="badge badge-buy model-mode-badge">live</span>
       </h2>
       <p class="small muted" style="margin-top:0">
-        Sole live capital path (F5). Position board and maturity mix live on the
+        Current paper book and a control; the strategy book is the only route to live capital (F5). Position board and maturity mix live on the
         <button type="button" class="link-btn" data-tab-jump="lifecycle">Lifecycle</button> tab —
         not an observe seal. N200 / N201 / N206 / N210 each have their own sealed stores under this switcher.
       </p>
@@ -6731,7 +6731,7 @@ function renderInvestmentModelCompanionStrip(data, modelId) {
             )}</div>
           </div>
         </div>
-        <p class="small muted" style="margin:0.35rem 0 0">Sole live path (F5). Observe models are separate tabs — never a second capital book.</p>
+        <p class="small muted" style="margin:0.35rem 0 0">Paper book and control; the strategy book is the only route to live capital (F5). Observe models are separate tabs — never a second capital book.</p>
       </div>`;
   }
 

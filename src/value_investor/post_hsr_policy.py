@@ -33,8 +33,9 @@ STRAND_A = {
     "title": "Current overarching model (strand A)",
     "summary": (
         "Existing composite / buy-tier stack. Keep its experiment grid on the "
-        "current framework; do not discard it because extras failed to beat "
-        "plain value in the US holdouts."
+        "current framework as the paper book and a control; do not discard it "
+        "because extras failed to beat plain value in the US holdouts. The "
+        "strategy book is the only route to live capital."
     ),
 }
 
