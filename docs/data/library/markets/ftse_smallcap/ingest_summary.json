@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-04T10:41:04.095056+00:00",
+  "run_at": "2026-11-05T07:40:26.322840+00:00",
   "market_id": "ftse_smallcap",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-04T10:40:58.703006+00:00",
+    "snapshot_at": "2026-11-05T07:40:16.761084+00:00",
     "market_id": "ftse_smallcap",
     "buy_tier_count": 10,
     "unmeasured_buy_tier": 0,
@@ -59,13 +59,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-04T10:41:04.066750+00:00",
+    "snapshot_at": "2026-11-05T07:40:21.491150+00:00",
     "market_id": "ftse_smallcap",
     "buy_tier_count": 10,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 46,
+    "indexed_without_body": 47,
     "bodies_min": 47,
     "bodies_median": 60.0,
     "bodies_max": 102,
@@ -89,7 +89,7 @@
       "ULTP.L": 8,
       "CLIG.L": 6,
       "APTD.L": 8,
-      "FOXT.L": 8,
+      "FOXT.L": 9,
       "TPT.L": 5
     },
     "parked_tickers": [
@@ -117,7 +117,7 @@
   "discovery_scan": {
     "scanned": 10,
     "hits": 6,
-    "new_rows_total": 0,
+    "new_rows_total": 1,
     "curiosity_total": 6,
     "errors": 0,
     "prioritization_weights": {
@@ -149,7 +149,7 @@
   },
   "critical_path": {
     "market_id": "ftse_smallcap",
-    "assessed_at": "2026-11-04T10:40:59.735476+00:00",
+    "assessed_at": "2026-11-05T07:40:17.637393+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -221,9 +221,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 3.3072355890000154,
+  "used_seconds": 3.005672967999999,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3596.692764411,
+  "leftover_seconds": 3596.994327032,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -231,9 +231,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_smallcap",
-    "updated_at": "2026-11-04T10:41:04.073134+00:00",
+    "updated_at": "2026-11-05T07:40:21.496780+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 18,
+    "complete_zero_improve_runs": 19,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -297,18 +297,6 @@
         "source_surface": "uk_rns"
       },
       {
-        "ticker": "FOXT.L",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-11-03T13:37:57.334117+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 68,
-        "filings_with_body": 58,
-        "indexed_without_body": 8,
-        "thin": false,
-        "source_surface": "uk_rns"
-      },
-      {
         "ticker": "MER.L",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
@@ -317,6 +305,18 @@
         "filings_total": 68,
         "filings_with_body": 62,
         "indexed_without_body": 6,
+        "thin": false,
+        "source_surface": "uk_rns"
+      },
+      {
+        "ticker": "FOXT.L",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-05T07:40:21.496780+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 69,
+        "filings_with_body": 58,
+        "indexed_without_body": 9,
         "thin": false,
         "source_surface": "uk_rns"
       }
@@ -371,7 +371,41 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261104-01"
+    "reason": "no parked leftover tickers remaining for hunter",
+    "tried_count": 62,
+    "candidate_count": 53,
+    "skipped_resolved_tickers": [
+      "LMT",
+      "TPT.L",
+      "DFS.L",
+      "APTD.L",
+      "ULTP.L",
+      "MER.L",
+      "FOXT.L",
+      "GIB-A.TO",
+      "NTR.TO",
+      "SU.TO",
+      "BAS.DE",
+      "IFX.DE",
+      "PDD",
+      "BAS.DE",
+      "DTE.DE",
+      "DTG.DE",
+      "FRE.DE",
+      "HNR1.DE",
+      "MUV2.DE",
+      "HEN3.DE",
+      "PST.MI",
+      "ACKB.BR",
+      "APAM.AS",
+      "0285.HK",
+      "0857.HK",
+      "0288.HK",
+      "2331.HK",
+      "0883.HK",
+      "EVN.VI",
+      "WIE.VI"
+    ],
+    "wait_behind_task_id": ""
   }
 }
