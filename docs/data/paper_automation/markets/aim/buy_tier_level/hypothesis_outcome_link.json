@@ -3,32 +3,39 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-04T14:17:08.552066+00:00",
+  "generated_at": "2026-11-05T14:18:03.883367+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 7,
+    "closed_total": 10,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 16,
+    "open_with_thesis": 13,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 7,
-        "recovery_rate": 0.8571,
-        "sold_underwater_rate": 0.1429,
-        "mean_peak_unrealized_pct": 0.0259,
-        "mean_trough_unrealized_pct": -0.059,
+        "closed_count": 9,
+        "recovery_rate": 0.7778,
+        "sold_underwater_rate": 0.2222,
+        "mean_peak_unrealized_pct": 0.0188,
+        "mean_trough_unrealized_pct": -0.0862,
         "outcome_labels": {
-          "recovered": 6,
-          "sold_underwater": 1
+          "recovered": 7,
+          "sold_underwater": 2
         }
       },
       "broken": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.1443,
+        "mean_trough_unrealized_pct": -0.0481,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "insufficient_data": {
         "closed_count": 0
@@ -56,10 +63,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 7,
+    "hold_closed_with_thesis": 10,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=7 (target >=8)",
+      "hold thesis buckets thin (broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -360,7 +367,7 @@
       "ticker": "CAML.L",
       "name": "Central Asia Metals plc",
       "started_at": "2026-09-25T08:28:47.373794+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -410,9 +417,9 @@
       "peak_unrealized_pct": 0.0,
       "trough_unrealized_pct": -0.2418,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-05T14:18:03.862696+00:00",
+      "linked_sell_trade_id": "08b24822-79a5-4c27-a491-45fd12c178ec"
     },
     {
       "episode_id": "buy_tier_level:DOTD.L:2026-09-25T08:28:47.373794+01:00",
@@ -420,7 +427,7 @@
       "ticker": "DOTD.L",
       "name": "dotdigital Group Plc",
       "started_at": "2026-09-25T08:28:47.373794+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -469,9 +476,9 @@
       "peak_unrealized_pct": 0.1443,
       "trough_unrealized_pct": -0.0481,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-05T14:18:03.862696+00:00",
+      "linked_sell_trade_id": "005af002-a2ba-4416-a876-f39f8776325c"
     },
     {
       "episode_id": "buy_tier_level:YNGN.L:2026-09-25T08:28:47.373794+01:00",
@@ -1194,7 +1201,7 @@
       "ticker": "PAF.L",
       "name": "Pan African Resources PLC",
       "started_at": "2026-10-20T08:35:41.278020+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -1236,9 +1243,9 @@
       "peak_unrealized_pct": -0.0118,
       "trough_unrealized_pct": -0.1211,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-11-05T14:18:03.862696+00:00",
+      "linked_sell_trade_id": "a0536730-1fa1-4866-babb-be857691bf86"
     },
     {
       "episode_id": "buy_tier_level:TFW.L:2026-10-29T07:38:17.348337+00:00",
@@ -1275,7 +1282,16 @@
       "conviction_score": 0.5109,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-05T14:18:03.862696+00:00",
+          "days_after": 7,
+          "price": 249.0,
+          "unrealized_pct": -0.0496,
+          "peak_unrealized_pct": -0.0115,
+          "trough_unrealized_pct": -0.0496
+        }
+      ],
       "peak_unrealized_pct": -0.0115,
       "trough_unrealized_pct": -0.0496,
       "recovered_to_breakeven": null,
@@ -1680,7 +1696,7 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "PAF.L": 0.0279,
+        "PAF.L": 0.0,
         "BREE.L": 0.0577
       },
       "buy_returns_since_rotation": {
@@ -1746,7 +1762,7 @@
         "YNGN.L": 0.0054
       },
       "buy_returns_since_rotation": {
-        "PAF.L": -0.0196
+        "PAF.L": -0.0463
       },
       "verdict": null,
       "closed_at": null
@@ -1806,7 +1822,7 @@
         "TFW.L": -0.0349
       },
       "buy_returns_since_rotation": {
-        "PAF.L": 0.004
+        "PAF.L": -0.0233
       },
       "verdict": null,
       "closed_at": null
@@ -2000,6 +2016,144 @@
       },
       "buy_returns_since_rotation": {
         "CRW.L": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-05T14:18:03.862696+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-05T14:18:03.862696+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0032,
+      "sells": [
+        {
+          "ticker": "CAML.L",
+          "price": 170.4,
+          "shares": 0.389,
+          "gross": 66.29,
+          "cost": 0.05,
+          "avg_cost_at_exit": 170.4,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        },
+        {
+          "ticker": "DOTD.L",
+          "price": 48.85,
+          "shares": 1.126961,
+          "gross": 55.05,
+          "cost": 0.04,
+          "avg_cost_at_exit": 48.85,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        },
+        {
+          "ticker": "PAF.L",
+          "price": 116.5679,
+          "shares": 0.538055,
+          "gross": 62.72,
+          "cost": 0.05,
+          "avg_cost_at_exit": 116.5679,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "KGH.L",
+          "price": 165.0,
+          "shares": 0.077158,
+          "gross": 12.73,
+          "cost": 0.07
+        },
+        {
+          "ticker": "CRW.L",
+          "price": 1048.0,
+          "shares": 0.040065,
+          "gross": 41.99,
+          "cost": 0.24
+        },
+        {
+          "ticker": "IGR.L",
+          "price": 83.5,
+          "shares": 0.138301,
+          "gross": 11.55,
+          "cost": 0.07
+        },
+        {
+          "ticker": "RWS.L",
+          "price": 142.0,
+          "shares": 0.282184,
+          "gross": 40.07,
+          "cost": 0.23
+        },
+        {
+          "ticker": "PMI.L",
+          "price": 29.5,
+          "shares": 0.396884,
+          "gross": 11.71,
+          "cost": 0.07
+        },
+        {
+          "ticker": "WJG.L",
+          "price": 15.0,
+          "shares": 0.848755,
+          "gross": 12.73,
+          "cost": 0.07
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "CAML.L": 0.0,
+        "DOTD.L": 0.0931,
+        "PAF.L": -0.0272
+      },
+      "buy_returns_since_rotation": {
+        "KGH.L": 0.0,
+        "CRW.L": 0.0,
+        "IGR.L": 0.0,
+        "RWS.L": 0.0,
+        "PMI.L": 0.0,
+        "WJG.L": 0.0
       },
       "verdict": null,
       "closed_at": null

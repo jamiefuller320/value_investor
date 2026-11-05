@@ -1,15 +1,91 @@
 {
-  "run_at": "2026-11-04T15:45:59.185177+00:00",
+  "run_at": "2026-11-05T13:39:39.801326+00:00",
   "market_id": "omxs30",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "SKA-B.ST"
+  ],
+  "target_details": [
+    {
+      "ticker": "SKA-B.ST",
+      "priority_score": 27.9676,
+      "filings_total": 12,
+      "filings_with_body": 11,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "SKA-B.ST",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 12,
+        "filings_with_body": 11,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 12,
+        "filings_with_body": 12,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 12,
+        "annual": 6,
+        "interim": 2,
+        "trading_update": 3,
+        "other": 1,
+        "with_body": 12,
+        "period_coverage": {
+          "annual": {
+            "total": 6,
+            "with_body": 6
+          },
+          "interim": {
+            "total": 2,
+            "with_body": 2
+          },
+          "trading_update": {
+            "total": 3,
+            "with_body": 3
+          },
+          "other": {
+            "total": 1,
+            "with_body": 1
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 12,
+        "with_body_after": 12,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 1,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "SKA-B.ST"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-04T15:45:00.726080+00:00",
+    "snapshot_at": "2026-11-05T13:38:03.874341+00:00",
     "market_id": "omxs30",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
@@ -35,7 +111,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-04T15:45:59.174050+00:00",
+    "snapshot_at": "2026-11-05T13:39:33.523945+00:00",
     "market_id": "omxs30",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
@@ -43,7 +119,7 @@
     "thin_body_buy_tier": 0,
     "indexed_without_body": 0,
     "bodies_min": 3,
-    "bodies_median": 11.5,
+    "bodies_median": 12.0,
     "bodies_max": 18,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -69,7 +145,7 @@
   "discovery_scan": {
     "scanned": 12,
     "hits": 9,
-    "new_rows_total": 0,
+    "new_rows_total": 1,
     "curiosity_total": 10,
     "errors": 0,
     "prioritization_weights": {
@@ -93,7 +169,7 @@
   },
   "critical_path": {
     "market_id": "omxs30",
-    "assessed_at": "2026-11-04T15:45:01.163943+00:00",
+    "assessed_at": "2026-11-05T13:38:04.576209+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -114,9 +190,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 57.59230035400003,
+  "used_seconds": 88.26231714,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3542.407699646,
+  "leftover_seconds": 3511.73768286,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -124,9 +200,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "omxs30",
-    "updated_at": "2026-11-04T15:45:59.178289+00:00",
+    "updated_at": "2026-11-05T13:39:33.528426+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 5,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -145,7 +221,41 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261103-09"
+    "reason": "no parked leftover tickers remaining for hunter",
+    "tried_count": 62,
+    "candidate_count": 53,
+    "skipped_resolved_tickers": [
+      "LMT",
+      "TPT.L",
+      "DFS.L",
+      "APTD.L",
+      "ULTP.L",
+      "MER.L",
+      "FOXT.L",
+      "GIB-A.TO",
+      "NTR.TO",
+      "SU.TO",
+      "BAS.DE",
+      "IFX.DE",
+      "PDD",
+      "BAS.DE",
+      "DTE.DE",
+      "DTG.DE",
+      "FRE.DE",
+      "HNR1.DE",
+      "MUV2.DE",
+      "HEN3.DE",
+      "PST.MI",
+      "ACKB.BR",
+      "APAM.AS",
+      "0285.HK",
+      "0857.HK",
+      "0288.HK",
+      "2331.HK",
+      "0883.HK",
+      "EVN.VI",
+      "WIE.VI"
+    ],
+    "wait_behind_task_id": ""
   }
 }

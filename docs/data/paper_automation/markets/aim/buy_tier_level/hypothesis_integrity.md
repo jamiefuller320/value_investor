@@ -1,25 +1,16 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-04T14:17:08.550121+00:00
+Track: `buy_tier_level` · updated 2026-11-05T14:18:03.880034+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **7** / 17 (41% count, 44% NAV)
+- Losers: **7** / 14 (50% count, 50% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
 ## Holding reviews
 
-### CAML.L — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### DOTD.L — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### PAF.L — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### PMI.L — weakening / watch_review (-18.1%)
+### PMI.L — weakening / watch_review (-15.3%)
 - research verdict caution
 - conviction 23% below intact floor
 - still buy
@@ -30,7 +21,7 @@ Track: `buy_tier_level` · updated 2026-11-04T14:17:08.550121+00:00
 - still strong_buy
 - cheapness family still passes
 
-### IGR.L — weakening / watch_review (-13.5%)
+### IGR.L — weakening / watch_review (-11.4%)
 - research verdict caution
 - conviction 25% below intact floor
 - still buy
@@ -72,26 +63,26 @@ Track: `buy_tier_level` · updated 2026-11-04T14:17:08.550121+00:00
 - data_quality 1.00
 - conviction 79%
 
-### KGH.L — intact / hold_tolerate (-2.4%)
+### KGH.L — intact / hold_tolerate (-2.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 60%
 
-### RWS.L — weakening / watch_review (-1.5%)
-- research verdict caution
-- conviction 24% below intact floor
-- still buy
-- cheapness family still passes
-
-### WJG.L — weakening / watch_review (-1.3%)
+### WJG.L — weakening / watch_review (-1.1%)
 - research verdict caution
 - conviction 18% below intact floor
 - still buy
 - cheapness family still passes
 
-### CRW.L — weakening / watch_review (+0.0%)
+### RWS.L — weakening / watch_review (-0.6%)
+- research verdict caution
+- conviction 24% below intact floor
+- still buy
+- cheapness family still passes
+
+### CRW.L — weakening / watch_review (-0.0%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
