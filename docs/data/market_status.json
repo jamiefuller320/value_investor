@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-11-05T18:24:41.893117+00:00",
+  "generated_at": "2026-11-05T18:29:10.840939+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -1612,7 +1612,7 @@
       "is_ftse_equivalent": true,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=7)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=6)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": 1,
@@ -1669,7 +1669,7 @@
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 7,
+        "indexed_without_body": 6,
         "bodies_median": 23.0,
         "coverage_scope": "canonical",
         "ftse_equivalent": true,
@@ -1738,9 +1738,9 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 5,
-        "targets": 10,
-        "improved": 9,
+        "run_count": 6,
+        "targets": 14,
+        "improved": 10,
         "improved_tickers": [
           "BR",
           "IT",
@@ -1750,9 +1750,10 @@
           "NEM",
           "NWSA",
           "CRH",
-          "LH"
+          "LH",
+          "ALL"
         ],
-        "last_run_at": "2026-11-05T15:59:27.162481+00:00",
+        "last_run_at": "2026-11-05T18:25:56.047417+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -1780,7 +1781,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 7,
+          "indexed_without_body": 6,
           "filing_gaps": 0
         },
         "admission_ready": true,
@@ -2330,7 +2331,7 @@
         "filing_ready": false,
         "span_weeks": 15.29,
         "unique_days": 52,
-        "leftover": 7,
+        "leftover": 6,
         "steps": [
           {
             "id": "start",
@@ -2413,7 +2414,7 @@
       "failed_fetch_count": 0,
       "last_metrics_refresh": "2026-11-02T07:38:25.607898+00:00",
       "last_constituents_refresh": "2026-11-02T07:38:00.899397+00:00",
-      "last_screen_at": "2026-11-05T18:15:44.273250+00:00",
+      "last_screen_at": "2026-11-05T18:22:51.690852+00:00",
       "signal_counts": {
         "hold": 12,
         "avoid": 6,
@@ -2567,7 +2568,7 @@
             "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock"
           }
         ],
-        "sprint_entered_at": "2026-11-05T18:14:36.903404+00:00"
+        "sprint_entered_at": "2026-11-05T18:21:19.228115+00:00"
       },
       "held_vs_market": {
         "schema_version": 1,
