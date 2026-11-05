@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-05T20:07:22+00:00",
+  "updated_at": "2026-11-05T21:15:30+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16652,6 +16652,40 @@
       "added_at": "2026-11-05T19:42:56+00:00",
       "updated_at": "2026-11-05T20:07:22+00:00",
       "status_note": "Hunter-fix still commits an allowlisted PR diff and does not push docs/data/agent_usage/ shards to main, so hunter_fix and hunter_verify runs can miss the weekly token ledger."
+    },
+    {
+      "id": "L676",
+      "category": "later",
+      "section": "universe",
+      "title": "Point-in-time S&P MidCap 400 constituent history for the US rehearsal",
+      "summary": "The strategy-book US rehearsal (strategy-book-us-rehearsal-v0) uses market-cap ranks 501-1000 because the Sharadar tables the replay adapter reads have no S&P MidCap 400 constituent history. A new registration_id can rerun on a real constituent tape if a licensed point-in-time membership source exists. It does not replace the v0 proxy after the first development score.",
+      "revisit_when": "A licensed point-in-time S&P MidCap 400 constituent history is on the owner machine, and strategy-book-us-rehearsal-v0 has a committed development block.",
+      "tags": [
+        "strategy-book",
+        "sp400",
+        "sharadar",
+        "us-rehearsal"
+      ],
+      "status": "open",
+      "source": "docs/ops/strategy-book-us-rehearsal-registration.md",
+      "added_at": "2026-11-05T21:15:24+00:00"
+    },
+    {
+      "id": "L677",
+      "category": "later",
+      "section": "ops",
+      "title": "Re-arm the Sharadar deletion warning on a later licensed month",
+      "summary": "ftse-historical-replay confirm-deleted already stamped deleted_at for the October 2026 screen-replay month, so the ops-monitor deletion finding does not arm again when the owner downloads a second month for the strategy-book US rehearsal. The human checklist carries that month until the finding keys off a new first_used_at.",
+      "revisit_when": "The owner records a second Sharadar download for strategy-book-us-rehearsal-v0 (access through 2026-11-09).",
+      "tags": [
+        "sharadar",
+        "licence",
+        "ops-monitor",
+        "us-rehearsal"
+      ],
+      "status": "open",
+      "source": "docs/ops/strategy-book-us-rehearsal-registration.md",
+      "added_at": "2026-11-05T21:15:30+00:00"
     }
   ],
   "fragments": [
