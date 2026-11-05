@@ -86,7 +86,8 @@ revealed opens a new `registration_id`, and its results are exploratory.
 `inconclusive`, so the freeze-extras action applies. Ops note and strand
 catalog: [post-hsr-freeze-extras.md](post-hsr-freeze-extras.md) (store
 `docs/data/post_hsr_policy.json`; daily `check_post_hsr_policy`). Strand A
-(current stack) stays; orthogonal peer strands are named but not registered.
+(current stack) stays as the paper book and a control; the strategy book is the
+only route to live capital ([plan](strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04)).
 Those spent verdicts live under `spent_epochs` after the **hsr-v2** dividend-units
 epoch (L571); freeze policy still reads the v1 marks, never the empty v2 slot.
 

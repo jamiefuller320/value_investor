@@ -37,11 +37,14 @@ not a mandate to throw away the live stack.
    or isomorphic screen/overlay variants that only re-mix the same identity
    without a new sealed `registration_id` and a pinned learning question.
 2. **Keep strand A.** The current overarching model (composite / buy-tier
-   stack and its experiment grid) stays. The holdout did not authorize a
-   silent rewrite of the live book.
-3. **Add orthogonal strands, not near-copies.** New strategy work enters as
-   peer strands on the shared data engine (filings, fundamentals, panels),
-   each with its own sealed learning loop.
+   stack and its experiment grid) stays as the current paper book and a
+   control. The holdout did not authorize a silent rewrite of it.
+3. **One route to live capital.** Since 2026-11-04 the only track that can
+   reach live capital is the strategy book (`owner-strategy-book-v0` and its
+   versions; [single track to live](strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04)).
+   Strand A and the sealed strands below are controls or feeders. New
+   strategy work enters as a strategy-book bench challenger or a plan step,
+   not as a new peer strand.
 4. **Share timing experiments.** Entry/exit and cost probes can be factorial
    across strands once registered; identity freezes stay per-strand.
 5. **Prune near-duplicates.** Prefer deleting or parking isomorphic
@@ -51,7 +54,7 @@ not a mandate to throw away the live stack.
 
 | Strand | Status | Role |
 |--------|--------|------|
-| **A — current stack** | Active | Live / paper experiment grid on the existing framework |
+| **A — current stack** | Active | Paper experiment grid on the existing framework; a control for the strategy book, not a route to live capital |
 | **B — plain-value + technical timing** (N200) | **Sealed observe-only** (`strand-b-plain-value-tech-timing-v0`) | Identity = `raw_buy_tier`; ±14d entry/exit brackets; see [n200-tech-timing-observe.md](n200-tech-timing-observe.md) |
 | **C — short-horizon value+momentum** (N201) | Named, not registered (define-only) | Global breadth → small-weight ~3m holds; distinct from patient value book |
 
@@ -89,4 +92,4 @@ All findings are `auto_fixable=False` (observe / warn-only).
    (**L583**); share timing factorials later (**L584**).
 
 Spend stays on P1/P2; N200/N201 observe work must not starve D1. Dual observe OK;
-≤1 live promotion path.
+≤1 live promotion path, and that path is the strategy book.
