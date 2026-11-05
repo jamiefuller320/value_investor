@@ -1,6 +1,6 @@
 # Strategy book US point-in-time rehearsal registration
 
-**Status: DRAFT — waiting on the owner signature of `owner-strategy-book-v0`. No development score exists. No licensed file has been read for this registration.**  
+**Status: DRAFT — parent `owner-strategy-book-v0` signed 2026-11-05; this registration awaits its own owner signature before the first development score. No development score exists. No licensed file has been read for this registration.**  
 **registration_id (proposed):** `strategy-book-us-rehearsal-v0`  
 **Parent:** `owner-strategy-book-v0` in [`strategy-book-registration.md`](strategy-book-registration.md)  
 **Plan step:** 2.5 in [`strategy-reorientation-plan.md`](strategy-reorientation-plan.md)  
