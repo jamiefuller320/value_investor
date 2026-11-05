@@ -51,8 +51,8 @@ Each check compares every year on one row label. The label is the first in the p
 | Operating income (margin) | `Operating Income`, `Total Operating Income As Reported`, `EBIT`, each over the revenue label order |
 | EPS | `Diluted EPS`, `Basic EPS` |
 | FCF | `Free Cash Flow`, then operating cash flow plus capital expenditure |
-| Interim revenue | `Total Revenue`, `Operating Revenue`, `Revenue` on the latest interim period |
-| Interim EPS | `Diluted EPS`, `Basic EPS`, then filing-interim adjusted EPS, then statutory EPS |
+| Interim revenue | `Total Revenue`, `Operating Revenue`, `Revenue` on the latest interim period, then the half-year filing extract |
+| Interim EPS | `Diluted EPS`, `Basic EPS`, then the half-year filing extract (diluted, basic, adjusted, statutory), then filing-interim adjusted EPS, then statutory EPS |
 
 FCF is never taken direct for one year and derived for another. Banks and insurers often lack operating income; they stay evaluable on EPS.
 
@@ -60,12 +60,47 @@ Interim comparisons are year-on-year. The latest interim period is the newest `q
 
 Interim EPS keeps a single slot. The first evaluable source replaces the others, so the screen-row flag is not counted again when a direct measurement exists:
 
-1. Usable `quarterly_income` year-on-year pair.
-2. `filing_interim_financials.json` `interim_highlights` adjusted EPS pair, else the statutory EPS pair, when the source filing is dated on or before `as_of`.
-3. `parse_interim_eps_decline_pct` on the latest dated half-year / interim-results body (`period` = `interim`, results headline, published on or before `as_of`).
-4. Screen-row `interim_eps_decline_pct`, when the screen run is dated on or before `as_of`.
+1. Usable `quarterly_income` year-on-year pair (diluted, then basic).
+2. `filing_interim_financials.json` `half_year_comparisons`: diluted, then basic, then adjusted, then statutory earnings per share. Diluted and basic are the statutory pair. Adjusted is used only when neither statutory pair was extracted.
+3. `interim_highlights` adjusted EPS pair, else the statutory EPS pair, when that extract's `extracted_at` and the source filing are both dated on or before `as_of`.
+4. `parse_interim_eps_decline_pct` on the latest dated half-year / interim-results body (`period` = `interim`, results headline, published on or before `as_of`).
+5. Screen-row `interim_eps_decline_pct`, when the screen run is dated on or before `as_of`.
 
-A filing published more than 460 days before `as_of` is not used. Trading-update advertising revenue in the filing-interim file is not treated as group revenue.
+Interim revenue uses the quarterly series first. When that comparison is not evaluable (missing, no prior-year quarter, stale, or a non-positive prior), the gate uses the revenue pair on the same half-year extract. The threshold is the same 5% hard bar. A quarterly comparison that is evaluable is kept even when the filing says something else.
+
+A filing published more than 460 days before `as_of`, or whose half-year period end is more than 460 days before `as_of`, is not used. Trading-update advertising revenue in the filing-interim file is not treated as group revenue.
+
+## Half-year extract
+
+UK companies report half-yearly, and the Yahoo quarterly series is empty for most of them. The text already on disk is the source. Each daily gate refresh re-reads half-year results bodies and writes `filing_interim_financials.json` before it scores, so a body ingested overnight is in the next verdict without a separate command. A read-only refresh (`--no-persist`) parses the same bodies in memory and does not write the file. The extract is refreshed inside the gate step, rather than only during ingest, because most of the bodies were already on disk before this parser existed and ingest does not re-run them every day.
+
+`interim_highlights` is unchanged: it is still the narrow free-cash-flow / adjusted-EPS / statutory-EPS prose parse. The new figures live beside it:
+
+| Key | Meaning |
+|---|---|
+| `half_year_comparisons` | One record per half-year results row (newest publication first), including rows that were not extracted and why |
+| `half_year_comparison` | The newest record whose status is `extracted`, or null. The gate does not trust this alone: it re-selects from the list using `as_of` |
+
+A row counts as a half-year results filing when `period` is `interim`, `has_body` is set, the headline or URL contains interim results, interim report, half-year, half year, half-yearly or half yearly, and the source is not third-party news. Companies House "accounts-with-accounts-type-interim" rows without those words are not parsed.
+
+The body file is resolved in one place (`resolve_filing_body_path_for_row`), used by the extract and by the gate's older prose reader:
+
+1. `filings/bodies/<basename of body_path>` (index paths often say `output/research/...`, which is not in the repo)
+2. the stored `body_path`, if that file exists
+3. `filings/bodies/<id>.txt`
+
+For each extracted record the file stores: current half period end, prior-year half period end, whether that prior date was stated or inferred as one year earlier, revenue current and prior with the label used (Group revenue, Total revenue, Revenue, Turnover and the close variants), unit and currency, each EPS pair (diluted, basic, adjusted, statutory) with its label, unit and currency, the filing id, `published_at`, a short snippet of the matched line, and `parse_confidence` (`high` when both period ends are stated, `medium` when the prior date is inferred).
+
+Fail closed. The status is `not_extracted` when any of these is true:
+
+- current and prior figures are not both present
+- the prior period is not about one year before the current period (within 45 days)
+- revenue is not positive
+- the column order is not explicit (no H1 / HY / six-months year pair one year apart, or the header mixes quarters and a half-year)
+- a group total and a segment line disagree, or two readings of the same label disagree by more than 0.5%
+- the period end is after the filing's publication date
+
+Segment lines (advertising, studios, UK retail and the same sort of prefix) are dropped when a group total is present. A bare "customers 1 to 2" style line is not revenue. The gate then applies its own point-in-time rules: `published_at` on or before `as_of`, and neither the publication nor the period end older than 460 days. If the newest filing that passes those rules was not extracted, an older half is not used. A missing extract is not evaluable. It is never a pass.
 
 ## Inputs (committed files only, no network)
 
@@ -73,19 +108,19 @@ A filing published more than 460 days before `as_of` is not used. Trading-update
 |---|---|---|
 | Screen rows | `docs/data/latest.json` `reports` | signal, sector, `interim_eps_decline_pct` (fallback), `interim_dividend_cut_flagged` |
 | Annual statements | `docs/data/research/{TICKER}/sources/financials_annual.json` | revenue, operating income, EPS, FCF by fiscal year; `quarterly_income` for interim year-on-year |
-| Filing interim extract | `docs/data/research/{TICKER}/sources/filing_interim_financials.json` | interim EPS pair in `interim_highlights` when the source filing is dated |
-| Filings index and bodies | `docs/data/research/{TICKER}/sources/filings/` | headline and summary scan; half-year results bodies for the interim EPS prose parser |
+| Filing interim extract | `docs/data/research/{TICKER}/sources/filing_interim_financials.json` | `half_year_comparisons` for interim revenue and EPS; `interim_highlights` EPS pair when the half-year extract has no EPS |
+| Filings index and bodies | `docs/data/research/{TICKER}/sources/filings/` | headline and summary scan; half-year results bodies, re-read on each gate refresh |
 | Library markets | `docs/data/library/markets/{market}/screen/latest_signals.csv` and `screen/research/{TICKER}/sources/` | same statements, extract and index; no interim fields on library rows |
 
 Scope in v0: every FTSE 350 screen row (`market` = `ftse350`), plus every admitted library market name that has a `financials_annual.json` under its research sources (about 525 names across 21 markets). Library names without research sources are not scored. If a ticker appears in both, the FTSE row wins. Buy-tier means `buy` or `strong_buy`; the summary counts FTSE names only.
 
-Only about 108 of 248 FTSE names have a filings index, so the profit-warning check is evaluated for those names only. That check matches headlines and summaries, not bodies. Third-party news items (index `source` starting `google_news`) are skipped because they often describe other companies. Expect low recall on warnings until a wider body scan is added. Interim EPS does read one half-year results body per name, and only through the existing decline parser.
+Only about 108 of 248 FTSE names have a filings index, so the profit-warning check is evaluated for those names only. That check matches headlines and summaries, not bodies. Third-party news items (index `source` starting `google_news`) are skipped because they often describe other companies. Expect low recall on warnings until a wider body scan is added. Interim revenue and interim EPS also read the half-year results bodies, through `half_year_comparisons` on the filing-interim extract. The older prose decline parser remains the fallback when that extract has no EPS pair.
 
 ## Point in time
 
 - `as_of` defaults to today (UTC). Use `--as-of YYYY-MM-DD` to re-judge a past date.
 - Profit-warning filings dated after `as_of`, undated filings, and filings older than 180 days are ignored.
-- Interim periods and half-year filings dated after `as_of` are ignored. An interim period end, or a results filing published more than 460 days before `as_of`, is stale and is not a comparison.
+- Interim periods and half-year filings dated after `as_of` are ignored. An interim period end, or a results filing published more than 460 days before `as_of`, is stale and is not a comparison. `extracted_at` on the filing-interim file is when the parser ran, not when the company reported. Half-year rows are kept and selected by `published_at`. The older `interim_highlights` pair still fails closed when `extracted_at` is after `as_of`.
 - Fiscal years after the `as_of` year are ignored. A statement file fetched after `as_of` is not usable (the file may contain restated or later-reported data), so annual checks and the quarterly series inside that file fail closed (`why: financials_fetched_after_as_of`).
 - Screen-row flags (`interim_*`) are dropped when the `latest.json` run is dated after `as_of`. A direct interim measurement replaces the screen-row EPS flag; the flag is the fallback when no direct comparison exists.
 - Annual data more than one fiscal year old (two in January to March) is treated as stale.
@@ -97,17 +132,19 @@ Because statement files are overwritten on each fetch, a past `as_of` is mainly 
 `docs/data/operating_decline_gate.json`:
 
 ```text
-{ schema_version: 2, generated_at, as_of, observe_only: true, influences_live: false,
+{ schema_version: 3, generated_at, as_of, observe_only: true, influences_live: false,
   learning_question,
   summary: { names, clear, declining, insufficient_data, buy_tier_names, buy_tier_covered,
-             names_with_interim_eps, names_with_interim_revenue, latest_fiscal_year_counts },
+             names_with_interim_eps, names_with_interim_revenue,
+             buy_tier_with_interim_revenue, buy_tier_with_interim_eps,
+             latest_fiscal_year_counts },
   names: { TICKER: { market, sector, signal, verdict,
                      reasons: [ {code, detail, source} ],
                      checks: { revenue, interim_revenue, operating_margin, eps_annual,
                                eps_interim, fcf, dividend, profit_warning } } } }
 ```
 
-`buy_tier_covered` counts FTSE buy-tier names whose verdict is `clear` or `declining`. `names_with_interim_eps` and `names_with_interim_revenue` count names with a year-on-year comparison from any interim source, not only the screen row. `latest_fiscal_year_counts` maps the latest fiscal year used for revenue to the number of names, so stale statements are visible. Name records still carry `verdict`, `market`, `sector`, `reasons` and `checks`. The sector headwind gate reads `names[].verdict`. `schema_version` is 2 because interim revenue is a check and the summary gained `names_with_interim_revenue`.
+`buy_tier_covered` counts FTSE buy-tier names whose verdict is `clear` or `declining`. `names_with_interim_eps` and `names_with_interim_revenue` count names with a year-on-year comparison from any interim source, not only the screen row. `buy_tier_with_interim_revenue` and `buy_tier_with_interim_eps` are those same counts restricted to FTSE `buy` / `strong_buy` names. `latest_fiscal_year_counts` maps the latest fiscal year used for revenue to the number of names, so stale statements are visible. Name records still carry `verdict`, `market`, `sector`, `reasons` and `checks`. The sector headwind gate reads `names[].verdict`. `schema_version` is 3 because the summary gained the two buy-tier interim counts.
 
 Each check carries `evaluable`, `fired`, and `strength` (when evaluable) or `why` (when not), plus the numbers it used. The store is about 750 KB because it keeps every check for every name. Raw store JSON commits with ops-monitor.
 
@@ -117,8 +154,9 @@ Daily `collect_ops_findings` calls `check_operating_decline_gate` (before the ob
 
 | Title | Severity | When |
 |---|---|---|
-| **Operating-decline gate refreshed (observe)** | info | Every run: counts, FTSE buy-tier coverage, the first five buy-tier names flagged `declining` with reason codes, names with interim EPS and interim revenue, and the latest-fiscal-year spread |
+| **Operating-decline gate refreshed (observe)** | info | Every run: counts, FTSE buy-tier coverage, the first five buy-tier names flagged `declining` with reason codes, names with interim EPS and interim revenue, the buy-tier-only interim counts, and the latest-fiscal-year spread |
 | **Operating-decline gate coverage gap** | warn | Fewer than 80% of FTSE buy-tier names have a `clear` or `declining` verdict, or no buy-tier names were scored |
+| **Operating-decline gate interim revenue coverage** | warn | At least 20 FTSE buy-tier names are scored and fewer than 45% of them have an evaluable interim revenue comparison. The 2026-11-05 backfill reached 30/65 (46%). The floor sits just under that, so a later drop is visible. It does not fire on a small fixture. |
 | **Operating-decline gate failed** | warn | The refresh raised (unreadable inputs) |
 
 A coverage gap is an input-quality signal for P1 (annual statements missing for buy-tier names). It does not trigger rememo or ingest spray by itself.
@@ -163,9 +201,18 @@ Before the quarterly backfill, FTSE buy-tier interim coverage was EPS 2/65 (MEGP
 
 After `ftse-quarterly-backfill --apply` (git history, current values kept) and a gate refresh as of 2026-11-03: FTSE buy-tier interim revenue is 4/65 and interim EPS is still 2/65. FTSE screen interim revenue is 8/248 and interim EPS is 6/248. Across all scored names, interim revenue and interim EPS are both 68. Buy-tier covered stays 62/65. No FTSE verdict changed. Two library names did: FSLR (sp500, `clear` → `declining`) on interim revenue −22.8% for 2026-09-30 vs 2025-09-30, and HRL (sp500, `clear` → `declining`) because interim EPS −66.7% joined an existing annual EPS decline. Store counts moved from clear 549 / declining 191 to clear 547 / declining 193. Details: [`quarterly-history.md`](quarterly-history.md).
 
+After the half-year extract backfill and a gate refresh as of 2026-11-05, on the same 65 FTSE buy-tier names:
+
+| Check | Before | After | Still not evaluable |
+|---|---:|---:|---|
+| Interim revenue | 4 (all Yahoo `quarterly_income`) | 30 (26 from the half-year extract, 4 still Yahoo) | 35: 31 `interim_revenue_missing`, 4 `interim_prior_period_missing` |
+| Interim EPS | 2 (half-year prose) | 33 (all from the half-year extract) | 32: 25 `interim_eps_not_on_screen_row`, 4 `interim_metric_missing_on_latest_period`, 3 `interim_prior_period_missing` |
+
+None of the 30 buy-tier interim revenue pairs fell by more than 5%. Eight buy-tier interim EPS pairs fell by at least 10% (ABF, BREE, FGP, FOUR, GEN, IAG, RNK, VCT). Across every scored name, interim revenue is evaluable on 131 and interim EPS on 138. Buy-tier covered stays 62/65. The 45% interim-revenue floor is just under the 30/65 (46%) this run reached, so the coverage finding does not fire today.
+
 ## Known limitations
 
-- **Buy-tier interim coverage is still mostly annual.** Four buy-tier names now have a year-on-year revenue pair and none of those pairs fire. Interim EPS is still two names, neither of which fires. Most verdicts rest on annual statements.
+- **Buy-tier interim coverage is still short of the names that have a results body.** 30 of 65 buy-tier names now have a year-on-year interim revenue pair and 33 have interim EPS. The rest fail closed: the body has no explicit current-and-prior pair, the column order is ambiguous, or there is no half-year results body. None of the new revenue pairs fire. Eight EPS pairs do. Most verdicts still rest on annual statements.
 - **Revenue hard checks flag commodity and cyclical names in a down year** (for example oil majors). That matches the owner's "no operating decline" rule but is a known false-positive source for a recovery thesis. The owner decides at the Phase 1 gate whether to adjust.
 - **Headline scan covers only names with a filings index** (about 108 of 248 FTSE names), matches headlines and summaries only, and skips third-party news. Expect low recall on profit warnings.
 - **`fetched_at` still moves on a live fetch**, so a past `as_of` fails closed (`financials_fetched_after_as_of`) against current files. Real historical replay needs dated snapshots. Quarterly income and cash flow are no longer replaced wholesale: each fetch merges period ends and keeps up to 12 quarters. See [`quarterly-history.md`](quarterly-history.md).
@@ -175,5 +222,5 @@ After `ftse-quarterly-backfill --apply` (git history, current values kept) and a
 No new Yahoo fetch and no change to how the screen computes `interim_eps_decline_pct`.
 
 1. **Keep the prior-year quarter in `quarterly_income`.** Built. The writer merges up to 12 quarters, and `ftse-quarterly-backfill` restored older period ends from git. That made interim revenue evaluable for GSK, SHEL, BARC and BP. It did not make interim EPS evaluable for them: the latest quarter has revenue and no EPS line. IAG, BGEO, ATYM and NWG still lack the prior-year quarter because no committed version of the file contains it (their latest period is 2026-06-30 and the oldest committed period is 2025-09-30). Runbook: [`quarterly-history.md`](quarterly-history.md).
-2. **Resolve half-year body paths and re-extract `filing_interim_financials.json`.** Index paths under `output/research/` miss bodies that exist as `filings/bodies/<basename>`. Re-running the current statutory highlights parser after that fix picks up ITV's EPS pair (a rise, so the soft check would not fire) and, on this buy-tier set, no other results body. It still does not extract revenue.
-3. **Structured current-vs-prior revenue and EPS from the 48 buy-tier half-year results bodies.** That is the coverage ceiling for names Yahoo does not quarter. The prose parsers already in the repo match two EPS declines, both under 10%. A broader extractor has to return levels for one period and the same period a year earlier; a loose "revenue down N%" phrase match is not that. Expected gain is up to those 48 names, and the yield is unproven until the parser is written.
+2. **Resolve half-year body paths.** Built. `resolve_filing_body_path_for_row` looks in `filings/bodies/<basename>` and `filings/bodies/<id>.txt` before trusting a stored `output/research/...` path. The decline gate uses that same function. ITV's half-year body is found by basename.
+3. **Structured current-vs-prior revenue and EPS from half-year results bodies.** Built. `half_year_comparisons` in `filing_interim_financials.json` holds the pair, the label, the unit, the filing id and the matched line. The daily gate refresh writes that file before it scores. Coverage after the 2026-11-05 backfill is in the diagnosis section below. A figure that fails the sanity rules stays `not_extracted`. It is not guessed.

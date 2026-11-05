@@ -8,8 +8,10 @@ from pathlib import Path
 import pytest
 
 from value_investor.operating_decline_gate import (
+    BUY_TIER_INTERIM_REVENUE_FLOOR,
     COVERAGE_GAP_TITLE,
     FINDING_TITLE,
+    INTERIM_COVERAGE_TITLE,
     assess_operating_decline,
     format_operating_decline_text,
     ops_findings_from_operating_decline_gate,
@@ -356,7 +358,7 @@ def test_refresh_writes_store_with_contract_shape(tmp_path):
     )
     on_disk = json.loads(store.read_text(encoding="utf-8"))
     assert on_disk == payload
-    assert payload["schema_version"] == 2
+    assert payload["schema_version"] == 3
     assert payload["as_of"] == AS_OF
     assert payload["observe_only"] is True
     assert payload["influences_live"] is False
@@ -369,6 +371,8 @@ def test_refresh_writes_store_with_contract_shape(tmp_path):
         "buy_tier_covered": 2,
         "names_with_interim_eps": 0,
         "names_with_interim_revenue": 0,
+        "buy_tier_with_interim_revenue": 0,
+        "buy_tier_with_interim_eps": 0,
         "latest_fiscal_year_counts": {"2025": 3},
     }
     bad = payload["names"]["BAD.L"]
@@ -932,3 +936,257 @@ def test_stale_half_year_body_does_not_replace_a_screen_flag(tmp_path):
     check = payload["names"]["OKAY.L"]["checks"]["eps_interim"]
     assert check["source"] == "latest.json reports"
     assert check["interim_eps_decline_pct"] == pytest.approx(0.25)
+
+
+def _half_year_filing(
+    *,
+    revenue: tuple[float, float] = (90.0, 100.0),
+    eps: tuple[float, float] | None = (8.0, 10.0),
+    published_at: str = "2026-07-31",
+    status: str = "extracted",
+    filing_id: str = "h1",
+    adjusted: tuple[float, float] | None = None,
+) -> dict:
+    record = {
+        "status": status,
+        "why": None if status == "extracted" else "figures_not_found",
+        "period_end": "2026-06-30",
+        "prior_period_end": "2025-06-30",
+        "prior_period_basis": "stated",
+        "revenue": {
+            "label": "Group revenue",
+            "current": revenue[0],
+            "prior": revenue[1],
+            "unit": "millions",
+            "currency": "GBP",
+            "snippet": f"Group revenue {revenue[0]} {revenue[1]}",
+            "order_basis": "column_headers",
+        }
+        if status == "extracted"
+        else None,
+        "eps": [],
+        "parse_confidence": "high" if status == "extracted" else None,
+        "source_filing_id": filing_id,
+        "published_at": published_at,
+        "headline": "Interim results for the six months ended 30 June 2026",
+    }
+    if status == "extracted" and eps is not None:
+        record["eps"].append(
+            {
+                "kind": "diluted",
+                "label": "Diluted earnings per share",
+                "current": eps[0],
+                "prior": eps[1],
+                "unit": "pence",
+                "currency": "GBP",
+                "snippet": f"Diluted earnings per share (p) {eps[0]} {eps[1]}",
+                "order_basis": "column_headers",
+            }
+        )
+    if status == "extracted" and adjusted is not None:
+        record["eps"].append(
+            {
+                "kind": "adjusted",
+                "label": "Adjusted earnings per share",
+                "current": adjusted[0],
+                "prior": adjusted[1],
+                "unit": "pence",
+                "currency": "GBP",
+                "snippet": f"Adjusted EPS {adjusted[0]} {adjusted[1]}",
+                "order_basis": "column_headers",
+            }
+        )
+    return {"half_year_comparisons": [record], "half_year_comparison": record}
+
+
+def _assess_half(filing_interim: dict, financials=None):
+    return assess_operating_decline(
+        {},
+        financials if financials is not None else _healthy(),
+        [{"id": "h1", "published_at": "2026-07-31", "headline": "Interim results"}],
+        as_of=AS_OF,
+        filing_interim=filing_interim,
+    )
+
+
+def test_half_year_revenue_drop_is_a_hard_decline():
+    result = _assess_half(_half_year_filing(revenue=(90.0, 100.0)))
+    check = result["checks"]["interim_revenue"]
+    assert check["evaluable"] is True
+    assert check["fired"] is True
+    assert check["strength"] == "hard"
+    assert check["source"] == "filing_interim_financials.json:h1"
+    assert check["change_pct"] == pytest.approx(-0.1)
+    assert "Group revenue" in check["citation"]
+    assert "interim_revenue_decline" in _codes(result)
+    assert result["verdict"] == "declining"
+
+
+def test_half_year_revenue_at_the_five_percent_line_does_not_fire():
+    result = _assess_half(_half_year_filing(revenue=(95.0, 100.0), eps=(10.0, 10.0)))
+    check = result["checks"]["interim_revenue"]
+    assert check["evaluable"] is True
+    assert check["fired"] is False
+    assert check["change_pct"] == pytest.approx(-0.05)
+    assert "interim_revenue_decline" not in _codes(result)
+
+
+def test_half_year_revenue_published_after_as_of_is_ignored():
+    result = _assess_half(_half_year_filing(published_at="2026-12-01"))
+    check = result["checks"]["interim_revenue"]
+    assert check["evaluable"] is False
+    assert "interim_revenue_decline" not in _codes(result)
+
+
+def test_stale_half_year_revenue_is_ignored():
+    result = _assess_half(_half_year_filing(published_at="2024-01-15"))
+    assert result["checks"]["interim_revenue"]["evaluable"] is False
+    assert result["checks"]["eps_interim"]["evaluable"] is False
+
+
+def test_newer_unextracted_half_year_blocks_an_older_pair():
+    older = _half_year_filing(revenue=(90.0, 100.0), published_at="2026-02-01", filing_id="old")
+    newer = _half_year_filing(published_at="2026-08-01", status="not_extracted", filing_id="new")
+    filing = {
+        "half_year_comparisons": [
+            newer["half_year_comparisons"][0],
+            older["half_year_comparisons"][0],
+        ]
+    }
+    result = _assess_half(filing)
+    assert result["checks"]["interim_revenue"]["evaluable"] is False
+
+
+def test_half_year_eps_prefers_diluted_over_adjusted():
+    result = _assess_half(
+        _half_year_filing(
+            revenue=(110.0, 100.0),
+            eps=(8.0, 10.0),
+            adjusted=(12.0, 10.0),
+        )
+    )
+    check = result["checks"]["eps_interim"]
+    assert check["evaluable"] is True
+    assert check["fired"] is True
+    assert check["label"] == "Diluted earnings per share"
+    assert check["latest"] == pytest.approx(8.0)
+    assert check["prior"] == pytest.approx(10.0)
+    assert check["source"] == "filing_interim_financials.json:h1"
+    assert check["interim_eps_decline_pct"] == pytest.approx(0.2)
+
+
+def test_quarterly_revenue_wins_over_a_half_year_extract():
+    fin = _with_quarters(
+        {
+            "2026-09-30": {"Total Revenue": 110.0},
+            "2025-09-30": {"Total Revenue": 100.0},
+        }
+    )
+    result = _assess_half(_half_year_filing(revenue=(80.0, 100.0)), financials=fin)
+    check = result["checks"]["interim_revenue"]
+    assert check["source"] == "financials_annual.json quarterly_income"
+    assert check["fired"] is False
+    assert check["latest"] == pytest.approx(110.0)
+
+
+def test_refresh_uses_half_year_body_found_by_basename(tmp_path):
+    latest, research, store = _build_fixture(tmp_path)
+    sources = research / "OKAY.L" / "sources"
+    bodies = sources / "filings" / "bodies"
+    bodies.mkdir(parents=True)
+    (bodies / "rev.txt").write_text(
+        "\n".join(
+            [
+                "Interim results for the six months ended 30 June 2026",
+                "£m H1 2026 H1 2025",
+                "Group revenue 90 100",
+                "Diluted earnings per share (p) 8.0 10.0",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "rev",
+                        "period": "interim",
+                        "has_body": True,
+                        "headline": "2026 Interim Results",
+                        "published_at": "2026-08-01",
+                        "body_path": "output/research/OKAY.L/sources/filings/bodies/rev.txt",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = refresh_operating_decline_gate(
+        latest_path=latest,
+        research_root=research,
+        store_path=store,
+        library_root=None,
+        persist=False,
+        as_of=AS_OF,
+    )
+    revenue = payload["names"]["OKAY.L"]["checks"]["interim_revenue"]
+    eps = payload["names"]["OKAY.L"]["checks"]["eps_interim"]
+    assert revenue["evaluable"] is True
+    assert revenue["fired"] is True
+    assert revenue["source"] == "filing_interim_financials.json:rev"
+    assert revenue["latest"] == pytest.approx(90.0)
+    assert revenue["prior"] == pytest.approx(100.0)
+    assert eps["evaluable"] is True
+    assert eps["fired"] is True
+    assert eps["source"] == "filing_interim_financials.json:rev"
+    assert "interim_revenue_decline" in _codes(payload["names"]["OKAY.L"])
+    assert not (sources / "filing_interim_financials.json").exists()
+
+
+def test_interim_revenue_coverage_finding_below_the_floor():
+    payload = {
+        "as_of": AS_OF,
+        "summary": {
+            "names": 25,
+            "clear": 25,
+            "declining": 0,
+            "insufficient_data": 0,
+            "buy_tier_names": 25,
+            "buy_tier_covered": 25,
+            "buy_tier_with_interim_revenue": 1,
+            "buy_tier_with_interim_eps": 1,
+            "names_with_interim_revenue": 1,
+            "names_with_interim_eps": 1,
+            "latest_fiscal_year_counts": {},
+        },
+        "names": {},
+    }
+    findings = ops_findings_from_operating_decline_gate(payload)
+    matched = next(f for f in findings if f["title"] == INTERIM_COVERAGE_TITLE)
+    assert matched["severity"] == "warn"
+    assert matched["auto_fixable"] is False
+    assert f"{BUY_TIER_INTERIM_REVENUE_FLOOR:.0%}" in matched["summary"]
+
+
+def test_interim_revenue_coverage_finding_silent_when_above_the_floor():
+    payload = {
+        "as_of": AS_OF,
+        "summary": {
+            "names": 25,
+            "clear": 25,
+            "declining": 0,
+            "insufficient_data": 0,
+            "buy_tier_names": 25,
+            "buy_tier_covered": 25,
+            "buy_tier_with_interim_revenue": 20,
+            "buy_tier_with_interim_eps": 20,
+            "names_with_interim_revenue": 20,
+            "names_with_interim_eps": 20,
+            "latest_fiscal_year_counts": {},
+        },
+        "names": {},
+    }
+    titles = [f["title"] for f in ops_findings_from_operating_decline_gate(payload)]
+    assert INTERIM_COVERAGE_TITLE not in titles
+    assert titles == [FINDING_TITLE]
