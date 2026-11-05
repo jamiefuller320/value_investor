@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import csv
+import gzip
 import json
 import math
 from collections import defaultdict
@@ -16,6 +18,15 @@ DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
 DEFAULT_CHARTS_DIR = Path("docs/data/charts")
 DEFAULT_DECLINE_STORE = Path("docs/data/operating_decline_gate.json")
 DEFAULT_STORE_PATH = Path("docs/data/sector_headwind_gate.json")
+DEFAULT_MARKET_STATUS = Path("docs/data/market_status.json")
+DEFAULT_LIBRARY_ROOT = Path("docs/data/library")
+DEFAULT_LABEL_HISTORY = Path("docs/data/sector_label_history.jsonl")
+FTSE_MARKET = "ftse350"
+SCREEN_EARNINGS_FIELDS = (
+    "interim_eps_decline_pct",
+    "yahoo_normalized_income_growth_pct",
+    "adjusted_eps_growth_pct",
+)
 
 SCHEMA_VERSION = 1
 MIN_MEMBERS_WITH_DATA = 4
@@ -172,6 +183,27 @@ def _decline_names(decline_verdicts: dict[str, Any] | None) -> dict[str, Any] | 
     return decline_verdicts
 
 
+def _decline_names_for_cutoff(
+    decline_verdicts: dict[str, Any] | None,
+    cutoff: date,
+) -> dict[str, Any] | None:
+    """Use decline rows only when the snapshot is not dated after ``cutoff``.
+
+    A payload with no ``as_of`` is the in-memory shape the scorer already
+    accepts. A stored snapshot dated after the decision date is later
+    information and is ignored, the same way chart bars after ``cutoff`` are.
+    """
+    if not isinstance(decline_verdicts, dict):
+        return None
+    if "as_of" in decline_verdicts:
+        try:
+            if _as_of_date(decline_verdicts.get("as_of")) > cutoff:
+                return None
+        except (TypeError, ValueError):
+            return None
+    return _decline_names(decline_verdicts)
+
+
 def _reason(code: str, detail: str, source: str) -> dict[str, str]:
     return {"code": code, "detail": detail, "source": source}
 
@@ -240,7 +272,7 @@ def assess_sector(
     drawdown_1y, drawdown_count, drawdown_days = _equal_weight_drawdown(all_series)
     trend_available = return_126d is not None and _coverage_ok(return_126d_count, total)
 
-    decline_names = _decline_names(decline_verdicts)
+    decline_names = _decline_names_for_cutoff(decline_verdicts, cutoff)
     decline_count = 0
     decline_declining = 0
     if decline_names is not None:
@@ -436,52 +468,183 @@ def _read_json(path: Path) -> dict[str, Any]:
     return payload
 
 
-def refresh_sector_headwind_gate(
-    *,
-    latest_path: Path = DEFAULT_LATEST_PATH,
-    charts_dir: Path = DEFAULT_CHARTS_DIR,
-    decline_store: Path = DEFAULT_DECLINE_STORE,
-    store_path: Path = DEFAULT_STORE_PATH,
-    persist: bool = True,
-    as_of: Any = None,
-) -> dict[str, Any]:
-    """Refresh the FTSE 350 sector store from committed, point-in-time inputs."""
-    latest = _read_json(Path(latest_path))
-    reports = latest.get("reports")
-    if not isinstance(reports, list):
-        raise ValueError(f"{latest_path} has no reports list")
-    members = [row for row in reports if isinstance(row, dict) and row.get("ticker")]
-    cutoff_value = (
-        as_of if as_of is not None else latest.get("run_at") or latest.get("generated_at")
-    )
-    cutoff = _as_of_date(cutoff_value)
+def _load_chart_cache(
+    charts_dir: Path,
+    tickers: list[str],
+    cache: dict[str, dict[str, Any] | None],
+) -> dict[str, dict[str, Any]]:
+    loaded: dict[str, dict[str, Any]] = {}
+    for ticker in tickers:
+        if ticker not in cache:
+            chart_path = Path(charts_dir) / f"{ticker}.json"
+            chart: dict[str, Any] | None = None
+            if chart_path.is_file():
+                try:
+                    payload = _read_json(chart_path)
+                    chart = payload if isinstance(payload, dict) else None
+                except (OSError, ValueError, TypeError, json.JSONDecodeError):
+                    chart = None
+            cache[ticker] = chart
+        cached = cache[ticker]
+        if isinstance(cached, dict):
+            loaded[ticker] = cached
+    return loaded
 
-    charts: dict[str, dict[str, Any]] = {}
-    for row in members:
+
+def _dedupe_members(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    seen: set[str] = set()
+    unique: list[dict[str, Any]] = []
+    for row in rows:
         ticker = str(row.get("ticker") or "").strip()
-        chart_path = Path(charts_dir) / f"{ticker}.json"
-        if not chart_path.is_file():
+        if not ticker or ticker in seen:
             continue
-        try:
-            charts[ticker] = _read_json(chart_path)
-        except (OSError, ValueError, TypeError, json.JSONDecodeError):
+        seen.add(ticker)
+        unique.append(row)
+    return unique
+
+
+def _earnings_input_census(members: list[dict[str, Any]]) -> dict[str, Any]:
+    """Which v0 earnings-breadth fields this membership file actually carries."""
+    present = {
+        field: sum(1 for row in members if _finite_float(row.get(field)) is not None)
+        for field in SCREEN_EARNINGS_FIELDS
+    }
+    return {
+        "v0_screen_fields": {field: count for field, count in present.items() if count},
+        "earnings_growth_names": sum(
+            1 for row in members if _finite_float(row.get("earnings_growth")) is not None
+        ),
+        "earnings_growth_used": False,
+    }
+
+
+def _insufficient_reasons(assessed: dict[str, Any]) -> list[str]:
+    reasons: list[str] = []
+    for row in assessed.get("reasons") or []:
+        if not isinstance(row, dict):
             continue
+        code = row.get("code")
+        detail = str(row.get("detail") or "")
+        if code == "TOO_FEW_SECTOR_MEMBERS":
+            reasons.append("too few members")
+        elif code == "INSUFFICIENT_CORE_COVERAGE":
+            if "price breadth" in detail:
+                reasons.append("chart coverage")
+            if "126d sector trend" in detail:
+                reasons.append("chart history")
+            if "earnings breadth" in detail:
+                reasons.append("earnings breadth")
+    return reasons
 
-    decline_payload: dict[str, Any] | None = None
-    if Path(decline_store).is_file():
+
+def _decision_date(
+    screen_date: date,
+    explicit_as_of: Any,
+    decline_payload: dict[str, Any] | None,
+) -> date:
+    """Decision date for one market.
+
+    An explicit ``as_of`` is the cutoff. Otherwise the date is the screen date,
+    moved forward to the decline snapshot when that snapshot is newer, so the
+    daily refresh can use the decline verdicts just written and still ignore
+    chart bars after the decision date.
+    """
+    if explicit_as_of is not None:
+        return _as_of_date(explicit_as_of)
+    cutoff = screen_date
+    if isinstance(decline_payload, dict) and decline_payload.get("as_of") is not None:
         try:
-            decline_payload = _read_json(Path(decline_store))
-        except (OSError, ValueError, TypeError, json.JSONDecodeError):
-            decline_payload = None
+            decline_day = _as_of_date(decline_payload.get("as_of"))
+        except (TypeError, ValueError):
+            decline_day = None
+        if decline_day is not None and decline_day > cutoff:
+            cutoff = decline_day
+    return cutoff
 
+
+def _read_signal_rows(path: Path) -> list[dict[str, Any]]:
+    with path.open(encoding="utf-8", newline="") as handle:
+        return [dict(row) for row in csv.DictReader(handle) if isinstance(row, dict)]
+
+
+def _screen_date_from_market(market_dir: Path) -> date | None:
+    summary_path = market_dir / "screen" / "latest_summary.json"
+    if summary_path.is_file():
+        try:
+            summary = _read_json(summary_path)
+        except (OSError, ValueError, TypeError, json.JSONDecodeError):
+            summary = {}
+        if isinstance(summary, dict):
+            for key in ("run_at", "generated_at", "as_of"):
+                if summary.get(key):
+                    try:
+                        return _as_of_date(summary[key])
+                    except (TypeError, ValueError):
+                        continue
+    history = market_dir / "screen" / "history"
+    runs = sorted(history.glob("run_*.json.gz")) if history.is_dir() else []
+    if not runs:
+        return None
+    try:
+        with gzip.open(runs[-1], "rt", encoding="utf-8") as handle:
+            payload = json.load(handle)
+    except (OSError, ValueError, TypeError, json.JSONDecodeError):
+        return None
+    if isinstance(payload, dict) and payload.get("run_at"):
+        try:
+            return _as_of_date(payload["run_at"])
+        except (TypeError, ValueError):
+            return None
+    return None
+
+
+def _graduated_library_markets(status: dict[str, Any]) -> tuple[list[str], list[dict[str, str]]]:
+    graduated: list[str] = []
+    skipped: list[dict[str, str]] = []
+    markets = status.get("markets")
+    if not isinstance(markets, list):
+        return graduated, skipped
+    for row in markets:
+        if not isinstance(row, dict):
+            continue
+        market_id = str(row.get("market_id") or "").strip()
+        if not market_id or market_id == FTSE_MARKET:
+            continue
+        if row.get("is_graduated") is True:
+            graduated.append(market_id)
+        else:
+            skipped.append({"market": market_id, "reason": "not_graduated"})
+    return graduated, skipped
+
+
+def _project_market(
+    *,
+    market: str,
+    members: list[dict[str, Any]],
+    charts: dict[str, dict[str, Any]],
+    decline_payload: dict[str, Any] | None,
+    cutoff: date,
+    screen_date: date,
+) -> tuple[
+    dict[str, dict[str, Any]], dict[str, dict[str, Any]], dict[str, Any], list[dict[str, str]]
+]:
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    for row in members:
+    missing_sector_buy: list[str] = []
+    for row in _dedupe_members(members):
+        ticker = str(row.get("ticker") or "").strip()
         sector = str(row.get("sector") or "").strip()
-        if sector:
-            grouped[sector].append(row)
+        if not sector:
+            if str(row.get("signal") or "").lower() in BUY_TIER_SIGNALS:
+                missing_sector_buy.append(ticker)
+            continue
+        grouped[sector].append(row)
 
     sectors: dict[str, dict[str, Any]] = {}
     names: dict[str, dict[str, Any]] = {}
+    label_rows: list[dict[str, str]] = []
+    buy_insufficient: list[dict[str, Any]] = []
+    screen_iso = screen_date.isoformat()
+    cutoff_iso = cutoff.isoformat()
     for sector in sorted(grouped):
         sector_members = grouped[sector]
         assessed = assess_sector(
@@ -490,91 +653,410 @@ def refresh_sector_headwind_gate(
             decline_verdicts=decline_payload,
             as_of=cutoff,
         )
-        key = f"ftse350:{sector}"
-        tickers = sorted(str(row["ticker"]) for row in sector_members)
+        key = f"{market}:{sector}"
+        tickers = sorted(str(row["ticker"]).strip() for row in sector_members)
         buy_tier = sorted(
-            str(row["ticker"])
+            str(row["ticker"]).strip()
             for row in sector_members
             if str(row.get("signal") or "").lower() in BUY_TIER_SIGNALS
         )
         sectors[key] = {
-            "market": "ftse350",
+            "market": market,
             "sector": sector,
+            "screen_date": screen_iso,
             **assessed,
             "members": tickers,
             "buy_tier_members": buy_tier,
         }
+        why = _insufficient_reasons(assessed) if assessed["verdict"] == "insufficient_data" else []
+        if assessed["verdict"] == "insufficient_data":
+            buy_insufficient.extend(
+                {"ticker": ticker, "sector": sector, "reasons": why} for ticker in buy_tier
+            )
         for ticker in tickers:
             names[ticker] = {
-                "market": "ftse350",
+                "market": market,
                 "sector": sector,
                 "sector_verdict": assessed["verdict"],
+                "screen_date": screen_iso,
             }
+            label_rows.append(
+                {
+                    "market": market,
+                    "ticker": ticker,
+                    "sector": sector,
+                    "screen_date": screen_iso,
+                    "as_of": cutoff_iso,
+                }
+            )
 
+    buy_by_verdict = {
+        verdict: sum(
+            len(row["buy_tier_members"]) for row in sectors.values() if row["verdict"] == verdict
+        )
+        for verdict in ("sound", "headwind", "insufficient_data")
+    }
     verdict_counts = {
         verdict: sum(1 for row in sectors.values() if row["verdict"] == verdict)
         for verdict in ("sound", "headwind", "insufficient_data")
     }
-    buy_tier_names = sum(len(row["buy_tier_members"]) for row in sectors.values())
-    buy_tier_in_headwind = sum(
-        len(row["buy_tier_members"]) for row in sectors.values() if row["verdict"] == "headwind"
+    unique_members = _dedupe_members(members)
+    member_count = len(unique_members)
+    chart_count = sum(1 for row in unique_members if str(row.get("ticker") or "").strip() in charts)
+    market_summary = {
+        "sectors": len(sectors),
+        **verdict_counts,
+        "members": member_count,
+        "buy_tier_names": sum(buy_by_verdict.values()),
+        "buy_tier_by_verdict": buy_by_verdict,
+        "buy_tier_in_headwind_sector": buy_by_verdict["headwind"],
+        "buy_tier_in_insufficient_data_sector": buy_by_verdict["insufficient_data"],
+        "buy_tier_sectors": sum(1 for row in sectors.values() if row["buy_tier_members"]),
+        "buy_tier_sectors_insufficient_data": sum(
+            1
+            for row in sectors.values()
+            if row["buy_tier_members"] and row["verdict"] == "insufficient_data"
+        ),
+        "buy_tier_insufficient_data": buy_insufficient,
+        "buy_tier_missing_sector": sorted(missing_sector_buy),
+        "names_with_chart_file": chart_count,
+        "chart_file_coverage_share": (
+            round(chart_count / member_count, 6) if member_count else 0.0
+        ),
+        "screen_date": screen_iso,
+        "as_of": cutoff_iso,
+        "earnings_inputs": _earnings_input_census(members),
+    }
+    return sectors, names, market_summary, label_rows
+
+
+def _last_recorded_labels(path: Path) -> dict[tuple[str, str], str]:
+    last: dict[tuple[str, str], str] = {}
+    if not path.is_file():
+        return last
+    with path.open(encoding="utf-8") as handle:
+        for line in handle:
+            text = line.strip()
+            if not text:
+                continue
+            try:
+                row = json.loads(text)
+            except json.JSONDecodeError:
+                continue
+            if not isinstance(row, dict):
+                continue
+            market = str(row.get("market") or "")
+            ticker = str(row.get("ticker") or "")
+            sector = row.get("sector")
+            if market and ticker and isinstance(sector, str):
+                last[(market, ticker)] = sector
+    return last
+
+
+def append_sector_labels(path: Path, rows: list[dict[str, str]]) -> int:
+    """Append a row only when a (market, ticker) sector label is new or changed."""
+    last = _last_recorded_labels(path)
+    fresh: list[dict[str, str]] = []
+    for row in rows:
+        key = (row["market"], row["ticker"])
+        if last.get(key) == row["sector"]:
+            continue
+        fresh.append(row)
+        last[key] = row["sector"]
+    if not fresh:
+        return 0
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as handle:
+        for row in fresh:
+            handle.write(json.dumps(row, separators=(",", ":"), sort_keys=True) + "\n")
+    return len(fresh)
+
+
+def sector_label_as_of(
+    market: str,
+    ticker: str,
+    on: Any,
+    *,
+    path: Path = DEFAULT_LABEL_HISTORY,
+) -> str | None:
+    """Sector label in force on ``on``: the latest row whose ``as_of`` is on or before it."""
+    cutoff = _as_of_date(on)
+    chosen: str | None = None
+    chosen_day: date | None = None
+    chosen_index = -1
+    history = Path(path)
+    if not history.is_file():
+        return None
+    with history.open(encoding="utf-8") as handle:
+        for index, line in enumerate(handle):
+            text = line.strip()
+            if not text:
+                continue
+            try:
+                row = json.loads(text)
+            except json.JSONDecodeError:
+                continue
+            if not isinstance(row, dict):
+                continue
+            if str(row.get("market") or "") != market or str(row.get("ticker") or "") != ticker:
+                continue
+            sector = row.get("sector")
+            if not isinstance(sector, str):
+                continue
+            try:
+                day = _as_of_date(row.get("as_of"))
+            except (TypeError, ValueError):
+                continue
+            if day > cutoff:
+                continue
+            if (
+                chosen_day is None
+                or day > chosen_day
+                or (day == chosen_day and index >= chosen_index)
+            ):
+                chosen = sector
+                chosen_day = day
+                chosen_index = index
+    return chosen
+
+
+def _mostly_insufficient_library_markets(sectors: dict[str, Any]) -> list[str]:
+    counts: dict[str, list[int]] = {}
+    for row in sectors.values():
+        if not isinstance(row, dict) or not row.get("buy_tier_members"):
+            continue
+        market = str(row.get("market") or FTSE_MARKET)
+        if market == FTSE_MARKET:
+            continue
+        bucket = counts.setdefault(market, [0, 0])
+        bucket[0] += 1
+        if row.get("verdict") == "insufficient_data":
+            bucket[1] += 1
+    named: list[str] = []
+    for market in sorted(counts):
+        buy_sectors, insufficient = counts[market]
+        if buy_sectors and insufficient * 2 > buy_sectors:
+            named.append(f"{market} ({insufficient}/{buy_sectors})")
+    return named
+
+
+def _load_decline_payload(path: Path) -> dict[str, Any] | None:
+    if not path.is_file():
+        return None
+    try:
+        payload = _read_json(path)
+    except (OSError, ValueError, TypeError, json.JSONDecodeError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def _overall_summary(
+    by_market: dict[str, dict[str, Any]],
+    *,
+    decline_available: bool,
+) -> dict[str, Any]:
+    verdicts = ("sound", "headwind", "insufficient_data")
+    totals = {verdict: 0 for verdict in verdicts}
+    sectors = 0
+    buy_tier_names = 0
+    buy_tier_in_headwind = 0
+    buy_tier_sectors = 0
+    buy_tier_sectors_insufficient = 0
+    report_names = 0
+    charts = 0
+    for row in by_market.values():
+        sectors += int(row.get("sectors") or 0)
+        for verdict in verdicts:
+            totals[verdict] += int(row.get(verdict) or 0)
+        buy_tier_names += int(row.get("buy_tier_names") or 0)
+        buy_tier_in_headwind += int(row.get("buy_tier_in_headwind_sector") or 0)
+        buy_tier_sectors += int(row.get("buy_tier_sectors") or 0)
+        buy_tier_sectors_insufficient += int(row.get("buy_tier_sectors_insufficient_data") or 0)
+        report_names += int(row.get("members") or 0)
+        charts += int(row.get("names_with_chart_file") or 0)
+    return {
+        "markets": len(by_market),
+        "sectors": sectors,
+        **totals,
+        "buy_tier_names": buy_tier_names,
+        "buy_tier_in_headwind_sector": buy_tier_in_headwind,
+        "buy_tier_in_insufficient_data_sector": sum(
+            int(row.get("buy_tier_in_insufficient_data_sector") or 0) for row in by_market.values()
+        ),
+        "buy_tier_sectors": buy_tier_sectors,
+        "buy_tier_sectors_insufficient_data": buy_tier_sectors_insufficient,
+        "report_names": report_names,
+        "names_with_chart_file": charts,
+        "chart_file_coverage_share": round(charts / report_names, 6) if report_names else 0.0,
+        "operating_decline_store_available": decline_available,
+        "by_market": by_market,
+    }
+
+
+def refresh_sector_headwind_gate(
+    *,
+    latest_path: Path = DEFAULT_LATEST_PATH,
+    charts_dir: Path = DEFAULT_CHARTS_DIR,
+    decline_store: Path = DEFAULT_DECLINE_STORE,
+    store_path: Path = DEFAULT_STORE_PATH,
+    market_status_path: Path = DEFAULT_MARKET_STATUS,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    label_history_path: Path = DEFAULT_LABEL_HISTORY,
+    persist: bool = True,
+    as_of: Any = None,
+) -> dict[str, Any]:
+    """Refresh FTSE 350 and graduated library sectors from point-in-time inputs.
+
+    Library markets come from ``is_graduated`` on the market-status file. Each
+    market is scored on its own membership. The flat ``names`` map stays the
+    FTSE projection. ``names_by_market`` holds one verdict per (market, ticker).
+    """
+    latest = _read_json(Path(latest_path))
+    reports = latest.get("reports")
+    if not isinstance(reports, list):
+        raise ValueError(f"{latest_path} has no reports list")
+    ftse_members = [row for row in reports if isinstance(row, dict) and row.get("ticker")]
+    screen_raw = latest.get("run_at") or latest.get("generated_at")
+    ftse_screen = _as_of_date(screen_raw)
+    decline_payload = _load_decline_payload(Path(decline_store))
+    ftse_cutoff = _decision_date(ftse_screen, as_of, decline_payload)
+
+    chart_cache: dict[str, dict[str, Any] | None] = {}
+    ftse_charts = _load_chart_cache(
+        Path(charts_dir),
+        [str(row.get("ticker") or "").strip() for row in ftse_members],
+        chart_cache,
     )
+    sectors, ftse_names, ftse_summary, label_rows = _project_market(
+        market=FTSE_MARKET,
+        members=ftse_members,
+        charts=ftse_charts,
+        decline_payload=decline_payload,
+        cutoff=ftse_cutoff,
+        screen_date=ftse_screen,
+    )
+    by_market = {FTSE_MARKET: ftse_summary}
+    names_by_market = {FTSE_MARKET: ftse_names}
+    scored_library: list[str] = []
+    not_scored: list[dict[str, str]] = []
+
+    status_path = Path(market_status_path)
+    if status_path.is_file():
+        try:
+            status = _read_json(status_path)
+        except (OSError, ValueError, TypeError, json.JSONDecodeError):
+            status = {}
+            not_scored.append({"market": "*", "reason": "market_status_unreadable"})
+        graduated, skipped = _graduated_library_markets(status if isinstance(status, dict) else {})
+        not_scored.extend(skipped)
+        root = Path(library_root)
+        for market in dict.fromkeys(graduated):
+            market_dir = root / "markets" / market
+            signals = market_dir / "screen" / "latest_signals.csv"
+            if not signals.is_file():
+                not_scored.append({"market": market, "reason": "missing_screen"})
+                continue
+            screen_date = _screen_date_from_market(market_dir)
+            if screen_date is None:
+                not_scored.append({"market": market, "reason": "missing_screen_date"})
+                continue
+            try:
+                library_members = _read_signal_rows(signals)
+            except (OSError, UnicodeDecodeError, csv.Error):
+                not_scored.append({"market": market, "reason": "unreadable_screen"})
+                continue
+            cutoff = _decision_date(screen_date, as_of, decline_payload)
+            library_charts = _load_chart_cache(
+                Path(charts_dir),
+                [str(row.get("ticker") or "").strip() for row in library_members],
+                chart_cache,
+            )
+            market_sectors, market_names, market_summary, market_labels = _project_market(
+                market=market,
+                members=library_members,
+                charts=library_charts,
+                decline_payload=decline_payload,
+                cutoff=cutoff,
+                screen_date=screen_date,
+            )
+            sectors.update(market_sectors)
+            names_by_market[market] = market_names
+            by_market[market] = market_summary
+            label_rows.extend(market_labels)
+            scored_library.append(market)
+    else:
+        not_scored.append({"market": "*", "reason": "market_status_missing"})
+
     payload = {
         "schema_version": SCHEMA_VERSION,
         "generated_at": datetime.now(UTC).isoformat(),
-        "as_of": cutoff.isoformat(),
+        "as_of": ftse_cutoff.isoformat(),
         "observe_only": True,
         "influences_live": False,
         "strategy_part": "3. Sector sound",
         "universe": {
-            "included": ["ftse350"],
-            "admitted_library_markets": "not_scored_v0_incomparable_earnings_inputs",
+            "included": [FTSE_MARKET, *scored_library],
+            "admitted_library_markets": scored_library,
+            "not_scored": not_scored,
         },
-        "summary": {
-            "sectors": len(sectors),
-            **verdict_counts,
-            "buy_tier_names": buy_tier_names,
-            "buy_tier_in_headwind_sector": buy_tier_in_headwind,
-            "buy_tier_sectors": sum(1 for row in sectors.values() if row["buy_tier_members"]),
-            "buy_tier_sectors_insufficient_data": sum(
-                1
-                for row in sectors.values()
-                if row["buy_tier_members"] and row["verdict"] == "insufficient_data"
-            ),
-            "report_names": len(members),
-            "names_with_chart_file": len(charts),
-            "chart_file_coverage_share": round(len(charts) / len(members), 6) if members else 0.0,
-            "operating_decline_store_available": decline_payload is not None,
-        },
+        "summary": _overall_summary(
+            by_market,
+            decline_available=decline_payload is not None,
+        ),
         "sectors": sectors,
-        "names": names,
+        "names": ftse_names,
+        "names_by_market": names_by_market,
     }
     if persist:
         path = Path(store_path)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        append_sector_labels(Path(label_history_path), label_rows)
     return payload
+
+
+def _headwind_label(key: str, row: dict[str, Any]) -> str:
+    market = str(row.get("market") or "")
+    sector = str(row.get("sector") or key)
+    if market and market != FTSE_MARKET:
+        return f"{market}:{sector}"
+    return sector
 
 
 def ops_findings_from_sector_headwind_gate(payload: dict[str, Any]) -> list[dict[str, Any]]:
     """Map the observe store to non-auto-fixable ops-monitor findings."""
     summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
     sectors = payload.get("sectors") if isinstance(payload.get("sectors"), dict) else {}
-    headwinds = sorted(
-        row.get("sector") or key
+    ftse_headwinds = sorted(
+        _headwind_label(key, row)
         for key, row in sectors.items()
-        if isinstance(row, dict) and row.get("verdict") == "headwind"
+        if isinstance(row, dict)
+        and row.get("verdict") == "headwind"
+        and str(row.get("market") or FTSE_MARKET) == FTSE_MARKET
     )
+    library_headwinds = sorted(
+        _headwind_label(key, row)
+        for key, row in sectors.items()
+        if isinstance(row, dict)
+        and row.get("verdict") == "headwind"
+        and str(row.get("market") or "") not in {"", FTSE_MARKET}
+    )
+    named_headwinds = ftse_headwinds + library_headwinds[:12]
+    extra_headwinds = max(0, len(library_headwinds) - 12)
+    headwind_text = ", ".join(named_headwinds) or "none"
+    if extra_headwinds:
+        headwind_text += f", and {extra_headwinds} more library sectors"
     findings = [
         {
             "severity": "info",
             "category": "research",
             "title": FINDING_TITLE,
             "summary": (
-                f"{summary.get('sectors', 0)} sectors: sound={summary.get('sound', 0)}, "
+                f"{summary.get('markets', 1)} markets, {summary.get('sectors', 0)} sectors: "
+                f"sound={summary.get('sound', 0)}, "
                 f"headwind={summary.get('headwind', 0)}, "
                 f"insufficient_data={summary.get('insufficient_data', 0)}; "
-                f"headwind sectors={', '.join(headwinds) or 'none'}; "
+                f"headwind sectors={headwind_text}; "
                 f"buy-tier names in headwind sectors="
                 f"{summary.get('buy_tier_in_headwind_sector', 0)}. "
                 "Observe-only; influences_live=false; no book or knob edits."
@@ -583,23 +1065,35 @@ def ops_findings_from_sector_headwind_gate(payload: dict[str, Any]) -> list[dict
         }
     ]
     gaps = sorted(
-        row.get("sector") or key
+        str(row.get("sector") or key)
         for key, row in sectors.items()
         if isinstance(row, dict)
         and row.get("verdict") == "insufficient_data"
         and row.get("buy_tier_members")
+        and str(row.get("market") or FTSE_MARKET) == FTSE_MARKET
     )
-    if gaps:
+    mostly = _mostly_insufficient_library_markets(sectors)
+    if gaps or mostly:
+        parts: list[str] = []
+        if gaps:
+            parts.append(
+                "Buy-tier sectors lack enough point-in-time gate data: " + ", ".join(gaps) + "."
+            )
+        if mostly:
+            parts.append(
+                "Library markets whose buy-tier sectors are mostly insufficient_data: "
+                + ", ".join(mostly)
+                + "."
+            )
+        parts.append(
+            "Fail closed; observe-only; no automated ingest, book, signal, or knob action."
+        )
         findings.append(
             {
                 "severity": "warn",
                 "category": "research",
                 "title": COVERAGE_GAP_TITLE,
-                "summary": (
-                    "Buy-tier sectors lack enough point-in-time gate data: "
-                    f"{', '.join(gaps)}. Fail closed; observe-only; no automated ingest, "
-                    "book, signal, or knob action."
-                ),
+                "summary": " ".join(parts),
                 "auto_fixable": False,
             }
         )
