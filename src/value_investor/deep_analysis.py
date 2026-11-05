@@ -8,6 +8,7 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
+from value_investor.agent_usage import prompt_and_record
 from value_investor.data_quality import MIN_QUALITY_FOR_ANALYSIS
 from value_investor.summary import CompanyReport
 
@@ -119,6 +120,7 @@ def run_deep_analysis(
     model: str = "composer-2.5",
     top_n: int = 5,
     cwd: str | None = None,
+    pool: str | None = None,
 ) -> DeepAnalysis:
     """Run Cursor agent deep analysis on top screening candidates."""
     import os
@@ -140,13 +142,17 @@ def run_deep_analysis(
     write_json(payload_path, payload, compact=True)
 
     try:
-        agent_result = Agent.prompt(
+        agent_result = prompt_and_record(
             _build_deep_analysis_prompt(payload_path.resolve()),
             AgentOptions(
                 api_key=api_key,
                 model=model,
                 local=LocalAgentOptions(cwd=cwd or os.getcwd()),
             ),
+            job="deep_analysis",
+            model=model,
+            pool=pool,
+            agent_cls=Agent,
         )
     except CursorAgentError as err:
         raise RuntimeError(f"Agent startup failed: {err.message}") from err

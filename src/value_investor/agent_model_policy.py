@@ -191,6 +191,7 @@ def default_policy() -> dict[str, Any]:
             "cycle_id": None,
             "weekly_ops_cap_usd": DEFAULT_WEEKLY_OPS_CAP_USD,
             "weekly_ops_plan_credit_share_cap": DEFAULT_WEEKLY_OPS_PLAN_CREDIT_SHARE_CAP,
+            "token_usage_weekly_warning_raw_usd": None,
             "enforce_weekly_ops_cap": True,
             "estimated_spend_weekly_ops_usd_this_week": 0.0,
             "note": (
@@ -200,6 +201,8 @@ def default_policy() -> dict[str, Any]:
                 "weekly_ops_plan_credit_share_cap of plan_monthly_usd "
                 "(default 15%) is a warning on estimated weekly_ops spend, "
                 "not a hard cap — included plan credit is not visible to the API. "
+                "token_usage_weekly_warning_raw_usd is null while real token "
+                "usage is measured; the estimated-USD cap stays the hard gate. "
                 "Ad-hoc depth passes use ladder.spend_since_checkpoint_usd. "
                 "Spend is estimated from agent runs — Cursor does not expose "
                 "remaining credits."
@@ -441,6 +444,11 @@ def normalize_budget(budget: dict[str, Any] | None) -> dict[str, Any]:
     else:
         share = max(0.0, min(1.0, float(raw_share)))
     budget["weekly_ops_plan_credit_share_cap"] = share
+    raw_token_warning = budget.get("token_usage_weekly_warning_raw_usd")
+    if raw_token_warning is None or raw_token_warning == "":
+        budget["token_usage_weekly_warning_raw_usd"] = None
+    else:
+        budget["token_usage_weekly_warning_raw_usd"] = round(max(0.0, float(raw_token_warning)), 4)
     if "enforce_weekly_ops_cap" not in budget:
         budget["enforce_weekly_ops_cap"] = True
     budget["estimated_spend_weekly_ops_usd_this_week"] = round(

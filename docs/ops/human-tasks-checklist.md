@@ -104,6 +104,7 @@ Raw `summary.recommend` (including acked overlays and capacity `ana-*` rows) is 
 | Follow **unified ops review cadence** (weekly → monthly → quarterly) | Human | [ops-review-cadence.md](ops-review-cadence.md#sequence) |
 | **Horizon scan** — weeder drops near-dups; triage remaining fragments | Human | [horizon-scan.md](horizon-scan.md#when-it-runs) |
 | Review **euro_depth filing/memo parity** vs FTSE before AI-gate / Phase 3 | Human | [market-sharded-learning.md](market-sharded-learning.md#depth-first-eu-pilot-aug-2026) |
+| **Calibrate token-usage warning** — after 2–3 weeks of measuring, compare week raw cost with the Cursor usage page each plan cycle and set `token_usage_weekly_warning_raw_usd` (leave null until then; estimated-USD cap stays) | Human | [agent-token-usage.md](agent-token-usage.md#calibration) |
 | Review **cycle-end Cursor surplus** — assess unused Ultra fraction, apply a 25% provisional weekly_ops bump (15% of plan credit / week is a warning on estimated USD, not a hard cap), keep or revert at the next cycle. Do not raise rememo daily caps or offline memo density from leftover credit | Human | [cycle-budget-surplus.md](cycle-budget-surplus.md#human-gate) |
 | Review **common PR fix-request reasons** (`ftse-project-traffic common-issues`) — fix recurring CI / merge-conflict root causes | Human | [project-traffic.md](project-traffic.md#pr-fix-occasion-log) |
 

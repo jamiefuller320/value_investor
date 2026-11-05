@@ -17,6 +17,7 @@ LIBRARY_INGEST_ARTIFACT_PATHS=(
   docs/data/ingest_gap_closure_runs.json
   docs/data/ingest_deviations.json
   docs/data/market_status.json
+  docs/data/agent_usage_log.jsonl
 )
 
 git_clean_state() {

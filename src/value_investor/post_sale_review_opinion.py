@@ -869,6 +869,7 @@ def _default_llm_complete(prompt: str) -> str:
         api_key=api_key,
         model=model,
         cwd=None,
+        job="post_sale_review_opinion",
     )
     return text
 

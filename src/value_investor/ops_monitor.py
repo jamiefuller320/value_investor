@@ -1395,6 +1395,35 @@ def check_automation_waste(
     return findings
 
 
+def check_agent_token_usage() -> list[OpsFinding]:
+    """Real Cursor token usage. Observe-only; the estimated-USD cap stays the hard gate."""
+    from value_investor.agent_usage_report import collect_token_usage_report
+
+    try:
+        _report, rows, _backfill = collect_token_usage_report(backfill=None)
+    except Exception as exc:
+        logger.exception("agent token usage check failed")
+        return [
+            OpsFinding(
+                severity="warn",
+                category="budget",
+                title="Agent token usage check failed",
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(row["severity"]),
+            category=str(row["category"]),
+            title=str(row["title"]),
+            summary=str(row["summary"]),
+            auto_fixable=False,
+        )
+        for row in rows
+    ]
+
+
 def check_ops_budget() -> list[OpsFinding]:
     status = weekly_ops_budget_status()
     if not status:
@@ -4826,6 +4855,7 @@ def collect_ops_findings(
     findings.extend(check_ingest_health_log(health_log_path))
     findings.extend(check_latest_bundle(latest_path))
     findings.extend(check_ops_budget())
+    findings.extend(check_agent_token_usage())
     findings.extend(check_memo_rememo_backlog())
     findings.extend(check_buy_tier_flip_lag(latest_path=latest_path))
     findings.extend(check_decision_input_inventory(latest_path=latest_path))

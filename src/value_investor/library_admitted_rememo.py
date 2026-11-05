@@ -377,6 +377,7 @@ def run_admitted_rememo_pass(
                 force_initial=True,
                 run_at=now,
                 market=dest_market,
+                spend_pool=SPEND_POOL_WEEKLY_OPS,
             )
             mq = doc.memo_quality or score_research_sources(source_counts=doc.source_counts)
             key = f"{dest_market}:{ticker}"

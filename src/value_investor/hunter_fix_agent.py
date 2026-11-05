@@ -14,6 +14,7 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
+from value_investor.agent_usage import prompt_and_record
 from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
     EngineeringTask,
@@ -447,13 +448,16 @@ def run_hunter_fix_agent(
     agent_id: str | None = None
     agent_text = ""
     try:
-        agent_result = Agent.prompt(
+        agent_result = prompt_and_record(
             prompt,
             AgentOptions(
                 api_key=api_key,
                 model=model,
                 local=LocalAgentOptions(cwd=cwd or os.getcwd()),
             ),
+            job="hunter_fix",
+            model=model,
+            agent_cls=Agent,
         )
         agent_id = agent_result.id
         if agent_result.status == "error":

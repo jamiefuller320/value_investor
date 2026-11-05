@@ -349,6 +349,7 @@ def run_research_for_strong_buys(
     alumni_cap: int = DEFAULT_RESEARCH_ALUMNI_CAP,
     market: str | None = None,
     director_shadow: bool = True,
+    spend_pool: str | None = None,
 ) -> ResearchSummary:
     """
     Create or update per-ticker research memos.
@@ -406,6 +407,7 @@ def run_research_for_strong_buys(
                 force_initial=force_initial and report.ticker not in alumni_tickers,
                 run_at=run_at,
                 market=market,
+                spend_pool=spend_pool,
             )
             summary.documents.append(doc)
             if action == "created":
@@ -447,6 +449,7 @@ def _process_ticker(
     force_initial: bool,
     run_at: datetime | None,
     market: str | None = None,
+    spend_pool: str | None = None,
 ) -> tuple[ResearchDocument, str]:
     sources_dir = store.sources_dir(report.ticker)
     existing = None if force_initial else store.load(report.ticker)
@@ -476,6 +479,7 @@ def _process_ticker(
             api_key=api_key,
             model=model,
             cwd=cwd,
+            pool=spend_pool,
         )
         filings_summary = source_meta.get("filings_summary") or {}
         doc.source_counts = {
@@ -510,6 +514,7 @@ def _process_ticker(
         model=model,
         cwd=cwd,
         screen_signal=report.signal,
+        pool=spend_pool,
     )
     updated = replace(updated, signal=report.signal)
     filings_summary = source_meta.get("filings_summary") or {}

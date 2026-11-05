@@ -311,6 +311,7 @@ def run_phase_b_catchup_pass(
                 force_initial=False,
                 run_at=run_at,
                 market=market,
+                spend_pool=SPEND_POOL_WEEKLY_OPS,
             )
             if doc.mode not in STRUCTURED_VERDICT_MODES:
                 summary.errors.append(

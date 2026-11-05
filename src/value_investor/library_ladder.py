@@ -662,6 +662,7 @@ def run_library_ladder(
                         continue_alumni=False,
                         force_initial=bool(dest["force_initial"]),
                         market=dest_market,
+                        spend_pool=spend_pool,
                     )
                     memo_executed = int(summary.created) + int(summary.updated)
                     executed += memo_executed

@@ -442,6 +442,7 @@ def default_memo_runner(
         force_initial=not store.exists(ticker),
         run_at=datetime.now(UTC),
         market=run_market,
+        spend_pool="weekly_ops",
     )
     return {
         "verdict": getattr(doc, "research_verdict", None),

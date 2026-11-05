@@ -9,6 +9,7 @@ MAX_ATTEMPTS="${MAX_ATTEMPTS:-4}"
 # stash overlays cannot resurrect ops_status / automation from an older tip.
 REMEMO_ARTIFACT_PATHS=(
   docs/data/weekday_memo_rememo_summary.json
+  docs/data/agent_usage_log.jsonl
   docs/data/latest.json
   docs/data/research
   docs/research
@@ -26,6 +27,7 @@ stage_rememo_artifacts() {
   local path
   for path in \
     docs/data/weekday_memo_rememo_summary.json \
+    docs/data/agent_usage_log.jsonl \
     docs/data/latest.json \
     docs/data/research \
     docs/research

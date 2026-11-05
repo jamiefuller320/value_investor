@@ -680,6 +680,7 @@ def run_weekday_memo_rememo_pass(
                 force_initial=True,
                 run_at=run_at,
                 market=market,
+                spend_pool=SPEND_POOL_WEEKLY_OPS,
             )
             mq = doc.memo_quality or score_research_sources(source_counts=doc.source_counts)
             summary.rememoed.append(target.ticker)

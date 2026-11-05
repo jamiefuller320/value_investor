@@ -304,6 +304,8 @@ def _run_variant(
         api_key=api_key,
         model=model_id,
         cwd=cwd,
+        job="model_ab",
+        pool=SPEND_POOL_AD_HOC,
     )
     doc.source_counts = dict(source_counts)
     rubric = score_memo_rubric(doc, inventory=inventory)
