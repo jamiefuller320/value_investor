@@ -1,27 +1,19 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-04T16:39:36.760232+00:00
+Track: `buy_tier_level` · updated 2026-11-05T15:21:21.945402+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **8** / 34 (24% count, 20% NAV)
+- Losers: **8** / 33 (24% count, 22% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
 
-### SNDK — weakening / watch_review (-24.3%)
+### SNDK — weakening / watch_review (-18.0%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes
-
-### MU — intact / watch_review (-17.7%)
-- deep drawdown (-17.7%) — re-check facts; thesis still intact
-- price drawdown alone does not invalidate value thesis
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
 
 ### PCAR — weakening / watch_review (-13.8%)
 - research verdict neutral
@@ -43,6 +35,14 @@ Track: `buy_tier_level` · updated 2026-11-04T16:39:36.760232+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 52%
+
+### MU — intact / hold_tolerate (-13.0%)
+- price drawdown alone does not invalidate value thesis
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 86%
 
 ### WDC — intact / hold_tolerate (-12.2%)
 - price drawdown alone does not invalidate value thesis
@@ -105,7 +105,7 @@ Track: `buy_tier_level` · updated 2026-11-04T16:39:36.760232+00:00
 - data_quality 1.00
 - conviction 44%
 
-### HON — weakening / watch_review (-1.3%)
+### HON — weakening / watch_review (-0.9%)
 - research verdict neutral
 - still strong_buy
 - cheapness family still passes
@@ -225,13 +225,6 @@ Track: `buy_tier_level` · updated 2026-11-04T16:39:36.760232+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 82%
-
-### GEHC — intact / hold_tolerate (+20.6%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 79%
 
 ### AMGN — weakening / watch_review (+23.8%)
 - cheapness family no longer passes

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-04T16:39:15.005193+00:00
+Track: `buy_tier_level` · updated 2026-11-05T15:20:49.415207+00:00
 
 ## Portfolio loser feedback
 
@@ -10,12 +10,15 @@ Track: `buy_tier_level` · updated 2026-11-04T16:39:15.005193+00:00
 
 ## Holding reviews
 
-### K.TO — weakening / watch_review (-26.2%)
+### CVE.TO — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### K.TO — weakening / watch_review (-23.6%)
 - research verdict neutral
 - still strong_buy
 - cheapness family still passes
 
-### ABX.TO — intact / hold_tolerate (-11.1%)
+### ABX.TO — intact / hold_tolerate (-9.1%)
 - price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
@@ -31,7 +34,7 @@ Track: `buy_tier_level` · updated 2026-11-04T16:39:15.005193+00:00
 - data_quality 1.00
 - conviction 75%
 
-### MG.TO — weakening / watch_review (-2.5%)
+### MG.TO — weakening / watch_review (-2.0%)
 - research verdict neutral
 - still strong_buy
 - cheapness family still passes
@@ -54,26 +57,19 @@ Track: `buy_tier_level` · updated 2026-11-04T16:39:15.005193+00:00
 - data_quality 0.95
 - conviction 51%
 
-### CNQ.TO — weakening / watch_review (+1.5%)
+### CNQ.TO — weakening / watch_review (+1.2%)
 - cheapness family no longer passes
 - still buy
 - research accumulate
 
-### L.TO — intact / hold_tolerate (+2.9%)
+### L.TO — intact / hold_tolerate (+2.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 62%
 
-### CVE.TO — intact / hold_tolerate (+3.6%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 66%
-
-### WSP.TO — intact / hold_tolerate (+5.2%)
+### WSP.TO — intact / hold_tolerate (+4.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
