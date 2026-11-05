@@ -20,7 +20,11 @@ Close real bind gaps on names Investment uses, in **serve order**:
 Bind fields (F9 per-name): `key_filing_bodies`, `fcf_basis_bound`, `overlay_bound`,
 `memo_recent` (≤21d default). Platform inventory
 (`docs/data/decision_input_inventory.json`) holds absolute facts — Investment
-reads eligibility and may negotiate; it does not own the join.
+reads eligibility and may negotiate; it does not own the join. Graduated
+library buy-tier names are scored in the separate observe store
+`docs/data/library_decision_input_inventory.json`
+([decision-input-inventory.md](decision-input-inventory.md#library-buy-tier-names)).
+That finding does not rememo or ingest, and it does not change the FTSE inventory.
 
 ### Sealed-strategy launch queue
 

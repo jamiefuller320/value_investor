@@ -56,7 +56,8 @@ lane change and readiness gate (see N152 / P1 pin rules).
   a combined **Lab learning progress** strip (fair-cost primary + drawdown /
   concurrence×outcome / outcome-gap companions; `influences_live=false`).
 - **L460** — raw instrument stores (`buy_tier_flip_lag.json`,
-  `decision_input_inventory.json`, `p1_first_run_pin.json`,
+  `decision_input_inventory.json`, `library_decision_input_inventory.json`,
+  `p1_first_run_pin.json`,
   `universe_filing_archive_miss_rate.json`) in
   ops-monitor `GHA_COMMIT_OPTIONAL` so
   daily cohort history persists in git (email-report excludes them so a broad
@@ -470,6 +471,7 @@ Both checks are **observe / warn-only** (`auto_fixable=False`). They refresh a
 runner-local store JSON and emit an ops finding when the warn cohort is material.
 Manual drill-down: `ftse-ingest-audit --flip-lag` /
 `ftse-ingest-audit --decision-inputs` /
+`ftse-ingest-audit --library-decision-inputs` /
 `ftse-ingest-audit --archive-miss-rate` /
 `ftse-ingest-audit --p1-first-run` (mutually exclusive) /
 `ftse-universe-archive-pack` (archive pack gate + bottleneck summary).
@@ -479,6 +481,7 @@ They do **not** deepen ingest or rememo.
 |-------|---------------|---------------|----------------|--------|
 | `check_buy_tier_flip_lag` | **New buy-tier not yet usable** | Path-incomplete ≥24h cohort non-empty (FTSE live ∪ admitted; schema v2). Library rows treat a sibling `research_home_market` as `has_memo` (observe-only; no auto-fix, no memo copy). FTSE live stays on `docs/data/research`. | `docs/data/buy_tier_flip_lag.json` | Live on main |
 | `check_decision_input_inventory` | **FTSE decision-input utilization gap** | Dominant bind gap count ≥3 on FTSE holdings ∪ buy-tier (else quiet / `P1 green-enough`) | `docs/data/decision_input_inventory.json` | Live on main |
+| `check_library_decision_input_inventory` | **Library decision-input binds (observe)** | Summary each refresh (info). Counts graduated-market buy-tier names, how many have all four F9-B binds, and the gap count for each bind. `auto_fixable=false`. Does not rememo, ingest, or open an engineering task. See [decision-input-inventory.md](decision-input-inventory.md#library-buy-tier-names) | `docs/data/library_decision_input_inventory.json` | Live |
 | `check_p1_first_run_pin` | **P1 first-run: EPS-from-body missing after Sunday screen** / **… slim freeze missing after Monday paper-auto** | After the relevant post-#953 run, EPS-from-body still 0/n on holdings ∪ buy-tier reports or `rebalance_log` slim. Auto-oks when a count lands. Empty/pre-Sunday is **not** a warn. Window 10d from #953 merge then expires (no forever babysit). Not a soak platform or utilization dashboard | `docs/data/p1_first_run_pin.json` | First-run pin |
 | `check_universe_filing_archive_miss_rate` | **Universe archive body-miss rate elevated** | Flip-lag proxy miss rate elevated with open body gaps — observe-only outcome (not a cold-store start gate; N180/N181) | `docs/data/universe_filing_archive_miss_rate.json` | Scaffold live |
 | `check_universe_filing_archive_pack_bottleneck` | **Universe archive pack bottleneck review stale** / **… processing bottleneck** | Bottleneck review missing/stale (>36h) or dominant stage / errors on an allowed dry pass; suspend/quiet_only outcomes do **not** warn. `head_needs_fat_slot` is not an archive suspend | `docs/data/universe_filing_archive_bottleneck_review.json` (owned by `universe-filing-archive-pack.yml` @ 22:00 UTC nightly) | Gated dry lane live |
