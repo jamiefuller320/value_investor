@@ -1,14 +1,18 @@
-"""Append-only ledger of real Cursor SDK agent token usage.
+"""Per-process shards of real Cursor SDK agent token usage.
 
 ``record_agent_usage`` calls ``agent.get_usage`` after a run finishes. A
 recording failure is logged and stored as ``usage_error``; it never changes
 the caller's result. The helper is a no-op under pytest (unless
 ``FTSE_AGENT_USAGE_RECORD=1``) and when the object has no ``get_usage``.
 
-Cost is server-derived and eventually consistent. ``cost_pending`` stays true
-until ``raw_cost_cents`` / ``charged_cents`` arrive. Backfill re-reads pending
-rows with ``Agent.resume`` plus ``get_usage``. Both are unary RPCs: resume
-returns a handle and does not call ``send``; ``GetUsage`` is read-only
+Each process appends to its own new file
+``docs/data/agent_usage/<YYYY-MM-DD>/<job>-<id>.jsonl``. Shards are never
+rewritten, so reset-and-overlay, rebase, and merge cannot drop another job's
+rows. Cost lag is filled into ``docs/data/agent_usage_cost_backfill.json``
+(ops-monitor only), not into the shards.
+
+``Agent.resume`` plus ``get_usage`` are unary RPCs: resume returns a handle
+and does not call ``send``; ``GetUsage`` is read-only
 (``cursor_sdk/_agent.py`` ``Agent.get_usage``, ``cursor_sdk/_client.py``
 ``Client.resume_agent``).
 """
@@ -17,9 +21,11 @@ from __future__ import annotations
 
 import argparse
 import fcntl
+import hashlib
 import json
 import logging
 import os
+import tempfile
 import uuid
 from collections.abc import Iterator, Mapping
 from contextlib import contextmanager
@@ -29,8 +35,16 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_LOG_PATH = Path("docs/data/agent_usage_log.jsonl")
+DEFAULT_SHARD_DIR = Path("docs/data/agent_usage")
+DEFAULT_LEGACY_LOG_PATH = Path("docs/data/agent_usage_log.jsonl")
+DEFAULT_BACKFILL_PATH = Path("docs/data/agent_usage_cost_backfill.json")
+# Kept so older callers that passed the single log still compile. New writes
+# go to a shard; the report still reads this file when it exists.
+DEFAULT_LOG_PATH = DEFAULT_LEGACY_LOG_PATH
 BACKFILL_MAX_AGE_DAYS = 7
+
+_PROCESS_SHARD_ID: str | None = None
+_shard_paths: dict[str, Path] = {}
 
 _TOKEN_FIELDS = (
     "input_tokens",
@@ -65,12 +79,66 @@ def _backfill_enabled() -> bool:
 
 
 def _lock_path(log_path: Path) -> Path:
-    return log_path.with_name(log_path.name + ".lock")
+    """Lock beside the file in the system temp dir so git never commits it."""
+    digest = hashlib.sha256(str(log_path.resolve()).encode()).hexdigest()[:16]
+    return Path(tempfile.gettempdir()) / f"ftse-agent-usage-{digest}.lock"
+
+
+def reset_process_shard_state() -> None:
+    """Forget the process shard id. Tests use this; production calls it never."""
+    global _PROCESS_SHARD_ID
+    _PROCESS_SHARD_ID = None
+    _shard_paths.clear()
+
+
+def process_shard_id() -> str:
+    """Id unique to this process.
+
+    GitHub Actions: ``GITHUB_RUN_ID-GITHUB_RUN_ATTEMPT-<pid>-<suffix>``.
+    Anywhere else: a uuid. The suffix keeps two processes in one job apart.
+    """
+    global _PROCESS_SHARD_ID
+    if _PROCESS_SHARD_ID is not None:
+        return _PROCESS_SHARD_ID
+    suffix = uuid.uuid4().hex[:8]
+    run_id = os.environ.get("GITHUB_RUN_ID", "").strip()
+    if run_id:
+        attempt = os.environ.get("GITHUB_RUN_ATTEMPT", "").strip() or "1"
+        _PROCESS_SHARD_ID = f"{run_id}-{attempt}-{os.getpid()}-{suffix}"
+    else:
+        _PROCESS_SHARD_ID = uuid.uuid4().hex
+    return _PROCESS_SHARD_ID
+
+
+def _safe_job_name(job: str) -> str:
+    cleaned = "".join(ch if ch.isalnum() or ch in "._-" else "_" for ch in (job or "").strip())
+    return cleaned or "job"
+
+
+def shard_path_for_job(
+    job: str,
+    *,
+    now: datetime | None = None,
+    shard_dir: Path | None = None,
+) -> Path:
+    """One new file per process per job. Threads in the process share it."""
+    root = Path(shard_dir) if shard_dir is not None else DEFAULT_SHARD_DIR
+    cache_key = f"{root}|{_safe_job_name(job)}"
+    cached = _shard_paths.get(cache_key)
+    if cached is not None:
+        return cached
+    moment = now or datetime.now(UTC)
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=UTC)
+    day = moment.astimezone(UTC).strftime("%Y-%m-%d")
+    path = root / day / f"{_safe_job_name(job)}-{process_shard_id()}.jsonl"
+    _shard_paths[cache_key] = path
+    return path
 
 
 @contextmanager
 def _exclusive_lock(log_path: Path) -> Iterator[None]:
-    """Serialize appends and rewrites so parallel jobs do not tear lines."""
+    """Serialize appends from threads in this process. Shards are not shared."""
     lock_path = _lock_path(log_path)
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     handle = open(lock_path, "a+", encoding="utf-8")
@@ -80,14 +148,6 @@ def _exclusive_lock(log_path: Path) -> Iterator[None]:
     finally:
         fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
         handle.close()
-
-
-def _write_lines_unlocked(path: Path, lines: list[str]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    payload = "".join(line if line.endswith("\n") else f"{line}\n" for line in lines)
-    temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
-    temporary.write_text(payload, encoding="utf-8")
-    os.replace(temporary, path)
 
 
 def _append_line_unlocked(path: Path, line: str) -> None:
@@ -307,7 +367,10 @@ def _record_agent_usage(
             if key not in row:
                 row[key] = value
 
-    path = Path(log_path) if log_path is not None else DEFAULT_LOG_PATH
+    if log_path is not None:
+        path = Path(log_path)
+    else:
+        path = shard_path_for_job(job)
     line = json.dumps(row, ensure_ascii=False, default=_json_default)
     with _exclusive_lock(path):
         _append_line_unlocked(path, line)
@@ -369,12 +432,15 @@ def parse_usage_timestamp(value: Any) -> datetime | None:
     return parsed.astimezone(UTC)
 
 
-def read_usage_rows(log_path: Path | None = None) -> list[dict[str, Any]]:
-    path = Path(log_path) if log_path is not None else DEFAULT_LOG_PATH
-    if not path.exists():
+def _read_raw_lines(path: Path) -> list[str]:
+    if not path.is_file():
         return []
+    return path.read_text(encoding="utf-8").splitlines()
+
+
+def _parse_jsonl_lines(lines: list[str]) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
-    for line in path.read_text(encoding="utf-8").splitlines():
+    for line in lines:
         if not line.strip():
             continue
         try:
@@ -386,10 +452,147 @@ def read_usage_rows(log_path: Path | None = None) -> list[dict[str, Any]]:
     return rows
 
 
-def _read_raw_lines(path: Path) -> list[str]:
-    if not path.exists():
-        return []
-    return path.read_text(encoding="utf-8").splitlines()
+def read_usage_rows(log_path: Path | None = None) -> list[dict[str, Any]]:
+    """Read one JSONL file. Does not apply the backfill map.
+
+    ``log_path`` defaults to the legacy single log. Shard directories are
+    read by ``load_ledger_rows``.
+    """
+    path = Path(log_path) if log_path is not None else DEFAULT_LEGACY_LOG_PATH
+    return _parse_jsonl_lines(_read_raw_lines(path))
+
+
+def usage_source_files(
+    log_path: Path | None = None,
+    *,
+    shard_dir: Path | None = None,
+) -> list[Path]:
+    """JSONL inputs for the report and backfill.
+
+    An explicit file is that file only (tests). An explicit directory is every
+    ``*.jsonl`` under it. The default is every shard plus the legacy log when
+    that file still exists.
+    """
+    if log_path is not None and Path(log_path).is_file():
+        return [Path(log_path)]
+    if log_path is not None and Path(log_path).is_dir():
+        root = Path(log_path)
+    else:
+        root = Path(shard_dir) if shard_dir is not None else DEFAULT_SHARD_DIR
+    files = (
+        sorted(item for item in root.rglob("*.jsonl") if item.is_file()) if root.is_dir() else []
+    )
+    legacy = DEFAULT_LEGACY_LOG_PATH
+    if legacy.is_file() and legacy.resolve() not in {item.resolve() for item in files}:
+        files.append(legacy)
+    return files
+
+
+def resolve_backfill_path(
+    backfill_path: Path | None = None,
+    log_path: Path | None = None,
+) -> Path:
+    if backfill_path is not None:
+        return Path(backfill_path)
+    if log_path is not None and Path(log_path).is_file():
+        return Path(log_path).parent / DEFAULT_BACKFILL_PATH.name
+    return DEFAULT_BACKFILL_PATH
+
+
+def load_backfill_map(path: Path | None = None) -> dict[str, dict[str, Any]]:
+    target = Path(path) if path is not None else DEFAULT_BACKFILL_PATH
+    if not target.is_file():
+        return {}
+    try:
+        payload = json.loads(target.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    if not isinstance(payload, dict):
+        return {}
+    rows = payload.get("by_row_id")
+    if not isinstance(rows, dict):
+        rows = {
+            key: value
+            for key, value in payload.items()
+            if key not in {"schema_version", "generated_at"} and isinstance(value, dict)
+        }
+    out: dict[str, dict[str, Any]] = {}
+    for key, value in rows.items():
+        if isinstance(value, dict):
+            out[str(key)] = value
+    return out
+
+
+def _backfill_entry_filled(entry: Mapping[str, Any] | None) -> bool:
+    if not entry or entry.get("error"):
+        return False
+    return entry.get("raw_cost_cents") is not None
+
+
+def apply_backfill_entry(row: Mapping[str, Any], entry: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Copy cost from the backfill map. The shard row is not modified on disk."""
+    copied = dict(row)
+    if not _backfill_entry_filled(entry):
+        return copied
+    assert entry is not None
+    copied["raw_cost_cents"] = entry.get("raw_cost_cents")
+    copied["charged_cents"] = entry.get("charged_cents")
+    copied["cost_pending"] = False
+    filled_at = entry.get("filled_at")
+    if filled_at:
+        copied["cost_backfilled_at"] = filled_at
+    return copied
+
+
+def dedupe_usage_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """One row per ``row_id``. A filled copy wins over a still-pending copy."""
+    order: list[str] = []
+    chosen: dict[str, dict[str, Any]] = {}
+    anonymous: list[dict[str, Any]] = []
+    for row in rows:
+        row_id = str(row.get("row_id") or "").strip()
+        if not row_id:
+            anonymous.append(row)
+            continue
+        previous = chosen.get(row_id)
+        if previous is None:
+            chosen[row_id] = row
+            order.append(row_id)
+            continue
+        if previous.get("cost_pending") and not row.get("cost_pending"):
+            chosen[row_id] = row
+    return [chosen[row_id] for row_id in order] + anonymous
+
+
+def load_ledger_rows(
+    log_path: Path | None = None,
+    *,
+    shard_dir: Path | None = None,
+    backfill_path: Path | None = None,
+) -> list[dict[str, Any]]:
+    """Read every shard (and the legacy log), apply the backfill map, dedupe."""
+    mapping = load_backfill_map(resolve_backfill_path(backfill_path, log_path))
+    rows: list[dict[str, Any]] = []
+    for path in usage_source_files(log_path, shard_dir=shard_dir):
+        for row in _parse_jsonl_lines(_read_raw_lines(path)):
+            row_id = str(row.get("row_id") or "")
+            rows.append(apply_backfill_entry(row, mapping.get(row_id)))
+    return dedupe_usage_rows(rows)
+
+
+def _write_backfill_map(path: Path, rows: dict[str, dict[str, Any]], *, now: datetime) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "schema_version": 1,
+        "generated_at": now.isoformat(),
+        "by_row_id": rows,
+    }
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    temporary.write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False, default=_json_default) + "\n",
+        encoding="utf-8",
+    )
+    os.replace(temporary, path)
 
 
 def _cost_from_usage_payload(agent_usage: Any, row: Mapping[str, Any]) -> Any:
@@ -408,44 +611,38 @@ def _cost_from_usage_payload(agent_usage: Any, row: Mapping[str, Any]) -> Any:
     return None
 
 
-def _apply_backfill(row: dict[str, Any], agent_usage: Any, *, now: datetime) -> bool:
-    cost = _cost_from_usage_payload(agent_usage, row)
+def _filled_entry(cost: Any, *, now: datetime) -> dict[str, Any] | None:
     raw_cost, charged, pending = _cost_payload(cost)
     if pending:
-        return False
-    row["raw_cost_cents"] = raw_cost
-    row["charged_cents"] = charged
-    row["cost_pending"] = False
-    row["cost_backfilled_at"] = now.isoformat()
-    if row.get("input_tokens") is None:
-        usage, _cost, usage_run_id = _select_usage(agent_usage, row.get("run_id"))
-        row.update(_token_payload(usage))
-        if usage_run_id and not row.get("usage_run_id"):
-            row["usage_run_id"] = usage_run_id
-        if row.get("usage_error") and row.get("total_tokens") is not None:
-            row["usage_error"] = None
-    return True
+        return None
+    return {
+        "raw_cost_cents": raw_cost,
+        "charged_cents": charged,
+        "filled_at": now.isoformat(),
+    }
 
 
 def backfill_pending_costs(
     *,
     log_path: Path | None = None,
+    shard_dir: Path | None = None,
+    backfill_path: Path | None = None,
     now: datetime | None = None,
     max_age_days: int = BACKFILL_MAX_AGE_DAYS,
     resume_agent: Any = None,
 ) -> dict[str, Any]:
     """Re-query cost for ``cost_pending`` rows younger than ``max_age_days``.
 
-    Uses ``Agent.resume(agent_id)`` then ``get_usage()`` and ``close()``.
-    Resume is ``ResumeAgent``, a unary that returns a handle and does not
-    call ``send``. ``get_usage`` is ``GetUsage``, a read-only unary. This
-    pass never sends a message. If resume fails, the row stays pending and
-    the error is reported.
+    Writes ``docs/data/agent_usage_cost_backfill.json`` only. Shard files are
+    not opened for write. Resume is ``ResumeAgent``, a unary that returns a
+    handle and does not call ``send``. ``get_usage`` is ``GetUsage``, a
+    read-only unary. This pass never sends a message. If resume fails, the
+    map stores an error and the shard row stays pending.
     """
     moment = now or datetime.now(UTC)
     if moment.tzinfo is None:
         moment = moment.replace(tzinfo=UTC)
-    path = Path(log_path) if log_path is not None else DEFAULT_LOG_PATH
+    dest = resolve_backfill_path(backfill_path, log_path)
     report: dict[str, Any] = {
         "queried_agents": 0,
         "updated_rows": 0,
@@ -456,47 +653,47 @@ def backfill_pending_costs(
         "skipped": False,
         "reason": None,
         "read_only": True,
+        "shards_unchanged": True,
+        "backfill_path": str(dest),
         "method": (
             "Agent.resume (ResumeAgent unary, no send) + "
-            "get_usage (GetUsage unary, read-only) + close"
+            "get_usage (GetUsage unary, read-only) + close; "
+            "cost is written to the backfill map, not the shards"
         ),
         "max_age_days": max_age_days,
     }
-    with _exclusive_lock(path):
-        raw_lines = _read_raw_lines(path)
+    sources = usage_source_files(log_path, shard_dir=shard_dir)
     pending_by_agent: dict[str, list[dict[str, Any]]] = {}
     max_age_seconds = float(max_age_days) * 86400.0
-    for line in raw_lines:
-        if not line.strip():
-            continue
-        try:
-            item = json.loads(line)
-        except json.JSONDecodeError:
-            continue
-        if not isinstance(item, dict):
-            continue
-        if not item.get("cost_pending"):
-            continue
-        stamp = parse_usage_timestamp(item.get("timestamp"))
-        if stamp is None:
-            report["still_pending"] += 1
-            continue
-        age = (moment - stamp).total_seconds()
-        if age >= max_age_seconds:
-            report["skipped_older_than_days"] += 1
-            continue
-        agent_id = str(item.get("agent_id") or "").strip()
-        if not agent_id:
-            report["skipped_no_agent_id"] += 1
-            report["still_pending"] += 1
-            continue
-        pending_by_agent.setdefault(agent_id, []).append(item)
+    existing = load_backfill_map(dest)
+    for path in sources:
+        for item in _parse_jsonl_lines(_read_raw_lines(path)):
+            if not item.get("cost_pending"):
+                continue
+            row_id = str(item.get("row_id") or "")
+            if row_id and _backfill_entry_filled(existing.get(row_id)):
+                continue
+            stamp = parse_usage_timestamp(item.get("timestamp"))
+            if stamp is None:
+                report["still_pending"] += 1
+                continue
+            age = (moment - stamp).total_seconds()
+            if age >= max_age_seconds:
+                report["skipped_older_than_days"] += 1
+                continue
+            agent_id = str(item.get("agent_id") or "").strip()
+            if not agent_id:
+                report["skipped_no_agent_id"] += 1
+                report["still_pending"] += 1
+                continue
+            pending_by_agent.setdefault(agent_id, []).append(item)
 
     if not pending_by_agent:
         report["reason"] = "no pending rows under the age bound"
         return report
 
-    if resume_agent is None:
+    resume = resume_agent
+    if resume is None:
         if not _backfill_enabled():
             report["skipped"] = True
             report["reason"] = (
@@ -506,20 +703,27 @@ def backfill_pending_costs(
             report["still_pending"] += sum(len(rows) for rows in pending_by_agent.values())
             return report
 
-        def resume_agent(agent_id: str) -> Any:
+        def _default_resume(agent_id: str) -> Any:
             from cursor_sdk import Agent
 
             return Agent.resume(agent_id)
+
+        resume = _default_resume
 
     updates: dict[str, dict[str, Any]] = {}
     for agent_id, rows in pending_by_agent.items():
         report["queried_agents"] += 1
         try:
-            agent = resume_agent(agent_id)
+            agent = resume(agent_id)
         except Exception as exc:
-            report["errors"].append({"agent_id": agent_id, "error": str(exc)[:500]})
+            message = str(exc)[:500]
+            report["errors"].append({"agent_id": agent_id, "error": message})
             report["still_pending"] += len(rows)
             logger.warning("usage backfill resume failed for %s: %s", agent_id, exc)
+            for row in rows:
+                row_id = str(row.get("row_id") or "")
+                if row_id:
+                    updates[row_id] = {"error": message}
             continue
         try:
             status, payload = _call_get_usage(agent, None)
@@ -534,80 +738,43 @@ def backfill_pending_costs(
             message = str(payload)[:500]
             report["errors"].append({"agent_id": agent_id, "error": message})
             report["still_pending"] += len(rows)
-            continue
-        for row in rows:
-            if _apply_backfill(row, payload, now=moment):
+            for row in rows:
                 row_id = str(row.get("row_id") or "")
                 if row_id:
-                    updates[row_id] = row
-                report["updated_rows"] += 1
-            else:
+                    updates[row_id] = {"error": message}
+            continue
+        for row in rows:
+            entry = _filled_entry(_cost_from_usage_payload(payload, row), now=moment)
+            row_id = str(row.get("row_id") or "")
+            if entry is None or not row_id:
                 report["still_pending"] += 1
+                continue
+            updates[row_id] = entry
+            report["updated_rows"] += 1
 
     if not updates:
         return report
 
-    with _exclusive_lock(path):
-        current = _read_raw_lines(path)
-        rewritten: list[str] = []
-        for line in current:
-            if not line.strip():
-                rewritten.append(line)
-                continue
-            try:
-                item = json.loads(line)
-            except json.JSONDecodeError:
-                rewritten.append(line)
-                continue
-            if not isinstance(item, dict):
-                rewritten.append(line)
-                continue
-            row_id = str(item.get("row_id") or "")
-            replacement = updates.get(row_id)
-            if replacement is None or not item.get("cost_pending"):
-                rewritten.append(line)
-                continue
-            rewritten.append(json.dumps(replacement, ensure_ascii=False, default=_json_default))
-        _write_lines_unlocked(path, rewritten)
-    return report
-
-
-def merge_snapshot_into(dest: Path, snapshot: Path) -> int:
-    """Append snapshot lines that are not already in ``dest``.
-
-    Used when a job commits the ledger onto a newer main that another job
-    already extended. Returns the number of lines appended.
-    """
-    snap_lines = [
-        line for line in snapshot.read_text(encoding="utf-8").splitlines() if line.strip()
-    ]
     with _exclusive_lock(dest):
-        existing = [line for line in _read_raw_lines(dest) if line.strip()]
-        have = set(existing)
-        added = [line for line in snap_lines if line not in have]
-        if not added:
-            return 0
-        _write_lines_unlocked(dest, existing + added)
-        return len(added)
+        # Re-read so a concurrent ops-monitor writer is not dropped. Shards
+        # are not locked and are not written.
+        current = load_backfill_map(dest)
+        current.update(updates)
+        _write_backfill_map(dest, current, now=moment)
+    return report
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Cursor agent token-usage ledger helpers")
     sub = parser.add_subparsers(dest="command", required=True)
-    merge = sub.add_parser(
-        "merge-snapshot",
-        help="Append snapshot JSONL lines missing from the destination log",
+    fill = sub.add_parser(
+        "backfill",
+        help="Re-query pending cost into the backfill map (does not edit shards)",
     )
-    merge.add_argument("--snapshot", type=Path, required=True)
-    merge.add_argument("--dest", type=Path, required=True)
-    fill = sub.add_parser("backfill", help="Re-query pending cost (read-only get_usage)")
-    fill.add_argument("--log", type=Path, default=DEFAULT_LOG_PATH)
+    fill.add_argument("--shard-dir", type=Path, default=DEFAULT_SHARD_DIR)
+    fill.add_argument("--backfill", type=Path, default=DEFAULT_BACKFILL_PATH)
     args = parser.parse_args(argv)
-    if args.command == "merge-snapshot":
-        added = merge_snapshot_into(args.dest, args.snapshot)
-        print(json.dumps({"appended": added}))
-        return 0
-    report = backfill_pending_costs(log_path=args.log)
+    report = backfill_pending_costs(shard_dir=args.shard_dir, backfill_path=args.backfill)
     print(json.dumps(report, indent=2, default=_json_default))
     return 0
 

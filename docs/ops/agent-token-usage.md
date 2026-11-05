@@ -8,7 +8,20 @@ cash does not correlate with the plan token allowance.
 
 ## What is logged
 
-Each finished run appends one JSON line to `docs/data/agent_usage_log.jsonl`:
+Each process writes a **new shard** and never edits an existing one:
+
+`docs/data/agent_usage/<YYYY-MM-DD>/<job>-<id>.jsonl`
+
+`<id>` is `GITHUB_RUN_ID-GITHUB_RUN_ATTEMPT-<pid>-<suffix>` on Actions, and a
+uuid otherwise. Threads in one process share that file under a lock in the
+temp dir (the lock file is not committed). Two jobs therefore never append to
+the same file, so reset-and-overlay, rebase, and merge cannot drop or tear
+another job's rows.
+
+A legacy `docs/data/agent_usage_log.jsonl`, if it is still present, is read by
+the roll-up and not written.
+
+Each finished run appends one JSON line:
 
 | Field | Meaning |
 |-------|---------|
@@ -42,18 +55,26 @@ threshold is in **raw USD** (`raw_cost_cents / 100`).
 
 ## Lag and backfill
 
-Cost is eventually consistent and can lag after a run ends. The row is written
-immediately with `cost_pending: true` when cost is null.
+Cost is eventually consistent and can lag after a run ends. The shard row is
+written immediately with `cost_pending: true` when cost is null. Shards stay
+that way. Backfill does not edit them.
 
 Daily ops-monitor calls `backfill_pending_costs` for pending rows younger than
-7 days. The pass resumes the agent and calls `get_usage`:
+7 days and writes `docs/data/agent_usage_cost_backfill.json` only. That file is
+a map `by_row_id` → `{raw_cost_cents, charged_cents, filled_at}` or
+`{error}`. Ops-monitor owns the file (and the weekly roll-up) so the commit
+helper does not skip it. Email-report excludes both JSON files from its broad
+`docs/data` overlay. The roll-up reads every shard, the legacy log, and this
+map, and counts each `row_id` once.
+
+The pass resumes the agent and calls `get_usage`:
 
 - `Agent.resume` is the `ResumeAgent` unary. It returns a handle. It does not
   call `send`, so it does not start a model run.
 - `get_usage` is the `GetUsage` unary. It is read-only.
 - The pass then `close()`s the handle.
 
-If resume fails, the row stays pending and the weekly report records why.
+If resume fails, the map stores the error and the shard row stays pending.
 Rows older than 7 days are left pending and counted as skipped. Local agents
 reject a client `run-<uuid>` passed as `run_id` (`BadRequestError`); the
 recorder calls unfiltered `get_usage` in that case and attributes the latest
@@ -84,11 +105,25 @@ or are still `cost_pending` after 48 hours.
 
 The weekly roll-up is `docs/data/agent_usage_weekly.json`: per ISO week and per
 plan cycle (`plan_refresh_day_of_month`, same `YYYY-MM-dN` label as
-`budget.cycle_id`). Both files are on the ops-monitor optional commit list.
-Jobs that run agents outside that commit (weekday rememo, library ingest,
-engineering spend, horizon scan, analysis review, learning director, paper
-learning review) also keep the JSONL. Hunter-fix commits an allowlisted PR
-diff and does not push this log to main.
+`budget.cycle_id`). Ops-monitor owns the shard directory, the backfill map, and
+the weekly file. Other jobs that run an agent commit only their new shards:
+email report (owned `docs/data`, backfill and weekly excluded), weekday rememo,
+library ingest and ladder, engineering spend, memo backfill, horizon scan,
+analysis review, learning director, paper learning review, paper-auto
+(`docs/data/**`), and post-sale review ack. An info finding **Agent token usage
+commit gap** names runs that still do not push shards to main.
+
+### Commit gaps
+
+| Where | Jobs | Why the shard is not on main |
+|-------|------|------------------------------|
+| `engineering-hunter-fix.yml` | `hunter_fix` | PR-only allowlist. The job does not push `docs/data/agent_usage/` to main. |
+| `engineering-hunter-verify.yml` | `hunter_verify` | PR review observer. No main commit. |
+| `ftse-research --phase-b-catchup` | `research_memo` | CLI only. No workflow commits the shard. |
+| `ftse-research` director-worker trial | `director_worker` | CLI only. No workflow commits the shard. |
+| `ftse-research --model-ab` | `model_ab` | CLI only. No workflow commits the shard. |
+| `engineering-conflict-resolve.yml` | `conflict_resolve` | The job records a shard, then unstages `docs/data/agent_usage` and pushes the PR branch. Shards are not committed to main. |
+| `scripts/agent_analyze.py` | `agent_analyze` | Manual script. No workflow commits the shard. |
 
 ## Calibration
 

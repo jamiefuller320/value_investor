@@ -6,6 +6,11 @@ No SDK network calls. Agents are fakes.
 from __future__ import annotations
 
 import json
+import os
+import re
+import shutil
+import subprocess
+import sys
 import threading
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -17,11 +22,16 @@ from cursor_sdk import CursorAgentError
 from value_investor.agent_model_policy import normalize_budget
 from value_investor.agent_usage import (
     backfill_pending_costs,
+    load_backfill_map,
+    load_ledger_rows,
     prompt_and_record,
     read_usage_rows,
     record_agent_usage,
+    reset_process_shard_state,
+    shard_path_for_job,
 )
 from value_investor.agent_usage_report import (
+    COMMIT_GAP_TITLE,
     COVERAGE_TITLE,
     MEASURING_TITLE,
     NEAR_TITLE,
@@ -41,7 +51,12 @@ CYCLE = plan_cycle_id(NOW, 8)
 
 def _enable(monkeypatch: pytest.MonkeyPatch, log_path: Path) -> None:
     monkeypatch.setenv("FTSE_AGENT_USAGE_RECORD", "1")
-    monkeypatch.setattr("value_investor.agent_usage.DEFAULT_LOG_PATH", log_path)
+
+    def _fixed_shard(_job: str, **_kwargs: object) -> Path:
+        return log_path
+
+    # Callers that omit log_path write a shard. Point that path at the test file.
+    monkeypatch.setattr("value_investor.agent_usage.shard_path_for_job", _fixed_shard)
 
 
 def _usage(
@@ -325,19 +340,27 @@ def test_backfill_updates_only_pending_rows_and_never_sends(tmp_path: Path) -> N
         resumed.append(agent_id)
         return handle
 
+    before = log_path.read_bytes()
     report = backfill_pending_costs(log_path=log_path, now=NOW, resume_agent=resume)
     assert report["read_only"] is True
+    assert report["shards_unchanged"] is True
     assert report["updated_rows"] == 1
     assert report["queried_agents"] == 1
     assert resumed == ["agent-1"]
     assert handle.sent is False
     assert handle.closed is True
-    rows = {row["row_id"]: row for row in read_usage_rows(log_path)}
-    assert rows["done"]["raw_cost_cents"] == 10.0
-    assert rows["wait"]["cost_pending"] is False
-    assert rows["wait"]["raw_cost_cents"] == 55.0
-    assert rows["wait"]["charged_cents"] == 0.0
-    assert rows["wait"]["cost_backfilled_at"]
+    assert log_path.read_bytes() == before
+    shards = {row["row_id"]: row for row in read_usage_rows(log_path)}
+    assert shards["wait"]["cost_pending"] is True
+    filled = load_backfill_map(log_path.parent / "agent_usage_cost_backfill.json")
+    assert filled["wait"]["raw_cost_cents"] == 55.0
+    assert filled["wait"]["charged_cents"] == 0.0
+    assert filled["wait"]["filled_at"]
+    assert "done" not in filled
+    merged = {row["row_id"]: row for row in load_ledger_rows(log_path)}
+    assert merged["done"]["raw_cost_cents"] == 10.0
+    assert merged["wait"]["cost_pending"] is False
+    assert merged["wait"]["raw_cost_cents"] == 55.0
 
 
 def test_backfill_skips_rows_older_than_seven_days(tmp_path: Path) -> None:
@@ -364,12 +387,17 @@ def test_backfill_skips_rows_older_than_seven_days(tmp_path: Path) -> None:
         queried.append(agent_id)
         return _FakeAgent(_agent_usage([_run("usage-1", raw=12.0)]))
 
+    before = log_path.read_bytes()
     report = backfill_pending_costs(log_path=log_path, now=NOW, resume_agent=resume)
     assert report["skipped_older_than_days"] == 1
     assert queried == ["agent-fresh"]
-    rows = {row["row_id"]: row for row in read_usage_rows(log_path)}
-    assert rows["old"]["cost_pending"] is True
-    assert rows["fresh"]["cost_pending"] is False
+    assert log_path.read_bytes() == before
+    shards = {row["row_id"]: row for row in read_usage_rows(log_path)}
+    assert shards["old"]["cost_pending"] is True
+    assert shards["fresh"]["cost_pending"] is True
+    filled = load_backfill_map(log_path.parent / "agent_usage_cost_backfill.json")
+    assert "old" not in filled
+    assert filled["fresh"]["raw_cost_cents"] == 12.0
 
 
 def test_backfill_disabled_under_pytest_does_not_resume(
@@ -473,7 +501,9 @@ def _findings(rows: list[dict], *, threshold: float | None, now: datetime = NOW)
 
 def test_findings_measuring_mode_is_info() -> None:
     findings = _findings([_row(raw_cents=40.0)], threshold=None)
-    assert len(findings) == 1
+    measuring = [item for item in findings if item["title"] == MEASURING_TITLE]
+    assert len(measuring) == 1
+    findings = measuring
     assert findings[0]["title"] == MEASURING_TITLE
     assert findings[0]["severity"] == "info"
     assert findings[0]["auto_fixable"] is False
@@ -547,7 +577,11 @@ def test_findings_coverage_gap_above_10_percent_only() -> None:
 
 def test_findings_empty_when_current_week_has_no_runs() -> None:
     rows = [_row(stamp=NOW - timedelta(days=21), raw_cents=40.0)]
-    assert _findings(rows, threshold=None, now=NOW) == []
+    findings = _findings(rows, threshold=None, now=NOW)
+    assert [item["title"] for item in findings] == [COMMIT_GAP_TITLE]
+    assert "engineering-hunter-fix.yml" in findings[0]["summary"]
+    assert "hunter_verify" in findings[0]["summary"]
+    assert findings[0]["auto_fixable"] is False
 
 
 def test_check_agent_token_usage_maps_findings(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -765,3 +799,207 @@ def test_normalize_budget_token_warning_field() -> None:
         ]
         == 0.0
     )
+
+
+_REPO = Path(__file__).resolve().parents[1]
+
+
+def test_two_processes_write_separate_shards(tmp_path: Path) -> None:
+    worker = tmp_path / "worker.py"
+    worker.write_text(
+        "\n".join(
+            [
+                "import os, sys",
+                "from pathlib import Path",
+                "from types import SimpleNamespace",
+                "os.environ['FTSE_AGENT_USAGE_RECORD'] = '1'",
+                "from value_investor import agent_usage as ledger",
+                "ledger.DEFAULT_SHARD_DIR = Path(sys.argv[1])",
+                "ledger.reset_process_shard_state()",
+                "class Agent:",
+                "    agent_id = 'proc'",
+                "    def get_usage(self, run_id=None):",
+                "        usage = SimpleNamespace(",
+                "            input_tokens=1, output_tokens=1, cache_read_tokens=0,",
+                "            cache_write_tokens=0, total_tokens=2, reasoning_tokens=0,",
+                "        )",
+                "        return SimpleNamespace(runs=[], usage=usage, cost=None)",
+                "ledger.record_agent_usage(Agent(), job=sys.argv[2], model='m')",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(_REPO / "src")
+    env["FTSE_AGENT_USAGE_RECORD"] = "1"
+    env.pop("GITHUB_RUN_ID", None)
+    shard_dir = tmp_path / "shards"
+    for _ in range(2):
+        subprocess.run(
+            [sys.executable, str(worker), str(shard_dir), "research_memo"],
+            check=True,
+            env=env,
+            cwd=tmp_path,
+        )
+    files = sorted(shard_dir.rglob("*.jsonl"))
+    assert len(files) == 2
+    assert files[0] != files[1]
+    assert all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", path.parent.name) for path in files)
+    assert all("research_memo-" in path.name for path in files)
+    assert files[0].read_text(encoding="utf-8").strip()
+    assert files[1].read_text(encoding="utf-8").strip()
+
+
+def test_github_run_id_is_in_the_shard_name(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("FTSE_AGENT_USAGE_RECORD", "1")
+    monkeypatch.setenv("GITHUB_RUN_ID", "4242")
+    monkeypatch.setenv("GITHUB_RUN_ATTEMPT", "3")
+    reset_process_shard_state()
+    try:
+        path = shard_path_for_job("research_memo", now=NOW, shard_dir=tmp_path)
+        assert path.parent.name == "2026-11-05"
+        assert path.name.startswith(f"research_memo-4242-3-{os.getpid()}-")
+        assert path.name.endswith(".jsonl")
+        again = shard_path_for_job("research_memo", shard_dir=tmp_path)
+        assert again == path
+        other = shard_path_for_job("gap_fill", now=NOW, shard_dir=tmp_path)
+        assert other != path
+        assert other.name.startswith(f"gap_fill-4242-3-{os.getpid()}-")
+    finally:
+        reset_process_shard_state()
+
+
+def test_report_merges_shards_backfill_and_dedupes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    day = tmp_path / "agent_usage" / "2026-11-05"
+    day.mkdir(parents=True)
+    pending = _row(row_id="same", pending=True, raw_cents=None, charged_cents=None)
+    _write_log(day / "a-one.jsonl", [pending])
+    _write_log(day / "b-two.jsonl", [pending])
+    _write_log(
+        day / "c-three.jsonl",
+        [_row(row_id="other", raw_cents=10.0, job="engineering")],
+    )
+    legacy = tmp_path / "agent_usage_log.jsonl"
+    _write_log(legacy, [_row(row_id="legacy", raw_cents=5.0, job="horizon_scan")])
+    backfill = tmp_path / "agent_usage_cost_backfill.json"
+    backfill.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "generated_at": NOW.isoformat(),
+                "by_row_id": {
+                    "same": {
+                        "raw_cost_cents": 25,
+                        "charged_cents": 0,
+                        "filled_at": NOW.isoformat(),
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr("value_investor.agent_usage.DEFAULT_LEGACY_LOG_PATH", legacy)
+    monkeypatch.setattr("value_investor.agent_usage.DEFAULT_BACKFILL_PATH", backfill)
+    before = {path: path.read_bytes() for path in day.glob("*.jsonl")}
+    report = build_usage_report(log_path=day.parent, policy=_policy(threshold=None), now=NOW)
+    assert {path: path.read_bytes() for path in day.glob("*.jsonl")} == before
+    week = next(row for row in report["weeks"] if row["id"] == WEEK)
+    assert week["runs"] == 3
+    assert week["raw_cost_usd"] == 0.4
+    loaded = {row["row_id"]: row for row in load_ledger_rows(day.parent)}
+    assert set(loaded) == {"same", "other", "legacy"}
+    assert loaded["same"]["raw_cost_cents"] == 25
+    assert loaded["same"]["cost_pending"] is False
+    assert read_usage_rows(day / "a-one.jsonl")[0]["cost_pending"] is True
+
+
+def test_backfill_never_edits_shards(tmp_path: Path) -> None:
+    shard_dir = tmp_path / "agent_usage"
+    shard = shard_dir / "2026-11-05" / "research_memo-local.jsonl"
+    shard.parent.mkdir(parents=True)
+    _write_log(
+        shard,
+        [_row(row_id="wait", pending=True, raw_cents=None, charged_cents=None)],
+    )
+    before = shard.read_bytes()
+    backfill = tmp_path / "agent_usage_cost_backfill.json"
+
+    def resume(_agent_id: str) -> _FakeAgent:
+        return _FakeAgent(_agent_usage([_run("usage-1", raw=9.0)]))
+
+    report = backfill_pending_costs(
+        shard_dir=shard_dir,
+        backfill_path=backfill,
+        now=NOW,
+        resume_agent=resume,
+    )
+    assert report["updated_rows"] == 1
+    assert report["shards_unchanged"] is True
+    assert shard.read_bytes() == before
+    assert read_usage_rows(shard)[0]["cost_pending"] is True
+    stored = load_backfill_map(backfill)
+    assert stored["wait"]["raw_cost_cents"] == 9.0
+    assert not (shard_dir / "agent_usage_cost_backfill.json").exists()
+
+
+def test_overlay_keeps_both_shards(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+
+    def git(*args: str) -> None:
+        subprocess.run(["git", *args], cwd=repo, check=True, capture_output=True, text=True)
+
+    git("init", "-b", "main")
+    git("config", "user.email", "usage@example.com")
+    git("config", "user.name", "usage")
+    day = repo / "docs/data/agent_usage/2026-11-05"
+    day.mkdir(parents=True)
+    (day / "job-aaaa.jsonl").write_text('{"row_id":"a"}\n', encoding="utf-8")
+    git("add", "docs/data/agent_usage")
+    git("commit", "-m", "shard A")
+    (day / "job-bbbb.jsonl").write_text('{"row_id":"b"}\n', encoding="utf-8")
+    snapshot = tmp_path / "snapshot"
+    shutil.copytree(repo / "docs/data/agent_usage", snapshot)
+    (day / "job-bbbb.jsonl").unlink()
+    (day / "job-cccc.jsonl").write_text('{"row_id":"c"}\n', encoding="utf-8")
+    git("add", "docs/data/agent_usage")
+    git("commit", "-m", "shard C")
+    git("reset", "--hard", "HEAD")
+    for src in snapshot.rglob("*.jsonl"):
+        dest = repo / "docs/data/agent_usage" / src.relative_to(snapshot)
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(src.read_bytes())
+    names = sorted(path.name for path in day.glob("*.jsonl"))
+    assert names == ["job-aaaa.jsonl", "job-bbbb.jsonl", "job-cccc.jsonl"]
+
+
+def test_commit_lists_use_shard_dir_not_the_old_log() -> None:
+    commit_paths = [
+        _REPO / "scripts/gha_commit_ops_monitor.sh",
+        _REPO / "scripts/gha_commit_engineering_spend.sh",
+        _REPO / "scripts/push_weekday_rememo_artifacts.sh",
+        _REPO / "scripts/push_library_ingest_artifacts.sh",
+        _REPO / ".github/workflows/horizon-scan.yml",
+        _REPO / ".github/workflows/learning-director-review.yml",
+        _REPO / ".github/workflows/analysis-review.yml",
+        _REPO / ".github/workflows/paper-learning-review.yml",
+        _REPO / ".github/workflows/memo-backfill.yml",
+        _REPO / ".github/workflows/library-grow.yml",
+        _REPO / ".github/workflows/post-sale-review-ack.yml",
+        _REPO / ".github/workflows/email-report.yml",
+    ]
+    text = "\n".join(path.read_text(encoding="utf-8") for path in commit_paths)
+    assert "agent_usage_log.jsonl" not in text
+    assert "merge-snapshot" not in text
+    for path in commit_paths[:4]:
+        assert "docs/data/agent_usage" in path.read_text(encoding="utf-8")
+    paper = (_REPO / ".github/workflows/paper-auto.yml").read_text(encoding="utf-8")
+    assert "file_pattern: docs/data/**" in paper
+    email = (_REPO / ".github/workflows/email-report.yml").read_text(encoding="utf-8")
+    assert "docs/data/agent_usage_cost_backfill.json" in email
+    assert "docs/data/agent_usage_weekly.json" in email

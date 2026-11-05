@@ -19,10 +19,10 @@ from value_investor.agent_model_policy import (
     load_policy,
 )
 from value_investor.agent_usage import (
-    DEFAULT_LOG_PATH,
+    DEFAULT_SHARD_DIR,
     backfill_pending_costs,
+    load_ledger_rows,
     parse_usage_timestamp,
-    read_usage_rows,
 )
 from value_investor.storage import write_json
 
@@ -36,6 +36,46 @@ MEASURING_TITLE = "Agent token usage (measuring)"
 NEAR_TITLE = "Agent token usage near weekly warning"
 OVER_TITLE = "Agent token usage over weekly warning"
 COVERAGE_TITLE = "Agent token usage coverage gap"
+COMMIT_GAP_TITLE = "Agent token usage commit gap"
+
+# Runs an SDK agent and does not commit docs/data/agent_usage/ to main.
+UNCOMMITTED_AGENT_RUNS = (
+    {
+        "where": "engineering-hunter-fix.yml",
+        "jobs": "hunter_fix",
+        "why": "PR-only allowlist; shards are not pushed to main",
+    },
+    {
+        "where": "engineering-hunter-verify.yml",
+        "jobs": "hunter_verify",
+        "why": "PR review observer; no main commit",
+    },
+    {
+        "where": "ftse-research --phase-b-catchup",
+        "jobs": "research_memo",
+        "why": "CLI only; no workflow commits the shard",
+    },
+    {
+        "where": "ftse-research director-worker trial",
+        "jobs": "director_worker",
+        "why": "CLI only; no workflow commits the shard",
+    },
+    {
+        "where": "ftse-research --model-ab",
+        "jobs": "model_ab",
+        "why": "CLI only; no workflow commits the shard",
+    },
+    {
+        "where": "engineering-conflict-resolve.yml",
+        "jobs": "conflict_resolve",
+        "why": "Pushes the PR branch and unstages docs/data/agent_usage so shards stay off main",
+    },
+    {
+        "where": "scripts/agent_analyze.py",
+        "jobs": "agent_analyze",
+        "why": "Manual script; no workflow commits the shard",
+    },
+)
 
 _TOKEN_KINDS = (
     "input_tokens",
@@ -232,7 +272,7 @@ def build_usage_report(
     if moment.tzinfo is None:
         moment = moment.replace(tzinfo=UTC)
     context = _policy_context(policy)
-    source = rows if rows is not None else read_usage_rows(log_path)
+    source = rows if rows is not None else load_ledger_rows(log_path)
     weeks: dict[str, dict[str, Any]] = {}
     cycles: dict[str, dict[str, Any]] = {}
     for row in source:
@@ -278,6 +318,7 @@ def build_usage_report(
         "current_cycle_id": plan_cycle_id(moment, context["refresh_day"]),
         "weeks": week_rows,
         "cycles": cycle_rows,
+        "uncommitted_agent_runs": [dict(row) for row in UNCOMMITTED_AGENT_RUNS],
     }
 
 
@@ -339,6 +380,17 @@ def _summary(bucket: dict[str, Any], *, threshold: float | None, mode: str) -> s
     )
 
 
+def _commit_gap_finding() -> dict[str, Any]:
+    parts = [f"{row['where']} ({row['jobs']}): {row['why']}" for row in UNCOMMITTED_AGENT_RUNS]
+    return {
+        "severity": "info",
+        "category": "budget",
+        "title": COMMIT_GAP_TITLE,
+        "summary": ("Usage shards from these runs are not committed to main. " + " ".join(parts)),
+        "auto_fixable": False,
+    }
+
+
 def usage_warning_findings(
     report: dict[str, Any],
     *,
@@ -349,16 +401,19 @@ def usage_warning_findings(
     Measuring mode (null threshold) is info. A numeric threshold warns at 80%
     and at 100% of week-to-date raw cost. Coverage is info when more than 10%
     of the current week's rows have ``usage_error`` or are still cost-pending
-    after 48 hours.
+    after 48 hours. A commit-gap info finding names workflows that run an
+    agent and do not push shards to main.
     """
     del now
+    findings: list[dict[str, Any]] = []
     week_id = str(report.get("current_week_id") or "")
     bucket = next((row for row in report.get("weeks") or [] if row.get("id") == week_id), None)
     if bucket is None or int(bucket.get("runs") or 0) <= 0:
-        return []
+        if UNCOMMITTED_AGENT_RUNS:
+            findings.append(_commit_gap_finding())
+        return findings
     threshold = report.get("token_usage_weekly_warning_raw_usd")
     raw = float(bucket.get("raw_cost_usd") or 0.0)
-    findings: list[dict[str, Any]] = []
     if threshold is None:
         findings.append(
             {
@@ -414,6 +469,8 @@ def usage_warning_findings(
                 "auto_fixable": False,
             }
         )
+    if UNCOMMITTED_AGENT_RUNS:
+        findings.append(_commit_gap_finding())
     return findings
 
 
@@ -467,7 +524,7 @@ def _should_backfill(backfill: bool | None) -> bool:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Roll up Cursor agent token usage")
-    parser.add_argument("--log", type=Path, default=DEFAULT_LOG_PATH)
+    parser.add_argument("--log", type=Path, default=DEFAULT_SHARD_DIR)
     parser.add_argument("--out", type=Path, default=DEFAULT_WEEKLY_PATH)
     parser.add_argument("--policy", type=Path, default=None)
     parser.add_argument(

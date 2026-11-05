@@ -9,11 +9,28 @@ MAX_ATTEMPTS="${MAX_ATTEMPTS:-4}"
 # stash overlays cannot resurrect ops_status / automation from an older tip.
 REMEMO_ARTIFACT_PATHS=(
   docs/data/weekday_memo_rememo_summary.json
-  docs/data/agent_usage_log.jsonl
+  docs/data/agent_usage
   docs/data/latest.json
   docs/data/research
   docs/research
 )
+
+USAGE_DIR="docs/data/agent_usage"
+USAGE_SNAPSHOT=""
+if [ -d "$USAGE_DIR" ]; then
+  USAGE_SNAPSHOT="$(mktemp -d)"
+  cp -a "$USAGE_DIR/." "$USAGE_SNAPSHOT/"
+fi
+
+restore_usage_shards() {
+  # Put main's shards back first (a stash checkout of docs/data can drop
+  # files another job pushed), then copy this job's new shards on top.
+  git checkout HEAD -- "$USAGE_DIR" 2>/dev/null || true
+  if [ -n "$USAGE_SNAPSHOT" ] && [ -d "$USAGE_SNAPSHOT" ]; then
+    mkdir -p "$USAGE_DIR"
+    cp -a "$USAGE_SNAPSHOT/." "$USAGE_DIR/"
+  fi
+}
 
 git_clean_state() {
   git merge --abort 2>/dev/null || true
@@ -27,7 +44,7 @@ stage_rememo_artifacts() {
   local path
   for path in \
     docs/data/weekday_memo_rememo_summary.json \
-    docs/data/agent_usage_log.jsonl \
+    docs/data/agent_usage \
     docs/data/latest.json \
     docs/data/research \
     docs/research
@@ -76,6 +93,7 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
     done < <(git diff --name-only -- docs/data/ docs/research/)
   fi
 
+  restore_usage_shards
   stage_rememo_artifacts
   if git diff --cached --quiet; then
     echo "No weekday rememo artifact changes after sync"

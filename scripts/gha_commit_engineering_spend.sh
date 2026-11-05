@@ -17,11 +17,11 @@
 set -euo pipefail
 
 POLICY="${POLICY_PATH:-docs/data/library/policy.json}"
-USAGE_LOG="${USAGE_LOG_PATH:-docs/data/agent_usage_log.jsonl}"
+USAGE_DIR="${USAGE_DIR_PATH:-docs/data/agent_usage}"
 USAGE_SNAPSHOT=""
-if [ -f "$USAGE_LOG" ]; then
-  USAGE_SNAPSHOT="$(mktemp)"
-  cp "$USAGE_LOG" "$USAGE_SNAPSHOT"
+if [ -d "$USAGE_DIR" ]; then
+  USAGE_SNAPSHOT="$(mktemp -d)"
+  cp -a "$USAGE_DIR/." "$USAGE_SNAPSHOT/"
 fi
 MAX_ATTEMPTS="${GHA_COMMIT_ATTEMPTS:-5}"
 SLEEP_BASE="${GHA_COMMIT_SLEEP_BASE:-3}"
@@ -113,21 +113,19 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
   # shellcheck disable=SC2086
   eval "$RECORD_SPEND_CMD"
 
-  if [ -n "$USAGE_SNAPSHOT" ] && [ -s "$USAGE_SNAPSHOT" ]; then
-    mkdir -p "$(dirname "$USAGE_LOG")"
-    if ! python3 -m value_investor.agent_usage merge-snapshot \
-      --snapshot "$USAGE_SNAPSHOT" \
-      --dest "$USAGE_LOG"; then
-      echo "::warning::Could not merge agent usage log; leaving destination unchanged" >&2
-    fi
+  # New shard files only. Copying onto origin/main does not delete shards
+  # another job already pushed, and shards are never rewritten.
+  if [ -n "$USAGE_SNAPSHOT" ]; then
+    mkdir -p "$USAGE_DIR"
+    cp -a "$USAGE_SNAPSHOT/." "$USAGE_DIR/"
   fi
 
   git add -- "$POLICY"
-  if [ -f "$USAGE_LOG" ]; then
-    git add -- "$USAGE_LOG" || true
+  if [ -d "$USAGE_DIR" ]; then
+    git add -- "$USAGE_DIR" || true
   fi
   if git diff --cached --quiet; then
-    echo "No policy.json spend or usage-log delta after re-record"
+    echo "No policy.json spend or usage-shard delta after re-record"
     restore_agent_work "$STASH_REF"
     exit 0
   fi
