@@ -60,7 +60,7 @@ Registration section 12 asks for a warn when `memo_not_ready` exceeds a fifth of
 | Path | Role |
 |------|------|
 | `docs/data/strategy_book_memo_log.jsonl` | Append-only. Ticker, market, kind (`signal_day` / `review_date`), session, action (`dry_run` / `requested` / `skipped`), skip reason, memo finish time and verdict when a model ran, estimated spend, `inputs` (repo-relative path and SHA-256 of each file read), `data_commit`. |
-| `docs/data/strategy_book_memo_job.json` | Last run per market, counts by ISO week and market (signals, all-but-memo, memo needed, dry-run requests, estimated spend), and that week's memo-needed count versus the 15–20 estimate. |
+| `docs/data/strategy_book_memo_job.json` | Last run per market, counts by ISO week and market (signals, all-but-memo, memo needed, dry-run requests, estimated spend), and that week's memo-needed count versus the 25–35 estimate (registration section 11). |
 
 Both paths are in `GHA_COMMIT_OPTIONAL` (`scripts/gha_commit_ops_monitor.sh`). Ops-monitor commits them with the other observe stores.
 
