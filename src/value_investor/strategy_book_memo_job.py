@@ -31,7 +31,8 @@ from value_investor.market_paper_shard import session_defaults_for_market
 from value_investor.paper_fund import BUY_SIGNALS
 from value_investor.research.weekday_rememo import DEFAULT_MIN_HEADROOM_USD
 from value_investor.sector_headwind_gate import FTSE_MARKET
-from value_investor.storage import read_json, write_json
+from value_investor.storage import write_json
+from value_investor.strategy_book_rules import registration_record, registration_signed
 from value_investor.strategy_book_signals import (
     MEMO_MAX_AGE_DAYS,
     STALE_CHART_CALENDAR_DAYS,
@@ -85,21 +86,12 @@ def spend_enabled(registration_path: Path) -> bool:
 
     Signature creates ``docs/data/strategy_book_registration.json``. Until that
     file is present, signed, and the flag is true, the job does not call a model.
+    The signature test is ``registration_signed``.
     """
-    if not registration_path.is_file():
+    payload = registration_record(registration_path)
+    if payload is None or payload.get("spend_enabled") is not True:
         return False
-    try:
-        payload = read_json(registration_path)
-    except (OSError, ValueError, TypeError):
-        return False
-    if not isinstance(payload, dict) or payload.get("spend_enabled") is not True:
-        return False
-    signed_at = str(payload.get("signed_at") or "").strip()
-    signature = payload.get("signature")
-    signed_flag = payload.get("signed") is True
-    signature_text = signature.strip() if isinstance(signature, str) else ""
-    signature_obj = signature if isinstance(signature, dict) and signature else None
-    return bool(signed_at or signed_flag or signature_text or signature_obj)
+    return registration_signed(registration_path)
 
 
 def data_commit(repo_root: Path) -> str:
