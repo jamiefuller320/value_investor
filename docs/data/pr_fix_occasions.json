@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-04T22:14:34.064995+00:00",
-  "occasion_count": 331,
+  "updated_at": "2026-11-05T09:11:55.531238+00:00",
+  "occasion_count": 332,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -6028,6 +6028,25 @@
       ],
       "notes": "Took main's snapshots; added Cenovus alias to _ESEF_ENTITY_SEARCH_ALIASES; fix log kept off the task branch because hunter-merge-gate allows task paths only",
       "details": {}
+    },
+    {
+      "id": "prf-20261105-001",
+      "recorded_at": "2026-11-05T09:11:55.531238+00:00",
+      "source": "human_request",
+      "kind": "ci_and_merge",
+      "failure_reason": "generated store conflict (operating_decline_gate.json); live-network test failures on main",
+      "pr_number": 1298,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "nightly test (0): test_parked_source_hunter_skip_sap_de_euro_depth"
+      ],
+      "notes": "Conflict: regenerated store after merging main. SAP.DE picked up Saputo IR URLs via bare SAP builtin key (eng-20261103-03); ITV UK-primary test hit live Companies House when COMPANIES_HOUSE_API_KEY is set.",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -6275,12 +6294,16 @@
       {
         "kind": "merge_conflict",
         "count": 152
+      },
+      {
+        "kind": "ci_and_merge",
+        "count": 1
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 325
+        "count": 326
       },
       {
         "source": "traffic_controller",

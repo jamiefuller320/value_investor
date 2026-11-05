@@ -4306,6 +4306,7 @@ def test_uk_primary_pipeline_investegate_lse_pdf_persists_with_validation_gate(
     tmp_path, monkeypatch
 ):
     """UK primary refetch persists Investegate/LSE bodies that pass period/issuer validation."""
+    monkeypatch.delenv("COMPANIES_HOUSE_API_KEY", raising=False)
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir()
     index = {
@@ -14445,7 +14446,11 @@ def test_fetch_filings_ir_allowlist_tsx60_sap_to_builtins(tmp_path: Path):
     assert any("Q4_2026_MD" in url for url in urls)
     assert sum(1 for row in rows if row["period"] == "annual") >= 1
     assert sum(1 for row in rows if row["period"] == "interim") >= 1
-    assert len(fetch_filings_ir_allowlist("SAP", path=allowlist_path)) == 2
+    # Bare "SAP" is SAP SE (US ADR, and the base symbol of SAP.DE): no Saputo documents.
+    assert fetch_filings_ir_allowlist("SAP", path=allowlist_path) == []
+    assert not any(
+        "saputo" in row["url"] for row in fetch_filings_ir_allowlist("SAP.DE", path=allowlist_path)
+    )
 
 
 def test_parked_source_hunter_sap_to_tsx60_has_fetchable_ir():

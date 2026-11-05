@@ -917,10 +917,6 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://saputo.canto.com/direct/document/ktttikfhit00nc426o68h5354i/K7mjvYr4GAkEi4jVcOcEEemI6j0/original?content-type=application%2Fpdf&name=SAP_Annual+Report+2026+ENG.pdf",
         "https://saputo.canto.com/direct/document/revps0nld92avdoqvc7mvpsk7q/Y1MhSkfuMcu9ntY_BvUj7lnKJXc/original?content-type=application%2Fpdf&name=Q4_2026_MD%26A_EN.pdf",
     ],
-    "SAP": [
-        "https://saputo.canto.com/direct/document/ktttikfhit00nc426o68h5354i/K7mjvYr4GAkEi4jVcOcEEemI6j0/original?content-type=application%2Fpdf&name=SAP_Annual+Report+2026+ENG.pdf",
-        "https://saputo.canto.com/direct/document/revps0nld92avdoqvc7mvpsk7q/Y1MhSkfuMcu9ntY_BvUj7lnKJXc/original?content-type=application%2Fpdf&name=Q4_2026_MD%26A_EN.pdf",
-    ],
     # tsx60 buy-tier leftover — eng-20261103-04: TECK-B.TO no_key_bodies; Teck Resources SEC
     # FY2025 40-F AIF/MD&A exhibits + Q2 2026 interim results 6-K EX-99.1 (live-fetchable HTML).
     "TECK-B.TO": [
@@ -1377,7 +1373,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "TRI": ("Thomson Reuters",),
     "SU": ("Suncor", "Suncor Energy"),
     # tsx60 SAP.TO — sap* URL tokens collide with SAP SE; Saputo issuer name required.
-    "SAP": ("Saputo", "Saputo Inc."),
+    # Keyed on the listed symbol: the bare "SAP" base symbol is also SAP SE (SAP.DE).
+    "SAP.TO": ("Saputo", "Saputo Inc."),
     # tsx60 MG.TO — d20215* / tm2618646* SEC slugs lack issuer tokens for IR title gate.
     "MG": ("Magna International", "Magna International Inc."),
     "MGA": ("Magna International", "Magna International Inc."),
@@ -6265,11 +6262,13 @@ def _reject_duplicate_filing_body_hash(
 def _ir_body_title_tokens_match(row: dict[str, Any], body: str, *, ticker: str = "") -> bool:
     tokens = _ir_row_search_tokens(row)
     if ticker:
+        upper = ticker.strip().upper()
         base = _base_symbol(ticker)
-        for alias in _ESEF_ENTITY_SEARCH_ALIASES.get(base, ()):
-            for tok in re.split(r"[^a-z0-9]+", alias.lower()):
-                if len(tok) >= 3 and tok not in _IR_ROW_TOKEN_SKIP:
-                    tokens.add(tok)
+        for key in dict.fromkeys((upper, base)):
+            for alias in _ESEF_ENTITY_SEARCH_ALIASES.get(key, ()):
+                for tok in re.split(r"[^a-z0-9]+", alias.lower()):
+                    if len(tok) >= 3 and tok not in _IR_ROW_TOKEN_SKIP:
+                        tokens.add(tok)
     if not tokens:
         return True
     sample = (body or "")[:4000].lower()
