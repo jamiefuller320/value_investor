@@ -267,8 +267,8 @@ merge clashes manageable.
 | 0.3 | Merged (supervisor corrected two rows) | #1277 | Composer 2.5 |
 | 1.5 | Merged. Buy-tier interim coverage did not move (2 of 65): Yahoo series lack the prior-year quarter and half-year bodies are not extracted, hence 1.6 and 1.7 | #1276 | Grok 4.7 |
 | 1.6 | Merged 2026-11-04. Writer merges up to 12 quarters; git backfill gave interim revenue to 4 of the 8 buy-tier names (GSK, SHEL, BARC, BP). IAG, BGEO, ATYM, NWG have no prior-year quarter in git. No FTSE verdict change. Two library verdicts moved to declining (FSLR, HRL) | #1281 | Grok 4.7 |
-| 1.7 | Next | — | Grok 4.7 |
-| 1.8, 1.9 | Next after 1.7 (sector gate on graduated markets; F9-B binds and the signal-day memo job for library names). Library entries to the strategy book wait on both | — | Grok 4.7 |
+| 1.7 | Merged 2026-11-05. One shared body-path resolver; half-year revenue and EPS pairs with cited lines, re-parsed at each daily gate refresh. FTSE buy-tier interim revenue evaluable 4 → 30 of 65, interim EPS 2 → 33. Four FTSE names moved to declining (ABF, RNK on statutory interim EPS; EWG on EPS; VTY on revenue) | this PR | Grok 4.7 (high) |
+| 1.8, 1.9 | Next (sector gate on graduated markets; F9-B binds and the signal-day memo job for library names). Library entries to the strategy book wait on both | — | Grok 4.7 |
 | Phase 1 gate | Waiting on a week of daily refreshes after the 1.2 merge (2026-11-04), then the owner's signature | — | Owner |
 | 2.1 | Draft merged (#1280); revised for the single track, multi-market universe, capital view and the checkpoint-ladder exit (#1283). Owner answered the 9 open questions on 2026-11-04 (all defaults) and added the signal-day memo routine. Awaiting owner signature | #1280, #1283 | Grok 4.7, then supervisor |
 | 2.5 | Next after signature: write the rehearsal registration, then the owner buys one data month | — | Grok 4.7 (xhigh), then supervisor |
