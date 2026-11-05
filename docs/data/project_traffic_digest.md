@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-05T20:13:27.176241+00:00`
+Generated: `2026-11-05T22:46:08.694199+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -36,7 +36,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `ingest_narrow`/verified PR #1296 `eng-20261105-01` — Seed IR allowlist for unmeasured/zero-body RKT.L — empty allowlist after 0-improve pin (igc-20261105-01)
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 334
+- Occasion count: 335
 - `PR mergeable=CONFLICTING against main` — 7×
 - `validate failed` — 7×
 - `merge_conflict:dirty` — 6×
