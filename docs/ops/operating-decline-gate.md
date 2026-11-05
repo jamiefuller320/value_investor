@@ -52,7 +52,7 @@ Each check compares every year on one row label. The label is the first in the p
 | EPS | `Diluted EPS`, `Basic EPS` |
 | FCF | `Free Cash Flow`, then operating cash flow plus capital expenditure |
 | Interim revenue | `Total Revenue`, `Operating Revenue`, `Revenue` on the latest interim period, then the half-year filing extract |
-| Interim EPS | `Diluted EPS`, `Basic EPS`, then the half-year filing extract (diluted, basic, adjusted, statutory), then filing-interim adjusted EPS, then statutory EPS |
+| Interim EPS | Filing adjusted EPS (half-year extract, then highlights), then `Diluted EPS`, `Basic EPS`, then filing statutory EPS (half-year extract diluted, basic, statutory, then highlights) |
 
 FCF is never taken direct for one year and derived for another. Banks and insurers often lack operating income; they stay evaluable on EPS.
 
@@ -60,11 +60,15 @@ Interim comparisons are year-on-year. The latest interim period is the newest `q
 
 Interim EPS keeps a single slot. The first evaluable source replaces the others, so the screen-row flag is not counted again when a direct measurement exists:
 
-1. Usable `quarterly_income` year-on-year pair (diluted, then basic).
-2. `filing_interim_financials.json` `half_year_comparisons`: diluted, then basic, then adjusted, then statutory earnings per share. Diluted and basic are the statutory pair. Adjusted is used only when neither statutory pair was extracted.
-3. `interim_highlights` adjusted EPS pair, else the statutory EPS pair, when that extract's `extracted_at` and the source filing are both dated on or before `as_of`.
+Adjusted EPS comes first (owner, 2026-11-05): statutory EPS carries one-off charges and gains, which can mark a business as declining when its underlying earnings grew (Rank on 2026-11-05: statutory basic EPS −25%, underlying +17%).
+
+1. Adjusted EPS from a filing: `half_year_comparisons` adjusted (or underlying) pair, then the `interim_highlights` adjusted pair.
+2. Usable `quarterly_income` year-on-year pair (diluted, then basic). Yahoo carries no adjusted EPS.
+3. Statutory EPS from a filing: `half_year_comparisons` diluted, then basic, then statutory; then the `interim_highlights` statutory pair.
 4. `parse_interim_eps_decline_pct` on the latest dated half-year / interim-results body (`period` = `interim`, results headline, published on or before `as_of`).
 5. Screen-row `interim_eps_decline_pct`, when the screen run is dated on or before `as_of`.
+
+The `interim_highlights` pairs count only when that extract's `extracted_at` and the source filing are both dated on or before `as_of`.
 
 Interim revenue uses the quarterly series first. When that comparison is not evaluable (missing, no prior-year quarter, stale, or a non-positive prior), the gate uses the revenue pair on the same half-year extract. The threshold is the same 5% hard bar. A quarterly comparison that is evaluable is kept even when the filing says something else.
 

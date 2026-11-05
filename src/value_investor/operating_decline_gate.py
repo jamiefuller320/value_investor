@@ -126,7 +126,8 @@ SRC_QUARTERLY = "financials_annual.json quarterly_income"
 SRC_FILING_INTERIM = "filing_interim_financials.json"
 SRC_SCREEN_ROW = "latest.json reports"
 SRC_FILINGS = "filings_index.json"
-_HALF_YEAR_EPS_KINDS = ("diluted", "basic", "adjusted", "statutory")
+_HALF_YEAR_ADJUSTED_EPS_KINDS = ("adjusted",)
+_HALF_YEAR_STATUTORY_EPS_KINDS = ("diluted", "basic", "statutory")
 
 _PERIOD_END_RE = re.compile(
     r"\b(?:ended|ending|to)\s+(\d{1,2})\s+([A-Za-z]+)\s+(20\d{2})\b",
@@ -476,7 +477,10 @@ def _published_for_id(filings_index: list | None, source_id: str) -> date | None
 
 
 def _highlights_eps(
-    filing_interim: dict | None, filings_index: list | None, as_of: date
+    filing_interim: dict | None,
+    filings_index: list | None,
+    as_of: date,
+    pairs: tuple[tuple[str, str, str], ...] = _HIGHLIGHT_EPS_PAIRS,
 ) -> dict[str, Any] | None:
     if not isinstance(filing_interim, dict):
         return None
@@ -487,7 +491,7 @@ def _highlights_eps(
     if not isinstance(highlights, dict):
         return None
     picked: tuple[str, float, float] | None = None
-    for label, current_key, prior_key in _HIGHLIGHT_EPS_PAIRS:
+    for label, current_key, prior_key in pairs:
         current = _num(highlights.get(current_key))
         previous = _num(highlights.get(prior_key))
         if current is None or previous is None or previous <= 0:
@@ -708,7 +712,9 @@ def _revenue_from_half_year(
     return check, reasons
 
 
-def _eps_from_half_year(filing_interim: dict | None, as_of: date) -> dict[str, Any] | None:
+def _eps_from_half_year(
+    filing_interim: dict | None, as_of: date, kinds: tuple[str, ...]
+) -> dict[str, Any] | None:
     row = _select_half_year_comparison(filing_interim, as_of)
     if row is None:
         return None
@@ -719,7 +725,7 @@ def _eps_from_half_year(filing_interim: dict | None, as_of: date) -> dict[str, A
         kind = str(item.get("kind") or "")
         if kind and kind not in by_kind:
             by_kind[kind] = item
-    for kind in _HALF_YEAR_EPS_KINDS:
+    for kind in kinds:
         item = by_kind.get(kind)
         if item is None:
             continue
@@ -748,20 +754,23 @@ def _check_eps_interim(
     filings_index: list | None,
     as_of: date,
 ) -> tuple[dict, list[dict]]:
-    """One interim EPS comparison. The first evaluable source replaces the rest."""
+    """One interim EPS comparison. The first evaluable source replaces the rest.
+
+    Adjusted EPS from a filing comes first, so one-off charges in statutory EPS
+    do not mark a business as declining on their own.
+    """
     observation, why = _quarterly_yoy(quarterly, EPS_LABELS, as_of)
-    if observation is not None and why is None:
-        check, reasons = _numeric_eps_check(observation)
-        if check["evaluable"]:
-            return check, reasons
-    half_year = _eps_from_half_year(filing_interim, as_of)
-    if half_year is not None:
-        check, reasons = _numeric_eps_check(half_year)
-        if check["evaluable"]:
-            return check, reasons
-    highlights = _highlights_eps(filing_interim, filings_index, as_of)
-    if highlights is not None:
-        check, reasons = _numeric_eps_check(highlights)
+    candidates = (
+        _eps_from_half_year(filing_interim, as_of, _HALF_YEAR_ADJUSTED_EPS_KINDS),
+        _highlights_eps(filing_interim, filings_index, as_of, _HIGHLIGHT_EPS_PAIRS[:1]),
+        observation if why is None else None,
+        _eps_from_half_year(filing_interim, as_of, _HALF_YEAR_STATUTORY_EPS_KINDS),
+        _highlights_eps(filing_interim, filings_index, as_of, _HIGHLIGHT_EPS_PAIRS[1:]),
+    )
+    for candidate in candidates:
+        if candidate is None:
+            continue
+        check, reasons = _numeric_eps_check(candidate)
         if check["evaluable"]:
             return check, reasons
     body = _body_eps_check(interim_body, as_of)

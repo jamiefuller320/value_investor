@@ -1057,7 +1057,7 @@ def test_newer_unextracted_half_year_blocks_an_older_pair():
     assert result["checks"]["interim_revenue"]["evaluable"] is False
 
 
-def test_half_year_eps_prefers_diluted_over_adjusted():
+def test_half_year_eps_prefers_adjusted_over_diluted():
     result = _assess_half(
         _half_year_filing(
             revenue=(110.0, 100.0),
@@ -1067,12 +1067,12 @@ def test_half_year_eps_prefers_diluted_over_adjusted():
     )
     check = result["checks"]["eps_interim"]
     assert check["evaluable"] is True
-    assert check["fired"] is True
-    assert check["label"] == "Diluted earnings per share"
-    assert check["latest"] == pytest.approx(8.0)
+    assert check["fired"] is False
+    assert check["label"] == "Adjusted earnings per share"
+    assert check["latest"] == pytest.approx(12.0)
     assert check["prior"] == pytest.approx(10.0)
     assert check["source"] == "filing_interim_financials.json:h1"
-    assert check["interim_eps_decline_pct"] == pytest.approx(0.2)
+    assert check["interim_eps_decline_pct"] == pytest.approx(-0.2)
 
 
 def test_quarterly_revenue_wins_over_a_half_year_extract():
@@ -1190,3 +1190,20 @@ def test_interim_revenue_coverage_finding_silent_when_above_the_floor():
     titles = [f["title"] for f in ops_findings_from_operating_decline_gate(payload)]
     assert INTERIM_COVERAGE_TITLE not in titles
     assert titles == [FINDING_TITLE]
+
+
+def test_half_year_adjusted_eps_drop_fires():
+    result = _assess_half(
+        _half_year_filing(revenue=(110.0, 100.0), eps=(12.0, 10.0), adjusted=(8.0, 10.0))
+    )
+    check = result["checks"]["eps_interim"]
+    assert check["fired"] is True
+    assert check["label"] == "Adjusted earnings per share"
+    assert "eps_decline_interim" in _codes(result)
+
+
+def test_half_year_diluted_eps_used_when_no_adjusted():
+    result = _assess_half(_half_year_filing(revenue=(110.0, 100.0), eps=(8.0, 10.0)))
+    check = result["checks"]["eps_interim"]
+    assert check["fired"] is True
+    assert check["label"] == "Diluted earnings per share"
