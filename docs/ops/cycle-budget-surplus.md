@@ -33,7 +33,7 @@ as a **warning**, not a hard cap. On a $200 Ultra listing that is **$30/week**.
 
 `ftse-library policy` flags when estimated weekly_ops is near or over that
 pseudo limit. It does **not** stop rememo, Sunday email, or surplus raises.
-The operational hard envelope remains `weekly_ops_cap_usd` (currently $80).
+The operational hard envelope remains `weekly_ops_cap_usd` ($100.50 on 2026-11-05: an $80 base, plus $16 the owner added for strategy-book memos (`budget.strategy_book_memo_raise`), plus the $4.50 provisional surplus bump). The $16 is in `previous_weekly_ops_cap_usd`, so reverting the surplus bump leaves it in place.
 The 15% estimated-USD warning is a stand-in until the token warning is calibrated
 (`token_usage_weekly_warning_raw_usd`; see [agent-token-usage.md](agent-token-usage.md)).
 
