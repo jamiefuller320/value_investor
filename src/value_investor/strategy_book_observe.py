@@ -2500,6 +2500,9 @@ def _bench_report(episodes: list[dict[str, Any]]) -> dict[str, Any]:
         kept_mean = _mean(_decision_values(kept_counted, "decision_return_floor"))
         difference = None if kept_mean is None or all_mean is None else kept_mean - all_mean
         error = entry_week_standard_error(by_week)
+        counted_primary = [episode for episode in primary if not episode.get("provenance_missing")]
+        kept_capital = capital_days_return(kept_counted)
+        primary_capital = capital_days_return(counted_primary)
         report[column] = {
             "kept": len(kept),
             "kept_share": None if not primary else len(kept) / len(primary),
@@ -2519,6 +2522,15 @@ def _bench_report(episodes: list[dict[str, Any]]) -> dict[str, Any]:
                     and abs(difference) > BENCH_STANDARD_ERRORS * error
                     and difference > 0
                 ),
+                # "No lower than the primary's" (section 8). Both-halves sign is
+                # not evaluated: the registration does not define the half cut.
+                "capital_days_met": bool(
+                    kept_capital is not None
+                    and primary_capital is not None
+                    and kept_capital >= primary_capital
+                ),
+                "kept_capital_days": kept_capital,
+                "primary_capital_days": primary_capital,
             },
         }
     return report
