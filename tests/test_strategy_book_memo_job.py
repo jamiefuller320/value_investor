@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
@@ -601,6 +602,111 @@ def test_spend_flag_requires_signature_and_the_boolean(tmp_path: Path) -> None:
     assert spend_enabled(path) is False
     _write_json(path, {"signed_at": "2026-11-05", "spend_enabled": True})
     assert spend_enabled(path) is True
+
+
+def _library_screen(root: Path, *, summary_at: str) -> Path:
+    """Buy-tier history row with no free_cashflow; the figure lives on the CSV."""
+    ticker = "BBB"
+    screen = root / "docs" / "data" / "library" / "markets" / "sp500" / "screen"
+    days = _weekdays_ending(SESSION, 30)
+    _chart(root, ticker, days, _decline_closes(len(days)))
+    _write_json(
+        screen / "history" / "run_20261023_120000.json",
+        {
+            "run_at": "2026-10-23T12:00:00+00:00",
+            "signals": [
+                {
+                    "ticker": ticker,
+                    "signal": "buy",
+                    "adjusted_signal": "buy",
+                    "research_verdict": "hold",
+                    "conviction_score": 1,
+                    "data_quality_score": 1,
+                    "timing_signal": "neutral",
+                }
+            ],
+        },
+    )
+    _write_json(screen / "latest_summary.json", {"run_at": summary_at, "market": "sp500"})
+    csv_path = screen / "latest_signals.csv"
+    csv_path.parent.mkdir(parents=True, exist_ok=True)
+    csv_path.write_text(
+        "ticker,signal,free_cashflow,name\nBBB,buy,100.0,Bee\n",
+        encoding="utf-8",
+    )
+    _write_json(
+        root / "docs" / "data" / "operating_decline_gate.json",
+        {
+            "as_of": "2026-10-29",
+            "names": {ticker: {"verdict": "clear", "market": "sp500"}},
+        },
+    )
+    _write_json(
+        root / "docs" / "data" / "sector_headwind_gate.json",
+        {
+            "as_of": "2026-10-29",
+            "names_by_market": {
+                "sp500": {ticker: {"sector_verdict": "sound", "sector_basis": "own_market"}}
+            },
+        },
+    )
+    research = screen / "research" / ticker
+    _write_json(
+        research / "sources" / "filings" / "filings_index.json",
+        {
+            "fetched_at": "2026-10-20T00:00:00+00:00",
+            "summary": {
+                "total": 1,
+                "with_body": 1,
+                "period_coverage": {"annual": {"total": 1, "with_body": 1}},
+            },
+        },
+    )
+    _write_json(
+        research / "sources" / "sec_companyfacts.json",
+        {
+            "fetched_at": "2026-10-20T00:00:00+00:00",
+            "latest": {"free_cashflow": 100.0, "currency": "USD"},
+        },
+    )
+    return csv_path
+
+
+def test_library_fcf_comes_from_the_screen_csv_not_the_run_row(tmp_path: Path) -> None:
+    csv_path = _library_screen(tmp_path, summary_at="2026-10-30T18:00:00+00:00")
+    name = evaluate_market("sp500", SESSION, repo_root=tmp_path).names[0]
+    assert "free_cashflow" not in name.screen_row
+    fcf = name.checks["fcf_basis_bound"]
+    assert fcf.passed
+    assert fcf.reason == "evaluated"
+    assert fcf.reason != "not_evaluable"
+    assert fcf.detail["free_cashflow"] == 100.0
+    assert any(path.endswith("latest_signals.csv") for path in name.input_paths)
+    assert any(path.endswith("latest_summary.json") for path in name.input_paths)
+
+    summary = run_strategy_book_memo_job(
+        repo_root=tmp_path,
+        now=datetime(2026, 11, 2, 12, tzinfo=UTC),
+        markets=["sp500"],
+        sessions_by_market={"sp500": [SESSION.isoformat()]},
+        persist=True,
+        runner=lambda **_kwargs: (_ for _ in ()).throw(AssertionError("runner")),
+    )
+    logged = summary["logged"]
+    assert len(logged) == 1
+    assert logged[0]["action"] == "dry_run"
+    row = json.loads(
+        (tmp_path / "docs" / "data" / "strategy_book_memo_log.jsonl").read_text(encoding="utf-8")
+    )
+    csv_inputs = [item for item in row["inputs"] if item["path"].endswith("latest_signals.csv")]
+    assert len(csv_inputs) == 1
+    assert csv_inputs[0]["sha256"] == hashlib.sha256(csv_path.read_bytes()).hexdigest()
+
+    _library_screen(tmp_path, summary_at="2026-11-05T00:00:00+00:00")
+    late = evaluate_market("sp500", SESSION, repo_root=tmp_path).names[0]
+    assert late.checks["fcf_basis_bound"].passed is False
+    assert late.checks["fcf_basis_bound"].reason == "screen_fcf_after_session"
+    assert late.eligible_except_memo is False
 
 
 def test_stale_chart_is_suppressed_and_replay_takes_the_latest_closes(tmp_path: Path) -> None:

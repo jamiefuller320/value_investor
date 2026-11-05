@@ -29,7 +29,7 @@ For each due close *t*, every current buy-tier name (`signal` `buy` or `strong_b
 | Primary low | close equals the minimum of the 10 chart sessions ending at *t* (ties count; shorter history does not fire) | `LOW_WINDOW_SESSIONS = 10` | section 3 |
 | Part 2 | operating-decline `verdict` exactly `clear` | — | section 2 |
 | Part 3 | `names_by_market[market][ticker].sector_verdict` exactly `sound` | — | section 2 |
-| F9-B | `key_filing_bodies`, `fcf_basis_bound`, `overlay_bound` | — | section 2 |
+| F9-B | `key_filing_bodies`, `fcf_basis_bound`, `overlay_bound`. Library FCF is `free_cashflow` on `screen/latest_signals.csv` when `latest_summary.json` `run_at` is on or before the session close (the inventory's dating). A later CSV is `screen_fcf_after_session`; a missing figure is `screen_fcf_missing`. History run rows do not carry the figure. FTSE still uses the boolean `fcf_basis_overlay` on the run row | — | section 2 |
 | Memo | missing, or older than 21 days at the next session | `MEMO_MAX_AGE_DAYS = 21` | section 2 |
 | Fill gap | no memo when the next stored bar is more than 5 calendar days after *t*. No stored next bar is not a drop: the memo is for the next close, which may not be on disk yet | `MAX_FILL_GAP_CALENDAR_DAYS = 5` | section 3 |
 
@@ -38,6 +38,10 @@ The pre-registered alternative (RSI(14) below 40 and the close at least 3 percen
 A thinned chart (median calendar gap between stored dates greater than 1 day) fails closed. The registration refuses a thinned tape because it changes RSI(14).
 
 Review dates are session indexes 63, 126 and 189 (`REVIEW_INDEXES`) on launched episodes in `docs/data/strategy_book_observe.json` (section 5). The file does not exist yet, so this path yields nothing. Memo age for a review is read at the review session itself. A review memo does not re-check the price rule or the F9-B binds. Fixture shape the walker can write later: `episodes[]` with `market`, `ticker`, launched (`launched`, `launched_at`, `launch_session`, or `state` `launched`), not closed, and `reviews: [{index, session}]` or `review_sessions` keyed by index.
+
+## Replays on past closes
+
+The decline store, the sector store, filings indexes, and each library market's `latest_signals.csv` (dated by `latest_summary.json`) are single overwritten snapshots. A point-in-time replay of a close before those dates correctly finds nothing: the files are not yet in force, and the job does not pretend they were. The forward job reads the same files after each refresh and before the next close, which is when their dates sit on the session being scored. There is no dating-override flag.
 
 ## Spend gate
 

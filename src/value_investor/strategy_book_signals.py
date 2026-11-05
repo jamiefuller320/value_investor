@@ -30,9 +30,9 @@ from value_investor.decision_input_inventory import (
 from value_investor.library_decision_input_inventory import (
     _index_as_of,
     _memo_as_of,
-    _number,
     evaluate_library_fcf_basis,
     graduated_market_ids,
+    library_screen_free_cashflow,
 )
 from value_investor.paper_fund import BUY_SIGNALS
 from value_investor.price_charts import chart_filename
@@ -676,6 +676,15 @@ def _filing_paths(research_root: Path, ticker: str) -> list[Path]:
     return [path for path in names if path.is_file()]
 
 
+def _library_snapshot_as_of(session: date) -> datetime:
+    """Close of *t* for the library screen CSV and the FCF source files.
+
+    A snapshot timestamp after this is not a pass. The forward job reads the
+    snapshots after they refresh and before the next close.
+    """
+    return session_end(session)
+
+
 def _binds(
     *,
     market: str,
@@ -709,21 +718,39 @@ def _binds(
             {"fcf_basis_overlay": overlay_flag if isinstance(overlay_flag, bool) else None},
         )
     else:
-        detail = evaluate_library_fcf_basis(
-            research_root / ticker,
-            screen_fcf=_number(row.get("free_cashflow")),
-            as_of=as_of,
+        # History rows do not carry free_cashflow. The figure lives on the
+        # market's latest_signals.csv, dated by latest_summary.json run_at.
+        snapshot_as_of = _library_snapshot_as_of(session)
+        screen = library_screen_free_cashflow(
+            research_root.parent,
+            ticker,
+            as_of=snapshot_as_of,
         )
-        fcf_ok = bool(detail.get("fcf_basis_bound"))
-        fcf = Check(
-            "fcf_basis_bound",
-            fcf_ok,
-            "evaluated" if fcf_ok else "not_evaluable",
-            {
-                "fcf_basis_overlay": detail.get("fcf_basis_overlay"),
-                "fcf_basis_source": detail.get("fcf_basis_source"),
-            },
-        )
+        paths.extend(str(item) for item in screen.get("paths") or [])
+        if screen.get("reason"):
+            fcf = Check(
+                "fcf_basis_bound",
+                False,
+                str(screen.get("reason")),
+                {"free_cashflow": None},
+            )
+        else:
+            detail = evaluate_library_fcf_basis(
+                research_root / ticker,
+                screen_fcf=screen.get("free_cashflow"),
+                as_of=snapshot_as_of,
+            )
+            fcf_ok = bool(detail.get("fcf_basis_bound"))
+            fcf = Check(
+                "fcf_basis_bound",
+                fcf_ok,
+                "evaluated" if fcf_ok else "not_evaluable",
+                {
+                    "free_cashflow": screen.get("free_cashflow"),
+                    "fcf_basis_overlay": detail.get("fcf_basis_overlay"),
+                    "fcf_basis_source": detail.get("fcf_basis_source"),
+                },
+            )
 
     has_memo, memo_at, disk_verdict = _memo_as_of(
         ticker, research_root=research_root, as_of=memo_as_of

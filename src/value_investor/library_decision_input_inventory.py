@@ -203,7 +203,8 @@ def _summary_run_at(screen_dir: Path) -> datetime | None:
     return _parse_dt(payload.get("run_at"))
 
 
-def _csv_buy_rows(path: Path) -> dict[str, dict[str, str]]:
+def _csv_rows(path: Path, *, buy_only: bool = False) -> dict[str, dict[str, str]]:
+    """First row per ticker. ``buy_only`` keeps the inventory's buy-tier filter."""
     if not path.is_file():
         return {}
     out: dict[str, dict[str, str]] = {}
@@ -211,12 +212,50 @@ def _csv_buy_rows(path: Path) -> dict[str, dict[str, str]]:
         for row in csv.DictReader(handle):
             ticker = str(row.get("ticker") or "").strip().upper()
             signal = str(row.get("signal") or "").strip()
-            if not ticker or signal not in BUY_SIGNALS or ticker in out:
+            if not ticker or ticker in out:
+                continue
+            if buy_only and signal not in BUY_SIGNALS:
                 continue
             out[ticker] = {
                 str(key): "" if value is None else str(value) for key, value in row.items()
             }
     return out
+
+
+def _csv_buy_rows(path: Path) -> dict[str, dict[str, str]]:
+    return _csv_rows(path, buy_only=True)
+
+
+def library_screen_free_cashflow(
+    screen_dir: Path,
+    ticker: str,
+    *,
+    as_of: datetime,
+) -> dict[str, Any]:
+    """``free_cashflow`` from ``latest_signals.csv``, dated like the inventory.
+
+    ``_buy_tier_members`` reads that CSV only when ``latest_summary.json``
+    ``run_at`` is on or before ``as_of``. A later snapshot is
+    ``screen_fcf_after_session``. A missing date, row, or figure is
+    ``screen_fcf_missing``. ``paths`` lists the files actually read.
+    """
+    summary_path = screen_dir / "latest_summary.json"
+    csv_path = screen_dir / "latest_signals.csv"
+    read: list[str] = []
+    if summary_path.is_file():
+        read.append(str(summary_path))
+    summary_at = _summary_run_at(screen_dir)
+    if summary_at is None:
+        return {"free_cashflow": None, "reason": "screen_fcf_missing", "paths": read}
+    if _as_utc(summary_at) > _as_utc(as_of):
+        return {"free_cashflow": None, "reason": "screen_fcf_after_session", "paths": read}
+    if csv_path.is_file():
+        read.append(str(csv_path))
+    row = _csv_rows(csv_path).get(str(ticker or "").strip().upper())
+    value = _number(row.get("free_cashflow")) if row else None
+    if value is None:
+        return {"free_cashflow": None, "reason": "screen_fcf_missing", "paths": read}
+    return {"free_cashflow": value, "reason": "", "paths": read}
 
 
 def _sec_free_cashflow(payload: dict[str, Any]) -> tuple[float | None, str]:
