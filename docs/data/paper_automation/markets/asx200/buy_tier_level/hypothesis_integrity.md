@@ -1,19 +1,16 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-04T00:48:10.608063+00:00
+Track: `buy_tier_level` · updated 2026-11-05T00:47:42.945507+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **11** / 29 (38% count, 36% NAV)
-- Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
-- Balancing hint: `trim_weakening_losers`
+- Losers: **10** / 28 (36% count, 35% NAV)
+- Tolerance: count ≤ 40%, NAV ≤ 35% → within band
+- Balancing hint: `tolerate_intact_losers`
 - Selection feedback:
-  - dividend fails more often among losers (64% vs 17%)
+  - dividend fails more often among losers (60% vs 17%)
 
 ## Holding reviews
-
-### SMR.AX — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
 
 ### ZIM.AX — intact / watch_review (-22.1%)
 - deep drawdown (-22.1%) — re-check facts; thesis still intact
@@ -70,14 +67,6 @@ Track: `buy_tier_level` · updated 2026-11-04T00:48:10.608063+00:00
 - still buy
 - cheapness family still passes
 
-### CYL.AX — intact / hold_tolerate (-7.4%)
-- price drawdown alone does not invalidate value thesis
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 51%
-
 ### ARB.AX — weakening / watch_review (-6.5%)
 - research verdict caution
 - still buy
@@ -110,6 +99,13 @@ Track: `buy_tier_level` · updated 2026-11-04T00:48:10.608063+00:00
 - cheapness family still passes
 - data_quality 0.95
 - conviction 53%
+
+### CYL.AX — intact / hold_tolerate (-3.3%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 51%
 
 ### NEM.AX — intact / hold_tolerate (-1.6%)
 - still buy

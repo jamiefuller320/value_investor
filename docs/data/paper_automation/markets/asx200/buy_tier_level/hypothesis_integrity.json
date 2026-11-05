@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-11-04T00:48:10.608063+00:00",
-  "as_of": "2026-11-04T11:48:10.429050+11:00",
+  "updated_at": "2026-11-05T00:47:42.945507+00:00",
+  "as_of": "2026-11-05T11:47:42.649473+11:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -16,78 +16,46 @@
     "broken_urgency_boost": 0.28,
     "skip_underwater_urgency_when_intact": true
   },
-  "holding_count": 29,
-  "underwater_count": 11,
+  "holding_count": 28,
+  "underwater_count": 10,
   "thesis_status_counts": {
     "intact": 17,
     "weakening": 11,
-    "broken": 1,
+    "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
-    "holding_count": 29,
-    "loser_count": 11,
-    "loser_share": 0.3793,
-    "loser_nav_share": 0.3598,
+    "holding_count": 28,
+    "loser_count": 10,
+    "loser_share": 0.3571,
+    "loser_nav_share": 0.348,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
-    "within_tolerance": false,
-    "intact_loser_count": 7,
+    "within_tolerance": true,
+    "intact_loser_count": 6,
     "weakening_loser_count": 4,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
-      "quality": 0.0909,
-      "dividend": 0.6364,
-      "garp": 0.2727,
+      "quality": 0.1,
+      "dividend": 0.6,
+      "garp": 0.3,
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.1111,
-      "quality": 0.3889,
+      "cheapness": 0.0556,
+      "quality": 0.3333,
       "dividend": 0.1667,
-      "garp": 0.5556,
-      "risk": 0.0556
+      "garp": 0.5,
+      "risk": 0.0
     },
     "selection_feedback_flags": [
-      "dividend fails more often among losers (64% vs 17%)"
+      "dividend fails more often among losers (60% vs 17%)"
     ],
-    "balancing_hint": "trim_weakening_losers",
+    "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
-    {
-      "ticker": "SMR.AX",
-      "name": "SMR.AX",
-      "thesis_status": "broken",
-      "recommended_action": "exit_candidate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 2.65,
-      "avg_cost": 2.65,
-      "signal": null,
-      "timing_signal": null,
-      "conviction_score": null,
-      "data_quality_score": null,
-      "passed_families": [],
-      "failed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "research_verdict": null,
-      "reasons": [
-        "cheapness lost and not in buy tier"
-      ],
-      "intact_reasons": [],
-      "weaken_reasons": [],
-      "broken_reasons": [
-        "cheapness lost and not in buy tier"
-      ]
-    },
     {
       "ticker": "ZIM.AX",
       "name": "Zimplats Holdings Limited",
@@ -141,7 +109,7 @@
       "mark": 55.32,
       "avg_cost": 69.81,
       "signal": "strong_buy",
-      "timing_signal": "accumulate",
+      "timing_signal": "neutral",
       "conviction_score": 0.4791,
       "data_quality_score": 1.0,
       "passed_families": [
@@ -417,48 +385,6 @@
       "broken_reasons": []
     },
     {
-      "ticker": "CYL.AX",
-      "name": "Catalyst Metals Limited",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.074,
-      "mark": 3.63,
-      "avg_cost": 3.92,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5118,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 51%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 51%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
       "ticker": "ARB.AX",
       "name": "ARB Corporation Limited",
       "thesis_status": "weakening",
@@ -663,6 +589,47 @@
       "broken_reasons": []
     },
     {
+      "ticker": "CYL.AX",
+      "name": "Catalyst Metals Limited",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0333,
+      "mark": 3.63,
+      "avg_cost": 3.7549,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5118,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 51%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 51%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
       "ticker": "NEM.AX",
       "name": "Newmont Corporation",
       "thesis_status": "intact",
@@ -753,7 +720,7 @@
       "mark": 29.67,
       "avg_cost": 29.58,
       "signal": "buy",
-      "timing_signal": "accumulate",
+      "timing_signal": "neutral",
       "conviction_score": 0.5839,
       "data_quality_score": 0.95,
       "passed_families": [
