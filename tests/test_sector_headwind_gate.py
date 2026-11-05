@@ -13,6 +13,7 @@ from value_investor.operating_decline_gate import EPS_INTERIM_DROP_PCT
 from value_investor.ops_monitor import check_sector_headwind_gate
 from value_investor.sector_headwind_gate import (
     COVERAGE_GAP_TITLE,
+    FALLBACK_FINDING_TITLE,
     FINDING_TITLE,
     PRICE_BREADTH_HEADWIND,
     SCREEN_EARNINGS_GROWTH_DECLINE_PCT,
@@ -328,7 +329,11 @@ def test_refresh_persists_store_shape_from_tmp_inputs(tmp_path: Path):
         "market": "ftse350",
         "sector": "Industrials",
         "sector_verdict": "sound",
+        "sector_basis": "own_market",
+        "own_market_verdict": "sound",
         "screen_date": "2025-09-30",
+        "earnings_fallback_used": False,
+        "deciding_sector_key": "ftse350:Industrials",
     }
     assert payload["universe"]["included"] == ["ftse350"]
     assert payload["universe"]["admitted_library_markets"] == []
@@ -360,10 +365,16 @@ def test_findings_report_headwinds_and_buy_tier_coverage_gaps():
 
     findings = ops_findings_from_sector_headwind_gate(payload)
 
-    assert [row["title"] for row in findings] == [FINDING_TITLE, COVERAGE_GAP_TITLE]
+    assert [row["title"] for row in findings] == [
+        FINDING_TITLE,
+        COVERAGE_GAP_TITLE,
+        FALLBACK_FINDING_TITLE,
+    ]
     assert "Energy" in findings[0]["summary"]
     assert "2" in findings[0]["summary"]
     assert "Utilities" in findings[1]["summary"]
+    assert findings[2]["severity"] == "info"
+    assert "no rememo" in findings[2]["summary"]
     assert all(row["auto_fixable"] is False for row in findings)
 
 
@@ -431,6 +442,7 @@ def _library_refresh(
     as_of: str | None = None,
     run_at: str = "2025-09-30T12:00:00+00:00",
     chart_kwargs: dict | None = None,
+    ftse_rows: list[dict] | None = None,
 ):
     library = tmp_path / "library"
     chart_dir = tmp_path / "charts"
@@ -453,13 +465,16 @@ def _library_refresh(
     decline_path = tmp_path / "decline.json"
     if decline is not None:
         decline_path.write_text(json.dumps(decline), encoding="utf-8")
+    ftse = ftse_rows if ftse_rows is not None else _members(sector="FTSE Only")
     latest = tmp_path / "latest.json"
     latest.write_text(
-        json.dumps({"run_at": run_at, "reports": _members(sector="FTSE Only")}),
+        json.dumps({"run_at": run_at, "reports": ftse}),
         encoding="utf-8",
     )
-    for ticker, chart in _charts(_members(sector="FTSE Only")).items():
-        (chart_dir / f"{ticker}.json").write_text(json.dumps(chart), encoding="utf-8")
+    for ticker, chart in _charts(ftse).items():
+        chart_path = chart_dir / f"{ticker}.json"
+        if not chart_path.is_file():
+            chart_path.write_text(json.dumps(chart), encoding="utf-8")
     store = tmp_path / "gate.json"
     labels = tmp_path / "labels.jsonl"
     payload = refresh_sector_headwind_gate(
@@ -765,3 +780,304 @@ def test_coverage_finding_names_library_markets_mostly_insufficient():
     assert "aim (2/3)" in findings[1]["summary"]
     assert "Mining" not in findings[1]["summary"]
     assert findings[1]["auto_fixable"] is False
+    assert findings[-1]["title"] == FALLBACK_FINDING_TITLE
+    assert findings[-1]["auto_fixable"] is False
+
+
+def _rows(
+    tickers: list[str],
+    *,
+    sector: str,
+    earnings_growth: float | list[float] | None = None,
+) -> list[dict]:
+    rows = []
+    for index, ticker in enumerate(tickers):
+        row: dict = {
+            "ticker": ticker,
+            "sector": sector,
+            "signal": "buy" if index == 0 else "hold",
+        }
+        if isinstance(earnings_growth, list):
+            row["earnings_growth"] = earnings_growth[index]
+        elif earnings_growth is not None:
+            row["earnings_growth"] = earnings_growth
+        rows.append(row)
+    return rows
+
+
+def _assert_name_labels(name: dict) -> None:
+    assert name["sector_basis"] in {"own_market", "regional"}
+    assert isinstance(name["earnings_fallback_used"], bool)
+    assert "own_market_verdict" in name
+    if name["sector_basis"] == "regional":
+        assert name["region"]
+    else:
+        assert "region" not in name
+
+
+def test_library_earnings_growth_used_only_when_decline_store_lacks_the_member(tmp_path: Path):
+    mixed = [
+        {"ticker": "A.SW", "sector": "Mixed", "signal": "buy", "earnings_growth": -0.90},
+        {"ticker": "B.SW", "sector": "Mixed", "signal": "hold", "earnings_growth": -0.90},
+        {"ticker": "C.SW", "sector": "Mixed", "signal": "hold", "earnings_growth": 0.50},
+        {"ticker": "D.SW", "sector": "Mixed", "signal": "hold", "earnings_growth": -0.20},
+    ]
+    edge = _rows(
+        ["E.SW", "F.SW", "G.SW", "H.SW"],
+        sector="Edge",
+        earnings_growth=[-0.05, -0.05, -0.049, -0.049],
+    )
+    flat = _rows(["I.SW", "J.SW", "K.SW", "L.SW"], sector="Flat", earnings_growth=-0.049)
+    decline = {
+        "as_of": "2025-09-30",
+        "names": {
+            "A.SW": {"verdict": "clear"},
+            "B.SW": {"verdict": "clear"},
+            "C.SW": {"verdict": "declining"},
+        },
+    }
+    payload, _labels = _library_refresh(
+        tmp_path,
+        markets={"smi": [*mixed, *edge, *flat]},
+        graduated=["smi"],
+        decline=decline,
+        as_of="2025-09-30",
+        chart_kwargs={"start": 80.0, "end": 120.0, "sma": 100.0},
+    )
+
+    mixed_sector = payload["sectors"]["smi:Mixed"]
+    assert mixed_sector["metrics"]["earnings_breadth_sources"] == {
+        "decline_store": 3,
+        "screen_earnings_growth": 1,
+    }
+    assert mixed_sector["metrics"]["earnings_fallback_used"] is True
+    assert mixed_sector["metrics"]["earnings_component"] == "screen_earnings_growth_fallback"
+    assert mixed_sector["metrics"]["earnings_declining_share"] == 0.5
+    assert mixed_sector["verdict"] == "headwind"
+    assert "SCREEN_EARNINGS_GROWTH_FALLBACK" in {row["code"] for row in mixed_sector["reasons"]}
+
+    edge_sector = payload["sectors"]["smi:Edge"]
+    assert edge_sector["metrics"]["earnings_declining_count"] == 2
+    assert edge_sector["metrics"]["earnings_declining_share"] == 0.5
+    assert edge_sector["verdict"] == "headwind"
+    assert edge_sector["earnings_fallback_used"] is True
+
+    flat_sector = payload["sectors"]["smi:Flat"]
+    assert flat_sector["metrics"]["earnings_declining_share"] == 0.0
+    assert flat_sector["metrics"]["earnings_fallback_used"] is True
+    assert flat_sector["verdict"] == "sound"
+
+    for ticker in ("A.SW", "D.SW", "E.SW", "I.SW"):
+        name = payload["names_by_market"]["smi"][ticker]
+        _assert_name_labels(name)
+        assert name["sector_basis"] == "own_market"
+        assert name["earnings_fallback_used"] is True
+    assert payload["names_by_market"]["smi"]["A.SW"]["sector_verdict"] == "headwind"
+    assert payload["names_by_market"]["smi"]["I.SW"]["sector_verdict"] == "sound"
+
+    smi = payload["summary"]["by_market"]["smi"]["buy_tier_by_basis"]
+    assert smi["own_market"]["headwind"] == 2
+    assert smi["own_market"]["sound"] == 1
+    assert smi["regional"] == {"sound": 0, "headwind": 0, "insufficient_data": 0}
+    used = payload["summary"]["by_market"]["smi"]["buy_tier_by_earnings_fallback"]
+    assert used["used"]["headwind"] == 2
+    assert used["used"]["sound"] == 1
+    assert used["not_used"] == {"sound": 0, "headwind": 0, "insufficient_data": 0}
+    overall = payload["summary"]["buy_tier_by_earnings_fallback"]
+    assert overall["used"]["sound"] == 1
+    assert overall["used"]["headwind"] == 2
+    assert overall["not_used"]["sound"] == 1
+    findings = ops_findings_from_sector_headwind_gate(payload)
+    assert findings[-1]["title"] == FALLBACK_FINDING_TITLE
+    assert findings[-1]["auto_fixable"] is False
+    assert "used sound=1" in findings[-1]["summary"]
+    assert "no rememo" in findings[-1]["summary"]
+
+
+def test_ftse_screen_is_not_scored_with_library_earnings_growth(tmp_path: Path):
+    ftse = _members(sector="Banks")
+    for row in ftse:
+        row["earnings_growth"] = -1.0
+    payload, _labels = _library_refresh(
+        tmp_path,
+        markets={},
+        graduated=[],
+        ftse_rows=ftse,
+        as_of="2025-09-30",
+    )
+
+    sector = payload["sectors"]["ftse350:Banks"]
+    assert sector["verdict"] == "sound"
+    assert sector["metrics"]["earnings_component"] == "screen_fields_fallback"
+    assert sector["metrics"]["earnings_declining_share"] == 0.0
+    assert sector["metrics"]["earnings_fallback_used"] is False
+    assert sector["metrics"]["earnings_breadth_sources"] == {
+        "decline_store": 0,
+        "screen_earnings_growth": 0,
+    }
+    name = payload["names"]["T0.L"]
+    _assert_name_labels(name)
+    assert name["sector_basis"] == "own_market"
+    assert name["earnings_fallback_used"] is False
+    assert name["sector_verdict"] == "sound"
+
+
+def test_earnings_growth_csv_dated_after_cutoff_is_ignored(tmp_path: Path):
+    rows = _rows(["A.SW", "B.SW", "C.SW", "D.SW"], sector="Watches", earnings_growth=-0.50)
+    payload, _labels = _library_refresh(
+        tmp_path,
+        markets={"smi": rows},
+        graduated=["smi"],
+        as_of="2025-09-01",
+        run_at="2025-10-15T00:00:00+00:00",
+        chart_kwargs={"start": 80.0, "end": 120.0, "sma": 100.0},
+    )
+
+    sector = payload["sectors"]["smi:Watches"]
+    assert sector["screen_date"] == "2025-10-15"
+    assert sector["metrics"]["as_of"] == "2025-09-01"
+    assert sector["verdict"] == "insufficient_data"
+    assert sector["metrics"]["earnings_component"] == "unavailable"
+    assert sector["metrics"]["earnings_fallback_used"] is False
+    assert sector["metrics"]["earnings_breadth_sources"]["screen_earnings_growth"] == 0
+    assert payload["names_by_market"]["smi"]["A.SW"]["earnings_fallback_used"] is False
+
+
+def test_regional_fallback_fires_only_for_the_member_count_rule(tmp_path: Path):
+    widgets_aim = _rows(["A1.L", "A2.L"], sector="Widgets")
+    widgets_small = _rows(["S1.L", "S2.L"], sector="Widgets")
+    broad = _rows([f"B{index}.DE" for index in range(8)], sector="Broadcast")
+    names = {row["ticker"]: {"verdict": "clear"} for row in [*widgets_aim, *widgets_small, *broad]}
+    payload, _labels = _library_refresh(
+        tmp_path,
+        markets={"aim": widgets_aim, "ftse_smallcap": widgets_small, "dax": broad},
+        graduated=["aim", "ftse_smallcap", "dax"],
+        charts=_charts([*widgets_aim, *widgets_small, *broad[:2]]),
+        decline={"as_of": "2025-09-30", "names": names},
+        as_of="2025-09-30",
+    )
+
+    own = payload["sectors"]["aim:Widgets"]
+    regional = payload["sectors"]["region:uk:Widgets"]
+    assert own["verdict"] == "insufficient_data"
+    assert regional["scope"] == "regional"
+    assert regional["metrics"]["member_count"] == 4
+    assert regional["verdict"] == "sound"
+    assert regional["contributing_markets"] == ["ftse_smallcap", "aim"]
+    name = payload["names_by_market"]["aim"]["A1.L"]
+    _assert_name_labels(name)
+    assert name["sector_verdict"] == "sound"
+    assert name["sector_basis"] == "regional"
+    assert name["region"] == "uk"
+    assert name["own_market_verdict"] == "insufficient_data"
+    assert name["earnings_fallback_used"] is False
+    assert name["deciding_sector_key"] == "region:uk:Widgets"
+
+    assert "region:europe:Broadcast" not in payload["sectors"]
+    broadcast = payload["names_by_market"]["dax"]["B0.DE"]
+    _assert_name_labels(broadcast)
+    assert broadcast["sector_basis"] == "own_market"
+    assert broadcast["sector_verdict"] == "insufficient_data"
+    gaps = {
+        row["sector"]: row["reasons"]
+        for row in payload["summary"]["by_market"]["dax"]["buy_tier_insufficient_data"]
+    }
+    assert "chart coverage" in gaps["Broadcast"]
+    assert "too few members" not in gaps["Broadcast"]
+    aim_basis = payload["summary"]["by_market"]["aim"]["buy_tier_by_basis"]
+    assert aim_basis["regional"]["sound"] == 1
+    assert aim_basis["own_market"]["sound"] == 0
+
+
+def test_regional_pool_counts_a_cross_listed_ticker_once(tmp_path: Path):
+    dax = _rows(["SAP.DE", "A.DE", "B.DE"], sector="Industrials", earnings_growth=0.10)
+    euro = _rows(["SAP.DE", "C.PA", "D.PA"], sector="Industrials", earnings_growth=0.10)
+    payload, _labels = _library_refresh(
+        tmp_path,
+        markets={"dax": dax, "euro_stoxx50": euro},
+        graduated=["dax", "euro_stoxx50"],
+        chart_kwargs={"start": 80.0, "end": 120.0, "sma": 100.0},
+        as_of="2025-09-30",
+    )
+
+    regional = payload["sectors"]["region:europe:Industrials"]
+    assert regional["metrics"]["member_count"] == 5
+    assert regional["members"].count("SAP.DE") == 1
+    assert sorted(regional["members"]) == ["A.DE", "B.DE", "C.PA", "D.PA", "SAP.DE"]
+    assert regional["member_count_by_market"] == {"dax": 3, "euro_stoxx50": 3}
+    for market in ("dax", "euro_stoxx50"):
+        name = payload["names_by_market"][market]["SAP.DE"]
+        assert name["sector_basis"] == "regional"
+        assert name["region"] == "europe"
+        assert name["own_market_verdict"] == "insufficient_data"
+
+
+def test_regional_pool_does_not_merge_different_sector_labels(tmp_path: Path):
+    dax = _rows(["A.DE", "B.DE"], sector="Industrials")
+    cac = _rows(["C.PA", "D.PA", "E.PA"], sector="Industrial Goods")
+    payload, _labels = _library_refresh(
+        tmp_path,
+        markets={"dax": dax, "cac40": cac},
+        graduated=["dax", "cac40"],
+        chart_kwargs={"start": 80.0, "end": 120.0, "sma": 100.0},
+        as_of="2025-09-30",
+    )
+
+    industrials = payload["sectors"]["region:europe:Industrials"]
+    goods = payload["sectors"]["region:europe:Industrial Goods"]
+    assert industrials["members"] == ["A.DE", "B.DE"]
+    assert goods["members"] == ["C.PA", "D.PA", "E.PA"]
+    assert set(industrials["members"]).isdisjoint(goods["members"])
+
+
+def test_market_outside_the_region_map_keeps_its_own_verdict(tmp_path: Path):
+    rows = _rows(["N1.NS", "N2.NS"], sector="Banks")
+    payload, _labels = _library_refresh(
+        tmp_path,
+        markets={"bursa": rows},
+        graduated=["bursa"],
+        chart_kwargs={"start": 80.0, "end": 120.0, "sma": 100.0},
+        as_of="2025-09-30",
+    )
+
+    assert payload["sectors"]["bursa:Banks"]["verdict"] == "insufficient_data"
+    assert not any(str(key).startswith("region:") for key in payload["sectors"])
+    name = payload["names_by_market"]["bursa"]["N1.NS"]
+    _assert_name_labels(name)
+    assert name["sector_basis"] == "own_market"
+    assert name["sector_verdict"] == "insufficient_data"
+    assert name["deciding_sector_key"] == "bursa:Banks"
+
+
+def test_non_graduated_market_adds_no_regional_members(tmp_path: Path):
+    ftse = _rows(["AEP.L", "B.L"], sector="Niche")
+    smallcap = _rows(["C.L", "D.L", "E.L", "F.L"], sector="Niche")
+    payload, _labels = _library_refresh(
+        tmp_path,
+        markets={"ftse_smallcap": smallcap},
+        graduated=[],
+        skipped=["ftse_smallcap"],
+        ftse_rows=ftse,
+        chart_kwargs={"start": 80.0, "end": 120.0, "sma": 100.0},
+        as_of="2025-09-30",
+    )
+
+    regional = payload["sectors"]["region:uk:Niche"]
+    assert regional["verdict"] == "insufficient_data"
+    assert regional["metrics"]["member_count"] == 2
+    assert regional["members"] == ["AEP.L", "B.L"]
+    assert regional["contributing_markets"] == ["ftse350"]
+    assert {"market": "ftse_smallcap", "reason": "not_graduated"} in payload["universe"][
+        "not_scored"
+    ]
+    name = payload["names"]["AEP.L"]
+    _assert_name_labels(name)
+    assert name["sector_basis"] == "regional"
+    assert name["region"] == "uk"
+    assert name["sector_verdict"] == "insufficient_data"
+    assert name["own_market_verdict"] == "insufficient_data"
+    assert "too few members" in {
+        row["reasons"][0]
+        for row in payload["summary"]["by_market"]["ftse350"]["buy_tier_insufficient_data"]
+        if row["sector"] == "Niche"
+    }
