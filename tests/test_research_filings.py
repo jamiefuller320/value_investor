@@ -11969,6 +11969,34 @@ def test_parked_source_hunter_nem_ax_asx200_has_fetchable_ir():
     assert "newmont" in body.lower()
 
 
+def test_fetch_filings_ir_allowlist_alk_ax_asx200_iwb_builtin(tmp_path: Path):
+    """eng-20261106-02: ALK.AX leftover IWB — seed investors.alkane.com.au statutory/ASX PDFs."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("ALK.AX", path=allowlist_path)
+    urls = {row["url"] for row in rows}
+    assert len(rows) == 3
+    assert any("Annual-Report-to-shareholders.pdf" in url for url in urls)
+    assert any("March-Quarterly-Activities-Report.pdf" in url for url in urls)
+    assert any("Diggers-amp-Dealers-Mining-Forum-Presentation.pdf" in url for url in urls)
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert "ALK.AX" not in PARKED_SOURCE_HUNTER_SKIP
+
+
+def test_parked_source_hunter_alk_ax_asx200_has_fetchable_ir():
+    """eng-20261106-02: ALK.AX IWB — Alkane IR PDFs in _BUILTIN_IR_URLS live-fetch with issuer text."""
+    assert "ALK.AX" not in PARKED_SOURCE_HUNTER_SKIP
+    urls = _BUILTIN_IR_URLS.get("ALK.AX") or []
+    assert len(urls) == 3
+    annual = next(url for url in urls if "Annual-Report-to-shareholders.pdf" in url)
+    body = _live_fetch_filing_body(annual)
+    if not body:
+        pytest.skip("Alkane IR PDF fetch unavailable (network) — retry later")
+    assert len(body) >= 10000
+    assert "alkane" in body.lower()
+
+
 def test_parked_source_hunter_fmg_ax_asx200_has_fetchable_ir():
     """eng-20261009-02: FMG.AX leftover IWB — Markit/ASX PDFs in _BUILTIN_IR_URLS."""
     from value_investor.research.filings import _ESEF_ENTITY_SEARCH_ALIASES
