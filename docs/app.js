@@ -6710,7 +6710,7 @@ function renderInvestmentModelCompanionStrip(data, modelId) {
         <div class="investment-model-companion-grid">
           <div class="investment-model-companion-cell">
             <div class="small muted">Mode</div>
-            <div class="investment-model-companion-value"><span class="badge badge-buy">live capital</span></div>
+            <div class="investment-model-companion-value"><span class="badge badge-hold">paper control</span></div>
           </div>
           <div class="investment-model-companion-cell">
             <div class="small muted">Primary track</div>
