@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-06T07:30:27+00:00",
+  "updated_at": "2026-11-06T13:15:25+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16766,6 +16766,22 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a1af74-11c6-7e8a-9823-c842727f4306",
       "added_at": "2026-11-06T07:57:47+00:00"
+    },
+    {
+      "id": "L683",
+      "category": "later",
+      "section": "ops",
+      "title": "Stop pound-cap test breaking on library market-cap refreshes",
+      "summary": "tests/test_ftse_pound_cap.py hardcodes library market caps (GROW.L, HMSO.L via HMSO.IR) that change on every ingest, so CI fails on unrelated PRs; it has been refreshed by hand four times since 2026-10-29. Read the expected cap from the same library row, or use a small fixture tree, so the test checks the method and arithmetic rather than today's number.",
+      "revisit_when": "Next time CI fails on test_ftse350_pound_caps_cover_priced_names after a library refresh",
+      "tags": [
+        "ci",
+        "flaky-test",
+        "pound-cap"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a1af74-11c6-7e8a-9823-c842727f4306",
+      "added_at": "2026-11-06T13:15:25+00:00"
     }
   ],
   "fragments": [
