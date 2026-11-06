@@ -120,8 +120,10 @@ This walks development signal sessions (2000–2012) twice, baseline and the
 `~/hsr-build/strategy_book_rehearsal/develop-<time>/`, and writes the
 development block, its sensitivity copy, the development regime cuts and the
 month series to the store. `licensed_data.first_used_at` is stamped on the
-first run. Expect several minutes and several GB of memory (see
-[Performance](#performance)).
+first run. Expect about five minutes and under 2 GB of memory with the default
+`--batch-size 400` (see [Performance](#performance)). If it warns that
+memory is short, close other programs or pass the smaller `--batch-size` it
+suggests; the blocks do not depend on the batch size.
 
 ## 5. Review
 
@@ -163,8 +165,11 @@ rm -rf ~/sharadar ~/hsr-build ~/hsr-mid-build
 ```
 
 That removes the zips, both builds, every `signals_cache*.csv.gz`,
-`daily.csv.gz`, the panels and the rehearsal scratch. If you used `--scratch`,
-delete that directory too. Also remove any copy in `~/Downloads` or the home folder
+`daily.csv.gz`, the panels and the rehearsal scratch. The scratch also holds
+the temporary daily-bar split (`_tapes-*` folders) while `develop` or `reveal`
+runs; the runner deletes it at the end, but an interrupted run can leave one
+behind, and this command removes it. If you used `--scratch`, delete that
+directory too (including any `_tapes-*` folder in it). Also remove any copy in `~/Downloads` or the home folder
 the download ran in, empty the Recycle Bin (or Trash), and delete any File
 History, OneDrive, Time Machine or other backup or sync copy that holds these
 directories.
@@ -202,32 +207,54 @@ All are `auto_fixable=false`. None triggers rememo, ingest or engineering work.
 
 ## Performance
 
-`scripts/strategy_book_rehearsal_scale.py` builds synthetic Sharadar-shaped
-SEP and fundamentals tables (random walks, Sharadar column names, no licensed
-data), builds the gate tapes and specs the same way the runner does, then runs
-the real `develop` and `reveal`:
+`develop` and `reveal` walk the book in batches of names (`--batch-size`,
+default 400). Whole-book tables stay in memory in compact form: screen rows,
+universe membership, sector breadth, statements, and a cross-name tape of
+closes and basket candidates that matched baskets and the regime read. Daily
+bars are split once per run, by ticker batch, into binary files under the
+scratch directory (`_tapes-*`, deleted at the end of the run) and loaded one
+batch at a time. A ticker's `sp500` and `sp400` specs share a book key, so
+batches group tickers rather than universes. Whole episodes stream to the
+scratch files as each batch finishes. The blocks equal a whole-book walk's for
+any batch size: the tests compare batch sizes 10,000, 50 and 3 on the
+synthetic fixture.
+
+Before walking, the runner checks available memory with psutil when it is
+installed (`pip install psutil`). When the estimate for the chosen batch size
+is above what is available, it prints a warning and suggests a smaller
+`--batch-size`.
+
+`scripts/strategy_book_rehearsal_scale.py` writes synthetic build directories
+and Sharadar-shaped tables of the real shape and runs the load, `develop` and
+`reveal`, each in a fresh process. No licensed data is used. It reports peak
+resident memory: `ru_maxrss` on Linux and macOS, psutil `peak_wset` on
+Windows, and the tracemalloc peak otherwise.
 
 ```bash
-python scripts/strategy_book_rehearsal_scale.py --names 1000 --sessions 6500
+python scripts/strategy_book_rehearsal_scale.py                    # default batch size
+python scripts/strategy_book_rehearsal_scale.py --batch-size 100
 ```
 
-Measured 2026-11-06 on a 4-core Linux VM (Python 3.12), 1,000 names × 6,500
-sessions (2000-01-03 to 2024-11-29), highs and lows present:
+Measured 2026-11-06 on a 4-core Linux VM (Python 3.12, pandas 3.1). The data
+was 1,068 `sp500` names over 5,180,716 daily rows and 3,380 cap-rank names
+over 12,699,270 daily rows, with 309 month-ends from 2000-01 to 2025-09.
+Listings and delistings were staggered, and 150 names moved from the cap-rank
+set into `sp500`. That is 4,448 names walked over 6,717 sessions.
 
-| Phase | Time | Peak memory after |
-|---|---|---|
-| Load SEP (543 MB CSV), fundamentals, sector and gate tapes, specs | 16 s | 1.6 GB |
-| `develop` (two walks to 2012-12-31, statistics, guard, write) | 189 s | 2.3 GB |
-| `reveal` (two walks to 2025-09-30, statistics, recomputed development) | 358 s | 2.9 GB |
+| Run | Load | `develop` | `reveal` |
+|---|---|---|---|
+| Before batching (whole book) | 66 s, 3.7 GB | 328 s, 4.5 GB | 542 s, 5.1 GB |
+| `--batch-size 400` (default) | 54 s, 1.7 GB | 256 s, 1.5 GB | 387 s, 1.7 GB |
+| `--batch-size 100` | 55 s, 0.9 GB | 247 s, 1.3 GB | 371 s, 1.4 GB |
 
-4,282 mature primary development episodes and 4,138 confirmation episodes;
-`development_reproduced` true; store 136 KB; scratch 75 MB. Peak RSS is
-2.9 GB.
+Each figure is the time and peak memory of that step alone. `develop` and
+`reveal` include their own load. The store blocks from `--batch-size 100` are
+byte-identical to the whole-book run's, with 4,454 mature development and
+4,265 mature confirmation primary episodes.
 
-Time and memory grow roughly with total name-sessions walked. The real run
-walks every name that was ever in either universe, active or delisted, so it
-may be several thousand specs, most with shorter histories than 6,500
-sessions. Budget about three times these figures (around 30 minutes and
-9 GB for both steps) and close other large apps on a 16 GB laptop. On Windows, check installed memory with `systeminfo | grep -i "total physical"`; with 8 GB, expect paging and see L680. The real run
-also reads the panels and caches and computes `sp500` membership on every
-session, which the synthetic run replaces with fixed sets.
+On a laptop with 8 GB of memory, the default is fine once other large
+programs are closed. If the runner warns or Windows starts paging, use
+`--batch-size 100`. Smaller batches cost almost no time. The synthetic run
+skips the SEP cap-rank pass, which streams `stocks.csv.zip` in 2M-row chunks
+twice. On Windows, check installed memory with
+`systeminfo | findstr /C:"Total Physical"`.
