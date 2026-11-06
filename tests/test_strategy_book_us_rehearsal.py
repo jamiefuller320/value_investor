@@ -522,9 +522,13 @@ def test_memory_warning_suggests_a_smaller_batch(monkeypatch: pytest.MonkeyPatch
     assert rehearsal.memory_warning(4_450, 6_500, 10) is None
     warning = rehearsal.memory_warning(4_450, 6_500, 4_450)
     assert warning and "--batch-size" in warning and "smaller" in warning
-    suggested = int(warning.rsplit("for example ", 1)[1].rstrip(").").split()[0])
-    assert suggested < 4_450
-    assert rehearsal.memory_estimate_mb(4_450, 6_500, suggested) <= 2_500 or suggested == 25
+    suggested = int(warning.rsplit("for example ", 1)[1].split(")")[0])
+    assert 25 <= suggested < 4_450
+    assert rehearsal.memory_estimate_mb(4_450, 6_500, suggested) <= 2_500
+    assert rehearsal.memory_estimate_mb(4_450, 6_500, suggested + 25) > 2_500
+    assert 1_600 <= rehearsal.memory_estimate_mb(4_448, 6_717, 400) <= 1_900
+    monkeypatch.setitem(sys.modules, "psutil", None)
+    assert rehearsal.memory_warning(4_450, 6_500, 4_450) is None
 
 
 def test_cli_batch_size_is_passed_through(

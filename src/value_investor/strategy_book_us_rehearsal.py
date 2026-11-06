@@ -867,12 +867,14 @@ _UNREAD_KEYS = frozenset(
         "download_as_of",
     }
 )
-# Peak resident memory of a real-scale run: a fixed part for the whole-book
-# tables and the cross-name tape, plus a part per name in a batch (its bars,
-# gate tape, positions and walk state). Calibrated on
-# ``scripts/strategy_book_rehearsal_scale.py``.
-MEMORY_FIXED_MB = 1500
-MEMORY_PER_NAME_MB = 1.5
+# Peak resident memory, calibrated on ``scripts/strategy_book_rehearsal_scale.py``
+# at the real shape (4,448 names, 6,717 sessions): the input pass holds one
+# batch of bars and specs, the walk one batch of walk state; both hold the
+# whole-book tables and the cross-name tape (about 9 bytes per name-session).
+MEMORY_LOAD_FIXED_MB = 450
+MEMORY_LOAD_PER_NAME_MB = 2.6
+MEMORY_WALK_FIXED_MB = 1100
+MEMORY_WALK_PER_NAME_MB = 1.0
 MEMORY_PER_CROSS_CELL_BYTES = 9
 
 
@@ -1013,7 +1015,14 @@ def walk_batches(
 def memory_estimate_mb(names: int, sessions: int, batch_size: int) -> int:
     """Rough peak resident memory of ``develop`` or ``reveal`` for a book of this shape."""
     cross = names * sessions * MEMORY_PER_CROSS_CELL_BYTES / 2**20
-    return int(MEMORY_FIXED_MB + cross + MEMORY_PER_NAME_MB * min(batch_size, names))
+    batch = min(max(batch_size, 1), max(names, 1))
+    return int(
+        cross
+        + max(
+            MEMORY_LOAD_FIXED_MB + MEMORY_LOAD_PER_NAME_MB * batch,
+            MEMORY_WALK_FIXED_MB + MEMORY_WALK_PER_NAME_MB * batch,
+        )
+    )
 
 
 def memory_warning(names: int, sessions: int, batch_size: int) -> str | None:
@@ -1026,12 +1035,15 @@ def memory_warning(names: int, sessions: int, batch_size: int) -> str | None:
     need = memory_estimate_mb(names, sessions, batch_size)
     if available >= need:
         return None
-    room = available - memory_estimate_mb(names, sessions, 0)
-    smaller = max(25, int(room / MEMORY_PER_NAME_MB) // 25 * 25) if room > 0 else 25
+    smaller = 25
+    for size in range(min(batch_size, names) // 25 * 25, 25, -25):
+        if memory_estimate_mb(names, sessions, size) <= available:
+            smaller = size
+            break
     return (
         f"warning: about {need} MB is needed with --batch-size {batch_size} but only "
         f"{int(available)} MB is available. Close other programs or pass a smaller "
-        f"--batch-size (for example {min(smaller, max(batch_size - 25, 25))})."
+        f"--batch-size (for example {smaller}); results do not depend on it."
     )
 
 
