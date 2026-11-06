@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-11-06T16:06:25.393203+00:00",
+  "generated_at": "2026-11-06T16:40:14.693780+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -74,7 +74,7 @@
       "1": "nasdaq100",
       "2": "sp500"
     },
-    "equal_support_generated_at": "2026-11-06T15:16:39.627399+00:00"
+    "equal_support_generated_at": "2026-11-06T16:19:21.226336+00:00"
   },
   "markets": [
     {
@@ -1719,8 +1719,8 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 3,
-        "hold_near_buy_count": 19,
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 20,
         "not_buy_tier_count": 62,
         "never_buy_tier_count": 49,
         "rememo_eligible_count": 1,
@@ -1728,19 +1728,15 @@
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 3,
-        "hold_near_buy_count": 19,
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 20,
         "not_buy_tier_count": 62,
         "never_buy_tier_count": 49,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [
-          "ROP",
-          "GEHC",
-          "TRI"
-        ],
+        "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "NVDA",
           "META",
@@ -2516,7 +2512,7 @@
         "hold_near_buy_count": 127,
         "not_buy_tier_count": 368,
         "never_buy_tier_count": 303,
-        "rememo_eligible_count": 0,
+        "rememo_eligible_count": 2,
         "first_time_memo_count": 0,
         "exclusion_ready_for_priors": null
       },

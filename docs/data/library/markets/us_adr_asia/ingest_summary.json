@@ -1,89 +1,15 @@
 {
-  "run_at": "2026-11-05T22:46:58.806455+00:00",
+  "run_at": "2026-11-06T16:36:19.706656+00:00",
   "market_id": "us_adr_asia",
-  "targets": [
-    "UMC"
-  ],
-  "target_details": [
-    {
-      "ticker": "UMC",
-      "priority_score": 20.3967,
-      "filings_total": 55,
-      "filings_with_body": 38,
-      "indexed_without_body": 17,
-      "reason": "indexed_without_body"
-    }
-  ],
-  "results": [
-    {
-      "ticker": "UMC",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 55,
-        "filings_with_body": 38,
-        "indexed_without_body": 17
-      },
-      "after": {
-        "filings_total": 55,
-        "filings_with_body": 38,
-        "indexed_without_body": 17
-      },
-      "improved": false,
-      "regime": "sec_edgar",
-      "filings_summary": {
-        "total": 55,
-        "annual": 1,
-        "interim": 54,
-        "trading_update": 0,
-        "other": 0,
-        "with_body": 38,
-        "period_coverage": {
-          "annual": {
-            "total": 1,
-            "with_body": 1
-          },
-          "interim": {
-            "total": 54,
-            "with_body": 37
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 0,
-            "with_body": 0
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 38,
-        "with_body_after": 38,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    }
-  ],
+  "targets": [],
+  "target_details": [],
+  "results": [],
   "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-05T22:44:19.916194+00:00",
+    "snapshot_at": "2026-11-06T16:36:18.086595+00:00",
     "market_id": "us_adr_asia",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
@@ -99,33 +25,32 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
+      "UMC",
       "TME",
       "JD",
-      "UMC",
       "PDD"
     ],
     "indexed_without_body_by_ticker": {
+      "UMC": 17,
       "TME": 12,
       "JD": 10,
-      "UMC": 17,
       "PDD": 1
     },
     "parked_tickers": [
       "JD",
       "PDD",
-      "TME"
-    ],
-    "parked_count": 3,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 17,
-    "effective_indexed_without_body_tickers": [
+      "TME",
       "UMC"
     ],
-    "ingest_exhausted": false
+    "parked_count": 4,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-05T22:44:30.403242+00:00",
+    "snapshot_at": "2026-11-06T16:36:19.691464+00:00",
     "market_id": "us_adr_asia",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
@@ -141,15 +66,15 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
+      "UMC",
       "TME",
       "JD",
-      "UMC",
       "PDD"
     ],
     "indexed_without_body_by_ticker": {
+      "UMC": 17,
       "TME": 12,
       "JD": 10,
-      "UMC": 17,
       "PDD": 1
     },
     "parked_tickers": [
@@ -171,37 +96,39 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 6,
+    "hits": 0,
+    "new_rows_total": 0,
+    "curiosity_total": 0,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "UMC",
+      "TME",
+      "JD",
+      "PDD"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "advanced": true,
-    "parallel_stream": 2,
-    "from_market": "us_adr_asia",
-    "to_market": null,
-    "stream_markets_after": [],
-    "parity_event": {
-      "recorded": false,
-      "reason": "ingest_exhausted_leftover_gaps",
-      "market_id": "us_adr_asia",
-      "ingest_exhausted": true,
-      "exhausted_maintenance_recorded": true,
-      "parked_tickers": [
-        "JD",
-        "PDD",
-        "TME",
-        "UMC"
-      ],
-      "learning_admitted_changed": false,
-      "learning_admitted": true
-    },
-    "screen_refresh": null,
-    "at": "2026-11-05T22:44:58.211436+00:00",
-    "ingest_parity_recorded": false
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "us_adr_asia"
   },
   "critical_path": {
     "market_id": "us_adr_asia",
-    "assessed_at": "2026-11-05T22:44:20.370492+00:00",
+    "assessed_at": "2026-11-06T16:36:18.425712+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -252,9 +179,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 9.563593279000003,
-  "budget_seconds": 962.5,
-  "leftover_seconds": 952.936406721,
+  "used_seconds": 0.9573546919999956,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3599.042645308,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -262,9 +189,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "us_adr_asia",
-    "updated_at": "2026-11-05T22:44:30.408750+00:00",
+    "updated_at": "2026-11-06T16:36:19.695684+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 2,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -363,42 +290,7 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 62,
-    "candidate_count": 56,
-    "skipped_resolved_tickers": [
-      "LMT",
-      "CRH",
-      "DFS.L",
-      "APTD.L",
-      "ULTP.L",
-      "MER.L",
-      "FOXT.L",
-      "TPT.L",
-      "GIB-A.TO",
-      "NTR.TO",
-      "SU.TO",
-      "BAS.DE",
-      "IFX.DE",
-      "PDD",
-      "BAS.DE",
-      "DTE.DE",
-      "DTG.DE",
-      "FRE.DE",
-      "HNR1.DE",
-      "MUV2.DE",
-      "HEN3.DE",
-      "PST.MI",
-      "ACKB.BR",
-      "APAM.AS",
-      "0285.HK",
-      "0857.HK",
-      "0288.HK",
-      "2331.HK",
-      "0883.HK",
-      "EVN.VI",
-      "WIE.VI"
-    ],
-    "wait_behind_task_id": ""
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20261106-02"
   }
 }
