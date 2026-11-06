@@ -3,8 +3,8 @@
 Written 2026-11-06 after a content audit of the dashboard against the owner's
 [investment strategy](../PROJECT_OBJECTIVE.md#investment-strategy-owner-2026-11-03)
 and the [single track to live](strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04).
-Status: **proposal, awaiting owner approval** (human task
-`adhoc-dashboard-v2-plan`).
+Status: **approved by the owner 2026-11-06** (human task
+`adhoc-dashboard-v2-plan`). Build progress is in [section 8](#8-status).
 
 Strategy part served: all of them. The dashboard is the owner's window onto
 the strategy book. Plan step 2.3 already asks for a "dashboard strip"; this plan
@@ -227,11 +227,23 @@ states, `pytest` on touched tests and `ruff check` green.
 
 ## 7. Owner decisions
 
-1. **Approve this plan** (scope, tab layout, the ledger), or change it. Until
-   then no v2 code is written.
-2. **Cutover**, later: when v2's Today, Candidates, Book and Proof tabs run on
+1. **Approve this plan** (scope, tab layout, the ledger), or change it.
+   Approved 2026-11-06.
+2. **Cutover** (`adhoc-dashboard-v2-cutover`), later: when v2's Today, Candidates, Book and Proof tabs run on
    the forward book for four weeks and every ledger row marked for v2 is
    ported, decide whether v2 becomes the root page. Decide the Trusts tab and
    the browser sandbox at the same time.
 
 Both are in the [human tasks checklist](human-tasks-checklist.md#ad-hoc-when-triggered).
+
+## 8. Status
+
+| Package | Status | Branch / PR | Model |
+|---------|--------|-------------|-------|
+| WP0 | Merged 2026-11-06 | #1313 | Supervisor; Composer 2.5 and Grok 4.7 inventories |
+| Plan approval | Owner approved 2026-11-06 | — | Owner |
+| WP1 | Built and browser-checked; supervisor fixed subfolder paths and date display | `cursor/dashboard-v2-shell-4306` | Composer 2.5 |
+| WP4 | Built: forward status carries a per-name `candidates` roster (443 rows; sealed screen unchanged). Queued N257 (excluded names, version review) and L684 (snapshot signals gap) | `cursor/dashboard-v2-shell-4306` | Grok 4.7 (high) |
+| WP2, WP3, WP5 | Waiting on WP1 | — | — |
+| WP6 | Waiting on step 2.4 | — | — |
+| WP7 | Waiting on the cutover decision | — | — |

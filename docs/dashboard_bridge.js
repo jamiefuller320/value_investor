@@ -11,7 +11,8 @@
 
   async function loadConfig() {
     try {
-      const response = await fetch(`data/dashboard_config.json?ts=${Date.now()}`, {
+      const configUrl = global.DASHBOARD_BRIDGE_CONFIG_URL || "data/dashboard_config.json";
+      const response = await fetch(`${configUrl}?ts=${Date.now()}`, {
         cache: "no-store",
       });
       if (!response.ok) return null;

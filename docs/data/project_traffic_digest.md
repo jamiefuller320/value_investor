@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-06T17:32:40.551014+00:00`
+Generated: `2026-11-06T19:39:36.731168+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -30,10 +30,10 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `remediate_queue_merge_sync` — detected merge sync lag for 1 task(s): eng-20261106-02 (not applied)
-- `remediate_queue_merge_sync` — PM remediated queue merge sync: fixed=['eng-20261106-02']; remaining=['none'] (applied)
+- _(none)_
 
 ## Merges today (monitor independent verify)
+- `ingest_narrow`/verified PR #1317 `eng-20261106-01` — Seed IR allowlist for unmeasured/zero-body BARC.L — empty allowlist after 0-improve pin (igc-20261106-02)
 - `human`/human PR #1315 `eng-20261106-02` — Hunt fetchable IR source for parked asx200 leftover ALK.AX
 
 ## PR fix occasions — common failure reasons
