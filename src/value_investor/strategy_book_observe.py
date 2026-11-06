@@ -138,8 +138,10 @@ US_REHEARSAL_MODE = "us_rehearsal"
 EXIT_DELISTED = "delisted"
 # Rows ``channel_columns`` and the price features read back from the signal
 # session; a longer prefix changes only the ``bars`` count.
-_FEATURE_TAIL = 2 * max(
-    CHANNEL_CONTEXT_WINDOW, CHANNEL_YEAR_SESSIONS, CHANNEL_PRIMARY_WINDOW + CHANNEL_PIVOT_SPAN
+_FEATURE_TAIL = (
+    max(CHANNEL_CONTEXT_WINDOW, CHANNEL_YEAR_SESSIONS, CHANNEL_PRIMARY_WINDOW + CHANNEL_PIVOT_SPAN)
+    + CHANNEL_PIVOT_SPAN
+    + 1
 )
 
 # Section 8. Numeric snapshot fields that the selection board splits into fifths.
@@ -278,6 +280,7 @@ class Download:
         self._index = _DayIndex(self.sessions)
         self._dups = self._index.duplicates
         self._rsi: array | None = None
+        self._bars: array | None = None
 
     def find(self, session: date) -> int | None:
         """Position of ``session``. A repeated date resolves to its last row."""
@@ -293,6 +296,16 @@ class Download:
     def count_through(self, session: date) -> int:
         """Rows dated on or before ``session``."""
         return bisect_right(self.sessions, session)
+
+    def channel_bars_before(self, count: int) -> int:
+        """Closes ``channel_columns`` would count among the first ``count`` rows."""
+        if self._bars is None:
+            self._bars = array("i", [0]) * (len(self.closes) + 1)
+            running = 0
+            for position, value in enumerate(self.closes):
+                running += _channel_float(value) is not None
+                self._bars[position + 1] = running
+        return self._bars[count]
 
     def rsi_at(self, count: int) -> float | None:
         """``rsi_last`` of the first ``count`` rows (no repeated dates)."""
@@ -808,7 +821,8 @@ class _Name:
     seen_insufficient: set[date] = field(default_factory=set)
     # Specs with the same ``book_key`` (this one included).
     siblings: list[_Name] = field(default_factory=list)
-    open_count: int = 0
+    # Open positions in the order they were opened (a subset of ``positions``).
+    open_positions: list[_Position] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if not self.siblings:
@@ -1205,7 +1219,7 @@ def _shadow_columns(name: _Name, session: date, options: WalkOptions) -> list[st
 
 
 def _open_position(name: _Name, column: str) -> _Position | None:
-    for position in name.positions:
+    for position in name.open_positions:
         if position.column == column and position.status == "open":
             return position
     return None
@@ -1218,7 +1232,7 @@ def _pending(name: _Name, column: str) -> bool:
 def _book_busy(name: _Name, column: str) -> bool:
     """One open or pending episode per column across specs that share a ``book_key``."""
     return any(
-        (other.open_count and _open_position(other, column)) or _pending(other, column)
+        (other.open_positions and _open_position(other, column)) or _pending(other, column)
         for other in name.siblings
     )
 
@@ -1438,10 +1452,7 @@ def _channels(name: _Name, session: date) -> dict[str, Any]:
         as_of=session.isoformat(),
     )
     if start and out.get("channel_status") == "ok":
-        head = download.closes[:start]
-        out["bars"] = int(out["bars"]) + sum(
-            1 for value in head if _channel_float(value) is not None
-        )
+        out["bars"] = int(out["bars"]) + download.channel_bars_before(start)
     return out
 
 
@@ -1996,7 +2007,6 @@ def _open_position_record(
         channels = _channels(name, signal_session)
         name._channel_cache[signal_session] = channels
     inputs, missing = _hash_inputs(spec, "entry")
-    name.open_count += 1
     position = _Position(
         column=column,
         market=spec.market,
@@ -2064,7 +2074,7 @@ def _close_position(
     position.exit_fill = close
     position.exit_session = session
     position.status = "closed"
-    name.open_count -= 1
+    name.open_positions.remove(position)
     position.fair_cost_return = _fair(entry_px, close, position.market)
     position.gross_return = close / entry_px - 1.0
     position.stress_return = _stress(entry_px, close)
@@ -2293,6 +2303,7 @@ def _fill_entries(
             names=names,
         )
         name.positions.append(position)
+        name.open_positions.append(position)
         events.append(
             {
                 "kind": "filled",
@@ -2318,6 +2329,7 @@ def _fill_entries(
                 )
                 paired.bench = {}
                 name.positions.append(paired)
+                name.open_positions.append(paired)
 
 
 def _fill_exits(name: _Name, session: date, names: list[_Name]) -> None:
@@ -2327,7 +2339,7 @@ def _fill_exits(name: _Name, session: date, names: list[_Name]) -> None:
     close = download.close(session)
     if close is None:
         return
-    for position in name.positions:
+    for position in list(name.open_positions):
         if (
             position.status != "open"
             or not position.pending_exit
@@ -2359,7 +2371,7 @@ def _step_positions(name: _Name, session: date, options: WalkOptions, names: lis
     gate = _gate_in_force(name, session) if options.apply_gates else None
     screen = _screen_in_force(name, session)
     costs = costs_for_market(name.spec.market)
-    for position in name.positions:
+    for position in list(name.open_positions):
         if position.status != "open" or position.pending_exit:
             continue
         if position.fill_session > session:
@@ -2565,6 +2577,7 @@ def _maybe_control(
     )
     position.entry_run = screen.run_date
     name.positions.append(position)
+    name.open_positions.append(position)
     events.append(
         {
             "kind": "buy_on_signal",
@@ -2580,7 +2593,7 @@ def _recovery_share(names: list[_Name]) -> tuple[float | None, int]:
     open_primary = [
         position
         for name in names
-        for position in name.positions
+        for position in name.open_positions
         if position.column == COLUMN_PRIMARY and position.status == "open"
     ]
     if not open_primary:
@@ -2646,7 +2659,7 @@ def _close_delisted(names: list[_Name], calendar: list[date]) -> None:
         return
     tape_end = calendar[-1]
     for name in names:
-        if name.spec.terminal_haircut is None or not name.open_count:
+        if name.spec.terminal_haircut is None or not name.open_positions:
             continue
         days = name.prices.calendar
         if not days or days[-1] >= tape_end:
@@ -2659,7 +2672,7 @@ def _close_delisted(names: list[_Name], calendar: list[date]) -> None:
         if close is None:
             continue
         price = close * (1.0 + float(name.spec.terminal_haircut))
-        for position in name.positions:
+        for position in list(name.open_positions):
             if position.status != "open":
                 continue
             if position.pending_exit:
@@ -2712,7 +2725,7 @@ def walk_book(
         for name in names:
             # Without an open or pending episode nothing below changes state;
             # the streaks catch up at the next session that needs them.
-            if not name.open_count and not name.pendings:
+            if not name.open_positions and not name.pendings:
                 continue
             if not name.prices.has_session(session):
                 continue
@@ -2720,7 +2733,7 @@ def walk_book(
             _fill_entries(name, session, options, names, events)
             _fill_exits(name, session, names)
             _step_positions(name, session, options, names)
-        share, open_count = _recovery_share([name for name in names if name.open_count])
+        share, open_count = _recovery_share([name for name in names if name.open_positions])
         entries_open = options.entry_not_after is None or session <= options.entry_not_after
         blocked = False
         if (
