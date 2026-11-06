@@ -274,7 +274,10 @@ def test_sources_do_not_load_latest_or_app() -> None:
         text = path.read_text(encoding="utf-8")
         assert "latest.json" not in text
         assert "app.js" not in text
-        assert "episode table needs a newer browser" in BOOK.read_text(encoding="utf-8") or path == PROOF
+        assert (
+            "episode table needs a newer browser" in BOOK.read_text(encoding="utf-8")
+            or path == PROOF
+        )
     assert "DecompressionStream" in BOOK.read_text(encoding="utf-8")
 
 

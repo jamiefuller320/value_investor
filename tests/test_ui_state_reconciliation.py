@@ -439,7 +439,9 @@ def test_dashboard_v2_stale_store_warns(tmp_path: Path) -> None:
     v2 = next(c for c in payload["checks"] if c["id"] == "dashboard_v2_stores_present_and_fresh")
     assert v2["status"] == "warn"
     stale = v2["details"]["stale_stores"]
-    assert any(s["store"] == "strategy_book_memo_job.json" and s["reason"] == "stale" for s in stale)
+    assert any(
+        s["store"] == "strategy_book_memo_job.json" and s["reason"] == "stale" for s in stale
+    )
 
 
 def test_dashboard_v2_missing_date_warns(tmp_path: Path) -> None:
@@ -502,5 +504,7 @@ def test_dashboard_v2_missing_script_warns(tmp_path: Path) -> None:
 
 
 def test_dashboard_v2_check_skipped_outside_docs_tree(tmp_path: Path) -> None:
-    payload = build_ui_state_reconciliation(data_dir=tmp_path, now=datetime(2026, 11, 6, 9, tzinfo=UTC))
+    payload = build_ui_state_reconciliation(
+        data_dir=tmp_path, now=datetime(2026, 11, 6, 9, tzinfo=UTC)
+    )
     assert all(c["id"] != "dashboard_v2_stores_present_and_fresh" for c in payload["checks"])
