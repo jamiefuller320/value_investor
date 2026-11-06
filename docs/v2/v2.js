@@ -5,7 +5,7 @@
 (function () {
   "use strict";
 
-  const V2_VERSION = "wp1-20261106";
+  const V2_VERSION = "wp2-20261106";
 
   /** @type {Record<string, object>} */
   const pendingHumanTaskAcks = Object.create(null);
@@ -581,11 +581,31 @@
     return t || m || "?";
   }
 
+  /**
+   * Tab modules (candidates.js, book.js, …) load after this file and call
+   * DashboardV2Tabs.register({ id, render(ctx, helpers) → html, bind?(root, ctx, helpers), dataPaths? }).
+   * dataPaths keys are fetched with the core stores and exposed as ctx.data[key] ({ ok, data, error }).
+   */
+  const registeredTabs = Object.create(null);
+
+  window.DashboardV2Tabs = {
+    register(tab) {
+      if (!tab || !tab.id || typeof tab.render !== "function") return;
+      registeredTabs[tab.id] = tab;
+      if (tab.dataPaths) {
+        for (const [key, path] of Object.entries(tab.dataPaths)) {
+          if (!(key in DATA_PATHS)) DATA_PATHS[key] = path;
+        }
+      }
+      for (const name of tab.optionalDataFiles || []) OPTIONAL_DATA_FILES.add(name);
+    },
+  };
+
   function renderNav(activeId) {
     const tabs = [
       { id: "today", label: "Today", placeholder: false },
       { id: "inputs", label: "Inputs", placeholder: false },
-      ...PLACEHOLDER_TABS.map((p) => ({ id: p.id, label: p.label, placeholder: true })),
+      ...PLACEHOLDER_TABS.map((p) => ({ id: p.id, label: p.label, placeholder: !registeredTabs[p.id] })),
     ];
     return tabs
       .map((t) => {
@@ -970,6 +990,19 @@
       "<strong>Observe-only.</strong> The forward book is not live for capital — signals and dry-run counts are for review only.";
   }
 
+  const TAB_HELPERS = {
+    esc,
+    tsQuery,
+    fetchJsonSafe,
+    parseIsoMs,
+    ageLabelFromMs,
+    displayDate,
+    freshnessDailyStore,
+    freshnessWeeklyStore,
+    freshnessChartBar,
+    nowMs,
+  };
+
   function mount() {
     const nav = document.getElementById("v2-nav");
     const root = document.getElementById("v2-root");
@@ -997,6 +1030,7 @@
         marketStatus: dr.market_status.ok ? dr.market_status.data : null,
         opsStatus: dr.ops_status.ok ? dr.ops_status.data : null,
         dailyFocus: dr.daily_focus.ok ? dr.daily_focus.data : null,
+        data: dr,
         bundle: br,
       };
     }
@@ -1056,6 +1090,16 @@
         if (tasksHost) bindV2HumanTaskClicks(tasksHost);
       } else if (tab === "inputs") {
         root.innerHTML = renderInputs(ctx);
+      } else if (registeredTabs[tab]) {
+        const mod = registeredTabs[tab];
+        try {
+          root.innerHTML = mod.render(ctx, TAB_HELPERS);
+          if (typeof mod.bind === "function") mod.bind(root, ctx, TAB_HELPERS);
+        } catch (err) {
+          root.innerHTML = `<section class="v2-panel v2-card"><h2>${esc(mod.label || tab)}</h2><p class="v2-muted">This tab failed to render: ${esc(
+            err && err.message ? err.message : String(err)
+          )}</p></section>`;
+        }
       } else {
         const ph = PLACEHOLDER_TABS.find((p) => p.id === tab);
         root.innerHTML = ph ? renderPlaceholder(ph) : renderToday(ctx);
