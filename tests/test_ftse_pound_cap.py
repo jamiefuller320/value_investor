@@ -59,12 +59,13 @@ def test_ftse350_pound_caps_cover_priced_names():
 
     hmso = by_ticker["HMSO.L"]
     assert hmso.method == "same_name_fx_cap"
-    assert abs(hmso.cap_gbp - 2_041_640_448 * 1.124 / 1.3317) < 1
+    # HMSO.IR library market_cap in EUR (refreshed; was 2_041_640_448).
+    assert abs(hmso.cap_gbp - 2_088_306_432 * 1.124 / 1.3317) < 1
 
     grow = by_ticker["GROW.L"]
     assert grow.method == "library_gbp_cap"
-    # Library AIM market_cap in GBP (refreshed; was 1_171_123_840).
-    assert grow.cap_gbp == 1_136_930_432
+    # Library AIM market_cap in GBP (refreshed; was 1_136_930_432).
+    assert grow.cap_gbp == 1_113_849_856
 
     for ticker in ("HSBA.L", "AZN.L", "BA.L", "CRDA.L", "PNN.L", "CPG.L"):
         assert by_ticker[ticker].cap_gbp is not None
