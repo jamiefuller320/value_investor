@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-05T07:48:53.053672+00:00",
+  "generated_at": "2026-11-06T02:34:23.100371+00:00",
   "epoch_id": "sec-filing-aligned-twin-v0",
   "learning_question": "If SEC companyfacts OCF \u2212 PP&E replaced Yahoo annual cash-flow as US filing_aligned in reconcile_fcf, how often would policy FCF / basis / mismatch flags change on buy-tier memos?",
   "observe_only": true,
@@ -14,20 +14,20 @@
   },
   "summary": {
     "compared": 241,
-    "policy_changed": 69,
-    "policy_changed_buy_tier": 58,
-    "raw_diverged_buy_tier": 14
+    "policy_changed": 71,
+    "policy_changed_buy_tier": 59,
+    "raw_diverged_buy_tier": 15
   },
   "markets": {
     "sp500": {
       "compared": 185,
-      "policy_changed": 51,
-      "policy_changed_buy_tier": 44,
-      "raw_diverged_buy_tier": 8
+      "policy_changed": 52,
+      "policy_changed_buy_tier": 45,
+      "raw_diverged_buy_tier": 9
     },
     "nasdaq100": {
       "compared": 51,
-      "policy_changed": 13,
+      "policy_changed": 14,
       "policy_changed_buy_tier": 9,
       "raw_diverged_buy_tier": 2
     },
@@ -454,6 +454,48 @@
         "filing_screen_mismatch": true,
         "fcf_divergence_flagged": true,
         "divergence_flagged": true,
+        "auto_policy_resolved": true
+      },
+      "influences_live": false,
+      "market_id": "sp500"
+    },
+    {
+      "ticker": "QCOM",
+      "signal": "strong_buy",
+      "buy_tier": true,
+      "fiscal_year_label": "2026",
+      "currency": "USD",
+      "sec_fcf": 8651000000.0,
+      "yahoo_filing_aligned": 12820000000.0,
+      "divergence": 0.3252,
+      "raw_diverged": true,
+      "policy_changed": true,
+      "yahoo": {
+        "filing_aligned": 12820000000.0,
+        "filing_aligned_source": "yahoo_annual",
+        "canonical": 12820000000.0,
+        "policy_fcf": 12820000000.0,
+        "policy_basis": "filing_aligned",
+        "source": "auto_fallback_filing_aligned",
+        "fiscal_year": "2025",
+        "currency": "USD",
+        "filing_screen_mismatch": false,
+        "fcf_divergence_flagged": false,
+        "divergence_flagged": false,
+        "auto_policy_resolved": true
+      },
+      "sec_twin": {
+        "filing_aligned": 8651000000.0,
+        "filing_aligned_source": "sec_companyfacts",
+        "canonical": 8651000000.0,
+        "policy_fcf": 8651000000.0,
+        "policy_basis": "filing_aligned",
+        "source": "auto_fallback_filing_aligned",
+        "fiscal_year": "2026",
+        "currency": "USD",
+        "filing_screen_mismatch": false,
+        "fcf_divergence_flagged": false,
+        "divergence_flagged": false,
         "auto_policy_resolved": true
       },
       "influences_live": false,
@@ -1035,48 +1077,6 @@
         "filing_aligned_source": "sec_companyfacts",
         "canonical": 3119000000.0,
         "policy_fcf": 3119000000.0,
-        "policy_basis": "filing_aligned",
-        "source": "auto_majority_filing_aligned",
-        "fiscal_year": "2025",
-        "currency": "USD",
-        "filing_screen_mismatch": false,
-        "fcf_divergence_flagged": false,
-        "divergence_flagged": false,
-        "auto_policy_resolved": true
-      },
-      "influences_live": false,
-      "market_id": "sp500"
-    },
-    {
-      "ticker": "FTV",
-      "signal": "buy",
-      "buy_tier": true,
-      "fiscal_year_label": "2025",
-      "currency": "USD",
-      "sec_fcf": 978100000.0,
-      "yahoo_filing_aligned": 1083200000.0,
-      "divergence": 0.097,
-      "raw_diverged": false,
-      "policy_changed": true,
-      "yahoo": {
-        "filing_aligned": 1083200000.0,
-        "filing_aligned_source": "yahoo_annual",
-        "canonical": 1083200000.0,
-        "policy_fcf": 1083200000.0,
-        "policy_basis": "filing_aligned",
-        "source": "auto_majority_filing_aligned",
-        "fiscal_year": "2025",
-        "currency": "USD",
-        "filing_screen_mismatch": false,
-        "fcf_divergence_flagged": false,
-        "divergence_flagged": false,
-        "auto_policy_resolved": true
-      },
-      "sec_twin": {
-        "filing_aligned": 978100000.0,
-        "filing_aligned_source": "sec_companyfacts",
-        "canonical": 978100000.0,
-        "policy_fcf": 978100000.0,
         "policy_basis": "filing_aligned",
         "source": "auto_majority_filing_aligned",
         "fiscal_year": "2025",

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-06T02:32:03.032479+00:00",
+  "plan_refresh_day_of_month": 8,
+  "estimated_memo_usd": 0.4,
+  "token_usage_weekly_warning_raw_usd": null,
+  "current_week_id": "2026-W45",
+  "current_cycle_id": "2026-11-d8",
+  "weeks": [],
+  "cycles": [],
+  "uncommitted_agent_runs": [
+    {
+      "where": "engineering-hunter-fix.yml",
+      "jobs": "hunter_fix",
+      "why": "PR-only allowlist; shards are not pushed to main"
+    },
+    {
+      "where": "engineering-hunter-verify.yml",
+      "jobs": "hunter_verify",
+      "why": "PR review observer; no main commit"
+    },
+    {
+      "where": "ftse-research --phase-b-catchup",
+      "jobs": "research_memo",
+      "why": "CLI only; no workflow commits the shard"
+    },
+    {
+      "where": "ftse-research director-worker trial",
+      "jobs": "director_worker",
+      "why": "CLI only; no workflow commits the shard"
+    },
+    {
+      "where": "ftse-research --model-ab",
+      "jobs": "model_ab",
+      "why": "CLI only; no workflow commits the shard"
+    },
+    {
+      "where": "engineering-conflict-resolve.yml",
+      "jobs": "conflict_resolve",
+      "why": "Pushes the PR branch and unstages docs/data/agent_usage so shards stay off main"
+    },
+    {
+      "where": "scripts/agent_analyze.py",
+      "jobs": "agent_analyze",
+      "why": "Manual script; no workflow commits the shard"
+    }
+  ],
+  "backfill": {
+    "queried_agents": 0,
+    "updated_rows": 0,
+    "still_pending": 0,
+    "skipped": false,
+    "reason": "no pending rows under the age bound",
+    "read_only": true,
+    "method": "Agent.resume (ResumeAgent unary, no send) + get_usage (GetUsage unary, read-only) + close; cost is written to the backfill map, not the shards",
+    "errors": []
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-11-05T03:29:35.249056+00:00",
+  "compiled_at": "2026-11-06T02:37:31.872686+00:00",
   "run_at": null,
   "task_count": 250,
   "tasks": [
@@ -3354,92 +3354,6 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
-      "id": "eng-20261105-01",
-      "area": "ingest",
-      "title": "Seed IR allowlist for unmeasured/zero-body RKT.L — empty allowlist after 0-improve pin (igc-20261105-01)",
-      "summary": "Gap-closure run igc-20261105-01 targeted RKT.L with outstanding coverage holes but zero IR allowlist URLs (refetch never attempted). Seed `_BUILTIN_IR_URLS` / issuer PDFs or fix discovery; do not keep re-pinning empty intensify. Add a regression test; verify with a pinned library ingest gap-closure / ingest-loop pass.",
-      "priority": "high",
-      "priority_score": 88.0,
-      "source": "ingest_gap_closure",
-      "evidence": {
-        "gap_closure_run_id": "igc-20261105-01",
-        "trial_id": "igc-20261105-01",
-        "chain_root_id": "igc-20261105-01",
-        "chain_round": 1,
-        "tickers": [
-          "RKT.L"
-        ],
-        "ticker": "RKT.L",
-        "market_id": null,
-        "library_market": null,
-        "universe": "ftse350",
-        "rerun_ingest_gap_closure": true,
-        "rerun_ingest_trial": true,
-        "rerun_library_ingest_loop": false,
-        "refetch_attempted": 0,
-        "refetch_fetched": 0,
-        "gap_closure_params": {
-          "max_targets": 1,
-          "max_bodies": 40,
-          "bootstrap_seed_cap": 0,
-          "max_runtime_seconds": 2100.0,
-          "require_outstanding_gaps": true,
-          "intensive_gap_closure": true,
-          "pin_tickers": [
-            "RKT.L"
-          ]
-        },
-        "trial_params": {
-          "max_targets": 1,
-          "max_bodies": 40,
-          "bootstrap_seed_cap": 0,
-          "max_runtime_seconds": 2100.0,
-          "require_outstanding_gaps": true,
-          "intensive_gap_closure": true,
-          "pin_tickers": [
-            "RKT.L"
-          ]
-        },
-        "compile_reason": "gaps_remain_without_allowlist",
-        "merge_class": "ingest_narrow"
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for RKT.L",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "merged",
-      "result_path": "output/engineering_result_eng-20261105-01.md",
-      "branch_name": "cursor/eng-20261105-01-1de3",
-      "no_diff_count": 0,
-      "completed_at": "2026-11-05T03:41:15.400127+00:00",
-      "merge_class": "ingest_narrow",
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1296",
-      "pr_number": 1296,
-      "merged_at": "2026-11-05T03:55:35.858917+00:00"
-    },
-    {
       "id": "eng-20261023-04",
       "area": "ingest",
       "title": "Close library ingest gaps for ftse_mib / TEN.MI (chain 2/3: 0/0 improved, run igc-20261005-01)",
@@ -3526,6 +3440,92 @@
       "cancelled_reason": "tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20261010-02",
       "cancelled_at": "2026-10-23T08:18:26.756856+00:00",
       "cancelled_policy": "superseded_gap_closure"
+    },
+    {
+      "id": "eng-20261105-01",
+      "area": "ingest",
+      "title": "Seed IR allowlist for unmeasured/zero-body RKT.L — empty allowlist after 0-improve pin (igc-20261105-01)",
+      "summary": "Gap-closure run igc-20261105-01 targeted RKT.L with outstanding coverage holes but zero IR allowlist URLs (refetch never attempted). Seed `_BUILTIN_IR_URLS` / issuer PDFs or fix discovery; do not keep re-pinning empty intensify. Add a regression test; verify with a pinned library ingest gap-closure / ingest-loop pass.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20261105-01",
+        "trial_id": "igc-20261105-01",
+        "chain_root_id": "igc-20261105-01",
+        "chain_round": 1,
+        "tickers": [
+          "RKT.L"
+        ],
+        "ticker": "RKT.L",
+        "market_id": null,
+        "library_market": null,
+        "universe": "ftse350",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": false,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "RKT.L"
+          ]
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "RKT.L"
+          ]
+        },
+        "compile_reason": "gaps_remain_without_allowlist",
+        "merge_class": "ingest_narrow"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for RKT.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "result_path": "output/engineering_result_eng-20261105-01.md",
+      "branch_name": "cursor/eng-20261105-01-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-11-05T03:41:15.400127+00:00",
+      "merge_class": "ingest_narrow",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1296",
+      "pr_number": 1296,
+      "merged_at": "2026-11-05T03:55:35.858917+00:00"
     },
     {
       "id": "eng-20261104-02",
@@ -16320,7 +16320,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-11-05T22:46:08.694199+00:00",
+    "evaluated_at": "2026-11-06T02:36:01.333941+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -16381,7 +16381,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 2,
-    "evaluated_at": "2026-11-06T02:20:07.362202+00:00",
+    "evaluated_at": "2026-11-06T02:35:59.514961+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -16397,9 +16397,9 @@
   "micro_compile_source": "ingest_gap_closure",
   "library_market_id": "tsx60",
   "hunter_ticker": "CVE.TO",
-  "source_gap_closure_run_id": "igc-20261105-01",
-  "source_trial_id": "igc-20261105-01",
-  "source_chain_root_id": "igc-20261105-01",
+  "source_gap_closure_run_id": "igc-20261005-01",
+  "source_trial_id": "igc-20261005-01",
+  "source_chain_root_id": "igc-20261005-01",
   "ingest_health_before": {
     "snapshot_at": "2026-11-03T07:48:28.956638+00:00",
     "buy_tier_count": 65,
