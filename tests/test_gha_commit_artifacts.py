@@ -213,6 +213,7 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     assert "docs/data/project_progress.json" in email
     assert "docs/data/strategy_book_observe.json" in email
     assert "docs/data/strategy_book_replay.json" in email
+    assert "docs/data/strategy_book_replay_episodes.json.gz" in email
     assert "docs/data/strategy_book_gate_log.jsonl" in email
     assert "docs/data/strategy_book_closes.json" in email
     assert "docs/data/strategy_book_forward_status.json" in email

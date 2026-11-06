@@ -290,6 +290,7 @@ LATE_SIGNAL_MAX_SHARE = 0.1
 # Section 12 store names. The forward job writes the observe store and the
 # gate log only when the seal is signed and ``forward_live`` is true.
 REPLAY_STORE_NAME = "strategy_book_replay.json"
+REPLAY_DETAIL_STORE_NAME = "strategy_book_replay_episodes.json.gz"
 OBSERVE_STORE_NAME = "strategy_book_observe.json"
 REGISTRATION_STORE_NAME = "strategy_book_registration.json"
 GATE_LOG_NAME = "strategy_book_gate_log.jsonl"

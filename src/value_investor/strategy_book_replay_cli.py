@@ -3,13 +3,16 @@
 from __future__ import annotations
 
 import argparse
+import gzip
 import json
 from pathlib import Path
+from typing import Any
 
 from value_investor.strategy_book_replay import run_replay
 from value_investor.strategy_book_rules import (
     INFLUENCES_LIVE,
     REGISTRATION_ID,
+    REPLAY_DETAIL_STORE_NAME,
     REPLAY_STORE_NAME,
     RegistrationUnsigned,
     require_signature_for_score,
@@ -52,10 +55,36 @@ def main(argv: list[str] | None = None) -> int:
         else:
             dest = Path(root) / REPLAY_STORE_NAME
         dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
-        payload = {**payload, "wrote": str(dest)}
+        detail = dest.with_name(REPLAY_DETAIL_STORE_NAME)
+        detail.write_bytes(
+            gzip.compress(
+                json.dumps(payload, separators=(",", ":"), default=str).encode("utf-8"),
+                mtime=0,
+            )
+        )
+        summary = {**summarize_replay(payload), "detail_store": detail.name}
+        dest.write_text(json.dumps(summary, indent=2, default=str) + "\n", encoding="utf-8")
+        print(json.dumps({**summary, "wrote": [str(dest), str(detail)]}, indent=2, default=str))
+        return 0
     print(json.dumps(payload, indent=2, default=str))
     return 0
+
+
+def summarize_replay(payload: dict[str, Any]) -> dict[str, Any]:
+    """Boards and counts only; per-episode rows live in the gzipped detail store."""
+    out: dict[str, Any] = {}
+    for key, value in payload.items():
+        if isinstance(value, dict) and ("episodes" in value or "events" in value):
+            out[key] = {
+                **{k: v for k, v in value.items() if k not in _DETAIL_KEYS},
+                "episode_count": len(value.get("episodes") or []),
+            }
+        else:
+            out[key] = value
+    return out
+
+
+_DETAIL_KEYS = frozenset({"episodes", "events"})
 
 
 if __name__ == "__main__":

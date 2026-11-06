@@ -102,9 +102,11 @@ When both the signature and `forward_live` are true, `--apply` writes
 `docs/data/strategy_book_gate_log.jsonl`.
 
 `ftse-strategy-book-replay --persist` writes `docs/data/strategy_book_replay.json`
-when the registration is signed. A fixture outside `docs/data` still writes
-under the fixture. Do not run the replay until the seal is on main. The
-supervisor runs it.
+(boards, counts and episode counts per arm) and
+`docs/data/strategy_book_replay_episodes.json.gz` (every episode and event, compact)
+when the registration is signed. The full payload is about 30 MB as JSON, so the
+per-episode rows ship gzipped. A fixture outside `docs/data` still writes
+under the fixture. The first replay ran on 2026-11-06 after the seal reached main.
 
 `ftse-strategy-book --replay` and `--forward` dispatch the two jobs.
 `--no-persist` skips writes. `--as-of` sets the forward clock.
@@ -156,6 +158,7 @@ without firing the same title twice for one missed run.
 
 - `docs/data/strategy_book_observe.json`
 - `docs/data/strategy_book_replay.json`
+- `docs/data/strategy_book_replay_episodes.json.gz`
 - `docs/data/strategy_book_gate_log.jsonl`
 - `docs/data/strategy_book_closes.json`
 - `docs/data/strategy_book_forward_status.json`

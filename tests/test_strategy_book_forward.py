@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import gzip
 import hashlib
 import json
 from datetime import UTC, date, datetime, time, timedelta
@@ -270,7 +271,16 @@ def test_replay_persist_outside_a_fixture_stays_there(tmp_path: Path, capsys) ->
     outside = tmp_path / "fixture"
     outside.mkdir()
     assert replay_main(["--repo-root", str(repo), "--fixture-dir", str(outside), "--persist"]) == 0
-    assert (outside / "strategy_book_replay.json").is_file()
+    summary = json.loads((outside / "strategy_book_replay.json").read_text(encoding="utf-8"))
+    assert summary["detail_store"] == "strategy_book_replay_episodes.json.gz"
+    for arm in ("archive_buy_tier_only", "archive_full_strategy", "lookahead_current_gates"):
+        assert "episodes" not in summary[arm]
+        assert "boards" in summary[arm]
+    detail = json.loads(gzip.decompress((outside / summary["detail_store"]).read_bytes()))
+    assert detail["archive_buy_tier_only"]["episodes"] is not None
+    assert summary["archive_buy_tier_only"]["episode_count"] == len(
+        detail["archive_buy_tier_only"]["episodes"]
+    )
     assert not (repo / "docs" / "data" / "strategy_book_replay.json").exists()
     capsys.readouterr()
 
