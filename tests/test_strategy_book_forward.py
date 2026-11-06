@@ -9,6 +9,7 @@ from datetime import UTC, date, datetime, time, timedelta
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from value_investor.ops_monitor import check_strategy_book_observe
 from value_investor.strategy_book_forward import (
@@ -20,6 +21,8 @@ from value_investor.strategy_book_forward import (
     TITLE_REFRESHED,
     TITLE_T212,
     TITLE_THICKNESS,
+    _load_forward_specs,
+    counts_view,
     run_forward_job,
 )
 from value_investor.strategy_book_forward_cli import main as forward_main
@@ -40,6 +43,7 @@ from value_investor.strategy_book_rules import (
     forward_live,
     forward_start_date,
 )
+from value_investor.strategy_book_signals import repo_paths
 
 NOW = datetime(2026, 11, 5, 22, 0, tzinfo=UTC)
 AS_OF = "2026-11-05T22:00:00+00:00"
@@ -386,6 +390,173 @@ def test_dashboard_strip_is_read_only() -> None:
     assert "strategy-book-observe.md" in registration
 
 
+_CANDIDATE_KEYS = {
+    "market",
+    "ticker",
+    "session",
+    "signal",
+    "adjusted_signal",
+    "decline",
+    "sector",
+    "gate_as_of",
+    "f9",
+    "price_rule",
+    "outcome",
+}
+
+
+def test_candidates_roster_names_each_block_and_a_signal(tmp_path: Path) -> None:
+    repo = _candidate_tree(tmp_path)
+    summary = run_forward_job(repo_root=repo, now=NOW, apply=False, persist=False)
+    data = repo / "docs" / "data"
+    assert summary["wrote_status"] is False
+    assert summary["influences_live"] is False
+    assert not (data / "strategy_book_forward_status.json").exists()
+    assert not (data / "strategy_book_observe.json").exists()
+    rows = summary["candidates"]
+    assert [row["ticker"] for row in rows] == ["DECLINE", "NOCHART", "PRICE", "SIGNAL"]
+    assert all(set(row) == _CANDIDATE_KEYS for row in rows)
+    by_ticker = {row["ticker"]: row for row in rows}
+
+    # Part 2 fails. The tally's code is "gate"; the verdict stays on decline.
+    decline = by_ticker["DECLINE"]
+    assert decline["session"] == "2026-11-05"
+    assert decline["signal"] == "buy"
+    assert decline["decline"] == "declining"
+    assert decline["sector"] == "sound"
+    assert decline["gate_as_of"] == "2026-11-04"
+    assert decline["outcome"] == "gate"
+
+    missing = by_ticker["NOCHART"]
+    assert missing["session"] is None
+    assert missing["price_rule"] is None
+    assert missing["f9"] is None
+    assert missing["signal"] == "buy"
+    assert missing["outcome"] == "no_chart"
+
+    priced = by_ticker["PRICE"]
+    assert priced["f9"] == "pass"
+    assert priced["decline"] == "clear"
+    assert priced["price_rule"] is False
+    assert priced["outcome"] == "price"
+
+    signalled = by_ticker["SIGNAL"]
+    assert signalled["f9"] == "pass"
+    assert signalled["price_rule"] is True
+    assert signalled["adjusted_signal"] == "buy"
+    assert signalled["outcome"] == "pending_fill"
+    assert summary["candidates_session_by_market"] == {"ftse350": "2026-11-05"}
+    text = json.dumps(summary)
+    for token in ("fair_cost", "median", "episodes", "gross_return", "capital_return"):
+        assert token not in text
+
+
+def test_omitted_csv_buy_is_roster_only(tmp_path: Path) -> None:
+    """A CSV buy the snapshot omits is explained, and it is not a spec."""
+    repo = _repo(tmp_path)
+    data = repo / "docs" / "data"
+    _write(
+        data / "strategy_book_registration.json",
+        {
+            "signed": True,
+            "signed_at": "2026-11-05T21:00:00Z",
+            "signature": {"by": "owner"},
+            "forward_live": False,
+            "spend_enabled": False,
+        },
+    )
+    _write(
+        data / "market_status.json",
+        {"markets": [{"market_id": "aex", "is_graduated": True}]},
+    )
+    screen = data / "library" / "markets" / "aex" / "screen"
+    _write(
+        screen / "history" / "run_20261104_120000.json",
+        {
+            "run_at": "2026-11-04T12:00:00+00:00",
+            "signals": [{"ticker": "KEPT.AS", "signal": "buy"}],
+        },
+    )
+    (screen / "signals_20261104_120000.csv").write_text(
+        "ticker,signal,adjusted_signal\n"
+        "KEPT.AS,buy,buy\n"
+        "PARK.AS,buy,strong_buy\n"
+        "STRAY.AS,buy,buy\n"
+        "HOLD.AS,hold,hold\n",
+        encoding="utf-8",
+    )
+    _write(
+        data / "library" / "markets" / "aex" / "ingest_exhaustion.json",
+        {"market_id": "aex", "parked": [{"ticker": "park.as"}]},
+    )
+    days = _weekdays_ending(date(2026, 11, 5), 20)
+    for ticker in ("PARK.AS", "STRAY.AS"):
+        _chart(
+            data / "charts" / f"{ticker}.json",
+            [day.isoformat() for day in days],
+            [float(100 - index) for index in range(len(days))],
+        )
+    summary = run_forward_job(repo_root=repo, now=NOW, apply=False, persist=False)
+    loaded = _load_forward_specs(
+        repo_paths(repo),
+        start=date(2026, 11, 5),
+        now=NOW,
+        commit=None,
+        log_rows=[],
+    )
+    spec_tickers = {spec.ticker for spec in loaded["specs"]}
+    assert "PARK.AS" not in spec_tickers
+    assert "STRAY.AS" not in spec_tickers
+    assert summary["signals"] == 0
+    assert "learning_pool_excluded" not in summary["blocked_reasons"]
+    assert "not_in_book_screen" not in summary["blocked_reasons"]
+    rows = [row for row in summary["candidates"] if row["market"] == "aex"]
+    assert [row["ticker"] for row in rows] == ["KEPT.AS", "PARK.AS", "STRAY.AS"]
+    assert all(set(row) == _CANDIDATE_KEYS for row in rows)
+    assert rows[0]["outcome"] == "no_session_on_or_after_start"
+    parked = rows[1]
+    assert parked["outcome"] == "learning_pool_excluded"
+    assert parked["signal"] == "buy"
+    assert parked["adjusted_signal"] == "strong_buy"
+    stray = rows[2]
+    assert stray["outcome"] == "not_in_book_screen"
+    assert stray["signal"] == "buy"
+    for row in (parked, stray):
+        assert row["session"] is None
+        assert row["decline"] is None
+        assert row["sector"] is None
+        assert row["gate_as_of"] is None
+        assert row["f9"] is None
+        assert row["price_rule"] is None
+        assert row["outcome"] not in {
+            "filled",
+            "pending_fill",
+            "late_signal",
+            "memo_not_ready",
+            "memo_blocked",
+        }
+
+
+def test_candidate_rows_reject_a_score(tmp_path: Path) -> None:
+    repo = _live_tree(tmp_path, live=False)
+    summary = run_forward_job(repo_root=repo, now=NOW, apply=True)
+    text = (repo / "docs" / "data" / "strategy_book_forward_status.json").read_text(
+        encoding="utf-8"
+    )
+    for token in ("fair_cost", "median", "episodes", "gross_return", "capital_return"):
+        assert token not in text
+    assert summary["candidates"]
+    assert all(set(row) == _CANDIDATE_KEYS for row in summary["candidates"])
+    leaked = dict(summary["candidates"][0])
+    leaked["close"] = 10.0
+    with pytest.raises(RuntimeError, match="candidate"):
+        counts_view({"candidates": [leaked]})
+    poisoned = dict(summary["candidates"][0])
+    poisoned["outcome"] = "fair_cost"
+    with pytest.raises(RuntimeError, match="fair_cost"):
+        counts_view({"candidates": [poisoned]})
+
+
 def test_human_task_covers_forward_live_and_spend() -> None:
     payload = json.loads(Path("docs/human_tasks_checklist.json").read_text(encoding="utf-8"))
     tasks = [task for section in payload["sections"] for task in section["tasks"]]
@@ -438,6 +609,110 @@ def _live_tree(tmp_path: Path, *, live: bool) -> Path:
     _screen(data, date(2026, 11, 4), ["AAA"])
     _chart(data / "charts" / "AAA.json", ["2026-11-05"], [10.0])
     return repo
+
+
+def _candidate_tree(tmp_path: Path) -> Path:
+    """Four buy-tier names: declining, no chart, price-rule miss, and a signal."""
+    repo = _repo(tmp_path)
+    data = repo / "docs" / "data"
+    _write(
+        data / "strategy_book_registration.json",
+        {
+            "signed": True,
+            "signed_at": "2026-11-05T21:00:00Z",
+            "signature": {"by": "owner"},
+            "forward_live": False,
+            "spend_enabled": False,
+        },
+    )
+    days = _weekdays_ending(date(2026, 11, 5), 20)
+    _write(
+        data / "history" / "run_20261104_120000.json",
+        {
+            "run_at": "2026-11-04T12:00:00+00:00",
+            "reports": [
+                {"ticker": "DECLINE", "signal": "buy"},
+                {"ticker": "NOCHART", "signal": "buy"},
+                {
+                    "ticker": "PRICE",
+                    "signal": "buy",
+                    "adjusted_signal": "buy",
+                    "research_verdict": "hold",
+                    "fcf_basis_overlay": True,
+                },
+                {
+                    "ticker": "SIGNAL",
+                    "signal": "buy",
+                    "adjusted_signal": "buy",
+                    "research_verdict": "hold",
+                    "fcf_basis_overlay": True,
+                },
+            ],
+        },
+    )
+    _chart(data / "charts" / "DECLINE.json", ["2026-11-05"], [10.0])
+    _write(data / "charts" / "NOCHART.json", {"dates": ["2026-11-05"], "closes": []})
+    _chart(
+        data / "charts" / "PRICE.json",
+        [day.isoformat() for day in days],
+        [float(50 + index) for index in range(len(days))],
+    )
+    _chart(
+        data / "charts" / "SIGNAL.json",
+        [day.isoformat() for day in days],
+        [float(100 - index) for index in range(len(days))],
+    )
+    names = {
+        "DECLINE": {"verdict": "declining", "market": "ftse350"},
+        "NOCHART": {"verdict": "clear", "market": "ftse350"},
+        "PRICE": {"verdict": "clear", "market": "ftse350"},
+        "SIGNAL": {"verdict": "clear", "market": "ftse350"},
+    }
+    sectors = {
+        ticker: {"sector_verdict": "sound"} for ticker in ("DECLINE", "NOCHART", "PRICE", "SIGNAL")
+    }
+    _write(data / "operating_decline_gate.json", {"as_of": "2026-11-04", "names": names})
+    _write(
+        data / "sector_headwind_gate.json",
+        {"as_of": "2026-11-04", "names_by_market": {"ftse350": sectors}},
+    )
+    for ticker in ("PRICE", "SIGNAL"):
+        _ready_binds(data, ticker)
+    return repo
+
+
+def _ready_binds(data: Path, ticker: str) -> None:
+    root = data / "research" / ticker
+    _write(
+        root / "research.json",
+        {
+            "created_at": "2026-11-05T08:00:00+00:00",
+            "updated_at": "2026-11-05T08:00:00+00:00",
+            "research_verdict": "hold",
+        },
+    )
+    _write(
+        root / "sources" / "filings" / "filings_index.json",
+        {
+            "fetched_at": "2026-11-04T12:00:00+00:00",
+            "summary": {
+                "total": 1,
+                "with_body": 1,
+                "period_coverage": {"annual": {"total": 1, "with_body": 1}},
+            },
+        },
+    )
+
+
+def _weekdays_ending(last: date, count: int) -> list[date]:
+    days: list[date] = []
+    cursor = last
+    while len(days) < count:
+        if cursor.weekday() < 5:
+            days.append(cursor)
+        cursor -= timedelta(days=1)
+    days.reverse()
+    return days
 
 
 def _weekdays(count: int, start: date) -> list[date]:

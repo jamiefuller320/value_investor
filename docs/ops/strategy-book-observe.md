@@ -91,6 +91,28 @@ on the current sessions, writes `docs/data/strategy_book_forward_status.json`
 (counts, phase span, mature count, freshness), and writes no observe store and
 no gate log. Stdout is the same counts. It has no returns.
 
+The status file also carries a `candidates` roster for the strategy dashboard's
+Candidates tab. One row per name the forward job loaded, plus a current buy-tier
+name that never loaded because it has no usable chart or no session on or after
+the start. The row is that name's latest chart session in the window. Verdicts
+are the ones the walk already uses (the gate-log in-force rule, the entry-low
+price flags, and the tally's blocked reason). There are no prices, returns, or
+scores. `candidates_session_by_market` is the latest of those sessions per
+market, or the scored session when a market's rows have no bar.
+
+The book's screen stays the history snapshot. A same-stamp `signals_*.csv`
+can still list a buy-tier name that snapshot omits. That name is a roster row
+only: it is not loaded as a spec and the book cannot buy it. `decline`,
+`sector`, `gate_as_of`, `f9`, and `price_rule` are null on these rows. `signal`
+and `adjusted_signal` come from the CSV.
+
+- `market`, `ticker`, `session` — `session` is that latest bar as an ISO date, or null when the name has no bar in the window.
+- `signal`, `adjusted_signal` — the screen row in force for that session (a run dated strictly before it). When `session` is null, the same rule is applied to the market's scored session. Null when no run is in force.
+- `decline`, `sector` — the part 2 and part 3 verdicts in force for that same session. Null when the gate's date is missing or not strictly before the session. `gate_as_of` is that date even then, or null when there is no gate.
+- `f9` — `pass`, or the list of failing binds, copied from the gate-log row for the scored session. Null when that row was not built.
+- `price_rule` — true when the registered short-term low (RSI below 35 and a 10-session close low) fires on that session, false when it does not, null when there is no chart.
+- `outcome` — the signal event kind when the name signalled (`filled`, `pending_fill`, `late_signal`, `memo_not_ready`, `memo_blocked`, and the other signal kinds). Otherwise the blocked reason the tally already records (`no_chart`, `not_buy_tier`, `gate`, `f9`, `price`, and the rest). A declining or headwind name is `gate`; the verdict is `decline` or `sector`. A miss of the short-term low is `price`. `learning_pool_excluded` means the signals CSV lists the name and the history snapshot omits it because it is in that market's learning-pool exclusion, so it is not in the book's universe. `not_in_book_screen` means the signals CSV lists the name and the snapshot omits it for any other reason, so it is not in the book's universe.
+
 The seal on the signature branch does not yet carry `forward_live`. The reader
 defaults it to false. After the Phase 1 gate review, set `forward_live` true
 and set `spend_enabled` true only if `weekly_ops` should pay for signal-day
@@ -171,7 +193,9 @@ still publishes charts. The JSON stores are not shared.
 
 Analysis → Observe, hash `#analysis/observe/strategy-book`. The strip reads
 `strategy_book_forward_status.json`: phase span, mature count, freshness.
-Read-only. No promote button. No strand A writes. The score store is not rendered.
+The same file's `candidates` roster is the per-name list for the strategy
+dashboard's Candidates tab (field list under Go-live). Read-only. No promote
+button. No strand A writes. The score store is not rendered.
 
 ## Tests
 

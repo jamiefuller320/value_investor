@@ -8,10 +8,14 @@ is true. Until then the job dry-runs and keeps a counts-only status.
 The scored snapshot is rebuilt from the start date each run. ``signal_seen_at``
 for an older session is the gate-log time, or ``now`` when that session was
 never logged, so a rewalk cannot fill it quietly.
+
+The counts-only status also carries a ``candidates`` roster: one row per name,
+with the verdicts already used by the walk. It has no prices and no returns.
 """
 
 from __future__ import annotations
 
+import csv
 import json
 import subprocess
 from collections import Counter
@@ -32,6 +36,7 @@ from value_investor.strategy_book_observe import (
     _base_eligible,
     _downloads_of,
     _Name,
+    _price_flags_at,
     options_for,
     series_refusal,
     sha256_bytes,
@@ -86,6 +91,22 @@ SIGNAL_KINDS = frozenset(
 )
 _ENTRY_KINDS = frozenset({"filled", "pending_fill"})
 _RETURN_TOKENS = ("fair_cost", "median", "episodes", "gross_return", "capital_return")
+# Verdicts only. A price, a return, or a score must not join this set.
+_CANDIDATE_KEYS = frozenset(
+    {
+        "market",
+        "ticker",
+        "session",
+        "signal",
+        "adjusted_signal",
+        "decline",
+        "sector",
+        "gate_as_of",
+        "f9",
+        "price_rule",
+        "outcome",
+    }
+)
 
 TITLE_REFRESHED = "Strategy book observe refreshed"
 TITLE_FAILED = "Strategy book observe failed"
@@ -131,6 +152,8 @@ def counts_view(summary: dict[str, Any]) -> dict[str, Any]:
         "memo_not_ready": int(summary.get("memo_not_ready") or 0),
         "memo_blocked": int(summary.get("memo_blocked") or 0),
         "blocked_reasons": dict(summary.get("blocked_reasons") or {}),
+        "candidates": [dict(row) for row in (summary.get("candidates") or [])],
+        "candidates_session_by_market": dict(summary.get("candidates_session_by_market") or {}),
         "sample_tickers": list(summary.get("sample_tickers") or []),
         "phase_span_sessions": int(summary.get("phase_span_sessions") or 0),
         "mature_count": int(summary.get("mature_count") or 0),
@@ -187,7 +210,19 @@ def run_forward_job(
         log_rows=log_rows,
     )
     result = walk_book(loaded["specs"], options=options)
-    tallied = _tally(result.get("events") or [], loaded["specs"], options, loaded["blocked"])
+    tallied = _tally(
+        result.get("events") or [],
+        loaded["specs"],
+        options,
+        loaded["blocked"],
+        session_rows=loaded["session_rows"],
+        dropped=loaded["dropped"],
+    )
+    # Dashboard only. These rows are not specs and do not change the walk.
+    tallied["candidates"] = _with_omitted_buy_rows(
+        tallied["candidates"],
+        _roster_omitted_buys(paths, now=moment),
+    )
     health = _health(result.get("boards") or {})
     disposition = bool(prior_observe.get("disposition")) if prior_observe else False
     announced = bool(previous.get("interim_announced")) if previous else False
@@ -228,6 +263,8 @@ def run_forward_job(
                 "memo_not_ready",
                 "memo_blocked",
                 "blocked_reasons",
+                "candidates",
+                "candidates_session_by_market",
             )
         },
     }
@@ -521,6 +558,7 @@ def _load_forward_specs(
     blocked: Counter[str] = Counter()
     errors: list[str] = []
     session_rows: list[dict[str, Any]] = []
+    dropped: list[dict[str, Any]] = []
     scored: dict[str, date] = {}
     for market in markets:
         completed = latest_completed_session(market, now)
@@ -541,16 +579,49 @@ def _load_forward_specs(
             if last is None or last < start:
                 if ticker in current:
                     blocked["no_session_on_or_after_start"] += 1
+                    dropped.append(
+                        _unloaded(
+                            market=market,
+                            ticker=ticker,
+                            outcome="no_session_on_or_after_start",
+                            screens=screens.get(ticker) or [],
+                            decline=decline,
+                            sector=sector,
+                            scored=completed,
+                        )
+                    )
                 continue
             chart = _read_chart(chart_path) if chart_path is not None else None
             if chart is None:
                 if ticker in current:
                     blocked["no_chart"] += 1
+                    dropped.append(
+                        _unloaded(
+                            market=market,
+                            ticker=ticker,
+                            outcome="no_chart",
+                            screens=screens.get(ticker) or [],
+                            decline=decline,
+                            sector=sector,
+                            scored=completed,
+                        )
+                    )
                 continue
             sessions, closes, highs, lows = chart
             if not any(day >= start for day in sessions):
                 if ticker in current:
                     blocked["no_session_on_or_after_start"] += 1
+                    dropped.append(
+                        _unloaded(
+                            market=market,
+                            ticker=ticker,
+                            outcome="no_session_on_or_after_start",
+                            screens=screens.get(ticker) or [],
+                            decline=decline,
+                            sector=sector,
+                            scored=completed,
+                        )
+                    )
                 continue
             try:
                 row = _session_verdict(
@@ -568,6 +639,17 @@ def _load_forward_specs(
             except (OSError, ValueError, TypeError) as exc:
                 errors.append(f"{market}:{ticker}: {exc}")
                 blocked["f9"] += 1
+                dropped.append(
+                    _unloaded(
+                        market=market,
+                        ticker=ticker,
+                        outcome="f9",
+                        screens=screens.get(ticker) or [],
+                        decline=decline,
+                        sector=sector,
+                        scored=completed,
+                    )
+                )
                 continue
             seen = _seen_at(
                 market=market,
@@ -605,6 +687,7 @@ def _load_forward_specs(
         "errors": errors,
         "session_rows": session_rows,
         "scored": scored,
+        "dropped": dropped,
     }
 
 
@@ -655,6 +738,112 @@ def _add_screen_payload(
         grouped.setdefault(ticker, []).append(_screen_fact(run_day, row, path))
 
 
+def _signals_csv_for(run_path: Path) -> Path | None:
+    """``screen/signals_<stamp>.csv`` beside ``screen/history/run_<stamp>.json``."""
+    name = run_path.name
+    if name.endswith(".json.gz"):
+        name = name[: -len(".json.gz")]
+    elif name.endswith(".json"):
+        name = name[: -len(".json")]
+    else:
+        return None
+    if not name.startswith("run_"):
+        return None
+    stamp = name[len("run_") :]
+    if len(stamp) != 15 or stamp[8] != "_" or not stamp[:8].isdigit() or not stamp[9:].isdigit():
+        return None
+    csv_path = run_path.parent.parent / f"signals_{stamp}.csv"
+    return csv_path if csv_path.is_file() else None
+
+
+def _read_signal_csv(path: Path) -> dict[str, dict[str, str]]:
+    rows: dict[str, dict[str, str]] = {}
+    try:
+        with path.open(newline="", encoding="utf-8") as handle:
+            for row in csv.DictReader(handle):
+                ticker = str(row.get("ticker") or "").strip().upper()
+                if not ticker or ticker in rows:
+                    continue
+                rows[ticker] = {
+                    key: value
+                    for key, value in row.items()
+                    if key
+                    in {
+                        "ticker",
+                        "signal",
+                        "adjusted_signal",
+                        "research_verdict",
+                        "sector",
+                        "timing_signal",
+                    }
+                }
+    except (OSError, UnicodeError, csv.Error):
+        return {}
+    return rows
+
+
+def _roster_omitted_buys(paths: Any, *, now: datetime) -> list[dict[str, Any]]:
+    """Buy-tier CSV names the book's in-force snapshot does not list.
+
+    Roster rows only. Nothing here is added to a screen fact or a spec.
+    """
+    from value_investor.library_ingest_exhaustion import learning_pool_excluded_tickers
+
+    rows: list[dict[str, Any]] = []
+    for market in universe_markets(paths.market_status):
+        completed = latest_completed_session(market, now)
+        if completed is None:
+            continue
+        newest, payload, _run_day = newest_screen_run(history_dir_for(paths, market), completed)
+        if newest is None or payload is None:
+            continue
+        csv_path = _signals_csv_for(newest)
+        if csv_path is None:
+            continue
+        snapshot = screen_rows(payload)
+        excluded = {
+            ticker.strip().upper()
+            for ticker in learning_pool_excluded_tickers(market, library_root=paths.library)
+        }
+        for ticker, row in _read_signal_csv(csv_path).items():
+            if ticker in snapshot or str(row.get("signal") or "") not in BUY_SIGNALS:
+                continue
+            outcome = "learning_pool_excluded" if ticker in excluded else "not_in_book_screen"
+            rows.append(
+                {
+                    "market": market,
+                    "ticker": ticker,
+                    "session": None,
+                    "signal": _text(row.get("signal")),
+                    "adjusted_signal": _text(row.get("adjusted_signal")),
+                    "decline": None,
+                    "sector": None,
+                    "gate_as_of": None,
+                    "f9": None,
+                    "price_rule": None,
+                    "outcome": outcome,
+                }
+            )
+    return rows
+
+
+def _with_omitted_buy_rows(
+    candidates: list[dict[str, Any]], omitted: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    seen = {(str(row.get("market") or ""), str(row.get("ticker") or "")) for row in candidates}
+    extra = [
+        row
+        for row in omitted
+        if (str(row.get("market") or ""), str(row.get("ticker") or "")) not in seen
+    ]
+    if not extra:
+        return candidates
+    return sorted(
+        [*candidates, *extra],
+        key=lambda row: (str(row["market"]), str(row["ticker"])),
+    )
+
+
 def _screen_fact(run_day: date, row: dict[str, Any], path: Path) -> ScreenFact:
     skip = {"ticker", "signal", "adjusted_signal", "research_verdict", "sector"}
     fields = {key: value for key, value in row.items() if key not in skip}
@@ -690,8 +879,7 @@ def _session_verdict(
     commit: str | None,
     observed_at: datetime,
 ) -> dict[str, Any]:
-    in_force = [fact for fact in screens if fact.run_date < scored]
-    latest = max(in_force, key=lambda item: item.run_date) if in_force else None
+    latest = _screen_fact_before(screens, scored)
     row = {}
     if latest is not None:
         row = {
@@ -733,8 +921,7 @@ def _session_verdict(
                 )
             )
     gates = _gate_for(decline, sector, market, ticker)
-    gate = gates[0] if gates else None
-    in_gate = gate is not None and gate.as_of < scored
+    decline_verdict, sector_verdict, gate_as_of = _gate_log_fields(gates, scored)
     files = _hash_files(
         paths.root,
         [path for path in (chart_path, paths.decline, paths.sector) if path is not None],
@@ -747,9 +934,9 @@ def _session_verdict(
         "market": market,
         "ticker": ticker,
         "as_of": scored.isoformat(),
-        "decline": gate.decline if in_gate else None,
-        "sector": gate.sector if in_gate else None,
-        "gate_as_of": None if gate is None else gate.as_of.isoformat(),
+        "decline": decline_verdict,
+        "sector": sector_verdict,
+        "gate_as_of": gate_as_of,
         "signal": None if latest is None else latest.signal,
         "research_verdict": None if latest is None else latest.research_verdict,
         "f9": "pass" if not gaps else gaps,
@@ -807,11 +994,137 @@ def _logged_seen(
     return None
 
 
+def _unloaded(
+    *,
+    market: str,
+    ticker: str,
+    outcome: str,
+    screens: list[ScreenFact],
+    decline: dict[str, Any],
+    sector: dict[str, Any],
+    scored: date,
+) -> dict[str, Any]:
+    """A current buy-tier name that never became a spec, with the reason already counted."""
+    return {
+        "market": market,
+        "ticker": ticker,
+        "outcome": outcome,
+        "screens": list(screens),
+        "gates": _gate_for(decline, sector, market, ticker),
+        "scored": scored,
+    }
+
+
+def _screen_fact_before(screens: list[ScreenFact], session: date) -> ScreenFact | None:
+    """Latest screen run strictly before ``session``. The gate log uses this pick."""
+    in_force = [fact for fact in screens if fact.run_date < session]
+    if not in_force:
+        return None
+    return max(in_force, key=lambda item: item.run_date)
+
+
+def _gate_log_fields(gates: list[Any], session: date) -> tuple[str | None, str | None, str | None]:
+    """Decline, sector, and gate date, with the gate log's in-force rule.
+
+    The first gate fact is the one the log records. Decline and sector are
+    null unless ``as_of`` is strictly before ``session``. The date stays.
+    """
+    gate = gates[0] if gates else None
+    if gate is None:
+        return None, None, None
+    in_force = gate.as_of < session
+    return (
+        gate.decline if in_force else None,
+        gate.sector if in_force else None,
+        gate.as_of.isoformat(),
+    )
+
+
+def _signalled_kind(events: list[dict[str, Any]], session: date | None) -> str:
+    """Event kind for this name. Prefer the row's session, else the latest event."""
+    if session is not None:
+        token = session.isoformat()
+        matched = [
+            event
+            for event in events
+            if str(event.get("session") or "")[:10] == token
+            or str(event.get("fill_session") or "")[:10] == token
+        ]
+        if matched:
+            return str(matched[-1].get("kind") or "")
+    if events:
+        return str(events[-1].get("kind") or "")
+    return ""
+
+
+def _candidate_row(
+    *,
+    market: str,
+    ticker: str,
+    session: date | None,
+    screens: list[ScreenFact],
+    gates: list[Any],
+    f9: Any,
+    price_rule: bool | None,
+    outcome: str,
+    judged: date | None,
+) -> dict[str, Any]:
+    """One roster row. Verdicts use the chart session, or ``judged`` when it has none."""
+    when = session or judged
+    screen = _screen_fact_before(screens, when) if when is not None else None
+    if when is not None:
+        decline, sector, gate_as_of = _gate_log_fields(gates, when)
+    else:
+        decline, sector, gate_as_of = None, None, None
+    if isinstance(f9, list):
+        f9_value: Any = [str(item) for item in f9]
+    else:
+        f9_value = f9
+    return {
+        "market": market,
+        "ticker": ticker,
+        "session": None if session is None else session.isoformat(),
+        "signal": None if screen is None else screen.signal,
+        "adjusted_signal": None if screen is None else screen.adjusted_signal,
+        "decline": decline,
+        "sector": sector,
+        "gate_as_of": gate_as_of,
+        "f9": f9_value,
+        "price_rule": price_rule,
+        "outcome": outcome,
+    }
+
+
+def _sessions_by_market(
+    rows: list[dict[str, Any]], dropped: list[dict[str, Any]]
+) -> dict[str, str]:
+    """Latest chart session per market. A market with no bar uses its scored date."""
+    found: dict[str, str] = {}
+    for row in rows:
+        token = row.get("session")
+        if not isinstance(token, str):
+            continue
+        market = str(row.get("market") or "")
+        if market not in found or token > found[market]:
+            found[market] = token
+    for item in dropped:
+        market = str(item.get("market") or "")
+        if not market or market in found:
+            continue
+        scored = item.get("scored")
+        if isinstance(scored, date):
+            found[market] = scored.isoformat()
+    return dict(sorted(found.items()))
+
+
 def _tally(
     events: list[dict[str, Any]],
     specs: list[NameSpec],
     options: Any,
     preset: Counter[str],
+    *,
+    session_rows: list[dict[str, Any]] | None = None,
+    dropped: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     blocked = Counter(preset)
     signals = 0
@@ -823,6 +1136,7 @@ def _tally(
     memo_blocked = 0
     tickers: list[str] = []
     signaled: set[tuple[str, str]] = set()
+    signal_events: dict[tuple[str, str], list[dict[str, Any]]] = {}
     for event in events:
         kind = str(event.get("kind") or "")
         if kind not in SIGNAL_KINDS:
@@ -832,7 +1146,9 @@ def _tally(
         signals += 1
         market = str(event.get("market") or "")
         ticker = str(event.get("ticker") or "")
-        signaled.add((market, ticker))
+        key = (market, ticker)
+        signaled.add(key)
+        signal_events.setdefault(key, []).append(event)
         if ticker and ticker not in tickers and len(tickers) < SAMPLE_TICKERS:
             tickers.append(ticker)
         if kind == "filled":
@@ -849,18 +1165,61 @@ def _tally(
             memo_nr += 1
         elif kind == "memo_blocked":
             memo_blocked += 1
+    logs = {
+        (str(row.get("market") or ""), str(row.get("ticker") or "")): row
+        for row in (session_rows or [])
+    }
+    candidates: list[dict[str, Any]] = []
+    loaded: set[tuple[str, str]] = set()
     for spec in specs:
-        if (spec.market, spec.ticker) in signaled:
-            continue
+        key = (spec.market, spec.ticker)
+        loaded.add(key)
         session = _last_in_window(spec, options.entry_not_before)
-        if session is None:
-            blocked["no_session_on_or_after_start"] += 1
-            continue
         book = PriceBook(_downloads_of(spec))
         refusal = series_refusal(book.calendar) if book.calendar else "no_chart"
         name = _Name(spec=spec, prices=book, refusal=refusal)
-        ok, reason = _base_eligible(name, session, options, price=True)
-        blocked[reason if not ok else "recovery_cap"] += 1
+        if key in signaled:
+            outcome = _signalled_kind(signal_events.get(key) or [], session)
+        elif session is None:
+            blocked["no_session_on_or_after_start"] += 1
+            outcome = "no_session_on_or_after_start"
+        else:
+            ok, reason = _base_eligible(name, session, options, price=True)
+            outcome = reason if not ok else "recovery_cap"
+            blocked[outcome] += 1
+        flags = _price_flags_at(name, session) if session is not None else None
+        log = logs.get(key) or {}
+        candidates.append(
+            _candidate_row(
+                market=spec.market,
+                ticker=spec.ticker,
+                session=session,
+                screens=spec.screens,
+                gates=spec.gates,
+                f9=log.get("f9"),
+                price_rule=None if not flags else bool(flags["primary"]),
+                outcome=outcome,
+                judged=_day(log.get("as_of")),
+            )
+        )
+    for item in dropped or []:
+        key = (str(item.get("market") or ""), str(item.get("ticker") or ""))
+        if key in loaded:
+            continue
+        candidates.append(
+            _candidate_row(
+                market=key[0],
+                ticker=key[1],
+                session=None,
+                screens=list(item.get("screens") or []),
+                gates=list(item.get("gates") or []),
+                f9=None,
+                price_rule=None,
+                outcome=str(item.get("outcome") or "no_chart"),
+                judged=item.get("scored") if isinstance(item.get("scored"), date) else None,
+            )
+        )
+    candidates.sort(key=lambda row: (str(row["market"]), str(row["ticker"])))
     return {
         "signals": signals,
         "entries_that_would_open": entries,
@@ -871,6 +1230,8 @@ def _tally(
         "memo_blocked": memo_blocked,
         "blocked_reasons": {key: int(value) for key, value in sorted(blocked.items()) if value},
         "sample_tickers": tickers,
+        "candidates": candidates,
+        "candidates_session_by_market": _sessions_by_market(candidates, dropped or []),
     }
 
 
@@ -1113,6 +1474,24 @@ def _reject_scores(payload: dict[str, Any]) -> None:
     for token in _RETURN_TOKENS:
         if token in text:
             raise RuntimeError(f"counts view contains {token}")
+    rows = payload.get("candidates")
+    if rows is None:
+        return
+    if not isinstance(rows, list):
+        raise RuntimeError("candidates is not a list")
+    for row in rows:
+        if not isinstance(row, dict) or set(row) != _CANDIDATE_KEYS:
+            raise RuntimeError("candidate row has unexpected keys")
+        for key, value in row.items():
+            if isinstance(value, str) or value is None or isinstance(value, bool):
+                continue
+            if (
+                key == "f9"
+                and isinstance(value, list)
+                and all(isinstance(item, str) for item in value)
+            ):
+                continue
+            raise RuntimeError(f"candidate {key} is not a verdict")
 
 
 def _aware(now: datetime) -> datetime:
