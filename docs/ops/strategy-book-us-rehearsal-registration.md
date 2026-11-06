@@ -1,12 +1,12 @@
 # Strategy book US point-in-time rehearsal registration
 
-**Status: DRAFT — parent `owner-strategy-book-v0` signed 2026-11-05; this registration awaits its own owner signature before the first development score. No development score exists. No licensed file has been read for this registration.**  
-**registration_id (proposed):** `strategy-book-us-rehearsal-v0`  
+**Status: SIGNED 2026-11-06 by the owner, with every proposed default in section 12 and the runner readings in the seal accepted unchanged. Parent `owner-strategy-book-v0` signed 2026-11-05. No development score exists yet.**  
+**registration_id:** `strategy-book-us-rehearsal-v0`  
 **Parent:** `owner-strategy-book-v0` in [`strategy-book-registration.md`](strategy-book-registration.md)  
 **Plan step:** 2.5 in [`strategy-reorientation-plan.md`](strategy-reorientation-plan.md)  
 **Screen replay:** [`historical-screen-replay.md`](historical-screen-replay.md)  
 **Human checklist:** `adhoc-strategy-us-pit-rehearsal` in [`human-tasks-checklist.md`](human-tasks-checklist.md#ad-hoc-when-triggered)  
-**Seal draft:** [`../data/strategy_book_us_rehearsal_registration.json`](../data/strategy_book_us_rehearsal_registration.json)
+**Seal:** [`../data/strategy_book_us_rehearsal_registration.json`](../data/strategy_book_us_rehearsal_registration.json)
 
 This document freezes the US rehearsal before any score is computed and before any Sharadar file is read. It does not run the rehearsal, does not change the Sharadar adapter, and does not write a results store. The owner has Sharadar access until **2026-11-09**. The licence and the day plan are in section 8.
 
@@ -453,7 +453,7 @@ The same default covers a Phase 1 signature that changes a decline-gate or secto
 
 The download in section 8 does not wait on either dependency. Scoring does.
 
-This package does not add an ops-monitor finding. There is no runner yet. The human checklist is the gate. The runner package wires the scheduled finding when it lands.
+The runner (`ftse-strategy-book-rehearsal`, [runbook](strategy-book-us-rehearsal-runbook.md)) wires the ops-monitor findings, including the licensed-data deletion warning.
 
 ## 11. Where the adapter does not have what the rules read
 

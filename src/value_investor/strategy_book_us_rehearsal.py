@@ -319,6 +319,11 @@ def preflight(repo_root: Path, *paths: Path | None) -> dict[str, Any]:
             "The parent strategy book registration (owner-strategy-book-v0) is not signed."
         )
     registration = load_registration(repo_root)
+    if registration.get("status") != "signed" or registration.get("signed") is not True:
+        raise RehearsalRefused(
+            f"{REGISTRATION_PATH} is not signed (status {registration.get('status')!r}); "
+            "the rehearsal scores only under a signed registration."
+        )
     for path in paths:
         if path is not None and _inside(path, repo_root):
             raise RehearsalRefused(
