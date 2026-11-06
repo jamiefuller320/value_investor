@@ -1,13 +1,13 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-02T08:04:38.664343+00:00",
+    "local_time": "2026-11-06T07:53:15.943078+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-02T08:00:00+00:00",
-    "settle_at": "2026-11-02T09:15:00+00:00",
+    "market_open_at": "2026-11-06T08:00:00+00:00",
+    "settle_at": "2026-11-06T09:15:00+00:00",
     "can_act": false,
-    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    "reason": "before market open"
   },
   "trades": [],
   "plan": {
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1095.2,
+    "nav": 1122.26,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -36,49 +36,49 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 182.53,
+    "target_sleeve_value": 187.04,
     "targets": [
       {
         "ticker": "ENI.MI",
         "name": "Eni S.p.A.",
         "signal": "strong_buy",
         "conviction_score": 0.7584000000000001,
-        "price": 27.135
+        "price": 25.355
       },
       {
         "ticker": "MONC.MI",
         "name": "Moncler S.p.A.",
         "signal": "strong_buy",
-        "conviction_score": 0.7060000000000001,
-        "price": 43.14
+        "conviction_score": 0.678,
+        "price": 45.93
       },
       {
         "ticker": "UNI.MI",
         "name": "Unipol Assicurazioni S.p.A.",
         "signal": "buy",
-        "conviction_score": 0.557,
-        "price": 25.18
-      },
-      {
-        "ticker": "LTMC.MI",
-        "name": "Lottomatica Group S.p.A.",
-        "signal": "buy",
-        "conviction_score": 0.544,
-        "price": 25.92
+        "conviction_score": 0.6183000000000001,
+        "price": 25.85
       },
       {
         "ticker": "IG.MI",
         "name": "Italgas S.p.A.",
         "signal": "buy",
-        "conviction_score": 0.5108,
-        "price": 8.948
+        "conviction_score": 0.5767,
+        "price": 9.174
+      },
+      {
+        "ticker": "LTMC.MI",
+        "name": "Lottomatica Group S.p.A.",
+        "signal": "buy",
+        "conviction_score": 0.516,
+        "price": 27.49
       },
       {
         "ticker": "BZU.MI",
         "name": "Buzzi S.p.A.",
         "signal": "buy",
-        "conviction_score": 0.4457,
-        "price": 40.12
+        "conviction_score": 0.4443,
+        "price": 41.66
       }
     ],
     "anticipated_exits": [],
@@ -88,32 +88,12 @@
     "anticipated_holds": [
       {
         "action": "hold",
-        "ticker": "MONC.MI",
-        "name": "Moncler S.p.A.",
-        "reason": "Already near equal-weight target",
-        "value": 183.09,
-        "target_value": 182.53,
-        "conviction_score": 0.7060000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
         "ticker": "UNI.MI",
         "name": "Unipol Assicurazioni S.p.A.",
         "reason": "Already near equal-weight target",
-        "value": 180.75,
-        "target_value": 182.53,
-        "conviction_score": 0.557,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "LTMC.MI",
-        "name": "Lottomatica Group S.p.A.",
-        "reason": "Already near equal-weight target",
-        "value": 183.21,
-        "target_value": 182.53,
-        "conviction_score": 0.544,
+        "value": 185.55,
+        "target_value": 187.04,
+        "conviction_score": 0.6183000000000001,
         "signal": "buy"
       },
       {
@@ -121,24 +101,32 @@
         "ticker": "BZU.MI",
         "name": "Buzzi S.p.A.",
         "reason": "Already near equal-weight target",
-        "value": 181.78,
-        "target_value": 182.53,
-        "conviction_score": 0.4457,
+        "value": 188.76,
+        "target_value": 187.04,
+        "conviction_score": 0.4443,
         "signal": "buy"
       }
     ],
     "skipped": [
       {
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 187.04,
+        "conviction_score": 0.7584000000000001,
+        "signal": "strong_buy"
+      },
+      {
         "ticker": "IG.MI",
         "name": "Italgas S.p.A.",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 182.53,
-        "conviction_score": 0.5108,
+        "target_value": 187.04,
+        "conviction_score": 0.5767,
         "signal": "buy"
       }
     ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 6 equal-weight sleeve(s); leave 4 near-target holding(s)."
+    "summary": "Next rebalance would target 6 equal-weight sleeve(s); leave 2 near-target holding(s)."
   },
   "alerts": [
     {
@@ -147,7 +135,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 27.135,
+      "mark": 25.355,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -158,7 +146,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 40.12,
+      "mark": 41.66,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -169,7 +157,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 43.14,
+      "mark": 45.93,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -180,10 +168,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 25.18,
+      "mark": 25.85,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "LTMC.MI",
@@ -191,7 +179,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 25.92,
+      "mark": 27.49,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -202,7 +190,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 8.948,
+      "mark": 9.174,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -1656,9 +1644,73 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-03T14:17:31.492298+00:00",
+        "portfolio_value": 1095.2,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 6,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-04T14:17:09.469973+00:00",
+        "portfolio_value": 1095.2,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 6,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-05T14:18:05.902830+00:00",
+        "portfolio_value": 1095.2,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 6,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-06T07:53:15.943078+00:00",
+        "portfolio_value": 1122.26,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 6,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-02T08:04:38.664343+00:00",
+    "last_mark_at": "2026-11-06T07:53:15.943078+00:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -1671,7 +1723,7 @@
     "schema_version": 2,
     "market_id": "ftse_mib",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:04:38.670828+00:00",
+    "generated_at": "2026-11-06T07:53:15.947567+00:00",
     "observe_only": true,
     "open_count": 7,
     "closed_count": 0,
@@ -1745,12 +1797,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 1
+    "checkpoints_added_this_pass": 3
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:04:38.671887+00:00",
+    "generated_at": "2026-11-06T07:53:15.948404+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1846,8 +1898,8 @@
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 1
+      "hold_episodes": 2,
+      "swap_rotations": 2
     }
   },
   "hypothesis_integrity": {
@@ -1855,8 +1907,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-11-02T08:04:38.673344+00:00",
-    "as_of": "2026-11-02T08:04:38.664343+00:00",
+    "updated_at": "2026-11-06T07:53:15.949581+00:00",
+    "as_of": "2026-11-06T07:53:15.943078+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1907,218 +1959,14 @@
     },
     "holdings": [
       {
-        "ticker": "IG.MI",
-        "name": "Italgas S.p.A.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 8.948,
-        "avg_cost": 8.948,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5108,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 51%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 51%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "MONC.MI",
-        "name": "Moncler S.p.A.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0113,
-        "mark": 43.14,
-        "avg_cost": 42.66,
-        "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.706,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 71%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 71%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "UNI.MI",
-        "name": "Unipol Assicurazioni S.p.A.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.019,
-        "mark": 25.18,
-        "avg_cost": 24.7106,
-        "signal": "buy",
-        "timing_signal": "accumulate",
-        "conviction_score": 0.557,
-        "data_quality_score": 0.9,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 0.90",
-          "conviction 56%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 0.90",
-          "conviction 56%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "LTMC.MI",
-        "name": "Lottomatica Group S.p.A.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0275,
-        "mark": 25.92,
-        "avg_cost": 25.2254,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.544,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [
-          "dividend"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 54%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 54%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "BZU.MI",
-        "name": "Buzzi S.p.A.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0593,
-        "mark": 40.12,
-        "avg_cost": 37.8744,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.4457,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "risk"
-        ],
-        "failed_families": [
-          "dividend",
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 45%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 45%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "ENI.MI",
         "name": "Eni S.p.A.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0613,
-        "mark": 27.135,
+        "unrealized_pct": -0.0083,
+        "mark": 25.355,
         "avg_cost": 25.5684,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -2149,6 +1997,210 @@
         ],
         "weaken_reasons": [],
         "broken_reasons": []
+      },
+      {
+        "ticker": "IG.MI",
+        "name": "Italgas S.p.A.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0253,
+        "mark": 9.174,
+        "avg_cost": 8.948,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.5767,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 58%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 58%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "UNI.MI",
+        "name": "Unipol Assicurazioni S.p.A.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0461,
+        "mark": 25.85,
+        "avg_cost": 24.7106,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6183,
+        "data_quality_score": 0.9,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.90",
+          "conviction 62%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.90",
+          "conviction 62%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "MONC.MI",
+        "name": "Moncler S.p.A.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0767,
+        "mark": 45.93,
+        "avg_cost": 42.66,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.678,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 68%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 68%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "LTMC.MI",
+        "name": "Lottomatica Group S.p.A.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0898,
+        "mark": 27.49,
+        "avg_cost": 25.2254,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.516,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "dividend"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 52%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 52%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "BZU.MI",
+        "name": "Buzzi S.p.A.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.1,
+        "mark": 41.66,
+        "avg_cost": 37.8744,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.4443,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "risk"
+        ],
+        "failed_families": [
+          "dividend",
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 44%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 44%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
       }
     ],
     "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
@@ -2158,7 +2210,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:04:38.675762+00:00",
+    "generated_at": "2026-11-06T07:53:15.950978+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2225,7 +2277,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-11-02T08:04:38.679582+00:00",
+    "generated_at": "2026-11-06T07:53:15.953662+00:00",
     "open_count": 1,
     "closed_count": 7,
     "scored_count": 7,
@@ -2292,7 +2344,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:04:38.664343+00:00",
+    "generated_at": "2026-11-06T07:53:15.943078+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2349,7 +2401,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:04:38.664343+00:00",
+    "generated_at": "2026-11-06T07:53:15.943078+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -2357,16 +2409,16 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 1,
-    "card_count": 1,
+    "proposal_count": 2,
+    "card_count": 2,
     "verdict_counts": {
-      "agree": 1,
+      "agree": 2,
       "veto": 0,
       "abstain": 0
     },
     "by_algo_action": {
       "rebuy_skip": {
-        "agree": 1,
+        "agree": 2,
         "veto": 0,
         "abstain": 0
       }
@@ -2374,15 +2426,15 @@
     "disagree_vs_heuristic_count": 0,
     "cards": [
       {
-        "ticker": "IG.MI",
-        "name": "Italgas S.p.A.",
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
         "algo_action": "rebuy_skip",
         "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
         "reasons": [
-          "algo_reason cites insufficient cash after higher-conviction fills \u2014 a portfolio-capacity skip, not a sell or leave-buy-cohort call.",
-          "still_buyish is true with rank_drop 0 and conviction_rank matches entry_rank at 5, so hold-gate deterioration is absent.",
-          "screen_signal remains buy and research_verdict is accumulate, consistent with skipping rebuy without disagreeing on merit."
+          "rebuy_skip is driven by algo_reason (insufficient cash after higher-conviction fills), not a merit exit",
+          "still_buyish with screen_signal strong_buy, conviction_rank 1, entry_rank 1, and rank_drop 0 \u2014 no leave-buy-cohort signal",
+          "research_verdict accumulate with overlay_bound supports continued buyish stance; skipping rebuy is consistent with cash priority over churn"
         ],
         "evidence": [
           {
@@ -2394,19 +2446,19 @@
             "kind": "screen_signal",
             "source": "candidates",
             "detail": "Effective signal at decision time",
-            "value": "buy"
+            "value": "strong_buy"
           },
           {
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 5
+            "value": 1
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 5
+            "value": 1
           },
           {
             "kind": "rank_drop",
@@ -2425,6 +2477,12 @@
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
             "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
           }
         ],
         "judge_backend": "llm",
@@ -2432,8 +2490,102 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level_native",
-        "logged_at": "2026-11-02T08:04:38.664343+00:00",
-        "proposal_id": "buy_tier_level_native:IG.MI:rebuy_skip:2026-11-02T08:04:38.664343+00:00",
+        "logged_at": "2026-11-06T07:53:15.943078+00:00",
+        "proposal_id": "buy_tier_level_native:ENI.MI:rebuy_skip:2026-11-06T07:53:15.943078+00:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "IG.MI",
+        "name": "Italgas S.p.A.",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "rebuy_skip follows explicit cash constraint in algo_reason, not deterioration of the name",
+          "still_buyish on buy with rank_drop 0 and conviction_rank matching entry_rank 4 \u2014 hold gate satisfied",
+          "research_verdict accumulate with overlay_bound; deferring rebuy aligns with low-churn when fundamentals unchanged"
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 4
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 4
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level_native",
+        "logged_at": "2026-11-06T07:53:15.943078+00:00",
+        "proposal_id": "buy_tier_level_native:IG.MI:rebuy_skip:2026-11-06T07:53:15.943078+00:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -2467,27 +2619,27 @@
       "attempted": true,
       "ok": true,
       "fallback": null,
-      "llm_card_count": 1
+      "llm_card_count": 2
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-11-02T08:04:38.664343+00:00",
+      "generated_at": "2026-11-06T07:53:15.943078+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 1,
+      "card_count": 2,
       "verdict_counts": {
-        "agree": 1,
+        "agree": 2,
         "veto": 0,
         "abstain": 0
       },
       "by_algo_action": {
         "rebuy_skip": {
-          "agree": 1,
+          "agree": 2,
           "veto": 0,
           "abstain": 0
         }
@@ -2507,7 +2659,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-02T08:04:49.401634+00:00",
+  "generated_at": "2026-11-06T07:53:19.554187+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,

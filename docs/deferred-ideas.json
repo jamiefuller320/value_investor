@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-06T07:57:47+00:00",
+  "updated_at": "2026-11-06T07:30:27+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16656,6 +16656,88 @@
     {
       "id": "L676",
       "category": "later",
+      "section": "universe",
+      "title": "Point-in-time S&P MidCap 400 constituent history for the US rehearsal",
+      "summary": "The strategy-book US rehearsal (strategy-book-us-rehearsal-v0) uses market-cap ranks 501-1000 because the Sharadar tables the replay adapter reads have no S&P MidCap 400 constituent history. A new registration_id can rerun on a real constituent tape if a licensed point-in-time membership source exists. It does not replace the v0 proxy after the first development score.",
+      "revisit_when": "A licensed point-in-time S&P MidCap 400 constituent history is on the owner machine, and strategy-book-us-rehearsal-v0 has a committed development block.",
+      "tags": [
+        "strategy-book",
+        "sp400",
+        "sharadar",
+        "us-rehearsal"
+      ],
+      "status": "open",
+      "source": "docs/ops/strategy-book-us-rehearsal-registration.md",
+      "added_at": "2026-11-05T21:15:24+00:00"
+    },
+    {
+      "id": "L677",
+      "category": "later",
+      "section": "ops",
+      "title": "Re-arm the Sharadar deletion warning on a later licensed month",
+      "summary": "ftse-historical-replay confirm-deleted already stamped deleted_at for the October 2026 screen-replay month, so the ops-monitor deletion finding does not arm again when the owner downloads a second month for the strategy-book US rehearsal. The human checklist carries that month until the finding keys off a new first_used_at.",
+      "revisit_when": "The owner records a second Sharadar download for strategy-book-us-rehearsal-v0 (access through 2026-11-09).",
+      "tags": [
+        "sharadar",
+        "licence",
+        "ops-monitor",
+        "us-rehearsal"
+      ],
+      "status": "open",
+      "source": "docs/ops/strategy-book-us-rehearsal-registration.md",
+      "added_at": "2026-11-05T21:15:30+00:00"
+    },
+    {
+      "id": "L678",
+      "category": "later",
+      "section": "ops",
+      "title": "Re-hash strategy-book gate log at the commit that contains the line",
+      "summary": "The daily check compares each stored hash to the commit the run started from. A path that commit does not contain stays pending_commit, because the close refresh writes those bytes earlier in the same run. A later check can re-hash the blob in the commit that first contains the log line.",
+      "revisit_when": "The first live strategy-book gate-log commit is on main.",
+      "tags": [
+        "strategy-book",
+        "provenance"
+      ],
+      "status": "open",
+      "source": "strategy-book forward package 2",
+      "added_at": "2026-11-05T23:00:28+00:00"
+    },
+    {
+      "id": "L679",
+      "category": "later",
+      "section": "ops",
+      "title": "Windows-safe paths for CON/PRN ticker artifacts",
+      "summary": "docs/data/charts/CON.DE.json, PRN.AX.json, PRN.L.json and library research/PRN.AX use Windows reserved device names, so a plain clone fails on Windows (owner hit it 2026-11-06 for the US rehearsal). Owner machine uses a sparse checkout excluding bulk data dirs. A path-escaping rule for reserved names would make full clones work.",
+      "revisit_when": "The owner needs a full Windows checkout (dashboard dev or bulk data work on the laptop).",
+      "tags": [
+        "windows",
+        "charts",
+        "library",
+        "dx"
+      ],
+      "status": "open",
+      "source": "US rehearsal setup on owner laptop",
+      "added_at": "2026-11-06T06:17:15+00:00"
+    },
+    {
+      "id": "L680",
+      "category": "later",
+      "section": "research",
+      "title": "US rehearsal: stream name specs to cap walk memory",
+      "summary": "The rehearsal holds every name's daily tape, gate tape and episodes in memory; synthetic 1,000 x 6,500 peaks at 2.9 GB and the real bundle may need about three times that. Build specs per universe or per name batch and release downloads after each walk if the owner's run swaps or is OOM-killed.",
+      "revisit_when": "The owner's develop or reveal run on the real bundle exceeds available memory or is killed",
+      "tags": [
+        "strategy-book",
+        "us-rehearsal",
+        "performance"
+      ],
+      "status": "open",
+      "source": "strategy-book US rehearsal runner build (plan step 2.5)",
+      "added_at": "2026-11-06T07:30:27+00:00"
+    },
+    {
+      "id": "L681",
+      "category": "later",
       "section": "ops",
       "title": "Retire legacy dashboard sections after v2 cutover",
       "summary": "Once the owner approves the dashboard v2 cutover, retire old-page sections the ledger marks as retirement candidates (browser sandbox, 1000-pound simulation headline, lifecycle experiment Start) one by one with a recorded reason; engineering views stay on docs/legacy/.",
@@ -16670,7 +16752,7 @@
       "added_at": "2026-11-06T07:57:47+00:00"
     },
     {
-      "id": "L677",
+      "id": "L682",
       "category": "later",
       "section": "ops",
       "title": "Legacy Overview stale progress report and empty week-over-week diff",

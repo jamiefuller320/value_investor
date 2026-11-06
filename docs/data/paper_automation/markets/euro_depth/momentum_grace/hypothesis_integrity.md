@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `momentum_grace` · updated 2026-11-02T08:08:02.145060+00:00
+Track: `momentum_grace` · updated 2026-11-06T07:55:29.932850+00:00
 
 ## Portfolio loser feedback
 
@@ -10,37 +10,37 @@ Track: `momentum_grace` · updated 2026-11-02T08:08:02.145060+00:00
 
 ## Holding reviews
 
-### UMI.BR — intact / hold_tolerate (+0.0%)
+### ERIC-B.ST — intact / hold_tolerate (-0.0%)
 - still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 91%
-
-### AD.AS — intact / hold_tolerate (+0.0%)
-- still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 71%
 
-### EG7.IR — intact / hold_tolerate (+2.9%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 73%
-
-### C5H.IR — intact / hold_tolerate (+4.7%)
+### OIZ.IR — intact / hold_tolerate (+0.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 78%
+- conviction 68%
 
-### PHIA.AS — intact / hold_tolerate (+8.5%)
+### EG7.IR — intact / hold_tolerate (+3.2%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 75%
+
+### C5H.IR — intact / hold_tolerate (+4.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 77%
+
+### UMI.BR — intact / hold_tolerate (+7.1%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 90%

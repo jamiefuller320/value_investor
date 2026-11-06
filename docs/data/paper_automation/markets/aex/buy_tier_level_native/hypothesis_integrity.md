@@ -1,72 +1,58 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-02T08:04:54.778018+00:00
+Track: `buy_tier_level_native` · updated 2026-11-06T07:53:20.235965+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 10 (0% count, 0% NAV)
+- Losers: **2** / 8 (25% count, 22% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
 ## Holding reviews
 
-### PRX.AS — weakening / watch_review (-4.3%)
-- research verdict caution
-- still buy
-- cheapness family still passes
-
-### ASML.AS — weakening / watch_review (+0.0%)
+### ASML.AS — weakening / watch_review (-11.5%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
 
-### KPN.AS — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 46%
-
-### ADYEN.AS — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 39%
-
-### MT.AS — weakening / watch_review (+0.6%)
-- research verdict caution
-- conviction 33% below intact floor
-- still buy
-- cheapness family still passes
-
-### SHELL.AS — intact / hold_tolerate (+0.8%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 70%
-
-### AD.AS — intact / hold_tolerate (+1.1%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 72%
-
-### AKZA.AS — intact / hold_tolerate (+2.7%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 52%
-
-### ASM.AS — weakening / watch_review (+4.3%)
+### ASM.AS — weakening / watch_review (-9.9%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
 
-### RAND.AS — intact / hold_tolerate (+13.3%)
+### KPN.AS — intact / hold_tolerate (+2.7%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 53%
+
+### AD.AS — intact / hold_tolerate (+6.7%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 89%
+
+### PRX.AS — weakening / watch_review (+7.0%)
+- research verdict caution
+- still buy
+- cheapness family still passes
+
+### AKZA.AS — intact / hold_tolerate (+7.8%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 59%
+
+### ADYEN.AS — weakening / watch_review (+8.0%)
+- left buy tier (hold)
+- conviction 27% below intact floor
+- research accumulate
+- cheapness family still passes
+
+### RAND.AS — intact / hold_tolerate (+12.4%)
 - still buy
 - research accumulate
 - cheapness family still passes

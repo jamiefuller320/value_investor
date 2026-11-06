@@ -2664,6 +2664,43 @@ def check_strategy_book_memo_job(
     ]
 
 
+def check_strategy_book_observe(
+    *,
+    repo_root: Path | None = None,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Read the forward status. Does not walk, download, or write a score.
+
+    Observe-only (``auto_fixable=False``). The weekday job at 21:30 UTC owns
+    the refresh. See docs/ops/strategy-book-observe.md.
+    """
+    from value_investor.strategy_book_forward import TITLE_FAILED, findings_from_state
+
+    moment = now or datetime.now(UTC)
+    try:
+        rows = findings_from_state(repo_root=repo_root, now=moment)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=TITLE_FAILED,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or TITLE_FAILED),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+        for finding in rows
+    ]
+
+
 def check_n206_plain_ey_observe(
     *,
     output_dir: Path | None = None,
@@ -4098,6 +4135,34 @@ def check_historical_screen_replay(
     ]
 
 
+def check_strategy_book_us_rehearsal(
+    *,
+    repo_root: Path | None = None,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Observe-only strategy-book US rehearsal: committed blocks and the licence deletion clock.
+
+    Reads ``docs/data/strategy_book_us_rehearsal.json`` (written only by the owner's
+    ``ftse-strategy-book-rehearsal`` runs); never writes it.
+    """
+    from value_investor.strategy_book_us_rehearsal import REPO_ROOT, TITLE_FAILED, findings
+
+    try:
+        rows = findings(Path(repo_root) if repo_root is not None else REPO_ROOT, now)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        rows = [{"severity": "warn", "title": TITLE_FAILED, "summary": str(exc)}]
+    return [
+        OpsFinding(
+            severity=str(row["severity"]),
+            category="backtest",
+            title=str(row["title"]),
+            summary=str(row["summary"]),
+            auto_fixable=False,
+        )
+        for row in rows
+    ]
+
+
 def check_post_hsr_policy(
     *,
     store_path: Path | None = None,
@@ -4883,6 +4948,7 @@ def collect_ops_findings(
     findings.extend(check_operating_decline_gate())
     findings.extend(check_sector_headwind_gate())
     findings.extend(check_strategy_book_memo_job())
+    findings.extend(check_strategy_book_observe())
     findings.extend(check_n200_tech_timing_observe())
     findings.extend(check_n201_value_mom_observe())
     findings.extend(check_n210_ai_judgment_observe())
@@ -4907,6 +4973,7 @@ def collect_ops_findings(
     findings.extend(check_backtest_history())
     findings.extend(check_screen_premise_backtest())
     findings.extend(check_historical_screen_replay())
+    findings.extend(check_strategy_book_us_rehearsal())
     findings.extend(check_post_hsr_policy())
     findings.extend(check_value_factor_base_rate())
     findings.extend(check_assessment_scoreboard())

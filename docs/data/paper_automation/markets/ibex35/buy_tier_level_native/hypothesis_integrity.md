@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-02T08:04:25.161681+00:00
+Track: `buy_tier_level_native` · updated 2026-11-06T07:53:08.548392+00:00
 
 ## Portfolio loser feedback
 
@@ -10,19 +10,20 @@ Track: `buy_tier_level_native` · updated 2026-11-02T08:04:25.161681+00:00
 
 ## Holding reviews
 
-### SCYR.MC — weakening / watch_review (+0.1%)
+### SCYR.MC — weakening / watch_review (-0.0%)
+- left buy tier (hold)
 - research verdict caution
-- still buy
+- conviction 12% below intact floor
 - cheapness family still passes
+- data_quality 0.95
 
-### REP.MC — weakening / watch_review (+4.3%)
+### REP.MC — weakening / watch_review (+2.5%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes
 
-### GRF.MC — intact / hold_tolerate (+8.4%)
-- still buy
+### GRF.MC — weakening / watch_review (+11.4%)
+- left buy tier (hold)
+- conviction 21% below intact floor
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 60%

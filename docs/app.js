@@ -604,6 +604,7 @@ const DASHBOARD_SIDECARS = [
   ["n200_tech_timing_observe", "data/n200_tech_timing_observe.json"],
   ["n201_value_mom_observe", "data/n201_value_mom_observe.json"],
   ["n206_plain_ey_observe", "data/n206_plain_ey_observe.json"],
+  ["strategy_book_forward_status", "data/strategy_book_forward_status.json"],
   ["n210_ai_judgment_observe", "data/n210_ai_judgment_observe.json"],
   ["chart_outcome_review", "data/chart_outcome_review.json"],
   ["engineering_tasks", "data/engineering_tasks.json"],
@@ -4359,6 +4360,19 @@ const INVESTMENT_MODELS = [
     blurb:
       "B3 sealed observe (launch-queue waiter): fixed-stake AI/filter judgment; fair-cost episode % primary. Shadow only — never assessment primary crown; matched-30 untouched (F8).",
   },
+  {
+    id: "strategy-book",
+    label: "Strategy book",
+    shortLabel: "Book · observe",
+    mode: "observe",
+    modeLabel: "Observe-only",
+    registrationId: "owner-strategy-book-v0",
+    deferredId: null,
+    opsDoc: "docs/ops/strategy-book-observe.md",
+    emptyHint: "Strategy book forward status not published yet.",
+    blurb:
+      "Observe-only forward book. Queue health only: phase span, mature count, freshness. No promote. No strand A writes.",
+  },
 ];
 
 const INVESTMENT_MODEL_IDS = new Set(INVESTMENT_MODELS.map((m) => m.id));
@@ -4633,6 +4647,9 @@ function renderAnalysisObserveForModel(data, modelId) {
         Compact Automation strip remains on
         <button type="button" class="link-btn" data-tab-jump="automation">Automation → Queue &amp; hunter</button>.
       </p>`;
+  }
+  if (id === "strategy-book") {
+    return renderStrategyBookObserveSection(data, { compact: false });
   }
   // Strand A — live capital path surfaces.
   return `
@@ -5740,6 +5757,37 @@ function resolveN206PipelineHealth(data) {
     },
     ops_doc: store.ops_doc || "docs/ops/n206-plain-ey-observe.md",
   };
+}
+
+function renderStrategyBookObserveSection(data, { compact = false } = {}) {
+  const payload = data && data.strategy_book_forward_status;
+  const sectionAttrs = compact
+    ? ' class="automation-section automation-section-full strategy-book-observe-section analysis-observe-compact"'
+    : ' class="automation-section automation-section-full strategy-book-observe-section"';
+  if (!payload || typeof payload !== "object") {
+    return `
+      <section${sectionAttrs}>
+        <h2>Strategy book</h2>
+        <p class="muted small">Forward status not published yet. The weekday job writes counts only until go-live.</p>
+      </section>`;
+  }
+  const fresh = payload.freshness || {};
+  const span =
+    payload.phase_span_sessions == null ? "—" : String(payload.phase_span_sessions);
+  const mature = payload.mature_count == null ? "—" : String(payload.mature_count);
+  const state = fresh.state || (payload.forward_live ? "live" : "dry_run");
+  const when = fresh.generated_at || payload.generated_at || "";
+  return `
+    <section${sectionAttrs}>
+      <h2>Strategy book</h2>
+      <p class="small" style="margin-top:0">Phase span ${esc(span)} sessions · mature ${esc(
+        mature
+      )} · ${esc(String(state))}${when ? ` · ${esc(fmtDate(when))}` : ""}</p>
+      <p class="small muted" style="margin-bottom:0">
+        Read-only queue health. No promote button. Does not write strand A.
+        ${compact ? "Compact strip." : "Full readout is this line."}
+      </p>
+    </section>`;
 }
 
 function renderN206PipelineHealthSection(data, { compact = false } = {}) {
@@ -7680,6 +7728,9 @@ function renderQueueHealthMonitor(data) {
         queue_health: health,
         n206_pipeline_health: health.n206_pipeline_health,
         n206_plain_ey_observe: data.n206_plain_ey_observe,
+      }, { compact: true })}
+      ${renderStrategyBookObserveSection({
+        strategy_book_forward_status: data.strategy_book_forward_status,
       }, { compact: true })}
       ${renderN210PipelineHealthSection({
         queue_health: health,

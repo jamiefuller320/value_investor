@@ -1,13 +1,13 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-05T14:18:04.634755+00:00",
+    "local_time": "2026-11-06T07:53:08.411444+00:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-11-05T08:00:00+00:00",
-    "settle_at": "2026-11-05T09:15:00+00:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-11-06T08:00:00+00:00",
+    "settle_at": "2026-11-06T09:15:00+00:00",
+    "can_act": false,
+    "reason": "before market open"
   },
   "trades": [],
   "plan": {
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1053.42,
+    "nav": 1056.72,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -36,89 +36,104 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 351.14,
+    "target_sleeve_value": 527.74,
     "targets": [
-      {
-        "ticker": "GRF.MC",
-        "name": "Grifols, S.A.",
-        "signal": "buy",
-        "conviction_score": 0.5955,
-        "price": 10.975
-      },
       {
         "ticker": "REP.MC",
         "name": "Repsol, S.A.",
         "signal": "strong_buy",
-        "conviction_score": 0.495125,
-        "price": 30.73
+        "conviction_score": 0.59976,
+        "price": 30.21
       },
       {
-        "ticker": "SCYR.MC",
-        "name": "Sacyr, S.A.",
+        "ticker": "AENA.MC",
+        "name": "Aena S.M.E., S.A.",
         "signal": "buy",
-        "conviction_score": 0.43877,
-        "price": 4.05
+        "conviction_score": 0.4013,
+        "price": 28.32
       }
     ],
-    "anticipated_exits": [],
-    "anticipated_grace_holds": [],
-    "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_exits": [
       {
-        "action": "hold",
+        "action": "sell",
         "ticker": "GRF.MC",
         "name": "Grifols, S.A.",
-        "reason": "Already near equal-weight target",
-        "value": 351.28,
-        "target_value": 351.14,
-        "conviction_score": 0.5955,
-        "signal": "buy"
+        "reason": "No longer in the top conviction target set",
+        "shares": 32.007371,
+        "price": 11.28,
+        "value": 361.04
       },
       {
-        "action": "hold",
+        "action": "sell",
+        "ticker": "SCYR.MC",
+        "name": "Sacyr, S.A.",
+        "reason": "No longer in the top conviction target set",
+        "shares": 86.697292,
+        "price": 4.044,
+        "value": 350.6
+      }
+    ],
+    "anticipated_grace_holds": [],
+    "anticipated_trims": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
         "ticker": "REP.MC",
         "name": "Repsol, S.A.",
-        "reason": "Already near equal-weight target",
-        "value": 351.02,
-        "target_value": 351.14,
-        "conviction_score": 0.495125,
+        "reason": "Top-up to equal weight",
+        "value": 182.66,
+        "price": 30.21,
+        "target_value": 527.74,
+        "conviction_score": 0.59976,
         "signal": "strong_buy"
       },
       {
-        "action": "hold",
-        "ticker": "SCYR.MC",
-        "name": "Sacyr, S.A.",
-        "reason": "Already near equal-weight target",
-        "value": 351.12,
-        "target_value": 351.14,
-        "conviction_score": 0.43877,
+        "action": "buy",
+        "ticker": "AENA.MC",
+        "name": "Aena S.M.E., S.A.",
+        "reason": "New sleeve",
+        "value": 527.74,
+        "price": 28.32,
+        "target_value": 527.74,
+        "conviction_score": 0.4013,
         "signal": "buy"
       }
     ],
+    "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 2 buy(s)."
   },
   "alerts": [
     {
       "ticker": "GRF.MC",
       "name": "Grifols, S.A.",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 10.975,
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
+      "mark": 11.28,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "wait"
+    },
+    {
+      "ticker": "GRF.MC",
+      "name": "Grifols, S.A.",
+      "source": "paper",
+      "severity": "watch",
+      "message": "Screen signal is now hold",
+      "mark": 11.28,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "wait"
     },
     {
       "ticker": "SCYR.MC",
       "name": "Sacyr, S.A.",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 4.05,
+      "severity": "watch",
+      "message": "Screen signal is now hold",
+      "mark": 4.044,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -129,7 +144,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 30.73,
+      "mark": 30.21,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -1122,11 +1137,31 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-06T07:53:08.411444+00:00",
+        "portfolio_value": 881.43,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83412
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-05T14:18:04.634755+00:00",
+    "last_mark_at": "2026-11-06T07:53:08.411444+00:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "GRF.MC": 1,
+        "SCYR.MC": 1
+      },
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
@@ -1137,7 +1172,7 @@
     "schema_version": 2,
     "market_id": "ibex35",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-05T14:18:04.835166+00:00",
+    "generated_at": "2026-11-06T07:53:08.517465+00:00",
     "observe_only": true,
     "open_count": 2,
     "closed_count": 0,
@@ -1216,7 +1251,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-05T14:18:04.836154+00:00",
+    "generated_at": "2026-11-06T07:53:08.518196+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1321,8 +1356,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-05T14:18:04.837379+00:00",
-    "as_of": "2026-11-05T14:18:04.634755+00:00",
+    "updated_at": "2026-11-06T07:53:08.519124+00:00",
+    "as_of": "2026-11-06T07:53:08.411444+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1337,8 +1372,8 @@
     "holding_count": 3,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 1,
-      "weakening": 2,
+      "intact": 0,
+      "weakening": 3,
       "broken": 0,
       "insufficient_data": 0
     },
@@ -1364,8 +1399,8 @@
         "cheapness": 0.0,
         "quality": 0.6667,
         "dividend": 0.0,
-        "garp": 0.0,
-        "risk": 0.0
+        "garp": 0.6667,
+        "risk": 0.6667
       },
       "selection_feedback_flags": [],
       "balancing_hint": "maintain",
@@ -1379,36 +1414,38 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0014,
-        "mark": 4.05,
+        "unrealized_pct": -0.0,
+        "mark": 4.044,
         "avg_cost": 4.0442,
-        "signal": "buy",
+        "signal": "hold",
         "timing_signal": "neutral",
-        "conviction_score": 0.4388,
-        "data_quality_score": 1.0,
+        "conviction_score": 0.1208,
+        "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
-          "dividend",
+          "dividend"
+        ],
+        "failed_families": [
+          "quality",
           "garp",
           "risk"
         ],
-        "failed_families": [
-          "quality"
-        ],
         "research_verdict": "caution",
         "reasons": [
+          "left buy tier (hold)",
           "research verdict caution",
-          "still buy",
-          "cheapness family still passes"
+          "conviction 12% below intact floor",
+          "cheapness family still passes",
+          "data_quality 0.95"
         ],
         "intact_reasons": [
-          "still buy",
           "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 44%"
+          "data_quality 0.95"
         ],
         "weaken_reasons": [
-          "research verdict caution"
+          "left buy tier (hold)",
+          "research verdict caution",
+          "conviction 12% below intact floor"
         ],
         "broken_reasons": []
       },
@@ -1419,12 +1456,12 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.043,
-        "mark": 30.73,
+        "unrealized_pct": 0.0254,
+        "mark": 30.21,
         "avg_cost": 29.4617,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4951,
+        "conviction_score": 0.5998,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1444,7 +1481,7 @@
           "still strong_buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 50%"
+          "conviction 60%"
         ],
         "weaken_reasons": [
           "research verdict caution"
@@ -1454,42 +1491,42 @@
       {
         "ticker": "GRF.MC",
         "name": "Grifols, S.A.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0837,
-        "mark": 10.975,
+        "unrealized_pct": 0.1139,
+        "mark": 11.28,
         "avg_cost": 10.127,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5955,
+        "signal": "hold",
+        "timing_signal": "wait",
+        "conviction_score": 0.2064,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
-          "dividend",
+          "dividend"
+        ],
+        "failed_families": [
+          "quality",
           "garp",
           "risk"
         ],
-        "failed_families": [
-          "quality"
-        ],
         "research_verdict": "accumulate",
         "reasons": [
-          "still buy",
+          "left buy tier (hold)",
+          "conviction 21% below intact floor",
           "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 60%"
+          "cheapness family still passes"
         ],
         "intact_reasons": [
-          "still buy",
           "research accumulate",
           "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 60%"
+          "data_quality 1.00"
         ],
-        "weaken_reasons": [],
+        "weaken_reasons": [
+          "left buy tier (hold)",
+          "conviction 21% below intact floor"
+        ],
         "broken_reasons": []
       }
     ],
@@ -1500,7 +1537,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-05T14:18:04.838999+00:00",
+    "generated_at": "2026-11-06T07:53:08.520331+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1575,7 +1612,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-05T14:18:04.842357+00:00",
+    "generated_at": "2026-11-06T07:53:08.522621+00:00",
     "open_count": 0,
     "closed_count": 5,
     "scored_count": 5,
@@ -1643,7 +1680,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-05T14:18:04.634755+00:00",
+    "generated_at": "2026-11-06T07:53:08.411444+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1700,12 +1737,12 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-05T14:18:04.634755+00:00",
+    "generated_at": "2026-11-06T07:53:08.411444+00:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "evidence_heuristic",
-    "judge_spec_id": "heuristic.v1",
-    "parent_spec_id": null,
+    "judge_backend": "llm",
+    "judge_spec_id": "llm.v1",
+    "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
     "proposal_count": 0,
@@ -1718,16 +1755,21 @@
     "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
     "cards": [],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
+    "llm_judge": {
+      "attempted": true,
+      "ok": true,
+      "fallback": null
+    },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-05T14:18:04.634755+00:00",
+      "generated_at": "2026-11-06T07:53:08.411444+00:00",
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "evidence_heuristic",
-      "judge_spec_id": "heuristic.v1",
-      "parent_spec_id": null,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
       "card_count": 0,
       "verdict_counts": {
@@ -1748,10 +1790,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-05T14:18:04.849378+00:00",
+  "generated_at": "2026-11-06T07:53:08.527250+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
