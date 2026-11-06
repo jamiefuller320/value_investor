@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-05T20:07:22+00:00",
+  "updated_at": "2026-11-06T07:57:47+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16652,6 +16652,38 @@
       "added_at": "2026-11-05T19:42:56+00:00",
       "updated_at": "2026-11-05T20:07:22+00:00",
       "status_note": "Hunter-fix still commits an allowlisted PR diff and does not push docs/data/agent_usage/ shards to main, so hunter_fix and hunter_verify runs can miss the weekly token ledger."
+    },
+    {
+      "id": "L676",
+      "category": "later",
+      "section": "ops",
+      "title": "Retire legacy dashboard sections after v2 cutover",
+      "summary": "Once the owner approves the dashboard v2 cutover, retire old-page sections the ledger marks as retirement candidates (browser sandbox, 1000-pound simulation headline, lifecycle experiment Start) one by one with a recorded reason; engineering views stay on docs/legacy/.",
+      "revisit_when": "Owner stamps the dashboard v2 cutover decision (human task adhoc-dashboard-v2-plan)",
+      "tags": [
+        "dashboard",
+        "dashboard-v2",
+        "legacy"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a1af74-11c6-7e8a-9823-c842727f4306",
+      "added_at": "2026-11-06T07:57:47+00:00"
+    },
+    {
+      "id": "L677",
+      "category": "later",
+      "section": "ops",
+      "title": "Legacy Overview stale progress report and empty week-over-week diff",
+      "summary": "The old Overview shows progress_report.json from 2026-09-30 and a week-over-week block that is always empty because run_diff is never published. Fix the regen cadence and publish run_diff, or drop both blocks from the old Overview.",
+      "revisit_when": "If the owner rejects dashboard v2, or the old Overview stays the landing page after the v2 cutover review",
+      "tags": [
+        "dashboard",
+        "legacy",
+        "stale"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a1af74-11c6-7e8a-9823-c842727f4306",
+      "added_at": "2026-11-06T07:57:47+00:00"
     }
   ],
   "fragments": [
