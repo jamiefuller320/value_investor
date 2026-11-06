@@ -55,6 +55,8 @@ from value_investor.technical_analysis import _rsi
 
 # ``_rsi`` is finite after 15 closes (diff plus ewm min_periods=14).
 _RSI_MIN_CLOSES = RSI_PERIOD + 1
+# ``price_flags`` reads no further back than this once the RSI is given.
+PRICE_FLAG_TAIL = max(LOW_WINDOW_SESSIONS, ALT_SMA_WINDOW)
 
 _RUN_PREFIX = "run_"
 
@@ -263,6 +265,25 @@ def rsi_last(closes: list[float]) -> float | None:
     if not math.isfinite(number):
         return None
     return number
+
+
+def rsi_path(closes: list[float]) -> list[float | None]:
+    """``rsi_last`` of every prefix, from one ``_rsi`` pass.
+
+    ``_rsi`` is causal (``ewm(adjust=False)``), so element *i* equals
+    ``rsi_last(closes[: i + 1])``.
+    """
+    if not closes:
+        return []
+    series = _rsi(pd.Series(closes, dtype="float64"), period=RSI_PERIOD)
+    out: list[float | None] = []
+    for index, raw in enumerate(series.tolist()):
+        if index + 1 < _RSI_MIN_CLOSES or raw is None or pd.isna(raw):
+            out.append(None)
+            continue
+        number = float(raw)
+        out.append(number if math.isfinite(number) else None)
+    return out
 
 
 def median_gap_days(days: list[date]) -> float | None:
@@ -517,13 +538,20 @@ def _iso(day: date | None) -> str | None:
     return day.isoformat() if day is not None else None
 
 
-def price_flags(closes: list[float]) -> dict[str, Any]:
+_RSI_FROM_CLOSES = object()
+
+
+def price_flags(closes: list[float], *, rsi: Any = _RSI_FROM_CLOSES) -> dict[str, Any]:
     """Primary and alternative entry arithmetic on a close prefix through *t*.
 
     The walker calls this. It does not reimplement the RSI or the 10-session
     low. Chart presence, thinning, and the gap rule stay with the caller.
+    A caller that passes ``rsi`` (``rsi_path`` of the full prefix) may pass
+    only the last ``PRICE_FLAG_TAIL`` closes; ``closes`` in the result is then
+    the tail length.
     """
-    rsi = rsi_last(closes)
+    if rsi is _RSI_FROM_CLOSES:
+        rsi = rsi_last(closes)
     rsi_ok = rsi_below(rsi, RSI_LEVEL)
     window_min: float | None
     if len(closes) < LOW_WINDOW_SESSIONS:

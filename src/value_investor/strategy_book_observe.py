@@ -18,11 +18,31 @@ import hashlib
 import math
 import random
 import statistics
+from array import array
+from bisect import bisect_left, bisect_right
 from collections import defaultdict
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from typing import Any
 
+import numpy as np
+
+from value_investor.channel_diagnostics import (
+    CONTEXT_WINDOW as CHANNEL_CONTEXT_WINDOW,
+)
+from value_investor.channel_diagnostics import (
+    PIVOT_SPAN as CHANNEL_PIVOT_SPAN,
+)
+from value_investor.channel_diagnostics import (
+    PRIMARY_WINDOW as CHANNEL_PRIMARY_WINDOW,
+)
+from value_investor.channel_diagnostics import (
+    SESSIONS_PER_YEAR as CHANNEL_YEAR_SESSIONS,
+)
+from value_investor.channel_diagnostics import (
+    _as_float as _channel_float,
+)
 from value_investor.channel_diagnostics import channel_columns
 from value_investor.core_sell_trigger import (
     core_sell_reason,
@@ -108,8 +128,18 @@ from value_investor.strategy_book_rules import (
     session_close,
 )
 from value_investor.strategy_book_signals import (
+    PRICE_FLAG_TAIL,
     chart_is_thinned,
     price_flags,
+    rsi_path,
+)
+
+US_REHEARSAL_MODE = "us_rehearsal"
+EXIT_DELISTED = "delisted"
+# Rows ``channel_columns`` and the price features read back from the signal
+# session; a longer prefix changes only the ``bars`` count.
+_FEATURE_TAIL = 2 * max(
+    CHANNEL_CONTEXT_WINDOW, CHANNEL_YEAR_SESSIONS, CHANNEL_PRIMARY_WINDOW + CHANNEL_PIVOT_SPAN
 )
 
 # Section 8. Numeric snapshot fields that the selection board splits into fifths.
@@ -245,13 +275,138 @@ class Download:
         order = sorted(zip(self.sessions, self.closes, strict=False), key=lambda item: item[0])
         self.sessions = [item[0] for item in order]
         self.closes = [float(item[1]) for item in order]
-        self._map = dict(zip(self.sessions, self.closes, strict=False))
+        self._index = _DayIndex(self.sessions)
+        self._dups = self._index.duplicates
+        self._rsi: array | None = None
+
+    def find(self, session: date) -> int | None:
+        """Position of ``session``. A repeated date resolves to its last row."""
+        return self._index.find(session)
 
     def has(self, session: date) -> bool:
-        return session in self._map
+        return self._index.find(session) is not None
 
     def close(self, session: date) -> float | None:
-        return self._map.get(session)
+        index = self._index.find(session)
+        return None if index is None else self.closes[index]
+
+    def count_through(self, session: date) -> int:
+        """Rows dated on or before ``session``."""
+        return bisect_right(self.sessions, session)
+
+    def rsi_at(self, count: int) -> float | None:
+        """``rsi_last`` of the first ``count`` rows (no repeated dates)."""
+        if self._rsi is None:
+            self._rsi = array("d", [math.nan if v is None else v for v in rsi_path(self.closes)])
+        if count <= 0:
+            return None
+        value = self._rsi[count - 1]
+        return None if math.isnan(value) else value
+
+
+class _DayIndex:
+    """Day-ordinal slots for a sorted date list: O(1) lookups without a dict per bar."""
+
+    __slots__ = ("days", "duplicates", "first", "slots")
+
+    def __init__(self, days: list[date]) -> None:
+        self.days = days
+        self.duplicates = False
+        if not days:
+            self.first = 0
+            self.slots = array("i")
+            return
+        self.first = days[0].toordinal()
+        self.slots = array("i", [-1]) * (days[-1].toordinal() - self.first + 1)
+        previous = None
+        for position, day in enumerate(days):
+            if day == previous:
+                self.duplicates = True
+            self.slots[day.toordinal() - self.first] = position
+            previous = day
+
+    def find(self, day: date) -> int | None:
+        offset = day.toordinal() - self.first
+        if offset < 0 or offset >= len(self.slots):
+            return None
+        position = self.slots[offset]
+        if position < 0 or self.days[position] != day:
+            return None
+        return position
+
+    def __contains__(self, day: date) -> bool:
+        return self.find(day) is not None
+
+
+class GateTape:
+    """Daily gate observations held as codes rather than one ``GateFact`` each.
+
+    ``as_of`` is strictly increasing. ``decline`` and ``sector`` index ``labels``.
+    ``detail(i)`` returns the remaining ``GateFact`` fields for observation *i*
+    (checks, soft checks, sector inputs, basis); it is called only when a
+    snapshot or a position needs them.
+    """
+
+    def __init__(
+        self,
+        as_of: list[date],
+        decline: Sequence[int],
+        sector: Sequence[int],
+        labels: Sequence[str | None],
+        detail: Callable[[int], dict[str, Any]] | None = None,
+    ) -> None:
+        if not (len(as_of) == len(decline) == len(sector)):
+            raise ValueError("gate tape columns differ in length")
+        self.as_of = as_of
+        self._decline = decline
+        self._sector = sector
+        self._labels = tuple(labels)
+        self._detail = detail
+
+    def __len__(self) -> int:
+        return len(self.as_of)
+
+    def decline(self, index: int) -> str | None:
+        return self._labels[self._decline[index]]
+
+    def sector(self, index: int) -> str | None:
+        return self._labels[self._sector[index]]
+
+    def fact(self, index: int) -> GateFact:
+        extra = self._detail(index) if self._detail is not None else {}
+        return GateFact(
+            as_of=self.as_of[index],
+            decline=self.decline(index),
+            sector=self.sector(index),
+            **extra,
+        )
+
+    def latest(self) -> GateFact | None:
+        return self.fact(len(self.as_of) - 1) if self.as_of else None
+
+
+class _GateList:
+    """``GateFact`` list in the order the walker reads it (stable by ``as_of``)."""
+
+    def __init__(self, facts: list[GateFact]) -> None:
+        self.facts = sorted(facts, key=lambda item: item.as_of)
+        self.as_of = [fact.as_of for fact in self.facts]
+        self._latest = max(facts, key=lambda item: item.as_of) if facts else None
+
+    def __len__(self) -> int:
+        return len(self.facts)
+
+    def decline(self, index: int) -> str | None:
+        return self.facts[index].decline
+
+    def sector(self, index: int) -> str | None:
+        return self.facts[index].sector
+
+    def fact(self, index: int) -> GateFact:
+        return self.facts[index]
+
+    def latest(self) -> GateFact | None:
+        return self._latest
 
 
 @dataclass
@@ -275,6 +430,14 @@ class NameSpec:
     files: dict[str, bytes] | None = None
     committed: dict[str, bytes] | None = None
     omit_hash_on: set[str] = field(default_factory=set)
+    # Inclusive (first, last) sessions in the universe. None is always in.
+    # Outside them a name cannot enter; an open episode still runs its exits.
+    universe: list[tuple[date, date]] | None = None
+    # Specs sharing a key are one name for the one-open rule and the cooldown.
+    book_key: str | None = None
+    # Set for a delisted name: an episode still open at its last bar exits
+    # there at ``close * (1 + terminal_haircut)``.
+    terminal_haircut: float | None = None
 
 
 @dataclass
@@ -297,12 +460,39 @@ class WalkOptions:
     # Sessions before this date are not entry sessions. The forward job sets
     # it from the seal so August–October stays in the archive.
     entry_not_before: date | None = None
+    # No signal session after this date. Later sessions still fill and exit.
+    entry_not_after: date | None = None
+    # Episode label when no catalogue applies (US rehearsal: not_applicable).
+    t212_label: str | None = None
+    # Keep each basket member's prices on the episode. Off keeps only the mean.
+    basket_members: bool = True
+    # A carried screen row with no signal is not on the screen for the basket.
+    basket_skips_blank_screen: bool = False
+    # Build the section 8 boards inside ``walk_book``.
+    boards: bool = True
 
 
 def options_for(mode: str) -> WalkOptions:
-    """``forward``, ``archive_buy_tier``, ``archive_full`` or ``lookahead``."""
+    """``forward``, ``archive_buy_tier``, ``archive_full``, ``lookahead`` or ``us_rehearsal``."""
     if mode == "forward":
         return WalkOptions()
+    if mode == US_REHEARSAL_MODE:
+        # Registration strategy-book-us-rehearsal-v0 sections 3–4: point-in-time
+        # gates, no F9-B, memo, late-signal clock or catalogue.
+        return WalkOptions(
+            apply_gates=True,
+            apply_f9=False,
+            apply_memo=False,
+            apply_late_signal=False,
+            alternative=True,
+            drop_last_bar=True,
+            include_controls=True,
+            f9_require_memo=False,
+            t212_label="not_applicable",
+            basket_members=False,
+            basket_skips_blank_screen=True,
+            boards=False,
+        )
     if mode == ARCHIVE_BUY_TIER_ONLY or mode == "archive_buy_tier":
         return WalkOptions(
             apply_gates=False,
@@ -458,13 +648,37 @@ def capital_days_return(episodes: list[dict[str, Any]]) -> float | None:
 class PriceBook:
     def __init__(self, downloads: list[Download]) -> None:
         self.downloads = sorted(downloads, key=lambda item: (item.as_of, id(item)))
-        self.calendar = sorted({day for item in self.downloads for day in item.sessions})
+        if len(self.downloads) == 1 and not self.downloads[0]._dups:
+            only = self.downloads[0]
+            self.calendar = only.sessions
+            self._days = only._index
+        else:
+            self.calendar = sorted({day for item in self.downloads for day in item.sessions})
+            self._days = _DayIndex(self.calendar)
+        self._chosen: dict[date, Download | None] = {}
+
+    def position(self, session: date) -> int | None:
+        """Index of ``session`` in ``calendar``."""
+        return self._days.find(session)
+
+    def has_session(self, session: date) -> bool:
+        return self._days.find(session) is not None
 
     def download_for(self, session: date) -> Download | None:
         """Earliest download that already contains ``session``."""
+        if len(self.downloads) == 1:
+            only = self.downloads[0]
+            return only if only.has(session) else None
+        if session in self._chosen:
+            return self._chosen[session]
+        chosen = self._download_for(session)
+        self._chosen[session] = chosen
+        return chosen
+
+    def _download_for(self, session: date) -> Download | None:
         chosen: Download | None = None
         for download in self.downloads:
-            if session not in download._map:
+            if not download.has(session):
                 continue
             if download.as_of < session:
                 continue
@@ -475,7 +689,7 @@ class PriceBook:
         # A download taken on a later rebuild still contains the session, but a
         # download whose as_of is before the session cannot be that session's tape.
         for download in self.downloads:
-            if session in download._map and (chosen is None or download.as_of < chosen.as_of):
+            if download.has(session) and (chosen is None or download.as_of < chosen.as_of):
                 chosen = download
         return chosen
 
@@ -488,9 +702,24 @@ class PriceBook:
         download = self.download_for(session)
         if download is None:
             return None, [], []
-        days = [day for day in download.sessions if day <= session]
-        closes = [download._map[day] for day in days]
+        count = download.count_through(session)
+        days = download.sessions[:count]
+        if download._dups:
+            closes = [download.closes[download.find(day)] for day in days]
+        else:
+            closes = download.closes[:count]
         return download, days, closes
+
+    def tail(self, session: date, rows: int) -> tuple[Download | None, int, list[float]]:
+        """``prefix`` closes, last ``rows`` only, plus the full prefix length."""
+        download = self.download_for(session)
+        if download is None:
+            return None, 0, []
+        if download._dups:
+            _download, days, closes = self.prefix(session)
+            return download, len(closes), closes[-rows:]
+        count = download.count_through(session)
+        return download, count, download.closes[max(0, count - rows) : count]
 
 
 @dataclass
@@ -577,6 +806,36 @@ class _Name:
     gate_cursor: date | None = None
     last_exit_fill: dict[str, date] = field(default_factory=dict)
     seen_insufficient: set[date] = field(default_factory=set)
+    # Specs with the same ``book_key`` (this one included).
+    siblings: list[_Name] = field(default_factory=list)
+    open_count: int = 0
+
+    def __post_init__(self) -> None:
+        if not self.siblings:
+            self.siblings = [self]
+        # ``sorted`` is stable: equal run dates keep the spec's order.
+        self.screens = sorted(self.spec.screens, key=lambda item: item.run_date)
+        self.run_dates = [fact.run_date for fact in self.screens]
+        # First fact of each run date, which ``max`` would pick among ties.
+        self.tie_first: list[int] = []
+        for position, run_date in enumerate(self.run_dates):
+            if position and self.run_dates[position - 1] == run_date:
+                self.tie_first.append(self.tie_first[-1])
+            else:
+                self.tie_first.append(position)
+        gates = self.spec.gates
+        self.gates: GateTape | _GateList = (
+            gates if isinstance(gates, GateTape) else _GateList(list(gates or []))
+        )
+        self.screen_pos = 0
+        self.gate_pos = 0
+        self._gate_fact: tuple[int, GateFact] | None = None
+        self._flags: tuple[tuple[int, int], dict[str, Any]] | None = None
+        self._entry_cache: dict[tuple[date, int], dict[str, Any]] = {}
+        self._channel_cache: dict[date, dict[str, Any]] = {}
+        spans = self.spec.universe
+        self.universe = sorted(spans) if spans is not None else None
+        self.universe_starts = [span[0] for span in self.universe] if self.universe else []
 
 
 def _downloads_of(spec: NameSpec) -> list[Download]:
@@ -619,35 +878,89 @@ def _stress(entry: float, exit_px: float) -> float:
     return episode_return(entry, exit_px, trade_cost_pct=STRESS_PER_SIDE)
 
 
-def _screen_in_force(spec: NameSpec, session: date) -> ScreenFact | None:
-    chosen: ScreenFact | None = None
-    for fact in spec.screens:
-        if fact.run_date < session and (chosen is None or fact.run_date > chosen.run_date):
-            chosen = fact
-    return chosen
-
-
-def _gates_through(spec: NameSpec, session: date) -> list[GateFact]:
-    return sorted(
-        (fact for fact in spec.gates if fact.as_of < session), key=lambda item: item.as_of
-    )
-
-
-def _gate_in_force(spec: NameSpec, session: date) -> GateFact | None:
-    found = _gates_through(spec, session)
-    return found[-1] if found else None
-
-
-def _latest_gate(spec: NameSpec) -> GateFact | None:
-    if not spec.gates:
+def _screen_in_force(name: _Name, session: date) -> ScreenFact | None:
+    """Latest run strictly before ``session``; the first such fact among equal run dates."""
+    position = bisect_left(name.run_dates, session) - 1
+    if position < 0:
         return None
-    return max(spec.gates, key=lambda item: item.as_of)
+    return name.screens[name.tie_first[position]]
 
 
-def _eligibility_gate(spec: NameSpec, session: date, options: WalkOptions) -> GateFact | None:
+def _screens_between(name: _Name, after: date, before: date) -> list[ScreenFact]:
+    """Runs with ``after < run_date < before``, in run-date order."""
+    low = bisect_right(name.run_dates, after)
+    high = bisect_left(name.run_dates, before)
+    return name.screens[low:high]
+
+
+def _gate_index(name: _Name, session: date) -> int:
+    """Index of the gate observation in force at ``session`` (as_of strictly before), or -1."""
+    return bisect_left(name.gates.as_of, session) - 1
+
+
+def _gate_fact(name: _Name, index: int) -> GateFact:
+    cached = name._gate_fact
+    if cached is not None and cached[0] == index:
+        return cached[1]
+    fact = name.gates.fact(index)
+    name._gate_fact = (index, fact)
+    return fact
+
+
+def _gate_in_force(name: _Name, session: date) -> GateFact | None:
+    index = _gate_index(name, session)
+    return None if index < 0 else _gate_fact(name, index)
+
+
+def _latest_gate(name: _Name) -> GateFact | None:
+    return name.gates.latest()
+
+
+def _eligibility_gate(name: _Name, session: date, options: WalkOptions) -> GateFact | None:
     if options.paint_gates:
-        return _latest_gate(spec)
-    return _gate_in_force(spec, session)
+        return _latest_gate(name)
+    return _gate_in_force(name, session)
+
+
+def _gate_verdicts(
+    name: _Name, session: date, options: WalkOptions
+) -> tuple[bool, str | None, str | None]:
+    """(present, decline, sector) of the eligibility gate without building a fact."""
+    if options.paint_gates:
+        gate = _latest_gate(name)
+        return (False, None, None) if gate is None else (True, gate.decline, gate.sector)
+    index = _gate_index(name, session)
+    if index < 0:
+        return False, None, None
+    return True, name.gates.decline(index), name.gates.sector(index)
+
+
+def _in_universe(name: _Name, session: date) -> bool:
+    if name.universe is None:
+        return True
+    position = bisect_right(name.universe_starts, session) - 1
+    return position >= 0 and session <= name.universe[position][1]
+
+
+def _price_flags_at(name: _Name, session: date) -> dict[str, Any] | None:
+    """``price_flags`` of the prefix through ``session``, or None without closes."""
+    download = name.prices.download_for(session)
+    if download is None:
+        return None
+    if download._dups:
+        _download, _days, closes = name.prices.prefix(session)
+        return price_flags(closes) if closes else None
+    count = download.count_through(session)
+    if count <= 0:
+        return None
+    key = (id(download), count)
+    cached = name._flags
+    if cached is not None and cached[0] == key:
+        return cached[1]
+    tail = download.closes[max(0, count - PRICE_FLAG_TAIL) : count]
+    flags = price_flags(tail, rsi=download.rsi_at(count))
+    name._flags = (key, flags)
+    return flags
 
 
 def _f9_in_force(spec: NameSpec, session: date) -> F9Fact | None:
@@ -672,15 +985,17 @@ def _research_blocks(verdict: str | None) -> bool:
     return core_sell_reason({"research_verdict": verdict}) is not None
 
 
-def _index_of(calendar: list[date], fill: date, session: date) -> int | None:
-    if fill not in calendar or session not in calendar:
+def _index_of(prices: PriceBook, fill: date, session: date) -> int | None:
+    start = prices.position(fill)
+    end = prices.position(session)
+    if start is None or end is None:
         return None
-    return calendar.index(session) - calendar.index(fill)
+    return end - start
 
 
 def _next_bar(calendar: list[date], session: date) -> date | None:
-    later = [day for day in calendar if day > session]
-    return later[0] if later else None
+    position = bisect_right(calendar, session)
+    return calendar[position] if position < len(calendar) else None
 
 
 def _gap_ok(start: date, end: date) -> bool:
@@ -691,7 +1006,7 @@ def _cooldown_open(name: _Name, column: str, session: date) -> bool:
     last = name.last_exit_fill.get(column)
     if last is None:
         return True
-    index = _index_of(name.prices.calendar, last, session)
+    index = _index_of(name.prices, last, session)
     return index is not None and index >= COOLDOWN_SESSIONS
 
 
@@ -735,11 +1050,16 @@ def _bump(streaks: dict[str, int], key: str, kind: str) -> None:
 
 
 def _consume_observations(name: _Name, session: date, options: WalkOptions) -> None:
+    """Advance the thesis streaks through every observation in force at ``session``.
+
+    Observations are read once, in date order, so a caller may skip sessions
+    and catch up later with the same streaks.
+    """
     spec = name.spec
-    screens = sorted(spec.screens, key=lambda item: item.run_date)
-    for fact in screens:
-        if not (fact.run_date < session):
-            continue
+    screens = name.screens
+    while name.screen_pos < len(screens) and screens[name.screen_pos].run_date < session:
+        fact = screens[name.screen_pos]
+        name.screen_pos += 1
         if name.screen_cursor is not None and fact.run_date <= name.screen_cursor:
             continue
         signal = str(fact.signal or "").strip().lower()
@@ -759,12 +1079,16 @@ def _consume_observations(name: _Name, session: date, options: WalkOptions) -> N
         name.screen_cursor = fact.run_date
     if not options.apply_gates:
         return
-    for fact in _gates_through(spec, session):
-        if name.gate_cursor is not None and fact.as_of <= name.gate_cursor:
+    gates = name.gates
+    as_of = gates.as_of
+    while name.gate_pos < len(as_of) and as_of[name.gate_pos] < session:
+        index = name.gate_pos
+        name.gate_pos += 1
+        if name.gate_cursor is not None and as_of[index] <= name.gate_cursor:
             continue
-        _gate_bump(name, "declining", fact.decline, fail="declining", reset="clear")
-        _gate_bump(name, "headwind", fact.sector, fail="headwind", reset="sound")
-        name.gate_cursor = fact.as_of
+        _gate_bump(name, "declining", gates.decline(index), fail="declining", reset="clear")
+        _gate_bump(name, "headwind", gates.sector(index), fail="headwind", reset="sound")
+        name.gate_cursor = as_of[index]
 
 
 def _gate_bump(name: _Name, reason: str, verdict: str | None, *, fail: str, reset: str) -> None:
@@ -819,22 +1143,24 @@ def _base_eligible(
         return False, name.refusal
     if not name.prices.calendar:
         return False, "no_chart"
-    screen = _screen_in_force(spec, session)
+    if not _in_universe(name, session):
+        return False, "not_in_universe"
+    screen = _screen_in_force(name, session)
     if screen is None or str(screen.signal or "") not in VALUE_SET_SIGNALS:
         return False, "not_buy_tier"
     if _research_blocks(screen.research_verdict):
         return False, "research_failed"
     if options.apply_gates:
-        gate = _eligibility_gate(spec, session, options)
-        if gate is None or gate.decline != "clear" or gate.sector != "sound":
+        present, decline, sector = _gate_verdicts(name, session, options)
+        if not present or decline != "clear" or sector != "sound":
             return False, "gate"
     if options.apply_f9 and not _f9_ok(
         _f9_in_force(spec, session), require_memo=options.f9_require_memo
     ):
         return False, "f9"
     if price:
-        _download, _days, closes = name.prices.prefix(session)
-        if not closes or not price_flags(closes)["primary"]:
+        flags = _price_flags_at(name, session)
+        if not flags or not flags["primary"]:
             return False, "price"
     if _stale(options, session):
         return False, "stale_chart"
@@ -849,7 +1175,9 @@ def _shadow_columns(name: _Name, session: date, options: WalkOptions) -> list[st
         return []
     if name.refusal or not name.prices.calendar:
         return []
-    screen = _screen_in_force(spec, session)
+    if not _in_universe(name, session):
+        return []
+    screen = _screen_in_force(name, session)
     if screen is None or str(screen.signal or "") not in VALUE_SET_SIGNALS:
         return []
     if _research_blocks(screen.research_verdict):
@@ -858,20 +1186,20 @@ def _shadow_columns(name: _Name, session: date, options: WalkOptions) -> list[st
         _f9_in_force(spec, session), require_memo=options.f9_require_memo
     ):
         return []
-    _download, _days, closes = name.prices.prefix(session)
-    if not closes or not price_flags(closes)["primary"]:
+    flags = _price_flags_at(name, session)
+    if not flags or not flags["primary"]:
         return []
     if _stale(options, session):
         return []
-    gate = _eligibility_gate(spec, session, options)
-    if gate is None:
+    present, decline, sector = _gate_verdicts(name, session, options)
+    if not present:
         return []
-    decline_fail = gate.decline == "declining"
-    sector_fail = gate.sector == "headwind"
+    decline_fail = decline == "declining"
+    sector_fail = sector == "headwind"
     kinds: list[str] = []
-    if decline_fail and (gate.sector == "sound" or sector_fail):
+    if decline_fail and (sector == "sound" or sector_fail):
         kinds.append(COLUMN_DECLINE_SHADOW)
-    if sector_fail and (gate.decline == "clear" or decline_fail):
+    if sector_fail and (decline == "clear" or decline_fail):
         kinds.append(COLUMN_SECTOR_SHADOW)
     return kinds
 
@@ -885,6 +1213,14 @@ def _open_position(name: _Name, column: str) -> _Position | None:
 
 def _pending(name: _Name, column: str) -> bool:
     return any(item.column == column for item in name.pendings)
+
+
+def _book_busy(name: _Name, column: str) -> bool:
+    """One open or pending episode per column across specs that share a ``book_key``."""
+    return any(
+        (other.open_count and _open_position(other, column)) or _pending(other, column)
+        for other in name.siblings
+    )
 
 
 def _memo_outcome(spec: NameSpec, fill_session: date) -> tuple[str, MemoFact | None]:
@@ -942,7 +1278,26 @@ def _finite(value: Any) -> float | None:
     return number
 
 
-def _price_features(closes: list[float], highs: list[float] | None) -> dict[str, Any]:
+def _last_returns(closes: list[float], count: int) -> list[float]:
+    """The last ``count`` one-session returns, skipping a zero previous close."""
+    found: list[float] = []
+    index = len(closes) - 1
+    while index >= 1 and len(found) < count:
+        if closes[index - 1]:
+            found.append(closes[index] / closes[index - 1] - 1.0)
+        index -= 1
+    found.reverse()
+    return found
+
+
+def _price_features(
+    closes: list[float], highs: list[float] | None, *, rsi: Any = None, rsi_given: bool = False
+) -> dict[str, Any]:
+    """Price features on the prefix through the signal session.
+
+    Every feature reads at most the last 252 rows, so a caller may pass a
+    tail of ``_FEATURE_TAIL`` rows with ``rsi`` from the full prefix.
+    """
     features: dict[str, Any] = {
         "vol_60": None,
         "close_vs_sma200": None,
@@ -953,7 +1308,7 @@ def _price_features(closes: list[float], highs: list[float] | None) -> dict[str,
         "rsi_14": None,
     }
     if len(closes) >= 2:
-        rets = [closes[i] / closes[i - 1] - 1.0 for i in range(1, len(closes)) if closes[i - 1]]
+        rets = _last_returns(closes, 60)
         if len(rets) >= 60:
             features["vol_60"] = statistics.pstdev(rets[-60:])
     if len(closes) >= REGIME_SMA_SESSIONS:
@@ -971,9 +1326,34 @@ def _price_features(closes: list[float], highs: list[float] | None) -> dict[str,
         features["range_pos_126"] = None if span <= 0 else (closes[-1] - min(sample)) / span
     if len(closes) > 20 and closes[-21]:
         features["return_20"] = closes[-1] / closes[-21] - 1.0
-    flags = price_flags(closes)
-    features["rsi_14"] = flags["rsi"]
+    if rsi_given:
+        features["rsi_14"] = rsi
+    else:
+        features["rsi_14"] = price_flags(closes)["rsi"]
     return features
+
+
+def _snapshot_price_features(name: _Name, session: date) -> dict[str, Any]:
+    download = name.prices.download_for(session)
+    highs_ok = bool(
+        download is not None and download.highs and len(download.highs) == len(download.sessions)
+    )
+    if download is not None and not download._dups:
+        count = download.count_through(session)
+        start = max(0, count - _FEATURE_TAIL)
+        closes = download.closes[start:count]
+        if 0.0 not in closes or start == 0:
+            highs = download.highs[start:count] if highs_ok else None
+            return _price_features(closes, highs, rsi=download.rsi_at(count), rsi_given=True)
+    _download, days, closes = name.prices.prefix(session)
+    highs = None
+    if highs_ok:
+        highs = [
+            high
+            for day, high in zip(download.sessions, download.highs, strict=False)
+            if day <= session
+        ]
+    return _price_features(closes, highs)
 
 
 def _snapshot(
@@ -984,16 +1364,9 @@ def _snapshot(
     options: WalkOptions,
 ) -> dict[str, Any]:
     spec = name.spec
-    screen = _screen_in_force(spec, session)
-    gate = _gate_in_force(spec, session)
-    _download, days, closes = name.prices.prefix(session)
-    highs = None
-    if _download and _download.highs and len(_download.highs) == len(_download.sessions):
-        highs = [
-            high
-            for day, high in zip(_download.sessions, _download.highs, strict=False)
-            if day <= session
-        ]
+    screen = _screen_in_force(name, session)
+    gate = _gate_in_force(name, session)
+    features = _snapshot_price_features(name, session)
     payload: dict[str, Any] = {
         "signal_session": session.isoformat(),
         "screen_run_date": screen.run_date.isoformat() if screen else None,
@@ -1027,7 +1400,7 @@ def _snapshot(
     else:
         payload["memo_age_days"] = None
         payload["memo_by_signal_job"] = False
-    payload.update(_price_features(closes, highs))
+    payload.update(features)
     # Files dated on or after the signal session are not in force, so they are absent.
     payload["inputs_not_after_signal"] = True
     if screen is not None and screen.run_date >= session:
@@ -1038,30 +1411,42 @@ def _snapshot(
 
 
 def _channels(name: _Name, session: date) -> dict[str, Any]:
-    download, days, closes = name.prices.prefix(session)
-    if download is None or not days:
+    download = name.prices.download_for(session)
+    if download is None:
         return {"channel_status": "no_bar_on_or_before_as_of"}
     highs = (
         download.highs if download.highs and len(download.highs) == len(download.sessions) else None
     )
     lows = download.lows if download.lows and len(download.lows) == len(download.sessions) else None
-    if highs is not None:
-        highs = [
-            high for day, high in zip(download.sessions, highs, strict=False) if day <= session
-        ]
-    if lows is not None:
-        lows = [low for day, low in zip(download.sessions, lows, strict=False) if day <= session]
-    return channel_columns(
+    count = download.count_through(session)
+    if count <= 0:
+        return {"channel_status": "no_bar_on_or_before_as_of"}
+    start = 0
+    if not download._dups and count > _FEATURE_TAIL:
+        # ``channel_columns`` reads the last 252 rows; only ``bars`` needs the rest.
+        start = count - _FEATURE_TAIL
+    days = download.sessions[start:count]
+    if download._dups:
+        closes = [download.closes[download.find(day)] for day in days]
+    else:
+        closes = download.closes[start:count]
+    out = channel_columns(
         [day.isoformat() for day in days],
         closes,
-        highs,
-        lows,
+        None if highs is None else highs[start:count],
+        None if lows is None else lows[start:count],
         as_of=session.isoformat(),
     )
+    if start and out.get("channel_status") == "ok":
+        head = download.closes[:start]
+        out["bars"] = int(out["bars"]) + sum(
+            1 for value in head if _channel_float(value) is not None
+        )
+    return out
 
 
 def _bench_flags(name: _Name, session: date, snapshot: dict[str, Any]) -> dict[str, bool]:
-    _download, _days, closes = name.prices.prefix(session)
+    _download, _count, closes = name.prices.tail(session, DEEP_DIP_LOOKBACK + 1)
     deep = False
     if len(closes) > DEEP_DIP_LOOKBACK and closes[-1 - DEEP_DIP_LOOKBACK]:
         prior = closes[-1 - DEEP_DIP_LOOKBACK]
@@ -1075,19 +1460,87 @@ def _bench_flags(name: _Name, session: date, snapshot: dict[str, Any]) -> dict[s
     }
 
 
+def _sma_above(closes: list[float]) -> bool:
+    sma = sum(closes[-REGIME_SMA_SESSIONS:]) / REGIME_SMA_SESSIONS
+    return bool(sma and closes[-1] > sma)
+
+
+class _RegimeTable:
+    """Per-session counts behind ``_regime`` for one market, built in one pass.
+
+    Only for names with one download and no repeated dates. A window mean
+    within 1e-9 of the close is recomputed with ``_sma_above`` itself, so a
+    rounding difference cannot flip a name.
+    """
+
+    def __init__(self, names: list[_Name], market: str) -> None:
+        self.counted: dict[int, int] = defaultdict(int)
+        self.above: dict[int, int] = defaultdict(int)
+        window = REGIME_SMA_SESSIONS
+        for name in names:
+            if name.spec.market != market or name.refusal:
+                continue
+            download = name.prices.downloads[0]
+            closes = np.asarray(download.closes, dtype="float64")
+            if len(closes) < window:
+                continue
+            sums = np.convolve(closes, np.ones(window), mode="valid")
+            means = sums / window
+            last = closes[window - 1 :]
+            gap = last - means
+            near = np.abs(gap) <= 1e-9 * np.maximum(np.abs(last), 1.0)
+            flags = (gap > 0) & (means != 0)
+            for offset in np.nonzero(near)[0]:
+                end = int(offset) + window
+                flags[offset] = _sma_above(download.closes[:end])
+            for offset, day in enumerate(download.sessions[window - 1 :]):
+                key = day.toordinal()
+                self.counted[key] += 1
+                if flags[offset]:
+                    self.above[key] += 1
+
+    @staticmethod
+    def usable(names: list[_Name], market: str) -> bool:
+        return all(
+            len(name.prices.downloads) == 1 and not name.prices.downloads[0]._dups
+            for name in names
+            if name.spec.market == market and not name.refusal
+        )
+
+    def counts(self, session: date) -> tuple[int, int]:
+        key = session.toordinal()
+        return self.counted.get(key, 0), self.above.get(key, 0)
+
+
 def _regime(names: list[_Name], market: str, session: date) -> str:
-    counted = 0
-    above = 0
-    for name in names:
-        if name.spec.market != market or name.refusal:
-            continue
-        _download, _days, closes = name.prices.prefix(session)
-        if len(closes) < REGIME_SMA_SESSIONS:
-            continue
-        sma = sum(closes[-REGIME_SMA_SESSIONS:]) / REGIME_SMA_SESSIONS
-        counted += 1
-        if sma and closes[-1] > sma:
-            above += 1
+    cache = getattr(names, "regime_cache", None)
+    if cache is not None and (market, session) in cache:
+        return cache[(market, session)]
+    tables = getattr(names, "regime_tables", None)
+    if tables is not None and market not in tables:
+        tables[market] = _RegimeTable(names, market) if _RegimeTable.usable(names, market) else None
+    table = tables.get(market) if tables is not None else None
+    if table is not None:
+        counted, above = table.counts(session)
+    else:
+        counted = 0
+        above = 0
+        for name in names:
+            if name.spec.market != market or name.refusal:
+                continue
+            _download, _days, closes = name.prices.prefix(session)
+            if len(closes) < REGIME_SMA_SESSIONS:
+                continue
+            counted += 1
+            if _sma_above(closes):
+                above += 1
+    label = _regime_label(counted, above)
+    if cache is not None:
+        cache[(market, session)] = label
+    return label
+
+
+def _regime_label(counted: int, above: int) -> str:
     if counted < REGIME_MIN_NAMES:
         return "regime_unknown"
     if above / counted >= REGIME_ABOVE_SHARE:
@@ -1388,19 +1841,21 @@ def _basket(
     exit_px: float,
     vintage: date,
 ) -> tuple[float | None, dict[str, Any]]:
-    """Gross episode return minus the equal-weight basket over the same sessions."""
+    """Gross episode return minus the equal-weight basket over the same sessions.
+
+    A name with ``terminal_haircut`` whose last bar falls strictly between the
+    entry and the exit is priced at that bar times ``1 + terminal_haircut``.
+    """
     market = episode_name.spec.market
+    options = getattr(names, "options", None)
     members: list[tuple[_Name, ScreenFact]] = []
     screened: list[_Name] = []
-    for name in names:
-        if name.spec.market != market or name.refusal or not name.prices.calendar:
-            continue
-        screen = _screen_in_force(name.spec, signal_session)
-        if screen is None:
+    for name, screen in _basket_candidates(names, market, signal_session, options):
+        if name.prices.download_for(entry_session) is None:
             continue
         if (
-            name.prices.download_for(entry_session) is None
-            or name.prices.download_for(exit_session) is None
+            name.prices.download_for(exit_session) is None
+            and _delisted_between(name, entry_session, exit_session) is None
         ):
             continue
         screened.append(name)
@@ -1415,12 +1870,21 @@ def _basket(
     used: list[dict[str, Any]] = []
     for name in chosen:
         download = _vintage_download(name, vintage) or name.prices.download_for(exit_session)
+        end_scale = 1.0
+        exit_day = exit_session
+        if download is None or not download.has(exit_session):
+            last = _delisted_between(name, entry_session, exit_session)
+            if last is not None:
+                download = name.prices.download_for(last)
+                exit_day = last
+                end_scale = 1.0 + float(name.spec.terminal_haircut or 0.0)
         if download is None:
             continue
         start = download.close(entry_session)
-        end = download.close(exit_session)
+        end = download.close(exit_day)
         if start is None or end is None or start <= 0:
             continue
+        end = end * end_scale if end_scale != 1.0 else end
         gross = end / start - 1.0
         grosses.append(gross)
         used.append({"ticker": name.spec.ticker, "entry": start, "exit": end, "gross": gross})
@@ -1429,7 +1893,7 @@ def _basket(
         "count": len(grosses),
         "fallback": source == "whole_screen",
         "download_as_of": vintage.isoformat(),
-        "members": used,
+        "members": used if options is None or options.basket_members else None,
     }
     if not grosses or entry_px <= 0:
         return None, detail
@@ -1438,6 +1902,57 @@ def _basket(
     detail["episode_gross"] = episode_gross
     detail["basket_gross"] = statistics.fmean(grosses)
     return excess, detail
+
+
+def _basket_candidates(
+    names: list[_Name], market: str, signal_session: date, options: WalkOptions | None
+) -> list[tuple[_Name, ScreenFact]]:
+    """Names of ``market`` with a screen row carried onto ``signal_session``."""
+    cache = getattr(names, "basket_cache", None)
+    key = (market, signal_session)
+    if cache is not None and key in cache:
+        return cache[key]
+    skip_blank = bool(options is not None and options.basket_skips_blank_screen)
+    found: list[tuple[_Name, ScreenFact]] = []
+    for name in names:
+        if name.spec.market != market or name.refusal or not name.prices.calendar:
+            continue
+        screen = _screen_in_force(name, signal_session)
+        if screen is None:
+            continue
+        if skip_blank and not str(screen.signal or "").strip():
+            continue
+        if not _in_universe(name, signal_session):
+            continue
+        found.append((name, screen))
+    if cache is not None:
+        if len(cache) >= _BASKET_CACHE_KEYS:
+            cache.pop(next(iter(cache)))
+        cache[key] = found
+    return found
+
+
+# About a year of signal sessions per market; older keys are rebuilt on demand.
+_BASKET_CACHE_KEYS = 600
+
+
+def _delisted_between(name: _Name, entry_session: date, exit_session: date) -> date | None:
+    """Last bar of a delisted name when it falls strictly inside the holding."""
+    if name.spec.terminal_haircut is None or not name.prices.calendar:
+        return None
+    last = name.prices.calendar[-1]
+    return last if entry_session < last < exit_session else None
+
+
+class _Book(list):
+    """The walk's names plus caches shared by every episode of one walk."""
+
+    def __init__(self, names: list[_Name], options: WalkOptions) -> None:
+        super().__init__(names)
+        self.options = options
+        self.basket_cache: dict[tuple[str, date], list[tuple[_Name, ScreenFact]]] = {}
+        self.regime_cache: dict[tuple[str, date], str] = {}
+        self.regime_tables: dict[str, _RegimeTable | None] = {}
 
 
 def _vintage_download(name: _Name, vintage: date) -> Download | None:
@@ -1468,10 +1983,20 @@ def _open_position_record(
     names: list[_Name],
 ) -> _Position:
     spec = name.spec
-    screen = _screen_in_force(spec, signal_session)
-    gate = _gate_in_force(spec, signal_session)
-    snapshot = _snapshot(name, signal_session, memo=memo, options=options)
+    screen = _screen_in_force(name, signal_session)
+    gate = _gate_in_force(name, signal_session)
+    # Paired columns share one signal session: snapshot and channels once.
+    snapshot_key = (signal_session, id(memo))
+    snapshot = name._entry_cache.get(snapshot_key)
+    if snapshot is None:
+        snapshot = _snapshot(name, signal_session, memo=memo, options=options)
+        name._entry_cache[snapshot_key] = snapshot
+    channels = name._channel_cache.get(signal_session)
+    if channels is None:
+        channels = _channels(name, signal_session)
+        name._channel_cache[signal_session] = channels
     inputs, missing = _hash_inputs(spec, "entry")
+    name.open_count += 1
     position = _Position(
         column=column,
         market=spec.market,
@@ -1480,9 +2005,11 @@ def _open_position_record(
         fill_session=fill_session,
         entry_first_seen=entry_px,
         snapshot=snapshot,
-        channels=_channels(name, signal_session),
+        channels=channels,
         bench=_bench_flags(name, signal_session, snapshot) if column == COLUMN_PRIMARY else {},
-        t212=t212_listed(spec.listing, fill_session),
+        t212=options.t212_label
+        if options.t212_label is not None
+        else t212_listed(spec.listing, fill_session),
         t212_fetched_at=spec.listing.fetched_at.isoformat()
         if spec.listing and spec.listing.fetched_at
         else None,
@@ -1537,6 +2064,7 @@ def _close_position(
     position.exit_fill = close
     position.exit_session = session
     position.status = "closed"
+    name.open_count -= 1
     position.fair_cost_return = _fair(entry_px, close, position.market)
     position.gross_return = close / entry_px - 1.0
     position.stress_return = _stress(entry_px, close)
@@ -1572,7 +2100,9 @@ def _remark_open(position: _Position, name: _Name, names: list[_Name], scoring: 
     if latest is None:
         return
     entry_px = latest.close(position.fill_session)
-    last_session = max((day for day in name.prices.calendar if day <= scoring), default=None)
+    calendar = name.prices.calendar
+    through = bisect_right(calendar, scoring)
+    last_session = calendar[through - 1] if through else None
     if entry_px is None or last_session is None:
         return
     latest_close = latest.close(last_session)
@@ -1599,11 +2129,14 @@ def _remark_open(position: _Position, name: _Name, names: list[_Name], scoring: 
     # at the latest close. Costs cancel, so both sides stay gross.
     if position.launched and position.floor is not None:
         floor_px = entry_px * (1.0 + position.floor)
-        grosses = [
-            row["gross"] for row in basket.get("members") or [] if row.get("gross") is not None
-        ]
-        if grosses and entry_px:
-            position.matched_excess = (floor_px / entry_px - 1.0) - statistics.fmean(grosses)
+        rows = basket.get("members")
+        if rows is None:
+            mean = basket.get("basket_gross")
+        else:
+            grosses = [row["gross"] for row in rows if row.get("gross") is not None]
+            mean = statistics.fmean(grosses) if grosses else None
+        if mean is not None and entry_px:
+            position.matched_excess = (floor_px / entry_px - 1.0) - mean
             basket = dict(basket)
             basket["episode_gross"] = floor_px / entry_px - 1.0
             basket["marked"] = "floor"
@@ -1623,7 +2156,7 @@ def _schedule(
     options: WalkOptions,
     events: list[dict[str, Any]],
 ) -> None:
-    if _open_position(name, column) or _pending(name, column):
+    if _book_busy(name, column):
         if column == COLUMN_PRIMARY:
             events.append(
                 {
@@ -1821,17 +2354,17 @@ def _step_positions(name: _Name, session: date, options: WalkOptions, names: lis
     close = download.close(session)
     if close is None:
         return
-    _download, days, closes = name.prices.prefix(session)
+    _download, _count, closes = name.prices.tail(session, DRAFT_HIGH_WINDOW)
     reasons = _confirmed_reasons(name, options)
-    gate = _gate_in_force(name.spec, session) if options.apply_gates else None
-    screen = _screen_in_force(name.spec, session)
+    gate = _gate_in_force(name, session) if options.apply_gates else None
+    screen = _screen_in_force(name, session)
     costs = costs_for_market(name.spec.market)
     for position in name.positions:
         if position.status != "open" or position.pending_exit:
             continue
         if position.fill_session > session:
             continue
-        index = _index_of(name.prices.calendar, position.fill_session, session)
+        index = _index_of(name.prices, position.fill_session, session)
         if index is None:
             continue
         entry_px = download.close(position.fill_session)
@@ -1923,14 +2456,7 @@ def _step_control(
         return EXIT_HOLD_63
     if position.entry_run is None:
         return None
-    runs = sorted(
-        (
-            fact
-            for fact in name.spec.screens
-            if fact.run_date > position.entry_run and fact.run_date < session
-        ),
-        key=lambda item: item.run_date,
-    )
+    runs = _screens_between(name, position.entry_run, session)
     # Also count a run that comes into force today (run_date < session includes it
     # once the cursor has moved). ``runs`` above uses run_date < session.
     streak = 0
@@ -1957,14 +2483,7 @@ def _step_control(
 def _step_leave_tier(position: _Position, name: _Name, session: date) -> str | None:
     if position.entry_run is None:
         return None
-    runs = sorted(
-        (
-            fact
-            for fact in name.spec.screens
-            if fact.run_date > position.entry_run and fact.run_date < session
-        ),
-        key=lambda item: item.run_date,
-    )
+    runs = _screens_between(name, position.entry_run, session)
     streak = 0
     confirming: ScreenFact | None = None
     for fact in runs:
@@ -1992,18 +2511,19 @@ def _maybe_control(
 ) -> None:
     if name.refusal or not name.prices.calendar:
         return
-    if _open_position(name, COLUMN_BUY_ON_SIGNAL) or _pending(name, COLUMN_BUY_ON_SIGNAL):
+    if _book_busy(name, COLUMN_BUY_ON_SIGNAL):
         return
-    screen = _screen_in_force(name.spec, session)
+    screen = _screen_in_force(name, session)
     if screen is None:
+        return
+    if options.entry_not_after is not None and screen.run_date > options.entry_not_after:
         return
     first = _next_bar(name.prices.calendar, screen.run_date)
     if first != session or not _gap_ok(screen.run_date, session):
         return
     ok, _reason = _base_eligible(name, session, options, price=False)
-    previous = [fact for fact in name.spec.screens if fact.run_date < screen.run_date]
-    if previous:
-        prev = max(previous, key=lambda item: item.run_date)
+    prev = _screen_in_force(name, screen.run_date)
+    if prev is not None:
         prev_session = _next_bar(name.prices.calendar, prev.run_date) or session
         prev_ok, _prev_reason = _base_eligible(name, prev_session, options, price=False)
     else:
@@ -2074,18 +2594,21 @@ def _note_insufficient(
 ) -> None:
     if not options.apply_gates:
         return
-    gate = _eligibility_gate(name.spec, session, options)
-    if gate is None:
+    present, decline, sector = _gate_verdicts(name, session, options)
+    if not present:
         return
-    if gate.decline != "insufficient_data" and gate.sector != "insufficient_data":
+    if decline != "insufficient_data" and sector != "insufficient_data":
         return
+    gate = _eligibility_gate(name, session, options)
     if gate.as_of in name.seen_insufficient:
         return
-    screen = _screen_in_force(name.spec, session)
+    if not _in_universe(name, session):
+        return
+    screen = _screen_in_force(name, session)
     if screen is None or str(screen.signal or "") not in VALUE_SET_SIGNALS:
         return
-    _download, _days, closes = name.prices.prefix(session)
-    if not closes or not price_flags(closes)["primary"]:
+    flags = _price_flags_at(name, session)
+    if not flags or not flags["primary"]:
         return
     name.seen_insufficient.add(gate.as_of)
     events.append(
@@ -2098,6 +2621,54 @@ def _note_insufficient(
             "sector": gate.sector,
         }
     )
+
+
+def _link_siblings(names: list[_Name]) -> None:
+    """Specs with one ``book_key`` share the one-open rule and the exit cooldown."""
+    groups: dict[str, list[_Name]] = defaultdict(list)
+    for name in names:
+        if name.spec.book_key:
+            groups[name.spec.book_key].append(name)
+    for group in groups.values():
+        shared: dict[str, date] = {}
+        for name in group:
+            name.siblings = group
+            name.last_exit_fill = shared
+
+
+def _close_delisted(names: list[_Name], calendar: list[date]) -> None:
+    """Registration rehearsal section 4: a delisted name's open episode exits at its last bar.
+
+    The exit is that bar's close times ``1 + terminal_haircut``. An exit already
+    signalled keeps its reason; otherwise the reason is ``delisted``.
+    """
+    if not calendar:
+        return
+    tape_end = calendar[-1]
+    for name in names:
+        if name.spec.terminal_haircut is None or not name.open_count:
+            continue
+        days = name.prices.calendar
+        if not days or days[-1] >= tape_end:
+            continue
+        last = days[-1]
+        download = name.prices.download_for(last)
+        if download is None:
+            continue
+        close = download.close(last)
+        if close is None:
+            continue
+        price = close * (1.0 + float(name.spec.terminal_haircut))
+        for position in name.positions:
+            if position.status != "open":
+                continue
+            if position.pending_exit:
+                position.exit_reason = position.pending_exit
+                position.pending_exit = None
+            else:
+                position.exit_reason = EXIT_DELISTED
+                position.exit_signal_session = last
+            _close_position(position, name, names, last, price, download)
 
 
 def walk_book(
@@ -2114,12 +2685,14 @@ def walk_book(
     if mode is not None and options is None:
         options = options_for(mode)
     options = options or WalkOptions()
-    names: list[_Name] = []
+    built: list[_Name] = []
     for spec in specs:
         downloads = _downloads_of(spec)
         book = PriceBook(downloads)
         refusal = series_refusal(book.calendar) if book.calendar else "no_chart"
-        names.append(_Name(spec=spec, prices=book, refusal=refusal))
+        built.append(_Name(spec=spec, prices=book, refusal=refusal))
+    names = _Book(built, options)
+    _link_siblings(names)
     events: list[dict[str, Any]] = []
     for name in names:
         if name.refusal:
@@ -2137,13 +2710,18 @@ def walk_book(
         if options.entry_not_before is not None and session < options.entry_not_before:
             continue
         for name in names:
-            if session not in name.prices.calendar:
+            # Without an open or pending episode nothing below changes state;
+            # the streaks catch up at the next session that needs them.
+            if not name.open_count and not name.pendings:
+                continue
+            if not name.prices.has_session(session):
                 continue
             _consume_observations(name, session, options)
             _fill_entries(name, session, options, names, events)
             _fill_exits(name, session, names)
             _step_positions(name, session, options, names)
-        share, open_count = _recovery_share(names)
+        share, open_count = _recovery_share([name for name in names if name.open_count])
+        entries_open = options.entry_not_after is None or session <= options.entry_not_after
         blocked = False
         if (
             share is not None
@@ -2161,10 +2739,17 @@ def walk_book(
                 }
             )
         for name in names:
-            if session not in name.prices.calendar or name.refusal:
+            if name.refusal or not name.prices.has_session(session):
+                continue
+            # Every entry path below needs a buy-tier row in force; the control
+            # also needs the row's next bar, which a non-buy row cannot open.
+            screen = _screen_in_force(name, session)
+            if screen is None or str(screen.signal or "") not in VALUE_SET_SIGNALS:
                 continue
             if options.include_controls:
                 _maybe_control(name, session, options, names, events)
+            if not entries_open:
+                continue
             _note_insufficient(name, session, options, events)
             if blocked:
                 continue
@@ -2176,9 +2761,10 @@ def walk_book(
                     _schedule(name, column, session, options, events)
             if options.alternative:
                 alt_ok, _alt_reason = _base_eligible(name, session, options, price=False)
-                _download, _days, closes = name.prices.prefix(session)
-                if alt_ok and closes and price_flags(closes)["alternative"]:
+                flags = _price_flags_at(name, session) if alt_ok else None
+                if alt_ok and flags and flags["alternative"]:
                     _schedule(name, COLUMN_ALTERNATIVE, session, options, events)
+    _close_delisted(names, calendar)
     scoring = options.scoring_date or (calendar[-1] if calendar else date.today())
     for name in names:
         for position in name.positions:
@@ -2190,13 +2776,17 @@ def walk_book(
     episodes = [
         _episode_dict(position, name, scoring) for name in names for position in name.positions
     ]
-    boards = build_boards(
-        episodes,
-        events=events,
-        scoring_date=scoring,
-        cap_would_block_days=cap_days,
-        names=names,
-        options=options,
+    boards = (
+        build_boards(
+            episodes,
+            events=events,
+            scoring_date=scoring,
+            cap_would_block_days=cap_days,
+            names=names,
+            options=options,
+        )
+        if options.boards
+        else None
     )
     return {
         "registration_id": REGISTRATION_ID,
@@ -2219,7 +2809,10 @@ def _held_days(position: _Position, scoring: date) -> int | None:
 
 
 def _sessions_after(calendar: list[date], fill: date, scoring: date) -> int:
-    return sum(1 for day in calendar if fill < day <= scoring)
+    """Days with ``fill < day <= scoring`` in a sorted, duplicate-free calendar."""
+    if scoring <= fill:
+        return 0
+    return bisect_right(calendar, scoring) - bisect_right(calendar, fill)
 
 
 def _episode_dict(position: _Position, name: _Name, scoring: date) -> dict[str, Any]:
@@ -2662,6 +3255,9 @@ def _slot_book(episodes: list[dict[str, Any]], *, seed: int) -> dict[str, Any]:
         nav_path: list[float] = []
         cash_path: list[float] = []
         pnl_by_name: dict[str, float] = defaultdict(float)
+        due_by_day: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        for episode in ordered:
+            due_by_day[episode["fill_session"]].append(episode)
         for day in days:
             still: list[dict[str, Any]] = []
             for position in positions:
@@ -2673,7 +3269,7 @@ def _slot_book(episodes: list[dict[str, Any]], *, seed: int) -> dict[str, Any]:
                     still.append(position)
             positions = still
             nav = cash + sum(position["alloc"] * (1.0 + position["mark"]) for position in positions)
-            due = [episode for episode in ordered if episode["fill_session"] == day]
+            due = due_by_day.get(day, [])
             alloc = nav / SLOT_COUNT if SLOT_COUNT else 0.0
             for episode in due:
                 if len(positions) >= SLOT_COUNT or cash <= 1e-12:
@@ -2758,10 +3354,17 @@ def _buy_and_hold(
     del episodes
     positions: dict[str, dict[str, Any]] = {}
     calendar = sorted({day for name in names for day in name.prices.calendar if day <= scoring})
+    ordered = sorted(names, key=lambda item: (item.spec.market, item.spec.ticker))
+    by_key: dict[str, _Name] = {}
+    for name in names:
+        by_key.setdefault(f"{name.spec.market}:{name.spec.ticker}", name)
     for session in calendar:
-        for name in sorted(names, key=lambda item: (item.spec.market, item.spec.ticker)):
+        for name in ordered:
             key = f"{name.spec.market}:{name.spec.ticker}"
             if key in positions or name.refusal:
+                continue
+            # A session missing from the chart has no download, so no position.
+            if not name.prices.has_session(session):
                 continue
             ok, _reason = _base_eligible(name, session, options, price=False)
             if not ok:
@@ -2779,11 +3382,10 @@ def _buy_and_hold(
     values: list[float] = []
     for key, position in positions.items():
         market, ticker = key.split(":", 1)
-        name = next(
-            item for item in names if item.spec.market == market and item.spec.ticker == ticker
-        )
+        name = by_key[key]
         latest = name.prices.latest()
-        last = max((day for day in name.prices.calendar if day <= scoring), default=None)
+        through = bisect_right(name.prices.calendar, scoring)
+        last = name.prices.calendar[through - 1] if through else None
         if latest is None or last is None or position["entry"] in (None, 0):
             continue
         end = latest.close(last)
@@ -3136,8 +3738,7 @@ def build_boards(
             date.fromisoformat(episode["fill_session"]) for episode in primary_rows
         )
         spanned = [
-            sum(1 for day in name.prices.calendar if first_fill_day < day <= scoring_date)
-            for name in names
+            _sessions_after(name.prices.calendar, first_fill_day, scoring_date) for name in names
         ]
         if spanned:
             longest = max(spanned)
