@@ -33,7 +33,7 @@
     },
     {
       "requirement": "Tail loss",
-      "bar": "The 5th-percentile fair-cost episode return is no worse than −20%"
+      "bar": "The 5th-percentile fair-cost episode return is no worse than \u221220%"
     },
     {
       "requirement": "Drawdown",
@@ -59,13 +59,39 @@
   "first_score_store_committed": false,
   "post_signature_edits": [
     {
-      "date": "2026-11-05",
-      "path": "docs/ops/strategy-book-registration.md",
-      "previous_sha256": "03e1f276e4f429df47be859eb6418f067461d9682e281eda5184b3d5b0828c12",
-      "sha256": "072607438df49c408cea68754b7574e9abbe70cc7a578775ad61ee91d72b4ccf",
-      "kind": "link",
-      "note": "Section 9(c): link to strategy-book-us-rehearsal-registration.md (plan step 2.5). No rule or number changed."
+      "at": "2026-11-06T06:00:00Z",
+      "document": "docs/ops/strategy-book-registration.md",
+      "kind": "links_only",
+      "prs": [
+        1308,
+        1310
+      ],
+      "change": "Section 11 links the US rehearsal registration (strategy-book-us-rehearsal-registration.md); section 12 links the observe runbook (strategy-book-observe.md). No rule, number or wording of a rule changed.",
+      "previous_sha256": "072607438df49c408cea68754b7574e9abbe70cc7a578775ad61ee91d72b4ccf",
+      "new_sha256": "a1a3e665f0e2e3f9e43fc572e2c73d5f386691a8132986d845203017638b6f95"
     }
   ],
-  "hash_rule": "The registration file is hashed whole; the plan only from its step 3.2 section heading up to the next '### Phase 4' heading, because the plan's status table changes. A non-substantive edit to a sealed text after signature (links, status lines) is appended to post_signature_edits with the new hash; a rule change is a new registration_id (section 10)."
+  "hash_rule": "The registration file is hashed whole; the plan only from its step 3.2 section heading up to the next '### Phase 4' heading, because the plan's status table changes. A non-substantive edit to a sealed text after signature (links, status lines) is appended to post_signature_edits with the new hash; a rule change is a new registration_id (section 10).",
+  "clarifications": [
+    {
+      "topic": "slot_book_random_seed",
+      "reading": "The 15 fixed random orders of the 20-slot reference book use seed 20261104, the US rehearsal registration's value.",
+      "code": "strategy_book_rules.SLOT_BOOK_RANDOM_SEED",
+      "source_pr": 1309
+    },
+    {
+      "topic": "both_halves_of_the_forward_period",
+      "reading": "Counted mature episodes split by entry ISO week at the calendar midpoint between the first and last counted entry weeks (empty weeks included); the middle week of an odd span is in the first half. One split serves the selection board halves and the bench bar's same-sign test.",
+      "code": "strategy_book_observe.period_halves",
+      "source_pr": 1309
+    },
+    {
+      "topic": "memo_deadline_clock",
+      "reading": "A memo binds a fill only if finished before that market's regular cash close (local exchange time, DST-aware), not UTC midnight. A market without a close entry opens nothing.",
+      "code": "strategy_book_rules.MARKET_CLOSE_LOCAL / session_close",
+      "source_pr": 1309
+    }
+  ],
+  "clarifications_note": "Readings of signed text used by the walker, merged by the owner in #1309 on 2026-11-06. Not rule changes; a different reading would be a logged adjustment before the first score store.",
+  "forward_live": false
 }
