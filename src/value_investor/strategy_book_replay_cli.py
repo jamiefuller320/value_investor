@@ -13,6 +13,7 @@ from value_investor.strategy_book_rules import (
     REPLAY_STORE_NAME,
     RegistrationUnsigned,
     require_signature_for_score,
+    scores_committed_tree,
 )
 
 
@@ -46,7 +47,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     payload = run_replay(root)
     if args.persist:
-        dest = Path(root) / REPLAY_STORE_NAME
+        if scores_committed_tree(args.fixture_dir, args.repo_root):
+            dest = Path(args.repo_root) / "docs" / "data" / REPLAY_STORE_NAME
+        else:
+            dest = Path(root) / REPLAY_STORE_NAME
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
         payload = {**payload, "wrote": str(dest)}
