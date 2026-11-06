@@ -928,15 +928,15 @@ def write_store(path: Path, payload: Mapping[str, Any], tickers: Iterable[str] =
 
 
 def _base_store(registration: Mapping[str, Any], inputs: RehearsalInputs) -> dict[str, Any]:
-    screen_codes = {key.get("screen_code") for key in inputs.cache_keys.values()}
+    screen_codes = sorted(
+        {str(c) for key in inputs.cache_keys.values() if (c := key.get("screen_code"))}
+    )
     return {
         "registration_id": registration.get("registration_id"),
         "parent_registration_id": registration.get("parent_registration_id"),
         "observe_only": True,
         "influences_live": False,
-        "screen_code_fingerprint": sorted(c for c in screen_codes if c)[0]
-        if screen_codes
-        else None,
+        "screen_code_fingerprint": screen_codes[0] if screen_codes else None,
         "universe_basis": {SP500: "sp500_members", SP400: "cap_rank_501_1000"},
         "labels": {
             "sector_label_basis": "tickers_current",
