@@ -1,0 +1,62 @@
+{
+  "registration_id": "owner-strategy-book-v0",
+  "signed": true,
+  "signed_at": "2026-11-05T21:00:00Z",
+  "signature": {
+    "owner": "jamiefuller320",
+    "method": "Owner instruction in the supervising agent session, 2026-11-05 21:00 UTC: 'Yes let's sign now.'",
+    "note": [
+      "Signed as written, with every proposed number accepted unchanged, including the step 3.2 proof numbers below. The one-time adjustment at signature is not used.",
+      "Signed before the Phase 1 gate's week of daily refreshes ends (about 2026-11-11). Owner decision: the Phase 1 gate review now governs only when the forward book (step 2.3) goes live. It does not hold back the archive replay (step 2.2) or the US rehearsal (step 2.5), which do not read the live gate stores.",
+      "Signal-day memo spend stays off (spend_enabled false) until the forward book goes live. The weekly_ops cap was already raised for it (budget.strategy_book_memo_raise). Flip spend_enabled at go-live (human task adhoc-strategy-book-memo-spend)."
+    ]
+  },
+  "spend_enabled": false,
+  "phase1_gate_scope": "forward_book_go_live_only",
+  "sealed_documents": {
+    "docs/ops/strategy-book-registration.md": {
+      "sha256": "03e1f276e4f429df47be859eb6418f067461d9682e281eda5184b3d5b0828c12",
+      "committed_with_seal": true
+    },
+    "docs/ops/strategy-reorientation-plan.md": {
+      "section": "Step 3.2 proof numbers",
+      "section_start": "#### Step 3.2 proof numbers",
+      "section_end_before": "### Phase 4",
+      "section_sha256": "4e99e9ad1b741a6fc8816575f1fcf6a9ac717c5693ad0244b9e46f9c7a207349",
+      "committed_with_seal": true
+    }
+  },
+  "step_3_2_proof_numbers": [
+    {
+      "requirement": "Uncertainty",
+      "bar": "The 90% interval of the median matched excess, from 10,000 resamples of whole ISO entry weeks, lies wholly above zero"
+    },
+    {
+      "requirement": "Tail loss",
+      "bar": "The 5th-percentile fair-cost episode return is no worse than −20%"
+    },
+    {
+      "requirement": "Drawdown",
+      "bar": "The sterling reference slot book's largest peak-to-trough fall is no more than 1.5 times that of the matched buy-tier basket in sterling over the same dates"
+    },
+    {
+      "requirement": "Market spread",
+      "bar": "The median matched excess stays above zero with the market holding the most mature episodes removed (no `single_market_dependence` flag)"
+    },
+    {
+      "requirement": "Regime spread",
+      "bar": "The median matched excess is at or above zero in both regime halves (above and below the 200-session average), each with at least 12 counted mature episodes; `regime_unknown` episodes sit out"
+    },
+    {
+      "requirement": "Sterling slot book",
+      "bar": "The 20-slot reference slot book, in sterling after fair costs and FX, has a positive total return and beats the matched basket in sterling over the same dates"
+    },
+    {
+      "requirement": "Tradable subset",
+      "bar": "The median matched excess on `t212_listed` episodes is above zero"
+    }
+  ],
+  "first_score_store_committed": false,
+  "post_signature_edits": [],
+  "hash_rule": "The registration file is hashed whole; the plan only from its step 3.2 section heading up to the next '### Phase 4' heading, because the plan's status table changes. A non-substantive edit to a sealed text after signature (links, status lines) is appended to post_signature_edits with the new hash; a rule change is a new registration_id (section 10)."
+}

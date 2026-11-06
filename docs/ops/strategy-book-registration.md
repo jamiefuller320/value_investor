@@ -1,7 +1,7 @@
 # Strategy book registration
 
-**Status: DRAFT — open questions answered (owner, 2026-11-04: all defaults); awaiting owner signature (Phase 2 gate).**  
-**registration_id (proposed):** `owner-strategy-book-v0`  
+**Status: SIGNED 2026-11-05 (owner), every proposed number accepted unchanged.** Seal: [`docs/data/strategy_book_registration.json`](../data/strategy_book_registration.json). The Phase 1 gate review now governs only the forward book's go-live (step 2.3), not the archive replay or the US rehearsal. Signal-day memo spend stays off until go-live.  
+**registration_id:** `owner-strategy-book-v0`  
 **Deferred:** N249  
 **Plan step:** 2.1 in [`strategy-reorientation-plan.md`](strategy-reorientation-plan.md)  
 **Strategy spec:** [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md#investment-strategy-owner-2026-11-03)  
