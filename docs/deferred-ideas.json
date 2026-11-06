@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-06T19:58:15+00:00",
+  "updated_at": "2026-11-06T21:21:36+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16818,6 +16818,22 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a1af74-11c6-7e8a-9823-c842727f4306",
       "added_at": "2026-11-06T18:01:39+00:00"
+    },
+    {
+      "id": "L685",
+      "category": "later",
+      "section": "ops",
+      "title": "Strategy book replay episode gzip writes bare NaN (invalid JSON)",
+      "summary": "strategy_book_replay_cli writes strategy_book_replay_episodes.json.gz with json.dumps defaults, so about 1,800 snapshot fields are bare NaN tokens that browsers' JSON.parse rejects; dashboard v2 Book tab patches them to null on load. Write null (allow_nan=False after cleaning) at the source.",
+      "revisit_when": "Next change to strategy_book_replay_cli or the replay snapshot fields",
+      "tags": [
+        "strategy-book",
+        "dashboard-v2",
+        "data-quality"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a1af74-11c6-7e8a-9823-c842727f4306",
+      "added_at": "2026-11-06T21:21:36+00:00"
     }
   ],
   "fragments": [
