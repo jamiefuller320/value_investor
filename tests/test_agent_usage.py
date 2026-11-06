@@ -1003,3 +1003,28 @@ def test_commit_lists_use_shard_dir_not_the_old_log() -> None:
     email = (_REPO / ".github/workflows/email-report.yml").read_text(encoding="utf-8")
     assert "docs/data/agent_usage_cost_backfill.json" in email
     assert "docs/data/agent_usage_weekly.json" in email
+
+
+def test_imports_and_appends_without_fcntl(tmp_path: Path) -> None:
+    """Windows has no fcntl; the owner runs ftse-historical-replay there."""
+    script = (
+        "import sys\n"
+        "sys.modules['fcntl'] = None\n"
+        "from pathlib import Path\n"
+        "import value_investor.agent_usage as au\n"
+        "assert au.fcntl is None\n"
+        f"log = Path({str(tmp_path / 'usage.jsonl')!r})\n"
+        "with au._exclusive_lock(log):\n"
+        "    au._append_line_unlocked(log, '{}')\n"
+        "assert log.read_text() == '{}\\n' or log.read_text().startswith('{}')\n"
+        "import value_investor.historical_screen_replay\n"
+        "import value_investor.strategy_book_replay_cli\n"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", script],
+        capture_output=True,
+        text=True,
+        env={**os.environ, "PYTHONPATH": str(Path(__file__).resolve().parents[1] / "src")},
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
