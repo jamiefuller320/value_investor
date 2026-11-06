@@ -175,6 +175,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.henryboot.co.uk/media/fv0nuosu/32326-henry-boot-ar2024-web.pdf",
         "https://www.henryboot.co.uk/media/tqvbhcvt/interim-results-25_main.pdf",
     ],
+    # eng-20261106-01: ftse350 BARC.L intensive pin had 0 refetch (empty IR allowlist); home.barclays statutory PDFs.
+    "BARC.L": [
+        "https://home.barclays/content/dam/home-barclays/documents/investor-relations/reports-and-events/annual-reports/2025/Barclays-PLC-Annual-Report-2025.pdf",
+        "https://home.barclays/content/dam/home-barclays/documents/investor-relations/ResultAnnouncements/H12026Results/H126-Barclays-PLC-6-K.pdf",
+        "https://home.barclays/content/dam/home-barclays/documents/investor-relations/ResultAnnouncements/H12026Results/Q226-BPLC-Results-RA.pdf",
+    ],
     # eng-20261030-03: ftse350 KIE.L buy-tier unwired — no filings index; kier.co.uk statutory PDFs.
     "KIE.L": [
         "https://www.kier.co.uk/media/3lvnd42r/kier-ar2025.pdf",
