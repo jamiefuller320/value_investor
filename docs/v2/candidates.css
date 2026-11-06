@@ -1,1 +1,195 @@
-/* Strategy dashboard v2 — Candidates tab styles. */
+/* Strategy dashboard v2 — Candidates tab. Uses the shell's v2-* tokens. */
+
+.v2-cand h2 {
+  margin: 0 0 0.35rem;
+}
+
+.v2-cand h3 {
+  margin: 0.9rem 0 0.25rem;
+  font-size: 0.95rem;
+}
+
+.v2-cand-intro p {
+  margin: 0.35rem 0 0;
+}
+
+.v2-cand-sources {
+  margin-bottom: 0.65rem;
+}
+
+.v2-cand-tip {
+  border-bottom: 1px dotted var(--v2-muted);
+  cursor: help;
+}
+
+.v2-cand-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  align-items: center;
+  margin: 0.35rem 0 0.75rem;
+}
+
+.v2-cand-toolbar select {
+  margin-left: 0.35rem;
+  font: inherit;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid var(--v2-border);
+  border-radius: 6px;
+  background: var(--v2-surface);
+  color: var(--v2-text);
+}
+
+.v2-cand-filter {
+  font-size: 0.9rem;
+}
+
+.v2-cand-funnel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+.v2-cand-step {
+  flex: 1 1 7.5rem;
+  min-width: 7rem;
+  background: var(--v2-bg);
+  border: 1px solid var(--v2-border);
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+}
+
+.v2-cand-step-open {
+  background: var(--v2-warn-bg);
+  border-color: var(--v2-warn-border);
+}
+
+.v2-cand-step-label {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--v2-muted);
+  font-weight: 650;
+}
+
+.v2-cand-count,
+.v2-cand-unmeasured {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.v2-cand-unmeasured {
+  font-size: 0.82rem;
+  font-weight: 650;
+  color: var(--v2-amber);
+}
+
+.v2-cand-arrow {
+  align-self: center;
+  color: var(--v2-muted);
+  font-size: 1.1rem;
+}
+
+.v2-cand-table .v2-cand-expand {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 650;
+  color: var(--v2-accent);
+  cursor: pointer;
+  text-align: left;
+}
+
+.v2-cand-table .v2-cand-expand:hover {
+  color: var(--v2-accent-hover);
+  text-decoration: underline;
+}
+
+.v2-cand-verdict {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 650;
+  padding: 0.12rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--v2-border);
+  white-space: nowrap;
+}
+
+.v2-cand-pass {
+  background: var(--v2-good-bg);
+  border-color: var(--v2-good-border);
+  color: #1f5c3a;
+}
+
+.v2-cand-fail {
+  background: var(--v2-bad-bg);
+  border-color: var(--v2-bad-border);
+  color: var(--v2-red);
+}
+
+.v2-cand-missing,
+.v2-cand-pending {
+  background: var(--v2-warn-bg);
+  border-color: var(--v2-warn-border);
+  color: var(--v2-amber);
+}
+
+.v2-cand-detail-row td {
+  background: #fbfcfe;
+}
+
+.v2-cand-detail ul {
+  margin: 0.25rem 0 0.4rem;
+  padding-left: 1.1rem;
+}
+
+.v2-cand-detail li {
+  margin: 0.15rem 0;
+}
+
+.v2-cand-chart {
+  margin-top: 0.75rem;
+}
+
+.v2-cand-chart-btn,
+.v2-cand-more {
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid var(--v2-border);
+  background: var(--v2-surface);
+  color: var(--v2-accent);
+  cursor: pointer;
+}
+
+.v2-cand-chart-btn:hover,
+.v2-cand-more:hover {
+  border-color: var(--v2-accent);
+}
+
+.v2-cand-more {
+  margin-top: 0.65rem;
+}
+
+.v2-cand-svg {
+  overflow-x: auto;
+  margin-top: 0.35rem;
+}
+
+.v2-cand-svg svg {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 720px) {
+  .v2-cand-arrow {
+    display: none;
+  }
+}
