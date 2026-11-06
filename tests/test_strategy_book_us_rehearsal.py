@@ -464,6 +464,51 @@ def test_batched_walk_equals_the_whole_book_walk(licensed: dict[str, Path], tmp_
     assert source.counts == inputs.counts
 
 
+def test_tape_split_loads_what_load_tapes_loads(tmp_path: Path):
+    first = pd.DataFrame(
+        {
+            "date": ["2000-01-03", "2000-01-04", "2000-01-04", "2000-01-03", "2000-01-05"]
+            + ["2000-01-03", "2000-01-04"],
+            "ticker": ["B", "B", "B", "A", "A", "E", "E"],
+            "open": 1.0,
+            "high": [11, 12, 13, 21, 22, 51, 52],
+            "low": [9, 10, 11, 19, 20, 49, 50],
+            "close": [10, 11, 12, 20, None, 50, None],
+        }
+    )
+    second = pd.DataFrame(
+        {
+            "date": ["2000-01-05", "2000-01-03", "2000-01-04", "2000-01-03", "2000-01-06"],
+            "ticker": ["A", "C", "C", "D", "E"],
+            "close": [99, 30, 31, 40, 55],
+        }
+    )
+    paths = [tmp_path / "one.csv.gz", tmp_path / "two.csv.gz"]
+    first.to_csv(paths[0], index=False)
+    second.to_csv(paths[1], index=False)
+    wanted = {"A", "B", "C", "E", "Z"}
+    for basis in (tape.HL_HIGH_LOW, tape.HL_CLOSES):
+        expected = tape.load_tapes(paths, wanted, hl_basis=basis)
+        for size in (1, 2, 100):
+            split = tape.TapeSplit(tmp_path / f"split-{basis}-{size}", sorted(wanted), size, basis)
+            split.split(paths, date(2000, 1, 4).toordinal())
+            got = {}
+            for bucket in range(split.buckets):
+                got.update(split.load(bucket))
+            assert got == expected
+            assert split.present_tickers() == set(expected)
+            assert split.days == {
+                day.toordinal()
+                for download in expected.values()
+                for day in download.sessions
+                if day >= date(2000, 1, 4)
+            }
+            split.remove()
+            assert not split.directory.exists()
+    assert tape.load_tapes(paths, wanted, hl_basis=tape.HL_HIGH_LOW)["C"].highs is None
+    assert tape.load_tapes(paths, wanted, hl_basis=tape.HL_HIGH_LOW)["B"].closes == [10, 12]
+
+
 def test_memory_warning_suggests_a_smaller_batch(monkeypatch: pytest.MonkeyPatch):
     class _Memory:
         available = 2_500 * 2**20
