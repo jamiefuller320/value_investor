@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-05T22:19:24.629727+00:00",
+  "run_at": "2026-11-06T21:51:21.472342+00:00",
   "market_id": "ftse_smallcap",
   "targets": [],
   "target_details": [],
@@ -9,15 +9,15 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-05T22:19:14.251017+00:00",
+    "snapshot_at": "2026-11-06T21:51:09.529365+00:00",
     "market_id": "ftse_smallcap",
-    "buy_tier_count": 10,
+    "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
     "indexed_without_body": 47,
-    "bodies_min": 47,
-    "bodies_median": 60.0,
+    "bodies_min": 46,
+    "bodies_median": 58,
     "bodies_max": 102,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -26,21 +26,21 @@
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
       "DFS.L",
-      "MER.L",
       "ULTP.L",
       "CLIG.L",
       "APTD.L",
       "FOXT.L",
-      "TPT.L"
+      "TPT.L",
+      "MER.L"
     ],
     "indexed_without_body_by_ticker": {
       "DFS.L": 5,
-      "MER.L": 6,
       "ULTP.L": 8,
       "CLIG.L": 6,
       "APTD.L": 8,
       "FOXT.L": 9,
-      "TPT.L": 5
+      "TPT.L": 5,
+      "MER.L": 6
     },
     "parked_tickers": [
       "APTD.L",
@@ -59,15 +59,15 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-05T22:19:18.623342+00:00",
+    "snapshot_at": "2026-11-06T21:51:14.569440+00:00",
     "market_id": "ftse_smallcap",
-    "buy_tier_count": 10,
+    "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
     "indexed_without_body": 47,
-    "bodies_min": 47,
-    "bodies_median": 60.0,
+    "bodies_min": 42,
+    "bodies_median": 58,
     "bodies_max": 102,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -76,21 +76,21 @@
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
       "DFS.L",
-      "MER.L",
       "ULTP.L",
       "CLIG.L",
       "APTD.L",
       "FOXT.L",
-      "TPT.L"
+      "TPT.L",
+      "MER.L"
     ],
     "indexed_without_body_by_ticker": {
       "DFS.L": 5,
-      "MER.L": 6,
       "ULTP.L": 8,
       "CLIG.L": 6,
       "APTD.L": 8,
       "FOXT.L": 9,
-      "TPT.L": 5
+      "TPT.L": 5,
+      "MER.L": 6
     },
     "parked_tickers": [
       "APTD.L",
@@ -115,7 +115,7 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 10,
+    "scanned": 11,
     "hits": 6,
     "new_rows_total": 0,
     "curiosity_total": 6,
@@ -149,7 +149,7 @@
   },
   "critical_path": {
     "market_id": "ftse_smallcap",
-    "assessed_at": "2026-11-05T22:19:15.421137+00:00",
+    "assessed_at": "2026-11-06T21:51:10.679281+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -192,7 +192,7 @@
       {
         "ticker": "TPT.L",
         "indexed_without_body": 5,
-        "filings_total": 58,
+        "filings_total": 59,
         "filings_with_body": 53
       }
     ],
@@ -221,9 +221,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 1.98977735699998,
+  "used_seconds": 2.8096102400000404,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3598.010222643,
+  "leftover_seconds": 3597.19038976,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -231,9 +231,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_smallcap",
-    "updated_at": "2026-11-05T22:19:18.629818+00:00",
+    "updated_at": "2026-11-06T21:51:14.575888+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 20,
+    "complete_zero_improve_runs": 21,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -261,30 +261,6 @@
         "source_surface": "uk_rns"
       },
       {
-        "ticker": "APTD.L",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-11-02T16:40:57.360125+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 123,
-        "filings_with_body": 102,
-        "indexed_without_body": 8,
-        "thin": false,
-        "source_surface": "uk_rns"
-      },
-      {
-        "ticker": "ULTP.L",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-11-02T16:40:57.360125+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 60,
-        "filings_with_body": 52,
-        "indexed_without_body": 8,
-        "thin": false,
-        "source_surface": "uk_rns"
-      },
-      {
         "ticker": "MER.L",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
@@ -297,18 +273,6 @@
         "source_surface": "uk_rns"
       },
       {
-        "ticker": "FOXT.L",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-11-05T07:40:21.496780+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 69,
-        "filings_with_body": 58,
-        "indexed_without_body": 9,
-        "thin": false,
-        "source_surface": "uk_rns"
-      },
-      {
         "ticker": "TPT.L",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
@@ -317,6 +281,42 @@
         "filings_total": 59,
         "filings_with_body": 53,
         "indexed_without_body": 5,
+        "thin": false,
+        "source_surface": "uk_rns"
+      },
+      {
+        "ticker": "APTD.L",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-06T21:51:14.575888+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 124,
+        "filings_with_body": 102,
+        "indexed_without_body": 8,
+        "thin": false,
+        "source_surface": "uk_rns"
+      },
+      {
+        "ticker": "FOXT.L",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-06T21:51:14.575888+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 70,
+        "filings_with_body": 58,
+        "indexed_without_body": 9,
+        "thin": false,
+        "source_surface": "uk_rns"
+      },
+      {
+        "ticker": "ULTP.L",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-06T21:51:14.575888+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 61,
+        "filings_with_body": 52,
+        "indexed_without_body": 8,
         "thin": false,
         "source_surface": "uk_rns"
       }
@@ -372,27 +372,27 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 62,
-    "candidate_count": 55,
+    "tried_count": 63,
+    "candidate_count": 54,
     "skipped_resolved_tickers": [
       "LMT",
-      "CRH",
+      "APTV",
       "DFS.L",
-      "APTD.L",
-      "ULTP.L",
       "MER.L",
-      "FOXT.L",
       "TPT.L",
+      "APTD.L",
+      "FOXT.L",
+      "ULTP.L",
       "GIB-A.TO",
-      "NTR.TO",
       "SU.TO",
+      "CNQ.TO",
+      "NTR.TO",
       "BAS.DE",
       "IFX.DE",
       "PDD",
       "BAS.DE",
       "DTE.DE",
       "DTG.DE",
-      "FRE.DE",
       "HNR1.DE",
       "MUV2.DE",
       "HEN3.DE",
