@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-06T13:15:25+00:00",
+  "updated_at": "2026-11-06T18:01:39+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16782,6 +16782,40 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a1af74-11c6-7e8a-9823-c842727f4306",
       "added_at": "2026-11-06T13:15:25+00:00"
+    },
+    {
+      "id": "N257",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Version review: should learning-pool-excluded buy-tier names join the strategy book",
+      "summary": "53 library buy-tier names are dropped from the history snapshot by learning_pool_excluded_tickers, so the sealed owner-strategy-book-v0 never screens them; the forward roster now lists them as learning_pool_excluded. Whether they belong in the book is a universe change for a sealed version, not a silent edit.",
+      "revisit_when": "Next strategy-book version review (challenger slot open)",
+      "tags": [
+        "strategy-version-review",
+        "strategy-book",
+        "universe",
+        "dashboard-v2"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a1af74-11c6-7e8a-9823-c842727f4306",
+      "added_at": "2026-11-06T18:01:39+00:00"
+    },
+    {
+      "id": "L684",
+      "category": "later",
+      "section": "learning",
+      "title": "Library snapshot gzip signals omit some buy-tier names (MT.AS, COR, CRH)",
+      "summary": "library_sim.save_library_run_snapshots writes a history gzip whose signals list lacks aex MT.AS and sp500 COR/CRH, although they are not learning-pool excluded and the same-stamp signals CSV marks them buy; the strategy book forward roster flags them not_in_book_screen. Investigate the writer before it silently narrows the book's screen.",
+      "revisit_when": "Before the next strategy-book version review, or if not_in_book_screen count in strategy_book_forward_status.json grows above 3",
+      "tags": [
+        "strategy-book",
+        "library-sim",
+        "data-bug",
+        "dashboard-v2"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a1af74-11c6-7e8a-9823-c842727f4306",
+      "added_at": "2026-11-06T18:01:39+00:00"
     }
   ],
   "fragments": [
