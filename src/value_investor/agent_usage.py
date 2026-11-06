@@ -20,12 +20,12 @@ and does not call ``send``; ``GetUsage`` is read-only
 from __future__ import annotations
 
 import argparse
-import fcntl
 import hashlib
 import json
 import logging
 import os
 import tempfile
+import threading
 import uuid
 from collections.abc import Iterator, Mapping
 from contextlib import contextmanager
@@ -33,7 +33,14 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+try:
+    import fcntl
+except ImportError:  # Windows: shards are per-process, so the thread lock is enough.
+    fcntl = None  # type: ignore[assignment]
+
 logger = logging.getLogger(__name__)
+
+_THREAD_LOCK = threading.Lock()
 
 DEFAULT_SHARD_DIR = Path("docs/data/agent_usage")
 DEFAULT_LEGACY_LOG_PATH = Path("docs/data/agent_usage_log.jsonl")
@@ -143,10 +150,15 @@ def _exclusive_lock(log_path: Path) -> Iterator[None]:
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     handle = open(lock_path, "a+", encoding="utf-8")
     try:
-        fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
-        yield
+        with _THREAD_LOCK:
+            if fcntl is not None:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+            try:
+                yield
+            finally:
+                if fcntl is not None:
+                    fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
     finally:
-        fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
         handle.close()
 
 
