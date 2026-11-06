@@ -582,7 +582,13 @@ def test_refuses_unsigned_parent_missing_registration_and_paths_in_the_repo(
         }
         with pytest.raises(rehearsal.RehearsalRefused, match="inside the repository"):
             rehearsal.develop(repo_root=repo, **args)
-    (repo / rehearsal.REGISTRATION_PATH).unlink()
+    reg_path = repo / rehearsal.REGISTRATION_PATH
+    signed = json.loads(reg_path.read_text())
+    assert signed["status"] == "signed"
+    reg_path.write_text(json.dumps({**signed, "status": "draft_awaiting_owner_signature"}))
+    with pytest.raises(rehearsal.RehearsalRefused, match="not signed"):
+        rehearsal.develop(licensed["build"], licensed["mid"], licensed["sharadar"], repo_root=repo)
+    reg_path.unlink()
     with pytest.raises(rehearsal.RehearsalRefused, match="not registered"):
         rehearsal.develop(licensed["build"], licensed["mid"], licensed["sharadar"], repo_root=repo)
     assert not (repo / rehearsal.STORE_PATH).exists()
