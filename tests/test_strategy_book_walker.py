@@ -22,6 +22,7 @@ from value_investor.strategy_book_observe import (
     Download,
     F9Fact,
     GateFact,
+    GateTape,
     ListingFact,
     MemoFact,
     NameSpec,
@@ -1321,3 +1322,145 @@ def test_bench_promotion_fails_when_the_halves_disagree() -> None:
     assert bar["met"] is False
     fifths = build_boards(rows)["selection_fifths"]["composite_score"]
     assert set(fifths) == {"whole", "first_half", "second_half"}
+
+
+# --- US rehearsal mode (strategy-book-us-rehearsal-v0) ----------------------------------------
+
+_LADDER = [100.0] + [100.0] * 8 + [110.4] + [112.0] * 10 + [116.0] + [112.0] * 5 + [109.8, 109.5]
+
+
+def _rehearsal(**overrides: object) -> WalkOptions:
+    import dataclasses
+
+    from value_investor.strategy_book_observe import options_for
+
+    return dataclasses.replace(options_for("us_rehearsal"), **overrides)
+
+
+def _tape(days: list[date], decline: str = "clear", sector: str = "sound") -> GateTape:
+    labels = (None, "clear", "declining", "insufficient_data", "sound", "headwind")
+    return GateTape(
+        [day - timedelta(days=1) for day in days],
+        [labels.index(decline)] * len(days),
+        [labels.index(sector)] * len(days),
+        labels,
+        lambda index: {"sector_basis": "price_only", "checks": {"revenue": {"change_pct": 0.02}}},
+    )
+
+
+def _us(closes: list[float], **kwargs: object) -> NameSpec:
+    gates = kwargs.pop("gates", None)
+    spec = _spec(
+        closes, market=kwargs.pop("market", "sp500"), adjusted=None, research=None, **kwargs
+    )
+    if gates is not None:
+        spec.gates = gates
+    return spec
+
+
+def test_a_gate_tape_walks_like_the_gate_facts_it_encodes() -> None:
+    closes = _decline() + _LADDER
+    days = _weekdays(len(closes))
+    facts = [
+        GateFact(as_of=day - timedelta(days=1), decline="clear", sector="sound") for day in days
+    ]
+    by_list = walk_book([_us(closes, gates=facts)], options=_rehearsal())
+    by_tape = walk_book([_us(closes, gates=_tape(days))], options=_rehearsal())
+    keep = (
+        "column",
+        "signal_session",
+        "fill_session",
+        "exit_reason",
+        "exit_fill",
+        "fair_cost_return",
+    )
+    assert [{k: row[k] for k in keep} for row in by_list["episodes"]] == [
+        {k: row[k] for k in keep} for row in by_tape["episodes"]
+    ]
+    assert any(row["column"] == COLUMN_PRIMARY for row in by_tape["episodes"])
+    declining = walk_book(
+        [_us(closes, gates=_tape(days, decline="declining"))], options=_rehearsal()
+    )
+    assert [row for row in declining["episodes"] if row["column"] == COLUMN_PRIMARY] == []
+    assert any(row["column"] == COLUMN_DECLINE_SHADOW for row in declining["episodes"])
+
+
+def test_rehearsal_mode_labels_and_needs_no_memo_or_f9() -> None:
+    closes = _decline() + _LADDER
+    days = _weekdays(len(closes))
+    result = walk_book([_us(closes, gates=_tape(days), memo=False, f9=False)], options=_rehearsal())
+    episode = _one(result)
+    assert episode["t212_listed"] == "not_applicable"
+    assert episode["f9_status"] == "f9_unverified"
+    assert episode["basket"]["members"] is None
+    assert result["boards"] is None
+    assert episode["bench"]["revenue_growing"] is True
+
+
+def test_leaving_the_universe_stops_entry_and_keeps_an_open_episode() -> None:
+    closes = _decline() + _LADDER
+    days = _weekdays(len(closes))
+    outside = _us(closes, gates=_tape(days))
+    outside.universe = [(days[0], days[13])]
+    assert _primary(walk_book([outside], options=_rehearsal())) == []
+    held = _us(closes, gates=_tape(days))
+    held.universe = [(days[0], days[15])]
+    episode = _one(walk_book([held], options=_rehearsal()))
+    assert episode["exit_reason"] == EXIT_FLOOR
+
+
+def test_one_book_key_is_one_name_across_two_universes() -> None:
+    closes = _decline() + _LADDER
+    days = _weekdays(len(closes))
+    big = _us(closes, gates=_tape(days), market="sp500")
+    mid = _us(closes, gates=_tape(days), market="sp400")
+    apart = walk_book([big, mid], options=_rehearsal())
+    assert {row["market"] for row in _primary(apart)} == {"sp500", "sp400"}
+    big.book_key = mid.book_key = "AAA"
+    shared = walk_book([big, mid], options=_rehearsal())
+    assert [row["market"] for row in _primary(shared)] == ["sp500"]
+
+
+def test_a_delisted_name_exits_at_its_last_bar_with_the_haircut() -> None:
+    closes = _decline() + [100.0, 101.0, 102.0, 101.5]
+    days = _weekdays(len(closes))
+    dead = _us(closes, gates=_tape(days), ticker="DEAD")
+    dead.terminal_haircut = -0.30
+    longer = _decline() + [100.0] * 30
+    alive = _us(longer, gates=_tape(_weekdays(len(longer))), ticker="LIVE", signal="hold")
+    result = walk_book([dead, alive], options=_rehearsal())
+    episode = _one(result, ticker="DEAD")
+    assert episode["exit_reason"] == "delisted"
+    assert episode["exit_session"] == days[-1].isoformat()
+    assert episode["exit_fill"] == pytest.approx(101.5 * 0.7)
+    survivor = _us(closes, gates=_tape(days), ticker="DEAD")
+    kept_open = _one(walk_book([survivor, alive], options=_rehearsal()), ticker="DEAD")
+    assert kept_open["status"] == "open"
+
+
+def test_entry_not_after_stops_new_signals_and_not_exits() -> None:
+    closes = _decline() + _LADDER
+    days = _weekdays(len(closes))
+    late = walk_book([_us(closes, gates=_tape(days))], options=_rehearsal(entry_not_after=days[13]))
+    assert _primary(late) == []
+    on_time = walk_book(
+        [_us(closes, gates=_tape(days))], options=_rehearsal(entry_not_after=days[14])
+    )
+    assert _one(on_time)["exit_reason"] == EXIT_FLOOR
+
+
+def test_a_blank_carried_row_is_not_on_the_screen_for_the_basket() -> None:
+    base = _decline() + _LADDER
+    days = _weekdays(len(base))
+    flat = [50.0] * len(base)
+    names = [_us(base, gates=_tape(days))]
+    for index in range(2):
+        names.append(_us(flat, ticker=f"B{index}", gates=_tape(days)))
+    for index in range(2):
+        names.append(_us(flat, ticker=f"H{index}", signal="hold", gates=_tape(days)))
+    names.append(_us(flat, ticker="GONE", signal=None, gates=_tape(days)))
+    counted = _one(walk_book(names, options=_rehearsal(basket_skips_blank_screen=False)))
+    skipped = _one(walk_book(names, options=_rehearsal()))
+    assert counted["basket"]["count"] == 6
+    assert skipped["basket"]["count"] == 5
+    assert skipped["basket"]["fallback"] is True
