@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-05T10:37:59.792667+00:00",
+  "run_at": "2026-11-06T07:38:33.116178+00:00",
   "market_id": "hang_seng",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-05T10:34:42.301495+00:00",
+    "snapshot_at": "2026-11-06T07:35:44.125582+00:00",
     "market_id": "hang_seng",
     "buy_tier_count": 23,
     "unmeasured_buy_tier": 0,
@@ -67,7 +67,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-05T10:37:53.275089+00:00",
+    "snapshot_at": "2026-11-06T07:38:28.040123+00:00",
     "market_id": "hang_seng",
     "buy_tier_count": 23,
     "unmeasured_buy_tier": 0,
@@ -132,8 +132,8 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 23,
-    "hits": 3,
-    "new_rows_total": 0,
+    "hits": 4,
+    "new_rows_total": 1,
     "curiosity_total": 3,
     "errors": 0,
     "prioritization_weights": {
@@ -167,7 +167,7 @@
   },
   "critical_path": {
     "market_id": "hang_seng",
-    "assessed_at": "2026-11-05T10:34:43.989941+00:00",
+    "assessed_at": "2026-11-06T07:35:45.375516+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -255,9 +255,9 @@
       "thin_need_bodies": 1
     }
   },
-  "used_seconds": 187.54792042,
+  "used_seconds": 161.527702878,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3412.45207958,
+  "leftover_seconds": 3438.472297122,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -265,9 +265,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "hang_seng",
-    "updated_at": "2026-11-05T10:37:53.282480+00:00",
+    "updated_at": "2026-11-06T07:38:28.045904+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 12,
+    "complete_zero_improve_runs": 13,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -303,18 +303,6 @@
         "filings_total": 18,
         "filings_with_body": 12,
         "indexed_without_body": 4,
-        "thin": false,
-        "source_surface": "asia_filings+hkex_direct"
-      },
-      {
-        "ticker": "9961.HK",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-10-30T13:47:29.271261+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 21,
-        "filings_with_body": 18,
-        "indexed_without_body": 2,
         "thin": false,
         "source_surface": "asia_filings+hkex_direct"
       },
@@ -377,6 +365,18 @@
         "indexed_without_body": 9,
         "thin": true,
         "source_surface": "asia_filings+hkex_direct"
+      },
+      {
+        "ticker": "9961.HK",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-06T07:38:28.045904+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 22,
+        "filings_with_body": 18,
+        "indexed_without_body": 2,
+        "thin": false,
+        "source_surface": "asia_filings+hkex_direct"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -433,15 +433,16 @@
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 62,
-    "candidate_count": 53,
+    "candidate_count": 56,
     "skipped_resolved_tickers": [
       "LMT",
-      "TPT.L",
+      "CRH",
       "DFS.L",
       "APTD.L",
       "ULTP.L",
       "MER.L",
       "FOXT.L",
+      "TPT.L",
       "GIB-A.TO",
       "NTR.TO",
       "SU.TO",
