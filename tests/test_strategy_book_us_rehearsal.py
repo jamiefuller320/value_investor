@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import shutil
+import sys
 from datetime import date
 from pathlib import Path
 
@@ -385,6 +386,169 @@ def test_develop_review_reveal_and_confirm_deleted(licensed: dict[str, Path], tm
     titles = {row["title"] for row in rehearsal.findings(repo)}
     assert rehearsal.TITLE_DELETION_DUE not in titles
     assert rehearsal.status(repo)["licensed_data"]["deleted_at"] == stamp
+
+
+def _blocks(store: dict) -> str:
+    keep = {
+        key: store[key]
+        for key in (
+            "development",
+            "confirmation",
+            "delisting_sensitivity",
+            "regime_cuts",
+            "month_series",
+            "run_counts",
+        )
+    }
+    for block in ("development", "confirmation"):
+        keep[block] = {k: v for k, v in keep[block].items() if k != "computed_at"}
+    return json.dumps(keep, sort_keys=True)
+
+
+def _scratch_rows(scratch: Path, variant: str) -> list[str]:
+    return sorted(json.dumps(row, sort_keys=True) for row in _read_episodes(scratch, variant))
+
+
+def test_blocks_do_not_depend_on_the_batch_size(licensed: dict[str, Path], tmp_path: Path):
+    stores, scratches = [], []
+    for size in (10_000, 50, 3):
+        repo = make_repo(tmp_path / f"repo-{size}")
+        scratch = tmp_path / f"scratch-{size}"
+        paths = (licensed["build"], licensed["mid"], licensed["sharadar"])
+        rehearsal.develop(*paths, repo_root=repo, scratch=scratch, batch_size=size)
+        out = rehearsal.reveal(*paths, repo_root=repo, scratch=scratch, batch_size=size)
+        stores.append(_blocks(out["store"]))
+        scratches.append(out["scratch"])
+        assert not list(scratch.glob(f"{tape.TAPE_SPLIT_PREFIX}*"))
+    assert stores[0] == stores[1] == stores[2]
+    assert json.loads(stores[0])["confirmation"]["primary"]["mature"] >= 5
+    for variant in (rehearsal.BASELINE, rehearsal.SENSITIVITY):
+        rows = [_scratch_rows(scratch, variant) for scratch in scratches]
+        assert rows[0] == rows[1] == rows[2]
+
+
+def test_batched_walk_equals_the_whole_book_walk(licensed: dict[str, Path], tmp_path: Path):
+    registration = rehearsal_registration()
+    last = registration["windows"]["confirmation"]["last_signal"]
+    builds = (
+        tape.BuildDir(licensed["build"], "sp500"),
+        tape.BuildDir(licensed["mid"], "midcap"),
+        licensed["sharadar"],
+        registration,
+    )
+    inputs = tape.build_inputs(*builds)
+    source = tape.prepare(
+        *builds,
+        work_dir=tmp_path / "work",
+        batch_size=4,
+        cross_options=rehearsal.walk_options(registration, last),
+    )
+    try:
+        assert len(source.batches) > 3
+        batched = rehearsal.walk_batches(source, registration, last_signal=last, target=tmp_path)
+    finally:
+        source.remove()
+    for variant in (rehearsal.BASELINE, rehearsal.SENSITIVITY):
+        whole = rehearsal.walk(inputs, registration, last_signal=last, variant=variant)
+        expected = [rehearsal._compact(e) for e in whole["episodes"]]
+        if variant == rehearsal.SENSITIVITY:
+            expected = [e for e in expected if e["column"] == "primary"]
+        got = batched[variant]
+        assert json.dumps(got["episodes"], default=str) == json.dumps(expected, default=str)
+        assert got["counts"] == whole["counts"]
+        assert got["cap_would_block_days"] == whole["cap_would_block_days"]
+        assert got["scoring_date"] == whole["scoring_date"]
+        events = [e for e in whole["events"] if e["kind"] == "no_next_bar"]
+        assert len(got["events"]) == sum(1 for e in events if e["column"] == "primary")
+    assert source.names_walked == len(inputs.specs)
+    assert source.counts == inputs.counts
+
+
+def test_tape_split_loads_what_load_tapes_loads(tmp_path: Path):
+    first = pd.DataFrame(
+        {
+            "date": ["2000-01-03", "2000-01-04", "2000-01-04", "2000-01-03", "2000-01-05"]
+            + ["2000-01-03", "2000-01-04"],
+            "ticker": ["B", "B", "B", "A", "A", "E", "E"],
+            "open": 1.0,
+            "high": [11, 12, 13, 21, 22, 51, 52],
+            "low": [9, 10, 11, 19, 20, 49, 50],
+            "close": [10, 11, 12, 20, None, 50, None],
+        }
+    )
+    second = pd.DataFrame(
+        {
+            "date": ["2000-01-05", "2000-01-03", "2000-01-04", "2000-01-03", "2000-01-06"],
+            "ticker": ["A", "C", "C", "D", "E"],
+            "close": [99, 30, 31, 40, 55],
+        }
+    )
+    paths = [tmp_path / "one.csv.gz", tmp_path / "two.csv.gz"]
+    first.to_csv(paths[0], index=False)
+    second.to_csv(paths[1], index=False)
+    wanted = {"A", "B", "C", "E", "Z"}
+    for basis in (tape.HL_HIGH_LOW, tape.HL_CLOSES):
+        expected = tape.load_tapes(paths, wanted, hl_basis=basis)
+        for size in (1, 2, 100):
+            split = tape.TapeSplit(tmp_path / f"split-{basis}-{size}", sorted(wanted), size, basis)
+            split.split(paths, date(2000, 1, 4).toordinal())
+            got = {}
+            for bucket in range(split.buckets):
+                got.update(split.load(bucket))
+            assert got == expected
+            assert split.present_tickers() == set(expected)
+            assert split.days == {
+                day.toordinal()
+                for download in expected.values()
+                for day in download.sessions
+                if day >= date(2000, 1, 4)
+            }
+            split.remove()
+            assert not split.directory.exists()
+    assert tape.load_tapes(paths, wanted, hl_basis=tape.HL_HIGH_LOW)["C"].highs is None
+    assert tape.load_tapes(paths, wanted, hl_basis=tape.HL_HIGH_LOW)["B"].closes == [10, 12]
+
+
+def test_memory_warning_suggests_a_smaller_batch(monkeypatch: pytest.MonkeyPatch):
+    class _Memory:
+        available = 2_500 * 2**20
+
+    class _Psutil:
+        @staticmethod
+        def virtual_memory():
+            return _Memory()
+
+    monkeypatch.setitem(sys.modules, "psutil", _Psutil)
+    assert rehearsal.memory_warning(4_450, 6_500, 10) is None
+    warning = rehearsal.memory_warning(4_450, 6_500, 4_450)
+    assert warning and "--batch-size" in warning and "smaller" in warning
+    suggested = int(warning.rsplit("for example ", 1)[1].split(")")[0])
+    assert 25 <= suggested < 4_450
+    assert rehearsal.memory_estimate_mb(4_450, 6_500, suggested) <= 2_500
+    assert rehearsal.memory_estimate_mb(4_450, 6_500, suggested + 25) > 2_500
+    assert 1_700 <= rehearsal.memory_estimate_mb(4_448, 6_717, 400) <= 2_000
+    monkeypatch.setitem(sys.modules, "psutil", None)
+    assert rehearsal.memory_warning(4_450, 6_500, 4_450) is None
+
+
+def test_cli_batch_size_is_passed_through(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+):
+    seen = {}
+
+    def _develop(*args, **kwargs):
+        seen.update(kwargs)
+        return {"store": {"development": {"primary": {}}}, "scratch": tmp_path}
+
+    monkeypatch.setattr(rehearsal, "develop", _develop)
+    paths = ["--build", "b", "--mid-build", "m", "--sharadar-dir", "s"]
+    assert rehearsal.main(["develop", *paths, "--batch-size", "75"]) == 0
+    assert seen["batch_size"] == 75
+    assert rehearsal.main(["develop", *paths]) == 0
+    assert seen["batch_size"] == tape.DEFAULT_BATCH_SIZE
+    with pytest.raises(SystemExit):
+        rehearsal.main(["develop", *paths, "--batch-size", "0"])
+    capsys.readouterr()
 
 
 def test_reveal_needs_a_development_block(licensed: dict[str, Path], tmp_path: Path):

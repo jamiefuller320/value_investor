@@ -1464,3 +1464,162 @@ def test_a_blank_carried_row_is_not_on_the_screen_for_the_basket() -> None:
     assert counted["basket"]["count"] == 6
     assert skipped["basket"]["count"] == 5
     assert skipped["basket"]["fallback"] is True
+
+
+def _batch_book(seed: int) -> list[NameSpec]:
+    """Random US-rehearsal book: two markets, shared book keys, delistings, spans."""
+    import random
+
+    rng = random.Random(seed)
+    days: list[date] = []
+    day = date(1999, 1, 4)
+    while len(days) < 900:
+        if day.weekday() < 5:
+            days.append(day)
+        day += timedelta(days=1)
+    month_ends = [days[i] for i in range(len(days) - 1) if days[i].month != days[i + 1].month]
+    labels = (None, "clear", "declining", "insufficient_data", "sound", "headwind")
+    specs: list[NameSpec] = []
+    for index in range(36):
+        ticker = f"B{index:02d}"
+        start = 0 if index % 5 else rng.randrange(0, 300)
+        stop = len(days) if index % 7 else rng.randrange(500, len(days))
+        sessions = days[start:stop]
+        price, closes = 50.0 + index, []
+        for _ in sessions:
+            price *= 1.0 + rng.gauss(0.0003, 0.025)
+            closes.append(round(price, 4))
+        markets = ["sp500"] if index < 14 else ["sp400"]
+        if index in (10, 11, 20, 21):
+            markets = ["sp500", "sp400"]
+        cut = len(sessions) // 2
+        for market in markets:
+            screens = [
+                ScreenFact(
+                    run_date=end,
+                    signal=rng.choice(["buy", "strong_buy", "hold", "avoid", "hold", None]),
+                    sector="Tech",
+                    fields={"composite_score": rng.random(), "weeks_at_signal": 2},
+                )
+                for end in month_ends
+                if sessions and sessions[0] <= end <= sessions[-1]
+            ]
+            if len(markets) == 2:
+                universe = (
+                    [(sessions[0], sessions[cut - 1])]
+                    if market == "sp500"
+                    else [(sessions[cut], sessions[-1])]
+                )
+            else:
+                universe = [(sessions[0], sessions[-1])] if index % 9 else []
+            specs.append(
+                NameSpec(
+                    market=market,
+                    ticker=ticker,
+                    downloads=[Download(as_of=sessions[-1], sessions=sessions, closes=closes)],
+                    screens=screens,
+                    gates=GateTape(
+                        [d - timedelta(days=1) for d in sessions],
+                        [rng.choice([1, 1, 1, 2, 3]) for _ in sessions],
+                        [rng.choice([4, 4, 4, 5]) for _ in sessions],
+                        labels,
+                        lambda i: {"sector_basis": "price_only", "checks": {}},
+                    ),
+                    universe=universe,
+                    book_key=ticker,
+                    terminal_haircut=0.0 if stop < len(days) else None,
+                )
+            )
+    return specs
+
+
+def _batched(
+    specs: list[NameSpec], options: WalkOptions, size: int, haircut=None, walked=None
+) -> dict:
+    from value_investor.strategy_book_observe import CrossNameTape, recovery_cap
+
+    walked = walked or specs
+
+    groups: dict[str, list[int]] = {}
+    for position, spec in enumerate(specs):
+        groups.setdefault(spec.book_key or spec.ticker, []).append(position)
+    batches: list[list[int]] = [[]]
+    for members in groups.values():
+        if batches[-1] and len(batches[-1]) + len(members) > size:
+            batches.append([])
+        batches[-1].extend(members)
+    cross = CrossNameTape(options)
+    for batch in batches:
+        cross.add([specs[i] for i in batch])
+    cross.finish()
+    if haircut is not None:
+        cross = cross.with_haircuts(haircut)
+    order = {(spec.market, spec.ticker): i for i, spec in enumerate(specs)}
+    episodes, events, counts = [], [], {}
+    opened = [0] * len(cross.calendar)
+    labelled = [0] * len(cross.calendar)
+    for batch in batches:
+        part = walk_book([walked[i] for i in batch], options=options, cross=cross)
+        episodes.extend(part["episodes"])
+        events.extend(part["events"])
+        for key, value in part["counts"].items():
+            counts[key] = counts.get(key, 0) + value
+        opened = [a + b for a, b in zip(opened, part["recovery_open"], strict=True)]
+        labelled = [a + b for a, b in zip(labelled, part["recovery_labelled"], strict=True)]
+    episodes.sort(key=lambda row: order[(row["market"], row["ticker"])])
+    cap_days, samples = recovery_cap(cross.calendar, opened, labelled)
+    return {
+        "episodes": episodes,
+        "events": events,
+        "counts": counts,
+        "cap_would_block_days": cap_days,
+        "recovery_share_samples": samples,
+    }
+
+
+@pytest.mark.parametrize("seed", [3, 11])
+def test_a_batched_walk_matches_the_whole_book(seed: int) -> None:
+    import dataclasses
+
+    specs = _batch_book(seed)
+    options = _rehearsal(entry_not_before=date(1999, 9, 1), entry_not_after=date(2002, 3, 29))
+    whole = walk_book(specs, options=options)
+    assert len(whole["episodes"]) > 50
+    assert {e["basket"]["source"] for e in whole["episodes"] if e["basket"]} >= {"buy_tier"}
+
+    def canon(rows: list[dict]) -> list[str]:
+        return sorted(json.dumps(row, default=str, sort_keys=True) for row in rows)
+
+    for size in (1, 7, 1000):
+        part = _batched(specs, options, size)
+        assert json.dumps(part["episodes"], default=str) == json.dumps(
+            whole["episodes"], default=str
+        )
+        assert canon(part["events"]) == canon(whole["events"])
+        assert part["counts"] == whole["counts"]
+        assert part["cap_would_block_days"] == whole["cap_would_block_days"]
+        assert part["recovery_share_samples"] == whole["recovery_share_samples"]
+
+    cut = {spec.ticker: -0.3 for spec in specs if spec.terminal_haircut is not None}
+    variant = [dataclasses.replace(s, terminal_haircut=cut.get(s.ticker)) for s in specs]
+    whole_variant = walk_book(variant, options=options)
+    part = _batched(specs, options, 5, haircut=cut.get, walked=variant)
+    assert json.dumps(part["episodes"], default=str) == json.dumps(
+        whole_variant["episodes"], default=str
+    )
+    assert json.dumps(part["episodes"], default=str) != json.dumps(whole["episodes"], default=str)
+
+
+def test_a_batched_walk_refuses_a_split_book_key() -> None:
+    from value_investor.strategy_book_observe import CrossNameTape
+
+    specs = _batch_book(3)
+    options = _rehearsal(entry_not_before=date(1999, 9, 1))
+    cross = CrossNameTape(options)
+    cross.add(specs)
+    cross.finish()
+    shared = [spec for spec in specs if spec.ticker == "B10"]
+    with pytest.raises(ValueError, match="split across batches"):
+        walk_book(shared[:1], options=options, cross=cross)
+    with pytest.raises(ValueError, match="boards off"):
+        walk_book(shared, options=_rehearsal(boards=True), cross=cross)

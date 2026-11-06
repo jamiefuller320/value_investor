@@ -25,7 +25,7 @@ import re
 import statistics
 import sys
 from collections import Counter, defaultdict
-from collections.abc import Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -49,12 +49,15 @@ from value_investor.strategy_book_rules import (
     registration_signed,
 )
 from value_investor.strategy_book_us_tape import (
+    DEFAULT_BATCH_SIZE,
     SP400,
     SP500,
     BuildDir,
     InputsMissing,
     RehearsalInputs,
-    build_inputs,
+    RehearsalSource,
+    prepare,
+    with_variant,
 )
 
 REPO_ROOT = hsr.REPO_ROOT
@@ -856,17 +859,189 @@ def month_series(episodes: list[dict[str, Any]], window: tuple[str, str]) -> lis
 
 # --- Walk ----------------------------------------------------------------------------------
 
+# Episode keys no board or block reads; dropped from the rows kept in memory.
+# The scratch files keep whole episodes.
+_UNREAD_KEYS = frozenset(
+    {
+        "inputs",
+        "reviews",
+        "floor_history",
+        "memo_rationale",
+        "t212_fetched_at",
+        "data_commit",
+        "download_as_of",
+    }
+)
+# Peak resident memory, calibrated on ``scripts/strategy_book_rehearsal_scale.py``
+# at the real shape (4,448 names, 6,717 sessions; batch sizes 100, 400 and
+# 1,000 peaked at 1.4, 1.7 and 2.8 GB): whole-book tables, the cross-name tape
+# (about 9 bytes per name-session) and one batch of bars, specs and walk state.
+MEMORY_FIXED_MB = 1050
+MEMORY_PER_NAME_MB = 1.5
+MEMORY_PER_CROSS_CELL_BYTES = 9
 
-def walk(
-    inputs: RehearsalInputs, registration: Mapping[str, Any], *, last_signal: str, variant: str
-) -> dict[str, Any]:
+
+def walk_options(registration: Mapping[str, Any], last_signal: str) -> sbo.WalkOptions:
     first = date.fromisoformat(registration["windows"]["development"]["first_signal"])
-    options = dataclasses.replace(
+    return dataclasses.replace(
         sbo.options_for(sbo.US_REHEARSAL_MODE),
         entry_not_before=first,
         entry_not_after=date.fromisoformat(last_signal),
     )
-    return sbo.walk_book(inputs.with_variant(variant), options=options)
+
+
+def walk(
+    inputs: RehearsalInputs, registration: Mapping[str, Any], *, last_signal: str, variant: str
+) -> dict[str, Any]:
+    """Whole-book walk of materialised inputs (small books and tests)."""
+    return sbo.walk_book(
+        inputs.with_variant(variant), options=walk_options(registration, last_signal)
+    )
+
+
+def _compact(episode: Mapping[str, Any]) -> dict[str, Any]:
+    out = {key: value for key, value in episode.items() if key not in _UNREAD_KEYS}
+    if out.get("decision_log"):
+        out["decision_log"] = [
+            row for row in out["decision_log"] if row.get("action") == sbo.EXIT_THESIS
+        ]
+    return out
+
+
+class _ScratchFiles:
+    """Per-episode files of one variant, written as each batch is walked."""
+
+    def __init__(self, target: Path, variant: str) -> None:
+        self.episodes = gzip.open(target / f"episodes_{variant}.jsonl.gz", "wt", encoding="utf-8")
+        self.events = gzip.open(target / f"events_{variant}.json.gz", "wt", encoding="utf-8")
+        self.events.write("[")
+        self._first_event = True
+
+    def add(self, result: Mapping[str, Any]) -> None:
+        for episode in result["episodes"]:
+            self.episodes.write(json.dumps(episode, default=str) + "\n")
+        for event in result["events"]:
+            self.events.write(("" if self._first_event else ", ") + json.dumps(event, default=str))
+            self._first_event = False
+
+    def close(self) -> None:
+        self.events.write("]")
+        self.events.close()
+        self.episodes.close()
+
+
+def walk_batches(
+    source: RehearsalSource,
+    registration: Mapping[str, Any],
+    *,
+    last_signal: str,
+    target: Path,
+) -> dict[str, dict[str, Any]]:
+    """Walk both delisting variants batch by batch against the source's cross-name tape.
+
+    Whole episodes and events go to ``target`` as each batch finishes. The
+    returned results hold what the blocks read: compact baseline episodes,
+    compact sensitivity primary episodes, primary ``no_next_bar`` events,
+    summed counts and the recovery cap from summed per-session counts. Their
+    episodes are in whole-book order, so the blocks equal a whole-book walk's.
+    """
+    options = walk_options(registration, last_signal)
+    cross = source.cross
+    if cross is None:
+        raise ValueError("the source was prepared without a cross-name tape")
+    views = {
+        BASELINE: cross,
+        SENSITIVITY: cross.with_haircuts(
+            lambda ticker: (source.haircuts.get(ticker) or {}).get(SENSITIVITY)
+        ),
+    }
+    target.mkdir(parents=True, exist_ok=True)
+    files = {variant: _ScratchFiles(target, variant) for variant in views}
+    kept: dict[str, dict[str, Any]] = {
+        variant: {
+            "episodes": [],
+            "events": [],
+            "counts": {},
+            "open": np.zeros(len(cross.calendar), dtype=np.int64),
+            "labelled": np.zeros(len(cross.calendar), dtype=np.int64),
+            "scoring_date": None,
+        }
+        for variant in views
+    }
+    try:
+        for position in range(max(len(source.batches), 1)):
+            specs = source.specs(position) if source.batches else []
+            for variant, view in views.items():
+                result = sbo.walk_book(
+                    with_variant(specs, source.haircuts, variant), options=options, cross=view
+                )
+                files[variant].add(result)
+                row = kept[variant]
+                for episode in result["episodes"]:
+                    if variant == BASELINE or episode.get("column") == COLUMN_PRIMARY:
+                        row["episodes"].append(_compact(episode))
+                row["events"].extend(
+                    {key: event.get(key) for key in ("kind", "column", "ticker", "session")}
+                    for event in result["events"]
+                    if event.get("kind") == "no_next_bar" and event.get("column") == COLUMN_PRIMARY
+                )
+                for key, value in result["counts"].items():
+                    row["counts"][key] = row["counts"].get(key, 0) + int(value)
+                row["open"] += np.asarray(result["recovery_open"], dtype=np.int64)
+                row["labelled"] += np.asarray(result["recovery_labelled"], dtype=np.int64)
+                if row["scoring_date"] not in (None, result["scoring_date"]):
+                    raise ValueError("batches disagree on the scoring date")
+                row["scoring_date"] = result["scoring_date"]
+                del result
+            del specs
+    finally:
+        for handle in files.values():
+            handle.close()
+    order = source.order()
+    out: dict[str, dict[str, Any]] = {}
+    for variant, row in kept.items():
+        row["episodes"].sort(key=lambda episode: order[(episode["market"], episode["ticker"])])
+        cap_days, samples = sbo.recovery_cap(
+            cross.calendar, row["open"].tolist(), row["labelled"].tolist()
+        )
+        out[variant] = {
+            "episodes": row["episodes"],
+            "events": row["events"],
+            "counts": row["counts"],
+            "cap_would_block_days": cap_days,
+            "recovery_share_samples": samples,
+            "scoring_date": row["scoring_date"],
+        }
+    return out
+
+
+def memory_estimate_mb(names: int, sessions: int, batch_size: int) -> int:
+    """Rough peak resident memory of ``develop`` or ``reveal`` for a book of this shape."""
+    cross = names * sessions * MEMORY_PER_CROSS_CELL_BYTES / 2**20
+    batch = min(max(batch_size, 1), max(names, 1))
+    return int(MEMORY_FIXED_MB + cross + MEMORY_PER_NAME_MB * batch)
+
+
+def memory_warning(names: int, sessions: int, batch_size: int) -> str | None:
+    """A warning when psutil reports less available memory than the run needs."""
+    try:
+        import psutil
+    except ImportError:
+        return None
+    available = psutil.virtual_memory().available / 2**20
+    need = memory_estimate_mb(names, sessions, batch_size)
+    if available >= need:
+        return None
+    smaller = 25
+    for size in range(min(batch_size, names) // 25 * 25, 25, -25):
+        if memory_estimate_mb(names, sessions, size) <= available:
+            smaller = size
+            break
+    return (
+        f"warning: about {need} MB is needed with --batch-size {batch_size} but only "
+        f"{int(available)} MB is available. Close other programs or pass a smaller "
+        f"--batch-size (for example {smaller}); results do not depend on it."
+    )
 
 
 def _scratch_dir(scratch: Path | None, build: Path) -> Path:
@@ -877,22 +1052,14 @@ def _scratch_dir(scratch: Path | None, build: Path) -> Path:
     )
 
 
-def write_scratch(
-    directory: Path, run: str, results: Mapping[str, Mapping[str, Any]], inputs: RehearsalInputs
+def write_summary(
+    target: Path, run: str, results: Mapping[str, Mapping[str, Any]], source: RehearsalSource
 ) -> Path:
-    """Per-episode files, outside the repository. They are licensed derived data."""
-    target = Path(directory) / run
-    target.mkdir(parents=True, exist_ok=True)
-    for variant, result in results.items():
-        with gzip.open(target / f"episodes_{variant}.jsonl.gz", "wt", encoding="utf-8") as handle:
-            for episode in result["episodes"]:
-                handle.write(json.dumps(episode, default=str) + "\n")
-        with gzip.open(target / f"events_{variant}.json.gz", "wt", encoding="utf-8") as handle:
-            json.dump(result["events"], handle, default=str)
+    """The run summary beside the per-episode files, outside the repository."""
     summary = {
         "run": run,
-        "counts": inputs.counts,
-        "hl_basis": inputs.hl_basis,
+        "counts": source.counts,
+        "hl_basis": source.hl_basis,
         "walk_counts": {variant: result["counts"] for variant, result in results.items()},
         "cap_would_block_days": {
             variant: result["cap_would_block_days"] for variant, result in results.items()
@@ -900,6 +1067,41 @@ def write_scratch(
     }
     (target / "summary.json").write_text(json.dumps(summary, indent=2, default=str), "utf-8")
     return target
+
+
+def _run(
+    build: Path,
+    mid_build: Path,
+    sharadar_dir: Path,
+    registration: Mapping[str, Any],
+    *,
+    last_signal: str,
+    scratch_dir: Path,
+    run: str,
+    batch_size: int,
+    check: Callable[[RehearsalSource], None] | None = None,
+) -> tuple[RehearsalSource, dict[str, dict[str, Any]], Path]:
+    source = prepare(
+        BuildDir(Path(build).expanduser(), "sp500"),
+        BuildDir(Path(mid_build).expanduser(), "midcap"),
+        Path(sharadar_dir).expanduser(),
+        registration,
+        work_dir=scratch_dir,
+        batch_size=batch_size,
+        cross_options=walk_options(registration, last_signal),
+    )
+    try:
+        if check is not None:
+            check(source)
+        warning = memory_warning(source.names_walked, len(source.calendar), batch_size)
+        if warning:
+            print(warning, file=sys.stderr)
+        target = Path(scratch_dir) / run
+        results = walk_batches(source, registration, last_signal=last_signal, target=target)
+        write_summary(target, run, results, source)
+    finally:
+        source.remove()
+    return source, results, target
 
 
 # --- Store ---------------------------------------------------------------------------------
@@ -937,7 +1139,7 @@ def write_store(path: Path, payload: Mapping[str, Any], tickers: Iterable[str] =
     path.write_text(json.dumps(payload, indent=2, allow_nan=False) + "\n", encoding="utf-8")
 
 
-def _base_store(registration: Mapping[str, Any], inputs: RehearsalInputs) -> dict[str, Any]:
+def _base_store(registration: Mapping[str, Any], inputs: RehearsalSource) -> dict[str, Any]:
     screen_codes = sorted(
         {str(c) for key in inputs.cache_keys.values() if (c := key.get("screen_code"))}
     )
@@ -990,7 +1192,7 @@ def _cuts(registration: Mapping[str, Any], block: str) -> dict[str, Mapping[str,
     }
 
 
-def _delisted(inputs: RehearsalInputs) -> set[str]:
+def _delisted(inputs: RehearsalSource | RehearsalInputs) -> set[str]:
     return set(inputs.haircuts)
 
 
@@ -1000,7 +1202,7 @@ def _scoring(result: Mapping[str, Any]) -> date:
 
 def development_blocks(
     registration: Mapping[str, Any],
-    inputs: RehearsalInputs,
+    inputs: RehearsalSource | RehearsalInputs,
     results: Mapping[str, Mapping[str, Any]],
 ) -> dict[str, Any]:
     fam = family(registration)
@@ -1041,6 +1243,7 @@ def develop(
     scratch: Path | None = None,
     repo_root: Path = REPO_ROOT,
     amendment: str | None = None,
+    batch_size: int = DEFAULT_BATCH_SIZE,
 ) -> dict[str, Any]:
     """Walk development signal sessions and commit the development block."""
     scratch_dir = _scratch_dir(scratch, build)
@@ -1054,19 +1257,17 @@ def develop(
         )
     if previous and previous.get("reveal"):
         raise RehearsalRefused("The confirmation window is revealed; development is sealed.")
-    inputs = build_inputs(
-        BuildDir(Path(build).expanduser(), "sp500"),
-        BuildDir(Path(mid_build).expanduser(), "midcap"),
-        Path(sharadar_dir).expanduser(),
-        registration,
-    )
-    last = _windows(registration)["development"][1]
-    results = {
-        BASELINE: walk(inputs, registration, last_signal=last, variant=BASELINE),
-        SENSITIVITY: walk(inputs, registration, last_signal=last, variant=SENSITIVITY),
-    }
     now = _now()
-    scratch_path = write_scratch(scratch_dir, f"develop-{now.replace(':', '')}", results, inputs)
+    inputs, results, scratch_path = _run(
+        build,
+        mid_build,
+        sharadar_dir,
+        registration,
+        last_signal=_windows(registration)["development"][1],
+        scratch_dir=scratch_dir,
+        run=f"develop-{now.replace(':', '')}",
+        batch_size=batch_size,
+    )
     blocks = development_blocks(registration, inputs, results)
     store = {**_base_store(registration, inputs), **(previous or {})}
     store["input_keys"] = inputs.cache_keys
@@ -1079,7 +1280,7 @@ def develop(
     store["month_series"] = blocks["months"]
     store["run_counts"] = {
         "overlap_excluded_from_sp400": inputs.counts.get("overlap_excluded_from_sp400", 0),
-        "names_walked": len(inputs.specs),
+        "names_walked": inputs.names_walked,
         "chart_not_daily": results[BASELINE]["counts"].get("chart_not_daily", 0),
         "thinned": results[BASELINE]["counts"].get("thinned", 0),
     }
@@ -1106,6 +1307,7 @@ def reveal(
     *,
     scratch: Path | None = None,
     repo_root: Path = REPO_ROOT,
+    batch_size: int = DEFAULT_BATCH_SIZE,
 ) -> dict[str, Any]:
     """The single reveal: confirmation boards, verdicts, and the delisting sensitivity."""
     scratch_dir = _scratch_dir(scratch, build)
@@ -1118,26 +1320,29 @@ def reveal(
         )
     if store.get("reveal"):
         raise RehearsalRefused("The confirmation window was already revealed. There is one reveal.")
-    inputs = build_inputs(
-        BuildDir(Path(build).expanduser(), "sp500"),
-        BuildDir(Path(mid_build).expanduser(), "midcap"),
-        Path(sharadar_dir).expanduser(),
-        registration,
-    )
-    if store.get("input_keys") and store["input_keys"] != inputs.cache_keys:
-        raise RehearsalRefused(
-            "The panels or signals caches changed since the development block. Recompute "
-            "development under a logged amendment before the reveal."
-        )
     windows = _windows(registration)
     fam = family(registration)
     conf = windows["confirmation"]
-    results = {
-        BASELINE: walk(inputs, registration, last_signal=conf[1], variant=BASELINE),
-        SENSITIVITY: walk(inputs, registration, last_signal=conf[1], variant=SENSITIVITY),
-    }
+
+    def _same_inputs(source: RehearsalSource) -> None:
+        if store.get("input_keys") and store["input_keys"] != source.cache_keys:
+            raise RehearsalRefused(
+                "The panels or signals caches changed since the development block. Recompute "
+                "development under a logged amendment before the reveal."
+            )
+
     now = _now()
-    scratch_path = write_scratch(scratch_dir, f"reveal-{now.replace(':', '')}", results, inputs)
+    inputs, results, scratch_path = _run(
+        build,
+        mid_build,
+        sharadar_dir,
+        registration,
+        last_signal=conf[1],
+        scratch_dir=scratch_dir,
+        run=f"reveal-{now.replace(':', '')}",
+        batch_size=batch_size,
+        check=_same_inputs,
+    )
     base = results[BASELINE]
     block = window_block(
         base["episodes"],
@@ -1328,6 +1533,15 @@ def _paths(parser: argparse.ArgumentParser) -> None:
         type=Path,
         help=f"Per-episode output, outside the repo (default: <build>/{SCRATCH_DIRNAME})",
     )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=DEFAULT_BATCH_SIZE,
+        help=(
+            f"Names walked together (default {DEFAULT_BATCH_SIZE}). Smaller uses less memory; "
+            "results do not depend on it."
+        ),
+    )
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -1364,7 +1578,9 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(confirm_deleted(at=args.at, still_present=args.check), indent=2))
             return 0
         run = develop if args.command == "develop" else reveal
-        kwargs: dict[str, Any] = {"scratch": args.scratch}
+        if args.batch_size < 1:
+            parser.error("--batch-size must be at least 1")
+        kwargs: dict[str, Any] = {"scratch": args.scratch, "batch_size": args.batch_size}
         if args.command == "develop":
             kwargs["amendment"] = args.amendment
         out = run(args.build, args.mid_build, args.sharadar_dir, **kwargs)

@@ -20,6 +20,8 @@ from __future__ import annotations
 import dataclasses
 import json
 import math
+import shutil
+import tempfile
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from datetime import date
@@ -31,7 +33,14 @@ import pandas as pd
 
 from value_investor import historical_screen_replay as hsr
 from value_investor import sharadar_replay_adapter as sra
-from value_investor.strategy_book_observe import Download, GateTape, NameSpec, ScreenFact
+from value_investor.strategy_book_observe import (
+    CrossNameTape,
+    Download,
+    GateTape,
+    NameSpec,
+    ScreenFact,
+    WalkOptions,
+)
 from value_investor.strategy_book_rules import VALUE_SET_SIGNALS
 
 SP500 = "sp500"
@@ -210,16 +219,23 @@ class RehearsalInputs:
 
     def with_variant(self, variant: str) -> list[NameSpec]:
         """Specs with the baseline or the sensitivity delisting haircut."""
-        out = []
-        for spec in self.specs:
-            cut = self.haircuts.get(spec.ticker)
-            haircut = None if cut is None else cut[variant]
-            out.append(
-                spec
-                if spec.terminal_haircut == haircut
-                else dataclasses.replace(spec, terminal_haircut=haircut)
-            )
-        return out
+        return with_variant(self.specs, self.haircuts, variant)
+
+
+def with_variant(
+    specs: Iterable[NameSpec], haircuts: Mapping[str, Mapping[str, float]], variant: str
+) -> list[NameSpec]:
+    """``specs`` with the baseline or the sensitivity delisting haircut."""
+    out = []
+    for spec in specs:
+        cut = haircuts.get(spec.ticker)
+        haircut = None if cut is None else cut[variant]
+        out.append(
+            spec
+            if spec.terminal_haircut == haircut
+            else dataclasses.replace(spec, terminal_haircut=haircut)
+        )
+    return out
 
 
 # --- Small helpers -------------------------------------------------------------------------
@@ -304,39 +320,58 @@ def _truthy(frame: pd.DataFrame, columns: list[str]) -> np.ndarray:
     return flags.isin(("true", "1", "1.0")).sum(axis=1).to_numpy()
 
 
-def screen_facts(
-    cache: pd.DataFrame,
-    panel: pd.DataFrame,
-    sectors: Mapping[str, str | None],
-) -> dict[str, list[ScreenFact]]:
-    """Monthly ``ScreenFact`` rows per ticker, with section 12 Q4–Q5 snapshot fields.
+_SCREEN_COLUMNS = ("signal", *_CACHE_FIELDS, "earnings_yield")
 
-    A cache date after a name's first row on which the name has no row is a
-    blank row: the name left the screen, so it cannot enter, and a blank row
-    is a missing observation rather than ``avoid``.
+
+class ScreenTable:
+    """One universe's cache rows merged with the panel fields the snapshot reads.
+
+    ``facts(ticker)`` gives the monthly ``ScreenFact`` rows for one name, so a
+    batched walk builds screen facts for one batch at a time.
     """
-    cache = cache.copy()
-    cache["day"] = _ordinals(cache["as_of"])
-    cache = cache.loc[cache["day"] > 0]
-    cache["ticker"] = cache["ticker"].astype(str)
-    cache["models_passed"] = _truthy(
-        cache, [c for c in cache.columns if c.startswith(hsr.MODEL_PASS_PREFIX)]
-    )
-    keep = ["as_of", "ticker", *[c for c in _PANEL_READ if c in panel.columns]]
-    panel_rows = panel[keep].copy()
-    panel_rows["day"] = _ordinals(panel_rows["as_of"])
-    panel_rows["ticker"] = panel_rows["ticker"].astype(str)
-    panel_rows = panel_rows.drop(columns=["as_of"]).drop_duplicates(["day", "ticker"], keep="last")
-    merged = cache.merge(panel_rows, on=["day", "ticker"], how="left")
-    dates = sorted(int(day) for day in merged["day"].dropna().unique())
-    out: dict[str, list[ScreenFact]] = {}
-    for ticker, rows in merged.sort_values("day").groupby("ticker", sort=True):
+
+    def __init__(
+        self, cache: pd.DataFrame, panel: pd.DataFrame, sectors: Mapping[str, str | None]
+    ) -> None:
+        cache = cache.copy()
+        cache["day"] = _ordinals(cache["as_of"])
+        cache = cache.loc[cache["day"] > 0]
+        cache["ticker"] = cache["ticker"].astype(str)
+        cache["models_passed"] = _truthy(
+            cache, [c for c in cache.columns if c.startswith(hsr.MODEL_PASS_PREFIX)]
+        )
+        cache = cache[
+            ["day", "ticker", "models_passed", *[c for c in _SCREEN_COLUMNS if c in cache.columns]]
+        ]
+        keep = ["as_of", "ticker", *[c for c in _PANEL_READ if c in panel.columns]]
+        panel_rows = panel[keep].copy()
+        panel_rows["day"] = _ordinals(panel_rows["as_of"])
+        panel_rows["ticker"] = panel_rows["ticker"].astype(str)
+        panel_rows = panel_rows.drop(columns=["as_of"]).drop_duplicates(
+            ["day", "ticker"], keep="last"
+        )
+        merged = cache.merge(panel_rows, on=["day", "ticker"], how="left")
+        self.dates = sorted(int(day) for day in merged["day"].dropna().unique())
+        self.frame = merged.sort_values("day").reset_index(drop=True)
+        self.rows = {
+            str(ticker): rows
+            for ticker, rows in self.frame.groupby("ticker", sort=True).indices.items()
+        }
+        self.sectors = sectors
+
+    @property
+    def tickers(self) -> list[str]:
+        return list(self.rows)
+
+    def facts(self, ticker: str) -> list[ScreenFact]:
+        """Blank rows after a name's first cache date are missing observations, not ``avoid``."""
+        rows = self.frame.iloc[self.rows[ticker]]
         by_day = {int(row["day"]): row for row in rows.to_dict("records")}
         first = min(by_day)
-        sector = sectors.get(str(ticker))
+        sector = self.sectors.get(ticker)
         facts: list[ScreenFact] = []
         streak = 0
-        for day in dates:
+        for day in self.dates:
             if day < first:
                 continue
             row = by_day.get(day)
@@ -358,8 +393,22 @@ def screen_facts(
                     fields=_snapshot_fields(row, streak) if buy else {},
                 )
             )
-        out[str(ticker)] = facts
-    return out
+        return facts
+
+
+def screen_facts(
+    cache: pd.DataFrame,
+    panel: pd.DataFrame,
+    sectors: Mapping[str, str | None],
+) -> dict[str, list[ScreenFact]]:
+    """Monthly ``ScreenFact`` rows per ticker, with section 12 Q4–Q5 snapshot fields.
+
+    A cache date after a name's first row on which the name has no row is a
+    blank row: the name left the screen, so it cannot enter, and a blank row
+    is a missing observation rather than ``avoid``.
+    """
+    table = ScreenTable(cache, panel, sectors)
+    return {ticker: table.facts(ticker) for ticker in table.tickers}
 
 
 def _snapshot_fields(row: Mapping[str, Any], streak: int) -> dict[str, Any]:
@@ -600,37 +649,42 @@ def sector_tapes(
     by_sector: dict[str, list[int]] = {}
     for ticker, slot in column.items():
         by_sector.setdefault(str(sectors[ticker]), []).append(slot)
-    out: dict[str, SectorTape] = {}
-    for label, slots in by_sector.items():
-        member = member_all[:, slots]
-        below = below_all[:, slots]
-        trend = trend_all[:, slots]
-        has_sma = member & (below >= 0)
-        has_trend = member & np.isfinite(trend)
-        members = member.sum(axis=1)
-        breadth_n = has_sma.sum(axis=1)
-        trend_n = has_trend.sum(axis=1)
-        below_n = (has_sma & (below == 1)).sum(axis=1)
-        trend_sum = np.where(has_trend, trend, 0.0).sum(axis=1, dtype=np.float64)
-        with np.errstate(divide="ignore", invalid="ignore"):
-            share = np.where(breadth_n > 0, below_n / breadth_n, np.nan)
-            mean = np.where(trend_n > 0, trend_sum / trend_n, np.nan)
-            breadth_ok = (breadth_n >= rules.min_members) & (breadth_n >= rules.min_share * members)
-            trend_ok = (trend_n >= rules.min_members) & (trend_n >= rules.min_share * members)
-        covered = breadth_ok & trend_ok & (members > 0)
-        trigger = (share >= rules.breadth_headwind) & (mean < rules.trend_headwind)
-        codes = np.full(sessions, _CODE["insufficient_data"], dtype=np.int8)
-        codes[covered & trigger] = _CODE["headwind"]
-        codes[covered & ~trigger] = _CODE["sound"]
-        out[label] = SectorTape(
-            codes=codes,
-            breadth_share=share,
-            breadth_members=breadth_n,
-            trend_mean=mean,
-            trend_members=trend_n,
-            members=members,
-        )
-    return out
+    return {
+        label: _sector_tape(member_all[:, slots], below_all[:, slots], trend_all[:, slots], rules)
+        for label, slots in by_sector.items()
+    }
+
+
+def _sector_tape(
+    member: np.ndarray, below: np.ndarray, trend: np.ndarray, rules: SectorRules
+) -> SectorTape:
+    """One sector's verdicts from (session x member) membership, below-SMA and trend flags."""
+    sessions = member.shape[0]
+    has_sma = member & (below >= 0)
+    has_trend = member & np.isfinite(trend)
+    members = member.sum(axis=1)
+    breadth_n = has_sma.sum(axis=1)
+    trend_n = has_trend.sum(axis=1)
+    below_n = (has_sma & (below == 1)).sum(axis=1)
+    trend_sum = np.where(has_trend, trend, 0.0).sum(axis=1, dtype=np.float64)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        share = np.where(breadth_n > 0, below_n / breadth_n, np.nan)
+        mean = np.where(trend_n > 0, trend_sum / trend_n, np.nan)
+        breadth_ok = (breadth_n >= rules.min_members) & (breadth_n >= rules.min_share * members)
+        trend_ok = (trend_n >= rules.min_members) & (trend_n >= rules.min_share * members)
+    covered = breadth_ok & trend_ok & (members > 0)
+    trigger = (share >= rules.breadth_headwind) & (mean < rules.trend_headwind)
+    codes = np.full(sessions, _CODE["insufficient_data"], dtype=np.int8)
+    codes[covered & trigger] = _CODE["headwind"]
+    codes[covered & ~trigger] = _CODE["sound"]
+    return SectorTape(
+        codes=codes,
+        breadth_share=share,
+        breadth_members=breadth_n,
+        trend_mean=mean,
+        trend_members=trend_n,
+        members=members,
+    )
 
 
 # --- Part 2: the decline gate ---------------------------------------------------------------
@@ -918,13 +972,304 @@ def delisting_haircuts(
     return out
 
 
-def build_inputs(
+# --- Batched source -------------------------------------------------------------------------
+
+DEFAULT_BATCH_SIZE = 400
+TAPE_SPLIT_PREFIX = "_tapes-"
+_TAPE_ROW = np.dtype(
+    [("ticker", "<i4"), ("day", "<i4"), ("close", "<f8"), ("high", "<f8"), ("low", "<f8")]
+)
+_DAILY_CHUNK_ROWS = 1_000_000
+_MEMBERSHIP_CHUNK = 256
+
+
+class TapeSplit:
+    """Both builds' daily bars split by ticker batch into binary files outside the repo.
+
+    One streaming pass per ``daily.csv.gz``. As in ``load_tapes``, the first file
+    with a valid bar for a ticker wins and later duplicate dates win within it.
+    ``load(bucket)`` returns one batch's downloads.
+    """
+
+    def __init__(self, directory: Path, tickers: list[str], batch_size: int, hl_basis: str):
+        self.directory = Path(directory)
+        self.tickers = list(tickers)
+        self.code = {ticker: index for index, ticker in enumerate(self.tickers)}
+        self.batch_size = max(1, int(batch_size))
+        self.buckets = -(-len(self.tickers) // self.batch_size)
+        self.hl_basis = hl_basis
+        self.present = np.zeros(len(self.tickers), dtype=bool)
+        self.high_low = np.zeros(len(self.tickers), dtype=bool)
+        self.days: set[int] = set()
+        self.rows = 0
+
+    def bucket_of(self, ticker: str) -> int:
+        return self.code[ticker] // self.batch_size
+
+    def _path(self, bucket: int) -> Path:
+        return self.directory / f"bucket-{bucket:05d}.bin"
+
+    def split(self, daily_paths: Iterable[Path], first_day: int) -> None:
+        self.directory.mkdir(parents=True, exist_ok=True)
+        for path in daily_paths:
+            found = np.zeros(len(self.tickers), dtype=bool)
+            for chunk in pd.read_csv(
+                path,
+                usecols=lambda c: c in {"date", "ticker", "high", "low", "close"},
+                dtype={"ticker": str},
+                chunksize=_DAILY_CHUNK_ROWS,
+            ):
+                high_low = "high" in chunk.columns and "low" in chunk.columns
+                code = chunk["ticker"].map(self.code).to_numpy(dtype=float)
+                close = pd.to_numeric(chunk["close"], errors="coerce").to_numpy(dtype=float)
+                day = _ordinals(chunk["date"])
+                keep = ~np.isnan(code) & ~np.isnan(close) & (day > 0)
+                code = code[keep].astype(np.int32)
+                fresh = ~self.present[code]
+                if not fresh.all():
+                    keep[np.flatnonzero(keep)[~fresh]] = False
+                    code = code[fresh]
+                if not len(code):
+                    continue
+                rows = np.empty(len(code), dtype=_TAPE_ROW)
+                rows["ticker"] = code
+                rows["day"] = day[keep]
+                rows["close"] = close[keep]
+                for column in ("high", "low"):
+                    rows[column] = (
+                        pd.to_numeric(chunk[column], errors="coerce").to_numpy(dtype=float)[keep]
+                        if high_low
+                        else np.nan
+                    )
+                found[code] = True
+                self.high_low[code] = high_low
+                self.days.update(np.unique(rows["day"][rows["day"] >= first_day]).tolist())
+                self.rows += len(rows)
+                bucket = code // self.batch_size
+                order = np.argsort(bucket, kind="stable")
+                rows, bucket = rows[order], bucket[order]
+                cuts = np.flatnonzero(np.diff(bucket)) + 1
+                for part in np.split(rows, cuts):
+                    with open(self._path(int(part["ticker"][0]) // self.batch_size), "ab") as out:
+                        out.write(part.tobytes())
+            self.present |= found
+
+    def present_tickers(self) -> set[str]:
+        return {self.tickers[index] for index in np.flatnonzero(self.present)}
+
+    def load(self, bucket: int) -> dict[str, Download]:
+        path = self._path(bucket)
+        if not path.exists():
+            return {}
+        rows = np.fromfile(path, dtype=_TAPE_ROW)
+        rows = rows[np.lexsort((np.arange(len(rows)), rows["day"], rows["ticker"]))]
+        repeat = (rows["ticker"][1:] == rows["ticker"][:-1]) & (rows["day"][1:] == rows["day"][:-1])
+        rows = rows[np.concatenate((~repeat, [True]))]
+        out: dict[str, Download] = {}
+        cuts = np.flatnonzero(np.diff(rows["ticker"])) + 1
+        for part in np.split(rows, cuts):
+            if not len(part):
+                continue
+            code = int(part["ticker"][0])
+            sessions = [_day(int(value)) for value in part["day"]]
+            use_hl = self.hl_basis == HL_HIGH_LOW and bool(self.high_low[code])
+            out[self.tickers[code]] = Download(
+                as_of=sessions[-1],
+                sessions=sessions,
+                closes=part["close"].tolist(),
+                highs=part["high"].tolist() if use_hl else None,
+                lows=part["low"].tolist() if use_hl else None,
+            )
+        return out
+
+    def remove(self) -> None:
+        shutil.rmtree(self.directory, ignore_errors=True)
+
+
+def _sp500_matrix(
+    sp500: pd.DataFrame, calendar: list[date], column: Mapping[str, int]
+) -> np.ndarray:
+    """(session x ticker) ``sp500`` membership from ``membership_on``."""
+    out = np.zeros((len(calendar), len(column)), dtype=bool)
+    for start in range(0, len(calendar), _MEMBERSHIP_CHUNK):
+        stamps = [pd.Timestamp(day) for day in calendar[start : start + _MEMBERSHIP_CHUNK]]
+        members = sra.membership_on(sp500, stamps)
+        for offset, stamp in enumerate(stamps):
+            slots = [column[str(t)] for t in members[stamp.normalize()] if str(t) in column]
+            out[start + offset, slots] = True
+    return out
+
+
+def _sp400_matrix(
+    month_sets: Mapping[date, set[str]],
+    calendar: list[date],
+    sp500: np.ndarray,
+    column: Mapping[str, int],
+) -> tuple[np.ndarray, int]:
+    """Cap-rank set of the month-end on or before each session, minus its ``sp500`` members."""
+    ends = sorted(month_sets)
+    slots = {end: [column[t] for t in month_sets[end] if t in column] for end in ends}
+    out = np.zeros_like(sp500)
+    overlap = 0
+    position = -1
+    for index, day in enumerate(calendar):
+        while position + 1 < len(ends) and ends[position + 1] <= day:
+            position += 1
+        if position < 0:
+            continue
+        row = out[index]
+        row[slots[ends[position]]] = True
+        overlap += int(np.count_nonzero(row & sp500[index]))
+        row &= ~sp500[index]
+    return out, overlap
+
+
+def _matrix_spans(
+    matrix: np.ndarray, calendar: list[date], tickers: list[str]
+) -> dict[str, list[tuple[date, date]]]:
+    out: dict[str, list[tuple[date, date]]] = {}
+    for slot in np.flatnonzero(matrix.any(axis=0)):
+        edges = np.diff(np.concatenate(([0], matrix[:, slot].astype(np.int8), [0])))
+        starts = np.flatnonzero(edges == 1)
+        stops = np.flatnonzero(edges == -1) - 1
+        out[tickers[slot]] = [
+            (calendar[a], calendar[b]) for a, b in zip(starts.tolist(), stops.tolist(), strict=True)
+        ]
+    return out
+
+
+def _universe_sector_tapes(
+    matrix: np.ndarray,
+    tickers: list[str],
+    flag_column: Mapping[str, int],
+    below_all: np.ndarray,
+    trend_all: np.ndarray,
+    sectors: Mapping[str, str | None],
+    rules: SectorRules,
+) -> dict[str, SectorTape]:
+    by_sector: dict[str, tuple[list[int], list[int]]] = {}
+    for slot in np.flatnonzero(matrix.any(axis=0)).tolist():
+        ticker = tickers[slot]
+        if not sectors.get(ticker):
+            continue
+        member_slots, flag_slots = by_sector.setdefault(str(sectors[ticker]), ([], []))
+        member_slots.append(slot)
+        flag_slots.append(flag_column[ticker])
+    return {
+        label: _sector_tape(matrix[:, a], below_all[:, b], trend_all[:, b], rules)
+        for label, (a, b) in by_sector.items()
+    }
+
+
+@dataclass
+class RehearsalSource:
+    """The rehearsal's inputs held compactly, with walker specs built one batch at a time.
+
+    Whole-book tables stay in memory: screen rows, universe spans, sector
+    verdicts, statement rows and (when built) the ``CrossNameTape``. Daily bars
+    stay in the tape split on disk until a batch's specs are built. ``remove``
+    deletes the split.
+    """
+
+    hl_basis: str
+    cache_keys: dict[str, dict[str, Any]]
+    counts: dict[str, int]
+    haircuts: dict[str, dict[str, float]]
+    tickers: set[str]
+    calendar: list[date]
+    batches: list[tuple[int, list[str]]]
+    split: TapeSplit
+    screens: dict[str, ScreenTable]
+    spans: dict[str, dict[str, list[tuple[date, date]]]]
+    sectors: Mapping[str, str | None]
+    first_signal: date
+    decline_rules: DeclineRules
+    cross: CrossNameTape | None = None
+    sector_by_universe: dict[str, dict[str, SectorTape]] = field(default_factory=dict)
+    statements: pd.DataFrame | None = None
+    statement_rows: dict[str, np.ndarray] = field(default_factory=dict)
+
+    @property
+    def names_walked(self) -> int:
+        return self.counts["names_walked_sp500"] + self.counts["names_walked_sp400"]
+
+    def order(self) -> dict[tuple[str, str], int]:
+        """Position of each (market, ticker) in the whole-book spec list of ``build_inputs``."""
+        walked = sorted(ticker for _bucket, tickers in self.batches for ticker in tickers)
+        keys = [
+            (market, ticker)
+            for market in (SP500, SP400)
+            for ticker in walked
+            if ticker in self.screens[market].rows
+        ]
+        return {key: index for index, key in enumerate(keys)}
+
+    def specs(self, position: int, *, gates: bool = True) -> list[NameSpec]:
+        bucket, tickers = self.batches[position]
+        return self._specs(tickers, self.split.load(bucket), gates=gates)
+
+    def _specs(
+        self, tickers: list[str], downloads: Mapping[str, Download], *, gates: bool
+    ) -> list[NameSpec]:
+        calendar_ord = np.fromiter((day.toordinal() for day in self.calendar), dtype=np.int64)
+        empty = None if self.statements is None else self.statements.iloc[0:0]
+        out: list[NameSpec] = []
+        for market in (SP500, SP400):
+            table = self.screens[market]
+            for ticker in tickers:
+                download = downloads.get(ticker)
+                if ticker not in table.rows or download is None:
+                    continue
+                label = self.sectors.get(ticker)
+                cut = self.haircuts.get(ticker)
+                tape: GateTape | list = []
+                if gates:
+                    sessions = [day for day in download.sessions if day >= self.first_signal]
+                    ords = np.fromiter((day.toordinal() for day in sessions), dtype=np.int64)
+                    rows = self.statement_rows.get(ticker)
+                    statements = empty if rows is None else self.statements.iloc[rows]
+                    tape = gate_tape(
+                        sessions,
+                        decline_codes(statements, ords, self.decline_rules),
+                        label,
+                        self.sector_by_universe[market].get(label) if label else None,
+                        np.searchsorted(calendar_ord, ords),
+                    )
+                out.append(
+                    NameSpec(
+                        market=market,
+                        ticker=ticker,
+                        downloads=[download],
+                        screens=table.facts(ticker),
+                        gates=tape,
+                        universe=self.spans[market].get(ticker, []),
+                        book_key=ticker,
+                        terminal_haircut=None if cut is None else cut["baseline"],
+                    )
+                )
+        return out
+
+    def remove(self) -> None:
+        self.split.remove()
+
+
+def prepare(
     sp500_build: BuildDir,
     mid_build: BuildDir,
     sharadar_dir: Path,
     registration: Mapping[str, Any],
-) -> RehearsalInputs:
-    """Read every licensed input and return the walker specs (both universes, one book)."""
+    *,
+    work_dir: Path,
+    batch_size: int = DEFAULT_BATCH_SIZE,
+    cross_options: WalkOptions | None = None,
+) -> RehearsalSource:
+    """Read every licensed input once, compactly; daily bars go to a tape split in ``work_dir``.
+
+    With ``cross_options`` the source also carries the whole book's
+    ``CrossNameTape`` for those walk options, so batches can be walked alone.
+    Batches group tickers, not universes: a ticker's ``sp500`` and ``sp400``
+    specs share a book key and must be walked together.
+    """
     first_signal = date.fromisoformat(registration["windows"]["development"]["first_signal"])
     sp500_cache, sp500_panel, sp500_key = checked_cache(sp500_build)
     mid_cache, mid_panel, mid_key = checked_cache(mid_build)
@@ -937,99 +1282,149 @@ def build_inputs(
         str(ticker): (str(label).strip() or None) if isinstance(label, str) else None
         for ticker, label in tickers.get("sector", pd.Series(dtype=str)).items()
     }
-
-    sp500_screens = screen_facts(sp500_cache, sp500_panel, sectors)
-    mid_screens = screen_facts(mid_cache, mid_panel, sectors)
-    del sp500_panel, mid_panel
-    mid_month_ends = sorted(
-        {_day(int(day)) for day in _ordinals(mid_cache["as_of"]).tolist() if day > 0}
-    )
+    screens = {
+        SP500: ScreenTable(sp500_cache, sp500_panel, sectors),
+        SP400: ScreenTable(mid_cache, mid_panel, sectors),
+    }
+    del sp500_cache, sp500_panel, mid_cache, mid_panel
     universe_rule = registration["universes"][SP400]
     month_sets = cap_rank_month_sets(
         files,
         tickers,
-        mid_month_ends,
+        [_day(day) for day in screens[SP400].dates],
         rank_from=int(universe_rule["rank_from"]),
         rank_to=int(universe_rule["rank_to"]),
     )
-    wanted = set(sp500_screens) | set(mid_screens) | set().union(*month_sets.values())
-    tapes = load_tapes([sp500_build.daily, mid_build.daily], wanted, hl_basis=hl_basis)
-    calendar = sorted(
-        {day for download in tapes.values() for day in download.sessions if day >= first_signal}
+    screened = set(screens[SP500].rows) | set(screens[SP400].rows)
+    wanted = sorted(screened | set().union(*month_sets.values()))
+    work = Path(work_dir).expanduser()
+    work.mkdir(parents=True, exist_ok=True)
+    split = TapeSplit(
+        Path(tempfile.mkdtemp(prefix=TAPE_SPLIT_PREFIX, dir=work)), wanted, batch_size, hl_basis
     )
-    sp500_days = sp500_members_by_day(sp500_table, calendar)
-    sp400_days, overlap = sp400_members_by_day(month_sets, calendar, sp500_days)
-    spans = {
-        SP500: spans_from_days(calendar, sp500_days),
-        SP400: spans_from_days(calendar, sp400_days),
-    }
-    sector_rules = SectorRules.from_registration(registration)
-    sector_by_universe = {
-        SP500: sector_tapes(calendar, sp500_days, sectors, tapes, sector_rules),
-        SP400: sector_tapes(calendar, sp400_days, sectors, tapes, sector_rules),
-    }
-    without_tape = sum(
-        1 for members in sp500_days for ticker in members if ticker not in tapes
-    ) + sum(1 for members in sp400_days for ticker in members if ticker not in tapes)
-    del sp500_days, sp400_days
+    try:
+        split.split([sp500_build.daily, mid_build.daily], first_signal.toordinal())
+        calendar = [_day(day) for day in sorted(split.days)]
+        calendar_ord = np.fromiter((day.toordinal() for day in calendar), dtype=np.int64)
+        present = split.present_tickers()
+        space = sorted({str(t) for t in sp500_table.get("ticker", [])} | set(wanted))
+        column = {ticker: index for index, ticker in enumerate(space)}
+        sp500_matrix = _sp500_matrix(sp500_table, calendar, column)
+        sp400_matrix, overlap = _sp400_matrix(month_sets, calendar, sp500_matrix, column)
+        spans = {
+            SP500: _matrix_spans(sp500_matrix, calendar, space),
+            SP400: _matrix_spans(sp400_matrix, calendar, space),
+        }
+        absent = np.array([ticker not in present for ticker in space], dtype=bool)
+        without_tape = int(
+            np.count_nonzero(sp500_matrix[:, absent]) + np.count_nonzero(sp400_matrix[:, absent])
+        )
+        ever = sp500_matrix.any(axis=0) | sp400_matrix.any(axis=0)
+        flagged = [space[slot] for slot in np.flatnonzero(ever) if sectors.get(space[slot])]
+        flag_column = {ticker: index for index, ticker in enumerate(flagged)}
+        below_all = np.full((len(calendar), len(flagged)), -1, dtype=np.int8)
+        trend_all = np.full((len(calendar), len(flagged)), np.nan, dtype=np.float32)
 
-    walked = sorted((set(sp500_screens) | set(mid_screens)) & set(tapes))
-    statements = load_statements(files.fundamentals, set(walked))
-    grouped = {str(t): rows for t, rows in statements.groupby("ticker", sort=False)}
-    empty = statements.iloc[0:0]
-    decline_rules = DeclineRules.from_registration(registration)
-    calendar_ord = np.fromiter((day.toordinal() for day in calendar), dtype=np.int64)
-    prices = registration.get("prices") or {}
-    haircuts = delisting_haircuts(
-        tickers,
-        actions,
-        walked,
-        baseline=float(prices.get("delisting_baseline_haircut", 0.0)),
-        sensitivity_non_merger=float(prices.get("delisting_sensitivity_haircut_non_merger", -0.3)),
-    )
-    specs: list[NameSpec] = []
-    for market, screens_by_ticker in ((SP500, sp500_screens), (SP400, mid_screens)):
-        for ticker in sorted(screens_by_ticker):
-            download = tapes.get(ticker)
-            if download is None:
-                continue
-            sessions = [day for day in download.sessions if day >= first_signal]
-            ords = np.fromiter((day.toordinal() for day in sessions), dtype=np.int64)
-            index = np.searchsorted(calendar_ord, ords)
-            decline = decline_codes(grouped.get(ticker, empty), ords, decline_rules)
-            label = sectors.get(ticker)
-            cut = haircuts.get(ticker)
-            specs.append(
-                NameSpec(
-                    market=market,
-                    ticker=ticker,
-                    downloads=[download],
-                    screens=screens_by_ticker[ticker],
-                    gates=gate_tape(
-                        sessions,
-                        decline,
-                        label,
-                        sector_by_universe[market].get(label) if label else None,
-                        index,
-                    ),
-                    universe=spans[market].get(ticker, []),
-                    book_key=ticker,
-                    terminal_haircut=None if cut is None else cut["baseline"],
-                )
+        walked = sorted(screened & present)
+        grouped: dict[int, list[str]] = {}
+        for ticker in walked:
+            grouped.setdefault(split.bucket_of(ticker), []).append(ticker)
+        prices = registration.get("prices") or {}
+        source = RehearsalSource(
+            hl_basis=hl_basis,
+            cache_keys={SP500: sp500_key, SP400: mid_key},
+            counts={
+                "names_walked_sp500": sum(1 for t in walked if t in screens[SP500].rows),
+                "names_walked_sp400": sum(1 for t in walked if t in screens[SP400].rows),
+                "overlap_excluded_from_sp400": overlap,
+                "member_sessions_without_tape": without_tape,
+                "screened_names_without_tape": len(screened - present),
+            },
+            haircuts=delisting_haircuts(
+                tickers,
+                actions,
+                walked,
+                baseline=float(prices.get("delisting_baseline_haircut", 0.0)),
+                sensitivity_non_merger=float(
+                    prices.get("delisting_sensitivity_haircut_non_merger", -0.3)
+                ),
+            ),
+            tickers=present | screened,
+            calendar=calendar,
+            batches=sorted(grouped.items()),
+            split=split,
+            screens=screens,
+            spans=spans,
+            sectors=sectors,
+            first_signal=first_signal,
+            decline_rules=DeclineRules.from_registration(registration),
+            cross=None if cross_options is None else CrossNameTape(cross_options),
+        )
+        sector_rules = SectorRules.from_registration(registration)
+        for bucket in range(split.buckets):
+            downloads = split.load(bucket)
+            for ticker, download in downloads.items():
+                slot = flag_column.get(ticker)
+                if slot is None or not download.sessions:
+                    continue
+                positions, low, ret = _own_bar_flags(download, calendar_ord, sector_rules)
+                below_all[positions, slot] = low
+                trend_all[positions, slot] = ret
+            if source.cross is not None and bucket in grouped:
+                source.cross.add(source._specs(grouped[bucket], downloads, gates=False))
+            del downloads
+        source.sector_by_universe = {
+            market: _universe_sector_tapes(
+                matrix, space, flag_column, below_all, trend_all, sectors, sector_rules
             )
+            for market, matrix in ((SP500, sp500_matrix), (SP400, sp400_matrix))
+        }
+        del sp500_matrix, sp400_matrix, below_all, trend_all
+        statements = load_statements(files.fundamentals, set(walked))
+        for name in ("ticker", "dimension"):
+            statements[name] = statements[name].astype(str).astype("category")
+        source.statements = statements
+        source.statement_rows = {
+            str(ticker): rows
+            for ticker, rows in statements.groupby(
+                "ticker", sort=False, observed=True
+            ).indices.items()
+        }
+        if source.cross is not None:
+            source.cross.finish()
+        return source
+    except BaseException:
+        split.remove()
+        raise
+
+
+def build_inputs(
+    sp500_build: BuildDir,
+    mid_build: BuildDir,
+    sharadar_dir: Path,
+    registration: Mapping[str, Any],
+) -> RehearsalInputs:
+    """Read every licensed input and return the walker specs (both universes, one book)."""
+    with tempfile.TemporaryDirectory(prefix="rehearsal-") as work:
+        source = prepare(
+            sp500_build,
+            mid_build,
+            sharadar_dir,
+            registration,
+            work_dir=Path(work),
+            batch_size=1 << 30,
+        )
+        try:
+            specs = [spec for index in range(len(source.batches)) for spec in source.specs(index)]
+        finally:
+            source.remove()
+    order = source.order()
+    specs.sort(key=lambda spec: order[(spec.market, spec.ticker)])
     return RehearsalInputs(
         specs=specs,
-        haircuts=haircuts,
-        tickers=set(tapes) | set(sp500_screens) | set(mid_screens),
-        hl_basis=hl_basis,
-        cache_keys={SP500: sp500_key, SP400: mid_key},
-        counts={
-            "names_walked_sp500": sum(1 for spec in specs if spec.market == SP500),
-            "names_walked_sp400": sum(1 for spec in specs if spec.market == SP400),
-            "overlap_excluded_from_sp400": overlap,
-            "member_sessions_without_tape": without_tape,
-            "screened_names_without_tape": len(
-                (set(sp500_screens) | set(mid_screens)) - set(tapes)
-            ),
-        },
+        haircuts=source.haircuts,
+        tickers=source.tickers,
+        hl_basis=source.hl_basis,
+        cache_keys=source.cache_keys,
+        counts=source.counts,
     )
