@@ -581,11 +581,11 @@
         },
         {
           "id": "adhoc-strategy-book-memo-spend",
-          "title": "Turn on strategy-book signal-day memo spend at signature",
-          "summary": "When signing the strategy-book registration, create docs/data/strategy_book_registration.json with a signature (signed_at, signed true, or signature) and set spend_enabled true only if weekly_ops should pay for signal-day and review-date memos. Until that file is signed and the flag is true, the memo job logs dry_run at $0.40 and calls no model. The job never turns spend on by itself.",
+          "title": "Flip strategy-book forward go-live and memo spend after the Phase 1 gate review",
+          "summary": "After the Phase 1 gate review, set forward_live true on docs/data/strategy_book_registration.json and set spend_enabled true only if weekly_ops should pay for signal-day and review-date memos. Phase 1 governs go-live, not the signature. Until forward_live is true the forward job dry-runs and writes no scored store. Until spend_enabled is true the memo job logs dry_run at $0.40 and calls no model. Neither job flips its own flag.",
           "automated": false,
-          "doc_path": "docs/ops/strategy-book-memo-job.md",
-          "doc_anchor": "spend-gate"
+          "doc_path": "docs/ops/strategy-book-observe.md",
+          "doc_anchor": "go-live"
         },
         {
           "id": "adhoc-strategy-phase-gate",

@@ -2664,6 +2664,43 @@ def check_strategy_book_memo_job(
     ]
 
 
+def check_strategy_book_observe(
+    *,
+    repo_root: Path | None = None,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Read the forward status. Does not walk, download, or write a score.
+
+    Observe-only (``auto_fixable=False``). The weekday job at 21:30 UTC owns
+    the refresh. See docs/ops/strategy-book-observe.md.
+    """
+    from value_investor.strategy_book_forward import TITLE_FAILED, findings_from_state
+
+    moment = now or datetime.now(UTC)
+    try:
+        rows = findings_from_state(repo_root=repo_root, now=moment)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=TITLE_FAILED,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or TITLE_FAILED),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+        for finding in rows
+    ]
+
+
 def check_n206_plain_ey_observe(
     *,
     output_dir: Path | None = None,
@@ -4883,6 +4920,7 @@ def collect_ops_findings(
     findings.extend(check_operating_decline_gate())
     findings.extend(check_sector_headwind_gate())
     findings.extend(check_strategy_book_memo_job())
+    findings.extend(check_strategy_book_observe())
     findings.extend(check_n200_tech_timing_observe())
     findings.extend(check_n201_value_mom_observe())
     findings.extend(check_n210_ai_judgment_observe())

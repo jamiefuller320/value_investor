@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-05T20:07:22+00:00",
+  "updated_at": "2026-11-05T23:00:28+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16652,6 +16652,21 @@
       "added_at": "2026-11-05T19:42:56+00:00",
       "updated_at": "2026-11-05T20:07:22+00:00",
       "status_note": "Hunter-fix still commits an allowlisted PR diff and does not push docs/data/agent_usage/ shards to main, so hunter_fix and hunter_verify runs can miss the weekly token ledger."
+    },
+    {
+      "id": "L676",
+      "category": "later",
+      "section": "ops",
+      "title": "Re-hash strategy-book gate log at the commit that contains the line",
+      "summary": "The daily check compares each stored hash to the commit the run started from. A path that commit does not contain stays pending_commit, because the close refresh writes those bytes earlier in the same run. A later check can re-hash the blob in the commit that first contains the log line.",
+      "revisit_when": "The first live strategy-book gate-log commit is on main.",
+      "tags": [
+        "strategy-book",
+        "provenance"
+      ],
+      "status": "open",
+      "source": "strategy-book forward package 2",
+      "added_at": "2026-11-05T23:00:28+00:00"
     }
   ],
   "fragments": [
