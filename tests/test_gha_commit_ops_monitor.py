@@ -283,6 +283,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "strategy_book_gate_log.jsonl" not in optional_line
     assert "strategy_book_closes.json" not in optional_line
     assert "strategy_book_forward_status.json" not in optional_line
+    assert "strategy_book_us_rehearsal.json" not in optional_line
     assert "agent_usage_log.jsonl" not in text
     assert "agent_usage_weekly.json" not in optional_line
     assert "n206_plain_ey_observe.json" in optional_line
@@ -331,3 +332,4 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "strategy_book_gate_log.jsonl" not in owned_line
     assert "strategy_book_closes.json" not in owned_line
     assert "strategy_book_forward_status.json" not in owned_line
+    assert "strategy_book_us_rehearsal.json" not in owned_line

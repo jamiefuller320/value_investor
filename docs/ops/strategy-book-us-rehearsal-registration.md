@@ -407,7 +407,7 @@ Do this download even if the parent is still unsigned and the walker is not merg
 
 Anything that reads the local files can run after 2026-11-09. The API is not required once the zips are on disk. If the walker is still missing when the 30 days end, the files are deleted anyway and this registration is not scored.
 
-The order is **development, review, reveal**.
+The order is **development, review, reveal**. Copy-paste commands for these steps are in the [owner runbook](strategy-book-us-rehearsal-runbook.md).
 
 | Step | What happens |
 |---|---|
