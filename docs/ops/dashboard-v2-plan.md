@@ -243,7 +243,7 @@ Both are in the [human tasks checklist](human-tasks-checklist.md#ad-hoc-when-tri
 | WP0 | Merged 2026-11-06 | #1313 | Supervisor; Composer 2.5 and Grok 4.7 inventories |
 | Plan approval | Owner approved 2026-11-06 | — | Owner |
 | WP1 | Built and browser-checked; supervisor fixed subfolder paths and date display | `cursor/dashboard-v2-shell-4306` | Composer 2.5 |
-| WP4 | Building (PR #1311 merged) | `cursor/dashboard-v2-shell-4306` | Grok 4.7 (high) |
+| WP4 | Built: forward status carries a per-name `candidates` roster (443 rows; sealed screen unchanged). Queued N257 (excluded names, version review) and L684 (snapshot signals gap) | `cursor/dashboard-v2-shell-4306` | Grok 4.7 (high) |
 | WP2, WP3, WP5 | Waiting on WP1 | — | — |
 | WP6 | Waiting on step 2.4 | — | — |
 | WP7 | Waiting on the cutover decision | — | — |
