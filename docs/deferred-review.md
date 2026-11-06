@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-05T21:15:30+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-06T06:17:15+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -721,6 +721,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | L666 | **Plain-English owner brief and codename glossary** | AGENTS.md, PROJECT_OBJECTIVE.md and docs/ops carry ~241 distinct codenames (L322, F9-B, N200, strand A, epoch-0, B3, Package L...) plus 910 deferred IDs; README facts are stale (20 vs 18 vs 22 models, Monday vs Sunday). Add one plain-English brief of goals, current gates and stage status, plus a generated glossary. | Next PROJECT_OBJECTIVE or README revision |
 | L677 | **Re-arm the Sharadar deletion warning on a later licensed month** | ftse-historical-replay confirm-deleted already stamped deleted_at for the October 2026 screen-replay month, so the ops-monitor deletion finding does not arm again when the owner downloads a second month for the strategy-book US rehearsal. The human checklist carries that month until the finding keys off a new first_used_at. | The owner records a second Sharadar download for strategy-book-us-rehearsal-v0 (access through 2026-11-09). |
 | L678 | **Re-hash strategy-book gate log at the commit that contains the line** | The daily check compares each stored hash to the commit the run started from. A path that commit does not contain stays pending_commit, because the close refresh writes those bytes earlier in the same run. A later check can re-hash the blob in the commit that first contains the log line. | The first live strategy-book gate-log commit is on main. |
+| L679 | **Windows-safe paths for CON/PRN ticker artifacts** | docs/data/charts/CON.DE.json, PRN.AX.json, PRN.L.json and library research/PRN.AX use Windows reserved device names, so a plain clone fails on Windows (owner hit it 2026-11-06 for the US rehearsal). Owner machine uses a sparse checkout excluding bulk data dirs. A path-escaping rule for reserved names would make full clones work. | The owner needs a full Windows checkout (dashboard dev or bulk data work on the laptop). |
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-05T21:15:30+00:00",
+  "updated_at": "2026-11-06T06:17:15+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16701,6 +16701,23 @@
       "status": "open",
       "source": "strategy-book forward package 2",
       "added_at": "2026-11-05T23:00:28+00:00"
+    },
+    {
+      "id": "L679",
+      "category": "later",
+      "section": "ops",
+      "title": "Windows-safe paths for CON/PRN ticker artifacts",
+      "summary": "docs/data/charts/CON.DE.json, PRN.AX.json, PRN.L.json and library research/PRN.AX use Windows reserved device names, so a plain clone fails on Windows (owner hit it 2026-11-06 for the US rehearsal). Owner machine uses a sparse checkout excluding bulk data dirs. A path-escaping rule for reserved names would make full clones work.",
+      "revisit_when": "The owner needs a full Windows checkout (dashboard dev or bulk data work on the laptop).",
+      "tags": [
+        "windows",
+        "charts",
+        "library",
+        "dx"
+      ],
+      "status": "open",
+      "source": "US rehearsal setup on owner laptop",
+      "added_at": "2026-11-06T06:17:15+00:00"
     }
   ],
   "fragments": [
