@@ -865,6 +865,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "NEM": [
         "https://www.sec.gov/Archives/edgar/data/1164727/000116472726000010/nem-20251231.htm",
     ],
+    # asx200 IWB blocker — eng-20261106-02: ALK.AX parked unfetchable_iwb; investors.alkane.com.au
+    # statutory annual + ASX-released quarterly + post-merger FY2025 presentation PDFs (HTTP 200).
+    "ALK.AX": [
+        "https://investors.alkane.com.au/site/pdf/f73e6e17-4884-40cf-b4de-67c965d62734/Annual-Report-to-shareholders.pdf",
+        "https://investors.alkane.com.au/site/pdf/a2f52449-00e5-4db3-a9c9-d95b2dd8b3ac/March-Quarterly-Activities-Report.pdf",
+        "https://investors.alkane.com.au/site/pdf/6eb31bb9-e360-4099-9c4c-d7024932ca87/Diggers-amp-Dealers-Mining-Forum-Presentation.pdf",
+    ],
     # tsx60 buy-tier deepen — unmeasured GIB-A.TO (class-share news query + no GIB-A SEC ticker).
     "GIB-A.TO": [
         "https://www.sec.gov/Archives/edgar/data/1061574/000119312525322911/d88305d40f.htm",
