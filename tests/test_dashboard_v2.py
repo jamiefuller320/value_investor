@@ -67,3 +67,9 @@ def test_node_syntax_check_v2_js() -> None:
         capture_output=True,
         text=True,
     )
+
+
+def test_v2_today_sorts_strategy_decisions_first() -> None:
+    js = (REPO / "docs" / "v2" / "v2.js").read_text(encoding="utf-8")
+    assert "STRATEGY_TASK_PATTERN" in js
+    assert js.count("renderOpenHumanTasks(") >= 3

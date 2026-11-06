@@ -458,6 +458,34 @@
     </details>`;
   }
 
+  /** Task ids that decide the strategy book or this dashboard; everything else is engineering or legacy cadence. */
+  const STRATEGY_TASK_PATTERN = /strategy|dashboard-v2|observe-instrument-freeze|t212/;
+
+  function isStrategyHumanTask(task) {
+    return STRATEGY_TASK_PATTERN.test(String((task && task.id) || ""));
+  }
+
+  function renderOpenHumanTasks(board) {
+    const openTasks =
+      board && Array.isArray(board.tasks)
+        ? board.tasks.filter((t) => t.sort_bucket === "unacked" || t.sort_bucket === "new_info")
+        : [];
+    if (!openTasks.length) {
+      return '<p class="v2-muted">No open owner tasks in the published board (or not yet available).</p>';
+    }
+    const strategy = openTasks.filter(isStrategyHumanTask);
+    const other = openTasks.filter((t) => !isStrategyHumanTask(t));
+    const strategyHtml = strategy.length
+      ? strategy.map((t) => renderHumanTaskCard(t)).join("")
+      : '<p class="v2-muted">No open strategy decisions.</p>';
+    const otherHtml = other.length
+      ? `<details class="v2-other-tasks"><summary>Other owner tasks (${other.length}): engineering, reviews and cadence</summary>${other
+          .map((t) => renderHumanTaskCard(t))
+          .join("")}</details>`
+      : "";
+    return `<h3 class="v2-subhead">Strategy decisions (${strategy.length})</h3>${strategyHtml}${otherHtml}`;
+  }
+
   function collectLatestBars(memoJob) {
     const markets = memoJob && memoJob.markets;
     if (!markets || typeof markets !== "object") return { bars: [], minMs: null, maxMs: null };
@@ -713,13 +741,7 @@
         <p class="v2-muted" style="margin:0.75rem 0 0"><a href="../index.html#automation/daily">Open Daily hub on the engineering dashboard (Accept / Discuss)</a></p>`;
     })();
 
-    const openTasks =
-      board && Array.isArray(board.tasks)
-        ? board.tasks.filter((t) => t.sort_bucket === "unacked" || t.sort_bucket === "new_info")
-        : [];
-    const tasksHtml = openTasks.length
-      ? openTasks.map((t) => renderHumanTaskCard(t)).join("")
-      : '<p class="v2-muted">No open owner tasks in the published board (or not yet available).</p>';
+    const tasksHtml = renderOpenHumanTasks(board);
 
     function line(label, dateStr, ageMs, badgeFn) {
       const b = badgeFn(ageMs);
@@ -756,7 +778,7 @@
 
         <div class="v2-card">
           <h2>Owner decisions due</h2>
-          <p class="v2-panel-meta">Human tasks board${board && board.generated_at ? ` · ${esc(board.generated_at)}` : ""}</p>
+          <p class="v2-panel-meta">Human tasks board${board && board.generated_at ? ` · ${esc(displayDate(board.generated_at))}` : ""}</p>
           <div id="v2-human-tasks">${tasksHtml}</div>
         </div>
 
@@ -1046,16 +1068,7 @@
             updateObserveBanner(ctx.registration);
             const tasksEl = document.getElementById("v2-human-tasks");
             if (tasksEl) {
-              tasksEl.innerHTML = (() => {
-                const board = ctx.bundle.human_tasks_board;
-                const openTasks =
-                  board && Array.isArray(board.tasks)
-                    ? board.tasks.filter((t) => t.sort_bucket === "unacked" || t.sort_bucket === "new_info")
-                    : [];
-                return openTasks.length
-                  ? openTasks.map((t) => renderHumanTaskCard(t)).join("")
-                  : '<p class="v2-muted">No open owner tasks in the published board (or not yet available).</p>';
-              })();
+              tasksEl.innerHTML = renderOpenHumanTasks(ctx.bundle.human_tasks_board);
               bindV2HumanTaskClicks(tasksEl);
             }
           });
