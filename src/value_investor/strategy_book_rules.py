@@ -281,10 +281,21 @@ REASON_HEADWIND = "headwind"
 REASON_SCREEN_AVOID = "screen_avoid"
 REASON_RESEARCH_FAILED = "research_failed"
 
-# Section 12 store names. This package does not write them from real data.
+# Section 12. More than a tenth of a market's buy tier still more than one
+# session behind after the close refresh, or late_signal over a tenth of a
+# week's signals.
+STALE_CLOSE_MAX_SHARE = 0.1
+LATE_SIGNAL_MAX_SHARE = 0.1
+
+# Section 12 store names. The forward job writes the observe store and the
+# gate log only when the seal is signed and ``forward_live`` is true.
 REPLAY_STORE_NAME = "strategy_book_replay.json"
+REPLAY_DETAIL_STORE_NAME = "strategy_book_replay_episodes.json.gz"
 OBSERVE_STORE_NAME = "strategy_book_observe.json"
 REGISTRATION_STORE_NAME = "strategy_book_registration.json"
+GATE_LOG_NAME = "strategy_book_gate_log.jsonl"
+CLOSES_STATE_NAME = "strategy_book_closes.json"
+FORWARD_STATUS_NAME = "strategy_book_forward_status.json"
 
 
 class RegistrationUnsigned(RuntimeError):
@@ -352,6 +363,48 @@ def registration_signed(path: Path) -> bool:
     signature_text = signature.strip() if isinstance(signature, str) else ""
     signature_obj = signature if isinstance(signature, dict) and signature else None
     return bool(signed_at or signed_flag or signature_text or signature_obj)
+
+
+def forward_live(path: Path) -> bool:
+    """True only when the seal is signed and ``forward_live`` is true.
+
+    A missing file, a missing key, or an unsigned seal is false. Phase 1
+    governs this go-live flag. The job may still dry-run while it is false.
+    """
+    if not registration_signed(path):
+        return False
+    payload = registration_record(path) or {}
+    return payload.get("forward_live") is True
+
+
+def forward_start_date(path: Path, *, decision: date) -> date:
+    """First session the forward book may open.
+
+    An explicit ``forward_start``, ``start_date`` or ``observe_start`` on the
+    seal wins. Otherwise the signature's calendar date. Otherwise ``decision``.
+    The archive keeps August–October; this date does not reach back for them.
+    """
+    payload = registration_record(path) or {}
+    for key in ("forward_start", "start_date", "observe_start"):
+        parsed = _iso_date(payload.get(key))
+        if parsed is not None:
+            return parsed
+    signed = _iso_date(payload.get("signed_at"))
+    if signed is not None:
+        return signed
+    return decision
+
+
+def _iso_date(value: Any) -> date | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    if len(text) < 10:
+        return None
+    try:
+        return date.fromisoformat(text[:10])
+    except ValueError:
+        return None
 
 
 def floor_for_checkpoint(level: float) -> float:

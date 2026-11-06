@@ -14,6 +14,7 @@ from value_investor.strategy_book_rules import (
     REGISTRATION_ID,
     RegistrationUnsigned,
     require_signature_for_score,
+    scores_committed_tree,
 )
 
 
@@ -45,6 +46,12 @@ def main(argv: list[str] | None = None) -> int:
     root = (
         args.fixture_dir if args.fixture_dir is not None else Path(args.repo_root) / "docs" / "data"
     )
+    if scores_committed_tree(args.fixture_dir, args.repo_root):
+        from value_investor.strategy_book_forward import counts_view, run_forward_job
+
+        summary = run_forward_job(repo_root=args.repo_root, apply=bool(args.persist))
+        print(json.dumps(counts_view(summary), indent=2))
+        return 0
     loaded = load_archive(root)
     payload = walk_book(loaded["specs"], mode="forward")
     payload["no_chart"] = loaded["no_chart"]

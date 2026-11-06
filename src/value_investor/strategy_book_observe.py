@@ -294,6 +294,9 @@ class WalkOptions:
     scoring_date: date | None = None
     decision_date: date | None = None
     data_commit: str | None = None
+    # Sessions before this date are not entry sessions. The forward job sets
+    # it from the seal so August–October stays in the archive.
+    entry_not_before: date | None = None
 
 
 def options_for(mode: str) -> WalkOptions:
@@ -2131,6 +2134,8 @@ def walk_book(
     cap_days = 0
     share_samples: list[dict[str, Any]] = []
     for session in calendar:
+        if options.entry_not_before is not None and session < options.entry_not_before:
+            continue
         for name in names:
             if session not in name.prices.calendar:
                 continue

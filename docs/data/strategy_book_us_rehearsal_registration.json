@@ -1,0 +1,202 @@
+{
+  "registration_id": "strategy-book-us-rehearsal-v0",
+  "status": "draft_awaiting_owner_signature",
+  "registered_at": null,
+  "document": "docs/ops/strategy-book-us-rehearsal-registration.md",
+  "canonical": "docs/ops/strategy-book-us-rehearsal-registration.md",
+  "plan_step": "2.5",
+  "parent_registration_id": "owner-strategy-book-v0",
+  "parent_document": "docs/ops/strategy-book-registration.md",
+  "parent_seal": "docs/data/strategy_book_registration.json",
+  "numbers_follow": "parent_signature",
+  "numbers_as_of_draft": "2026-11-05",
+  "observe_only": true,
+  "influences_live": false,
+  "learning_question_role": "method_evidence_only",
+  "does_not": [
+    "pass_parent_section_1",
+    "thickness_gate",
+    "step_3_2_live_capital_bar",
+    "promote_or_retire_forward_bench",
+    "reveal_hsr_v2",
+    "reveal_hsr_mid_v2",
+    "reveal_hrs_v2",
+    "reveal_hms_v2"
+  ],
+  "blocked_until": [
+    "parent_signature",
+    "walker_package"
+  ],
+  "walker": {
+    "module": "src/value_investor/strategy_book_observe.py",
+    "rules_module": "src/value_investor/strategy_book_rules.py",
+    "rule": "The runner calls the walker. It does not re-implement the entry, the ladder, the comparison exits, the shadows, or the bench. The signed parent text wins if the walker and the parent differ."
+  },
+  "universes": {
+    "book": "pooled",
+    "overlap": "sp500_wins",
+    "sp500": {
+      "market_id": "sp500",
+      "kind": "sp500_members",
+      "source": "Sharadar sp500",
+      "timing": "membership_on every SEP session date",
+      "status": "existing"
+    },
+    "sp400": {
+      "market_id": "sp400",
+      "kind": "us_cap_rank",
+      "rank_from": 501,
+      "rank_to": 1000,
+      "universe_basis": "cap_rank_501_1000",
+      "timing": "month_end_carried_forward",
+      "common_stock": "Domestic Common Stock, USD, active and delisted",
+      "status": "proposed_proxy",
+      "reason": "The adapter has no S&P MidCap 400 constituent table. This is the hsr-mid-v2 universe."
+    }
+  },
+  "value_set": {
+    "field": "signal",
+    "pass": ["buy", "strong_buy"],
+    "variant": "baseline",
+    "cache_file": "signals_cache.csv.gz",
+    "sp500_epoch": "hsr-v2",
+    "sp400_epoch": "hsr-mid-v2",
+    "not_read": ["hsr-v1", "hsr-mid-v1", "dividend_units_fixed", "adjusted_signal"],
+    "carry": "A cache row dated D applies to sessions strictly after D until the next cache row."
+  },
+  "decline_gate": {
+    "statement_basis": "art_ttm",
+    "dimensions": ["ART", "ARQ"],
+    "dimensions_not_read": ["MRT", "MRQ", "MRY", "ARY"],
+    "filing_lag_days": 2,
+    "stale_filing_days": 456,
+    "interim_yoy_window_days": 45,
+    "interim_max_age_days": 460,
+    "maps": ["revenue", "interim_revenue", "operating_margin", "eps_annual", "eps_interim", "fcf"],
+    "absent": ["dividend", "profit_warning", "impairment_or_downgrade"],
+    "thresholds_existing": {
+      "revenue_drop_pct": 0.05,
+      "revenue_flat_tolerance_pct": 0.01,
+      "margin_drop_pp": 0.03,
+      "eps_annual_drop_pct": 0.2,
+      "eps_interim_drop_pct": 0.1,
+      "fcf_sharp_fall_pct": 0.5,
+      "soft_signals_to_decline": 2
+    }
+  },
+  "sector_gate": {
+    "basis": "price_only",
+    "sector_label_basis": "tickers_current",
+    "regional_pooling": false,
+    "price_breadth_headwind": 0.65,
+    "sector_return_126d_headwind": -0.1,
+    "return_lookback_sessions": 126,
+    "sma_sessions": 200,
+    "minimum_members_with_data": 4,
+    "minimum_coverage_share": 0.6,
+    "not_used": ["earnings_breadth", "decline_breadth", "earnings_growth_fallback", "regional_pool"]
+  },
+  "labels": {
+    "f9_status": "f9_unverified",
+    "research_verdict": "absent",
+    "memo": "not_applicable",
+    "adjusted_signal": "absent",
+    "t212_listed": "not_applicable",
+    "late_signal": "not_applicable",
+    "provenance_missing": "not_used"
+  },
+  "prices": {
+    "tape": "daily.csv.gz",
+    "total_return": "closeadj",
+    "hl_basis_when_columns_present": "high_low",
+    "hl_basis_when_column_absent": "closes",
+    "fill": "next_session_close",
+    "gap_calendar_days": 5,
+    "opens_used": false,
+    "delisting_baseline_haircut": 0.0,
+    "delisting_sensitivity_haircut_non_merger": -0.3,
+    "costs": {
+      "sp500": {"buy_pct": 0.00175, "sell_pct": 0.00175, "source": "t212_invest_fair_v1"},
+      "sp400": {"buy_pct": 0.00175, "sell_pct": 0.00175, "source": "t212_invest_fair_v1"},
+      "stress_per_side": 0.03,
+      "not_used": "hsr-mid 0.225% per side"
+    },
+    "sterling": "not_applicable",
+    "fx_series": false
+  },
+  "windows": {
+    "development": {"first_signal": "2000-01-01", "last_signal": "2012-12-31"},
+    "confirmation": {
+      "first_signal": "2013-01-01",
+      "last_signal": "2025-09-30",
+      "status": "reused_unscored",
+      "halves": ["2013-01-01/2019-06-30", "2019-07-01/2025-09-30"]
+    },
+    "classified_by": "signal_session"
+  },
+  "confirmation_family": {
+    "alpha": 0.1,
+    "family_size": 3,
+    "coverage": 0.9666666666666667,
+    "coverage_formula": "1 - 0.10 / 3",
+    "resamples": 10000,
+    "resample_unit": "iso_entry_week_of_signal_session",
+    "tests": [
+      {
+        "name": "primary",
+        "statistic": "median_matched_excess",
+        "companion": "fair_cost_median_above_zero"
+      },
+      {
+        "name": "deep_dip",
+        "statistic": "mean_difference_kept_minus_all"
+      },
+      {
+        "name": "revenue_growing",
+        "statistic": "mean_difference_kept_minus_all"
+      }
+    ],
+    "not_tests": [
+      "fcf_agrees",
+      "fair_cost_median_interval",
+      "per_market",
+      "draft_v0_exit",
+      "ladder_no_deadline",
+      "decline_rejected_shadow",
+      "sector_rejected_shadow",
+      "buy_on_signal",
+      "leave_tier",
+      "alternative_entry",
+      "regime_cuts",
+      "price_regime_split",
+      "delisting_sensitivity",
+      "capital_view",
+      "channel_splits",
+      "selection_fifths",
+      "stress"
+    ],
+    "other_instruments_in_family": false
+  },
+  "regime_cuts": {
+    "2000_02": {"first_signal": "2000-01-01", "last_signal": "2002-12-31", "block": "development"},
+    "2008_09": {"first_signal": "2008-01-01", "last_signal": "2009-12-31", "block": "development"},
+    "2020": {"first_signal": "2020-01-01", "last_signal": "2020-12-31", "block": "confirmation"},
+    "2022": {"first_signal": "2022-01-01", "last_signal": "2022-12-31", "block": "confirmation"}
+  },
+  "kept_stores": [
+    "docs/data/strategy_book_us_rehearsal_registration.json",
+    "docs/data/strategy_book_us_rehearsal.json"
+  ],
+  "results_store": "docs/data/strategy_book_us_rehearsal.json",
+  "results_store_written_by_this_package": false,
+  "minimum_cell_episodes": 5,
+  "licence": {
+    "access_ends": "2026-11-09",
+    "deletion_due": "2026-12-09",
+    "personal_use": true,
+    "redistribution": false,
+    "build_report_committed": false,
+    "per_name_values_committed": false
+  },
+  "amendments": []
+}

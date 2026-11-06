@@ -1,0 +1,71 @@
+name: Strategy book forward
+
+# Weekday close refresh and forward walk, after the cash closes.
+# London 16:30 and New York 16:00 are both done by 21:30 UTC (EST 21:00, EDT 20:00).
+# Hong Kong 16:00 is 08:00 UTC, so this slot also covers that session.
+# Ops-monitor at 07:45 UTC is before those cash closes and is not this job.
+# GitHub's schedule is best-effort, same as email-report.
+on:
+  schedule:
+    - cron: "30 21 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "List due charts and forward counts without writing stores"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: strategy-book-forward
+  cancel-in-progress: false
+
+jobs:
+  forward:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: bash scripts/gha_pip_install.sh -e .
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Refresh closes and walk the forward book
+        env:
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          set -euo pipefail
+          if [ "${DRY_RUN}" = "true" ]; then
+            ftse-strategy-book-prices --repo-root .
+            ftse-strategy-book-forward --repo-root .
+          else
+            ftse-strategy-book-prices --repo-root . --apply
+            ftse-strategy-book-forward --repo-root . --apply
+          fi
+
+      # This workflow is the single writer for the strategy-book JSON stores.
+      # Email-report excludes them. Charts stay shared with publish.
+      - name: Commit strategy-book forward artifacts
+        env:
+          COMMIT_MESSAGE: "chore: strategy book forward [skip ci]"
+          GHA_COMMIT_LABEL: "Strategy book forward"
+          GHA_COMMIT_OWNED: |
+            docs/data/strategy_book_observe.json
+            docs/data/strategy_book_replay.json
+            docs/data/strategy_book_replay_episodes.json.gz
+            docs/data/strategy_book_gate_log.jsonl
+            docs/data/strategy_book_closes.json
+            docs/data/strategy_book_forward_status.json
+            docs/data/charts
+        run: bash scripts/gha_commit_artifacts.sh
