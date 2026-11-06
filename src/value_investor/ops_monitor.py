@@ -4135,6 +4135,34 @@ def check_historical_screen_replay(
     ]
 
 
+def check_strategy_book_us_rehearsal(
+    *,
+    repo_root: Path | None = None,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Observe-only strategy-book US rehearsal: committed blocks and the licence deletion clock.
+
+    Reads ``docs/data/strategy_book_us_rehearsal.json`` (written only by the owner's
+    ``ftse-strategy-book-rehearsal`` runs); never writes it.
+    """
+    from value_investor.strategy_book_us_rehearsal import REPO_ROOT, TITLE_FAILED, findings
+
+    try:
+        rows = findings(Path(repo_root) if repo_root is not None else REPO_ROOT, now)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        rows = [{"severity": "warn", "title": TITLE_FAILED, "summary": str(exc)}]
+    return [
+        OpsFinding(
+            severity=str(row["severity"]),
+            category="backtest",
+            title=str(row["title"]),
+            summary=str(row["summary"]),
+            auto_fixable=False,
+        )
+        for row in rows
+    ]
+
+
 def check_post_hsr_policy(
     *,
     store_path: Path | None = None,
@@ -4945,6 +4973,7 @@ def collect_ops_findings(
     findings.extend(check_backtest_history())
     findings.extend(check_screen_premise_backtest())
     findings.extend(check_historical_screen_replay())
+    findings.extend(check_strategy_book_us_rehearsal())
     findings.extend(check_post_hsr_policy())
     findings.extend(check_value_factor_base_rate())
     findings.extend(check_assessment_scoreboard())

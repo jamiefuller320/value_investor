@@ -2040,3 +2040,46 @@ def test_send_ops_monitor_email_skips_when_sync_lag_healed():
     with patch("value_investor.ops_monitor.send_report_email") as send:
         assert send_ops_monitor_email(report, only_if_not_ok=True) is False
         send.assert_not_called()
+
+
+def test_check_strategy_book_us_rehearsal_reports_blocks_and_deletion_clock(tmp_path: Path) -> None:
+    from value_investor import strategy_book_us_rehearsal as rehearsal
+    from value_investor.ops_monitor import check_strategy_book_us_rehearsal
+
+    assert check_strategy_book_us_rehearsal(repo_root=tmp_path) == []
+    store = tmp_path / rehearsal.STORE_PATH
+    store.parent.mkdir(parents=True)
+    store.write_text("{not json", encoding="utf-8")
+    [failed] = check_strategy_book_us_rehearsal(repo_root=tmp_path)
+    assert (failed.title, failed.severity, failed.auto_fixable) == (
+        rehearsal.TITLE_FAILED,
+        "warn",
+        False,
+    )
+
+    payload = {
+        "development": {"computed_at": "2026-11-07T10:00:00+00:00", "primary": {"mature": 40}},
+        "reveal": {"at": "2026-11-08T10:00:00+00:00"},
+        "confirmation": {"verdicts": {"primary": "inconclusive", "bench": "fail_costs"}},
+        "licensed_data": {"first_used_at": "2026-11-06T09:00:00+00:00", "deleted_at": None},
+    }
+    store.write_text(json.dumps(payload), encoding="utf-8")
+    now = datetime(2026, 11, 20, 12, tzinfo=UTC)
+    findings = check_strategy_book_us_rehearsal(repo_root=tmp_path, now=now)
+    by_title = {finding.title: finding for finding in findings}
+    assert set(by_title) == {
+        rehearsal.TITLE_DEVELOPMENT,
+        rehearsal.TITLE_REVEALED,
+        rehearsal.TITLE_DELETION_DUE,
+    }
+    assert by_title[rehearsal.TITLE_DEVELOPMENT].severity == "info"
+    assert by_title[rehearsal.TITLE_REVEALED].severity == "info"
+    due = by_title[rehearsal.TITLE_DELETION_DUE]
+    assert due.severity == "warn"
+    assert "2026-12-06" in due.summary and "(16 days)" in due.summary
+    assert not any(finding.auto_fixable for finding in findings)
+
+    payload["licensed_data"]["deleted_at"] = "2026-11-21T09:00:00+00:00"
+    store.write_text(json.dumps(payload), encoding="utf-8")
+    titles = {finding.title for finding in check_strategy_book_us_rehearsal(repo_root=tmp_path)}
+    assert rehearsal.TITLE_DELETION_DUE not in titles
