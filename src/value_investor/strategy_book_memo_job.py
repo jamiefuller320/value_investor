@@ -31,7 +31,13 @@ from value_investor.market_paper_shard import session_defaults_for_market
 from value_investor.paper_fund import BUY_SIGNALS
 from value_investor.research.weekday_rememo import DEFAULT_MIN_HEADROOM_USD
 from value_investor.sector_headwind_gate import FTSE_MARKET
-from value_investor.storage import read_json, write_json
+from value_investor.storage import write_json
+from value_investor.strategy_book_rules import (
+    UnknownMarketClose,
+    registration_record,
+    registration_signed,
+    session_close,
+)
 from value_investor.strategy_book_signals import (
     MEMO_MAX_AGE_DAYS,
     STALE_CHART_CALENDAR_DAYS,
@@ -47,7 +53,6 @@ from value_investor.strategy_book_signals import (
     research_root_for,
     review_memo_needs,
     screen_rows,
-    session_end,
     universe_markets,
 )
 
@@ -85,21 +90,12 @@ def spend_enabled(registration_path: Path) -> bool:
 
     Signature creates ``docs/data/strategy_book_registration.json``. Until that
     file is present, signed, and the flag is true, the job does not call a model.
+    The signature test is ``registration_signed``.
     """
-    if not registration_path.is_file():
+    payload = registration_record(registration_path)
+    if payload is None or payload.get("spend_enabled") is not True:
         return False
-    try:
-        payload = read_json(registration_path)
-    except (OSError, ValueError, TypeError):
-        return False
-    if not isinstance(payload, dict) or payload.get("spend_enabled") is not True:
-        return False
-    signed_at = str(payload.get("signed_at") or "").strip()
-    signature = payload.get("signature")
-    signed_flag = payload.get("signed") is True
-    signature_text = signature.strip() if isinstance(signature, str) else ""
-    signature_obj = signature if isinstance(signature, dict) and signature else None
-    return bool(signed_at or signed_flag or signature_text or signature_obj)
+    return registration_signed(registration_path)
 
 
 def data_commit(repo_root: Path) -> str:
@@ -460,12 +456,15 @@ def _review_is_stale(
     inputs = [str(paths.observe)]
     if memo_path.is_file():
         inputs.append(str(memo_path))
-    has_memo, memo_at, _verdict = _memo_as_of(
-        ticker, research_root=root, as_of=session_end(session)
-    )
+    try:
+        # Review-date memo is read at that session's local cash close.
+        cutoff = session_close(market, session)
+    except UnknownMarketClose:
+        return True, inputs
+    has_memo, memo_at, _verdict = _memo_as_of(ticker, research_root=root, as_of=cutoff)
     if not has_memo or memo_at is None:
         return True, inputs
-    age = _memo_age_days(memo_at, now=session_end(session))
+    age = _memo_age_days(memo_at, now=cutoff)
     stale = age is None or age > float(MEMO_MAX_AGE_DAYS)
     return stale, inputs
 

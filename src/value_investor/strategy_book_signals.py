@@ -23,7 +23,6 @@ from typing import Any
 import pandas as pd
 
 from value_investor.decision_input_inventory import (
-    DEFAULT_MEMO_MAX_AGE_DAYS,
     _memo_age_days,
     _overlay_bound,
 )
@@ -38,34 +37,21 @@ from value_investor.paper_fund import BUY_SIGNALS
 from value_investor.price_charts import chart_filename
 from value_investor.sector_headwind_gate import FTSE_MARKET
 from value_investor.storage import read_json
+from value_investor.strategy_book_rules import (
+    ALT_RSI_LEVEL,
+    ALT_SMA_DISTANCE,
+    ALT_SMA_WINDOW,
+    LOW_WINDOW_SESSIONS,
+    MAX_FILL_GAP_CALENDAR_DAYS,
+    MEMO_MAX_AGE_DAYS,
+    REVIEW_INDEXES,
+    RSI_LEVEL,
+    RSI_PERIOD,
+    STALE_CHART_CALENDAR_DAYS,
+    UnknownMarketClose,
+    session_close,
+)
 from value_investor.technical_analysis import _rsi
-
-# Registration section 3, primary rule. ``_rsi`` period is 14.
-RSI_PERIOD = 14
-# Strictly below. ``TradePlanConfig.accumulate_rsi_limit_gate`` is 35.
-RSI_LEVEL = 35
-# Chart sessions ending at *t*. Ties count. A shorter history does not fire.
-LOW_WINDOW_SESSIONS = 10
-
-# Registration section 3, pre-registered alternative. Report-only.
-# It does not open a forward episode and it does not request a memo.
-ALT_RSI_LEVEL = 40
-ALT_SMA_WINDOW = 10
-# At least this fraction under the 10-session simple average.
-ALT_SMA_DISTANCE = 0.03
-
-# Registration section 2: memo age uses the existing 21-day maximum.
-MEMO_MAX_AGE_DAYS = DEFAULT_MEMO_MAX_AGE_DAYS
-
-# Registration section 3: no fill when the next session is more than 5 calendar days after *t*.
-MAX_FILL_GAP_CALENDAR_DAYS = 5
-
-# Registration section 3: a forward chart more than 5 calendar days behind the
-# decision date produces no signal that day.
-STALE_CHART_CALENDAR_DAYS = 5
-
-# Registration section 5. Review spacing on the primary exit.
-REVIEW_INDEXES = (63, 126, 189)
 
 # ``_rsi`` is finite after 15 closes (diff plus ewm min_periods=14).
 _RSI_MIN_CLOSES = RSI_PERIOD + 1
@@ -222,7 +208,12 @@ def universe_markets(market_status: Path) -> list[str]:
 
 
 def session_end(day: date) -> datetime:
-    """UTC end of the session calendar day. A later timestamp is after *t*."""
+    """UTC end of the calendar day. A date boundary, not an exchange close.
+
+    Point-in-time files (filings index, library screen snapshot, overlay
+    verdicts) dated after this instant are not in force on ``day``. Memo
+    binds and late signals use ``session_close``.
+    """
     return datetime.combine(day, time(23, 59, 59), tzinfo=UTC)
 
 
@@ -526,6 +517,48 @@ def _iso(day: date | None) -> str | None:
     return day.isoformat() if day is not None else None
 
 
+def price_flags(closes: list[float]) -> dict[str, Any]:
+    """Primary and alternative entry arithmetic on a close prefix through *t*.
+
+    The walker calls this. It does not reimplement the RSI or the 10-session
+    low. Chart presence, thinning, and the gap rule stay with the caller.
+    """
+    rsi = rsi_last(closes)
+    rsi_ok = rsi_below(rsi, RSI_LEVEL)
+    window_min: float | None
+    if len(closes) < LOW_WINDOW_SESSIONS:
+        low_ok = False
+        window_min = None
+    else:
+        window = closes[-LOW_WINDOW_SESSIONS:]
+        window_min = min(window)
+        low_ok = closes[-1] == window_min
+    alt_rsi = rsi_below(rsi, ALT_RSI_LEVEL)
+    sma: float | None
+    distance: float | None
+    if len(closes) < ALT_SMA_WINDOW:
+        sma = None
+        distance = None
+        alt_ok = False
+    else:
+        sample = closes[-ALT_SMA_WINDOW:]
+        sma = sum(sample) / float(ALT_SMA_WINDOW)
+        distance = (sma - closes[-1]) / sma if sma else None
+        alt_ok = bool(alt_rsi and distance is not None and distance >= ALT_SMA_DISTANCE)
+    return {
+        "rsi": rsi,
+        "rsi_below_35": rsi_ok,
+        "ten_session_low": low_ok,
+        "window_min": window_min,
+        "primary": bool(rsi_ok and low_ok),
+        "alternative": alt_ok,
+        "sma10": sma,
+        "distance": distance,
+        "alt_rsi": alt_rsi,
+        "closes": len(closes),
+    }
+
+
 def _price_checks(
     *,
     chart_path: Path,
@@ -577,8 +610,9 @@ def _price_checks(
             paths,
         )
 
-    rsi = rsi_last(closes)
-    rsi_ok = rsi_below(rsi, RSI_LEVEL)
+    flags = price_flags(closes)
+    rsi = flags["rsi"]
+    rsi_ok = bool(flags["rsi_below_35"])
     rsi_reason = "below_35" if rsi_ok else ("not_finite" if rsi is None else "not_below_35")
     rsi_check = Check(
         "rsi_below_35",
@@ -594,47 +628,42 @@ def _price_checks(
             "shorter_than_10",
             {"closes": len(closes), "window": LOW_WINDOW_SESSIONS},
         )
-        low_ok = False
     else:
-        window = closes[-LOW_WINDOW_SESSIONS:]
-        low_ok = closes[-1] == min(window)
+        low_ok = bool(flags["ten_session_low"])
         low_check = Check(
             "ten_session_low",
             low_ok,
             "is_low" if low_ok else "not_low",
             {
                 "close": closes[-1],
-                "window_min": min(window),
+                "window_min": flags["window_min"],
                 "window": LOW_WINDOW_SESSIONS,
             },
         )
 
-    price_ok = rsi_ok and low_ok
+    price_ok = bool(flags["primary"])
     price_reason = "primary" if price_ok else "primary_failed"
     price_check = Check("price_entry", price_ok, price_reason)
 
-    alt_rsi = rsi_below(rsi, ALT_RSI_LEVEL)
     if len(closes) < ALT_SMA_WINDOW:
         alt = Check("alternative_entry", False, "shorter_than_10", {"closes": len(closes)})
     else:
-        sample = closes[-ALT_SMA_WINDOW:]
-        sma = sum(sample) / float(ALT_SMA_WINDOW)
-        distance = (sma - closes[-1]) / sma if sma else None
-        far = distance is not None and distance >= ALT_SMA_DISTANCE
-        alt_ok = alt_rsi and far
+        alt_ok = bool(flags["alternative"])
         if alt_ok:
             alt_reason = "alternative"
-        elif not alt_rsi:
+        elif not flags["alt_rsi"]:
             alt_reason = "rsi_not_below_40"
         else:
             alt_reason = "not_3pct_under_sma10"
+        sma = flags["sma10"]
+        distance = flags["distance"]
         alt = Check(
             "alternative_entry",
             alt_ok,
             alt_reason,
             {
                 "rsi_14": None if rsi is None else round(rsi, 4),
-                "sma10": round(sma, 6),
+                "sma10": None if sma is None else round(sma, 6),
                 "distance": None if distance is None else round(distance, 6),
                 "rsi_level": ALT_RSI_LEVEL,
                 "distance_min": ALT_SMA_DISTANCE,
@@ -677,10 +706,10 @@ def _filing_paths(research_root: Path, ticker: str) -> list[Path]:
 
 
 def _library_snapshot_as_of(session: date) -> datetime:
-    """Close of *t* for the library screen CSV and the FCF source files.
+    """Calendar-day boundary for the library screen CSV and the FCF files.
 
-    A snapshot timestamp after this is not a pass. The forward job reads the
-    snapshots after they refresh and before the next close.
+    A snapshot timestamp after this is not in force on ``session``. This is
+    ``session_end``, not the cash close: the file stamp is a date, not a fill.
     """
     return session_end(session)
 
@@ -694,6 +723,7 @@ def _binds(
     session: date,
     memo_as_of: datetime,
 ) -> tuple[dict[str, Check], list[str]]:
+    # Date boundary for filing and overlay files. The memo clock is ``memo_as_of``.
     as_of = session_end(session)
     paths = [str(path) for path in _filing_paths(research_root, ticker)]
     index = _index_as_of(ticker, research_root=research_root, as_of=as_of)
@@ -845,13 +875,18 @@ def evaluate_ticker(
     next_day, stored_next = _next_session(all_days, session)
     gap_days = (next_day - session).days if stored_next else None
     research_root = research_root_for(paths, market)
+    try:
+        # Section 2: memo_recent is read at the fill session's own close.
+        memo_as_of = session_close(market, next_day)
+    except UnknownMarketClose:
+        memo_as_of = datetime.min.replace(tzinfo=UTC)
     binds, filing_paths = _binds(
         market=market,
         ticker=token,
         row=row or {},
         research_root=research_root,
         session=session,
-        memo_as_of=session_end(next_day),
+        memo_as_of=memo_as_of,
     )
     gap_over = bool(stored_next and gap_days is not None and gap_days > MAX_FILL_GAP_CALENDAR_DAYS)
     # Section 3: a hole longer than 5 calendar days drops the signal. No memo.
@@ -1059,6 +1094,7 @@ __all__ = [
     "RepoPaths",
     "chart_is_thinned",
     "evaluate_market",
+    "price_flags",
     "evaluate_ticker",
     "history_dir_for",
     "newest_screen_run",
