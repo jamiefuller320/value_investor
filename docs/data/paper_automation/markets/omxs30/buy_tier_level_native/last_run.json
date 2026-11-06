@@ -1,13 +1,13 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-02T08:05:53.659189+00:00",
+    "local_time": "2026-11-06T07:54:13.381488+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-02T08:00:00+00:00",
-    "settle_at": "2026-11-02T09:15:00+00:00",
+    "market_open_at": "2026-11-06T08:00:00+00:00",
+    "settle_at": "2026-11-06T09:15:00+00:00",
     "can_act": false,
-    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    "reason": "before market open"
   },
   "trades": [],
   "plan": {
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1051.27,
+    "nav": 1062.12,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -36,157 +36,217 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 87.61,
+    "target_sleeve_value": 96.55,
     "targets": [
       {
         "ticker": "SKF-B.ST",
         "name": "AB SKF (publ)",
         "signal": "strong_buy",
         "conviction_score": 0.8673000000000001,
-        "price": 275.2
+        "price": 273.7
       },
       {
         "ticker": "VOLV-B.ST",
         "name": "AB Volvo (publ)",
         "signal": "strong_buy",
         "conviction_score": 0.8269000000000001,
-        "price": 310.0
+        "price": 316.8
       },
       {
         "ticker": "TEL2-B.ST",
         "name": "Tele2 AB (publ)",
         "signal": "strong_buy",
         "conviction_score": 0.7975000000000001,
-        "price": 159.6
+        "price": 162.15
+      },
+      {
+        "ticker": "SKA-B.ST",
+        "name": "Skanska AB (publ)",
+        "signal": "strong_buy",
+        "conviction_score": 0.7558,
+        "price": 282.5
       },
       {
         "ticker": "BOL.ST",
         "name": "Boliden AB (publ)",
         "signal": "buy",
         "conviction_score": 0.6991,
-        "price": 499.9
-      },
-      {
-        "ticker": "SKA-B.ST",
-        "name": "Skanska AB (publ)",
-        "signal": "strong_buy",
-        "conviction_score": 0.6676000000000001,
-        "price": 282.4
+        "price": 507.6
       },
       {
         "ticker": "HM-B.ST",
         "name": "H & M Hennes & Mauritz AB (publ)",
         "signal": "buy",
         "conviction_score": 0.6262000000000001,
-        "price": 177.95
-      },
-      {
-        "ticker": "ESSITY-B.ST",
-        "name": "Essity AB (publ)",
-        "signal": "buy",
-        "conviction_score": 0.5952000000000001,
-        "price": 280.0
+        "price": 182.15
       },
       {
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "signal": "buy",
-        "conviction_score": 0.5732,
-        "price": 109.05
+        "conviction_score": 0.6012000000000001,
+        "price": 102.8
       },
       {
-        "ticker": "LIFCO-B.ST",
-        "name": "Lifco AB (publ)",
+        "ticker": "ESSITY-B.ST",
+        "name": "Essity AB (publ)",
         "signal": "buy",
-        "conviction_score": 0.5712,
-        "price": 276.8
+        "conviction_score": 0.5781000000000001,
+        "price": 292.5
       },
       {
         "ticker": "SAND.ST",
         "name": "Sandvik AB (publ)",
         "signal": "buy",
-        "conviction_score": 0.5362,
+        "conviction_score": 0.5254,
         "price": 358.9
       },
       {
         "ticker": "ASSA-B.ST",
         "name": "ASSA ABLOY AB (publ)",
         "signal": "buy",
-        "conviction_score": 0.4215,
-        "price": 393.1
+        "conviction_score": 0.4065,
+        "price": 401.8
       },
       {
         "ticker": "NIBE-B.ST",
         "name": "NIBE Industrier AB (publ)",
         "signal": "buy",
         "conviction_score": 0.37790999999999997,
-        "price": 45.56
+        "price": 46.03
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "LIFCO-B.ST",
+        "name": "Lifco AB (publ)",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.244537,
+        "price": 287.8,
+        "value": 70.38
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "ERIC-B.ST",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "reason": "Top-up to equal weight",
+        "value": 14.51,
+        "price": 102.8,
+        "target_value": 96.55,
+        "conviction_score": 0.6012000000000001,
+        "signal": "buy"
+      }
+    ],
     "anticipated_holds": [
       {
         "action": "hold",
-        "ticker": "ESSITY-B.ST",
-        "name": "Essity AB (publ)",
+        "ticker": "SKF-B.ST",
+        "name": "AB SKF (publ)",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 89.52,
+        "target_value": 96.55,
+        "conviction_score": 0.8673000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "VOLV-B.ST",
+        "name": "AB Volvo (publ)",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 87.96,
+        "target_value": 96.55,
+        "conviction_score": 0.8269000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "TEL2-B.ST",
+        "name": "Tele2 AB (publ)",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 86.67,
+        "target_value": 96.55,
+        "conviction_score": 0.7975000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "SKA-B.ST",
+        "name": "Skanska AB (publ)",
         "reason": "Already near equal-weight target",
-        "value": 87.94,
-        "target_value": 87.61,
-        "conviction_score": 0.5952000000000001,
+        "value": 97.3,
+        "target_value": 96.55,
+        "conviction_score": 0.7558,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "BOL.ST",
+        "name": "Boliden AB (publ)",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 94.9,
+        "target_value": 96.55,
+        "conviction_score": 0.6991,
         "signal": "buy"
       },
       {
         "action": "hold",
-        "ticker": "ERIC-B.ST",
-        "name": "Telefonaktiebolaget LM Ericsson (publ)",
-        "reason": "Already near equal-weight target",
-        "value": 87.03,
-        "target_value": 87.61,
-        "conviction_score": 0.5732,
+        "ticker": "HM-B.ST",
+        "name": "H & M Hennes & Mauritz AB (publ)",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 91.37,
+        "target_value": 96.55,
+        "conviction_score": 0.6262000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "ESSITY-B.ST",
+        "name": "Essity AB (publ)",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 91.87,
+        "target_value": 96.55,
+        "conviction_score": 0.5781000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "SAND.ST",
+        "name": "Sandvik AB (publ)",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 89.96,
+        "target_value": 96.55,
+        "conviction_score": 0.5254,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "ASSA-B.ST",
+        "name": "ASSA ABLOY AB (publ)",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 91.68,
+        "target_value": 96.55,
+        "conviction_score": 0.4065,
         "signal": "buy"
       },
       {
         "action": "hold",
         "ticker": "NIBE-B.ST",
         "name": "NIBE Industrier AB (publ)",
-        "reason": "Already near equal-weight target",
-        "value": 87.57,
-        "target_value": 87.61,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 88.48,
+        "target_value": 96.55,
         "conviction_score": 0.37790999999999997,
         "signal": "buy"
       }
     ],
-    "skipped": [
-      {
-        "ticker": "VOLV-B.ST",
-        "name": "AB Volvo (publ)",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 87.61,
-        "conviction_score": 0.8269000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "ticker": "TEL2-B.ST",
-        "name": "Tele2 AB (publ)",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 87.61,
-        "conviction_score": 0.7975000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "ticker": "LIFCO-B.ST",
-        "name": "Lifco AB (publ)",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 87.61,
-        "conviction_score": 0.5712,
-        "signal": "buy"
-      }
-    ],
+    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 12 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    "summary": "Next rebalance would target 11 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 10 near-target holding(s)."
   },
   "alerts": [
     {
@@ -195,7 +255,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 310.0,
+      "mark": 316.8,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -206,7 +266,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 109.05,
+      "mark": 102.8,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -217,7 +277,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 499.9,
+      "mark": 507.6,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -228,7 +288,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 177.95,
+      "mark": 182.15,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -239,7 +299,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 393.1,
+      "mark": 401.8,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -250,7 +310,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 159.6,
+      "mark": 162.15,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -272,7 +332,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 280.0,
+      "mark": 292.5,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -283,7 +343,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 275.2,
+      "mark": 273.7,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -294,7 +354,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 282.4,
+      "mark": 282.5,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -305,7 +365,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 45.56,
+      "mark": 46.03,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -314,9 +374,9 @@
       "ticker": "LIFCO-B.ST",
       "name": "Lifco AB (publ)",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 276.8,
+      "severity": "watch",
+      "message": "Screen signal is now hold",
+      "mark": 287.8,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "accumulate"
@@ -1487,11 +1547,77 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-03T14:17:40.214553+00:00",
+        "portfolio_value": 1051.27,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 12,
+        "reporting_currency": "SEK",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "SEK": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-04T14:17:19.045652+00:00",
+        "portfolio_value": 1051.27,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 12,
+        "reporting_currency": "SEK",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "SEK": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-05T14:18:24.468207+00:00",
+        "portfolio_value": 1051.27,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 12,
+        "reporting_currency": "SEK",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "SEK": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-06T07:54:13.381488+00:00",
+        "portfolio_value": 1062.12,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 12,
+        "reporting_currency": "SEK",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "SEK": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-02T08:05:53.659189+00:00",
+    "last_mark_at": "2026-11-06T07:54:13.381488+00:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "LIFCO-B.ST": 1
+      },
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
@@ -1502,7 +1628,7 @@
     "schema_version": 2,
     "market_id": "omxs30",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:05:53.666571+00:00",
+    "generated_at": "2026-11-06T07:54:13.387685+00:00",
     "observe_only": true,
     "open_count": 2,
     "closed_count": 0,
@@ -1581,7 +1707,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:05:53.667536+00:00",
+    "generated_at": "2026-11-06T07:54:13.388577+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1647,7 +1773,7 @@
     "hold_recovery": {
       "open": {
         "count": 9,
-        "recovered_to_breakeven": 8,
+        "recovered_to_breakeven": 9,
         "close_reasons": {
           "open": 9
         }
@@ -1677,8 +1803,8 @@
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 0
+      "hold_episodes": 6,
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -1686,8 +1812,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-11-02T08:05:53.668954+00:00",
-    "as_of": "2026-11-02T08:05:53.659189+00:00",
+    "updated_at": "2026-11-06T07:54:13.389823+00:00",
+    "as_of": "2026-11-06T07:54:13.381488+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1744,8 +1870,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0356,
-        "mark": 499.9,
+        "unrealized_pct": -0.0208,
+        "mark": 507.6,
         "avg_cost": 518.3743,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -1778,134 +1904,14 @@
         "broken_reasons": []
       },
       {
-        "ticker": "VOLV-B.ST",
-        "name": "AB Volvo (publ)",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0115,
-        "mark": 310.0,
-        "avg_cost": 313.6186,
-        "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.8269,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 83%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 83%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "LIFCO-B.ST",
-        "name": "Lifco AB (publ)",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0109,
-        "mark": 276.8,
-        "avg_cost": 279.8376,
-        "signal": "buy",
-        "timing_signal": "accumulate",
-        "conviction_score": 0.5712,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "neutral",
-        "reasons": [
-          "research verdict neutral",
-          "still buy",
-          "cheapness family still passes"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 57%"
-        ],
-        "weaken_reasons": [
-          "research verdict neutral"
-        ],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "SAND.ST",
-        "name": "Sandvik AB (publ)",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0099,
-        "mark": 358.9,
-        "avg_cost": 362.5,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5362,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [
-          "dividend"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 54%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 54%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "SKF-B.ST",
         "name": "AB SKF (publ)",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0094,
-        "mark": 275.2,
+        "unrealized_pct": -0.0148,
+        "mark": 273.7,
         "avg_cost": 277.8,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -1938,14 +1944,95 @@
         "broken_reasons": []
       },
       {
+        "ticker": "SAND.ST",
+        "name": "Sandvik AB (publ)",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0099,
+        "mark": 358.9,
+        "avg_cost": 362.5,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.5254,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "dividend"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 53%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 53%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "VOLV-B.ST",
+        "name": "AB Volvo (publ)",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0101,
+        "mark": 316.8,
+        "avg_cost": 313.6186,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.8269,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 83%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 83%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "TEL2-B.ST",
         "name": "Tele2 AB (publ)",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0057,
-        "mark": 159.6,
+        "unrealized_pct": 0.0101,
+        "mark": 162.15,
         "avg_cost": 160.521,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -1978,14 +2065,55 @@
         "broken_reasons": []
       },
       {
+        "ticker": "LIFCO-B.ST",
+        "name": "Lifco AB (publ)",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0285,
+        "mark": 287.8,
+        "avg_cost": 279.8376,
+        "signal": "hold",
+        "timing_signal": "accumulate",
+        "conviction_score": 0.3329,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "neutral",
+        "reasons": [
+          "left buy tier (hold)",
+          "research verdict neutral",
+          "conviction 33% below intact floor",
+          "cheapness family still passes",
+          "data_quality 1.00"
+        ],
+        "intact_reasons": [
+          "cheapness family still passes",
+          "data_quality 1.00"
+        ],
+        "weaken_reasons": [
+          "left buy tier (hold)",
+          "research verdict neutral",
+          "conviction 33% below intact floor"
+        ],
+        "broken_reasons": []
+      },
+      {
         "ticker": "NIBE-B.ST",
         "name": "NIBE Industrier AB (publ)",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0252,
-        "mark": 45.56,
+        "unrealized_pct": 0.0358,
+        "mark": 46.03,
         "avg_cost": 44.44,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2025,12 +2153,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0738,
-        "mark": 282.4,
+        "unrealized_pct": 0.0741,
+        "mark": 282.5,
         "avg_cost": 263.0,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6676,
+        "conviction_score": 0.7558,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2046,14 +2174,55 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 67%"
+          "conviction 76%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 67%"
+          "conviction 76%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "ERIC-B.ST",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0783,
+        "mark": 102.8,
+        "avg_cost": 95.3371,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6012,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 60%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 60%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2065,12 +2234,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0882,
-        "mark": 280.0,
+        "unrealized_pct": 0.1368,
+        "mark": 292.5,
         "avg_cost": 257.3,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5952,
+        "conviction_score": 0.5781,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2087,14 +2256,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 60%"
+          "conviction 58%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 60%"
+          "conviction 58%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2106,12 +2275,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.1142,
-        "mark": 393.1,
+        "unrealized_pct": 0.1389,
+        "mark": 401.8,
         "avg_cost": 352.8,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4215,
+        "conviction_score": 0.4065,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2128,14 +2297,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 42%"
+          "conviction 41%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 42%"
+          "conviction 41%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2147,8 +2316,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.1227,
-        "mark": 177.95,
+        "unrealized_pct": 0.1492,
+        "mark": 182.15,
         "avg_cost": 158.5,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2179,47 +2348,6 @@
         ],
         "weaken_reasons": [],
         "broken_reasons": []
-      },
-      {
-        "ticker": "ERIC-B.ST",
-        "name": "Telefonaktiebolaget LM Ericsson (publ)",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.1438,
-        "mark": 109.05,
-        "avg_cost": 95.3371,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5732,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 57%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 57%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
       }
     ],
     "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
@@ -2229,7 +2357,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:05:53.670841+00:00",
+    "generated_at": "2026-11-06T07:54:13.391478+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2304,7 +2432,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-11-02T08:05:53.674227+00:00",
+    "generated_at": "2026-11-06T07:54:13.394193+00:00",
     "open_count": 2,
     "closed_count": 6,
     "scored_count": 6,
@@ -2372,7 +2500,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:05:53.659189+00:00",
+    "generated_at": "2026-11-06T07:54:13.381488+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2429,7 +2557,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:05:53.659189+00:00",
+    "generated_at": "2026-11-06T07:54:13.381488+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -2437,317 +2565,39 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 3,
-    "card_count": 3,
+    "proposal_count": 0,
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 3,
+      "agree": 0,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {
-      "rebuy_skip": {
-        "agree": 3,
-        "veto": 0,
-        "abstain": 0
-      }
-    },
+    "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
-    "cards": [
-      {
-        "ticker": "VOLV-B.ST",
-        "name": "AB Volvo (publ)",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Rebuy deferral is explained by algo_reason (insufficient cash after higher-conviction fills), not by a leave-buy-cohort signal.",
-          "still_buyish remains true with rank_drop 0 versus entry_rank, so skipping rebuy avoids capacity churn without contradicting hold-gate quality.",
-          "screen_signal strong_buy and research_verdict accumulate support treating this as a portfolio constraint, not a conviction exit."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "strong_buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 2
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 2
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level_native",
-        "logged_at": "2026-11-02T08:05:53.659189+00:00",
-        "proposal_id": "buy_tier_level_native:VOLV-B.ST:rebuy_skip:2026-11-02T08:05:53.659189+00:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "TEL2-B.ST",
-        "name": "Tele2 AB (publ)",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "algo_reason cites insufficient cash after higher-conviction fills; no evidence of decisive exit from the buy cohort.",
-          "rank_drop 0 with still_buyish true aligns with agree on skip rather than vetoing a still-top-tier name (conviction_rank 3).",
-          "strong_buy screen_signal and accumulate overlay_bound research support deferring rebuy under cash priority."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "strong_buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 3
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level_native",
-        "logged_at": "2026-11-02T08:05:53.659189+00:00",
-        "proposal_id": "buy_tier_level_native:TEL2-B.ST:rebuy_skip:2026-11-02T08:05:53.659189+00:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "LIFCO-B.ST",
-        "name": "Lifco AB (publ)",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Explicit rebuy block via algo_reason (insufficient cash) is consistent with shadow agree on rebuy_skip.",
-          "still_buyish true and rank_drop 0 show no rank_drop-driven sell case; lower conviction_rank 9 fits cash rationing to higher-conviction fills.",
-          "buy screen_signal with neutral research_verdict does not provide decisive leave-cohort grounds to veto the skip."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 9
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "neutral"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.5712
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level_native",
-        "logged_at": "2026-11-02T08:05:53.659189+00:00",
-        "proposal_id": "buy_tier_level_native:LIFCO-B.ST:rebuy_skip:2026-11-02T08:05:53.659189+00:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "neutral",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      }
-    ],
+    "cards": [],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null,
-      "llm_card_count": 3
+      "fallback": null
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-11-02T08:05:53.659189+00:00",
+      "generated_at": "2026-11-06T07:54:13.381488+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 3,
+      "card_count": 0,
       "verdict_counts": {
-        "agree": 3,
+        "agree": 0,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {
-        "rebuy_skip": {
-          "agree": 3,
-          "veto": 0,
-          "abstain": 0
-        }
-      },
+      "by_algo_action": {},
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -2763,7 +2613,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-02T08:05:58.781779+00:00",
+  "generated_at": "2026-11-06T07:54:13.397977+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (SEK reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,

@@ -1,15 +1,78 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-02T08:04:04.166226+00:00",
+    "local_time": "2026-11-06T07:52:54.625445+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-02T08:00:00+00:00",
-    "settle_at": "2026-11-02T09:15:00+00:00",
+    "market_open_at": "2026-11-06T08:00:00+00:00",
+    "settle_at": "2026-11-06T09:15:00+00:00",
     "can_act": false,
-    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    "reason": "before market open"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "3bf6c0c0-d82a-4ebc-9640-3e896ada466e",
+      "fund_id": "206b974c-fad3-4844-8c6e-61db875f69c7",
+      "acted_at": "2026-11-06T07:52:54.625445+00:00",
+      "ticker": "FME.DE",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 6.196792,
+      "price": 42.32,
+      "gross": 262.25,
+      "cost": 0.07,
+      "net_cash": 262.18,
+      "note": "Automated trim",
+      "name": "Fresenius Medical Care AG",
+      "avg_cost_at_exit": 40.1621
+    },
+    {
+      "id": "37ad0b8d-d17e-4414-a566-153bb8e0436a",
+      "fund_id": "206b974c-fad3-4844-8c6e-61db875f69c7",
+      "acted_at": "2026-11-06T07:52:54.625445+00:00",
+      "ticker": "HEI.DE",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 1.849348,
+      "price": 175.05,
+      "gross": 323.73,
+      "cost": 0.08,
+      "net_cash": 323.65,
+      "note": "Automated trim",
+      "name": "Heidelberg Materials AG",
+      "avg_cost_at_exit": 148.6527
+    },
+    {
+      "id": "4695c9b0-195a-4c48-a3a1-2b67ce59bb1f",
+      "fund_id": "206b974c-fad3-4844-8c6e-61db875f69c7",
+      "acted_at": "2026-11-06T07:52:54.625445+00:00",
+      "ticker": "BNR.DE",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 4.588559,
+      "price": 63.82,
+      "gross": 292.84,
+      "cost": 0.07,
+      "net_cash": -292.92,
+      "note": "Automated buy",
+      "name": "Brenntag SE"
+    },
+    {
+      "id": "e75d3d76-37c0-4d6c-8a96-0442fd530440",
+      "fund_id": "206b974c-fad3-4844-8c6e-61db875f69c7",
+      "acted_at": "2026-11-06T07:52:54.625445+00:00",
+      "ticker": "VOW3.DE",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 4.071772,
+      "price": 71.92,
+      "gross": 292.84,
+      "cost": 0.07,
+      "net_cash": -292.92,
+      "note": "Automated buy",
+      "name": "Volkswagen AG"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,7 +86,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1060.01,
+    "nav": 1171.37,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -36,64 +99,86 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 529.96,
+    "target_sleeve_value": 292.84,
     "targets": [
       {
-        "ticker": "HEI.DE",
-        "name": "Heidelberg Materials AG",
-        "signal": "strong_buy",
-        "conviction_score": 0.615,
-        "price": 150.45
-      },
-      {
         "ticker": "FME.DE",
         "name": "Fresenius Medical Care AG",
         "signal": "strong_buy",
-        "conviction_score": 0.580805,
-        "price": 40.4
-      }
-    ],
-    "anticipated_exits": [
+        "conviction_score": 0.5553049999999999,
+        "price": 42.32
+      },
       {
-        "action": "sell",
+        "ticker": "HEI.DE",
+        "name": "Heidelberg Materials AG",
+        "signal": "buy",
+        "conviction_score": 0.3781,
+        "price": 175.05
+      },
+      {
+        "ticker": "BNR.DE",
+        "name": "Brenntag SE",
+        "signal": "buy",
+        "conviction_score": 0.23902,
+        "price": 63.82
+      },
+      {
         "ticker": "VOW3.DE",
         "name": "Volkswagen AG",
-        "reason": "No longer in the top conviction target set",
-        "shares": 5.042491,
-        "price": 69.62,
-        "value": 351.06
+        "signal": "buy",
+        "conviction_score": 0.2159,
+        "price": 71.92
       }
     ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
+    "anticipated_buys": [],
+    "anticipated_holds": [
       {
-        "action": "buy",
-        "ticker": "HEI.DE",
-        "name": "Heidelberg Materials AG",
-        "reason": "Top-up to equal weight",
-        "value": 170.56,
-        "price": 150.45,
-        "target_value": 529.96,
-        "conviction_score": 0.615,
+        "action": "hold",
+        "ticker": "FME.DE",
+        "name": "Fresenius Medical Care AG",
+        "reason": "Already near equal-weight target",
+        "value": 292.85,
+        "target_value": 292.84,
+        "conviction_score": 0.5553049999999999,
         "signal": "strong_buy"
       },
       {
-        "action": "buy",
-        "ticker": "FME.DE",
-        "name": "Fresenius Medical Care AG",
-        "reason": "Top-up to equal weight",
-        "value": 180.41,
-        "price": 40.4,
-        "target_value": 529.96,
-        "conviction_score": 0.580805,
-        "signal": "strong_buy"
+        "action": "hold",
+        "ticker": "HEI.DE",
+        "name": "Heidelberg Materials AG",
+        "reason": "Already near equal-weight target",
+        "value": 292.83,
+        "target_value": 292.84,
+        "conviction_score": 0.3781,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "BNR.DE",
+        "name": "Brenntag SE",
+        "reason": "Already near equal-weight target",
+        "value": 292.84,
+        "target_value": 292.84,
+        "conviction_score": 0.23902,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "VOW3.DE",
+        "name": "Volkswagen AG",
+        "reason": "Already near equal-weight target",
+        "value": 292.84,
+        "target_value": 292.84,
+        "conviction_score": 0.2159,
+        "signal": "buy"
       }
     ],
-    "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s)."
+    "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 4 near-target holding(s)."
   },
   "alerts": [
     {
@@ -102,7 +187,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 40.4,
+      "mark": 42.32,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -113,7 +198,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 150.45,
+      "mark": 175.05,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "BNR.DE",
+      "name": "Brenntag SE",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 63.82,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -122,9 +218,9 @@
       "ticker": "VOW3.DE",
       "name": "Volkswagen AG",
       "source": "paper",
-      "severity": "watch",
-      "message": "Screen signal is now hold",
-      "mark": 69.62,
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 71.92,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -151,8 +247,8 @@
     "holdings": {
       "FME.DE": {
         "ticker": "FME.DE",
-        "shares": 8.652147,
-        "avg_cost": 40.0393,
+        "shares": 6.919884,
+        "avg_cost": 40.1621,
         "name": "Fresenius Medical Care AG",
         "sector": "Healthcare",
         "currency": "EUR",
@@ -162,8 +258,8 @@
       },
       "HEI.DE": {
         "ticker": "HEI.DE",
-        "shares": 2.388836,
-        "avg_cost": 147.8,
+        "shares": 1.67286,
+        "avg_cost": 148.6527,
         "name": "Heidelberg Materials AG",
         "sector": "Basic Materials",
         "currency": "EUR",
@@ -171,16 +267,27 @@
         "take_profit": null,
         "opened_at": "2026-10-26T14:19:33.710938+00:00"
       },
+      "BNR.DE": {
+        "ticker": "BNR.DE",
+        "shares": 4.588559,
+        "avg_cost": 63.82,
+        "name": "Brenntag SE",
+        "sector": "Basic Materials",
+        "currency": "EUR",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-11-06T07:52:54.625445+00:00"
+      },
       "VOW3.DE": {
         "ticker": "VOW3.DE",
-        "shares": 5.042491,
-        "avg_cost": 69.62,
+        "shares": 4.071772,
+        "avg_cost": 71.92,
         "name": "Volkswagen AG",
         "sector": "Consumer Cyclical",
         "currency": "EUR",
         "stop_loss": null,
         "take_profit": null,
-        "opened_at": "2026-11-01T07:12:45.495587+00:00"
+        "opened_at": "2026-11-06T07:52:54.625445+00:00"
       }
     },
     "trades": [
@@ -828,6 +935,115 @@
         "net_cash": -351.15,
         "note": "Automated buy",
         "name": "Volkswagen AG"
+      },
+      {
+        "id": "42538f2c-b555-4a35-9e3d-e4d4e946e4dd",
+        "fund_id": "206b974c-fad3-4844-8c6e-61db875f69c7",
+        "acted_at": "2026-11-03T14:17:15.450145+00:00",
+        "ticker": "VOW3.DE",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 5.042491,
+        "price": 69.62,
+        "gross": 351.06,
+        "cost": 0.09,
+        "net_cash": 350.97,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Volkswagen AG",
+        "avg_cost_at_exit": 69.62,
+        "position_closed": true
+      },
+      {
+        "id": "a5ce0fff-a8eb-4df6-8341-58089757eda7",
+        "fund_id": "206b974c-fad3-4844-8c6e-61db875f69c7",
+        "acted_at": "2026-11-03T14:17:15.450145+00:00",
+        "ticker": "HEI.DE",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 1.133372,
+        "price": 150.45,
+        "gross": 170.52,
+        "cost": 0.04,
+        "net_cash": -170.56,
+        "note": "Automated buy",
+        "name": "Heidelberg Materials AG"
+      },
+      {
+        "id": "7b35dcfa-c555-49e1-95d2-27c1d155fb7f",
+        "fund_id": "206b974c-fad3-4844-8c6e-61db875f69c7",
+        "acted_at": "2026-11-03T14:17:15.450145+00:00",
+        "ticker": "FME.DE",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 4.464529,
+        "price": 40.4,
+        "gross": 180.37,
+        "cost": 0.05,
+        "net_cash": -180.41,
+        "note": "Automated buy",
+        "name": "Fresenius Medical Care AG"
+      },
+      {
+        "id": "3bf6c0c0-d82a-4ebc-9640-3e896ada466e",
+        "fund_id": "206b974c-fad3-4844-8c6e-61db875f69c7",
+        "acted_at": "2026-11-06T07:52:54.625445+00:00",
+        "ticker": "FME.DE",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 6.196792,
+        "price": 42.32,
+        "gross": 262.25,
+        "cost": 0.07,
+        "net_cash": 262.18,
+        "note": "Automated trim",
+        "name": "Fresenius Medical Care AG",
+        "avg_cost_at_exit": 40.1621
+      },
+      {
+        "id": "37ad0b8d-d17e-4414-a566-153bb8e0436a",
+        "fund_id": "206b974c-fad3-4844-8c6e-61db875f69c7",
+        "acted_at": "2026-11-06T07:52:54.625445+00:00",
+        "ticker": "HEI.DE",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 1.849348,
+        "price": 175.05,
+        "gross": 323.73,
+        "cost": 0.08,
+        "net_cash": 323.65,
+        "note": "Automated trim",
+        "name": "Heidelberg Materials AG",
+        "avg_cost_at_exit": 148.6527
+      },
+      {
+        "id": "4695c9b0-195a-4c48-a3a1-2b67ce59bb1f",
+        "fund_id": "206b974c-fad3-4844-8c6e-61db875f69c7",
+        "acted_at": "2026-11-06T07:52:54.625445+00:00",
+        "ticker": "BNR.DE",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 4.588559,
+        "price": 63.82,
+        "gross": 292.84,
+        "cost": 0.07,
+        "net_cash": -292.92,
+        "note": "Automated buy",
+        "name": "Brenntag SE"
+      },
+      {
+        "id": "e75d3d76-37c0-4d6c-8a96-0442fd530440",
+        "fund_id": "206b974c-fad3-4844-8c6e-61db875f69c7",
+        "acted_at": "2026-11-06T07:52:54.625445+00:00",
+        "ticker": "VOW3.DE",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 4.071772,
+        "price": 71.92,
+        "gross": 292.84,
+        "cost": 0.07,
+        "net_cash": -292.92,
+        "note": "Automated buy",
+        "name": "Volkswagen AG"
       }
     ],
     "equity_curve": [
@@ -1398,26 +1614,88 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-03T14:17:15.450145+00:00",
+        "portfolio_value": 1059.83,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-04T14:17:00.075349+00:00",
+        "portfolio_value": 1059.83,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-05T14:17:46.474536+00:00",
+        "portfolio_value": 1059.83,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-06T07:52:54.625445+00:00",
+        "portfolio_value": 1171.37,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 4,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-02T08:04:04.166226+00:00",
+    "last_mark_at": "2026-11-06T07:52:54.625445+00:00",
     "rebalance_state": {
-      "exit_streak": {
-        "VOW3.DE": 1
-      },
+      "exit_streak": {},
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (4 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "dax",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:04:04.171744+00:00",
+    "generated_at": "2026-11-06T07:52:54.629720+00:00",
     "observe_only": true,
-    "open_count": 13,
+    "open_count": 14,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -1488,13 +1766,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 1
+    "ingested_this_pass": 1,
+    "checkpoints_added_this_pass": 9
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:04:04.172863+00:00",
+    "generated_at": "2026-11-06T07:52:54.630677+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1550,7 +1828,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 4,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 3,
+      "hold_with_data_quality_count": 4,
       "gaps": [
         "hold_recovery closed episodes=4 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -1559,10 +1837,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 2,
-        "recovered_to_breakeven": 2,
+        "count": 3,
+        "recovered_to_breakeven": 3,
         "close_reasons": {
-          "open": 2
+          "open": 3
         }
       },
       "closed": {
@@ -1575,9 +1853,9 @@
     },
     "swap_rotation": {
       "open": {
-        "count": 5,
+        "count": 6,
         "verdicts": {
-          "open": 5
+          "open": 6
         }
       },
       "closed": {
@@ -1586,12 +1864,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 0
+      "hold_episodes": 1,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 0
+      "hold_episodes": 1,
+      "swap_rotations": 2
     }
   },
   "hypothesis_integrity": {
@@ -1599,8 +1877,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-11-02T08:04:04.175141+00:00",
-    "as_of": "2026-11-02T08:04:04.166226+00:00",
+    "updated_at": "2026-11-06T07:52:54.631571+00:00",
+    "as_of": "2026-11-06T07:52:54.625445+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1612,16 +1890,16 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 3,
+    "holding_count": 4,
     "underwater_count": 0,
     "thesis_status_counts": {
       "intact": 1,
-      "weakening": 2,
+      "weakening": 3,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 3,
+      "holding_count": 4,
       "loser_count": 0,
       "loser_share": 0.0,
       "loser_nav_share": 0.0,
@@ -1639,10 +1917,10 @@
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.0,
-        "quality": 0.3333,
+        "cheapness": 0.25,
+        "quality": 0.25,
         "dividend": 0.0,
-        "garp": 1.0,
+        "garp": 0.75,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -1651,6 +1929,48 @@
     },
     "holdings": [
       {
+        "ticker": "BNR.DE",
+        "name": "Brenntag SE",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 63.82,
+        "avg_cost": 63.82,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.239,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "cheapness"
+        ],
+        "research_verdict": "caution",
+        "reasons": [
+          "research verdict caution",
+          "cheapness family no longer passes",
+          "conviction 24% below intact floor",
+          "still buy",
+          "data_quality 1.00"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "data_quality 1.00"
+        ],
+        "weaken_reasons": [
+          "research verdict caution",
+          "cheapness family no longer passes",
+          "conviction 24% below intact floor"
+        ],
+        "broken_reasons": []
+      },
+      {
         "ticker": "VOW3.DE",
         "name": "Volkswagen AG",
         "thesis_status": "weakening",
@@ -1658,11 +1978,11 @@
         "underwater": false,
         "deep_underwater": false,
         "unrealized_pct": 0.0,
-        "mark": 69.62,
-        "avg_cost": 69.62,
-        "signal": "hold",
+        "mark": 71.92,
+        "avg_cost": 71.92,
+        "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.1988,
+        "conviction_score": 0.2159,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1675,20 +1995,19 @@
         ],
         "research_verdict": "caution",
         "reasons": [
-          "left buy tier (hold)",
           "research verdict caution",
-          "conviction 20% below intact floor",
-          "cheapness family still passes",
-          "data_quality 1.00"
+          "conviction 22% below intact floor",
+          "still buy",
+          "cheapness family still passes"
         ],
         "intact_reasons": [
+          "still buy",
           "cheapness family still passes",
           "data_quality 1.00"
         ],
         "weaken_reasons": [
-          "left buy tier (hold)",
           "research verdict caution",
-          "conviction 20% below intact floor"
+          "conviction 22% below intact floor"
         ],
         "broken_reasons": []
       },
@@ -1699,12 +2018,12 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.009,
-        "mark": 40.4,
-        "avg_cost": 40.0393,
+        "unrealized_pct": 0.0537,
+        "mark": 42.32,
+        "avg_cost": 40.1621,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5808,
+        "conviction_score": 0.5553,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1725,7 +2044,7 @@
           "still strong_buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 58%"
+          "conviction 56%"
         ],
         "weaken_reasons": [
           "research verdict caution"
@@ -1739,12 +2058,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0179,
-        "mark": 150.45,
-        "avg_cost": 147.8,
-        "signal": "strong_buy",
+        "unrealized_pct": 0.1776,
+        "mark": 175.05,
+        "avg_cost": 148.6527,
+        "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.615,
+        "conviction_score": 0.3781,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1757,18 +2076,18 @@
         ],
         "research_verdict": "accumulate",
         "reasons": [
-          "still strong_buy",
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 62%"
+          "conviction 38%"
         ],
         "intact_reasons": [
-          "still strong_buy",
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 62%"
+          "conviction 38%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1781,7 +2100,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:04:04.179606+00:00",
+    "generated_at": "2026-11-06T07:52:54.632805+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1789,7 +2108,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 4,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 2,
+      "open_with_thesis": 3,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -1848,8 +2167,8 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-11-02T08:04:04.185935+00:00",
-    "open_count": 1,
+    "generated_at": "2026-11-06T07:52:54.634937+00:00",
+    "open_count": 2,
     "closed_count": 6,
     "scored_count": 5,
     "scored_count_all": 6,
@@ -1909,14 +2228,14 @@
       "recommit_scored": 1
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 1,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:04:04.166226+00:00",
+    "generated_at": "2026-11-06T07:52:54.625445+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1941,15 +2260,15 @@
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
     "open_count": 7,
-    "closed_count": 0,
+    "closed_count": 1,
     "open_by_capital_status": {
-      "on_book": 3,
-      "off_book": 4,
+      "on_book": 4,
+      "off_book": 3,
       "never_funded": 0
     },
     "closed_by_capital_status": {
       "on_book": 0,
-      "off_book": 0,
+      "off_book": 1,
       "never_funded": 0
     },
     "readiness": {
@@ -1957,23 +2276,23 @@
       "closed_per_tag_target": 15,
       "gaps": [
         "on_book closed=0 (target>=15)",
-        "off_book closed=0 (target>=15)",
+        "off_book closed=1 (target>=15)",
         "never_funded closed=0 (target>=15)"
       ],
       "note": "Probability / nested counterfactual promotion waits until each capital_status tag has a thick closed cohort."
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 0,
-      "closed": 0,
-      "tagged_on_book": 0,
+      "opened": 1,
+      "closed": 1,
+      "tagged_on_book": 1,
       "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:04:04.166226+00:00",
+    "generated_at": "2026-11-06T07:52:54.625445+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1981,39 +2300,213 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 2,
+    "card_count": 2,
     "verdict_counts": {
       "agree": 0,
-      "veto": 0,
+      "veto": 2,
       "abstain": 0
     },
-    "by_algo_action": {},
-    "disagree_vs_heuristic_count": 0,
-    "cards": [],
+    "by_algo_action": {
+      "buy": {
+        "agree": 0,
+        "veto": 2,
+        "abstain": 0
+      }
+    },
+    "disagree_vs_heuristic_count": 2,
+    "cards": [
+      {
+        "ticker": "BNR.DE",
+        "name": "Brenntag SE",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "veto",
+        "reasons": [
+          "Automated buy conflicts with still_buyish false \u2014 name is not buy/strong_buy on the decision screen.",
+          "Effective screen_signal is hold, not a fresh buy cohort signal.",
+          "research_verdict caution with overlay_bound true caps enthusiasm despite conviction_rank 3 and rank_drop 0."
+        ],
+        "evidence": [
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 3
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level_native",
+        "logged_at": "2026-11-06T07:52:54.625445+00:00",
+        "proposal_id": "buy_tier_level_native:BNR.DE:buy:2026-11-06T07:52:54.625445+00:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "abstain",
+            "reasons": [
+              "Buy while not buyish \u2014 abstain."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "VOW3.DE",
+        "name": "Volkswagen AG",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "veto",
+        "reasons": [
+          "Automated buy conflicts with still_buyish false \u2014 name is not buy/strong_buy on the decision screen.",
+          "Effective screen_signal is hold, not a fresh buy cohort signal.",
+          "research_verdict caution with overlay_bound true; rank_drop 0 does not restore buyish status."
+        ],
+        "evidence": [
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level_native",
+        "logged_at": "2026-11-06T07:52:54.625445+00:00",
+        "proposal_id": "buy_tier_level_native:VOW3.DE:buy:2026-11-06T07:52:54.625445+00:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "abstain",
+            "reasons": [
+              "Buy while not buyish \u2014 abstain."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null
+      "fallback": null,
+      "llm_card_count": 2
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-11-02T08:04:04.166226+00:00",
+      "generated_at": "2026-11-06T07:52:54.625445+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 2,
       "verdict_counts": {
         "agree": 0,
-        "veto": 0,
+        "veto": 2,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "buy": {
+          "agree": 0,
+          "veto": 2,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -2029,7 +2522,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-02T08:04:04.190373+00:00",
+  "generated_at": "2026-11-06T07:53:02.438448+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,

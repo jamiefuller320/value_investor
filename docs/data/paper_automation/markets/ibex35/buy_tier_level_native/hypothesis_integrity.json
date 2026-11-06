@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "updated_at": "2026-11-02T08:04:25.161681+00:00",
-  "as_of": "2026-11-02T08:04:25.154384+00:00",
+  "updated_at": "2026-11-06T07:53:08.548392+00:00",
+  "as_of": "2026-11-06T07:53:08.543440+00:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -19,8 +19,8 @@
   "holding_count": 3,
   "underwater_count": 0,
   "thesis_status_counts": {
-    "intact": 1,
-    "weakening": 2,
+    "intact": 0,
+    "weakening": 3,
     "broken": 0,
     "insufficient_data": 0
   },
@@ -46,8 +46,8 @@
       "cheapness": 0.0,
       "quality": 0.6667,
       "dividend": 0.0,
-      "garp": 0.0,
-      "risk": 0.0
+      "garp": 0.6667,
+      "risk": 0.6667
     },
     "selection_feedback_flags": [],
     "balancing_hint": "maintain",
@@ -61,36 +61,38 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0014,
-      "mark": 4.05,
+      "unrealized_pct": -0.0,
+      "mark": 4.044,
       "avg_cost": 4.0442,
-      "signal": "buy",
+      "signal": "hold",
       "timing_signal": "neutral",
-      "conviction_score": 0.4388,
-      "data_quality_score": 1.0,
+      "conviction_score": 0.1208,
+      "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
-        "dividend",
+        "dividend"
+      ],
+      "failed_families": [
+        "quality",
         "garp",
         "risk"
       ],
-      "failed_families": [
-        "quality"
-      ],
       "research_verdict": "caution",
       "reasons": [
+        "left buy tier (hold)",
         "research verdict caution",
-        "still buy",
-        "cheapness family still passes"
+        "conviction 12% below intact floor",
+        "cheapness family still passes",
+        "data_quality 0.95"
       ],
       "intact_reasons": [
-        "still buy",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 44%"
+        "data_quality 0.95"
       ],
       "weaken_reasons": [
-        "research verdict caution"
+        "left buy tier (hold)",
+        "research verdict caution",
+        "conviction 12% below intact floor"
       ],
       "broken_reasons": []
     },
@@ -101,12 +103,12 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.043,
-      "mark": 30.73,
+      "unrealized_pct": 0.0253,
+      "mark": 30.21,
       "avg_cost": 29.464,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4951,
+      "conviction_score": 0.5998,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -126,7 +128,7 @@
         "still strong_buy",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 50%"
+        "conviction 60%"
       ],
       "weaken_reasons": [
         "research verdict caution"
@@ -136,42 +138,42 @@
     {
       "ticker": "GRF.MC",
       "name": "Grifols, S.A.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0837,
-      "mark": 10.975,
+      "unrealized_pct": 0.1138,
+      "mark": 11.28,
       "avg_cost": 10.1277,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5955,
+      "signal": "hold",
+      "timing_signal": "wait",
+      "conviction_score": 0.2064,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
-        "dividend",
+        "dividend"
+      ],
+      "failed_families": [
+        "quality",
         "garp",
         "risk"
       ],
-      "failed_families": [
-        "quality"
-      ],
       "research_verdict": "accumulate",
       "reasons": [
-        "still buy",
+        "left buy tier (hold)",
+        "conviction 21% below intact floor",
         "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 60%"
+        "cheapness family still passes"
       ],
       "intact_reasons": [
-        "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 60%"
+        "data_quality 1.00"
       ],
-      "weaken_reasons": [],
+      "weaken_reasons": [
+        "left buy tier (hold)",
+        "conviction 21% below intact floor"
+      ],
       "broken_reasons": []
     }
   ],

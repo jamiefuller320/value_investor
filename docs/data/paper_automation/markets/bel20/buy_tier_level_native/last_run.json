@@ -1,31 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-02T08:05:07.359284+00:00",
+    "local_time": "2026-11-06T07:53:25.988257+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-02T08:00:00+00:00",
-    "settle_at": "2026-11-02T09:15:00+00:00",
+    "market_open_at": "2026-11-06T08:00:00+00:00",
+    "settle_at": "2026-11-06T09:15:00+00:00",
     "can_act": false,
-    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    "reason": "before market open"
   },
-  "trades": [
-    {
-      "id": "5164c452-4f04-475f-a37a-190b70e3d786",
-      "fund_id": "0077d59b-0902-4d01-add7-458a2b36bf3b",
-      "acted_at": "2026-11-02T08:05:07.359284+00:00",
-      "ticker": "UMI.BR",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.890702,
-      "price": 17.62,
-      "gross": 15.69,
-      "cost": 0.0,
-      "net_cash": -15.7,
-      "note": "Automated buy",
-      "name": "Umicore SA"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -39,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 937.05,
+    "nav": 974.85,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -52,52 +36,40 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 468.53,
+    "target_sleeve_value": 487.42,
     "targets": [
-      {
-        "ticker": "UMI.BR",
-        "name": "Umicore SA",
-        "signal": "strong_buy",
-        "conviction_score": 0.5802,
-        "price": 17.62
-      },
       {
         "ticker": "AED.BR",
         "name": "Aedifica NV/SA",
         "signal": "buy",
-        "conviction_score": 0.505,
-        "price": 63.65
+        "conviction_score": 0.5700000000000001,
+        "price": 65.1
+      },
+      {
+        "ticker": "UMI.BR",
+        "name": "Umicore SA",
+        "signal": "buy",
+        "conviction_score": 0.4794,
+        "price": 18.64
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_holds": [],
+    "skipped": [
       {
-        "action": "hold",
-        "ticker": "UMI.BR",
-        "name": "Umicore SA",
-        "reason": "Already near equal-weight target",
-        "value": 468.52,
-        "target_value": 468.53,
-        "conviction_score": 0.5802,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
         "ticker": "AED.BR",
         "name": "Aedifica NV/SA",
-        "reason": "Already near equal-weight target",
-        "value": 468.53,
-        "target_value": 468.53,
-        "conviction_score": 0.505,
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 487.42,
+        "conviction_score": 0.5700000000000001,
         "signal": "buy"
       }
     ],
-    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s)."
   },
   "alerts": [
     {
@@ -105,11 +77,11 @@
       "name": "Umicore SA",
       "source": "paper",
       "severity": "info",
-      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
-      "mark": 17.62,
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 18.64,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "AED.BR",
@@ -117,7 +89,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 63.65,
+      "mark": 65.1,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -1218,9 +1190,73 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-03T14:17:33.054157+00:00",
+        "portfolio_value": 937.05,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-04T14:17:10.328220+00:00",
+        "portfolio_value": 937.05,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-05T14:18:07.475164+00:00",
+        "portfolio_value": 937.05,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-06T07:53:25.988257+00:00",
+        "portfolio_value": 974.85,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-02T08:05:07.359284+00:00",
+    "last_mark_at": "2026-11-06T07:53:25.988257+00:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -1228,12 +1264,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (1 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "bel20",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:05:07.363400+00:00",
+    "generated_at": "2026-11-06T07:53:25.991386+00:00",
     "observe_only": true,
     "open_count": 6,
     "closed_count": 0,
@@ -1307,12 +1343,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 0
+    "checkpoints_added_this_pass": 2
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:05:07.364371+00:00",
+    "generated_at": "2026-11-06T07:53:25.992202+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1378,7 +1414,7 @@
     "hold_recovery": {
       "open": {
         "count": 2,
-        "recovered_to_breakeven": 0,
+        "recovered_to_breakeven": 1,
         "close_reasons": {
           "open": 2
         }
@@ -1408,8 +1444,8 @@
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 0
+      "hold_episodes": 1,
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -1417,8 +1453,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-11-02T08:05:07.365539+00:00",
-    "as_of": "2026-11-02T08:05:07.359284+00:00",
+    "updated_at": "2026-11-06T07:53:25.993140+00:00",
+    "as_of": "2026-11-06T07:53:25.988257+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1431,7 +1467,7 @@
       "skip_underwater_urgency_when_intact": true
     },
     "holding_count": 2,
-    "underwater_count": 1,
+    "underwater_count": 0,
     "thesis_status_counts": {
       "intact": 2,
       "weakening": 0,
@@ -1440,13 +1476,13 @@
     },
     "portfolio_feedback": {
       "holding_count": 2,
-      "loser_count": 1,
-      "loser_share": 0.5,
-      "loser_nav_share": 0.5,
+      "loser_count": 0,
+      "loser_share": 0.0,
+      "loser_nav_share": 0.0,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
-      "within_tolerance": false,
-      "intact_loser_count": 1,
+      "within_tolerance": true,
+      "intact_loser_count": 0,
       "weakening_loser_count": 0,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
@@ -1460,11 +1496,11 @@
         "cheapness": 0.0,
         "quality": 0.0,
         "dividend": 0.0,
-        "garp": 1.0,
+        "garp": 0.5,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
-      "balancing_hint": "hold_intact_review_selection",
+      "balancing_hint": "maintain",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
@@ -1473,14 +1509,14 @@
         "name": "Umicore SA",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
-        "underwater": true,
+        "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0726,
-        "mark": 17.62,
+        "unrealized_pct": -0.0189,
+        "mark": 18.64,
         "avg_cost": 18.9992,
-        "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5802,
+        "signal": "buy",
+        "timing_signal": "accumulate",
+        "conviction_score": 0.4794,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1492,19 +1528,18 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "price drawdown alone does not invalidate value thesis",
-          "still strong_buy",
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 58%"
+          "conviction 48%"
         ],
         "intact_reasons": [
-          "still strong_buy",
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 58%"
+          "conviction 48%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1516,12 +1551,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0087,
-        "mark": 63.65,
+        "unrealized_pct": 0.0317,
+        "mark": 65.1,
         "avg_cost": 63.098,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.505,
+        "conviction_score": 0.57,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1538,14 +1573,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 50%"
+          "conviction 57%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 50%"
+          "conviction 57%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1558,7 +1593,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:05:07.367071+00:00",
+    "generated_at": "2026-11-06T07:53:25.994372+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1633,7 +1668,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-11-02T08:05:07.369809+00:00",
+    "generated_at": "2026-11-06T07:53:25.996446+00:00",
     "open_count": 0,
     "closed_count": 5,
     "scored_count": 3,
@@ -1700,7 +1735,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:05:07.359284+00:00",
+    "generated_at": "2026-11-06T07:53:25.988257+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1757,7 +1792,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-02T08:05:07.359284+00:00",
+    "generated_at": "2026-11-06T07:53:25.988257+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1773,7 +1808,7 @@
       "abstain": 0
     },
     "by_algo_action": {
-      "buy": {
+      "rebuy_skip": {
         "agree": 1,
         "veto": 0,
         "abstain": 0
@@ -1782,27 +1817,27 @@
     "disagree_vs_heuristic_count": 0,
     "cards": [
       {
-        "ticker": "UMI.BR",
-        "name": "Umicore SA",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
+        "ticker": "AED.BR",
+        "name": "Aedifica NV/SA",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
         "reasons": [
-          "Screen signal is strong_buy with still_buyish true, so the name remains in the buy cohort at decision time.",
-          "Conviction rank 1 with rank_drop 0 versus entry rank 1 shows no deterioration relative to the hold gate.",
-          "Research verdict accumulate with overlay_bound true supports the automated buy without a conflicting overlay flag; fcf_basis_overlay is false."
+          "algo_reason states insufficient cash after higher-conviction fills\u2014a capital-priority skip, not a screen or research downgrade.",
+          "still_buyish true with screen_signal buy, rank_drop 0, entry_rank and conviction_rank both 1, and research_verdict accumulate; no decisive leave-buy-cohort signal to second-guess the skip.",
+          "Hold-gate logic (rank_drop 0) supports continued buyish treatment; rebuy_skip aligns with low-churn intent when cash is constrained."
         ],
         "evidence": [
           {
             "kind": "algo_reason",
             "source": "plan_or_trade",
-            "detail": "Automated buy"
+            "detail": "Insufficient cash after higher-conviction fills"
           },
           {
             "kind": "screen_signal",
             "source": "candidates",
             "detail": "Effective signal at decision time",
-            "value": "strong_buy"
+            "value": "buy"
           },
           {
             "kind": "conviction_rank",
@@ -1829,27 +1864,9 @@
             "value": "accumulate"
           },
           {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.5802
-          },
-          {
             "kind": "still_buyish",
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
             "value": true
           }
         ],
@@ -1858,8 +1875,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level_native",
-        "logged_at": "2026-11-02T08:05:07.359284+00:00",
-        "proposal_id": "buy_tier_level_native:UMI.BR:buy:2026-11-02T08:05:07.359284+00:00",
+        "logged_at": "2026-11-06T07:53:25.988257+00:00",
+        "proposal_id": "buy_tier_level_native:AED.BR:rebuy_skip:2026-11-06T07:53:25.988257+00:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -1878,7 +1895,7 @@
           "heuristic_baseline": {
             "shadow_verdict": "agree",
             "reasons": [
-              "Buy into buyish target set \u2014 agree with algo selection."
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
             ],
             "judge_spec_id": "heuristic.v1"
           },
@@ -1898,7 +1915,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-11-02T08:05:07.359284+00:00",
+      "generated_at": "2026-11-06T07:53:25.988257+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
@@ -1912,7 +1929,7 @@
         "abstain": 0
       },
       "by_algo_action": {
-        "buy": {
+        "rebuy_skip": {
           "agree": 1,
           "veto": 0,
           "abstain": 0
@@ -1933,7 +1950,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-02T08:05:10.973137+00:00",
+  "generated_at": "2026-11-06T07:53:30.327297+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,

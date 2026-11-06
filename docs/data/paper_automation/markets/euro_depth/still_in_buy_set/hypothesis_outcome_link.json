@@ -3,13 +3,13 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "still_in_buy_set",
-  "generated_at": "2026-11-02T08:07:41.160010+00:00",
+  "generated_at": "2026-11-06T07:55:17.701189+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 7,
+    "closed_total": 8,
     "closed_unknown_thesis": 0,
     "open_with_thesis": 3,
     "by_thesis_status": {
@@ -28,7 +28,14 @@
         }
       },
       "broken": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.2251,
+        "mean_trough_unrealized_pct": 0.2251,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "insufficient_data": {
         "closed_count": 0
@@ -56,10 +63,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 7,
+    "hold_closed_with_thesis": 8,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=7 (target >=8)",
+      "hold thesis buckets thin (broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -121,7 +128,7 @@
           "trough_unrealized_pct": -0.0126
         }
       ],
-      "peak_unrealized_pct": 0.0173,
+      "peak_unrealized_pct": 0.0435,
       "trough_unrealized_pct": -0.0126,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -483,7 +490,7 @@
           "trough_unrealized_pct": -0.0321
         }
       ],
-      "peak_unrealized_pct": 0.0466,
+      "peak_unrealized_pct": 0.0607,
       "trough_unrealized_pct": -0.0321,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -532,6 +539,48 @@
       "close_reason": "sold_while_underwater",
       "closed_at": "2026-11-01T08:15:16.314413+01:00",
       "linked_sell_trade_id": "c988c289-ab19-40bd-8b37-beded3f0ac88"
+    },
+    {
+      "episode_id": "still_in_buy_set:PHIA.AS:2026-11-06T08:43:22.990969+01:00",
+      "track_id": "still_in_buy_set",
+      "ticker": "PHIA.AS",
+      "name": "Koninklijke Philips N.V.",
+      "started_at": "2026-11-06T08:43:22.990969+01:00",
+      "status": "closed",
+      "stress_triggers": [
+        "exit_streak",
+        "signal_downgrade"
+      ],
+      "entry_mark": 27.38,
+      "avg_cost": 22.35,
+      "unrealized_pct_at_start": 0.2251,
+      "thesis_status_at_start": "broken",
+      "recommended_action_at_start": "exit_candidate",
+      "thesis_reasons_at_start": [
+        "cheapness lost and not in buy tier"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": 0.2251,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.247,
+      "exit_streak_at_start": 1,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.2251,
+      "trough_unrealized_pct": 0.2251,
+      "recovered_to_breakeven": true,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-06T08:55:11.900489+01:00",
+      "linked_sell_trade_id": "63e5e556-9e0b-460d-bb42-d79db3753d3e"
     }
   ],
   "swap_rotations": [
@@ -584,13 +633,20 @@
           "avg_sell_return": 0.0053,
           "avg_buy_return": 0.0211,
           "replacement_delta": 0.0158
+        },
+        {
+          "scored_at": "2026-11-06T08:43:22.990969+01:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0398,
+          "avg_buy_return": 0.0601,
+          "replacement_delta": 0.0203
         }
       ],
       "sell_returns_since_rotation": {
-        "EG7.IR": 0.0345
+        "EG7.IR": 0.0398
       },
       "buy_returns_since_rotation": {
-        "AED.BR": 0.0333
+        "AED.BR": 0.0601
       },
       "verdict": null,
       "closed_at": null
@@ -644,13 +700,20 @@
           "avg_sell_return": 0.0212,
           "avg_buy_return": 0.0282,
           "replacement_delta": 0.007
+        },
+        {
+          "scored_at": "2026-11-06T08:43:22.990969+01:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0627,
+          "avg_buy_return": 0.057,
+          "replacement_delta": -0.0057
         }
       ],
       "sell_returns_since_rotation": {
-        "AED.BR": 0.0358
+        "AED.BR": 0.0627
       },
       "buy_returns_since_rotation": {
-        "TTE.PA": 0.107
+        "TTE.PA": 0.057
       },
       "verdict": null,
       "closed_at": null
@@ -764,13 +827,13 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "ERIC-B.ST": 0.1315,
-        "AD.AS": 0.0254,
-        "SAN.PA": 0.1271
+        "ERIC-B.ST": 0.1154,
+        "AD.AS": 0.0736,
+        "SAN.PA": 0.1887
       },
       "buy_returns_since_rotation": {
-        "PHIA.AS": 0.0846,
-        "C5H.IR": 0.0472
+        "PHIA.AS": 0.2251,
+        "C5H.IR": 0.0453
       },
       "verdict": null,
       "closed_at": null
@@ -827,10 +890,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "PHIA.AS": 0.0164
+        "PHIA.AS": 0.148
       },
       "buy_returns_since_rotation": {
-        "UMI.BR": -0.0112
+        "UMI.BR": 0.0589
       },
       "verdict": null,
       "closed_at": null
@@ -887,10 +950,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "TTE.PA": 0.0237
+        "TTE.PA": -0.0225
       },
       "buy_returns_since_rotation": {
-        "TEL2-B.ST": -0.0031
+        "TEL2-B.ST": 0.0025
       },
       "verdict": null,
       "closed_at": null

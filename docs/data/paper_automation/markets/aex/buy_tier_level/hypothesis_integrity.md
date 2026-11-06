@@ -1,59 +1,58 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-05T14:18:06.768505+00:00
+Track: `buy_tier_level` · updated 2026-11-06T07:53:20.190870+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 8 (0% count, 0% NAV)
+- Losers: **2** / 8 (25% count, 22% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
 ## Holding reviews
 
-### PRX.AS — weakening / watch_review (-3.5%)
-- research verdict caution
-- still buy
-- cheapness family still passes
-
-### ASML.AS — weakening / watch_review (+0.0%)
+### ASML.AS — weakening / watch_review (-11.5%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
 
-### KPN.AS — intact / hold_tolerate (+0.0%)
+### ASM.AS — weakening / watch_review (-9.9%)
+- research verdict neutral
+- still buy
+- cheapness family still passes
+
+### KPN.AS — intact / hold_tolerate (+2.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 46%
+- conviction 53%
 
-### ADYEN.AS — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 39%
-
-### AD.AS — intact / hold_tolerate (+0.9%)
+### AD.AS — intact / hold_tolerate (+6.7%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 72%
+- conviction 89%
 
-### AKZA.AS — intact / hold_tolerate (+2.2%)
+### PRX.AS — weakening / watch_review (+7.0%)
+- research verdict caution
+- still buy
+- cheapness family still passes
+
+### AKZA.AS — intact / hold_tolerate (+7.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 52%
+- conviction 59%
 
-### ASM.AS — weakening / watch_review (+3.4%)
-- research verdict neutral
-- still buy
+### ADYEN.AS — weakening / watch_review (+8.0%)
+- left buy tier (hold)
+- conviction 27% below intact floor
+- research accumulate
 - cheapness family still passes
 
-### RAND.AS — intact / hold_tolerate (+10.4%)
+### RAND.AS — intact / hold_tolerate (+12.4%)
 - still buy
 - research accumulate
 - cheapness family still passes
