@@ -1,23 +1,171 @@
 {
-  "run_at": "2026-11-05T20:56:58.336080+00:00",
+  "run_at": "2026-11-06T20:17:00.084247+00:00",
   "market_id": "dax",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "BNR.DE",
+    "VOW3.DE"
+  ],
+  "target_details": [
+    {
+      "ticker": "BNR.DE",
+      "priority_score": 17.0812,
+      "filings_total": 24,
+      "filings_with_body": 16,
+      "indexed_without_body": 8,
+      "reason": "indexed_without_body"
+    },
+    {
+      "ticker": "VOW3.DE",
+      "priority_score": 5.254,
+      "filings_total": 2,
+      "filings_with_body": 2,
+      "indexed_without_body": 0,
+      "reason": "thin_bodies"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "BNR.DE",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 24,
+        "filings_with_body": 16,
+        "indexed_without_body": 8
+      },
+      "after": {
+        "filings_total": 25,
+        "filings_with_body": 22,
+        "indexed_without_body": 3
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 25,
+        "annual": 7,
+        "interim": 13,
+        "trading_update": 0,
+        "other": 5,
+        "with_body": 22,
+        "period_coverage": {
+          "annual": {
+            "total": 7,
+            "with_body": 7
+          },
+          "interim": {
+            "total": 13,
+            "with_body": 11
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 5,
+            "with_body": 4
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 22,
+        "with_body_after": 22,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    },
+    {
+      "ticker": "VOW3.DE",
+      "reason": "thin_bodies",
+      "before": {
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0
+      },
+      "after": {
+        "filings_total": 3,
+        "filings_with_body": 3,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 3,
+        "annual": 2,
+        "interim": 1,
+        "trading_update": 0,
+        "other": 0,
+        "with_body": 3,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 1,
+            "with_body": 1
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 0,
+            "with_body": 0
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 3,
+        "with_body_after": 3,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 2,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "BNR.DE",
+    "VOW3.DE"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-05T20:56:08.029952+00:00",
+    "snapshot_at": "2026-11-06T20:10:37.111061+00:00",
     "market_id": "dax",
-    "buy_tier_count": 10,
+    "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 8,
-    "indexed_without_body": 0,
+    "thin_body_buy_tier": 7,
+    "indexed_without_body": 9,
     "bodies_min": 1,
-    "bodies_median": 1.0,
+    "bodies_median": 2,
     "bodies_max": 50,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -26,15 +174,18 @@
     "thin_body_tickers": [
       "DHL.DE",
       "DTE.DE",
-      "BAS.DE",
-      "FRE.DE",
       "MUV2.DE",
       "DTG.DE",
+      "HEN3.DE",
       "HNR1.DE",
-      "HEN3.DE"
+      "BAS.DE"
     ],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
+    "indexed_without_body_tickers": [
+      "BNR.DE"
+    ],
+    "indexed_without_body_by_ticker": {
+      "BNR.DE": 9
+    },
     "parked_tickers": [
       "BAS.DE",
       "DHL.DE",
@@ -48,20 +199,22 @@
     "parked_count": 8,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_indexed_without_body": 9,
+    "effective_indexed_without_body_tickers": [
+      "BNR.DE"
+    ],
+    "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-05T20:56:52.377552+00:00",
+    "snapshot_at": "2026-11-06T20:16:53.929573+00:00",
     "market_id": "dax",
-    "buy_tier_count": 10,
+    "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 8,
-    "indexed_without_body": 0,
+    "thin_body_buy_tier": 7,
+    "indexed_without_body": 3,
     "bodies_min": 1,
-    "bodies_median": 1.0,
+    "bodies_median": 2,
     "bodies_max": 50,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -70,31 +223,35 @@
     "thin_body_tickers": [
       "DHL.DE",
       "DTE.DE",
-      "BAS.DE",
-      "FRE.DE",
       "MUV2.DE",
       "DTG.DE",
+      "HEN3.DE",
       "HNR1.DE",
-      "HEN3.DE"
+      "BAS.DE"
     ],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
+    "indexed_without_body_tickers": [
+      "BNR.DE"
+    ],
+    "indexed_without_body_by_ticker": {
+      "BNR.DE": 3
+    },
     "parked_tickers": [
       "BAS.DE",
       "DHL.DE",
       "DTE.DE",
       "DTG.DE",
-      "FRE.DE",
       "HEN3.DE",
       "HNR1.DE",
       "MUV2.DE"
     ],
-    "parked_count": 8,
+    "parked_count": 7,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_indexed_without_body": 3,
+    "effective_indexed_without_body_tickers": [
+      "BNR.DE"
+    ],
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
@@ -103,7 +260,7 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 10,
+    "scanned": 11,
     "hits": 9,
     "new_rows_total": 0,
     "curiosity_total": 10,
@@ -120,58 +277,63 @@
     "prefer_tickers": [
       "DHL.DE",
       "DTE.DE",
-      "BAS.DE",
-      "FRE.DE",
       "MUV2.DE",
       "DTG.DE",
+      "HEN3.DE",
       "HNR1.DE",
-      "HEN3.DE"
+      "BAS.DE",
+      "BNR.DE"
     ],
     "runtime_cutoff": false
   },
   "maintenance_mode": true,
   "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "dax"
-  },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "dax",
-    "assessed_at": "2026-11-05T20:56:08.706616+00:00",
+    "assessed_at": "2026-11-06T20:10:37.894822+00:00",
     "unmeasured": [],
     "zero_body": [],
-    "indexed_without_body": [],
+    "indexed_without_body": [
+      {
+        "ticker": "BNR.DE",
+        "indexed_without_body": 9,
+        "filings_total": 25,
+        "filings_with_body": 16
+      }
+    ],
     "thin_need_discovery": [
       "DHL.DE",
       "DTE.DE",
-      "BAS.DE",
-      "FRE.DE",
       "MUV2.DE",
       "DTG.DE",
+      "HEN3.DE",
       "HNR1.DE",
-      "HEN3.DE"
+      "BAS.DE"
     ],
     "thin_need_bodies": [],
-    "primary_blocker": "thin_need_discovery",
+    "primary_blocker": "indexed_without_body",
     "force_discovery_scan": true,
-    "auto_pin_tickers": [],
+    "auto_pin_tickers": [
+      "BNR.DE"
+    ],
     "recommended_actions": [
-      "Discovery/IR seed for 8 thin ticker(s) that already have bodies for every indexed filing",
+      "Prefer indexed-without-body body refetch (1 tickers, top: BNR.DE(9))",
+      "Discovery/IR seed for 7 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 0,
-      "indexed_without_body_rows": 0,
-      "thin_need_discovery": 8,
+      "indexed_without_body_tickers": 1,
+      "indexed_without_body_rows": 9,
+      "thin_need_discovery": 7,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 43.004480546000025,
+  "used_seconds": 375.27118610400004,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3556.995519454,
+  "leftover_seconds": 3224.728813896,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -179,9 +341,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "dax",
-    "updated_at": "2026-11-05T20:56:52.398351+00:00",
-    "exhausted": true,
-    "complete_zero_improve_runs": 5,
+    "updated_at": "2026-11-06T20:16:53.950966+00:00",
+    "exhausted": false,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -222,18 +384,6 @@
       },
       {
         "ticker": "DTG.DE",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-10-26T21:41:38.348508+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 1,
-        "filings_with_body": 1,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings+ir_allowlist_direct"
-      },
-      {
-        "ticker": "FRE.DE",
         "reason": "awaiting_periodic_report",
         "revisit_when": "Next statutory annual or interim report is issued and indexed",
         "parked_at": "2026-10-26T21:41:38.348508+00:00",
@@ -287,72 +437,49 @@
     "had_complete_targets": false,
     "leftover_tickers": [
       "BAS.DE",
+      "BNR.DE",
       "DHL.DE",
       "DTE.DE",
       "DTG.DE",
-      "FRE.DE",
       "HEN3.DE",
       "HNR1.DE",
       "MUV2.DE"
     ],
-    "unparked_leftover": [],
+    "unparked_leftover": [
+      "BNR.DE"
+    ],
     "surface_released": [],
     "path": "docs/data/library/markets/dax/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "dax",
-    "ingest_exhausted_markets": [
-      "aex",
-      "aim",
-      "asx200",
-      "atx",
-      "bel20",
-      "cac40",
-      "dax",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_mib",
-      "ftse_smallcap",
-      "hang_seng",
-      "ibex35",
-      "iseq20",
-      "nasdaq100",
-      "omxs30",
-      "psi20",
-      "smi",
-      "sp500",
-      "sti",
-      "tsx60",
-      "us_adr_asia"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "not_exhausted",
+    "market_id": "dax"
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 62,
-    "candidate_count": 52,
+    "tried_count": 63,
+    "candidate_count": 54,
     "skipped_resolved_tickers": [
       "LMT",
-      "TPT.L",
+      "APTV",
       "DFS.L",
       "APTD.L",
       "ULTP.L",
       "MER.L",
       "FOXT.L",
+      "TPT.L",
       "GIB-A.TO",
-      "NTR.TO",
       "SU.TO",
+      "CNQ.TO",
+      "NTR.TO",
       "BAS.DE",
       "IFX.DE",
       "PDD",
       "BAS.DE",
       "DTE.DE",
       "DTG.DE",
-      "FRE.DE",
       "HNR1.DE",
       "MUV2.DE",
       "HEN3.DE",
