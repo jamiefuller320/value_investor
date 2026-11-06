@@ -14,16 +14,17 @@ Entry arithmetic is ``strategy_book_signals.price_flags`` (RSI via
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import math
 import random
 import statistics
 from array import array
 from bisect import bisect_left, bisect_right
-from collections import defaultdict
-from collections.abc import Callable, Sequence
+from collections import Counter, defaultdict
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass, field
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import Any
 
 import numpy as np
@@ -1487,28 +1488,30 @@ class _RegimeTable:
     def __init__(self, names: list[_Name], market: str) -> None:
         self.counted: dict[int, int] = defaultdict(int)
         self.above: dict[int, int] = defaultdict(int)
-        window = REGIME_SMA_SESSIONS
         for name in names:
-            if name.spec.market != market or name.refusal:
-                continue
-            download = name.prices.downloads[0]
-            closes = np.asarray(download.closes, dtype="float64")
-            if len(closes) < window:
-                continue
-            sums = np.convolve(closes, np.ones(window), mode="valid")
-            means = sums / window
-            last = closes[window - 1 :]
-            gap = last - means
-            near = np.abs(gap) <= 1e-9 * np.maximum(np.abs(last), 1.0)
-            flags = (gap > 0) & (means != 0)
-            for offset in np.nonzero(near)[0]:
-                end = int(offset) + window
-                flags[offset] = _sma_above(download.closes[:end])
-            for offset, day in enumerate(download.sessions[window - 1 :]):
-                key = day.toordinal()
-                self.counted[key] += 1
-                if flags[offset]:
-                    self.above[key] += 1
+            if name.spec.market == market and not name.refusal:
+                self.add(name)
+
+    def add(self, name: _Name) -> None:
+        window = REGIME_SMA_SESSIONS
+        download = name.prices.downloads[0]
+        closes = np.asarray(download.closes, dtype="float64")
+        if len(closes) < window:
+            return
+        sums = np.convolve(closes, np.ones(window), mode="valid")
+        means = sums / window
+        last = closes[window - 1 :]
+        gap = last - means
+        near = np.abs(gap) <= 1e-9 * np.maximum(np.abs(last), 1.0)
+        flags = (gap > 0) & (means != 0)
+        for offset in np.nonzero(near)[0]:
+            end = int(offset) + window
+            flags[offset] = _sma_above(download.closes[:end])
+        for offset, day in enumerate(download.sessions[window - 1 :]):
+            key = day.toordinal()
+            self.counted[key] += 1
+            if flags[offset]:
+                self.above[key] += 1
 
     @staticmethod
     def usable(names: list[_Name], market: str) -> bool:
@@ -1524,6 +1527,9 @@ class _RegimeTable:
 
 
 def _regime(names: list[_Name], market: str, session: date) -> str:
+    cross = getattr(names, "cross", None)
+    if cross is not None:
+        return cross.regime(market, session)
     cache = getattr(names, "regime_cache", None)
     if cache is not None and (market, session) in cache:
         return cache[(market, session)]
@@ -1858,6 +1864,11 @@ def _basket(
     entry and the exit is priced at that bar times ``1 + terminal_haircut``.
     """
     market = episode_name.spec.market
+    cross = getattr(names, "cross", None)
+    if cross is not None:
+        return cross.basket(
+            market, signal_session, entry_session, exit_session, entry_px, exit_px, vintage
+        )
     options = getattr(names, "options", None)
     members: list[tuple[_Name, ScreenFact]] = []
     screened: list[_Name] = []
@@ -1964,6 +1975,254 @@ class _Book(list):
         self.basket_cache: dict[tuple[str, date], list[tuple[_Name, ScreenFact]]] = {}
         self.regime_cache: dict[tuple[str, date], str] = {}
         self.regime_tables: dict[str, _RegimeTable | None] = {}
+        self.cross: CrossNameTape | None = None
+
+
+# Signal sessions of controls fall up to MAX_FILL_GAP_CALENDAR_DAYS before the first
+# entry session; the tape keeps this many days before ``entry_not_before``.
+_CROSS_MARGIN_DAYS = 60
+
+
+class CrossNameTape:
+    """What one name's walk reads about the other names, so the book can be walked in batches.
+
+    ``walk_book`` reads other names in two places: the matched basket (every
+    name of the market with a screen row carried onto the signal session) and
+    the market regime. This tape holds both for the whole book in compact
+    arrays: closes on the walk's sessions, a basket-candidate code per session,
+    each name's last bar, and the regime counts. ``walk_book(batch, cross=tape)``
+    then walks a subset of names and prices baskets and regimes as the
+    whole-book walk does. Specs sharing a ``book_key`` must be in one batch.
+
+    Add every spec with ``add`` (in batches), call ``finish``, then walk.
+    """
+
+    def __init__(self, options: WalkOptions) -> None:
+        self.options = options
+        start = options.entry_not_before
+        self._start = (
+            None if start is None else (start - timedelta(days=_CROSS_MARGIN_DAYS)).toordinal()
+        )
+        self._pending: list[dict[str, Any]] = []
+        self._days: set[int] = set()
+        self._regimes: dict[str, _RegimeTable] = {}
+        self.book_keys: Counter[str] = Counter()
+        self.calendar: list[date] = []
+        self.markets: dict[str, np.ndarray] = {}
+        self.tickers: list[str] = []
+        self._finished = False
+
+    def add(self, specs: Iterable[NameSpec]) -> None:
+        if self._finished:
+            raise ValueError("cross-name tape already finished")
+        skip_blank = self.options.basket_skips_blank_screen
+        for spec in specs:
+            book = PriceBook(_downloads_of(spec))
+            if len(book.downloads) > 1 or (book.downloads and book.downloads[0]._dups):
+                raise ValueError(
+                    f"{spec.market}:{spec.ticker}: a batched walk needs one download per name "
+                    "without repeated dates"
+                )
+            refusal = series_refusal(book.calendar) if book.calendar else "no_chart"
+            name = _Name(spec=spec, prices=book, refusal=refusal)
+            if spec.book_key:
+                self.book_keys[spec.book_key] += 1
+            ords = np.fromiter((day.toordinal() for day in book.calendar), dtype=np.int64)
+            self._days.update(ords.tolist())
+            row: dict[str, Any] = {
+                "market": spec.market,
+                "ticker": spec.ticker,
+                "haircut": spec.terminal_haircut,
+                "candidate": not refusal and bool(book.calendar),
+                "last_ord": int(ords[-1]) if len(ords) else 0,
+                "last_close": float(book.downloads[0].closes[-1]) if len(ords) else math.nan,
+            }
+            if row["candidate"]:
+                keep = ords >= self._start if self._start is not None else slice(None)
+                row["ords"] = ords[keep]
+                row["closes"] = np.asarray(book.downloads[0].closes, dtype=np.float64)[keep]
+                row["run_ords"] = np.fromiter(
+                    (day.toordinal() for day in name.run_dates), dtype=np.int64
+                )
+                codes = np.zeros(len(name.run_dates), dtype=np.int8)
+                for position, first in enumerate(name.tie_first):
+                    signal = str(name.screens[first].signal or "")
+                    if skip_blank and not signal.strip():
+                        continue
+                    codes[position] = 2 if signal in VALUE_SET_SIGNALS else 1
+                row["codes"] = codes
+                row["universe"] = (
+                    None
+                    if name.universe is None
+                    else (
+                        np.array([a.toordinal() for a, _b in name.universe], dtype=np.int64),
+                        np.array([b.toordinal() for _a, b in name.universe], dtype=np.int64),
+                    )
+                )
+                self._regimes.setdefault(spec.market, _RegimeTable([], spec.market)).add(name)
+            self._pending.append(row)
+
+    def finish(self) -> CrossNameTape:
+        """Lay the added names out as matrices over the walk's sessions and screen dates."""
+        if self._finished:
+            return self
+        self.calendar = [date.fromordinal(day) for day in sorted(self._days)]
+        grid = set(self._days)
+        for row in self._pending:
+            if row["candidate"]:
+                grid.update(row["run_ords"].tolist())
+        if self._start is not None:
+            grid = {day for day in grid if day >= self._start}
+        self._grid = np.array(sorted(grid), dtype=np.int64)
+        self._row = {int(day): index for index, day in enumerate(self._grid.tolist())}
+        rows, width = len(self._grid), len(self._pending)
+        self._close = np.full((rows, width), np.nan, dtype=np.float64)
+        self._codes = np.zeros((rows, width), dtype=np.int8)
+        self._last_ord = np.zeros(width, dtype=np.int64)
+        self._last_close = np.full(width, np.nan, dtype=np.float64)
+        self._haircut = np.full(width, np.nan, dtype=np.float64)
+        by_market: dict[str, list[int]] = defaultdict(list)
+        for column, row in enumerate(self._pending):
+            by_market[row["market"]].append(column)
+            self.tickers.append(row["ticker"])
+            self._last_ord[column] = row["last_ord"]
+            self._last_close[column] = row["last_close"]
+            if row["haircut"] is not None:
+                self._haircut[column] = float(row["haircut"])
+            if not row["candidate"]:
+                continue
+            self._close[np.searchsorted(self._grid, row["ords"]), column] = row["closes"]
+            position = np.searchsorted(row["run_ords"], self._grid, side="left") - 1
+            codes = np.where(position >= 0, row["codes"][np.maximum(position, 0)], 0)
+            if row["universe"] is not None:
+                starts, ends = row["universe"]
+                if len(starts):
+                    span = np.searchsorted(starts, self._grid, side="right") - 1
+                    inside = (span >= 0) & (self._grid <= ends[np.maximum(span, 0)])
+                else:
+                    inside = np.zeros(rows, dtype=bool)
+                codes = np.where(inside, codes, 0)
+            self._codes[:, column] = codes
+        self._pending = []
+        self.markets = {
+            market: np.array(columns, dtype=np.int64) for market, columns in by_market.items()
+        }
+        self._finished = True
+        return self
+
+    def with_haircuts(self, haircuts: Callable[[str], float | None]) -> CrossNameTape:
+        """The same tape with each name's ``terminal_haircut`` replaced (a delisting variant)."""
+        if not self._finished:
+            raise ValueError("finish the cross-name tape first")
+        view = copy.copy(self)
+        values = [haircuts(ticker) for ticker in self.tickers]
+        view._haircut = np.array(
+            [math.nan if value is None else float(value) for value in values], dtype=np.float64
+        )
+        return view
+
+    def _index(self, day: date) -> int:
+        index = self._row.get(day.toordinal())
+        if index is None:
+            raise ValueError(f"{day} is outside the cross-name tape")
+        return index
+
+    def regime(self, market: str, session: date) -> str:
+        table = self._regimes.get(market)
+        counted, above = table.counts(session) if table is not None else (0, 0)
+        return _regime_label(counted, above)
+
+    def basket(
+        self,
+        market: str,
+        signal_session: date,
+        entry_session: date,
+        exit_session: date,
+        entry_px: float,
+        exit_px: float,
+        vintage: date,
+    ) -> tuple[float | None, dict[str, Any]]:
+        """``_basket`` over every name of ``market`` in the tape."""
+        columns = self.markets.get(market, np.zeros(0, dtype=np.int64))
+        codes = self._codes[self._index(signal_session), columns]
+        start = self._close[self._index(entry_session), columns]
+        end = self._close[self._index(exit_session), columns]
+        has_entry = ~np.isnan(start)
+        has_exit = ~np.isnan(end)
+        haircut = self._haircut[columns]
+        last = self._last_ord[columns]
+        delisted = (
+            ~np.isnan(haircut)
+            & (last > entry_session.toordinal())
+            & (last < exit_session.toordinal())
+        )
+        screened = (codes > 0) & has_entry & (has_exit | delisted)
+        members = screened & (codes == 2)
+        source = "buy_tier"
+        chosen = members
+        if int(members.sum()) < BASKET_MIN_NAMES:
+            source = "whole_screen"
+            chosen = screened
+        end = np.where(has_exit, end, self._last_close[columns] * (1.0 + np.nan_to_num(haircut)))
+        used = chosen & (start > 0)
+        grosses_array = end[used] / start[used] - 1.0
+        grosses = grosses_array.tolist()
+        detail: dict[str, Any] = {
+            "source": source,
+            "count": len(grosses),
+            "fallback": source == "whole_screen",
+            "download_as_of": vintage.isoformat(),
+            "members": [
+                {
+                    "ticker": self.tickers[int(column)],
+                    "entry": float(a),
+                    "exit": float(b),
+                    "gross": g,
+                }
+                for column, a, b, g in zip(
+                    columns[used].tolist(), start[used], end[used], grosses, strict=True
+                )
+            ]
+            if self.options.basket_members
+            else None,
+        }
+        if not grosses or entry_px <= 0:
+            return None, detail
+        episode_gross = exit_px / entry_px - 1.0
+        mean = statistics.fmean(grosses)
+        detail["episode_gross"] = episode_gross
+        detail["basket_gross"] = mean
+        return episode_gross - mean, detail
+
+    def check_batch(self, names: list[_Name]) -> None:
+        """Every spec of each ``book_key`` in the batch is in the batch."""
+        present = Counter(name.spec.book_key for name in names if name.spec.book_key)
+        for key, count in present.items():
+            if count != self.book_keys.get(key, 0):
+                raise ValueError(f"book_key {key!r} is split across batches")
+
+
+def recovery_cap(
+    calendar: list[date], open_counts: Sequence[int], labelled_counts: Sequence[int]
+) -> tuple[int, list[dict[str, Any]]]:
+    """Cap days and share samples from per-session open and recovery-labelled primary counts."""
+    cap_days = 0
+    samples: list[dict[str, Any]] = []
+    for session, open_count, labelled in zip(calendar, open_counts, labelled_counts, strict=True):
+        if not open_count:
+            continue
+        share = labelled / open_count
+        if open_count >= RECOVERY_SHARE_MIN_OPEN and share >= RECOVERY_SHARE_LINE:
+            cap_days += 1
+            samples.append(
+                {
+                    "session": session.isoformat(),
+                    "share": share,
+                    "open": open_count,
+                    "blocked": CAP_BLOCKS_ENTRIES,
+                }
+            )
+    return cap_days, samples
 
 
 def _vintage_download(name: _Name, vintage: date) -> Download | None:
@@ -2589,17 +2848,22 @@ def _maybe_control(
     )
 
 
-def _recovery_share(names: list[_Name]) -> tuple[float | None, int]:
+def _recovery_counts(names: list[_Name]) -> tuple[int, int]:
+    """(recovery-labelled, all) open primary positions."""
     open_primary = [
         position
         for name in names
         for position in name.open_positions
         if position.column == COLUMN_PRIMARY and position.status == "open"
     ]
-    if not open_primary:
+    return sum(1 for position in open_primary if position.recovery), len(open_primary)
+
+
+def _recovery_share(names: list[_Name]) -> tuple[float | None, int]:
+    labelled, open_count = _recovery_counts(names)
+    if not open_count:
         return None, 0
-    labelled = sum(1 for position in open_primary if position.recovery)
-    return labelled / len(open_primary), len(open_primary)
+    return labelled / open_count, open_count
 
 
 def _note_insufficient(
@@ -2689,15 +2953,24 @@ def walk_book(
     *,
     options: WalkOptions | None = None,
     mode: str | None = None,
+    cross: CrossNameTape | None = None,
 ) -> dict[str, Any]:
     """Walk every name and build the section 8 boards.
 
     ``mode`` selects a section 9 preset. ``options`` overrides it. The walk
     uses only the facts on ``specs``.
+
+    With ``cross``, ``specs`` is one batch of a larger book: baskets, regimes
+    and the session calendar come from the tape, no boards are built, and the
+    recovery-share counts are returned per calendar session
+    (``recovery_open``, ``recovery_labelled``) for ``recovery_cap`` over all
+    batches.
     """
     if mode is not None and options is None:
         options = options_for(mode)
     options = options or WalkOptions()
+    if cross is not None and (options.boards or CAP_BLOCKS_ENTRIES):
+        raise ValueError("a batched walk needs boards off and a cap that does not block entries")
     built: list[_Name] = []
     for spec in specs:
         downloads = _downloads_of(spec)
@@ -2705,6 +2978,9 @@ def walk_book(
         refusal = series_refusal(book.calendar) if book.calendar else "no_chart"
         built.append(_Name(spec=spec, prices=book, refusal=refusal))
     names = _Book(built, options)
+    if cross is not None:
+        cross.check_batch(names)
+        names.cross = cross
     _link_siblings(names)
     events: list[dict[str, Any]] = []
     for name in names:
@@ -2716,10 +2992,15 @@ def walk_book(
                     "ticker": name.spec.ticker,
                 }
             )
-    calendar = sorted({day for name in names for day in name.prices.calendar})
+    if cross is not None:
+        calendar = cross.calendar
+        recovery_open = array("i", [0]) * len(calendar)
+        recovery_labelled = array("i", [0]) * len(calendar)
+    else:
+        calendar = sorted({day for name in names for day in name.prices.calendar})
     cap_days = 0
     share_samples: list[dict[str, Any]] = []
-    for session in calendar:
+    for session_index, session in enumerate(calendar):
         if options.entry_not_before is not None and session < options.entry_not_before:
             continue
         for name in names:
@@ -2733,9 +3014,16 @@ def walk_book(
             _fill_entries(name, session, options, names, events)
             _fill_exits(name, session, names)
             _step_positions(name, session, options, names)
-        share, open_count = _recovery_share([name for name in names if name.open_positions])
+        holding = [name for name in names if name.open_positions]
         entries_open = options.entry_not_after is None or session <= options.entry_not_after
         blocked = False
+        if cross is not None:
+            labelled, open_count = _recovery_counts(holding)
+            recovery_open[session_index] = open_count
+            recovery_labelled[session_index] = labelled
+            share = None
+        else:
+            share, open_count = _recovery_share(holding)
         if (
             share is not None
             and open_count >= RECOVERY_SHARE_MIN_OPEN
@@ -2801,7 +3089,7 @@ def walk_book(
         if options.boards
         else None
     )
-    return {
+    result = {
         "registration_id": REGISTRATION_ID,
         "influences_live": INFLUENCES_LIVE,
         "episodes": episodes,
@@ -2812,6 +3100,12 @@ def walk_book(
         "scoring_date": scoring.isoformat(),
         "counts": _counts(events, episodes),
     }
+    if cross is not None:
+        result["cap_would_block_days"] = None
+        result["recovery_share_samples"] = None
+        result["recovery_open"] = recovery_open
+        result["recovery_labelled"] = recovery_labelled
+    return result
 
 
 def _held_days(position: _Position, scoring: date) -> int | None:
