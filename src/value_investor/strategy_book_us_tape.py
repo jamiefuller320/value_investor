@@ -219,16 +219,23 @@ class RehearsalInputs:
 
     def with_variant(self, variant: str) -> list[NameSpec]:
         """Specs with the baseline or the sensitivity delisting haircut."""
-        out = []
-        for spec in self.specs:
-            cut = self.haircuts.get(spec.ticker)
-            haircut = None if cut is None else cut[variant]
-            out.append(
-                spec
-                if spec.terminal_haircut == haircut
-                else dataclasses.replace(spec, terminal_haircut=haircut)
-            )
-        return out
+        return with_variant(self.specs, self.haircuts, variant)
+
+
+def with_variant(
+    specs: Iterable[NameSpec], haircuts: Mapping[str, Mapping[str, float]], variant: str
+) -> list[NameSpec]:
+    """``specs`` with the baseline or the sensitivity delisting haircut."""
+    out = []
+    for spec in specs:
+        cut = haircuts.get(spec.ticker)
+        haircut = None if cut is None else cut[variant]
+        out.append(
+            spec
+            if spec.terminal_haircut == haircut
+            else dataclasses.replace(spec, terminal_haircut=haircut)
+        )
+    return out
 
 
 # --- Small helpers -------------------------------------------------------------------------
