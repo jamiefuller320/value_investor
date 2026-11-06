@@ -526,7 +526,7 @@ def test_memory_warning_suggests_a_smaller_batch(monkeypatch: pytest.MonkeyPatch
     assert 25 <= suggested < 4_450
     assert rehearsal.memory_estimate_mb(4_450, 6_500, suggested) <= 2_500
     assert rehearsal.memory_estimate_mb(4_450, 6_500, suggested + 25) > 2_500
-    assert 1_600 <= rehearsal.memory_estimate_mb(4_448, 6_717, 400) <= 1_900
+    assert 1_700 <= rehearsal.memory_estimate_mb(4_448, 6_717, 400) <= 2_000
     monkeypatch.setitem(sys.modules, "psutil", None)
     assert rehearsal.memory_warning(4_450, 6_500, 4_450) is None
 

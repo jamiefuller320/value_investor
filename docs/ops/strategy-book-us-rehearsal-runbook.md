@@ -246,10 +246,11 @@ set into `sp500`. That is 4,448 names walked over 6,717 sessions.
 | Before batching (whole book) | 66 s, 3.7 GB | 328 s, 4.5 GB | 542 s, 5.1 GB |
 | `--batch-size 400` (default) | 54 s, 1.7 GB | 256 s, 1.5 GB | 387 s, 1.7 GB |
 | `--batch-size 100` | 55 s, 0.9 GB | 247 s, 1.3 GB | 371 s, 1.4 GB |
+| `--batch-size 1000` | 56 s, 1.5 GB | 282 s, 2.5 GB | 412 s, 2.8 GB |
 
 Each figure is the time and peak memory of that step alone. `develop` and
-`reveal` include their own load. The store blocks from `--batch-size 100` are
-byte-identical to the whole-book run's, with 4,454 mature development and
+`reveal` include their own load. The store blocks from `--batch-size 100` and
+`--batch-size 1000` are byte-identical to the whole-book run's, with 4,454 mature development and
 4,265 mature confirmation primary episodes.
 
 On a laptop with 8 GB of memory, the default is fine once other large

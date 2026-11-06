@@ -868,13 +868,11 @@ _UNREAD_KEYS = frozenset(
     }
 )
 # Peak resident memory, calibrated on ``scripts/strategy_book_rehearsal_scale.py``
-# at the real shape (4,448 names, 6,717 sessions): the input pass holds one
-# batch of bars and specs, the walk one batch of walk state; both hold the
-# whole-book tables and the cross-name tape (about 9 bytes per name-session).
-MEMORY_LOAD_FIXED_MB = 450
-MEMORY_LOAD_PER_NAME_MB = 2.6
-MEMORY_WALK_FIXED_MB = 1100
-MEMORY_WALK_PER_NAME_MB = 1.0
+# at the real shape (4,448 names, 6,717 sessions; batch sizes 100, 400 and
+# 1,000 peaked at 1.4, 1.7 and 2.8 GB): whole-book tables, the cross-name tape
+# (about 9 bytes per name-session) and one batch of bars, specs and walk state.
+MEMORY_FIXED_MB = 1050
+MEMORY_PER_NAME_MB = 1.5
 MEMORY_PER_CROSS_CELL_BYTES = 9
 
 
@@ -1016,13 +1014,7 @@ def memory_estimate_mb(names: int, sessions: int, batch_size: int) -> int:
     """Rough peak resident memory of ``develop`` or ``reveal`` for a book of this shape."""
     cross = names * sessions * MEMORY_PER_CROSS_CELL_BYTES / 2**20
     batch = min(max(batch_size, 1), max(names, 1))
-    return int(
-        cross
-        + max(
-            MEMORY_LOAD_FIXED_MB + MEMORY_LOAD_PER_NAME_MB * batch,
-            MEMORY_WALK_FIXED_MB + MEMORY_WALK_PER_NAME_MB * batch,
-        )
-    )
+    return int(MEMORY_FIXED_MB + cross + MEMORY_PER_NAME_MB * batch)
 
 
 def memory_warning(names: int, sessions: int, batch_size: int) -> str | None:
