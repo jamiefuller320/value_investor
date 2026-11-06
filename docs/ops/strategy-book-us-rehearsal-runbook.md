@@ -105,7 +105,7 @@ This walks development signal sessions (2000–2012) twice, baseline and the
 `~/hsr-build/strategy_book_rehearsal/develop-<time>/`, and writes the
 development block, its sensitivity copy, the development regime cuts and the
 month series to the store. `licensed_data.first_used_at` is stamped on the
-first run. Expect a few minutes and about 3 GB of memory (see
+first run. Expect several minutes and several GB of memory (see
 [Performance](#performance)).
 
 ## 5. Review
@@ -206,9 +206,12 @@ sessions (2000-01-03 to 2024-11-29), highs and lows present:
 
 4,282 mature primary development episodes and 4,138 confirmation episodes;
 `development_reproduced` true; store 136 KB; scratch 75 MB. Peak RSS is
-2.9 GB, so a 16 GB Mac has room. The synthetic signal rate (13% buy-tier per
-name-month) is higher than the screen's, so real walks should be no slower.
+2.9 GB.
 
-The real run adds the panel and cache reads and the `sp500` daily membership,
-which the synthetic run replaces with fixed sets; on a full bundle allow extra
-time for those.
+Time and memory grow roughly with total name-sessions walked. The real run
+walks every name that was ever in either universe, active or delisted, so it
+may be several thousand specs, most with shorter histories than 6,500
+sessions. Budget about three times these figures (around 30 minutes and
+9 GB for both steps) and close other large apps on a 16 GB Mac. The real run
+also reads the panels and caches and computes `sp500` membership on every
+session, which the synthetic run replaces with fixed sets.
