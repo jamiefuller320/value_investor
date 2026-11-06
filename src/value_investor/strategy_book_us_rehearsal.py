@@ -172,6 +172,7 @@ _COUNT_KEYS = frozenset(
 )
 _SECRET_ENV = re.compile(r"SHARADAR|NASDAQ|QUANDL|API_KEY", re.IGNORECASE)
 _TOKEN_SPLIT = re.compile(r"[^A-Za-z0-9.]+")
+_HOME_PATH = re.compile(r"(^|[\s'\"=(])(([a-z]:)?|/[a-z])/(users|home)/")
 
 
 def _scalar(value: Any) -> bool:
@@ -202,17 +203,21 @@ def privacy_violations(
 ) -> list[str]:
     """Every reason ``payload`` may not be committed (empty when it may)."""
     names = {str(t) for t in tickers if str(t) and not str(t).isdigit()}
-    home_text = (home if home is not None else str(Path.home())).rstrip("/").lower()
+    home_text = (
+        (home if home is not None else str(Path.home())).replace("\\", "/").rstrip("/").lower()
+    )
     keys = [s for s in (secrets if secrets is not None else _secrets()) if s]
     found: list[str] = []
 
     def _text(text: str, where: str) -> None:
         lowered = text.lower()
+        slashed = lowered.replace("\\", "/")
         if "sharadar" in lowered:
             found.append(f"{where}: mentions the vendor directory")
-        if (home_text and home_text not in ("", "/") and home_text in lowered) or "~/" in text:
+        if (home_text and home_text not in ("", "/") and home_text in slashed) or "~/" in slashed:
             found.append(f"{where}: contains a home-directory path")
-        if re.search(r"(^|[\s'\"=])/(users|home)/", lowered):
+        # POSIX homes, Windows drive paths (C:/Users), and MSYS/Git Bash drive paths (/c/Users).
+        if _HOME_PATH.search(slashed):
             found.append(f"{where}: contains a home-directory path")
         for secret in keys:
             if secret in text:

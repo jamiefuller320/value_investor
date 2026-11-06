@@ -707,6 +707,26 @@ def test_privacy_guard_refuses_licensed_content(
     assert not (repo / rehearsal.STORE_PATH).exists()
 
 
+@pytest.mark.parametrize(
+    "note",
+    [
+        r"C:\Users\jamie\hsr-build\panel.csv.gz",
+        "C:/Users/jamie/hsr-build",
+        "/c/Users/jamie/hsr-build",
+        r"built in D:\Users\someone\scratch",
+    ],
+)
+def test_privacy_guard_refuses_windows_home_paths(note: str):
+    for home in (r"C:\Users\jamie", "/home/owner"):
+        problems = rehearsal.privacy_violations({"note": note}, [], home=home, secrets=[])
+        assert any("home-directory" in problem for problem in problems), (note, home)
+
+
+def test_privacy_guard_allows_plain_dates_and_ratios():
+    payload = {"window": "2000-01/2012-12", "share": "3/5", "note": "users/home split"}
+    assert rehearsal.privacy_violations(payload, [], home=r"C:\Users\jamie", secrets=[]) == []
+
+
 def test_privacy_guard_reads_api_keys_from_the_environment(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setenv("SHARADAR_API_KEY", "zz-not-a-real-key-123")
     assert rehearsal.privacy_violations({"x": "zz-not-a-real-key-123"})

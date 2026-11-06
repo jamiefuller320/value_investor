@@ -1,6 +1,6 @@
 # Strategy-book US rehearsal — owner runbook
 
-How to run `strategy-book-us-rehearsal-v0` (plan step 2.5) on your own Mac. The
+How to run `strategy-book-us-rehearsal-v0` (plan step 2.5) on your own machine. The owner's machine is a Windows laptop running Git Bash (MSYS2 UCRT64); the commands are bash and also work on macOS or Linux. The
 rules are in [strategy-book-us-rehearsal-registration.md](strategy-book-us-rehearsal-registration.md);
 this page is only the commands. The runner is `ftse-strategy-book-rehearsal`
 (`src/value_investor/strategy_book_us_rehearsal.py`, inputs in
@@ -40,6 +40,21 @@ the first licensed run, which is earlier than the licence's 30 days from the
   runner refuses otherwise.
 - Run every command from the repository root on an up-to-date `main`, in the
   virtualenv you already use (`python3 -m pip install -e .`).
+- **Windows.** A plain clone fails on Windows because a few chart and research
+  paths use reserved device names (`CON.DE`, `PRN.AX`, `PRN.L`; queued as L679).
+  Use a sparse checkout that skips the bulk data folders, then a venv whose
+  activate script is under `Scripts`:
+
+  ```bash
+  cd ~/value_investor
+  git sparse-checkout init --no-cone
+  git sparse-checkout set '/*' '!/docs/data/charts/' '!/docs/data/library/' \
+    '!/docs/data/research/' '!/docs/data/archive/' '!/docs/data/history/'
+  git checkout -f main
+  py -3 -m venv .venv && source .venv/Scripts/activate && pip install -e .
+  ```
+
+  Commit only the stores named on this page from that checkout.
 - Keep the key out of shell history files you sync. You do not need it again
   after the download.
 
@@ -57,7 +72,7 @@ Every line should say `ok`. Re-download any `BAD` file while access lasts
 ## 2. Build both panels
 
 ```bash
-cd ~/path/to/value_investor
+cd ~/value_investor
 ftse-historical-replay build-panel --sharadar-dir ~/sharadar --out ~/hsr-build
 ftse-historical-replay build-panel --universe midcap --sharadar-dir ~/sharadar --out ~/hsr-mid-build
 ```
@@ -149,8 +164,9 @@ rm -rf ~/sharadar ~/hsr-build ~/hsr-mid-build
 
 That removes the zips, both builds, every `signals_cache*.csv.gz`,
 `daily.csv.gz`, the panels and the rehearsal scratch. If you used `--scratch`,
-delete that directory too. Also remove any copy in `~/Downloads`, empty the
-Trash, and delete any Time Machine or cloud-sync snapshot that holds these
+delete that directory too. Also remove any copy in `~/Downloads` or the home folder
+the download ran in, empty the Recycle Bin (or Trash), and delete any File
+History, OneDrive, Time Machine or other backup or sync copy that holds these
 directories.
 
 ## 8. Confirm deletion and stamp the store
@@ -212,6 +228,6 @@ Time and memory grow roughly with total name-sessions walked. The real run
 walks every name that was ever in either universe, active or delisted, so it
 may be several thousand specs, most with shorter histories than 6,500
 sessions. Budget about three times these figures (around 30 minutes and
-9 GB for both steps) and close other large apps on a 16 GB Mac. The real run
+9 GB for both steps) and close other large apps on a 16 GB laptop. On Windows, check installed memory with `systeminfo | grep -i "total physical"`; with 8 GB, expect paging and see L680. The real run
 also reads the panels and caches and computes `sp500` membership on every
 session, which the synthetic run replaces with fixed sets.

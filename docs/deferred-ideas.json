@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-06T07:28:40+00:00",
+  "updated_at": "2026-11-06T07:30:27+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16705,6 +16705,23 @@
     {
       "id": "L679",
       "category": "later",
+      "section": "ops",
+      "title": "Windows-safe paths for CON/PRN ticker artifacts",
+      "summary": "docs/data/charts/CON.DE.json, PRN.AX.json, PRN.L.json and library research/PRN.AX use Windows reserved device names, so a plain clone fails on Windows (owner hit it 2026-11-06 for the US rehearsal). Owner machine uses a sparse checkout excluding bulk data dirs. A path-escaping rule for reserved names would make full clones work.",
+      "revisit_when": "The owner needs a full Windows checkout (dashboard dev or bulk data work on the laptop).",
+      "tags": [
+        "windows",
+        "charts",
+        "library",
+        "dx"
+      ],
+      "status": "open",
+      "source": "US rehearsal setup on owner laptop",
+      "added_at": "2026-11-06T06:17:15+00:00"
+    },
+    {
+      "id": "L680",
+      "category": "later",
       "section": "research",
       "title": "US rehearsal: stream name specs to cap walk memory",
       "summary": "The rehearsal holds every name's daily tape, gate tape and episodes in memory; synthetic 1,000 x 6,500 peaks at 2.9 GB and the real bundle may need about three times that. Build specs per universe or per name batch and release downloads after each walk if the owner's run swaps or is OOM-killed.",
@@ -16716,7 +16733,7 @@
       ],
       "status": "open",
       "source": "strategy-book US rehearsal runner build (plan step 2.5)",
-      "added_at": "2026-11-06T07:28:40+00:00"
+      "added_at": "2026-11-06T07:30:27+00:00"
     }
   ],
   "fragments": [
