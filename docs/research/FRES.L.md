@@ -1,6 +1,6 @@
 # Fresnillo plc (FRES.L) — Research memo
 
-_Version 7 · Updated 2026-11-01T07:48:34.089503+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-07T19:24:37.751194+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -43,3 +43,8 @@ News since 18 Oct is thin (quote pages only); planned CFO handover due 1 Nov; H1
 Buy signal persists (26 weeks, ~58% composite); timing neutral with RSI ~27 oversold and price still marginally below the 200-day MA; screen still flags statutory vs filing EPS divergence.  
 No new indexed RNS and no articles in the 1 Nov news batch since the 28 Oct refresh; CFO handover was due 1 Nov with no new disclosure in this pull.  
 H1 2026 interim remains the latest accounts anchor.
+
+### 2026-11-07T19:24:37.751194+00:00
+Buy signal persists (27 weeks, ~58% composite); timing neutral (RSI ~48, marginally below 200-day MA); screen still flags statutory vs filing EPS divergence.  
+No new indexed RNS since the 21 Oct 3Q26 production report; planned 1 Nov CFO handover has no confirmatory disclosure in this pull.  
+News since 1 Nov is a generic quote page only; H1 2026 interim remains the latest accounts anchor.

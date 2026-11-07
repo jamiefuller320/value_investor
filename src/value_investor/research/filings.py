@@ -665,6 +665,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.italgas.it/wp-content/uploads/sites/2/2026/03/2025-Integrated-Annual-Report.pdf",
         "https://www.italgas.it/wp-content/uploads/sites/2/2025/08/Consolidated-interim-financial-statements-as-at-30-June-2025-.pdf",
     ],
+    # ftse_mib parked leftover — eng-20261107-02: AZM.MI awaiting_periodic_report; ESEF xhtml
+    # indexes as period=other; CONSOB eMarket STORAGE statutory FY2025 relazione + H1-2025 results PDF.
+    "AZM.MI": [
+        "https://www.emarketstorage.it/sites/default/files/comunicati/2026-04/20260402_181268.pdf",
+        "https://www.emarketstorage.it/sites/default/files/comunicati/2025-07/20250731_170567.pdf",
+    ],
     # ftse_mib buy-tier deepen — eng-20261005-01 / eng-20261010-02: TEN.MI unmeasured — Yahoo base
     # TEN collides with Tsakos on SEC; pin Tenaris S.A. FY2025 20-F + Q1 2026 FS 6-K (CIK 1190723).
     "TEN.MI": [
@@ -1431,6 +1437,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     ),
     # sti Y92.SI SGX allowlist — THBEV slugs and 1HFY2025 token need issuer match (fy false-positive).
     "Y92": ("Thai Beverage", "ThaiBev", "THBEV"),
+    # ftse_mib AZM.MI — emarketstorage hash slugs need issuer tokens for IR title gate.
+    "AZM": ("Azimut Holding", "Azimut Holding S.p.A."),
     # sti N2IU.SI SGX allowlist — MPACT 2QFY* SGXNet slugs need issuer tokens (fy false-positive).
     "N2IU": (
         "Mapletree Pan Asia Commercial Trust",
@@ -6099,6 +6107,9 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.sec.gov/Archives/edgar/data/756894/000119312526079253/d833573dex991.htm": "annual",
     "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex991.htm": "interim",
     "https://www.sec.gov/Archives/edgar/data/756894/000119312526343857/d67611dex992.htm": "interim",
+    # eng-20261107-02: AZM.MI — emarketstorage CONSOB comunicati slugs are date_hash only.
+    "https://www.emarketstorage.it/sites/default/files/comunicati/2026-04/20260402_181268.pdf": "annual",
+    "https://www.emarketstorage.it/sites/default/files/comunicati/2025-07/20250731_170567.pdf": "interim",
 }
 
 

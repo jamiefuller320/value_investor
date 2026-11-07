@@ -13894,6 +13894,49 @@ def test_parked_source_hunter_fct_mi_ftse_mib_has_fetchable_ir():
     assert valid, reason
 
 
+def test_fetch_filings_ir_allowlist_ftse_mib_azm_mi_builtins_eng_20261107_02(
+    tmp_path: Path,
+):
+    """eng-20261107-02: AZM.MI awaiting_periodic_report — eMarket STORAGE FY2025 + H1-2025 PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("AZM.MI", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert {row["period"] for row in rows} == {"annual", "interim"}
+    annual = next(row for row in rows if row["period"] == "annual")
+    interim = next(row for row in rows if row["period"] == "interim")
+    assert "emarketstorage.it" in annual["url"]
+    assert annual["url"].endswith("20260402_181268.pdf")
+    assert "emarketstorage.it" in interim["url"]
+    assert interim["url"].endswith("20250731_170567.pdf")
+    assert "AZM.MI" in _BUILTIN_IR_URLS
+
+
+def test_parked_source_hunter_azm_mi_ftse_mib_has_fetchable_ir():
+    """eng-20261107-02: AZM.MI eMarket STORAGE FY2025 relazione + H1-2025 results PDFs fetch and validate."""
+    assert "AZM.MI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("AZM.MI")
+    assert len(rows) == 2
+    annual = [row for row in rows if row["period"] == "annual"]
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(annual) == 1
+    assert len(interim) == 1
+    body = fetch_filing_body(annual[0]["url"])
+    assert body
+    assert len(body) >= 50000
+    assert "AZIMUT HOLDING" in body.upper()
+    valid, reason = _validate_ir_allowlist_body_content(annual[0], body, ticker="AZM.MI")
+    assert valid, reason
+    body_i = fetch_filing_body(interim[0]["url"])
+    assert body_i
+    assert len(body_i) >= 35000
+    assert "Azimut Holding" in body_i
+    valid_i, reason_i = _validate_ir_allowlist_body_content(interim[0], body_i, ticker="AZM.MI")
+    assert valid_i, reason_i
+
+
 def test_parked_source_hunter_krx_ir_euro_depth_has_fetchable_ir():
     """eng-20261019-02: KRX.IR has live Kingspan FY2025 statutory annual + H1 2026 interim PDFs."""
     assert "KRX.IR" not in PARKED_SOURCE_HUNTER_SKIP

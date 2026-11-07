@@ -1,6 +1,6 @@
 # Ninety One Group (N91.L) — Research memo
 
-_Version 4 · Updated 2026-10-18T09:37:29.595064+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-07T19:46:54.313252+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.65
-Rationale: Q2 AUM RNS shows a modest QoQ dip with strong YoY growth; buybacks continue, but absent net-flow disclosure and pre-interim results, research stays neutral on the screen hold.
+Confidence: 0.64
+Rationale: Buyback RNS to early Nov and Q2 AUM unchanged in filings; interim results not yet published and net flows still undisclosed, so research remains neutral on the screen hold.
 RiskTags: cyclical, competitive, regulatory, governance, key_person, accounting
 
 ## Weekly updates
@@ -28,3 +28,8 @@ News reiterates buyback and director-dealing only; thesis unchanged.
 Q2 2027 AUM RNS (13 Oct): £181.4bn at 30 Sep 2026 vs £184.0bn at 30 Jun and £152.1bn YoY; interim results scheduled for 16 Nov 2026.  
 Buyback RNS continued (28 Sep–9 Oct; ~9.2m LSE programme shares since 3 Jun); further PDMR/associate purchase disclosures (28 Sep–2 Oct).  
 Filings still do not split net flows from market moves; Kalkine/TipRanks commentary only.
+
+### 2026-11-07T19:46:54.313252+00:00
+Buyback RNS continued through 2 Nov (~10.8m LSE programme shares since 3 Jun; Total Voting Rights 30 Oct; shares cancelled, no treasury).  
+No interim results in the file set as of 7 Nov (16 Nov date unchanged from Q2 AUM RNS); no new AUM or PDMR disclosures since early Oct.  
+News is thin (Kalkine buyback vs AUM dip); filings still do not split net flows from market moves.

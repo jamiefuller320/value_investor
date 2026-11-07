@@ -1,6 +1,6 @@
 # Vistry Group PLC (VTY.L) — Research memo
 
-_Version 4 · Updated 2026-10-18T09:28:50.358170+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-07T19:40:21.432543+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: high
-Confidence: 0.55
-Rationale: Post-H1 leverage, covenant and cash guidance risks are unchanged and there has been no trading update; research is neutral on hold—cheap P/B keeps optionality but does not yet justify adding.
+Confidence: 0.57
+Rationale: The November trading update supports reset execution but highlights c.£800m H2 average net debt and a weak Open Market; research stays neutral on hold—cheap P/B does not offset leverage and negative ROE.
 RiskTags: cyclical, governance, leverage, key_person, competitive, accounting, regulatory, liquidity
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Screen signal remains Buy on asset cheapness, but post-interim metrics weakened 
 No trading update or results RNS since the 24 Sep H1 release; filings since then are Total Voting Rights (30 Sep) and routine Director/PDMR notices, including Executive Chair Daniel King’s Oct SIP purchase.
 News is syndicated Kalkine commentary on the H1 loss, reset and SAHP award—no new corporate facts.
 The quant screen remains **Hold** (6/22 models, three weeks at signal); cheapness persists but model breadth and negative ROE keep conviction low.
+
+### 2026-11-07T19:40:21.432543+00:00
+5 Nov trading update: reset actions advancing (SAHP grant signed, land-bank sales, £900m refinancing started, regions 25→12), but Open Market remains difficult and H2 **average daily net debt is expected at c.£800m**.
+27 Oct RNS: Helen Miles appointed CFO (joining 2027); Robert Allen interim CFO with immediate Board effect.
+Quant screen unchanged **Hold** (6/22 models, eight weeks at signal); other news is syndicated commentary on the CFO move and valuation.

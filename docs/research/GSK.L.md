@@ -1,6 +1,6 @@
 # GSK plc (GSK.L) — Research memo
 
-_Version 5 · Updated 2026-10-25T08:25:47.034004+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-07T19:05:34.982594+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: October FDA wins for Jemperli and Hibsago support the buy screen; unresolved FCF and earnings-basis gaps still cap conviction versus the quantitative signal.
+Confidence: 0.73
+Rationale: Q3 specialty growth partly offsets vaccine weakness and lower net income; the buy screen still holds after FCF bridge resolution, but earnings-basis gaps cap conviction.
 RiskTags: regulatory, competitive, litigation, leverage, pension, accounting, key_person
 
 ## Weekly updates
@@ -33,3 +33,8 @@ No material change to H1 outlook, leverage, litigation, or patent-cliff risks si
 Since 27 September, RNS/6-K disclosures include US FDA approval of Hibsago for chronic hepatitis B (21 October) and Jemperli for MSI-H/dMMR rectal cancer (19 October), plus closure of the HUTCHMED KRAS–EGFR licence.
 Commentary largely revisits Q2 outperformance and cost-efficiency themes; Wendy Becker joined the board on 8 October.
 No new interim results or guidance; leverage, litigation and patent-cliff risks are unchanged.
+
+### 2026-11-07T19:05:34.982594+00:00
+Late-October Q3 headlines cite ~£8.9bn sales with specialty medicines lifting performance and vaccines disappointing; net income fell year on year and shares sold off on vaccine weakness.  
+Commentary largely revisits ESMO Mo-Rez/Ris-Rez data and prior Jemperli/Hibsago FDA approvals; the news batch adds no new company guidance beyond those Q3 themes.  
+The latest screen run resolves the prior FCF basis mismatch; earnings statutory/adjusted divergence, leverage, litigation and patent-cliff risks are unchanged.
