@@ -1843,8 +1843,1667 @@
       "single_market_dependence": false
     }
   },
-  "confirmation": null,
-  "reveal": null,
+  "confirmation": {
+    "computed_at": "2026-11-07T18:44:51+00:00",
+    "development_reproduced": true,
+    "signal_window": {
+      "first": "2013-01-01",
+      "last": "2025-09-30"
+    },
+    "interval_label": "bonferroni",
+    "counts": {
+      "episodes": 4122,
+      "mature_episodes": 4113,
+      "entry_weeks": 561,
+      "by_market": {
+        "sp500": 2430,
+        "sp400": 1692
+      },
+      "by_exit_reason": {
+        "floor_exit": 1467,
+        "fail_to_launch": 1253,
+        "thesis_break": 1363,
+        "review_insufficient_data": 7,
+        "delisted": 11,
+        "time_cap": 21
+      },
+      "shadows": {
+        "decline_rejected_shadow": 4877,
+        "sector_rejected_shadow": 2171
+      },
+      "controls": {
+        "buy_on_signal": 3860,
+        "leave_tier": 4113
+      },
+      "alternative": 5052,
+      "hl_basis": {
+        "high_low": 4122
+      },
+      "sector_basis": {
+        "price_only": 4122
+      },
+      "basket_fallback": 0,
+      "f9_unverified": 4122,
+      "research_absent": 4122,
+      "delisted": 11,
+      "delisted_before_fill": 0
+    },
+    "primary": {
+      "mature": 4113,
+      "entry_weeks": 561,
+      "fair_cost_median": 0.017261876961249423,
+      "fair_cost_mean": 0.01129462821146101,
+      "matched_excess_median": -0.001043484478546056,
+      "matched_excess_mean": 0.00038831058772827235,
+      "entry_week_standard_error": 0.004062195618927359,
+      "share_above_zero": 0.4938001458789205,
+      "interval": {
+        "coverage": 0.9666666666666667,
+        "low": -0.005480162090951737,
+        "high": 0.002284337947194348
+      },
+      "companion": {
+        "statistic": "fair_cost_median",
+        "label": "descriptive_not_a_test",
+        "mature": 4113,
+        "interval": {
+          "coverage": 0.9666666666666667,
+          "low": 0.009067594491917871,
+          "high": 0.023785908769218544
+        }
+      }
+    },
+    "by_market": {
+      "sp500": {
+        "mature": 2425,
+        "fair_cost_median": 0.01641833895132644,
+        "matched_excess_median": -0.0009045871099653338,
+        "launch_share": 0.39010309278350513
+      },
+      "sp400": {
+        "mature": 1688,
+        "fair_cost_median": 0.0182818448640229,
+        "matched_excess_median": -0.0013386656961222316,
+        "launch_share": 0.4212085308056872
+      }
+    },
+    "paired_exits": {
+      "draft_v0_exit": {
+        "column": "draft_v0_exit",
+        "n": 4113,
+        "entry_weeks": 563,
+        "mean_difference": 0.0075288243643505835,
+        "median_difference": 0.0,
+        "standard_error": 0.005291699188240586,
+        "share_primary_better": 0.43569170921468514,
+        "pairing": "same_entries"
+      },
+      "ladder_no_deadline": {
+        "column": "ladder_no_deadline",
+        "n": 4113,
+        "entry_weeks": 563,
+        "mean_difference": -0.0045137876101963015,
+        "median_difference": 0.0,
+        "standard_error": 0.002233998515808038,
+        "share_primary_better": 0.1361536591295891,
+        "pairing": "same_entries"
+      }
+    },
+    "unpaired_columns": {
+      "decline_rejected_shadow": {
+        "column": "decline_rejected_shadow",
+        "count": 4877,
+        "entry_weeks": 574,
+        "mean_difference_vs_primary": -0.015495462073108857,
+        "standard_error": 0.00515702050674277,
+        "pairing": "unpaired"
+      },
+      "sector_rejected_shadow": {
+        "column": "sector_rejected_shadow",
+        "count": 2171,
+        "entry_weeks": 164,
+        "mean_difference_vs_primary": -0.017032238072632024,
+        "standard_error": 0.0055418308115527705,
+        "pairing": "unpaired"
+      },
+      "buy_on_signal": {
+        "column": "buy_on_signal",
+        "count": 3860,
+        "entry_weeks": 153,
+        "mean_difference_vs_primary": 0.01270194569928839,
+        "standard_error": 0.008342156277852366,
+        "pairing": "unpaired"
+      },
+      "leave_tier": {
+        "column": "leave_tier",
+        "count": 4113,
+        "entry_weeks": 561,
+        "mean_difference_vs_primary": 0.17524299710263527,
+        "standard_error": 0.01671573203734263,
+        "pairing": "unpaired"
+      },
+      "alternative": {
+        "column": "alternative",
+        "count": 5052,
+        "entry_weeks": 606,
+        "mean_difference_vs_primary": 0.0019245409897585813,
+        "standard_error": 0.006371062111730431,
+        "pairing": "unpaired"
+      }
+    },
+    "bench": {
+      "deep_dip": {
+        "kept": 1789,
+        "mature": 4113,
+        "kept_share": 0.4349623146122052,
+        "mean_difference": -0.0025251484885262954,
+        "interval": {
+          "coverage": 0.9666666666666667,
+          "low": -0.010067088324441411,
+          "high": 0.004898357395890571
+        },
+        "halves": [
+          {
+            "window": "2013-01-01/2019-06-30",
+            "kept": 819,
+            "sign": "negative"
+          },
+          {
+            "window": "2019-07-01/2025-09-30",
+            "kept": 970,
+            "sign": "positive"
+          }
+        ],
+        "verdict": "inconclusive"
+      },
+      "revenue_growing": {
+        "kept": 3656,
+        "mature": 4113,
+        "kept_share": 0.8888888888888888,
+        "mean_difference": 4.863067324597549e-05,
+        "interval": {
+          "coverage": 0.9666666666666667,
+          "low": -0.0018964760590013349,
+          "high": 0.0020696438253357033
+        },
+        "halves": [
+          {
+            "window": "2013-01-01/2019-06-30",
+            "kept": 1921,
+            "sign": "negative"
+          },
+          {
+            "window": "2019-07-01/2025-09-30",
+            "kept": 1735,
+            "sign": "positive"
+          }
+        ],
+        "verdict": "inconclusive"
+      }
+    },
+    "selection": {
+      "features": {
+        "composite_score": {
+          "present": 4113,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.019871588738129387
+            },
+            {
+              "fifth": 2,
+              "count": 823,
+              "median_fair_cost": 0.019127239476783686
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.021610363312760505
+            },
+            {
+              "fifth": 4,
+              "count": 823,
+              "median_fair_cost": 0.012411449325492822
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.011430378100527886
+            }
+          ]
+        },
+        "signal_rank": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "weeks_at_signal": {
+          "present": 4113,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.016821797293267216
+            },
+            {
+              "fifth": 2,
+              "count": 823,
+              "median_fair_cost": 0.01824093781177255
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.022538353277962442
+            },
+            {
+              "fifth": 4,
+              "count": 823,
+              "median_fair_cost": 0.014810169865431102
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.01386502146860397
+            }
+          ]
+        },
+        "conviction_score": {
+          "present": 4113,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.01886721721962742
+            },
+            {
+              "fifth": 2,
+              "count": 823,
+              "median_fair_cost": 0.01911868859224458
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.018136708190634565
+            },
+            {
+              "fifth": 4,
+              "count": 823,
+              "median_fair_cost": 0.017891891508497182
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.011680676438369845
+            }
+          ]
+        },
+        "models_passed": {
+          "present": 4113,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.01641976760271119
+            },
+            {
+              "fifth": 2,
+              "count": 823,
+              "median_fair_cost": 0.015974433948118094
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.024378933830727034
+            },
+            {
+              "fifth": 4,
+              "count": 823,
+              "median_fair_cost": 0.01773735591625486
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.011553457622460243
+            }
+          ]
+        },
+        "data_quality_score": {
+          "present": 4113,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.018789943404440568
+            },
+            {
+              "fifth": 2,
+              "count": 823,
+              "median_fair_cost": 0.015880997432085542
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.01386502146860397
+            },
+            {
+              "fifth": 4,
+              "count": 823,
+              "median_fair_cost": 0.01756571200331375
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.020088435162974594
+            }
+          ]
+        },
+        "fcf_yield": {
+          "present": 4113,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.011223210778771146
+            },
+            {
+              "fifth": 2,
+              "count": 823,
+              "median_fair_cost": 0.01756571200331375
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.01822096087469821
+            },
+            {
+              "fifth": 4,
+              "count": 823,
+              "median_fair_cost": 0.014954625692048586
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.021307131014831004
+            }
+          ]
+        },
+        "ev_ebit": {
+          "present": 4106,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.01760916010346575
+            },
+            {
+              "fifth": 2,
+              "count": 821,
+              "median_fair_cost": 0.018051422603759637
+            },
+            {
+              "fifth": 3,
+              "count": 821,
+              "median_fair_cost": 0.019871588738129387
+            },
+            {
+              "fifth": 4,
+              "count": 821,
+              "median_fair_cost": 0.01304627539503406
+            },
+            {
+              "fifth": 5,
+              "count": 821,
+              "median_fair_cost": 0.01625592677803339
+            }
+          ]
+        },
+        "earnings_yield_pe": {
+          "present": 4108,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.013493222384502405
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.018501087240915093
+            },
+            {
+              "fifth": 3,
+              "count": 821,
+              "median_fair_cost": 0.022838697534349806
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.017797637668356348
+            },
+            {
+              "fifth": 5,
+              "count": 821,
+              "median_fair_cost": 0.011751652262328275
+            }
+          ]
+        },
+        "roic_proxy": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "profit_margins": {
+          "present": 4113,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.020636353237245386
+            },
+            {
+              "fifth": 2,
+              "count": 823,
+              "median_fair_cost": 0.02043733567046463
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.013353118938347844
+            },
+            {
+              "fifth": 4,
+              "count": 823,
+              "median_fair_cost": 0.01641833895132644
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.015232056051280364
+            }
+          ]
+        },
+        "debt_to_equity": {
+          "present": 3962,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 793,
+              "median_fair_cost": 0.022690373034097322
+            },
+            {
+              "fifth": 2,
+              "count": 792,
+              "median_fair_cost": 0.018501087240915093
+            },
+            {
+              "fifth": 3,
+              "count": 793,
+              "median_fair_cost": 0.011278122623476442
+            },
+            {
+              "fifth": 4,
+              "count": 792,
+              "median_fair_cost": 0.01523138971952648
+            },
+            {
+              "fifth": 5,
+              "count": 792,
+              "median_fair_cost": 0.016832626191251976
+            }
+          ]
+        },
+        "revenue_growth": {
+          "present": 4113,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.015193415342166507
+            },
+            {
+              "fifth": 2,
+              "count": 823,
+              "median_fair_cost": 0.015542524739234955
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.021227837062931132
+            },
+            {
+              "fifth": 4,
+              "count": 823,
+              "median_fair_cost": 0.016275731737899923
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.018297560448498784
+            }
+          ]
+        },
+        "earnings_growth": {
+          "present": 3985,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 797,
+              "median_fair_cost": 0.015803784820750677
+            },
+            {
+              "fifth": 2,
+              "count": 797,
+              "median_fair_cost": 0.019852746374329044
+            },
+            {
+              "fifth": 3,
+              "count": 797,
+              "median_fair_cost": 0.013181703590669006
+            },
+            {
+              "fifth": 4,
+              "count": 797,
+              "median_fair_cost": 0.019032844485181777
+            },
+            {
+              "fifth": 5,
+              "count": 797,
+              "median_fair_cost": 0.02065133454262741
+            }
+          ]
+        },
+        "market_cap": {
+          "present": 4113,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.02135963911490074
+            },
+            {
+              "fifth": 2,
+              "count": 823,
+              "median_fair_cost": 0.012028223149571696
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.01273314352191152
+            },
+            {
+              "fifth": 4,
+              "count": 823,
+              "median_fair_cost": 0.022731751824817625
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.01533834536719997
+            }
+          ]
+        },
+        "vol_60": {
+          "present": 4112,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.017458640788739432
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.0196992869817067
+            },
+            {
+              "fifth": 3,
+              "count": 823,
+              "median_fair_cost": 0.022731751824817625
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.014765306989532325
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.010457892906150904
+            }
+          ]
+        },
+        "close_vs_sma200": {
+          "present": 4108,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.001946697238663201
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.01057392342709135
+            },
+            {
+              "fifth": 3,
+              "count": 821,
+              "median_fair_cost": 0.021926121153715006
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.014494158230751121
+            },
+            {
+              "fifth": 5,
+              "count": 821,
+              "median_fair_cost": 0.029601508759928674
+            }
+          ]
+        },
+        "fall_from_high_252": {
+          "present": 4106,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.0045729791847024005
+            },
+            {
+              "fifth": 2,
+              "count": 821,
+              "median_fair_cost": 0.014782617069278694
+            },
+            {
+              "fifth": 3,
+              "count": 821,
+              "median_fair_cost": 0.02127705847177791
+            },
+            {
+              "fifth": 4,
+              "count": 821,
+              "median_fair_cost": 0.02430167117227816
+            },
+            {
+              "fifth": 5,
+              "count": 821,
+              "median_fair_cost": 0.02059894207159957
+            }
+          ]
+        },
+        "return_126": {
+          "present": 4110,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.010825220886144186
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.0150309743429779
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.02034408745064048
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.014850997695355419
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.02534810260364523
+            }
+          ]
+        },
+        "range_pos_126": {
+          "present": 4110,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.009048050460927107
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.015632663502039346
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.01601571482706482
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.024203786737834465
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.020617647654422477
+            }
+          ]
+        },
+        "return_20": {
+          "present": 4113,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.010267624217748465
+            },
+            {
+              "fifth": 2,
+              "count": 823,
+              "median_fair_cost": 0.01952698522528401
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.019478790750897146
+            },
+            {
+              "fifth": 4,
+              "count": 823,
+              "median_fair_cost": 0.01708823529411757
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.018879615070790556
+            }
+          ]
+        },
+        "rsi_14": {
+          "present": 4113,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.0034179649199258012
+            },
+            {
+              "fifth": 2,
+              "count": 823,
+              "median_fair_cost": 0.022302627063118197
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.020719948583621195
+            },
+            {
+              "fifth": 4,
+              "count": 823,
+              "median_fair_cost": 0.011652449680297498
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.020753923849781752
+            }
+          ]
+        },
+        "memo_age_days": {
+          "present": 0,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 2,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 3,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 4,
+              "count": 0,
+              "median_fair_cost": null
+            },
+            {
+              "fifth": 5,
+              "count": 0,
+              "median_fair_cost": null
+            }
+          ]
+        },
+        "ch126_slope_pct_yr": {
+          "present": 4110,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.007544412034441509
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.02218311242710108
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.013044073643419921
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.020634654606955516
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.020208473337716415
+            }
+          ]
+        },
+        "ch126_r2": {
+          "present": 4110,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.017292343409340438
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.014476233200192147
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.014929419157625414
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.02171568717908484
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.01634703534461318
+            }
+          ]
+        },
+        "ch126_z": {
+          "present": 4110,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.016178434582571566
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.017851963521396452
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.020814659998302065
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.017295463269571154
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.013602966468536929
+            }
+          ]
+        },
+        "ch126_lower": {
+          "present": 4110,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.018452684534427444
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.019666953071725224
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.01557932534532819
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.018213902510144153
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.012672108659044948
+            }
+          ]
+        },
+        "ch126_upper": {
+          "present": 4110,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.019920433662326487
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.017445734833369808
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.0138246142862733
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.020719948583621195
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.012125532541641785
+            }
+          ]
+        },
+        "ch252_slope_pct_yr": {
+          "present": 4106,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.013064435583996007
+            },
+            {
+              "fifth": 2,
+              "count": 821,
+              "median_fair_cost": 0.014954625692048586
+            },
+            {
+              "fifth": 3,
+              "count": 821,
+              "median_fair_cost": 0.013030195077570254
+            },
+            {
+              "fifth": 4,
+              "count": 821,
+              "median_fair_cost": 0.0171252713851498
+            },
+            {
+              "fifth": 5,
+              "count": 821,
+              "median_fair_cost": 0.02783244663454193
+            }
+          ]
+        },
+        "ch252_r2": {
+          "present": 4106,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.01610003690379974
+            },
+            {
+              "fifth": 2,
+              "count": 821,
+              "median_fair_cost": 0.013181703590669006
+            },
+            {
+              "fifth": 3,
+              "count": 821,
+              "median_fair_cost": 0.01103609319742033
+            },
+            {
+              "fifth": 4,
+              "count": 821,
+              "median_fair_cost": 0.02078856262461498
+            },
+            {
+              "fifth": 5,
+              "count": 821,
+              "median_fair_cost": 0.02391462641629022
+            }
+          ]
+        },
+        "ch252_z": {
+          "present": 4106,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.009732367694847702
+            },
+            {
+              "fifth": 2,
+              "count": 821,
+              "median_fair_cost": 0.015101196418730702
+            },
+            {
+              "fifth": 3,
+              "count": 821,
+              "median_fair_cost": 0.014810169865431102
+            },
+            {
+              "fifth": 4,
+              "count": 821,
+              "median_fair_cost": 0.022258510991880753
+            },
+            {
+              "fifth": 5,
+              "count": 821,
+              "median_fair_cost": 0.01844968761363247
+            }
+          ]
+        },
+        "ch252_lower": {
+          "present": 4106,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.020558930735929792
+            },
+            {
+              "fifth": 2,
+              "count": 821,
+              "median_fair_cost": 0.018921852176453424
+            },
+            {
+              "fifth": 3,
+              "count": 821,
+              "median_fair_cost": 0.01342126332334576
+            },
+            {
+              "fifth": 4,
+              "count": 821,
+              "median_fair_cost": 0.018313802905874976
+            },
+            {
+              "fifth": 5,
+              "count": 821,
+              "median_fair_cost": 0.014810169865431102
+            }
+          ]
+        },
+        "ch252_upper": {
+          "present": 4106,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.019920433662326487
+            },
+            {
+              "fifth": 2,
+              "count": 821,
+              "median_fair_cost": 0.017458640788739432
+            },
+            {
+              "fifth": 3,
+              "count": 821,
+              "median_fair_cost": 0.014326086956521657
+            },
+            {
+              "fifth": 4,
+              "count": 821,
+              "median_fair_cost": 0.019753964045182315
+            },
+            {
+              "fifth": 5,
+              "count": 821,
+              "median_fair_cost": 0.013181703590669006
+            }
+          ]
+        },
+        "bb20_pct_b": {
+          "present": 4113,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.01773735591625486
+            },
+            {
+              "fifth": 2,
+              "count": 823,
+              "median_fair_cost": 0.02477254735651685
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.02098728685549961
+            },
+            {
+              "fifth": 4,
+              "count": 823,
+              "median_fair_cost": 0.015699638062787458
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.0045206830981846
+            }
+          ]
+        },
+        "bb20_width_pct": {
+          "present": 4113,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.02001800554016603
+            },
+            {
+              "fifth": 2,
+              "count": 823,
+              "median_fair_cost": 0.018921852176453424
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.02201543530396649
+            },
+            {
+              "fifth": 4,
+              "count": 823,
+              "median_fair_cost": 0.011530530765617556
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.010883338721130512
+            }
+          ]
+        },
+        "dc20_pos": {
+          "present": 4113,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.021049637088391526
+            },
+            {
+              "fifth": 2,
+              "count": 823,
+              "median_fair_cost": 0.026083289152794065
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.021047984359062133
+            },
+            {
+              "fifth": 4,
+              "count": 823,
+              "median_fair_cost": 0.010458810068649852
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.0051186068672924336
+            }
+          ]
+        },
+        "dc55_pos": {
+          "present": 4112,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.018374159468064477
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.007877115931704873
+            },
+            {
+              "fifth": 3,
+              "count": 823,
+              "median_fair_cost": 0.008817556736691105
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.020528987008454014
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.026599358380360594
+            }
+          ]
+        },
+        "support_dist_pct": {
+          "present": 4109,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.01704183712725832
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.02102675146275107
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.018469086198563855
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.011701841016062479
+            },
+            {
+              "fifth": 5,
+              "count": 821,
+              "median_fair_cost": 0.015803784820750677
+            }
+          ]
+        },
+        "resistance_dist_pct": {
+          "present": 4109,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.017631776030516744
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.02129473977002455
+            },
+            {
+              "fifth": 3,
+              "count": 822,
+              "median_fair_cost": 0.011702050971312886
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.020403215335563496
+            },
+            {
+              "fifth": 5,
+              "count": 821,
+              "median_fair_cost": 0.01213994643198785
+            }
+          ]
+        },
+        "sma50_dist_pct": {
+          "present": 4112,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 823,
+              "median_fair_cost": 0.0036147664039425965
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.019458099902880444
+            },
+            {
+              "fifth": 3,
+              "count": 823,
+              "median_fair_cost": 0.01858881935971618
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.018315930259976076
+            },
+            {
+              "fifth": 5,
+              "count": 822,
+              "median_fair_cost": 0.02624055250821583
+            }
+          ]
+        },
+        "sma200_dist_pct": {
+          "present": 4108,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.001946697238663201
+            },
+            {
+              "fifth": 2,
+              "count": 822,
+              "median_fair_cost": 0.01057392342709135
+            },
+            {
+              "fifth": 3,
+              "count": 821,
+              "median_fair_cost": 0.021926121153715006
+            },
+            {
+              "fifth": 4,
+              "count": 822,
+              "median_fair_cost": 0.014494158230751121
+            },
+            {
+              "fifth": 5,
+              "count": 821,
+              "median_fair_cost": 0.029601508759928674
+            }
+          ]
+        },
+        "hi252_dist_pct": {
+          "present": 4106,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": 0.004321946631487165
+            },
+            {
+              "fifth": 2,
+              "count": 821,
+              "median_fair_cost": 0.014810169865431102
+            },
+            {
+              "fifth": 3,
+              "count": 821,
+              "median_fair_cost": 0.02108819513798471
+            },
+            {
+              "fifth": 4,
+              "count": 821,
+              "median_fair_cost": 0.02494423548770991
+            },
+            {
+              "fifth": 5,
+              "count": 821,
+              "median_fair_cost": 0.02059894207159957
+            }
+          ]
+        },
+        "lo252_dist_pct": {
+          "present": 4106,
+          "fifths": [
+            {
+              "fifth": 1,
+              "count": 822,
+              "median_fair_cost": -0.001840884962466868
+            },
+            {
+              "fifth": 2,
+              "count": 821,
+              "median_fair_cost": 0.01065929203539812
+            },
+            {
+              "fifth": 3,
+              "count": 821,
+              "median_fair_cost": 0.017445319740500287
+            },
+            {
+              "fifth": 4,
+              "count": 821,
+              "median_fair_cost": 0.02372603354764552
+            },
+            {
+              "fifth": 5,
+              "count": 821,
+              "median_fair_cost": 0.03454039850105112
+            }
+          ]
+        }
+      }
+    },
+    "channels": {
+      "by_band_bucket": {
+        "None": {
+          "mature": 3,
+          "fair_cost_median": null,
+          "matched_excess_median": null,
+          "launch_share": null
+        },
+        "below_lower": {
+          "mature": 2163,
+          "fair_cost_median": 0.01773735591625486,
+          "matched_excess_median": -0.002469544860236539,
+          "launch_share": 0.4040684234858992
+        },
+        "lower_half": {
+          "mature": 1875,
+          "fair_cost_median": 0.01675911234443911,
+          "matched_excess_median": 0.0003519588835044843,
+          "launch_share": 0.40213333333333334
+        },
+        "upper_half": {
+          "mature": 72,
+          "fair_cost_median": 0.016612962985531443,
+          "matched_excess_median": -0.003406353989550203,
+          "launch_share": 0.3888888888888889
+        }
+      },
+      "by_direction": {
+        "None": {
+          "mature": 3,
+          "fair_cost_median": null,
+          "matched_excess_median": null,
+          "launch_share": null
+        },
+        "falling": {
+          "mature": 691,
+          "fair_cost_median": 0.008937873073753103,
+          "matched_excess_median": -0.0033087332132432923,
+          "launch_share": 0.3849493487698987
+        },
+        "rising": {
+          "mature": 2030,
+          "fair_cost_median": 0.019974908768981392,
+          "matched_excess_median": -0.002643077467608985,
+          "launch_share": 0.41083743842364534
+        },
+        "sideways": {
+          "mature": 1389,
+          "fair_cost_median": 0.01625592677803339,
+          "matched_excess_median": 0.0017941382862404834,
+          "launch_share": 0.40028797696184304
+        }
+      }
+    },
+    "regime": {
+      "above": {
+        "mature": 3032,
+        "fair_cost_median": 0.020468379161204087,
+        "matched_excess_median": -0.0024166281759978557,
+        "launch_share": 0.4129287598944591
+      },
+      "below": {
+        "mature": 1081,
+        "fair_cost_median": 0.006390771480175476,
+        "matched_excess_median": 0.0015593292786684892,
+        "launch_share": 0.37465309898242366
+      },
+      "regime_unknown": {
+        "mature": 0,
+        "fair_cost_median": null,
+        "matched_excess_median": null,
+        "launch_share": null
+      }
+    },
+    "tails": {
+      "count": 4113,
+      "p5_fair_cost": -0.213070890217
+    },
+    "launch": {
+      "mature": 4113,
+      "launched": 1657,
+      "launch_share": 0.40286895210308776,
+      "median_sessions_to_launch": 25.0
+    },
+    "floor_exits": {
+      "count": 1467,
+      "median_fair_cost": 0.07886835963447686,
+      "checkpoints": {
+        "0.3": 115,
+        "0.2": 214,
+        "0.1": 582,
+        "0.15": 349,
+        "0.25": 132,
+        "0.5": 30,
+        "0.4": 37,
+        "0.75": 5,
+        "1.0": 3
+      }
+    },
+    "fail_to_launch": {
+      "count": 1253,
+      "median_fair_cost": -0.02890430825640017,
+      "share_below_fill": 0.6153232242617718
+    },
+    "thesis_breaks": {
+      "count": 1361,
+      "by_reason": {
+        "declining": 660,
+        "headwind": 695,
+        "screen_avoid": 8
+      },
+      "median_fair_cost": -0.03353739455604826,
+      "launched": 158
+    },
+    "review_and_time_cap": {
+      "review_insufficient_data": {
+        "count": 7,
+        "median_fair_cost": 0.13596280991735538
+      },
+      "time_cap": {
+        "count": 21,
+        "median_fair_cost": 0.5766922000373202
+      },
+      "review_cap": {
+        "count": 0,
+        "median_fair_cost": null
+      }
+    },
+    "recovery_label": {
+      "count": 1302,
+      "launch_share": 0.08448540706605223,
+      "median_fair_cost": -0.09938141875787648
+    },
+    "stress": {
+      "count": 4113,
+      "median_fair_cost": -0.03923812303875057
+    },
+    "capital": {
+      "episodes": 4122,
+      "capital_days_return": 0.05418177848141706,
+      "recovery_hold_capital_share": 0.3199613920944789,
+      "slot_book": {
+        "trades_taken": 1160,
+        "trades_skipped": 2962,
+        "annualised_return": 0.054747428231041395,
+        "max_drawdown": -0.2640723484184867,
+        "random_order_median": 0.05512487704150537,
+        "random_orders": 15,
+        "seed": 20261104
+      }
+    },
+    "flags": {
+      "single_market_dependence": false,
+      "pass_delisting_sensitive": false
+    },
+    "verdicts": {
+      "primary": "inconclusive",
+      "primary_baseline": "inconclusive",
+      "clean_pass": false,
+      "bench": {
+        "deep_dip": "inconclusive",
+        "revenue_growing": "inconclusive"
+      }
+    }
+  },
+  "reveal": {
+    "at": "2026-11-07T18:44:51+00:00",
+    "evidence": true
+  },
   "delisting_sensitivity": {
     "development": {
       "haircut_non_merger": -0.3,
@@ -1863,7 +3522,24 @@
         }
       }
     },
-    "confirmation": null
+    "confirmation": {
+      "haircut_non_merger": -0.3,
+      "signal_window": {
+        "first": "2013-01-01",
+        "last": "2025-09-30"
+      },
+      "primary": {
+        "mature": 4113,
+        "fair_cost_median": 0.017261876961249423,
+        "matched_excess_median": -0.0010291393129137905,
+        "interval": {
+          "coverage": 0.9666666666666667,
+          "low": -0.005480162090951737,
+          "high": 0.002284337947194348
+        }
+      },
+      "verdict": "inconclusive"
+    }
   },
   "regime_cuts": {
     "2000_02": {
@@ -1883,6 +3559,24 @@
       "fair_cost_median": -0.010537225905150324,
       "matched_excess_median": -0.0014327131482844572,
       "launch_share": 0.3448275862068966
+    },
+    "2020": {
+      "block": "confirmation",
+      "first": "2020-01-01",
+      "last": "2020-12-31",
+      "mature": 242,
+      "fair_cost_median": -0.11685634219130242,
+      "matched_excess_median": -0.013706537260182089,
+      "launch_share": 0.2975206611570248
+    },
+    "2022": {
+      "block": "confirmation",
+      "first": "2022-01-01",
+      "last": "2022-12-31",
+      "mature": 357,
+      "fair_cost_median": -0.0023873272429141804,
+      "matched_excess_median": 0.0043875959436529,
+      "launch_share": 0.3557422969187675
     }
   },
   "month_series": [
@@ -2791,6 +4485,902 @@
       "episodes": 10,
       "fair_cost_median": 0.20061417649762575,
       "matched_excess_median": 0.016448157448278808
+    },
+    {
+      "month": "2013-01",
+      "episodes": 9,
+      "fair_cost_median": 0.02519296855450831,
+      "matched_excess_median": -0.020712314246598015
+    },
+    {
+      "month": "2013-02",
+      "episodes": 16,
+      "fair_cost_median": 0.06540335382701196,
+      "matched_excess_median": -0.012943824585286014
+    },
+    {
+      "month": "2013-03",
+      "episodes": 4
+    },
+    {
+      "month": "2013-04",
+      "episodes": 26,
+      "fair_cost_median": 0.05745255514055919,
+      "matched_excess_median": 7.131909479043269e-05
+    },
+    {
+      "month": "2013-05",
+      "episodes": 20,
+      "fair_cost_median": -0.045242518898038764,
+      "matched_excess_median": -0.06459101159996619
+    },
+    {
+      "month": "2013-06",
+      "episodes": 37,
+      "fair_cost_median": 0.06868209851497192,
+      "matched_excess_median": -0.013177474411097276
+    },
+    {
+      "month": "2013-07",
+      "episodes": 4
+    },
+    {
+      "month": "2013-08",
+      "episodes": 48,
+      "fair_cost_median": 0.06936680428570757,
+      "matched_excess_median": -0.03652088375790272
+    },
+    {
+      "month": "2013-09",
+      "episodes": 22,
+      "fair_cost_median": 0.03367645605035924,
+      "matched_excess_median": -0.03929109032281646
+    },
+    {
+      "month": "2013-10",
+      "episodes": 22,
+      "fair_cost_median": 0.04706973192406677,
+      "matched_excess_median": -0.01279087503042763
+    },
+    {
+      "month": "2013-11",
+      "episodes": 8,
+      "fair_cost_median": 0.035610937544232,
+      "matched_excess_median": 0.00716691756345449
+    },
+    {
+      "month": "2013-12",
+      "episodes": 20,
+      "fair_cost_median": -0.007826047818012712,
+      "matched_excess_median": -0.056898270919379754
+    },
+    {
+      "month": "2014-01",
+      "episodes": 51,
+      "fair_cost_median": 0.03780040463234263,
+      "matched_excess_median": -0.010910876698754249
+    },
+    {
+      "month": "2014-02",
+      "episodes": 38,
+      "fair_cost_median": 0.06787725284850538,
+      "matched_excess_median": -0.01429955227301244
+    },
+    {
+      "month": "2014-03",
+      "episodes": 13,
+      "fair_cost_median": 0.03601042264295279,
+      "matched_excess_median": -0.024923939593856123
+    },
+    {
+      "month": "2014-04",
+      "episodes": 21,
+      "fair_cost_median": 0.040952244550024386,
+      "matched_excess_median": 0.00013391879830406067
+    },
+    {
+      "month": "2014-05",
+      "episodes": 27,
+      "fair_cost_median": 0.03169583675705284,
+      "matched_excess_median": -0.0008651879119103562
+    },
+    {
+      "month": "2014-06",
+      "episodes": 13,
+      "fair_cost_median": 0.038747658688865816,
+      "matched_excess_median": 0.04349905618244531
+    },
+    {
+      "month": "2014-07",
+      "episodes": 61,
+      "fair_cost_median": 0.006263712047012874,
+      "matched_excess_median": 0.022038207907135954
+    },
+    {
+      "month": "2014-08",
+      "episodes": 23,
+      "fair_cost_median": 0.03752760736196331,
+      "matched_excess_median": 0.007283673961441098
+    },
+    {
+      "month": "2014-09",
+      "episodes": 47,
+      "fair_cost_median": 0.05707146584904438,
+      "matched_excess_median": 0.029589242510906916
+    },
+    {
+      "month": "2014-10",
+      "episodes": 57,
+      "fair_cost_median": 0.08808504934927158,
+      "matched_excess_median": 0.00848476048975532
+    },
+    {
+      "month": "2014-11",
+      "episodes": 1
+    },
+    {
+      "month": "2014-12",
+      "episodes": 37,
+      "fair_cost_median": 0.021880237006624947,
+      "matched_excess_median": -0.023303382749134273
+    },
+    {
+      "month": "2015-01",
+      "episodes": 38,
+      "fair_cost_median": 0.037098363977313864,
+      "matched_excess_median": 0.0006093510923051298
+    },
+    {
+      "month": "2015-02",
+      "episodes": 6,
+      "fair_cost_median": -0.008482890059877513,
+      "matched_excess_median": -0.011566320650140868
+    },
+    {
+      "month": "2015-03",
+      "episodes": 25,
+      "fair_cost_median": 0.01844968761363247,
+      "matched_excess_median": 0.01729167259431231
+    },
+    {
+      "month": "2015-04",
+      "episodes": 30,
+      "fair_cost_median": -0.0022201895736246834,
+      "matched_excess_median": 0.017739521144374007
+    },
+    {
+      "month": "2015-05",
+      "episodes": 15,
+      "fair_cost_median": -0.0015039920159680112,
+      "matched_excess_median": 0.014944448873305967
+    },
+    {
+      "month": "2015-06",
+      "episodes": 42,
+      "fair_cost_median": -0.06071285113717606,
+      "matched_excess_median": -0.007414321253225642
+    },
+    {
+      "month": "2015-07",
+      "episodes": 26,
+      "fair_cost_median": -0.06387622784309355,
+      "matched_excess_median": -0.016301338324394295
+    },
+    {
+      "month": "2015-08",
+      "episodes": 62,
+      "fair_cost_median": 0.02983464931020846,
+      "matched_excess_median": -0.0033446492270165183
+    },
+    {
+      "month": "2015-09",
+      "episodes": 18,
+      "fair_cost_median": 0.0006301764086345562,
+      "matched_excess_median": 0.00051070581185862
+    },
+    {
+      "month": "2015-10",
+      "episodes": 9,
+      "fair_cost_median": 0.020207488599527423,
+      "matched_excess_median": 0.02245727126153473
+    },
+    {
+      "month": "2015-11",
+      "episodes": 16,
+      "fair_cost_median": -0.11511680801944923,
+      "matched_excess_median": -0.020405281516730746
+    },
+    {
+      "month": "2015-12",
+      "episodes": 40,
+      "fair_cost_median": -0.07577600468255924,
+      "matched_excess_median": -0.021933955068077635
+    },
+    {
+      "month": "2016-01",
+      "episodes": 44,
+      "fair_cost_median": -0.012358773920294604,
+      "matched_excess_median": 0.005728718836917284
+    },
+    {
+      "month": "2016-02",
+      "episodes": 8,
+      "fair_cost_median": 0.06513747925504615,
+      "matched_excess_median": -0.005526253119186555
+    },
+    {
+      "month": "2016-03",
+      "episodes": 3
+    },
+    {
+      "month": "2016-04",
+      "episodes": 23,
+      "fair_cost_median": -0.011385304659498326,
+      "matched_excess_median": -0.011420183547039898
+    },
+    {
+      "month": "2016-05",
+      "episodes": 31,
+      "fair_cost_median": 0.03725257881737615,
+      "matched_excess_median": 0.010476279093432926
+    },
+    {
+      "month": "2016-06",
+      "episodes": 44,
+      "fair_cost_median": 0.08278446935137679,
+      "matched_excess_median": 0.003206262401343987
+    },
+    {
+      "month": "2016-07",
+      "episodes": 3
+    },
+    {
+      "month": "2016-08",
+      "episodes": 17,
+      "fair_cost_median": -0.05581326322277441,
+      "matched_excess_median": -0.07907847912185575
+    },
+    {
+      "month": "2016-09",
+      "episodes": 40,
+      "fair_cost_median": 0.050974335048518615,
+      "matched_excess_median": -0.01647149807165764
+    },
+    {
+      "month": "2016-10",
+      "episodes": 30,
+      "fair_cost_median": 0.0887610922137137,
+      "matched_excess_median": -0.00032341585861213676
+    },
+    {
+      "month": "2016-11",
+      "episodes": 13,
+      "fair_cost_median": 0.09113496738901744,
+      "matched_excess_median": -0.04355586017970772
+    },
+    {
+      "month": "2016-12",
+      "episodes": 12,
+      "fair_cost_median": 0.062085489633645186,
+      "matched_excess_median": 0.02794403738308621
+    },
+    {
+      "month": "2017-01",
+      "episodes": 22,
+      "fair_cost_median": 0.048858331036545966,
+      "matched_excess_median": 0.030950645142650644
+    },
+    {
+      "month": "2017-02",
+      "episodes": 13,
+      "fair_cost_median": 0.019871588738129387,
+      "matched_excess_median": 0.01792878555308356
+    },
+    {
+      "month": "2017-03",
+      "episodes": 27,
+      "fair_cost_median": -0.019629032258064505,
+      "matched_excess_median": -0.0350875756951144
+    },
+    {
+      "month": "2017-04",
+      "episodes": 21,
+      "fair_cost_median": 0.03171380731581658,
+      "matched_excess_median": -0.003545496718149986
+    },
+    {
+      "month": "2017-05",
+      "episodes": 47,
+      "fair_cost_median": -0.024825648414985635,
+      "matched_excess_median": -0.030380534609459442
+    },
+    {
+      "month": "2017-06",
+      "episodes": 21,
+      "fair_cost_median": 0.04780762573888536,
+      "matched_excess_median": 0.03586582637035484
+    },
+    {
+      "month": "2017-07",
+      "episodes": 22,
+      "fair_cost_median": 0.06967022158278174,
+      "matched_excess_median": 0.044597589469197146
+    },
+    {
+      "month": "2017-08",
+      "episodes": 50,
+      "fair_cost_median": 0.0383061724279235,
+      "matched_excess_median": -0.018577436567753448
+    },
+    {
+      "month": "2017-09",
+      "episodes": 26,
+      "fair_cost_median": 0.16707583750041827,
+      "matched_excess_median": 0.06783500076761334
+    },
+    {
+      "month": "2017-10",
+      "episodes": 29,
+      "fair_cost_median": 0.016150432222044098,
+      "matched_excess_median": -0.06721285703256294
+    },
+    {
+      "month": "2017-11",
+      "episodes": 30,
+      "fair_cost_median": 0.08211896257409329,
+      "matched_excess_median": 0.045194299049951175
+    },
+    {
+      "month": "2017-12",
+      "episodes": 13,
+      "fair_cost_median": 0.03167219070369259,
+      "matched_excess_median": -0.009310649258520862
+    },
+    {
+      "month": "2018-01",
+      "episodes": 12,
+      "fair_cost_median": -0.041006984286403536,
+      "matched_excess_median": 0.03508047118775226
+    },
+    {
+      "month": "2018-02",
+      "episodes": 81,
+      "fair_cost_median": -0.0027433437899017613,
+      "matched_excess_median": -0.006436494161306386
+    },
+    {
+      "month": "2018-03",
+      "episodes": 54,
+      "fair_cost_median": -8.030622109977612e-05,
+      "matched_excess_median": 0.00029027813953862863
+    },
+    {
+      "month": "2018-04",
+      "episodes": 29,
+      "fair_cost_median": 0.04511407249466953,
+      "matched_excess_median": 0.016884477357050183
+    },
+    {
+      "month": "2018-05",
+      "episodes": 21,
+      "fair_cost_median": 0.03849066874027979,
+      "matched_excess_median": 0.00896729690997776
+    },
+    {
+      "month": "2018-06",
+      "episodes": 56,
+      "fair_cost_median": 0.0065689885413775,
+      "matched_excess_median": -0.025895095704571228
+    },
+    {
+      "month": "2018-07",
+      "episodes": 20,
+      "fair_cost_median": -0.0817361616339759,
+      "matched_excess_median": -0.01908888190164381
+    },
+    {
+      "month": "2018-08",
+      "episodes": 19,
+      "fair_cost_median": -0.024405635432159956,
+      "matched_excess_median": 0.03029147036677496
+    },
+    {
+      "month": "2018-09",
+      "episodes": 48,
+      "fair_cost_median": -0.1317675089244179,
+      "matched_excess_median": -0.009283299312255182
+    },
+    {
+      "month": "2018-10",
+      "episodes": 97,
+      "fair_cost_median": -0.05192151944344353,
+      "matched_excess_median": 0.0068281336871199305
+    },
+    {
+      "month": "2018-11",
+      "episodes": 19,
+      "fair_cost_median": -0.05821709107860845,
+      "matched_excess_median": 0.014797476445810047
+    },
+    {
+      "month": "2018-12",
+      "episodes": 36,
+      "fair_cost_median": -0.006746863272316658,
+      "matched_excess_median": -0.026989293091817586
+    },
+    {
+      "month": "2019-01",
+      "episodes": 6,
+      "fair_cost_median": 0.010263699688622232,
+      "matched_excess_median": -0.10125016178305132
+    },
+    {
+      "month": "2019-02",
+      "episodes": 6,
+      "fair_cost_median": -0.0069559817377910504,
+      "matched_excess_median": 0.01771728106765732
+    },
+    {
+      "month": "2019-03",
+      "episodes": 38,
+      "fair_cost_median": 0.051278372938087624,
+      "matched_excess_median": 0.04656324887409545
+    },
+    {
+      "month": "2019-04",
+      "episodes": 23,
+      "fair_cost_median": 0.02472966507177038,
+      "matched_excess_median": 0.04411241205840187
+    },
+    {
+      "month": "2019-05",
+      "episodes": 76,
+      "fair_cost_median": -0.023555058853585165,
+      "matched_excess_median": -0.01804800971090808
+    },
+    {
+      "month": "2019-06",
+      "episodes": 8,
+      "fair_cost_median": -0.02538308953064139,
+      "matched_excess_median": -0.026329454233085164
+    },
+    {
+      "month": "2019-07",
+      "episodes": 10,
+      "fair_cost_median": 0.06744039777210659,
+      "matched_excess_median": 0.06409131818251933
+    },
+    {
+      "month": "2019-08",
+      "episodes": 72,
+      "fair_cost_median": 0.050088958916362725,
+      "matched_excess_median": -0.004349914561495713
+    },
+    {
+      "month": "2019-09",
+      "episodes": 8,
+      "fair_cost_median": 0.09560856242533372,
+      "matched_excess_median": 0.012826976657834464
+    },
+    {
+      "month": "2019-10",
+      "episodes": 24,
+      "fair_cost_median": 0.09310500531190463,
+      "matched_excess_median": 0.011789626092755183
+    },
+    {
+      "month": "2019-11",
+      "episodes": 6,
+      "fair_cost_median": -0.00010015244440736426,
+      "matched_excess_median": -0.0015806182074035845
+    },
+    {
+      "month": "2019-12",
+      "episodes": 10,
+      "fair_cost_median": -0.17399847700236643,
+      "matched_excess_median": -0.0753806152141136
+    },
+    {
+      "month": "2020-01",
+      "episodes": 57,
+      "fair_cost_median": -0.20799526426853793,
+      "matched_excess_median": -0.004151450109328436
+    },
+    {
+      "month": "2020-02",
+      "episodes": 77,
+      "fair_cost_median": -0.21847127644668624,
+      "matched_excess_median": 0.021453229324484124
+    },
+    {
+      "month": "2020-03",
+      "episodes": 27,
+      "fair_cost_median": -0.18236790241615736,
+      "matched_excess_median": -0.009163912488881265
+    },
+    {
+      "month": "2020-04",
+      "episodes": 1
+    },
+    {
+      "month": "2020-05",
+      "episodes": 0
+    },
+    {
+      "month": "2020-06",
+      "episodes": 6,
+      "fair_cost_median": 0.03665799974487255,
+      "matched_excess_median": -0.027523140420565657
+    },
+    {
+      "month": "2020-07",
+      "episodes": 6,
+      "fair_cost_median": 0.00941764908941495,
+      "matched_excess_median": -0.046122425813672194
+    },
+    {
+      "month": "2020-08",
+      "episodes": 5,
+      "fair_cost_median": -0.009194324815771811,
+      "matched_excess_median": -0.0008114192747773474
+    },
+    {
+      "month": "2020-09",
+      "episodes": 34,
+      "fair_cost_median": 0.0765114383360182,
+      "matched_excess_median": -0.007628401608688037
+    },
+    {
+      "month": "2020-10",
+      "episodes": 20,
+      "fair_cost_median": 0.0936849222675909,
+      "matched_excess_median": -0.12532090647575186
+    },
+    {
+      "month": "2020-11",
+      "episodes": 5,
+      "fair_cost_median": 0.0650878962536024,
+      "matched_excess_median": -0.019723615604407066
+    },
+    {
+      "month": "2020-12",
+      "episodes": 4
+    },
+    {
+      "month": "2021-01",
+      "episodes": 22,
+      "fair_cost_median": 0.09832955405495575,
+      "matched_excess_median": -0.020043355080733793
+    },
+    {
+      "month": "2021-02",
+      "episodes": 14,
+      "fair_cost_median": 0.10375359726985162,
+      "matched_excess_median": -0.03304248025499171
+    },
+    {
+      "month": "2021-03",
+      "episodes": 11,
+      "fair_cost_median": 0.06202433173406435,
+      "matched_excess_median": -0.028191407887771386
+    },
+    {
+      "month": "2021-04",
+      "episodes": 3
+    },
+    {
+      "month": "2021-05",
+      "episodes": 17,
+      "fair_cost_median": 0.03318174962292614,
+      "matched_excess_median": 0.014225609908451797
+    },
+    {
+      "month": "2021-06",
+      "episodes": 61,
+      "fair_cost_median": 0.00018933152371297972,
+      "matched_excess_median": -0.012163457615918942
+    },
+    {
+      "month": "2021-07",
+      "episodes": 20,
+      "fair_cost_median": 0.011033131693757916,
+      "matched_excess_median": 0.005815738427343426
+    },
+    {
+      "month": "2021-08",
+      "episodes": 26,
+      "fair_cost_median": 0.04388910146368469,
+      "matched_excess_median": 0.03900438078696254
+    },
+    {
+      "month": "2021-09",
+      "episodes": 65,
+      "fair_cost_median": 0.04162614678899074,
+      "matched_excess_median": 0.0033855366719383745
+    },
+    {
+      "month": "2021-10",
+      "episodes": 28,
+      "fair_cost_median": 0.02720748947092816,
+      "matched_excess_median": -0.0013778432848877333
+    },
+    {
+      "month": "2021-11",
+      "episodes": 49,
+      "fair_cost_median": 0.05038843262366527,
+      "matched_excess_median": 0.0245385784475649
+    },
+    {
+      "month": "2021-12",
+      "episodes": 46,
+      "fair_cost_median": 0.04260543604983452,
+      "matched_excess_median": 0.014444279901877488
+    },
+    {
+      "month": "2022-01",
+      "episodes": 63,
+      "fair_cost_median": -0.020616524028966243,
+      "matched_excess_median": -0.0047041802514022416
+    },
+    {
+      "month": "2022-02",
+      "episodes": 25,
+      "fair_cost_median": 0.004497560536127546,
+      "matched_excess_median": 0.035103536028789975
+    },
+    {
+      "month": "2022-03",
+      "episodes": 35,
+      "fair_cost_median": 0.023898647793168026,
+      "matched_excess_median": 0.009360680743590588
+    },
+    {
+      "month": "2022-04",
+      "episodes": 45,
+      "fair_cost_median": -0.02639542091581676,
+      "matched_excess_median": 3.87902388953032e-05
+    },
+    {
+      "month": "2022-05",
+      "episodes": 16,
+      "fair_cost_median": -0.019522008860668627,
+      "matched_excess_median": 0.003996975748776153
+    },
+    {
+      "month": "2022-06",
+      "episodes": 31,
+      "fair_cost_median": 0.016206436943099034,
+      "matched_excess_median": -0.022790855921366385
+    },
+    {
+      "month": "2022-07",
+      "episodes": 9,
+      "fair_cost_median": 0.04938393237675803,
+      "matched_excess_median": 0.025759181968746325
+    },
+    {
+      "month": "2022-08",
+      "episodes": 22,
+      "fair_cost_median": -0.047740448352022125,
+      "matched_excess_median": 0.0034558269835876076
+    },
+    {
+      "month": "2022-09",
+      "episodes": 48,
+      "fair_cost_median": -0.020739895200944103,
+      "matched_excess_median": 0.007579181493218099
+    },
+    {
+      "month": "2022-10",
+      "episodes": 9,
+      "fair_cost_median": 0.04628940367989359,
+      "matched_excess_median": 0.0050693869294119315
+    },
+    {
+      "month": "2022-11",
+      "episodes": 6,
+      "fair_cost_median": 0.04874882385299034,
+      "matched_excess_median": 0.04214468276062998
+    },
+    {
+      "month": "2022-12",
+      "episodes": 48,
+      "fair_cost_median": 0.07713390306734674,
+      "matched_excess_median": 0.026254680822795914
+    },
+    {
+      "month": "2023-01",
+      "episodes": 21,
+      "fair_cost_median": 0.0019301077640395158,
+      "matched_excess_median": 0.01532246552528644
+    },
+    {
+      "month": "2023-02",
+      "episodes": 18,
+      "fair_cost_median": -0.023445546833073094,
+      "matched_excess_median": 0.02984747304669344
+    },
+    {
+      "month": "2023-03",
+      "episodes": 56,
+      "fair_cost_median": 0.023653884354566113,
+      "matched_excess_median": -0.008505869590183256
+    },
+    {
+      "month": "2023-04",
+      "episodes": 28,
+      "fair_cost_median": 0.017454223328745855,
+      "matched_excess_median": 0.0047152274273350265
+    },
+    {
+      "month": "2023-05",
+      "episodes": 30,
+      "fair_cost_median": 0.024209745470813726,
+      "matched_excess_median": -0.035765146073416895
+    },
+    {
+      "month": "2023-06",
+      "episodes": 3
+    },
+    {
+      "month": "2023-07",
+      "episodes": 8,
+      "fair_cost_median": -0.10443197238580387,
+      "matched_excess_median": 0.0036583329514607438
+    },
+    {
+      "month": "2023-08",
+      "episodes": 46,
+      "fair_cost_median": -0.03171956603825865,
+      "matched_excess_median": 0.019679671824703135
+    },
+    {
+      "month": "2023-09",
+      "episodes": 38,
+      "fair_cost_median": 0.05270995226976177,
+      "matched_excess_median": 0.021731808647926305
+    },
+    {
+      "month": "2023-10",
+      "episodes": 24,
+      "fair_cost_median": 0.08974112455846267,
+      "matched_excess_median": -0.04524102717959817
+    },
+    {
+      "month": "2023-11",
+      "episodes": 7,
+      "fair_cost_median": 0.03149627699180951,
+      "matched_excess_median": 0.004839656258495025
+    },
+    {
+      "month": "2023-12",
+      "episodes": 4
+    },
+    {
+      "month": "2024-01",
+      "episodes": 5,
+      "fair_cost_median": 0.06811951436845615,
+      "matched_excess_median": 0.026664159258914986
+    },
+    {
+      "month": "2024-02",
+      "episodes": 14,
+      "fair_cost_median": 0.03581212380077908,
+      "matched_excess_median": 0.03422407417027776
+    },
+    {
+      "month": "2024-03",
+      "episodes": 5,
+      "fair_cost_median": -0.0016012282679642134,
+      "matched_excess_median": 0.013452691484417313
+    },
+    {
+      "month": "2024-04",
+      "episodes": 62,
+      "fair_cost_median": -0.004197368383028418,
+      "matched_excess_median": -0.011963653341327127
+    },
+    {
+      "month": "2024-05",
+      "episodes": 26,
+      "fair_cost_median": 0.01834902040186398,
+      "matched_excess_median": 0.003923290827787956
+    },
+    {
+      "month": "2024-06",
+      "episodes": 16,
+      "fair_cost_median": 0.05102861073379733,
+      "matched_excess_median": 0.028195104103277427
+    },
+    {
+      "month": "2024-07",
+      "episodes": 9,
+      "fair_cost_median": 0.08678960817717202,
+      "matched_excess_median": 0.04277485368845367
+    },
+    {
+      "month": "2024-08",
+      "episodes": 26,
+      "fair_cost_median": 0.0673890534225074,
+      "matched_excess_median": -0.0003116881596970048
+    },
+    {
+      "month": "2024-09",
+      "episodes": 17,
+      "fair_cost_median": 0.030585193639493913,
+      "matched_excess_median": -0.011553359618329664
+    },
+    {
+      "month": "2024-10",
+      "episodes": 39,
+      "fair_cost_median": -0.0070257822829440895,
+      "matched_excess_median": -0.019898450943521453
+    },
+    {
+      "month": "2024-11",
+      "episodes": 19,
+      "fair_cost_median": 0.011223210778771146,
+      "matched_excess_median": 0.02097084891658161
+    },
+    {
+      "month": "2024-12",
+      "episodes": 62,
+      "fair_cost_median": -0.01955802928199929,
+      "matched_excess_median": -0.007927194017969291
+    },
+    {
+      "month": "2025-01",
+      "episodes": 22,
+      "fair_cost_median": -0.011948500459287524,
+      "matched_excess_median": 0.044159982298623945
+    },
+    {
+      "month": "2025-02",
+      "episodes": 27,
+      "fair_cost_median": -0.07474419204956134,
+      "matched_excess_median": 0.02594020430116895
+    },
+    {
+      "month": "2025-03",
+      "episodes": 48,
+      "fair_cost_median": -0.08726642696382886,
+      "matched_excess_median": -0.018653309944543284
+    },
+    {
+      "month": "2025-04",
+      "episodes": 43,
+      "fair_cost_median": 0.009158227848101112,
+      "matched_excess_median": 0.009806956549279957
+    },
+    {
+      "month": "2025-05",
+      "episodes": 13,
+      "fair_cost_median": 0.020617974671283623,
+      "matched_excess_median": -0.005150823055712787
+    },
+    {
+      "month": "2025-06",
+      "episodes": 14,
+      "fair_cost_median": 0.014561979510612723,
+      "matched_excess_median": -0.06405285219118789
+    },
+    {
+      "month": "2025-07",
+      "episodes": 28,
+      "fair_cost_median": 0.024244840594626782,
+      "matched_excess_median": -0.0008240889891191865
+    },
+    {
+      "month": "2025-08",
+      "episodes": 26,
+      "fair_cost_median": 0.017885007910074135,
+      "matched_excess_median": -0.01565314396791645
+    },
+    {
+      "month": "2025-09",
+      "episodes": 28,
+      "fair_cost_median": 0.004749573746263837,
+      "matched_excess_median": -0.03555631658052526
     }
   ],
   "input_keys": {
@@ -2816,6 +5406,10 @@
     {
       "kind": "develop",
       "at": "2026-11-07T11:48:55+00:00"
+    },
+    {
+      "kind": "reveal",
+      "at": "2026-11-07T18:44:51+00:00"
     }
   ],
   "run_counts": {
@@ -2824,5 +5418,5 @@
     "chart_not_daily": 0,
     "thinned": 0
   },
-  "status": "development_committed"
+  "status": "revealed"
 }
