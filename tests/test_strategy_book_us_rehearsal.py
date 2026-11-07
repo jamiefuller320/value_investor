@@ -915,6 +915,8 @@ def test_cli_status_and_help(capsys: pytest.CaptureFixture[str]):
 
 
 def test_cli_refuses_without_writing(tmp_path: Path, capsys: pytest.CaptureFixture[str]):
+    store = REPO / rehearsal.STORE_PATH
+    before = store.read_bytes() if store.exists() else None
     code = rehearsal.main(
         [
             "develop",
@@ -928,4 +930,4 @@ def test_cli_refuses_without_writing(tmp_path: Path, capsys: pytest.CaptureFixtu
     )
     assert code == 2
     assert "inside the repository" in capsys.readouterr().err
-    assert not (REPO / rehearsal.STORE_PATH).exists()
+    assert (store.read_bytes() if store.exists() else None) == before
