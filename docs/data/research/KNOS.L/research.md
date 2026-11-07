@@ -1,6 +1,6 @@
 # Kainos Group plc (KNOS.L) — Research memo
 
-_Version 4 · Updated 2026-10-18T09:35:54.519219+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-07T19:45:59.226498+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.69
-Rationale: No trading update since August guidance; routine RNS and commentary-only news leave competitive and valuation risks unchanged, so research stays neutral on the hold case.
+Rationale: No trading update since August; routine November voting-rights RNS and thin news leave competitive and cyclical risks unchanged, so research stays neutral on the hold case.
 RiskTags: competitive, cyclical, customer_concentration, key_person, governance, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ No new trading update; remaining news is commentary and ex-dividend calendar ite
 1 October total voting rights and 7 October holdings RNS are the only new disclosures since the 22 September AGM.  
 No trading update since the 18 August FY27 guidance raise.  
 October news is mostly Kalkine Media rehashing backlog, AI themes and prior board changes.
+
+### 2026-11-07T19:45:59.226498+00:00
+2 November total voting rights RNS is the only new group disclosure since the 1 October voting-rights notice.  
+No trading update since the 18 August FY27 guidance raise.  
+News since 18 October is a single LSE quote-page item only; no material change.

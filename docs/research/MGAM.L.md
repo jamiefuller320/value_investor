@@ -1,6 +1,6 @@
 # Morgan Advanced Materials plc (MGAM.L) — Research memo
 
-_Version 4 · Updated 2026-10-18T09:17:57.383154+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-07T19:30:02.287820+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.70
-Rationale: Research still supports the screen buy on cheapness and filing-aligned FCF; no new results, while leverage, margin delivery and October debt maturities keep medium-risk checks unchanged.
+Confidence: 0.72
+Rationale: Q3 RNS supports the screen buy on sales momentum and upper-end FY26 profit guidance; FCF basis mismatch and leverage remain medium-risk checks, with post-October debt refinancing not disclosed here.
 RiskTags: cyclical, leverage, key_person, accounting, competitive, pension, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Accumulate view unchanged: H2 cash flow, FY2026 margin delivery and October 2026
 No new results or trading update since H1; since 23 September only routine PDMR (29 Sep) and a holdings disclosure (14 Oct).  
 Kalkine cites an RBC upgrade and semiconductor-cycle timing; neither is corroborated in indexed RNS.  
 Fresh buy screen flags FCF basis mismatch and neutral timing; H2 cash, margins and October debt maturities remain the checkpoints.
+
+### 2026-11-07T19:30:02.287820+00:00
+5 November Q3 trading RNS: 9M organic sales +4.9% and FY26 adjusted operating profit guided to the upper end of the £100–105m analyst range.
+Thermal Products review is moving to formal engagement with potential buyers; CFO succession to Elizabeth Knowles from 1 January 2027 is confirmed.
+Indexed filings do not disclose October 2026 debt refinancing; H2 cash flow and leverage remain the main checkpoints.

@@ -1,15 +1,15 @@
 # Drax Group plc (DRX.L) — Research memo
 
-_Version 4 · Updated 2026-10-18T09:29:55.660770+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-07T19:41:32.359571+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
 
 ## RESEARCH VERDICT
-Verdict: caution
+Verdict: pass
 Risk: medium
-Confidence: 0.63
-Rationale: Research is neutral on the new hold signal: no fresh filings, while FCF-definition split, liquidity and post-BSIF leverage still outweigh cheapness/risk passes.
+Confidence: 0.61
+Rationale: Research confirms the avoid case: screen deterioration and enduring FCF split, weak liquidity and post-BSIF leverage outweigh conditional Brookfield/Radiant data-centre optionality.
 RiskTags: regulatory, cyclical, leverage, competitive, accounting, liquidity
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Interim dividend went ex on 24 Sep; other coverage is mostly dividend and solar-
 No new company RNS since the 17 Sep EBITDA upgrade; only routine 1 Oct total voting rights and share issue.  
 Coverage is mostly third-party commentary on outlook, BSIF debt and biomass policy; the Jun FCA closure RNS is unchanged.  
 The quant screen is now **hold** (from avoid); leverage, weak liquidity and dual FCF/dividend cover definitions are unchanged.
+
+### 2026-11-07T19:41:32.359571+00:00
+Quant screen is back to **avoid** (deteriorating); FCF mismatch, weak liquidity and dual dividend-cover definitions are unchanged.  
+3 Nov RNS: Brookfield/Radiant GW-scale AI data centre at Drax Power Station—Phase 1 up to 100MW targets Q1 2028, conditional on planning, regulatory consents, tenant and FID.  
+Oct–Nov routine BSIF Rule 19.6(b), voting rights and share issues only; no new results.
