@@ -1338,6 +1338,74 @@ def test_eng_20261101_01_fetch_backfills_ocf_from_screening_snapshot_json(
     assert fetched.data_sources.get("operating_cashflow") == "yahoo_financials_annual"
 
 
+def test_eng_20261107_03_fetch_backfills_ocf_from_ifrs_yahoo_cash_flow_rows(
+    tmp_path: Path, monkeypatch
+):
+    """Regression: IFRS Yahoo annual rows backfill fetch when yfinance cashflow is null."""
+    from types import SimpleNamespace
+
+    from value_investor import fetch as fetch_mod
+
+    monkeypatch.chdir(tmp_path)
+    sources = tmp_path / "output" / "research" / "BLND.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "BLND.L",
+        "cash_flow": {
+            "2025": {
+                "Free Cash Flow": 12_000_000.0,
+                "Cash Flowsfromusedin Operating Activities Direct": 309_000_000.0,
+                "Classesof Cash Receiptsfrom Operating Activities": 532_000_000.0,
+            },
+        },
+        "cashflow_metrics": {},
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    class DummyTicker:
+        @property
+        def info(self):
+            return {"longName": "British Land Company plc", "marketCap": 4_000_000_000}
+
+        @property
+        def fast_info(self):
+            return SimpleNamespace(market_cap=4_000_000_000)
+
+        @property
+        def balance_sheet(self):
+            return None
+
+        @property
+        def income_stmt(self):
+            return None
+
+        @property
+        def cashflow(self):
+            return None
+
+        financials = pd.DataFrame()
+        quarterly_financials = None
+
+    fetch_mod.fetch_company_metrics._cashflow_fallback_installed = False  # type: ignore[attr-defined]
+    install_fetch_cashflow_fallback()
+
+    with patch.object(fetch_mod.yf, "Ticker", lambda _sym: DummyTicker()):
+        fetched = fetch_mod.fetch_company_metrics("BLND.L")
+
+    assert fetched.operating_cashflow == pytest.approx(309_000_000.0)
+    assert fetched.free_cashflow == pytest.approx(12_000_000.0)
+    assert fetched.data_sources.get("operating_cashflow") == "yahoo_financials_annual"
+
+    refresh = refresh_sources_yahoo_cashflow_metrics(
+        ticker="BLND.L",
+        sources_dir=sources,
+    )
+    assert refresh["updated"] is True
+    assert refresh["operating_cashflow"] == pytest.approx(309_000_000.0)
+    stored = json.loads((sources / "financials_annual.json").read_text(encoding="utf-8"))
+    assert stored["cashflow_metrics"]["operating_cashflow"] == pytest.approx(309_000_000.0)
+
+
 def test_fetch_annual_financials_includes_cashflow_metrics(monkeypatch):
     cashflow_df = pd.DataFrame(
         {"2024": [90_800_000.0, 55_000_000.0]},
