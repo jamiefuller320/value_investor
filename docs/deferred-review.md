@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-07T10:46:01+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-07T18:07:13+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -728,7 +728,6 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | L679 | **Windows-safe paths for CON/PRN ticker artifacts** | docs/data/charts/CON.DE.json, PRN.AX.json, PRN.L.json and library research/PRN.AX use Windows reserved device names, so a plain clone fails on Windows (owner hit it 2026-11-06 for the US rehearsal). Owner machine uses a sparse checkout excluding bulk data dirs. A path-escaping rule for reserved names would make full clones work. | The owner needs a full Windows checkout (dashboard dev or bulk data work on the laptop). |
 | L681 | **Retire legacy dashboard sections after v2 cutover** | Once the owner approves the dashboard v2 cutover, retire old-page sections the ledger marks as retirement candidates (browser sandbox, 1000-pound simulation headline, lifecycle experiment Start) one by one with a recorded reason; engineering views stay on docs/legacy/. | Owner stamps the dashboard v2 cutover decision (human task adhoc-dashboard-v2-plan) |
 | L682 | **Legacy Overview stale progress report and empty week-over-week diff** | The old Overview shows progress_report.json from 2026-09-30 and a week-over-week block that is always empty because run_diff is never published. Fix the regen cadence and publish run_diff, or drop both blocks from the old Overview. | If the owner rejects dashboard v2, or the old Overview stays the landing page after the v2 cutover review |
-| L683 | **Stop pound-cap test breaking on library market-cap refreshes** | tests/test_ftse_pound_cap.py hardcodes library market caps (GROW.L, HMSO.L via HMSO.IR) that change on every ingest, so CI fails on unrelated PRs; it has been refreshed by hand four times since 2026-10-29. Read the expected cap from the same library row, or use a small fixture tree, so the test checks the method and arithmetic rather than today's number. | Next time CI fails on test_ftse350_pound_caps_cover_priced_names after a library refresh |
 | L685 | **Strategy book replay episode gzip writes bare NaN (invalid JSON)** | strategy_book_replay_cli writes strategy_book_replay_episodes.json.gz with json.dumps defaults, so about 1,800 snapshot fields are bare NaN tokens that browsers' JSON.parse rejects; dashboard v2 Book tab patches them to null on load. Write null (allow_nan=False after cleaning) at the source. | Next change to strategy_book_replay_cli or the replay snapshot fields |
 
 ---

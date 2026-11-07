@@ -7,6 +7,10 @@ from pathlib import Path
 
 from value_investor.ftse_pound_cap import (
     SCREEN_PRICE_RUN_PREFIX,
+    _fx_to_gbp,
+    _fx_usd_per_unit,
+    _library_caps,
+    _stable_cap,
     compute_ftse350_pound_caps,
     normalize_issuer_name,
 )
@@ -59,13 +63,16 @@ def test_ftse350_pound_caps_cover_priced_names():
 
     hmso = by_ticker["HMSO.L"]
     assert hmso.method == "same_name_fx_cap"
-    # HMSO.IR library market_cap in EUR (refreshed; was 2_041_640_448).
-    assert abs(hmso.cap_gbp - 2_088_306_432 * 1.124 / 1.3317) < 1
+    # Library caps refresh with every ingest, so read the stored value rather than pin it.
+    library = _library_caps(ROOT)
+    hmso_eur = _stable_cap([(market, cap) for market, _, cap in library["HMSO.IR"]])
+    assert hmso_eur is not None
+    assert abs(hmso.cap_gbp - _fx_to_gbp(hmso_eur, "EUR", _fx_usd_per_unit(ROOT))) < 1
 
     grow = by_ticker["GROW.L"]
     assert grow.method == "library_gbp_cap"
-    # Library AIM market_cap in GBP (refreshed; was 1_136_930_432).
-    assert grow.cap_gbp == 1_113_849_856
+    assert grow.cap_gbp == _stable_cap([(market, cap) for market, _, cap in library["GROW.L"]])
+    assert grow.cap_gbp > 0
 
     for ticker in ("HSBA.L", "AZN.L", "BA.L", "CRDA.L", "PNN.L", "CPG.L"):
         assert by_ticker[ticker].cap_gbp is not None
