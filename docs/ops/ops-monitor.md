@@ -101,7 +101,11 @@ lane change and readiness gate (see N152 / P1 pin rules).
   end of ops-monitor after the human-tasks board — including the **02:30 UTC**
   early slot so the hub is fresh before 04:00 Europe/London. Automation →
   **Daily** (`#automation/daily`) is the collated cockpit (Today + History);
-  **Ops** shows the reconcile table (includes `daily_hub_local_date_matches_today`).
+  **Ops** shows the reconcile table (includes `daily_hub_local_date_matches_today`
+  and `dashboard_v2_stores_present_and_fresh` for `docs/v2/` page integrity +
+  Today-tab store presence/freshness). If the latter warns, triage observe-only:
+  restore missing v2 assets or rerun/publish the writer for stale JSON in
+  `docs/data/` — do not rememo from the finding alone.
   Findings titled **UI state reconciliation drift** are observe-only
   (`auto_fixable=False`). Accept / Discuss recommendations queue via
   `daily-focus-ack` / `daily-discuss` (inbox: `daily_discuss_inbox.json`).

@@ -5,7 +5,7 @@
 (function () {
   "use strict";
 
-  const V2_VERSION = "wp1-20261106";
+  const V2_VERSION = "wp2-20261106";
 
   /** @type {Record<string, object>} */
   const pendingHumanTaskAcks = Object.create(null);
@@ -458,6 +458,34 @@
     </details>`;
   }
 
+  /** Task ids that decide the strategy book or this dashboard; everything else is engineering or legacy cadence. */
+  const STRATEGY_TASK_PATTERN = /strategy|dashboard-v2|observe-instrument-freeze|t212/;
+
+  function isStrategyHumanTask(task) {
+    return STRATEGY_TASK_PATTERN.test(String((task && task.id) || ""));
+  }
+
+  function renderOpenHumanTasks(board) {
+    const openTasks =
+      board && Array.isArray(board.tasks)
+        ? board.tasks.filter((t) => t.sort_bucket === "unacked" || t.sort_bucket === "new_info")
+        : [];
+    if (!openTasks.length) {
+      return '<p class="v2-muted">No open owner tasks in the published board (or not yet available).</p>';
+    }
+    const strategy = openTasks.filter(isStrategyHumanTask);
+    const other = openTasks.filter((t) => !isStrategyHumanTask(t));
+    const strategyHtml = strategy.length
+      ? strategy.map((t) => renderHumanTaskCard(t)).join("")
+      : '<p class="v2-muted">No open strategy decisions.</p>';
+    const otherHtml = other.length
+      ? `<details class="v2-other-tasks"><summary>Other owner tasks (${other.length}): engineering, reviews and cadence</summary>${other
+          .map((t) => renderHumanTaskCard(t))
+          .join("")}</details>`
+      : "";
+    return `<h3 class="v2-subhead">Strategy decisions (${strategy.length})</h3>${strategyHtml}${otherHtml}`;
+  }
+
   function collectLatestBars(memoJob) {
     const markets = memoJob && memoJob.markets;
     if (!markets || typeof markets !== "object") return { bars: [], minMs: null, maxMs: null };
@@ -581,11 +609,31 @@
     return t || m || "?";
   }
 
+  /**
+   * Tab modules (candidates.js, book.js, …) load after this file and call
+   * DashboardV2Tabs.register({ id, render(ctx, helpers) → html, bind?(root, ctx, helpers), dataPaths? }).
+   * dataPaths keys are fetched with the core stores and exposed as ctx.data[key] ({ ok, data, error }).
+   */
+  const registeredTabs = Object.create(null);
+
+  window.DashboardV2Tabs = {
+    register(tab) {
+      if (!tab || !tab.id || typeof tab.render !== "function") return;
+      registeredTabs[tab.id] = tab;
+      if (tab.dataPaths) {
+        for (const [key, path] of Object.entries(tab.dataPaths)) {
+          if (!(key in DATA_PATHS)) DATA_PATHS[key] = path;
+        }
+      }
+      for (const name of tab.optionalDataFiles || []) OPTIONAL_DATA_FILES.add(name);
+    },
+  };
+
   function renderNav(activeId) {
     const tabs = [
       { id: "today", label: "Today", placeholder: false },
       { id: "inputs", label: "Inputs", placeholder: false },
-      ...PLACEHOLDER_TABS.map((p) => ({ id: p.id, label: p.label, placeholder: true })),
+      ...PLACEHOLDER_TABS.map((p) => ({ id: p.id, label: p.label, placeholder: !registeredTabs[p.id] })),
     ];
     return tabs
       .map((t) => {
@@ -693,13 +741,7 @@
         <p class="v2-muted" style="margin:0.75rem 0 0"><a href="../index.html#automation/daily">Open Daily hub on the engineering dashboard (Accept / Discuss)</a></p>`;
     })();
 
-    const openTasks =
-      board && Array.isArray(board.tasks)
-        ? board.tasks.filter((t) => t.sort_bucket === "unacked" || t.sort_bucket === "new_info")
-        : [];
-    const tasksHtml = openTasks.length
-      ? openTasks.map((t) => renderHumanTaskCard(t)).join("")
-      : '<p class="v2-muted">No open owner tasks in the published board (or not yet available).</p>';
+    const tasksHtml = renderOpenHumanTasks(board);
 
     function line(label, dateStr, ageMs, badgeFn) {
       const b = badgeFn(ageMs);
@@ -736,7 +778,7 @@
 
         <div class="v2-card">
           <h2>Owner decisions due</h2>
-          <p class="v2-panel-meta">Human tasks board${board && board.generated_at ? ` · ${esc(board.generated_at)}` : ""}</p>
+          <p class="v2-panel-meta">Human tasks board${board && board.generated_at ? ` · ${esc(displayDate(board.generated_at))}` : ""}</p>
           <div id="v2-human-tasks">${tasksHtml}</div>
         </div>
 
@@ -970,6 +1012,19 @@
       "<strong>Observe-only.</strong> The forward book is not live for capital — signals and dry-run counts are for review only.";
   }
 
+  const TAB_HELPERS = {
+    esc,
+    tsQuery,
+    fetchJsonSafe,
+    parseIsoMs,
+    ageLabelFromMs,
+    displayDate,
+    freshnessDailyStore,
+    freshnessWeeklyStore,
+    freshnessChartBar,
+    nowMs,
+  };
+
   function mount() {
     const nav = document.getElementById("v2-nav");
     const root = document.getElementById("v2-root");
@@ -997,6 +1052,7 @@
         marketStatus: dr.market_status.ok ? dr.market_status.data : null,
         opsStatus: dr.ops_status.ok ? dr.ops_status.data : null,
         dailyFocus: dr.daily_focus.ok ? dr.daily_focus.data : null,
+        data: dr,
         bundle: br,
       };
     }
@@ -1012,16 +1068,7 @@
             updateObserveBanner(ctx.registration);
             const tasksEl = document.getElementById("v2-human-tasks");
             if (tasksEl) {
-              tasksEl.innerHTML = (() => {
-                const board = ctx.bundle.human_tasks_board;
-                const openTasks =
-                  board && Array.isArray(board.tasks)
-                    ? board.tasks.filter((t) => t.sort_bucket === "unacked" || t.sort_bucket === "new_info")
-                    : [];
-                return openTasks.length
-                  ? openTasks.map((t) => renderHumanTaskCard(t)).join("")
-                  : '<p class="v2-muted">No open owner tasks in the published board (or not yet available).</p>';
-              })();
+              tasksEl.innerHTML = renderOpenHumanTasks(ctx.bundle.human_tasks_board);
               bindV2HumanTaskClicks(tasksEl);
             }
           });
@@ -1056,6 +1103,16 @@
         if (tasksHost) bindV2HumanTaskClicks(tasksHost);
       } else if (tab === "inputs") {
         root.innerHTML = renderInputs(ctx);
+      } else if (registeredTabs[tab]) {
+        const mod = registeredTabs[tab];
+        try {
+          root.innerHTML = mod.render(ctx, TAB_HELPERS);
+          if (typeof mod.bind === "function") mod.bind(root, ctx, TAB_HELPERS);
+        } catch (err) {
+          root.innerHTML = `<section class="v2-panel v2-card"><h2>${esc(mod.label || tab)}</h2><p class="v2-muted">This tab failed to render: ${esc(
+            err && err.message ? err.message : String(err)
+          )}</p></section>`;
+        }
       } else {
         const ph = PLACEHOLDER_TABS.find((p) => p.id === tab);
         root.innerHTML = ph ? renderPlaceholder(ph) : renderToday(ctx);

@@ -7,7 +7,8 @@ drifts from the working set automation used. Findings are warn-only
 
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
+import re
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
@@ -24,6 +25,18 @@ DEFAULT_LIFECYCLE_STALE_HOURS = 30.0
 MASS_STALE_WARN_RATIO = 0.5
 MASS_STALE_MIN_ACKS = 3
 
+# Strategy dashboard v2 (`docs/v2/`) — mirrors `OPTIONAL_DATA_FILES` / `optionalDataFiles`
+# in `docs/v2/v2.js` and tab registrations (forward status + observe book).
+DASHBOARD_V2_OPTIONAL_STORE_BASENAMES = frozenset(
+    {
+        "strategy_book_forward_status.json",
+        "strategy_book_observe.json",
+    }
+)
+
+# Daily freshness for v2 Today tab: must mirror `freshnessDailyStore` in `docs/v2/v2.js`
+# (fresh ≤36h, stale ≤72h; we warn past the fresh band only).
+DASHBOARD_V2_DAILY_FRESH_HOURS = 36.0
 CheckStatus = str  # ok | warn | fail
 
 
@@ -40,7 +53,12 @@ def _parse_dt(value: Any) -> datetime | None:
     try:
         dt = datetime.fromisoformat(text.replace("Z", "+00:00"))
     except ValueError:
-        return None
+        # Date-only `as_of` (gate stores)
+        try:
+            day = date.fromisoformat(text)
+        except ValueError:
+            return None
+        dt = datetime(day.year, day.month, day.day, tzinfo=UTC)
     if dt.tzinfo is None:
         dt = dt.replace(tzinfo=UTC)
     return dt.astimezone(UTC)
@@ -69,8 +87,9 @@ def _check(
     authority_path: str | None = None,
     authority_generated_at: str | None = None,
     runbook: str | None = None,
+    details: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    return {
+    out: dict[str, Any] = {
         "id": check_id,
         "title": title,
         "status": status,
@@ -82,6 +101,9 @@ def _check(
         "detail": detail,
         "runbook": runbook,
     }
+    if details:
+        out["details"] = details
+    return out
 
 
 def _check_progress_report_vs_overlay(data_dir: Path) -> dict[str, Any]:
@@ -370,6 +392,255 @@ def _check_daily_hub_local_date(
     )
 
 
+def _repo_root_for_data_dir(data_dir: Path) -> Path | None:
+    """`<root>/docs/data` → `<root>`; None when the data dir is not a published docs tree."""
+    resolved = data_dir.resolve()
+    if resolved.parent.name != "docs":
+        return None
+    return resolved.parent.parent
+
+
+_V2_JS_PATH_LITERAL_RE = re.compile(
+    r"""["'](\.\./(?:data/)?[^'"\s]+\.(?:json|json\.gz))["']""",
+    re.IGNORECASE,
+)
+_V2_OPTIONAL_ARRAY_RE = re.compile(
+    r"optionalDataFiles\s*:\s*\[([^\]]*)\]",
+    re.MULTILINE,
+)
+
+
+def _strip_asset_query(uri: str) -> str:
+    base = str(uri).strip()
+    if "?" in base:
+        base = base.split("?", 1)[0]
+    return base
+
+
+def _parse_index_html_assets(index_html: str) -> tuple[list[str], list[str]]:
+    """Return (stylesheet hrefs, script srcs) from v2 index.html."""
+    styles: list[str] = []
+    scripts: list[str] = []
+    for m in re.finditer(r"<link([^>]+)>", index_html, flags=re.IGNORECASE):
+        tag = m.group(1)
+        if "stylesheet" not in tag.lower():
+            continue
+        hm = re.search(r"""href\s*=\s*["']([^"']+)["']""", tag, flags=re.IGNORECASE)
+        if hm:
+            styles.append(_strip_asset_query(hm.group(1)))
+    for m in re.finditer(r"<script([^>]+)>", index_html, flags=re.IGNORECASE):
+        tag = m.group(1)
+        if "src=" not in tag.lower():
+            continue
+        sm = re.search(r"""src\s*=\s*["']([^"']+)["']""", tag, flags=re.IGNORECASE)
+        if sm:
+            scripts.append(_strip_asset_query(sm.group(1)))
+    return styles, scripts
+
+
+def _resolve_v2_relative(ref: str, *, v2_dir: Path, repo_root: Path) -> Path:
+    rel = _strip_asset_query(ref)
+    if rel.startswith("/"):
+        return (repo_root / rel.lstrip("/")).resolve()
+    return (v2_dir / rel).resolve()
+
+
+def _collect_dashboard_v2_json_refs(v2_dir: Path) -> tuple[set[str], set[str]]:
+    """Return (path literals, optional basenames) scraped from docs/v2/*.js."""
+    literals: set[str] = set()
+    optional_names: set[str] = set(DASHBOARD_V2_OPTIONAL_STORE_BASENAMES)
+    for js_path in sorted(v2_dir.glob("*.js")):
+        try:
+            text = js_path.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        for m in _V2_JS_PATH_LITERAL_RE.finditer(text):
+            literals.add(m.group(1))
+        for block in _V2_OPTIONAL_ARRAY_RE.finditer(text):
+            inner = block.group(1)
+            for qm in re.finditer(r"""["']([^"']+\.json)["']""", inner):
+                optional_names.add(qm.group(1))
+    return literals, optional_names
+
+
+def _freshness_dt_for_core_store(
+    name: str, payload: dict[str, Any] | None
+) -> tuple[datetime | None, str]:
+    """Return (timestamp, field_used) for v2 Today core stores."""
+    if payload is None:
+        return None, ""
+    order: tuple[str, ...]
+    if name == "strategy_book_memo_job.json":
+        order = ("generated_at", "last_run_at", "as_of", "run_at")
+    elif name in {"operating_decline_gate.json", "sector_headwind_gate.json"}:
+        order = ("as_of", "generated_at", "run_at")
+    elif name in {"decision_input_inventory.json", "library_decision_input_inventory.json"}:
+        order = ("generated_at", "as_of", "run_at")
+    elif name == "human_tasks_board.json":
+        order = ("generated_at", "checklist_updated_at", "as_of", "run_at")
+    elif name == "daily_focus.json":
+        order = ("generated_at", "as_of", "run_at")
+    else:
+        order = ("generated_at", "as_of", "run_at")
+    for field in order:
+        dt = _parse_dt(payload.get(field))
+        if dt is not None:
+            return dt, field
+    return None, ""
+
+
+def _check_dashboard_v2_stores_present_and_fresh(
+    *,
+    data_dir: Path,
+    repo_root: Path,
+    now: datetime,
+) -> dict[str, Any]:
+    """Page integrity + required JSON sidecars for `docs/v2/` (observe-only)."""
+    v2_dir = repo_root / "docs" / "v2"
+    index_path = v2_dir / "index.html"
+    check_id = "dashboard_v2_stores_present_and_fresh"
+    title = "Strategy dashboard v2 present and fresh"
+    runbook = "docs/ops/ops-monitor.md#daily-hub--ui-reconciliation"
+
+    missing_page_assets: list[str] = []
+    missing_stores: list[str] = []
+    stale_stores: list[dict[str, Any]] = []
+
+    core_daily = (
+        "strategy_book_memo_job.json",
+        "operating_decline_gate.json",
+        "sector_headwind_gate.json",
+        "decision_input_inventory.json",
+        "library_decision_input_inventory.json",
+        "human_tasks_board.json",
+        "daily_focus.json",
+    )
+
+    if not index_path.is_file():
+        detail = "docs/v2/index.html missing — strategy dashboard v2 not ship-shaped"
+        return _check(
+            check_id=check_id,
+            title=title,
+            status="warn",
+            drift_class="missing_required",
+            detail=detail,
+            ui_path="docs/v2/index.html",
+            runbook=runbook,
+            details={
+                "v2_path": "docs/v2/",
+                "missing_page_assets": [],
+                "missing_stores": ["docs/v2/index.html"],
+                "stale_stores": [],
+                "freshness_threshold_hours": DASHBOARD_V2_DAILY_FRESH_HOURS,
+                "freshness_rule": "freshnessDailyStore in docs/v2/v2.js",
+            },
+        )
+
+    try:
+        index_html = index_path.read_text(encoding="utf-8")
+    except OSError as exc:
+        return _check(
+            check_id=check_id,
+            title=title,
+            status="warn",
+            drift_class="missing_required",
+            detail=f"could not read docs/v2/index.html: {exc}",
+            ui_path="docs/v2/index.html",
+            runbook=runbook,
+        )
+
+    styles, scripts = _parse_index_html_assets(index_html)
+    for href in styles + scripts:
+        resolved = _resolve_v2_relative(href, v2_dir=v2_dir, repo_root=repo_root)
+        if not resolved.is_file():
+            missing_page_assets.append(href)
+
+    literals, optional_names = _collect_dashboard_v2_json_refs(v2_dir)
+    for lit in sorted(literals):
+        if lit.endswith(".json.gz"):
+            resolved = _resolve_v2_relative(lit, v2_dir=v2_dir, repo_root=repo_root)
+            if not resolved.is_file():
+                missing_stores.append(lit)
+            continue
+        base = Path(lit).name
+        if base in optional_names:
+            continue
+        resolved = _resolve_v2_relative(lit, v2_dir=v2_dir, repo_root=repo_root)
+        if not resolved.is_file():
+            missing_stores.append(lit)
+
+    data_dir = Path(data_dir)
+    for store in core_daily:
+        path = data_dir / store
+        if not path.is_file():
+            stale_stores.append({"store": store, "reason": "missing file"})
+            continue
+        try:
+            payload_any = read_json(path)
+        except (OSError, ValueError, TypeError):
+            stale_stores.append({"store": store, "reason": "unreadable JSON"})
+            continue
+        payload = payload_any if isinstance(payload_any, dict) else None
+        if payload is None:
+            stale_stores.append({"store": store, "reason": "date missing"})
+            continue
+        ts, field = _freshness_dt_for_core_store(store, payload)
+        if ts is None:
+            stale_stores.append({"store": store, "reason": "date missing"})
+            continue
+        age_h = (now - ts).total_seconds() / 3600.0
+        if age_h > DASHBOARD_V2_DAILY_FRESH_HOURS:
+            stale_stores.append(
+                {
+                    "store": store,
+                    "reason": "stale",
+                    "field": field,
+                    "age_hours": round(age_h, 2),
+                    "timestamp": ts.astimezone(UTC).isoformat().replace("+00:00", "Z"),
+                }
+            )
+
+    has_missing = bool(missing_page_assets or missing_stores)
+    has_issue = has_missing or bool(stale_stores)
+    parts: list[str] = []
+    if missing_page_assets:
+        parts.append(f"missing page assets ({len(missing_page_assets)})")
+    if missing_stores:
+        parts.append(f"missing stores ({len(missing_stores)})")
+    if stale_stores:
+        parts.append(f"stale or unreadable stores ({len(stale_stores)})")
+    detail = "; ".join(parts) if parts else "v2 page + Today stores look fresh"
+
+    if not has_issue:
+        drift: str | None = None
+    elif has_missing or any(s.get("reason") == "missing file" for s in stale_stores):
+        drift = "missing_required"
+    elif any(s.get("reason") in {"date missing", "unreadable JSON"} for s in stale_stores):
+        drift = "fingerprint_noise"
+    else:
+        drift = "publish_lag"
+
+    status: CheckStatus = "warn" if has_issue else "ok"
+
+    return _check(
+        check_id=check_id,
+        title=title,
+        status=status,
+        drift_class=drift,
+        detail=detail,
+        ui_path="docs/v2/index.html",
+        runbook=runbook,
+        details={
+            "v2_path": "docs/v2/",
+            "missing_page_assets": missing_page_assets,
+            "missing_stores": missing_stores,
+            "stale_stores": stale_stores,
+            "freshness_threshold_hours": DASHBOARD_V2_DAILY_FRESH_HOURS,
+            "freshness_rule": "freshnessDailyStore in docs/v2/v2.js (warn past 36h fresh band)",
+        },
+    )
+
+
 def build_ui_state_reconciliation(
     *,
     data_dir: Path | None = None,
@@ -392,6 +663,13 @@ def build_ui_state_reconciliation(
         ),
         _check_daily_hub_local_date(data_dir, now=now, timezone=timezone),
     ]
+    v2_repo_root = _repo_root_for_data_dir(data_dir)
+    if v2_repo_root is not None:
+        checks.append(
+            _check_dashboard_v2_stores_present_and_fresh(
+                data_dir=data_dir, repo_root=v2_repo_root, now=now
+            )
+        )
     summary = {
         "ok": sum(1 for c in checks if c.get("status") == "ok"),
         "warn": sum(1 for c in checks if c.get("status") == "warn"),

@@ -242,8 +242,10 @@ Both are in the [human tasks checklist](human-tasks-checklist.md#ad-hoc-when-tri
 |---------|--------|-------------|-------|
 | WP0 | Merged 2026-11-06 | #1313 | Supervisor; Composer 2.5 and Grok 4.7 inventories |
 | Plan approval | Owner approved 2026-11-06 | — | Owner |
-| WP1 | Built and browser-checked; supervisor fixed subfolder paths and date display | `cursor/dashboard-v2-shell-4306` | Composer 2.5 |
-| WP4 | Built: forward status carries a per-name `candidates` roster (443 rows; sealed screen unchanged). Queued N257 (excluded names, version review) and L684 (snapshot signals gap) | `cursor/dashboard-v2-shell-4306` | Grok 4.7 (high) |
-| WP2, WP3, WP5 | Waiting on WP1 | — | — |
+| WP1 | Merged 2026-11-06 | #1318 | Composer 2.5 |
+| WP4 | Merged 2026-11-06: forward status carries a per-name `candidates` roster (443 rows; sealed screen unchanged). Queued N257 (excluded names, version review) and L684 (snapshot signals gap) | #1318 | Grok 4.7 (high) |
+| WP2 | Built: Candidates funnel and per-name checks; Today lists strategy decisions first. Queued N258 (per-name T212 flag, G5) | `cursor/dashboard-v2-candidates-book-4306` | Grok 4.7 (high) |
+| WP3 | Built: Book and Proof on the archive replay, three results kept apart. Queued L685 (episode gzip writes bare `NaN`) | `cursor/dashboard-v2-candidates-book-4306` | Grok 4.7 (high) |
+| WP5 | Built: `dashboard_v2_stores_present_and_fresh` in the UI reconciliation check (daily ops-monitor) | `cursor/dashboard-v2-candidates-book-4306` | Composer 2.5 |
 | WP6 | Waiting on step 2.4 | — | — |
 | WP7 | Waiting on the cutover decision | — | — |
