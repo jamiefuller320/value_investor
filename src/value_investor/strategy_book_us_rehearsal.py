@@ -33,6 +33,7 @@ from typing import Any
 import numpy as np
 
 from value_investor import historical_screen_replay as hsr
+from value_investor import strategy_book_exit_lab as lab
 from value_investor import strategy_book_observe as sbo
 from value_investor.strategy_book_rules import (
     COLUMN_ALTERNATIVE,
@@ -63,6 +64,8 @@ from value_investor.strategy_book_us_tape import (
 REPO_ROOT = hsr.REPO_ROOT
 REGISTRATION_PATH = Path("docs/data/strategy_book_us_rehearsal_registration.json")
 STORE_PATH = Path("docs/data/strategy_book_us_rehearsal.json")
+EXIT_LAB_PATH = Path("docs/data") / lab.LAB_STORE_NAME
+EXIT_LAB_ID = "strategy-book-exit-lab-v0"
 PARENT_SEAL = Path("docs/data") / REGISTRATION_STORE_NAME
 SCRATCH_DIRNAME = "strategy_book_rehearsal"
 DELETION_DAYS = 30
@@ -84,6 +87,7 @@ TITLE_DEVELOPMENT = "Strategy-book US rehearsal: development block committed"
 TITLE_REVEALED = "Strategy-book US rehearsal: confirmation revealed"
 TITLE_DELETION_DUE = "Strategy-book US rehearsal: licensed data deletion due"
 TITLE_FAILED = "Strategy-book US rehearsal store unreadable"
+TITLE_EXIT_LAB = "Strategy-book exit lab: development-window scores committed"
 
 
 class RehearsalRefused(RuntimeError):
@@ -1437,6 +1441,121 @@ def confirm_deleted(
     return licensed
 
 
+# --- Exit lab ------------------------------------------------------------------------------
+
+
+def exit_lab(
+    build: Path,
+    mid_build: Path,
+    sharadar_dir: Path,
+    *,
+    scratch: Path | None = None,
+    repo_root: Path = REPO_ROOT,
+    batch_size: int = DEFAULT_BATCH_SIZE,
+    exits: tuple[lab.LabExit, ...] = lab.LAB_EXITS,
+) -> dict[str, Any]:
+    """Score the exit-lab variants on development signal sessions only (exploratory).
+
+    Writes ``docs/data/strategy_book_exit_lab.json``. Never reads a confirmation
+    signal session and never writes the rehearsal store.
+    """
+    scratch_dir = _scratch_dir(scratch, build)
+    registration = preflight(repo_root, build, mid_build, sharadar_dir, scratch_dir)
+    store = _load_json(Path(repo_root) / STORE_PATH) or {}
+    if not store.get("development"):
+        raise RehearsalRefused("No development block is committed. Run `develop` first.")
+    if (store.get("licensed_data") or {}).get("deleted_at"):
+        raise RehearsalRefused("The licensed data is recorded as deleted; the lab cannot run.")
+    window = _windows(registration)["development"]
+    options = dataclasses.replace(walk_options(registration, window[1]), exit_lab=tuple(exits))
+    source = prepare(
+        BuildDir(Path(build).expanduser(), "sp500"),
+        BuildDir(Path(mid_build).expanduser(), "midcap"),
+        Path(sharadar_dir).expanduser(),
+        registration,
+        work_dir=scratch_dir,
+        batch_size=batch_size,
+        cross_options=options,
+    )
+    columns = {COLUMN_PRIMARY, *(rule.column for rule in exits)}
+    rows: list[dict[str, Any]] = []
+    try:
+        warning = memory_warning(source.names_walked, len(source.calendar), batch_size)
+        if warning:
+            print(warning, file=sys.stderr)
+        for position in range(max(len(source.batches), 1)):
+            specs = source.specs(position) if source.batches else []
+            result = sbo.walk_book(
+                with_variant(specs, source.haircuts, BASELINE), options=options, cross=source.cross
+            )
+            rows.extend(
+                _compact(episode) for episode in result["episodes"] if episode["column"] in columns
+            )
+            del result, specs
+        tickers = source.tickers
+    finally:
+        source.remove()
+    boards = lab.lab_boards(rows, exits, window, sbo._slot_book)
+    committed = (store.get("development") or {}).get("primary") or {}
+    whole = boards["whole"]["primary"]
+    payload = {
+        "lab_id": EXIT_LAB_ID,
+        "registration_id": registration.get("registration_id"),
+        "parent_registration_id": registration.get("parent_registration_id"),
+        "observe_only": True,
+        "influences_live": False,
+        "exploratory": True,
+        "evidence": False,
+        "purpose": (
+            "Choose at most one trend-led exit to seal as the strategy book's exit challenger "
+            "(N259). Development signal sessions only; not evidence for any variant."
+        ),
+        "computed_at": _now(),
+        "signal_window": {"first": window[0], "last": window[1]},
+        "development_reproduced": (
+            whole.get("mature") == committed.get("mature")
+            and whole.get("fair_cost_median") == committed.get("fair_cost_median")
+        ),
+        "variants": [rule.describe() for rule in exits],
+        "boards": suppress_small(boards),
+    }
+    payload["choice"] = lab.apply_choice_rule(payload["boards"])
+    write_store(Path(repo_root) / EXIT_LAB_PATH, payload, tickers)
+    return {"store": payload}
+
+
+def exit_lab_table(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """One row per column: the numbers the owner compares, whole window and halves."""
+    boards = payload.get("boards") or {}
+    whole = boards.get("whole") or {}
+    out = []
+    for column, board in [
+        (COLUMN_PRIMARY, whole.get("primary") or {}),
+        *((whole.get("variants") or {}).items()),
+    ]:
+        paired = board.get("paired") or {}
+        halves = [
+            (((boards.get(half) or {}).get("variants") or {}).get(column) or {}).get("paired") or {}
+            for half in ("first_half", "second_half")
+        ]
+        out.append(
+            {
+                "column": column,
+                "capital_days_return": board.get("capital_days_return"),
+                "slot_book_annualised": (board.get("slot_book") or {}).get("annualised_return"),
+                "slot_book_max_drawdown": (board.get("slot_book") or {}).get("max_drawdown"),
+                "fair_cost_median": board.get("fair_cost_median"),
+                "matched_excess_median": board.get("matched_excess_median"),
+                "held_sessions_median": board.get("held_sessions_median"),
+                "turns_per_slot_year": board.get("turns_per_slot_year"),
+                "vs_primary_mean": paired.get("mean_difference_vs_primary"),
+                "vs_primary_t": paired.get("t"),
+                "vs_primary_halves": [half.get("mean_difference_vs_primary") for half in halves],
+            }
+        )
+    return out
+
+
 # --- Status and findings -------------------------------------------------------------------
 
 
@@ -1502,6 +1621,22 @@ def findings(repo_root: Path = REPO_ROOT, now: datetime | None = None) -> list[d
                 ),
             }
         )
+    lab_store = _load_json(Path(repo_root) / EXIT_LAB_PATH)
+    if lab_store:
+        out.append(
+            {
+                "severity": "info",
+                "title": TITLE_EXIT_LAB,
+                "summary": (
+                    f"Exit lab {lab_store.get('lab_id')} computed {lab_store.get('computed_at')} "
+                    f"on development signals ({len(lab_store.get('variants') or [])} variants; "
+                    f"development reproduced: {lab_store.get('development_reproduced')}; "
+                    f"choice-rule pick: {(lab_store.get('choice') or {}).get('pick')}). "
+                    "Exploratory, not evidence: input to sealing at most one exit challenger "
+                    "(N259) at a version review."
+                ),
+            }
+        )
     licensed = store.get("licensed_data") or {}
     due = deletion_due(store)
     if licensed.get("first_used_at") and not licensed.get("deleted_at") and due:
@@ -1559,6 +1694,11 @@ def main(argv: list[str] | None = None) -> int:
         "reveal", help="The single confirmation reveal and delisting sensitivity"
     )
     _paths(rev_p)
+    lab_p = sub.add_parser(
+        "exit-lab",
+        help="Score trend-led exit variants on development signals only (exploratory)",
+    )
+    _paths(lab_p)
     sub.add_parser("status", help="Print the store status (reads the committed store only)")
     del_p = sub.add_parser("confirm-deleted", help="Stamp licensed_data.deleted_at after deletion")
     del_p.add_argument("--at", help="Deletion timestamp (default: the screen replay's deleted_at)")
@@ -1577,9 +1717,21 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "confirm-deleted":
             print(json.dumps(confirm_deleted(at=args.at, still_present=args.check), indent=2))
             return 0
-        run = develop if args.command == "develop" else reveal
         if args.batch_size < 1:
             parser.error("--batch-size must be at least 1")
+        if args.command == "exit-lab":
+            lab_out = exit_lab(
+                args.build,
+                args.mid_build,
+                args.sharadar_dir,
+                scratch=args.scratch,
+                batch_size=args.batch_size,
+            )
+            print(json.dumps(exit_lab_table(lab_out["store"]), indent=2))
+            print(json.dumps({"choice": lab_out["store"]["choice"]}, indent=2))
+            print(f"wrote {EXIT_LAB_PATH}", file=sys.stderr)
+            return 0
+        run = develop if args.command == "develop" else reveal
         kwargs: dict[str, Any] = {"scratch": args.scratch, "batch_size": args.batch_size}
         if args.command == "develop":
             kwargs["amendment"] = args.amendment

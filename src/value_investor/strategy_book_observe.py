@@ -53,6 +53,16 @@ from value_investor.core_sell_trigger import (
 from value_investor.decision_input_inventory import _memo_age_days
 from value_investor.market_trading_costs import costs_for_market
 from value_investor.n200_tech_timing_observe import episode_return
+from value_investor.strategy_book_exit_lab import (
+    MAX_LOOKBACK as LAB_MAX_LOOKBACK,
+)
+from value_investor.strategy_book_exit_lab import (
+    LabExit,
+    is_review_session,
+    lab_by_column,
+    launched_signal,
+    unlaunched_signal,
+)
 from value_investor.strategy_book_rules import (
     ARCHIVE_BUY_TIER_ONLY,
     ARCHIVE_FULL_STRATEGY,
@@ -95,6 +105,7 @@ from value_investor.strategy_book_rules import (
     INFLUENCES_LIVE,
     INITIAL_BENCH,
     INTERIM_WEEKS,
+    LAUNCH_RETURN,
     LOOKAHEAD_CURRENT_GATES,
     MARKET_BOARD_MIN_MATURE,
     MATURITY_SESSIONS,
@@ -484,6 +495,9 @@ class WalkOptions:
     basket_skips_blank_screen: bool = False
     # Build the section 8 boards inside ``walk_book``.
     boards: bool = True
+    # Exploratory exit variants (``strategy_book_exit_lab``), paired on primary
+    # entries. Empty on every registered walk.
+    exit_lab: tuple[LabExit, ...] = ()
 
 
 def options_for(mode: str) -> WalkOptions:
@@ -806,6 +820,7 @@ class _Position:
     currency: str = ""
     out_of_median: bool = False
     data_commit: str | None = None
+    lab_peak: float | None = None
 
 
 @dataclass
@@ -1839,6 +1854,57 @@ def _step_ladder(
     return None
 
 
+def _step_lab(
+    position: _Position,
+    rule: LabExit,
+    *,
+    name: _Name,
+    index: int,
+    session: date,
+    close: float,
+    entry_px: float,
+    reasons: list[str],
+    gate: GateFact | None,
+    screen: ScreenFact | None,
+    require_gates: bool,
+) -> str | None:
+    """An exit-lab variant: thesis breaks, 63-session reviews, then its own two rules."""
+    if reasons:
+        position.pending_reasons = list(reasons)
+        return EXIT_THESIS
+    position.lab_peak = close if position.lab_peak is None else max(position.lab_peak, close)
+    gain = close / entry_px - 1.0 if entry_px else 0.0
+    if rule.launched == "ladder":
+        _raise_floor(position, index, session, gain)
+        if (
+            position.launched
+            and position.floor is not None
+            and close <= entry_px * (1.0 + position.floor)
+        ):
+            return EXIT_FLOOR
+    elif not position.launched and gain >= LAUNCH_RETURN:
+        position.launched = True
+        position.launch_index = index
+        position.launch_session = session
+    if is_review_session(index):
+        decision = _review_decision(
+            gate=gate,
+            screen=screen,
+            review_number=None,
+            comparison=False,
+            require_gates=require_gates,
+        )
+        position.reviews.append(
+            {"index": index, "session": session.isoformat(), "action": decision or "hold"}
+        )
+        if decision:
+            return decision
+    _download, _count, closes = name.prices.tail(session, LAB_MAX_LOOKBACK)
+    if position.launched:
+        return launched_signal(rule, close=close, peak=position.lab_peak, closes=closes)
+    return unlaunched_signal(rule, index=index, close=close, closes=closes)
+
+
 def _signal_exit(position: _Position, session: date, reason: str, nxt: date | None) -> None:
     position.pending_exit = reason
     position.pending_exit_session = session
@@ -2574,7 +2640,8 @@ def _fill_entries(
             }
         )
         if pending.column == COLUMN_PRIMARY:
-            for column in (COLUMN_DRAFT, COLUMN_LADDER, COLUMN_LEAVE_TIER):
+            lab_columns = tuple(rule.column for rule in options.exit_lab)
+            for column in (COLUMN_DRAFT, COLUMN_LADDER, COLUMN_LEAVE_TIER, *lab_columns):
                 paired = _open_position_record(
                     name,
                     column=column,
@@ -2630,6 +2697,7 @@ def _step_positions(name: _Name, session: date, options: WalkOptions, names: lis
     gate = _gate_in_force(name, session) if options.apply_gates else None
     screen = _screen_in_force(name, session)
     costs = costs_for_market(name.spec.market)
+    lab = lab_by_column(options.exit_lab) if options.exit_lab else {}
     for position in list(name.open_positions):
         if position.status != "open" or position.pending_exit:
             continue
@@ -2672,6 +2740,20 @@ def _step_positions(name: _Name, session: date, options: WalkOptions, names: lis
         elif position.column == COLUMN_LADDER:
             action = _step_ladder(
                 position,
+                index=index,
+                session=session,
+                close=close,
+                entry_px=entry_px,
+                reasons=reasons,
+                gate=gate,
+                screen=screen,
+                require_gates=options.apply_gates,
+            )
+        elif position.column in lab:
+            action = _step_lab(
+                position,
+                lab[position.column],
+                name=name,
                 index=index,
                 session=session,
                 close=close,
