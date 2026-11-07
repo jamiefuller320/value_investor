@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-06T19:58:15+00:00",
+  "updated_at": "2026-11-06T21:25:52+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16818,6 +16818,39 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a1af74-11c6-7e8a-9823-c842727f4306",
       "added_at": "2026-11-06T18:01:39+00:00"
+    },
+    {
+      "id": "L685",
+      "category": "later",
+      "section": "ops",
+      "title": "Strategy book replay episode gzip writes bare NaN (invalid JSON)",
+      "summary": "strategy_book_replay_cli writes strategy_book_replay_episodes.json.gz with json.dumps defaults, so about 1,800 snapshot fields are bare NaN tokens that browsers' JSON.parse rejects; dashboard v2 Book tab patches them to null on load. Write null (allow_nan=False after cleaning) at the source.",
+      "revisit_when": "Next change to strategy_book_replay_cli or the replay snapshot fields",
+      "tags": [
+        "strategy-book",
+        "dashboard-v2",
+        "data-quality"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a1af74-11c6-7e8a-9823-c842727f4306",
+      "added_at": "2026-11-06T21:21:36+00:00"
+    },
+    {
+      "id": "N258",
+      "category": "not_now",
+      "section": "research",
+      "title": "Per-name Trading 212 listing flag on decision-input inventories (dashboard G5)",
+      "summary": "Neither decision_input_inventory.json nor library_decision_input_inventory.json carries tradable_on_t212, so the v2 Candidates tab shows 'not yet known' for all 443 buy-tier names and Proof cannot show the tradable subset bar. Add a small per-name listing board from the T212 catalogue.",
+      "revisit_when": "Trading 212 catalogue secrets added (adhoc-t212-catalogue-secrets acked) or step 3.2 needs the tradable-subset proof bar",
+      "tags": [
+        "dashboard-v2",
+        "t212",
+        "strategy-book",
+        "p1"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a1af74-11c6-7e8a-9823-c842727f4306",
+      "added_at": "2026-11-06T21:25:52+00:00"
     }
   ],
   "fragments": [
