@@ -14656,6 +14656,38 @@ def test_cve_to_sec_bodies_pass_ir_title_gate_via_issuer_alias():
     assert not _ir_body_title_tokens_match(row, "Unrelated issuer annual form", ticker="CVE.TO")
 
 
+def test_fetch_filings_ir_allowlist_tsx60_mfc_to_builtins(tmp_path: Path):
+    """Regression: MFC.TO parked IWB — SEC FY2025 AIF/MD&A + Q3 2026 interim MD&A HTML."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("MFC.TO", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("a2025annualmdareport.htm" in url for url in urls)
+    assert any("aiffebruary2026.htm" in url for url in urls)
+    assert any("a3q26form6-kxreporttoshare.htm" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") >= 1
+    assert sum(1 for row in rows if row["period"] == "interim") >= 1
+    assert {row["period"] for row in rows} <= {"annual", "interim", "other"}
+    assert len(fetch_filings_ir_allowlist("MFC", path=allowlist_path)) == 3
+
+
+def test_parked_source_hunter_mfc_to_tsx60_has_fetchable_ir():
+    """eng-20261107-01: MFC.TO has live-fetchable Manulife SEC statutory HTML."""
+    assert "MFC.TO" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("MFC.TO")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("sec.gov" in url for url in urls)
+    mda_url = next(url for url in urls if "a2025annualmdareport.htm" in url)
+    body = _live_fetch_filing_body(mda_url)
+    if not body:
+        pytest.skip("SEC.gov body fetch unavailable (rate-limit / network) — retry later")
+    assert len(body) >= 50000
+
+
 def test_parked_source_hunter_skip_tri_to_tsx60():
     """eng-20260914-01: TRI.TO leftover IWB is SEC 6-K cover HTML, not missing 40-F/interim."""
     assert "TRI.TO" in PARKED_SOURCE_HUNTER_SKIP

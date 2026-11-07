@@ -988,6 +988,18 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/1475260/000147526026000008/a2025managementsdiscussion.htm",
         "https://www.sec.gov/Archives/edgar/data/1475260/000147526026000041/q32026managementsdiscussio.htm",
     ],
+    # tsx60 IWB blocker — eng-20261107-01: MFC.TO parked unfetchable_iwb; SEC FY2025 40-F
+    # AIF/MD&A exhibits + Q3 2026 interim report-to-shareholders HTML (live-fetchable).
+    "MFC.TO": [
+        "https://www.sec.gov/Archives/edgar/data/1086888/000108688826000003/a2025annualmdareport.htm",
+        "https://www.sec.gov/Archives/edgar/data/1086888/000108688826000003/aiffebruary2026.htm",
+        "https://www.sec.gov/Archives/edgar/data/1086888/000108688826000105/a3q26form6-kxreporttoshare.htm",
+    ],
+    "MFC": [
+        "https://www.sec.gov/Archives/edgar/data/1086888/000108688826000003/a2025annualmdareport.htm",
+        "https://www.sec.gov/Archives/edgar/data/1086888/000108688826000003/aiffebruary2026.htm",
+        "https://www.sec.gov/Archives/edgar/data/1086888/000108688826000105/a3q26form6-kxreporttoshare.htm",
+    ],
     # hang_seng buy-tier deepen — eng-20260930-03: asia_filings Google News miss / zero-body;
     # seed HKEX statutory PDFs and issuer IR mirrors for stalled buy-tier names.
     "1099.HK": [
@@ -1397,6 +1409,10 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     # tsx60 CVE.TO — a2025annualinformationform / q32026managementsdiscussio SEC slugs
     # are run-together words, so the IR title gate needs the issuer name.
     "CVE": ("Cenovus", "Cenovus Energy", "Cenovus Energy Inc."),
+    # tsx60 MFC.TO — a2025annualmdareport / a3q26form6-kxreporttoshare SEC slugs lack
+    # issuer tokens for _ir_body_title_tokens_match.
+    "MFC": ("Manulife", "Manulife Financial", "Manulife Financial Corporation"),
+    "MFC.TO": ("Manulife", "Manulife Financial", "Manulife Financial Corporation"),
     "DNL": ("Dyno Nobel", "Incitec Pivot"),
     "YAL": ("Yancoal", "Yancoal Australia"),
     # asx200 FMG.AX Markit/ASX allowlist PDFs — opaque documentKey URLs need issuer tokens
