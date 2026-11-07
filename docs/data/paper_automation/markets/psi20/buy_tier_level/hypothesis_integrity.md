@@ -1,24 +1,28 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-06T07:54:00.853434+00:00
+Track: `buy_tier_level` · updated 2026-11-07T12:50:19.481692+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 2 (0% count, 0% NAV)
-- Tolerance: count ≤ 40%, NAV ≤ 35% → within band
-- Balancing hint: `maintain`
+- Losers: **1** / 2 (50% count, 49% NAV)
+- Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
+- Balancing hint: `hold_intact_review_selection`
+- Selection feedback:
+  - garp fails more often among losers (100% vs 0%)
 
 ## Holding reviews
 
-### GALP.LS — intact / hold_tolerate (-4.6%)
+### GALP.LS — intact / hold_tolerate (-7.6%)
+- price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 41%
+- conviction 42%
 
-### COR.LS — weakening / watch_review (-2.3%)
+### COR.LS — weakening / watch_review (-2.2%)
+- left buy tier (hold)
 - research verdict caution
-- conviction 21% below intact floor
-- still strong_buy
+- conviction 18% below intact floor
 - cheapness family still passes
+- data_quality 0.85

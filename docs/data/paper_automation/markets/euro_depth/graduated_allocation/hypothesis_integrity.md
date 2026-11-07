@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `graduated_allocation` · updated 2026-11-06T07:55:41.353192+00:00
+Track: `graduated_allocation` · updated 2026-11-07T12:52:21.627755+00:00
 
 ## Portfolio loser feedback
 
@@ -10,37 +10,37 @@ Track: `graduated_allocation` · updated 2026-11-06T07:55:41.353192+00:00
 
 ## Holding reviews
 
-### ERIC-B.ST — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 71%
-
-### OIZ.IR — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 68%
-
-### EG7.IR — intact / hold_tolerate (+3.4%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 75%
-
-### C5H.IR — intact / hold_tolerate (+4.5%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 77%
-
-### UMI.BR — intact / hold_tolerate (+7.1%)
+### DG.PA — intact / hold_tolerate (+0.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 90%
+
+### MELE.BR — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 76%
+
+### DTE.DE — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 75%
+
+### EG7.IR — intact / hold_tolerate (+4.5%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 74%
+
+### C5H.IR — intact / hold_tolerate (+4.7%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 76%

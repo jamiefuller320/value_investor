@@ -52,7 +52,7 @@
       "learning_tracks_churn_health.json"
     ]
   },
-  "updated_at": "2026-11-06T07:53:08.547474+00:00",
+  "updated_at": "2026-11-07T12:49:45.897559+00:00",
   "hold_episodes": [
     {
       "episode_id": "buy_tier_level_native:SCYR.MC:2026-09-29T08:24:21.729672+01:00",
@@ -60,7 +60,7 @@
       "ticker": "SCYR.MC",
       "name": "Sacyr, S.A.",
       "started_at": "2026-09-29T08:24:21.729672+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -111,9 +111,9 @@
       "peak_unrealized_pct": 0.0129,
       "trough_unrealized_pct": -0.0421,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-07T12:49:45.889834+00:00",
+      "linked_sell_trade_id": "4e0c9947-0544-44f9-85ec-dca2f7d7024d"
     },
     {
       "episode_id": "buy_tier_level_native:GRF.MC:2026-09-30T08:26:47.275118+01:00",
@@ -121,7 +121,7 @@
       "ticker": "GRF.MC",
       "name": "Grifols, S.A.",
       "started_at": "2026-09-30T08:26:47.275118+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -171,9 +171,9 @@
       "peak_unrealized_pct": 0.1757,
       "trough_unrealized_pct": -0.0108,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-07T12:49:45.889834+00:00",
+      "linked_sell_trade_id": "8c50b519-19e8-4f9b-bcb9-6259f8bd5a7d"
     },
     {
       "episode_id": "buy_tier_level_native:REP.MC:2026-10-07T17:34:47.641317+01:00",
@@ -391,10 +391,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "GRF.MC": 0.1548
+        "GRF.MC": 0.1512
       },
       "buy_returns_since_rotation": {
-        "SCYR.MC": 0.001
+        "SCYR.MC": 0.0015
       },
       "verdict": null,
       "closed_at": null
@@ -484,11 +484,11 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "GRF.MC": 0.1777,
-        "SCYR.MC": 0.0135
+        "GRF.MC": 0.174,
+        "SCYR.MC": 0.014
       },
       "buy_returns_since_rotation": {
-        "AENA.MC": 0.1062
+        "AENA.MC": 0.1047
       },
       "verdict": null,
       "closed_at": null
@@ -542,11 +542,11 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "AENA.MC": 0.0458
+        "AENA.MC": 0.0443
       },
       "buy_returns_since_rotation": {
-        "GRF.MC": 0.0278,
-        "SCYR.MC": -0.0015
+        "GRF.MC": 0.0246,
+        "SCYR.MC": -0.001
       },
       "verdict": null,
       "closed_at": null
@@ -600,15 +600,97 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "NTGY.MC": 0.0027
+        "NTGY.MC": -0.004
       },
       "buy_returns_since_rotation": {
-        "REP.MC": -0.0169,
-        "SCYR.MC": -0.0015
+        "REP.MC": -0.027,
+        "SCYR.MC": -0.001
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-11-07T12:49:45.889834+00:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-11-07T12:49:45.889834+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "GRF.MC",
+          "price": 11.245,
+          "shares": 32.202033,
+          "gross": 362.11,
+          "cost": 0.09,
+          "avg_cost_at_exit": 10.1277,
+          "realized_pct": 0.1103,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.1103
+        },
+        {
+          "ticker": "SCYR.MC",
+          "price": 4.046,
+          "shares": 87.257964,
+          "gross": 353.05,
+          "cost": 0.09,
+          "avg_cost_at_exit": 4.0442,
+          "realized_pct": 0.0004,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": 0.0004
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "REP.MC",
+          "price": 29.9,
+          "shares": 6.204876,
+          "gross": 185.53,
+          "cost": 0.05
+        },
+        {
+          "ticker": "AENA.MC",
+          "price": 28.28,
+          "shares": 18.715499,
+          "gross": 529.27,
+          "cost": 0.13
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "GRF.MC": 0.0,
+        "SCYR.MC": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "REP.MC": 0.0,
+        "AENA.MC": 0.0
       },
       "verdict": null,
       "closed_at": null
     }
   ],
-  "hypothesis_outcome_link_updated_at": "2026-11-06T07:53:08.543440+00:00"
+  "hypothesis_outcome_link_updated_at": "2026-11-07T12:49:45.889834+00:00"
 }

@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-06T20:06:25.104932+00:00",
+  "run_at": "2026-11-07T16:51:17.527290+00:00",
   "market_id": "bel20",
   "targets": [],
   "target_details": [],
@@ -9,23 +9,22 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-06T20:05:48.529596+00:00",
+    "snapshot_at": "2026-11-07T16:51:08.223166+00:00",
     "market_id": "bel20",
-    "buy_tier_count": 4,
+    "buy_tier_count": 3,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 2,
+    "thin_body_buy_tier": 1,
     "indexed_without_body": 0,
     "bodies_min": 1,
-    "bodies_median": 2.5,
+    "bodies_median": 3,
     "bodies_max": 4,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
     "thin_body_tickers": [
-      "APAM.AS",
-      "ACKB.BR"
+      "APAM.AS"
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
@@ -41,31 +40,29 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-06T20:06:19.216487+00:00",
+    "snapshot_at": "2026-11-07T16:51:17.501902+00:00",
     "market_id": "bel20",
-    "buy_tier_count": 4,
+    "buy_tier_count": 3,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 2,
+    "thin_body_buy_tier": 1,
     "indexed_without_body": 0,
     "bodies_min": 1,
-    "bodies_median": 2.5,
+    "bodies_median": 3,
     "bodies_max": 4,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
     "thin_body_tickers": [
-      "APAM.AS",
-      "ACKB.BR"
+      "APAM.AS"
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
     "parked_tickers": [
-      "ACKB.BR",
       "APAM.AS"
     ],
-    "parked_count": 2,
+    "parked_count": 1,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
@@ -79,10 +76,10 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 4,
-    "hits": 4,
+    "scanned": 3,
+    "hits": 3,
     "new_rows_total": 0,
-    "curiosity_total": 5,
+    "curiosity_total": 3,
     "errors": 0,
     "prioritization_weights": {
       "new_index_rows": 8.0,
@@ -94,8 +91,7 @@
     "forced_by_critical_path": false,
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
-      "APAM.AS",
-      "ACKB.BR"
+      "APAM.AS"
     ],
     "runtime_cutoff": false
   },
@@ -108,20 +104,19 @@
   },
   "critical_path": {
     "market_id": "bel20",
-    "assessed_at": "2026-11-06T20:05:48.881382+00:00",
+    "assessed_at": "2026-11-07T16:51:08.556107+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
     "thin_need_discovery": [
-      "APAM.AS",
-      "ACKB.BR"
+      "APAM.AS"
     ],
     "thin_need_bodies": [],
     "primary_blocker": "thin_need_discovery",
     "force_discovery_scan": true,
     "auto_pin_tickers": [],
     "recommended_actions": [
-      "Discovery/IR seed for 2 thin ticker(s) that already have bodies for every indexed filing",
+      "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
@@ -129,13 +124,13 @@
       "zero_body": 0,
       "indexed_without_body_tickers": 0,
       "indexed_without_body_rows": 0,
-      "thin_need_discovery": 2,
+      "thin_need_discovery": 1,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 29.961184624999987,
+  "used_seconds": 8.581276373999984,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3570.038815375,
+  "leftover_seconds": 3591.418723626,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -143,23 +138,11 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "bel20",
-    "updated_at": "2026-11-06T20:06:19.224813+00:00",
+    "updated_at": "2026-11-07T16:51:17.510697+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 17,
+    "complete_zero_improve_runs": 18,
     "min_zero_runs": 3,
     "parked": [
-      {
-        "ticker": "ACKB.BR",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-10-27T19:30:43.217874+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings+ir_allowlist_direct"
-      },
       {
         "ticker": "APAM.AS",
         "reason": "awaiting_periodic_report",
@@ -178,7 +161,6 @@
     "straggler_zero_runs": 2,
     "had_complete_targets": true,
     "leftover_tickers": [
-      "ACKB.BR",
       "APAM.AS"
     ],
     "unparked_leftover": [],
@@ -218,43 +200,7 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 63,
-    "candidate_count": 55,
-    "skipped_resolved_tickers": [
-      "LMT",
-      "APTV",
-      "DFS.L",
-      "APTD.L",
-      "ULTP.L",
-      "MER.L",
-      "FOXT.L",
-      "TPT.L",
-      "GIB-A.TO",
-      "SU.TO",
-      "CNQ.TO",
-      "NTR.TO",
-      "BAS.DE",
-      "IFX.DE",
-      "PDD",
-      "BAS.DE",
-      "DTE.DE",
-      "DTG.DE",
-      "FRE.DE",
-      "HNR1.DE",
-      "MUV2.DE",
-      "HEN3.DE",
-      "PST.MI",
-      "ACKB.BR",
-      "APAM.AS",
-      "0285.HK",
-      "0857.HK",
-      "0288.HK",
-      "2331.HK",
-      "0883.HK",
-      "EVN.VI",
-      "WIE.VI"
-    ],
-    "wait_behind_task_id": ""
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20261107-01"
   }
 }
