@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-07T18:07:13+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-07T19:36:08+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -578,6 +578,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | L664 | **Non-US point-in-time out-of-sample screen replay (UK / Europe)** | hsr-v1 US holdout is spent (N203) and the fresh US holdout waits 5+ years (L570). A survivorship-free PIT panel for UK or Europe would give a new independent out-of-sample test of the frozen screen in the markets actually traded, without re-litigating the US window. | Owner approves a licensed non-US PIT fundamentals source, or the autonomy proof-gate decision needs selection evidence |
 | L673 | **Sterling view of non-sterling strategy-book episodes** | Report each non-sterling strategy-book episode converted to GBP at entry and exit fills, beside the local-currency return, so exchange-rate moves over 3–12 month holds are visible before live capital on non-UK names. | Plan step 3.2 (live proof standard) starts |
 | L686 | **Linear-time signal stability for historical screen replays** | enrich_signals_with_stability calls compute_stability per name against the whole accumulated signal_history, so a 309-month replay is quadratic. The hsr-mid-v2 baseline cache took about 16 hours on the owner's Windows laptop (2026-11-06/07) versus about 25 minutes documented. Index history by ticker or carry streak state forward. Changing library screen code moves the screen fingerprint, so it lands only with a new hsr registration, never mid-epoch. | A new historical-screen-replay registration (hsr-v3 or a new universe) is drafted, or a licensed month is bought again. |
+| L687 | **US rehearsal: 63-session fail-to-launch deadline cost the primary in both windows** | strategy-book-us-rehearsal-v0, descriptive (not a pre-registered test). Paired ladder_no_deadline column vs primary: development 2000-2012 +1.5pp mean (SE 0.19, primary better in 10% of pairs); confirmation 2013-2025 +0.45pp (SE 0.22, primary better in 14%). The deadline is frozen on owner-strategy-book-v0; dropping or lengthening it is a new registration_id or bench candidate judged on forward marks. The leave-tier control (+18pp dev, +17.5pp confirmation per episode) is not capital-adjusted and belongs in the same review. | The strategy book version review (thickness gate); the confirmation reveal is committed. |
 
 ### Ops / reliability
 
