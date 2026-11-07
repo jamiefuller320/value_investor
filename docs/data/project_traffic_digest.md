@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-06T22:16:10.966810+00:00`
+Generated: `2026-11-07T02:37:52.701770+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,8 +33,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `ingest_narrow`/verified PR #1317 `eng-20261106-01` — Seed IR allowlist for unmeasured/zero-body BARC.L — empty allowlist after 0-improve pin (igc-20261106-02)
-- `human`/human PR #1315 `eng-20261106-02` — Hunt fetchable IR source for parked asx200 leftover ALK.AX
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
 - Occasion count: 339
@@ -46,6 +45,19 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `validate job failed` — 3×
 - `deferred-ideas.json conflict after L516 merge` — 3×
 - `ruff_format` — 2×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 9 (open=9, resolved=0)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Sector headwind gate coverage gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Two-lot retention beats full exit in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Chart highs and lows incomplete — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Recent workflow failure: CI main nightly — planned: `cancel_recovered_workflow_failure` (PM v1: cancel open workflow_failure eng tasks when the workflow has succeeded after the minting failure; else rerun/dispatch / eng draft; no recovered workflow_failure rows to cancel — keep rerun/eng path)
+- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
