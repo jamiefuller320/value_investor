@@ -158,6 +158,23 @@ months. It recomputes the development block and records
 second time, or when the panels or caches differ from the ones development
 used. It does not reveal hsr-v2, hsr-mid-v2, hrs-v2 or hms-v2.
 
+## 6b. Exit lab (exploratory, before deletion)
+
+The exit lab scores eight trend-led exit variants on the **development** signal sessions only (2000–2012), as paired columns on the primary's own entries. It is design input for the [bench-seal review](strategy-book-bench-seal-review.md); it is not evidence and does not touch the rehearsal store. It needs a committed development block and refuses once `deleted_at` is stamped, so run it before step 7.
+
+```bash
+git checkout main && git pull
+pip install -e .
+ftse-strategy-book-rehearsal exit-lab --build ~/hsr-build --mid-build ~/hsr-mid-build \
+  --sharadar-dir ~/sharadar
+git checkout -b cursor/exit-lab-results-567c
+git add docs/data/strategy_book_exit_lab.json
+git commit -m "Strategy-book exit lab: development-window scores"
+git push -u origin cursor/exit-lab-results-567c
+```
+
+It prints one row per column (capital-days return, the 20-slot book, the medians, holding time, turns per slot-year, and the paired difference against the primary for the whole window and each half), then the choice rule's result: the eligible variants and the pick, if any. It writes `docs/data/strategy_book_exit_lab.json` with aggregates only; the privacy guard runs before the write. Expect a little longer than `develop`, with similar memory; `--batch-size` works the same way. It writes no per-episode files; its temporary `_tapes-*` split is removed at the end, and step 7 removes any left by an interrupted run.
+
 ## 7. Delete (by 2026-12-09 at the latest)
 
 ```bash
@@ -193,8 +210,8 @@ deletion warn clears on the next ops-monitor run.
 
 ## Ops-monitor
 
-`check_strategy_book_us_rehearsal` reads the committed store daily and never
-writes it. The store is excluded from GHA artifact commits.
+`check_strategy_book_us_rehearsal` reads the committed store and the exit-lab store daily and never
+writes them. Both are excluded from GHA artifact commits.
 
 | Title | Severity | When |
 |---|---|---|
@@ -202,6 +219,7 @@ writes it. The store is excluded from GHA artifact commits.
 | Strategy-book US rehearsal: confirmation revealed | info | The reveal is in the store |
 | Strategy-book US rehearsal: licensed data deletion due | warn | `first_used_at` is set and `deleted_at` is not |
 | Strategy-book US rehearsal store unreadable | warn | The store is not valid JSON |
+| Strategy-book exit lab: development-window scores committed | info | `strategy_book_exit_lab.json` exists (names the choice-rule pick) |
 
 All are `auto_fixable=false`. None triggers rememo, ingest or engineering work.
 
