@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-06T07:51:04.244594+00:00
+Track: `buy_tier_level` · updated 2026-11-07T12:48:14.280223+00:00
 
 ## Portfolio loser feedback
 
@@ -8,7 +8,7 @@ Track: `buy_tier_level` · updated 2026-11-06T07:51:04.244594+00:00
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 - Selection feedback:
-  - dividend fails more often among losers (62% vs 20%)
+  - dividend fails more often among losers (75% vs 20%)
 
 ## Holding reviews
 
@@ -18,9 +18,10 @@ Track: `buy_tier_level` · updated 2026-11-06T07:51:04.244594+00:00
 - cheapness family still passes
 
 ### WHC.AX — weakening / watch_review (-18.1%)
-- conviction 32% below intact floor
+- research verdict neutral
+- conviction 27% below intact floor
 - still buy
-- research accumulate
+- cheapness family still passes
 
 ### ZIM.AX — intact / hold_tolerate (-14.1%)
 - price drawdown alone does not invalidate value thesis
@@ -44,11 +45,10 @@ Track: `buy_tier_level` · updated 2026-11-06T07:51:04.244594+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 81%
+- conviction 82%
 
 ### NWS.AX — weakening / watch_review (-9.6%)
 - research verdict caution
-- conviction 33% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -58,7 +58,7 @@ Track: `buy_tier_level` · updated 2026-11-06T07:51:04.244594+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 43%
+- conviction 44%
 
 ### GGP.AX — intact / hold_tolerate (-5.3%)
 - price drawdown alone does not invalidate value thesis
@@ -84,7 +84,7 @@ Track: `buy_tier_level` · updated 2026-11-06T07:51:04.244594+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 58%
+- conviction 59%
 
 ### GMD.AX — weakening / watch_review (-0.4%)
 - research verdict caution
@@ -103,14 +103,14 @@ Track: `buy_tier_level` · updated 2026-11-06T07:51:04.244594+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 60%
+- conviction 62%
 
 ### ANN.AX — intact / hold_tolerate (+1.6%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 69%
+- conviction 67%
 
 ### EBO.AX — weakening / watch_review (+2.3%)
 - research verdict neutral
@@ -122,14 +122,14 @@ Track: `buy_tier_level` · updated 2026-11-06T07:51:04.244594+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 53%
+- conviction 54%
 
 ### AMC.AX — intact / hold_tolerate (+3.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 52%
+- conviction 50%
 
 ### BPT.AX — weakening / watch_review (+3.5%)
 - research verdict caution
@@ -154,42 +154,44 @@ Track: `buy_tier_level` · updated 2026-11-06T07:51:04.244594+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 60%
+- conviction 59%
 
 ### CYL.AX — intact / hold_tolerate (+8.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 49%
+- conviction 50%
 
 ### CLW.AX — weakening / watch_review (+9.5%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
 
-### NEM.AX — weakening / watch_review (+10.7%)
-- left buy tier (hold)
+### NEM.AX — intact / hold_tolerate (+10.7%)
+- still buy
 - research accumulate
 - cheapness family still passes
+- data_quality 1.00
+- conviction 40%
 
 ### RMD.AX — intact / hold_tolerate (+10.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 52%
+- conviction 50%
 
 ### JBH.AX — intact / hold_tolerate (+14.5%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 52%
+- conviction 51%
 
 ### ALK.AX — intact / hold_tolerate (+17.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 57%
+- conviction 58%

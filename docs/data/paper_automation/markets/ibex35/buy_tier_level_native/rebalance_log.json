@@ -17452,5 +17452,729 @@
       },
       "cards": []
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-11-07T12:49:51.412450+00:00",
+    "track_id": "buy_tier_level_native",
+    "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ibex35/screen_latest.json",
+      "run_at": "2026-11-07T11:56:28.453179+00:00",
+      "generated_at": "2026-11-07T12:49:40.796136+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-11-07T12:49:45.889834+00:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-11-07T08:00:00+00:00",
+      "settle_at": "2026-11-07T09:15:00+00:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (4 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0003,
+    "candidates": [
+      {
+        "ticker": "REP.MC",
+        "name": "Repsol, S.A.",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.698445,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Energy",
+        "price": 29.9,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "AENA.MC",
+        "name": "Aena S.M.E., S.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.47159999999999996,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 28.28,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "SCYR.MC",
+        "name": "Sacyr, S.A.",
+        "signal": "hold",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.153595,
+        "data_quality_score": 0.95,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 4.046,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "GRF.MC",
+        "name": "Grifols, S.A.",
+        "signal": "hold",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.2373,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Healthcare",
+        "price": 11.245,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "REP.MC",
+        "name": "Repsol, S.A.",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.698445,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Energy",
+        "price": 29.9,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "AENA.MC",
+        "name": "Aena S.M.E., S.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.47159999999999996,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 28.28,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "SCYR.MC",
+        "name": "Sacyr, S.A.",
+        "signal": "hold",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.153595,
+        "data_quality_score": 0.95,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 4.046,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "GRF.MC",
+        "name": "Grifols, S.A.",
+        "signal": "hold",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.2373,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Healthcare",
+        "price": 11.245,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.03% / sell 0.03% (legacy symmetric slot 0.03%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1058.63,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 529.32,
+      "targets": [
+        {
+          "ticker": "REP.MC",
+          "name": "Repsol, S.A.",
+          "signal": "strong_buy",
+          "conviction_score": 0.698445,
+          "price": 29.9
+        },
+        {
+          "ticker": "AENA.MC",
+          "name": "Aena S.M.E., S.A.",
+          "signal": "buy",
+          "conviction_score": 0.47159999999999996,
+          "price": 28.28
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "REP.MC",
+          "name": "Repsol, S.A.",
+          "reason": "Already near equal-weight target",
+          "value": 529.36,
+          "target_value": 529.32,
+          "conviction_score": 0.698445,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "AENA.MC",
+          "name": "Aena S.M.E., S.A.",
+          "reason": "Already near equal-weight target",
+          "value": 529.27,
+          "target_value": 529.32,
+          "conviction_score": 0.47159999999999996,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "8c50b519-19e8-4f9b-bcb9-6259f8bd5a7d",
+        "fund_id": "3584ff55-6111-4b75-8da7-74f0672551bb",
+        "acted_at": "2026-11-07T12:49:45.889834+00:00",
+        "ticker": "GRF.MC",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 32.202033,
+        "price": 11.245,
+        "gross": 362.11,
+        "cost": 0.09,
+        "net_cash": 362.02,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Grifols, S.A.",
+        "avg_cost_at_exit": 10.1277,
+        "position_closed": true
+      },
+      {
+        "id": "4e0c9947-0544-44f9-85ec-dca2f7d7024d",
+        "fund_id": "3584ff55-6111-4b75-8da7-74f0672551bb",
+        "acted_at": "2026-11-07T12:49:45.889834+00:00",
+        "ticker": "SCYR.MC",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 87.257964,
+        "price": 4.046,
+        "gross": 353.05,
+        "cost": 0.09,
+        "net_cash": 352.96,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Sacyr, S.A.",
+        "avg_cost_at_exit": 4.0442,
+        "position_closed": true
+      },
+      {
+        "id": "761a7a4d-744a-487e-9796-98ea9359d336",
+        "fund_id": "3584ff55-6111-4b75-8da7-74f0672551bb",
+        "acted_at": "2026-11-07T12:49:45.889834+00:00",
+        "ticker": "REP.MC",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 6.204876,
+        "price": 29.9,
+        "gross": 185.53,
+        "cost": 0.05,
+        "net_cash": -185.57,
+        "note": "Automated buy",
+        "name": "Repsol, S.A."
+      },
+      {
+        "id": "95ae8cf0-10e9-4576-a648-690dacdeff22",
+        "fund_id": "3584ff55-6111-4b75-8da7-74f0672551bb",
+        "acted_at": "2026-11-07T12:49:45.889834+00:00",
+        "ticker": "AENA.MC",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 18.715499,
+        "price": 28.28,
+        "gross": 529.27,
+        "cost": 0.13,
+        "net_cash": -529.41,
+        "note": "Automated buy",
+        "name": "Aena S.M.E., S.A."
+      }
+    ],
+    "nav_before": 1058.99,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "GRF.MC",
+        "shares": 32.202033,
+        "avg_cost": 10.1277,
+        "sector": "Healthcare",
+        "name": "Grifols, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "SCYR.MC",
+        "shares": 87.257964,
+        "avg_cost": 4.0442,
+        "sector": "Industrials",
+        "name": "Sacyr, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "REP.MC",
+        "shares": 11.49948,
+        "avg_cost": 29.464,
+        "sector": "Energy",
+        "name": "Repsol, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "GRF.MC": 1,
+        "SCYR.MC": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "nav_after": 1058.63,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "REP.MC",
+        "shares": 17.704356,
+        "avg_cost": 29.6168,
+        "sector": "Energy",
+        "name": "Repsol, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "AENA.MC",
+        "shares": 18.715499,
+        "avg_cost": 28.28,
+        "sector": "Industrials",
+        "name": "Aena S.M.E., S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "GRF.MC": 1,
+        "SCYR.MC": 1
+      }
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
+      "verdict_counts": {
+        "agree": 4,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": [
+        {
+          "ticker": "GRF.MC",
+          "name": "Grifols, S.A.",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Effective screen signal is hold, not buy or strong_buy, and still_buyish is false\u2014exit from the buy cohort is decisive.",
+            "Research verdict accumulate conflicts with hold effective signal, but overlay_bound does not restore buyish status on the decision screen.",
+            "Algo reason matches automated exit after leaving the target set."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-07T12:49:45.889834+00:00",
+          "proposal_id": "buy_tier_level_native:GRF.MC:sell:2026-11-07T12:49:45.889834+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "SCYR.MC",
+          "name": "Sacyr, S.A.",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Effective screen signal is hold with still_buyish false\u2014name no longer in the buy cohort.",
+            "Research verdict caution aligns with reduced conviction (0.153595) and supports exit discipline.",
+            "Leave-buy-cohort sell is decisive; no still_buyish capacity-bump veto case."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.153595
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-07T12:49:45.889834+00:00",
+          "proposal_id": "buy_tier_level_native:SCYR.MC:sell:2026-11-07T12:49:45.889834+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "REP.MC",
+          "name": "Repsol, S.A.",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Screen signal buy with still_buyish true\u2014fits automated buy into the target set.",
+            "Conviction rank 1 with rank_drop 0\u2014no material rank deterioration versus entry.",
+            "Research verdict caution is noted but does not override buy signal and top rank placement."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 1
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 1
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-07T12:49:45.889834+00:00",
+          "proposal_id": "buy_tier_level_native:REP.MC:buy:2026-11-07T12:49:45.889834+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Buy into buyish target set \u2014 agree with algo selection."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "AENA.MC",
+          "name": "Aena S.M.E., S.A.",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Screen signal buy with still_buyish true and rank_drop 0 at conviction rank 2.",
+            "Research verdict accumulate supports the buyish effective signal.",
+            "Automated buy is consistent with buyish target-set selection and stable entry rank."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 2
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-07T12:49:45.889834+00:00",
+          "proposal_id": "buy_tier_level_native:AENA.MC:buy:2026-11-07T12:49:45.889834+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Buy into buyish target set \u2014 agree with algo selection."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
+    }
   }
 ]

@@ -1,18 +1,18 @@
 # Hypothesis outcome link
 
-Track: `graduated_allocation` · 2026-11-06T07:55:41.355141+00:00
+Track: `graduated_allocation` · 2026-11-07T12:52:21.631224+00:00
 
 ## Readiness
 
 - Ready for thesis outcome analysis: **False**
-- Closed hold episodes with thesis: 19
+- Closed hold episodes with thesis: 22
 - Swap sell legs with thesis: 0
 - Gap: hold thesis buckets thin (broken=1; target >=3 each)
 - Gap: swap sell legs with thesis=0 (target >=5)
 
 ## Hold recovery by thesis
 
-- **weakening** (n=18): recovery 72%, sold underwater 28%, mean peak +1.5%
+- **weakening** (n=21): recovery 67%, sold underwater 33%, mean peak +1.0%
 - **broken** (n=1): recovery 100%, sold underwater 0%, mean peak +22.5%
 
 ## Swap rotation by sell thesis

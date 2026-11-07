@@ -1,13 +1,13 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-06T07:54:00.452531+00:00",
+    "local_time": "2026-11-07T12:50:19.086179+00:00",
     "trading_day": true,
-    "after_settle": false,
-    "market_open_at": "2026-11-06T08:00:00+00:00",
-    "settle_at": "2026-11-06T09:15:00+00:00",
-    "can_act": false,
-    "reason": "before market open"
+    "after_settle": true,
+    "market_open_at": "2026-11-07T08:00:00+00:00",
+    "settle_at": "2026-11-07T09:15:00+00:00",
+    "can_act": true,
+    "reason": "ok"
   },
   "trades": [],
   "plan": {
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1006.11,
+    "nav": 996.54,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -36,39 +36,39 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 335.22,
+    "target_sleeve_value": 332.04,
     "targets": [
       {
         "ticker": "STR.VI",
         "name": "Strabag SE",
         "signal": "strong_buy",
         "conviction_score": 0.75,
-        "price": 101.6
-      },
-      {
-        "ticker": "OMV.VI",
-        "name": "OMV Aktiengesellschaft",
-        "signal": "strong_buy",
-        "conviction_score": 0.5919000000000001,
-        "price": 72.75
+        "price": 101.4
       },
       {
         "ticker": "CAI.VI",
         "name": "CA Immobilien Anlagen AG",
         "signal": "buy",
-        "conviction_score": 0.5605,
-        "price": 21.5
+        "conviction_score": 0.5389,
+        "price": 21.2
+      },
+      {
+        "ticker": "ANDR.VI",
+        "name": "Andritz AG",
+        "signal": "buy",
+        "conviction_score": 0.33249999999999996,
+        "price": 81.8
       }
     ],
     "anticipated_exits": [
       {
         "action": "sell",
-        "ticker": "ANDR.VI",
-        "name": "Andritz AG",
+        "ticker": "OMV.VI",
+        "name": "OMV Aktiengesellschaft",
         "reason": "No longer in the top conviction target set",
-        "shares": 3.103615,
-        "price": 82.5,
-        "value": 256.05
+        "shares": 3.288557,
+        "price": 71.75,
+        "value": 235.95
       }
     ],
     "anticipated_grace_holds": [],
@@ -79,21 +79,10 @@
         "ticker": "STR.VI",
         "name": "Strabag SE",
         "reason": "Top-up to equal weight",
-        "value": 83.29,
-        "price": 101.6,
-        "target_value": 335.22,
+        "value": 80.6,
+        "price": 101.4,
+        "target_value": 332.04,
         "conviction_score": 0.75,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "buy",
-        "ticker": "OMV.VI",
-        "name": "OMV Aktiengesellschaft",
-        "reason": "Top-up to equal weight",
-        "value": 95.98,
-        "price": 72.75,
-        "target_value": 335.22,
-        "conviction_score": 0.5919000000000001,
         "signal": "strong_buy"
       },
       {
@@ -101,16 +90,35 @@
         "ticker": "CAI.VI",
         "name": "CA Immobilien Anlagen AG",
         "reason": "Top-up to equal weight",
-        "value": 76.34,
-        "price": 21.5,
-        "target_value": 335.22,
-        "conviction_score": 0.5605,
+        "value": 76.77,
+        "price": 21.2,
+        "target_value": 332.04,
+        "conviction_score": 0.5389,
+        "signal": "buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "ANDR.VI",
+        "name": "Andritz AG",
+        "reason": "Top-up to equal weight",
+        "value": 78.17,
+        "price": 81.8,
+        "target_value": 332.04,
+        "conviction_score": 0.33249999999999996,
         "signal": "buy"
       }
     ],
     "anticipated_holds": [],
     "skipped": [],
-    "waitlisted": [],
+    "waitlisted": [
+      {
+        "ticker": "OMV.VI",
+        "name": "OMV Aktiengesellschaft",
+        "signal": "strong_buy",
+        "conviction_score": 0.6693,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      }
+    ],
     "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 3 buy(s)."
   },
   "alerts": [
@@ -118,12 +126,12 @@
       "ticker": "OMV.VI",
       "name": "OMV Aktiengesellschaft",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 72.75,
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
+      "mark": 71.75,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "wait"
     },
     {
       "ticker": "STR.VI",
@@ -131,10 +139,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 101.6,
+      "mark": 101.4,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "CAI.VI",
@@ -142,7 +150,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 21.5,
+      "mark": 21.2,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -151,9 +159,9 @@
       "ticker": "ANDR.VI",
       "name": "Andritz AG",
       "source": "paper",
-      "severity": "watch",
-      "message": "Screen signal is now hold",
-      "mark": 82.5,
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 81.8,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -1166,12 +1174,29 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-07T12:50:19.086179+00:00",
+        "portfolio_value": 831.52,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 4,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.8344
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-06T07:54:00.452531+00:00",
+    "last_mark_at": "2026-11-07T12:50:19.086179+00:00",
     "rebalance_state": {
       "exit_streak": {
-        "ANDR.VI": 1
+        "OMV.VI": 1
       },
       "reentry_cooldown": {}
     },
@@ -1183,7 +1208,7 @@
     "schema_version": 2,
     "market_id": "atx",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-06T07:54:00.560778+00:00",
+    "generated_at": "2026-11-07T12:50:19.108167+00:00",
     "observe_only": true,
     "open_count": 2,
     "closed_count": 0,
@@ -1262,7 +1287,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-06T07:54:00.561592+00:00",
+    "generated_at": "2026-11-07T12:50:19.109330+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1354,7 +1379,7 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
@@ -1367,8 +1392,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-06T07:54:00.562585+00:00",
-    "as_of": "2026-11-06T07:54:00.452531+00:00",
+    "updated_at": "2026-11-07T12:50:19.110832+00:00",
+    "as_of": "2026-11-07T12:50:19.086179+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1419,17 +1444,99 @@
     },
     "holdings": [
       {
+        "ticker": "CAI.VI",
+        "name": "CA Immobilien Anlagen AG",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0071,
+        "mark": 21.2,
+        "avg_cost": 21.3514,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.5389,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 54%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 54%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "OMV.VI",
+        "name": "OMV Aktiengesellschaft",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0026,
+        "mark": 71.75,
+        "avg_cost": 71.9386,
+        "signal": "strong_buy",
+        "timing_signal": "wait",
+        "conviction_score": 0.6693,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "quality"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 67%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 67%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "STR.VI",
         "name": "Strabag SE",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0027,
-        "mark": 101.6,
+        "unrealized_pct": 0.0007,
+        "mark": 101.4,
         "avg_cost": 101.3305,
         "signal": "strong_buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.75,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -1459,100 +1566,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "CAI.VI",
-        "name": "CA Immobilien Anlagen AG",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.007,
-        "mark": 21.5,
-        "avg_cost": 21.3514,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5605,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 56%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 56%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "OMV.VI",
-        "name": "OMV Aktiengesellschaft",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0113,
-        "mark": 72.75,
-        "avg_cost": 71.9386,
-        "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5919,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [
-          "quality"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 59%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 59%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "ANDR.VI",
         "name": "Andritz AG",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0236,
-        "mark": 82.5,
+        "unrealized_pct": 0.0149,
+        "mark": 81.8,
         "avg_cost": 80.6,
-        "signal": "hold",
+        "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.32,
+        "conviction_score": 0.3325,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1565,19 +1590,18 @@
         ],
         "research_verdict": "accumulate",
         "reasons": [
-          "left buy tier (hold)",
-          "conviction 32% below intact floor",
-          "research accumulate",
-          "cheapness family still passes"
+          "conviction 33% below intact floor",
+          "still buy",
+          "research accumulate"
         ],
         "intact_reasons": [
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00"
         ],
         "weaken_reasons": [
-          "left buy tier (hold)",
-          "conviction 32% below intact floor"
+          "conviction 33% below intact floor"
         ],
         "broken_reasons": []
       }
@@ -1589,7 +1613,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-06T07:54:00.563845+00:00",
+    "generated_at": "2026-11-07T12:50:19.112697+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1664,7 +1688,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-06T07:54:00.565949+00:00",
+    "generated_at": "2026-11-07T12:50:19.115783+00:00",
     "open_count": 2,
     "closed_count": 4,
     "scored_count": 4,
@@ -1732,7 +1756,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-06T07:54:00.452531+00:00",
+    "generated_at": "2026-11-07T12:50:19.086179+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1789,7 +1813,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-06T07:54:00.452531+00:00",
+    "generated_at": "2026-11-07T12:50:19.086179+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1816,7 +1840,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-06T07:54:00.452531+00:00",
+      "generated_at": "2026-11-07T12:50:19.086179+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
@@ -1845,7 +1869,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-06T07:54:00.568923+00:00",
+  "generated_at": "2026-11-07T12:50:19.120417+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

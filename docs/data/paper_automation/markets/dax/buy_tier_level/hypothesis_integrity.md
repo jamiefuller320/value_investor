@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-06T07:52:44.675962+00:00
+Track: `buy_tier_level` · updated 2026-11-07T12:49:38.000470+00:00
 
 ## Portfolio loser feedback
 
@@ -10,27 +10,27 @@ Track: `buy_tier_level` · updated 2026-11-06T07:52:44.675962+00:00
 
 ## Holding reviews
 
-### BNR.DE — weakening / watch_review (+0.0%)
+### BNR.DE — weakening / watch_review (-3.0%)
+- left buy tier (hold)
 - research verdict caution
-- cheapness family no longer passes
-- conviction 24% below intact floor
-- still buy
+- conviction 27% below intact floor
+- cheapness family still passes
 - data_quality 1.00
 
-### VOW3.DE — weakening / watch_review (+0.0%)
+### VOW3.DE — weakening / watch_review (-2.9%)
 - research verdict caution
-- conviction 22% below intact floor
+- conviction 30% below intact floor
 - still buy
 - cheapness family still passes
 
-### FME.DE — weakening / watch_review (+5.4%)
+### FME.DE — weakening / watch_review (+5.1%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes
 
-### HEI.DE — intact / hold_tolerate (+17.8%)
+### HEI.DE — intact / hold_tolerate (+16.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 38%
+- conviction 51%

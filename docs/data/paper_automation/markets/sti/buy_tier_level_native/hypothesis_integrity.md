@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-06T07:53:50.045208+00:00
+Track: `buy_tier_level_native` · updated 2026-11-07T12:50:18.623726+00:00
 
 ## Portfolio loser feedback
 
@@ -10,7 +10,11 @@ Track: `buy_tier_level_native` · updated 2026-11-06T07:53:50.045208+00:00
 
 ## Holding reviews
 
-### BS6.SI — weakening / watch_review (-3.3%)
+### BUOU.SI — broken / exit_candidate (+1.9%)
+- screen signal is avoid
+- cheapness lost and not in buy tier
+
+### BS6.SI — weakening / watch_review (-3.1%)
 - research verdict caution
 - still buy
 - cheapness family still passes
@@ -22,13 +26,7 @@ Track: `buy_tier_level_native` · updated 2026-11-06T07:53:50.045208+00:00
 - data_quality 1.00
 - conviction 74%
 
-### J36.SI — weakening / watch_review (+1.8%)
+### J36.SI — weakening / watch_review (+1.9%)
 - research verdict caution
 - still strong_buy
-- cheapness family still passes
-
-### BUOU.SI — weakening / watch_review (+1.9%)
-- research verdict caution
-- conviction 34% below intact floor
-- still buy
 - cheapness family still passes
