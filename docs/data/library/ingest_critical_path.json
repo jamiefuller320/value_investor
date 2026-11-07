@@ -1,46 +1,32 @@
 {
-  "market_id": "nasdaq100",
-  "assessed_at": "2026-11-07T16:41:52.324068+00:00",
-  "unmeasured": [],
-  "zero_body": [],
-  "indexed_without_body": [
-    {
-      "ticker": "MCHP",
-      "indexed_without_body": 9,
-      "filings_total": 19,
-      "filings_with_body": 10
-    },
-    {
-      "ticker": "TRI",
-      "indexed_without_body": 9,
-      "filings_total": 101,
-      "filings_with_body": 92
-    },
-    {
-      "ticker": "PDD",
-      "indexed_without_body": 1,
-      "filings_total": 18,
-      "filings_with_body": 17
-    }
+  "market_id": "ftse_mib",
+  "assessed_at": "2026-11-07T16:53:50.435901+00:00",
+  "unmeasured": [
+    "AZM.MI"
   ],
-  "thin_need_discovery": [],
+  "zero_body": [],
+  "indexed_without_body": [],
+  "thin_need_discovery": [
+    "PST.MI",
+    "FCT.MI"
+  ],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "MCHP",
-    "TRI",
-    "PDD"
+    "AZM.MI"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (3 tickers, top: MCHP(9), TRI(9), PDD(1))"
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Discovery/IR seed for 2 thin ticker(s) that already have bodies for every indexed filing",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
-    "indexed_without_body_tickers": 3,
-    "indexed_without_body_rows": 19,
-    "thin_need_discovery": 0,
+    "indexed_without_body_tickers": 0,
+    "indexed_without_body_rows": 0,
+    "thin_need_discovery": 2,
     "thin_need_bodies": 0
   }
 }
