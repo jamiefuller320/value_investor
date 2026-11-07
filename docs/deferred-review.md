@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-07T19:36:08+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-07T23:48:31+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -282,6 +282,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | N256 | **Commit agent token-usage log from hunter jobs** | Hunter-fix commits an allowlisted PR diff and does not push docs/data/agent_usage_log.jsonl to main, so hunter_fix and hunter_verify runs can miss the weekly token ledger. | After token_usage_weekly_warning_raw_usd is calibrated, or when hunter agent volume is large enough that missing rows would hide spend |
 | N257 | **Version review: should learning-pool-excluded buy-tier names join the strategy book** | 53 library buy-tier names are dropped from the history snapshot by learning_pool_excluded_tickers, so the sealed owner-strategy-book-v0 never screens them; the forward roster now lists them as learning_pool_excluded. Whether they belong in the book is a universe change for a sealed version, not a silent edit. | Next strategy-book version review (challenger slot open) |
 | N258 | **Per-name Trading 212 listing flag on decision-input inventories (dashboard G5)** | Neither decision_input_inventory.json nor library_decision_input_inventory.json carries tradable_on_t212, so the v2 Candidates tab shows 'not yet known' for all 443 buy-tier names and Proof cannot show the tradable subset bar. Add a small per-name listing board from the T212 catalogue. | Trading 212 catalogue secrets added (adhoc-t212-catalogue-secrets acked) or step 3.2 needs the tradable-subset proof bar |
+| N259 | **Prevent research snapshot sync from writing under docs/data** | apply_research_overlay snapshot hooks derive output_dir from committed memo paths (docs/data), so refresh_dashboard_bundle rewrites screening_snapshot.json under the committed store and trips the docs write guard whenever overlay reconcile runs with pipeline imported. | Next CI docs-write-guard failure from overlay reconcile, or when touching pipeline snapshot hooks / overlay_refresh |
 
 ---
 
