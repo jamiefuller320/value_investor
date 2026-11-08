@@ -1,6 +1,6 @@
 # A.G. BARR p.l.c. (BAG.L) — Research memo
 
-_Version 4 · Updated 2026-10-25T08:29:59.059812+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-08T09:44:56.950395+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: September H1 and unchanged FY guidance still support value; nothing new since 4 Oct weakens that, while interim net debt and FCF definition noise keep the overlay cautious versus a full buy.
+Confidence: 0.73
+Rationale: H1 and unchanged FY guidance still support value; no material news or RNS since 25 Oct weakens that, while interim leverage and FCF definition noise align with the quantitative screen hold.
 RiskTags: regulatory, competitive, customer_concentration, governance, cyclical, leverage, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Accumulate view unchanged; leverage reflects interim debt.
 Since the 4 Oct H1 refresh, indexed news is non-material (LSE quote page; unrelated “grab bag” headline).  
 No new company RNS beyond routine director shareholding notices (2 and 8 Oct).  
 Thesis, risk set and accumulate view unchanged.
+
+### 2026-11-08T09:44:56.950395+00:00
+Since the 25 Oct refresh, the news batch contains no company-relevant articles.  
+Filings index shows only a routine Director/PDMR shareholding notice (3 Nov); no new trading or results RNS.  
+No material change to thesis, risks or overlay.

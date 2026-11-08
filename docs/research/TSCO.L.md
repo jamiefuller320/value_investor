@@ -1,6 +1,6 @@
 # Tesco PLC (TSCO.L) — Research memo
 
-_Version 4 · Updated 2026-10-25T08:14:06.309905+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-08T09:21:42.813747+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.72
-Rationale: H1 interim RNS confirms solid trading, raised FY adjusted operating profit guidance and larger buyback; leverage, equal-pay litigation and overbought timing keep research neutral on the hold case.
+Confidence: 0.73
+Rationale: 30 Oct RNS crystallises the Central Europe exit and buyback intent, but leverage, litigation and extended timing (RSI ~68) keep research neutral on the hold case.
 RiskTags: competitive, regulatory, cyclical, pension, litigation, leverage
 
 ## Weekly updates
@@ -28,3 +28,8 @@ June profit guidance and the filing pack are unchanged; interim accounts still a
 8 Oct interim RNS: H1 adjusted operating profit +6.3%, FY guidance raised to £3.15–3.30bn, buyback increased to £950m.  
 No Tesco RNS on Czech/Slovak sale talk; buyback continuation (19 Oct) and board appointment only since late September.  
 News flow is price/commentary-led; screen remains hold with RSI ~72 (overbought timing).
+
+### 2026-11-08T09:21:42.813747+00:00
+30 Oct RNS: agreed sale of Czech and Slovak businesses to Ahold Delhaize (€1.7bn EV, ~£1.0bn net cash); majority of proceeds earmarked for an incremental buyback after completion (expected H2 2027).  
+Since late October, flow is mostly commentary (momentum, analyst targets, household energy squeeze); FY profit guidance is unchanged vs the 8 Oct interim.  
+Screen remains hold; RSI ~68 with neutral timing (still extended above the 200-day MA).

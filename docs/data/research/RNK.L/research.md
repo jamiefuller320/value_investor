@@ -1,6 +1,6 @@
 # The Rank Group Plc (RNK.L) — Research memo
 
-_Version 5 · Updated 2026-10-25T07:56:29.919127+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-08T09:15:45.841805+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.70
-Rationale: Q1 revenue growth and the closed GC settlement partly support cheapness and entry timing, but pre-Budget duty noise and unresolved FCF, leverage and liquidity still temper full strong-buy conviction.
+Confidence: 0.68
+Rationale: Autumn Budget MGD rise costs ~£9m pa, but current-year LFL operating profit is still guided in line; quantified duty weakens the buy case while FCF, leverage and liquidity overlays are unchanged.
 RiskTags: regulatory, cyclical, governance, competitive, leverage, accounting, liquidity
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Late-Sep media on gaming-machine tax ahead of the Budget again pressured the sha
 7 Oct RNS: £5m Gambling Commission settlement confirmed in line with the prior provision; no further profit impact.  
 15 Oct Q1 update: LFL NGR +5%; management expects LFL operating profit in line with market expectations under the current tax regime.  
 Budget/MGD speculation still weighs on sentiment; screen FCF-basis and liquidity overlays unchanged.
+
+### 2026-11-08T09:15:45.841805+00:00
+29 Oct RNS: MGD rises 20%→25% from Apr 2027; ~£9m pa and ~£2m in FY2027 before mitigation; current-year LFL operating profit still guided in line.  
+Press tied a ~3% share fall to the Budget disclosure; quant screen remains **buy** with neutral timing and unchanged FCF-basis overlay.  
+No trading RNS since 15 Oct Q1; interim Budget commentary due 28 Jan 2027.

@@ -1,6 +1,6 @@
 # PPHE Hotel Group Limited (PPH.L) — Research memo
 
-_Version 13 · Updated 2026-11-01T08:02:48.517412+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-08T09:03:55.365623+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -72,4 +72,9 @@ Buy screen now nineteen weeks persistent (7/22 models, stable); screen timing is
 ### 2026-11-01T08:02:48.517412+00:00
 No new RNS or company-specific press since the 30 October refresh; the 1 November news batch is empty.  
 Buy screen is now twenty weeks persistent (7/22 models, stable); timing remains neutral.  
+Q3 trading RNS is still the filing anchor; leverage, governance, liquidity and earnings-basis concerns are unchanged.
+
+### 2026-11-08T09:03:55.365623+00:00
+No new RNS or company-specific press since the 1 November refresh; the 8 November news batch is empty.  
+Buy screen is now twenty-two weeks persistent (7/22 models, stable); timing remains neutral.  
 Q3 trading RNS is still the filing anchor; leverage, governance, liquidity and earnings-basis concerns are unchanged.

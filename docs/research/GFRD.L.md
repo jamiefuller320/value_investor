@@ -1,6 +1,6 @@
 # Galliford Try Holdings plc (GFRD.L) — Research memo
 
-_Version 9 · Updated 2026-10-25T08:05:10.264721+00:00 · Mode: structured_verdict_update_
+_Version 10 · Updated 2026-11-08T09:16:34.698066+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.78
-Rationale: Pagabo Major Works RNS adds to the regulated backlog and supports the buy screen; FY26 rectification and fire-safety risks are unchanged, and the CEO sale is routine disclosure only.
+Confidence: 0.75
+Rationale: Research confirms the buy screen on FY26 net cash, backlog and ongoing buybacks; no new operational RNS since Pagabo, while statutory versus screen FCF divergence keeps accounting on the overlay.
 RiskTags: cyclical, regulatory, litigation, accounting, competitive
 
 ## Weekly updates
@@ -53,3 +53,8 @@ Quantitative **buy** unchanged (9/22 models, stable); timing **wait** (RSI ~62, 
 20 Oct RNS: appointed to the £5bn Pagabo Major Works framework (South West, South East, London and Scotland lots); buyback own-share transactions continue.  
 15 Oct PDMR: CEO Bill Hocking disclosed sale of 250,000 shares; later press is mostly framework recap and price/200-day MA commentary, with no new accounts.  
 Quantitative **buy** unchanged (10/22 models, stable); timing **neutral** (RSI ~56, still modestly above 200-day MA).
+
+### 2026-11-08T09:16:34.698066+00:00
+No new operational RNS since 20 Oct Pagabo Major Works; only routine buyback transactions (27 Oct, 3 Nov) and 2 Nov total voting rights.  
+News since 25 Oct is thin (Simply Wall St stock analysis only); no fresh contract or accounts disclosure.  
+Quantitative **buy** unchanged (8/22 models, stable); screen flags FCF definition divergence; timing **neutral** (RSI ~54).

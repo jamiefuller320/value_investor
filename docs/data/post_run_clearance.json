@@ -3,9 +3,9 @@
   "last_run": {
     "schema_version": 1,
     "trigger": "post_run_review_email",
-    "evaluated_at": "2026-11-07T19:59:08.912216+00:00",
+    "evaluated_at": "2026-11-08T09:57:54.328519+00:00",
     "review_source": "output/post_run_review.md",
-    "fingerprint": "23be02b8140a287d584b",
+    "fingerprint": "d2a4854898f76016e054",
     "skipped": false,
     "skip_reason": null,
     "applied": true,
@@ -20,17 +20,14 @@
       "pr_open_count": 0
     },
     "compile_cap_audit": {
-      "candidate_count": 4,
+      "candidate_count": 3,
       "truncated_count": 0,
-      "post_run_plan_beyond_cap": [
-        "FCF-basis enforcement overlay: when filing FCF and screen TTM FCF diverge beyond a defined threshold, cap adjusted_signal and surface statutory dividend cover o"
-      ]
+      "post_run_plan_beyond_cap": []
     },
     "plan_alignment": {
       "unlinked_plan_titles": [
-        "Unified RNS body fetcher (Investegate/LSE direct HTML/PDF, reject Google News wrappers) for all indexed filings with `indexed_without_body` > 0",
-        "Companies House document-api PDF download + text extract path for UK-listed buy-tier names when RNS bodies exist but accounts notes are missing",
-        "FCF-basis enforcement overlay: when filing FCF and screen TTM FCF diverge beyond a defined threshold, cap adjusted_signal and surface statutory dividend cover on filing cash"
+        "Bulk RNS/Investegate body downloader for buy-tier tickers with `indexed_without_body` > 0 (prioritise NWG.L 40, IGG.L 18, IAG.L 16, INCH.L 14, BGEO.L 14)",
+        "Companies House filed-accounts PDF fetch + text extract path when RNS bodies absent (backlog pattern on AEP.L/ITV.L; generalise to UK-listed zero-body indexes)"
       ],
       "terminal_only_titles": []
     },
@@ -621,6 +618,46 @@
           "Unified RNS body fetcher (Investegate/LSE direct HTML/PDF, reject Google News wrappers) for all indexed filings with `indexed_without_body` > 0",
           "Companies House document-api PDF download + text extract path for UK-listed buy-tier names when RNS bodies exist but accounts notes are missing",
           "FCF-basis enforcement overlay: when filing FCF and screen TTM FCF diverge beyond a defined threshold, cap adjusted_signal and surface statutory dividend cover on filing cash"
+        ],
+        "terminal_only_titles": []
+      },
+      "compile_cap_drain_skipped": "priority engineering queue not empty",
+      "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
+      "queue_after": {
+        "open_count": 3,
+        "pr_open_count": 0
+      },
+      "tasks_added_estimate": 0,
+      "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+    },
+    {
+      "schema_version": 1,
+      "trigger": "post_run_review_email",
+      "evaluated_at": "2026-11-08T09:57:54.328519+00:00",
+      "review_source": "output/post_run_review.md",
+      "fingerprint": "d2a4854898f76016e054",
+      "skipped": false,
+      "skip_reason": null,
+      "applied": true,
+      "lanes": {
+        "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
+      },
+      "should_dispatch_engineering": true,
+      "lane_c_recommended": false,
+      "actions": [],
+      "queue_before": {
+        "open_count": 3,
+        "pr_open_count": 0
+      },
+      "compile_cap_audit": {
+        "candidate_count": 3,
+        "truncated_count": 0,
+        "post_run_plan_beyond_cap": []
+      },
+      "plan_alignment": {
+        "unlinked_plan_titles": [
+          "Bulk RNS/Investegate body downloader for buy-tier tickers with `indexed_without_body` > 0 (prioritise NWG.L 40, IGG.L 18, IAG.L 16, INCH.L 14, BGEO.L 14)",
+          "Companies House filed-accounts PDF fetch + text extract path when RNS bodies absent (backlog pattern on AEP.L/ITV.L; generalise to UK-listed zero-body indexes)"
         ],
         "terminal_only_titles": []
       },

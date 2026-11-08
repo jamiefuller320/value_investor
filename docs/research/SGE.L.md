@@ -1,6 +1,6 @@
 # The Sage Group plc (SGE.L) — Research memo
 
-_Version 5 · Updated 2026-10-25T08:22:45.437265+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-08T09:32:44.542989+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: medium
-Confidence: 0.64
-Rationale: July guidance remains the latest operational disclosure and is unchanged, but the avoid screen’s rich multiples, overbought timing and filing FCF gap align with caution—not a return to accumulate.
+Confidence: 0.65
+Rationale: Research confirms avoid: July trading update still latest ops disclosure, FCF filing vs screen gap and leverage unchanged, and rich multiples persist—RSI eased but no fundamental offset in filings or news.
 RiskTags: competitive, leverage, key_person, regulatory, accounting
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Headlines are Kalkine-only (AI bolt-ons, chart support); FCF filing vs screen mi
 Screen is **avoid** (2 weeks, stable, conviction ~15%); timing **wait**, RSI ~76, extended above the 200-day MA.  
 No operational RNS since the 29 July nine-month trading update; October headlines are Kalkine/Simply Wall St ahead of autumn FY results.  
 FCF filing vs screen mismatch, leverage and ELT succession watch unchanged; September bond refinancing already completed.
+
+### 2026-11-08T09:32:44.542989+00:00
+Screen **avoid** (7 weeks, stable, conviction ~18%); timing **wait**, RSI ~58 vs ~76—still above the 200-day MA.  
+No articles since 25 October; no operational RNS since the 29 July nine-month update—only routine voting rights and a holdings notice.  
+FCF filing vs screen gap, leverage and ELT succession watch unchanged.

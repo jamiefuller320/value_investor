@@ -1,6 +1,6 @@
 # Endeavour Mining plc (EDV.L) — Research memo
 
-_Version 5 · Updated 2026-10-25T08:23:59.762049+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-08T09:33:46.517485+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.63
-Rationale: Research confirms the hold case: 9 Oct Ity fatality RNS and 12 Nov Q3 date add safety noise but no production reset; FCF basis, H2 output and Mana risks stay filing-unresolved.
+Confidence: 0.61
+Rationale: Research confirms the hold case: 2 Nov Mana ramp RNS adds operational noise but reiterates FY guidance; Q3 (12 Nov) not in pack—FCF basis, H2 output and Mana remediation stay filing-unresolved.
 RiskTags: regulatory, cyclical, governance, competitive, accounting, other
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Hold screen drivers unchanged: FCF basis mismatch, H2-weighted output, and Mana/
 Since late September: company RNS on 9 Oct reported a fatality at Ity (investigation; update with Q3); 14 Oct set Q3 results for 12 Nov—still no operational numbers post-H1.  
 Oct coverage is mostly third-party dividend/gold pieces and Ity commentary; recent filings are buybacks and PDMR only.  
 Hold drivers unchanged: FCF/coverage basis, H2-weighted output, and Mana/production risks remain unresolved in filings.
+
+### 2026-11-08T09:33:46.517485+00:00
+2 Nov RNS: Mana access ramp subsidence (28 Oct) suspends three underground portals; company still guides FY production/AISC, with remediation detail promised at Q3 on 12 Nov—not in pack as of 8 Nov.  
+News batch since 25 Oct is empty; other filings are buybacks (27 Oct) and total voting rights (3 Nov).  
+Hold drivers unchanged: FCF/coverage basis and H2-weighted output; Mana adds noise without post-H1 operational numbers.

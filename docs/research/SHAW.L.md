@@ -1,6 +1,6 @@
 # Shawbrook Group PLC (SHAW.L) — Research memo
 
-_Version 3 · Updated 2026-11-07T19:09:12.706425+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-11-08T09:15:02.834322+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -23,3 +23,8 @@ News batch is thin (LSE quote, third-party analysis); nothing that alters the FY
 No Shawbrook RNS or filings since the 30 Oct refresh; latest source disclosure remains the 5 Oct Q1 2026 trading update and FY25 annual pack.  
 Buy screen still stable (sixth week at buy); P/E ~7.6 and neutral timing—small metric drift only vs the prior snapshot.  
 News since 30 Oct is one irrelevant Google hit (name collision); nothing that changes the filing-based view.
+
+### 2026-11-08T09:15:02.834322+00:00
+No new Shawbrook RNS or filings since the 7 Nov refresh; latest disclosure remains the 5 Oct Q1 2026 trading update and FY25 annual pack.  
+Buy screen still stable (seventh week at buy); P/E ~7.6 and neutral timing—composite drift only (~70% vs ~69%).  
+News batch since 7 Nov is empty; nothing that changes the filing-based view.

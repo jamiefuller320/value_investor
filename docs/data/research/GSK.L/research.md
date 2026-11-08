@@ -1,6 +1,6 @@
 # GSK plc (GSK.L) — Research memo
 
-_Version 6 · Updated 2026-11-07T19:05:34.982594+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-08T09:11:20.972539+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -38,3 +38,8 @@ No new interim results or guidance; leverage, litigation and patent-cliff risks 
 Late-October Q3 headlines cite ~£8.9bn sales with specialty medicines lifting performance and vaccines disappointing; net income fell year on year and shares sold off on vaccine weakness.  
 Commentary largely revisits ESMO Mo-Rez/Ris-Rez data and prior Jemperli/Hibsago FDA approvals; the news batch adds no new company guidance beyond those Q3 themes.  
 The latest screen run resolves the prior FCF basis mismatch; earnings statutory/adjusted divergence, leverage, litigation and patent-cliff risks are unchanged.
+
+### 2026-11-08T09:11:20.972539+00:00
+No new headlines in the 8 November news batch since the 7 November structured update; prior Q3 specialty/vaccine and sell-off themes stand.
+The buy screen remains stable (persistent, 19 weeks); FCF bridge stays resolved in the latest screening snapshot.
+No material change to guidance, leverage, litigation, or patent-cliff risks in supplied sources.
