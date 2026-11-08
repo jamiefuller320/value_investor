@@ -1,17 +1,25 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-07T12:48:59.347329+00:00
+Track: `buy_tier_level_native` · updated 2026-11-08T06:58:29.800495+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **2** / 13 (15% count, 16% NAV)
+- Losers: **3** / 13 (23% count, 25% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
 
-### CNQ.TO — broken / exit_candidate (+0.0%)
+### MFC.TO — broken / exit_candidate (+0.0%)
 - cheapness lost and not in buy tier
+
+### CNQ.TO — intact / hold_tolerate (-8.5%)
+- price drawdown alone does not invalidate value thesis
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 74%
 
 ### TECK-B.TO — intact / hold_tolerate (-7.2%)
 - price drawdown alone does not invalidate value thesis
@@ -19,7 +27,7 @@ Track: `buy_tier_level_native` · updated 2026-11-07T12:48:59.347329+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 60%
+- conviction 79%
 
 ### K.TO — weakening / watch_review (-5.7%)
 - research verdict neutral
@@ -43,12 +51,7 @@ Track: `buy_tier_level_native` · updated 2026-11-07T12:48:59.347329+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 40%
-
-### MFC.TO — weakening / watch_review (+0.0%)
-- conviction 33% below intact floor
-- still buy
-- research accumulate
+- conviction 54%
 
 ### WSP.TO — intact / hold_tolerate (+1.2%)
 - still strong_buy

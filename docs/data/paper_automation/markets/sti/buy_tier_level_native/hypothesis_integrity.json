@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "updated_at": "2026-11-07T12:50:18.623726+00:00",
-  "as_of": "2026-11-07T12:50:18.613625+00:00",
+  "updated_at": "2026-11-08T07:00:05.396918+00:00",
+  "as_of": "2026-11-08T07:00:05.386735+00:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -20,8 +20,8 @@
   "underwater_count": 0,
   "thesis_status_counts": {
     "intact": 1,
-    "weakening": 2,
-    "broken": 1,
+    "weakening": 3,
+    "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
@@ -43,8 +43,8 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.25,
-      "quality": 0.25,
+      "cheapness": 0.0,
+      "quality": 0.5,
       "dividend": 0.0,
       "garp": 0.5,
       "risk": 0.0
@@ -54,46 +54,6 @@
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
-    {
-      "ticker": "BUOU.SI",
-      "name": "Frasers Logistics & Commercial Trust",
-      "thesis_status": "broken",
-      "recommended_action": "exit_candidate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0195,
-      "mark": 0.925,
-      "avg_cost": 0.9073,
-      "signal": "avoid",
-      "timing_signal": "neutral",
-      "conviction_score": 0.1357,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "cheapness",
-        "garp"
-      ],
-      "research_verdict": "caution",
-      "reasons": [
-        "screen signal is avoid",
-        "cheapness lost and not in buy tier"
-      ],
-      "intact_reasons": [
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "research verdict caution",
-        "conviction 14% below intact floor"
-      ],
-      "broken_reasons": [
-        "screen signal is avoid",
-        "cheapness lost and not in buy tier"
-      ]
-    },
     {
       "ticker": "BS6.SI",
       "name": "Yangzijiang Shipbuilding (Holdings) Ltd.",
@@ -130,6 +90,47 @@
       ],
       "weaken_reasons": [
         "research verdict caution"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "A17U.SI",
+      "name": "CapitaLand Ascendas REIT",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 2.26,
+      "avg_cost": 2.26,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.1999,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "quality",
+        "garp"
+      ],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "conviction 20% below intact floor",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 0.95"
+      ],
+      "weaken_reasons": [
+        "research verdict caution",
+        "conviction 20% below intact floor"
       ],
       "broken_reasons": []
     },

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-07T12:50:17.115808+00:00
+Track: `buy_tier_level_native` · updated 2026-11-08T06:59:58.566957+00:00
 
 ## Portfolio loser feedback
 
@@ -17,7 +17,6 @@ Track: `buy_tier_level_native` · updated 2026-11-07T12:50:17.115808+00:00
 
 ### 2628.HK — weakening / watch_review (-5.0%)
 - research verdict caution
-- conviction 31% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -44,7 +43,7 @@ Track: `buy_tier_level_native` · updated 2026-11-07T12:50:17.115808+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 55%
+- conviction 63%
 
 ### 6690.HK — intact / hold_tolerate (+6.5%)
 - still strong_buy

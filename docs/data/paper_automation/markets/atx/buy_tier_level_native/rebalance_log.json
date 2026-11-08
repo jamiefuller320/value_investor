@@ -11386,5 +11386,767 @@
       },
       "cards": []
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-11-08T07:00:21.896335+00:00",
+    "track_id": "buy_tier_level_native",
+    "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/atx/screen_latest.json",
+      "run_at": "2026-11-08T06:23:16.355562+00:00",
+      "generated_at": "2026-11-08T07:00:11.123326+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-11-08T07:00:16.902672+00:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-11-08T08:00:00+00:00",
+      "settle_at": "2026-11-08T09:15:00+00:00",
+      "can_act": false,
+      "reason": "before market open"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (4 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0003,
+    "candidates": [
+      {
+        "ticker": "OMV.VI",
+        "name": "OMV Aktiengesellschaft",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6693,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Energy",
+        "price": 71.75,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "STR.VI",
+        "name": "Strabag SE",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.75,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 101.4,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "CAI.VI",
+        "name": "CA Immobilien Anlagen AG",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.55,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Real Estate",
+        "price": 21.2,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "ANDR.VI",
+        "name": "Andritz AG",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.389,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 81.8,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "OMV.VI",
+        "name": "OMV Aktiengesellschaft",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6693,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Energy",
+        "price": 71.75,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "STR.VI",
+        "name": "Strabag SE",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.75,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 101.4,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "CAI.VI",
+        "name": "CA Immobilien Anlagen AG",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.55,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Real Estate",
+        "price": 21.2,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "ANDR.VI",
+        "name": "Andritz AG",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.389,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 81.8,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.03% / sell 0.03% (legacy symmetric slot 0.03%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1003.24,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 334.41,
+      "targets": [
+        {
+          "ticker": "STR.VI",
+          "name": "Strabag SE",
+          "signal": "strong_buy",
+          "conviction_score": 0.75,
+          "price": 101.4
+        },
+        {
+          "ticker": "CAI.VI",
+          "name": "CA Immobilien Anlagen AG",
+          "signal": "buy",
+          "conviction_score": 0.55,
+          "price": 21.2
+        },
+        {
+          "ticker": "ANDR.VI",
+          "name": "Andritz AG",
+          "signal": "buy",
+          "conviction_score": 0.389,
+          "price": 81.8
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "STR.VI",
+          "name": "Strabag SE",
+          "reason": "Already near equal-weight target",
+          "value": 334.41,
+          "target_value": 334.41,
+          "conviction_score": 0.75,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "CAI.VI",
+          "name": "CA Immobilien Anlagen AG",
+          "reason": "Already near equal-weight target",
+          "value": 334.41,
+          "target_value": 334.41,
+          "conviction_score": 0.55,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "ANDR.VI",
+          "name": "Andritz AG",
+          "reason": "Already near equal-weight target",
+          "value": 334.41,
+          "target_value": 334.41,
+          "conviction_score": 0.389,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [
+        {
+          "ticker": "OMV.VI",
+          "name": "OMV Aktiengesellschaft",
+          "signal": "strong_buy",
+          "conviction_score": 0.6693,
+          "reason": "timing_signal=wait \u2014 skipped until timing improves"
+        }
+      ],
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "76f21576-b475-456b-bc90-85b76743630d",
+        "fund_id": "491a3640-b3a1-4908-9e17-5c07f25ec1a2",
+        "acted_at": "2026-11-08T07:00:16.902672+00:00",
+        "ticker": "OMV.VI",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 3.310419,
+        "price": 71.75,
+        "gross": 237.52,
+        "cost": 0.06,
+        "net_cash": 237.46,
+        "note": "Automated exit \u2014 left target set",
+        "name": "OMV Aktiengesellschaft",
+        "avg_cost_at_exit": 71.9392,
+        "position_closed": true
+      },
+      {
+        "id": "a058fc67-eb3b-4f1d-8e46-a8a6635a90a9",
+        "fund_id": "491a3640-b3a1-4908-9e17-5c07f25ec1a2",
+        "acted_at": "2026-11-08T07:00:16.902672+00:00",
+        "ticker": "STR.VI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.801986,
+        "price": 101.4,
+        "gross": 81.32,
+        "cost": 0.02,
+        "net_cash": -81.34,
+        "note": "Automated buy",
+        "name": "Strabag SE"
+      },
+      {
+        "id": "af826954-8812-4c42-a810-c7e4effbafb6",
+        "fund_id": "491a3640-b3a1-4908-9e17-5c07f25ec1a2",
+        "acted_at": "2026-11-08T07:00:16.902672+00:00",
+        "ticker": "CAI.VI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 3.654325,
+        "price": 21.2,
+        "gross": 77.47,
+        "cost": 0.02,
+        "net_cash": -77.49,
+        "note": "Automated buy",
+        "name": "CA Immobilien Anlagen AG"
+      },
+      {
+        "id": "91a7e0d3-4562-4251-ba96-caa83a48ff99",
+        "fund_id": "491a3640-b3a1-4908-9e17-5c07f25ec1a2",
+        "acted_at": "2026-11-08T07:00:16.902672+00:00",
+        "ticker": "ANDR.VI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.961011,
+        "price": 81.8,
+        "gross": 78.61,
+        "cost": 0.02,
+        "net_cash": -78.63,
+        "note": "Automated buy",
+        "name": "Andritz AG"
+      }
+    ],
+    "nav_before": 1003.36,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "OMV.VI",
+        "shares": 3.310419,
+        "avg_cost": 71.9392,
+        "sector": "Energy",
+        "name": "OMV Aktiengesellschaft",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "STR.VI",
+        "shares": 2.49596,
+        "avg_cost": 101.3312,
+        "sector": "Industrials",
+        "name": "Strabag SE",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAI.VI",
+        "shares": 12.119859,
+        "avg_cost": 21.3509,
+        "sector": "Real Estate",
+        "name": "CA Immobilien Anlagen AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "ANDR.VI",
+        "shares": 3.12716,
+        "avg_cost": 80.6,
+        "sector": "Industrials",
+        "name": "Andritz AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "OMV.VI": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "nav_after": 1003.24,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "STR.VI",
+        "shares": 3.297946,
+        "avg_cost": 101.3479,
+        "sector": "Industrials",
+        "name": "Strabag SE",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAI.VI",
+        "shares": 15.774184,
+        "avg_cost": 21.3159,
+        "sector": "Real Estate",
+        "name": "CA Immobilien Anlagen AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "ANDR.VI",
+        "shares": 4.088171,
+        "avg_cost": 80.8821,
+        "sector": "Industrials",
+        "name": "Andritz AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "OMV.VI": 1
+      }
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
+      "verdict_counts": {
+        "agree": 3,
+        "veto": 1,
+        "abstain": 0
+      },
+      "cards": [
+        {
+          "ticker": "OMV.VI",
+          "name": "OMV Aktiengesellschaft",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "veto",
+          "reasons": [
+            "still_buyish remains true with screen_signal strong_buy and research_verdict accumulate",
+            "rank_drop is 0 (below hold gate threshold 3) \u2014 insufficient deterioration to justify exit churn",
+            "Selling while conviction_rank equals entry_rank (2) poses capacity-bump risk if rebought later"
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 2
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 2
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-08T07:00:16.902672+00:00",
+          "proposal_id": "buy_tier_level_native:OMV.VI:sell:2026-11-08T07:00:16.902672+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "veto",
+              "reasons": [
+                "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "STR.VI",
+          "name": "Strabag SE",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Top conviction_rank (1) with strong_buy and accumulate overlay",
+            "still_buyish true with overlay_bound \u2014 fits buyish target set selection"
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 1
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-08T07:00:16.902672+00:00",
+          "proposal_id": "buy_tier_level_native:STR.VI:buy:2026-11-08T07:00:16.902672+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Buy into buyish target set \u2014 agree with algo selection."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "CAI.VI",
+          "name": "CA Immobilien Anlagen AG",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "buy signal with rank_drop 0 and research_verdict accumulate",
+            "still_buyish true \u2014 consistent with automated buy into target set"
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 3
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-08T07:00:16.902672+00:00",
+          "proposal_id": "buy_tier_level_native:CAI.VI:buy:2026-11-08T07:00:16.902672+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Buy into buyish target set \u2014 agree with algo selection."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "ANDR.VI",
+          "name": "Andritz AG",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "buy signal with still_buyish true and overlay_bound",
+            "rank_drop 0 \u2014 no deterioration signal against entry at rank 4"
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 4
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 4
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-11-08T07:00:16.902672+00:00",
+          "proposal_id": "buy_tier_level_native:ANDR.VI:buy:2026-11-08T07:00:16.902672+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Buy into buyish target set \u2014 agree with algo selection."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
+    }
   }
 ]

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-07T12:49:56.941474+00:00
+Track: `buy_tier_level_native` · updated 2026-11-08T06:59:44.017532+00:00
 
 ## Portfolio loser feedback
 
@@ -22,7 +22,7 @@ Track: `buy_tier_level_native` · updated 2026-11-07T12:49:56.941474+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 38%
+- conviction 51%
 
 ### IG.MI — intact / hold_tolerate (+1.9%)
 - still buy

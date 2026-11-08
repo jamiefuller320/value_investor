@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `technical` · updated 2026-11-07T12:51:09.860432+00:00
+Track: `technical` · updated 2026-11-08T07:01:12.323184+00:00
 
 ## Portfolio loser feedback
 
@@ -15,7 +15,7 @@ Track: `technical` · updated 2026-11-07T12:51:09.860432+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 36%
+- conviction 41%
 
 ### ERIC-B.ST — intact / hold_tolerate (+4.7%)
 - still strong_buy
@@ -29,17 +29,17 @@ Track: `technical` · updated 2026-11-07T12:51:09.860432+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 67%
+- conviction 77%
 
 ### SAN.PA — intact / hold_tolerate (+13.2%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 45%
+- conviction 53%
 
 ### PHIA.AS — weakening / watch_review (+25.5%)
 - left buy tier (hold)
-- conviction 27% below intact floor
+- conviction 31% below intact floor
 - research accumulate
 - cheapness family still passes

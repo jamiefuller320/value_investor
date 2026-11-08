@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-07T12:49:20.475300+00:00
+Track: `buy_tier_level` · updated 2026-11-08T06:58:44.681369+00:00
 
 ## Portfolio loser feedback
 
@@ -85,10 +85,10 @@ Track: `buy_tier_level` · updated 2026-11-07T12:49:20.475300+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 59%
+- conviction 67%
 
 ### BKNG — weakening / watch_review (-6.3%)
-- conviction 23% below intact floor
+- conviction 30% below intact floor
 - still buy
 - research accumulate
 
@@ -100,10 +100,12 @@ Track: `buy_tier_level` · updated 2026-11-07T12:49:20.475300+00:00
 - data_quality 1.00
 - conviction 41%
 
-### ADBE — weakening / watch_review (-4.5%)
-- conviction 31% below intact floor
+### ADBE — intact / hold_tolerate (-4.5%)
 - still strong_buy
 - research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 42%
 
 ### ODFL — intact / hold_tolerate (-4.3%)
 - still buy
@@ -132,12 +134,18 @@ Track: `buy_tier_level` · updated 2026-11-07T12:49:20.475300+00:00
 - still buy
 - cheapness family still passes
 
+### AVGO — weakening / watch_review (+0.0%)
+- research verdict caution
+- cheapness family no longer passes
+- still buy
+- data_quality 1.00
+
 ### PAYX — intact / hold_tolerate (+0.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 53%
+- conviction 60%
 
 ### MSFT — intact / hold_tolerate (+1.2%)
 - still buy
@@ -188,17 +196,12 @@ Track: `buy_tier_level` · updated 2026-11-07T12:49:20.475300+00:00
 - data_quality 1.00
 - conviction 52%
 
-### LRCX — weakening / watch_review (+8.2%)
-- left buy tier (hold)
-- research accumulate
-- cheapness family still passes
-
 ### MAR — intact / hold_tolerate (+9.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 37%
+- conviction 49%
 
 ### PYPL — weakening / watch_review (+12.4%)
 - research verdict neutral

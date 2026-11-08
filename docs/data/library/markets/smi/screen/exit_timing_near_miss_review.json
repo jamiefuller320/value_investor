@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "track_id": "archive_near_miss",
-  "generated_at": "2026-11-07T12:47:21.030701+00:00",
+  "generated_at": "2026-11-08T06:57:08.924278+00:00",
   "framework": {
     "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
     "hold_recovery": {
@@ -69,13 +69,17 @@
     "ready_for_probability_analysis": true,
     "hold_closed_count": 112,
     "swap_closed_count": 112,
-    "hold_with_data_quality_count": 112,
+    "hold_with_data_quality_count": 117,
     "gaps": [],
     "note": "Closed cohorts reached initial targets; probability strand analysis can begin."
   },
   "hold_recovery": {
     "open": {
-      "count": 0
+      "count": 5,
+      "recovered_to_breakeven": 0,
+      "close_reasons": {
+        "open": 5
+      }
     },
     "closed": {
       "count": 112,
@@ -89,26 +93,29 @@
   },
   "swap_rotation": {
     "open": {
-      "count": 0
+      "count": 5,
+      "verdicts": {
+        "open": 5
+      }
     },
     "closed": {
       "count": 112,
       "verdicts": {
-        "exit_outperformed": 51,
-        "replacement_outperformed": 45,
-        "inconclusive": 16
+        "exit_outperformed": 50,
+        "replacement_outperformed": 51,
+        "inconclusive": 11
       }
     }
   },
   "note": "Archive near-miss + held-book observe sim \u2014 priors only; pair with live learning_tracks_exit_timing.json for paper-track evidence. Wider gate: min_conviction=0.28, max_episodes_per_week=25.",
   "scope": "archive_near_miss",
-  "snapshot_count": 26,
+  "snapshot_count": 27,
   "episodes_opened": {
-    "hold_recovery": 112,
-    "hold_recovery_near_miss": 112,
+    "hold_recovery": 117,
+    "hold_recovery_near_miss": 117,
     "hold_recovery_held_book": 0,
-    "swap_rotation": 112,
-    "swap_rotation_near_miss": 112,
+    "swap_rotation": 117,
+    "swap_rotation_near_miss": 117,
     "swap_rotation_log_book": 0
   },
   "by_conviction_band": {

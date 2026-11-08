@@ -1,16 +1,19 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-07T12:48:14.280223+00:00
+Track: `buy_tier_level` · updated 2026-11-08T06:57:53.977738+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **8** / 28 (29% count, 28% NAV)
+- Losers: **8** / 29 (28% count, 27% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 - Selection feedback:
-  - dividend fails more often among losers (75% vs 20%)
+  - dividend fails more often among losers (75% vs 19%)
 
 ## Holding reviews
+
+### ALK.AX — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### AAI.AX — weakening / watch_review (-19.9%)
 - research verdict caution
@@ -84,7 +87,7 @@ Track: `buy_tier_level` · updated 2026-11-07T12:48:14.280223+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 59%
+- conviction 60%
 
 ### GMD.AX — weakening / watch_review (-0.4%)
 - research verdict caution
@@ -98,6 +101,12 @@ Track: `buy_tier_level` · updated 2026-11-07T12:48:14.280223+00:00
 - data_quality 0.90
 - conviction 81%
 
+### CDA.AX — weakening / watch_review (+0.0%)
+- research verdict neutral
+- conviction 34% below intact floor
+- still buy
+- cheapness family still passes
+
 ### FMG.AX — intact / hold_tolerate (+1.1%)
 - still strong_buy
 - research accumulate
@@ -110,7 +119,7 @@ Track: `buy_tier_level` · updated 2026-11-07T12:48:14.280223+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 67%
+- conviction 69%
 
 ### EBO.AX — weakening / watch_review (+2.3%)
 - research verdict neutral
@@ -122,7 +131,7 @@ Track: `buy_tier_level` · updated 2026-11-07T12:48:14.280223+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 54%
+- conviction 53%
 
 ### AMC.AX — intact / hold_tolerate (+3.1%)
 - still buy
@@ -154,7 +163,7 @@ Track: `buy_tier_level` · updated 2026-11-07T12:48:14.280223+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 59%
+- conviction 60%
 
 ### CYL.AX — intact / hold_tolerate (+8.7%)
 - still buy
@@ -173,14 +182,14 @@ Track: `buy_tier_level` · updated 2026-11-07T12:48:14.280223+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 40%
+- conviction 47%
 
 ### RMD.AX — intact / hold_tolerate (+10.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 50%
+- conviction 52%
 
 ### JBH.AX — intact / hold_tolerate (+14.5%)
 - still buy
@@ -188,10 +197,3 @@ Track: `buy_tier_level` · updated 2026-11-07T12:48:14.280223+00:00
 - cheapness family still passes
 - data_quality 0.95
 - conviction 51%
-
-### ALK.AX — intact / hold_tolerate (+17.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 58%

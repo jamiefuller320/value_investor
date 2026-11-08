@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-07T12:52:34.023001+00:00
+Track: `buy_tier_level` · updated 2026-11-08T07:02:26.627386+00:00
 
 ## Portfolio loser feedback
 
@@ -56,19 +56,21 @@ Track: `buy_tier_level` · updated 2026-11-07T12:52:34.023001+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 56%
+- conviction 64%
 
-### APAM.AS — weakening / watch_review (-4.3%)
-- conviction 35% below intact floor
+### APAM.AS — intact / hold_tolerate (-4.3%)
 - still buy
 - research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 41%
 
 ### OMV.VI — intact / hold_tolerate (-2.5%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 51%
+- conviction 57%
 
 ### AED.BR — intact / hold_tolerate (-2.2%)
 - still buy
@@ -89,7 +91,7 @@ Track: `buy_tier_level` · updated 2026-11-07T12:52:34.023001+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 68%
+- conviction 69%
 
 ### ANDR.VI — intact / hold_tolerate (-1.5%)
 - still strong_buy
@@ -103,7 +105,7 @@ Track: `buy_tier_level` · updated 2026-11-07T12:52:34.023001+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 36%
+- conviction 41%
 
 ### SKF-B.ST — intact / hold_tolerate (-1.1%)
 - still buy
@@ -171,7 +173,7 @@ Track: `buy_tier_level` · updated 2026-11-07T12:52:34.023001+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 56%
+- conviction 57%
 
 ### AKZA.AS — intact / hold_tolerate (+3.7%)
 - still buy
@@ -258,7 +260,7 @@ Track: `buy_tier_level` · updated 2026-11-07T12:52:34.023001+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 67%
+- conviction 77%
 
 ### ESSITY-B.ST — intact / hold_tolerate (+10.9%)
 - still buy
@@ -272,7 +274,7 @@ Track: `buy_tier_level` · updated 2026-11-07T12:52:34.023001+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 45%
+- conviction 53%
 
 ### SGO.PA — intact / hold_tolerate (+14.4%)
 - still strong_buy

@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-07T12:50:37.292755+00:00",
+  "generated_at": "2026-11-08T07:00:46.388820+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 3,
+    "closed_total": 4,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 8,
+    "open_with_thesis": 7,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 2,
+        "closed_count": 3,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0577,
-        "mean_trough_unrealized_pct": -0.0166,
+        "mean_peak_unrealized_pct": 0.0504,
+        "mean_trough_unrealized_pct": -0.0073,
         "outcome_labels": {
-          "recovered": 2
+          "recovered": 3
         }
       },
       "broken": {
@@ -62,11 +62,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 3,
+    "hold_closed_with_thesis": 4,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=3 (target >=8)",
-      "hold thesis buckets thin (weakening=2, broken=1; target >=3 each)",
+      "hold closed with thesis=4 (target >=8)",
+      "hold thesis buckets thin (broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -587,7 +587,7 @@
       "ticker": "NIBE-B.ST",
       "name": "NIBE Industrier AB (publ)",
       "started_at": "2026-10-25T07:08:49.934908+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -630,9 +630,9 @@
       "peak_unrealized_pct": 0.0358,
       "trough_unrealized_pct": 0.0113,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-08T07:00:46.312776+00:00",
+      "linked_sell_trade_id": "bc2f5672-ea08-47ca-9691-c676f043a816"
     },
     {
       "episode_id": "buy_tier_level:LIFCO-B.ST:2026-11-01T07:14:03.017104+00:00",
@@ -1319,6 +1319,88 @@
         "TEL2-B.ST": 0.0,
         "BOL.ST": 0.0,
         "HM-B.ST": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-08T07:00:46.312776+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-08T07:00:46.312776+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "NIBE-B.ST",
+          "price": 44.94,
+          "shares": 1.912011,
+          "gross": 85.93,
+          "cost": 0.15,
+          "avg_cost_at_exit": 44.44,
+          "realized_pct": 0.0113,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": 0.0113
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "HM-B.ST",
+          "price": 178.75,
+          "shares": 0.064939,
+          "gross": 11.61,
+          "cost": 0.02
+        },
+        {
+          "ticker": "ERIC-B.ST",
+          "price": 102.2,
+          "shares": 0.230149,
+          "gross": 23.52,
+          "cost": 0.04
+        },
+        {
+          "ticker": "ESSITY-B.ST",
+          "price": 289.8,
+          "shares": 0.048547,
+          "gross": 14.07,
+          "cost": 0.02
+        },
+        {
+          "ticker": "SAND.ST",
+          "price": 357.4,
+          "shares": 0.043201,
+          "gross": 15.44,
+          "cost": 0.03
+        },
+        {
+          "ticker": "ASSA-B.ST",
+          "price": 394.6,
+          "shares": 0.038278,
+          "gross": 15.1,
+          "cost": 0.03
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "NIBE-B.ST": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "HM-B.ST": 0.0,
+        "ERIC-B.ST": 0.0,
+        "ESSITY-B.ST": 0.0,
+        "SAND.ST": 0.0,
+        "ASSA-B.ST": 0.0
       },
       "verdict": null,
       "closed_at": null

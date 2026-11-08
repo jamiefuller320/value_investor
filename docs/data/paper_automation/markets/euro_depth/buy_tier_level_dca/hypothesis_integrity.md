@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_dca` · updated 2026-11-07T12:51:40.915571+00:00
+Track: `buy_tier_level_dca` · updated 2026-11-08T07:01:39.136095+00:00
 
 ## Portfolio loser feedback
 
@@ -39,7 +39,7 @@ Track: `buy_tier_level_dca` · updated 2026-11-07T12:51:40.915571+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 56%
+- conviction 64%
 
 ### VOE.VI — intact / hold_tolerate (-8.0%)
 - price drawdown alone does not invalidate value thesis
@@ -55,12 +55,15 @@ Track: `buy_tier_level_dca` · updated 2026-11-07T12:51:40.915571+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 36%
+- conviction 41%
 
-### APAM.AS — weakening / watch_review (-5.9%)
-- conviction 35% below intact floor
+### APAM.AS — intact / hold_tolerate (-5.9%)
+- price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 41%
 
 ### DQ7A.IR — weakening / watch_review (-5.0%)
 - research verdict caution
@@ -87,14 +90,14 @@ Track: `buy_tier_level_dca` · updated 2026-11-07T12:51:40.915571+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 68%
+- conviction 69%
 
 ### OMV.VI — intact / hold_tolerate (-2.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 51%
+- conviction 57%
 
 ### VOLV-B.ST — intact / hold_tolerate (-2.2%)
 - still buy
@@ -129,7 +132,7 @@ Track: `buy_tier_level_dca` · updated 2026-11-07T12:51:40.915571+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 56%
+- conviction 57%
 
 ### ACKB.BR — intact / hold_tolerate (+1.3%)
 - still strong_buy
@@ -240,7 +243,7 @@ Track: `buy_tier_level_dca` · updated 2026-11-07T12:51:40.915571+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 67%
+- conviction 77%
 
 ### SKA-B.ST — intact / hold_tolerate (+9.7%)
 - still buy
@@ -282,7 +285,7 @@ Track: `buy_tier_level_dca` · updated 2026-11-07T12:51:40.915571+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 45%
+- conviction 53%
 
 ### WKL.AS — intact / hold_tolerate (+32.8%)
 - still buy

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "track_id": "archive_near_miss",
-  "generated_at": "2026-11-07T12:46:10.648982+00:00",
+  "generated_at": "2026-11-08T06:55:38.008867+00:00",
   "framework": {
     "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
     "hold_recovery": {
@@ -69,13 +69,17 @@
     "ready_for_probability_analysis": true,
     "hold_closed_count": 567,
     "swap_closed_count": 567,
-    "hold_with_data_quality_count": 567,
+    "hold_with_data_quality_count": 582,
     "gaps": [],
     "note": "Closed cohorts reached initial targets; probability strand analysis can begin."
   },
   "hold_recovery": {
     "open": {
-      "count": 0
+      "count": 15,
+      "recovered_to_breakeven": 0,
+      "close_reasons": {
+        "open": 15
+      }
     },
     "closed": {
       "count": 567,
@@ -90,26 +94,29 @@
   },
   "swap_rotation": {
     "open": {
-      "count": 0
+      "count": 15,
+      "verdicts": {
+        "open": 15
+      }
     },
     "closed": {
       "count": 567,
       "verdicts": {
-        "replacement_outperformed": 332,
-        "exit_outperformed": 186,
-        "inconclusive": 49
+        "replacement_outperformed": 330,
+        "exit_outperformed": 205,
+        "inconclusive": 32
       }
     }
   },
   "note": "Archive near-miss + held-book observe sim \u2014 priors only; pair with live learning_tracks_exit_timing.json for paper-track evidence. Wider gate: min_conviction=0.28, max_episodes_per_week=25.",
   "scope": "archive_near_miss",
-  "snapshot_count": 40,
+  "snapshot_count": 41,
   "episodes_opened": {
-    "hold_recovery": 567,
-    "hold_recovery_near_miss": 567,
+    "hold_recovery": 582,
+    "hold_recovery_near_miss": 582,
     "hold_recovery_held_book": 0,
-    "swap_rotation": 567,
-    "swap_rotation_near_miss": 567,
+    "swap_rotation": 582,
+    "swap_rotation_near_miss": 582,
     "swap_rotation_log_book": 0
   },
   "by_conviction_band": {

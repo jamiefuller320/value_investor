@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-07T12:49:28.906903+00:00
+Track: `buy_tier_level_native` · updated 2026-11-08T06:58:55.765915+00:00
 
 ## Portfolio loser feedback
 
@@ -77,7 +77,7 @@ Track: `buy_tier_level_native` · updated 2026-11-07T12:49:28.906903+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 59%
+- conviction 67%
 
 ### CSX — intact / hold_tolerate (-5.0%)
 - price drawdown alone does not invalidate value thesis
@@ -121,10 +121,18 @@ Track: `buy_tier_level_native` · updated 2026-11-07T12:49:28.906903+00:00
 - still buy
 - cheapness family still passes
 
-### ADBE — weakening / watch_review (+0.1%)
-- conviction 31% below intact floor
+### AVGO — weakening / watch_review (+0.0%)
+- research verdict caution
+- cheapness family no longer passes
+- still buy
+- data_quality 1.00
+
+### ADBE — intact / hold_tolerate (+0.1%)
 - still strong_buy
 - research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 42%
 
 ### MSFT — intact / hold_tolerate (+1.2%)
 - still buy
@@ -134,7 +142,7 @@ Track: `buy_tier_level_native` · updated 2026-11-07T12:49:28.906903+00:00
 - conviction 62%
 
 ### BKNG — weakening / watch_review (+2.1%)
-- conviction 23% below intact floor
+- conviction 30% below intact floor
 - still buy
 - research accumulate
 
@@ -151,11 +159,6 @@ Track: `buy_tier_level_native` · updated 2026-11-07T12:49:28.906903+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 67%
-
-### LRCX — weakening / watch_review (+8.2%)
-- left buy tier (hold)
-- research accumulate
-- cheapness family still passes
 
 ### MDLZ — intact / hold_tolerate (+8.5%)
 - still buy
@@ -190,7 +193,7 @@ Track: `buy_tier_level_native` · updated 2026-11-07T12:49:28.906903+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 37%
+- conviction 49%
 
 ### PYPL — weakening / watch_review (+12.6%)
 - research verdict neutral
@@ -221,7 +224,7 @@ Track: `buy_tier_level_native` · updated 2026-11-07T12:49:28.906903+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 53%
+- conviction 60%
 
 ### KDP — intact / hold_tolerate (+18.6%)
 - still buy

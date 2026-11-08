@@ -3,13 +3,13 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-07T12:50:18.577757+00:00",
+  "generated_at": "2026-11-08T07:00:00.278309+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 10,
+    "closed_total": 11,
     "closed_unknown_thesis": 0,
     "open_with_thesis": 3,
     "by_thesis_status": {
@@ -17,13 +17,13 @@
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 8,
+        "closed_count": 9,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0064,
-        "mean_trough_unrealized_pct": -0.0068,
+        "mean_peak_unrealized_pct": 0.0094,
+        "mean_trough_unrealized_pct": -0.0024,
         "outcome_labels": {
-          "recovered": 8
+          "recovered": 9
         }
       },
       "broken": {
@@ -62,7 +62,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 10,
+    "hold_closed_with_thesis": 11,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "hold thesis buckets thin (broken=2; target >=3 each)",
@@ -557,7 +557,7 @@
       "ticker": "BUOU.SI",
       "name": "Frasers Logistics & Commercial Trust",
       "started_at": "2026-11-03T14:17:36.835136+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -591,9 +591,9 @@
       "peak_unrealized_pct": 0.0335,
       "trough_unrealized_pct": 0.0335,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-08T07:00:00.150643+00:00",
+      "linked_sell_trade_id": "4d2efcb3-fcc1-4253-be4c-06d86fabf53f"
     },
     {
       "episode_id": "buy_tier_level:N2IU.SI:2026-11-04T14:17:16.535055+00:00",
@@ -679,6 +679,50 @@
       ],
       "research_verdict_at_start": null,
       "unrealized_pct_at_thesis": 0.0
+    },
+    {
+      "episode_id": "buy_tier_level:A17U.SI:2026-11-08T07:00:00.150643+00:00",
+      "track_id": "buy_tier_level",
+      "ticker": "A17U.SI",
+      "name": "CapitaLand Ascendas REIT",
+      "started_at": "2026-11-08T07:00:00.150643+00:00",
+      "status": "open",
+      "stress_triggers": [
+        "signal_downgrade"
+      ],
+      "entry_mark": 2.26,
+      "avg_cost": 2.26,
+      "unrealized_pct_at_start": 0.0,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "research verdict caution",
+        "cheapness family no longer passes",
+        "conviction 20% below intact floor",
+        "still buy"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "caution",
+      "unrealized_pct_at_thesis": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 0.95,
+      "conviction_score": 0.19992,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
     }
   ],
   "swap_rotations": [
@@ -1267,7 +1311,15 @@
           "cost": 0.57
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-11-08T07:00:00.150643+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0335,
+          "avg_buy_return": 0.0235,
+          "replacement_delta": -0.01
+        }
+      ],
       "sell_returns_since_rotation": {
         "BUOU.SI": 0.0335
       },
@@ -1479,6 +1531,57 @@
         "BS6.SI": 0.0023,
         "J36.SI": 0.0016,
         "BUOU.SI": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-08T07:00:00.150643+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-08T07:00:00.150643+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "BUOU.SI",
+          "price": 0.925,
+          "shares": 267.744189,
+          "gross": 247.66,
+          "cost": 0.43,
+          "avg_cost_at_exit": 0.9073,
+          "realized_pct": 0.0195,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "screen signal is avoid",
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": 0.0195
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "A17U.SI",
+          "price": 2.26,
+          "shares": 109.202685,
+          "gross": 246.8,
+          "cost": 0.43
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "BUOU.SI": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "A17U.SI": 0.0
       },
       "verdict": null,
       "closed_at": null

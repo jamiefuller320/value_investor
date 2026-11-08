@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `still_in_buy_set` · updated 2026-11-07T12:51:52.898715+00:00
+Track: `still_in_buy_set` · updated 2026-11-08T07:01:45.624831+00:00
 
 ## Portfolio loser feedback
 
@@ -18,7 +18,7 @@ Track: `still_in_buy_set` · updated 2026-11-07T12:51:52.898715+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 68%
+- conviction 69%
 
 ### MELE.BR — intact / hold_tolerate (+0.0%)
 - still strong_buy
