@@ -8544,14 +8544,17 @@ def test_fetch_filings_ir_allowlist_hei_de_h1_live_eng_20261006_01():
     assert valid, reason
 
 
-@patch("value_investor.research.filings.fetch_filing_body")
+@patch("value_investor.research.filings._fetch_ir_allowlist_body")
 def test_refetch_euro_filings_primary_bodies_hei_de_eng_20261006_01(mock_fetch, tmp_path: Path):
     """eng-20261006-01: euro primary pipeline bootstraps empty HEI.DE index from IR allowlist."""
     from value_investor.research.filings import refetch_euro_filings_primary_bodies
 
     mock_fetch.return_value = (
-        "Heidelberg Materials consolidated financial statements revenue operating margin "
-        "half year interim report " * 40
+        (
+            "Heidelberg Materials consolidated financial statements revenue operating margin "
+            "half year interim report " * 40
+        ),
+        "pdf",
     )
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir()
@@ -12411,11 +12414,19 @@ def test_ingest_filings_tsx60_gib_a_indexes_ir_allowlist_bodies(
     assert any(row.get("has_body") for row in index.get("filings") or [])
 
 
+_IR_ALLOWLIST_BODY_FIXTURE = "Issuer annual report revenue operating cash flow segment notes " * 40
+
+
+@patch(
+    "value_investor.research.filings.fetch_filing_body",
+    return_value=_IR_ALLOWLIST_BODY_FIXTURE,
+)
 @patch("value_investor.research.filings.fetch_filings_asx_news", return_value=[])
 @patch("value_investor.research.filings.fetch_filings_asx_direct", return_value=[])
 def test_ingest_filings_asx200_ebo_ax_indexes_ir_allowlist_bodies(
     _mock_asx_direct,
     _mock_asx_news,
+    _mock_filing_body,
     tmp_path: Path,
 ):
     """When Markit latest-five lacks results rows, EBO.AX still indexes IR allowlist filings."""
@@ -12434,11 +12445,16 @@ def test_ingest_filings_asx200_ebo_ax_indexes_ir_allowlist_bodies(
     assert (tmp_path / "filings" / "filings_index.json").exists()
 
 
+@patch(
+    "value_investor.research.filings.fetch_filing_body",
+    return_value=_IR_ALLOWLIST_BODY_FIXTURE,
+)
 @patch("value_investor.research.filings.fetch_filings_asx_news", return_value=[])
 @patch("value_investor.research.filings.fetch_filings_asx_direct", return_value=[])
 def test_ingest_filings_asx200_cda_ax_indexes_ir_allowlist_bodies(
     _mock_asx_direct,
     _mock_asx_news,
+    _mock_filing_body,
     tmp_path: Path,
 ):
     """When Markit latest-five lacks results rows, CDA.AX still indexes IR allowlist filings."""
@@ -12774,9 +12790,15 @@ def test_eng_20260919_04_refetch_ir_allowlist_fetches_fgp_fy2026_body(tmp_path, 
         json.dumps({"filings": [], "summary": {}}),
         encoding="utf-8",
     )
+
+    def _fake_ir_body(row, **_kwargs):
+        if str(row.get("url") or "") == fy2026_url:
+            return sample_body, "pdf"
+        return None, None
+
     monkeypatch.setattr(
-        "value_investor.research.filings.fetch_filing_body",
-        lambda url: sample_body if url == fy2026_url else None,
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        _fake_ir_body,
     )
     result = refetch_ir_allowlist_filing_bodies(
         filings_dir,
@@ -13041,9 +13063,15 @@ def test_eng_20260919_05_refetch_ir_allowlist_fetches_megp_h1_presentation_body(
         json.dumps({"filings": [], "summary": {}}),
         encoding="utf-8",
     )
+
+    def _fake_ir_body(row, **_kwargs):
+        if str(row.get("url") or "") == h1_url:
+            return sample_body, "pdf"
+        return None, None
+
     monkeypatch.setattr(
-        "value_investor.research.filings.fetch_filing_body",
-        lambda url: sample_body if url == h1_url else None,
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        _fake_ir_body,
     )
     result = refetch_ir_allowlist_filing_bodies(
         filings_dir,
