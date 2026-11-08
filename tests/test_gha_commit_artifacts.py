@@ -218,6 +218,7 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     assert "docs/data/strategy_book_closes.json" in email
     assert "docs/data/strategy_book_forward_status.json" in email
     assert "docs/data/strategy_book_us_rehearsal.json" in email
+    assert "docs/data/strategy_book_exit_lab.json" in email
     forward = Path(".github/workflows/strategy-book-forward.yml").read_text(encoding="utf-8")
     assert 'cron: "30 21 * * 1-5"' in forward
     assert "timeout-minutes: 90" in forward
@@ -227,6 +228,7 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     exclude = email.split("GHA_COMMIT_EXCLUDE:", 1)[1].split("run:", 1)[0]
     assert "docs/data/charts" not in exclude
     assert "docs/data/strategy_book_us_rehearsal.json" in exclude
+    assert "docs/data/strategy_book_exit_lab.json" in exclude
     assert "docs/data/paper_automation/markets/**/buy_tier_level/**" in epoch0
     assert "docs/data/library/equal_support_status.json" in epoch0
 
