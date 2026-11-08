@@ -14852,6 +14852,54 @@ def test_parked_source_hunter_mfc_to_tsx60_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_tsx60_ppl_to_builtins(tmp_path: Path):
+    """Regression: PPL.TO no_key_bodies — Pembina SEC FY2025 AIF + Q3 interim report HTML."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("PPL.TO", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("aifppcq42025.htm" in url for url in urls)
+    assert any("q32026interimreport.htm" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") >= 1
+    assert sum(1 for row in rows if row["period"] == "interim") >= 1
+    assert {row["period"] for row in rows} <= {"annual", "interim", "other"}
+    assert fetch_filings_ir_allowlist("PPL", path=allowlist_path) == []
+
+
+def test_ppl_to_sec_bodies_pass_ir_title_gate_via_issuer_alias():
+    """Pembina SEC slugs carry no issuer token; the PPL.TO alias must match the body."""
+    from value_investor.research.filings import (
+        _ESEF_ENTITY_SEARCH_ALIASES,
+        _ir_body_title_tokens_match,
+    )
+
+    assert "Pembina" in _ESEF_ENTITY_SEARCH_ALIASES["PPL.TO"]
+    row = {
+        "id": "x",
+        "url": "https://www.sec.gov/Archives/edgar/data/1546066/000154606626000014/aifppcq42025.htm",
+    }
+    body = "ANNUAL INFORMATION FORM Pembina Pipeline Corporation year ended December 31, 2025"
+    assert _ir_body_title_tokens_match(row, body, ticker="PPL.TO")
+    assert not _ir_body_title_tokens_match(row, "Unrelated issuer annual form", ticker="PPL.TO")
+
+
+def test_parked_source_hunter_ppl_to_tsx60_has_fetchable_ir():
+    """eng-20261108-02: PPL.TO has live-fetchable Pembina SEC statutory HTML."""
+    assert "PPL.TO" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("PPL.TO")
+    assert len(rows) == 2
+    urls = [row["url"] for row in rows]
+    assert all("sec.gov" in url for url in urls)
+    aif_url = next(url for url in urls if "aifppcq42025.htm" in url)
+    body = _live_fetch_filing_body(aif_url)
+    if not body:
+        pytest.skip("SEC.gov body fetch unavailable (rate-limit / network) — retry later")
+    assert len(body) >= 50000
+
+
 def test_parked_source_hunter_skip_tri_to_tsx60():
     """eng-20260914-01: TRI.TO leftover IWB is SEC 6-K cover HTML, not missing 40-F/interim."""
     assert "TRI.TO" in PARKED_SOURCE_HUNTER_SKIP
