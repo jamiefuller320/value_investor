@@ -1459,6 +1459,31 @@ def test_headline_relevant_to_issuer_filters_noise():
         "ME Group International plc",
         "MEGP.L",
     )
+    assert headline_relevant_to_issuer(
+        "Harbour Energy trading update", "Harbour Energy plc", "HBR.L"
+    )
+    assert not headline_relevant_to_issuer(
+        "Form 38.5b (EPT/NON-RI) - DCC Energy plc Amend",
+        "Harbour Energy plc",
+        "HBR.L",
+    )
+
+
+def test_filter_misattributed_filings_drops_hbr_dcc_energy_ticker_rns_collateral():
+    """eng-20261107-04: HBR.L ticker_rns global feed must not keep DCC Energy EPT rows."""
+    row = {
+        "id": "e245e5e4ca8522a8",
+        "source": "ticker_rns_api",
+        "headline": "Form 38.5b (EPT/NON-RI) - DCC Energy plc Amend",
+        "has_body": True,
+    }
+    kept = filter_misattributed_filings(
+        [row],
+        company_name="Harbour Energy plc",
+        ticker="HBR.L",
+        regime="uk_rns",
+    )
+    assert kept == []
 
 
 def test_fetch_filings_ticker_api_drops_unrelated_global_feed(monkeypatch):

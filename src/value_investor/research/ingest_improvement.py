@@ -1463,9 +1463,10 @@ def _execute_ingest_improvement_pass(
     try:
         from value_investor.research.ingest import reconcile_committed_research_publish
 
+        # Index gaps from Sunday research (e.g. HBR.L / MKS.L) are often outside the
+        # ingest-improvement batch — reconcile every missing committed verdict.
         summary.research_publish_reconcile = reconcile_committed_research_publish(
             data_dir=Path("docs/data"),
-            tickers=completed_tickers or None,
         )
         summary.research_index_reconcile = (
             summary.research_publish_reconcile.get("index")
