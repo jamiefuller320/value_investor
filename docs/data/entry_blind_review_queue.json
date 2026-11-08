@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-08T02:32:38.062964+00:00",
+  "generated_at": "2026-11-08T07:47:54.888295+00:00",
   "stage": "entry_blind",
   "observe_only": true,
   "influences_live": false,
@@ -9,12 +9,12 @@
   "product_claim": "Blind entry critique for lab / interesting buys — PIT chart through buy day + buy decision reasons + L650 entry news polarity cites + L652 parallel timing lens summary; Accept/Comment; no post-fill path / no realized %; never fills or knobs",
   "learning_question": "Given only information available at / just after the buy, was this a sound entry under the intended entry lens / policy?",
   "entry_news_polarity_summary": {
-    "cards_with_usable_news": 0,
-    "no_usable_news": 12,
+    "cards_with_usable_news": 1,
+    "no_usable_news": 11,
     "label_counts": {
-      "improvement_path": 0,
+      "improvement_path": 1,
       "mixed_or_unclear": 0,
-      "no_usable_news": 12,
+      "no_usable_news": 11,
       "structural_negative": 0
     },
     "ops_doc": "docs/ops/entry-news-polarity.md"
@@ -85,10 +85,772 @@
   "reply_count": 0,
   "new_count": 12,
   "by_book": {
-    "N201": 12
+    "N201": 11,
+    "N206": 1
   },
   "sort_default": "interesting",
   "active": [
+    {
+      "review_id": "61f6315aceb1bd86403d",
+      "review_fingerprint": "61f6315aceb1bd86403d",
+      "family_id": "n201|HIK.L|2026-11-07",
+      "episode_key": "n201|HIK.L|2026-11-07",
+      "stage": "entry_blind",
+      "tag": "new",
+      "book_id": "n201",
+      "book_tag": "N201",
+      "model_id": "n201",
+      "registration_id": "strand-c-short-horizon-value-mom-v0",
+      "ticker": "HIK.L",
+      "name": null,
+      "entry_at": "2026-11-07T18:46:00.874090+00:00",
+      "opened_at": "2026-11-07T18:46:00.874090+00:00",
+      "days_since_entry": 0,
+      "charts": {
+        "pit": {
+          "start": "2026-05-11",
+          "end": "2026-11-07",
+          "days_before": 180,
+          "days_after": 0,
+          "blind_clip_at": "entry",
+          "forbidden_forward_path": true,
+          "asof": "2026-11-07"
+        }
+      },
+      "population": "sealed_just_bought",
+      "package": "M",
+      "influences_live": false,
+      "observe_only": true,
+      "outcome_fields_stripped": true,
+      "phase_clock": "entry_run_at",
+      "entry_detail": {
+        "earnings_yield": 0.07936507936507936,
+        "in_ey_top30_local": true,
+        "momentum_12_1": 0.04092483064554475,
+        "financial_health_pass": true,
+        "require_momentum": true
+      },
+      "buy_decision": {
+        "side": "buy",
+        "code": "filters_newly_clear",
+        "label": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+        "source": "episode.entry_detail",
+        "join_ok": true,
+        "structured": {
+          "earnings_yield": 0.07936507936507936,
+          "in_ey_top30_local": true,
+          "momentum_12_1": 0.04092483064554475,
+          "financial_health_pass": true,
+          "require_momentum": true
+        },
+        "influences_live": false
+      },
+      "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+      "decision_reasons_join_ok": false,
+      "framing": "[N201] HIK.L · bought 2026-11-07\nStage: entry_blind (blind entry critique)\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0\nChart: PIT clip through buy day only — no post-fill path\nOutcome fields stripped — influences_live=false",
+      "llm_opinion": "Blind entry critique for HIK.L: bought because Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Judge whether the entry was sound given only information at / just after the buy.",
+      "learning_points": [
+        "No post-fill path or realized % on this card — keep critique entry-lens only.",
+        "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M)."
+      ],
+      "buy_strengths": [
+        "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — ground comments on that trail.",
+        "Blind stage: critique entry quality from PIT chart + reasons only (no hindsight from the post-fill path)."
+      ],
+      "buy_weaknesses": [
+        "Owner Comment can add entry-lens patterns (range location, thesis quality) without waiting for exit autopsy."
+      ],
+      "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
+      "lens_side": "entry",
+      "opinion_source": "deterministic_entry_blind_v0",
+      "chart_annotations": {
+        "schema_version": 1,
+        "pit": "PIT through buy day — forward bars forbidden on entry_blind. Pattern marks: entry quality / range location / MA context.",
+        "marks": [
+          {
+            "id": "entry_quality_band",
+            "pattern": "entry_quality",
+            "type": "entry_band",
+            "charts": [
+              "pit",
+              "episode"
+            ],
+            "label": "Entry quality — judge vs PIT range / thesis",
+            "tone": "info",
+            "cite": "lens=entry_blind",
+            "influences_live": false,
+            "t0": "2026-10-31",
+            "t1": "2026-11-07",
+            "anchor": "entry_price"
+          },
+          {
+            "id": "entry_range_ref",
+            "pattern": "support_context",
+            "type": "range_ref",
+            "charts": [
+              "pit",
+              "episode"
+            ],
+            "label": "Entry vs visible range (client %ile)",
+            "tone": "info",
+            "cite": "support_context",
+            "influences_live": false,
+            "t1": "2026-11-07",
+            "ref": "entry"
+          },
+          {
+            "id": "entry_ma_context",
+            "pattern": "ma_context",
+            "type": "ma_context",
+            "charts": [
+              "pit",
+              "episode"
+            ],
+            "label": "Entry vs SMA50/200",
+            "tone": "info",
+            "cite": "ma_context",
+            "influences_live": false,
+            "t0": "2026-11-07",
+            "t1": "2026-11-07",
+            "ref": "entry"
+          }
+        ]
+      },
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "Blind entry critique for HIK.L: bought because Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Judge whether the entry was sound given only information at / just after the buy.",
+          "learning_points": [
+            "No post-fill path or realized % on this card — keep critique entry-lens only.",
+            "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M)."
+          ],
+          "chart_annotations": {
+            "schema_version": 1,
+            "pit": "PIT through buy day — forward bars forbidden on entry_blind. Pattern marks: entry quality / range location / MA context.",
+            "marks": [
+              {
+                "id": "entry_quality_band",
+                "pattern": "entry_quality",
+                "type": "entry_band",
+                "charts": [
+                  "pit",
+                  "episode"
+                ],
+                "label": "Entry quality — judge vs PIT range / thesis",
+                "tone": "info",
+                "cite": "lens=entry_blind",
+                "influences_live": false,
+                "t0": "2026-10-31",
+                "t1": "2026-11-07",
+                "anchor": "entry_price"
+              },
+              {
+                "id": "entry_range_ref",
+                "pattern": "support_context",
+                "type": "range_ref",
+                "charts": [
+                  "pit",
+                  "episode"
+                ],
+                "label": "Entry vs visible range (client %ile)",
+                "tone": "info",
+                "cite": "support_context",
+                "influences_live": false,
+                "t1": "2026-11-07",
+                "ref": "entry"
+              },
+              {
+                "id": "entry_ma_context",
+                "pattern": "ma_context",
+                "type": "ma_context",
+                "charts": [
+                  "pit",
+                  "episode"
+                ],
+                "label": "Entry vs SMA50/200",
+                "tone": "info",
+                "cite": "ma_context",
+                "influences_live": false,
+                "t0": "2026-11-07",
+                "t1": "2026-11-07",
+                "ref": "entry"
+              }
+            ]
+          },
+          "buy_strengths": [
+            "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — ground comments on that trail.",
+            "Blind stage: critique entry quality from PIT chart + reasons only (no hindsight from the post-fill path)."
+          ],
+          "buy_weaknesses": [
+            "Owner Comment can add entry-lens patterns (range location, thesis quality) without waiting for exit autopsy."
+          ],
+          "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
+          "lens_side": "entry",
+          "source": "deterministic_entry_blind_v0",
+          "at": "2026-11-08T07:47:54.782793+00:00",
+          "influences_live": false
+        }
+      ],
+      "entry_news_polarity": {
+        "label": "improvement_path",
+        "asof": "2026-11-07",
+        "window_start": "2026-08-09",
+        "join_ok": true,
+        "influences_live": false,
+        "source": "lexicon_journal_v0",
+        "cites": [
+          {
+            "kind": "headline",
+            "ticker": "HIK.L",
+            "published_at": "2026-11-05T12:14:30Z",
+            "article_id": "fbbba799-bcb6-3123-8f93-2f2ba7f4be1f",
+            "event_id": null,
+            "title": "Hikma Pharmaceuticals Raises Profit Floor as Branded Growth Offsets Injectables Slowdown",
+            "event_type": null,
+            "phrase": null,
+            "lexicon_status": null,
+            "valence_hint": null,
+            "age_days": 2,
+            "freshness": "recent"
+          },
+          {
+            "kind": "headline",
+            "ticker": "HIK.L",
+            "published_at": "2026-11-05T06:44:00+00:00",
+            "article_id": "cf981cfbfa35312c",
+            "event_id": null,
+            "title": "Generic drug stocks: Can Hikma (LSE:HIK) stay in the pharma spotlight? - Kalkine Media",
+            "event_type": null,
+            "phrase": null,
+            "lexicon_status": null,
+            "valence_hint": null,
+            "age_days": 2,
+            "freshness": "recent"
+          },
+          {
+            "kind": "headline",
+            "ticker": "HIK.L",
+            "published_at": "2026-11-04T00:03:00+00:00",
+            "article_id": "7fbc3948cb3e0b04",
+            "event_id": null,
+            "title": "What Could Shape Hikma Pharmaceuticals (LSE:HIK) Next? - Kalkine Media",
+            "event_type": null,
+            "phrase": null,
+            "lexicon_status": null,
+            "valence_hint": null,
+            "age_days": 3,
+            "freshness": "recent"
+          },
+          {
+            "kind": "headline",
+            "ticker": "HIK.L",
+            "published_at": "2026-11-03T13:50:00+00:00",
+            "article_id": "65056cd9d983e3ff",
+            "event_id": null,
+            "title": "Is Hikma (LSE:HIK) Set To Regain Momentum As Its New Finance Chief Prepares To Take The Reins? - Kalkine Media",
+            "event_type": null,
+            "phrase": null,
+            "lexicon_status": null,
+            "valence_hint": null,
+            "age_days": 4,
+            "freshness": "recent"
+          },
+          {
+            "kind": "headline",
+            "ticker": "HIK.L",
+            "published_at": "2026-11-02T07:59:00+00:00",
+            "article_id": "27933ce14c2752db",
+            "event_id": null,
+            "title": "FTSE 100 Hikma (LSE:HIK) Draws a Bigger Wellington Stake - Kalkine Media",
+            "event_type": null,
+            "phrase": null,
+            "lexicon_status": null,
+            "valence_hint": null,
+            "age_days": 5,
+            "freshness": "recent"
+          }
+        ],
+        "counts": {
+          "articles_pit": 99,
+          "journal_hits": 0,
+          "lexicon_hits": 2,
+          "structural_hints": 0,
+          "improvement_hints": 1
+        }
+      },
+      "parallel_timing_lenses": {
+        "present": true,
+        "influences_live": false,
+        "observe_only": true,
+        "ops_doc": "docs/ops/parallel-timing-lenses.md",
+        "candidate_id": "ptl_9f041f8b2d9edd5d",
+        "favourite_lens_id": "buy_news_improve_path",
+        "favourite_entry_at": "2026-08-02",
+        "lens_statuses": {
+          "buy_support_bounce": "looking",
+          "buy_news_improve_path": "entered",
+          "buy_cheap_trend_confirm": "looking"
+        },
+        "concurrence_count": 1,
+        "concurrence_lens_ids": [
+          "buy_news_improve_path"
+        ],
+        "looking_n": 2,
+        "entered_n": 1,
+        "abandoned_n": 0
+      }
+    },
+    {
+      "review_id": "02efb51f0ac271dc2ae1",
+      "review_fingerprint": "02efb51f0ac271dc2ae1",
+      "family_id": "n201|CAM.L|2026-11-07",
+      "episode_key": "n201|CAM.L|2026-11-07",
+      "stage": "entry_blind",
+      "tag": "new",
+      "book_id": "n201",
+      "book_tag": "N201",
+      "model_id": "n201",
+      "registration_id": "strand-c-short-horizon-value-mom-v0",
+      "ticker": "CAM.L",
+      "name": null,
+      "entry_at": "2026-11-07T11:56:28+00:00",
+      "opened_at": "2026-11-07T11:56:28+00:00",
+      "days_since_entry": 0,
+      "charts": {
+        "pit": {
+          "start": "2026-05-11",
+          "end": "2026-11-07",
+          "days_before": 180,
+          "days_after": 0,
+          "blind_clip_at": "entry",
+          "forbidden_forward_path": true,
+          "asof": "2026-11-07"
+        }
+      },
+      "population": "sealed_just_bought",
+      "package": "M",
+      "influences_live": false,
+      "observe_only": true,
+      "outcome_fields_stripped": true,
+      "phase_clock": "entry_run_at",
+      "entry_detail": {
+        "earnings_yield": 0.1305555635339511,
+        "in_ey_top30_local": true,
+        "momentum_12_1": 0.031044304391529165,
+        "financial_health_pass": true,
+        "require_momentum": true
+      },
+      "buy_decision": {
+        "side": "buy",
+        "code": "filters_newly_clear",
+        "label": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+        "source": "episode.entry_detail",
+        "join_ok": true,
+        "structured": {
+          "earnings_yield": 0.1305555635339511,
+          "in_ey_top30_local": true,
+          "momentum_12_1": 0.031044304391529165,
+          "financial_health_pass": true,
+          "require_momentum": true
+        },
+        "influences_live": false
+      },
+      "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
+      "decision_reasons_join_ok": false,
+      "framing": "[N201] CAM.L · bought 2026-11-07\nStage: entry_blind (blind entry critique)\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0\nChart: PIT clip through buy day only — no post-fill path\nOutcome fields stripped — influences_live=false",
+      "llm_opinion": "Blind entry critique for CAM.L: bought because Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Judge whether the entry was sound given only information at / just after the buy.",
+      "learning_points": [
+        "No post-fill path or realized % on this card — keep critique entry-lens only.",
+        "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M)."
+      ],
+      "buy_strengths": [
+        "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — ground comments on that trail.",
+        "Blind stage: critique entry quality from PIT chart + reasons only (no hindsight from the post-fill path)."
+      ],
+      "buy_weaknesses": [
+        "Owner Comment can add entry-lens patterns (range location, thesis quality) without waiting for exit autopsy."
+      ],
+      "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
+      "lens_side": "entry",
+      "opinion_source": "deterministic_entry_blind_v0",
+      "chart_annotations": {
+        "schema_version": 1,
+        "pit": "PIT through buy day — forward bars forbidden on entry_blind. Pattern marks: entry quality / range location / MA context.",
+        "marks": [
+          {
+            "id": "entry_quality_band",
+            "pattern": "entry_quality",
+            "type": "entry_band",
+            "charts": [
+              "pit",
+              "episode"
+            ],
+            "label": "Entry quality — judge vs PIT range / thesis",
+            "tone": "info",
+            "cite": "lens=entry_blind",
+            "influences_live": false,
+            "t0": "2026-10-31",
+            "t1": "2026-11-07",
+            "anchor": "entry_price"
+          },
+          {
+            "id": "entry_range_ref",
+            "pattern": "support_context",
+            "type": "range_ref",
+            "charts": [
+              "pit",
+              "episode"
+            ],
+            "label": "Entry vs visible range (client %ile)",
+            "tone": "info",
+            "cite": "support_context",
+            "influences_live": false,
+            "t1": "2026-11-07",
+            "ref": "entry"
+          },
+          {
+            "id": "entry_ma_context",
+            "pattern": "ma_context",
+            "type": "ma_context",
+            "charts": [
+              "pit",
+              "episode"
+            ],
+            "label": "Entry vs SMA50/200",
+            "tone": "info",
+            "cite": "ma_context",
+            "influences_live": false,
+            "t0": "2026-11-07",
+            "t1": "2026-11-07",
+            "ref": "entry"
+          }
+        ]
+      },
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "Blind entry critique for CAM.L: bought because Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Judge whether the entry was sound given only information at / just after the buy.",
+          "learning_points": [
+            "No post-fill path or realized % on this card — keep critique entry-lens only.",
+            "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M)."
+          ],
+          "chart_annotations": {
+            "schema_version": 1,
+            "pit": "PIT through buy day — forward bars forbidden on entry_blind. Pattern marks: entry quality / range location / MA context.",
+            "marks": [
+              {
+                "id": "entry_quality_band",
+                "pattern": "entry_quality",
+                "type": "entry_band",
+                "charts": [
+                  "pit",
+                  "episode"
+                ],
+                "label": "Entry quality — judge vs PIT range / thesis",
+                "tone": "info",
+                "cite": "lens=entry_blind",
+                "influences_live": false,
+                "t0": "2026-10-31",
+                "t1": "2026-11-07",
+                "anchor": "entry_price"
+              },
+              {
+                "id": "entry_range_ref",
+                "pattern": "support_context",
+                "type": "range_ref",
+                "charts": [
+                  "pit",
+                  "episode"
+                ],
+                "label": "Entry vs visible range (client %ile)",
+                "tone": "info",
+                "cite": "support_context",
+                "influences_live": false,
+                "t1": "2026-11-07",
+                "ref": "entry"
+              },
+              {
+                "id": "entry_ma_context",
+                "pattern": "ma_context",
+                "type": "ma_context",
+                "charts": [
+                  "pit",
+                  "episode"
+                ],
+                "label": "Entry vs SMA50/200",
+                "tone": "info",
+                "cite": "ma_context",
+                "influences_live": false,
+                "t0": "2026-11-07",
+                "t1": "2026-11-07",
+                "ref": "entry"
+              }
+            ]
+          },
+          "buy_strengths": [
+            "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — ground comments on that trail.",
+            "Blind stage: critique entry quality from PIT chart + reasons only (no hindsight from the post-fill path)."
+          ],
+          "buy_weaknesses": [
+            "Owner Comment can add entry-lens patterns (range location, thesis quality) without waiting for exit autopsy."
+          ],
+          "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
+          "lens_side": "entry",
+          "source": "deterministic_entry_blind_v0",
+          "at": "2026-11-08T07:47:54.782356+00:00",
+          "influences_live": false
+        }
+      ],
+      "entry_news_polarity": {
+        "label": "no_usable_news",
+        "asof": "2026-11-07",
+        "window_start": "2026-08-09",
+        "join_ok": false,
+        "influences_live": false,
+        "source": "lexicon_journal_v0",
+        "cites": [],
+        "counts": {
+          "articles_pit": 0,
+          "journal_hits": 0,
+          "lexicon_hits": 0,
+          "structural_hints": 0,
+          "improvement_hints": 0
+        }
+      },
+      "parallel_timing_lenses": {
+        "present": false,
+        "influences_live": false,
+        "observe_only": true,
+        "ops_doc": "docs/ops/parallel-timing-lenses.md"
+      }
+    },
+    {
+      "review_id": "8d44c56f964bac01d7e5",
+      "review_fingerprint": "8d44c56f964bac01d7e5",
+      "family_id": "n206|INTU|2026-11-07",
+      "episode_key": "n206|INTU|2026-11-07",
+      "stage": "entry_blind",
+      "tag": "new",
+      "book_id": "n206",
+      "book_tag": "N206",
+      "model_id": "n206",
+      "registration_id": "strand-d-plain-ey-identity-v0",
+      "ticker": "INTU",
+      "name": null,
+      "entry_at": "2026-11-07T11:56:28+00:00",
+      "opened_at": "2026-11-07T11:56:28+00:00",
+      "days_since_entry": 0,
+      "charts": {
+        "pit": {
+          "start": "2026-05-11",
+          "end": "2026-11-07",
+          "days_before": 180,
+          "days_after": 0,
+          "blind_clip_at": "entry",
+          "forbidden_forward_path": true,
+          "asof": "2026-11-07"
+        }
+      },
+      "population": "sealed_just_bought",
+      "package": "M",
+      "influences_live": false,
+      "observe_only": true,
+      "outcome_fields_stripped": true,
+      "phase_clock": "entry_run_at",
+      "entry_detail": {
+        "earnings_yield": 0.048199119431007464,
+        "in_ey_top30_local": true,
+        "momentum_12_1": null,
+        "financial_health_pass": true,
+        "require_momentum": false
+      },
+      "buy_decision": {
+        "side": "buy",
+        "code": "filters_newly_clear",
+        "label": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+        "source": "episode.entry_detail",
+        "join_ok": true,
+        "structured": {
+          "earnings_yield": 0.048199119431007464,
+          "in_ey_top30_local": true,
+          "momentum_12_1": null,
+          "financial_health_pass": true,
+          "require_momentum": false
+        },
+        "influences_live": false
+      },
+      "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, no mom gate",
+      "decision_reasons_join_ok": false,
+      "framing": "[N206] INTU · bought 2026-11-07\nStage: entry_blind (blind entry critique)\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate\nChart: PIT clip through buy day only — no post-fill path\nOutcome fields stripped — influences_live=false",
+      "llm_opinion": "Blind entry critique for INTU: bought because Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Judge whether the entry was sound given only information at / just after the buy.",
+      "learning_points": [
+        "No post-fill path or realized % on this card — keep critique entry-lens only.",
+        "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M)."
+      ],
+      "buy_strengths": [
+        "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — ground comments on that trail.",
+        "Blind stage: critique entry quality from PIT chart + reasons only (no hindsight from the post-fill path)."
+      ],
+      "buy_weaknesses": [
+        "Owner Comment can add entry-lens patterns (range location, thesis quality) without waiting for exit autopsy."
+      ],
+      "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
+      "lens_side": "entry",
+      "opinion_source": "deterministic_entry_blind_v0",
+      "chart_annotations": {
+        "schema_version": 1,
+        "pit": "PIT through buy day — forward bars forbidden on entry_blind. Pattern marks: entry quality / range location / MA context.",
+        "marks": [
+          {
+            "id": "entry_quality_band",
+            "pattern": "entry_quality",
+            "type": "entry_band",
+            "charts": [
+              "pit",
+              "episode"
+            ],
+            "label": "Entry quality — judge vs PIT range / thesis",
+            "tone": "info",
+            "cite": "lens=entry_blind",
+            "influences_live": false,
+            "t0": "2026-10-31",
+            "t1": "2026-11-07",
+            "anchor": "entry_price"
+          },
+          {
+            "id": "entry_range_ref",
+            "pattern": "support_context",
+            "type": "range_ref",
+            "charts": [
+              "pit",
+              "episode"
+            ],
+            "label": "Entry vs visible range (client %ile)",
+            "tone": "info",
+            "cite": "support_context",
+            "influences_live": false,
+            "t1": "2026-11-07",
+            "ref": "entry"
+          },
+          {
+            "id": "entry_ma_context",
+            "pattern": "ma_context",
+            "type": "ma_context",
+            "charts": [
+              "pit",
+              "episode"
+            ],
+            "label": "Entry vs SMA50/200",
+            "tone": "info",
+            "cite": "ma_context",
+            "influences_live": false,
+            "t0": "2026-11-07",
+            "t1": "2026-11-07",
+            "ref": "entry"
+          }
+        ]
+      },
+      "dialogue": [
+        {
+          "role": "factory",
+          "kind": "initial_opinion",
+          "text": "Blind entry critique for INTU: bought because Filters newly cleared (entry): EY top 30%, FH pass, no mom gate. Judge whether the entry was sound given only information at / just after the buy.",
+          "learning_points": [
+            "No post-fill path or realized % on this card — keep critique entry-lens only.",
+            "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M)."
+          ],
+          "chart_annotations": {
+            "schema_version": 1,
+            "pit": "PIT through buy day — forward bars forbidden on entry_blind. Pattern marks: entry quality / range location / MA context.",
+            "marks": [
+              {
+                "id": "entry_quality_band",
+                "pattern": "entry_quality",
+                "type": "entry_band",
+                "charts": [
+                  "pit",
+                  "episode"
+                ],
+                "label": "Entry quality — judge vs PIT range / thesis",
+                "tone": "info",
+                "cite": "lens=entry_blind",
+                "influences_live": false,
+                "t0": "2026-10-31",
+                "t1": "2026-11-07",
+                "anchor": "entry_price"
+              },
+              {
+                "id": "entry_range_ref",
+                "pattern": "support_context",
+                "type": "range_ref",
+                "charts": [
+                  "pit",
+                  "episode"
+                ],
+                "label": "Entry vs visible range (client %ile)",
+                "tone": "info",
+                "cite": "support_context",
+                "influences_live": false,
+                "t1": "2026-11-07",
+                "ref": "entry"
+              },
+              {
+                "id": "entry_ma_context",
+                "pattern": "ma_context",
+                "type": "ma_context",
+                "charts": [
+                  "pit",
+                  "episode"
+                ],
+                "label": "Entry vs SMA50/200",
+                "tone": "info",
+                "cite": "ma_context",
+                "influences_live": false,
+                "t0": "2026-11-07",
+                "t1": "2026-11-07",
+                "ref": "entry"
+              }
+            ]
+          },
+          "buy_strengths": [
+            "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, no mom gate — ground comments on that trail.",
+            "Blind stage: critique entry quality from PIT chart + reasons only (no hindsight from the post-fill path)."
+          ],
+          "buy_weaknesses": [
+            "Owner Comment can add entry-lens patterns (range location, thesis quality) without waiting for exit autopsy."
+          ],
+          "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
+          "lens_side": "entry",
+          "source": "deterministic_entry_blind_v0",
+          "at": "2026-11-08T07:47:54.784358+00:00",
+          "influences_live": false
+        }
+      ],
+      "entry_news_polarity": {
+        "label": "no_usable_news",
+        "asof": "2026-11-07",
+        "window_start": "2026-08-09",
+        "join_ok": false,
+        "influences_live": false,
+        "source": "lexicon_journal_v0",
+        "cites": [],
+        "counts": {
+          "articles_pit": 0,
+          "journal_hits": 0,
+          "lexicon_hits": 0,
+          "structural_hints": 0,
+          "improvement_hints": 0
+        }
+      },
+      "parallel_timing_lenses": {
+        "present": false,
+        "influences_live": false,
+        "observe_only": true,
+        "ops_doc": "docs/ops/parallel-timing-lenses.md"
+      }
+    },
     {
       "review_id": "dc012242de77f71e050d",
       "review_fingerprint": "dc012242de77f71e050d",
@@ -125,7 +887,7 @@
       "entry_detail": {
         "earnings_yield": 0.11121763288838867,
         "in_ey_top30_local": true,
-        "momentum_12_1": 0.2141754083536893,
+        "momentum_12_1": 0.21417533565836933,
         "financial_health_pass": true,
         "require_momentum": true
       },
@@ -138,7 +900,7 @@
         "structured": {
           "earnings_yield": 0.11121763288838867,
           "in_ey_top30_local": true,
-          "momentum_12_1": 0.2141754083536893,
+          "momentum_12_1": 0.21417533565836933,
           "financial_health_pass": true,
           "require_momentum": true
         },
@@ -287,7 +1049,7 @@
           "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
           "lens_side": "entry",
           "source": "deterministic_entry_blind_v0",
-          "at": "2026-11-08T02:32:38.009251+00:00",
+          "at": "2026-11-08T07:47:54.782204+00:00",
           "influences_live": false
         }
       ],
@@ -350,7 +1112,7 @@
       "entry_detail": {
         "earnings_yield": 0.07265502457083949,
         "in_ey_top30_local": true,
-        "momentum_12_1": 0.49174860516675456,
+        "momentum_12_1": 0.4917487084254766,
         "financial_health_pass": true,
         "require_momentum": true
       },
@@ -363,7 +1125,7 @@
         "structured": {
           "earnings_yield": 0.07265502457083949,
           "in_ey_top30_local": true,
-          "momentum_12_1": 0.49174860516675456,
+          "momentum_12_1": 0.4917487084254766,
           "financial_health_pass": true,
           "require_momentum": true
         },
@@ -512,7 +1274,7 @@
           "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
           "lens_side": "entry",
           "source": "deterministic_entry_blind_v0",
-          "at": "2026-11-08T02:32:38.009272+00:00",
+          "at": "2026-11-08T07:47:54.782244+00:00",
           "influences_live": false
         }
       ],
@@ -575,7 +1337,7 @@
       "entry_detail": {
         "earnings_yield": 0.23636361573553896,
         "in_ey_top30_local": true,
-        "momentum_12_1": 0.05107987569872896,
+        "momentum_12_1": 0.051079807725202375,
         "financial_health_pass": true,
         "require_momentum": true
       },
@@ -588,7 +1350,7 @@
         "structured": {
           "earnings_yield": 0.23636361573553896,
           "in_ey_top30_local": true,
-          "momentum_12_1": 0.05107987569872896,
+          "momentum_12_1": 0.051079807725202375,
           "financial_health_pass": true,
           "require_momentum": true
         },
@@ -737,7 +1499,7 @@
           "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
           "lens_side": "entry",
           "source": "deterministic_entry_blind_v0",
-          "at": "2026-11-08T02:32:38.009365+00:00",
+          "at": "2026-11-08T07:47:54.782481+00:00",
           "influences_live": false
         }
       ],
@@ -962,7 +1724,7 @@
           "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
           "lens_side": "entry",
           "source": "deterministic_entry_blind_v0",
-          "at": "2026-11-08T02:32:38.009383+00:00",
+          "at": "2026-11-08T07:47:54.782519+00:00",
           "influences_live": false
         }
       ],
@@ -1187,7 +1949,7 @@
           "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
           "lens_side": "entry",
           "source": "deterministic_entry_blind_v0",
-          "at": "2026-11-08T02:32:38.009416+00:00",
+          "at": "2026-11-08T07:47:54.782592+00:00",
           "influences_live": false
         }
       ],
@@ -1250,7 +2012,7 @@
       "entry_detail": {
         "earnings_yield": 0.05810320686705533,
         "in_ey_top30_local": true,
-        "momentum_12_1": 0.2632495759987852,
+        "momentum_12_1": 0.26324945780618747,
         "financial_health_pass": true,
         "require_momentum": true
       },
@@ -1263,7 +2025,7 @@
         "structured": {
           "earnings_yield": 0.05810320686705533,
           "in_ey_top30_local": true,
-          "momentum_12_1": 0.2632495759987852,
+          "momentum_12_1": 0.26324945780618747,
           "financial_health_pass": true,
           "require_momentum": true
         },
@@ -1412,7 +2174,7 @@
           "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
           "lens_side": "entry",
           "source": "deterministic_entry_blind_v0",
-          "at": "2026-11-08T02:32:38.009433+00:00",
+          "at": "2026-11-08T07:47:54.782626+00:00",
           "influences_live": false
         }
       ],
@@ -1475,7 +2237,7 @@
       "entry_detail": {
         "earnings_yield": 0.11962986042664554,
         "in_ey_top30_local": true,
-        "momentum_12_1": 0.014875573903137873,
+        "momentum_12_1": 0.014875457934057534,
         "financial_health_pass": true,
         "require_momentum": true
       },
@@ -1488,7 +2250,7 @@
         "structured": {
           "earnings_yield": 0.11962986042664554,
           "in_ey_top30_local": true,
-          "momentum_12_1": 0.014875573903137873,
+          "momentum_12_1": 0.014875457934057534,
           "financial_health_pass": true,
           "require_momentum": true
         },
@@ -1637,7 +2399,7 @@
           "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
           "lens_side": "entry",
           "source": "deterministic_entry_blind_v0",
-          "at": "2026-11-08T02:32:38.009559+00:00",
+          "at": "2026-11-08T07:47:54.782929+00:00",
           "influences_live": false
         }
       ],
@@ -1862,7 +2624,7 @@
           "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
           "lens_side": "entry",
           "source": "deterministic_entry_blind_v0",
-          "at": "2026-11-08T02:32:38.009590+00:00",
+          "at": "2026-11-08T07:47:54.782997+00:00",
           "influences_live": false
         }
       ],
@@ -1925,7 +2687,7 @@
       "entry_detail": {
         "earnings_yield": 0.08102073158479792,
         "in_ey_top30_local": true,
-        "momentum_12_1": 0.0669742286301529,
+        "momentum_12_1": 0.06697413267300267,
         "financial_health_pass": true,
         "require_momentum": true
       },
@@ -1938,7 +2700,7 @@
         "structured": {
           "earnings_yield": 0.08102073158479792,
           "in_ey_top30_local": true,
-          "momentum_12_1": 0.0669742286301529,
+          "momentum_12_1": 0.06697413267300267,
           "financial_health_pass": true,
           "require_momentum": true
         },
@@ -2087,682 +2849,7 @@
           "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
           "lens_side": "entry",
           "source": "deterministic_entry_blind_v0",
-          "at": "2026-11-08T02:32:38.010645+00:00",
-          "influences_live": false
-        }
-      ],
-      "entry_news_polarity": {
-        "label": "no_usable_news",
-        "asof": "2026-11-06",
-        "window_start": "2026-08-08",
-        "join_ok": false,
-        "influences_live": false,
-        "source": "lexicon_journal_v0",
-        "cites": [],
-        "counts": {
-          "articles_pit": 0,
-          "journal_hits": 0,
-          "lexicon_hits": 0,
-          "structural_hints": 0,
-          "improvement_hints": 0
-        }
-      },
-      "parallel_timing_lenses": {
-        "present": false,
-        "influences_live": false,
-        "observe_only": true,
-        "ops_doc": "docs/ops/parallel-timing-lenses.md"
-      }
-    },
-    {
-      "review_id": "1124654edfd317688872",
-      "review_fingerprint": "1124654edfd317688872",
-      "family_id": "n201|SGM.AX|2026-11-06",
-      "episode_key": "n201|SGM.AX|2026-11-06",
-      "stage": "entry_blind",
-      "tag": "new",
-      "book_id": "n201",
-      "book_tag": "N201",
-      "model_id": "n201",
-      "registration_id": "strand-c-short-horizon-value-mom-v0",
-      "ticker": "SGM.AX",
-      "name": null,
-      "entry_at": "2026-11-06T06:53:10+00:00",
-      "opened_at": "2026-11-06T06:53:10+00:00",
-      "days_since_entry": 1,
-      "charts": {
-        "pit": {
-          "start": "2026-05-10",
-          "end": "2026-11-06",
-          "days_before": 180,
-          "days_after": 0,
-          "blind_clip_at": "entry",
-          "forbidden_forward_path": true,
-          "asof": "2026-11-06"
-        }
-      },
-      "population": "sealed_just_bought",
-      "package": "M",
-      "influences_live": false,
-      "observe_only": true,
-      "outcome_fields_stripped": true,
-      "phase_clock": "entry_run_at",
-      "entry_detail": {
-        "earnings_yield": 0.06361323559880634,
-        "in_ey_top30_local": true,
-        "momentum_12_1": 0.5448477407791414,
-        "financial_health_pass": true,
-        "require_momentum": true
-      },
-      "buy_decision": {
-        "side": "buy",
-        "code": "filters_newly_clear",
-        "label": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
-        "source": "episode.entry_detail",
-        "join_ok": true,
-        "structured": {
-          "earnings_yield": 0.06361323559880634,
-          "in_ey_top30_local": true,
-          "momentum_12_1": 0.5448477407791414,
-          "financial_health_pass": true,
-          "require_momentum": true
-        },
-        "influences_live": false
-      },
-      "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
-      "decision_reasons_join_ok": false,
-      "framing": "[N201] SGM.AX · bought 2026-11-06\nStage: entry_blind (blind entry critique)\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0\nChart: PIT clip through buy day only — no post-fill path\nOutcome fields stripped — influences_live=false",
-      "llm_opinion": "Blind entry critique for SGM.AX: bought because Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Judge whether the entry was sound given only information at / just after the buy.",
-      "learning_points": [
-        "No post-fill path or realized % on this card — keep critique entry-lens only.",
-        "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M)."
-      ],
-      "buy_strengths": [
-        "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — ground comments on that trail.",
-        "Blind stage: critique entry quality from PIT chart + reasons only (no hindsight from the post-fill path)."
-      ],
-      "buy_weaknesses": [
-        "Owner Comment can add entry-lens patterns (range location, thesis quality) without waiting for exit autopsy."
-      ],
-      "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
-      "lens_side": "entry",
-      "opinion_source": "deterministic_entry_blind_v0",
-      "chart_annotations": {
-        "schema_version": 1,
-        "pit": "PIT through buy day — forward bars forbidden on entry_blind. Pattern marks: entry quality / range location / MA context.",
-        "marks": [
-          {
-            "id": "entry_quality_band",
-            "pattern": "entry_quality",
-            "type": "entry_band",
-            "charts": [
-              "pit",
-              "episode"
-            ],
-            "label": "Entry quality — judge vs PIT range / thesis",
-            "tone": "info",
-            "cite": "lens=entry_blind",
-            "influences_live": false,
-            "t0": "2026-10-30",
-            "t1": "2026-11-06",
-            "anchor": "entry_price"
-          },
-          {
-            "id": "entry_range_ref",
-            "pattern": "support_context",
-            "type": "range_ref",
-            "charts": [
-              "pit",
-              "episode"
-            ],
-            "label": "Entry vs visible range (client %ile)",
-            "tone": "info",
-            "cite": "support_context",
-            "influences_live": false,
-            "t1": "2026-11-06",
-            "ref": "entry"
-          },
-          {
-            "id": "entry_ma_context",
-            "pattern": "ma_context",
-            "type": "ma_context",
-            "charts": [
-              "pit",
-              "episode"
-            ],
-            "label": "Entry vs SMA50/200",
-            "tone": "info",
-            "cite": "ma_context",
-            "influences_live": false,
-            "t0": "2026-11-06",
-            "t1": "2026-11-06",
-            "ref": "entry"
-          }
-        ]
-      },
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "Blind entry critique for SGM.AX: bought because Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Judge whether the entry was sound given only information at / just after the buy.",
-          "learning_points": [
-            "No post-fill path or realized % on this card — keep critique entry-lens only.",
-            "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M)."
-          ],
-          "chart_annotations": {
-            "schema_version": 1,
-            "pit": "PIT through buy day — forward bars forbidden on entry_blind. Pattern marks: entry quality / range location / MA context.",
-            "marks": [
-              {
-                "id": "entry_quality_band",
-                "pattern": "entry_quality",
-                "type": "entry_band",
-                "charts": [
-                  "pit",
-                  "episode"
-                ],
-                "label": "Entry quality — judge vs PIT range / thesis",
-                "tone": "info",
-                "cite": "lens=entry_blind",
-                "influences_live": false,
-                "t0": "2026-10-30",
-                "t1": "2026-11-06",
-                "anchor": "entry_price"
-              },
-              {
-                "id": "entry_range_ref",
-                "pattern": "support_context",
-                "type": "range_ref",
-                "charts": [
-                  "pit",
-                  "episode"
-                ],
-                "label": "Entry vs visible range (client %ile)",
-                "tone": "info",
-                "cite": "support_context",
-                "influences_live": false,
-                "t1": "2026-11-06",
-                "ref": "entry"
-              },
-              {
-                "id": "entry_ma_context",
-                "pattern": "ma_context",
-                "type": "ma_context",
-                "charts": [
-                  "pit",
-                  "episode"
-                ],
-                "label": "Entry vs SMA50/200",
-                "tone": "info",
-                "cite": "ma_context",
-                "influences_live": false,
-                "t0": "2026-11-06",
-                "t1": "2026-11-06",
-                "ref": "entry"
-              }
-            ]
-          },
-          "buy_strengths": [
-            "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — ground comments on that trail.",
-            "Blind stage: critique entry quality from PIT chart + reasons only (no hindsight from the post-fill path)."
-          ],
-          "buy_weaknesses": [
-            "Owner Comment can add entry-lens patterns (range location, thesis quality) without waiting for exit autopsy."
-          ],
-          "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
-          "lens_side": "entry",
-          "source": "deterministic_entry_blind_v0",
-          "at": "2026-11-08T02:32:38.010661+00:00",
-          "influences_live": false
-        }
-      ],
-      "entry_news_polarity": {
-        "label": "no_usable_news",
-        "asof": "2026-11-06",
-        "window_start": "2026-08-08",
-        "join_ok": false,
-        "influences_live": false,
-        "source": "lexicon_journal_v0",
-        "cites": [],
-        "counts": {
-          "articles_pit": 0,
-          "journal_hits": 0,
-          "lexicon_hits": 0,
-          "structural_hints": 0,
-          "improvement_hints": 0
-        }
-      },
-      "parallel_timing_lenses": {
-        "present": false,
-        "influences_live": false,
-        "observe_only": true,
-        "ops_doc": "docs/ops/parallel-timing-lenses.md"
-      }
-    },
-    {
-      "review_id": "5c7b342a4755895660df",
-      "review_fingerprint": "5c7b342a4755895660df",
-      "family_id": "n201|SMCI|2026-11-06",
-      "episode_key": "n201|SMCI|2026-11-06",
-      "stage": "entry_blind",
-      "tag": "new",
-      "book_id": "n201",
-      "book_tag": "N201",
-      "model_id": "n201",
-      "registration_id": "strand-c-short-horizon-value-mom-v0",
-      "ticker": "SMCI",
-      "name": null,
-      "entry_at": "2026-11-06T06:53:10+00:00",
-      "opened_at": "2026-11-06T06:53:10+00:00",
-      "days_since_entry": 1,
-      "charts": {
-        "pit": {
-          "start": "2026-05-10",
-          "end": "2026-11-06",
-          "days_before": 180,
-          "days_after": 0,
-          "blind_clip_at": "entry",
-          "forbidden_forward_path": true,
-          "asof": "2026-11-06"
-        }
-      },
-      "population": "sealed_just_bought",
-      "package": "M",
-      "influences_live": false,
-      "observe_only": true,
-      "outcome_fields_stripped": true,
-      "phase_clock": "entry_run_at",
-      "entry_detail": {
-        "earnings_yield": 0.17503692053764902,
-        "in_ey_top30_local": true,
-        "momentum_12_1": 0.07734256123161187,
-        "financial_health_pass": true,
-        "require_momentum": true
-      },
-      "buy_decision": {
-        "side": "buy",
-        "code": "filters_newly_clear",
-        "label": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
-        "source": "episode.entry_detail",
-        "join_ok": true,
-        "structured": {
-          "earnings_yield": 0.17503692053764902,
-          "in_ey_top30_local": true,
-          "momentum_12_1": 0.07734256123161187,
-          "financial_health_pass": true,
-          "require_momentum": true
-        },
-        "influences_live": false
-      },
-      "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
-      "decision_reasons_join_ok": false,
-      "framing": "[N201] SMCI · bought 2026-11-06\nStage: entry_blind (blind entry critique)\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0\nChart: PIT clip through buy day only — no post-fill path\nOutcome fields stripped — influences_live=false",
-      "llm_opinion": "Blind entry critique for SMCI: bought because Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Judge whether the entry was sound given only information at / just after the buy.",
-      "learning_points": [
-        "No post-fill path or realized % on this card — keep critique entry-lens only.",
-        "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M)."
-      ],
-      "buy_strengths": [
-        "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — ground comments on that trail.",
-        "Blind stage: critique entry quality from PIT chart + reasons only (no hindsight from the post-fill path)."
-      ],
-      "buy_weaknesses": [
-        "Owner Comment can add entry-lens patterns (range location, thesis quality) without waiting for exit autopsy."
-      ],
-      "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
-      "lens_side": "entry",
-      "opinion_source": "deterministic_entry_blind_v0",
-      "chart_annotations": {
-        "schema_version": 1,
-        "pit": "PIT through buy day — forward bars forbidden on entry_blind. Pattern marks: entry quality / range location / MA context.",
-        "marks": [
-          {
-            "id": "entry_quality_band",
-            "pattern": "entry_quality",
-            "type": "entry_band",
-            "charts": [
-              "pit",
-              "episode"
-            ],
-            "label": "Entry quality — judge vs PIT range / thesis",
-            "tone": "info",
-            "cite": "lens=entry_blind",
-            "influences_live": false,
-            "t0": "2026-10-30",
-            "t1": "2026-11-06",
-            "anchor": "entry_price"
-          },
-          {
-            "id": "entry_range_ref",
-            "pattern": "support_context",
-            "type": "range_ref",
-            "charts": [
-              "pit",
-              "episode"
-            ],
-            "label": "Entry vs visible range (client %ile)",
-            "tone": "info",
-            "cite": "support_context",
-            "influences_live": false,
-            "t1": "2026-11-06",
-            "ref": "entry"
-          },
-          {
-            "id": "entry_ma_context",
-            "pattern": "ma_context",
-            "type": "ma_context",
-            "charts": [
-              "pit",
-              "episode"
-            ],
-            "label": "Entry vs SMA50/200",
-            "tone": "info",
-            "cite": "ma_context",
-            "influences_live": false,
-            "t0": "2026-11-06",
-            "t1": "2026-11-06",
-            "ref": "entry"
-          }
-        ]
-      },
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "Blind entry critique for SMCI: bought because Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Judge whether the entry was sound given only information at / just after the buy.",
-          "learning_points": [
-            "No post-fill path or realized % on this card — keep critique entry-lens only.",
-            "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M)."
-          ],
-          "chart_annotations": {
-            "schema_version": 1,
-            "pit": "PIT through buy day — forward bars forbidden on entry_blind. Pattern marks: entry quality / range location / MA context.",
-            "marks": [
-              {
-                "id": "entry_quality_band",
-                "pattern": "entry_quality",
-                "type": "entry_band",
-                "charts": [
-                  "pit",
-                  "episode"
-                ],
-                "label": "Entry quality — judge vs PIT range / thesis",
-                "tone": "info",
-                "cite": "lens=entry_blind",
-                "influences_live": false,
-                "t0": "2026-10-30",
-                "t1": "2026-11-06",
-                "anchor": "entry_price"
-              },
-              {
-                "id": "entry_range_ref",
-                "pattern": "support_context",
-                "type": "range_ref",
-                "charts": [
-                  "pit",
-                  "episode"
-                ],
-                "label": "Entry vs visible range (client %ile)",
-                "tone": "info",
-                "cite": "support_context",
-                "influences_live": false,
-                "t1": "2026-11-06",
-                "ref": "entry"
-              },
-              {
-                "id": "entry_ma_context",
-                "pattern": "ma_context",
-                "type": "ma_context",
-                "charts": [
-                  "pit",
-                  "episode"
-                ],
-                "label": "Entry vs SMA50/200",
-                "tone": "info",
-                "cite": "ma_context",
-                "influences_live": false,
-                "t0": "2026-11-06",
-                "t1": "2026-11-06",
-                "ref": "entry"
-              }
-            ]
-          },
-          "buy_strengths": [
-            "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — ground comments on that trail.",
-            "Blind stage: critique entry quality from PIT chart + reasons only (no hindsight from the post-fill path)."
-          ],
-          "buy_weaknesses": [
-            "Owner Comment can add entry-lens patterns (range location, thesis quality) without waiting for exit autopsy."
-          ],
-          "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
-          "lens_side": "entry",
-          "source": "deterministic_entry_blind_v0",
-          "at": "2026-11-08T02:32:38.010678+00:00",
-          "influences_live": false
-        }
-      ],
-      "entry_news_polarity": {
-        "label": "no_usable_news",
-        "asof": "2026-11-06",
-        "window_start": "2026-08-08",
-        "join_ok": false,
-        "influences_live": false,
-        "source": "lexicon_journal_v0",
-        "cites": [],
-        "counts": {
-          "articles_pit": 0,
-          "journal_hits": 0,
-          "lexicon_hits": 0,
-          "structural_hints": 0,
-          "improvement_hints": 0
-        }
-      },
-      "parallel_timing_lenses": {
-        "present": false,
-        "influences_live": false,
-        "observe_only": true,
-        "ops_doc": "docs/ops/parallel-timing-lenses.md"
-      }
-    },
-    {
-      "review_id": "478d0d0404dc34b0d3e4",
-      "review_fingerprint": "478d0d0404dc34b0d3e4",
-      "family_id": "n201|STLD|2026-11-06",
-      "episode_key": "n201|STLD|2026-11-06",
-      "stage": "entry_blind",
-      "tag": "new",
-      "book_id": "n201",
-      "book_tag": "N201",
-      "model_id": "n201",
-      "registration_id": "strand-c-short-horizon-value-mom-v0",
-      "ticker": "STLD",
-      "name": null,
-      "entry_at": "2026-11-06T06:53:10+00:00",
-      "opened_at": "2026-11-06T06:53:10+00:00",
-      "days_since_entry": 1,
-      "charts": {
-        "pit": {
-          "start": "2026-05-10",
-          "end": "2026-11-06",
-          "days_before": 180,
-          "days_after": 0,
-          "blind_clip_at": "entry",
-          "forbidden_forward_path": true,
-          "asof": "2026-11-06"
-        }
-      },
-      "population": "sealed_just_bought",
-      "package": "M",
-      "influences_live": false,
-      "observe_only": true,
-      "outcome_fields_stripped": true,
-      "phase_clock": "entry_run_at",
-      "entry_detail": {
-        "earnings_yield": 0.061019849146728936,
-        "in_ey_top30_local": true,
-        "momentum_12_1": 0.574195679327669,
-        "financial_health_pass": true,
-        "require_momentum": true
-      },
-      "buy_decision": {
-        "side": "buy",
-        "code": "filters_newly_clear",
-        "label": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
-        "source": "episode.entry_detail",
-        "join_ok": true,
-        "structured": {
-          "earnings_yield": 0.061019849146728936,
-          "in_ey_top30_local": true,
-          "momentum_12_1": 0.574195679327669,
-          "financial_health_pass": true,
-          "require_momentum": true
-        },
-        "influences_live": false
-      },
-      "buy_reason": "Filters newly cleared (entry): EY top 30%, FH pass, mom>0",
-      "decision_reasons_join_ok": false,
-      "framing": "[N201] STLD · bought 2026-11-06\nStage: entry_blind (blind entry critique)\nBought because: Filters newly cleared (entry): EY top 30%, FH pass, mom>0\nChart: PIT clip through buy day only — no post-fill path\nOutcome fields stripped — influences_live=false",
-      "llm_opinion": "Blind entry critique for STLD: bought because Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Judge whether the entry was sound given only information at / just after the buy.",
-      "learning_points": [
-        "No post-fill path or realized % on this card — keep critique entry-lens only.",
-        "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M)."
-      ],
-      "buy_strengths": [
-        "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — ground comments on that trail.",
-        "Blind stage: critique entry quality from PIT chart + reasons only (no hindsight from the post-fill path)."
-      ],
-      "buy_weaknesses": [
-        "Owner Comment can add entry-lens patterns (range location, thesis quality) without waiting for exit autopsy."
-      ],
-      "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
-      "lens_side": "entry",
-      "opinion_source": "deterministic_entry_blind_v0",
-      "chart_annotations": {
-        "schema_version": 1,
-        "pit": "PIT through buy day — forward bars forbidden on entry_blind. Pattern marks: entry quality / range location / MA context.",
-        "marks": [
-          {
-            "id": "entry_quality_band",
-            "pattern": "entry_quality",
-            "type": "entry_band",
-            "charts": [
-              "pit",
-              "episode"
-            ],
-            "label": "Entry quality — judge vs PIT range / thesis",
-            "tone": "info",
-            "cite": "lens=entry_blind",
-            "influences_live": false,
-            "t0": "2026-10-30",
-            "t1": "2026-11-06",
-            "anchor": "entry_price"
-          },
-          {
-            "id": "entry_range_ref",
-            "pattern": "support_context",
-            "type": "range_ref",
-            "charts": [
-              "pit",
-              "episode"
-            ],
-            "label": "Entry vs visible range (client %ile)",
-            "tone": "info",
-            "cite": "support_context",
-            "influences_live": false,
-            "t1": "2026-11-06",
-            "ref": "entry"
-          },
-          {
-            "id": "entry_ma_context",
-            "pattern": "ma_context",
-            "type": "ma_context",
-            "charts": [
-              "pit",
-              "episode"
-            ],
-            "label": "Entry vs SMA50/200",
-            "tone": "info",
-            "cite": "ma_context",
-            "influences_live": false,
-            "t0": "2026-11-06",
-            "t1": "2026-11-06",
-            "ref": "entry"
-          }
-        ]
-      },
-      "dialogue": [
-        {
-          "role": "factory",
-          "kind": "initial_opinion",
-          "text": "Blind entry critique for STLD: bought because Filters newly cleared (entry): EY top 30%, FH pass, mom>0. Judge whether the entry was sound given only information at / just after the buy.",
-          "learning_points": [
-            "No post-fill path or realized % on this card — keep critique entry-lens only.",
-            "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M)."
-          ],
-          "chart_annotations": {
-            "schema_version": 1,
-            "pit": "PIT through buy day — forward bars forbidden on entry_blind. Pattern marks: entry quality / range location / MA context.",
-            "marks": [
-              {
-                "id": "entry_quality_band",
-                "pattern": "entry_quality",
-                "type": "entry_band",
-                "charts": [
-                  "pit",
-                  "episode"
-                ],
-                "label": "Entry quality — judge vs PIT range / thesis",
-                "tone": "info",
-                "cite": "lens=entry_blind",
-                "influences_live": false,
-                "t0": "2026-10-30",
-                "t1": "2026-11-06",
-                "anchor": "entry_price"
-              },
-              {
-                "id": "entry_range_ref",
-                "pattern": "support_context",
-                "type": "range_ref",
-                "charts": [
-                  "pit",
-                  "episode"
-                ],
-                "label": "Entry vs visible range (client %ile)",
-                "tone": "info",
-                "cite": "support_context",
-                "influences_live": false,
-                "t1": "2026-11-06",
-                "ref": "entry"
-              },
-              {
-                "id": "entry_ma_context",
-                "pattern": "ma_context",
-                "type": "ma_context",
-                "charts": [
-                  "pit",
-                  "episode"
-                ],
-                "label": "Entry vs SMA50/200",
-                "tone": "info",
-                "cite": "ma_context",
-                "influences_live": false,
-                "t0": "2026-11-06",
-                "t1": "2026-11-06",
-                "ref": "entry"
-              }
-            ]
-          },
-          "buy_strengths": [
-            "Buy decision is joinable: Filters newly cleared (entry): EY top 30%, FH pass, mom>0 — ground comments on that trail.",
-            "Blind stage: critique entry quality from PIT chart + reasons only (no hindsight from the post-fill path)."
-          ],
-          "buy_weaknesses": [
-            "Owner Comment can add entry-lens patterns (range location, thesis quality) without waiting for exit autopsy."
-          ],
-          "learning_point_forward": "Carry one concrete entry-lens pattern forward for super-book stock choice / buy timing / buy strategy — never auto-apply knobs (Package M).",
-          "lens_side": "entry",
-          "source": "deterministic_entry_blind_v0",
-          "at": "2026-11-08T02:32:38.010739+00:00",
+          "at": "2026-11-08T07:47:54.783365+00:00",
           "influences_live": false
         }
       ],

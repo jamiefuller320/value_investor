@@ -2,7 +2,7 @@
   "schema_version": 1,
   "local_date": "2026-11-08",
   "timezone": "Europe/London",
-  "generated_at": "2026-11-08T02:37:12.146833Z",
+  "generated_at": "2026-11-08T07:56:04.380576Z",
   "refresh_deadline_local": "04:00",
   "stale_for_local_date": false,
   "focus_lines": [
@@ -30,7 +30,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Absolute availability on the serve order — no rememo/ingest spray on a green set; do not steal P1 for N201 or seal D.",
@@ -99,7 +99,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Fat sprint empty — maintenance + spare auto-advance only; no fourth equal sprint; no parallel eng spray from hub ambers.",
@@ -147,13 +147,13 @@
   "status_report": {
     "schema_version": 1,
     "local_date": "2026-11-08",
-    "ops_overall": "fail",
+    "ops_overall": "warn",
     "ops_findings": [
       {
-        "severity": "fail",
-        "title": "Engineering agent sync failures",
-        "auto_fixable": true,
-        "category": "engineering"
+        "severity": "warn",
+        "title": "Dashboard bundle is stale",
+        "auto_fixable": false,
+        "category": "dashboard"
       },
       {
         "severity": "warn",
@@ -236,11 +236,6 @@
     },
     "engineering_open": [
       {
-        "id": "eng-20261108-01",
-        "status": "open",
-        "title": "Rework verify round 2/3: Populate `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo statements when `financials_annual` has values b"
-      },
-      {
         "id": "eng-20261018-03",
         "status": "parked",
         "title": "Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)"
@@ -256,7 +251,7 @@
         "title": "Hunt fetchable IR source for parked asx200 leftover SMR.AX"
       }
     ],
-    "queue_health_headline": "Agent lane active.",
+    "queue_health_headline": "Queue and hunter idle.",
     "post_run_clearance": {
       "evaluated_at": "2026-11-07T19:59:08.912216+00:00",
       "trigger": "post_run_review_email",
@@ -296,12 +291,12 @@
           ]
         }
       ],
-      "generated_at": "2026-11-08T02:34:53.163330+00:00"
+      "generated_at": "2026-11-08T07:51:00.792227+00:00"
     },
     "focus_relevant": true,
     "post_sell_cue_digest": {
       "present": true,
-      "generated_at": "2026-11-08T02:32:37.414617+00:00",
+      "generated_at": "2026-11-08T07:47:53.982372+00:00",
       "item_count": 6,
       "timing_cue_count": 4,
       "selection_cue_count": 2,
@@ -314,7 +309,7 @@
       {
         "id": "ops",
         "label": "Ops",
-        "value": "overall=fail; fail:Engineering agent sync failures; warn:New buy-tier not yet usable; warn:Longer holds beat live exit buffer in replay; warn:Sector headwind gate coverage gap; warn:Two-lot retention beats full exit in replay"
+        "value": "overall=warn; warn:Dashboard bundle is stale; warn:New buy-tier not yet usable; warn:Longer holds beat live exit buffer in replay; warn:Sector headwind gate coverage gap; warn:Two-lot retention beats full exit in replay"
       },
       {
         "id": "scoreboard",
@@ -324,7 +319,7 @@
       {
         "id": "eng",
         "label": "Eng queue",
-        "value": "open:eng-20261108-01, parked:eng-20261018-03, parked:eng-20261104-01"
+        "value": "parked:eng-20261018-03, parked:eng-20261104-01, parked:eng-20261103-09"
       },
       {
         "id": "post_run",
@@ -390,21 +385,6 @@
         "href": "#automation/human",
         "doc_path": "docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
         "leverage": "Human judgment on existing gate — not a new strand"
-      },
-      {
-        "id": "push:eng:eng-20261108-01",
-        "lane": "push",
-        "priority": 3,
-        "title": "Confirm eng open still P1-aligned: eng-20261108-01",
-        "why_now": "Rework verify round 2/3: Populate `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo statements when `financials_annual` has values b",
-        "cite": {
-          "kind": "engineering_task",
-          "ref": "eng-20261108-01",
-          "status": "open"
-        },
-        "checklist_task_id": "",
-        "href": "#automation/queue",
-        "leverage": "Clash-aware eng head — cancel/merge/unpark; no spray"
       }
     ],
     "mapped_warns_open": [
@@ -494,7 +474,7 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → dismiss",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "euro_depth · ingest_deviation (focus/priority-slot head) — proposed triage: dismiss. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
@@ -617,7 +597,7 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → dismiss",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "hang_seng · ingest_deviation (ingest_deviation) — proposed triage: dismiss. Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers.",
@@ -740,7 +720,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: 2 attention-parked eng tasks",
@@ -768,11 +748,11 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "2 attention-parked eng tasks",
-          "updated_at": "2026-11-08T02:37:10.751594+00:00",
+          "updated_at": "2026-11-08T07:53:06.673547+00:00",
           "fingerprint": "0a2dad58594e26e2",
           "bullets": [
             "Parked tasks: 3 (attention ~2)",
-            "Queue-clearing pause active: False — evaluated 2026-11-08T02:37:10.751594+00:00",
+            "Queue-clearing pause active: False — evaluated 2026-11-08T07:53:06.673547+00:00",
             "Traffic pause active: False",
             "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
             "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
@@ -799,11 +779,11 @@
       "closed": false,
       "review_detail": {
         "headline": "2 attention-parked eng tasks",
-        "updated_at": "2026-11-08T02:37:10.751594+00:00",
+        "updated_at": "2026-11-08T07:53:06.673547+00:00",
         "fingerprint": "0a2dad58594e26e2",
         "bullets": [
           "Parked tasks: 3 (attention ~2)",
-          "Queue-clearing pause active: False — evaluated 2026-11-08T02:37:10.751594+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-11-08T07:53:06.673547+00:00",
           "Traffic pause active: False",
           "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
           "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
@@ -840,7 +820,7 @@
         "id": "rec-55ae47791364",
         "task_id": "human:weekday-engineering-parked-backlog-clear",
         "summary": "Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-08T02:37:10.751594+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-08T07:53:06.673547+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
         "accept_action": {
           "kind": "human-task-ack",
           "payload": {
@@ -849,7 +829,7 @@
             "finding_fingerprint": "0a2dad58594e26e2"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-55ae47791364` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-08T02:37:10.751594+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 3 (attention ~2)\n- Queue-clearing pause active: False — evaluated 2026-11-08T02:37:10.751594+00:00\n- Traffic pause active: False\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-55ae47791364` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "discuss_prompt": "Discuss daily recommendation `rec-55ae47791364` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-08T07:53:06.673547+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 3 (attention ~2)\n- Queue-clearing pause active: False — evaluated 2026-11-08T07:53:06.673547+00:00\n- Traffic pause active: False\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-55ae47791364` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
         "priority": 12,
         "options": [
           {
@@ -931,7 +911,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Assessment scoreboard · primary not scored",
@@ -959,7 +939,7 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "Assessment scoreboard · primary not scored",
-          "updated_at": "2026-11-08T02:34:53.137788+00:00",
+          "updated_at": "2026-11-08T07:51:00.742956+00:00",
           "fingerprint": "94066622535964a2",
           "bullets": [
             "ai_judgment_matched30_fair: total return -2.4% vs FTAL.L +0.6% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.7% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
@@ -988,7 +968,7 @@
       "closed": false,
       "review_detail": {
         "headline": "Assessment scoreboard · primary not scored",
-        "updated_at": "2026-11-08T02:34:53.137788+00:00",
+        "updated_at": "2026-11-08T07:51:00.742956+00:00",
         "fingerprint": "94066622535964a2",
         "bullets": [
           "ai_judgment_matched30_fair: total return -2.4% vs FTAL.L +0.6% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.7% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
@@ -1133,7 +1113,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: PR fix common issues",
@@ -1323,7 +1303,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Ingest deviations · 2 open",
@@ -1505,7 +1485,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -1675,7 +1655,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -1845,7 +1825,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2015,7 +1995,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2185,7 +2165,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2355,7 +2335,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2525,7 +2505,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2695,7 +2675,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -2865,7 +2845,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3035,7 +3015,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3205,7 +3185,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3375,7 +3355,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3545,7 +3525,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=unacked · analysis: See runbook for analysis inputs",
@@ -3715,7 +3695,7 @@
         "ready": true,
         "ready_reason": "cited push suggestion",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "ops finding (warn): Deferred idea triggers met",
@@ -3851,7 +3831,7 @@
         "ready": true,
         "ready_reason": "cited push suggestion",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "ops finding (warn): Parked engineering tasks need manual review",
@@ -3954,145 +3934,11 @@
       }
     },
     {
-      "task_ref": "push:eng:eng-20261108-01",
-      "source": "daily_push",
-      "work_class": "ops_gate",
-      "task_family": "daily-push",
-      "priority": 31,
-      "title": "Confirm eng open still P1-aligned: eng-20261108-01",
-      "summary": "Rework verify round 2/3: Populate `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo statements when `financials_annual` has values b",
-      "sort_bucket": "push",
-      "lane": "push",
-      "closeable": true,
-      "close_action": "daily-focus-ack",
-      "close_payload": {
-        "focus_id": "push:eng:eng-20261108-01",
-        "decision": "accept"
-      },
-      "href": "#automation/queue",
-      "recommendation_id": "rec-f9b1fff30843",
-      "status": {
-        "state": "ready",
-        "label": "Push",
-        "next_steps": [
-          "Discuss or observe-ack after acting"
-        ],
-        "waiting_on": [
-          {
-            "kind": "external",
-            "ref": null,
-            "detail": "operator Discuss or observe-ack (Explore = park/defer only)"
-          }
-        ],
-        "ready": true,
-        "ready_reason": "cited push suggestion",
-        "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
-        "updated_by": "morning_builder",
-        "assessment": {
-          "where_we_are": "Rework verify round 2/3: Populate `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo statements when `financials_annual` has values b",
-          "stage_label": "ready",
-          "stage_state": "ready",
-          "stage_since": null,
-          "days_in_stage": null,
-          "stage_duration": "duration unknown",
-          "waiting_for": "operator Discuss or observe-ack (Explore = park/defer only)",
-          "how_achieved": "Discuss or observe-ack after acting",
-          "provenance": [
-            "status:next_steps",
-            "observe:where",
-            "observe:waiting_for"
-          ],
-          "incomplete_fields": [
-            "stage_duration"
-          ],
-          "observe_only": true
-        }
-      },
-      "closed": false,
-      "push": {
-        "id": "push:eng:eng-20261108-01",
-        "lane": "push",
-        "priority": 3,
-        "title": "Confirm eng open still P1-aligned: eng-20261108-01",
-        "why_now": "Rework verify round 2/3: Populate `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo statements when `financials_annual` has values b",
-        "cite": {
-          "kind": "engineering_task",
-          "ref": "eng-20261108-01",
-          "status": "open"
-        },
-        "checklist_task_id": "",
-        "href": "#automation/queue",
-        "leverage": "Clash-aware eng head — cancel/merge/unpark; no spray"
-      },
-      "assessment": {
-        "where_we_are": "Rework verify round 2/3: Populate `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo statements when `financials_annual` has values b",
-        "stage_label": "ready",
-        "stage_state": "ready",
-        "stage_since": null,
-        "days_in_stage": null,
-        "stage_duration": "duration unknown",
-        "waiting_for": "operator Discuss or observe-ack (Explore = park/defer only)",
-        "how_achieved": "Discuss or observe-ack after acting",
-        "provenance": [
-          "status:next_steps",
-          "observe:where",
-          "observe:waiting_for"
-        ],
-        "incomplete_fields": [
-          "stage_duration"
-        ],
-        "observe_only": true
-      },
-      "recommendation": {
-        "id": "rec-f9b1fff30843",
-        "task_id": "push:eng:eng-20261108-01",
-        "summary": "Confirm eng open still P1-aligned: eng-20261108-01",
-        "rationale": "Rework verify round 2/3: Populate `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo statements when `financials_annual` has values b",
-        "accept_action": {
-          "kind": "focus-ack",
-          "payload": {
-            "focus_id": "push:eng:eng-20261108-01",
-            "decision": "accept",
-            "lane": "push"
-          }
-        },
-        "discuss_prompt": "Discuss daily recommendation `rec-f9b1fff30843` (push `push:eng:eng-20261108-01`):\nConfirm eng open still P1-aligned: eng-20261108-01\nWhy now: Rework verify round 2/3: Populate `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo statements when `financials_annual` has values b\nCite: engineering_task eng-20261108-01\nPush is execution — do not invent a new strand from chat alone.",
-        "priority": 31,
-        "options": [
-          {
-            "id": "accept",
-            "label": "Accept — reviewed for today (observe-only)",
-            "action": {
-              "kind": "focus-ack",
-              "payload": {
-                "focus_id": "push:eng:eng-20261108-01",
-                "decision": "accept"
-              }
-            }
-          },
-          {
-            "id": "discuss",
-            "label": "Discuss in Project chat",
-            "action": {
-              "kind": "discuss",
-              "payload": {
-                "recommendation_id": "rec-f9b1fff30843"
-              }
-            }
-          }
-        ],
-        "lane": "push",
-        "work_class": "ops_gate",
-        "task_family": "daily-push"
-      }
-    },
-    {
       "task_ref": "explore:post_sell:n200_entry_exit_levers",
       "source": "daily_explore",
       "work_class": "surface",
       "task_family": "daily-explore",
-      "priority": 32,
+      "priority": 31,
       "title": "Explore · N200 (strand-b-plain-value-tech-timing-v0) entry lever win; exit lever lose (population ≠ FTSE control closed sells)",
       "summary": "Per-lever fair-cost verdicts are independent of path P&L — exit lose + entry win is a factory timing signal, not a book rewrite — Falsify/promote: Volume gate met + thicker closed cohort; promote only via sealed observe design (F8), never mid-flight knob apply",
       "sort_bucket": "explore",
@@ -4122,7 +3968,7 @@
         "ready": true,
         "ready_reason": "quality-barred explore card",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Per-lever fair-cost verdicts are independent of path P&L — exit lose + entry win is a factory timing signal, not a book rewrite — Falsify/promote: Volume gate met + thicker closed cohort; promote only via sealed observe design (F8), never mid-flight knob apply",
@@ -4191,7 +4037,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-a3d3266888ef` (explore `explore:post_sell:n200_entry_exit_levers`):\nClaim: N200 (strand-b-plain-value-tech-timing-v0) entry lever win; exit lever lose (population ≠ FTSE control closed sells)\nWhy: Per-lever fair-cost verdicts are independent of path P&L — exit lose + entry win is a factory timing signal, not a book rewrite\nFalsify/promote: Volume gate met + thicker closed cohort; promote only via sealed observe design (F8), never mid-flight knob apply\nLabeled not-today — park via ftse-defer add/fragment; never eng-dispatch.",
-        "priority": 32,
+        "priority": 31,
         "options": [
           {
             "id": "accept",
@@ -4226,7 +4072,7 @@
       "source": "daily_explore",
       "work_class": "surface",
       "task_family": "daily-explore",
-      "priority": 33,
+      "priority": 32,
       "title": "Explore · FTSE exit-timing readiness: 0/3 tracks ready (control/DCA/AI-judgment)",
       "summary": "Live hold/swap probability stays parked until closed cohorts mature — Falsify/promote: ready_for_probability_analysis true with hold+swap closed targets; else keep collecting (L117/N25)",
       "sort_bucket": "explore",
@@ -4256,7 +4102,7 @@
         "ready": true,
         "ready_reason": "quality-barred explore card",
         "blocked_reason": null,
-        "updated_at": "2026-11-08T02:37:12.146833Z",
+        "updated_at": "2026-11-08T07:56:04.380576Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Live hold/swap probability stays parked until closed cohorts mature — Falsify/promote: ready_for_probability_analysis true with hold+swap closed targets; else keep collecting (L117/N25)",
@@ -4325,7 +4171,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-7dd5a2adbdb1` (explore `explore:post_sell:exit_timing_ready_ftse`):\nClaim: FTSE exit-timing readiness: 0/3 tracks ready (control/DCA/AI-judgment)\nWhy: Live hold/swap probability stays parked until closed cohorts mature\nFalsify/promote: ready_for_probability_analysis true with hold+swap closed targets; else keep collecting (L117/N25)\nLabeled not-today — park via ftse-defer add/fragment; never eng-dispatch.",
-        "priority": 33,
+        "priority": 32,
         "options": [
           {
             "id": "accept",
@@ -4356,7 +4202,7 @@
       }
     }
   ],
-  "open_task_count": 24,
+  "open_task_count": 23,
   "recommendations": [
     {
       "id": "rec-201a8ae3e5a3",
@@ -4422,7 +4268,7 @@
       "id": "rec-55ae47791364",
       "task_id": "human:weekday-engineering-parked-backlog-clear",
       "summary": "Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-08T02:37:10.751594+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-08T07:53:06.673547+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
       "accept_action": {
         "kind": "human-task-ack",
         "payload": {
@@ -4431,7 +4277,7 @@
           "finding_fingerprint": "0a2dad58594e26e2"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-55ae47791364` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-08T02:37:10.751594+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 3 (attention ~2)\n- Queue-clearing pause active: False — evaluated 2026-11-08T02:37:10.751594+00:00\n- Traffic pause active: False\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-55ae47791364` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "discuss_prompt": "Discuss daily recommendation `rec-55ae47791364` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 2 attention-parked eng tasks detail: Parked tasks: 3 (attention ~2); Queue-clearing pause active: False — evaluated 2026-11-08T07:53:06.673547+00:00; Traffic pause active: False; eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\nReview detail:\n- Parked tasks: 3 (attention ~2)\n- Queue-clearing pause active: False — evaluated 2026-11-08T07:53:06.673547+00:00\n- Traffic pause active: False\n- eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)\n- eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L\n- eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-55ae47791364` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
       "priority": 12,
       "options": [
         {
@@ -5535,48 +5381,6 @@
       "task_family": "daily-push"
     },
     {
-      "id": "rec-f9b1fff30843",
-      "task_id": "push:eng:eng-20261108-01",
-      "summary": "Confirm eng open still P1-aligned: eng-20261108-01",
-      "rationale": "Rework verify round 2/3: Populate `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo statements when `financials_annual` has values b",
-      "accept_action": {
-        "kind": "focus-ack",
-        "payload": {
-          "focus_id": "push:eng:eng-20261108-01",
-          "decision": "accept",
-          "lane": "push"
-        }
-      },
-      "discuss_prompt": "Discuss daily recommendation `rec-f9b1fff30843` (push `push:eng:eng-20261108-01`):\nConfirm eng open still P1-aligned: eng-20261108-01\nWhy now: Rework verify round 2/3: Populate `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo statements when `financials_annual` has values b\nCite: engineering_task eng-20261108-01\nPush is execution — do not invent a new strand from chat alone.",
-      "priority": 31,
-      "options": [
-        {
-          "id": "accept",
-          "label": "Accept — reviewed for today (observe-only)",
-          "action": {
-            "kind": "focus-ack",
-            "payload": {
-              "focus_id": "push:eng:eng-20261108-01",
-              "decision": "accept"
-            }
-          }
-        },
-        {
-          "id": "discuss",
-          "label": "Discuss in Project chat",
-          "action": {
-            "kind": "discuss",
-            "payload": {
-              "recommendation_id": "rec-f9b1fff30843"
-            }
-          }
-        }
-      ],
-      "lane": "push",
-      "work_class": "ops_gate",
-      "task_family": "daily-push"
-    },
-    {
       "id": "rec-a3d3266888ef",
       "task_id": "explore:post_sell:n200_entry_exit_levers",
       "summary": "N200 (strand-b-plain-value-tech-timing-v0) entry lever win; exit lever lose (population ≠ FTSE control closed sells)",
@@ -5590,7 +5394,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-a3d3266888ef` (explore `explore:post_sell:n200_entry_exit_levers`):\nClaim: N200 (strand-b-plain-value-tech-timing-v0) entry lever win; exit lever lose (population ≠ FTSE control closed sells)\nWhy: Per-lever fair-cost verdicts are independent of path P&L — exit lose + entry win is a factory timing signal, not a book rewrite\nFalsify/promote: Volume gate met + thicker closed cohort; promote only via sealed observe design (F8), never mid-flight knob apply\nLabeled not-today — park via ftse-defer add/fragment; never eng-dispatch.",
-      "priority": 32,
+      "priority": 31,
       "options": [
         {
           "id": "accept",
@@ -5633,7 +5437,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-7dd5a2adbdb1` (explore `explore:post_sell:exit_timing_ready_ftse`):\nClaim: FTSE exit-timing readiness: 0/3 tracks ready (control/DCA/AI-judgment)\nWhy: Live hold/swap probability stays parked until closed cohorts mature\nFalsify/promote: ready_for_probability_analysis true with hold+swap closed targets; else keep collecting (L117/N25)\nLabeled not-today — park via ftse-defer add/fragment; never eng-dispatch.",
-      "priority": 33,
+      "priority": 32,
       "options": [
         {
           "id": "accept",
@@ -5672,13 +5476,13 @@
     "human_unacked": 13,
     "progress": 0,
     "reconcile": 0,
-    "push": 3,
+    "push": 2,
     "explore": 2,
     "later": 0
   },
   "project_sync": {
     "notes_fingerprint": null,
-    "synced_at": "2026-11-08T02:37:12.146833Z",
+    "synced_at": "2026-11-08T07:56:04.380576Z",
     "method": "morning_builder_reads_committed_export_or_manual"
   },
   "illumination_hints": {
@@ -5686,7 +5490,7 @@
       "attention": true,
       "new_info": true,
       "reasons": [
-        "open_tasks=24"
+        "open_tasks=23"
       ]
     },
     "automation.human": {

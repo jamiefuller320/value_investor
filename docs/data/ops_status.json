@@ -1,12 +1,21 @@
 {
-  "run_at": "2026-11-08T02:31:56.097522+00:00",
-  "overall": "fail",
+  "run_at": "2026-11-08T07:46:52.721351+00:00",
+  "overall": "warn",
   "findings": [
+    {
+      "severity": "warn",
+      "category": "dashboard",
+      "title": "Dashboard bundle is stale",
+      "summary": "latest.json updated 2026-11-01T07:33:21.879670+00:00 (168h ago; threshold 168h).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
     {
       "severity": "info",
       "category": "budget",
       "title": "Agent token usage (measuring)",
-      "summary": "Week 2026-W45: raw $0.0000, charged $0.0000, tokens 0 (in 0 / out 0 / cache_read 0 / cache_write 0). Top jobs: llm_agree_veto_shadow $0.0000 (77 runs), research_memo $0.0000 (47 runs), engineering $0.0000 (12 runs). Research memo raw median n/a / p90 n/a vs ledger estimate $0.40 (0 of 47 runs with cost). Estimated-USD ledger this week $73.20. Measuring mode (token_usage_weekly_warning_raw_usd is null).",
+      "summary": "Week 2026-W45: raw $0.0000, charged $0.0000, tokens 0 (in 0 / out 0 / cache_read 0 / cache_write 0). Top jobs: llm_agree_veto_shadow $0.0000 (77 runs), research_memo $0.0000 (47 runs), engineering $0.0000 (15 runs). Research memo raw median n/a / p90 n/a vs ledger estimate $0.40 (0 of 47 runs with cost). Estimated-USD ledger this week $76.80. Measuring mode (token_usage_weekly_warning_raw_usd is null).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -15,7 +24,7 @@
       "severity": "info",
       "category": "budget",
       "title": "Agent token usage coverage gap",
-      "summary": "Week 2026-W45: 138 of 138 rows (100%) have usage_error or are still cost-pending after 48h (usage_error 138, pending after 48h 0). Coverage gap only — the estimated-USD cap is unchanged.",
+      "summary": "Week 2026-W45: 141 of 141 rows (100%) have usage_error or are still cost-pending after 48h (usage_error 141, pending after 48h 21). Coverage gap only — the estimated-USD cap is unchanged.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -33,7 +42,7 @@
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "3 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across euro_depth, ftse_mib, tsx60: euro_depth/UCB.BR (no_key_bodies, 338.53h since flip), ftse_mib/AZM.MI (no_key_bodies, 26.53h since flip), tsx60/PPL.TO (no_key_bodies, 26.53h since flip). Blocking: no_key_bodies=3.",
+      "summary": "3 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across euro_depth, ftse_mib, tsx60: euro_depth/UCB.BR (no_key_bodies, 343.78h since flip), ftse_mib/AZM.MI (no_key_bodies, 31.78h since flip), tsx60/PPL.TO (no_key_bodies, 31.78h since flip). Blocking: no_key_bodies=3.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -42,7 +51,7 @@
       "severity": "info",
       "category": "research",
       "title": "Library decision-input binds (observe)",
-      "summary": "Graduated library buy-tier names: 379; all four binds true: 45. Gaps: key_filing_bodies=6, fcf_basis_bound=2, overlay_bound=53, memo_recent=334. Largest gap: memo_recent. Observe-only — do not rememo, ingest, or open an engineering task from this finding. See docs/data/library_decision_input_inventory.json.",
+      "summary": "Graduated library buy-tier names: 379; all four binds true: 44. Gaps: key_filing_bodies=6, fcf_basis_bound=2, overlay_bound=53, memo_recent=335. Largest gap: memo_recent. Observe-only — do not rememo, ingest, or open an engineering task from this finding. See docs/data/library_decision_input_inventory.json.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -69,7 +78,7 @@
       "severity": "info",
       "category": "research",
       "title": "Post-sale review queue (observe)",
-      "summary": "Active uncommented post-sale reviews: 121; actioned history=138; candidates sealed+control=482. Accept/Comment/Duplicate observe-only (influences_live=false).",
+      "summary": "Active uncommented post-sale reviews: 143; actioned history=138; candidates sealed+control=504. Accept/Comment/Duplicate observe-only (influences_live=false).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -141,7 +150,7 @@
       "severity": "info",
       "category": "research",
       "title": "Entry news polarity (observe)",
-      "summary": "Buy-day PIT polarity on entry_blind: 0/12 cards with usable news cites; 12 no_usable_news. Labels={'improvement_path': 0, 'mixed_or_unclear': 0, 'no_usable_news': 12, 'structural_negative': 0}. Observe-only (influences_live=false); not Package L / not strand-A veto. See docs/ops/entry-news-polarity.md.",
+      "summary": "Buy-day PIT polarity on entry_blind: 1/12 cards with usable news cites; 11 no_usable_news. Labels={'improvement_path': 1, 'mixed_or_unclear': 0, 'no_usable_news': 11, 'structural_negative': 0}. Observe-only (influences_live=false); not Package L / not strand-A veto. See docs/ops/entry-news-polarity.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -195,7 +204,7 @@
       "severity": "info",
       "category": "research",
       "title": "Strategy book memo job refreshed",
-      "summary": "Spend off. Signals 83, all-but-memo 0, memo needed 0, dry-run requests 0. First tickers: none. ftse350 signals 10 all_but_memo 0 memo_needed 0; aex signals 4 all_but_memo 0 memo_needed 0; aim signals 9 all_but_memo 0 memo_needed 0; atx signals 0 all_but_memo 0 memo_needed 0; bel20 signals 0 all_but_memo 0 memo_needed 0; cac40 signals 0 all_but_memo 0 memo_needed 0; dax signals 0 all_but_memo 0 memo_needed 0; euro_stoxx50 signals 0 all_but_memo 0 memo_needed 0 Observe-only; no rememo or ingest from this finding.",
+      "summary": "Spend off. Signals 0, all-but-memo 0, memo needed 0, dry-run requests 0. First tickers: none. No due session. Observe-only; no rememo or ingest from this finding.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -330,7 +339,7 @@
       "severity": "info",
       "category": "research",
       "title": "Trading 212 catalogue fresh",
-      "summary": "Catalogue age 3.32 days (fetched 2026-11-04T18:57:35.197695+00:00; limit 14d). Weekly refresh via t212-catalogue-refresh.yml. See docs/ops/t212-catalogue-refresh.md.",
+      "summary": "Catalogue age 3.54 days (fetched 2026-11-04T18:57:35.197695+00:00; limit 14d). Weekly refresh via t212-catalogue-refresh.yml. See docs/ops/t212-catalogue-refresh.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -400,19 +409,19 @@
     },
     {
       "severity": "warn",
+      "category": "workflows",
+      "title": "Recent workflow failure: FTSE Ops Monitor",
+      "summary": "1 unresolved failure(s) since last success (runs: 42438853888).",
+      "auto_fixable": false,
+      "fixed": true,
+      "action_taken": "Recovery run in flight (#42460088372); suppressed from alert"
+    },
+    {
+      "severity": "warn",
       "category": "engineering",
       "title": "Parked engineering tasks need manual review",
       "summary": "2 parked task(s): eng-20261104-01, eng-20261103-09",
       "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "fail",
-      "category": "engineering",
-      "title": "Engineering agent sync failures",
-      "summary": "2 engineering-agent failure(s) in the last 6h while open tasks remain and no engineering PR is in flight.",
-      "auto_fixable": true,
       "fixed": false,
       "action_taken": null
     }
@@ -426,9 +435,9 @@
       "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-11-08T00:03:25+00:00",
-      "last_success_run_id": 42428001140,
-      "age_hours": 2.5,
+      "last_success_at": "2026-11-08T07:34:55+00:00",
+      "last_success_run_id": 42459385165,
+      "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -437,11 +446,11 @@
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "past_email_ready": false,
+      "past_email_ready": true,
       "max_age_hours": 28,
       "last_success_at": "2026-11-07T18:43:18+00:00",
       "last_success_run_id": 42402677676,
-      "age_hours": 7.9,
+      "age_hours": 13.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -451,10 +460,10 @@
       "name": "FTSE Engineering Queue",
       "expected_today": false,
       "past_email_ready": false,
-      "max_age_hours": 3,
-      "last_success_at": "2026-11-08T01:20:02+00:00",
-      "last_success_run_id": 42433791779,
-      "age_hours": 1.2,
+      "max_age_hours": 26,
+      "last_success_at": "2026-11-08T07:28:26+00:00",
+      "last_success_run_id": 42458928898,
+      "age_hours": 0.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -465,9 +474,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-11-08T02:30:51+00:00",
-      "last_success_run_id": 42438863061,
-      "age_hours": 0.1,
+      "last_success_at": "2026-11-08T07:40:35+00:00",
+      "last_success_run_id": 42459758026,
+      "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -478,9 +487,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-07T07:30:48+00:00",
-      "last_success_run_id": 42351587108,
-      "age_hours": 19.1,
+      "last_success_at": "2026-11-08T07:30:51+00:00",
+      "last_success_run_id": 42459098962,
+      "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -493,7 +502,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-01T15:19:29+00:00",
       "last_success_run_id": 41320639954,
-      "age_hours": 155.3,
+      "age_hours": 160.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -506,7 +515,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-07T11:55:14+00:00",
       "last_success_run_id": 42370200762,
-      "age_hours": 14.7,
+      "age_hours": 19.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -519,7 +528,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-01T07:31:52+00:00",
       "last_success_run_id": 41285148221,
-      "age_hours": 163.1,
+      "age_hours": 168.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -532,7 +541,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-07T18:44:41+00:00",
       "last_success_run_id": 42402787713,
-      "age_hours": 7.8,
+      "age_hours": 13.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -545,7 +554,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-01T17:59:16+00:00",
       "last_success_run_id": 41334234519,
-      "age_hours": 152.6,
+      "age_hours": 157.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -558,7 +567,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-11-06T13:10:45+00:00",
       "last_success_run_id": 42223397535,
-      "age_hours": 37.4,
+      "age_hours": 42.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -571,26 +580,26 @@
       "max_age_hours": 28,
       "last_success_at": "2026-11-07T18:01:07+00:00",
       "last_success_run_id": 42399141432,
-      "age_hours": 8.6,
+      "age_hours": 13.8,
       "stale": false,
-      "recent_failures_24h": 0,
-      "unresolved_failures_12h": 0
+      "recent_failures_24h": 1,
+      "unresolved_failures_12h": 1
     }
   ],
   "queue_status": {
-    "open_count": 1,
+    "open_count": 0,
     "pr_open_count": 0,
     "parked_count": 3,
-    "merged_count": 208,
+    "merged_count": 210,
     "failed_count": 0,
-    "next_task_id": "eng-20261108-01",
+    "next_task_id": null,
     "in_flight_branch": null,
     "in_flight_pr": null,
     "spend_since_checkpoint_usd": 10.4,
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": true,
+  "should_dispatch_engineering": false,
   "email_deferred": false,
   "email_defer_reasons": []
 }
