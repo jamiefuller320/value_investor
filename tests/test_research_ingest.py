@@ -471,6 +471,52 @@ def test_research_overlay_cohesion_wired_missing_excludes_off_universe(tmp_path:
     assert metrics["wired_missing_committed_verdicts_in_universe"] == 1
 
 
+def test_reconcile_committed_research_publish_indexes_all_missing_verdicts(tmp_path: Path):
+    """eng-20261107-04: scoped tickers must not skip index merge for off-batch memos (HBR.L-style)."""
+    from value_investor.research.ingest import reconcile_committed_research_publish
+    from value_investor.storage import write_json
+
+    data_dir = tmp_path / "data"
+    committed = data_dir / "research"
+    for ticker in ("ENQ.L", "HBR.L"):
+        tree = committed / ticker
+        tree.mkdir(parents=True)
+        write_json(
+            tree / "research.json",
+            {
+                "ticker": ticker,
+                "name": ticker,
+                "research_verdict": "neutral",
+                "version": 1,
+            },
+            compact=True,
+        )
+        (tree / "research.md").write_text(f"# {ticker}\n", encoding="utf-8")
+    latest_path = data_dir / "latest.json"
+    write_json(latest_path, {"research": [], "reports": []}, compact=True)
+
+    scoped = reconcile_committed_research_publish(
+        data_dir=data_dir,
+        dest_dir=tmp_path / "docs",
+        latest_path=latest_path,
+        committed_root=committed,
+        output_dir=tmp_path / "output",
+        tickers=["ENQ.L"],
+    )
+    assert scoped["index"]["reconciled"] == ["ENQ.L"]
+
+    write_json(latest_path, {"research": [], "reports": []}, compact=True)
+    full = reconcile_committed_research_publish(
+        data_dir=data_dir,
+        dest_dir=tmp_path / "docs",
+        latest_path=latest_path,
+        committed_root=committed,
+        output_dir=tmp_path / "output",
+    )
+    assert set(full["index"]["reconciled"]) == {"ENQ.L", "HBR.L"}
+    assert full["index"]["index_missing_committed_verdicts"] == 0
+
+
 @patch("value_investor.research.overlay_refresh.refresh_dashboard_bundle", return_value=1)
 def test_reconcile_committed_research_publish_refreshes_overlay_without_index_scope(
     mock_refresh, tmp_path: Path

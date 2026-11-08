@@ -3274,6 +3274,24 @@ _ISSUER_STOPWORDS = frozenset(
     }
 )
 
+# Sector/generic tokens must not alone prove issuer relevance (HBR.L vs DCC Energy plc).
+_ISSUER_WEAK_HEADLINE_TOKENS = frozenset(
+    {
+        "energy",
+        "resources",
+        "mining",
+        "capital",
+        "financial",
+        "international",
+        "global",
+        "media",
+        "digital",
+        "health",
+        "pharma",
+        "technology",
+    }
+)
+
 # Headline brand aliases when Yahoo legal names omit the trading brand (e.g. H&M).
 _ISSUER_HEADLINE_BRAND_ALIASES: dict[str, tuple[str, ...]] = {
     "HM-B": (
@@ -3404,7 +3422,12 @@ def headline_relevant_to_issuer(headline: str, company_name: str, ticker: str) -
     tokens = _issuer_distinctive_tokens(company_name)
     # Prefer word-boundary hits so short legal scraps (e.g. ``publ``) cannot
     # match unrelated English words like ``public``.
-    return any(re.search(rf"\b{re.escape(tok)}\b", text) for tok in tokens[:4])
+    matched = [tok for tok in tokens[:4] if re.search(rf"\b{re.escape(tok)}\b", text)]
+    if not matched:
+        return False
+    if any(tok not in _ISSUER_WEAK_HEADLINE_TOKENS for tok in matched):
+        return True
+    return False
 
 
 def _companies_house_ocr_enabled() -> bool:
