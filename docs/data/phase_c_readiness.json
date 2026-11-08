@@ -1,0 +1,57 @@
+{
+  "assessed_at": "2026-11-08T10:37:20.503337+00:00",
+  "ready": false,
+  "summary": "Phase C not ready: rebalance_log_span=fail",
+  "checks": [
+    {
+      "id": "phase_b_slim",
+      "title": "Phase B structured-verdict slim in flight or done",
+      "status": "pass",
+      "required": true,
+      "detail": "Found 104 structured-verdict docs (legacy essay modes still present: 0).",
+      "evidence": {
+        "sampled_docs": 104,
+        "structured_docs": 104,
+        "essay_docs": 0,
+        "examples": [
+          "ABDN.L:structured_verdict_update",
+          "ABF.L:structured_verdict_update",
+          "AEP.L:structured_verdict_update",
+          "ALFA.L:structured_verdict_update",
+          "AO.L:structured_verdict_update"
+        ],
+        "min_structured_docs": 3
+      }
+    },
+    {
+      "id": "rebalance_log_span",
+      "title": "Primary-track rebalance_log \u22658 weeks with buy-tier/candidates",
+      "status": "fail",
+      "required": true,
+      "detail": "Span 21.2 days across 24 entries (24 with buy-tier/candidates). Need \u226556 days and universe fields on \u226580% of rows.",
+      "evidence": {
+        "path": "docs/data/paper_automation/ai_judgment_matched30_fair/rebalance_log.json",
+        "entry_count": 24,
+        "span_days": 21.2,
+        "min_span_days": 56,
+        "with_universe_fields": 24,
+        "first": "2026-10-16T08:28:08.941674+00:00",
+        "last": "2026-11-06T13:12:26.968660+00:00"
+      }
+    },
+    {
+      "id": "feature_flag_coverage",
+      "title": "FTSE holdings/buy-tier feature flags non-trivial",
+      "status": "pass",
+      "required": true,
+      "detail": "70/70 sampled buy-tier/held rows show a positive filing/FCF/overlay/verdict feature (100%; need \u226525%).",
+      "evidence": {
+        "path": "docs/data/latest.json",
+        "sampled": 70,
+        "positive": 70,
+        "coverage": 1.0,
+        "min_coverage": 0.25
+      }
+    }
+  ]
+}
