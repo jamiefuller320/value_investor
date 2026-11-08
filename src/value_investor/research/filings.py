@@ -1006,6 +1006,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/1086888/000108688826000003/aiffebruary2026.htm",
         "https://www.sec.gov/Archives/edgar/data/1086888/000108688826000105/a3q26form6-kxreporttoshare.htm",
     ],
+    # tsx60 buy-tier leftover — eng-20261108-02: PPL.TO no_key_bodies; base PPL is US PPL Corp
+    # homonym — Pembina Pipeline SEC (PBA) FY2025 40-F AIF + Q3 2026 interim report HTML.
+    "PPL.TO": [
+        "https://www.sec.gov/Archives/edgar/data/1546066/000154606626000014/aifppcq42025.htm",
+        "https://www.sec.gov/Archives/edgar/data/1546066/000154606626000082/q32026interimreport.htm",
+    ],
     # hang_seng buy-tier deepen — eng-20260930-03: asia_filings Google News miss / zero-body;
     # seed HKEX statutory PDFs and issuer IR mirrors for stalled buy-tier names.
     "1099.HK": [
@@ -1353,6 +1359,8 @@ _IR_ALLOWLIST_SKIP_BASE_SYMBOL: frozenset[str] = frozenset(
     {
         # eng-20261010-02: TEN.MI Tenaris vs US-listed TEN (Tsakos) on EDGAR.
         "TEN.MI",
+        # eng-20261108-02: PPL.TO Pembina vs US-listed PPL Corp on EDGAR.
+        "PPL.TO",
     }
 )
 
@@ -1419,6 +1427,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     # issuer tokens for _ir_body_title_tokens_match.
     "MFC": ("Manulife", "Manulife Financial", "Manulife Financial Corporation"),
     "MFC.TO": ("Manulife", "Manulife Financial", "Manulife Financial Corporation"),
+    # tsx60 PPL.TO — aifppcq42025 / q32026interimreport SEC slugs lack issuer tokens.
+    "PPL.TO": ("Pembina", "Pembina Pipeline", "Pembina Pipeline Corporation"),
     "DNL": ("Dyno Nobel", "Incitec Pivot"),
     "YAL": ("Yancoal", "Yancoal Australia"),
     # asx200 FMG.AX Markit/ASX allowlist PDFs — opaque documentKey URLs need issuer tokens
