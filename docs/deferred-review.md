@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-08T00:05:49+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-08T10:57:14+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -66,6 +66,8 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | frag-20261030-01 | Owner dialogue also parked: live news trading signals; sentiment API sprawl; restoring NEWS HIGHLIGHTS into scheduled memos as capital path — covered partly by live hard-filter defer; keep as fragment if a separate slim-memo restore fork is ever debated. | news, memo, sentiment, NEWS_HIGHLIGHTS |
 | frag-20261030-02 | Hypothesis-slate scoring rubric (most_correct vs graded multi-label vs none_clear) still half-formed — pin when eng authorized; prefer single most_correct_item_id + none_clear over multi-winner spray. | hypothesis-slate, scoring-rubric |
 | frag-20261030-03 | Slate §8 locks three separate eval questions (fair-cost profit; drawdown depth/duration; repeatability vs luck). Remaining half-formed: abandon taxonomy (timeout vs thesis-break enums) and how autopsy slate_score joins per-lens episodes when favourite and late lenses coexist. | hypothesis-slate, abandon-taxonomy, slate-score-join |
+| frag-20261108-01 | If `positive_alpha_rate` collapse at u2 is concentrated in recent 8-week pairs only, the loser-filter may be regime-fragile while retain statistics stay high — monthly scan could test whether recommended_step should float with volatility regime instead of fixed ladder id. | regime, exclusion, hypothesis |
+| frag-20261108-02 | Given `weeks_to_realization.within_4w_rate` 0.8201 vs 1w hit 0.3675, a “what if we scored opinion flips on 4w labels only?” counterfactual might separate assessment lag from directional error without new paper books. | trajectory, scoring, hypothesis |
 
 ---
 
