@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-07T19:36:08+00:00",
+  "updated_at": "2026-11-07T20:11:43+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16887,6 +16887,66 @@
       "status": "open",
       "source": "PR #1322 development block and the 2026-11-07 reveal",
       "added_at": "2026-11-07T19:36:08+00:00"
+    },
+    {
+      "id": "L688",
+      "category": "later",
+      "section": "research",
+      "title": "US rehearsal: recovery-hold leg rarely recovers and ties up a third of capital",
+      "summary": "strategy-book-us-rehearsal-v0, descriptive: episodes taking the recovery label (an 8% drop that does not sell) launched only 11% (development) and 8% (confirmation) of the time, with median fair-cost about -9.8% in both windows, and held 31-32% of capital-days. The 'hold mis-timed entries for recovery' part is frozen on owner-strategy-book-v0; a shorter wait or a stop after the label is a new registration_id or bench candidate judged on forward marks.",
+      "revisit_when": "The strategy book version review (thickness gate), read beside L687.",
+      "tags": [
+        "strategy-version-review",
+        "strategy-book",
+        "us-rehearsal",
+        "exit-ladder",
+        "recovery-hold"
+      ],
+      "status": "open",
+      "source": "US rehearsal reveal 2026-11-07 (PR #1325)",
+      "added_at": "2026-11-07T19:56:05+00:00"
+    },
+    {
+      "id": "N259",
+      "category": "not_now",
+      "section": "research",
+      "title": "Exit challenger scored on capital-days return, with trend-led exits and no fixed time cap",
+      "summary": "Owner goal (2026-11-07): a steady pipeline of trades on rallying names, so that capital gets several attempts per year rather than one long hold; when trades generally succeed, that turnover acts as a multiplier. No holding period is preferred: the owner's '6 months' was an illustration, not a target. A trade closes when its exit criteria are met and runs on while a strong upward trend shows no sign of breaking; a fixed time limit is not part of the exit. Turnover is rewarded through the score (capital-days return), not forced by the rule. Learning question: on the book's own entries, does a trend-led exit raise capital-days return without lowering median matched excess? Shape: an unlaunched trade is sold when its post-entry trend breaks, instead of the 63-session deadline and the recovery hold; a launched trade is held while its trend holds and sold when the trend breaks, instead of the +5% ratchet and the 252-session cap. Open design question: how a flat trade that is neither breaking nor rising gives up its slot, judged by capital-days rather than a calendar limit. One exit challenger in the free fourth bench slot, sealed at a version review before its scores are read. Parameters chosen on the US development window (2000-2012) only; the 2013-2025 window is spent, so evidence comes from forward marks.",
+      "revisit_when": "Owner calls a version review to seal it, ideally before forward_live; any US development-window design pass must finish before the licensed data deletion on 2026-12-07.",
+      "tags": [
+        "strategy-version-review",
+        "strategy-book",
+        "exit-ladder",
+        "capital-days",
+        "bench-challenger"
+      ],
+      "status": "open",
+      "source": "Owner dialogue after the US rehearsal reveal, 2026-11-07",
+      "added_at": "2026-11-07T20:11:43+00:00",
+      "trigger": {
+        "all": [
+          {
+            "on_or_after": "2026-11-21"
+          }
+        ]
+      }
+    },
+    {
+      "id": "L689",
+      "category": "later",
+      "section": "research",
+      "title": "Falling-trend entry filter challenger for the strategy book",
+      "summary": "US rehearsal, descriptive, both windows: entries whose 6-month channel was falling had a median fair-cost return about 1pp lower (1.1% vs 2.1-2.2% development; 0.9% vs 1.6-2.0% confirmation), and entries nearest their 52-week low were the weakest fifth. About 18% of entries. A filter challenger that drops falling-channel entries is a candidate for a later bench slot, kept separate from the exit question so cause and effect stay readable.",
+      "revisit_when": "After the exit challenger is sealed, at the next version review with a free bench slot.",
+      "tags": [
+        "strategy-version-review",
+        "strategy-book",
+        "bench-challenger",
+        "channels"
+      ],
+      "status": "open",
+      "source": "Owner dialogue after the US rehearsal reveal, 2026-11-07",
+      "added_at": "2026-11-07T20:11:43+00:00"
     }
   ],
   "fragments": [
