@@ -12149,6 +12149,10 @@ def refresh_sources_yahoo_cashflow_metrics(
         return {"updated": False, "note": "financials_annual_invalid", "ticker": normalized}
 
     extracted = extract_cashflow_metrics_from_annual_financials(financials)
+    for key, value in _extract_yahoo_statement_cashflow_metrics(financials).items():
+        if value is not None and (extracted or {}).get(key) is None:
+            extracted = dict(extracted or {})
+            extracted[key] = value
     existing_metrics = dict(financials.get("cashflow_metrics") or {})
     merged_metrics = dict(existing_metrics)
     for key, value in (extracted or {}).items():
@@ -12209,6 +12213,113 @@ def refresh_sources_yahoo_cashflow_metrics(
 def _default_research_sources_dir(ticker: str, output_dir: Path | None = None) -> Path:
     base = output_dir if output_dir is not None else Path("output")
     return base / "research" / ticker.strip().upper() / "sources"
+
+
+def _normalize_yahoo_statement_label(label: str) -> str:
+    """Split yfinance-concatenated IFRS cash-flow row labels for heuristic matching."""
+    text = str(label or "").strip()
+    if not text:
+        return ""
+    text = re.sub(r"(?i)flows(from)", r"flows \1", text)
+    text = re.sub(r"(?i)from(used)", r"from \1", text)
+    text = re.sub(r"(?i)used(in)\b", r"used \1", text)
+    text = re.sub(r"(?i)receipts(from)", r"receipts \1", text)
+    text = re.sub(r"(?i)payments(from)", r"payments \1", text)
+    text = re.sub(r"(?i)classes(of)", r"classes \1", text)
+    return re.sub(r"\s+", " ", text).strip().lower()
+
+
+def _score_yahoo_operating_cashflow_label(label: str) -> int:
+    """Rank annual cash-flow row labels so net operating lines beat receipt/payment parts."""
+    normalized = _normalize_yahoo_statement_label(label)
+    compact = normalized.replace(" ", "")
+    if not compact:
+        return -1
+    if compact in {"freecashflow", "operatingcashflow"}:
+        return 100 if compact == "operatingcashflow" else -1
+    if any(token in compact for token in ("investingcash", "financingcash", "cashdividend")):
+        return -1
+    if any(token in compact for token in ("receiptsfrom", "paymentsfrom", "classesof")):
+        return 1
+    if "operatingactivities" in compact and ("cashflows" in compact or "cashflow" in compact):
+        return 90
+    if "operatingcashflow" in compact:
+        return 95
+    if normalized == "operating cash flow":
+        return 100
+    if "operating" in normalized and "cash" in normalized:
+        return 5
+    return -1
+
+
+def _pick_yahoo_operating_cashflow_from_year_rows(year_rows: dict[str, Any]) -> float | None:
+    from value_investor.research.ingest import _CASHFLOW_LABEL_ALIASES, _annual_label_value
+
+    direct = _annual_label_value(year_rows, _CASHFLOW_LABEL_ALIASES["operating_cashflow"])
+    if direct is not None:
+        return direct
+
+    best_score = 0
+    best_value: float | None = None
+    for label, raw in year_rows.items():
+        score = _score_yahoo_operating_cashflow_label(str(label))
+        if score < 50:
+            continue
+        coerced = _coerce_cashflow_metric_number(raw)
+        if coerced is None:
+            continue
+        if score > best_score:
+            best_score = score
+            best_value = coerced
+    return best_value
+
+
+def _extract_yahoo_statement_cashflow_metrics(financials: dict[str, Any]) -> dict[str, float]:
+    """
+    Pull OCF/FCF from cached Yahoo ``cash_flow`` rows when standard aliases are absent.
+
+    yfinance sometimes serializes IFRS lines like
+    ``Cash Flowsfromusedin Operating Activities Direct`` without the quote-summary
+    spellings ``extract_cashflow_metrics_from_annual_financials`` recognises.
+    """
+    from value_investor.research.ingest import (
+        _CASHFLOW_LABEL_ALIASES,
+        CASHFLOW_METRIC_KEYS,
+        _annual_label_value,
+        _sorted_financial_years,
+    )
+
+    metrics: dict[str, float] = {}
+
+    for key in CASHFLOW_METRIC_KEYS:
+        top = _coerce_cashflow_metric_number(financials.get(key))
+        if top is not None:
+            metrics[key] = top
+
+    cash_flow = financials.get("cash_flow") or {}
+    if not cash_flow:
+        return metrics
+
+    years = _sorted_financial_years(cash_flow)
+    if years:
+        latest_rows = cash_flow.get(years[0]) or {}
+        ocf = _pick_yahoo_operating_cashflow_from_year_rows(latest_rows)
+        if ocf is not None:
+            metrics.setdefault("operating_cashflow", ocf)
+        fcf = _annual_label_value(latest_rows, _CASHFLOW_LABEL_ALIASES["free_cashflow"])
+        if fcf is not None:
+            metrics.setdefault("free_cashflow", fcf)
+
+    if len(years) > 1:
+        prior_rows = cash_flow.get(years[1]) or {}
+        ocf_prev = _pick_yahoo_operating_cashflow_from_year_rows(prior_rows)
+        if ocf_prev is not None:
+            metrics.setdefault("operating_cashflow_prev", ocf_prev)
+        fcf_prev = _annual_label_value(prior_rows, _CASHFLOW_LABEL_ALIASES["free_cashflow"])
+        if fcf_prev is not None:
+            metrics.setdefault("free_cashflow_prev", fcf_prev)
+
+    return metrics
 
 
 def _coerce_cashflow_metric_number(value: Any) -> float | None:
@@ -12321,6 +12432,11 @@ def _financials_with_merged_yahoo_cashflow(
     extracted = extract_cashflow_metrics_from_annual_financials(financials)
     for key, value in (extracted or {}).items():
         if value is not None and merged_metrics.get(key) != value:
+            merged_metrics[key] = value
+            changed = True
+
+    for key, value in _extract_yahoo_statement_cashflow_metrics(financials).items():
+        if value is not None and merged_metrics.get(key) is None:
             merged_metrics[key] = value
             changed = True
 

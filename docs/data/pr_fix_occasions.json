@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-08T00:06:11.663064+00:00",
-  "occasion_count": 344,
+  "updated_at": "2026-11-08T00:08:07.909623+00:00",
+  "occasion_count": 347,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -6248,11 +6248,66 @@
       "details": {}
     },
     {
-      "id": "prf-20261108-001",
-      "recorded_at": "2026-11-08T00:06:11.663064+00:00",
+      "id": "prf-20261107-005",
+      "recorded_at": "2026-11-07T23:30:47.559105+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "docs write guard: tests mutated screening_snapshot.json + latest.json; shard1 also research_index_cohesion assert 2==0",
+      "pr_number": 1328,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (0)",
+        "CI / test (1)",
+        "CI / test (3)"
+      ],
+      "notes": "eng-20261107-03 Yahoo IFRS OCF backfill PR",
+      "details": {}
+    },
+    {
+      "id": "prf-20261107-006",
+      "recorded_at": "2026-11-07T23:49:56.117753+00:00",
       "source": "human_request",
       "kind": "merge_conflict",
-      "failure_reason": "Conflicting with main after #1326 merge; resolved latest.json and screening_snapshot conflicts by taking origin/main",
+      "failure_reason": "latest.json conflict with main after skip-ci ingest; resolved by taking main then re-healing HBR/MKS index+overlay",
+      "pr_number": 1328,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "eng-20261107-03",
+      "details": {}
+    },
+    {
+      "id": "prf-20261108-001",
+      "recorded_at": "2026-11-08T00:05:58.064657+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "re-conflicted with main on latest.json/pr_fix/deferred before merge",
+      "pr_number": 1328,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "resolved; re-heal unnecessary (main already cohesive)",
+      "details": {}
+    },
+    {
+      "id": "prf-20261108-002",
+      "recorded_at": "2026-11-08T00:08:07.909623+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "Conflicting with main after #1326/#1328; resolved latest.json, screening_snapshot, and pr_fix_occasions by taking origin/main",
       "pr_number": 1329,
       "branch": null,
       "title": null,
@@ -6505,11 +6560,11 @@
     "by_kind": [
       {
         "kind": "ci_check",
-        "count": 184
+        "count": 185
       },
       {
         "kind": "merge_conflict",
-        "count": 159
+        "count": 161
       },
       {
         "kind": "ci_and_merge",
@@ -6519,7 +6574,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 338
+        "count": 341
       },
       {
         "source": "traffic_controller",

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-07T20:11:43+00:00",
+  "updated_at": "2026-11-08T00:05:49+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16947,6 +16947,23 @@
       "status": "open",
       "source": "Owner dialogue after the US rehearsal reveal, 2026-11-07",
       "added_at": "2026-11-07T20:11:43+00:00"
+    },
+    {
+      "id": "N260",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Prevent research snapshot sync from writing under docs/data",
+      "summary": "apply_research_overlay snapshot hooks derive output_dir from committed memo paths (docs/data), so refresh_dashboard_bundle rewrites screening_snapshot.json under the committed store and trips the docs write guard whenever overlay reconcile runs with pipeline imported.",
+      "revisit_when": "Next CI docs-write-guard failure from overlay reconcile, or when touching pipeline snapshot hooks / overlay_refresh",
+      "tags": [
+        "ci",
+        "docs-write-guard",
+        "overlay",
+        "snapshots"
+      ],
+      "status": "open",
+      "source": "https://github.com/jamiefuller320/value_investor/pull/1328",
+      "added_at": "2026-11-08T00:05:49+00:00"
     }
   ],
   "fragments": [
