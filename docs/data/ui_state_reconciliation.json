@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-07T07:54:20.480629Z",
+  "generated_at": "2026-11-08T02:37:12.081105Z",
   "timezone": "Europe/London",
   "overall": "ok",
   "surface_freshness": "fresh",
@@ -38,7 +38,7 @@
       "ui_generated_at": null,
       "authority_path": null,
       "authority_generated_at": null,
-      "detail": "5/42 open acks stale (under mass-stale threshold)",
+      "detail": "4/42 open acks stale (under mass-stale threshold)",
       "runbook": "docs/ops/human-tasks-checklist.md"
     },
     {
@@ -47,10 +47,10 @@
       "status": "ok",
       "drift_class": null,
       "ui_path": "docs/data/lifecycle_board.json",
-      "ui_generated_at": "2026-11-07T02:34:21.338156+00:00",
+      "ui_generated_at": "2026-11-07T19:50:20.835855+00:00",
       "authority_path": null,
       "authority_generated_at": null,
-      "detail": "board age 5.3h (limit 30h)",
+      "detail": "board age 6.8h (limit 30h)",
       "runbook": "docs/ops/position-lifecycle.md"
     },
     {
@@ -59,15 +59,35 @@
       "status": "ok",
       "drift_class": null,
       "ui_path": "docs/data/daily_focus.json",
-      "ui_generated_at": "2026-11-07T02:37:52.611815Z",
+      "ui_generated_at": "2026-11-07T07:54:20.557050Z",
       "authority_path": null,
       "authority_generated_at": null,
-      "detail": "hub local_date=2026-11-07 matches Europe/London today",
+      "detail": "hub local_date=2026-11-07 ≠ today 2026-11-08; before 04:00 Europe/London refresh deadline",
       "runbook": "docs/ops/ops-monitor.md#daily-hub"
+    },
+    {
+      "id": "dashboard_v2_stores_present_and_fresh",
+      "title": "Strategy dashboard v2 present and fresh",
+      "status": "ok",
+      "drift_class": null,
+      "ui_path": "docs/v2/index.html",
+      "ui_generated_at": null,
+      "authority_path": null,
+      "authority_generated_at": null,
+      "detail": "v2 page + Today stores look fresh",
+      "runbook": "docs/ops/ops-monitor.md#daily-hub--ui-reconciliation",
+      "details": {
+        "v2_path": "docs/v2/",
+        "missing_page_assets": [],
+        "missing_stores": [],
+        "stale_stores": [],
+        "freshness_threshold_hours": 36.0,
+        "freshness_rule": "freshnessDailyStore in docs/v2/v2.js (warn past 36h fresh band)"
+      }
     }
   ],
   "summary": {
-    "ok": 5,
+    "ok": 6,
     "warn": 0,
     "fail": 0
   },
