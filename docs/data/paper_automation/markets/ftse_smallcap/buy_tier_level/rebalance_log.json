@@ -25306,5 +25306,543 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-11-09T07:35:38.714467+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ftse_smallcap/screen_latest.json",
+      "run_at": "2026-11-09T06:53:19.890728+00:00",
+      "generated_at": "2026-11-09T07:35:33.077436+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-11-09T07:35:33.100460+00:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-11-09T08:00:00+00:00",
+      "settle_at": "2026-11-09T09:15:00+00:00",
+      "can_act": false,
+      "reason": "before market open"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (2 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.003,
+    "candidates": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6839000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Consumer Cyclical",
+        "price": 89.1,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6733,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 108.5,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "SBRE.L",
+        "name": "Sabre Insurance Group plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.3307,
+        "data_quality_score": 0.85,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 174.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "TRI.L",
+        "name": "Trifast plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.259,
+        "data_quality_score": 0.95,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 84.4,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6839000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Consumer Cyclical",
+        "price": 89.1,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6733,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 108.5,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "SBRE.L",
+        "name": "Sabre Insurance Group plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.3307,
+        "data_quality_score": 0.85,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 174.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "TRI.L",
+        "name": "Trifast plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.259,
+        "data_quality_score": 0.95,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 84.4,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.55% / sell 0.05% (legacy symmetric slot 0.30%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1126.59,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 375.53,
+      "targets": [
+        {
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "signal": "strong_buy",
+          "conviction_score": 0.6733,
+          "price": 108.5
+        },
+        {
+          "ticker": "SBRE.L",
+          "name": "Sabre Insurance Group plc",
+          "signal": "buy",
+          "conviction_score": 0.3307,
+          "price": 174.0
+        },
+        {
+          "ticker": "TRI.L",
+          "name": "Trifast plc",
+          "signal": "buy",
+          "conviction_score": 0.259,
+          "price": 84.4
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "reason": "Already near equal-weight target",
+          "value": 377.35,
+          "target_value": 375.53,
+          "conviction_score": 0.6733,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "SBRE.L",
+          "name": "Sabre Insurance Group plc",
+          "reason": "Already near equal-weight target",
+          "value": 373.98,
+          "target_value": 375.53,
+          "conviction_score": 0.3307,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "TRI.L",
+          "name": "Trifast plc",
+          "reason": "Already near equal-weight target",
+          "value": 375.26,
+          "target_value": 375.53,
+          "conviction_score": 0.259,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [
+        {
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "signal": "strong_buy",
+          "conviction_score": 0.6839000000000001,
+          "reason": "timing_signal=wait \u2014 skipped until timing improves"
+        }
+      ],
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "ac7922a5-5f97-45c0-9eb3-5b59928fd09a",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-11-09T07:35:33.100460+00:00",
+        "ticker": "REC.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 7.911841,
+        "price": 47.5,
+        "gross": 375.81,
+        "cost": 0.19,
+        "net_cash": 375.62,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Record plc",
+        "avg_cost_at_exit": 47.5,
+        "position_closed": true
+      },
+      {
+        "id": "2df7ed1b-8f05-451c-9e9e-ebcfa83ba74c",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-11-09T07:35:33.100460+00:00",
+        "ticker": "SBRE.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 2.149297,
+        "price": 174.0,
+        "gross": 373.98,
+        "cost": 2.06,
+        "net_cash": -376.03,
+        "note": "Automated buy",
+        "name": "Sabre Insurance Group plc"
+      }
+    ],
+    "nav_before": 1128.84,
+    "cash_before": 0.41,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "CAPD.L",
+        "shares": 3.477898,
+        "avg_cost": 115.6742,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "REC.L",
+        "shares": 7.911841,
+        "avg_cost": 47.5,
+        "sector": "Financial Services",
+        "name": "Record plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "TRI.L",
+        "shares": 4.446225,
+        "avg_cost": 84.4,
+        "sector": "Industrials",
+        "name": "Trifast plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "REC.L": 1
+      },
+      "reentry_cooldown": {
+        "ZTF.L": 1
+      }
+    },
+    "nav_after": 1126.59,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "CAPD.L",
+        "shares": 3.477898,
+        "avg_cost": 115.6742,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "TRI.L",
+        "shares": 4.446225,
+        "avg_cost": 84.4,
+        "sector": "Industrials",
+        "name": "Trifast plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "SBRE.L",
+        "shares": 2.149297,
+        "avg_cost": 174.0,
+        "sector": "Financial Services",
+        "name": "Sabre Insurance Group plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "REC.L": 1
+      }
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
+      "verdict_counts": {
+        "agree": 2,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": [
+        {
+          "ticker": "REC.L",
+          "name": "Record plc",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "still_buyish is false \u2014 name no longer buy/strong_buy on the decision screen, so leaving the buy cohort supports the automated exit",
+            "Algo reason is automated exit for left target set, consistent with non-buyish screen status"
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-11-09T07:35:33.100460+00:00",
+          "proposal_id": "buy_tier_level:REC.L:sell:2026-11-09T07:35:33.100460+00:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "SBRE.L",
+          "name": "Sabre Insurance Group plc",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Effective screen signal is buy and still_buyish is true \u2014 aligns with automated buy into the buyish set",
+            "Conviction rank 3 with entry_rank 3 and rank_drop 0 \u2014 no material rank deterioration versus hold gate",
+            "Research verdict accumulate with overlay_bound true supports conviction; rank_drop 0 does not suggest capacity-bump sell pressure"
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 3
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 3
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-11-09T07:35:33.100460+00:00",
+          "proposal_id": "buy_tier_level:SBRE.L:buy:2026-11-09T07:35:33.100460+00:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Buy into buyish target set \u2014 agree with algo selection."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
+    }
   }
 ]

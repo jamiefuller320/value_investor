@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `graduated_allocation` · updated 2026-11-08T07:02:15.907993+00:00
+Track: `graduated_allocation` · updated 2026-11-09T07:38:10.820518+00:00
 
 ## Portfolio loser feedback
 
@@ -36,7 +36,7 @@ Track: `graduated_allocation` · updated 2026-11-08T07:02:15.907993+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 77%
+- conviction 87%
 
 ### C5H.IR — intact / hold_tolerate (+4.7%)
 - still strong_buy

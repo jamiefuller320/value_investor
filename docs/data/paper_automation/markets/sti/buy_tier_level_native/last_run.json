@@ -1,48 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-08T07:00:05.386735+00:00",
+    "local_time": "2026-11-09T07:36:51.938649+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-08T08:00:00+00:00",
-    "settle_at": "2026-11-08T09:15:00+00:00",
+    "market_open_at": "2026-11-09T08:00:00+00:00",
+    "settle_at": "2026-11-09T09:15:00+00:00",
     "can_act": false,
     "reason": "before market open"
   },
-  "trades": [
-    {
-      "id": "39c126bb-6576-42c1-b9af-f784209b945c",
-      "fund_id": "8310904b-74e0-497e-92f0-649dd4d20b80",
-      "acted_at": "2026-11-08T07:00:05.386735+00:00",
-      "ticker": "BUOU.SI",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 270.994897,
-      "price": 0.925,
-      "gross": 250.67,
-      "cost": 0.06,
-      "net_cash": 250.61,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Frasers Logistics & Commercial Trust",
-      "avg_cost_at_exit": 0.9073,
-      "position_closed": true
-    },
-    {
-      "id": "78fe328d-87e0-4440-b703-5c15174bef55",
-      "fund_id": "8310904b-74e0-497e-92f0-649dd4d20b80",
-      "acted_at": "2026-11-08T07:00:05.386735+00:00",
-      "ticker": "A17U.SI",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 110.860609,
-      "price": 2.26,
-      "gross": 250.54,
-      "cost": 0.06,
-      "net_cash": -250.61,
-      "note": "Automated buy",
-      "name": "CapitaLand Ascendas REIT"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -96,7 +63,7 @@
         "ticker": "A17U.SI",
         "name": "CapitaLand Ascendas REIT",
         "signal": "buy",
-        "conviction_score": 0.19992,
+        "conviction_score": 0.26655999999999996,
         "price": 2.26
       }
     ],
@@ -142,7 +109,7 @@
         "reason": "Already near equal-weight target",
         "value": 250.54,
         "target_value": 250.89,
-        "conviction_score": 0.19992,
+        "conviction_score": 0.26655999999999996,
         "signal": "buy"
       }
     ],
@@ -1550,24 +1517,38 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-09T07:36:51.938649+00:00",
+        "portfolio_value": 1003.54,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 4,
+        "reporting_currency": "SGD",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "SGD": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-08T07:00:05.386735+00:00",
+    "last_mark_at": "2026-11-09T07:36:51.938649+00:00",
     "rebalance_state": {
       "exit_streak": {},
-      "reentry_cooldown": {
-        "BUOU.SI": 1
-      }
+      "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (2 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "sti",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-08T07:00:05.393665+00:00",
+    "generated_at": "2026-11-09T07:36:51.945370+00:00",
     "observe_only": true,
     "open_count": 11,
     "closed_count": 0,
@@ -1640,13 +1621,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
+    "ingested_this_pass": 0,
     "checkpoints_added_this_pass": 1
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-08T07:00:05.395065+00:00",
+    "generated_at": "2026-11-09T07:36:51.946654+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1739,12 +1720,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
-      "swap_rotations": 1
+      "hold_episodes": 0,
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     }
   },
   "hypothesis_integrity": {
@@ -1752,8 +1733,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-11-08T07:00:05.396918+00:00",
-    "as_of": "2026-11-08T07:00:05.386735+00:00",
+    "updated_at": "2026-11-09T07:36:51.948501+00:00",
+    "as_of": "2026-11-09T07:36:51.938649+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1854,7 +1835,7 @@
         "avg_cost": 2.26,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.1999,
+        "conviction_score": 0.2666,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -1868,7 +1849,7 @@
         "research_verdict": "caution",
         "reasons": [
           "research verdict caution",
-          "conviction 20% below intact floor",
+          "conviction 27% below intact floor",
           "still buy",
           "cheapness family still passes"
         ],
@@ -1879,7 +1860,7 @@
         ],
         "weaken_reasons": [
           "research verdict caution",
-          "conviction 20% below intact floor"
+          "conviction 27% below intact floor"
         ],
         "broken_reasons": []
       },
@@ -1971,7 +1952,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-08T07:00:05.399232+00:00",
+    "generated_at": "2026-11-09T07:36:51.950757+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2047,7 +2028,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-11-08T07:00:05.402679+00:00",
+    "generated_at": "2026-11-09T07:36:51.954369+00:00",
     "open_count": 1,
     "closed_count": 5,
     "scored_count": 2,
@@ -2106,14 +2087,14 @@
       "recommit_scored": 2
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 1,
-    "marked_this_pass": 0,
+    "ingested_this_pass": 0,
+    "marked_this_pass": 1,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-08T07:00:05.386735+00:00",
+    "generated_at": "2026-11-09T07:36:51.938649+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2163,14 +2144,14 @@
     "ingested_this_pass": {
       "opened": 0,
       "closed": 0,
-      "tagged_on_book": 1,
+      "tagged_on_book": 0,
       "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-11-08T07:00:05.386735+00:00",
+    "generated_at": "2026-11-09T07:36:51.938649+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -2178,233 +2159,39 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 2,
-    "card_count": 2,
+    "proposal_count": 0,
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 1,
+      "agree": 0,
       "veto": 0,
-      "abstain": 1
+      "abstain": 0
     },
-    "by_algo_action": {
-      "sell": {
-        "agree": 1,
-        "veto": 0,
-        "abstain": 0
-      },
-      "buy": {
-        "agree": 0,
-        "veto": 0,
-        "abstain": 1
-      }
-    },
+    "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
-    "cards": [
-      {
-        "ticker": "BUOU.SI",
-        "name": "Frasers Logistics & Commercial Trust",
-        "algo_action": "sell",
-        "algo_reason": "Automated exit \u2014 left target set",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Effective screen signal is avoid and still_buyish is false, so the name has left the buy cohort.",
-          "Sell aligns with automated exit reason left target set.",
-          "Research overlay is bound with caution verdict; no still_buyish case for capacity-bump veto on sell."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated exit \u2014 left target set"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "avoid"
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "caution"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level_native",
-        "logged_at": "2026-11-08T07:00:05.386735+00:00",
-        "proposal_id": "buy_tier_level_native:BUOU.SI:sell:2026-11-08T07:00:05.386735+00:00",
-        "meta": {
-          "still_buyish": false,
-          "rank_drop": null,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "caution",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "A17U.SI",
-        "name": "CapitaLand Ascendas REIT",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "abstain",
-        "reasons": [
-          "Automated buy conflicts with still_buyish false and effective signal hold, not buy or strong_buy.",
-          "Rank_drop is 0 relative to entry rank 4 but name is not buyish on the decision screen.",
-          "Research verdict caution with overlay bound does not supply a decisive agree case for entry."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "hold"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 4
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 4
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "caution"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level_native",
-        "logged_at": "2026-11-08T07:00:05.386735+00:00",
-        "proposal_id": "buy_tier_level_native:A17U.SI:buy:2026-11-08T07:00:05.386735+00:00",
-        "meta": {
-          "still_buyish": false,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "caution",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "abstain",
-            "reasons": [
-              "Buy while not buyish \u2014 abstain."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      }
-    ],
+    "cards": [],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null,
-      "llm_card_count": 2
+      "fallback": null
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-11-08T07:00:05.386735+00:00",
+      "generated_at": "2026-11-09T07:36:51.938649+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 2,
+      "card_count": 0,
       "verdict_counts": {
-        "agree": 1,
+        "agree": 0,
         "veto": 0,
-        "abstain": 1
+        "abstain": 0
       },
-      "by_algo_action": {
-        "sell": {
-          "agree": 1,
-          "veto": 0,
-          "abstain": 0
-        },
-        "buy": {
-          "agree": 0,
-          "veto": 0,
-          "abstain": 1
-        }
-      },
+      "by_algo_action": {},
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -2420,7 +2207,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-08T07:00:10.550290+00:00",
+  "generated_at": "2026-11-09T07:36:51.959515+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (SGD reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,

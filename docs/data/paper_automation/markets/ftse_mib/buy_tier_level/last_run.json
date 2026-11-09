@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-08T06:59:43.934925+00:00",
+    "local_time": "2026-11-09T07:36:20.286916+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-08T08:00:00+00:00",
-    "settle_at": "2026-11-08T09:15:00+00:00",
+    "market_open_at": "2026-11-09T08:00:00+00:00",
+    "settle_at": "2026-11-09T09:15:00+00:00",
     "can_act": false,
     "reason": "before market open"
   },
@@ -60,6 +60,13 @@
         "price": 9.122
       },
       {
+        "ticker": "AZM.MI",
+        "name": "Azimut Holding S.p.A.",
+        "signal": "buy",
+        "conviction_score": 0.5713,
+        "price": 35.82
+      },
+      {
         "ticker": "UNI.MI",
         "name": "Unipol Assicurazioni S.p.A.",
         "signal": "buy",
@@ -72,13 +79,6 @@
         "signal": "buy",
         "conviction_score": 0.516,
         "price": 27.57
-      },
-      {
-        "ticker": "AZM.MI",
-        "name": "Azimut Holding S.p.A.",
-        "signal": "buy",
-        "conviction_score": 0.5062,
-        "price": 35.82
       },
       {
         "ticker": "BZU.MI",
@@ -125,6 +125,16 @@
       },
       {
         "action": "hold",
+        "ticker": "AZM.MI",
+        "name": "Azimut Holding S.p.A.",
+        "reason": "Already near equal-weight target",
+        "value": 157.87,
+        "target_value": 158.07,
+        "conviction_score": 0.5713,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
         "ticker": "UNI.MI",
         "name": "Unipol Assicurazioni S.p.A.",
         "reason": "Already near equal-weight target",
@@ -141,16 +151,6 @@
         "value": 158.09,
         "target_value": 158.07,
         "conviction_score": 0.516,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "AZM.MI",
-        "name": "Azimut Holding S.p.A.",
-        "reason": "Already near equal-weight target",
-        "value": 157.87,
-        "target_value": 158.07,
-        "conviction_score": 0.5062,
         "signal": "buy"
       },
       {
@@ -1951,9 +1951,26 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-09T07:36:20.286916+00:00",
+        "portfolio_value": 922.85,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 7,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83404
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-08T06:59:43.934925+00:00",
+    "last_mark_at": "2026-11-09T07:36:20.286916+00:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -1966,7 +1983,7 @@
     "schema_version": 2,
     "market_id": "ftse_mib",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:43.956928+00:00",
+    "generated_at": "2026-11-09T07:36:20.308843+00:00",
     "observe_only": true,
     "open_count": 7,
     "closed_count": 0,
@@ -2040,12 +2057,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 1
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:43.958323+00:00",
+    "generated_at": "2026-11-09T07:36:20.310249+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2150,8 +2167,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-08T06:59:43.960496+00:00",
-    "as_of": "2026-11-08T06:59:43.934925+00:00",
+    "updated_at": "2026-11-09T07:36:20.312461+00:00",
+    "as_of": "2026-11-09T07:36:20.286916+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2253,7 +2270,7 @@
         "avg_cost": 35.82,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5062,
+        "conviction_score": 0.5713,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2270,14 +2287,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 51%"
+          "conviction 57%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 51%"
+          "conviction 57%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2494,7 +2511,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:43.963265+00:00",
+    "generated_at": "2026-11-09T07:36:20.315285+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2568,7 +2585,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-08T06:59:43.968644+00:00",
+    "generated_at": "2026-11-09T07:36:20.320793+00:00",
     "open_count": 5,
     "closed_count": 9,
     "scored_count": 9,
@@ -2635,7 +2652,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:43.934925+00:00",
+    "generated_at": "2026-11-09T07:36:20.286916+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2692,7 +2709,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:43.934925+00:00",
+    "generated_at": "2026-11-09T07:36:20.286916+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -2719,7 +2736,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-08T06:59:43.934925+00:00",
+      "generated_at": "2026-11-09T07:36:20.286916+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
@@ -2748,7 +2765,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-08T06:59:43.976437+00:00",
+  "generated_at": "2026-11-09T07:36:20.328581+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

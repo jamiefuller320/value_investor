@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-08T06:59:42.846074+00:00
+Track: `buy_tier_level` · updated 2026-11-09T07:36:19.324109+00:00
 
 ## Portfolio loser feedback
 
@@ -15,7 +15,7 @@ Track: `buy_tier_level` · updated 2026-11-08T06:59:42.846074+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 54%
+- conviction 61%
 
 ### REP.MC — weakening / watch_review (+1.0%)
 - research verdict caution

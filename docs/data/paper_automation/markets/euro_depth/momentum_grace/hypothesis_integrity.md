@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `momentum_grace` · updated 2026-11-08T07:01:57.728434+00:00
+Track: `momentum_grace` · updated 2026-11-09T07:37:58.118807+00:00
 
 ## Portfolio loser feedback
 
@@ -36,7 +36,7 @@ Track: `momentum_grace` · updated 2026-11-08T07:01:57.728434+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 77%
+- conviction 87%
 
 ### C5H.IR — intact / hold_tolerate (+4.5%)
 - still strong_buy

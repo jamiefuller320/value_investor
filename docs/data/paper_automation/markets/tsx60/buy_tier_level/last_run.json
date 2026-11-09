@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-08T01:58:22.929892-05:00",
+    "local_time": "2026-11-09T02:35:40.077340-05:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-08T09:30:00-05:00",
-    "settle_at": "2026-11-08T10:00:00-05:00",
+    "market_open_at": "2026-11-09T09:30:00-05:00",
+    "settle_at": "2026-11-09T10:00:00-05:00",
     "can_act": false,
     "reason": "before market open"
   },
@@ -36,7 +36,7 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 81.71,
+    "target_sleeve_value": 89.13,
     "targets": [
       {
         "ticker": "WSP.TO",
@@ -95,13 +95,6 @@
         "price": 57.2
       },
       {
-        "ticker": "PPL.TO",
-        "name": "Pembina Pipeline Corporation",
-        "signal": "buy",
-        "conviction_score": 0.5373,
-        "price": 68.16
-      },
-      {
         "ticker": "CP.TO",
         "name": "Canadian Pacific Kansas City Limited",
         "signal": "buy",
@@ -123,66 +116,139 @@
         "price": 43.99
       }
     ],
-    "anticipated_exits": [],
-    "anticipated_grace_holds": [],
-    "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_exits": [
       {
-        "action": "hold",
-        "ticker": "L.TO",
-        "name": "Loblaw Companies Limited",
-        "reason": "Already near equal-weight target",
-        "value": 80.97,
-        "target_value": 81.71,
-        "conviction_score": 0.66,
-        "signal": "buy"
+        "action": "sell",
+        "ticker": "PPL.TO",
+        "name": "Pembina Pipeline Corporation",
+        "reason": "No longer in the top conviction target set",
+        "shares": 1.000313,
+        "price": 68.16,
+        "value": 68.18
       }
     ],
-    "skipped": [
+    "anticipated_grace_holds": [],
+    "anticipated_trims": [],
+    "anticipated_buys": [
       {
+        "action": "buy",
         "ticker": "WSP.TO",
         "name": "WSP Global Inc.",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 81.71,
+        "reason": "Top-up to equal weight",
+        "value": 10.8,
+        "price": 181.45,
+        "target_value": 89.13,
         "conviction_score": 0.8792000000000001,
         "signal": "strong_buy"
       },
       {
-        "ticker": "MG.TO",
-        "name": "Magna International Inc.",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 81.71,
-        "conviction_score": 0.6625,
-        "signal": "buy"
-      },
-      {
-        "ticker": "PPL.TO",
-        "name": "Pembina Pipeline Corporation",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 81.71,
-        "conviction_score": 0.5373,
-        "signal": "buy"
-      },
-      {
+        "action": "buy",
         "ticker": "MRU.TO",
         "name": "Metro Inc.",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 81.71,
+        "reason": "Top-up to equal weight",
+        "value": 14.58,
+        "price": 98.61,
+        "target_value": 89.13,
         "conviction_score": 0.416,
         "signal": "buy"
       },
       {
+        "action": "buy",
         "ticker": "SAP.TO",
         "name": "Saputo Inc.",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 81.71,
+        "reason": "Top-up to equal weight",
+        "value": 18.63,
+        "price": 43.99,
+        "target_value": 89.13,
         "conviction_score": 0.3876,
         "signal": "buy"
       }
     ],
+    "anticipated_holds": [
+      {
+        "action": "hold",
+        "ticker": "OTEX.TO",
+        "name": "Open Text Corporation",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 85.74,
+        "target_value": 89.13,
+        "conviction_score": 0.8550000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "K.TO",
+        "name": "Kinross Gold Corporation",
+        "reason": "Already near equal-weight target",
+        "value": 89.69,
+        "target_value": 89.13,
+        "conviction_score": 0.8094,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "TECK-B.TO",
+        "name": "Teck Resources Limited",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 86.8,
+        "target_value": 89.13,
+        "conviction_score": 0.7875000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "CNQ.TO",
+        "name": "Canadian Natural Resources Limited",
+        "reason": "Already near equal-weight target",
+        "value": 89.22,
+        "target_value": 89.13,
+        "conviction_score": 0.7382000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "MG.TO",
+        "name": "Magna International Inc.",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 79.14,
+        "target_value": 89.13,
+        "conviction_score": 0.6625,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "L.TO",
+        "name": "Loblaw Companies Limited",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 80.97,
+        "target_value": 89.13,
+        "conviction_score": 0.66,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "ABX.TO",
+        "name": "Barrick Mining Corporation",
+        "reason": "Already near equal-weight target",
+        "value": 89.19,
+        "target_value": 89.13,
+        "conviction_score": 0.5475,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "CP.TO",
+        "name": "Canadian Pacific Kansas City Limited",
+        "reason": "Already near equal-weight target",
+        "value": 88.26,
+        "target_value": 89.13,
+        "conviction_score": 0.47,
+        "signal": "buy"
+      }
+    ],
+    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 12 equal-weight sleeve(s); leave 1 near-target holding(s)."
+    "summary": "Next rebalance would target 11 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 3 buy(s); leave 8 near-target holding(s)."
   },
   "alerts": [
     {
@@ -315,7 +381,7 @@
       "mark": 68.16,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": null
     }
   ],
   "fund": {
@@ -3416,11 +3482,30 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-09T02:35:40.077340-05:00",
+        "portfolio_value": 518.92,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 12,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "CAD": 0.5292
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-08T01:58:22.929892-05:00",
+    "last_mark_at": "2026-11-09T02:35:40.077340-05:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "PPL.TO": 1
+      },
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
@@ -3431,7 +3516,7 @@
     "schema_version": 2,
     "market_id": "tsx60",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:58:23.054236+00:00",
+    "generated_at": "2026-11-09T07:35:40.197154+00:00",
     "observe_only": true,
     "open_count": 17,
     "closed_count": 0,
@@ -3505,12 +3590,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 1
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:58:23.056413+00:00",
+    "generated_at": "2026-11-09T07:35:40.199369+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -3574,10 +3659,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 10,
-        "recovered_to_breakeven": 8,
+        "count": 11,
+        "recovered_to_breakeven": 9,
         "close_reasons": {
-          "open": 10
+          "open": 11
         }
       },
       "closed": {
@@ -3602,12 +3687,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 4,
-      "swap_rotations": 2
+      "hold_episodes": 0,
+      "swap_rotations": 0
     }
   },
   "hypothesis_integrity": {
@@ -3615,8 +3700,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-08T06:58:23.060517+00:00",
-    "as_of": "2026-11-08T01:58:22.929892-05:00",
+    "updated_at": "2026-11-09T07:35:40.203439+00:00",
+    "as_of": "2026-11-09T02:35:40.077340-05:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -3631,9 +3716,9 @@
     "holding_count": 12,
     "underwater_count": 3,
     "thesis_status_counts": {
-      "intact": 8,
+      "intact": 7,
       "weakening": 4,
-      "broken": 0,
+      "broken": 1,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
@@ -3655,17 +3740,49 @@
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.1111,
-        "quality": 0.0,
-        "dividend": 0.3333,
-        "garp": 0.1111,
-        "risk": 0.0
+        "cheapness": 0.2222,
+        "quality": 0.1111,
+        "dividend": 0.4444,
+        "garp": 0.2222,
+        "risk": 0.1111
       },
       "selection_feedback_flags": [],
       "balancing_hint": "tolerate_intact_losers",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
+      {
+        "ticker": "PPL.TO",
+        "name": "PPL.TO",
+        "thesis_status": "broken",
+        "recommended_action": "exit_candidate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 68.16,
+        "avg_cost": 68.16,
+        "signal": null,
+        "timing_signal": null,
+        "conviction_score": null,
+        "data_quality_score": null,
+        "passed_families": [],
+        "failed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "research_verdict": null,
+        "reasons": [
+          "cheapness lost and not in buy tier"
+        ],
+        "intact_reasons": [],
+        "weaken_reasons": [],
+        "broken_reasons": [
+          "cheapness lost and not in buy tier"
+        ]
+      },
       {
         "ticker": "K.TO",
         "name": "Kinross Gold Corporation",
@@ -3824,46 +3941,6 @@
         "weaken_reasons": [
           "research verdict neutral"
         ],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "PPL.TO",
-        "name": "Pembina Pipeline Corporation",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 68.16,
-        "avg_cost": 68.16,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5373,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 54%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 54%"
-        ],
-        "weaken_reasons": [],
         "broken_reasons": []
       },
       {
@@ -4157,15 +4234,15 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:58:23.065282+00:00",
+    "generated_at": "2026-11-09T07:35:40.208477+00:00",
     "stamped_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
       "closed_total": 16,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 10,
+      "open_with_thesis": 11,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -4231,7 +4308,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-08T06:58:23.077046+00:00",
+    "generated_at": "2026-11-09T07:35:40.220995+00:00",
     "open_count": 3,
     "closed_count": 26,
     "scored_count": 19,
@@ -4300,7 +4377,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T01:58:22.929892-05:00",
+    "generated_at": "2026-11-09T02:35:40.077340-05:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -4357,7 +4434,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T01:58:22.929892-05:00",
+    "generated_at": "2026-11-09T02:35:40.077340-05:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -4365,469 +4442,39 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 5,
-    "card_count": 5,
+    "proposal_count": 0,
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 5,
+      "agree": 0,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {
-      "rebuy_skip": {
-        "agree": 5,
-        "veto": 0,
-        "abstain": 0
-      }
-    },
+    "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
-    "cards": [
-      {
-        "ticker": "WSP.TO",
-        "name": "WSP Global Inc.",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Explicit rebuy block from insufficient cash after higher-conviction fills is a mechanical allocation constraint, not a thesis exit.",
-          "still_buyish remains true with rank_drop 0 and conviction_rank 1 at entry\u2014no leave-buy-cohort signal to override skip.",
-          "strong_buy screen_signal and accumulate research_verdict support holding exposure without forcing a cash-constrained rebuy."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "strong_buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 1
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 1
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-08T01:58:22.929892-05:00",
-        "proposal_id": "buy_tier_level:WSP.TO:rebuy_skip:2026-11-08T01:58:22.929892-05:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "MG.TO",
-        "name": "Magna International Inc.",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Insufficient cash after higher-conviction fills is an explicit rebuy_skip reason consistent with prioritizing higher-conviction fills.",
-          "still_buyish true with rank_drop 0\u2014hold gate satisfied; no decisive sell or leave-cohort case.",
-          "buy screen_signal with neutral research_verdict does not contradict skipping rebuy under cash limits."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 6
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 6
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "neutral"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-08T01:58:22.929892-05:00",
-        "proposal_id": "buy_tier_level:MG.TO:rebuy_skip:2026-11-08T01:58:22.929892-05:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "neutral",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "PPL.TO",
-        "name": "Pembina Pipeline Corporation",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Rebuy_skip aligns with algo_reason insufficient cash after higher-conviction fills.",
-          "still_buyish true and rank_drop 0\u2014no material rank deterioration versus entry.",
-          "buy screen_signal and accumulate research_verdict with overlay_bound do not require vetoing a cash-driven skip."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-08T01:58:22.929892-05:00",
-        "proposal_id": "buy_tier_level:PPL.TO:rebuy_skip:2026-11-08T01:58:22.929892-05:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "MRU.TO",
-        "name": "Metro Inc.",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Cash constraint after higher-conviction fills justifies rebuy_skip without contradicting screen thesis.",
-          "still_buyish true with rank_drop 0 at conviction_rank 11\u2014no leave-buy-cohort evidence.",
-          "accumulate research_verdict and buy screen_signal support agree on skip rather than forced rebuy."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 11
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-08T01:58:22.929892-05:00",
-        "proposal_id": "buy_tier_level:MRU.TO:rebuy_skip:2026-11-08T01:58:22.929892-05:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "SAP.TO",
-        "name": "Saputo Inc.",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Insufficient cash after higher-conviction fills is a valid explicit skip reason.",
-          "still_buyish false with hold screen_signal and caution research_verdict\u2014skipping rebuy is consistent with not treating the name as buy cohort.",
-          "No still_buyish plus low rank_drop pattern that would argue vetoing a skip (sell veto rule does not apply to rebuy_skip)."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "hold"
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "caution"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": false
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-08T01:58:22.929892-05:00",
-        "proposal_id": "buy_tier_level:SAP.TO:rebuy_skip:2026-11-08T01:58:22.929892-05:00",
-        "meta": {
-          "still_buyish": false,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "caution",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      }
-    ],
+    "cards": [],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null,
-      "llm_card_count": 5
+      "fallback": null
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-08T01:58:22.929892-05:00",
+      "generated_at": "2026-11-09T02:35:40.077340-05:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 5,
+      "card_count": 0,
       "verdict_counts": {
-        "agree": 5,
+        "agree": 0,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {
-        "rebuy_skip": {
-          "agree": 5,
-          "veto": 0,
-          "abstain": 0
-        }
-      },
+      "by_algo_action": {},
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -4843,7 +4490,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-08T06:58:29.710475+00:00",
+  "generated_at": "2026-11-09T07:35:40.234727+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

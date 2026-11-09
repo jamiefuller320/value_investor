@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-08T06:59:13.875951+00:00
+Track: `buy_tier_level_native` · updated 2026-11-09T07:36:15.017365+00:00
 
 ## Portfolio loser feedback
 
@@ -23,7 +23,7 @@ Track: `buy_tier_level_native` · updated 2026-11-08T06:59:13.875951+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 67%
+- conviction 76%
 
 ### PUB.PA — intact / hold_tolerate (+1.4%)
 - still buy
@@ -41,7 +41,8 @@ Track: `buy_tier_level_native` · updated 2026-11-08T06:59:13.875951+00:00
 
 ### EN.PA — weakening / watch_review (+3.1%)
 - research verdict neutral
-- still strong_buy
+- conviction 29% below intact floor
+- still buy
 - cheapness family still passes
 
 ### RI.PA — weakening / watch_review (+4.4%)

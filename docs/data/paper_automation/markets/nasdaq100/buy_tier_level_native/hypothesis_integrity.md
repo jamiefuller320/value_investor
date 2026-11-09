@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-08T06:58:55.765915+00:00
+Track: `buy_tier_level_native` · updated 2026-11-09T07:36:01.208925+00:00
 
 ## Portfolio loser feedback
 
@@ -132,7 +132,7 @@ Track: `buy_tier_level_native` · updated 2026-11-08T06:58:55.765915+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 42%
+- conviction 47%
 
 ### MSFT — intact / hold_tolerate (+1.2%)
 - still buy
@@ -142,7 +142,7 @@ Track: `buy_tier_level_native` · updated 2026-11-08T06:58:55.765915+00:00
 - conviction 62%
 
 ### BKNG — weakening / watch_review (+2.1%)
-- conviction 30% below intact floor
+- conviction 33% below intact floor
 - still buy
 - research accumulate
 
@@ -165,7 +165,7 @@ Track: `buy_tier_level_native` · updated 2026-11-08T06:58:55.765915+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 73%
+- conviction 74%
 
 ### CMCSA — intact / hold_tolerate (+10.2%)
 - still strong_buy
@@ -193,7 +193,7 @@ Track: `buy_tier_level_native` · updated 2026-11-08T06:58:55.765915+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 49%
+- conviction 56%
 
 ### PYPL — weakening / watch_review (+12.6%)
 - research verdict neutral

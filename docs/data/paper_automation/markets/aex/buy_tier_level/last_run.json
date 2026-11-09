@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-08T06:59:44.789227+00:00",
+    "local_time": "2026-11-09T07:36:21.121145+00:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-11-08T08:00:00+00:00",
-    "settle_at": "2026-11-08T09:15:00+00:00",
+    "market_open_at": "2026-11-09T08:00:00+00:00",
+    "settle_at": "2026-11-09T09:15:00+00:00",
     "can_act": false,
     "reason": "before market open"
   },
@@ -2608,9 +2608,26 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-09T07:36:21.121145+00:00",
+        "portfolio_value": 932.72,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 8,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.83404
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-08T06:59:44.789227+00:00",
+    "last_mark_at": "2026-11-09T07:36:21.121145+00:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -2623,7 +2640,7 @@
     "schema_version": 2,
     "market_id": "aex",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:44.812052+00:00",
+    "generated_at": "2026-11-09T07:36:21.143993+00:00",
     "observe_only": true,
     "open_count": 12,
     "closed_count": 0,
@@ -2697,12 +2714,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 0
+    "checkpoints_added_this_pass": 1
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:44.813745+00:00",
+    "generated_at": "2026-11-09T07:36:21.145780+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2807,8 +2824,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-08T06:59:44.818264+00:00",
-    "as_of": "2026-11-08T06:59:44.789227+00:00",
+    "updated_at": "2026-11-09T07:36:21.149056+00:00",
+    "as_of": "2026-11-09T07:36:21.121145+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -3188,7 +3205,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:44.822234+00:00",
+    "generated_at": "2026-11-09T07:36:21.153096+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -3261,7 +3278,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-08T06:59:44.830837+00:00",
+    "generated_at": "2026-11-09T07:36:21.161630+00:00",
     "open_count": 4,
     "closed_count": 16,
     "scored_count": 12,
@@ -3323,13 +3340,13 @@
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
-    "marked_this_pass": 5,
-    "closed_this_pass": 1
+    "marked_this_pass": 4,
+    "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:44.789227+00:00",
+    "generated_at": "2026-11-09T07:36:21.121145+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -3386,7 +3403,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:44.789227+00:00",
+    "generated_at": "2026-11-09T07:36:21.121145+00:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -3417,9 +3434,8 @@
         "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
         "reasons": [
-          "algo_reason cites insufficient cash after higher-conviction fills, so skip is a funding constraint rather than a sell or leave-cohort call.",
-          "screen_signal is buy, still_buyish is true, and rank_drop is 0 with conviction_rank matching entry_rank 7, so there is no decisive rank_drop or leave-buy-cohort case to veto.",
-          "Rebuy_skip is consistent with low churn while the name remains on a buyish screen under overlay_bound."
+          "Rebuy blocked by explicit cash constraint after higher-conviction fills; no shadow override of plan_or_trade funding priority.",
+          "Screen still shows buy with rank_drop 0 vs entry (hold gate < 3), still_buyish true \u2014 skipping rebuy is liquidity sequencing, not a leave-buy-cohort sell."
         ],
         "evidence": [
           {
@@ -3456,12 +3472,6 @@
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
             "value": true
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
           }
         ],
         "judge_backend": "llm",
@@ -3469,8 +3479,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-08T06:59:44.789227+00:00",
-        "proposal_id": "buy_tier_level:ASM.AS:rebuy_skip:2026-11-08T06:59:44.789227+00:00",
+        "logged_at": "2026-11-09T07:36:21.121145+00:00",
+        "proposal_id": "buy_tier_level:ASM.AS:rebuy_skip:2026-11-09T07:36:21.121145+00:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -3505,9 +3515,8 @@
         "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
         "reasons": [
-          "algo_reason cites insufficient cash after higher-conviction fills as the sole block to rebuy.",
-          "screen_signal is hold, still_buyish is false, and research_verdict is caution with overlay_bound true, so evidence does not support overriding cash-priority skip to force rebuy.",
-          "rank_drop is 0; absence of buyish screen state makes agree appropriate rather than veto on a rebuy_skip."
+          "Insufficient cash after higher-conviction fills is a clear rebuy block; agree without needing to second-guess capital allocation.",
+          "Effective signal is hold, still_buyish false, research_verdict caution \u2014 not a still-buyish capacity-bump case; skip rebuy aligns with weak re-entry case even aside from cash."
         ],
         "evidence": [
           {
@@ -3551,8 +3560,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-08T06:59:44.789227+00:00",
-        "proposal_id": "buy_tier_level:PRX.AS:rebuy_skip:2026-11-08T06:59:44.789227+00:00",
+        "logged_at": "2026-11-09T07:36:21.121145+00:00",
+        "proposal_id": "buy_tier_level:PRX.AS:rebuy_skip:2026-11-09T07:36:21.121145+00:00",
         "meta": {
           "still_buyish": false,
           "rank_drop": 0,
@@ -3591,7 +3600,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-08T06:59:44.789227+00:00",
+      "generated_at": "2026-11-09T07:36:21.121145+00:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
@@ -3626,7 +3635,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-11-08T06:59:50.021726+00:00",
+  "generated_at": "2026-11-09T07:36:29.999111+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
