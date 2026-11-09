@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-09T18:47:20.638783+00:00",
+  "run_at": "2026-11-09T21:30:26.106749+00:00",
   "market_id": "asx200",
   "targets": [
     "ALK.AX"
@@ -8,8 +8,8 @@
     {
       "ticker": "ALK.AX",
       "priority_score": 14.8795,
-      "filings_total": 86,
-      "filings_with_body": 83,
+      "filings_total": 81,
+      "filings_with_body": 80,
       "indexed_without_body": 1,
       "reason": "indexed_without_body"
     }
@@ -19,8 +19,8 @@
       "ticker": "ALK.AX",
       "reason": "indexed_without_body",
       "before": {
-        "filings_total": 86,
-        "filings_with_body": 83,
+        "filings_total": 81,
+        "filings_with_body": 80,
         "indexed_without_body": 1
       },
       "after": {
@@ -83,7 +83,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-09T18:46:52.096582+00:00",
+    "snapshot_at": "2026-11-09T21:28:53.588583+00:00",
     "market_id": "asx200",
     "buy_tier_count": 35,
     "unmeasured_buy_tier": 0,
@@ -119,7 +119,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-09T18:47:20.625865+00:00",
+    "snapshot_at": "2026-11-09T21:29:19.945079+00:00",
     "market_id": "asx200",
     "buy_tier_count": 35,
     "unmeasured_buy_tier": 0,
@@ -143,16 +143,15 @@
       "SMR.AX": 1
     },
     "parked_tickers": [
+      "ALK.AX",
       "SMR.AX"
     ],
-    "parked_count": 1,
+    "parked_count": 2,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
-    "effective_indexed_without_body_tickers": [
-      "ALK.AX"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -163,18 +162,40 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 2,
+    "from_market": "asx200",
+    "to_market": null,
+    "stream_markets_after": [],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "asx200",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "ALK.AX",
+        "SMR.AX"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": null,
+    "at": "2026-11-09T21:29:33.289163+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "asx200",
-    "assessed_at": "2026-11-09T18:46:54.424271+00:00",
+    "assessed_at": "2026-11-09T21:28:55.222406+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
       {
         "ticker": "ALK.AX",
         "indexed_without_body": 1,
-        "filings_total": 86,
-        "filings_with_body": 83
+        "filings_total": 81,
+        "filings_with_body": 80
       },
       {
         "ticker": "SMR.AX",
@@ -203,9 +224,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 23.800588059999995,
+  "used_seconds": 22.9895676,
   "budget_seconds": 87.5,
-  "leftover_seconds": 63.699411940000005,
+  "leftover_seconds": 64.5104324,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -213,9 +234,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "asx200",
-    "updated_at": "2026-11-09T18:47:20.630839+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-11-09T21:29:19.948993+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -229,6 +250,18 @@
         "indexed_without_body": 1,
         "thin": false,
         "source_surface": "asx_announcements"
+      },
+      {
+        "ticker": "ALK.AX",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-09T21:29:19.948993+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 81,
+        "filings_with_body": 80,
+        "indexed_without_body": 1,
+        "thin": false,
+        "source_surface": "asx_announcements"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -239,16 +272,40 @@
       "ALK.AX",
       "SMR.AX"
     ],
-    "unparked_leftover": [
-      "ALK.AX"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/asx200/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "asx200"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "asx200",
+    "ingest_exhausted_markets": [
+      "aex",
+      "aim",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "iseq20",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
