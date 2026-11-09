@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-09T17:33:00.373111+00:00`
+Generated: `2026-11-09T22:39:40.456193+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,10 +33,10 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- _(none merged today)_
+- `human`/human PR #1333 `eng-20261108-03` — Reconcile dedupe “fresh_memo” vs body-lag signals: set rememo eligibility when `filings_with_body` < `filings_total` or memo source_quality below threshold desp
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 347
+- Occasion count: 348
 - `PR mergeable=CONFLICTING against main` — 7×
 - `validate failed` — 7×
 - `merge_conflict:dirty` — 6×
