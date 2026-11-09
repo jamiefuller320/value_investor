@@ -367,15 +367,15 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 107.2,
-    "estimated_spend_usd_this_week": 86.0,
-    "week_id": "2026-W45",
+    "estimated_spend_usd_this_cycle": 108.8,
+    "estimated_spend_usd_this_week": 1.6,
+    "week_id": "2026-W46",
     "cycle_id": "2026-11-d8",
     "weekly_ops_cap_usd": 100.5,
     "weekly_ops_plan_credit_share_cap": 0.15,
     "token_usage_weekly_warning_raw_usd": null,
     "enforce_weekly_ops_cap": true,
-    "estimated_spend_weekly_ops_usd_this_week": 34.4,
+    "estimated_spend_weekly_ops_usd_this_week": 1.6,
     "note": "Cursor Ultra $200 included pool is surplus-math metadata. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder). Ad-hoc depth passes use ladder.spend_since_checkpoint_usd. Rememo daily cap stays at 3.",
     "cycle_surplus_provisional": {
       "status": "provisional",
@@ -559,7 +559,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-11-08T18:54:13.319917+00:00",
+  "updated_at": "2026-11-09T07:46:46.824893+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -571,7 +571,9 @@
     "omxs30",
     "psi20"
   ],
-  "ingest_parallel_sprint": [],
+  "ingest_parallel_sprint": [
+    "asx200"
+  ],
   "ingest_parallel_sprint_2": [],
   "ladder": {
     "enabled": true,
@@ -839,16 +841,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-10-28T16:39:16.479635+00:00",
-        "parallel_stream": 1,
-        "from_market": "sti",
-        "to_market": "sp500",
-        "stream_markets_after": [
-          "sp500"
-        ],
-        "ingest_parity_recorded": false
-      },
       {
         "at": "2026-10-28T16:53:34.008013+00:00",
         "parallel_stream": 1,
@@ -1424,6 +1416,28 @@
         "to_market": null,
         "stream_markets_after": [],
         "ingest_parity_recorded": false
+      },
+      {
+        "reseeded": true,
+        "market_queue_appended": false,
+        "at": "2026-11-09T07:41:15.363890+00:00",
+        "parallel_stream": 1,
+        "from_market": null,
+        "to_market": "asx200",
+        "stream_markets_after": [
+          "asx200"
+        ],
+        "ingest_parity_recorded": false,
+        "screen_refresh": {
+          "refreshed": true,
+          "market_id": "asx200",
+          "forced": true,
+          "prior_screen_at": "2026-11-08T06:23:16.355562+00:00",
+          "prior_age_days": 1,
+          "run_at": "2026-11-09T07:41:15.363902+00:00",
+          "shortlist_count": 35,
+          "ticker_count": 196
+        }
       }
     ]
   },
