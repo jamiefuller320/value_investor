@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-11-08T06:58:11.091376+00:00
+Track: `buy_tier_level_native` · updated 2026-11-09T07:35:31.427867+00:00
 
 ## Portfolio loser feedback
 
@@ -55,14 +55,14 @@ Track: `buy_tier_level_native` · updated 2026-11-08T06:58:11.091376+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 41%
+- conviction 47%
 
 ### LOGN.SW — intact / hold_tolerate (-4.5%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 41%
+- conviction 46%
 
 ### BOL.ST — intact / hold_tolerate (-2.8%)
 - still buy
@@ -106,7 +106,7 @@ Track: `buy_tier_level_native` · updated 2026-11-08T06:58:11.091376+00:00
 - data_quality 1.00
 - conviction 63%
 
-### DQ7A.IR — weakening / watch_review (-0.9%)
+### DQ7A.IR — weakening / watch_review (-1.0%)
 - research verdict caution
 - conviction 21% below intact floor
 - still buy
@@ -237,7 +237,7 @@ Track: `buy_tier_level_native` · updated 2026-11-08T06:58:11.091376+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 77%
+- conviction 87%
 
 ### ERIC-B.ST — intact / hold_tolerate (+8.3%)
 - still strong_buy

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_dca` · updated 2026-11-08T07:01:39.136095+00:00
+Track: `buy_tier_level_dca` · updated 2026-11-09T07:37:40.882754+00:00
 
 ## Portfolio loser feedback
 
@@ -55,7 +55,7 @@ Track: `buy_tier_level_dca` · updated 2026-11-08T07:01:39.136095+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 41%
+- conviction 46%
 
 ### APAM.AS — intact / hold_tolerate (-5.9%)
 - price drawdown alone does not invalidate value thesis
@@ -63,7 +63,7 @@ Track: `buy_tier_level_dca` · updated 2026-11-08T07:01:39.136095+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 41%
+- conviction 47%
 
 ### DQ7A.IR — weakening / watch_review (-5.0%)
 - research verdict caution
@@ -214,17 +214,17 @@ Track: `buy_tier_level_dca` · updated 2026-11-08T07:01:39.136095+00:00
 - data_quality 1.00
 - conviction 76%
 
+### PRX.AS — weakening / watch_review (+4.7%)
+- research verdict caution
+- still buy
+- cheapness family still passes
+
 ### TEL2-B.ST — intact / hold_tolerate (+4.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 64%
-
-### PRX.AS — weakening / watch_review (+5.5%)
-- research verdict caution
-- still buy
-- cheapness family still passes
 
 ### MC.PA — intact / hold_tolerate (+5.6%)
 - still buy
@@ -243,7 +243,7 @@ Track: `buy_tier_level_dca` · updated 2026-11-08T07:01:39.136095+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 77%
+- conviction 87%
 
 ### SKA-B.ST — intact / hold_tolerate (+9.7%)
 - still buy
@@ -285,7 +285,7 @@ Track: `buy_tier_level_dca` · updated 2026-11-08T07:01:39.136095+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 53%
+- conviction 61%
 
 ### WKL.AS — intact / hold_tolerate (+32.8%)
 - still buy

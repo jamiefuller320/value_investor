@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "deferred_id": "L121",
-  "generated_at": "2026-09-22T09:23:51.508183+00:00",
+  "generated_at": "2026-11-08T10:36:51.465206+00:00",
   "framework": {
     "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
     "hold_recovery": {
@@ -53,47 +53,47 @@
       "learning_tracks_churn_health.json"
     ]
   },
-  "primary_live_track_id": "rules",
+  "primary_live_track_id": "ai_judgment_matched30_fair",
   "sources": {
     "live_primary": {
       "hold_recovery": {
         "present": true,
-        "track_id": "rules",
+        "track_id": "ai_judgment_matched30_fair",
         "scope": null,
         "readiness": {
           "ready_for_probability_analysis": false,
-          "hold_closed_count": 7,
+          "hold_closed_count": 9,
           "swap_closed_count": 0,
-          "hold_with_data_quality_count": 10,
+          "hold_with_data_quality_count": 25,
           "gaps": [
-            "hold_recovery closed episodes=7 (target >=15)",
+            "hold_recovery closed episodes=9 (target >=15)",
             "swap_rotation closed rotations=0 (target >=10)"
           ],
           "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
         },
-        "hold_closed_count": 7,
-        "recovered_to_breakeven_count": 3,
-        "hold_recovery_rate": 0.4286,
+        "hold_closed_count": 9,
+        "recovered_to_breakeven_count": 6,
+        "hold_recovery_rate": 0.6667,
         "close_reasons_raw": {
-          "sold_while_recovered": 3,
-          "sold_while_underwater": 4
+          "sold_while_recovered": 6,
+          "sold_while_underwater": 3
         },
         "close_reasons_canonical": {
-          "recovered_at_close": 3,
-          "not_recovered_at_close": 4
+          "recovered_at_close": 6,
+          "not_recovered_at_close": 3
         }
       },
       "swap_rotation": {
         "present": true,
-        "track_id": "rules",
+        "track_id": "ai_judgment_matched30_fair",
         "scope": null,
         "readiness": {
           "ready_for_probability_analysis": false,
-          "hold_closed_count": 7,
+          "hold_closed_count": 9,
           "swap_closed_count": 0,
-          "hold_with_data_quality_count": 10,
+          "hold_with_data_quality_count": 25,
           "gaps": [
-            "hold_recovery closed episodes=7 (target >=15)",
+            "hold_recovery closed episodes=9 (target >=15)",
             "swap_rotation closed rotations=0 (target >=10)"
           ],
           "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
@@ -111,25 +111,31 @@
         "graduated_allocation",
         "technical",
         "buy_tier_level",
+        "buy_tier_level_dca",
+        "still_in_buy_set",
         "ai_judgment_calibrated",
         "ai_judgment_calibrated_r2",
         "ai_judgment_calibrated_r3",
         "ai_judgment_exclusion_u4",
         "ai_judgment_fair",
-        "rules_fair"
+        "rules_fair",
+        "ai_judgment_graduated_fair",
+        "ai_judgment_hold5_fair",
+        "ai_judgment_matched30_fair",
+        "buy_tier_matched30_fair"
       ],
-      "hold_closed_count": 68,
-      "recovered_to_breakeven_count": 27,
-      "hold_recovery_rate": 0.3971,
+      "hold_closed_count": 218,
+      "recovered_to_breakeven_count": 132,
+      "hold_recovery_rate": 0.6055,
       "close_reasons_canonical": {
-        "recovered_at_close": 27,
-        "not_recovered_at_close": 41
+        "recovered_at_close": 132,
+        "not_recovered_at_close": 86
       },
       "swap_closed_count": 0,
       "swap_replacement_outperformed_rate": null,
       "readiness": {
         "ready_for_probability_analysis": false,
-        "hold_closed_count": 68,
+        "hold_closed_count": 218,
         "swap_closed_count": 0,
         "gaps": [
           "swap_rotation closed rotations=0 (target >=10)"
@@ -145,22 +151,24 @@
         "scope": "archive_near_miss",
         "readiness": {
           "ready_for_probability_analysis": true,
-          "hold_closed_count": 202,
-          "swap_closed_count": 209,
-          "hold_with_data_quality_count": 202,
+          "hold_closed_count": 729,
+          "swap_closed_count": 748,
+          "hold_with_data_quality_count": 754,
           "gaps": [],
           "note": "Closed cohorts reached initial targets; probability strand analysis can begin."
         },
-        "hold_closed_count": 202,
-        "recovered_to_breakeven_count": 148,
-        "hold_recovery_rate": 0.7327,
+        "hold_closed_count": 729,
+        "recovered_to_breakeven_count": 639,
+        "hold_recovery_rate": 0.8765,
         "close_reasons_raw": {
-          "recovered_archive_end": 148,
-          "underwater_archive_end": 54
+          "recovered_max_window": 154,
+          "underwater_max_window": 15,
+          "recovered_archive_end": 485,
+          "underwater_archive_end": 75
         },
         "close_reasons_canonical": {
-          "recovered_at_close": 148,
-          "not_recovered_at_close": 54
+          "recovered_at_close": 639,
+          "not_recovered_at_close": 90
         }
       },
       "swap_rotation": {
@@ -169,33 +177,38 @@
         "scope": "archive_near_miss",
         "readiness": {
           "ready_for_probability_analysis": true,
-          "hold_closed_count": 202,
-          "swap_closed_count": 209,
-          "hold_with_data_quality_count": 202,
+          "hold_closed_count": 729,
+          "swap_closed_count": 748,
+          "hold_with_data_quality_count": 754,
           "gaps": [],
           "note": "Closed cohorts reached initial targets; probability strand analysis can begin."
         },
-        "swap_closed_count": 209,
+        "swap_closed_count": 748,
         "verdicts": {
-          "replacement_outperformed": 118,
-          "exit_outperformed": 63,
-          "inconclusive": 28
+          "replacement_outperformed": 315,
+          "exit_outperformed": 428,
+          "inconclusive": 5
         },
-        "swap_replacement_outperformed_rate": 0.5646
+        "swap_replacement_outperformed_rate": 0.4211
       },
       "episodes_opened": {
-        "hold_recovery": 202,
-        "hold_recovery_near_miss": 202,
-        "hold_recovery_held_book": 0,
-        "swap_rotation": 209,
-        "swap_rotation_near_miss": 202,
-        "swap_rotation_log_book": 7
+        "hold_recovery": 754,
+        "hold_recovery_near_miss": 750,
+        "hold_recovery_held_book": 4,
+        "swap_rotation": 773,
+        "swap_rotation_near_miss": 750,
+        "swap_rotation_log_book": 23
       },
       "by_conviction_band": {
+        "high_ge_0.45": {
+          "closed_count": 232,
+          "recovered_to_breakeven_count": 200,
+          "recovery_rate": 0.8621
+        },
         "pre_buy_0.28_0.45": {
-          "closed_count": 202,
-          "recovered_to_breakeven_count": 148,
-          "recovery_rate": 0.7327
+          "closed_count": 493,
+          "recovered_to_breakeven_count": 435,
+          "recovery_rate": 0.8824
         }
       }
     }

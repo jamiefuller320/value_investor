@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `still_in_buy_set` · updated 2026-11-08T07:01:45.624831+00:00
+Track: `still_in_buy_set` · updated 2026-11-09T07:37:47.662521+00:00
 
 ## Portfolio loser feedback
 

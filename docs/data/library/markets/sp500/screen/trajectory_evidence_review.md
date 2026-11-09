@@ -1,18 +1,19 @@
 # Trajectory evidence review
 
-Generated: 2026-11-08T06:44:39.083950+00:00
-Archive snapshots: 77
-Transition events: 4607
-Boundary watch panel: 189
+Generated: 2026-11-09T07:21:39.485283+00:00
+Archive snapshots: 78
+Transition events: 4613
+Boundary watch panel: 199
 Loser snapshot cards: None
 
 ## Boundary watch
 
-- Panel count: 189 (core tags only; mean weeks on boundary=27.14)
-- avoid_recovery_candidate: 7
+- Panel count: 199 (core tags only; mean weeks on boundary=26.41)
+- avoid_recovery_candidate: 8
+- hold_improving: 1
 - pre_avoid: 17
-- pre_buy: 126
-- strong_buy_candidate: 39
+- pre_buy: 129
+- strong_buy_candidate: 45
 
 ## Outcome summary (1-week forward)
 
@@ -28,22 +29,22 @@ Loser snapshot cards: None
 - hold->avoid: n=201 mean=0.000645 positive_rate=0.1592
 - hold->buy: n=224 mean=0.002929 positive_rate=0.1875
 - hold->strong_buy: n=43 mean=-0.000105 positive_rate=0.0465
-- signal_unchanged: n=3499 mean=0.000117 positive_rate=0.2318
+- signal_unchanged: n=3009 mean=0.000135 positive_rate=0.2692
 - strong_buy->buy: n=115 mean=0.002576 positive_rate=0.1217
 - strong_buy->hold: n=8 mean=0.006672 positive_rate=0.125
 
 ## Multi-horizon prediction calibration
 
-- 1w: scored=2723 hit_rate=0.2035
-- 4w: scored=2646 hit_rate=0.4184
-- 8w: scored=2451 hit_rate=0.4676
-- 12w: scored=2295 hit_rate=0.454
+- 1w: scored=2726 hit_rate=0.2032
+- 4w: scored=2647 hit_rate=0.4182
+- 8w: scored=2457 hit_rate=0.4685
+- 12w: scored=2301 hit_rate=0.4546
 
 ## Weeks to realization
 
-- Realized within 12w: 1883/2731 (rate=0.6895)
-- Median weeks: 2
-- Within 4w rate: 0.7382
+- Realized within 12w: 1884/2747 (rate=0.6858)
+- Median weeks: 2.0
+- Within 4w rate: 0.7378
 
 ## Model focus candidates (for analysis-review scoring)
 

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-08T06:58:17.907546+00:00
+Track: `buy_tier_level` · updated 2026-11-09T14:16:50.347684+00:00
 
 ## Portfolio loser feedback
 
@@ -21,7 +21,7 @@ Track: `buy_tier_level` · updated 2026-11-08T06:58:17.907546+00:00
 - data_quality 1.00
 - conviction 67%
 
-### TRI.L — weakening / watch_review (-0.0%)
+### TRI.L — weakening / watch_review (+0.0%)
 - conviction 26% below intact floor
 - still buy
 - research accumulate

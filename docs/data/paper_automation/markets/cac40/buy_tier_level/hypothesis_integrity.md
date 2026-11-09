@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-08T06:59:06.516419+00:00
+Track: `buy_tier_level` · updated 2026-11-09T14:16:51.155154+00:00
 
 ## Portfolio loser feedback
 
@@ -37,7 +37,7 @@ Track: `buy_tier_level` · updated 2026-11-08T06:59:06.516419+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 67%
+- conviction 76%
 
 ### ORA.PA — weakening / watch_review (+2.2%)
 - research verdict caution
@@ -46,7 +46,8 @@ Track: `buy_tier_level` · updated 2026-11-08T06:59:06.516419+00:00
 
 ### EN.PA — weakening / watch_review (+3.1%)
 - research verdict neutral
-- still strong_buy
+- conviction 29% below intact floor
+- still buy
 - cheapness family still passes
 
 ### RI.PA — weakening / watch_review (+4.3%)

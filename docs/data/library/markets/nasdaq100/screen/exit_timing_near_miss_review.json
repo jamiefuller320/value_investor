@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "track_id": "archive_near_miss",
-  "generated_at": "2026-11-08T06:54:38.536780+00:00",
+  "generated_at": "2026-11-09T07:31:56.210080+00:00",
   "framework": {
     "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
     "hold_recovery": {
@@ -67,68 +67,61 @@
   },
   "readiness": {
     "ready_for_probability_analysis": true,
-    "hold_closed_count": 1313,
-    "swap_closed_count": 1313,
-    "hold_with_data_quality_count": 1360,
+    "hold_closed_count": 1384,
+    "swap_closed_count": 1384,
+    "hold_with_data_quality_count": 1384,
     "gaps": [],
     "note": "Closed cohorts reached initial targets; probability strand analysis can begin."
   },
   "hold_recovery": {
     "open": {
-      "count": 47,
-      "recovered_to_breakeven": 0,
-      "close_reasons": {
-        "open": 47
-      }
+      "count": 0
     },
     "closed": {
-      "count": 1313,
-      "recovered_to_breakeven": 1091,
+      "count": 1384,
+      "recovered_to_breakeven": 1162,
       "close_reasons": {
-        "recovered_max_window": 255,
-        "underwater_max_window": 12,
-        "recovered_archive_end": 836,
-        "underwater_archive_end": 210
+        "recovered_max_window": 268,
+        "underwater_max_window": 19,
+        "recovered_archive_end": 894,
+        "underwater_archive_end": 203
       }
     }
   },
   "swap_rotation": {
     "open": {
-      "count": 47,
-      "verdicts": {
-        "open": 47
-      }
+      "count": 0
     },
     "closed": {
-      "count": 1313,
+      "count": 1384,
       "verdicts": {
-        "replacement_outperformed": 865,
-        "exit_outperformed": 356,
-        "inconclusive": 92
+        "replacement_outperformed": 884,
+        "exit_outperformed": 361,
+        "inconclusive": 139
       }
     }
   },
   "note": "Archive near-miss + held-book observe sim \u2014 priors only; pair with live learning_tracks_exit_timing.json for paper-track evidence. Wider gate: min_conviction=0.28, max_episodes_per_week=25.",
   "scope": "archive_near_miss",
-  "snapshot_count": 61,
+  "snapshot_count": 62,
   "episodes_opened": {
-    "hold_recovery": 1360,
-    "hold_recovery_near_miss": 1360,
+    "hold_recovery": 1384,
+    "hold_recovery_near_miss": 1384,
     "hold_recovery_held_book": 0,
-    "swap_rotation": 1360,
-    "swap_rotation_near_miss": 1360,
+    "swap_rotation": 1384,
+    "swap_rotation_near_miss": 1384,
     "swap_rotation_log_book": 0
   },
   "by_conviction_band": {
     "high_ge_0.45": {
-      "closed_count": 372,
-      "recovered_to_breakeven_count": 319,
-      "recovery_rate": 0.8575
+      "closed_count": 390,
+      "recovered_to_breakeven_count": 337,
+      "recovery_rate": 0.8641
     },
     "pre_buy_0.28_0.45": {
-      "closed_count": 941,
-      "recovered_to_breakeven_count": 772,
-      "recovery_rate": 0.8204
+      "closed_count": 994,
+      "recovered_to_breakeven_count": 825,
+      "recovery_rate": 0.83
     }
   }
 }

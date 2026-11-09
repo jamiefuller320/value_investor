@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-11-08T06:57:53.977738+00:00",
-  "as_of": "2026-11-08T17:57:53.829695+11:00",
+  "updated_at": "2026-11-09T00:46:53.526184+00:00",
+  "as_of": "2026-11-09T11:46:52.918105+11:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -20,15 +20,15 @@
   "underwater_count": 8,
   "thesis_status_counts": {
     "intact": 17,
-    "weakening": 11,
-    "broken": 1,
+    "weakening": 12,
+    "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
     "holding_count": 29,
     "loser_count": 8,
     "loser_share": 0.2759,
-    "loser_nav_share": 0.2716,
+    "loser_nav_share": 0.2717,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
@@ -43,11 +43,11 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0476,
+      "cheapness": 0.0,
       "quality": 0.2857,
       "dividend": 0.1905,
-      "garp": 0.4762,
-      "risk": 0.0476
+      "garp": 0.4286,
+      "risk": 0.0
     },
     "selection_feedback_flags": [
       "dividend fails more often among losers (75% vs 19%)"
@@ -56,38 +56,6 @@
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
-    {
-      "ticker": "ALK.AX",
-      "name": "ALK.AX",
-      "thesis_status": "broken",
-      "recommended_action": "exit_candidate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 1.475,
-      "avg_cost": 1.475,
-      "signal": null,
-      "timing_signal": null,
-      "conviction_score": null,
-      "data_quality_score": null,
-      "passed_families": [],
-      "failed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "research_verdict": null,
-      "reasons": [
-        "cheapness lost and not in buy tier"
-      ],
-      "intact_reasons": [],
-      "weaken_reasons": [],
-      "broken_reasons": [
-        "cheapness lost and not in buy tier"
-      ]
-    },
     {
       "ticker": "AAI.AX",
       "name": "Alcoa Corporation",
@@ -655,6 +623,47 @@
       "weaken_reasons": [
         "research verdict neutral",
         "conviction 34% below intact floor"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "TUA.AX",
+      "name": "Tuas Limited",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 1.46,
+      "avg_cost": 1.46,
+      "signal": "buy",
+      "timing_signal": "accumulate",
+      "conviction_score": 0.3109,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality",
+        "dividend"
+      ],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "conviction 31% below intact floor",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 0.95"
+      ],
+      "weaken_reasons": [
+        "research verdict caution",
+        "conviction 31% below intact floor"
       ],
       "broken_reasons": []
     },

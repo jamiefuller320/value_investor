@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-08T06:58:44.681369+00:00
+Track: `buy_tier_level` · updated 2026-11-09T15:19:29.818959+00:00
 
 ## Portfolio loser feedback
 
@@ -88,7 +88,7 @@ Track: `buy_tier_level` · updated 2026-11-08T06:58:44.681369+00:00
 - conviction 67%
 
 ### BKNG — weakening / watch_review (-6.3%)
-- conviction 30% below intact floor
+- conviction 33% below intact floor
 - still buy
 - research accumulate
 
@@ -105,7 +105,7 @@ Track: `buy_tier_level` · updated 2026-11-08T06:58:44.681369+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 42%
+- conviction 47%
 
 ### ODFL — intact / hold_tolerate (-4.3%)
 - still buy
@@ -124,10 +124,12 @@ Track: `buy_tier_level` · updated 2026-11-08T06:58:44.681369+00:00
 - still strong_buy
 - cheapness family still passes
 
-### STX — weakening / watch_review (-0.1%)
-- research verdict neutral
+### STX — intact / hold_tolerate (-0.1%)
 - still buy
+- research accumulate
 - cheapness family still passes
+- data_quality 1.00
+- conviction 66%
 
 ### AMAT — weakening / watch_review (+0.0%)
 - research verdict neutral
@@ -187,7 +189,7 @@ Track: `buy_tier_level` · updated 2026-11-08T06:58:44.681369+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 73%
+- conviction 74%
 
 ### INTU — intact / hold_tolerate (+7.3%)
 - still strong_buy
@@ -201,7 +203,7 @@ Track: `buy_tier_level` · updated 2026-11-08T06:58:44.681369+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 49%
+- conviction 56%
 
 ### PYPL — weakening / watch_review (+12.4%)
 - research verdict neutral

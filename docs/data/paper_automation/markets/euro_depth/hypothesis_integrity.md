@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `rules` · updated 2026-11-08T07:01:18.639159+00:00
+Track: `rules` · updated 2026-11-09T07:37:27.877606+00:00
 
 ## Portfolio loser feedback
 
@@ -36,7 +36,7 @@ Track: `rules` · updated 2026-11-08T07:01:18.639159+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 77%
+- conviction 87%
 
 ### C5H.IR — intact / hold_tolerate (+4.6%)
 - still strong_buy

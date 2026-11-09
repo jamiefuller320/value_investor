@@ -1,78 +1,15 @@
 {
-  "acted": true,
+  "acted": false,
   "gate": {
-    "local_time": "2026-11-08T06:59:28.726284+00:00",
+    "local_time": "2026-11-09T14:16:51.957225+00:00",
     "trading_day": true,
-    "after_settle": false,
-    "market_open_at": "2026-11-08T08:00:00+00:00",
-    "settle_at": "2026-11-08T09:15:00+00:00",
-    "can_act": false,
-    "reason": "before market open"
+    "after_settle": true,
+    "market_open_at": "2026-11-09T08:00:00+00:00",
+    "settle_at": "2026-11-09T09:15:00+00:00",
+    "can_act": true,
+    "reason": "ok"
   },
-  "trades": [
-    {
-      "id": "e34edeef-4ce4-48b5-a70e-968707d71bfd",
-      "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
-      "acted_at": "2026-11-08T06:59:28.726284+00:00",
-      "ticker": "BNR.DE",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 4.485898,
-      "price": 61.9,
-      "gross": 277.68,
-      "cost": 0.49,
-      "net_cash": 277.19,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Brenntag SE",
-      "avg_cost_at_exit": 63.82,
-      "position_closed": true
-    },
-    {
-      "id": "77a5bd9c-fbc7-4063-ade9-ca0580cb3870",
-      "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
-      "acted_at": "2026-11-08T06:59:28.726284+00:00",
-      "ticker": "HEI.DE",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.521815,
-      "price": 173.8,
-      "gross": 90.69,
-      "cost": 0.16,
-      "net_cash": -90.85,
-      "note": "Automated buy",
-      "name": "Heidelberg Materials AG"
-    },
-    {
-      "id": "1fff58ca-2608-4d62-9591-d2709e161882",
-      "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
-      "acted_at": "2026-11-08T06:59:28.726284+00:00",
-      "ticker": "FME.DE",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 2.111143,
-      "price": 42.23,
-      "gross": 89.15,
-      "cost": 0.16,
-      "net_cash": -89.31,
-      "note": "Automated buy",
-      "name": "Fresenius Medical Care AG"
-    },
-    {
-      "id": "8e06213e-7f63-4f13-8826-30870d2ccacd",
-      "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
-      "acted_at": "2026-11-08T06:59:28.726284+00:00",
-      "ticker": "VOW3.DE",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 1.386912,
-      "price": 69.84,
-      "gross": 96.86,
-      "cost": 0.17,
-      "net_cash": -97.03,
-      "note": "Automated buy",
-      "name": "Volkswagen AG"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -99,8 +36,15 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 374.88,
+    "target_sleeve_value": 281.16,
     "targets": [
+      {
+        "ticker": "DHL.DE",
+        "name": "DHL AG",
+        "signal": "strong_buy",
+        "conviction_score": 0.7075,
+        "price": 58.02
+      },
       {
         "ticker": "HEI.DE",
         "name": "Heidelberg Materials AG",
@@ -125,7 +69,38 @@
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
-    "anticipated_trims": [],
+    "anticipated_trims": [
+      {
+        "action": "trim",
+        "ticker": "HEI.DE",
+        "name": "Heidelberg Materials AG",
+        "reason": "Overweight vs equal-weight sleeve (281 target)",
+        "value": 93.72,
+        "price": 173.8,
+        "conviction_score": 0.5750000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "trim",
+        "ticker": "FME.DE",
+        "name": "Fresenius Medical Care AG",
+        "reason": "Overweight vs equal-weight sleeve (281 target)",
+        "value": 93.73,
+        "price": 42.23,
+        "conviction_score": 0.532695,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "trim",
+        "ticker": "VOW3.DE",
+        "name": "Volkswagen AG",
+        "reason": "Overweight vs equal-weight sleeve (281 target)",
+        "value": 93.71,
+        "price": 69.84,
+        "conviction_score": 0.34790499999999996,
+        "signal": "buy"
+      }
+    ],
     "anticipated_buys": [],
     "anticipated_holds": [
       {
@@ -133,8 +108,8 @@
         "ticker": "HEI.DE",
         "name": "Heidelberg Materials AG",
         "reason": "Already near equal-weight target",
-        "value": 374.88,
-        "target_value": 374.88,
+        "value": 281.16,
+        "target_value": 281.16,
         "conviction_score": 0.5750000000000001,
         "signal": "buy"
       },
@@ -143,8 +118,8 @@
         "ticker": "FME.DE",
         "name": "Fresenius Medical Care AG",
         "reason": "Already near equal-weight target",
-        "value": 374.89,
-        "target_value": 374.88,
+        "value": 281.16,
+        "target_value": 281.16,
         "conviction_score": 0.532695,
         "signal": "strong_buy"
       },
@@ -153,15 +128,24 @@
         "ticker": "VOW3.DE",
         "name": "Volkswagen AG",
         "reason": "Already near equal-weight target",
-        "value": 374.87,
-        "target_value": 374.88,
+        "value": 281.16,
+        "target_value": 281.16,
         "conviction_score": 0.34790499999999996,
         "signal": "buy"
       }
     ],
-    "skipped": [],
+    "skipped": [
+      {
+        "ticker": "DHL.DE",
+        "name": "DHL AG",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 281.16,
+        "conviction_score": 0.7075,
+        "signal": "strong_buy"
+      }
+    ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    "summary": "Next rebalance would target 4 equal-weight sleeve(s); trim 3 overweight sleeve(s); leave 3 near-target holding(s)."
   },
   "alerts": [
     {
@@ -1834,12 +1818,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (4 trade(s)).",
+  "note": "Already rebalanced today for this track \u2014 skipping duplicate pass (use --force to override).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "dax",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:28.794522+00:00",
+    "generated_at": "2026-11-09T14:16:51.962916+00:00",
     "observe_only": true,
     "open_count": 15,
     "closed_count": 0,
@@ -1912,13 +1896,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
-    "checkpoints_added_this_pass": 1
+    "ingested_this_pass": 0,
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:28.796183+00:00",
+    "generated_at": "2026-11-09T14:16:51.963965+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2010,11 +1994,11 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     }
   },
   "hypothesis_integrity": {
@@ -2022,8 +2006,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-08T06:59:28.798481+00:00",
-    "as_of": "2026-11-08T06:59:28.726284+00:00",
+    "updated_at": "2026-11-09T14:16:51.965516+00:00",
+    "as_of": "2026-11-09T14:16:51.957225+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2203,7 +2187,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:28.801312+00:00",
+    "generated_at": "2026-11-09T14:16:51.967630+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2276,7 +2260,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-08T06:59:28.807884+00:00",
+    "generated_at": "2026-11-09T14:16:51.972072+00:00",
     "open_count": 2,
     "closed_count": 16,
     "scored_count": 13,
@@ -2339,13 +2323,13 @@
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
-    "marked_this_pass": 3,
-    "closed_this_pass": 1
+    "marked_this_pass": 2,
+    "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:28.726284+00:00",
+    "generated_at": "2026-11-09T14:16:51.957225+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2396,139 +2380,56 @@
       "opened": 0,
       "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 1
+      "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-08T06:59:28.726284+00:00",
+    "generated_at": "2026-11-09T14:16:51.957225+00:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "llm",
-    "judge_spec_id": "llm.v1",
-    "parent_spec_id": "heuristic.v1",
+    "judge_backend": "evidence_heuristic",
+    "judge_spec_id": "heuristic.v1",
+    "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 4,
-    "card_count": 4,
+    "proposal_count": 1,
+    "card_count": 1,
     "verdict_counts": {
-      "agree": 3,
+      "agree": 1,
       "veto": 0,
-      "abstain": 1
+      "abstain": 0
     },
     "by_algo_action": {
-      "sell": {
+      "rebuy_skip": {
         "agree": 1,
         "veto": 0,
         "abstain": 0
-      },
-      "buy": {
-        "agree": 2,
-        "veto": 0,
-        "abstain": 1
       }
     },
     "disagree_vs_heuristic_count": 0,
     "cards": [
       {
-        "ticker": "BNR.DE",
-        "name": "Brenntag SE",
-        "algo_action": "sell",
-        "algo_reason": "Automated exit \u2014 left target set",
+        "ticker": "DHL.DE",
+        "name": "DHL AG",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
         "reasons": [
-          "Effective screen signal is hold and still_buyish is false, so the name has left the buy/strong_buy cohort.",
-          "Research overlay is caution with overlay_bound true; exit aligns with diminished buy posture rather than a capacity-bump while still buyish.",
-          "Automated exit for leaving the target set is consistent with cited decision-time evidence."
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
         ],
         "evidence": [
           {
             "kind": "algo_reason",
             "source": "plan_or_trade",
-            "detail": "Automated exit \u2014 left target set"
+            "detail": "Insufficient cash after higher-conviction fills"
           },
           {
             "kind": "screen_signal",
             "source": "candidates",
             "detail": "Effective signal at decision time",
-            "value": "hold"
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "caution"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-08T06:59:28.726284+00:00",
-        "proposal_id": "buy_tier_level:BNR.DE:sell:2026-11-08T06:59:28.726284+00:00",
-        "meta": {
-          "still_buyish": false,
-          "rank_drop": null,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "caution",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "HEI.DE",
-        "name": "Heidelberg Materials AG",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Effective screen signal is buy with still_buyish true.",
-          "Conviction rank 1 with rank_drop 0 matches entry rank 1 (hold gate satisfied).",
-          "Research verdict accumulate with bounded overlay supports automated buy into the buyish target set."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
+            "value": "strong_buy"
           },
           {
             "kind": "conviction_rank",
@@ -2555,10 +2456,22 @@
             "value": "accumulate"
           },
           {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.7075
+          },
+          {
             "kind": "still_buyish",
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
             "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
           },
           {
             "kind": "overlay_bound",
@@ -2567,13 +2480,13 @@
             "value": true
           }
         ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-11-08T06:59:28.726284+00:00",
-        "proposal_id": "buy_tier_level:HEI.DE:buy:2026-11-08T06:59:28.726284+00:00",
+        "logged_at": "2026-11-09T14:16:51.957225+00:00",
+        "proposal_id": "buy_tier_level:DHL.DE:rebuy_skip:2026-11-09T14:16:51.957225+00:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -2588,235 +2501,33 @@
             "overlay_bound": true,
             "interim_eps_decline_pct": null,
             "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Buy into buyish target set \u2014 agree with algo selection."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "FME.DE",
-        "name": "Fresenius Medical Care AG",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Effective screen signal is buy with still_buyish true.",
-          "Conviction rank 2 unchanged from entry (rank_drop 0).",
-          "Research caution is noted but does not overturn buyish screen signal with overlay_bound true."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 2
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 2
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "caution"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
           }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-08T06:59:28.726284+00:00",
-        "proposal_id": "buy_tier_level:FME.DE:buy:2026-11-08T06:59:28.726284+00:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "caution",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Buy into buyish target set \u2014 agree with algo selection."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
         },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "VOW3.DE",
-        "name": "Volkswagen AG",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "abstain",
-        "reasons": [
-          "Effective screen signal is hold and still_buyish is false while algo_action is buy \u2014 mixed posture on supplied evidence.",
-          "Research verdict caution with overlay_bound true does not establish a decisive buy case from the memo alone.",
-          "Insufficient alignment between buy action and buyish cohort flags to agree or veto confidently."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "hold"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 3
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "caution"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-11-08T06:59:28.726284+00:00",
-        "proposal_id": "buy_tier_level:VOW3.DE:buy:2026-11-08T06:59:28.726284+00:00",
-        "meta": {
-          "still_buyish": false,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "caution",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "abstain",
-            "reasons": [
-              "Buy while not buyish \u2014 abstain."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
+        "schema_version": 1
       }
     ],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
-    "llm_judge": {
-      "attempted": true,
-      "ok": true,
-      "fallback": null,
-      "llm_card_count": 4
-    },
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-08T06:59:28.726284+00:00",
+      "generated_at": "2026-11-09T14:16:51.957225+00:00",
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "llm",
-      "judge_spec_id": "llm.v1",
-      "parent_spec_id": "heuristic.v1",
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 4,
+      "card_count": 1,
       "verdict_counts": {
-        "agree": 3,
+        "agree": 1,
         "veto": 0,
-        "abstain": 1
+        "abstain": 0
       },
       "by_algo_action": {
-        "sell": {
+        "rebuy_skip": {
           "agree": 1,
           "veto": 0,
           "abstain": 0
-        },
-        "buy": {
-          "agree": 2,
-          "veto": 0,
-          "abstain": 1
         }
       },
       "veto_sell_count": 0,
@@ -2831,10 +2542,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-11-08T06:59:34.240864+00:00",
+  "generated_at": "2026-11-09T14:16:51.977089+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

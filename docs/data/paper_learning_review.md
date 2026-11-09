@@ -1,45 +1,31 @@
 CHURN SUMMARY
-Hold-buffer guards (`exit_confirm_screens=2`, `reentry_cooldown_screens=1`, `min_rebalance_notional_gbp=10.0`) are live on all three focus tracks, but the 7-day window shows no guard activation: `buffered_holdings=0`, empty `exit_streak` and `reentry_cooldown` on rules/ai_judgment/momentum_grace, `duplicate_day_skip=false`, and `adjacent_flip_count=0` everywhere. Recent activity is quiet (rules 0 trades, momentum_grace 0, ai_judgment 2), yet lifetime cost drag remains elevated on rules (30.51%, 51 trades) and primary ai_judgment (22.98%, 34 trades), with watch alerts on both; momentum_grace is the outlier at 2.91% drag and 5 lifetime trades. The buffered-hold counterfactual replay for rules and ai_judgment shows zero differentiation between `exit_confirm_screens=1` vs `2` (`trade_count_delta_lower_minus_higher=0`, `cost_drag_delta_lower_minus_higher=0.0`). The single biggest operational learning gap is insufficient post-guard epoch evidence on the primary track: ai_judgment epoch started 2026-08-26 with only 3 equity marks, `post_apply_trade_count=0`, and `enough_epoch_history=false`, so churn improvement cannot yet be attributed to guards rather than pre-epoch history.
+All four active books share the same hold-buffer stack (`exit_confirm_screens`: 2, `reentry_cooldown_screens`: 1, `min_rebalance_notional_gbp`: 10.0), yet `rebalance_state.buffered_holdings` is 0 everywhere with empty `exit_streak` and `reentry_cooldown`, so guards are not visibly binding on the latest pass. `churn_health.alerts` is empty, every `last_run` shows `trade_count` 0 and `duplicate_day_skip` false, and `adjacent_flip_count` is 0 across the panel—mechanical flip churn looks contained in the last 7d. Lifetime `decision_review.cost_drag` remains highest on the primary (`ai_judgment_matched30_fair` 0.0111 vs control `buy_tier_matched30_fair` 0.0092), while the 7d buffered-hold replay shows `cost_drag_delta_lower_minus_higher` 0.0 on both matched-30 books (primary `trade_count_delta_lower_minus_higher` −2: screens=1 → 6 trades vs screens=2 → 8). The single biggest operational learning gap is benchmark/epoch readiness: `learning_track_epoch_datum.summary` reports `tracks_with_epoch` 0, `tracks_benchmark_span_ready` 0, and `all_benchmark_spans_insufficient` true on every active book, so churn economics cannot yet be judged on a post-apply epoch while log replay stays thin (5 `log_entries_in_window`) and cites L111 pre-logging limits.
 
 PER-TRACK DIAGNOSIS
-**rules (control)**
-- Lifetime `cost_drag=0.3051`, `trade_count=51`; epoch-scoped drag is lower at `0.1277` over 16 epoch trades (`learning_track_epoch_datum.post_apply_trade_count=16`, `enough_epoch_history=true`).
-- Guards: `exit_confirm_screens=2`, `reentry_cooldown_screens=1`, `min_rebalance_notional_gbp=10.0`.
-- `rebalance_state.exit_streak={}`, `reentry_cooldown={}`, `buffered_holdings=0`.
-- Last run: `trade_count=0`, `duplicate_day_skip=false`, `buffer_holds_planned=0`, `reentry_skips_planned=0`.
-- 7d trades: `total=0`; `adjacent_flip_count=0`, `adjacent_side_flips=[]`.
-- Buffered-hold replay (screens 1 vs 2): `trade_count_delta_lower_minus_higher=0`, `cost_drag_delta_lower_minus_higher=0.0`; both variants `simulated_trade_count=3`, `simulated_cost_drag=0.0291`; `churn_context.full_exits_in_window=0`, `log_entries_in_window=4`.
+- **ai_judgment_matched30_fair** (primary, `is_primary_learning_track`: true): `decision_review.cost_drag` 0.0111, `trade_count` 71, `excess_after_costs` −0.0145; guards `exit_confirm_screens` 2, `reentry_cooldown_screens` 1, `min_rebalance_notional_gbp` 10.0. `rebalance_state`: empty `exit_streak`, empty `reentry_cooldown`, `buffered_holdings` 0. `last_run`: `trade_count` 0, `duplicate_day_skip` false, `buffer_holds_planned` 0, `reentry_skips_planned` 0, note “Rebalanced after open settle (0 trade(s)).” 7d: `total` 8 (5 buys, 3 sells, 3 `full_exits`), `adjacent_flip_count` 0, `adjacent_side_flips` []. Buffered-hold (7d): `full_exits_in_window` 3, `log_entries_in_window` 5; screens 1 vs 2 → `trade_count_delta_lower_minus_higher` −2, `cost_drag_delta_lower_minus_higher` 0.0, `return_delta_lower_minus_higher` −0.0025 (variant 1: `simulated_trade_count` 6, `simulated_cost_drag` 0.001; variant 2: `simulated_trade_count` 8, `simulated_cost_drag` 0.001, matches `actual_nav` 976.22). `learning_track_epoch_datum`: `post_apply_trade_count` 0, `equity_marks` 0, `benchmark_span_available` false, `enough_epoch_history` false.
 
-**ai_judgment (primary)**
-- Lifetime `cost_drag=0.2298`, `trade_count=34`; beats control on excess (`excess_after_costs=-0.1924` vs rules `-0.2826`) but `beat_market=false`, verdict `underperforming`.
-- Guards: same as rules (`exit_confirm_screens=2`, `reentry_cooldown_screens=1`, `min_rebalance_notional_gbp=10.0`).
-- `rebalance_state.exit_streak={}`, `reentry_cooldown={}`, `buffered_holdings=0`.
-- Last run: `trade_count=0`, `duplicate_day_skip=false`, `buffer_holds_planned=0`.
-- 7d trades: `total=2` (1 buy, 1 trim); `adjacent_flip_count=0`.
-- Buffered-hold replay: identical 1 vs 2 outcome — `trade_count_delta_lower_minus_higher=0`, `cost_drag_delta_lower_minus_higher=0.0`; both variants `simulated_trade_count=3`, `simulated_cost_drag=0.0291`; `churn_context.full_exits_in_window=0`.
-- Epoch datum: `epoch_started_at=2026-08-26`, `epoch_nav=821.98`, `epoch_return=0.0`, `post_apply_trade_count=0`, `equity_marks=3`, `benchmark_span_available=true`, `enough_epoch_history=false`.
+- **buy_tier_matched30_fair** (control): `cost_drag` 0.0092, `trade_count` 76, `excess_after_costs` −0.0057; same guard triple. Empty `exit_streak` / `reentry_cooldown`, `buffered_holdings` 0. `last_run`: 0 trades, `duplicate_day_skip` false. 7d: 12 trades (6 buys, 6 sells, 6 `full_exits`), `adjacent_flip_count` 0. Buffered-hold: `full_exits_in_window` 6, `log_entries_in_window` 5; `trade_count_delta_lower_minus_higher` 0, `cost_drag_delta_lower_minus_higher` 0.0, `return_delta_lower_minus_higher` 0.0011 (both variants `simulated_trade_count` 12, `simulated_cost_drag` 0.0011). Epoch datum: `benchmark_span_available` false, `post_apply_trade_count` 0.
 
-**momentum_grace (experimental)**
-- Lifetime `cost_drag=0.0291`, `trade_count=5`; `excess_after_costs=-0.0219`.
-- Guards: `exit_confirm_screens=2`, `reentry_cooldown_screens=1`, `min_rebalance_notional_gbp=10.0`; `use_momentum_grace=true`, `min_conviction=0.0`.
-- `rebalance_state.exit_streak={}`, `reentry_cooldown={}`, `buffered_holdings=0`.
-- Last run: `trade_count=0`, `duplicate_day_skip=false`.
-- 7d trades: `total=0`; `adjacent_flip_count=0`.
-- No `buffered_hold_counterfactual` entry for this track in the payload.
-- Epoch datum: `epoch_started_at=2026-08-12`, `epoch_nav=970.87`, `epoch_return=0.0`, `post_apply_trade_count=0`, `equity_marks=13`, `benchmark_span_available=true`, `enough_epoch_history=false`.
+- **buy_tier_level** (running twin): `cost_drag` 0.0089, `trade_count` 145, `excess_after_costs` 0.0053; same guards. Empty streak/cooldown, `buffered_holdings` 0. `last_run`: 0 trades, `duplicate_day_skip` false. 7d: 14 trades (7 buys, 7 sells, 7 `full_exits`), `adjacent_flip_count` 0. Not in `buffered_hold_counterfactual.tracks`. Epoch datum: `benchmark_span_available` false, `post_apply_trade_count` 0.
+
+- **buy_tier_level_dca** (running twin): `cost_drag` 0.0063, `trade_count` 172, `excess_after_costs` −0.0099; same guards. Empty streak/cooldown, `buffered_holdings` 0. `last_run`: 0 trades, `duplicate_day_skip` false. 7d: 43 trades (33 buys, 10 sells, 10 `full_exits`), `adjacent_flip_count` 0. Not in `buffered_hold_counterfactual.tracks`. Epoch datum: `benchmark_span_available` false, `post_apply_trade_count` 0.
 
 PROPOSED EXPERIMENTS
-1. [paper_churn] Raise `min_rebalance_notional_gbp` on rules and ai_judgment track `config.json` (e.g. 10 → 25 GBP) and run one weekly paper pass — expected learning value: test whether sub-notional rebalance intents explain the 51/34 lifetime trade gap vs momentum_grace's 5 trades without touching live guards.
+1. [paper_churn] Run `ftse-rebalance-log buffered-hold` on `buy_tier_level` and `buy_tier_level_dca` with `--exit-confirm-variants 1,2` and `--lookback-days 28` (paper root `output/paper_automation`) — expected learning value: quantify whether Suite B cohort churn (14 vs 43 trades in 7d) shows the same screens=1 vs 2 trade split as matched-30 primary without mutating live `exit_confirm_screens`; extend the done `plr-20260901-02` verdict chain on books absent from this week’s `buffered_hold_counterfactual.tracks` (no new PLR wrapper; `paper_learning_tasks.json` has no open tasks).
 
-2. [paper_churn] Re-run buffered-hold counterfactual on rules/ai_judgment with extended lookback (beyond 7d, covering epoch start 2026-08-12/26) — expected learning value: the current window tied at delta 0; a longer replay may surface whether `exit_confirm_screens=1` vs `2` changes trade count or cost drag when exit signals actually fire.
+2. [paper_churn] Re-run buffered-hold on `ai_judgment_matched30_fair` and `buy_tier_matched30_fair` with `--lookback-days 28` and variants 1,2 only — expected learning value: test whether the 7d panel’s primary `trade_count_delta_lower_minus_higher` −2 and control tie at 0 persist over a longer logged window before any config edit to `output/paper_automation/*/config.json`; treat as observe-only follow-on to `plr-20260901-02` evidence, not a reopen.
 
-3. [offline_sim] Manual replay of ai_judgment_calibrated proposed knobs (`min_conviction=0.05`, `max_positions=4`) already sketched in `learning_tracks_review` counterfactual — expected learning value: log replay shows `cost_drag_delta_vs_actual=0.0349` and `return_delta_vs_actual=0.0369`; confirms whether conviction floor + position cap reduce drag before any paper-track config edit on primary ai_judgment.
+3. [monitoring] Cross-read active-book `exit_shadow` open cohorts (`buy_tier_matched30_fair` `open_count` 23 vs `closed_count` 0; primary `open_count` 9) with churn `full_exits_in_window` (3 primary, 6 control) under `ana-20260728-04` — expected learning value: learn exit-kind mix before any guard retune while `closed_count` remains 0 across active books.
 
 DEFER
-- Auto-applying decision-review proposed changes (`applied=false` everywhere; calibrated shadows propose `min_conviction=0.05` / `max_positions=4` but are frozen).
-- Reducing live `exit_confirm_screens` from 2 to 1 based on counterfactual — replay shows zero delta in-window and payload explicitly marks observe-only.
-- Momentum_grace buffered-hold screen comparison — no counterfactual block exists for this track yet.
-- Knob proposals for graduated_allocation/technical (`enough_history=false`; benchmark unavailable) until ≥2 epoch marks and ≥1 post-apply trade.
-- Exit-shadow grace-vs-rotation auto-tuning — all focus tracks report `closed_count=0`.
-- Archive lab (L111) full pre-logging replay — current replays cover logged passes only with stated limitations.
-- Any live-capital cutover or engineering/paper-auto pipeline changes.
+- Any `decision-review --apply`, significance-gate knob auto-proposals, or live guard edits from this review: all `learning_tracks_review.reviews.*.applied` are false; `guardrails.no_decision_review_apply` is true; `proposed_changes` {} on every active book.
+
+- Using `learning_track_epoch_datum` or FTAL proposal windows for knob decisions until `benchmark_span_available` and post-apply trade history exist (`summary.all_benchmark_spans_insufficient` true; every track `equity_marks` 0, `post_apply_trade_count` 0).
+
+- Re-opening N58/N59 parked probes: `min_rebalance_notional_gbp` live lifts (`plr-20260901-01` cancelled), calibrated-knob replay (`plr-20260901-03` cancelled), or duplicate extended buffered-hold human-acks beyond the done `plr-20260901-02` keep-`exit_confirm_screens`=2 verdict.
+
+- Lowering live `exit_confirm_screens` on matched-30 books from the 7d replay alone (primary `return_delta_lower_minus_higher` −0.0025 favors screens=2 in-window; `cost_drag_delta_lower_minus_higher` 0.0).
+
+- Exit-shadow / momentum-grace knob auto-tune while `exit_shadow` shows `closed_count` 0 on all active churn_health track_ids.
+
+- Full-history churn attribution via archive lab (L111) or live-capital cutover until more equity marks and closed exit cohorts accumulate—observe-only per payload `limitations` on buffered-hold replay.
