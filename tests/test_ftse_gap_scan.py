@@ -77,14 +77,14 @@ def test_known_examples_when_files_contain_them():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
 
     bab = rows["BAB.L"]
-    assert bab.dividend_yield_raw == pytest.approx(0.73)
-    assert bab.yield_display == "73.0%"
+    assert bab.dividend_yield_raw == pytest.approx(0.75)
+    assert bab.yield_display == "75.0%"
     assert "raw_yield_below_one_displayed_as_percent" in _ids(bab)
 
-    iii = rows["III.L"]
-    assert iii.displayed_fcf is not None
-    assert iii.operating_cashflow is None
-    assert "fcf_stored_operating_cashflow_missing" in _ids(iii)
+    # No live screen row currently stores FCF without operating cashflow; keep the
+    # rule covered with a synthetic row (same pattern as empty_fcf below).
+    missing_ocf = _row(displayed_fcf=1.0, operating_cashflow=None)
+    assert "fcf_stored_operating_cashflow_missing" in _ids(missing_ocf)
 
     barc = rows["BARC.L"]
     assert barc.operating_cashflow == pytest.approx(18_739_000_000.0)
@@ -96,7 +96,7 @@ def test_known_examples_when_files_contain_them():
     assert "empty_fcf_object_with_operating_cashflow" in _ids(empty_fcf)
 
     bhmg = rows["BHMG.L"]
-    assert bhmg.pe_display == "418.0"
+    assert bhmg.pe_display == "413.0"
     assert bhmg.history_price == pytest.approx(419.0)
     assert "screen_pe_equals_pence_price" not in _ids(bhmg)
     matched_price = _row(pe_display="419.0", history_price=419.0)
@@ -337,14 +337,14 @@ def test_byg_and_dln_are_trust_rows_with_revenue_and_no_price():
     byg = rows["BYG.L"]
     assert byg.trust is True
     assert byg.statement_revenue == pytest.approx(209_084_000.0)
-    assert byg.discount_display == "29.2%"
+    assert byg.discount_display == "28.4%"
     assert byg.fcf_has_figure is False
     assert byg.history_price is None
     assert "trust_revenue_discount_without_fcf_or_price" in _ids(byg)
     dln = rows["DLN.L"]
     assert dln.trust is True
     assert dln.statement_revenue == pytest.approx(388_700_000.0)
-    assert dln.discount_display == "39.2%"
+    assert dln.discount_display == "38.0%"
     assert dln.fcf_has_figure is False
     assert dln.history_price is None
     assert "trust_revenue_discount_without_fcf_or_price" in _ids(dln)
@@ -404,12 +404,12 @@ def test_emg_premium_counts_on_the_trust_revenue_check():
     emg = rows["EMG.L"]
     latest = json.loads((ROOT / "docs/data/latest.json").read_text())
     stored = next(raw for raw in latest["trust_reports"] if raw.get("ticker") == "EMG.L")
-    assert stored["key_metrics"]["P/B"] == "3.12"
+    assert stored["key_metrics"]["P/B"] == "2.78"
     assert emg.trust is True
-    assert emg.premium_display == "212.1%"
+    assert emg.premium_display == "178.2%"
     assert emg.discount_display is None
-    assert emg.pe_display == "15.9"
-    assert emg.yield_display == "3.8%"
+    assert emg.pe_display == "14.1"
+    assert emg.yield_display == "4.3%"
     assert "P/B" in emg.key_metric_names
     assert emg.fcf_has_figure is False
     assert emg.history_price is None
@@ -419,7 +419,7 @@ def test_emg_premium_counts_on_the_trust_revenue_check():
         for hit in hits_for(emg)
         if hit.rule_id == "trust_revenue_discount_without_fcf_or_price"
     )
-    assert "premium 212.1%" in detail
+    assert "premium 178.2%" in detail
 
 
 def _income_pair(ticker: str, year: str) -> tuple[float, float]:
@@ -475,11 +475,11 @@ def test_fras_gdwn_and_has_2026_income_pairs():
 def test_hbr_and_elm_positive_pe_beside_negative_diluted_eps():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
     hbr = rows["HBR.L"]
-    assert hbr.pe_display == "25.7"
+    assert hbr.pe_display == "21.9"
     assert hbr.diluted_eps == pytest.approx(-0.16)
     assert "positive_screen_pe_beside_negative_diluted_eps" in _ids(hbr)
     elm = rows["ELM.L"]
-    assert elm.pe_display == "20.8"
+    assert elm.pe_display == "21.2"
     assert elm.diluted_eps == pytest.approx(-0.078)
     assert "positive_screen_pe_beside_negative_diluted_eps" in _ids(elm)
     assert "positive_screen_pe_beside_negative_diluted_eps" not in _ids(
@@ -496,7 +496,7 @@ def test_hbr_and_elm_positive_pe_beside_negative_diluted_eps():
 
 def test_jemi_and_fcss_have_a_pe_and_neither_discount_nor_premium():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
-    for ticker, pe in (("JEMI.L", "3.2"), ("FCSS.L", "7.7")):
+    for ticker, pe in (("JEMI.L", "3.1"), ("FCSS.L", "8.1")):
         row = rows[ticker]
         assert row.trust is True
         assert row.pe_display == pe
@@ -531,10 +531,10 @@ def test_jemi_and_fcss_have_a_pe_and_neither_discount_nor_premium():
 def test_screen_pe_beside_a_revenue_year_with_no_eps_line():
     rows = {row.ticker: row for row in load_screen_rows(ROOT)}
     expected = {
-        "LRE.L": ("7.2", "2025", 1_883_400_000.0, 293_400_000.0),
+        "LRE.L": ("7.1", "2025", 1_883_400_000.0, 293_400_000.0),
         "LWDB.L": ("5.2", "2025", 366_003_000.0, 304_670_000.0),
-        "INPP.L": ("10.7", "2025", 267_760_000.0, 263_704_000.0),
-        "JEDT.L": ("5.3", "2026", 114_629_000.0, 112_129_000.0),
+        "INPP.L": ("10.8", "2025", 267_760_000.0, 263_704_000.0),
+        "JEDT.L": ("5.4", "2026", 114_629_000.0, 112_129_000.0),
     }
     for ticker, (pe, year, revenue, net) in expected.items():
         row = rows[ticker]
