@@ -16934,3 +16934,125 @@ def test_eng_20260927_03_refetch_ir_presentation_sources_pipeline(tmp_path: Path
     assert summary["management_fcf_definition_count"] >= 1
     saved = json.loads((sources_dir / "ir_presentation_metrics.json").read_text(encoding="utf-8"))
     assert saved["bridge_count"] == summary["bridge_count"]
+
+
+def test_eng_20261108_03_body_lag_gate_index_body_gap_despite_zero_lag(tmp_path: Path):
+    """eng-20261108-03: adequate memo at body parity still rememos when index has body gaps."""
+    from value_investor.research.filings import body_lag_rememo_gate
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    rows = []
+    for i in range(40):
+        rows.append(
+            {
+                "id": f"row_{i}",
+                "source": "ir_allowlist",
+                "period": "annual" if i < 4 else "other",
+                "has_body": i < 8,
+                "url": f"https://example.com/doc{i}.pdf",
+            }
+        )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": rows, "summary": {"total": 40, "with_body": 8}}),
+        encoding="utf-8",
+    )
+    gate = body_lag_rememo_gate(
+        grade="adequate",
+        memo_bodies=8,
+        memo_filings_total=8,
+        filings_dir=filings_dir,
+        body_lag_threshold=10,
+    )
+    assert gate["eligible"] is True
+    assert gate["reason"] == "stale_adequate_grade_index_body_gap_8_of_40"
+    assert gate["indexed_without_body"] == 32
+
+
+def test_eng_20261108_03_body_lag_gate_memo_penetration_lt_total(tmp_path: Path):
+    """eng-20261108-03: memo snapshot 5/20 bodies is rememo-eligible without disk lag."""
+    from value_investor.research.filings import body_lag_rememo_gate
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+    gate = body_lag_rememo_gate(
+        grade="thin",
+        memo_bodies=5,
+        memo_filings_total=20,
+        filings_dir=filings_dir,
+    )
+    assert gate["eligible"] is True
+    assert gate["reason"] == "stale_thin_grade_memo_penetration_5_of_20"
+
+
+def test_eng_20261108_03_body_lag_gate_low_source_quality(tmp_path: Path):
+    """eng-20261108-03: sub-adequate source_quality_score marks weak memo stale."""
+    from value_investor.research.filings import rememo_eligibility_from_research_meta
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [{"id": "a1", "has_body": True, "url": "https://example.com/a.pdf"}],
+                "summary": {"total": 1, "with_body": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+    meta = {
+        "research_verdict": "accumulate",
+        "memo_quality": {
+            "grade": "adequate",
+            "filings_with_body": 1,
+            "filings_total": 1,
+            "source_quality_score": 0.48,
+        },
+        "source_counts": {"filings_with_body": 1, "filings_total": 1},
+    }
+    gate = rememo_eligibility_from_research_meta(meta, filings_dir)
+    assert gate["eligible"] is True
+    assert gate["reason"] == "stale_adequate_grade_source_quality_0.480"
+
+
+def test_eng_20261108_03_refetch_residual_reports_index_coverage(tmp_path: Path, monkeypatch):
+    """eng-20261108-03: residual refetch exposes index penetration for ingest-improved."""
+    from value_investor.research.filings import refetch_residual_filing_bodies
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: "Revenue operating profit cash flow statutory accounts " * 35 if url else None,
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "gap_row",
+                        "source": "ir_allowlist",
+                        "period": "annual",
+                        "has_body": False,
+                        "url": "https://example.com/fy2025-annual-report.pdf",
+                    }
+                ],
+                "summary": {"total": 3, "with_body": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker="TEST.L",
+        company_name="Test plc",
+        max_bodies=2,
+    )
+    assert result["filings_total_before"] == 3
+    assert result["indexed_without_body_before"] == 3
+    assert result["with_body_after"] >= 1
+    assert result["indexed_without_body_after"] < result["indexed_without_body_before"]

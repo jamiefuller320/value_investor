@@ -11074,6 +11074,11 @@ def refetch_residual_filing_bodies(
         company_name=company_name,
         ticker=ticker,
     )
+    coverage_before = filings_index_coverage(
+        filings_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
     try:
         payload = json.loads(index_path.read_text(encoding="utf-8"))
     except (OSError, ValueError, TypeError) as exc:
@@ -11127,6 +11132,11 @@ def refetch_residual_filing_bodies(
         ticker=ticker,
     )
     after = int(post_reconcile.get("with_body_after") or after)
+    coverage_after = filings_index_coverage(
+        filings_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
     return {
         "attempted": len(attempted_ids),
         "fetched": max(0, after - before),
@@ -11135,6 +11145,10 @@ def refetch_residual_filing_bodies(
         "pruned_unfetchable": pruned_unfetchable,
         "with_body_before": before,
         "with_body_after": after,
+        "filings_total_before": int(coverage_before.get("filings_total") or 0),
+        "filings_total_after": int(coverage_after.get("filings_total") or 0),
+        "indexed_without_body_before": int(coverage_before.get("indexed_without_body") or 0),
+        "indexed_without_body_after": int(coverage_after.get("indexed_without_body") or 0),
         "deadline_hit": deadline_reached(deadline_monotonic),
         "note": "refetch_residual_filing_bodies",
     }
@@ -11528,6 +11542,95 @@ def count_filings_with_body(
     return sum(1 for row in reconciled_rows if isinstance(row, dict) and row.get("has_body"))
 
 
+MEMO_SOURCE_QUALITY_REMEMO_THRESHOLD = 0.55
+THIN_MEMO_GRADES = frozenset({"thin", "poor", "adequate", ""})
+
+
+def filings_index_coverage(
+    filings_dir: Path,
+    *,
+    company_name: str | None = None,
+    ticker: str | None = None,
+) -> dict[str, int]:
+    """``filings_index.json`` totals for dedupe fresh_memo vs body-lag reconciliation."""
+    filings_dir = Path(filings_dir)
+    empty = {"filings_total": 0, "filings_with_body": 0, "indexed_without_body": 0}
+    index_path = filings_dir / "filings_index.json"
+    if not index_path.exists():
+        return empty
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return empty
+    if not isinstance(payload, dict):
+        return empty
+    filings = list(payload.get("filings") or [])
+    summary = payload.get("summary") or {}
+    total = int(summary.get("total") or len(filings))
+    with_body = count_filings_with_body(
+        filings_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
+    if with_body == 0:
+        with_body = int(summary.get("with_body") or 0)
+        if with_body == 0:
+            with_body = sum(1 for row in filings if isinstance(row, dict) and row.get("has_body"))
+    indexed_without_body = max(0, total - with_body)
+    return {
+        "filings_total": total,
+        "filings_with_body": with_body,
+        "indexed_without_body": indexed_without_body,
+    }
+
+
+def _supplemental_fresh_memo_rememo_reason(
+    *,
+    grade: str | None,
+    memo_bodies: int,
+    memo_filings_total: int,
+    memo_source_quality_score: float | None,
+    disk_bodies: int,
+    disk_filings_total: int,
+    has_verdict: bool,
+) -> str | None:
+    """
+    Rememo when dedupe would skip a weak memo as ``fresh_memo`` but filings coverage
+    or memo source quality still lags the index (without widening ``rememo_reason``).
+    """
+    if not has_verdict:
+        return None
+    grade_key = str(grade or "").strip().lower()
+    if grade_key not in THIN_MEMO_GRADES:
+        return None
+    memo_bodies_i = int(memo_bodies)
+    memo_total = int(memo_filings_total)
+    disk_bodies_i = int(disk_bodies)
+    disk_total = int(disk_filings_total)
+    label = grade_key or "missing"
+
+    if memo_total > 0 and memo_bodies_i < memo_total:
+        return f"stale_{label}_grade_memo_penetration_{memo_bodies_i}_of_{memo_total}"
+
+    if (
+        disk_total > 0
+        and disk_bodies_i < disk_total
+        and memo_bodies_i >= disk_bodies_i
+        and disk_bodies_i > 0
+    ):
+        return f"stale_{label}_grade_index_body_gap_{disk_bodies_i}_of_{disk_total}"
+
+    if memo_source_quality_score is not None:
+        try:
+            score = float(memo_source_quality_score)
+        except (TypeError, ValueError):
+            score = None
+        if score is not None and score < MEMO_SOURCE_QUALITY_REMEMO_THRESHOLD:
+            return f"stale_{label}_grade_source_quality_{score:.3f}"
+
+    return None
+
+
 def body_lag_rememo_gate(
     *,
     grade: str | None,
@@ -11538,20 +11641,25 @@ def body_lag_rememo_gate(
     ingest_improved: bool = False,
     company_name: str | None = None,
     ticker: str | None = None,
+    memo_filings_total: int = 0,
+    memo_source_quality_score: float | None = None,
 ) -> dict[str, Any]:
     """
     Whether a thin/zero-body memo should rememo after filing bodies land.
 
     Uses the shared ``rememo_reason`` rule — thin grade alone does not qualify;
     disk must exceed the memo snapshot (zero-body catchup or full body-lag).
+    Also reconciles ``fresh_memo`` dedupe with index penetration and memo
+    ``source_quality`` for weak grades (Phase B does not widen ``rememo_reason``).
     """
     from value_investor.research.market_store import rememo_reason
 
-    disk_bodies = count_filings_with_body(
+    coverage = filings_index_coverage(
         filings_dir,
         company_name=company_name,
         ticker=ticker,
     )
+    disk_bodies = int(coverage["filings_with_body"])
     reason = rememo_reason(
         grade=grade,
         memo_bodies=int(memo_bodies),
@@ -11560,17 +11668,53 @@ def body_lag_rememo_gate(
         ingest_improved=bool(ingest_improved),
         has_verdict=has_verdict,
     )
+    if reason is None:
+        reason = _supplemental_fresh_memo_rememo_reason(
+            grade=grade,
+            memo_bodies=int(memo_bodies),
+            memo_filings_total=int(memo_filings_total),
+            memo_source_quality_score=memo_source_quality_score,
+            disk_bodies=disk_bodies,
+            disk_filings_total=int(coverage["filings_total"]),
+            has_verdict=has_verdict,
+        )
     return {
         "eligible": reason is not None,
         "reason": reason,
         "disk_bodies": disk_bodies,
+        "disk_filings_total": int(coverage["filings_total"]),
+        "indexed_without_body": int(coverage["indexed_without_body"]),
         "memo_bodies": int(memo_bodies),
+        "memo_filings_total": int(memo_filings_total),
         "body_lag": max(0, disk_bodies - int(memo_bodies)),
         "ingest_improved": bool(ingest_improved),
     }
 
 
-THIN_MEMO_GRADES = frozenset({"thin", "poor", "adequate", ""})
+def rememo_eligibility_from_research_meta(
+    meta: dict[str, Any],
+    filings_dir: Path,
+    *,
+    company_name: str | None = None,
+    ticker: str | None = None,
+    body_lag_threshold: int = 10,
+    ingest_improved: bool = False,
+) -> dict[str, Any]:
+    """Body-lag rememo gate from committed ``research.json`` metadata."""
+    fields = memo_quality_filing_fields(meta)
+    has_verdict = bool(str(meta.get("research_verdict") or "").strip())
+    return body_lag_rememo_gate(
+        grade=fields.get("grade"),
+        memo_bodies=int(fields.get("filings_with_body") or 0),
+        memo_filings_total=int(fields.get("filings_total") or 0),
+        memo_source_quality_score=fields.get("source_quality_score"),
+        filings_dir=filings_dir,
+        body_lag_threshold=int(body_lag_threshold),
+        has_verdict=has_verdict,
+        ingest_improved=bool(ingest_improved),
+        company_name=company_name,
+        ticker=ticker,
+    )
 
 
 def memo_quality_body_fields(meta: dict[str, Any]) -> tuple[str | None, int]:
@@ -11585,6 +11729,31 @@ def memo_quality_body_fields(meta: dict[str, Any]) -> tuple[str | None, int]:
         or 0
     )
     return grade, bodies
+
+
+def memo_quality_filing_fields(meta: dict[str, Any]) -> dict[str, Any]:
+    """Grade, body counts, and source-quality snapshot from ``research.json``."""
+    mq = meta.get("memo_quality") or {}
+    if not isinstance(mq, dict):
+        mq = {}
+    sc = meta.get("source_counts") or {}
+    if not isinstance(sc, dict):
+        sc = {}
+    grade, bodies = memo_quality_body_fields(meta)
+    total = int(mq.get("filings_total") or sc.get("filings_total") or 0)
+    score = mq.get("source_quality_score")
+    if score is None:
+        score = mq.get("score")
+    try:
+        score_f = float(score) if score is not None else None
+    except (TypeError, ValueError):
+        score_f = None
+    return {
+        "grade": grade,
+        "filings_with_body": bodies,
+        "filings_total": total,
+        "source_quality_score": score_f,
+    }
 
 
 def thin_zero_body_memo_needs_ingest(
