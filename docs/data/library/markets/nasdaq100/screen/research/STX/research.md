@@ -1,13 +1,13 @@
 # Seagate Technology Holdings plc (STX) — Research memo
 
-_Version 1 · Updated 2026-11-06T07:34:45.077934+00:00 · Mode: structured_verdict_
+_Version 1 · Updated 2026-11-09T10:43:46.825965+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
 
 ## RESEARCH VERDICT
-Verdict: neutral
+Verdict: accumulate
 Risk: medium
-Confidence: 0.64
-Rationale: FY26 SEC FCF (~$3.1bn) and dividend cover (~4.9× on $634m paid) support dividend/quality passes, but screen TTM FCF (~$2.3bn), failed FCF-yield/deep-value models, and cyclical HDD/customer concentration temper the buy signal.
-RiskTags: cyclical, competitive, customer_concentration, leverage, regulatory, litigation
+Confidence: 0.68
+Rationale: FY2026 10-K cash flow (OCF $3.67bn, FCF $3.11bn, dividends $634m, ~4.9× cover) aligns with screen cash metrics and supports the buy signal, though sparse screen model passes and HDD cyclicality temper conviction.
+RiskTags: cyclical, competitive, customer_concentration, leverage, regulatory
