@@ -1,15 +1,91 @@
 {
-  "run_at": "2026-11-08T16:35:27.787583+00:00",
+  "run_at": "2026-11-09T20:58:58.313978+00:00",
   "market_id": "nasdaq100",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "KDP"
+  ],
+  "target_details": [
+    {
+      "ticker": "KDP",
+      "priority_score": 14.8729,
+      "filings_total": 25,
+      "filings_with_body": 24,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "KDP",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 25,
+        "filings_with_body": 24,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 25,
+        "filings_with_body": 25,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 25,
+        "annual": 2,
+        "interim": 8,
+        "trading_update": 0,
+        "other": 15,
+        "with_body": 25,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 8,
+            "with_body": 8
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 15,
+            "with_body": 15
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 25,
+        "with_body_after": 25,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "KDP"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-08T16:35:14.380182+00:00",
+    "snapshot_at": "2026-11-09T20:58:47.231869+00:00",
     "market_id": "nasdaq100",
     "buy_tier_count": 40,
     "unmeasured_buy_tier": 0,
@@ -44,7 +120,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-08T16:35:21.358499+00:00",
+    "snapshot_at": "2026-11-09T20:58:58.296120+00:00",
     "market_id": "nasdaq100",
     "buy_tier_count": 40,
     "unmeasured_buy_tier": 0,
@@ -114,7 +190,7 @@
   },
   "critical_path": {
     "market_id": "nasdaq100",
-    "assessed_at": "2026-11-08T16:35:16.717902+00:00",
+    "assessed_at": "2026-11-09T20:58:49.573655+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -151,9 +227,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 2.292892223999985,
+  "used_seconds": 6.380248477000009,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3597.707107776,
+  "leftover_seconds": 3593.619751523,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -161,9 +237,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "nasdaq100",
-    "updated_at": "2026-11-08T16:35:21.364839+00:00",
+    "updated_at": "2026-11-09T20:58:58.302371+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 1,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -235,42 +311,7 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 63,
-    "candidate_count": 55,
-    "skipped_resolved_tickers": [
-      "LMT",
-      "APTV",
-      "DFS.L",
-      "MER.L",
-      "TPT.L",
-      "APTD.L",
-      "FOXT.L",
-      "ULTP.L",
-      "REC.L",
-      "GIB-A.TO",
-      "SU.TO",
-      "NTR.TO",
-      "MFC.TO",
-      "BAS.DE",
-      "IFX.DE",
-      "PDD",
-      "BAS.DE",
-      "DTE.DE",
-      "DTG.DE",
-      "HNR1.DE",
-      "MUV2.DE",
-      "HEN3.DE",
-      "PST.MI",
-      "APAM.AS",
-      "0285.HK",
-      "0857.HK",
-      "0288.HK",
-      "2331.HK",
-      "0883.HK",
-      "EVN.VI",
-      "WIE.VI"
-    ],
-    "wait_behind_task_id": ""
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20261109-01"
   }
 }
