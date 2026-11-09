@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-08T06:57:53.977738+00:00
+Track: `buy_tier_level` · updated 2026-11-09T00:46:53.526184+00:00
 
 ## Portfolio loser feedback
 
@@ -11,9 +11,6 @@ Track: `buy_tier_level` · updated 2026-11-08T06:57:53.977738+00:00
   - dividend fails more often among losers (75% vs 19%)
 
 ## Holding reviews
-
-### ALK.AX — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
 
 ### AAI.AX — weakening / watch_review (-19.9%)
 - research verdict caution
@@ -104,6 +101,12 @@ Track: `buy_tier_level` · updated 2026-11-08T06:57:53.977738+00:00
 ### CDA.AX — weakening / watch_review (+0.0%)
 - research verdict neutral
 - conviction 34% below intact floor
+- still buy
+- cheapness family still passes
+
+### TUA.AX — weakening / watch_review (+0.0%)
+- research verdict caution
+- conviction 31% below intact floor
 - still buy
 - cheapness family still passes
 
