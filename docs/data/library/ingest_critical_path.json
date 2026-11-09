@@ -1,32 +1,67 @@
 {
-  "market_id": "dax",
-  "assessed_at": "2026-11-09T13:38:13.166151+00:00",
+  "market_id": "ftse_smallcap",
+  "assessed_at": "2026-11-09T16:41:23.384929+00:00",
   "unmeasured": [],
   "zero_body": [],
-  "indexed_without_body": [],
-  "thin_need_discovery": [
-    "DTE.DE",
-    "DHL.DE",
-    "DTG.DE",
-    "BAS.DE",
-    "MUV2.DE",
-    "HNR1.DE",
-    "HEN3.DE"
+  "indexed_without_body": [
+    {
+      "ticker": "FOXT.L",
+      "indexed_without_body": 9,
+      "filings_total": 70,
+      "filings_with_body": 58
+    },
+    {
+      "ticker": "APTD.L",
+      "indexed_without_body": 8,
+      "filings_total": 124,
+      "filings_with_body": 102
+    },
+    {
+      "ticker": "ULTP.L",
+      "indexed_without_body": 8,
+      "filings_total": 61,
+      "filings_with_body": 52
+    },
+    {
+      "ticker": "MER.L",
+      "indexed_without_body": 6,
+      "filings_total": 68,
+      "filings_with_body": 62
+    },
+    {
+      "ticker": "DFS.L",
+      "indexed_without_body": 5,
+      "filings_total": 74,
+      "filings_with_body": 69
+    },
+    {
+      "ticker": "TPT.L",
+      "indexed_without_body": 5,
+      "filings_total": 59,
+      "filings_with_body": 53
+    }
   ],
+  "thin_need_discovery": [],
   "thin_need_bodies": [],
-  "primary_blocker": "thin_need_discovery",
-  "force_discovery_scan": true,
-  "auto_pin_tickers": [],
+  "primary_blocker": "indexed_without_body",
+  "force_discovery_scan": false,
+  "auto_pin_tickers": [
+    "FOXT.L",
+    "APTD.L",
+    "ULTP.L",
+    "MER.L",
+    "DFS.L",
+    "TPT.L"
+  ],
   "recommended_actions": [
-    "Discovery/IR seed for 7 thin ticker(s) that already have bodies for every indexed filing",
-    "Run listing-only discovery_scan before deepen"
+    "Prefer indexed-without-body body refetch (6 tickers, top: FOXT.L(9), APTD.L(8), ULTP.L(8), MER.L(6), DFS.L(5))"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 0,
-    "indexed_without_body_rows": 0,
-    "thin_need_discovery": 7,
+    "indexed_without_body_tickers": 6,
+    "indexed_without_body_rows": 41,
+    "thin_need_discovery": 0,
     "thin_need_bodies": 0
   }
 }
