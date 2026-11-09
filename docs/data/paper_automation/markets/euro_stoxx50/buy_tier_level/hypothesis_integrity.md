@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-09T07:35:46.556338+00:00
+Track: `buy_tier_level` · updated 2026-11-09T08:47:05.381518+00:00
 
 ## Portfolio loser feedback
 
@@ -16,21 +16,21 @@ Track: `buy_tier_level` · updated 2026-11-09T07:35:46.556338+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 78%
+- conviction 69%
 
 ### DTE.DE — intact / hold_tolerate (-2.5%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 76%
+- conviction 67%
 
 ### MUV2.DE — intact / hold_tolerate (-2.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 61%
+- conviction 54%
 
 ### TTE.PA — intact / hold_tolerate (+1.3%)
 - still strong_buy
@@ -51,7 +51,7 @@ Track: `buy_tier_level` · updated 2026-11-09T07:35:46.556338+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 62%
+- conviction 55%
 
 ### AD.AS — intact / hold_tolerate (+5.3%)
 - still strong_buy

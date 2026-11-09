@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-09T07:38:17.640512+00:00
+Track: `buy_tier_level` · updated 2026-11-09T08:47:03.615418+00:00
 
 ## Portfolio loser feedback
 
@@ -63,7 +63,7 @@ Track: `buy_tier_level` · updated 2026-11-09T07:38:17.640512+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 47%
+- conviction 41%
 
 ### OMV.VI — intact / hold_tolerate (-2.5%)
 - still buy
@@ -105,7 +105,7 @@ Track: `buy_tier_level` · updated 2026-11-09T07:38:17.640512+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 46%
+- conviction 41%
 
 ### SKF-B.ST — intact / hold_tolerate (-1.1%)
 - still buy
@@ -231,7 +231,7 @@ Track: `buy_tier_level` · updated 2026-11-09T07:38:17.640512+00:00
 - data_quality 0.95
 - conviction 74%
 
-### PRX.AS — weakening / watch_review (+6.3%)
+### PRX.AS — weakening / watch_review (+7.1%)
 - research verdict caution
 - still buy
 - cheapness family still passes
@@ -260,7 +260,7 @@ Track: `buy_tier_level` · updated 2026-11-09T07:38:17.640512+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 87%
+- conviction 77%
 
 ### ESSITY-B.ST — intact / hold_tolerate (+10.9%)
 - still buy
@@ -274,7 +274,7 @@ Track: `buy_tier_level` · updated 2026-11-09T07:38:17.640512+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 61%
+- conviction 53%
 
 ### SGO.PA — intact / hold_tolerate (+14.4%)
 - still strong_buy

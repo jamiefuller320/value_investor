@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-11-09T07:35:33.120402+00:00",
-  "as_of": "2026-11-09T07:35:33.100460+00:00",
+  "updated_at": "2026-11-08T06:58:17.907546+00:00",
+  "as_of": "2026-11-08T06:58:17.887832+00:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -20,15 +20,15 @@
   "underwater_count": 1,
   "thesis_status_counts": {
     "intact": 1,
-    "weakening": 2,
-    "broken": 0,
+    "weakening": 1,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
     "holding_count": 3,
     "loser_count": 1,
     "loser_share": 0.3333,
-    "loser_nav_share": 0.335,
+    "loser_nav_share": 0.3344,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
@@ -43,19 +43,49 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
-      "quality": 0.5,
-      "dividend": 0.5,
+      "cheapness": 0.5,
+      "quality": 1.0,
+      "dividend": 1.0,
       "garp": 1.0,
-      "risk": 0.0
+      "risk": 0.5
     },
-    "selection_feedback_flags": [
-      "dividend fails more often among losers (100% vs 50%)"
-    ],
+    "selection_feedback_flags": [],
     "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
+    {
+      "ticker": "REC.L",
+      "name": "REC.L",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 47.5,
+      "avg_cost": 47.5,
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "cheapness lost and not in buy tier"
+      ],
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
+    },
     {
       "ticker": "CAPD.L",
       "name": "Capital Limited",
@@ -105,7 +135,7 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0,
+      "unrealized_pct": -0.0,
       "mark": 84.4,
       "avg_cost": 84.4,
       "signal": "buy",
@@ -135,46 +165,6 @@
       ],
       "weaken_reasons": [
         "conviction 26% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "SBRE.L",
-      "name": "Sabre Insurance Group plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 174.0,
-      "avg_cost": 174.0,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.3307,
-      "data_quality_score": 0.85,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "conviction 33% below intact floor",
-        "still buy",
-        "research accumulate"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.85"
-      ],
-      "weaken_reasons": [
-        "conviction 33% below intact floor"
       ],
       "broken_reasons": []
     }

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-09T07:36:51.899932+00:00
+Track: `buy_tier_level` · updated 2026-11-08T07:00:00.275678+00:00
 
 ## Portfolio loser feedback
 
@@ -17,7 +17,7 @@ Track: `buy_tier_level` · updated 2026-11-09T07:36:51.899932+00:00
 
 ### A17U.SI — weakening / watch_review (+0.0%)
 - research verdict caution
-- conviction 27% below intact floor
+- conviction 20% below intact floor
 - still buy
 - cheapness family still passes
 

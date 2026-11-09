@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-09T07:36:18.580416+00:00
+Track: `buy_tier_level` · updated 2026-11-08T06:59:42.034018+00:00
 
 ## Portfolio loser feedback
 
@@ -90,7 +90,7 @@ Track: `buy_tier_level` · updated 2026-11-09T07:36:18.580416+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 65%
+- conviction 56%
 
 ### YNGN.L — weakening / watch_review (+15.0%)
 - research verdict caution
