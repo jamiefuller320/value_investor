@@ -14,7 +14,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-11-09T23:20:28.246098+00:00",
+    "snapshot_at": "2026-11-09T23:21:14.062183+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 41,
     "unmeasured_buy_tier": 0,
@@ -87,7 +87,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-11-09T23:20:28.247592+00:00",
+  "evaluated_at": "2026-11-09T23:21:14.063783+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -135,12 +135,99 @@
     "tsx60",
     "us_adr_asia"
   ],
-  "parallel_sprint_markets": [],
-  "parallel_sprint_status": [],
+  "parallel_sprint_markets": [
+    "dax"
+  ],
+  "parallel_sprint_status": [
+    {
+      "market_id": "dax",
+      "focus_market": "euro_depth",
+      "mode": "sprint",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=7, indexed_without_body=0)",
+      "ingest_parity_met": false,
+      "ingest_exhausted": false,
+      "ingest_sprint_complete": false,
+      "parked_tickers": [
+        "BAS.DE",
+        "DTE.DE",
+        "DTG.DE",
+        "HEN3.DE",
+        "HNR1.DE",
+        "MUV2.DE"
+      ],
+      "phase3_ready": false,
+      "current_phase": 1,
+      "next_phase": 1,
+      "phase_blockers": [
+        "dax not in ladder.weekly_paper_shard_markets"
+      ],
+      "filing_health": {
+        "snapshot_at": "2026-11-09T23:21:39.877106+00:00",
+        "market_id": "dax",
+        "buy_tier_count": 10,
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 7,
+        "indexed_without_body": 0,
+        "bodies_min": 1,
+        "bodies_median": 1.5,
+        "bodies_max": 50,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
+        "unmeasured_tickers": [],
+        "zero_body_tickers": [],
+        "thin_body_tickers": [
+          "DTE.DE",
+          "DHL.DE",
+          "DTG.DE",
+          "BAS.DE",
+          "MUV2.DE",
+          "HNR1.DE",
+          "HEN3.DE"
+        ],
+        "indexed_without_body_tickers": [],
+        "indexed_without_body_by_ticker": {},
+        "parked_tickers": [
+          "BAS.DE",
+          "DTE.DE",
+          "DTG.DE",
+          "HEN3.DE",
+          "HNR1.DE",
+          "MUV2.DE"
+        ],
+        "parked_count": 6,
+        "effective_thin_body_buy_tier": 1,
+        "effective_thin_body_tickers": [
+          "DHL.DE"
+        ],
+        "effective_indexed_without_body": 0,
+        "effective_indexed_without_body_tickers": [],
+        "ingest_exhausted": false
+      },
+      "filing_gaps": 0,
+      "max_daily_successes": 4,
+      "max_targets": 24,
+      "priority_slot_width": null,
+      "priority_slot_unfilled": null,
+      "priority_slot_ceiling": null,
+      "cron_morning": true,
+      "cron_afternoon": true,
+      "cron_midafternoon": true,
+      "cron_evening": true,
+      "cron_ladder_weekday": true,
+      "cron_maintenance": false,
+      "should_run_sprint_ingest": true,
+      "should_run_maintenance_ingest": false,
+      "should_run_ingest": true,
+      "evaluated_at": "2026-11-09T23:21:39.887758+00:00",
+      "should_run_parallel_ingest": true
+    }
+  ],
   "parallel_sprint_2_markets": [],
   "parallel_sprint_2_status": [],
   "sprint_markets": [
-    "euro_depth"
+    "euro_depth",
+    "dax"
   ],
   "market_queue": [
     "sp500",
@@ -193,7 +280,9 @@
       "scheduler_enabled": true
     }
   },
-  "scheduler_stream_1_markets": [],
+  "scheduler_stream_1_markets": [
+    "dax"
+  ],
   "scheduler_stream_2_markets": [],
   "should_run_library_maintenance": true
 }
