@@ -1,19 +1,62 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-08T09:46:11.335369+00:00",
+  "generated_at": "2026-11-09T02:37:21.024196+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-11-06",
   "counts": {
-    "new_info": 5,
+    "new_info": 6,
     "unacked": 13,
-    "acked": 37,
+    "acked": 36,
     "automated": 20,
     "human": 55
   },
   "tasks": [
+    {
+      "id": "weekday-engineering-parked-backlog-clear",
+      "title": "Clear engineering parked backlog when dispatch pauses",
+      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
+      "automated": false,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/ops-monitor.md",
+      "doc_anchor": "engineering-parked-backlog-clearing",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "2 attention-parked eng tasks",
+        "updated_at": "2026-11-09T02:37:17.760686+00:00",
+        "fingerprint": "0a2dad58594e26e2",
+        "bullets": [
+          "Parked tasks: 3 (attention ~2)",
+          "Queue-clearing pause active: False — evaluated 2026-11-09T02:37:17.760686+00:00",
+          "Traffic pause active: False",
+          "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
+          "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
+          "eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX"
+        ],
+        "source_keys": [
+          "engineering_tasks"
+        ],
+        "ack_sufficient": false,
+        "auto_ackable": false,
+        "ack_reason": "attention_parked_remaining"
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-10-26T02:39:50.092299+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "463c1c358411298f"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
     {
       "id": "sunday-assessment-scoreboard",
       "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
@@ -29,7 +72,7 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary not scored",
-        "updated_at": "2026-11-08T07:51:00.742956+00:00",
+        "updated_at": "2026-11-09T02:35:37.929036+00:00",
         "fingerprint": "94066622535964a2",
         "bullets": [
           "ai_judgment_matched30_fair: total return -2.4% vs FTAL.L +0.6% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.7% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
@@ -56,85 +99,37 @@
       "ack_sufficient": false
     },
     {
-      "id": "sunday-shard-epoch0-watch",
-      "title": "Watch shard epoch-0 and near-miss before forking AI",
-      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "id": "adhoc-review-ingest-deviations",
+      "title": "Review open ingest deviations and reprocess if needed",
+      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
       "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/market-sharded-learning.md",
-      "doc_anchor": "what-enter-learning-means",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/ingest-deviations.md",
+      "doc_anchor": "what-needs-a-human",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
       "approval_gate": false,
       "approval_label": null,
       "analysis": {
-        "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-11-08T07:05:14.013362+00:00",
-        "fingerprint": "890b69696360cbf5",
+        "headline": "Ingest deviations · 2 open",
+        "updated_at": "2026-11-08T20:52:14.678159+00:00",
+        "fingerprint": "6dda3808006c2a3a",
         "bullets": [
-          "euro_depth: phase=3 ai=False knob=False holdings=39",
-          "ftse_mib: phase=0 ai=False knob=False holdings=7",
-          "aex: phase=0 ai=False knob=False holdings=8",
-          "aim: phase=0 ai=False knob=False holdings=14",
-          "atx: phase=0 ai=False knob=False holdings=3",
-          "bel20: phase=0 ai=False knob=False holdings=2",
-          "cac40: phase=1 ai=False knob=False holdings=11",
-          "dax: phase=1 ai=False knob=False holdings=3"
+          "Open deviations: 2",
+          "WIE.VI: blocker_no_improve — WIE.VI hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources.",
+          "0288.HK: blocker_no_improve — 0288.HK hit the weekday ticker cap with no coverage gain and 4 indexed-without-body row(s). Pin intensive or fix sources."
         ],
         "source_keys": [
-          "market_status"
+          "ingest_deviations"
         ]
       },
       "ack": {
         "acked": true,
         "stale": true,
-        "acked_at": "2026-10-21T22:54:00.304576+00:00",
+        "acked_at": "2026-10-09T15:43:43.166131+00:00",
         "decision": "ack_observe",
-        "finding_fingerprint": "445acb0f9a3f9032"
-      },
-      "sort_bucket": "new_info",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "weekday-engineering-parked-backlog-clear",
-      "title": "Clear engineering parked backlog when dispatch pauses",
-      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
-      "automated": false,
-      "cadence": "weekday",
-      "section_id": "weekday",
-      "section_title": "Weekday (Mon–Fri)",
-      "doc_path": "docs/ops/ops-monitor.md",
-      "doc_anchor": "engineering-parked-backlog-clearing",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "2 attention-parked eng tasks",
-        "updated_at": "2026-11-08T02:43:00.699163+00:00",
-        "fingerprint": "0a2dad58594e26e2",
-        "bullets": [
-          "Parked tasks: 3 (attention ~2)",
-          "Queue-clearing pause active: False — evaluated 2026-11-08T02:43:00.699163+00:00",
-          "Traffic pause active: False",
-          "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
-          "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
-          "eng-20261103-09: Hunt fetchable IR source for parked asx200 leftover SMR.AX"
-        ],
-        "source_keys": [
-          "engineering_tasks"
-        ],
-        "ack_sufficient": false,
-        "auto_ackable": false,
-        "ack_reason": "attention_parked_remaining"
-      },
-      "ack": {
-        "acked": true,
-        "stale": true,
-        "acked_at": "2026-10-26T02:39:50.092299+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "463c1c358411298f"
+        "finding_fingerprint": "f765d60144146672"
       },
       "sort_bucket": "new_info",
       "auto_ackable": false,
@@ -182,37 +177,78 @@
       "ack_sufficient": false
     },
     {
-      "id": "adhoc-review-ingest-deviations",
-      "title": "Review open ingest deviations and reprocess if needed",
-      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
+      "id": "sunday-analysis-tasks",
+      "title": "Triage analysis_tasks experiments",
+      "summary": "Persist/publish/apply high system_gaps flags auto-queue as eng-sgap-* (no agent dispatch). Triage remaining proposed produce/learning-clock flags with ftse-analysis-review promote. Phase B rememo is body-lag slim — do not promote thin_memo_counted_as_coverage as rememo-eligibility widening; thicken filings then existing rememo_reason. Scoring candidates remain eng-20260903-02 / eng-20260903-03 (observe-only; no assign_signal() edits). Keep paper_knobs and offline_sim manual; do not revive cancelled N58/N59 knob counterfactuals.",
       "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/ingest-deviations.md",
-      "doc_anchor": "what-needs-a-human",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/analysis-review.md",
+      "doc_anchor": "manual-promotion-to-engineering",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/analysis-review.md#manual-promotion-to-engineering",
       "approval_gate": false,
       "approval_label": null,
       "analysis": {
-        "headline": "Ingest deviations · 2 open",
-        "updated_at": "2026-11-07T18:20:23.203173+00:00",
-        "fingerprint": "6dda3808006c2a3a",
+        "headline": "Triage queue · 12 open",
+        "updated_at": null,
+        "fingerprint": "2d622ccac766905d",
         "bullets": [
-          "Open deviations: 2",
-          "WIE.VI: blocker_no_improve — WIE.VI hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources.",
-          "0288.HK: blocker_no_improve — 0288.HK hit the weekday ticker cap with no coverage gain and 4 indexed-without-body row(s). Pin intensive or fix sources."
+          "Open/proposed: 12 / 12",
+          "ana-20260728-04: Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.",
+          "ana-20260921-01: Exclusion-universe step u3 (conviction ≥ 0.25, cumulative_exclusion_alpha +0.00261) replay on ai_judgment candidate pool vs baseline — expected learning value: quantify whether priors improve filtered",
+          "ana-20260921-02: Offline family-weight stress test for quality/dividend failures on avoid cohort (pattern AAL.L / AML.L opinion-flip triggers) — expected learning value: test whether tightening quality+dividend gates",
+          "ana-20260921-03: Conviction/timing delay model for transition_key hold→buy and realization_lag (1w hit 0.406 vs within_4w_rate 0.9448) — expected learning value: separate assessment lag from signal direction for overl",
+          "ana-20260921-04: Hold-vs-swap probability strand using exit_timing_near_miss (hold_closed 202, swap_closed 209, ready_for_probability_analysis true) — expected learning value: estimate whether early swap beats hold re"
         ],
         "source_keys": [
-          "ingest_deviations"
+          "analysis_tasks"
         ]
       },
       "ack": {
         "acked": true,
         "stale": true,
-        "acked_at": "2026-10-09T15:43:43.166131+00:00",
+        "acked_at": "2026-09-29T19:24:14.435234+00:00",
         "decision": "ack_observe",
-        "finding_fingerprint": "f765d60144146672"
+        "finding_fingerprint": "eaa31c994c4a4a3a"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "sunday-triage-plr-director-tasks",
+      "title": "Triage paper-learning and learning-director tasks",
+      "summary": "These queues have no promote CLI. Remaining: watch u4 (ldr-20260823-02) and exit-shadow (ana-20260728-04); leave L111 replay as continue. Buffered-hold and IMB.L audits are done. Do not reopen duplicate human-ack wrappers. Prefer the engineering queue for the two scoring tasks.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/paper-learning-review.md",
+      "doc_anchor": "enacting-proposed-experiments",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/paper-learning-review.md#enacting-proposed-experiments",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Triage queue · 3 open",
+        "updated_at": null,
+        "fingerprint": "537d13df8d3a089d",
+        "bullets": [
+          "Open/proposed: 3 / 3",
+          "plr-20261108-01: Run `ftse-rebalance-log buffered-hold` on `buy_tier_level` and `buy_tier_level_dca` with `--exit-confirm-variants 1,2` and `--lookback-days 28` (paper root `output/paper_automation`) — expected learni",
+          "plr-20261108-02: Re-run buffered-hold on `ai_judgment_matched30_fair` and `buy_tier_matched30_fair` with `--lookback-days 28` and variants 1,2 only — expected learning value: test whether the 7d panel’s primary `trade",
+          "plr-20261108-03: Cross-read active-book `exit_shadow` open cohorts (`buy_tier_matched30_fair` `open_count` 23 vs `closed_count` 0; primary `open_count` 9) with churn `full_exits_in_window` (3 primary, 6 control) under"
+        ],
+        "source_keys": [
+          "paper_learning_tasks"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-09-28T23:02:52.393563+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "a1a6621a17f9f062"
       },
       "sort_bucket": "new_info",
       "auto_ackable": false,
@@ -653,6 +689,48 @@
       "ack_sufficient": false
     },
     {
+      "id": "sunday-shard-epoch0-watch",
+      "title": "Watch shard epoch-0 and near-miss before forking AI",
+      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Admitted shard epoch-0 watch · 22",
+        "updated_at": "2026-11-08T20:53:54.312598+00:00",
+        "fingerprint": "445acb0f9a3f9032",
+        "bullets": [
+          "euro_depth: phase=3 ai=False knob=False holdings=39",
+          "aex: phase=0 ai=False knob=False holdings=8",
+          "aim: phase=0 ai=False knob=False holdings=14",
+          "atx: phase=0 ai=False knob=False holdings=3",
+          "bel20: phase=0 ai=False knob=False holdings=2",
+          "cac40: phase=1 ai=False knob=False holdings=11",
+          "dax: phase=1 ai=False knob=False holdings=3",
+          "euro_stoxx50: phase=1 ai=False knob=False holdings=9"
+        ],
+        "source_keys": [
+          "market_status"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-10-21T22:54:00.304576+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "445acb0f9a3f9032"
+      },
+      "sort_bucket": "acked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
       "id": "sunday-matched30-twins",
       "title": "Matched-30 fund twin vs matched buy-tier control (B3 shadow)",
       "summary": "Triggered / nested under sunday-assessment-scoreboard (D4): Read ai_judgment_matched30_fair vs buy_tier_matched30_fair on common marked days (fair-cost fund NAV). Construction-matched filter LQ only — do not treat unmatched gaps vs full buy_tier_level as skill. Shadow until volume/mark gates; do not crown assessment primary; do not decision-review --apply (churn-policy twins). Judgment evidence primary remains N210 episode %.",
@@ -1070,7 +1148,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-11-07T19:51:17.792818+00:00",
+        "updated_at": "2026-11-08T10:36:32.615594+00:00",
         "fingerprint": "1d374ee9ad0e2d3b",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
@@ -1423,7 +1501,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Buy-cross archive review",
-        "updated_at": "2026-09-06T20:12:22.657688+00:00",
+        "updated_at": "2026-11-08T10:36:36.914415+00:00",
         "fingerprint": "d4d0703511ed9b06",
         "bullets": [],
         "source_keys": [
@@ -1456,7 +1534,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-11-07T19:51:17.791572+00:00",
+        "updated_at": "2026-11-08T09:47:34.910047+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",
@@ -1510,46 +1588,6 @@
         "acked_at": "2026-09-29T19:32:51.906652+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "e71f112bfafe4505"
-      },
-      "sort_bucket": "acked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "sunday-analysis-tasks",
-      "title": "Triage analysis_tasks experiments",
-      "summary": "Persist/publish/apply high system_gaps flags auto-queue as eng-sgap-* (no agent dispatch). Triage remaining proposed produce/learning-clock flags with ftse-analysis-review promote. Phase B rememo is body-lag slim — do not promote thin_memo_counted_as_coverage as rememo-eligibility widening; thicken filings then existing rememo_reason. Scoring candidates remain eng-20260903-02 / eng-20260903-03 (observe-only; no assign_signal() edits). Keep paper_knobs and offline_sim manual; do not revive cancelled N58/N59 knob counterfactuals.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/analysis-review.md",
-      "doc_anchor": "manual-promotion-to-engineering",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/analysis-review.md#manual-promotion-to-engineering",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Triage queue · 6 open",
-        "updated_at": null,
-        "fingerprint": "eaa31c994c4a4a3a",
-        "bullets": [
-          "Open/proposed: 6 / 6",
-          "ana-20260728-04: Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.",
-          "ana-20260921-01: Exclusion-universe step u3 (conviction ≥ 0.25, cumulative_exclusion_alpha +0.00261) replay on ai_judgment candidate pool vs baseline — expected learning value: quantify whether priors improve filtered",
-          "ana-20260921-02: Offline family-weight stress test for quality/dividend failures on avoid cohort (pattern AAL.L / AML.L opinion-flip triggers) — expected learning value: test whether tightening quality+dividend gates",
-          "ana-20260921-03: Conviction/timing delay model for transition_key hold→buy and realization_lag (1w hit 0.406 vs within_4w_rate 0.9448) — expected learning value: separate assessment lag from signal direction for overl",
-          "ana-20260921-04: Hold-vs-swap probability strand using exit_timing_near_miss (hold_closed 202, swap_closed 209, ready_for_probability_analysis true) — expected learning value: estimate whether early swap beats hold re"
-        ],
-        "source_keys": [
-          "analysis_tasks"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-09-29T19:24:14.435234+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "eaa31c994c4a4a3a"
       },
       "sort_bucket": "acked",
       "auto_ackable": false,
@@ -1711,41 +1749,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "sunday-triage-plr-director-tasks",
-      "title": "Triage paper-learning and learning-director tasks",
-      "summary": "These queues have no promote CLI. Remaining: watch u4 (ldr-20260823-02) and exit-shadow (ana-20260728-04); leave L111 replay as continue. Buffered-hold and IMB.L audits are done. Do not reopen duplicate human-ack wrappers. Prefer the engineering queue for the two scoring tasks.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/paper-learning-review.md",
-      "doc_anchor": "enacting-proposed-experiments",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/paper-learning-review.md#enacting-proposed-experiments",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Triage queue · 0 open",
-        "updated_at": null,
-        "fingerprint": "a1a6621a17f9f062",
-        "bullets": [
-          "Open/proposed: 0 / 3"
-        ],
-        "source_keys": [
-          "paper_learning_tasks"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-09-28T23:02:52.393563+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "a1a6621a17f9f062"
-      },
-      "sort_bucket": "acked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "monthly-horizon-scan",
       "title": "Horizon scan + deferred fragments",
       "summary": "First Sunday 11:00 UTC: weeder applies deterministic near-dup / already-an-idea DROPs; read horizon scan; triage remaining open fragments and deferred ideas. apply_fragments stays off unless you reviewed the markdown.",
@@ -1894,7 +1897,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Sunday analysis review synthesis",
-        "updated_at": "2026-11-07T19:59:08.694003+00:00",
+        "updated_at": "2026-11-08T10:36:43.449470+00:00",
         "fingerprint": "489f92d878371fa0",
         "bullets": [],
         "source_keys": [
@@ -2535,6 +2538,5 @@
       "auto_ackable": false,
       "ack_sufficient": false
     }
-  ],
-  "path": "docs/data/human_tasks_board.json"
+  ]
 }
