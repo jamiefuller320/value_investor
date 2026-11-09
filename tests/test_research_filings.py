@@ -12110,6 +12110,42 @@ def test_parked_source_hunter_alk_ax_asx200_has_fetchable_ir():
     assert "alkane" in body.lower()
 
 
+def test_fetch_filings_ir_allowlist_imd_ax_asx200_builtin(tmp_path: Path):
+    """eng-20261109-01: IMD.AX buy-tier no_key_bodies — seed imdex.com FY26 annual + Weblink 1H26 4D."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("IMD.AX", path=allowlist_path)
+    periods = {row["period"] for row in rows}
+    urls = {row["url"] for row in rows}
+    assert len(rows) == 2
+    assert periods == {"annual", "interim"}
+    assert any("30-FY26-Imdex-Annual-Report.pdf" in url for url in urls)
+    assert any("wcsecure.weblink.com.au/pdf/IMD/03059253.pdf" in url for url in urls)
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert "IMD.AX" not in PARKED_SOURCE_HUNTER_SKIP
+
+
+def test_parked_source_hunter_imd_ax_asx200_has_fetchable_ir():
+    """eng-20261109-01: IMD.AX leftover — imdex.com / Weblink statutory PDFs live-fetch with issuer text."""
+    assert "IMD.AX" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("IMD.AX")
+    assert len(rows) == 2
+    annual = next(row for row in rows if row["period"] == "annual")
+    interim = next(row for row in rows if row["period"] == "interim")
+    annual_body = _live_fetch_filing_body(annual["url"])
+    if not annual_body:
+        pytest.skip("Imdex FY26 annual PDF fetch unavailable (network) — retry later")
+    assert len(annual_body) >= 50000
+    assert "imdex" in annual_body.lower()
+    interim_body = _live_fetch_filing_body(interim["url"])
+    if not interim_body:
+        pytest.skip("Imdex 1H26 Appendix 4D PDF fetch unavailable (network) — retry later")
+    assert len(interim_body) >= 10000
+    assert "appendix 4d" in interim_body.lower() or "half-year" in interim_body.lower()
+    assert "imdex" in interim_body.lower()
+
+
 def test_parked_source_hunter_fmg_ax_asx200_has_fetchable_ir():
     """eng-20261009-02: FMG.AX leftover IWB — Markit/ASX PDFs in _BUILTIN_IR_URLS."""
     from value_investor.research.filings import _ESEF_ENTITY_SEARCH_ALIASES

@@ -884,6 +884,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://investors.alkane.com.au/site/pdf/a2f52449-00e5-4db3-a9c9-d95b2dd8b3ac/March-Quarterly-Activities-Report.pdf",
         "https://investors.alkane.com.au/site/pdf/6eb31bb9-e360-4099-9c4c-d7024932ca87/Diggers-amp-Dealers-Mining-Forum-Presentation.pdf",
     ],
+    # asx200 buy-tier leftover — eng-20261109-01: IMD.AX no_key_bodies; Markit/google_news_asx
+    # rows lack FY26 annual / 1H26 statutory bodies; imdex.com IR + Weblink Appendix 4D fetch.
+    "IMD.AX": [
+        "https://www.imdex.com/getmedia/9ff86649-1fbc-46ab-b045-ba87a03a3365/30-FY26-Imdex-Annual-Report.pdf",
+        "https://wcsecure.weblink.com.au/pdf/IMD/03059253.pdf",
+    ],
     # tsx60 buy-tier deepen — unmeasured GIB-A.TO (class-share news query + no GIB-A SEC ticker).
     "GIB-A.TO": [
         "https://www.sec.gov/Archives/edgar/data/1061574/000119312525322911/d88305d40f.htm",
@@ -1436,6 +1442,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "FMG": ("Fortescue", "Fortescue Ltd"),
     # asx200 NEM.AX SEC allowlist — nem-* slugs need issuer tokens for IR title gate.
     "NEM": ("Newmont", "Newmont Corporation"),
+    # asx200 IMD.AX Weblink allowlist — numeric wcsecure slugs need issuer tokens for IR title gate.
+    "IMD": ("Imdex", "IMDEX Limited", "IMDEX"),
     # sti J36.SI SGX allowlist — opaque 877984_JMH.pdf / 853959_JMH.pdf slugs need issuer
     # tokens for _ir_body_title_tokens_match (same pattern as FMG.AX / YAL.AX).
     "J36": ("Jardine Matheson", "Jardine Matheson Holdings"),
@@ -6099,6 +6107,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://links.sgx.com/FileOpen/20241029_2QFY24%20Results_Financial%20Statement.ashx?App=Announcement&FileID=823421": "interim",
     # eng-20261028-05: U14.SI — 1H2025_Final slug has no half-year token (would classify other).
     "https://links.sgx.com/1.0.0/corporate-announcements/U776Y0C8YROX8M8K/855378_1.%20UOL%201H2025_Final.pdf": "interim",
+    # eng-20261109-01: IMD.AX — Weblink Appendix 4D slug is numeric-only (would classify other).
+    "https://wcsecure.weblink.com.au/pdf/IMD/03059253.pdf": "interim",
     # eng-20261004-01: GALP.LS — Inv_4Q25 path contains q2 so would classify interim.
     "https://www.galp.com/corp/Portals/0/Recursos/Inv_4Q25/Results_4Q25.pdf": "annual",
     # eng-20261009-03: JD.L HY27 slug has no half-year token (would classify other).
