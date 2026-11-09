@@ -1,13 +1,13 @@
 {
-  "acted": true,
+  "acted": false,
   "gate": {
-    "local_time": "2026-11-09T07:36:52.524711+00:00",
+    "local_time": "2026-11-09T14:17:01.524006+00:00",
     "trading_day": true,
-    "after_settle": false,
+    "after_settle": true,
     "market_open_at": "2026-11-09T08:00:00+00:00",
     "settle_at": "2026-11-09T09:15:00+00:00",
-    "can_act": false,
-    "reason": "before market open"
+    "can_act": true,
+    "reason": "ok"
   },
   "trades": [],
   "plan": {
@@ -1235,39 +1235,24 @@
           "issues": []
         },
         "note": "Automated rebalance"
-      },
-      {
-        "at": "2026-11-09T07:36:52.524711+00:00",
-        "portfolio_value": 830.5,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "positions": 3,
-        "reporting_currency": "GBP",
-        "hedge_assumption": "none",
-        "fx": {
-          "rates": {
-            "GBP": 1.0,
-            "EUR": 0.83407
-          },
-          "issues": []
-        },
-        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-09T07:36:52.524711+00:00",
+    "last_mark_at": "2026-11-08T07:00:11.135360+00:00",
     "rebalance_state": {
       "exit_streak": {},
-      "reentry_cooldown": {}
+      "reentry_cooldown": {
+        "OMV.VI": 1
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Already rebalanced today for this track \u2014 skipping duplicate pass (use --force to override).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "atx",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-09T07:36:52.592645+00:00",
+    "generated_at": "2026-11-09T14:17:01.528206+00:00",
     "observe_only": true,
     "open_count": 3,
     "closed_count": 0,
@@ -1346,7 +1331,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-09T07:36:52.593657+00:00",
+    "generated_at": "2026-11-09T14:17:01.529074+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1451,8 +1436,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-09T07:36:52.595124+00:00",
-    "as_of": "2026-11-09T07:36:52.524711+00:00",
+    "updated_at": "2026-11-09T14:17:01.530284+00:00",
+    "as_of": "2026-11-09T14:17:01.524006+00:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1632,7 +1617,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-09T07:36:52.597025+00:00",
+    "generated_at": "2026-11-09T14:17:01.531834+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1707,7 +1692,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-09T07:36:52.600191+00:00",
+    "generated_at": "2026-11-09T14:17:01.534526+00:00",
     "open_count": 2,
     "closed_count": 4,
     "scored_count": 4,
@@ -1775,7 +1760,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-09T07:36:52.524711+00:00",
+    "generated_at": "2026-11-09T14:17:01.524006+00:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1832,12 +1817,12 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-09T07:36:52.524711+00:00",
+    "generated_at": "2026-11-09T14:17:01.524006+00:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "llm",
-    "judge_spec_id": "llm.v1",
-    "parent_spec_id": "heuristic.v1",
+    "judge_backend": "evidence_heuristic",
+    "judge_spec_id": "heuristic.v1",
+    "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
     "proposal_count": 0,
@@ -1850,21 +1835,16 @@
     "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
     "cards": [],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
-    "llm_judge": {
-      "attempted": true,
-      "ok": true,
-      "fallback": null
-    },
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-09T07:36:52.524711+00:00",
+      "generated_at": "2026-11-09T14:17:01.524006+00:00",
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "llm",
-      "judge_spec_id": "llm.v1",
-      "parent_spec_id": "heuristic.v1",
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
       "card_count": 0,
       "verdict_counts": {
@@ -1885,10 +1865,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-11-09T07:36:52.604746+00:00",
+  "generated_at": "2026-11-09T14:17:01.538250+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
