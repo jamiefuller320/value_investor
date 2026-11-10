@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-10T00:34:24+00:00",
+  "updated_at": "2026-11-10T01:10:04+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16998,6 +16998,58 @@
       "status": "open",
       "source": "docs/ops/strategy-book-bench-seal-review.md#outcome-2026-11-09",
       "added_at": "2026-11-10T00:34:24+00:00"
+    },
+    {
+      "id": "L692",
+      "category": "later",
+      "section": "learning",
+      "title": "Strategy book: slot-count and stake-size twin (capital path)",
+      "summary": "The 20-slot, 5%-stake book skipped 70% of US signals. Slot count changes utilisation and diversification, not per-trade edge, and decides whether long-hold exits pay (exit lab L690). Test 10/20/30/40 slots as a capital-path twin read beside the forward book's skip counts; not a v0 change (fixed-stake v0 rule).",
+      "revisit_when": "Strategy-book version review once the forward book shows whether slots bind (slot-book skip share over 26 weeks)",
+      "tags": [
+        "strategy-version-review",
+        "strategy-book",
+        "capacity",
+        "capital-path"
+      ],
+      "status": "open",
+      "source": "Owner question 2026-11-10 after exit lab",
+      "added_at": "2026-11-10T01:10:04+00:00"
+    },
+    {
+      "id": "L693",
+      "category": "later",
+      "section": "learning",
+      "title": "Strategy book: queue-aware sell urgency (swap a stalled holding for a waiting signal)",
+      "summary": "When all slots are full and fresh signals wait, sell the weakest holding (e.g. oldest unlaunched trade below entry) to admit a ranked new signal; when the queue is empty, let trades run. A book-level rule, so it is a capital-view twin, not a paired bench column. Needs a ranking of incoming vs held (L691) and must clear round-trip costs. Strategy-book sibling of L442.",
+      "revisit_when": "After L691 has a ranking that beats random on forward selection-board data",
+      "tags": [
+        "strategy-version-review",
+        "strategy-book",
+        "capacity",
+        "exits"
+      ],
+      "status": "open",
+      "source": "Owner question 2026-11-10 after exit lab",
+      "added_at": "2026-11-10T01:10:04+00:00"
+    },
+    {
+      "id": "L694",
+      "category": "later",
+      "section": "research",
+      "title": "Strategy book: memo-led ranking of same-day buy candidates (shadow first)",
+      "summary": "Price-only tests show the entry earns about market drift (matched excess ~0). Signal-day memos and meta-analysis (business quality, thesis, catalysts) could rank candidates when slots are scarce. Start as an observe-only shadow ranking scored on forward matched excess, with structured evidence per the LLM live-path rule; a filter or ranking challenger only via a version review.",
+      "revisit_when": "Forward book has 48 counted mature episodes with signal-day memo verdicts (thickness gate)",
+      "tags": [
+        "strategy-version-review",
+        "strategy-book",
+        "memo",
+        "selection",
+        "llm"
+      ],
+      "status": "open",
+      "source": "Owner question 2026-11-10 after exit lab",
+      "added_at": "2026-11-10T01:10:04+00:00"
     }
   ],
   "fragments": [
