@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-11-09T14:16:50.351584+00:00",
+  "generated_at": "2026-11-10T14:17:03.877946+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 26,
+    "closed_total": 27,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 2,
+    "open_with_thesis": 1,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -27,13 +27,13 @@
         }
       },
       "broken": {
-        "closed_count": 17,
+        "closed_count": 18,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0361,
-        "mean_trough_unrealized_pct": 0.0299,
+        "mean_peak_unrealized_pct": 0.0341,
+        "mean_trough_unrealized_pct": 0.0282,
         "outcome_labels": {
-          "recovered": 17
+          "recovered": 18
         }
       },
       "insufficient_data": {
@@ -62,7 +62,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 26,
+    "hold_closed_with_thesis": 27,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -1269,7 +1269,7 @@
       "ticker": "REC.L",
       "name": "Record plc",
       "started_at": "2026-11-08T06:58:17.887832+00:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -1286,9 +1286,9 @@
       "peak_unrealized_pct": 0.0,
       "trough_unrealized_pct": 0.0,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-11-10T14:17:03.843259+00:00",
+      "linked_sell_trade_id": "d40ee526-d958-41b7-9c08-6ad3fca4af61",
       "thesis_status_at_start": "broken",
       "recommended_action_at_start": "exit_candidate",
       "thesis_reasons_at_start": [
@@ -1665,6 +1665,13 @@
           "avg_sell_return": 0.0647,
           "avg_buy_return": 0.116,
           "replacement_delta": 0.0513
+        },
+        {
+          "scored_at": "2026-11-10T14:17:03.843259+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0569,
+          "avg_buy_return": 0.1078,
+          "replacement_delta": 0.0509
         }
       ],
       "sell_returns_since_rotation": {
@@ -1863,7 +1870,7 @@
         "CARD.L": 0.3142
       },
       "buy_returns_since_rotation": {
-        "CLIG.L": 0.0433
+        "CLIG.L": -0.0474
       },
       "verdict": null,
       "closed_at": null
@@ -2033,7 +2040,7 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "CLIG.L": 0.0
+        "CLIG.L": -0.087
       },
       "buy_returns_since_rotation": {
         "CAPD.L": -0.0606,
@@ -3377,6 +3384,13 @@
           "avg_sell_return": 0.0666,
           "avg_buy_return": 0.0173,
           "replacement_delta": -0.0493
+        },
+        {
+          "scored_at": "2026-11-10T14:17:03.843259+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0155,
+          "avg_buy_return": -0.0316,
+          "replacement_delta": -0.0161
         }
       ],
       "sell_returns_since_rotation": {
@@ -3672,7 +3686,7 @@
         "CAPD.L": -0.125
       },
       "buy_returns_since_rotation": {
-        "CLIG.L": 0.1048
+        "CLIG.L": 0.0087
       },
       "verdict": null,
       "closed_at": null
@@ -3819,7 +3833,7 @@
       ],
       "sell_returns_since_rotation": {
         "CARD.L": -0.0315,
-        "CLIG.L": 0.1048
+        "CLIG.L": 0.0087
       },
       "buy_returns_since_rotation": {
         "SBRE.L": 0.0482
@@ -4321,6 +4335,56 @@
       },
       "buy_returns_since_rotation": {
         "TRI.L": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-11-10T14:17:03.843259+00:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-11-10T14:17:03.843259+00:00",
+      "status": "open",
+      "trade_cost_pct": 0.003,
+      "sells": [
+        {
+          "ticker": "REC.L",
+          "price": 47.5,
+          "shares": 7.911841,
+          "gross": 375.81,
+          "cost": 0.19,
+          "avg_cost_at_exit": 47.5,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "SBRE.L",
+          "price": 174.0,
+          "shares": 2.149297,
+          "gross": 373.98,
+          "cost": 2.06
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "REC.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "SBRE.L": 0.0
       },
       "verdict": null,
       "closed_at": null
