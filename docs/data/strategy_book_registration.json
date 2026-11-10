@@ -26,9 +26,9 @@
       "note": "The single Phase 1 adjustment is spent. A later gate threshold change is a new registration_id (section 10)."
     },
     "queued": [
-      "L699",
       "L700",
-      "L701"
+      "L701",
+      "L702"
     ],
     "forward_live_set": false,
     "doc": "docs/ops/phase1-gate-review-pack.md#owner-decision-2026-11-10"
@@ -124,18 +124,57 @@
   },
   "change_markers": [
     {
+      "marker_id": "owner-strategy-book-v0-gate-dating-fix-v1",
+      "at": "2026-11-10T12:00:00Z",
+      "kind": "bug_fix",
+      "rule_change": false,
+      "approved_by": "owner",
+      "approved_at": "2026-11-10",
+      "owner_quote": "For 1349 happy to say its a bug fix and to accept the exit change",
+      "new_registration_id": false,
+      "logged_on_registration_id": "owner-strategy-book-v0",
+      "exit_change_accepted": true,
+      "visible_change": "Forward exits can now fire on two successive declining verdicts, as the sealed exit rule says; before the fix the walker saw one gate observation per name and this exit could never confirm.",
+      "sealed_text": "Section 2, Gates: 'A decline or sector verdict applies to sessions strictly after that store's as_of date.' Section 8, entry snapshot: facts 'read from files dated on or before that session.'",
+      "what_was_wrong": "The decline and sector stores are overwritten in place by ops-monitor with as_of set to the run date, just before the memo job and the forward dry run score the previous close. Readers took only the live file, so the one verdict they could see was always dated on or after the signal session and every signal failed parts 2 and 3 as store_after_session (ISO week 45: 0 of 101 entry-rule hits passed; forward dry run 2026-11-10: 411 candidates blocked on gate with gate_as_of 2026-11-10). The forward walker also saw a single gate observation per name, so the two-successive-declining-verdicts exit could never confirm.",
+      "fix": "Each gate refresh writes a dated copy to docs/data/gate_history/<gate>/<date>.json.gz (date = later of the store as_of and the UTC day it was generated). The memo job, evaluate_market and the forward job read the version dated strictly before each session (gate_store_history.GateHistory); the forward walker gets one gate fact per version date. Versions 2026-11-03 to 2026-11-10 were recovered from the committed store files in git history.",
+      "no_lookahead": "Strict reading kept: a version applies only to sessions after its date, and its date is never earlier than the day it was written. A session with no earlier version reads a stub with no verdicts and fails closed. as_of stays the run date rather than the data cutoff, because statement files are overwritten on fetch and may hold data published after the previous close.",
+      "unchanged": "No threshold, verdict rule, entry rule, exit rule or eligibility rule changed. The replay first score store (strategy_book_replay.json) is not re-run.",
+      "pr": 1349,
+      "doc": "docs/ops/operating-decline-gate.md#dated-verdict-history"
+    },
+    {
       "marker_id": "owner-strategy-book-v0-fund-insufficient-data-v1",
       "at": "2026-11-10T12:00:00Z",
       "kind": "bug_fix",
       "rule_change": false,
+      "approved_by": "owner",
+      "approved_at": "2026-11-10",
+      "owner_quote": "I agree all of these: Accept both gates as they are, keeping the 'at least 50%' line. Adjust once: funds and investment trusts get insufficient_data from the decline gate. ... I'd argue a change marker, since it only declares that a class of names lacks the data the gate needs. Queue for later: a minimum declining count for small sectors; a balance-sheet check; a trust discount-to-net-asset-value lens.",
+      "new_registration_id": false,
+      "logged_on_registration_id": "owner-strategy-book-v0",
       "phase1_gate_adjustment": true,
-      "owner_words": "I agree all of these: Accept both gates as they are, keeping the 'at least 50%' line. Adjust once: funds and investment trusts get insufficient_data from the decline gate. ... I'd argue a change marker, since it only declares that a class of names lacks the data the gate needs. Queue for later: a minimum declining count for small sectors; a balance-sheet check; a trust discount-to-net-asset-value lens.",
       "sealed_text": "Section 2: 'Part 2, not declining | Operating-decline verdict clear ... declining and insufficient_data both fail entry' and 'One failure, or a missing input, means the name is not eligible. insufficient_data is not a pass.' Section 10: 'A bug fix that makes the code match this text | A logged change marker on the same registration_id'; a new registration_id is for 'Any threshold, the learning question, or which rule is primary'.",
       "what_was_wrong": "The operating-decline gate applied company rules to funds and investment trusts. Their revenue line is investment income or portfolio return and they have no operating margin, so part 2 ('no sign of declining operating performance') was judged on inputs that do not exist for them. GCP.L (GCP Infrastructure Investments, buy tier) was declining on a fall in investment income; PSH.L, BHMG.L and III.L were clear on the same kind of figures.",
       "fix": "src/value_investor/fund_or_trust.py classifies a name as a fund or trust from a reviewed override list (docs/data/fund_or_trust_overrides.json), then sector label, Yahoo industry or quote type, then 'investment trust' / 'fund' (not 'fund management') in the name; REITs are operating. The gate returns insufficient_data with reason fund_or_trust and keeps the company-rule verdict as company_rules_verdict. The sector gate leaves fund members out of decline and earnings breadth and their coverage base.",
       "effect": "As of 2026-11-10: 8 FTSE names classified; 5 change verdict (GCP.L and 3IN.L declining, PSH.L, BHMG.L and III.L clear, all now insufficient_data). FTSE buy tier: GCP.L only, which failed entry before and after. No library verdict and no sector verdict changed.",
       "unchanged": "No threshold, learning question, entry rule, exit rule or primary rule changed. The change only narrows entry: no name becomes eligible. The replay first score store (strategy_book_replay.json) has an empty full-strategy arm and is not re-run; no forward store exists.",
       "doc": "docs/ops/operating-decline-gate.md#funds-and-investment-trusts"
+    }
+  ],
+  "bench_seals": [
+    {
+      "column": "trend_not_falling",
+      "kind": "filter_challenger",
+      "review": "bench-fill-2026-11-10",
+      "review_doc": "docs/ops/strategy-book-bench-fill-review.md",
+      "sealed_at": "2026-11-10T08:00:00Z",
+      "before_forward_scores": true,
+      "rule": "trend_not_falling is a filter challenger. It keeps a primary entry when the entry's 6-month channel direction (ch126_direction, channel_v0, computed at the signal session from closes on or before that session) is rising or sideways. An entry whose direction is falling, or that has no 6-month channel, is not kept. It opens no episode and is scored under the section 8 bench rules: 48 counted mature episodes, a mean difference above 2.5 standard errors, the same sign in both halves, and a capital-days return not below the primary's.",
+      "rule_sha256": "f264887897639323da9c79415ae91970ac97dc7fc5ad6def9304e45f45dbd2a0",
+      "code": "strategy_book_rules.REVIEW_BENCH / strategy_book_observe._bench_flags",
+      "evidence": "US rehearsal, descriptive: falling-channel entries had a lower fair-cost median in both windows (L689). Not a US rehearsal test.",
+      "owner_note": "Lets seal it now."
     }
   ]
 }

@@ -304,6 +304,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
         line for line in text.splitlines() if "GHA_COMMIT_OWNED" in line and ":-" in line
     )
     assert "docs/data/agent_usage " in owned_line
+    assert "docs/data/gate_history " in owned_line
     assert "agent_usage_cost_backfill.json" in owned_line
     assert "agent_usage_weekly.json" in owned_line
     assert "buy_tier_flip_lag.json" not in owned_line

@@ -26,6 +26,7 @@ from value_investor.decision_input_inventory import (
     _memo_age_days,
     _overlay_bound,
 )
+from value_investor.gate_store_history import GateHistory
 from value_investor.library_decision_input_inventory import (
     _index_as_of,
     _memo_as_of,
@@ -942,10 +943,12 @@ def evaluate_ticker(
     if screen_path is not None:
         inputs.append(str(screen_path))
     inputs.extend(chart_paths)
-    if paths.decline.is_file():
-        inputs.append(str(paths.decline))
-    if paths.sector.is_file():
-        inputs.append(str(paths.sector))
+    for payload, store in ((decline_payload, paths.decline), (sector_payload, paths.sector)):
+        version_path = payload.get("version_path") if isinstance(payload, dict) else None
+        if version_path:
+            inputs.append(str(version_path))
+        elif store.is_file():
+            inputs.append(str(store))
     inputs.extend(filing_paths)
     # De-duplicate while keeping order.
     seen: set[str] = set()
@@ -980,10 +983,10 @@ def evaluate_market(
     """
     book = paths or repo_paths(repo_root)
     screen_path, payload, run_day = newest_screen_run(history_dir_for(book, market), session)
-    if load_stores and decline_payload is None:
-        decline_payload = _load_json(book.decline)
-    if load_stores and sector_payload is None:
-        sector_payload = _load_json(book.sector)
+    if load_stores and (decline_payload is None or sector_payload is None):
+        decline_now, sector_now = GateHistory.load(book.decline, book.sector).in_force(session)
+        decline_payload = decline_now if decline_payload is None else decline_payload
+        sector_payload = sector_now if sector_payload is None else sector_payload
     rows = screen_rows(payload)
     names: list[NameSignal] = []
     for ticker in sorted(rows):

@@ -404,6 +404,8 @@ def test_ops_monitor_check_refreshes_tmp_store(tmp_path: Path):
     assert store.is_file()
     assert findings[0].title == FINDING_TITLE
     assert findings[0].auto_fixable is False
+    assert len(list((tmp_path / "gate_history" / "sector_headwind").glob("*.json.gz"))) == 1
+    assert "Gate verdict history stale" not in [finding.title for finding in findings]
 
 
 def _write_signals(root: Path, market: str, rows: list[dict], *, run_at: str) -> None:

@@ -1,6 +1,6 @@
 # Strategy book bench-seal review (proposed)
 
-**Status: CLOSED 2026-11-10 — nothing sealed.** The exit lab ran on 2026-11-09 and no variant met the choice rule ([outcome](#outcome-2026-11-09)). The fourth bench slot stays free.  
+**Status: CLOSED 2026-11-10 — nothing sealed.** The exit lab ran on 2026-11-09 and no variant met the choice rule ([outcome](#outcome-2026-11-09)). The fourth bench slot was left free; it was filled on 2026-11-10 by the filter challenger `trend_not_falling` ([bench-fill review](strategy-book-bench-fill-review.md)).  
 **Book:** `owner-strategy-book-v0` ([registration](strategy-book-registration.md))  
 **Deferred idea:** N259 (exit challenger scored on capital-days return, trend-led exits, no fixed time cap)  
 **Lab:** `ftse-strategy-book-rehearsal exit-lab` ([runbook](strategy-book-us-rehearsal-runbook.md#6b-exit-lab-exploratory-before-deletion))  

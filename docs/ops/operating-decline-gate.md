@@ -151,6 +151,18 @@ Only about 108 of 248 FTSE names have a filings index, so the profit-warning che
 
 Because statement files are overwritten on each fetch, a past `as_of` is mainly useful against archived trees. Real historical replay needs dated snapshots of the statements (plan step 2.2).
 
+## Dated verdict history
+
+The store is overwritten in place each refresh and `as_of` is the run date. The strategy book applies a decline or sector verdict only to sessions strictly after its date, and it scores the previous close. So each refresh also writes a dated copy of the verdict maps (`gate_store_history.archive_gate_version`), and the strategy book reads the version dated strictly before each signal session instead of the live file.
+
+- Path: `docs/data/gate_history/operating_decline/<date>.json.gz` and `docs/data/gate_history/sector_headwind/<date>.json.gz`. Decline copies keep `names`; sector copies keep `names` and `names_by_market`. Each also stores `schema_version`, `generated_at`, the store's `as_of`, `version_date` and `source` (`refresh` or `git:<sha>`).
+- Date: the later of the store's `as_of` and the UTC day it was generated. A store generated after its `as_of` (the sector store dated to the 2026-11-01 screen but written on 2026-11-03 and 2026-11-04) is filed under the day it was written, so it is never applied before it existed.
+- One file per date. A later refresh the same day replaces it; an older `generated_at` never replaces a newer one. The newest 400 versions are kept (`MAX_VERSIONS`, about 13 months of daily runs). The forward book rebuilds from its start date, so retention must be revisited before it prunes a session the book still walks (deferred L699).
+- Readers: `GateHistory` in `gate_store_history.py`. `strategy_book_signals.evaluate_market` and the memo job take the payload in force at each session; the forward job builds one gate fact per version date for each name. When nothing is in force they get a stub with only the earliest later date and no verdicts, so the check reports `verdict_not_in_force` or `store_after_session` and cannot read a later verdict. Sector copies written before `names_by_market` existed (2026-11-03, 2026-11-04) are read by grouping the flat FTSE `names` map by each entry's market.
+- Bootstrap: `PYTHONPATH=src python -m value_investor.gate_store_history backfill-git` archives every committed version of both stores from git history (first: decline 2026-11-03, sector 2026-11-03). `... in-force YYYY-MM-DD` prints the version dates a session reads.
+- Ops-monitor commits the folder with the other ops-monitor artifacts (`GHA_COMMIT_OWNED` in `scripts/gha_commit_ops_monitor.sh`). The warning **Gate verdict history stale** (`auto_fixable: false`) fires when a gate's newest archived version is missing or more than 3 days old. It is raised by `check_operating_decline_gate` and `check_sector_headwind_gate`.
+- Registration: logged as bug fix marker `owner-strategy-book-v0-gate-dating-fix-v1` on `owner-strategy-book-v0`, not a new `registration_id`. Approved by the owner on 2026-11-10, who also accepted the visible exit change: forward exits can now fire on two successive `declining` verdicts, as the sealed exit rule says.
+
 ## Store
 
 `docs/data/operating_decline_gate.json`:

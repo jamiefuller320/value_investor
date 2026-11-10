@@ -117,7 +117,7 @@ as of 2026-11-10.
 | F4 | GCP.L | GCP Infrastructure Investments | Financial Services | **declining** | sound | Revenue down two years (−4.3%, −33.4%) (hard) || agree it is blocked, for the wrong reason: a fund. Now `insufficient_data` (`fund_or_trust`) |
 | F5 | BT-A.L | BT Group | Communication Services | **declining** | sound | Revenue down two years (−3.5%, −2.1%) (hard) || agree (owner, 2026-11-10) |
 | C1 | DNLM.L | Dunelm Group | Consumer Cyclical | clear | sound | No check fired (interim EPS −7.3%, under the 10% line) || agree (owner, 2026-11-10) |
-| C2 | DATA.L | GlobalData | Industrials | clear | sound | No check fired || agree (owner, 2026-11-10); balance-sheet check queued (L700) |
+| C2 | DATA.L | GlobalData | Industrials | clear | sound | No check fired || agree (owner, 2026-11-10); balance-sheet check queued (L701) |
 | C3 | IGG.L | IG Group | Financial Services | clear | sound | No check fired || agree (owner, 2026-11-10) |
 | C4 | BREE.L | Breedon Group | Basic Materials | clear | sound | One soft signal only (interim EPS −16.1%) || agree (owner, 2026-11-10) |
 | C5 | IMB.L | Imperial Brands | Consumer Defensive | clear | sound | No check fired (annual EPS −16.6%, under the 20% line) || agree (owner, 2026-11-10) |
@@ -544,8 +544,8 @@ for the wrong reason, because it is a fund. DNLM.L, DATA.L, IGG.L, BREE.L and IM
   `declining`, PSH.L, BHMG.L and III.L `clear`, all now `insufficient_data`); none is in the buy tier.
   No library verdict and no sector verdict changes.
 - Queued for later, each behind the next version review (machine trigger: `thickness_ready` in
-  `strategy_book_forward_status.json`): L699 minimum declining-member count for small sectors, L700
-  balance-sheet check in the decline gate, L701 investment-trust discount-to-NAV lens.
+  `strategy_book_forward_status.json`): L700 minimum declining-member count for small sectors, L701
+  balance-sheet check in the decline gate, L702 investment-trust discount-to-NAV lens.
 
 **Change marker or new `registration_id`?** A change marker on `owner-strategy-book-v0`:
 `owner-strategy-book-v0-fund-insufficient-data-v1` in `docs/data/strategy_book_registration.json`.
@@ -579,8 +579,8 @@ the question and the primary rule, the marker reading holds. If the owner reads 
 marker is replaced by a new `registration_id` before go-live; the code change is the same either way.
 
 **Not changed by this decision:** `forward_live` stays `false`. Go-live is a separate owner step
-after PRs [#1346](https://github.com/jamiefuller320/value_investor/pull/1346),
-[#1347](https://github.com/jamiefuller320/value_investor/pull/1347),
-[#1349](https://github.com/jamiefuller320/value_investor/pull/1349) and
-[#1350](https://github.com/jamiefuller320/value_investor/pull/1350) merge
-([go-live readiness](#go-live-readiness)).
+([go-live readiness](#go-live-readiness)). Since this pack was written,
+[#1346](https://github.com/jamiefuller320/value_investor/pull/1346) (bench seal) and
+[#1349](https://github.com/jamiefuller320/value_investor/pull/1349) (dated gate history, which fixes
+go-live item 1) have merged. [#1347](https://github.com/jamiefuller320/value_investor/pull/1347)
+and [#1350](https://github.com/jamiefuller320/value_investor/pull/1350) are still open.

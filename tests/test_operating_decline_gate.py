@@ -531,6 +531,10 @@ def test_ops_monitor_check_wraps_findings(tmp_path):
     assert findings[0].title == FINDING_TITLE
     assert findings[0].auto_fixable is False
     assert store.exists()
+    # The dated copy is keyed by the day it was generated, never earlier.
+    archived = list((store.parent / "gate_history" / "operating_decline").glob("*.json.gz"))
+    assert len(archived) == 1
+    assert "Gate verdict history stale" not in [finding.title for finding in findings]
 
 
 def test_margin_uses_one_operating_income_label_across_years():
@@ -1359,3 +1363,29 @@ def test_committed_fund_overrides_are_reviewed_and_disjoint():
     assert all(entry.get("why") for entry in [*funds.values(), *operating.values()])
     assert classify_fund_or_trust("GCP.L", {"name": "GCP"}, overrides)["basis"] == "override"
     assert classify_fund_or_trust("JUP.L", {"name": "Jupiter Fund"}, overrides) is None
+
+
+def test_fund_marker_survives_dated_gate_history(tmp_path):
+    from datetime import timedelta
+
+    from value_investor.gate_store_history import GateHistory, version_date
+
+    latest, research, store = _build_fixture(tmp_path)
+    data = json.loads(latest.read_text(encoding="utf-8"))
+    data["reports"].append({"ticker": "FUND.L", "name": "F", "signal": "buy", "sector": "FS"})
+    latest.write_text(json.dumps(data), encoding="utf-8")
+    _write_name(research, "FUND.L", _declining_financials())
+    _fund_overrides(tmp_path / "fund_or_trust_overrides.json")
+    payload = refresh_operating_decline_gate(
+        latest_path=latest,
+        research_root=research,
+        store_path=store,
+        library_root=None,
+        as_of=AS_OF,
+    )
+    session = version_date(payload) + timedelta(days=1)
+    decline, _ = GateHistory.load(store, tmp_path / "sector.json").in_force(session)
+    entry = decline["names"]["FUND.L"]
+    assert entry["verdict"] == "insufficient_data"
+    assert entry["fund_or_trust"]["basis"] == "override"
+    assert entry["company_rules_verdict"] == "declining"

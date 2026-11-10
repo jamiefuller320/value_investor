@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-10T10:23:24+00:00",
+  "updated_at": "2026-11-10T10:05:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16944,9 +16944,11 @@
         "bench-challenger",
         "channels"
       ],
-      "status": "open",
+      "status": "done",
       "source": "Owner dialogue after the US rehearsal reveal, 2026-11-07",
-      "added_at": "2026-11-07T20:11:43+00:00"
+      "added_at": "2026-11-07T20:11:43+00:00",
+      "updated_at": "2026-11-10T08:00:16+00:00",
+      "status_note": "Sealed 2026-11-10 as bench filter challenger trend_not_falling at the bench-fill review (docs/ops/strategy-book-bench-fill-review.md); bench now full."
     },
     {
       "id": "N260",
@@ -17119,7 +17121,71 @@
       "added_at": "2026-11-10T01:54:33+00:00"
     },
     {
+      "id": "N261",
+      "category": "not_now",
+      "section": "universe",
+      "title": "Cold-store archive pack stage-3 widen (16/64)",
+      "summary": "After stage-2 (8/32) lands, raise quiet-window archive caps to documented stage 3 (max_units=16, max_http_fetches=64) only after 5 quiet isolation_ok apply nights at stage-2 caps with no shared 429/runner collision. Keep tickers/bodies at 2/1; never auto-widen; N180/N181 stay parked.",
+      "revisit_when": "5 quiet apply_complete nights at stage-2 caps (8/32) with capacity_isolation.isolation_ok=true and no shared 429/runner collision vs euro maintenance or spare sprints; then human/eng raise workflow+code defaults to 16/64",
+      "tags": [
+        "cold-store",
+        "archive",
+        "l499",
+        "caps",
+        "stage-3",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-6112d118-7403-5843-8fe7-65510ff22fb0",
+      "added_at": "2026-11-10T09:58:51+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/universe_filing_archive_status.json",
+            "path": "current_caps.max_units",
+            "op": ">=",
+            "value": 8
+          },
+          {
+            "file": "docs/data/universe_filing_archive_status.json",
+            "path": "capacity_isolation.isolation_ok",
+            "op": "==",
+            "value": true
+          },
+          {
+            "file": "docs/data/universe_filing_archive_status.json",
+            "path": "next_widen_step.id",
+            "op": "==",
+            "value": "accumulate_quiet_nights"
+          }
+        ]
+      }
+    },
+    {
       "id": "L699",
+      "category": "later",
+      "section": "ops",
+      "title": "Gate history retention before the forward book outgrows 400 versions",
+      "summary": "docs/data/gate_history keeps the newest 400 dated copies per gate (about 80 KB a day gzipped). The forward book rebuilds from its start date each run, so once versions older than the start are pruned an early entry would lose its gate. Before then either compact to a delta format, keep every version on or after the forward start date, or have the rebuild read past decisions from the gate log.",
+      "revisit_when": "2027-09-01, or when docs/data/gate_history/operating_decline holds 350 versions, whichever is first",
+      "tags": [
+        "strategy-book",
+        "gates",
+        "retention"
+      ],
+      "status": "open",
+      "source": "gate-store dating fix (cursor/gate-store-dating-fix-567c)",
+      "added_at": "2026-11-10T09:04:08+00:00",
+      "trigger": {
+        "all": [
+          {
+            "on_or_after": "2027-09-01"
+          }
+        ]
+      }
+    },
+    {
+      "id": "L700",
       "category": "later",
       "section": "research",
       "title": "Minimum declining-member count for small sectors in the sector-headwind gate",
@@ -17144,7 +17210,7 @@
       }
     },
     {
-      "id": "L700",
+      "id": "L701",
       "category": "later",
       "section": "research",
       "title": "Balance-sheet check in the operating-decline gate",
@@ -17169,7 +17235,7 @@
       }
     },
     {
-      "id": "L701",
+      "id": "L702",
       "category": "later",
       "section": "research",
       "title": "Investment-trust discount-to-NAV value lens",
