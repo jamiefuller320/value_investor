@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-09T22:39:40.456193+00:00`
+Generated: `2026-11-10T00:49:56.008256+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,7 +33,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `human`/human PR #1333 `eng-20261108-03` — Reconcile dedupe “fresh_memo” vs body-lag signals: set rememo eligibility when `filings_with_body` < `filings_total` or memo source_quality below threshold desp
+- `human`/human PR #1334 `eng-20261109-01` — Hunt fetchable IR source for parked asx200 leftover IMD.AX
 
 ## PR fix occasions — common failure reasons
 - Occasion count: 348
