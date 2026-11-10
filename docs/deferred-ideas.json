@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-10T10:05:00+00:00",
+  "updated_at": "2026-11-10T12:02:13+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -17296,6 +17296,34 @@
             "path": "outcome",
             "op": "==",
             "value": "inconclusive_keep"
+          }
+        ]
+      }
+    },
+    {
+      "id": "L703",
+      "category": "later",
+      "section": "research",
+      "title": "Outcome-scored memo model shadow",
+      "summary": "Both memo models (incumbent composer-2.5 and the comparison challenger) write memos in shadow on real strategy-book signals; score each model's block/pass verdict against the name's 63-session outcome, tied into early-indicator tracking. Complements the blind judge comparison (rule v2), which scores memo quality, not outcome. Observe-only; never feeds the book's memo bind.",
+      "revisit_when": "When the memo model comparison decides (docs/data/memo_model_comparison/decision.json written, with judge_trusted recorded) or when the strategy-book forward status has at least 30 signals",
+      "tags": [
+        "memo-model",
+        "strategy-book",
+        "shadow",
+        "early-indicators",
+        "memo-model-comparison"
+      ],
+      "status": "open",
+      "source": "Owner decision 2026-11-10 ('yes please') on the memo model comparison judge amendment",
+      "added_at": "2026-11-10T12:02:13+00:00",
+      "trigger": {
+        "any": [
+          {
+            "file": "docs/data/strategy_book_forward_status.json",
+            "path": "signals",
+            "op": ">=",
+            "value": 30
           }
         ]
       }

@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-10T10:05:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-10T12:02:13+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -598,6 +598,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | L694 | **Strategy book: memo-led ranking of same-day buy candidates (shadow first)** | Price-only tests show the entry earns about market drift (matched excess ~0). Signal-day memos and meta-analysis (business quality, thesis, catalysts) could rank candidates when slots are scarce. Start as an observe-only shadow ranking scored on forward matched excess, with structured evidence per the LLM live-path rule; a filter or ranking challenger only via a version review. | Forward book has 48 counted mature episodes with signal-day memo verdicts (thickness gate) |
 | L701 | **Memo model comparison: add grok-4.7 as a challenger** | The Cursor runtime lists grok-4.7 (and claude/gpt/gemini frontier models) for our key on 2026-11-10, but agent_model_policy has no rate for it, so the comparison uses grok-4.6 as the strongest configured Grok. Adding a grok-4.7 rate would make strongest_configured_grok pick it for a second comparison. | After the 12-name composer-2.5 vs grok-4.6 comparison has a decision.json, or when a grok-4.7 rate is added to MODEL_API_RATES _(machine-checked)_ |
 | L702 | **Larger memo model comparison if the 12-name result is inconclusive** | Twelve names can only show a large quality gap. If the pre-declared rule returns inconclusive_keep, rerun the same harness on a fresh rule-v2 manifest (more names, new comparison_id) rather than switching on a thin read. | docs/data/memo_model_comparison/decision.json outcome is inconclusive_keep _(machine-checked)_ |
+| L703 | **Outcome-scored memo model shadow** | Both memo models (incumbent composer-2.5 and the comparison challenger) write memos in shadow on real strategy-book signals; score each model's block/pass verdict against the name's 63-session outcome, tied into early-indicator tracking. Complements the blind judge comparison (rule v2), which scores memo quality, not outcome. Observe-only; never feeds the book's memo bind. | When the memo model comparison decides (docs/data/memo_model_comparison/decision.json written, with judge_trusted recorded) or when the strategy-book forward status has at least 30 signals _(machine-checked)_ |
 
 ### Ops / reliability
 
