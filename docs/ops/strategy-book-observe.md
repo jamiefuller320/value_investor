@@ -11,11 +11,36 @@ sections 9(b), 11 and 12. Ops row: [ops-monitor.md](ops-monitor.md).
 Named weekday workflow [`.github/workflows/strategy-book-forward.yml`](../../.github/workflows/strategy-book-forward.yml):
 
 ```
+45 17 * * 1-5
 30 21 * * 1-5
 ```
 
-UTC, timeout 90 minutes. GitHub's scheduler is best-effort, the same caveat as
-email-report. There is no cron-job.org task.
+UTC, timeout 90 minutes. The primary trigger is cron-job.org
+`workflow_dispatch` (`scripts/import_cron_jobs.py` keys
+`strategy-book-forward-europe` and `strategy-book-forward`, re-imported by
+`import-ingest-crons.yml` when the script or this workflow changes). The
+GitHub `schedule:` lines are a backup. In the week of 2026-11-02 GitHub
+created both scheduled runs 3.5–6 hours late (`createdAt` 01:03 UTC Saturday
+for the Friday slot, 03:43 UTC Tuesday for the Monday slot), so it is not
+the primary.
+
+The 17:45 slot was approved by the owner on 2026-11-10 ("A second 17:45 run is fine").
+The partial-bar clip and refresh trim below are logged as change marker
+`owner-strategy-book-v0-partial-bar-clip-v1` in `docs/data/strategy_book_registration.json`
+(bug fix, no rule change; owner: "Yes - log the partial-bar clipping").
+
+The 17:45 slot exists for London and continental Europe. Yahoo's daily
+history has those bars intraday and for some hours after the close, then
+drops the just-completed bar overnight until about the next session. Chart
+history shows it: European bars present at 17:55 and 18:08 UTC (2026-09-21,
+09-23), but absent for every continental exchange at 23:42 UTC (2026-10-30)
+and for London and the continent at 03:45 UTC (2026-11-10, Swiss and US
+present). The 21:30 slot covers New York and Toronto and retries anything
+the first slot missed.
+
+Both slots are the same job. Each fetches only charts behind a market's
+latest completed session and drops bars dated after it, so a second, late,
+or weekend run is a safe catch-up and does not write a partial intraday bar.
 
 The job refreshes due charts, then runs the forward walk so the walk sees the
 new closes. Decline and sector stores are already refreshed by the 07:45 UTC
@@ -53,16 +78,27 @@ before the Hong Kong 08:00 UTC close. It can refresh the previous completed
 session. It cannot refresh today's cash close, and a Yahoo fetch of the buy
 tier does not belong on a 7–10 minute job that then sends mail.
 
-21:30 UTC is after London 16:30 and after New York 16:00 in both EST (21:00 UTC)
+17:45 UTC is after the London and continental closes (16:30 UTC in winter,
+15:30 UTC in summer). 21:30 UTC is after New York 16:00 in both EST (21:00 UTC)
 and EDT (20:00 UTC). Hong Kong 16:00 is 08:00 UTC, so that session is already
-closed. The per-run cap is 500 names, with a one-second pause between market
+closed at both slots. The per-run cap is 500 names, with a one-second pause between market
 batches. Those caps are ops limits, not registration thresholds.
 
 ## Close refresh
 
 `ftse-strategy-book-prices` lists charts that would refresh. `--apply` downloads
 and writes `docs/data/strategy_book_closes.json` with `closes_through` per
-market. A current chart is left byte-for-byte. Weekends do not fetch.
+market. A current chart is left byte-for-byte. Due lists use each market's
+latest completed session, not the wall clock: a Friday slot that starts on
+Saturday still fetches Friday's closes. A weekend run with nothing due
+fetches and writes nothing (`skipped: weekend`). Fetched bars dated after
+`closes_through` are dropped.
+
+`short_of_session` per market counts buy-tier charts that still end before
+`closes_through` after the fetch (usually Yahoo has not published that
+session's bar yet). It is reported as info **Strategy book closes short of
+session** and the next slot retries those charts. It is not the registration
+stale rule below.
 
 After the fetch, a market is **Strategy book closes stale** when more than a
 tenth of its buy tier (`STALE_CLOSE_MAX_SHARE`) is still more than one session
@@ -87,6 +123,13 @@ start, plus the single newest run strictly before the scored session. That
 with the same signature test as `spend_enabled`. The two flags are independent.
 A missing file, a missing key, or any value other than boolean true is false.
 This includes the string `"true"`.
+
+The go-live commit sets `forward_live: true` and `forward_start` to the go-live
+date (YYYY-MM-DD) together. Owner, 2026-11-10: "Lets align the forward start
+and live dates", so `forward_start` will equal the go-live date (recorded on the
+seal as `phase1_gate_decision.forward_start_alignment`). Without it the walk
+would start on the `signed_at` date and replay the sessions before go-live as
+late signals ([forward job](#forward-job)).
 
 Phase 1 governs go-live only. While `forward_live` is false the job still runs
 on the current sessions, writes `docs/data/strategy_book_forward_status.json`
@@ -115,11 +158,11 @@ and `adjusted_signal` come from the CSV.
 - `price_rule` — true when the registered short-term low (RSI below 35 and a 10-session close low) fires on that session, false when it does not, null when there is no chart.
 - `outcome` — the signal event kind when the name signalled (`filled`, `pending_fill`, `late_signal`, `memo_not_ready`, `memo_blocked`, and the other signal kinds). Otherwise the blocked reason the tally already records (`no_chart`, `not_buy_tier`, `gate`, `f9`, `price`, and the rest). A declining or headwind name is `gate`; the verdict is `decline` or `sector`. A miss of the short-term low is `price`. `learning_pool_excluded` means the signals CSV lists the name and the history snapshot omits it because it is in that market's learning-pool exclusion, so it is not in the book's universe. `not_in_book_screen` means the signals CSV lists the name and the snapshot omits it for any other reason, so it is not in the book's universe.
 
-The seal on the signature branch does not yet carry `forward_live`. The reader
-defaults it to false. After the Phase 1 gate review, set `forward_live` true
-and set `spend_enabled` true only if `weekly_ops` should pay for signal-day
-memos. The human task is `adhoc-strategy-book-memo-spend`. Neither job flips
-its own flag.
+The reader defaults `forward_live` to false. After the Phase 1 gate review, set
+`forward_live` true. The human task is `adhoc-strategy-book-memo-spend`.
+`spend_enabled` is already true: the owner switched memo spend on on 2026-11-10,
+before go-live ([memo job spend gate](strategy-book-memo-job.md#spend-gate)).
+Neither job flips its own flag.
 
 When both the signature and `forward_live` are true, `--apply` writes
 `docs/data/strategy_book_observe.json` and appends
@@ -165,6 +208,7 @@ All `auto_fixable` false. Stable titles:
 | Strategy book 26-week interim read published | info | Once, when the walk first publishes the interim read. The job stamps `interim_announce`. The check does not write. |
 | Strategy book thickness gate ready for review | info | Live observe store exists, the gate is ready, and no disposition is stored. |
 | Strategy book memo routine falling behind | warn | Walk share: `memo_not_ready / (filled + memo_not_ready + memo_blocked) > 0.2`. |
+| Strategy book closes short of session | info | After an applied refresh, some buy-tier charts still end before that market's `closes_through`. Names the market, count and first tickers. The next slot retries. |
 | Strategy book closes stale | warn | After the refresh, more than a tenth of a market's buy tier is more than one session behind. |
 | Strategy book late signals | warn | `late_signal / signals > 0.1`. No warn when there are no signals. |
 | Strategy book Trading 212 catalogue stale | warn | Catalogue missing or older than 35 days. Not the 14-day "Trading 212 catalogue stale" finding. |

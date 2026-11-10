@@ -45,7 +45,15 @@ The decline store, the sector store, filings indexes, and each library market's 
 
 ## Spend gate
 
-Spend is off in this PR. `spend_enabled()` in `strategy_book_memo_job.py` reads `docs/data/strategy_book_registration.json` and returns true only when that file exists, `spend_enabled` is boolean true, and a signature is present (`signed_at`, `signed: true`, or a non-empty `signature` string or object). The flag alone does not turn spend on. This PR does not create that file. Signature creates it and sets both the signature and `spend_enabled: true` in the same edit ([human task](human-tasks-checklist.md#ad-hoc-when-triggered)). Until then every request is logged `action: dry_run` with `estimated_spend_usd` 0.40 and no model call.
+**Spend is on since 2026-11-10 (owner).** `spend_enabled()` in `strategy_book_memo_job.py` reads `docs/data/strategy_book_registration.json` and returns true only when that file exists, `spend_enabled` is boolean true, and a signature is present (`signed_at`, `signed: true`, or a non-empty `signature` string or object). The flag alone does not turn spend on. While it is false every request is logged `action: dry_run` with `estimated_spend_usd` 0.40 and no model call.
+
+The owner turned spend on before forward go-live: "From a spending point of view I am willing to be generous and resource this as much as necessary initially, assess what is useful (and used) and if budget demands prove excessive economise later," then "Lets switch it on now." The switch is logged in `operational_switches` on the seal with the quote, the budget and the review date. It supersedes the signature note and the sealed registration's status line ("spend stays off until go-live"), which recorded the owner's choice at signature; section 11's rule makes this flag the switch, and the sealed text is not edited. `forward_live` is unchanged (false). This job never reads `forward_live`, so memos are written while the forward book still dry-runs.
+
+**Budget.** The `weekly_ops` cap is $124.50 (`budget.weekly_ops_cap_usd` in `docs/data/library/policy.json`). `budget.strategy_book_memo_raise` is $40 a week, 100 memos at $0.40, up from $16 (40 memos) on 2026-11-05. It sits in `previous_weekly_ops_cap_usd` too, so reverting the cycle-surplus bump keeps it. Sizing: with every gate passing, 29–44 distinct buy-tier names a week hit the entry rule with a missing or stale memo (ISO weeks 43–45 of 2026), $12–18 a week. The registration's after-gates estimate is 25–35 ($10–14). The pool is shared with the Sunday bundle and ladder research, so the headroom check below still applies.
+
+The job asks only for buy-tier names that already pass `key_filing_bodies` and the other F9-B binds, so spend does not reach thin memos without filing bodies. N138 (off-buy-tier zero-filing memos) is untouched.
+
+**Zero requests at switch-on are not low demand.** On the 2026-11-10 run every entry-rule hit (83 in ISO week 45) failed Part 2 and Part 3 as `store_after_session`. `check_operating_decline_gate` and `check_sector_headwind_gate` rewrite their stores with `as_of` set to the run date just before this job, and this job scores closes before the run date, so the in-force rule (a verdict applies strictly after its `as_of`) never passes. `all_but_memo` and `memo_needed` stay 0 and no memo is requested until the job reads the store version that was in force at each close. The forward job's gate shows the same thing.
 
 When the flag is on, the job checks `weekly_ops` headroom first (`weekday_rememo.DEFAULT_MIN_HEADROOM_USD` of $8 plus the $0.40 estimate, and not `constraining`). A short budget is `action: skipped`, `skip_reason: memo_not_ready_budget` (the registration's label is `memo_not_ready`; the log uses the budget-specific reason). A request calls `research.runner._process_ticker`, the same runner admitted rememo uses. The as-of-only instruction is already appended inside the research agent (plan step 1.3); the job does not build a second prompt. It does not delete an existing memo. Estimated spend is recorded on `weekly_ops` only after a successful `requested` row.
 
@@ -53,7 +61,15 @@ A second run for the same `(market, ticker, kind, session)` does not append anot
 
 ## Memo routine falling behind
 
-Registration section 12 asks for a warn when `memo_not_ready` exceeds a fifth of a week's otherwise-eligible signals (`MEMO_NOT_READY_MAX_SHARE = 0.2`, strict greater-than, so exactly one fifth does not fire). Otherwise-eligible is `all_but_memo`. `memo_routine_falling_behind` returns no finding while `spend_enabled` is false, because dry runs are not budget skips. The function is called on every ops-monitor pass and stays inert until signature turns spend on. The finding does not rememo or ingest.
+Registration section 12 asks for a warn when `memo_not_ready` exceeds a fifth of a week's otherwise-eligible signals (`MEMO_NOT_READY_MAX_SHARE = 0.2`, strict greater-than, so exactly one fifth does not fire). Otherwise-eligible is `all_but_memo`. `memo_routine_falling_behind` returns no finding while `spend_enabled` is false, because dry runs are not budget skips. The function is called on every ops-monitor pass and is live since spend went on (2026-11-10). The finding does not rememo or ingest.
+
+## Spend review
+
+Generosity at switch-on is not a silent default. Every 4 weeks (first 2026-12-08; the date is `operational_switches[].review.next_review_on` on the seal) the owner reviews spend against use ([human task](human-tasks-checklist.md#monthly) `monthly-strategy-book-memo-spend-review`) and keeps, lowers or raises `budget.strategy_book_memo_raise`.
+
+Input: the info finding **Strategy book memo spend this week** (`strategy_book_memo_spend.memo_spend_finding`, called from `check_strategy_book_memo_job`). It reports the latest ISO week's `requested` memos and their $0.40 estimate, budget skips, memo-needed count, the total since switch-on, the `weekly_ops` cap and remaining headroom, and whether the review is due. It is silent while spend is off.
+
+Whether a memo then fed an entry decision (a fill, or `memo_blocked`) or went unused is not tracked yet (queued with `ftse-defer`). Until it is, judge use from the forward book's filled versus `memo_not_ready` counts once `forward_live` is on.
 
 ## Stores and findings
 
@@ -72,6 +88,7 @@ Findings (`category: research`, `auto_fixable: false`):
 | Strategy book memo job failed | warn | The job raised, or a market reported an error. |
 | Strategy book memo job not run on a weekday | warn | UTC weekday and `last_run_at` is missing or before today. A weekend does not warn. |
 | Strategy book memo routine falling behind | warn | Spend is on and budget skips exceed one fifth of the week's otherwise-eligible signals. Inert while spend is off. |
+| Strategy book memo spend this week | info | Spend is on. Week's requested memos and estimated spend, budget skips, total since switch-on, `weekly_ops` headroom, review date ([spend review](#spend-review)). |
 
 None of these findings rememo, ingest, or mint an engineering task.
 

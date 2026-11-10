@@ -227,13 +227,15 @@ def run_close_refresh(
     per market. Charts that are already current are not rewritten.
     """
     moment = _aware(now or datetime.now(UTC))
-    if moment.weekday() >= 5 and apply:
-        plan = plan_close_refresh(repo_root=repo_root, now=moment, budget=budget)
+    plan = plan_close_refresh(repo_root=repo_root, now=moment, budget=budget)
+    # Each market's due list is keyed on its latest completed session, so a
+    # Friday slot that GitHub starts on Saturday still fetches Friday's closes.
+    # A weekend run with nothing due fetches and writes nothing.
+    if apply and moment.weekday() >= 5 and int(plan.get("budget_take") or 0) == 0:
         plan["dry_run"] = True
         plan["skipped"] = "weekend"
         plan["fetched"] = 0
         return _public_plan(plan)
-    plan = plan_close_refresh(repo_root=repo_root, now=moment, budget=budget)
     paths = repo_paths(repo_root)
     fetched = 0
     if apply:
@@ -252,6 +254,7 @@ def run_close_refresh(
                     market=market,
                     refresh_stale=False,
                     closes_through=date.fromisoformat(str(row["closes_through"])),
+                    last_session=date.fromisoformat(str(row["closes_through"])),
                 )
             except (OSError, ValueError, TypeError) as exc:
                 plan["errors"].append(f"{market}: {exc}")
@@ -269,16 +272,24 @@ def run_close_refresh(
         prior = date.fromisoformat(str(row["prior_session"]))
         rows = _buy_rows(history_dir_for(paths, market), completed)
         behind: list[str] = []
+        short: list[str] = []
         for ticker in rows:
             last = _last_close(paths.charts / chart_filename(ticker))
             if last is None or last < prior:
                 behind.append(ticker)
+            if last is None or last < completed:
+                short.append(ticker)
         buy_count = len(rows)
         share = (len(behind) / buy_count) if buy_count else 0.0
         row["more_than_one_session_behind"] = len(behind)
         row["stale_share"] = round(share, 4)
         row["stale"] = share > STALE_CLOSE_MAX_SHARE
         row["sample_tickers"] = behind[:SAMPLE_TICKERS]
+        # Not the registration stale rule. Counts buy-tier charts that still
+        # end before closes_through, e.g. when Yahoo has not yet published the
+        # session's daily bar. The next slot retries them.
+        row["short_of_session"] = len(short)
+        row["short_sample_tickers"] = short[:SAMPLE_TICKERS]
         row.pop("reports", None)
     public = _public_plan(plan)
     should_persist = apply if persist is None else persist
@@ -324,6 +335,27 @@ def _public_plan(plan: dict[str, Any]) -> dict[str, Any]:
         "markets": markets,
         "errors": list(plan.get("errors") or []),
     }
+
+
+def short_markets(state: dict[str, Any] | None) -> list[dict[str, Any]]:
+    """Markets whose buy-tier charts still end before ``closes_through`` after a fetch."""
+    if not isinstance(state, dict) or state.get("dry_run"):
+        return []
+    found: list[dict[str, Any]] = []
+    markets = state.get("markets") if isinstance(state.get("markets"), dict) else {}
+    for market, row in markets.items():
+        if not isinstance(row, dict) or int(row.get("short_of_session") or 0) <= 0:
+            continue
+        found.append(
+            {
+                "market": market,
+                "closes_through": row.get("closes_through"),
+                "buy_tier": row.get("buy_tier"),
+                "short": int(row.get("short_of_session") or 0),
+                "sample_tickers": list(row.get("short_sample_tickers") or []),
+            }
+        )
+    return found
 
 
 def stale_markets(state: dict[str, Any] | None) -> list[dict[str, Any]]:

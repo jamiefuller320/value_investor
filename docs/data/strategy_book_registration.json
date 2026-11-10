@@ -11,7 +11,28 @@
       "Signal-day memo spend stays off (spend_enabled false) until the forward book goes live. The weekly_ops cap was already raised for it (budget.strategy_book_memo_raise). Flip spend_enabled at go-live (human task adhoc-strategy-book-memo-spend)."
     ]
   },
-  "spend_enabled": false,
+  "spend_enabled": true,
+  "operational_switches": [
+    {
+      "at": "2026-11-10T09:00:00Z",
+      "switch": "spend_enabled",
+      "from": false,
+      "to": true,
+      "approved_by": "owner",
+      "owner_quote": [
+        "From a spending point of view I am willing to be generous and resource this as much as necessary initially, assess what is useful (and used) and if budget demands prove excessive economise later.",
+        "Lets switch it on now"
+      ],
+      "forward_live": "unchanged (false). The book still does not trade until the Phase 1 gate review sets forward_live.",
+      "supersedes": "The 2026-11-05 signature note and the sealed registration's status line ('Signal-day memo spend stays off until go-live'). Both record the owner's operational choice at signature, not a rule: section 11 makes this flag the switch. The sealed text is not edited.",
+      "budget": "weekly_ops cap raised by a further $24 to $124.50 (budget.strategy_book_memo_raise $40 a week, 100 memos at $0.40) in docs/data/library/policy.json.",
+      "review": {
+        "every_weeks": 4,
+        "next_review_on": "2026-12-08",
+        "human_task": "monthly-strategy-book-memo-spend-review"
+      }
+    }
+  ],
   "phase1_gate_scope": "forward_book_go_live_only",
   "phase1_gate_decision": {
     "decided_at": "2026-11-10",
@@ -26,11 +47,19 @@
       "note": "The single Phase 1 adjustment is spent. A later gate threshold change is a new registration_id (section 10)."
     },
     "queued": [
-      "L700",
       "L701",
-      "L702"
+      "L702",
+      "L703"
     ],
     "forward_live_set": false,
+    "forward_start_alignment": {
+      "decided_at": "2026-11-10",
+      "owner_words": "Lets align the forward start and live dates.",
+      "rule": "forward_start will equal the go-live date. The go-live edit sets forward_live true and forward_start to the go-live date (YYYY-MM-DD) in the same commit, so the first live walk starts on the go-live session and does not re-walk 2026-11-05 onward as late signals.",
+      "set_now": false,
+      "code": "strategy_book_rules.forward_start_date reads forward_start first, then start_date, observe_start, then the signed_at date.",
+      "doc": "docs/ops/strategy-book-observe.md#go-live"
+    },
     "doc": "docs/ops/phase1-gate-review-pack.md#owner-decision-2026-11-10"
   },
   "sealed_documents": {
@@ -142,6 +171,22 @@
       "unchanged": "No threshold, verdict rule, entry rule, exit rule or eligibility rule changed. The replay first score store (strategy_book_replay.json) is not re-run.",
       "pr": 1349,
       "doc": "docs/ops/operating-decline-gate.md#dated-verdict-history"
+    },
+    {
+      "marker_id": "owner-strategy-book-v0-partial-bar-clip-v1",
+      "at": "2026-11-10T10:09:00Z",
+      "kind": "bug_fix",
+      "rule_change": false,
+      "approved_by": "owner",
+      "approved_at": "2026-11-10",
+      "owner_quote": "Yes - log the partial-bar clipping",
+      "sealed_text": "Section 11, Daily close refresh: 'It passes closes_through set to that market's latest completed session.' Summary: 'The refresh rebuilds every chart whose last close is behind the latest completed session (closes_through).'",
+      "what_was_wrong": "Shared chart files can end on a partial intraday bar for a session that has not closed: the dashboard chart writer stores Yahoo's live bar (Hong Kong charts were rebuilt with a 2026-11-10 bar at 02:10 UTC, mid-session), and a refresh run during a later session downloaded that session's live bar too. The forward loader passed every chart bar to the walker, whose scoring date is the UTC calendar day, so a partial bar could be walked as a completed close (signal, fill or exit on an intraday price).",
+      "fix": "The close refresh drops fetched bars dated after the market's closes_through before writing a chart (ensure_price_charts last_session), and the forward loader keeps only chart bars on or before that market's latest completed session (strategy_book_forward._through_completed). Chart files written by other jobs are unchanged; only what the walk reads is clipped.",
+      "no_lookahead": "Removes a lookahead: no bar from a session that has not closed reaches the walk. Completed sessions are read exactly as before.",
+      "unchanged": "No threshold, signal, entry, exit, gate, F9 or eligibility rule changed. Price basis stays Yahoo adjusted closes from ensure_price_charts. The replay first score store (strategy_book_replay.json) is not re-run.",
+      "pr": 1350,
+      "doc": "docs/ops/strategy-book-observe.md#close-refresh"
     },
     {
       "marker_id": "owner-strategy-book-v0-fund-insufficient-data-v1",

@@ -117,7 +117,7 @@ as of 2026-11-10.
 | F4 | GCP.L | GCP Infrastructure Investments | Financial Services | **declining** | sound | Revenue down two years (−4.3%, −33.4%) (hard) || agree it is blocked, for the wrong reason: a fund. Now `insufficient_data` (`fund_or_trust`) |
 | F5 | BT-A.L | BT Group | Communication Services | **declining** | sound | Revenue down two years (−3.5%, −2.1%) (hard) || agree (owner, 2026-11-10) |
 | C1 | DNLM.L | Dunelm Group | Consumer Cyclical | clear | sound | No check fired (interim EPS −7.3%, under the 10% line) || agree (owner, 2026-11-10) |
-| C2 | DATA.L | GlobalData | Industrials | clear | sound | No check fired || agree (owner, 2026-11-10); balance-sheet check queued (L701) |
+| C2 | DATA.L | GlobalData | Industrials | clear | sound | No check fired || agree (owner, 2026-11-10); balance-sheet check queued (L702) |
 | C3 | IGG.L | IG Group | Financial Services | clear | sound | No check fired || agree (owner, 2026-11-10) |
 | C4 | BREE.L | Breedon Group | Basic Materials | clear | sound | One soft signal only (interim EPS −16.1%) || agree (owner, 2026-11-10) |
 | C5 | IMB.L | Imperial Brands | Consumer Defensive | clear | sound | No check fired (annual EPS −16.6%, under the 20% line) || agree (owner, 2026-11-10) |
@@ -467,7 +467,7 @@ file did not yet exist.
 | 5 | Memo spend switch-on (`cursor/memo-spend-on-567c`) | Branch pushed at `e8859d5e26`; **no PR yet, not merged**. It sets `spend_enabled: true` with an `operational_switches` record, a $40/week memo raise and a 4-weekly spend review task. | Advised. Without spend, `memo_recent` fails on most library names (148 rows in the back-dated dry run) and the memo job only logs `dry_run`. FTSE binds mostly pass today. |
 | 6 | Forward store | `strategy_book_observe.json` and `strategy_book_gate_log.jsonl` do not exist. The first live `--apply` creates both. | Nothing to do |
 | 7 | Seal signed | `signed: true`, `signed_at` 2026-11-05 (`registration_signed` passes) | Already true |
-| 8 | Start date | No `forward_start` on the seal, so the walk starts on the `signed_at` date, **2026-11-05**. On its first live run the book re-walks 2026-11-05 to go-live. Sessions it never logged get `signal_seen_at` equal to that run's time, so any signal from those days is `late_signal` and is never filled. That can trip the "Strategy book late signals" warning (above 10%). | Owner choice: leave it, or set `forward_start` to the go-live date in the same edit. |
+| 8 | Start date | No `forward_start` on the seal, so the walk starts on the `signed_at` date, **2026-11-05**. On its first live run the book re-walks 2026-11-05 to go-live. Sessions it never logged get `signal_seen_at` equal to that run's time, so any signal from those days is `late_signal` and is never filled. That can trip the "Strategy book late signals" warning (above 10%). | **Decided (owner, 2026-11-10): "Lets align the forward start and live dates."** The go-live edit sets `forward_start` to the go-live date in the same commit as `forward_live: true`, so the first live walk starts on the go-live session. Recorded on the seal as `phase1_gate_decision.forward_start_alignment`. |
 | 9 | Ops-monitor 07:45 failure on 2026-11-10 (gap 2) | Open | Advised, so that the go-live findings are current |
 
 ### What `forward_live` checks in code
@@ -486,11 +486,12 @@ other condition in `strategy_book_forward.py` gates the live write.
 - **What:** in `docs/data/strategy_book_registration.json`, change `"forward_live": false` to
   `"forward_live": true`. Record the decision next to it, as in the memo-spend branch's
   `operational_switches` pattern: date, the owner's words, the Phase 1 outcome and a link to this
-  pack. Optionally add `"forward_start": "<go-live date>"` (item 8). Sealed documents are not edited.
+  pack. In the same commit, add `"forward_start": "<go-live date>"` (YYYY-MM-DD, item 8): the owner
+  decided on 2026-11-10 that `forward_start` will equal the go-live date. Sealed documents are not edited.
   The Phase 1 gate status row in the plan is updated.
 - **What the first live run does:** the next weekday 21:30 UTC `strategy-book-forward.yml` run
   refreshes closes (`ftse-strategy-book-prices --apply`), then walks the book from the start date
-  (`ftse-strategy-book-forward --apply`). It writes `docs/data/strategy_book_observe.json` (the first
+  (`ftse-strategy-book-forward --apply`), which is the go-live date. It writes `docs/data/strategy_book_observe.json` (the first
   forward score store), starts the append-only `docs/data/strategy_book_gate_log.jsonl` with one
   session row per scored name and input hashes, and writes the status with `forward_live: true` and
   freshness `live`. Ops-monitor then drops "Strategy book forward go-live pending" and reports
@@ -544,8 +545,8 @@ for the wrong reason, because it is a fund. DNLM.L, DATA.L, IGG.L, BREE.L and IM
   `declining`, PSH.L, BHMG.L and III.L `clear`, all now `insufficient_data`); none is in the buy tier.
   No library verdict and no sector verdict changes.
 - Queued for later, each behind the next version review (machine trigger: `thickness_ready` in
-  `strategy_book_forward_status.json`): L700 minimum declining-member count for small sectors, L701
-  balance-sheet check in the decline gate, L702 investment-trust discount-to-NAV lens.
+  `strategy_book_forward_status.json`): L701 minimum declining-member count for small sectors, L702
+  balance-sheet check in the decline gate, L703 investment-trust discount-to-NAV lens.
 
 **Change marker or new `registration_id`?** A change marker on `owner-strategy-book-v0`:
 `owner-strategy-book-v0-fund-insufficient-data-v1` in `docs/data/strategy_book_registration.json`.
@@ -580,7 +581,12 @@ marker is replaced by a new `registration_id` before go-live; the code change is
 
 **Not changed by this decision:** `forward_live` stays `false`. Go-live is a separate owner step
 ([go-live readiness](#go-live-readiness)). Since this pack was written,
-[#1346](https://github.com/jamiefuller320/value_investor/pull/1346) (bench seal) and
+[#1346](https://github.com/jamiefuller320/value_investor/pull/1346) (bench seal),
+[#1347](https://github.com/jamiefuller320/value_investor/pull/1347) (memo spend),
 [#1349](https://github.com/jamiefuller320/value_investor/pull/1349) (dated gate history, which fixes
-go-live item 1) have merged. [#1347](https://github.com/jamiefuller320/value_investor/pull/1347)
-and [#1350](https://github.com/jamiefuller320/value_investor/pull/1350) are still open.
+go-live item 1) and [#1350](https://github.com/jamiefuller320/value_investor/pull/1350) (forward
+refresh reliability) have merged.
+
+**Start date (owner, 2026-11-10):** "Lets align the forward start and live dates." `forward_start`
+will equal the go-live date: the go-live commit sets `forward_live: true` and
+`forward_start: "<go-live date>"` together ([go-live item 8](#go-live-readiness)). Neither is set yet.
