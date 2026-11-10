@@ -11,7 +11,28 @@
       "Signal-day memo spend stays off (spend_enabled false) until the forward book goes live. The weekly_ops cap was already raised for it (budget.strategy_book_memo_raise). Flip spend_enabled at go-live (human task adhoc-strategy-book-memo-spend)."
     ]
   },
-  "spend_enabled": false,
+  "spend_enabled": true,
+  "operational_switches": [
+    {
+      "at": "2026-11-10T09:00:00Z",
+      "switch": "spend_enabled",
+      "from": false,
+      "to": true,
+      "approved_by": "owner",
+      "owner_quote": [
+        "From a spending point of view I am willing to be generous and resource this as much as necessary initially, assess what is useful (and used) and if budget demands prove excessive economise later.",
+        "Lets switch it on now"
+      ],
+      "forward_live": "unchanged (false). The book still does not trade until the Phase 1 gate review sets forward_live.",
+      "supersedes": "The 2026-11-05 signature note and the sealed registration's status line ('Signal-day memo spend stays off until go-live'). Both record the owner's operational choice at signature, not a rule: section 11 makes this flag the switch. The sealed text is not edited.",
+      "budget": "weekly_ops cap raised by a further $24 to $124.50 (budget.strategy_book_memo_raise $40 a week, 100 memos at $0.40) in docs/data/library/policy.json.",
+      "review": {
+        "every_weeks": 4,
+        "next_review_on": "2026-12-08",
+        "human_task": "monthly-strategy-book-memo-spend-review"
+      }
+    }
+  ],
   "phase1_gate_scope": "forward_book_go_live_only",
   "sealed_documents": {
     "docs/ops/strategy-book-registration.md": {
@@ -103,6 +124,26 @@
     "note": "From here, a bug fix is a logged change marker on this registration_id; a threshold or primary-rule change is a new registration_id (section 10)."
   },
   "change_markers": [
+    {
+      "marker_id": "owner-strategy-book-v0-gate-dating-fix-v1",
+      "at": "2026-11-10T12:00:00Z",
+      "kind": "bug_fix",
+      "rule_change": false,
+      "approved_by": "owner",
+      "approved_at": "2026-11-10",
+      "owner_quote": "For 1349 happy to say its a bug fix and to accept the exit change",
+      "new_registration_id": false,
+      "logged_on_registration_id": "owner-strategy-book-v0",
+      "exit_change_accepted": true,
+      "visible_change": "Forward exits can now fire on two successive declining verdicts, as the sealed exit rule says; before the fix the walker saw one gate observation per name and this exit could never confirm.",
+      "sealed_text": "Section 2, Gates: 'A decline or sector verdict applies to sessions strictly after that store's as_of date.' Section 8, entry snapshot: facts 'read from files dated on or before that session.'",
+      "what_was_wrong": "The decline and sector stores are overwritten in place by ops-monitor with as_of set to the run date, just before the memo job and the forward dry run score the previous close. Readers took only the live file, so the one verdict they could see was always dated on or after the signal session and every signal failed parts 2 and 3 as store_after_session (ISO week 45: 0 of 101 entry-rule hits passed; forward dry run 2026-11-10: 411 candidates blocked on gate with gate_as_of 2026-11-10). The forward walker also saw a single gate observation per name, so the two-successive-declining-verdicts exit could never confirm.",
+      "fix": "Each gate refresh writes a dated copy to docs/data/gate_history/<gate>/<date>.json.gz (date = later of the store as_of and the UTC day it was generated). The memo job, evaluate_market and the forward job read the version dated strictly before each session (gate_store_history.GateHistory); the forward walker gets one gate fact per version date. Versions 2026-11-03 to 2026-11-10 were recovered from the committed store files in git history.",
+      "no_lookahead": "Strict reading kept: a version applies only to sessions after its date, and its date is never earlier than the day it was written. A session with no earlier version reads a stub with no verdicts and fails closed. as_of stays the run date rather than the data cutoff, because statement files are overwritten on fetch and may hold data published after the previous close.",
+      "unchanged": "No threshold, verdict rule, entry rule, exit rule or eligibility rule changed. The replay first score store (strategy_book_replay.json) is not re-run.",
+      "pr": 1349,
+      "doc": "docs/ops/operating-decline-gate.md#dated-verdict-history"
+    },
     {
       "marker_id": "owner-strategy-book-v0-partial-bar-clip-v1",
       "at": "2026-11-10T10:09:00Z",

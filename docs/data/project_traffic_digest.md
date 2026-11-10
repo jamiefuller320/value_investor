@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-10T00:49:56.008256+00:00`
+Generated: `2026-11-10T10:16:29.448426+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -25,14 +25,23 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
-- [ok] Queue health overall=blocked; headline=1 open task(s) blocked by file clash or policy — no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs) _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-11-09T07:47:05.550888+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Queue health overall=idle; headline=Queue and hunter idle. _(source: docs/data/queue_health.json)_
+- [ok] Ops monitor overall=warn at 2026-11-10T02:32:15.124668+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `human`/human PR #1345 `eng-20261110-09` — Workflow fix: library ingest maintenance failure
+- `ingest_narrow`/verified PR #1344 `eng-20261110-08` — Buy-tier body-lag sweep job: prioritize BGEO.L, IAG.L, IGG.L, INCH.L from this run’s `filing_coverage.indexed_without_body` with success metrics and alert on ze
+- `scoring_narrow`/verified PR #1343 `eng-20261110-07` — contractor: Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio [4/4]
+- `ingest_narrow`/verified PR #1342 `eng-20261110-03` — Allowlisted company IR results-presentation PDF fetch (pattern in `gap_fill_source_map` / high-priority HIK.L, MEGP.L samples)
+- `scoring_narrow`/verified PR #1341 `eng-20261110-06` — healthcare: Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio [3/4]
+- `human`/human PR #1340 `eng-20261110-02` — Harden Companies House filed-accounts PDF download + text/OCR pipeline using existing `document-api` URLs in `filings_index.json`
+- `scoring_narrow`/verified PR #1339 `eng-20261110-05` — fcf: Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio [2/4]
+- `human`/human PR #1338 `eng-20261110-01` — Ship unified Investegate/LSE direct fetch for indexed RNS items (replace Google News redirect URLs, PDF/HTML body persist to `filings/bodies/`)
+- `scoring_narrow`/verified PR #1337 `eng-20261110-04` — Sector and cyclical overlay registry (e.g [1/4]
 - `human`/human PR #1334 `eng-20261109-01` — Hunt fetchable IR source for parked asx200 leftover IMD.AX
 
 ## PR fix occasions — common failure reasons
@@ -45,6 +54,22 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `validate job failed` — 3×
 - `deferred-ideas.json conflict after L516 merge` — 3×
 - `ruff_format` — 2×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 14 (open=14, resolved=0)
+- [open] WARN Ingest loop hit runtime cutoff — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Sector headwind gate coverage gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Two-lot retention beats full exit in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Chart highs and lows incomplete — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Strategy-book US rehearsal: licensed data deletion due — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Paper-auto last_run is pre-settle only — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Deferred idea triggers met — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Deferred idea triggers unreadable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
