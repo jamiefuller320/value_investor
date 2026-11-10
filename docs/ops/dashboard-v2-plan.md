@@ -87,7 +87,7 @@ Detail: [`strategy-data-map.md`](dashboard-audit-2026-11-06/strategy-data-map.md
 | Part 2 not declining | `operating_decline_gate.json` | FTSE buy tier: clear 53, declining 9, insufficient 3 |
 | Part 3 sector sound | `sector_headwind_gate.json` | 211 sectors: sound 71, headwind 25, insufficient 115 |
 | Input quality (F9-B) | `decision_input_inventory.json`, `library_decision_input_inventory.json` | FTSE 64 of 65 pass all four; library 33 of 378 (345 fail memo recency) |
-| Seal | `strategy_book_registration.json` | Signed 2026-11-05; spend off |
+| Seal | `strategy_book_registration.json` | Signed 2026-11-05; memo spend on 2026-11-10; `forward_live` false |
 | Memo job | `strategy_book_memo_job.json` | Idle: charts stale at 2026-10-30 |
 | Parts 4–7, scoring | `strategy_book_replay.json` (+ gzipped episodes) | Only on open [PR #1311](https://github.com/jamiefuller320/value_investor/pull/1311): archive replay, three results that must not be averaged |
 | Forward book | `strategy_book_forward_status.json`, `strategy_book_observe.json` | Writer on PR #1311; the observe store is written only once `forward_live` is true |
