@@ -1,6 +1,6 @@
 # JD Sports Fashion Plc (JD.L) — Research memo
 
-_Version 8 · Updated 2026-10-25T07:58:26.134846+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-10T01:40:36.590426+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Strong Buy cheapness fits the screen, but no new H1 RNS, soft trading, North America weakness and leverage keep research at accumulate rather than a full Strong Buy endorsement.
+Confidence: 0.71
+Rationale: Buy-screen cheapness holds, but Deutsche hold despite a higher target, unchanged FCF definition divergence and no fresh RNS leave research supportive yet capped at accumulate.
 RiskTags: cyclical, competitive, leverage, customer_concentration, governance, other
 
 ## Weekly updates
@@ -48,3 +48,8 @@ Screen moved to Strong Buy (7 Oct; P/E ~7.5, improving); FCF definition overlay 
 No material change since 7 Oct.  
 Since then, news is LSE/Yahoo quote pages only; the filings index still has no tagged interim/H1 RNS (Mexico Grupo Axo was already noted 21 Sep).  
 Strong Buy screen holds (4 weeks; P/E ~8.1, neutral timing); FCF basis overlay unchanged.
+
+### 2026-11-10T01:40:36.590426+00:00
+Since 25 Oct: Deutsche raised target to 105p but kept Hold (earnings caution, 28 Oct); valuation press and a 414-store stock-tracking rollout (6 Nov)—no new RNS in the batch.  
+Screen is Buy (1 week; neutral timing; P/E ~8.8); FCF definition/coverage divergence overlay unchanged.  
+Filings index adds nothing material versus the prior interim/H1 tagging gap.

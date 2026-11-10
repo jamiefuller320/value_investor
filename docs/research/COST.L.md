@@ -1,6 +1,6 @@
 # Costain Group PLC (COST.L) — Research memo
 
-_Version 11 · Updated 2026-11-07T19:22:54.938613+00:00 · Mode: structured_verdict_update_
+_Version 12 · Updated 2026-11-10T01:20:15.530666+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Research confirms the buy screen on unchanged H1 evidence; post-1 Nov RNS is voting rights and holdings only; nineteen-week stable buy with neutral timing—still favour limit orders.
+Rationale: Research confirms the buy screen on unchanged H1 evidence; no Costain RNS since 7 Nov; 21-week stable buy (9/22 models), neutral timing—still favour limit orders.
 RiskTags: cyclical, regulatory, pension, competitive, customer_concentration, other
 
 ## Weekly updates
@@ -63,3 +63,8 @@ Buy signal stable at eighteen weeks (9/22 models); neutral timing with RSI ~52; 
 No new results or trading update since H1; the filing picture is unchanged.
 Since 1 November, RNS is limited to total voting rights (2 Nov) and a routine holdings disclosure (3 Nov); news is false-positive COST ticker noise only.
 Buy signal is stable at nineteen weeks (10/22 models); neutral timing with RSI ~51; H1 thesis unchanged.
+
+### 2026-11-10T01:20:15.530666+00:00
+No new results or trading update since H1; the filing picture is unchanged.  
+Since 7 November, no new Costain RNS; news is retrospective Yahoo commentary plus false-positive COST ticker matches (Celanese, Molson Coors).  
+Buy signal is stable at twenty-one weeks (9/22 models); neutral timing with RSI ~51; H1 thesis unchanged.

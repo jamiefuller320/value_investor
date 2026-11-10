@@ -1,6 +1,6 @@
 # Fresnillo plc (FRES.L) — Research memo
 
-_Version 8 · Updated 2026-11-07T19:24:37.751194+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-11-10T01:21:46.591872+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Cheapness and quality still support the buy screen, but unchanged EPS basis warnings and cyclical output keep research at accumulate rather than full confirmation.
+Rationale: Valuation and quality still fit the buy screen, but unchanged EPS basis warnings, cyclical output, and no confirmatory CFO handover disclosure keep research at accumulate, not full confirmation.
 RiskTags: cyclical, regulatory, governance, key_person, other
 
 ## Weekly updates
@@ -48,3 +48,8 @@ H1 2026 interim remains the latest accounts anchor.
 Buy signal persists (27 weeks, ~58% composite); timing neutral (RSI ~48, marginally below 200-day MA); screen still flags statutory vs filing EPS divergence.  
 No new indexed RNS since the 21 Oct 3Q26 production report; planned 1 Nov CFO handover has no confirmatory disclosure in this pull.  
 News since 1 Nov is a generic quote page only; H1 2026 interim remains the latest accounts anchor.
+
+### 2026-11-10T01:21:46.591872+00:00
+Buy signal persists (29 weeks, ~57% composite); timing neutral (RSI ~48, marginally below 200-day MA); screen still flags statutory vs filing EPS divergence.  
+No new indexed RNS since the 21 Oct 3Q26 production report; planned 1 Nov CFO handover has no confirmatory disclosure in this pull.  
+News since 7 Nov is thin (quote pages and generic silver-sector commentary); H1 2026 interim remains the latest accounts anchor.

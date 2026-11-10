@@ -1,6 +1,6 @@
 # IG Group Holdings plc (IGG.L) — Research memo
 
-_Version 5 · Updated 2026-11-08T09:00:43.734231+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-10T01:31:34.982087+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Filing-aligned FCF and yield still support the buy screen at nine weeks; routine RNS only, but the Q3 outlook cut and statutory vs adjusted EPS divergence keep the overlay cautious.
+Rationale: Filing-aligned FCF and yield still support the buy screen at ten weeks; no new disclosures, but statutory vs adjusted EPS divergence keeps the overlay cautious.
 RiskTags: regulatory, cyclical, leverage, competitive, governance
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Buy screen still buy (seven weeks, neutral timing); filing-backed FCF and yield 
 No new trading statements, accounts, or material RNS since the 1 Nov refresh—only routine Total Voting Rights (2 Nov) and Treasury Stock (5 Nov) notices in the filing set.  
 One new headline (6 Nov) discusses IG seeking a US prediction-markets licence; that is commentary only and is not corroborated in the supplied filing bodies.  
 The buy screen is unchanged in filing-backed terms (nine weeks, neutral timing; FCF £486m, yield ~4.5%); statutory vs adjusted EPS divergence warnings remain.
+
+### 2026-11-10T01:31:34.982087+00:00
+No new trading statements, accounts, or material RNS since the 8 Nov refresh; the post-8 Nov news batch is empty.  
+Buy screen unchanged in filing-backed terms (10 weeks, neutral timing; FCF £486m, yield ~4.5%).  
+Statutory vs adjusted EPS divergence warnings and prior Q3 commentary remain; US prediction-markets licence talk is still uncorroborated in the filing set.

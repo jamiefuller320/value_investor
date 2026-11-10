@@ -1,6 +1,6 @@
 # Taylor Wimpey plc (TW.L) — Research memo
 
-_Version 5 · Updated 2026-10-28T11:33:06.538080+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-10T02:03:51.126475+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Persistent cheapness/risk screen supports the buy case, but absent interim RNS and unresolved filing vs TTM FCF with ~0.38× cover only partly confirm it.
+Rationale: Persistent cheapness/risk screen supports the buy case, but missing interim RNS and unresolved filing vs TTM FCF with ~0.38× cover only partly confirm it.
 RiskTags: regulatory, cyclical, governance, pension, competitive, liquidity, leverage, litigation
 
 ## Weekly updates
@@ -33,3 +33,8 @@ RSI ~49 (was ~43); price still below the 200-day MA — no filing-verified chang
 Since 4 Oct: no interim or trading-update RNS indexed; filings index unchanged (annual only).  
 News batch is third-party quote pages only (one irrelevant hit); no filing-verified trading or distribution news.  
 Buy screen still persistent (~70% composite, 9/22 models, 11w); RSI ~63 (was ~49), price near the 200-day MA; FCF overlay and ~0.38× statutory cover unchanged.
+
+### 2026-11-10T02:03:51.126475+00:00
+Since 28 Oct: no interim or trading-update RNS indexed; filings index still annual-only.  
+News batch is one irrelevant third-party quote hit; no filing-verified Taylor Wimpey trading or distribution news.  
+Buy screen remains persistent (~71% composite, 10/22 models, 16w); FCF filing vs screen TTM gap and ~0.38× statutory cover unchanged; RSI ~56, price still slightly below the 200-day MA.

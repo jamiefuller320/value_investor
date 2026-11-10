@@ -1,6 +1,6 @@
 # Victrex plc (VCT.L) — Research memo
 
-_Version 7 · Updated 2026-11-07T19:23:42.356977+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-11-10T01:20:52.009026+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Buy screen persists (10w, stable) with FY26 guidance and capital-return framework intact; only routine RNS and syndicated press since 1 Nov—research neutrally confirms measured accumulation.
+Rationale: Buy screen holds (12w, stable) with no new company disclosures since 7 Nov; research neutrally confirms measured accumulation on intact FY26 guidance and the Sep capital-return framework.
 RiskTags: cyclical, competitive, liquidity, leverage, accounting, customer_concentration, key_person, other
 
 ## Weekly updates
@@ -43,3 +43,8 @@ Quantitative buy signal unchanged (ninth week, stable); FY26 PBT guidance and th
 No trading or results RNS since the 9 Sep pre-close upgrade; filings through 7 Nov show nothing new beyond the 30 Oct total voting-rights disclosure.  
 5 Nov syndicated Yahoo piece on valuation after a strong share run — not a company filing.  
 Quantitative buy signal unchanged (tenth week, stable); FY26 PBT guidance and the 24 Sep dividend/capital-return framework are unchanged.
+
+### 2026-11-10T01:20:52.009026+00:00
+No trading or results RNS since the 9 Sep pre-close upgrade; filings through 10 Nov add nothing beyond the 30 Oct total voting-rights disclosure.  
+News batch since 7 Nov is empty.  
+Quantitative buy signal unchanged (twelfth week, stable); FY26 PBT guidance and the 24 Sep dividend/capital-return framework are unchanged.

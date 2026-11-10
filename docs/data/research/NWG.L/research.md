@@ -1,6 +1,6 @@
 # NatWest Group plc (NWG.L) — Research memo
 
-_Version 4 · Updated 2026-11-08T09:05:53.061136+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-11-10T01:39:03.178473+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.70
-Rationale: Strong-buy screen fits cheapness and yield, but with no new results since Q3 IMS, impairment or tax overhang and BoE rate-risk press keep research at accumulate rather than full strong-buy conviction.
+Rationale: Buy screen fits cheapness and yield, but with no new disclosure since 8 Nov, Q3 impairment, tax and BoE rate overhang keep research at accumulate rather than full buy conviction.
 RiskTags: regulatory, cyclical, leverage, litigation
 
 ## Weekly updates
@@ -28,3 +28,8 @@ No material change.
 Quant screen upgraded to Strong Buy (1w, improving); timing still accumulate, RSI ~37.  
 Since 1 Nov only routine share-buyback RNS (3 Nov); press rehashes Q3 NIM/loans and possible further BoE Bank Rate rises.  
 30 Oct Q3 IMS thesis unchanged—elevated impairments and surcharge/tax still temper conviction.
+
+### 2026-11-10T01:39:03.178473+00:00
+No new articles or filings since the 8 Nov refresh; the 30 Oct Q3 IMS thesis is unchanged.  
+The quant screen is **Buy** (was Strong Buy on 8 Nov); composite ~69%, trend deteriorating; timing still **accumulate**, RSI ~37.  
+No material change in impairment, surcharge/tax or BoE rate-risk narrative in supplied sources.

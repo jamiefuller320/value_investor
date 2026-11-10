@@ -1,6 +1,6 @@
 # Aberdeen Group Plc (ABDN.L) — Research memo
 
-_Version 5 · Updated 2026-10-25T08:31:45.307879+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-10T01:41:38.776273+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Q3 RNS and Standard Life proceeds support the buy screen on value and capital optionality, but YTD group outflows and delayed Adviser recovery leave dividend/FCF cover only partly resolved.
+Rationale: Oct Q3 flows and Standard Life proceeds still support the buy screen on value and capital optionality; thin post-period news leaves group outflows and dividend/FCF cover unresolved.
 RiskTags: regulatory, cyclical, competitive, pension, leverage, other
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Late Sep–Oct coverage is syndicated Kalkine/Yahoo—dividend-sustainability co
 7–8 Oct RNS: completed secondary placing of half the Standard Life stake (~£436m gross); dividend policy and FY 2026 profit/capital targets unchanged; £210m AT1 redemption flagged for Dec 2026.  
 21 Oct Q3 AUMA & flows: AUMA £578.9bn (+4%); interactive investor YTD net inflows £9.3bn, but group Q3 net outflows £0.3bn with Adviser still at £0.7bn.  
 Subsequent coverage is mostly syndicated Kalkine/Yahoo on flows and the placing—no new accounts.
+
+### 2026-11-10T01:41:38.776273+00:00
+No interim, trading update or accounts since the 21 Oct 2026 Q3 AUMA & flows RNS; latest material indexed filing unchanged.  
+2 Nov RNS: routine share-plan issue and total voting rights; 26–30 Oct director/PDMR notices only.  
+Press (30 Oct) on Scottish Widows/IP Group venture LTAF mandate—no new primary disclosure on flows, leverage or dividend cover.

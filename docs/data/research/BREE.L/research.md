@@ -1,6 +1,6 @@
 # Breedon Group plc (BREE.L) — Research memo
 
-_Version 5 · Updated 2026-10-28T11:17:12.450434+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-10T01:48:49.707297+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: H1 2026 still supports the screen buy on valuation and cash return; recent RNS adds governance noise but no trading update, leaving cyclicality, leverage and CEO succession risks in place.
+Rationale: H1 2026 still supports the screen buy on valuation and cash return; since 28 Oct only routine voting rights and third-party commentary appeared, so cyclical, leverage and CEO succession risks are unchanged.
 RiskTags: cyclical, regulatory, leverage, competitive, key_person, governance, other
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Late-Sep news is third-party dividend/commentary only (GuruFocus, Kalkine); no t
 27 Oct RNS is a routine NED external-appointment disclosure (Helen Miles); her Breedon role is unchanged.  
 5 Oct PDMR flagged a pledge of up to 67m shares by a director-linked holder; 7 Oct investor site visit confirmed no new trading information.  
 H1 2026 interim results remain the latest accounts; post–4 Oct news is third-party commentary only.
+
+### 2026-11-10T01:48:49.707297+00:00
+No indexed RNS since 28 Oct except 30 Oct routine total voting rights.  
+5 Nov news is third-party Yahoo valuation commentary only; no trading update or new accounts.  
+H1 2026 interim results remain the latest disclosure; thesis and risk tags unchanged.

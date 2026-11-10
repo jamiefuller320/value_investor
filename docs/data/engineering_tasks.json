@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-11-10T02:39:42.251699+00:00",
+  "compiled_at": "2026-11-10T02:04:37.447681+00:00",
   "run_at": null,
-  "task_count": 260,
+  "task_count": 268,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -52,6 +52,49 @@
       "parked_policy": "no_diff_cap",
       "cancelled_reason": "backlog clearing: no-diff cap — CH pipeline deferred to post-run queue",
       "cancelled_at": "2026-09-19T20:41:16.636033+00:00"
+    },
+    {
+      "id": "eng-20261110-01",
+      "area": "ingest",
+      "title": "Ship unified Investegate/LSE direct fetch for indexed RNS items (replace Google News redirect URLs, PDF/HTML body persist to `filings/bodies/`)",
+      "summary": "Ship unified Investegate/LSE direct fetch for indexed RNS items (replace Google News redirect URLs, PDF/HTML body persist to `filings/bodies/`)",
+      "priority": "high",
+      "priority_score": 99.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "LSE",
+          "RNS",
+          "PDF",
+          "HTML"
+        ],
+        "plan_index": 1,
+        "narrow_scope_mode": "single",
+        "narrow_scope_reason": "topics=filings paths=2",
+        "narrow_parent_title": "Ship unified Investegate/LSE direct fetch for indexed RNS items (replace Google News redirect URLs, PDF/HTML body persist to `filings/bodies/`)",
+        "narrow_cohesion_bypass": false,
+        "narrow_topics": [
+          "filings"
+        ]
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for LSE",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "tests/test_research_filings.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20261030-01",
@@ -611,6 +654,51 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/876",
       "pr_number": 876,
       "merged_at": "2026-09-27T14:10:39.695497+00:00"
+    },
+    {
+      "id": "eng-20261110-02",
+      "area": "ingest",
+      "title": "Harden Companies House filed-accounts PDF download + text/OCR pipeline using existing `document-api` URLs in `filings_index.json`",
+      "summary": "Harden Companies House filed-accounts PDF download + text/OCR pipeline using existing `document-api` URLs in `filings_index.json`",
+      "priority": "high",
+      "priority_score": 98.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "PDF",
+          "OCR"
+        ],
+        "plan_index": 2,
+        "narrow_scope_mode": "single",
+        "narrow_scope_reason": "topics=filings,companies_house paths=5",
+        "narrow_parent_title": "Harden Companies House filed-accounts PDF download + text/OCR pipeline using existing `document-api` URLs in `filings_index.json`",
+        "narrow_cohesion_bypass": false,
+        "narrow_topics": [
+          "filings",
+          "companies_house"
+        ]
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for PDF",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "tests/test_research_filings.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20261107-01",
@@ -1512,6 +1600,243 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/652",
       "pr_number": 652,
       "merged_at": "2026-09-15T13:54:17.254505+00:00"
+    },
+    {
+      "id": "eng-20261110-03",
+      "area": "ingest",
+      "title": "Allowlisted company IR results-presentation PDF fetch (pattern in `gap_fill_source_map` / high-priority HIK.L, MEGP.L samples)",
+      "summary": "Allowlisted company IR results-presentation PDF fetch (pattern in `gap_fill_source_map` / high-priority HIK.L, MEGP.L samples) (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+      "priority": "high",
+      "priority_score": 97.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "IR",
+          "PDF",
+          "HIK.L",
+          "MEGP.L"
+        ],
+        "plan_index": 3,
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Allowlisted company IR results-presentation PDF fetch (pattern in `gap_fill_source_map` / high-priority HIK.L, MEGP.L samples)",
+        "narrow_cohesion_bypass": true
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for IR",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20261110-04",
+      "area": "scoring",
+      "title": "Sector and cyclical overlay registry (e.g [1/4]",
+      "summary": "First-principle slice 1/4 of: Sector and cyclical overlay registry (e.g. Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio. no topic map — cohesion bypass keeps full area allowlist",
+      "priority": "high",
+      "priority_score": 97.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "UK",
+          "FCF"
+        ],
+        "plan_index": 5,
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Sector and cyclical overlay registry (e.g. Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio",
+        "narrow_cohesion_bypass": true,
+        "narrow_split_group_id": "95b0f5081525",
+        "narrow_split_index": 1,
+        "narrow_split_count": 4
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20261110-05",
+      "area": "scoring",
+      "title": "fcf: Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio [2/4]",
+      "summary": "First-principle slice 2/4 of: Sector and cyclical overlay registry (e.g. Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio. topics=fcf paths=8",
+      "priority": "high",
+      "priority_score": 97.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "UK",
+          "FCF"
+        ],
+        "plan_index": 5,
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "topics=fcf paths=8",
+        "narrow_parent_title": "Sector and cyclical overlay registry (e.g. Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio",
+        "narrow_cohesion_bypass": false,
+        "narrow_split_group_id": "95b0f5081525",
+        "narrow_split_index": 2,
+        "narrow_split_count": 4,
+        "narrow_topics": [
+          "fcf"
+        ]
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/scoring/fcf.py",
+        "src/value_investor/scoring/fcf_basis_overlay.py",
+        "src/value_investor/scoring/fcf_three_way_conviction_overlay.py",
+        "src/value_investor/scoring/screening_export_guard.py",
+        "src/value_investor/scoring/snapshot.py",
+        "src/value_investor/pipeline.py",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20261110-06",
+      "area": "scoring",
+      "title": "healthcare: Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio [3/4]",
+      "summary": "First-principle slice 3/4 of: Sector and cyclical overlay registry (e.g. Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio. topics=healthcare paths=6",
+      "priority": "high",
+      "priority_score": 97.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "UK",
+          "FCF"
+        ],
+        "plan_index": 5,
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "topics=healthcare paths=6",
+        "narrow_parent_title": "Sector and cyclical overlay registry (e.g. Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio",
+        "narrow_cohesion_bypass": false,
+        "narrow_split_group_id": "95b0f5081525",
+        "narrow_split_index": 3,
+        "narrow_split_count": 4,
+        "narrow_topics": [
+          "healthcare"
+        ]
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/scoring/healthcare_overlay.py",
+        "src/value_investor/scoring/healthcare_price_erosion_overlay.py",
+        "src/value_investor/scoring/snapshot.py",
+        "src/value_investor/pipeline.py",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20261110-07",
+      "area": "scoring",
+      "title": "contractor: Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio [4/4]",
+      "summary": "First-principle slice 4/4 of: Sector and cyclical overlay registry (e.g. Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio. topics=contractor paths=3",
+      "priority": "high",
+      "priority_score": 97.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "UK",
+          "FCF"
+        ],
+        "plan_index": 5,
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "topics=contractor paths=3",
+        "narrow_parent_title": "Sector and cyclical overlay registry (e.g. Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio",
+        "narrow_cohesion_bypass": false,
+        "narrow_split_group_id": "95b0f5081525",
+        "narrow_split_index": 4,
+        "narrow_split_count": 4,
+        "narrow_topics": [
+          "contractor"
+        ]
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/scoring/uk_contractor_overlay.py",
+        "src/value_investor/scoring/snapshot.py",
+        "tests/test_pipeline.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20261108-01",
@@ -2756,6 +3081,49 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1330",
       "pr_number": 1330,
       "merged_at": "2026-11-08T01:19:48.285941+00:00"
+    },
+    {
+      "id": "eng-20261110-08",
+      "area": "ingest",
+      "title": "Buy-tier body-lag sweep job: prioritize BGEO.L, IAG.L, IGG.L, INCH.L from this run’s `filing_coverage.indexed_without_body` with success metrics and alert on ze",
+      "summary": "Buy-tier body-lag sweep job: prioritize BGEO.L, IAG.L, IGG.L, INCH.L from this run’s `filing_coverage.indexed_without_body` with success metrics and alert on ze",
+      "priority": "high",
+      "priority_score": 96.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "BGEO.L",
+          "IAG.L",
+          "IGG.L",
+          "INCH.L"
+        ],
+        "plan_index": 4,
+        "narrow_scope_mode": "single",
+        "narrow_scope_reason": "topics=filings paths=2",
+        "narrow_parent_title": "Buy-tier body-lag sweep job: prioritize BGEO.L, IAG.L, IGG.L, INCH.L from this run’s `filing_coverage.indexed_without_body` with success metrics and alert on ze",
+        "narrow_cohesion_bypass": false,
+        "narrow_topics": [
+          "filings"
+        ]
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for BGEO.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "tests/test_research_filings.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20261108-03",
@@ -16880,20 +17248,20 @@
     }
   ],
   "ingest_health": {
-    "snapshot_at": "2026-11-09T17:57:07.959734+00:00",
+    "snapshot_at": "2026-11-10T02:04:37.424481+00:00",
     "buy_tier_count": 70,
     "measured_tickers": 70,
     "unmeasured_buy_tier": 0,
     "unmeasured_tickers": [],
     "zero_body_buy_tier": 0,
     "zero_body_tickers": [],
-    "indexed_without_body": 7,
-    "filings_with_body": 5747
+    "indexed_without_body": 6,
+    "filings_with_body": 5896
   },
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-11-10T02:38:18.687530+00:00",
+    "evaluated_at": "2026-11-10T00:49:56.008256+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -16954,36 +17322,12 @@
   },
   "queue_clearing": {
     "attention_parked_count": 2,
-    "evaluated_at": "2026-11-10T02:38:17.973834+00:00",
+    "evaluated_at": "2026-11-10T00:41:34.876634+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
       "resumed": true
     },
     "resumed_at": "2026-10-14T07:12:50.922751+00:00"
-  },
-  "micro_compile_source": "ingest_gap_closure",
-  "library_market_id": "asx200",
-  "hunter_ticker": "IMD.AX",
-  "queue_block_notify": {
-    "last_fingerprint": "clash_blocked|no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
-    "last_sent_at": "2026-11-09T16:20:36.927689+00:00",
-    "cooldown_hours": 12.0
-  },
-  "ingest_health_before": {
-    "snapshot_at": "2026-11-08T09:45:38.172421+00:00",
-    "buy_tier_count": 65,
-    "measured_tickers": 65,
-    "unmeasured_buy_tier": 0,
-    "unmeasured_tickers": [],
-    "zero_body_buy_tier": 0,
-    "zero_body_tickers": [],
-    "indexed_without_body": 5,
-    "filings_with_body": 5425
-  },
-  "reprioritized_at": "2026-11-09T17:57:07.960025+00:00",
-  "reprioritized_after_task": "eng-20261108-03",
-  "source_gap_closure_run_id": "igc-20261005-01",
-  "source_trial_id": "igc-20261005-01",
-  "source_chain_root_id": "igc-20261005-01"
+  }
 }

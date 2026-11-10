@@ -1,15 +1,15 @@
 # Associated British Foods plc (ABF.L) — Research memo
 
-_Version 5 · Updated 2026-10-28T11:14:25.709019+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-10T01:47:03.385625+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
 
 ## RESEARCH VERDICT
-Verdict: neutral
+Verdict: caution
 Risk: medium
-Confidence: 0.62
-Rationale: Press reiterates September outlook cautions without new disclosures; unresolved FCF definition gaps leave research neutral on the buy screen, not confirming cheapness alone.
+Confidence: 0.70
+Rationale: FY2026 RNS confirms a 14% adjusted operating profit fall and guides 2027 below 2026; flat dividend, but research weakens the buy screen on earnings momentum despite ongoing FCF definition tension.
 RiskTags: cyclical, competitive, regulatory, pension, accounting, other
 
 ## Weekly updates
@@ -33,3 +33,8 @@ September segment cautions and the unresolved FCF basis gap are unchanged.
 Since 4 October, secondary media has revisited the September trading cautions (Sugar, grocery, European Primark) and Primark UK delivery, plus commentary on British Sugar changes.  
 Simply Wall Street–style forecast pieces circulated; nothing adds primary RNS or accounts evidence.  
 September outlook risks and the unresolved filing vs management FCF basis gap are unchanged.
+
+### 2026-11-10T01:47:03.385625+00:00
+3 November FY2026 annual results: adjusted operating profit down 14%, adjusted EPS down 11%, management free cash flow £652m; total dividend unchanged at 63.0p.  
+Outlook expects 2027 adjusted operating profit and EPS below 2026, mainly from Sugar (guided adjusted operating loss £70m–£170m).  
+Annual report and accounts filed 5 November; Primark demerger still targeted for December 2027.

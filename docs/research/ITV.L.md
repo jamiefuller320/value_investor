@@ -1,6 +1,6 @@
 # ITV plc (ITV.L) — Research memo
 
-_Version 5 · Updated 2026-10-28T11:32:08.078385+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-10T02:02:58.444792+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.71
-Rationale: Filings still support cheap metrics and Sky proceeds as catalyst, but PIIN-minded DCMS step adds delay risk; FCF/dividend gaps leave research neutral on fully confirming buy.
+Confidence: 0.70
+Rationale: Formal PIIN (4 Nov) and Jan 2027 CMA/Ofcom deadline extend proceeds uncertainty; cheap metrics and catalyst remain, but FCF/dividend gaps keep research neutral on fully confirming buy.
 RiskTags: regulatory, cyclical, pension, competitive, leverage, liquidity, governance
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Filing base, FCF/dividend divergence, and risk profile are unchanged.
 15–20 Oct: DCMS/CMA colour shows the Culture Secretary is “minded to” a public-interest intervention on the Sky M&E deal; CMA page updated 20 Oct, with pre-notification still open (press 27 Oct).  
 No new issuer RNS in this batch; items are commentary (yield/price, LSE quote) plus unrelated ITVX news.  
 Filing base and FCF/dividend gaps are unchanged; regulatory timing on Sky proceeds is the main change since 4 Oct.
+
+### 2026-11-10T02:02:58.444792+00:00
+On 4 Nov the Culture Secretary issued a formal PIIN on the Sky M&E deal; the CMA case page (updated 4 Nov) requires CMA and Ofcom to report by 27 Jan 2027.  
+No new issuer RNS since 28 Oct; the 5 Nov news item is commentary on the regulatory review.  
+Filing base and FCF/dividend gaps are unchanged; Sky proceeds timing now follows the PIIN statutory timetable.

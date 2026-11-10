@@ -1,15 +1,15 @@
 # discoverIE Group plc (DSCV.L) — Research memo
 
-_Version 6 · Updated 2026-10-28T10:55:07.645434+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-11-10T01:43:12.201991+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
 
 ## RESEARCH VERDICT
-Verdict: accumulate
+Verdict: neutral
 Risk: medium
-Confidence: 0.75
-Rationale: The H1 trading update confirms order momentum and earnings ahead of expectations, supporting the buy screen; leverage (~1.6–1.8x) and rich valuation still cap conviction.
+Confidence: 0.72
+Rationale: H1 trading still looks sound, but the hold screen, rich valuation and persistent statutory–filing EPS divergence align with pausing adds rather than chasing.
 RiskTags: cyclical, leverage, competitive, accounting, key_person
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Buy screen remains persistent (4/22 models, 25 weeks, stable); statutory vs fili
 14 October First Half Trading Update RNS: +8% organic sales, +22% organic orders, book-to-bill 1.12, and full-year adjusted earnings ahead of the Board’s expectations; gearing c.1.6x at 30 September 2026.  
 Syndicated pieces (14–28 October) on sales, orders and valuation; no further RNS since that update.  
 Buy screen unchanged (4/22 models, 28 weeks, stable).
+
+### 2026-11-10T01:43:12.201991+00:00
+Screen is now **hold** (3/22 models, stable since 30 October); statutory vs filing EPS and adjusted EPS growth divergence warnings are unchanged.  
+No RNS since the 14 October H1 trading update; news is only syndicated Kalkine cycle commentary (5 November).  
+October H1 positives (organic orders, book-to-bill, gearing ~1.6x) are unchanged in the supplied sources.

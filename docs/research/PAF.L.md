@@ -1,6 +1,6 @@
 # Pan African Resources PLC (PAF.L) — Research memo
 
-_Version 13 · Updated 2026-11-08T09:01:19.601115+00:00 · Mode: structured_verdict_update_
+_Version 14 · Updated 2026-11-10T01:32:54.556287+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.75
-Rationale: FY26 filing-aligned FCF still supports the strong buy screen, but absent post-results trading news, gold cyclicality and the Nov AGM/chair handover keep research at accumulate.
+Confidence: 0.74
+Rationale: FY26 filing-aligned FCF still supports the buy screen, but the deteriorating screen label, thin news and Nov AGM/chair handover keep research at accumulate.
 RiskTags: regulatory, cyclical, governance, pension, competitive, leverage, accounting, key_person
 
 ## Weekly updates
@@ -72,4 +72,9 @@ Strong buy screen remains stable (15/22 models, six weeks, neutral timing); fili
 ### 2026-11-08T09:01:19.601115+00:00
 Strong buy screen remains stable (13/22 models, eight weeks, neutral timing); filing-aligned FCF ~£341m is unchanged versus the 1 Nov refresh.  
 No trading RNS since 16 Sep audited FY26; 3 Nov CDI monthly movement only plus thin third-party news (5 Nov Kalkine).  
+19 Nov AGM and Oct/Nov chair succession remain the main live governance overlay.
+
+### 2026-11-10T01:32:54.556287+00:00
+Quantitative screen is **buy** (13/22, 1w, deteriorating), down from strong buy on 8 Nov; filing-aligned FCF ~£341m is unchanged.  
+No company RNS or incremental news since the 8 Nov refresh; the news batch is empty.  
 19 Nov AGM and Oct/Nov chair succession remain the main live governance overlay.

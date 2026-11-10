@@ -1,6 +1,6 @@
 # Centrica plc (CNA.L) — Research memo
 
-_Version 5 · Updated 2026-10-28T11:15:58.673601+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-10T01:48:10.806382+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.71
-Rationale: Research still confirms the screen buy on cheapness and ROE; no new disclosures since the upstream sale completion; FCF basis mismatch and H1 negative FCF still cap conviction.
+Rationale: Research still confirms the screen buy on cheapness and ROE; no new filings since late October; syndicated Jefferies upgrade does not resolve FCF or H1 cash-flow overlays.
 RiskTags: regulatory, cyclical, pension, leverage, competitive, accounting
 
 ## Weekly updates
@@ -33,3 +33,8 @@ Screen still buy (P/E ~9.9, yield ~3.8%); FCF basis mismatch and H1 2026 negativ
 Since 4 October there has been no RNS with financial or strategic substance; only routine director/PDMR shareholding notices (14 and 26 October).
 Syndicated LSE quote and analyst forecast pieces add no new primary disclosures.
 The screen remains a stable buy (P/E ~10.0, yield ~3.8%); FCF basis mismatch and H1 2026 negative quarterly FCF overlay are unchanged.
+
+### 2026-11-10T01:48:10.806382+00:00
+Since 28 October the only RNS is routine Total Voting Rights (2 November); no financial or strategic disclosures.  
+Syndicated Jefferies upgrade and forecast pieces add no new primary company data.  
+The screen remains a stable buy (P/E ~10.3, yield ~3.7%); FCF basis mismatch and H1 2026 negative quarterly FCF overlay are unchanged.

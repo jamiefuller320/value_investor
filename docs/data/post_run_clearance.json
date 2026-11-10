@@ -2,10 +2,10 @@
   "schema_version": 1,
   "last_run": {
     "schema_version": 1,
-    "trigger": "analysis_review_follow_up",
-    "evaluated_at": "2026-11-08T10:37:16.302231+00:00",
-    "review_source": "latest.json",
-    "fingerprint": "d2a4854898f76016e054",
+    "trigger": "post_run_review_email",
+    "evaluated_at": "2026-11-10T02:17:45.051625+00:00",
+    "review_source": "output/post_run_review.md",
+    "fingerprint": "87eadca806d0964196db",
     "skipped": false,
     "skip_reason": null,
     "applied": true,
@@ -16,34 +16,30 @@
     "lane_c_recommended": false,
     "actions": [],
     "queue_before": {
-      "open_count": 1,
+      "open_count": 8,
       "pr_open_count": 0
     },
     "compile_cap_audit": {
-      "candidate_count": 3,
+      "candidate_count": 8,
       "truncated_count": 0,
-      "post_run_plan_beyond_cap": []
+      "post_run_plan_beyond_cap": [
+        "Sector and cyclical overlay registry (e.g. Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio"
+      ]
     },
     "plan_alignment": {
       "unlinked_plan_titles": [
-        "Bulk RNS/Investegate body downloader for buy-tier tickers with `indexed_without_body` > 0 (prioritise NWG.L 40, IGG.L 18, IAG.L 16, INCH.L 14, BGEO.L 14)",
-        "Companies House filed-accounts PDF fetch + text extract path when RNS bodies absent (backlog pattern on AEP.L/ITV.L; generalise to UK-listed zero-body indexes)",
-        "Wire Yahoo (and filing) cash-flow fields into `CompanyMetrics` when `financials_annual.json` has OCF/FCF but fetch returns None (MEGP.L false Piotroski/Earnings Quality)",
-        "Sector override registry for non-consumer agrimedia/plantation issuers (AEP.L backlog) and stale `company_adjusted` FCF year flags"
+        "Sector and cyclical overlay registry (e.g. Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Piotroski cap) wired from filing tags/metadata"
       ],
-      "terminal_only_titles": [
-        "Wire Yahoo (and filing) cash-flow fields into `CompanyMetrics` when `financials_annual.json` has OCF/FCF but fetch returns None (MEGP.L false Piotroski/Earnings Quality)",
-        "Sector override registry for non-consumer agrimedia/plantation issuers (AEP.L backlog) and stale `company_adjusted` FCF year flags"
-      ]
+      "terminal_only_titles": []
     },
     "compile_cap_drain_skipped": "priority engineering queue not empty",
-    "idle_backstop_skipped": "engineering queue not idle",
+    "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
     "queue_after": {
-      "open_count": 1,
+      "open_count": 8,
       "pr_open_count": 0
     },
     "tasks_added_estimate": 0,
-    "dispatch_reason": "queue ready — dispatch next open task"
+    "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
   },
   "runs": [
     {
@@ -719,6 +715,47 @@
       },
       "tasks_added_estimate": 0,
       "dispatch_reason": "queue ready — dispatch next open task"
+    },
+    {
+      "schema_version": 1,
+      "trigger": "post_run_review_email",
+      "evaluated_at": "2026-11-10T02:17:45.051625+00:00",
+      "review_source": "output/post_run_review.md",
+      "fingerprint": "87eadca806d0964196db",
+      "skipped": false,
+      "skip_reason": null,
+      "applied": true,
+      "lanes": {
+        "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
+      },
+      "should_dispatch_engineering": true,
+      "lane_c_recommended": false,
+      "actions": [],
+      "queue_before": {
+        "open_count": 8,
+        "pr_open_count": 0
+      },
+      "compile_cap_audit": {
+        "candidate_count": 8,
+        "truncated_count": 0,
+        "post_run_plan_beyond_cap": [
+          "Sector and cyclical overlay registry (e.g. Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio"
+        ]
+      },
+      "plan_alignment": {
+        "unlinked_plan_titles": [
+          "Sector and cyclical overlay registry (e.g. Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Piotroski cap) wired from filing tags/metadata"
+        ],
+        "terminal_only_titles": []
+      },
+      "compile_cap_drain_skipped": "priority engineering queue not empty",
+      "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
+      "queue_after": {
+        "open_count": 8,
+        "pr_open_count": 0
+      },
+      "tasks_added_estimate": 0,
+      "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     }
   ]
 }

@@ -1,6 +1,6 @@
 # GCP Infrastructure Investments Limited (GCP.L) — Research memo
 
-_Version 5 · Updated 2026-10-28T11:10:08.288018+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-11-10T01:44:01.004701+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Research confirms the buy via 99.39p Sept NAV, sub-NAV buybacks and maintained 7p dividend, though gas-peaking marks and filing vs screen FCF cover stay unresolved.
+Rationale: Research still supports the buy on 99.39p NAV, 7p dividend intent and sub-NAV buybacks, but gas-peaking marks, disposal timing and filing vs screen FCF cover are unresolved.
 RiskTags: regulatory, cyclical, governance, liquidity, competitive, customer_concentration, accounting, other
 
 ## Weekly updates
@@ -32,3 +32,7 @@ Still no September NAV RNS or supported-housing disposal update since the July d
 26 Oct RNS: 30 Sept unaudited NAV 99.39p (+0.79p vs 98.60p at 30 June); Q3 dividend 1.75p (7.00p annual target); RCF fully undrawn at period end.  
 Buybacks continued at ~81–82p VWAP; treasury ~49.5m shares after routine Transaction in Own Shares through 27 Oct.  
 NAV bridge mixed (power-price and generation uplift vs gas-peaking and discount-rate headwinds); supported-housing and other disposals still in progress.
+
+### 2026-11-10T01:44:01.004701+00:00
+Since the 30 Sept NAV RNS (99.39p), filings are routine only: buybacks at ~82–83p VWAP through 4 November and treasury at ~50.6m shares (745.4m voting rights).
+Syndicated news is an LSE 15-year piece (7 November); no supported-housing disposal or other portfolio RNS in the batch.
