@@ -17183,6 +17183,81 @@
           }
         ]
       }
+    },
+    {
+      "id": "L700",
+      "category": "later",
+      "section": "research",
+      "title": "Minimum declining-member count for small sectors in the sector-headwind gate",
+      "summary": "The decline-breadth trigger is a share (>= 50% of covered members). In a small sector one name decides it: FTSE Energy has 8 members and 4/8 declining sits exactly on the line (SHEL.L is one of the four and its own decline makes the headwind that blocks HBR.L). A minimum count of declining members (e.g. at least 5) alongside the share would stop a single name tipping a small sector. Owner accepted the 50% line as it is at the Phase 1 gate (2026-11-10); this is a threshold change, so it can only arrive as a sealed challenger / new registration_id.",
+      "revisit_when": "Next strategy-book version review: the forward book's thickness gate opens (strategy_book_forward_status.json thickness_ready true); a challenger is sealed as a new registration_id there, never as an edit to owner-strategy-book-v0.",
+      "tags": [
+        "strategy-book",
+        "phase1-gate",
+        "sector-headwind-gate"
+      ],
+      "status": "open",
+      "source": "Phase 1 gate review, owner decision 2026-11-10 (cursor/phase1-gate-decision-567c)",
+      "added_at": "2026-11-10T10:23:23+00:00",
+      "trigger": {
+        "any": [
+          {
+            "file": "docs/data/strategy_book_forward_status.json",
+            "path": "thickness_ready",
+            "op": "truthy"
+          }
+        ]
+      }
+    },
+    {
+      "id": "L701",
+      "category": "later",
+      "section": "research",
+      "title": "Balance-sheet check in the operating-decline gate",
+      "summary": "The decline gate reads revenue, margin, EPS, FCF and headlines but nothing on the balance sheet. In the Phase 1 sample GlobalData (DATA.L, clear) showed net bank debt up from 16.8m to 133.0m in its half-year table, and the gate cannot see it. Candidate: a soft signal on a sharp rise in net debt / EBITDA or net debt over a size threshold, from the half-year extract or Yahoo balance sheet. Adds a check, so it is a rule change: sealed challenger / new registration_id only.",
+      "revisit_when": "Next strategy-book version review: the forward book's thickness gate opens (strategy_book_forward_status.json thickness_ready true); a challenger is sealed as a new registration_id there, never as an edit to owner-strategy-book-v0.",
+      "tags": [
+        "strategy-book",
+        "phase1-gate",
+        "operating-decline-gate"
+      ],
+      "status": "open",
+      "source": "Phase 1 gate review, owner decision 2026-11-10 (cursor/phase1-gate-decision-567c)",
+      "added_at": "2026-11-10T10:23:24+00:00",
+      "trigger": {
+        "any": [
+          {
+            "file": "docs/data/strategy_book_forward_status.json",
+            "path": "thickness_ready",
+            "op": "truthy"
+          }
+        ]
+      }
+    },
+    {
+      "id": "L702",
+      "category": "later",
+      "section": "research",
+      "title": "Investment-trust discount-to-NAV value lens",
+      "summary": "Since 2026-11-10 funds and investment trusts are insufficient_data in the decline gate (fund_or_trust), so they can never pass strategy part 2. A fund-specific lens would judge them on their own terms: discount to net asset value against its own history, NAV total return trend, gearing and dividend cover. The screen already runs a parallel trust track (trust_signals.py, trust_metrics.py) that could feed it. It would be a separate part-2 rule for funds, so a new registration or a sealed bench challenger.",
+      "revisit_when": "Next strategy-book version review: the forward book's thickness gate opens (strategy_book_forward_status.json thickness_ready true); a challenger is sealed as a new registration_id there, never as an edit to owner-strategy-book-v0.",
+      "tags": [
+        "strategy-book",
+        "phase1-gate",
+        "investment-trusts"
+      ],
+      "status": "open",
+      "source": "Phase 1 gate review, owner decision 2026-11-10 (cursor/phase1-gate-decision-567c)",
+      "added_at": "2026-11-10T10:23:24+00:00",
+      "trigger": {
+        "any": [
+          {
+            "file": "docs/data/strategy_book_forward_status.json",
+            "path": "thickness_ready",
+            "op": "truthy"
+          }
+        ]
+      }
     }
   ],
   "fragments": [

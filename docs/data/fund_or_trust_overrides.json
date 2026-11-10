@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-11-10",
+  "decision": "Owner, Phase 1 gate review 2026-11-10: funds and investment trusts get insufficient_data from the operating-decline gate.",
+  "rule_doc": "docs/ops/operating-decline-gate.md#funds-and-investment-trusts",
+  "note": "Reviewed per-ticker decisions for src/value_investor/fund_or_trust.py. The automatic rules (sector label 'Investment Trust' and similar, Yahoo industry 'Closed-End Fund', quote type ETF/MUTUALFUND, names containing 'investment trust' or 'fund' but not 'fund management') run after this list. REITs are operating property companies and are never classified as funds unless listed here. Add a name only after reading what it is; a change here moves a verdict, so it goes through a PR.",
+  "fund_or_trust": {
+    "GCP.L": {"name": "GCP Infrastructure Investments Limited", "why": "listed closed-end infrastructure debt fund; revenue is investment income"},
+    "INPP.L": {"name": "International Public Partnerships Limited", "why": "listed closed-end infrastructure fund"},
+    "3IN.L": {"name": "3i Infrastructure plc", "why": "listed investment trust (infrastructure)"},
+    "PSH.L": {"name": "Pershing Square Holdings, Ltd.", "why": "listed closed-end fund"},
+    "BHMG.L": {"name": "BH Macro Limited", "why": "listed closed-end fund (feeder into a macro hedge fund)"},
+    "SYNC.L": {"name": "Syncona Limited", "why": "listed investment company reporting on a net-asset-value basis"},
+    "III.L": {"name": "3i Group plc", "why": "self-managed investment company; IFRS 10 investment entity reporting gross investment return and NAV, so the revenue line is portfolio return. Borderline: it also runs a fee-earning manager. Owner may move it to operating."},
+    "IPO.L": {"name": "IP Group plc", "why": "holds a venture portfolio at fair value and reports NAV; income is portfolio gains. Borderline: not an investment trust by legal form."},
+    "RSE.L": {"name": "Riverstone Energy Limited", "why": "listed closed-end investment company"},
+    "JZCP.L": {"name": "JZ Capital Partners Limited", "why": "listed closed-end investment company in run-off"},
+    "DGI9.L": {"name": "Digital 9 Infrastructure PLC", "why": "listed investment trust (digital infrastructure) in managed wind-down"},
+    "GROW.L": {"name": "Molten Ventures plc", "why": "listed venture capital investment company reporting NAV"},
+    "GRP.L": {"name": "Greencoat Renewables PLC", "why": "listed renewable infrastructure fund"},
+    "GRP.IR": {"name": "Greencoat Renewables PLC", "why": "listed renewable infrastructure fund (Dublin line)"},
+    "AFI.AX": {"name": "Australian Foundation Investment Company Limited", "why": "listed investment company (LIC)"},
+    "ARG.AX": {"name": "Argo Investments Limited", "why": "listed investment company (LIC)"},
+    "WAM.AX": {"name": "WAM Capital Limited", "why": "listed investment company (LIC)"},
+    "WLE.AX": {"name": "WAM Leaders Limited", "why": "listed investment company (LIC)"},
+    "MFF.AX": {"name": "MFF Capital Investments Limited", "why": "listed investment company (LIC)"},
+    "MXT.AX": {"name": "Metrics Master Income Trust", "why": "listed investment trust (private credit)"},
+    "INDU-C.ST": {"name": "AB Industrivärden (publ)", "why": "investment company holding listed stakes; reports NAV, no consolidated operating revenue"},
+    "SOF.BR": {"name": "Sofina SA", "why": "investment company; IFRS 10 investment entity reporting NAV"}
+  },
+  "operating": {
+    "JUP.L": {"name": "Jupiter Fund Management Plc", "why": "asset manager: fee revenue and operating margin are its business"},
+    "ABDN.L": {"name": "Aberdeen Group Plc", "why": "asset manager and platform operator"},
+    "ICG.L": {"name": "ICG plc", "why": "alternative asset manager; fee-earning business with a balance-sheet book"},
+    "ASHM.L": {"name": "Ashmore Group Plc", "why": "asset manager"},
+    "MNG.L": {"name": "M&G plc", "why": "asset manager and insurer"},
+    "POLN.L": {"name": "Pollen Street Group Limited", "why": "former investment trust, now an asset manager with an investment balance sheet since the 2022 merger with its manager"},
+    "CLIG.L": {"name": "City of London Investment Group Plc", "why": "asset manager (not the City of London Investment Trust)"},
+    "PMV.AX": {"name": "Premier Investments Limited", "why": "retailer (Smiggle, Peter Alexander) despite 'Investments' in the name"},
+    "ACKB.BR": {"name": "Ackermans & van Haaren NV", "why": "holding company that consolidates operating subsidiaries (DEME and others)"},
+    "SOL.AX": {"name": "Washington H. Soul Pattinson and Company Limited", "why": "investment house that consolidates operating subsidiaries; kept operating, borderline"}
+  }
+}

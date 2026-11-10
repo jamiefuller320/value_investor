@@ -44,6 +44,19 @@ threshold rather than defining another threshold. Missing or
 `insufficient_data` operating verdicts are not evidence and do not enter the
 coverage denominator.
 
+**Funds and investment trusts (owner, 2026-11-10).** A member whose
+decline-store entry carries `fund_or_trust` is left out of the earnings and
+operating breadth entirely: not in the declining count, not in the covered
+count, and not in the member total that the 60% coverage share is measured
+against. In library markets it also does not fall back to `earnings_growth`,
+because a fund's quarterly earnings are investment gains. It stays in price
+breadth and the sector trend. `metrics.fund_or_trust_member_count` records how
+many were left out. On the 2026-11-10 data this changed one sector's inputs:
+FTSE Financial Services went from 9 of 43 covered members declining (20.9%,
+coverage 43 of 49) to 7 of 39 (17.9%, coverage 39 of 42) and stayed `sound`. No
+sector verdict changed. Rule and list:
+[operating-decline-gate.md](operating-decline-gate.md#funds-and-investment-trusts).
+
 ## Verdict rule
 
 - `headwind`: price breadth and 126d trend jointly cross their thresholds, or
