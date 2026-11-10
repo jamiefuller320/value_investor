@@ -161,8 +161,10 @@ def load_stage_ladder_state(
     pack_run: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Load committed stage/streak state, seeding from status or last pack caps."""
-    payload = status if status is not None else (
-        _safe_read(Path(status_path)) if status_path is not None else {}
+    payload = (
+        status
+        if status is not None
+        else (_safe_read(Path(status_path)) if status_path is not None else {})
     )
     prior = _extract_stage_ladder(_as_dict(payload))
     stage = prior.get("current_stage")

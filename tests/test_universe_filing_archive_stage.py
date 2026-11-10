@@ -33,31 +33,46 @@ def _clean_iso(**extra: object) -> dict:
 
 
 def test_classify_clean_and_reset() -> None:
-    assert classify_quiet_night(
-        outcome="apply_complete",
-        dry_run=False,
-        isolation=_clean_iso(),
-    )[0] == "clean"
-    assert classify_quiet_night(
-        outcome="suspend",
-        dry_run=False,
-        isolation=_clean_iso(),
-    )[0] == "reset"
-    assert classify_quiet_night(
-        outcome="apply_complete",
-        dry_run=False,
-        isolation=_clean_iso(isolation_ok=False),
-    )[0] == "reset"
-    assert classify_quiet_night(
-        outcome="apply_complete",
-        dry_run=False,
-        isolation=_clean_iso(shared_critical_path=True),
-    )[0] == "reset"
-    assert classify_quiet_night(
-        outcome="dry_complete",
-        dry_run=True,
-        isolation=_clean_iso(),
-    )[0] == "ignore"
+    assert (
+        classify_quiet_night(
+            outcome="apply_complete",
+            dry_run=False,
+            isolation=_clean_iso(),
+        )[0]
+        == "clean"
+    )
+    assert (
+        classify_quiet_night(
+            outcome="suspend",
+            dry_run=False,
+            isolation=_clean_iso(),
+        )[0]
+        == "reset"
+    )
+    assert (
+        classify_quiet_night(
+            outcome="apply_complete",
+            dry_run=False,
+            isolation=_clean_iso(isolation_ok=False),
+        )[0]
+        == "reset"
+    )
+    assert (
+        classify_quiet_night(
+            outcome="apply_complete",
+            dry_run=False,
+            isolation=_clean_iso(shared_critical_path=True),
+        )[0]
+        == "reset"
+    )
+    assert (
+        classify_quiet_night(
+            outcome="dry_complete",
+            dry_run=True,
+            isolation=_clean_iso(),
+        )[0]
+        == "ignore"
+    )
 
 
 def test_advance_promotes_after_required_streak() -> None:
@@ -107,7 +122,9 @@ def test_advance_resets_on_suspend_mid_streak() -> None:
 
 
 def test_advance_does_not_pass_ceiling() -> None:
-    state = {"stage_ladder": {"current_stage": MAX_DOCUMENTED_STAGE, "quiet_isolation_ok_streak": 0}}
+    state = {
+        "stage_ladder": {"current_stage": MAX_DOCUMENTED_STAGE, "quiet_isolation_ok_streak": 0}
+    }
     for i in range(QUIET_NIGHTS_REQUIRED + 2):
         state = advance_stage_ladder(
             state,

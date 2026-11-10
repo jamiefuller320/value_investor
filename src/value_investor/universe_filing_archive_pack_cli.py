@@ -72,8 +72,7 @@ def main(argv: list[str] | None = None) -> int:
         type=int,
         default=None,
         help=(
-            "Optional override for week×market coverage units "
-            "(omit to use committed stage ladder)"
+            "Optional override for week×market coverage units (omit to use committed stage ladder)"
         ),
     )
     parser.add_argument(
