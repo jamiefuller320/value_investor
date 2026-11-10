@@ -45,7 +45,7 @@ def test_status_dry_complete_next_widen_need_apply() -> None:
             "fourth_equal_sprint_stream": False,
             "http_fetches": 0,
         },
-        "max_units": 4,
+        "max_units": 8,
     }
     payload = build_universe_filing_archive_status(
         pack_run=pack_run,
@@ -72,18 +72,18 @@ def test_status_apply_isolation_ok_accumulate() -> None:
         "outcome": "apply_complete",
         "dry_run": False,
         "gate": {"decision": "allow", "allowed": True, "focus_pressure_reasons": []},
-        "max_units": 4,
-        "units_attempted": 4,
-        "units_completed": 3,
-        "objects_written": 6,
+        "max_units": 8,
+        "units_attempted": 8,
+        "units_completed": 5,
+        "objects_written": 10,
         "fourth_equal_sprint_stream": False,
         "capacity_isolation": {
             "isolation_ok": True,
             "shared_critical_path": False,
-            "http_fetches": 8,
+            "http_fetches": 16,
             "fourth_equal_sprint_stream": False,
         },
-        "assemble_caps": {"max_http_fetches": 16, "max_tickers_per_unit": 2},
+        "assemble_caps": {"max_http_fetches": 32, "max_tickers_per_unit": 2},
     }
     payload = build_universe_filing_archive_status(
         pack_run=pack_run,
@@ -92,7 +92,7 @@ def test_status_apply_isolation_ok_accumulate() -> None:
     )
     assert payload["last_run"]["mode"] == "apply"
     assert payload["next_widen_step"]["id"] == "accumulate_quiet_nights"
-    assert "max_units=4" in payload["next_widen_step"]["detail"]
+    assert "max_units=8" in payload["next_widen_step"]["detail"]
 
 
 def test_status_failures_hold_widen() -> None:

@@ -210,8 +210,14 @@ BENCH_SLOTS = 4
 BENCH_STANDARD_ERRORS = 2.5
 BENCH_MIN_COUNTED = 48
 
-# Section 8 and section 13 question 9. Initial filter challengers. One slot left.
+# Section 8 and section 13 question 9. Initial filter challengers.
 INITIAL_BENCH: tuple[str, ...] = ("deep_dip", "revenue_growing", "fcf_agrees")
+
+# Section 8. Challengers sealed later, each at a logged version review whose rule
+# text and hash are in the registration's ``bench_seals``.
+REVIEW_BENCH: tuple[str, ...] = ("trend_not_falling",)
+BENCH_COLUMNS: tuple[str, ...] = (*INITIAL_BENCH, *REVIEW_BENCH)
+TREND_NOT_FALLING_DIRECTIONS = frozenset({"rising", "sideways"})
 DEEP_DIP_LOOKBACK = 20
 DEEP_DIP_DROP = 0.08
 

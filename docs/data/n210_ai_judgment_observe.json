@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-10T02:35:46.072088+00:00",
+  "generated_at": "2026-11-10T10:10:48.986426+00:00",
   "registration_id": "strand-e-ai-judgment-fixed-stake-v0",
   "deferred_id": "N210",
   "status": "sealed_observe_only",
@@ -42,14 +42,14 @@
     "stress_trade_cost_pct": 0.03,
     "stress_role": "report_only"
   },
-  "snapshot_count": 32,
-  "completed_entry_episodes": 6,
-  "open_entry_episodes": 2,
-  "control_completed_entry_episodes_report_only": 146,
+  "snapshot_count": 33,
+  "completed_entry_episodes": 7,
+  "open_entry_episodes": 1,
+  "control_completed_entry_episodes_report_only": 150,
   "skipped_missing_entry_fields": 863,
   "skipped_ineligible": 0,
   "skipped_filters": 0,
-  "calendar_weeks_spanned": 13,
+  "calendar_weeks_spanned": 14,
   "volume_gate": {
     "min_episodes": 48,
     "min_weeks": 8,
@@ -58,7 +58,7 @@
     "role": "sample_thickness_pipeline_badge"
   },
   "phase": {
-    "entries_per_week": 0.462,
+    "entries_per_week": 0.5,
     "floor": 8.0,
     "floor_met": false
   },
@@ -66,28 +66,28 @@
     "primary": "absolute_smoothed_return_fair_costs",
     "success_metric_id": "smooth_ret_cohort_median",
     "scoreboard_unit": "fair_cost_episode_pct",
-    "smooth_ret_cohort_median": 0.033513,
-    "smooth_ret_cohort_median_stress_report_only": -0.020987,
-    "unfiltered_buy_tier_smooth_ret_cohort_median_report_only": 0.004244,
-    "unfiltered_buy_tier_excess_report_only": 0.029269,
-    "completed_entry_episodes": 6,
-    "open_entry_episodes": 2,
-    "n": 6,
+    "smooth_ret_cohort_median": 0.026937,
+    "smooth_ret_cohort_median_stress_report_only": -0.027563,
+    "unfiltered_buy_tier_smooth_ret_cohort_median_report_only": 0.004585,
+    "unfiltered_buy_tier_excess_report_only": 0.022352,
+    "completed_entry_episodes": 7,
+    "open_entry_episodes": 1,
+    "n": 7,
     "independent_of_fund_nav": true,
     "companions": {
-      "volume_toward_gate": "6/48",
-      "open_episodes": 2,
-      "calendar_weeks_spanned": 13,
-      "weeks_toward_gate": "13/8",
-      "control_episodes_report_only": 146,
+      "volume_toward_gate": "7/48",
+      "open_episodes": 1,
+      "calendar_weeks_spanned": 14,
+      "weeks_toward_gate": "14/8",
+      "control_episodes_report_only": 150,
       "stress_cost": "report_only"
     },
     "note": "Primary is fair-cost episode % cohort median on fixed-stake AI/filter entries. Fund NAV / cash drag not used. Unfiltered buy-tier excess and stress 3%/side are report-only (F8). Matched-30 fund twins are a separate B3 instrument."
   },
   "stress_scoreboard_report_only": {
     "trade_cost_pct_per_side": 0.03,
-    "smooth_ret_cohort_median": -0.020987,
-    "n": 6,
+    "smooth_ret_cohort_median": -0.027563,
+    "n": 7,
     "role": "report_only"
   },
   "launch_queue": {
@@ -214,6 +214,32 @@
       "influences_live": false
     },
     {
+      "ticker": "CURY.L",
+      "market_id": "ftse350",
+      "cohort": "ai_filter",
+      "entry_run_at": "2026-10-25T07:32:00.532121+00:00",
+      "exit_run_at": "2026-11-10T00:53:03.160884+00:00",
+      "hold_trading_days": 11,
+      "exit_reason": "identity_break_conviction_below_floor",
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "entry_detail": {
+        "signal": "strong_buy",
+        "use_adjusted_signal": true,
+        "research_verdict": "accumulate",
+        "conviction_score": 0.6258,
+        "min_conviction": 0.6,
+        "require_research_accumulate": true,
+        "timing_signal": "neutral"
+      },
+      "fixed_stake_units": 100.0,
+      "return_pct": 0.006948,
+      "pnl_local_report_only": 0.694809,
+      "return_pct_stress_report_only": -0.047552,
+      "scoreboard_unit": "fair_cost_episode_pct",
+      "independent_of_fund_nav": true,
+      "influences_live": false
+    },
+    {
       "ticker": "PAF.L",
       "market_id": "ftse350",
       "cohort": "ai_filter",
@@ -268,28 +294,6 @@
   ],
   "open_episodes_sample": [
     {
-      "ticker": "CURY.L",
-      "market_id": "ftse350",
-      "cohort": "ai_filter",
-      "entry_run_at": "2026-10-25T07:32:00.532121+00:00",
-      "status": "open",
-      "eligibility": "eligibility_mode=row_fields_or_pass",
-      "entry_detail": {
-        "signal": "strong_buy",
-        "use_adjusted_signal": true,
-        "research_verdict": "accumulate",
-        "conviction_score": 0.6258,
-        "min_conviction": 0.6,
-        "require_research_accumulate": true,
-        "timing_signal": "neutral"
-      },
-      "fixed_stake_units": 100.0,
-      "influences_live": false,
-      "open_mark_return": -0.009649,
-      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-08T08:26:03.098701+00:00"
-    },
-    {
       "ticker": "GSK.L",
       "market_id": "ftse350",
       "cohort": "ai_filter",
@@ -307,9 +311,9 @@
       },
       "fixed_stake_units": 100.0,
       "influences_live": false,
-      "open_mark_return": 0.013368,
+      "open_mark_return": 0.021185,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-08T08:26:03.098701+00:00"
+      "open_mark_at": "2026-11-10T00:53:03.160884+00:00"
     }
   ],
   "lifecycle_episodes": [
@@ -366,6 +370,19 @@
       }
     },
     {
+      "ticker": "CURY.L",
+      "entry_run_at": "2026-10-25T07:32:00.532121+00:00",
+      "exit_run_at": "2026-11-10T00:53:03.160884+00:00",
+      "status": "closed",
+      "fair_cost_return": 0.006948,
+      "exit_reason": "identity_break_conviction_below_floor",
+      "entry_detail": {
+        "research_verdict": "accumulate",
+        "conviction_score": 0.6258,
+        "timing_signal": "neutral"
+      }
+    },
+    {
       "ticker": "PAF.L",
       "entry_run_at": "2026-10-25T07:32:00.532121+00:00",
       "exit_run_at": "2026-10-28T10:27:58.820841+00:00",
@@ -392,27 +409,13 @@
       }
     },
     {
-      "ticker": "CURY.L",
-      "entry_run_at": "2026-10-25T07:32:00.532121+00:00",
-      "exit_run_at": null,
-      "status": "open",
-      "open_mark_return": -0.009649,
-      "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-08T08:26:03.098701+00:00",
-      "entry_detail": {
-        "research_verdict": "accumulate",
-        "conviction_score": 0.6258,
-        "timing_signal": "neutral"
-      }
-    },
-    {
       "ticker": "GSK.L",
       "entry_run_at": "2026-10-30T21:55:18.461452+00:00",
       "exit_run_at": null,
       "status": "open",
-      "open_mark_return": 0.013368,
+      "open_mark_return": 0.021185,
       "open_mark_basis": "fair_cost_as_if_closed_latest_quote",
-      "open_mark_at": "2026-11-08T08:26:03.098701+00:00",
+      "open_mark_at": "2026-11-10T00:53:03.160884+00:00",
       "entry_detail": {
         "research_verdict": "accumulate",
         "conviction_score": 0.6653,
@@ -430,7 +433,7 @@
     "schema_version": 1,
     "met": false,
     "thickness_met": false,
-    "fair_cost_median": 0.033513,
+    "fair_cost_median": 0.026937,
     "fair_cost_median_ok": true,
     "rule": "thickness && smooth_ret_cohort_median > 0 (matched-30 separate)",
     "not_auto_promote": true,

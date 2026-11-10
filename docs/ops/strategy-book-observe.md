@@ -19,7 +19,9 @@ email-report. There is no cron-job.org task.
 
 The job refreshes due charts, then runs the forward walk so the walk sees the
 new closes. Decline and sector stores are already refreshed by the 07:45 UTC
-ops-monitor. `check_strategy_book_observe` only reads the status those runs
+ops-monitor. The walk reads their dated copies under `docs/data/gate_history/`,
+one gate observation per version date, not the live files, so a refresh dated
+today never decides an earlier close. `check_strategy_book_observe` only reads the status those runs
 leave. It does not download and it does not walk.
 
 ### Why this is not ops-monitor
@@ -108,7 +110,7 @@ and `adjusted_signal` come from the CSV.
 
 - `market`, `ticker`, `session` — `session` is that latest bar as an ISO date, or null when the name has no bar in the window.
 - `signal`, `adjusted_signal` — the screen row in force for that session (a run dated strictly before it). When `session` is null, the same rule is applied to the market's scored session. Null when no run is in force.
-- `decline`, `sector` — the part 2 and part 3 verdicts in force for that same session. Null when the gate's date is missing or not strictly before the session. `gate_as_of` is that date even then, or null when there is no gate.
+- `decline`, `sector` — the part 2 and part 3 verdicts in force for that same session: the dated gate version ([dated verdict history](operating-decline-gate.md#dated-verdict-history)) with the latest date strictly before the session. `gate_as_of` is that version's date. When no version is dated before the session, both are null and `gate_as_of` is the earliest later version's date, or null when there is no gate.
 - `f9` — `pass`, or the list of failing binds, copied from the gate-log row for the scored session. Null when that row was not built.
 - `price_rule` — true when the registered short-term low (RSI below 35 and a 10-session close low) fires on that session, false when it does not, null when there is no chart.
 - `outcome` — the signal event kind when the name signalled (`filled`, `pending_fill`, `late_signal`, `memo_not_ready`, `memo_blocked`, and the other signal kinds). Otherwise the blocked reason the tally already records (`no_chart`, `not_buy_tier`, `gate`, `f9`, `price`, and the rest). A declining or headwind name is `gate`; the verdict is `decline` or `sector`. A miss of the short-term low is `price`. `learning_pool_excluded` means the signals CSV lists the name and the history snapshot omits it because it is in that market's learning-pool exclusion, so it is not in the book's universe. `not_in_book_screen` means the signals CSV lists the name and the snapshot omits it for any other reason, so it is not in the book's universe.
