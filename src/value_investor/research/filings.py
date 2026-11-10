@@ -2424,10 +2424,12 @@ def _is_rns_body_fetch_candidate(row: dict[str, Any]) -> bool:
     url = str(row.get("url") or "")
     if not url:
         return False
+    source = str(row.get("source") or "")
+    if source in _RNS_BODY_FETCH_SOURCES:
+        return True
     if "news.google.com" in url:
         return False
-    source = str(row.get("source") or "")
-    return source in _RNS_BODY_FETCH_SOURCES or "investegate.co.uk" in url or _is_lse_rns_url(url)
+    return "investegate.co.uk" in url or _is_lse_rns_url(url)
 
 
 _INVESTEGATE_AI_SUMMARY_RE = re.compile(r"^BETA\s+Close\s+X\b", re.I)
