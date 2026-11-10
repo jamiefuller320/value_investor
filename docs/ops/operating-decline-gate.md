@@ -21,7 +21,27 @@ The gate answers one thing: is the business getting worse? It does not say wheth
 | `declining` | Any hard check fired, or two or more soft checks fired. |
 | `insufficient_data` | No adverse signal fired, and either revenue or (operating margin and EPS) could not be computed. Missing data never passes. |
 
-Adverse evidence always wins: a profit warning on a name with no financials is `declining`, not `insufficient_data`.
+Adverse evidence always wins: a profit warning on a name with no financials is `declining`, not `insufficient_data`. The one exception is a fund or investment trust, which is always `insufficient_data` (next section).
+
+## Funds and investment trusts
+
+**Owner, Phase 1 gate review, 2026-11-10:** "funds and investment trusts get insufficient_data from the decline gate." The company rules read a fund's investment income or portfolio return as revenue, and a fund has no operating margin, so they cannot say whether its business is getting worse (GCP.L was `declining` on a −33% then −4% fall in investment income). `insufficient_data` already fails strategy-book entry, so a fund can no longer pass part 2 through company rules that do not fit it. This is the one Phase 1 adjustment and is logged as change marker `owner-strategy-book-v0-fund-insufficient-data-v1` in `docs/data/strategy_book_registration.json`. No threshold changed.
+
+**Rule** (`src/value_investor/fund_or_trust.py`, first match wins):
+
+1. Reviewed override list `docs/data/fund_or_trust_overrides.json`. Its `operating` block keeps a name operating whatever the later rules say; its `fund_or_trust` block classifies a name the rules miss (GCP Infrastructure Investments, 3i Group, Australian listed investment companies). Each entry has a `why`. A change to this file moves verdicts, so it goes through a PR.
+2. REIT carve-out: a name containing "REIT" or "real estate investment trust", or a `Real Estate` / `REIT` sector label, is operating. REITs are operating property companies (rent, occupancy, operating costs); the owner has not asked to exclude them.
+3. Sector label containing "investment trust", "closed-end fund", "collective investment" or "(non)equity investment instrument" (the FTSE SmallCap library labels trusts `Investment Trust`).
+4. Yahoo `industry` containing "closed-end fund" or "exchange traded fund", or `quoteType` `ETF` / `MUTUALFUND`, when a row carries them (no current screen does).
+5. Name containing "investment trust", or the word "fund" not followed by "management" (so Jupiter Fund Management and Funding Circle stay operating).
+
+The screen's own vehicle filter (`universe_filters.is_investment_vehicle`) is not reused: it also matches any "trust", "ventures" or "Ord" name, which would catch Northern Trust, Secure Trust Bank, US REITs and 3i-style "Ord" listings of operating companies.
+
+**Asset managers stay operating.** Schroders, Aberdeen, Ashmore, Jupiter, M&G, ICG, Ninety One, Impax, Polar Capital, Liontrust, Partners Group and similar earn fees and have an operating margin, so company rules fit them. Several are listed in the `operating` block for the record. **3i Group (III.L) is classified as a fund**: it is a self-managed investment company reporting under IFRS 10 investment-entity rules, so the revenue line is gross investment return on its portfolio (mostly Action), not fee income. It is borderline because it also runs a fee-earning manager; the owner can move it to `operating`. IP Group (IPO.L) is classified the same way for the same reason. Holding companies that consolidate operating subsidiaries (Ackermans & van Haaren, Soul Pattinson, Investor AB, GBL, Exor, Brookfield, Power Corporation, Fairfax) stay operating; Industrivärden and Sofina, which report NAV with no consolidated operating revenue, are listed as funds.
+
+**Store.** A classified name has `verdict: insufficient_data`, a single reason `fund_or_trust` citing the basis, its `fund_or_trust: {basis, detail}`, every check still computed, and `company_rules_verdict` (what company rules would have said). `summary.fund_or_trust` counts all such names and `summary.buy_tier_fund_or_trust` the FTSE buy-tier ones. Funds are left out of the coverage-gap denominator, since a fund is not an ingest gap. The sector gate leaves them out of earnings and decline breadth ([sector-headwind-gate.md](sector-headwind-gate.md#components-and-thresholds)).
+
+**Effect on 2026-11-10 data** (dry run, same inputs with and without the rule): 8 FTSE names are classified (GCP.L, INPP.L, 3IN.L, PSH.L, BHMG.L, SYNC.L, III.L, IPO.L), all by override. Five change verdict: GCP.L (`buy`) and 3IN.L `declining` → `insufficient_data`; PSH.L, BHMG.L and III.L `clear` → `insufficient_data`. INPP.L, SYNC.L and IPO.L were already `insufficient_data`. FTSE buy tier: 1 change (GCP.L); buy-tier covered 67/70 → 66/70, which is 66 of 69 operating companies. No scored library name is a fund today: the library funds the rules or the list catch (FTSE SmallCap investment trusts, ASX listed investment companies, Greencoat Renewables, Molten Ventures, Industrivärden, Sofina) have no research sources, so they are not in the store. No sector verdict changed.
 
 ## Checks and thresholds (v0)
 
@@ -136,19 +156,20 @@ Because statement files are overwritten on each fetch, a past `as_of` is mainly 
 `docs/data/operating_decline_gate.json`:
 
 ```text
-{ schema_version: 3, generated_at, as_of, observe_only: true, influences_live: false,
+{ schema_version: 4, generated_at, as_of, observe_only: true, influences_live: false,
   learning_question,
   summary: { names, clear, declining, insufficient_data, buy_tier_names, buy_tier_covered,
              names_with_interim_eps, names_with_interim_revenue,
              buy_tier_with_interim_revenue, buy_tier_with_interim_eps,
-             latest_fiscal_year_counts },
+             latest_fiscal_year_counts, fund_or_trust, buy_tier_fund_or_trust },
   names: { TICKER: { market, sector, signal, verdict,
+                     fund_or_trust?: {basis, detail}, company_rules_verdict?,
                      reasons: [ {code, detail, source} ],
                      checks: { revenue, interim_revenue, operating_margin, eps_annual,
                                eps_interim, fcf, dividend, profit_warning } } } }
 ```
 
-`buy_tier_covered` counts FTSE buy-tier names whose verdict is `clear` or `declining`. `names_with_interim_eps` and `names_with_interim_revenue` count names with a year-on-year comparison from any interim source, not only the screen row. `buy_tier_with_interim_revenue` and `buy_tier_with_interim_eps` are those same counts restricted to FTSE `buy` / `strong_buy` names. `latest_fiscal_year_counts` maps the latest fiscal year used for revenue to the number of names, so stale statements are visible. Name records still carry `verdict`, `market`, `sector`, `reasons` and `checks`. The sector headwind gate reads `names[].verdict`. `schema_version` is 3 because the summary gained the two buy-tier interim counts.
+`buy_tier_covered` counts FTSE buy-tier names whose verdict is `clear` or `declining`. `names_with_interim_eps` and `names_with_interim_revenue` count names with a year-on-year comparison from any interim source, not only the screen row. `buy_tier_with_interim_revenue` and `buy_tier_with_interim_eps` are those same counts restricted to FTSE `buy` / `strong_buy` names. `latest_fiscal_year_counts` maps the latest fiscal year used for revenue to the number of names, so stale statements are visible. Name records still carry `verdict`, `market`, `sector`, `reasons` and `checks`. The sector headwind gate reads `names[].verdict` and `names[].fund_or_trust`. `schema_version` is 4 because names gained `fund_or_trust` and `company_rules_verdict` and the summary gained the two fund counts (3 added the two buy-tier interim counts).
 
 Each check carries `evaluable`, `fired`, and `strength` (when evaluable) or `why` (when not), plus the numbers it used. The store is about 750 KB because it keeps every check for every name. Raw store JSON commits with ops-monitor.
 
@@ -158,8 +179,8 @@ Daily `collect_ops_findings` calls `check_operating_decline_gate` (before the ob
 
 | Title | Severity | When |
 |---|---|---|
-| **Operating-decline gate refreshed (observe)** | info | Every run: counts, FTSE buy-tier coverage, the first five buy-tier names flagged `declining` with reason codes, names with interim EPS and interim revenue, the buy-tier-only interim counts, and the latest-fiscal-year spread |
-| **Operating-decline gate coverage gap** | warn | Fewer than 80% of FTSE buy-tier names have a `clear` or `declining` verdict, or no buy-tier names were scored |
+| **Operating-decline gate refreshed (observe)** | info | Every run: counts, FTSE buy-tier coverage, fund/trust counts, the first five buy-tier names flagged `declining` with reason codes, names with interim EPS and interim revenue, the buy-tier-only interim counts, and the latest-fiscal-year spread |
+| **Operating-decline gate coverage gap** | warn | Fewer than 80% of FTSE buy-tier operating companies (funds and trusts excluded) have a `clear` or `declining` verdict, or none were scored |
 | **Operating-decline gate interim revenue coverage** | warn | At least 20 FTSE buy-tier names are scored and fewer than 45% of them have an evaluable interim revenue comparison. The 2026-11-05 backfill reached 30/65 (46%). The floor sits just under that, so a later drop is visible. It does not fire on a small fixture. |
 | **Operating-decline gate failed** | warn | The refresh raised (unreadable inputs) |
 
@@ -182,7 +203,7 @@ ftse-operating-decline-gate --json                # full store to stdout
 - Observe-only. Nothing reads this verdict to size, buy, sell or hold until an owner phase gate says so.
 - Never edits books or knobs; never calls the network.
 - Later use, after the Phase 1 owner gate in the plan: (1) entry filter for the strategy book (only `clear` names are bought); (2) thesis-break trigger for a recovery hold (a held name that turns `declining` ends the hold). The same function serves both, so the hold rule and the entry rule cannot drift apart.
-- Thresholds are v0 defaults. The owner may adjust them once at the Phase 1 gate (logged); do not tune them against outcomes in between.
+- Thresholds are v0 defaults. The Phase 1 gate allowed one logged adjustment. The owner used it on 2026-11-10 for the fund rule, not for a threshold, and accepted every threshold as it is ([review pack](phase1-gate-review-pack.md#owner-decision-2026-11-10)). Any later threshold change is a new `registration_id` for the strategy book (registration section 10).
 
 ## Interim coverage diagnosis (FTSE buy-tier)
 

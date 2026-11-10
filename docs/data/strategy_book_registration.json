@@ -13,6 +13,26 @@
   },
   "spend_enabled": false,
   "phase1_gate_scope": "forward_book_go_live_only",
+  "phase1_gate_decision": {
+    "decided_at": "2026-11-10",
+    "outcome": "accepted_with_one_adjustment",
+    "owner_words": "I agree all of these: Accept both gates as they are, keeping the 'at least 50%' line. Adjust once: funds and investment trusts get insufficient_data from the decline gate. ... I'd argue a change marker, since it only declares that a class of names lacks the data the gate needs. Queue for later: a minimum declining count for small sectors; a balance-sheet check; a trust discount-to-net-asset-value lens.",
+    "sample_review": "Owner agreed with all ten sampled verdicts: COST.L, INCH.L, SHEL.L, BT-A.L declining; GCP.L blocked but for the wrong reason (a fund); DNLM.L, DATA.L, IGG.L, BREE.L, IMB.L clear.",
+    "thresholds_changed": false,
+    "adjust_once": {
+      "used": true,
+      "spent_on": "funds and investment trusts get insufficient_data from the operating-decline gate",
+      "change_marker": "owner-strategy-book-v0-fund-insufficient-data-v1",
+      "note": "The single Phase 1 adjustment is spent. A later gate threshold change is a new registration_id (section 10)."
+    },
+    "queued": [
+      "L699",
+      "L700",
+      "L701"
+    ],
+    "forward_live_set": false,
+    "doc": "docs/ops/phase1-gate-review-pack.md#owner-decision-2026-11-10"
+  },
   "sealed_documents": {
     "docs/ops/strategy-book-registration.md": {
       "sha256": "072607438df49c408cea68754b7574e9abbe70cc7a578775ad61ee91d72b4ccf",
@@ -101,5 +121,21 @@
     "run_at": "2026-11-06T06:00:00Z",
     "code_commit": "a1a1ab892243c2257f8254dbf1a4a094200346de",
     "note": "From here, a bug fix is a logged change marker on this registration_id; a threshold or primary-rule change is a new registration_id (section 10)."
-  }
+  },
+  "change_markers": [
+    {
+      "marker_id": "owner-strategy-book-v0-fund-insufficient-data-v1",
+      "at": "2026-11-10T12:00:00Z",
+      "kind": "bug_fix",
+      "rule_change": false,
+      "phase1_gate_adjustment": true,
+      "owner_words": "I agree all of these: Accept both gates as they are, keeping the 'at least 50%' line. Adjust once: funds and investment trusts get insufficient_data from the decline gate. ... I'd argue a change marker, since it only declares that a class of names lacks the data the gate needs. Queue for later: a minimum declining count for small sectors; a balance-sheet check; a trust discount-to-net-asset-value lens.",
+      "sealed_text": "Section 2: 'Part 2, not declining | Operating-decline verdict clear ... declining and insufficient_data both fail entry' and 'One failure, or a missing input, means the name is not eligible. insufficient_data is not a pass.' Section 10: 'A bug fix that makes the code match this text | A logged change marker on the same registration_id'; a new registration_id is for 'Any threshold, the learning question, or which rule is primary'.",
+      "what_was_wrong": "The operating-decline gate applied company rules to funds and investment trusts. Their revenue line is investment income or portfolio return and they have no operating margin, so part 2 ('no sign of declining operating performance') was judged on inputs that do not exist for them. GCP.L (GCP Infrastructure Investments, buy tier) was declining on a fall in investment income; PSH.L, BHMG.L and III.L were clear on the same kind of figures.",
+      "fix": "src/value_investor/fund_or_trust.py classifies a name as a fund or trust from a reviewed override list (docs/data/fund_or_trust_overrides.json), then sector label, Yahoo industry or quote type, then 'investment trust' / 'fund' (not 'fund management') in the name; REITs are operating. The gate returns insufficient_data with reason fund_or_trust and keeps the company-rule verdict as company_rules_verdict. The sector gate leaves fund members out of decline and earnings breadth and their coverage base.",
+      "effect": "As of 2026-11-10: 8 FTSE names classified; 5 change verdict (GCP.L and 3IN.L declining, PSH.L, BHMG.L and III.L clear, all now insufficient_data). FTSE buy tier: GCP.L only, which failed entry before and after. No library verdict and no sector verdict changed.",
+      "unchanged": "No threshold, learning question, entry rule, exit rule or primary rule changed. The change only narrows entry: no name becomes eligible. The replay first score store (strategy_book_replay.json) has an empty full-strategy arm and is not re-run; no forward store exists.",
+      "doc": "docs/ops/operating-decline-gate.md#funds-and-investment-trusts"
+    }
+  ]
 }

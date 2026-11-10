@@ -1,5 +1,7 @@
 # Phase 1 gate review pack (owner, 2026-11-11)
 
+**Outcome: ACCEPTED with one adjustment, owner, 2026-11-10.** Both gates accepted as they are, including the "at least 50%" sector line. The one adjustment: funds and investment trusts get `insufficient_data` from the decline gate, logged as a change marker. See [owner decision](#owner-decision-2026-11-10). `forward_live` is not set by this decision.
+
 **Decision asked of the owner:** the Phase 1 gate in
 [`strategy-reorientation-plan.md`](strategy-reorientation-plan.md#phase-1--filters-and-foundations-observe-only):
 "review the gate verdicts on a sample of 10 FTSE buy-tier names (5 flagged, 5 clear) against the
@@ -109,16 +111,16 @@ as of 2026-11-10.
 
 | # | Ticker | Name | Sector | Decline | Sector | Deciding reason | Owner: agree / disagree / note |
 |---|---|---|---|---|---|---|---|
-| F1 | COST.L | Costain Group | Industrials | **declining** | sound | FY2025 revenue −16.4% (hard), second year down | |
-| F2 | INCH.L | Inchcape | Consumer Cyclical | **declining** | sound | Revenue down two years (−1.8%, −1.3%) (hard), plus annual EPS −30% (soft) | |
-| F3 | SHEL.L | Shell | Energy | **declining** | **headwind** | FY2025 revenue −6.1% (hard); Energy has 4 of 8 members declining (= 50%) | |
-| F4 | GCP.L | GCP Infrastructure Investments | Financial Services | **declining** | sound | Revenue down two years (−4.3%, −33.4%) (hard) | |
-| F5 | BT-A.L | BT Group | Communication Services | **declining** | sound | Revenue down two years (−3.5%, −2.1%) (hard) | |
-| C1 | DNLM.L | Dunelm Group | Consumer Cyclical | clear | sound | No check fired (interim EPS −7.3%, under the 10% line) | |
-| C2 | DATA.L | GlobalData | Industrials | clear | sound | No check fired | |
-| C3 | IGG.L | IG Group | Financial Services | clear | sound | No check fired | |
-| C4 | BREE.L | Breedon Group | Basic Materials | clear | sound | One soft signal only (interim EPS −16.1%) | |
-| C5 | IMB.L | Imperial Brands | Consumer Defensive | clear | sound | No check fired (annual EPS −16.6%, under the 20% line) | |
+| F1 | COST.L | Costain Group | Industrials | **declining** | sound | FY2025 revenue −16.4% (hard), second year down || agree (owner, 2026-11-10) |
+| F2 | INCH.L | Inchcape | Consumer Cyclical | **declining** | sound | Revenue down two years (−1.8%, −1.3%) (hard), plus annual EPS −30% (soft) || agree (owner, 2026-11-10) |
+| F3 | SHEL.L | Shell | Energy | **declining** | **headwind** | FY2025 revenue −6.1% (hard); Energy has 4 of 8 members declining (= 50%) || agree (owner, 2026-11-10) |
+| F4 | GCP.L | GCP Infrastructure Investments | Financial Services | **declining** | sound | Revenue down two years (−4.3%, −33.4%) (hard) || agree it is blocked, for the wrong reason: a fund. Now `insufficient_data` (`fund_or_trust`) |
+| F5 | BT-A.L | BT Group | Communication Services | **declining** | sound | Revenue down two years (−3.5%, −2.1%) (hard) || agree (owner, 2026-11-10) |
+| C1 | DNLM.L | Dunelm Group | Consumer Cyclical | clear | sound | No check fired (interim EPS −7.3%, under the 10% line) || agree (owner, 2026-11-10) |
+| C2 | DATA.L | GlobalData | Industrials | clear | sound | No check fired || agree (owner, 2026-11-10); balance-sheet check queued (L700) |
+| C3 | IGG.L | IG Group | Financial Services | clear | sound | No check fired || agree (owner, 2026-11-10) |
+| C4 | BREE.L | Breedon Group | Basic Materials | clear | sound | One soft signal only (interim EPS −16.1%) || agree (owner, 2026-11-10) |
+| C5 | IMB.L | Imperial Brands | Consumer Defensive | clear | sound | No check fired (annual EPS −16.6%, under the 20% line) || agree (owner, 2026-11-10) |
 
 ### F1. COST.L — Costain Group (Industrials, `buy`)
 
@@ -514,3 +516,71 @@ Points the owner may want to weigh, all from the sample:
 - **Funds.** GCP.L is judged by company rules on investment income.
 - **Near-misses that pass.** BREE.L (margin −2.2 pp, half-year EPS −16%), IMB.L (annual EPS −16.6%)
   and DNLM.L (half-year EPS −7.3%).
+
+## Owner decision (2026-11-10)
+
+**Outcome: ACCEPTED with one adjustment.** Owner, verbatim: "I agree all of these: Accept both
+gates as they are, keeping the 'at least 50%' line. Adjust once: funds and investment trusts get
+insufficient_data from the decline gate. ... I'd argue a change marker, since it only declares that
+a class of names lacks the data the gate needs. Queue for later: a minimum declining count for small
+sectors; a balance-sheet check; a trust discount-to-net-asset-value lens."
+
+**Per-name review.** The owner agreed with all ten verdicts (owner column in
+[the summary](#summary)). COST.L, INCH.L, SHEL.L and BT-A.L: `declining` agreed. GCP.L: blocked, but
+for the wrong reason, because it is a fund. DNLM.L, DATA.L, IGG.L, BREE.L and IMB.L: `clear` agreed.
+
+**What changed.**
+
+- Both gates' thresholds stay as they are, including the sector gate's `>= 50%` decline-breadth line
+  (`DECLINE_BREADTH_HEADWIND = 0.50`) that SHEL.L and HBR.L sit on.
+- The one allowed adjustment is **spent**. It went to a scope rule, not a threshold: funds and
+  investment trusts are `insufficient_data` from the decline gate, with reason code `fund_or_trust`
+  ([rule, override list and counts](operating-decline-gate.md#funds-and-investment-trusts)). The
+  sector gate leaves them out of decline and earnings breadth
+  ([sector gate](sector-headwind-gate.md#components-and-thresholds)). No further Phase 1 adjustment
+  is available; a later threshold change is a new `registration_id`.
+- Effect on the 2026-11-10 data: GCP.L is the only FTSE buy-tier name that changes
+  (`declining` → `insufficient_data`; it still fails entry). Four other FTSE names change (3IN.L
+  `declining`, PSH.L, BHMG.L and III.L `clear`, all now `insufficient_data`); none is in the buy tier.
+  No library verdict and no sector verdict changes.
+- Queued for later, each behind the next version review (machine trigger: `thickness_ready` in
+  `strategy_book_forward_status.json`): L699 minimum declining-member count for small sectors, L700
+  balance-sheet check in the decline gate, L701 investment-trust discount-to-NAV lens.
+
+**Change marker or new `registration_id`?** A change marker on `owner-strategy-book-v0`:
+`owner-strategy-book-v0-fund-insufficient-data-v1` in `docs/data/strategy_book_registration.json`.
+The sealed text, and why it allows this:
+
+1. Registration section 10 sends three kinds of change, after the first score store, to a new id:
+   "Any threshold, the learning question, or which rule is primary", and "Adopting the alternative
+   as the book". This change is none of those. No constant moves, the learning question is unchanged,
+   and the primary entry and exit rules are unchanged. The frozen-parameter list in section 10 does
+   not include the decline gate's internals at all.
+2. Section 2 defines part 2 as "Operating-decline verdict `clear`", with "`declining` and
+   `insufficient_data` both fail entry", and says "One failure, or a missing input, means the name is
+   not eligible. `insufficient_data` is not a pass." A fund has no operating revenue or operating
+   margin; the gate was reading investment income as revenue (GCP.L operating margin "not evaluable",
+   `operating_income_missing_or_stale`). Declaring that class of names `insufficient_data` makes the
+   code match the text's missing-input rule. That is section 10's first row: "A bug fix that makes the
+   code match this text — A logged change marker on the same `registration_id` … The marker says what
+   was wrong."
+3. It only narrows entry. A fund that was `clear` now fails; a fund that was `declining` still fails.
+   No name becomes eligible that was not, and every non-fund verdict is unchanged.
+4. No score is rewritten. The first score store (`strategy_book_replay.json`, `first_score_store` on
+   the seal) has an empty full-strategy arm because the archive has no point-in-time gate verdicts
+   (section 1: "It has no point-in-time operating-decline or sector verdicts"), and no forward store
+   exists. `hash_rule` ("a rule change is a new registration_id") is therefore not triggered: this is
+   a data-scope fix, not a change to a rule the seal states.
+
+The honest counter-argument: a fund that the old code scored `clear` could have entered, and now
+cannot, so eligibility for that class changed. Because that change is in the fail-closed direction
+the text already requires for missing inputs, and section 10 reserves new ids for thresholds,
+the question and the primary rule, the marker reading holds. If the owner reads it the other way, the
+marker is replaced by a new `registration_id` before go-live; the code change is the same either way.
+
+**Not changed by this decision:** `forward_live` stays `false`. Go-live is a separate owner step
+after PRs [#1346](https://github.com/jamiefuller320/value_investor/pull/1346),
+[#1347](https://github.com/jamiefuller320/value_investor/pull/1347),
+[#1349](https://github.com/jamiefuller320/value_investor/pull/1349) and
+[#1350](https://github.com/jamiefuller320/value_investor/pull/1350) merge
+([go-live readiness](#go-live-readiness)).
