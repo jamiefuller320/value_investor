@@ -17183,6 +17183,35 @@
           }
         ]
       }
+    },
+    {
+      "id": "N262",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Strategy-book memo use tracking (memo fed an entry decision vs unused)",
+      "summary": "Tag each requested strategy-book memo in strategy_book_memo_log.jsonl with what it fed: a fill, memo_blocked, memo_not_ready (finished after the close), or nothing (signal never reached a decision). Add used/unused counts to the 'Strategy book memo spend this week' finding so the 4-week spend-vs-use review (monthly-strategy-book-memo-spend-review) can economise on evidence. Another agent (forward shadow / memo throughput work on strategy_book_memo_job.py) may build this first; check before starting.",
+      "revisit_when": "forward_live is true on the strategy-book seal (memos can then feed decisions), or the first spend-vs-use review on 2026-12-08, whichever comes first",
+      "tags": [
+        "strategy_book",
+        "memo",
+        "spend",
+        "review"
+      ],
+      "status": "open",
+      "source": "Owner 2026-11-10 memo spend switch-on (cursor/memo-spend-on-567c)",
+      "added_at": "2026-11-10T08:44:07+00:00",
+      "trigger": {
+        "any": [
+          {
+            "file": "docs/data/strategy_book_registration.json",
+            "path": "forward_live",
+            "op": "truthy"
+          },
+          {
+            "on_or_after": "2026-12-08"
+          }
+        ]
+      }
     }
   ],
   "fragments": [

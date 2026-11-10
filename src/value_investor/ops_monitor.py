@@ -2635,8 +2635,8 @@ def check_strategy_book_memo_job(
 ) -> list[OpsFinding]:
     """Signal-day memo job after the decline and sector gates.
 
-    Spend stays off until the registration seal sets ``spend_enabled``.
-    Observe-only (``auto_fixable=False``). Does not rememo or ingest from the
+    Spend follows the registration seal's ``spend_enabled`` (on since
+    2026-11-10; ``forward_live`` is separate). Observe-only (``auto_fixable=False``). Does not rememo or ingest from the
     finding. See docs/ops/strategy-book-memo-job.md.
     """
     from value_investor.strategy_book_memo_job import (
@@ -2662,6 +2662,10 @@ def check_strategy_book_memo_job(
                 auto_fixable=False,
             )
         ]
+    findings = findings_from_memo_job(summary, now=moment)
+    spend = _strategy_book_memo_spend(summary, repo_root=repo_root, now=moment)
+    if spend is not None:
+        findings.append(spend)
     return [
         OpsFinding(
             severity=str(finding.get("severity") or "info"),
@@ -2670,8 +2674,30 @@ def check_strategy_book_memo_job(
             summary=str(finding.get("summary") or ""),
             auto_fixable=False,
         )
-        for finding in findings_from_memo_job(summary, now=moment)
+        for finding in findings
     ]
+
+
+def _strategy_book_memo_spend(
+    summary: dict[str, Any], *, repo_root: Path | None, now: datetime
+) -> dict[str, Any] | None:
+    from value_investor.agent_model_policy import weekly_ops_budget_status
+    from value_investor.strategy_book_memo_job import ESTIMATED_MEMO_USD
+    from value_investor.strategy_book_memo_spend import memo_spend_finding
+    from value_investor.strategy_book_rules import registration_record
+    from value_investor.strategy_book_signals import repo_paths
+
+    paths = repo_paths(Path(repo_root) if repo_root is not None else Path())
+    try:
+        weekly_ops = weekly_ops_budget_status(estimated_memo_usd=ESTIMATED_MEMO_USD)
+    except (OSError, ValueError, TypeError, KeyError):
+        weekly_ops = None
+    return memo_spend_finding(
+        summary,
+        registration_record(paths.registration),
+        weekly_ops=weekly_ops,
+        now=now,
+    )
 
 
 def check_strategy_book_observe(
