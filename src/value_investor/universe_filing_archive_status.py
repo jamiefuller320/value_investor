@@ -1,7 +1,8 @@
 """Compact UI status for the universe filing archive pack lane (thin L521).
 
 Derives a low-distraction Ops panel payload from the last pack run + bottleneck
-review. Observe-only — does not eng-spray, deepen, or widen caps.
+review. Observe-only for eng-spray / deepen; stage ladder auto-widen is the
+documented quiet-night promote (hard ceiling stage 3) — not N181 eng-spray.
 """
 
 from __future__ import annotations
@@ -11,24 +12,28 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.storage import read_json, write_json
+from value_investor.universe_filing_archive_stage import (
+    DEFAULT_STAGE,
+    MAX_DOCUMENTED_STAGE,
+    QUIET_NIGHTS_REQUIRED,
+    advance_stage_ladder,
+    caps_for_stage,
+    load_stage_ladder_state,
+)
 
 SCHEMA_VERSION = 1
 DEFAULT_PACK_RUN_PATH = Path("docs/data/universe_filing_archive_pack_run.json")
 DEFAULT_BOTTLENECK_PATH = Path("docs/data/universe_filing_archive_bottleneck_review.json")
 DEFAULT_STATUS_PATH = Path("docs/data/universe_filing_archive_status.json")
 
-# Current apply defaults (stage-2 moderate quiet). Scale only after several
-# quiet nights with isolation_ok; never auto-widen (N180/N181).
-PILOT_CAPS = {
-    "max_units": 8,
-    "max_tickers_per_unit": 2,
-    "max_bodies_per_ticker": 1,
-    "max_http_fetches": 32,
-}
+# Fallback caps when pack_run / stage ladder are missing (stage-2 floor).
+PILOT_CAPS = caps_for_stage(DEFAULT_STAGE)
 
 WIDEN_CRITERIA = (
-    "Several quiet apply nights with capacity_isolation.isolation_ok=true "
-    "and no shared 429/runner collision vs euro maintenance or spare sprints"
+    f"{QUIET_NIGHTS_REQUIRED} quiet apply nights with "
+    "capacity_isolation.isolation_ok=true "
+    "and no shared 429/runner collision vs euro maintenance or spare sprints; "
+    f"auto-promote one documented stage (hard ceiling stage {MAX_DOCUMENTED_STAGE})"
 )
 
 RUNBOOK = "docs/ops/universe-filing-archive-pack.md"
@@ -97,17 +102,43 @@ def _next_widen_step(
     gate: dict[str, Any],
     errors: list[Any],
     caps: dict[str, Any],
+    stage_ladder: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Return actionable next-widen guidance (observe-only; never auto-widens)."""
+    """Return next-widen guidance from gate + committed quiet-night streak."""
+    ladder = stage_ladder if isinstance(stage_ladder, dict) else {}
     max_units = caps.get("max_units", PILOT_CAPS["max_units"])
     max_fetches = caps.get("max_http_fetches", PILOT_CAPS["max_http_fetches"])
     caps_label = f"max_units={max_units}, max_http_fetches={max_fetches}"
+    streak = int(ladder.get("quiet_isolation_ok_streak") or 0)
+    required = int(ladder.get("required_streak") or QUIET_NIGHTS_REQUIRED)
+    stage = ladder.get("current_stage")
+    stage_bit = f" stage {stage}" if stage is not None else ""
 
     key = str(outcome or "").strip().lower()
     pressure = list(gate.get("focus_pressure_reasons") or [])
     isolation_ok = isolation.get("isolation_ok")
     shared = bool(isolation.get("shared_critical_path"))
     fourth = bool(isolation.get("fourth_equal_sprint_stream"))
+
+    if ladder.get("promoted"):
+        to_caps = _as_dict(_as_dict(ladder.get("last_auto_widen")).get("to_caps")) or caps
+        return {
+            "id": "auto_widened",
+            "label": f"Auto-widened to stage {ladder.get('current_stage')}",
+            "detail": (
+                f"Quiet streak met; promoted to{stage_bit} "
+                f"(max_units={to_caps.get('max_units', max_units)}, "
+                f"max_http_fetches={to_caps.get('max_http_fetches', max_fetches)}). "
+                f"Streak reset; hard ceiling stage {MAX_DOCUMENTED_STAGE}."
+            ),
+            "current_caps": caps,
+            "widen_criteria": WIDEN_CRITERIA,
+            "stage_ladder": {
+                "current_stage": ladder.get("current_stage"),
+                "streak": 0,
+                "required": required,
+            },
+        }
 
     if key in {"suspend", "quiet_only"} or gate.get("allowed") is False:
         reason = ", ".join(str(r) for r in pressure) if pressure else key or "gate_block"
@@ -116,10 +147,15 @@ def _next_widen_step(
             "label": "Hold widen — wait for archive_lane_gate allow",
             "detail": (
                 f"Last outcome={key or 'unknown'} ({reason}). "
-                "Do not raise caps until quiet allow nights resume."
+                f"Streak reset. Keep{stage_bit} {caps_label} until quiet allow nights resume."
             ),
             "current_caps": caps,
             "widen_criteria": WIDEN_CRITERIA,
+            "stage_ladder": {
+                "current_stage": stage,
+                "streak": 0,
+                "required": required,
+            },
         }
 
     if errors or key == "error":
@@ -127,9 +163,17 @@ def _next_widen_step(
         return {
             "id": "fix_failures",
             "label": "Hold widen — fix last-run failures first",
-            "detail": f"Errors on last pass (first={first[:160]}). Keep {caps_label}.",
+            "detail": (
+                f"Errors on last pass (first={first[:160]}). "
+                f"Streak reset. Keep{stage_bit} {caps_label}."
+            ),
             "current_caps": caps,
             "widen_criteria": WIDEN_CRITERIA,
+            "stage_ladder": {
+                "current_stage": stage,
+                "streak": 0,
+                "required": required,
+            },
         }
 
     if shared or fourth or isolation_ok is False:
@@ -138,10 +182,16 @@ def _next_widen_step(
             "label": "Hold widen — capacity isolation not clean",
             "detail": (
                 f"isolation_ok={isolation_ok}, shared_critical_path={shared}, "
-                f"fourth_equal_sprint_stream={fourth}. Keep {caps_label}."
+                f"fourth_equal_sprint_stream={fourth}. Streak reset. "
+                f"Keep{stage_bit} {caps_label}."
             ),
             "current_caps": caps,
             "widen_criteria": WIDEN_CRITERIA,
+            "stage_ladder": {
+                "current_stage": stage,
+                "streak": 0,
+                "required": required,
+            },
         }
 
     if dry_run or key == "dry_complete":
@@ -150,30 +200,78 @@ def _next_widen_step(
             "label": "Next: quiet --apply nights (still hold scale)",
             "detail": (
                 "Last pass was dry/plan-only. Cron should run thin --apply; "
-                f"accumulate several isolation_ok apply nights before raising {caps_label}."
+                f"accumulate {required} isolation_ok apply nights before auto-promote "
+                f"from{stage_bit} {caps_label}."
             ),
             "current_caps": caps,
             "widen_criteria": WIDEN_CRITERIA,
+            "stage_ladder": {
+                "current_stage": stage,
+                "streak": streak,
+                "required": required,
+            },
+        }
+
+    if ladder.get("at_ceiling"):
+        return {
+            "id": "at_max_stage",
+            "label": f"At max documented stage ({MAX_DOCUMENTED_STAGE})",
+            "detail": (
+                f"Keep{stage_bit} {caps_label}. Auto-widen will not invent stages "
+                f"past {MAX_DOCUMENTED_STAGE}; further raises need a documented ladder edit."
+            ),
+            "current_caps": caps,
+            "widen_criteria": WIDEN_CRITERIA,
+            "stage_ladder": {
+                "current_stage": stage,
+                "streak": streak,
+                "required": required,
+                "at_ceiling": True,
+            },
         }
 
     if isolation_ok is True and not dry_run:
+        next_caps = _as_dict(ladder.get("next_stage_caps"))
+        next_label = (
+            f"stage {ladder.get('next_stage')} "
+            f"(max_units={next_caps.get('max_units')}, "
+            f"max_http_fetches={next_caps.get('max_http_fetches')})"
+            if next_caps
+            else "next documented stage"
+        )
         return {
             "id": "accumulate_quiet_nights",
-            "label": "Next widen: after several quiet isolation_ok nights",
+            "label": (
+                f"Next auto-widen: {streak}/{required} quiet isolation_ok nights "
+                f"toward {next_label}"
+            ),
             "detail": (
-                f"Last apply looked isolated. Keep {caps_label} until "
-                f"{WIDEN_CRITERIA.lower()}; then raise max_units / fetch caps gradually."
+                f"Last apply looked isolated. Keep{stage_bit} {caps_label}; "
+                f"auto-promote after {required} clean nights "
+                f"(streak {streak}/{required}). Fail-closed reset on suspend/"
+                "isolation/shared-path."
             ),
             "current_caps": caps,
             "widen_criteria": WIDEN_CRITERIA,
+            "stage_ladder": {
+                "current_stage": stage,
+                "streak": streak,
+                "required": required,
+                "next_stage": ladder.get("next_stage"),
+            },
         }
 
     return {
         "id": "observe",
-        "label": "Observe — hold pilot caps",
-        "detail": f"Keep {caps_label}. {WIDEN_CRITERIA}.",
+        "label": "Observe — hold current stage caps",
+        "detail": f"Keep{stage_bit} {caps_label}. {WIDEN_CRITERIA}.",
         "current_caps": caps,
         "widen_criteria": WIDEN_CRITERIA,
+        "stage_ladder": {
+            "current_stage": stage,
+            "streak": streak,
+            "required": required,
+        },
     }
 
 
@@ -183,7 +281,10 @@ def build_universe_filing_archive_status(
     bottleneck: dict[str, Any] | None = None,
     pack_run_path: Path = DEFAULT_PACK_RUN_PATH,
     bottleneck_path: Path = DEFAULT_BOTTLENECK_PATH,
+    status_path: Path = DEFAULT_STATUS_PATH,
+    prior_status: dict[str, Any] | None = None,
     now: datetime | None = None,
+    advance_ladder: bool = True,
 ) -> dict[str, Any]:
     """Assemble compact Ops status from last pack run + bottleneck review."""
     clock = now or datetime.now(UTC)
@@ -194,6 +295,7 @@ def build_universe_filing_archive_status(
 
     run = _as_dict(pack_run if pack_run is not None else _safe_read(Path(pack_run_path)))
     review = _as_dict(bottleneck if bottleneck is not None else _safe_read(Path(bottleneck_path)))
+    prior = prior_status if prior_status is not None else _safe_read(Path(status_path))
 
     present = bool(run)
     generated_at = _parse_dt(run.get("generated_at"))
@@ -205,15 +307,35 @@ def build_universe_filing_archive_status(
     if not errors and outcome == "error":
         errors = ["pack_run outcome=error"]
 
-    caps = dict(PILOT_CAPS)
-    assemble_caps = _as_dict(run.get("assemble_caps"))
-    if run.get("max_units") is not None:
-        caps["max_units"] = run.get("max_units")
-    for key in ("max_tickers_per_unit", "max_bodies_per_ticker", "max_http_fetches"):
-        if assemble_caps.get(key) is not None:
-            caps[key] = assemble_caps.get(key)
-        elif run.get(key) is not None:
-            caps[key] = run.get(key)
+    if present and advance_ladder:
+        stage_ladder = advance_stage_ladder(
+            prior,
+            outcome=outcome,
+            dry_run=dry_run,
+            isolation=isolation,
+            errors=errors,
+            fourth_equal_sprint_stream=(
+                run.get("fourth_equal_sprint_stream")
+                if run.get("fourth_equal_sprint_stream") is not None
+                else isolation.get("fourth_equal_sprint_stream")
+            ),
+            run_id=str(run.get("run_id") or "") or None,
+            now=clock,
+        )
+    else:
+        stage_ladder = load_stage_ladder_state(status=prior, pack_run=run or None)
+
+    caps = dict(stage_ladder.get("current_caps") or PILOT_CAPS)
+    # Prefer ladder caps after a promote; otherwise mirror last-run caps when present.
+    if present and not stage_ladder.get("promoted"):
+        assemble_caps = _as_dict(run.get("assemble_caps"))
+        if run.get("max_units") is not None:
+            caps["max_units"] = run.get("max_units")
+        for key in ("max_tickers_per_unit", "max_bodies_per_ticker", "max_http_fetches"):
+            if assemble_caps.get(key) is not None:
+                caps[key] = assemble_caps.get(key)
+            elif run.get(key) is not None:
+                caps[key] = run.get(key)
 
     clash_flags = {
         "isolation_ok": isolation.get("isolation_ok"),
@@ -238,6 +360,7 @@ def build_universe_filing_archive_status(
         gate=gate,
         errors=errors,
         caps=caps,
+        stage_ladder=stage_ladder,
     )
 
     badge = _outcome_badge(outcome, dry_run=dry_run, errors=errors) if present else "missing"
@@ -278,10 +401,12 @@ def build_universe_filing_archive_status(
         "capacity_isolation": isolation or None,
         "clash_flags": clash_flags,
         "current_caps": caps,
+        "stage_ladder": stage_ladder,
         "next_widen_step": next_widen,
         "note": (
             "Thin Ops status from last pack_run + bottleneck review. "
-            "Does not eng-spray or auto-widen (N180/N181)."
+            f"Quiet-night auto-widen up to stage {MAX_DOCUMENTED_STAGE}; "
+            "no eng-spray / fourth sprint (N180/N181)."
             if present
             else "No pack_run artifact yet — nightly 22:00 UTC workflow writes it."
         ),
@@ -295,7 +420,9 @@ def write_universe_filing_archive_status(
     pack_run_path: Path = DEFAULT_PACK_RUN_PATH,
     bottleneck_path: Path = DEFAULT_BOTTLENECK_PATH,
     status_path: Path = DEFAULT_STATUS_PATH,
+    prior_status: dict[str, Any] | None = None,
     now: datetime | None = None,
+    advance_ladder: bool = True,
 ) -> dict[str, Any]:
     """Persist ``universe_filing_archive_status.json`` and return the payload."""
     payload = build_universe_filing_archive_status(
@@ -303,7 +430,10 @@ def write_universe_filing_archive_status(
         bottleneck=bottleneck,
         pack_run_path=pack_run_path,
         bottleneck_path=bottleneck_path,
+        status_path=status_path,
+        prior_status=prior_status,
         now=now,
+        advance_ladder=advance_ladder,
     )
     write_json(Path(status_path), payload)
     return payload

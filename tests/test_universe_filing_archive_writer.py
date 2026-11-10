@@ -188,16 +188,17 @@ def test_assemble_and_apply_pack_with_injectable_fetch(tmp_path: Path) -> None:
 def test_workflow_schedule_applies_with_tiny_caps() -> None:
     text = Path(".github/workflows/universe-filing-archive-pack.yml").read_text(encoding="utf-8")
     assert "--apply" in text
-    # Stage-2 defaults (was stage-1 4/16; pilot 2/8).
-    assert 'default: "8"' in text
-    assert 'default: "32"' in text
-    # Cron has no workflow_dispatch inputs — env fallbacks must be stage-2 too.
-    assert "github.event.inputs.max_units || '8'" in text
-    assert "github.event.inputs.max_http_fetches || '32'" in text
+    # Schedule/blank dispatch resolve caps from committed stage ladder (not pinned 8/32).
+    assert "committed stage ladder" in text
+    assert "github.event.inputs.max_units || ''" in text
+    assert "github.event.inputs.max_http_fetches || ''" in text
+    assert "github.event.inputs.max_units || '8'" not in text
+    assert "github.event.inputs.max_http_fetches || '32'" not in text
     assert "github.event.inputs.max_units || '4'" not in text
     assert "github.event.inputs.max_http_fetches || '16'" not in text
     assert "github.event.inputs.max_units || '2'" not in text
     assert "github.event.inputs.max_http_fetches || '8'" not in text
+    assert 'if [ -n "${MAX_UNITS}" ]' in text
     assert "cancel-in-progress: true" in text
     assert "NOT a fourth" in text or "not a fourth" in text.lower()
     assert "universe_filings" in Path(".gitignore").read_text(encoding="utf-8")

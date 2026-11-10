@@ -1,6 +1,6 @@
 # easyJet plc (EZJ.L) — Research memo
 
-_Version 1 · Updated 2026-11-02T11:32:23.639585+00:00 · Mode: structured_verdict_
+_Version 1 · Updated 2026-11-10T11:34:54.647965+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,5 +9,5 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: neutral
 Risk: medium
 Confidence: 0.62
-Rationale: FY25 filings back cheapness/quality (headline PBT +9%, net cash £602m, filing-aligned FCF £624m) but the screen’s adjusted hold stands on TTM vs FY25 FCF divergence and Apollo’s recommended scheme amid a wider H1 FY26 loss.
-RiskTags: cyclical, competitive, leverage, other
+Rationale: FY25 filings support cheapness/quality (headline PBT +9%, net cash £602m, statutory OCF−capex FCF £624m) but screen TTM FCF (−£813m) diverges from FY25, FCF Yield fails, and the board-recommended Apollo scheme plus wider H1 FY26 headline...
+RiskTags: regulatory, cyclical, competitive, leverage, other
