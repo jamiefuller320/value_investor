@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-09T15:19:27.726154+00:00
+Track: `buy_tier_level` · updated 2026-11-10T15:20:12.015369+00:00
 
 ## Portfolio loser feedback
 
@@ -9,9 +9,6 @@ Track: `buy_tier_level` · updated 2026-11-09T15:19:27.726154+00:00
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
-
-### PPL.TO — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
 
 ### K.TO — weakening / watch_review (-14.9%)
 - research verdict neutral
@@ -37,6 +34,11 @@ Track: `buy_tier_level` · updated 2026-11-09T15:19:27.726154+00:00
 ### MG.TO — weakening / watch_review (-3.7%)
 - research verdict neutral
 - still buy
+- cheapness family still passes
+
+### PPL.TO — weakening / watch_review (+0.0%)
+- left buy tier (hold)
+- research accumulate
 - cheapness family still passes
 
 ### ABX.TO — intact / hold_tolerate (+0.6%)

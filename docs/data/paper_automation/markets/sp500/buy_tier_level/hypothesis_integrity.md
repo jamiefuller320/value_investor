@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-09T15:19:25.424538+00:00
+Track: `buy_tier_level` · updated 2026-11-10T15:20:09.053590+00:00
 
 ## Portfolio loser feedback
 
@@ -188,13 +188,10 @@ Track: `buy_tier_level` · updated 2026-11-09T15:19:25.424538+00:00
 - data_quality 1.00
 - conviction 89%
 
-### LDOS — intact / hold_tolerate (-7.2%)
-- price drawdown alone does not invalidate value thesis
+### LDOS — weakening / watch_review (-7.2%)
+- timing=wait while underwater
 - still strong_buy
 - research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 67%
 
 ### MKC — intact / hold_tolerate (-7.1%)
 - price drawdown alone does not invalidate value thesis
