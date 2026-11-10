@@ -113,6 +113,7 @@ TITLE_FAILED = "Strategy book observe failed"
 TITLE_INTERIM = "Strategy book 26-week interim read published"
 TITLE_THICKNESS = "Strategy book thickness gate ready for review"
 TITLE_CLOSES_STALE = "Strategy book closes stale"
+TITLE_CLOSES_SHORT = "Strategy book closes short of session"
 TITLE_LATE = "Strategy book late signals"
 TITLE_T212 = "Strategy book Trading 212 catalogue stale"
 TITLE_PENDING = "Strategy book forward go-live pending"
@@ -386,7 +387,8 @@ def findings_from_state(
                 "warn",
                 TITLE_FAILED,
                 f"Missed the {slot.isoformat()} slot (last status {seen}). "
-                "The weekday job is strategy-book-forward.yml at 21:30 UTC.",
+                "The weekday job is strategy-book-forward.yml (17:45 and 21:30 UTC, "
+                "cron-job.org primary); freshness is tested against the 21:30 slot.",
             )
         )
     else:
@@ -455,6 +457,18 @@ def findings_from_state(
                 "No rememo or ingest.",
             )
         )
+    for row in _short_closes(closes):
+        names = ", ".join(str(item) for item in row.get("sample_tickers") or []) or "none"
+        findings.append(
+            _finding(
+                "info",
+                TITLE_CLOSES_SHORT,
+                f"{row.get('market')}: {row.get('short')} of {row.get('buy_tier')} buy-tier "
+                f"charts end before {row.get('closes_through')} after the fetch. "
+                f"First tickers: {names}. The next forward slot retries them. "
+                "No rememo or ingest.",
+            )
+        )
     if catalogue.get("status") in {"missing", "stale"}:
         findings.append(
             _finding(
@@ -500,6 +514,12 @@ def _append_late(findings: list[dict[str, Any]], status: dict[str, Any]) -> None
                 f"late_signal is {late} of {signals} signals (over {LATE_SIGNAL_MAX_SHARE:.0%}).",
             )
         )
+
+
+def _short_closes(state: dict[str, Any]) -> list[dict[str, Any]]:
+    from value_investor.strategy_book_prices import short_markets
+
+    return short_markets(state)
 
 
 def _stale_closes(state: dict[str, Any]) -> list[dict[str, Any]]:
@@ -607,7 +627,9 @@ def _load_forward_specs(
                         )
                     )
                 continue
-            sessions, closes, highs, lows = chart
+            # Shared charts can carry a partial intraday bar for a session that
+            # has not closed (e.g. Hong Kong rebuilt mid-session). It is not a close.
+            sessions, closes, highs, lows = _through_completed(chart, completed)
             if not any(day >= start for day in sessions):
                 if ticker in current:
                     blocked["no_session_on_or_after_start"] += 1
@@ -689,6 +711,22 @@ def _load_forward_specs(
         "scored": scored,
         "dropped": dropped,
     }
+
+
+def _through_completed(
+    chart: tuple[list[date], list[float], list[float] | None, list[float] | None],
+    completed: date,
+) -> tuple[list[date], list[float], list[float] | None, list[float] | None]:
+    sessions, closes, highs, lows = chart
+    keep = sum(1 for day in sessions if day <= completed)
+    if keep == len(sessions):
+        return chart
+    return (
+        sessions[:keep],
+        closes[:keep],
+        highs[:keep] if highs is not None else None,
+        lows[:keep] if lows is not None else None,
+    )
 
 
 def _screens_for(

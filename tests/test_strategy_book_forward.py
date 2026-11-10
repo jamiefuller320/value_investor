@@ -112,12 +112,12 @@ def test_close_refresh_keeps_a_name_inside_the_budget(tmp_path: Path, monkeypatc
     assert bbb.read_bytes() == bbb_bytes
 
 
-def test_weekend_apply_does_not_fetch(tmp_path: Path, monkeypatch) -> None:
+def test_weekend_apply_does_not_fetch_when_friday_is_current(tmp_path: Path, monkeypatch) -> None:
     repo = _repo(tmp_path)
     data = repo / "docs" / "data"
     _screen(data, date(2026, 11, 4), ["AAA"])
     chart = data / "charts" / "AAA.json"
-    _chart(chart, ["2026-11-03"], [1.0])
+    _chart(chart, ["2026-11-05", "2026-11-06"], [1.0, 1.0])
     before = chart.read_bytes()
 
     def fail_fetch(*_args, **_kwargs):
