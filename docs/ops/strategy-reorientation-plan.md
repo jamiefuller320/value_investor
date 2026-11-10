@@ -56,7 +56,13 @@ as versions of one book rather than as a new instrument each month.
      novelty distance and cull (N223, N226, N227) are not built while this
      section holds. See [cue-consumer-mft.md](cue-consumer-mft.md#role-under-the-single-track-owner-2026-11-04).
 4. **Versions, not ideas.** v0 runs to its thickness gate. The version review
-   happens at that gate and then at most once every 26 weeks. Between reviews,
+   happens at that gate and then at most once every 26 weeks, with two
+   exceptions (owner, 2026-11-10, before forward go-live): the owner may call a
+   review as soon as a bench challenger clears its sealed promotion bar
+   (ops-monitor reports it), and may call a bench-fill review at any time to
+   seal a challenger into a free slot. A bench-fill review promotes nothing, and
+   a challenger sealed after go-live is scored only on entries filled after its
+   seal. Every review still promotes at most one challenger. Between reviews,
    up to four sealed **bench** challengers (exit variants or entry filters)
    are scored daily on the book's own entries, with a 2.5-standard-error bar
    because several run at once ([registration](strategy-book-registration.md#8-scoring)).

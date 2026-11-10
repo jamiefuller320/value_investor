@@ -112,6 +112,7 @@ TITLE_REFRESHED = "Strategy book observe refreshed"
 TITLE_FAILED = "Strategy book observe failed"
 TITLE_INTERIM = "Strategy book 26-week interim read published"
 TITLE_THICKNESS = "Strategy book thickness gate ready for review"
+TITLE_BENCH_BAR = "Strategy book bench challenger cleared its promotion bar"
 TITLE_CLOSES_STALE = "Strategy book closes stale"
 TITLE_LATE = "Strategy book late signals"
 TITLE_T212 = "Strategy book Trading 212 catalogue stale"
@@ -165,6 +166,7 @@ def counts_view(summary: dict[str, Any]) -> dict[str, Any]:
         "interim_announced": bool(summary.get("interim_announced")),
         "thickness_ready": bool(summary.get("thickness_ready")),
         "disposition": bool(summary.get("disposition")),
+        "bench_bar_met": [str(column) for column in (summary.get("bench_bar_met") or [])],
         "wrote_observe": bool(summary.get("wrote_observe")),
         "wrote_gate_log": bool(summary.get("wrote_gate_log")),
         "wrote_status": bool(summary.get("wrote_status")),
@@ -245,6 +247,7 @@ def run_forward_job(
         "mature_count": health["mature_count"],
         "thickness_ready": bool(live and health["thickness_ready"]),
         "disposition": disposition,
+        "bench_bar_met": health["bench_bar_met"] if live else [],
         "interim_announce": interim_announce,
         "interim_announced": announced,
         "freshness": {
@@ -439,6 +442,16 @@ def findings_from_state(
                     "info",
                     TITLE_THICKNESS,
                     "The thickness gate is ready for review. No disposition is stored.",
+                )
+            )
+        met = [str(column) for column in (status.get("bench_bar_met") or [])]
+        if live and observe_exists and met:
+            findings.append(
+                _finding(
+                    "info",
+                    TITLE_BENCH_BAR,
+                    f"{', '.join(met)} cleared the sealed promotion bar. The owner may call a "
+                    "version review now; at most one promotion per review.",
                 )
             )
         _append_memo_share(findings, status)
@@ -1249,7 +1262,18 @@ def _health(boards: dict[str, Any]) -> dict[str, Any]:
         "mature_count": int(launch.get("mature") or 0),
         "interim_published": bool(interim.get("published")),
         "thickness_ready": bool(gate.get("ready")),
+        "bench_bar_met": _bench_bar_met(boards),
     }
+
+
+def _bench_bar_met(boards: dict[str, Any]) -> list[str]:
+    """Bench columns whose sealed promotion bar is met (registration section 8)."""
+    bench = boards.get("bench") if isinstance(boards.get("bench"), dict) else {}
+    return sorted(
+        str(column)
+        for column, row in bench.items()
+        if isinstance(row, dict) and (row.get("promotion_bar") or {}).get("met") is True
+    )
 
 
 def _append_gate_log(

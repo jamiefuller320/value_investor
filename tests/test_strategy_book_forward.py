@@ -13,6 +13,7 @@ import pytest
 
 from value_investor.ops_monitor import check_strategy_book_observe
 from value_investor.strategy_book_forward import (
+    TITLE_BENCH_BAR,
     TITLE_CLOSES_STALE,
     TITLE_FAILED,
     TITLE_INTERIM,
@@ -312,6 +313,7 @@ def test_observe_findings_are_not_auto_fixable(tmp_path: Path) -> None:
             "interim_announce": True,
             "thickness_ready": True,
             "disposition": False,
+            "bench_bar_met": ["deep_dip"],
             "errors": [],
             "provenance_mismatches": 0,
         },
@@ -339,6 +341,7 @@ def test_observe_findings_are_not_auto_fixable(tmp_path: Path) -> None:
     assert TITLE_CLOSES_STALE in titles
     assert TITLE_T212 in titles
     assert TITLE_THICKNESS not in titles
+    assert TITLE_BENCH_BAR not in titles
     assert all(row.auto_fixable is False for row in findings)
     assert all("fair_cost" not in row.summary for row in findings)
 
@@ -356,6 +359,8 @@ def test_observe_findings_are_not_auto_fixable(tmp_path: Path) -> None:
     live_titles = {row.title for row in live}
     assert TITLE_PENDING not in live_titles
     assert TITLE_THICKNESS in live_titles
+    assert TITLE_BENCH_BAR in live_titles
+    assert "deep_dip" in next(row.summary for row in live if row.title == TITLE_BENCH_BAR)
     assert all(row.auto_fixable is False for row in live)
 
     _write(
@@ -723,3 +728,17 @@ def _weekdays(count: int, start: date) -> list[date]:
             days.append(cursor)
         cursor += timedelta(days=1)
     return days
+
+
+def test_bench_bar_met_reads_only_met_columns():
+    from value_investor.strategy_book_forward import _bench_bar_met
+
+    boards = {
+        "bench": {
+            "deep_dip": {"promotion_bar": {"met": True}},
+            "revenue_growing": {"promotion_bar": {"met": False}},
+            "fcf_agrees": {},
+        }
+    }
+    assert _bench_bar_met(boards) == ["deep_dip"]
+    assert _bench_bar_met({}) == []

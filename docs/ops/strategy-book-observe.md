@@ -162,6 +162,7 @@ All `auto_fixable` false. Stable titles:
 | Strategy book observe failed | warn | Missed that slot, the status has errors, or `provenance_mismatches` is non-zero. |
 | Strategy book 26-week interim read published | info | Once, when the walk first publishes the interim read. The job stamps `interim_announce`. The check does not write. |
 | Strategy book thickness gate ready for review | info | Live observe store exists, the gate is ready, and no disposition is stored. |
+| Strategy book bench challenger cleared its promotion bar | info | Live observe store exists and a bench column meets its sealed bar (section 8). The owner may call a version review ([plan item 4](strategy-reorientation-plan.md#single-track-to-live-owner-2026-11-04)); it repeats while the bar is met. |
 | Strategy book memo routine falling behind | warn | Walk share: `memo_not_ready / (filled + memo_not_ready + memo_blocked) > 0.2`. |
 | Strategy book closes stale | warn | After the refresh, more than a tenth of a market's buy tier is more than one session behind. |
 | Strategy book late signals | warn | `late_signal / signals > 0.1`. No warn when there are no signals. |
