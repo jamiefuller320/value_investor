@@ -34,6 +34,34 @@
     }
   ],
   "phase1_gate_scope": "forward_book_go_live_only",
+  "phase1_gate_decision": {
+    "decided_at": "2026-11-10",
+    "outcome": "accepted_with_one_adjustment",
+    "owner_words": "I agree all of these: Accept both gates as they are, keeping the 'at least 50%' line. Adjust once: funds and investment trusts get insufficient_data from the decline gate. ... I'd argue a change marker, since it only declares that a class of names lacks the data the gate needs. Queue for later: a minimum declining count for small sectors; a balance-sheet check; a trust discount-to-net-asset-value lens.",
+    "sample_review": "Owner agreed with all ten sampled verdicts: COST.L, INCH.L, SHEL.L, BT-A.L declining; GCP.L blocked but for the wrong reason (a fund); DNLM.L, DATA.L, IGG.L, BREE.L, IMB.L clear.",
+    "thresholds_changed": false,
+    "adjust_once": {
+      "used": true,
+      "spent_on": "funds and investment trusts get insufficient_data from the operating-decline gate",
+      "change_marker": "owner-strategy-book-v0-fund-insufficient-data-v1",
+      "note": "The single Phase 1 adjustment is spent. A later gate threshold change is a new registration_id (section 10)."
+    },
+    "queued": [
+      "L704",
+      "L705",
+      "L706"
+    ],
+    "forward_live_set": false,
+    "forward_start_alignment": {
+      "decided_at": "2026-11-10",
+      "owner_words": "Lets align the forward start and live dates.",
+      "rule": "forward_start will equal the go-live date. The go-live edit sets forward_live true and forward_start to the go-live date (YYYY-MM-DD) in the same commit, so the first live walk starts on the go-live session and does not re-walk 2026-11-05 onward as late signals.",
+      "set_now": false,
+      "code": "strategy_book_rules.forward_start_date reads forward_start first, then start_date, observe_start, then the signed_at date.",
+      "doc": "docs/ops/strategy-book-observe.md#go-live"
+    },
+    "doc": "docs/ops/phase1-gate-review-pack.md#owner-decision-2026-11-10"
+  },
   "sealed_documents": {
     "docs/ops/strategy-book-registration.md": {
       "sha256": "072607438df49c408cea68754b7574e9abbe70cc7a578775ad61ee91d72b4ccf",
@@ -159,6 +187,24 @@
       "unchanged": "No threshold, signal, entry, exit, gate, F9 or eligibility rule changed. Price basis stays Yahoo adjusted closes from ensure_price_charts. The replay first score store (strategy_book_replay.json) is not re-run.",
       "pr": 1350,
       "doc": "docs/ops/strategy-book-observe.md#close-refresh"
+    },
+    {
+      "marker_id": "owner-strategy-book-v0-fund-insufficient-data-v1",
+      "at": "2026-11-10T12:00:00Z",
+      "kind": "bug_fix",
+      "rule_change": false,
+      "approved_by": "owner",
+      "approved_at": "2026-11-10",
+      "owner_quote": "I agree all of these: Accept both gates as they are, keeping the 'at least 50%' line. Adjust once: funds and investment trusts get insufficient_data from the decline gate. ... I'd argue a change marker, since it only declares that a class of names lacks the data the gate needs. Queue for later: a minimum declining count for small sectors; a balance-sheet check; a trust discount-to-net-asset-value lens.",
+      "new_registration_id": false,
+      "logged_on_registration_id": "owner-strategy-book-v0",
+      "phase1_gate_adjustment": true,
+      "sealed_text": "Section 2: 'Part 2, not declining | Operating-decline verdict clear ... declining and insufficient_data both fail entry' and 'One failure, or a missing input, means the name is not eligible. insufficient_data is not a pass.' Section 10: 'A bug fix that makes the code match this text | A logged change marker on the same registration_id'; a new registration_id is for 'Any threshold, the learning question, or which rule is primary'.",
+      "what_was_wrong": "The operating-decline gate applied company rules to funds and investment trusts. Their revenue line is investment income or portfolio return and they have no operating margin, so part 2 ('no sign of declining operating performance') was judged on inputs that do not exist for them. GCP.L (GCP Infrastructure Investments, buy tier) was declining on a fall in investment income; PSH.L, BHMG.L and III.L were clear on the same kind of figures.",
+      "fix": "src/value_investor/fund_or_trust.py classifies a name as a fund or trust from a reviewed override list (docs/data/fund_or_trust_overrides.json), then sector label, Yahoo industry or quote type, then 'investment trust' / 'fund' (not 'fund management') in the name; REITs are operating. The gate returns insufficient_data with reason fund_or_trust and keeps the company-rule verdict as company_rules_verdict. The sector gate leaves fund members out of decline and earnings breadth and their coverage base.",
+      "effect": "As of 2026-11-10: 8 FTSE names classified; 5 change verdict (GCP.L and 3IN.L declining, PSH.L, BHMG.L and III.L clear, all now insufficient_data). FTSE buy tier: GCP.L only, which failed entry before and after. No library verdict and no sector verdict changed.",
+      "unchanged": "No threshold, learning question, entry rule, exit rule or primary rule changed. The change only narrows entry: no name becomes eligible. The replay first score store (strategy_book_replay.json) has an empty full-strategy arm and is not re-run; no forward store exists.",
+      "doc": "docs/ops/operating-decline-gate.md#funds-and-investment-trusts"
     }
   ],
   "bench_seals": [

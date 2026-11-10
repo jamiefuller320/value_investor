@@ -190,6 +190,23 @@ def test_forward_start_ignores_august_when_the_seal_is_absent(tmp_path: Path) ->
     assert forward_start_date(path, decision=date(2026, 11, 6)) == date(2026, 11, 5)
 
 
+def test_forward_start_on_the_go_live_edit_overrides_the_signature_date(tmp_path: Path) -> None:
+    path = tmp_path / "strategy_book_registration.json"
+    path.write_text(
+        json.dumps(
+            {
+                "signed": True,
+                "signed_at": "2026-11-05T21:00:00Z",
+                "forward_live": True,
+                "forward_start": "2026-11-12",
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert forward_live(path) is True
+    assert forward_start_date(path, decision=date(2026, 11, 13)) == date(2026, 11, 12)
+
+
 def test_dry_run_writes_counts_only(tmp_path: Path) -> None:
     repo = _live_tree(tmp_path, live=False)
     summary = run_forward_job(repo_root=repo, now=NOW, apply=True)

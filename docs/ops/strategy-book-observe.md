@@ -124,6 +124,13 @@ with the same signature test as `spend_enabled`. The two flags are independent.
 A missing file, a missing key, or any value other than boolean true is false.
 This includes the string `"true"`.
 
+The go-live commit sets `forward_live: true` and `forward_start` to the go-live
+date (YYYY-MM-DD) together. Owner, 2026-11-10: "Lets align the forward start
+and live dates", so `forward_start` will equal the go-live date (recorded on the
+seal as `phase1_gate_decision.forward_start_alignment`). Without it the walk
+would start on the `signed_at` date and replay the sessions before go-live as
+late signals ([forward job](#forward-job)).
+
 Phase 1 governs go-live only. While `forward_live` is false the job still runs
 on the current sessions, writes `docs/data/strategy_book_forward_status.json`
 (counts, phase span, mature count, freshness), and writes no observe store and
