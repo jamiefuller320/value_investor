@@ -87,6 +87,9 @@ from value_investor.scoring.screening_export_guard import (
     guard_signals_dataframe,
     install_screening_export_guard_hooks,
 )
+from value_investor.scoring.sector_cyclical_overlay_registry import (
+    enrich_signals_with_sector_cyclical_overlay_registry,
+)
 from value_investor.scoring.sector_overrides import apply_sector_overrides
 from value_investor.scoring.snapshot import save_run_snapshot
 from value_investor.scoring.uk_contractor_overlay import (
@@ -564,6 +567,10 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
         run_at=result.run_at,
     )
     signals_out = enrich_signals_with_quality_family_avoid_gate(
+        signals_out,
+        result.model_results,
+    )
+    signals_out = enrich_signals_with_sector_cyclical_overlay_registry(
         signals_out,
         result.model_results,
     )

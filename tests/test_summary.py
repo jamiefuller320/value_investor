@@ -387,6 +387,9 @@ def test_build_company_reports_exports_overridden_plantation_sector():
     exported = report.to_dict()
     assert exported["sector"] == AGRICULTURE_COMMODITIES_SECTOR
     assert exported["sector_composite_score"] == 0.55
+    registry = exported["sector_cyclical_overlay_registry"]
+    assert registry["registry_version"] == 1
+    assert "agriculture_commodities_plantation" in registry["active_hook_ids"]
 
 
 def _healthcare_overlay_models(*, f_score: int = 3) -> pd.DataFrame:
@@ -426,6 +429,10 @@ def test_healthcare_overlay_caps_strong_buy_when_negative_fcf_and_weak_piotroski
     assert snapshot["healthcare_overlay"] is True
     assert snapshot["adjusted_signal"] == "buy"
     assert "Healthcare overlay" in report.summary
+    assert (
+        "healthcare_negative_fcf_low_piotroski"
+        in (snapshot["sector_cyclical_overlay_registry"]["active_hook_ids"])
+    )
 
 
 def test_healthcare_overlay_uses_trailing_fcf_when_canonical_positive():

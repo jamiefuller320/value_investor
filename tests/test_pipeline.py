@@ -69,6 +69,13 @@ from value_investor.scoring.quality_family_avoid_gate_overlay import (
     build_quality_family_avoid_gate_overlay,
     enrich_signals_with_quality_family_avoid_gate,
 )
+from value_investor.scoring.sector_cyclical_overlay_registry import (
+    HOOK_AGRICULTURE_COMMODITIES_PLANTATION,
+    HOOK_HEALTHCARE_NEGATIVE_FCF_LOW_PIOTROSKI,
+    HOOK_UK_CONTRACTOR_BACKLOG_MARGIN,
+    build_sector_cyclical_overlay_registry,
+    enrich_signals_with_sector_cyclical_overlay_registry,
+)
 from value_investor.scoring.sector_overrides import (
     AGRICULTURE_COMMODITIES_SECTOR,
     apply_sector_overrides,
@@ -991,6 +998,78 @@ def test_apply_sector_overrides_changes_sector_composite_score():
 
     assert aep_before > 0.7
     assert aep_after < aep_before
+
+
+def test_build_sector_cyclical_overlay_registry_flags_plantation_peer_group():
+    row = pd.Series(
+        {
+            "ticker": "AEP.L",
+            "name": "AEP Plantations Plc",
+            "sector": AGRICULTURE_COMMODITIES_SECTOR,
+        }
+    )
+    registry = build_sector_cyclical_overlay_registry(row)
+    assert registry["registry_version"] == 1
+    assert HOOK_AGRICULTURE_COMMODITIES_PLANTATION in registry["active_hook_ids"]
+    plantation = next(
+        h for h in registry["hooks"] if h["id"] == HOOK_AGRICULTURE_COMMODITIES_PLANTATION
+    )
+    assert plantation["scoring_sector"] == AGRICULTURE_COMMODITIES_SECTOR
+
+
+def test_enrich_signals_with_sector_cyclical_overlay_registry_uk_contractor():
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "COST.L",
+                "name": "Costain Group PLC",
+                "sector": "Industrials",
+                "signal": "buy",
+                "uk_contractor": True,
+                "uk_contractor_ch_backlog_margin_cyclical_detected": True,
+            }
+        ]
+    )
+    enriched = enrich_signals_with_sector_cyclical_overlay_registry(signals, pd.DataFrame())
+    assert HOOK_UK_CONTRACTOR_BACKLOG_MARGIN in enriched.iloc[0]["sector_cyclical_overlay_hooks"]
+    registry = enriched.iloc[0]["sector_cyclical_overlay_registry"]
+    contractor = next(h for h in registry["hooks"] if h["id"] == HOOK_UK_CONTRACTOR_BACKLOG_MARGIN)
+    assert contractor["uk_contractor_ch_backlog_margin_cyclical_detected"] is True
+
+
+def test_enrich_sector_cyclical_registry_healthcare_hook_lists_eligibility():
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "name": "Pharma Co",
+                "sector": "Healthcare",
+                "signal": "hold",
+                "free_cashflow": -10.0,
+                "healthcare_overlay": True,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "model_id": "piotroski_f",
+                "passed": False,
+                "score": 3 / 9,
+                "reasons": "['F-Score=3/9']",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+    enriched = enrich_signals_with_sector_cyclical_overlay_registry(signals, model_results)
+    registry = enriched.iloc[0]["sector_cyclical_overlay_registry"]
+    assert HOOK_HEALTHCARE_NEGATIVE_FCF_LOW_PIOTROSKI in registry["active_hook_ids"]
+    healthcare = next(
+        h for h in registry["hooks"] if h["id"] == HOOK_HEALTHCARE_NEGATIVE_FCF_LOW_PIOTROSKI
+    )
+    assert healthcare["triggered"] is True
+    assert healthcare["overlay_applied"] is True
 
 
 def test_enrich_signals_with_healthcare_overlay_caps_adjusted_signal():
