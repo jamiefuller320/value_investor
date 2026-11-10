@@ -205,6 +205,24 @@
       "effect": "As of 2026-11-10: 8 FTSE names classified; 5 change verdict (GCP.L and 3IN.L declining, PSH.L, BHMG.L and III.L clear, all now insufficient_data). FTSE buy tier: GCP.L only, which failed entry before and after. No library verdict and no sector verdict changed.",
       "unchanged": "No threshold, learning question, entry rule, exit rule or primary rule changed. The change only narrows entry: no name becomes eligible. The replay first score store (strategy_book_replay.json) has an empty full-strategy arm and is not re-run; no forward store exists.",
       "doc": "docs/ops/operating-decline-gate.md#funds-and-investment-trusts"
+    },
+    {
+      "marker_id": "owner-strategy-book-v0-filings-index-dating-fix-v1",
+      "at": "2026-11-10T18:30:00Z",
+      "kind": "bug_fix",
+      "rule_change": false,
+      "approved_by": "owner",
+      "approved_at": "2026-11-10",
+      "owner_quote": "Can you apply the fix now.",
+      "new_registration_id": false,
+      "logged_on_registration_id": "owner-strategy-book-v0",
+      "sealed_text": "Section 8, entry snapshot: facts 'read from files dated on or before that session.' Section 10: 'A bug fix that makes the code match this text | A logged change marker on the same registration_id'.",
+      "what_was_wrong": "The F9-B key_filing_bodies bind dates a filings index by its top-level fetched_at. The scan-then-target listing merge, which adds rows without bodies, rewrote fetched_at with the scan time on every run. On 2026-11-10, 73 of 110 FTSE indexes and most library indexes carried a 2026-11-09 or 2026-11-10 stamp, so names whose bodies had been on disk for weeks failed the bind for the previous close. Separately, body re-fetch passes (ch_refetched_at and similar) added bodies without moving fetched_at, so those bodies could count before they existed.",
+      "fix": "filings_index_dating.bodies_at dates an index by the latest body-affecting stamp (fetched_at and the *_refetched_at stamps; not discovery_scan_at or listing_refresh_at), and _index_as_of reads it. The listing merge keeps the prior fetched_at unless key bodies turn on. A one-off backfill restored fetched_at on 692 indexes to the committer time of the first commit in the unbroken run of committed versions with key bodies (docs/data/filings_index_dating_backfill.json).",
+      "no_lookahead": "The restored time is a commit time, so it is never earlier than the bodies were in the repository, and it only ever moves fetched_at earlier for indexes whose current version has key bodies. Counting the re-fetch stamps only makes the bind stricter.",
+      "effect": "Memo-job dry run with spend off (sessions due on 2026-11-10): signals blocked only by the memo rose from 1 to 5 of 17, and key_filing_bodies now passes on all 17. The rest fail the sector gate, the library FCF snapshot dating (screen_fcf_after_session) or the decline gate.",
+      "unchanged": "No threshold, learning question, entry rule, exit rule or primary rule changed. forward_live stays false. The replay first score store (strategy_book_replay.json) is not re-run.",
+      "doc": "docs/ops/ingest-scan-then-target.md#filings-index-dating"
     }
   ],
   "bench_seals": [
