@@ -1,11 +1,12 @@
 {
-  "run_at": "2026-11-09T10:22:43.753062+00:00",
+  "run_at": "2026-11-10T00:26:48.361204+00:00",
   "market_id": "euro_depth",
   "targets": [
     "ESSITY-B.ST",
     "EVN.VI",
     "UCB.BR",
     "WIE.VI",
+    "TTE.PA",
     "SHELL.AS",
     "ACKB.BR",
     "BAS.DE",
@@ -43,6 +44,14 @@
       "priority_score": 16.9359,
       "filings_total": 3,
       "filings_with_body": 2,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    },
+    {
+      "ticker": "TTE.PA",
+      "priority_score": 16.9625,
+      "filings_total": 145,
+      "filings_with_body": 143,
       "indexed_without_body": 1,
       "reason": "indexed_without_body"
     },
@@ -333,6 +342,68 @@
         "with_body_after": 2,
         "investegate_fallbacks": 0,
         "skipped_unfetchable": 1,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 1,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    },
+    {
+      "ticker": "TTE.PA",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 145,
+        "filings_with_body": 143,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 145,
+        "filings_with_body": 145,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 145,
+        "annual": 10,
+        "interim": 64,
+        "trading_update": 7,
+        "other": 64,
+        "with_body": 145,
+        "period_coverage": {
+          "annual": {
+            "total": 10,
+            "with_body": 10
+          },
+          "interim": {
+            "total": 64,
+            "with_body": 64
+          },
+          "trading_update": {
+            "total": 7,
+            "with_body": 7
+          },
+          "other": {
+            "total": 64,
+            "with_body": 64
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 145,
+        "with_body_after": 145,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
         "deadline_hit": false,
         "merge": {
           "added": 0,
@@ -736,13 +807,14 @@
     }
   ],
   "improved": [
+    "TTE.PA",
     "SHELL.AS"
   ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-09T10:19:09.559942+00:00",
+    "snapshot_at": "2026-11-10T00:20:07.052522+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 41,
     "unmeasured_buy_tier": 0,
@@ -801,7 +873,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-09T10:22:43.728631+00:00",
+    "snapshot_at": "2026-11-10T00:26:48.336833+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 41,
     "unmeasured_buy_tier": 0,
@@ -810,7 +882,7 @@
     "indexed_without_body": 4,
     "bodies_min": 1,
     "bodies_median": 4,
-    "bodies_max": 143,
+    "bodies_max": 145,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -898,7 +970,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-11-09T10:19:13.079013+00:00",
+    "assessed_at": "2026-11-10T00:20:09.822527+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -962,9 +1034,9 @@
       "thin_need_bodies": 3
     }
   },
-  "used_seconds": 207.23314105400001,
+  "used_seconds": 395.81051214900003,
   "budget_seconds": 2700.0,
-  "leftover_seconds": 2492.766858946,
+  "leftover_seconds": 2304.189487851,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -972,7 +1044,7 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_depth",
-    "updated_at": "2026-11-09T10:22:43.735721+00:00",
+    "updated_at": "2026-11-10T00:26:48.344129+00:00",
     "exhausted": false,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
