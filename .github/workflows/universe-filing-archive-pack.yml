@@ -2,7 +2,7 @@ name: Universe filing archive pack
 
 # Quiet-window cold archive lane (L499). Week-first then iterative-backward pack
 # under archive_lane_gate. Preemptible, max concurrency 1, NOT a fourth equal
-# sprint stream. Thin --apply writers use archive budgets + stage-1 max_units.
+# sprint stream. Thin --apply writers use archive budgets + stage-2 max_units.
 # head_needs_fat_slot does not suspend this lane. Cold blobs stay on the runner;
 # only pack_run + bottleneck review are committed.
 # See docs/ops/universe-filing-archive-pack.md
@@ -23,17 +23,17 @@ on:
         type: string
         default: "12"
       max_units:
-        description: "Cap on week×market units (stage-1 default 4)"
+        description: "Cap on week×market units (stage-2 default 8)"
         type: string
-        default: "4"
+        default: "8"
       apply:
         description: "Thin quiet cold-store writers (archive budgets; tiny caps)"
         type: boolean
         default: true
       max_http_fetches:
-        description: "Hard archive-lane HTTP fetch cap (stage-1 default 16)"
+        description: "Hard archive-lane HTTP fetch cap (stage-2 default 32)"
         type: string
-        default: "16"
+        default: "32"
 
 permissions:
   contents: write
@@ -64,9 +64,9 @@ jobs:
           ALLOW_OUTSIDE_QUIET: ${{ github.event.inputs.allow_outside_quiet || 'false' }}
           APPLY_INPUT: ${{ github.event.inputs.apply }}
           LOOKBACK_WEEKS: ${{ github.event.inputs.lookback_weeks || '12' }}
-          # Schedule has no inputs — fallbacks must match stage-1 (4/16), not pilot 2/8.
-          MAX_UNITS: ${{ github.event.inputs.max_units || '4' }}
-          MAX_HTTP_FETCHES: ${{ github.event.inputs.max_http_fetches || '16' }}
+          # Schedule has no inputs — fallbacks must match stage-2 (8/32), not 4/16.
+          MAX_UNITS: ${{ github.event.inputs.max_units || '8' }}
+          MAX_HTTP_FETCHES: ${{ github.event.inputs.max_http_fetches || '32' }}
         run: |
           set -euo pipefail
           # Schedule always applies; workflow_dispatch honors apply input (default true).
