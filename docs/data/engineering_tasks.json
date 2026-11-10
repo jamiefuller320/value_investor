@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-11-10T07:18:16.020961+00:00",
+  "compiled_at": "2026-11-10T02:04:37.447681+00:00",
   "run_at": null,
-  "task_count": 269,
+  "task_count": 268,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -4053,47 +4053,6 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/674",
       "pr_number": 674,
       "merged_at": "2026-09-16T16:11:25.884730+00:00"
-    },
-    {
-      "id": "eng-20261110-09",
-      "area": "scoring",
-      "title": "Workflow fix: euro library ingest loop failure",
-      "summary": "GitHub workflow euro-ingest-loop.yml failed on main. Investigate the failed run log and fix the workflow or underlying code within allowed_paths. Run: https://github.com/jamiefuller320/value_investor/actions/runs/42774027458",
-      "priority": "high",
-      "priority_score": 90.0,
-      "source": "workflow_failure",
-      "evidence": {
-        "workflow": "euro-ingest-loop.yml",
-        "run_id": "42774027458",
-        "run_url": "https://github.com/jamiefuller320/value_investor/actions/runs/42774027458",
-        "signature": null
-      },
-      "acceptance_criteria": [
-        "Export or overlay behaviour is covered by a unit test",
-        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
-        "No edits under blocked_paths"
-      ],
-      "allowed_paths": [
-        ".github/workflows/euro-ingest-loop.yml",
-        "src/value_investor/scoring/",
-        "src/value_investor/summary.py",
-        "src/value_investor/library_screen.py",
-        "src/value_investor/library_ingest_dispatch.py",
-        "src/value_investor/library_ingest_escalation.py",
-        "src/value_investor/library_ingest_loop.py",
-        "tests/test_pipeline.py",
-        "tests/test_summary.py",
-        "tests/test_workflow_failure_tasks.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
     },
     {
       "id": "eng-20261004-06",
@@ -17428,7 +17387,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 2,
-    "evaluated_at": "2026-11-10T06:50:55.689712+00:00",
+    "evaluated_at": "2026-11-10T07:21:06.817692+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -17440,6 +17399,5 @@
     "last_fingerprint": "parallel_cap|parallel cap reached — 2 pr_open, 0 agent run(s) (max_parallel=2)",
     "last_sent_at": "2026-11-10T04:20:29.788343+00:00",
     "cooldown_hours": 12.0
-  },
-  "workflow_failure_compiled": true
+  }
 }
