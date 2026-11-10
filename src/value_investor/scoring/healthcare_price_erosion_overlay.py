@@ -123,6 +123,33 @@ def apply_healthcare_price_erosion_overlay_to_signal(
     return True, _more_conservative_signal(base_adjusted, capped)
 
 
+def apply_healthcare_price_erosion_export_enforcement(
+    *,
+    signal: str,
+    adjusted_signal: str,
+    sector: str | None,
+    passed_families: str | None,
+    ticker_models: pd.DataFrame,
+    price_erosion_detected: bool,
+    healthcare_price_erosion_overlay: bool = False,
+) -> tuple[bool, str]:
+    """Re-apply healthcare price-erosion caps on export/snapshot paths."""
+    if healthcare_price_erosion_overlay:
+        capped = cap_signal_for_healthcare_price_erosion_overlay(signal)
+        return True, _more_conservative_signal(adjusted_signal, capped)
+    triggered, merged = apply_healthcare_price_erosion_overlay_to_signal(
+        signal,
+        sector=sector,
+        passed_families=passed_families,
+        ticker_models=ticker_models,
+        price_erosion_detected=price_erosion_detected,
+        adjusted_signal=adjusted_signal,
+    )
+    if not triggered:
+        return False, adjusted_signal
+    return True, merged
+
+
 def enrich_signals_with_healthcare_price_erosion_overlay(
     signals: pd.DataFrame,
     model_results: pd.DataFrame,
