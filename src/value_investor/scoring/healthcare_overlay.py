@@ -138,6 +138,31 @@ def apply_healthcare_overlay_to_signal(
     return True, _more_conservative_signal(base_adjusted, capped)
 
 
+def apply_healthcare_export_enforcement(
+    *,
+    signal: str,
+    adjusted_signal: str,
+    healthcare_overlay: bool = False,
+    sector: str | None = None,
+    free_cashflow: float | None = None,
+    piotroski_f_score: int | None = None,
+) -> tuple[bool, str]:
+    """Re-apply healthcare cash-quality caps on export/snapshot paths."""
+    if healthcare_overlay:
+        capped = cap_signal_for_healthcare_overlay(signal)
+        return True, _more_conservative_signal(adjusted_signal, capped)
+    triggered, merged = apply_healthcare_overlay_to_signal(
+        signal,
+        sector=sector,
+        free_cashflow=free_cashflow,
+        piotroski_f_score=piotroski_f_score,
+        adjusted_signal=adjusted_signal,
+    )
+    if not triggered:
+        return False, adjusted_signal
+    return True, merged
+
+
 def enrich_signals_with_healthcare_overlay(
     signals: pd.DataFrame,
     model_results: pd.DataFrame,

@@ -1117,6 +1117,20 @@ def test_primary_fcf_harmonization_before_sector_cyclical_registry():
     assert healthcare["triggered"] is True
 
 
+def test_apply_healthcare_export_enforcement_caps_stale_strong_buy():
+    from value_investor.scoring.healthcare_overlay import apply_healthcare_export_enforcement
+
+    overlay, adjusted = apply_healthcare_export_enforcement(
+        signal="strong_buy",
+        adjusted_signal="strong_buy",
+        sector="Healthcare",
+        free_cashflow=-10.0,
+        piotroski_f_score=3,
+    )
+    assert overlay is True
+    assert adjusted == "buy"
+
+
 def test_enrich_signals_with_healthcare_overlay_caps_adjusted_signal():
     signals = pd.DataFrame(
         [

@@ -35,7 +35,14 @@ from value_investor.scoring.fcf_basis_overlay import (
 from value_investor.scoring.fcf_three_way_conviction_overlay import (
     enforce_fcf_three_way_conviction_in_snapshot,
 )
-from value_investor.scoring.healthcare_overlay import piotroski_score_for_ticker
+from value_investor.scoring.healthcare_overlay import (
+    apply_healthcare_export_enforcement,
+    piotroski_score_for_ticker,
+    trailing_free_cashflow_for_healthcare_overlay,
+)
+from value_investor.scoring.healthcare_price_erosion_overlay import (
+    apply_healthcare_price_erosion_export_enforcement,
+)
 from value_investor.scoring.leverage_overlay import (
     cap_research_verdict_for_statutory_fcf_moat_leverage_overlay,
 )
@@ -341,9 +348,55 @@ def enforce_fcf_basis_in_snapshot(
         updated["research_verdict"] = capped_verdict
     updated = enforce_fcf_three_way_conviction_in_snapshot(updated, output_dir=output_dir)
     updated = enforce_neutral_watchlist_dividend_caution_in_snapshot(updated)
-    from value_investor.scoring.fcf import enforce_sector_cyclical_overlay_registry_in_snapshot
+
+    from value_investor.scoring.fcf import (
+        enforce_sector_cyclical_overlay_registry_in_snapshot,
+        harmonize_snapshot_fcf_for_sector_overlay_registry,
+    )
 
     fcf_export = updated.get("fcf") if isinstance(updated.get("fcf"), dict) else None
+    updated = harmonize_snapshot_fcf_for_sector_overlay_registry(
+        updated,
+        fcf_bundle=fcf_export,
+    )
+    trailing_fcf = trailing_free_cashflow_for_healthcare_overlay(pd.Series(updated))
+    hc_overlay, hc_adjusted = apply_healthcare_export_enforcement(
+        signal=screen_signal,
+        adjusted_signal=str(updated.get("adjusted_signal") or merged_adjusted),
+        healthcare_overlay=bool(updated.get("healthcare_overlay")),
+        sector=updated.get("sector"),
+        free_cashflow=trailing_fcf,
+        piotroski_f_score=piotroski_f_score,
+    )
+    if hc_overlay:
+        updated["healthcare_overlay"] = True
+        updated["adjusted_signal"] = hc_adjusted
+    elif hc_adjusted != str(updated.get("adjusted_signal") or merged_adjusted):
+        updated["adjusted_signal"] = hc_adjusted
+
+    erosion_detected = updated.get("healthcare_price_erosion_detected")
+    if erosion_detected is not None and not (
+        isinstance(erosion_detected, float) and pd.isna(erosion_detected)
+    ):
+        price_erosion = bool(erosion_detected)
+    else:
+        price_erosion = False
+
+    pe_overlay, pe_adjusted = apply_healthcare_price_erosion_export_enforcement(
+        signal=screen_signal,
+        adjusted_signal=str(updated.get("adjusted_signal") or merged_adjusted),
+        sector=updated.get("sector"),
+        passed_families=updated.get("passed_families"),
+        ticker_models=ticker_models,
+        price_erosion_detected=price_erosion,
+        healthcare_price_erosion_overlay=bool(updated.get("healthcare_price_erosion_overlay")),
+    )
+    if pe_overlay:
+        updated["healthcare_price_erosion_overlay"] = True
+        updated["adjusted_signal"] = pe_adjusted
+    elif pe_adjusted != str(updated.get("adjusted_signal") or merged_adjusted):
+        updated["adjusted_signal"] = pe_adjusted
+
     return enforce_sector_cyclical_overlay_registry_in_snapshot(
         updated,
         model_results=model_results,

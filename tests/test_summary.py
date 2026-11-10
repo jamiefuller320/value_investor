@@ -5710,6 +5710,110 @@ def test_guard_screening_snapshot_export_refreshes_sector_cyclical_registry_on_f
     assert "healthcare_negative_fcf_low_piotroski" in guarded["sector_cyclical_overlay_hooks"]
 
 
+def test_guard_screening_snapshot_export_applies_healthcare_overlay():
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    snapshot = {
+        "ticker": "PHAR.L",
+        "name": "Pharma Co",
+        "sector": "Healthcare",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.9,
+        "free_cashflow": -25.0,
+        "healthcare_overlay": False,
+    }
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "model_id": "piotroski_f",
+                "passed": False,
+                "score": 3 / 9,
+                "reasons": "['F-Score=3/9']",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    guarded = guard_screening_snapshot_export(snapshot, model_results=model_results)
+
+    assert guarded["healthcare_overlay"] is True
+    assert guarded["adjusted_signal"] == "buy"
+    assert guarded["conviction_score"] == pytest.approx(0.9)
+
+
+def test_guard_screening_snapshot_export_healthcare_uses_trailing_fcf_on_export():
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    snapshot = {
+        "ticker": "PHAR.L",
+        "sector": "Health Care",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.8,
+        "free_cashflow": 119_000_000.0,
+        "free_cashflow_screen_ttm": -66_125_000.0,
+        "healthcare_overlay": False,
+    }
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "model_id": "piotroski_f",
+                "passed": False,
+                "score": 4 / 9,
+                "reasons": "['F-Score=4/9']",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    guarded = guard_screening_snapshot_export(snapshot, model_results=model_results)
+
+    assert guarded["healthcare_overlay"] is True
+    assert guarded["adjusted_signal"] == "buy"
+
+
+def test_guard_screening_snapshot_export_applies_healthcare_price_erosion_overlay():
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    snapshot = {
+        "ticker": "HIK.L",
+        "sector": "Health Care",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7,
+        "passed_families": "quality,dividend,garp,risk",
+        "healthcare_price_erosion_detected": True,
+        "healthcare_price_erosion_overlay": False,
+    }
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "model_id": model_id,
+                "passed": False,
+                "score": 0.2,
+            }
+            for model_id in ("high_dividend", "fcf_yield", "earnings_yield", "low_pe_high_yield")
+        ]
+        + [
+            {
+                "ticker": "HIK.L",
+                "model_id": "buffett_quality",
+                "passed": True,
+                "score": 0.8,
+            }
+        ]
+    )
+
+    guarded = guard_screening_snapshot_export(snapshot, model_results=model_results)
+
+    assert guarded["healthcare_price_erosion_overlay"] is True
+    assert guarded["adjusted_signal"] == "buy"
+
+
 def test_guard_screening_snapshot_export_applies_media_cyclical_thin_fcf_overlay():
     from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
 
