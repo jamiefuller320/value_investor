@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-10T17:33:03.016125+00:00`
+Generated: `2026-11-10T19:56:40.291095+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -45,7 +45,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `human`/human PR #1334 `eng-20261109-01` — Hunt fetchable IR source for parked asx200 leftover IMD.AX
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 362
+- Occasion count: 363
 - `PR mergeable=CONFLICTING against main` — 7×
 - `validate failed` — 7×
 - `validate check failed` — 6×
