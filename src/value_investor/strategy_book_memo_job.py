@@ -430,6 +430,7 @@ def default_memo_runner(
         }
     )
     store = ResearchStore(output_dir)
+    before = _file_stamps(store.ticker_dir(ticker))
     doc, action = _process_ticker(
         report=report,
         store=store,
@@ -441,11 +442,30 @@ def default_memo_runner(
         market=run_market,
         spend_pool="weekly_ops",
     )
+    after = _file_stamps(store.ticker_dir(ticker))
+    root = Path(repo_root).resolve()
+    written = sorted(
+        str(path.resolve().relative_to(root))
+        for path, stamp in after.items()
+        if before.get(path) != stamp
+    )
     return {
         "verdict": getattr(doc, "research_verdict", None),
         "finished_at": getattr(doc, "updated_at", None),
         "runner_action": action,
         "session": session,
+        "written_paths": written,
+    }
+
+
+def _file_stamps(directory: Path) -> dict[Path, tuple[int, int]]:
+    if not directory.is_dir():
+        return {}
+    return {
+        path: (stat.st_mtime_ns, stat.st_size)
+        for path in directory.rglob("*")
+        if path.is_file() and not path.is_relative_to(directory / "sources")
+        for stat in (path.stat(),)
     }
 
 
@@ -531,6 +551,7 @@ def _execute_request(
     budget_status: Any,
     record_spend: Any,
     reserved: float,
+    written: list[str],
 ) -> tuple[dict[str, Any] | None, float]:
     key = (request.market, request.ticker, request.kind, request.session)
     if _blocking_row(rows, key, spend=spend):
@@ -572,6 +593,7 @@ def _execute_request(
                 if isinstance(outcome, dict):
                     record["verdict"] = outcome.get("verdict")
                     record["memo_finished_at"] = outcome.get("finished_at")
+                    written.extend(str(path) for path in outcome.get("written_paths") or [])
                 record_spend(ESTIMATED_MEMO_USD)
                 extra_reserved += ESTIMATED_MEMO_USD
     return record, extra_reserved
@@ -629,6 +651,7 @@ def run_strategy_book_memo_job(
     call_record = record_spend or _default_record
     reserved = 0.0
     new_rows: list[dict[str, Any]] = []
+    written: list[str] = []
 
     for market in chosen:
         try:
@@ -708,6 +731,7 @@ def run_strategy_book_memo_job(
                         budget_status=call_budget,
                         record_spend=call_record,
                         reserved=reserved,
+                        written=written,
                     )
                     if logged is None:
                         continue
@@ -743,6 +767,8 @@ def run_strategy_book_memo_job(
         for row in new_rows
     ]
     summary["new_log_rows"] = len(new_rows)
+    # Memo files this run wrote; scripts/gha_commit_ops_monitor.sh commits them.
+    summary["written_paths"] = sorted(set(written))
     if persist:
         if new_rows:
             for row in new_rows:

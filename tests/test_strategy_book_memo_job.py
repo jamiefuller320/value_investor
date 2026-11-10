@@ -419,6 +419,48 @@ def test_spend_on_calls_the_mocked_runner_and_logs_the_verdict(tmp_path: Path) -
     assert row["verdict"] == "hold"
     assert row["memo_finished_at"] == "2026-11-05T15:00:00+00:00"
     assert summary["spend_enabled"] is True
+    assert summary["written_paths"] == []
+
+
+def test_written_memo_paths_reach_the_summary(tmp_path: Path) -> None:
+    _green(tmp_path)
+    _write_json(
+        tmp_path / "docs" / "data" / "strategy_book_registration.json",
+        {"signed_at": "2026-11-05T00:00:00+00:00", "signature": "owner", "spend_enabled": True},
+    )
+    memo = f"docs/data/research/{TICKER}/research.json"
+
+    def runner(**_kwargs):
+        return {
+            "verdict": "hold",
+            "finished_at": "2026-11-05T15:00:00+00:00",
+            "written_paths": [memo],
+        }
+
+    run_strategy_book_memo_job(
+        repo_root=tmp_path,
+        now=datetime(2026, 11, 2, 12, tzinfo=UTC),
+        markets=["ftse350"],
+        sessions_by_market={"ftse350": [SESSION.isoformat()]},
+        persist=True,
+        runner=runner,
+        budget_status=lambda: {"constraining": False, "remaining_weekly_ops_usd": 100.0},
+        record_spend=lambda _usd: None,
+    )
+    stored = json.loads(
+        (tmp_path / "docs" / "data" / "strategy_book_memo_job.json").read_text(encoding="utf-8")
+    )
+    assert stored["written_paths"] == [memo]
+
+
+def test_file_stamps_skip_sources(tmp_path: Path) -> None:
+    from value_investor.strategy_book_memo_job import _file_stamps
+
+    (tmp_path / "sources").mkdir()
+    (tmp_path / "sources" / "f.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "research.json").write_text("{}", encoding="utf-8")
+    assert [path.name for path in _file_stamps(tmp_path)] == ["research.json"]
+    assert _file_stamps(tmp_path / "missing") == {}
 
 
 def test_budget_headroom_skip_does_not_call_the_runner(tmp_path: Path) -> None:

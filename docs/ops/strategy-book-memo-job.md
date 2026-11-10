@@ -78,7 +78,7 @@ Whether a memo then fed an entry decision (a fill, or `memo_blocked`) or went un
 | `docs/data/strategy_book_memo_log.jsonl` | Append-only. Ticker, market, kind (`signal_day` / `review_date`), session, action (`dry_run` / `requested` / `skipped`), skip reason, memo finish time and verdict when a model ran, estimated spend, `inputs` (repo-relative path and SHA-256 of each file read), `data_commit`. |
 | `docs/data/strategy_book_memo_job.json` | Last run per market, counts by ISO week and market (signals, all-but-memo, memo needed, dry-run requests, estimated spend), and that week's memo-needed count versus the 25–35 estimate (registration section 11). |
 
-Both paths are in `GHA_COMMIT_OPTIONAL` (`scripts/gha_commit_ops_monitor.sh`). Ops-monitor commits them with the other observe stores.
+Both paths are in `GHA_COMMIT_OPTIONAL` (`scripts/gha_commit_ops_monitor.sh`). Ops-monitor commits them with the other observe stores. The memo files themselves (`research/<ticker>/` under the FTSE data folder or the name's library screen folder, not `sources/`) are listed in the summary's `written_paths` for that run, and the same script commits them as owned paths. Before 2026-11-10 they were not committed: the first three paid memos (SCT.L, ASY.L, NWS.AX on the forced run of 2026-11-10) were logged as `requested` but their files were lost with the runner.
 
 Findings (`category: research`, `auto_fixable: false`):
 

@@ -336,3 +336,25 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "strategy_book_forward_status.json" not in owned_line
     assert "strategy_book_us_rehearsal.json" not in owned_line
     assert "strategy_book_exit_lab.json" not in owned_line
+
+
+def test_ops_monitor_commit_adds_memo_files_the_job_wrote(tmp_path: Path):
+    remote, work = _seed_repo(tmp_path)
+    memo = work / "docs" / "data" / "research" / "SCT.L" / "research.json"
+    _write_json(memo, {"research_verdict": "accumulate"})
+    untouched = work / "docs" / "data" / "research" / "SCT.L" / "sources" / "x.json"
+    _write_json(untouched, {"ingest": True})
+    _write_json(
+        work / "docs" / "data" / "strategy_book_memo_job.json",
+        {
+            "generated_at": "2026-11-10T21:08:45+00:00",
+            "written_paths": ["docs/data/research/SCT.L/research.json", "../outside.txt"],
+        },
+    )
+    result = _run_script(work)
+    assert result.returncode == 0, result.stderr
+    latest = tmp_path / "latest"
+    _git(tmp_path, "clone", str(remote), str(latest))
+    committed = latest / "docs" / "data" / "research" / "SCT.L"
+    assert _read_json(committed / "research.json") == {"research_verdict": "accumulate"}
+    assert not (committed / "sources" / "x.json").exists()
