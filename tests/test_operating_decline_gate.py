@@ -529,6 +529,10 @@ def test_ops_monitor_check_wraps_findings(tmp_path):
     assert findings[0].title == FINDING_TITLE
     assert findings[0].auto_fixable is False
     assert store.exists()
+    # The dated copy is keyed by the day it was generated, never earlier.
+    archived = list((store.parent / "gate_history" / "operating_decline").glob("*.json.gz"))
+    assert len(archived) == 1
+    assert "Gate verdict history stale" not in [finding.title for finding in findings]
 
 
 def test_margin_uses_one_operating_income_label_across_years():
