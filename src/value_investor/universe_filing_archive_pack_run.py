@@ -44,8 +44,6 @@ from value_investor.universe_filing_archive_pack_order import (
 from value_investor.universe_filing_archive_stage import resolve_apply_caps
 from value_investor.universe_filing_archive_writer import (
     DEFAULT_LIBRARY_ROOT,
-    DEFAULT_MAX_BODIES_PER_TICKER,
-    DEFAULT_MAX_TICKERS_PER_UNIT,
     assemble_archive_pack_units,
 )
 
