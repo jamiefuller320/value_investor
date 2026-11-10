@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-10T01:54:33+00:00",
+  "updated_at": "2026-11-10T09:11:30+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -17117,6 +17117,39 @@
       "status": "open",
       "source": "Owner question 2026-11-10 on rate of change",
       "added_at": "2026-11-10T01:54:33+00:00"
+    },
+    {
+      "id": "L699",
+      "category": "later",
+      "section": "ops",
+      "title": "Shared chart writers store partial intraday bars",
+      "summary": "email-report/dashboard ensure_price_charts writes the current session's live Yahoo bar (e.g. HK 2026-11-10 bars written 02:10 UTC mid-session). The strategy-book forward loader now clips to each market's completed session and the close refresh trims, but other chart consumers (N200, paper, dashboards) still read partial bars as closes.",
+      "revisit_when": "After strategy book forward_live goes true and its first 2 weeks of marks are clean, or when another observe instrument is found reading a partial bar",
+      "tags": [
+        "charts",
+        "yahoo",
+        "strategy-book",
+        "partial-bar"
+      ],
+      "status": "open",
+      "source": "forward-refresh-reliability go-live review 2026-11-10",
+      "added_at": "2026-11-10T09:11:30+00:00"
+    },
+    {
+      "id": "N261",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Quote fallback for unpublished European daily bars",
+      "summary": "Yahoo drops the just-completed London/continental daily bar overnight until about the next session. Instead of relying on the 17:45 UTC slot, the close refresh could fill the missing session from the quote's regularMarketPrice/time. That changes the registered adjusted-close source, so it needs an owner change marker.",
+      "revisit_when": "If Strategy book closes short of session fires for a European market on 3+ weekdays in a month after the 17:45 slot is live",
+      "tags": [
+        "yahoo",
+        "strategy-book",
+        "closes"
+      ],
+      "status": "open",
+      "source": "forward-refresh-reliability go-live review 2026-11-10",
+      "added_at": "2026-11-10T09:11:30+00:00"
     }
   ],
   "fragments": [
