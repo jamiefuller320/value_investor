@@ -1,12 +1,19 @@
 name: Strategy book forward
 
 # Weekday close refresh and forward walk, after the cash closes.
-# London 16:30 and New York 16:00 are both done by 21:30 UTC (EST 21:00, EDT 20:00).
-# Hong Kong 16:00 is 08:00 UTC, so this slot also covers that session.
-# Ops-monitor at 07:45 UTC is before those cash closes and is not this job.
-# GitHub's schedule is best-effort, same as email-report.
+# Primary trigger is cron-job.org workflow_dispatch (scripts/import_cron_jobs.py
+# keys strategy-book-forward-europe / strategy-book-forward). GitHub's schedule
+# below is a backup only: it started the 21:30 slot 3.5-6 h late in Nov 2026.
+# 17:45 UTC is after the London and continental closes (16:30 UTC winter,
+# 15:30 summer). Yahoo publishes those bars soon after the close but drops them
+# again overnight until the next session, so a run after ~23:00 UTC misses them.
+# 21:30 UTC is after New York 16:00 (EST 21:00, EDT 20:00) and Toronto.
+# Hong Kong 16:00 is 08:00 UTC, so both slots cover that session.
+# Each run fetches only charts behind a market's latest completed session and
+# trims bars after it, so a second or late run is a safe catch-up.
 on:
   schedule:
+    - cron: "45 17 * * 1-5"
     - cron: "30 21 * * 1-5"
   workflow_dispatch:
     inputs:

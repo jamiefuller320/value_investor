@@ -785,6 +785,13 @@ def chart_last_close_date(payload: dict[str, Any] | None) -> dt.date | None:
         return None
 
 
+def _through_session(frame: pd.DataFrame, last_session: dt.date) -> pd.DataFrame:
+    stamps = pd.DatetimeIndex(pd.to_datetime(frame.index))
+    if stamps.tz is not None:
+        stamps = stamps.tz_localize(None)
+    return frame.loc[stamps.normalize() <= pd.Timestamp(last_session)]
+
+
 def ensure_price_charts(
     *,
     reports: list[dict[str, Any]],
@@ -795,6 +802,7 @@ def ensure_price_charts(
     market: str | None = None,
     refresh_stale: bool = True,
     closes_through: dt.date | None = None,
+    last_session: dt.date | None = None,
 ) -> list[Path]:
     """
     Ensure chart JSON exists for the requested tickers.
@@ -808,6 +816,9 @@ def ensure_price_charts(
 
     ``closes_through`` also rebuilds any chart whose last close is earlier than
     that date. Without it a chart is never refreshed just for being old.
+
+    ``last_session`` drops fetched bars dated after it, so a fetch during a
+    later session does not write that session's partial intraday bar.
     """
     chart_dir.mkdir(parents=True, exist_ok=True)
     if tickers is None:
@@ -866,6 +877,8 @@ def ensure_price_charts(
     for report in to_build:
         ticker = str(report["ticker"])
         frame = frames.get(ticker)
+        if frame is not None and last_session is not None and not frame.empty:
+            frame = _through_session(frame, last_session)
         if frame is None or frame.empty or "Close" not in frame.columns:
             logger.warning("No price history for chart: %s", ticker)
             existing_path = chart_dir / chart_filename(ticker)
