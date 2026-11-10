@@ -340,7 +340,15 @@ def enforce_fcf_basis_in_snapshot(
     if capped_verdict != updated.get("research_verdict"):
         updated["research_verdict"] = capped_verdict
     updated = enforce_fcf_three_way_conviction_in_snapshot(updated, output_dir=output_dir)
-    return enforce_neutral_watchlist_dividend_caution_in_snapshot(updated)
+    updated = enforce_neutral_watchlist_dividend_caution_in_snapshot(updated)
+    from value_investor.scoring.fcf import enforce_sector_cyclical_overlay_registry_in_snapshot
+
+    fcf_export = updated.get("fcf") if isinstance(updated.get("fcf"), dict) else None
+    return enforce_sector_cyclical_overlay_registry_in_snapshot(
+        updated,
+        model_results=model_results,
+        fcf_bundle=fcf_export,
+    )
 
 
 def merge_research_verdict_into_snapshot(

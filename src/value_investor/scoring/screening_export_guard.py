@@ -388,7 +388,14 @@ def guard_screening_snapshot_export(
     fcf_out = merged.get("fcf")
     if isinstance(fcf_out, dict):
         merged["fcf"] = finalize_fcf_basis_bundle(fcf_out)
-    return enforce_neutral_watchlist_dividend_caution_in_snapshot(merged)
+    merged = enforce_neutral_watchlist_dividend_caution_in_snapshot(merged)
+    from value_investor.scoring.fcf import enforce_sector_cyclical_overlay_registry_in_snapshot
+
+    return enforce_sector_cyclical_overlay_registry_in_snapshot(
+        merged,
+        model_results=model_results,
+        fcf_bundle=fcf_bundle if fcf_bundle else None,
+    )
 
 
 def enrich_signals_with_hospitality_cyclical_detection(signals: pd.DataFrame) -> pd.DataFrame:

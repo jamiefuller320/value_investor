@@ -3267,6 +3267,62 @@ def overlay_free_cashflow_from_bundle(
     return primary
 
 
+def harmonize_snapshot_fcf_for_sector_overlay_registry(
+    snapshot: dict[str, Any],
+    *,
+    fcf_bundle: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Align primary FCF fields before sector/cyclical overlay registry evaluation."""
+    prior_series = pd.Series(snapshot)
+    preserved_screen_ttm = _float_or_none(prior_series.get("free_cashflow_screen_ttm"))
+    if preserved_screen_ttm is None:
+        preserved_screen_ttm = screen_ttm_from_row(prior_series)
+
+    updated = surface_primary_fcf_on_overlay_record(
+        snapshot,
+        row=prior_series,
+        fcf_bundle=fcf_bundle,
+    )
+    bundle = updated.get("fcf") if isinstance(updated.get("fcf"), dict) else {}
+    screen_ttm = _float_or_none(bundle.get("screen_ttm"))
+    if screen_ttm is None:
+        screen_ttm = preserved_screen_ttm
+    if screen_ttm is not None:
+        updated["free_cashflow_screen_ttm"] = screen_ttm
+    return updated
+
+
+def enforce_sector_cyclical_overlay_registry_in_snapshot(
+    snapshot: dict[str, Any],
+    *,
+    model_results: pd.DataFrame | None = None,
+    fcf_bundle: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Rebuild sector/cyclical hook registry from harmonized FCF and overlay flags."""
+    from value_investor.scoring.healthcare_overlay import piotroski_score_for_ticker
+    from value_investor.scoring.sector_cyclical_overlay_registry import (
+        build_sector_cyclical_overlay_registry,
+        sector_cyclical_overlay_hooks_csv,
+    )
+
+    updated = harmonize_snapshot_fcf_for_sector_overlay_registry(snapshot, fcf_bundle=fcf_bundle)
+    piotroski: int | None = None
+    if model_results is not None and not model_results.empty:
+        ticker = str(updated.get("ticker") or "")
+        if ticker:
+            piotroski = piotroski_score_for_ticker(model_results[model_results["ticker"] == ticker])
+
+    registry = build_sector_cyclical_overlay_registry(
+        pd.Series(updated),
+        piotroski_f_score=piotroski,
+    )
+    updated["sector_cyclical_overlay_registry"] = registry
+    updated["sector_cyclical_overlay_hooks"] = sector_cyclical_overlay_hooks_csv(
+        registry.get("active_hook_ids") or []
+    )
+    return updated
+
+
 def _format_fcf_compact(value: float, *, currency: str = "USD") -> str:
     sign = "−" if value < 0 else ""
     abs_val = abs(value)
