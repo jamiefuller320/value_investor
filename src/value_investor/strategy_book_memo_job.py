@@ -26,6 +26,7 @@ from value_investor.agent_model_policy import (
     record_estimated_spend,
     weekly_ops_budget_status,
 )
+from value_investor.gate_store_history import GateHistory
 from value_investor.library_decision_input_inventory import _memo_as_of
 from value_investor.market_paper_shard import session_defaults_for_market
 from value_investor.paper_fund import BUY_SIGNALS
@@ -622,8 +623,7 @@ def run_strategy_book_memo_job(
     rows = _log_rows(paths.memo_log)
     cache: dict[str, str] = {}
     observe = _load_json(paths.observe) if paths.observe.is_file() else None
-    decline = _load_json(paths.decline)
-    sector = _load_json(paths.sector)
+    gate_history = GateHistory.load(paths.decline, paths.sector)
     call_runner = runner or default_memo_runner
     call_budget = budget_status or _default_budget
     call_record = record_spend or _default_record
@@ -664,6 +664,7 @@ def run_strategy_book_memo_job(
             }
             for session_iso in plan.get("sessions") or []:
                 session = date.fromisoformat(session_iso)
+                decline, sector = gate_history.in_force(session)
                 evaluated = evaluate_market(
                     market,
                     session,

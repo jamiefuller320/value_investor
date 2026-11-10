@@ -22,6 +22,8 @@ from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from value_investor.gate_store_history import DECLINE_KIND, archive_gate_version
+
 DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
 DEFAULT_RESEARCH_ROOT = Path("docs/data/research")
 DEFAULT_LIBRARY_ROOT = Path("docs/data/library")
@@ -1305,6 +1307,7 @@ def refresh_operating_decline_gate(
             json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\n",
             encoding="utf-8",
         )
+        archive_gate_version(store, DECLINE_KIND, payload)
     return payload
 
 

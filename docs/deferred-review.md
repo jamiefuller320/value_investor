@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-10T09:58:51+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-10T10:05:00+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -746,6 +746,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | L681 | **Retire legacy dashboard sections after v2 cutover** | Once the owner approves the dashboard v2 cutover, retire old-page sections the ledger marks as retirement candidates (browser sandbox, 1000-pound simulation headline, lifecycle experiment Start) one by one with a recorded reason; engineering views stay on docs/legacy/. | Owner stamps the dashboard v2 cutover decision (human task adhoc-dashboard-v2-plan) |
 | L682 | **Legacy Overview stale progress report and empty week-over-week diff** | The old Overview shows progress_report.json from 2026-09-30 and a week-over-week block that is always empty because run_diff is never published. Fix the regen cadence and publish run_diff, or drop both blocks from the old Overview. | If the owner rejects dashboard v2, or the old Overview stays the landing page after the v2 cutover review |
 | L685 | **Strategy book replay episode gzip writes bare NaN (invalid JSON)** | strategy_book_replay_cli writes strategy_book_replay_episodes.json.gz with json.dumps defaults, so about 1,800 snapshot fields are bare NaN tokens that browsers' JSON.parse rejects; dashboard v2 Book tab patches them to null on load. Write null (allow_nan=False after cleaning) at the source. | Next change to strategy_book_replay_cli or the replay snapshot fields |
+| L699 | **Gate history retention before the forward book outgrows 400 versions** | docs/data/gate_history keeps the newest 400 dated copies per gate (about 80 KB a day gzipped). The forward book rebuilds from its start date each run, so once versions older than the start are pruned an early entry would lose its gate. Before then either compact to a delta format, keep every version on or after the forward start date, or have the rebuild read past decisions from the gate log. | 2027-09-01, or when docs/data/gate_history/operating_decline holds 350 versions, whichever is first _(machine-checked)_ |
 
 ---
 

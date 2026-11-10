@@ -123,6 +123,28 @@
     "code_commit": "a1a1ab892243c2257f8254dbf1a4a094200346de",
     "note": "From here, a bug fix is a logged change marker on this registration_id; a threshold or primary-rule change is a new registration_id (section 10)."
   },
+  "change_markers": [
+    {
+      "marker_id": "owner-strategy-book-v0-gate-dating-fix-v1",
+      "at": "2026-11-10T12:00:00Z",
+      "kind": "bug_fix",
+      "rule_change": false,
+      "approved_by": "owner",
+      "approved_at": "2026-11-10",
+      "owner_quote": "For 1349 happy to say its a bug fix and to accept the exit change",
+      "new_registration_id": false,
+      "logged_on_registration_id": "owner-strategy-book-v0",
+      "exit_change_accepted": true,
+      "visible_change": "Forward exits can now fire on two successive declining verdicts, as the sealed exit rule says; before the fix the walker saw one gate observation per name and this exit could never confirm.",
+      "sealed_text": "Section 2, Gates: 'A decline or sector verdict applies to sessions strictly after that store's as_of date.' Section 8, entry snapshot: facts 'read from files dated on or before that session.'",
+      "what_was_wrong": "The decline and sector stores are overwritten in place by ops-monitor with as_of set to the run date, just before the memo job and the forward dry run score the previous close. Readers took only the live file, so the one verdict they could see was always dated on or after the signal session and every signal failed parts 2 and 3 as store_after_session (ISO week 45: 0 of 101 entry-rule hits passed; forward dry run 2026-11-10: 411 candidates blocked on gate with gate_as_of 2026-11-10). The forward walker also saw a single gate observation per name, so the two-successive-declining-verdicts exit could never confirm.",
+      "fix": "Each gate refresh writes a dated copy to docs/data/gate_history/<gate>/<date>.json.gz (date = later of the store as_of and the UTC day it was generated). The memo job, evaluate_market and the forward job read the version dated strictly before each session (gate_store_history.GateHistory); the forward walker gets one gate fact per version date. Versions 2026-11-03 to 2026-11-10 were recovered from the committed store files in git history.",
+      "no_lookahead": "Strict reading kept: a version applies only to sessions after its date, and its date is never earlier than the day it was written. A session with no earlier version reads a stub with no verdicts and fails closed. as_of stays the run date rather than the data cutoff, because statement files are overwritten on fetch and may hold data published after the previous close.",
+      "unchanged": "No threshold, verdict rule, entry rule, exit rule or eligibility rule changed. The replay first score store (strategy_book_replay.json) is not re-run.",
+      "pr": 1349,
+      "doc": "docs/ops/operating-decline-gate.md#dated-verdict-history"
+    }
+  ],
   "bench_seals": [
     {
       "column": "trend_not_falling",

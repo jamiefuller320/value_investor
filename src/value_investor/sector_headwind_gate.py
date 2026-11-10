@@ -12,6 +12,7 @@ from pathlib import Path
 from statistics import fmean
 from typing import Any
 
+from value_investor.gate_store_history import SECTOR_KIND, archive_gate_version
 from value_investor.operating_decline_gate import EPS_INTERIM_DROP_PCT
 
 DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
@@ -1460,6 +1461,7 @@ def refresh_sector_headwind_gate(
         path = Path(store_path)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        archive_gate_version(path, SECTOR_KIND, payload)
         append_sector_labels(Path(label_history_path), label_rows)
     return payload
 

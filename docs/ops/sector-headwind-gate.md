@@ -120,6 +120,15 @@ and the refresh decision date (`as_of`).
 decision date is on or before the date asked. A label first recorded on
 5 November is not applied to 3 November. No row means no label.
 
+## Dated verdict history
+
+Each refresh also writes a dated copy of `names` and `names_by_market` to
+`docs/data/gate_history/sector_headwind/<date>.json.gz`. The strategy book
+reads the copy dated strictly before each signal session, not the live store.
+Dating, retention, the git bootstrap and the stale-history warning are shared
+with the decline gate: see
+[operating-decline-gate.md](operating-decline-gate.md#dated-verdict-history).
+
 ## Inputs and store
 
 | Path | Use |
@@ -132,6 +141,7 @@ decision date is on or before the date asked. A label first recorded on
 | `docs/data/operating_decline_gate.json` | Primary per-name operating-decline verdict |
 | `docs/data/sector_headwind_gate.json` | Sector verdicts, per-market summary, FTSE `names`, `names_by_market` |
 | `docs/data/sector_label_history.jsonl` | Append-only sector labels |
+| `docs/data/gate_history/sector_headwind/<date>.json.gz` | Dated copies the strategy book reads |
 
 `universe.included` lists the FTSE 350 and the graduated markets that were
 scored. `universe.admitted_library_markets` is that library list.
