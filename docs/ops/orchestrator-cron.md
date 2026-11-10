@@ -49,6 +49,7 @@ Post-run review in the email bundle feeds Analysis tab themes; clearance policy:
 | `paper-learning-review.yml` | External **primary** | `45 10 * * 0` → `paper-learning-review.yml` | Sun 10:45 |
 | `learning-director-review.yml` | External **primary** | `55 10 * * 0` → `learning-director-review.yml` | Sun 10:55 |
 | `ops-monitor.yml` | External **primary** | Early hub `30 2 * * *` + morning `45 7 * * *` + catch-up `15 13 * * *` → `ops-monitor.yml` | Daily 02:30 + 07:45 + 13:15 |
+| `strategy-book-forward.yml` | External **primary** | Mon–Fri `45 17 * * 1-5` (London / Europe close) + `30 21 * * 1-5` (US close) → `strategy-book-forward.yml` (re-imported by `import-ingest-crons.yml`) | Mon–Fri 17:45 + 21:30 (late GitHub runs are safe catch-ups) |
 | `project-traffic.yml` | External **primary** | Weekdays `30 12 * * 1-5` + `30 17 * * 1-5` → `project-traffic.yml` | Weekdays 12:30 + 17:30 |
 | `gha-secret-hygiene.yml` | External **primary** | `20 6 * * *` → `gha-secret-hygiene.yml` (skips if no merges / workflow touches in 36h) | Daily 06:20 |
 | `ci-main-nightly.yml` | External **primary** | `30 7 * * *` → `ci-main-nightly.yml` | Daily 07:30 |
