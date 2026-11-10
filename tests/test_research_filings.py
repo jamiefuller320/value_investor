@@ -2338,9 +2338,69 @@ def test_refetch_investegate_rejects_unresolved_google_news_wrapper(tmp_path, mo
         company_name="Rio Tinto Group",
         max_bodies=5,
     )
-    assert result["attempted"] == 0
+    assert result["attempted"] == 1
     assert result["fetched"] == 0
     assert result["google_news_rejected"] == 1
+
+
+def test_refetch_investegate_resolves_google_news_at_fetch_time_eng_20261110_01(
+    tmp_path, monkeypatch
+):
+    """eng-20261110-01: unified RNS fetch resolves Google News at refetch and persists LSE PDF body."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    gnews = "https://news.google.com/rss/articles/CBMiabc?oc=5"
+    lse_pdf = "http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf"
+    index = {
+        "ticker": "ITV.L",
+        "company_name": "ITV plc",
+        "filings": [
+            {
+                "id": "gnews_lse",
+                "source": "google_news_investegate",
+                "headline": "ITV plc Full Year Results 2025 - Investegate",
+                "published_at": "2026-03-05T00:00:00+00:00",
+                "url": gnews,
+                "period": "annual",
+                "has_body": False,
+                "body_path": None,
+                "priority": 120,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.resolve_google_news_publisher_url",
+        lambda url: lse_pdf if "news.google.com" in str(url) else url,
+    )
+    pdf_body = (
+        "ITV plc full year results for the year ended 31 December 2025 with revenue metrics. "
+        + ("x" * 220)
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url, **kwargs: pdf_body if url == lse_pdf else None,
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        max_bodies=5,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    # enrich left the Google News wrapper; unified fetch resolved it at refetch time.
+    assert result["google_news_rejected"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = saved["filings"][0]
+    assert row["has_body"] is True
+    assert row["url"] == lse_pdf
+    assert row["source"] == "investegate_resolved"
+    assert (filings_dir / "bodies" / "gnews_lse.txt").exists()
 
 
 def test_refetch_investegate_fetches_direct_lse_pdf_url(tmp_path, monkeypatch):
