@@ -181,6 +181,15 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://home.barclays/content/dam/home-barclays/documents/investor-relations/ResultAnnouncements/H12026Results/H126-Barclays-PLC-6-K.pdf",
         "https://home.barclays/content/dam/home-barclays/documents/investor-relations/ResultAnnouncements/H12026Results/Q226-BPLC-Results-RA.pdf",
     ],
+    # eng-20261110-08: ftse350 BGEO.L buy-tier body-lag sweep had empty IR allowlist; Lion Finance Group PDFs.
+    "BGEO.L": [
+        "https://ramad.bog.ge/s3/BogGroup/49872-Lion-Finance-Group-AR-25.pdf",
+        "https://ramad.bog.ge/s3/BogGroup/Lion-Finance-Group-publishes-Annual-Report-2025-003.pdf",
+    ],
+    # eng-20261110-08: ftse350 IAG.L buy-tier body-lag sweep — iairgroup.com FY2025 statutory PDF.
+    "IAG.L": [
+        "https://www.iairgroup.com/media/ktnlp1jx/iag-annual-report-and-accounts-2025.pdf",
+    ],
     # eng-20261030-03: ftse350 KIE.L buy-tier unwired — no filings index; kier.co.uk statutory PDFs.
     "KIE.L": [
         "https://www.kier.co.uk/media/3lvnd42r/kier-ar2025.pdf",
@@ -11262,6 +11271,138 @@ def refetch_uk_primary_filing_bodies(
         "with_body_after": after,
         "google_news_rejected": int(rns.get("google_news_rejected") or 0),
         "note": "refetch_uk_primary_filing_bodies",
+    }
+
+
+BUY_TIER_BODY_LAG_SWEEP_PRIORITY_TICKERS: frozenset[str] = frozenset(
+    {"BGEO.L", "IAG.L", "IGG.L", "INCH.L"}
+)
+
+
+def prioritize_buy_tier_body_lag_sweep_targets(
+    filing_coverage: list[dict[str, Any]],
+    *,
+    priority_tickers: frozenset[str] = BUY_TIER_BODY_LAG_SWEEP_PRIORITY_TICKERS,
+) -> list[dict[str, Any]]:
+    """Rank post-run ``filing_coverage`` rows with indexed-without-body gaps for body-lag sweep."""
+    candidates = [
+        dict(row)
+        for row in filing_coverage
+        if int(row.get("indexed_without_body") or 0) > 0 and str(row.get("ticker") or "").strip()
+    ]
+    candidates.sort(
+        key=lambda row: (
+            0 if str(row.get("ticker") or "").strip().upper() in priority_tickers else 1,
+            -int(row.get("indexed_without_body") or 0),
+            str(row.get("ticker") or "").strip().upper(),
+        )
+    )
+    return candidates
+
+
+def run_buy_tier_body_lag_sweep(
+    *,
+    filing_coverage: list[dict[str, Any]],
+    output_dir: Path,
+    company_names: dict[str, str] | None = None,
+    max_bodies: int = 20,
+    priority_tickers: frozenset[str] = BUY_TIER_BODY_LAG_SWEEP_PRIORITY_TICKERS,
+    uk_refetch: Callable[..., dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """
+    Refetch UK primary filing bodies for buy-tier names flagged with indexed-without-body gaps.
+
+    Prioritizes the pinned post-run review tickers (BGEO.L, IAG.L, IGG.L, INCH.L) before
+    wider backlog rows. Returns per-ticker success metrics and ``zero_success_alert`` when
+    every attempted name fetched zero new bodies.
+    """
+    from value_investor.research.ingest_bootstrap import canonical_sources_dir
+
+    output_dir = Path(output_dir)
+    company_names = company_names or {}
+    refetch = uk_refetch or refetch_uk_primary_filing_bodies
+    targets = prioritize_buy_tier_body_lag_sweep_targets(
+        filing_coverage,
+        priority_tickers=priority_tickers,
+    )
+    results: list[dict[str, Any]] = []
+    total_fetched = 0
+    iwb_before = 0
+    iwb_after = 0
+
+    for row in targets:
+        ticker = str(row.get("ticker") or "").strip().upper()
+        if not ticker:
+            continue
+        name = str(company_names.get(ticker) or row.get("name") or ticker).strip()
+        filings_dir = canonical_sources_dir(output_dir, ticker) / "filings"
+        coverage_before = filings_index_coverage(
+            filings_dir,
+            company_name=name,
+            ticker=ticker,
+        )
+        if int(row.get("indexed_without_body") or 0) > int(
+            coverage_before.get("indexed_without_body") or 0
+        ):
+            coverage_before = {
+                **coverage_before,
+                "indexed_without_body": int(row.get("indexed_without_body") or 0),
+            }
+        refetch_result: dict[str, Any] = {}
+        if filings_dir.joinpath("filings_index.json").exists():
+            refetch_result = refetch(
+                filings_dir,
+                ticker=ticker,
+                company_name=name,
+                max_bodies=max_bodies,
+            )
+            sanitize_filings_index(
+                filings_dir,
+                company_name=name,
+                ticker=ticker,
+            )
+        coverage_after = filings_index_coverage(
+            filings_dir,
+            company_name=name,
+            ticker=ticker,
+        )
+        fetched = int(refetch_result.get("fetched") or 0)
+        total_fetched += fetched
+        iwb_before += int(coverage_before.get("indexed_without_body") or 0)
+        iwb_after += int(coverage_after.get("indexed_without_body") or 0)
+        results.append(
+            {
+                "ticker": ticker,
+                "priority": ticker in priority_tickers,
+                "indexed_without_body_before": int(
+                    coverage_before.get("indexed_without_body") or 0
+                ),
+                "indexed_without_body_after": int(coverage_after.get("indexed_without_body") or 0),
+                "filings_with_body_before": int(coverage_before.get("filings_with_body") or 0),
+                "filings_with_body_after": int(coverage_after.get("filings_with_body") or 0),
+                "fetched": fetched,
+                "refetch": refetch_result,
+            }
+        )
+
+    attempted = len(results)
+    zero_success_alert = attempted > 0 and total_fetched == 0
+    if zero_success_alert:
+        logger.warning(
+            "Buy-tier body-lag sweep fetched zero bodies across %s ticker(s): %s",
+            attempted,
+            [row["ticker"] for row in results],
+        )
+
+    return {
+        "note": "run_buy_tier_body_lag_sweep",
+        "targets": results,
+        "tickers_attempted": attempted,
+        "total_fetched": total_fetched,
+        "indexed_without_body_before": iwb_before,
+        "indexed_without_body_after": iwb_after,
+        "zero_success_alert": zero_success_alert,
+        "priority_tickers": sorted(priority_tickers),
     }
 
 

@@ -17252,3 +17252,176 @@ def test_eng_20261108_03_refetch_residual_reports_index_coverage(tmp_path: Path,
     assert result["indexed_without_body_before"] == 3
     assert result["with_body_after"] >= 1
     assert result["indexed_without_body_after"] < result["indexed_without_body_before"]
+
+
+def test_eng_20261110_08_prioritize_buy_tier_body_lag_sweep_targets():
+    """eng-20261110-08: post-run IWB rows pin BGEO.L ahead of wider buy-tier backlog."""
+    from value_investor.research.filings import prioritize_buy_tier_body_lag_sweep_targets
+
+    filing_coverage = [
+        {"ticker": "ZZZ.L", "indexed_without_body": 30},
+        {"ticker": "BGEO.L", "indexed_without_body": 23},
+        {"ticker": "IAG.L", "indexed_without_body": 17},
+        {"ticker": "HOLD.L", "indexed_without_body": 5},
+    ]
+    ordered = prioritize_buy_tier_body_lag_sweep_targets(filing_coverage)
+    assert [row["ticker"] for row in ordered[:3]] == ["BGEO.L", "IAG.L", "ZZZ.L"]
+    assert ordered[-1]["ticker"] == "HOLD.L"
+
+
+def test_eng_20261110_08_run_buy_tier_body_lag_sweep_zero_success_alert(
+    tmp_path: Path, monkeypatch
+):
+    """eng-20261110-08: sweep surfaces zero_success_alert when no bodies land."""
+    from value_investor.research.filings import run_buy_tier_body_lag_sweep
+
+    filings_dir = tmp_path / "research" / "BGEO.L" / "sources" / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [{"id": "g1", "has_body": False, "url": "https://example.com/a"}]}),
+        encoding="utf-8",
+    )
+
+    def _noop_refetch(*_args, **_kwargs):
+        return {"fetched": 0, "with_body_before": 0, "with_body_after": 0}
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.refetch_uk_primary_filing_bodies",
+        _noop_refetch,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.sanitize_filings_index",
+        lambda *_a, **_k: {"with_body_after": 0},
+    )
+
+    result = run_buy_tier_body_lag_sweep(
+        filing_coverage=[
+            {"ticker": "BGEO.L", "indexed_without_body": 4, "name": "Lion Finance Group PLC"},
+        ],
+        output_dir=tmp_path,
+        company_names={"BGEO.L": "Lion Finance Group PLC"},
+    )
+    assert result["tickers_attempted"] == 1
+    assert result["total_fetched"] == 0
+    assert result["zero_success_alert"] is True
+    assert result["targets"][0]["priority"] is True
+    assert result["targets"][0]["indexed_without_body_before"] == 4
+
+
+def test_eng_20261110_08_run_buy_tier_body_lag_sweep_reports_success_metrics(
+    tmp_path: Path, monkeypatch
+):
+    """eng-20261110-08: sweep records per-ticker fetched and IWB delta."""
+    from value_investor.research.filings import run_buy_tier_body_lag_sweep
+
+    filings_dir = tmp_path / "research" / "BGEO.L" / "sources" / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {"id": "g1", "has_body": False, "url": "https://example.com/a"},
+                    {"id": "g2", "has_body": False, "url": "https://example.com/b"},
+                ],
+                "summary": {"total": 2, "with_body": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def _win_refetch(*_args, **_kwargs):
+        return {"fetched": 2, "with_body_before": 0, "with_body_after": 2}
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.refetch_uk_primary_filing_bodies",
+        _win_refetch,
+    )
+
+    def _sanitize(filings_dir, *, company_name, ticker):
+        payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+        for row in payload.get("filings") or []:
+            row["has_body"] = True
+        (filings_dir / "filings_index.json").write_text(json.dumps(payload), encoding="utf-8")
+        return {"with_body_after": 2}
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.sanitize_filings_index",
+        _sanitize,
+    )
+
+    result = run_buy_tier_body_lag_sweep(
+        filing_coverage=[{"ticker": "BGEO.L", "indexed_without_body": 2}],
+        output_dir=tmp_path,
+        company_names={"BGEO.L": "Lion Finance Group PLC"},
+    )
+    assert result["total_fetched"] == 2
+    assert result["zero_success_alert"] is False
+    assert result["indexed_without_body_after"] < result["indexed_without_body_before"]
+
+
+def test_builtin_ir_allowlist_includes_bgeo_l_eng_20261110_08():
+    """eng-20261110-08: BGEO.L buy-tier body-lag sweep seeds Lion Finance Group statutory PDFs."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("BGEO.L") or []
+    assert any("Lion-Finance-Group-AR-25.pdf" in url for url in urls)
+    assert all("bog.ge" in url or "lionfinancegroup" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("BGEO.L")
+    assert len(rows) >= 2
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    assert "annual" in {row.get("period") for row in rows}
+
+
+def test_eng_20261110_08_bgeo_l_refetch_resolves_investegate_lse_pdf(tmp_path, monkeypatch):
+    """eng-20261110-08: BGEO.L indexed RNS row persists body when LSE rns-pdf resolves at refetch."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    html_url = (
+        "https://www.investegate.co.uk/announcement/rns/lion-finance-group-plc--bgeo/"
+        "transaction-in-own-shares/9720001"
+    )
+    lse_pdf = "http://www.rns-pdf.londonstockexchange.com/rns/6879T_1-2026-9-7.pdf"
+    index = {
+        "ticker": "BGEO.L",
+        "company_name": "Lion Finance Group PLC",
+        "filings": [
+            {
+                "id": "bgeo_own",
+                "source": "investegate_direct",
+                "headline": "Transaction in Own Shares",
+                "published_at": "2026-09-07T00:00:00+00:00",
+                "url": html_url,
+                "period": "other",
+                "has_body": False,
+                "body_path": None,
+                "priority": 50,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.resolve_investegate_lse_pdf_url",
+        lambda url: lse_pdf if "investegate" in str(url) else url,
+    )
+    body_text = "Lion Finance Group PLC transaction in own shares programme update.\n" + (
+        "shares purchased " * 40
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url, **kwargs: body_text if url == lse_pdf else None,
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="BGEO.L",
+        company_name="Lion Finance Group PLC",
+        max_bodies=5,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+    assert lse_pdf in str(saved["filings"][0].get("url") or "")
