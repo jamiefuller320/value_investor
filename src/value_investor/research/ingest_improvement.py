@@ -23,7 +23,7 @@ from value_investor.research.filings import (
     memo_quality_body_fields,
     period_body_coverage,
     refetch_euro_filings_primary_bodies,
-    refetch_ir_allowlist_filing_bodies,
+    refetch_ir_presentation_sources,
     refetch_uk_primary_filing_bodies,
     sanitize_filings_index,
     thin_zero_body_memo_needs_ingest,
@@ -50,6 +50,28 @@ from value_investor.storage import read_json, resolve_json_path, write_json
 from value_investor.summary import CompanyReport
 
 logger = logging.getLogger(__name__)
+
+
+def refetch_ir_allowlist_filing_bodies(
+    filings_dir: Path,
+    ticker: str,
+    *,
+    company_name: str = "",
+    max_bodies: int = 20,
+    sources_dir: Path | None = None,
+    **kwargs: Any,
+) -> dict[str, Any]:
+    """Ingest-improvement path: allowlisted IR results decks + ``ir_presentation_metrics.json``."""
+    resolved_sources = Path(sources_dir) if sources_dir is not None else Path(filings_dir).parent
+    return refetch_ir_presentation_sources(
+        Path(filings_dir),
+        ticker,
+        company_name=company_name,
+        sources_dir=resolved_sources,
+        max_bodies=max_bodies,
+        **kwargs,
+    )
+
 
 # Learning-phase default: deepen roughly full FTSE buy-tier in one weekday pass
 # when compute is unconstrained (stage 2b). Re-throttle when GHA minutes bind.
@@ -1268,6 +1290,7 @@ def _execute_ingest_improvement_pass(
                         target.ticker,
                         company_name=target.name,
                         max_bodies=target_max_bodies,
+                        sources_dir=sources_dir,
                     )
                 else:
                     ir_refetch = dict(euro_primary.get("ir_allowlist") or {})
@@ -1278,16 +1301,25 @@ def _execute_ingest_improvement_pass(
                             target.ticker,
                             company_name=target.name,
                             max_bodies=target_max_bodies,
+                            sources_dir=sources_dir,
                         )
                 ir_refetch["mandatory"] = True
                 ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
-                from value_investor.research.filings import extract_ir_presentation_metrics
+                ir_presentation_metrics = dict(ir_refetch.get("ir_presentation_metrics") or {})
+                if not ir_presentation_metrics:
+                    from value_investor.research.filings import extract_ir_presentation_metrics
 
-                ir_presentation_metrics = extract_ir_presentation_metrics(
-                    sources_dir / "filings",
-                    target.ticker,
-                    sources_dir=sources_dir,
-                )
+                    full_metrics = extract_ir_presentation_metrics(
+                        sources_dir / "filings",
+                        target.ticker,
+                        sources_dir=sources_dir,
+                    )
+                    ir_presentation_metrics = {
+                        "bridge_count": full_metrics.get("bridge_count", 0),
+                        "segment_split_count": full_metrics.get("segment_split_count", 0),
+                        "lease_maturity_count": full_metrics.get("lease_maturity_count", 0),
+                        "mandatory": full_metrics.get("mandatory", False),
+                    }
                 from value_investor.research.filings import extract_filing_interim_financials
                 from value_investor.research.ingest import attach_filing_interim_financials
 

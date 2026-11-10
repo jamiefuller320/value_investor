@@ -16,7 +16,7 @@ from value_investor.research.filings import (
     fetch_filings_ir_allowlist,
     merge_ir_allowlist_filings,
     period_body_coverage,
-    refetch_ir_allowlist_filing_bodies,
+    refetch_ir_presentation_sources,
     refetch_missing_filing_bodies,
     refetch_uk_primary_filing_bodies,
 )
@@ -35,6 +35,32 @@ from value_investor.storage import (
 register_enhanced_ch_body_fetch()
 
 logger = logging.getLogger(__name__)
+
+
+def refetch_ir_allowlist_filing_bodies(
+    filings_dir: Path,
+    ticker: str,
+    *,
+    company_name: str = "",
+    max_bodies: int = 20,
+    sources_dir: Path | None = None,
+    **kwargs: Any,
+) -> dict[str, Any]:
+    """
+    Gap-fill / ``gap_fill_source_map`` path: refetch allowlisted IR PDFs and write metrics.
+
+    Wraps ``refetch_ir_presentation_sources`` so existing tests can keep patching this name.
+    """
+    resolved_sources = Path(sources_dir) if sources_dir is not None else Path(filings_dir).parent
+    return refetch_ir_presentation_sources(
+        Path(filings_dir),
+        ticker,
+        company_name=company_name,
+        sources_dir=resolved_sources,
+        max_bodies=max_bodies,
+        **kwargs,
+    )
+
 
 # Evidence ladder the agent should walk before declaring unresolved.
 EVIDENCE_LADDER = (
@@ -544,6 +570,7 @@ def prepare_gap_fill_source_pack(
             ticker,
             company_name=company_name,
             max_bodies=20,
+            sources_dir=sources_dir,
         )
         ir_refetch["mandatory"] = True
         ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
@@ -723,20 +750,15 @@ def execute_planned_alternate_sources(
             continue
         sources_tried.append(source_id)
         if source_id == "company_ir_presentation":
-            merge_ir_allowlist_filings(ticker, filings_dir)
             last_refetch = refetch_ir_allowlist_filing_bodies(
                 filings_dir,
                 ticker,
                 company_name=company_name,
                 max_bodies=20,
+                sources_dir=sources_dir,
             )
             last_refetch["mandatory"] = True
             prune_orphaned_filing_bodies(filings_dir)
-            extract_ir_presentation_metrics(
-                filings_dir,
-                ticker,
-                sources_dir=sources_dir,
-            )
             fetched = int(last_refetch.get("fetched") or 0)
             fetched_total += fetched
             if fetched > 0:

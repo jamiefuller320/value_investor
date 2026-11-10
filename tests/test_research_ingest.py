@@ -143,7 +143,7 @@ def test_ingest_tsx60_runs_ir_allowlist_refetch_like_euro(
 )
 @patch("value_investor.research.filings.ingest_filings")
 @patch("value_investor.research.filings.extract_ir_presentation_metrics")
-@patch("value_investor.research.filings.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.filings.refetch_ir_presentation_sources")
 @patch("value_investor.research.filings.fetch_filings_ir_allowlist")
 def test_eng_20260921_02_uk_ingest_runs_ir_results_presentation_pipeline(
     mock_ir_rows,
@@ -174,12 +174,12 @@ def test_eng_20260921_02_uk_ingest_runs_ir_results_presentation_pipeline(
         "fetched": 1,
         "merge": {"added": 1, "total_allowlist": 4},
         "with_body_after": 3,
-    }
-    mock_extract_metrics.return_value = {
-        "bridge_count": 2,
-        "segment_split_count": 0,
-        "lease_maturity_count": 0,
-        "mandatory": True,
+        "ir_presentation_metrics": {
+            "bridge_count": 2,
+            "segment_split_count": 0,
+            "lease_maturity_count": 0,
+            "mandatory": True,
+        },
     }
 
     meta = ingest_research_sources(
@@ -193,10 +193,66 @@ def test_eng_20260921_02_uk_ingest_runs_ir_results_presentation_pipeline(
 
     mock_ir_refetch.assert_called_once()
     assert mock_ir_refetch.call_args.kwargs["ticker"] == "FGP.L"
-    mock_extract_metrics.assert_called_once()
+    assert mock_ir_refetch.call_args.kwargs["sources_dir"] == tmp_path
+    mock_extract_metrics.assert_not_called()
     metrics = meta["ir_presentation_metrics"]
     assert metrics["bridge_count"] == 2
     assert metrics["mandatory"] is True
+
+
+@patch("value_investor.research.ingest.fetch_google_news_rss", return_value=[])
+@patch("value_investor.research.ingest.fetch_yfinance_news", return_value=[])
+@patch(
+    "value_investor.research.ingest.fetch_annual_financials", return_value={"income_statement": {}}
+)
+@patch("value_investor.research.filings.ingest_filings")
+@patch("value_investor.research.filings.refetch_ir_presentation_sources")
+@patch("value_investor.research.filings.fetch_filings_ir_allowlist")
+def test_eng_20261110_03_uk_ingest_ir_presentation_for_megp_l(
+    mock_ir_rows,
+    mock_ir_refetch,
+    mock_ingest_filings,
+    _mock_financials,
+    _mock_yf_news,
+    _mock_google_news,
+    tmp_path: Path,
+):
+    """eng-20261110-03: MEGP.L gap-fill/IR path uses refetch_ir_presentation_sources."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    mock_ingest_filings.return_value = {
+        "filings_index_path": str(filings_dir / "filings_index.json"),
+        "filings_summary": {"total": 3, "with_body": 1},
+        "filings_sources": ["investegate_direct"],
+    }
+    (filings_dir / "filings_index.json").write_text(
+        '{"summary": {"total": 3, "with_body": 1}, "filings": []}',
+        encoding="utf-8",
+    )
+    mock_ir_rows.return_value = [{"id": "ir_megp_pres", "source": "ir_allowlist"}]
+    mock_ir_refetch.return_value = {
+        "fetched": 1,
+        "note": "refetch_ir_presentation_sources",
+        "ir_presentation_metrics": {
+            "bridge_count": 1,
+            "segment_split_count": 1,
+            "lease_maturity_count": 0,
+            "mandatory": True,
+        },
+    }
+
+    meta = ingest_research_sources(
+        ticker="MEGP.L",
+        company_name="ME Group International plc",
+        screening_snapshot={"ticker": "MEGP.L", "name": "ME Group", "signal": "strong_buy"},
+        sources_dir=tmp_path,
+        market="ftse350",
+        deepen_history=False,
+    )
+
+    mock_ir_refetch.assert_called_once()
+    assert meta["ir_presentation_metrics"]["segment_split_count"] == 1
+    assert meta["ir_refetch"]["note"] == "refetch_ir_presentation_sources"
 
 
 def test_attach_filing_interim_financials_when_yahoo_quarterlies_empty(tmp_path: Path):

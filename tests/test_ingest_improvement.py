@@ -1562,3 +1562,67 @@ def test_ingest_improvement_pass_attaches_screen_manifest_and_ir_metrics(
     assert (output_dir / "research" / "MEGP.L" / "sources" / "screen_run_manifest.json").exists()
     assert "ir_presentation_metrics" in row
     mock_ir_refetch.assert_called_once()
+    assert mock_ir_refetch.call_args.kwargs.get("sources_dir") is not None
+
+
+@patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
+@patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
+@patch("value_investor.research.ingest_improvement.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.ingest_improvement.fetch_filings_ir_allowlist")
+@patch("value_investor.research.ingest_improvement.refetch_uk_primary_filing_bodies")
+@patch("value_investor.research.ingest_improvement.ingest_research_sources")
+@patch("value_investor.research.ingest_improvement.sanitize_filings_index")
+@patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
+def test_eng_20261110_03_ingest_improvement_ir_presentation_metrics_from_refetch(
+    mock_bootstrap,
+    mock_sanitize,
+    mock_ingest_sources,
+    mock_primary_refetch,
+    mock_ir_rows,
+    mock_ir_refetch,
+    mock_alternate,
+    mock_deepen,
+    tmp_path: Path,
+):
+    """eng-20261110-03: ingest-improvement uses presentation refetch metrics for HIK.L."""
+    output_dir = tmp_path / "output"
+    sources = output_dir / "research" / "HIK.L" / "sources" / "filings"
+    sources.mkdir(parents=True)
+    (sources / "filings_index.json").write_text(
+        json.dumps({"summary": {"total": 1, "with_body": 0}, "filings": []}),
+        encoding="utf-8",
+    )
+    mock_ingest_sources.return_value = {"filings_summary": {"with_body": 0}}
+    mock_primary_refetch.return_value = {
+        "fetched": 0,
+        "companies_house": {},
+        "rns": {"investegate": {}, "ticker_rns": {}},
+    }
+    mock_ir_rows.return_value = [{"id": "ir_hik", "source": "ir_allowlist"}]
+    mock_ir_refetch.return_value = {
+        "fetched": 1,
+        "note": "refetch_ir_presentation_sources",
+        "ir_presentation_metrics": {
+            "bridge_count": 1,
+            "segment_split_count": 1,
+            "lease_maturity_count": 0,
+            "mandatory": True,
+        },
+    }
+    mock_alternate.return_value = {"fetched": 0}
+    mock_deepen.return_value = {"skipped": True, "reason": "sufficient_bodies"}
+
+    summary = run_ingest_improvement_pass(
+        reports=[_report("HIK.L", "Hikma Pharmaceuticals PLC")],
+        output_dir=output_dir,
+        market="ftse350",
+        max_targets=1,
+        suggestions_path=tmp_path / "missing.json",
+    )
+
+    mock_ir_refetch.assert_called_once()
+    call_kwargs = mock_ir_refetch.call_args.kwargs
+    assert call_kwargs.get("sources_dir") == output_dir / "research" / "HIK.L" / "sources"
+    row = summary.results[0]
+    assert row["ir_presentation_metrics"]["segment_split_count"] == 1
+    assert row["ir_refetch"]["note"] == "refetch_ir_presentation_sources"

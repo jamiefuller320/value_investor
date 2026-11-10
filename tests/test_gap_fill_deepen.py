@@ -173,31 +173,27 @@ def test_deepen_thin_filings_runs_when_thin(
     mock_execute.assert_called_once()
 
 
-@patch("value_investor.research.gap_fill_sources.extract_ir_presentation_metrics")
 @patch("value_investor.research.filings.prune_orphaned_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
-@patch("value_investor.research.gap_fill_sources.merge_ir_allowlist_filings")
 def test_execute_planned_company_ir_presentation_uses_ir_pipeline(
-    mock_merge,
     mock_ir_refetch,
     mock_prune,
-    mock_extract,
     tmp_path: Path,
 ):
     from value_investor.research.gap_fill_sources import execute_planned_alternate_sources
 
-    mock_merge.return_value = {"added": 1}
     mock_ir_refetch.return_value = {
         "attempted": 2,
         "fetched": 1,
         "with_body_before": 0,
         "with_body_after": 1,
-    }
-    mock_extract.return_value = {
-        "bridge_count": 1,
-        "segment_split_count": 1,
-        "lease_maturity_count": 0,
-        "mandatory": True,
+        "note": "refetch_ir_presentation_sources",
+        "ir_presentation_metrics": {
+            "bridge_count": 1,
+            "segment_split_count": 1,
+            "lease_maturity_count": 0,
+            "mandatory": True,
+        },
     }
 
     result = execute_planned_alternate_sources(
@@ -208,13 +204,71 @@ def test_execute_planned_company_ir_presentation_uses_ir_pipeline(
         market="ftse350",
     )
 
-    mock_merge.assert_called_once()
     mock_ir_refetch.assert_called_once()
+    assert mock_ir_refetch.call_args.kwargs["sources_dir"] == tmp_path
     mock_prune.assert_called_once()
-    mock_extract.assert_called_once()
     assert result["sources_tried"] == ["company_ir_presentation"]
     assert result["fetched"] == 1
     assert result["body_refetch"]["fetched"] == 1
+
+
+@patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist")
+@patch("value_investor.research.gap_fill_sources.refetch_uk_primary_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
+def test_eng_20261110_03_gap_fill_source_map_ir_presentation_megp_l(
+    mock_refetch,
+    mock_primary_refetch,
+    mock_ir_rows,
+    mock_ir_refetch,
+    mock_news,
+    tmp_path: Path,
+):
+    """eng-20261110-03: gap_fill_source_map ir_refetch uses presentation pipeline for MEGP.L."""
+    import json
+
+    from value_investor.research.gap_fill_sources import prepare_gap_fill_source_pack
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"summary": {"with_body": 0}, "filings": []}),
+        encoding="utf-8",
+    )
+    mock_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+    mock_primary_refetch.return_value = {
+        "fetched": 0,
+        "companies_house": {"fetched": 0},
+        "rns": {"fetched": 0, "investegate": {"fetched": 0}, "ticker_rns": {}},
+    }
+    mock_ir_rows.return_value = [{"id": "ir_megp", "source": "ir_allowlist"}]
+    mock_ir_refetch.return_value = {
+        "fetched": 1,
+        "note": "refetch_ir_presentation_sources",
+        "mandatory": True,
+        "ir_presentation_metrics": {
+            "bridge_count": 2,
+            "segment_split_count": 1,
+            "mandatory": True,
+        },
+    }
+
+    pack = prepare_gap_fill_source_pack(
+        ticker="MEGP.L",
+        company_name="ME Group International plc",
+        sources_dir=tmp_path,
+        open_questions=["H1 FCF bridge from results presentation"],
+        market="ftse350",
+    )
+
+    mock_ir_refetch.assert_called_once()
+    assert mock_ir_refetch.call_args.kwargs["sources_dir"] == tmp_path
+    assert pack["ir_refetch"]["note"] == "refetch_ir_presentation_sources"
+    assert pack["ir_refetch"]["fetched"] == 1
+    saved = json.loads((tmp_path / "gap_fill_source_map.json").read_text(encoding="utf-8"))
+    assert saved["ir_refetch"]["mandatory"] is True
+    assert saved["ir_refetch"]["fetched"] == 1
 
 
 @patch("value_investor.research.filings.prune_orphaned_filing_bodies")

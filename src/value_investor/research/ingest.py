@@ -1665,7 +1665,7 @@ def ingest_research_sources(
             from value_investor.research.filings import (
                 extract_ir_presentation_metrics,
                 fetch_filings_ir_allowlist,
-                refetch_ir_allowlist_filing_bodies,
+                refetch_ir_presentation_sources,
                 resolve_filings_regime,
             )
 
@@ -1675,10 +1675,11 @@ def ingest_research_sources(
                 if regime not in {"euro_filings", "tsx_announcements"} and not deadline_reached(
                     deadline_monotonic
                 ):
-                    ir_refetch = refetch_ir_allowlist_filing_bodies(
+                    ir_refetch = refetch_ir_presentation_sources(
                         sources_dir / "filings",
                         ticker=ticker,
                         company_name=company_name,
+                        sources_dir=sources_dir,
                         max_bodies=12,
                         deadline_monotonic=deadline_monotonic,
                     )
@@ -1698,17 +1699,20 @@ def ingest_research_sources(
                             )
                         except (OSError, ValueError, TypeError):
                             pass
-                metrics = extract_ir_presentation_metrics(
-                    sources_dir / "filings",
-                    ticker,
-                    sources_dir=sources_dir,
-                )
-                filings_meta["ir_presentation_metrics"] = {
-                    "bridge_count": metrics.get("bridge_count", 0),
-                    "segment_split_count": metrics.get("segment_split_count", 0),
-                    "lease_maturity_count": metrics.get("lease_maturity_count", 0),
-                    "mandatory": metrics.get("mandatory", False),
-                }
+                metrics_block = dict(ir_refetch.get("ir_presentation_metrics") or {})
+                if not metrics_block:
+                    metrics = extract_ir_presentation_metrics(
+                        sources_dir / "filings",
+                        ticker,
+                        sources_dir=sources_dir,
+                    )
+                    metrics_block = {
+                        "bridge_count": metrics.get("bridge_count", 0),
+                        "segment_split_count": metrics.get("segment_split_count", 0),
+                        "lease_maturity_count": metrics.get("lease_maturity_count", 0),
+                        "mandatory": metrics.get("mandatory", False),
+                    }
+                filings_meta["ir_presentation_metrics"] = metrics_block
 
         if deepen_history:
             from value_investor.research.gap_fill_sources import deepen_thin_filings_if_needed
