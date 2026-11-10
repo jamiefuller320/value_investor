@@ -76,6 +76,9 @@ from value_investor.scoring.quality_family_avoid_gate_overlay import (
     compute_quality_family_composite_score,
     format_quality_family_avoid_gate_note,
 )
+from value_investor.scoring.sector_cyclical_overlay_registry import (
+    build_sector_cyclical_overlay_registry,
+)
 from value_investor.technical_analysis import (
     TradePlan,
     format_timing_summary,
@@ -142,6 +145,7 @@ class CompanyReport:
     earnings_growth_bps_divergence_warning: bool = False
     adjusted_eps_filing_screen_divergence_warning: bool = False
     peer_model_pass_table: dict[str, Any] = field(default_factory=dict)
+    sector_cyclical_overlay_registry: dict[str, Any] = field(default_factory=dict)
     fcf_basis_overlay: bool = False
     fcf_three_way_conviction_overlay: bool = False
     fcf_three_way_conviction_overlay_detail: dict[str, Any] = field(default_factory=dict)
@@ -221,6 +225,7 @@ class CompanyReport:
                 self.adjusted_eps_filing_screen_divergence_warning
             ),
             "peer_model_pass_table": self.peer_model_pass_table,
+            "sector_cyclical_overlay_registry": self.sector_cyclical_overlay_registry,
             "fcf_basis_overlay": enforced.fcf_basis_overlay,
             "fcf_three_way_conviction_overlay": self.fcf_three_way_conviction_overlay,
             "fcf_three_way_conviction_overlay_detail": self.fcf_three_way_conviction_overlay_detail,
@@ -308,6 +313,9 @@ class CompanyReport:
                 data.get("adjusted_eps_filing_screen_divergence_warning")
             ),
             peer_model_pass_table=dict(data.get("peer_model_pass_table") or {}),
+            sector_cyclical_overlay_registry=dict(
+                data.get("sector_cyclical_overlay_registry") or {}
+            ),
             fcf_basis_overlay=bool(data.get("fcf_basis_overlay")),
             fcf_three_way_conviction_overlay=bool(data.get("fcf_three_way_conviction_overlay")),
             fcf_three_way_conviction_overlay_detail=dict(
@@ -1723,6 +1731,15 @@ def build_company_reports(
                     sector=row.get("sector"),
                 )
 
+        registry_raw = row.get("sector_cyclical_overlay_registry")
+        if isinstance(registry_raw, dict):
+            sector_cyclical_overlay_registry = registry_raw
+        else:
+            sector_cyclical_overlay_registry = build_sector_cyclical_overlay_registry(
+                row,
+                piotroski_f_score=piotroski_score_for_ticker(ticker_models),
+            )
+
         summary = _brief_summary(
             signal=signal,
             models_passed=int(row.get("models_passed") or 0),
@@ -1867,6 +1884,7 @@ def build_company_reports(
                     quality_family_avoid_gate=quality_family_avoid_gate,
                     quality_family_avoid_gate_detail=quality_family_avoid_gate_detail,
                     peer_model_pass_table=peer_model_pass_table,
+                    sector_cyclical_overlay_registry=sector_cyclical_overlay_registry,
                     fcf_basis_overlay=fcf_basis_overlay,
                     fcf_three_way_conviction_overlay=fcf_three_way_conviction_overlay,
                     fcf_three_way_conviction_overlay_detail=fcf_three_way_conviction_overlay_detail,
