@@ -4904,6 +4904,32 @@ def merge_healed_findings(
     return list(after) + healed
 
 
+CHECK_CRASHED_TITLE = "Ops monitor check crashed"
+
+
+def _guarded_check(check: Any, /, *args: Any, **kwargs: Any) -> list[OpsFinding]:
+    """Run one detection check; a crash becomes a warn finding, not a lost run.
+
+    Without this, one check's exception aborts ``run_ops_monitor`` before
+    ``ops_status.json`` is written, so every other finding goes stale.
+    """
+    try:
+        return list(check(*args, **kwargs))
+    except Exception as exc:  # noqa: BLE001 — one check must not fail the monitor
+        name = getattr(check, "__name__", repr(check))
+        logger.exception("ops monitor check %s crashed", name)
+        return [
+            OpsFinding(
+                severity="warn",
+                category="ops",
+                title=CHECK_CRASHED_TITLE,
+                summary=f"{name} raised {type(exc).__name__}: {exc}. Other checks ran; "
+                "this check's finding is missing until the crash is fixed.",
+                auto_fixable=False,
+            )
+        ]
+
+
 def collect_ops_findings(
     *,
     tasks_path: Path = COMMITTED_TASKS_PATH,
@@ -4916,74 +4942,74 @@ def collect_ops_findings(
 ) -> tuple[list[OpsFinding], dict[str, Any], list[dict[str, Any]]]:
     """Run all detection checks without applying fixes."""
     findings: list[OpsFinding] = []
-    findings.extend(check_committed_json())
-    findings.extend(check_ingest_health_log(health_log_path))
-    findings.extend(check_latest_bundle(latest_path))
-    findings.extend(check_ops_budget())
-    findings.extend(check_agent_token_usage())
-    findings.extend(check_memo_rememo_backlog())
-    findings.extend(check_buy_tier_flip_lag(latest_path=latest_path))
-    findings.extend(check_decision_input_inventory(latest_path=latest_path))
-    findings.extend(check_library_decision_input_inventory())
-    findings.extend(check_p1_first_run_pin(latest_path=latest_path))
-    findings.extend(check_universe_filing_archive_miss_rate())
-    findings.extend(check_universe_filing_archive_pack_bottleneck())
-    findings.extend(check_ingest_occupancy_mismatch())
-    findings.extend(check_shard_nav_fx_warp())
-    findings.extend(check_combined_tagged_learning())
-    findings.extend(check_track_statistics())
-    findings.extend(check_decision_review_significance_gate())
-    findings.extend(check_total_return_view())
-    findings.extend(check_hold_period_counterfactual())
-    findings.extend(check_post_sell_cue_digest())
-    findings.extend(check_post_sale_review_queue())
+    findings.extend(_guarded_check(check_committed_json))
+    findings.extend(_guarded_check(check_ingest_health_log, health_log_path))
+    findings.extend(_guarded_check(check_latest_bundle, latest_path))
+    findings.extend(_guarded_check(check_ops_budget))
+    findings.extend(_guarded_check(check_agent_token_usage))
+    findings.extend(_guarded_check(check_memo_rememo_backlog))
+    findings.extend(_guarded_check(check_buy_tier_flip_lag, latest_path=latest_path))
+    findings.extend(_guarded_check(check_decision_input_inventory, latest_path=latest_path))
+    findings.extend(_guarded_check(check_library_decision_input_inventory))
+    findings.extend(_guarded_check(check_p1_first_run_pin, latest_path=latest_path))
+    findings.extend(_guarded_check(check_universe_filing_archive_miss_rate))
+    findings.extend(_guarded_check(check_universe_filing_archive_pack_bottleneck))
+    findings.extend(_guarded_check(check_ingest_occupancy_mismatch))
+    findings.extend(_guarded_check(check_shard_nav_fx_warp))
+    findings.extend(_guarded_check(check_combined_tagged_learning))
+    findings.extend(_guarded_check(check_track_statistics))
+    findings.extend(_guarded_check(check_decision_review_significance_gate))
+    findings.extend(_guarded_check(check_total_return_view))
+    findings.extend(_guarded_check(check_hold_period_counterfactual))
+    findings.extend(_guarded_check(check_post_sell_cue_digest))
+    findings.extend(_guarded_check(check_post_sale_review_queue))
     # MFT first → L652 lenses consume lab episodes → lab learning strip joins both
     # → entry_blind binds lens summary.
-    findings.extend(check_cue_consumer_mft())
-    findings.extend(check_parallel_timing_lenses())
-    findings.extend(check_lab_learning_progress())
-    findings.extend(check_entry_blind_review_queue())
-    findings.extend(check_entry_news_polarity())
-    findings.extend(check_entry_revisit_review_queue())
-    findings.extend(check_operating_decline_gate())
-    findings.extend(check_sector_headwind_gate())
-    findings.extend(check_strategy_book_memo_job())
-    findings.extend(check_strategy_book_observe())
-    findings.extend(check_n200_tech_timing_observe())
-    findings.extend(check_n201_value_mom_observe())
-    findings.extend(check_n210_ai_judgment_observe())
-    findings.extend(check_n206_plain_ey_observe())
-    findings.extend(check_n215_technical_veto_observe())
-    findings.extend(check_n215_reentry_observe())
-    findings.extend(check_two_lot_replay())
-    findings.extend(check_sec_companyfacts_coverage())
-    findings.extend(check_sec_filing_aligned_twin())
-    findings.extend(check_hkex_direct_coverage())
-    findings.extend(check_amf_direct_coverage())
-    findings.extend(check_cision_direct_coverage())
-    findings.extend(check_t212_catalogue_freshness())
-    findings.extend(check_chart_high_low_coverage())
-    findings.extend(check_lifecycle_maturity_trajectory())
-    findings.extend(check_ui_state_reconciliation())
-    findings.extend(check_gha_failure_triage())
-    findings.extend(check_thin_memo_learning_gap())
-    findings.extend(check_missing_ir_allowlist_stall())
-    findings.extend(check_phase_b_producer_progress())
-    findings.extend(check_indicator_integrity())
-    findings.extend(check_backtest_history())
-    findings.extend(check_screen_premise_backtest())
-    findings.extend(check_historical_screen_replay())
-    findings.extend(check_strategy_book_us_rehearsal())
-    findings.extend(check_post_hsr_policy())
-    findings.extend(check_value_factor_base_rate())
-    findings.extend(check_assessment_scoreboard())
-    findings.extend(check_paper_learning_tracks())
-    findings.extend(check_unsettled_corporate_actions())
-    findings.extend(check_investor_yield())
-    findings.extend(check_paper_halt())
-    findings.extend(check_deferred_triggers())
-    findings.extend(check_daily_hub_relevance())
-    findings.extend(check_daily_hub_push_empty())
+    findings.extend(_guarded_check(check_cue_consumer_mft))
+    findings.extend(_guarded_check(check_parallel_timing_lenses))
+    findings.extend(_guarded_check(check_lab_learning_progress))
+    findings.extend(_guarded_check(check_entry_blind_review_queue))
+    findings.extend(_guarded_check(check_entry_news_polarity))
+    findings.extend(_guarded_check(check_entry_revisit_review_queue))
+    findings.extend(_guarded_check(check_operating_decline_gate))
+    findings.extend(_guarded_check(check_sector_headwind_gate))
+    findings.extend(_guarded_check(check_strategy_book_memo_job))
+    findings.extend(_guarded_check(check_strategy_book_observe))
+    findings.extend(_guarded_check(check_n200_tech_timing_observe))
+    findings.extend(_guarded_check(check_n201_value_mom_observe))
+    findings.extend(_guarded_check(check_n210_ai_judgment_observe))
+    findings.extend(_guarded_check(check_n206_plain_ey_observe))
+    findings.extend(_guarded_check(check_n215_technical_veto_observe))
+    findings.extend(_guarded_check(check_n215_reentry_observe))
+    findings.extend(_guarded_check(check_two_lot_replay))
+    findings.extend(_guarded_check(check_sec_companyfacts_coverage))
+    findings.extend(_guarded_check(check_sec_filing_aligned_twin))
+    findings.extend(_guarded_check(check_hkex_direct_coverage))
+    findings.extend(_guarded_check(check_amf_direct_coverage))
+    findings.extend(_guarded_check(check_cision_direct_coverage))
+    findings.extend(_guarded_check(check_t212_catalogue_freshness))
+    findings.extend(_guarded_check(check_chart_high_low_coverage))
+    findings.extend(_guarded_check(check_lifecycle_maturity_trajectory))
+    findings.extend(_guarded_check(check_ui_state_reconciliation))
+    findings.extend(_guarded_check(check_gha_failure_triage))
+    findings.extend(_guarded_check(check_thin_memo_learning_gap))
+    findings.extend(_guarded_check(check_missing_ir_allowlist_stall))
+    findings.extend(_guarded_check(check_phase_b_producer_progress))
+    findings.extend(_guarded_check(check_indicator_integrity))
+    findings.extend(_guarded_check(check_backtest_history))
+    findings.extend(_guarded_check(check_screen_premise_backtest))
+    findings.extend(_guarded_check(check_historical_screen_replay))
+    findings.extend(_guarded_check(check_strategy_book_us_rehearsal))
+    findings.extend(_guarded_check(check_post_hsr_policy))
+    findings.extend(_guarded_check(check_value_factor_base_rate))
+    findings.extend(_guarded_check(check_assessment_scoreboard))
+    findings.extend(_guarded_check(check_paper_learning_tracks))
+    findings.extend(_guarded_check(check_unsettled_corporate_actions))
+    findings.extend(_guarded_check(check_investor_yield))
+    findings.extend(_guarded_check(check_paper_halt))
+    findings.extend(_guarded_check(check_deferred_triggers))
+    findings.extend(_guarded_check(check_daily_hub_relevance))
+    findings.extend(_guarded_check(check_daily_hub_push_empty))
 
     engineering_findings, queue_status = check_engineering_queue(
         open_prs=open_prs,
