@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-10T10:16:29.041722+00:00",
+  "generated_at": "2026-11-10T21:15:38.483715+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
-  "checklist_updated_at": "2026-11-06",
+  "checklist_updated_at": "2026-11-10",
   "counts": {
     "new_info": 7,
-    "unacked": 12,
+    "unacked": 14,
     "acked": 35,
     "automated": 20,
-    "human": 54
+    "human": 56
   },
   "tasks": [
     {
@@ -29,11 +29,11 @@
       "approval_label": null,
       "analysis": {
         "headline": "2 attention-parked eng tasks",
-        "updated_at": "2026-11-10T10:14:03.038811+00:00",
+        "updated_at": "2026-11-10T21:13:27.544224+00:00",
         "fingerprint": "0a2dad58594e26e2",
         "bullets": [
           "Parked tasks: 3 (attention ~2)",
-          "Queue-clearing pause active: False — evaluated 2026-11-10T10:14:03.038811+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-11-10T21:13:27.544224+00:00",
           "Traffic pause active: False",
           "eng-20261018-03: Sector override registry for non-standard FTSE issuers (backlog: AEP.L agriculture/plantation vs Consumer Defensive)",
           "eng-20261104-01: Hunt fetchable IR source for parked aim leftover PAF.L",
@@ -72,15 +72,15 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary not scored",
-        "updated_at": "2026-11-10T10:12:15.333277+00:00",
+        "updated_at": "2026-11-10T21:12:25.471041+00:00",
         "fingerprint": "94066622535964a2",
         "bullets": [
-          "ai_judgment_matched30_fair: total return -2.4% vs FTAL.L +0.6% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +0.7% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
-          "Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.1116",
-          "vs control buy_tier_matched30_fair: difference 0.0068 (common window, not significance)",
+          "ai_judgment_matched30_fair: total return +0.5% vs FTAL.L +0.5% since 2026-10-15 — too few marks to judge. vs buy_tier_matched30_fair: +1.6% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+          "Primary verdict: insufficient_data · 90% interval — · excess at 3% stress -0.082",
+          "vs control buy_tier_matched30_fair: difference 0.0162 (common window, not significance)",
           "AI gate binds: False (N189 while it never binds)",
           "twin ai_judgment_matched30_fair: difference -0.0158 over 10 days",
-          "twin buy_tier_matched30_fair: difference -0.0381 over 15 days",
+          "twin buy_tier_matched30_fair: difference -0.036 over 16 days",
           "Policy changes: significance_gate_v1 (2026-10-06), evidentiary_demotion_ai_judgment_fair_v1 (2026-10-15), stop_ai_judgment_fair_3name_v1 (2026-10-31)"
         ],
         "source_keys": [
@@ -113,11 +113,11 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-11-10T02:05:10.626627+00:00",
-        "fingerprint": "2f9b8b863da0b7c8",
+        "updated_at": "2026-11-10T20:47:32.787066+00:00",
+        "fingerprint": "024552489bf2820b",
         "bullets": [
-          "euro_depth: phase=3 ai=False knob=False holdings=39",
-          "sti: phase=0 ai=False knob=False holdings=4",
+          "euro_depth: phase=3 ai=False knob=False holdings=38",
+          "sp500: phase=1 ai=False knob=False holdings=120",
           "aex: phase=0 ai=False knob=False holdings=8",
           "aim: phase=0 ai=False knob=False holdings=14",
           "atx: phase=0 ai=False knob=False holdings=3",
@@ -155,7 +155,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 2 open",
-        "updated_at": "2026-11-10T00:48:59.656605+00:00",
+        "updated_at": "2026-11-10T20:45:46.416132+00:00",
         "fingerprint": "6dda3808006c2a3a",
         "bullets": [
           "Open deviations: 2",
@@ -192,15 +192,15 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-11-09T17:28:27.266377+00:00",
-        "fingerprint": "61f578acad7f24db",
+        "updated_at": "2026-11-10T19:27:53.308928+00:00",
+        "fingerprint": "ec740315e99a1692",
         "bullets": [
-          "Occasions logged: 348",
+          "Occasions logged: 363",
           "PR mergeable=CONFLICTING against main: 7",
           "validate failed: 7",
+          "validate check failed: 6",
           "merge_conflict:dirty: 6",
-          "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
-          "validate check failed: 5"
+          "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5"
         ],
         "source_keys": [
           "pr_fix_occasions",
@@ -359,6 +359,37 @@
       "ack_sufficient": false
     },
     {
+      "id": "adhoc-memo-model-comparison-blind-review",
+      "title": "Rate the memo model comparison calibration sample",
+      "summary": "Rule v2 (owner, 2026-11-10): an LLM judge (gpt-5.6-luna) scores every pair blind in both orders; you rate only a calibration sample of at least 4 names, so the judge can be checked against you. When ops shows 'Memo model comparison ready for owner calibration', read docs/data/memo_model_comparison/review.md (sample only, memos labelled A/B). Copy ratings_template.json to ratings.json and rate each memo 1-5 on evidence, thesis break and verdict justified, plus a preferred memo (A, B or tie). Commit ratings.json to main without opening blind_key.json, results.json, judge_results.json, calibration.json, judgements/, judge_status.json or the status.json cost fields, then run gh workflow run memo-model-comparison.yml -f action=decide. Your picks decide whether the judge is trusted, and govern any pair where the two verdicts differ on blocking entry. A switch needs owner approval, an operational_switches row on the registration and its own memo-model PR; otherwise composer-2.5 stays.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/memo-model-comparison.md",
+      "doc_anchor": "owner-calibration-review",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/memo-model-comparison.md#owner-calibration-review",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "4b5d12721010ac3f",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
       "id": "adhoc-observe-instrument-freeze",
       "title": "Decide which observe instruments to freeze",
       "summary": "When strategy-book step 2.3 starts, decide which existing observe instruments to freeze under the single-track decision. Candidates: N201, N206, the parallel timing lenses (L652) and the super book's unbuilt spawn and cull work (N223, N226, N227). Frozen books keep their history; the super book's lab book stays as an outside reference.",
@@ -391,8 +422,8 @@
     },
     {
       "id": "adhoc-strategy-book-memo-spend",
-      "title": "Flip strategy-book forward go-live and memo spend after the Phase 1 gate review",
-      "summary": "After the Phase 1 gate review, set forward_live true on docs/data/strategy_book_registration.json and set spend_enabled true only if weekly_ops should pay for signal-day and review-date memos. Phase 1 governs go-live, not the signature. Until forward_live is true the forward job dry-runs and writes no scored store. Until spend_enabled is true the memo job logs dry_run at $0.40 and calls no model. Neither job flips its own flag.",
+      "title": "Flip strategy-book forward go-live after the Phase 1 gate review",
+      "summary": "The Phase 1 gate review is done (accepted with one adjustment, 2026-11-10), and #1346, #1347, #1349 and #1350 have merged. On the go-live date, set forward_live true and forward_start to that date (YYYY-MM-DD) on docs/data/strategy_book_registration.json in the same commit (owner, 2026-11-10: forward_start will equal the go-live date; recorded in phase1_gate_decision.forward_start_alignment). Phase 1 governs go-live, not the signature. Until forward_live is true the forward job dry-runs and writes no scored store. Memo spend is already on: the owner set spend_enabled true on 2026-11-10 (logged in operational_switches), independent of forward_live; its review is monthly-strategy-book-memo-spend-review. Neither job flips its own flag.",
       "automated": false,
       "cadence": "ad_hoc",
       "section_id": "ad_hoc",
@@ -423,7 +454,7 @@
     {
       "id": "adhoc-strategy-phase-gate",
       "title": "Sign strategy reorientation phase gates",
-      "summary": "At the end of each phase of the strategy reorientation plan, review the evidence the supervising agent presents and sign, adjust once (logged), or reject. Phase 1: check operating-decline and sector-headwind verdicts on 10 FTSE buy-tier names (5 flagged, 5 clear) against cited evidence. Phase 2: sign the strategy-book registration (docs/ops/strategy-book-registration.md) before scoring, confirming or adjusting once the step 3.2 live proof numbers (docs/ops/strategy-reorientation-plan.md) that the seal copies, then the sample-thickness gate before it becomes the primary learning track. Later phases: new proof standard, demo-to-live execution steps, small live capital. Gates bind books only after sign-off; nothing auto-promotes.",
+      "summary": "At the end of each phase of the strategy reorientation plan, review the evidence the supervising agent presents and sign, adjust once (logged), or reject. Phase 1: DONE 2026-11-10, accepted with one adjustment (owner). Both gates kept as they are; the one adjustment, now spent, makes funds and investment trusts insufficient_data in the decline gate, logged as change marker owner-strategy-book-v0-fund-insufficient-data-v1. Record in docs/ops/phase1-gate-review-pack.md (owner decision section). It governs only forward_live, which is a separate step (adhoc-strategy-book-memo-spend). Phase 2: sign the strategy-book registration (docs/ops/strategy-book-registration.md) before scoring, confirming or adjusting once the step 3.2 live proof numbers (docs/ops/strategy-reorientation-plan.md) that the seal copies, then the sample-thickness gate before it becomes the primary learning track. Later phases: new proof standard, demo-to-live execution steps, small live capital. Gates bind books only after sign-off; nothing auto-promotes.",
       "automated": false,
       "cadence": "ad_hoc",
       "section_id": "ad_hoc",
@@ -576,6 +607,37 @@
       "ack_sufficient": false
     },
     {
+      "id": "monthly-strategy-book-memo-spend-review",
+      "title": "Review strategy-book memo spend vs use (every 4 weeks)",
+      "summary": "Every 4 weeks from the 2026-11-10 switch-on (first review 2026-12-08; the date is in operational_switches on docs/data/strategy_book_registration.json): read the ops-monitor finding 'Strategy book memo spend this week' and the weekly requested / budget-skip / spend counts in docs/data/strategy_book_memo_job.json against budget.strategy_book_memo_raise ($40 a week, 100 memos). Decide keep, lower, or raise the raise; if memos go unused, economise. Whether a memo fed an entry decision is not tracked yet, so judge use from signals filled vs memo_not_ready once forward_live is on. Set the next review date when you log the decision. Do not turn spend into rememo of thin memos without new filing bodies (N138 stays).",
+      "automated": false,
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/strategy-book-memo-job.md",
+      "doc_anchor": "spend-review",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/strategy-book-memo-job.md#spend-review",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "2293211ca8d0bb75",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
       "id": "sunday-entry-blind-reviews",
       "title": "Work entry-blind review queue (lab/interesting buys; PIT only)",
       "summary": "Sunday nest beside post-sale reviews (Package M v0): open Lifecycle → Entry blind (docs/data/entry_blind_review_queue.json). Critique recent lab / interesting buys with PIT chart through buy day + buy decision reasons only — no post-fill path / realized % / exit chrome. Accept/Comment/Duplicate; actioned clear from active; history in entry_blind_review_labels.json. influences_live=false — never knobs/fills. Ops finding Entry-blind review queue (observe). Nest neighbor: sunday-entry-revisit-reviews. Exit stages + missed-opp stay parked.",
@@ -683,7 +745,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-11-10T08:28:50.448448+00:00",
+        "updated_at": "2026-11-10T13:45:40.108180+00:00",
         "fingerprint": "2b0e33e50082be09",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
@@ -1568,7 +1630,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-11-10T08:28:50.446301+00:00",
+        "updated_at": "2026-11-10T13:45:40.105703+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",

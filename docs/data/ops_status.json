@@ -1,21 +1,12 @@
 {
-  "run_at": "2026-11-10T10:07:40.188733+00:00",
+  "run_at": "2026-11-10T21:07:41.269922+00:00",
   "overall": "warn",
   "findings": [
-    {
-      "severity": "warn",
-      "category": "ingest",
-      "title": "Ingest loop hit runtime cutoff",
-      "summary": "Last run deferred 19 ticker(s) after completing 16 (per_ticker_budget) — backlog resume or chained chunk should drain remainder.",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
     {
       "severity": "info",
       "category": "budget",
       "title": "Agent token usage (measuring)",
-      "summary": "Week 2026-W46: raw $0.0000, charged $0.0000, tokens 0 (in 0 / out 0 / cache_read 0 / cache_write 0). Top jobs: research_memo $0.0000 (34 runs), llm_agree_veto_shadow $0.0000 (20 runs), engineering $0.0000 (14 runs). Research memo raw median n/a / p90 n/a vs ledger estimate $0.40 (0 of 34 runs with cost). Estimated-USD ledger this week $28.80. Measuring mode (token_usage_weekly_warning_raw_usd is null).",
+      "summary": "Week 2026-W46: raw $0.0000, charged $0.0000, tokens 0 (in 0 / out 0 / cache_read 0 / cache_write 0). Top jobs: research_memo $0.0000 (35 runs), llm_agree_veto_shadow $0.0000 (20 runs), engineering $0.0000 (14 runs). Research memo raw median n/a / p90 n/a vs ledger estimate $0.40 (0 of 35 runs with cost). Estimated-USD ledger this week $28.80. Measuring mode (token_usage_weekly_warning_raw_usd is null).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -24,7 +15,7 @@
       "severity": "info",
       "category": "budget",
       "title": "Agent token usage coverage gap",
-      "summary": "Week 2026-W46: 70 of 70 rows (100%) have usage_error or are still cost-pending after 48h (usage_error 70, pending after 48h 0). Coverage gap only — the estimated-USD cap is unchanged.",
+      "summary": "Week 2026-W46: 71 of 71 rows (100%) have usage_error or are still cost-pending after 48h (usage_error 71, pending after 48h 0). Coverage gap only — the estimated-USD cap is unchanged.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -42,7 +33,7 @@
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "1 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across euro_depth: euro_depth/UCB.BR (no_key_bodies, 394.13h since flip). Blocking: no_key_bodies=1.",
+      "summary": "1 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across euro_depth: euro_depth/UCB.BR (no_key_bodies, 405.13h since flip). Blocking: no_key_bodies=1.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -59,8 +50,17 @@
     {
       "severity": "warn",
       "category": "paper",
+      "title": "Price-only excess misstates track performance",
+      "summary": "Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_matched30_fair: published -1.5% vs total-return +0.0% (lifetime, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "paper",
       "title": "Longer holds beat live exit buffer in replay",
-      "summary": "Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: buy_tier_matched30_fair: exit_confirm_screens 10 vs live 2 +2.2% over 15 passes (44 vs 76 trades; realised median hold 5.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.",
+      "summary": "Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: buy_tier_matched30_fair: exit_confirm_screens 10 vs live 2 +2.4% over 16 passes (46 vs 76 trades; realised median hold 5.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -78,7 +78,7 @@
       "severity": "info",
       "category": "research",
       "title": "Post-sale review queue (observe)",
-      "summary": "Active uncommented post-sale reviews: 147; actioned history=138; candidates sealed+control=476. Accept/Comment/Duplicate observe-only (influences_live=false).",
+      "summary": "Active uncommented post-sale reviews: 149; actioned history=138; candidates sealed+control=478. Accept/Comment/Duplicate observe-only (influences_live=false).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -168,7 +168,7 @@
       "severity": "info",
       "category": "research",
       "title": "Operating-decline gate refreshed (observe)",
-      "summary": "as_of 2026-11-10: 784 names — clear 545, declining 206, insufficient_data 33; FTSE buy-tier covered 67/70, flagged declining 11; interim EPS on 173 names, interim revenue on 163 names, FTSE buy-tier interim revenue 34/70, interim EPS 35/70, latest revenue FY 2026:165, 2025:587: BT-A.L (revenue_two_year_decline); CKN.L (operating_margin_drop); CNA.L (revenue_two_year_decline, operating_margin_drop, eps_decline_annual, fcf_sharp_fall); COST.L (revenue_decline, revenue_two_year_decline); FGP.L (revenue_decline, eps_decline_interim) (+6 more). Observe-only — influences_live false; no book, knob or signal writes.",
+      "summary": "as_of 2026-11-10: 784 names — clear 542, declining 204, insufficient_data 38; FTSE buy-tier covered 66/70, fund/trust 1 (insufficient_data by rule; 8 across all names), flagged declining 10; interim EPS on 175 names, interim revenue on 165 names, FTSE buy-tier interim revenue 34/70, interim EPS 35/70, latest revenue FY 2026:165, 2025:587: BT-A.L (revenue_two_year_decline); CKN.L (operating_margin_drop); CNA.L (revenue_two_year_decline, operating_margin_drop, eps_decline_annual, fcf_sharp_fall); COST.L (revenue_decline, revenue_two_year_decline); FGP.L (revenue_decline, eps_decline_interim) (+5 more). Observe-only — influences_live false; no book, knob or signal writes.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -204,7 +204,25 @@
       "severity": "info",
       "category": "research",
       "title": "Strategy book memo job refreshed",
-      "summary": "Spend off. Signals 6, all-but-memo 0, memo needed 0, dry-run requests 0. First tickers: none. hang_seng signals 0 all_but_memo 0 memo_needed 0; nasdaq100 signals 1 all_but_memo 0 memo_needed 0; sp500 signals 3 all_but_memo 0 memo_needed 0; asx200 signals 1 all_but_memo 0 memo_needed 0; tsx60 signals 1 all_but_memo 0 memo_needed 0; smi signals 0 all_but_memo 0 memo_needed 0; us_adr_asia signals 0 all_but_memo 0 memo_needed 0 Observe-only; no rememo or ingest from this finding.",
+      "summary": "Spend on. Signals 24, all-but-memo 5, memo needed 3, dry-run requests 0. First tickers: ftse350:SCT.L, aim:ASY.L, asx200:NWS.AX. ftse350 signals 8 all_but_memo 3 memo_needed 1; aex signals 2 all_but_memo 0 memo_needed 0; aim signals 9 all_but_memo 1 memo_needed 1; atx signals 0 all_but_memo 0 memo_needed 0; bel20 signals 0 all_but_memo 0 memo_needed 0; cac40 signals 0 all_but_memo 0 memo_needed 0; dax signals 0 all_but_memo 0 memo_needed 0; euro_stoxx50 signals 0 all_but_memo 0 memo_needed 0 Observe-only; no rememo or ingest from this finding.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "Strategy book memo spend this week",
+      "summary": "2026-W46: 2 memos requested ($0.80 at $0.40), 0 budget skips, 2 memo needed. Since switch-on 2026-11-10: 2 memos ($0.80). weekly_ops cap $124.50, remaining $111.30. Spend-vs-use review next 2026-12-08. Whether a memo fed an entry decision is not tracked yet. Observe-only; no rememo or ingest from this finding.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "Memo model comparison awaiting generation",
+      "summary": "12 names selected (selection v1, decision rule v2); estimated $39.84 of a $50.0 cap (memos and judge). Runs on the next scheduled slot or `gh workflow run memo-model-comparison.yml -f action=generate`.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -222,7 +240,16 @@
       "severity": "info",
       "category": "research",
       "title": "Strategy book observe refreshed",
-      "summary": "Signals 0, entries that would open 0. Blocked: gate 410, not_buy_tier 70. First tickers: none.",
+      "summary": "Signals 2, entries that would open 2. Blocked: f9 155, gate 190, not_buy_tier 59, price 75. First tickers: FOUR.L, MEGP.L.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "Strategy book closes short of session",
+      "summary": "ftse350: 1 of 70 buy-tier charts end before 2026-11-10 after the fetch. First tickers: MGNS.L. The next forward slot retries them. No rememo or ingest.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -249,7 +276,7 @@
       "severity": "info",
       "category": "research",
       "title": "N201 value-mom observe refreshed",
-      "summary": "strand-c-short-horizon-value-mom-v0: 161 completed episodes over 16 weeks; entries/week=10.062; smooth_ret_cohort_median=0.035395 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.020186; stress_3pct_report_only=-0.039387; skipped_missing_entry_fields=97930. Observe-only — launch-queue waiter; no live writes (F8).",
+      "summary": "strand-c-short-horizon-value-mom-v0: 161 completed episodes over 16 weeks; entries/week=10.062; smooth_ret_cohort_median=0.035395 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.020186; stress_3pct_report_only=-0.039387; skipped_missing_entry_fields=98376. Observe-only — launch-queue waiter; no live writes (F8).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -312,7 +339,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Two-lot retention beats full exit in replay",
-      "summary": "buy_tier_level: core_kept beats full exit by +1.7% over 42 passes (2026-09-07 to 2026-11-06; core value £895.09, rank exits 25 vs full exit). Observe-only. Do not edit buy_tier_level. See docs/ops/two-lot-replay.md.",
+      "summary": "buy_tier_level: core_kept beats full exit by +1.1% over 43 passes (2026-09-07 to 2026-11-10; core value £905.29, rank exits 25 vs full exit). Observe-only. Do not edit buy_tier_level. See docs/ops/two-lot-replay.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -339,7 +366,7 @@
       "severity": "info",
       "category": "research",
       "title": "Trading 212 catalogue fresh",
-      "summary": "Catalogue age 0.85 days (fetched 2026-11-09T13:45:23.337923+00:00; limit 14d). Weekly refresh via t212-catalogue-refresh.yml. See docs/ops/t212-catalogue-refresh.md.",
+      "summary": "Catalogue age 1.31 days (fetched 2026-11-09T13:45:23.337923+00:00; limit 14d). Weekly refresh via t212-catalogue-refresh.yml. See docs/ops/t212-catalogue-refresh.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -400,18 +427,9 @@
     },
     {
       "severity": "warn",
-      "category": "paper",
-      "title": "Paper-auto last_run is pre-settle only",
-      "summary": "Committed last_run.json has gate.after_settle=false — orchestrator should re-dispatch a post-settle pass.",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "warn",
       "category": "observe",
       "title": "Deferred idea triggers met",
-      "summary": "1 open deferred idea(s) have met their structured trigger: L616 (2026-11-08). Pick up, retarget, or close each with ftse-defer (docs/ops/deferred-triggers.md).",
+      "summary": "2 open deferred idea(s) have met their structured trigger: L616 (2026-11-08), L625 (2026-11-10). Pick up, retarget, or close each with ftse-defer (docs/ops/deferred-triggers.md).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -424,24 +442,6 @@
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "workflows",
-      "title": "Recent workflow failure: FTSE Library Ladder",
-      "summary": "1 unresolved failure(s) since last success (runs: 42771392626).",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "workflows",
-      "title": "Recent workflow failure: FTSE Ops Monitor",
-      "summary": "1 unresolved failure(s) since last success (runs: 42777533612).",
-      "auto_fixable": false,
-      "fixed": true,
-      "action_taken": "Recovery run in flight (#42796263215); suppressed from alert"
     },
     {
       "severity": "warn",
@@ -462,9 +462,9 @@
       "expected_today": false,
       "past_email_ready": true,
       "max_age_hours": 30,
-      "last_success_at": "2026-11-10T09:05:40+00:00",
-      "last_success_run_id": 42787800426,
-      "age_hours": 1.1,
+      "last_success_at": "2026-11-10T20:21:03+00:00",
+      "last_success_run_id": 42894414155,
+      "age_hours": 0.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -475,9 +475,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-10T08:25:20+00:00",
-      "last_success_run_id": 42782504878,
-      "age_hours": 1.8,
+      "last_success_at": "2026-11-10T18:44:06+00:00",
+      "last_success_run_id": 42878173669,
+      "age_hours": 2.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -488,9 +488,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 26,
-      "last_success_at": "2026-11-10T09:59:58+00:00",
-      "last_success_run_id": 42795365482,
-      "age_hours": 0.2,
+      "last_success_at": "2026-11-10T21:07:58+00:00",
+      "last_success_run_id": 42902009340,
+      "age_hours": 0.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -501,8 +501,8 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-11-10T10:10:35+00:00",
-      "last_success_run_id": 42796897736,
+      "last_success_at": "2026-11-10T21:10:38+00:00",
+      "last_success_run_id": 42902451308,
       "age_hours": 0.0,
       "stale": false,
       "recent_failures_24h": 0,
@@ -514,9 +514,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-10T07:30:57+00:00",
-      "last_success_run_id": 42775815572,
-      "age_hours": 2.7,
+      "last_success_at": "2026-11-10T15:41:33+00:00",
+      "last_success_run_id": 42846995334,
+      "age_hours": 5.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -525,11 +525,11 @@
       "workflow": "analysis-review.yml",
       "name": "Modelling analysis review",
       "expected_today": false,
-      "past_email_ready": false,
+      "past_email_ready": true,
       "max_age_hours": 36,
       "last_success_at": "2026-11-08T15:24:55+00:00",
       "last_success_run_id": 42494688914,
-      "age_hours": 42.8,
+      "age_hours": 53.8,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -542,10 +542,10 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-09T06:52:00+00:00",
       "last_success_run_id": 42575692247,
-      "age_hours": 27.3,
+      "age_hours": 38.3,
       "stale": false,
-      "recent_failures_24h": 1,
-      "unresolved_failures_12h": 1
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
     },
     {
       "workflow": "library-model-review.yml",
@@ -555,7 +555,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-08T08:24:43+00:00",
       "last_success_run_id": 42462822729,
-      "age_hours": 49.8,
+      "age_hours": 60.8,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -568,7 +568,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-10T00:51:34+00:00",
       "last_success_run_id": 42731496776,
-      "age_hours": 9.3,
+      "age_hours": 20.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -577,11 +577,11 @@
       "workflow": "data-backup.yml",
       "name": "FTSE Data Backup",
       "expected_today": false,
-      "past_email_ready": false,
+      "past_email_ready": true,
       "max_age_hours": 36,
       "last_success_at": "2026-11-08T17:58:45+00:00",
       "last_success_run_id": 42507623200,
-      "age_hours": 40.2,
+      "age_hours": 51.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -592,9 +592,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-10T08:26:50+00:00",
-      "last_success_run_id": 42782698630,
-      "age_hours": 1.8,
+      "last_success_at": "2026-11-10T13:43:32+00:00",
+      "last_success_run_id": 42827136239,
+      "age_hours": 7.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -605,12 +605,12 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-10T02:30:46+00:00",
-      "last_success_run_id": 42743266374,
-      "age_hours": 7.7,
+      "last_success_at": "2026-11-10T20:27:23+00:00",
+      "last_success_run_id": 42895448760,
+      "age_hours": 0.8,
       "stale": false,
-      "recent_failures_24h": 1,
-      "unresolved_failures_12h": 1
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
     }
   ],
   "queue_status": {

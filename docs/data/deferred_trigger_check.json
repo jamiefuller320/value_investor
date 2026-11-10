@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-10T10:12:15.374548+00:00",
+  "generated_at": "2026-11-10T21:12:25.507106+00:00",
   "observe_only": true,
-  "open_ideas": 659,
-  "with_trigger": 25,
+  "open_ideas": 668,
+  "with_trigger": 32,
   "met": [
     {
       "id": "L616",
@@ -32,6 +32,24 @@
           "actual": 83
         }
       ]
+    },
+    {
+      "id": "L625",
+      "title": "Cold-store skip-already-packed + rotate pilot tickers",
+      "status": "open",
+      "first_met_at": "2026-11-10T21:12:25.507106+00:00",
+      "conditions": [
+        {
+          "condition": {
+            "file": "docs/data/universe_filing_archive_status.json",
+            "path": "current_caps.max_units",
+            "op": ">=",
+            "value": 8
+          },
+          "state": "met",
+          "actual": 8
+        }
+      ]
     }
   ],
   "unknown": [
@@ -54,6 +72,26 @@
       "reasons": [
         "tracks[track_id=ai_judgment_matched30_fair].statistics.verdict not in docs/data/assessment_scoreboard.json"
       ]
+    },
+    {
+      "id": "L701",
+      "title": "Memo model comparison: add grok-4.7 as a challenger",
+      "status": "open",
+      "unknown_since": "2026-11-10T21:12:25.507106+00:00",
+      "invalid": false,
+      "reasons": [
+        "docs/data/memo_model_comparison/decision.json not found"
+      ]
+    },
+    {
+      "id": "L702",
+      "title": "Larger memo model comparison if the 12-name result is inconclusive",
+      "status": "open",
+      "unknown_since": "2026-11-10T21:12:25.507106+00:00",
+      "invalid": false,
+      "reasons": [
+        "docs/data/memo_model_comparison/decision.json not found"
+      ]
     }
   ],
   "unmet": [
@@ -72,13 +110,17 @@
     "N213",
     "N215",
     "N220",
-    "L625",
     "N223",
     "N227",
     "L658",
     "N246",
     "N259",
-    "N261"
+    "L699",
+    "N262",
+    "L703",
+    "L704",
+    "L705",
+    "L706"
   ],
   "frozen_mentions": [],
   "unknown_grace_days": 7
