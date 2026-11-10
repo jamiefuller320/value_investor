@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-10T10:05:00+00:00",
+  "updated_at": "2026-11-10T12:02:13+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -17252,6 +17252,86 @@
       "id": "L701",
       "category": "later",
       "section": "research",
+      "title": "Memo model comparison: add grok-4.7 as a challenger",
+      "summary": "The Cursor runtime lists grok-4.7 (and claude/gpt/gemini frontier models) for our key on 2026-11-10, but agent_model_policy has no rate for it, so the comparison uses grok-4.6 as the strongest configured Grok. Adding a grok-4.7 rate would make strongest_configured_grok pick it for a second comparison.",
+      "revisit_when": "After the 12-name composer-2.5 vs grok-4.6 comparison has a decision.json, or when a grok-4.7 rate is added to MODEL_API_RATES",
+      "tags": [
+        "memo",
+        "model",
+        "grok",
+        "strategy-book"
+      ],
+      "status": "open",
+      "source": "memo model comparison PR (cursor/memo-model-comparison-567c, owner decision 2026-11-10)",
+      "added_at": "2026-11-10T11:18:39+00:00",
+      "trigger": {
+        "any": [
+          {
+            "file": "docs/data/memo_model_comparison/decision.json",
+            "path": "outcome",
+            "op": "exists"
+          }
+        ]
+      }
+    },
+    {
+      "id": "L702",
+      "category": "later",
+      "section": "research",
+      "title": "Larger memo model comparison if the 12-name result is inconclusive",
+      "summary": "Twelve names can only show a large quality gap. If the pre-declared rule returns inconclusive_keep, rerun the same harness on a fresh rule-v2 manifest (more names, new comparison_id) rather than switching on a thin read.",
+      "revisit_when": "docs/data/memo_model_comparison/decision.json outcome is inconclusive_keep",
+      "tags": [
+        "memo",
+        "model",
+        "strategy-book"
+      ],
+      "status": "open",
+      "source": "memo model comparison PR (cursor/memo-model-comparison-567c, owner decision 2026-11-10)",
+      "added_at": "2026-11-10T11:18:39+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/memo_model_comparison/decision.json",
+            "path": "outcome",
+            "op": "==",
+            "value": "inconclusive_keep"
+          }
+        ]
+      }
+    },
+    {
+      "id": "L703",
+      "category": "later",
+      "section": "research",
+      "title": "Outcome-scored memo model shadow",
+      "summary": "Both memo models (incumbent composer-2.5 and the comparison challenger) write memos in shadow on real strategy-book signals; score each model's block/pass verdict against the name's 63-session outcome, tied into early-indicator tracking. Complements the blind judge comparison (rule v2), which scores memo quality, not outcome. Observe-only; never feeds the book's memo bind.",
+      "revisit_when": "When the memo model comparison decides (docs/data/memo_model_comparison/decision.json written, with judge_trusted recorded) or when the strategy-book forward status has at least 30 signals",
+      "tags": [
+        "memo-model",
+        "strategy-book",
+        "shadow",
+        "early-indicators",
+        "memo-model-comparison"
+      ],
+      "status": "open",
+      "source": "Owner decision 2026-11-10 ('yes please') on the memo model comparison judge amendment",
+      "added_at": "2026-11-10T12:02:13+00:00",
+      "trigger": {
+        "any": [
+          {
+            "file": "docs/data/strategy_book_forward_status.json",
+            "path": "signals",
+            "op": ">=",
+            "value": 30
+          }
+        ]
+      }
+    },
+    {
+      "id": "L704",
+      "category": "later",
+      "section": "research",
       "title": "Minimum declining-member count for small sectors in the sector-headwind gate",
       "summary": "The decline-breadth trigger is a share (>= 50% of covered members). In a small sector one name decides it: FTSE Energy has 8 members and 4/8 declining sits exactly on the line (SHEL.L is one of the four and its own decline makes the headwind that blocks HBR.L). A minimum count of declining members (e.g. at least 5) alongside the share would stop a single name tipping a small sector. Owner accepted the 50% line as it is at the Phase 1 gate (2026-11-10); this is a threshold change, so it can only arrive as a sealed challenger / new registration_id.",
       "revisit_when": "Next strategy-book version review: the forward book's thickness gate opens (strategy_book_forward_status.json thickness_ready true); a challenger is sealed as a new registration_id there, never as an edit to owner-strategy-book-v0.",
@@ -17274,7 +17354,7 @@
       }
     },
     {
-      "id": "L702",
+      "id": "L705",
       "category": "later",
       "section": "research",
       "title": "Balance-sheet check in the operating-decline gate",
@@ -17299,7 +17379,7 @@
       }
     },
     {
-      "id": "L703",
+      "id": "L706",
       "category": "later",
       "section": "research",
       "title": "Investment-trust discount-to-NAV value lens",
@@ -18079,6 +18159,20 @@
     },
     {
       "id": "frag-20261110-01",
+      "text": "FTSE filings_index.json fetched_at is rewritten on each listing re-scan (ABF.L index_at 2026-11-10T09:12 with 69 bodies). The strategy-book point-in-time key_filing_bodies bind ignores an index fetched after the session, so on 2026-11-10 all 65 FTSE buy-tier names failed bodies for the 2026-11-06 session although bodies were on disk. Check whether the forward/memo job ever sees FTSE bodies pass, and whether index_at should be the first-body date rather than the last scan.",
+      "tags": [
+        "p1",
+        "strategy-book",
+        "filings",
+        "ftse",
+        "point-in-time"
+      ],
+      "status": "open",
+      "source": "memo model comparison PR (cursor/memo-model-comparison-567c, owner decision 2026-11-10)",
+      "added_at": "2026-11-10T11:18:39+00:00"
+    },
+    {
+      "id": "frag-20261110-02",
       "text": "Operating-decline gate applies company rules (revenue, operating margin) to listed funds and investment trusts; GCP.L (infrastructure fund) is declining on investment-income 'revenue' with no operating margin. Consider a fund-specific part-2 definition (NAV/dividend cover) at a strategy version review if the Phase 1 owner review flags it.",
       "tags": [
         "strategy-version-review",

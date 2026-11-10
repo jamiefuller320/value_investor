@@ -117,7 +117,7 @@ as of 2026-11-10.
 | F4 | GCP.L | GCP Infrastructure Investments | Financial Services | **declining** | sound | Revenue down two years (−4.3%, −33.4%) (hard) || agree it is blocked, for the wrong reason: a fund. Now `insufficient_data` (`fund_or_trust`) |
 | F5 | BT-A.L | BT Group | Communication Services | **declining** | sound | Revenue down two years (−3.5%, −2.1%) (hard) || agree (owner, 2026-11-10) |
 | C1 | DNLM.L | Dunelm Group | Consumer Cyclical | clear | sound | No check fired (interim EPS −7.3%, under the 10% line) || agree (owner, 2026-11-10) |
-| C2 | DATA.L | GlobalData | Industrials | clear | sound | No check fired || agree (owner, 2026-11-10); balance-sheet check queued (L702) |
+| C2 | DATA.L | GlobalData | Industrials | clear | sound | No check fired || agree (owner, 2026-11-10); balance-sheet check queued (L705) |
 | C3 | IGG.L | IG Group | Financial Services | clear | sound | No check fired || agree (owner, 2026-11-10) |
 | C4 | BREE.L | Breedon Group | Basic Materials | clear | sound | One soft signal only (interim EPS −16.1%) || agree (owner, 2026-11-10) |
 | C5 | IMB.L | Imperial Brands | Consumer Defensive | clear | sound | No check fired (annual EPS −16.6%, under the 20% line) || agree (owner, 2026-11-10) |
@@ -545,8 +545,8 @@ for the wrong reason, because it is a fund. DNLM.L, DATA.L, IGG.L, BREE.L and IM
   `declining`, PSH.L, BHMG.L and III.L `clear`, all now `insufficient_data`); none is in the buy tier.
   No library verdict and no sector verdict changes.
 - Queued for later, each behind the next version review (machine trigger: `thickness_ready` in
-  `strategy_book_forward_status.json`): L701 minimum declining-member count for small sectors, L702
-  balance-sheet check in the decline gate, L703 investment-trust discount-to-NAV lens.
+  `strategy_book_forward_status.json`): L704 minimum declining-member count for small sectors, L705
+  balance-sheet check in the decline gate, L706 investment-trust discount-to-NAV lens.
 
 **Change marker or new `registration_id`?** A change marker on `owner-strategy-book-v0`:
 `owner-strategy-book-v0-fund-insufficient-data-v1` in `docs/data/strategy_book_registration.json`.
