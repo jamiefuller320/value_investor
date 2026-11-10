@@ -23,6 +23,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any, Literal
 
+from value_investor.filings_index_dating import bodies_at
 from value_investor.paper_fund import BUY_SIGNALS
 from value_investor.research.gap_fill_sources import inspect_local_sources
 from value_investor.research.market_store import (
@@ -201,6 +202,7 @@ def _index_meta(
         return {
             "has_index": False,
             "index_at": None,
+            "bodies_at": None,
             "filings_total": 0,
             "filings_with_body": 0,
             "period_coverage": {},
@@ -212,6 +214,7 @@ def _index_meta(
         return {
             "has_index": True,
             "index_at": None,
+            "bodies_at": None,
             "filings_total": 0,
             "filings_with_body": 0,
             "period_coverage": {},
@@ -226,9 +229,11 @@ def _index_meta(
     filings_total = int(summary.get("total") or 0)
     filings_with_body = int(summary.get("with_body") or 0)
     index_at = _parse_dt(payload.get("fetched_at") or payload.get("ch_refetched_at"))
+    body_stamp = bodies_at(payload)
     return {
         "has_index": True,
         "index_at": index_at.isoformat() if index_at else None,
+        "bodies_at": body_stamp.isoformat() if body_stamp else None,
         "filings_total": filings_total,
         "filings_with_body": filings_with_body,
         "period_coverage": period_coverage,

@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
+from value_investor.filings_index_dating import scan_fetched_at
 from value_investor.research.companies_house import fetch_filings_companies_house
 from value_investor.research.filings import (
     UNEXTRACTABLE_BODY_URLS_KEY,
@@ -36,7 +37,7 @@ from value_investor.research.ingest_bootstrap import (
     canonical_filings_dir,
     prefer_filing_index_path,
 )
-from value_investor.storage import write_json
+from value_investor.storage import read_json, resolve_json_path, write_json
 from value_investor.summary import CompanyReport
 
 logger = logging.getLogger(__name__)
@@ -291,6 +292,17 @@ def list_uk_filings_index_only(
     return merge_filings(*groups)
 
 
+def _load_prior_index(filings_dir: Path) -> dict[str, Any] | None:
+    path = resolve_json_path(Path(filings_dir) / "filings_index.json")
+    if path is None:
+        return None
+    try:
+        payload = read_json(path)
+    except (OSError, ValueError, TypeError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
 def merge_discovery_into_index(
     *,
     filings_dir: Path,
@@ -318,20 +330,22 @@ def merge_discovery_into_index(
             item["body_path"] = None
         cleaned_discovered.append(item)
     merged = merge_filings(prior, cleaned_discovered)
+    now = datetime.now(UTC)
+    summary = summarize_filings(merged)
     index = {
         "ticker": ticker,
         "company_name": company_name,
         "market": market,
         "regime": resolve_filings_regime(market, ticker),
-        "fetched_at": datetime.now(UTC).isoformat(),
+        "fetched_at": scan_fetched_at(_load_prior_index(filings_dir), {"summary": summary}, now),
         "note": (
             "Scan-then-target listing merge (no body download). "
             "Bodies filled by subsequent deepen pass."
         ),
         "sources_used": sorted({str(r.get("source")) for r in merged if r.get("source")}),
-        "summary": summarize_filings(merged),
+        "summary": summary,
         "filings": merged,
-        "discovery_scan_at": datetime.now(UTC).isoformat(),
+        "discovery_scan_at": now.isoformat(),
     }
     if unextractable:
         index[UNEXTRACTABLE_BODY_URLS_KEY] = unextractable

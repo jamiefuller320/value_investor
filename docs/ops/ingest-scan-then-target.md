@@ -81,6 +81,14 @@ WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py \
 Sunday `email-report.yml` no longer passes `--ingest-improvement-pass`. Mid-week
 `email_only` accelerated reviews may still deepen when explicitly configured.
 
+## Filings index dating
+
+The strategy book's F9-B `key_filing_bodies` check reads a filings index only on sessions ending after its body stamp: the latest of `fetched_at`, `ch_refetched_at`, `ir_refetched_at`, `investegate_refetched_at`, `residual_refetched_at`, `ticker_rns_refetched_at` and `refetched_at` (`filings_index_dating.bodies_at`). Listing-only stamps (`discovery_scan_at`, `listing_refresh_at`) do not count, because those passes add rows without bodies.
+
+The listing merge keeps the prior `fetched_at` (`filings_index_dating.scan_fetched_at`). It writes the merge time only when the merge turns key bodies on or the index is new. Before 2026-11-10 it wrote the scan time on every run, so a nightly scan made every index look newer than the previous close and every buy-tier name failed the check. That was a bug fix logged as change marker `owner-strategy-book-v0-filings-index-dating-fix-v1`.
+
+On 2026-11-10, `python -m value_investor.filings_index_dating backfill --apply` restored `fetched_at` on 692 indexes (107 FTSE, 585 library). Each one moved back to the committer time of the first commit in the unbroken run of committed versions that have key bodies. The value only ever moves earlier, and never before the bodies were in the repository. Rows are in `docs/data/filings_index_dating_backfill.json`.
+
 ## Curiosity
 
 Novel filing `source` labels and unfamiliar URL hosts are written to:

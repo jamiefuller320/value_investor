@@ -376,9 +376,13 @@ def _index_as_of(
     research_root: Path,
     as_of: datetime,
 ) -> dict[str, Any]:
-    """Filings-index meta, ignored when its timestamp is missing or after ``as_of``."""
+    """Filings-index meta, ignored when its body stamp is missing or after ``as_of``.
+
+    The body stamp is the latest pass that could add bodies
+    (``filings_index_dating.bodies_at``); listing-only scans do not move it.
+    """
     meta = _index_meta(ticker, research_root=research_root)
-    index_at = _parse_dt(meta.get("index_at"))
+    index_at = _parse_dt(meta.get("bodies_at"))
     if index_at is None or index_at > as_of:
         return {
             "has_index": False,
