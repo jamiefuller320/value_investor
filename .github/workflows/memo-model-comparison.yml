@@ -1,0 +1,78 @@
+name: Memo model comparison
+
+# Observe-only side-by-side memo comparison (owner, 2026-11-10):
+# composer-2.5 against the strongest configured Grok on the frozen names in
+# docs/data/memo_model_comparison/manifest.json. One-off: the weekday slot runs
+# `generate --if-due`, which does nothing once the store is ready for review or
+# the comparison's own cap is reached. Writes only the comparison store, the
+# weekly_ops ledger and agent-usage shards; never the research store or the
+# strategy book. ops-monitor reads the store daily (check_memo_model_comparison).
+# Runbook: docs/ops/memo-model-comparison.md
+on:
+  schedule:
+    - cron: "40 10 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "generate (missing memos) | decide (after owner ratings)"
+        type: choice
+        options:
+          - generate
+          - decide
+        default: generate
+
+permissions:
+  contents: write
+
+concurrency:
+  group: memo-model-comparison
+  cancel-in-progress: false
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: bash scripts/gha_pip_install.sh -e .
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Run comparison step
+        env:
+          ACTION: ${{ github.event.inputs.action || 'generate' }}
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [ "${ACTION}" = "decide" ]; then
+            ftse-memo-model-comparison --repo-root . decide --apply
+          else
+            ftse-memo-model-comparison --repo-root . generate --apply --if-due
+          fi
+
+      - name: Commit comparison artifacts
+        if: always()
+        env:
+          COMMIT_MESSAGE: "chore: memo model comparison [skip ci]"
+          GHA_COMMIT_LABEL: "Memo model comparison"
+          GHA_COMMIT_OWNED: |
+            docs/data/memo_model_comparison
+            docs/data/agent_usage
+          GHA_COMMIT_OPTIONAL: |
+            docs/data/library/policy.json
+          # The owner's ratings are never restored from this job's checkout.
+          GHA_COMMIT_EXCLUDE: |
+            docs/data/memo_model_comparison/ratings.json
+        run: bash scripts/gha_commit_artifacts.sh

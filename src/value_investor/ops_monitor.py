@@ -2727,6 +2727,35 @@ def check_strategy_book_memo_job(
     ]
 
 
+def check_memo_model_comparison(
+    *,
+    repo_root: Path | None = None,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Observe-only memo model comparison: generation, blind owner review, decision.
+
+    Reads ``docs/data/memo_model_comparison/`` (written by
+    ``memo-model-comparison.yml``); never writes it and never calls a model.
+    See docs/ops/memo-model-comparison.md.
+    """
+    from value_investor.memo_model_comparison import TITLE_FAILED, findings
+
+    try:
+        rows = findings(Path(repo_root) if repo_root is not None else Path(), now)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        rows = [{"severity": "warn", "title": TITLE_FAILED, "summary": str(exc)}]
+    return [
+        OpsFinding(
+            severity=str(row["severity"]),
+            category="research",
+            title=str(row["title"]),
+            summary=str(row["summary"]),
+            auto_fixable=False,
+        )
+        for row in rows
+    ]
+
+
 def _strategy_book_memo_spend(
     summary: dict[str, Any], *, repo_root: Path | None, now: datetime
 ) -> dict[str, Any] | None:
@@ -5060,6 +5089,7 @@ def collect_ops_findings(
     findings.extend(_guarded_check(check_operating_decline_gate))
     findings.extend(_guarded_check(check_sector_headwind_gate))
     findings.extend(_guarded_check(check_strategy_book_memo_job))
+    findings.extend(_guarded_check(check_memo_model_comparison))
     findings.extend(_guarded_check(check_strategy_book_observe))
     findings.extend(_guarded_check(check_n200_tech_timing_observe))
     findings.extend(_guarded_check(check_n201_value_mom_observe))

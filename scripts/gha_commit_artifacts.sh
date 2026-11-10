@@ -26,7 +26,8 @@
 # Env:
 #   GHA_COMMIT_OWNED       required — space/newline separated files, dirs, or globs
 #   GHA_COMMIT_OPTIONAL    optional exact file paths (conditional overlay)
-#   GHA_COMMIT_EXCLUDE     exact file paths skipped even when under an owned dir
+#   GHA_COMMIT_EXCLUDE     exact file paths skipped even when under an owned dir;
+#                          an entry ending in / skips every file under that dir
 #   GHA_COMMIT_PRESERVE_NEWER_GENERATED_AT
 #                          default 1 — skip owned JSON overlay when remote
 #                          generated_at is newer than the job snapshot
@@ -329,6 +330,9 @@ is_excluded_path() {
     if [ "$path" = "$opt" ]; then
       return 0
     fi
+    case "$opt" in
+      */) case "$path" in "$opt"*) return 0 ;; esac ;;
+    esac
   done
   return 1
 }
