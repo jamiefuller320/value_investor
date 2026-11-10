@@ -27,7 +27,7 @@ DEFAULT_RESEARCH_ROOT = Path("docs/data/research")
 DEFAULT_LIBRARY_ROOT = Path("docs/data/library")
 DEFAULT_STORE_PATH = Path("docs/data/operating_decline_gate.json")
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 LIVE_MARKET_ID = "ftse350"
 BUY_TIER_SIGNALS = frozenset({"buy", "strong_buy"})
 
@@ -977,6 +977,7 @@ def assess_operating_decline(
     as_of: Any,
     filing_interim: dict | None = None,
     interim_body: dict | None = None,
+    fund_or_trust: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """Pure verdict from screen row, statements, interim sources and filings headlines.
 
@@ -993,7 +994,10 @@ def assess_operating_decline(
     the half-year filing extract when that series is not evaluable.
     ``insufficient_data`` when no adverse signal fired and revenue plus (margin or
     EPS) could not be evaluated. Only periods and filings dated on or before
-    ``as_of`` are used.
+    ``as_of`` are used. A name passed with ``fund_or_trust`` (see
+    ``fund_or_trust.classify_fund_or_trust``) is always ``insufficient_data``:
+    the checks are still computed and kept, and the verdict company rules would
+    have given is stored as ``company_rules_verdict``.
     """
     as_of_date = _to_date(as_of)
     if as_of_date is None:
@@ -1061,6 +1065,30 @@ def assess_operating_decline(
             )
     else:
         verdict = "clear"
+    if fund_or_trust is not None:
+        from value_investor.fund_or_trust import BASIS_OVERRIDE, OVERRIDES_FILENAME, REASON_CODE
+
+        source = (
+            f"docs/data/{OVERRIDES_FILENAME}"
+            if fund_or_trust.get("basis") == BASIS_OVERRIDE
+            else "screen row (name, sector)"
+        )
+        return {
+            "verdict": "insufficient_data",
+            "reasons": [
+                {
+                    "code": REASON_CODE,
+                    "detail": (
+                        "fund or investment trust: company operating rules do not apply "
+                        f"({fund_or_trust.get('basis')}: {fund_or_trust.get('detail')})"
+                    ),
+                    "source": source,
+                }
+            ],
+            "checks": checks,
+            REASON_CODE: dict(fund_or_trust),
+            "company_rules_verdict": verdict,
+        }
     return {"verdict": verdict, "reasons": reasons, "checks": checks}
 
 
@@ -1196,6 +1224,8 @@ def _empty_summary() -> dict[str, Any]:
         "buy_tier_with_interim_revenue": 0,
         "buy_tier_with_interim_eps": 0,
         "latest_fiscal_year_counts": {},
+        "fund_or_trust": 0,
+        "buy_tier_fund_or_trust": 0,
     }
 
 
@@ -1207,12 +1237,26 @@ def refresh_operating_decline_gate(
     persist: bool = True,
     as_of: Any = None,
     library_root: Path | None = DEFAULT_LIBRARY_ROOT,
+    fund_overrides_path: Path | None = None,
 ) -> dict[str, Any]:
     """Score every FTSE screen name (then library names with research sources).
 
     Committed files only. FTSE names win a ticker collision with library markets.
+    Funds and investment trusts are ``insufficient_data``; the reviewed override
+    list defaults to ``fund_or_trust_overrides.json`` beside ``latest_path``.
     """
+    from value_investor.fund_or_trust import (
+        OVERRIDES_FILENAME,
+        classify_fund_or_trust,
+        load_overrides,
+    )
+
     as_of_date = _resolve_as_of(as_of)
+    fund_overrides = load_overrides(
+        Path(fund_overrides_path)
+        if fund_overrides_path is not None
+        else Path(latest_path).parent / OVERRIDES_FILENAME
+    )
     if persist:
         # A newly ingested half-year body is extracted in this same daily step,
         # before the gate reads ``filing_interim_financials.json``.
@@ -1246,6 +1290,7 @@ def refresh_operating_decline_gate(
             as_of=as_of_date,
             filing_interim=filing_interim,
             interim_body=interim_body,
+            fund_or_trust=classify_fund_or_trust(ticker, row, fund_overrides),
         )
         names[ticker] = {
             "market": market,
@@ -1271,6 +1316,8 @@ def refresh_operating_decline_gate(
     for entry in names.values():
         summary["names"] += 1
         summary[entry["verdict"]] += 1
+        is_fund = "fund_or_trust" in entry
+        summary["fund_or_trust"] += int(is_fund)
         if entry["checks"]["eps_interim"]["evaluable"]:
             summary["names_with_interim_eps"] += 1
         if entry["checks"]["interim_revenue"]["evaluable"]:
@@ -1281,6 +1328,7 @@ def refresh_operating_decline_gate(
             counts[str(revenue_year)] = counts.get(str(revenue_year), 0) + 1
         if entry["market"] == LIVE_MARKET_ID and entry["signal"] in BUY_TIER_SIGNALS:
             summary["buy_tier_names"] += 1
+            summary["buy_tier_fund_or_trust"] += int(is_fund)
             if entry["verdict"] != "insufficient_data":
                 summary["buy_tier_covered"] += 1
             if entry["checks"]["interim_revenue"]["evaluable"]:
@@ -1332,6 +1380,8 @@ def ops_findings_from_operating_decline_gate(payload: dict[str, Any]) -> list[di
     summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
     buy_names = int(summary.get("buy_tier_names") or 0)
     covered = int(summary.get("buy_tier_covered") or 0)
+    buy_funds = int(summary.get("buy_tier_fund_or_trust") or 0)
+    companies = buy_names - buy_funds
     flagged = _flagged_buy_tier(payload)
     flagged_text = "; ".join(
         f"{ticker} ({', '.join(r['code'] for r in entry.get('reasons') or [])})"
@@ -1352,6 +1402,8 @@ def ops_findings_from_operating_decline_gate(payload: dict[str, Any]) -> list[di
                 f"clear {summary.get('clear', 0)}, declining {summary.get('declining', 0)}, "
                 f"insufficient_data {summary.get('insufficient_data', 0)}; "
                 f"FTSE buy-tier covered {covered}/{buy_names}, "
+                f"fund/trust {buy_funds} (insufficient_data by rule; "
+                f"{summary.get('fund_or_trust', 0)} across all names), "
                 f"flagged declining {len(flagged)}; "
                 f"interim EPS on {summary.get('names_with_interim_eps', 0)} names, "
                 f"interim revenue on {summary.get('names_with_interim_revenue', 0)} names, "
@@ -1365,15 +1417,16 @@ def ops_findings_from_operating_decline_gate(payload: dict[str, Any]) -> list[di
             "auto_fixable": False,
         }
     ]
-    if buy_names == 0 or covered / buy_names < COVERAGE_WARN_SHARE:
+    if companies <= 0 or covered / companies < COVERAGE_WARN_SHARE:
         findings.append(
             {
                 "severity": "warn",
                 "category": "research",
                 "title": COVERAGE_GAP_TITLE,
                 "summary": (
-                    f"Only {covered}/{buy_names} FTSE buy-tier names have a clear/declining "
-                    f"verdict (floor {COVERAGE_WARN_SHARE:.0%}); the rest are "
+                    f"Only {covered}/{companies} FTSE buy-tier operating companies have a "
+                    f"clear/declining verdict (floor {COVERAGE_WARN_SHARE:.0%}; "
+                    f"{buy_funds} fund/trust names excluded); the rest are "
                     "insufficient_data — annual statements or EPS comparison missing. "
                     "Observe-only; no rememo/ingest spray from this finding alone."
                 ),
@@ -1426,7 +1479,9 @@ def format_operating_decline_text(payload: dict[str, Any], *, ticker: str | None
         f"  names {summary.get('names')}: clear {summary.get('clear')}, "
         f"declining {summary.get('declining')}, "
         f"insufficient_data {summary.get('insufficient_data')}",
-        f"  FTSE buy-tier covered {summary.get('buy_tier_covered')}/{summary.get('buy_tier_names')}",
+        f"  FTSE buy-tier covered {summary.get('buy_tier_covered')}/{summary.get('buy_tier_names')}"
+        f" (fund/trust {summary.get('buy_tier_fund_or_trust', 0)}; "
+        f"all names {summary.get('fund_or_trust', 0)})",
         f"  interim comparisons: revenue {summary.get('names_with_interim_revenue', 0)}, "
         f"EPS {summary.get('names_with_interim_eps', 0)}",
         f"  FTSE buy-tier interim revenue "

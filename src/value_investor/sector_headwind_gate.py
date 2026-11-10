@@ -339,6 +339,17 @@ def assess_sector(
     trend_available = return_126d is not None and _coverage_ok(return_126d_count, total)
 
     decline_names = _decline_names_for_cutoff(decline_verdicts, cutoff)
+    from value_investor.fund_or_trust import is_fund_or_trust_entry
+
+    # Funds and trusts have no operating verdict, so they leave the earnings and
+    # decline breadth (numerator and coverage base) but stay in price breadth.
+    fund_tickers: set[str] = set()
+    if decline_names is not None:
+        for member in members:
+            ticker = str(member.get("ticker") or "").strip()
+            if is_fund_or_trust_entry(decline_names.get(ticker)):
+                fund_tickers.add(ticker)
+    operating_total = total - len(fund_tickers)
     decline_count = 0
     decline_declining = 0
     if decline_names is not None:
@@ -353,8 +364,12 @@ def assess_sector(
             decline_count += 1
             decline_declining += int(verdict == "declining")
     decline_breadth = decline_declining / decline_count if decline_count else None
-    decline_coverage = decline_count / total
-    decline_available = decline_names is not None and _coverage_ok(decline_count, total)
+    decline_coverage = decline_count / operating_total if operating_total else 0.0
+    decline_available = (
+        decline_names is not None
+        and operating_total > 0
+        and _coverage_ok(decline_count, operating_total)
+    )
 
     earnings_fields: set[str] = set()
     earnings_breadth_sources = {"decline_store": 0, "screen_earnings_growth": 0}
@@ -369,6 +384,8 @@ def assess_sector(
         earnings_declining = 0
         for member in members:
             ticker = str(member.get("ticker") or "").strip()
+            if ticker in fund_tickers:
+                continue
             decline_row = decline_names.get(ticker) if isinstance(decline_names, dict) else None
             observed = _member_library_earnings(
                 member,
@@ -392,8 +409,8 @@ def assess_sector(
             + screen_field_count
         )
         earnings_breadth = earnings_declining / earnings_count if earnings_count else None
-        earnings_coverage = earnings_count / total
-        earnings_available = _coverage_ok(earnings_count, total)
+        earnings_coverage = earnings_count / operating_total if operating_total else 0.0
+        earnings_available = operating_total > 0 and _coverage_ok(earnings_count, operating_total)
         if not earnings_available:
             earnings_component = "unavailable"
         elif earnings_breadth_sources["screen_earnings_growth"]:
@@ -414,6 +431,8 @@ def assess_sector(
         earnings_count = 0
         earnings_declining = 0
         for member in members:
+            if str(member.get("ticker") or "").strip() in fund_tickers:
+                continue
             declining, fields = _earnings_decline(member)
             if declining is None:
                 continue
@@ -421,8 +440,8 @@ def assess_sector(
             earnings_declining += int(declining)
             earnings_fields.update(fields)
         earnings_breadth = earnings_declining / earnings_count if earnings_count else None
-        earnings_coverage = earnings_count / total
-        earnings_available = _coverage_ok(earnings_count, total)
+        earnings_coverage = earnings_count / operating_total if operating_total else 0.0
+        earnings_available = operating_total > 0 and _coverage_ok(earnings_count, operating_total)
         earnings_component = "screen_fields_fallback" if earnings_available else "unavailable"
     earnings_fallback_used = earnings_breadth_sources["screen_earnings_growth"] > 0
 
@@ -599,6 +618,7 @@ def assess_sector(
             "operating_declining_share": (
                 round(decline_breadth, 6) if decline_breadth is not None else None
             ),
+            "fund_or_trust_member_count": len(fund_tickers),
             "operating_decline_store_present": decline_names is not None,
             "operating_decline_component_available": decline_available,
             "earnings_breadth_sources": earnings_breadth_sources,

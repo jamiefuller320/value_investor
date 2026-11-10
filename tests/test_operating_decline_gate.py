@@ -358,7 +358,7 @@ def test_refresh_writes_store_with_contract_shape(tmp_path):
     )
     on_disk = json.loads(store.read_text(encoding="utf-8"))
     assert on_disk == payload
-    assert payload["schema_version"] == 3
+    assert payload["schema_version"] == 4
     assert payload["as_of"] == AS_OF
     assert payload["observe_only"] is True
     assert payload["influences_live"] is False
@@ -374,6 +374,8 @@ def test_refresh_writes_store_with_contract_shape(tmp_path):
         "buy_tier_with_interim_revenue": 0,
         "buy_tier_with_interim_eps": 0,
         "latest_fiscal_year_counts": {"2025": 3},
+        "fund_or_trust": 0,
+        "buy_tier_fund_or_trust": 0,
     }
     bad = payload["names"]["BAD.L"]
     assert set(bad) >= {"market", "sector", "signal", "verdict", "reasons", "checks"}
@@ -1207,3 +1209,153 @@ def test_half_year_diluted_eps_used_when_no_adjusted():
     check = result["checks"]["eps_interim"]
     assert check["fired"] is True
     assert check["label"] == "Diluted earnings per share"
+
+
+# --- Funds and investment trusts (owner, Phase 1 gate review 2026-11-10) ---
+
+
+def _fund_overrides(path: Path) -> Path:
+    path.write_text(
+        json.dumps(
+            {
+                "fund_or_trust": {"FUND.L": {"why": "listed closed-end fund"}},
+                "operating": {"MGR.L": {"why": "asset manager"}},
+            }
+        ),
+        encoding="utf-8",
+    )
+    return path
+
+
+@pytest.mark.parametrize(
+    ("ticker", "row", "basis"),
+    [
+        ("FUND.L", {"name": "GCP Infrastructure Investments Limited"}, "override"),
+        ("SMT.L", {"name": "Some Ord", "sector": "Investment Trust"}, "sector_label"),
+        ("X", {"name": "X Corp", "industry": "Closed-End Fund"}, "industry"),
+        ("Y", {"name": "Y", "quoteType": "ETF"}, "quote_type"),
+        ("LSF.AX", {"name": "L1 Long Short Fund Limited"}, "name"),
+        ("FCIT.L", {"name": "F&C Investment Trust PLC"}, "name"),
+    ],
+)
+def test_fund_or_trust_classified(tmp_path, ticker, row, basis):
+    from value_investor.fund_or_trust import classify_fund_or_trust, load_overrides
+
+    overrides = load_overrides(_fund_overrides(tmp_path / "o.json"))
+    result = classify_fund_or_trust(ticker, row, overrides)
+    assert result is not None
+    assert result["basis"] == basis
+
+
+@pytest.mark.parametrize(
+    ("ticker", "row"),
+    [
+        ("JUP.L", {"name": "Jupiter Fund Management Plc", "sector": "Financial Services"}),
+        ("ASHM.L", {"name": "Ashmore Group Plc", "sector": "Financial Services"}),
+        ("NTRS", {"name": "Northern Trust Corporation", "sector": "Financial Services"}),
+        ("STB.L", {"name": "Secure Trust Bank PLC", "sector": "Financial Services"}),
+        ("FUND2", {"name": "Funding Circle Holdings plc"}),
+        ("CREI.L", {"name": "Custodian Property Income REIT Ord", "sector": "Investment Trust"}),
+        ("CPT", {"name": "Camden Property Trust", "sector": "Real Estate"}),
+        ("MGR.L", {"name": "Manager Fund Ltd", "sector": "Investment Trust"}),
+    ],
+)
+def test_operating_companies_and_reits_are_not_funds(tmp_path, ticker, row):
+    from value_investor.fund_or_trust import classify_fund_or_trust, load_overrides
+
+    overrides = load_overrides(_fund_overrides(tmp_path / "o.json"))
+    assert classify_fund_or_trust(ticker, row, overrides) is None
+
+
+def test_fund_is_insufficient_data_and_keeps_company_rule_verdict():
+    result = assess_operating_decline(
+        {},
+        _declining_financials(),
+        None,
+        as_of=AS_OF,
+        fund_or_trust={"basis": "override", "detail": "listed closed-end fund"},
+    )
+    assert result["verdict"] == "insufficient_data"
+    assert _codes(result) == ["fund_or_trust"]
+    assert result["company_rules_verdict"] == "declining"
+    assert result["fund_or_trust"]["basis"] == "override"
+    assert result["checks"]["revenue"]["fired"] is True
+
+
+def test_refresh_marks_funds_and_leaves_asset_managers(tmp_path):
+    latest, research, store = _build_fixture(tmp_path)
+    data = json.loads(latest.read_text(encoding="utf-8"))
+    data["reports"] += [
+        {"ticker": "FUND.L", "name": "Infra Investments Ltd", "signal": "buy", "sector": "FS"},
+        {"ticker": "MGR.L", "name": "Asset Manager plc", "signal": "buy", "sector": "FS"},
+    ]
+    latest.write_text(json.dumps(data), encoding="utf-8")
+    _write_name(research, "FUND.L", _declining_financials())
+    _write_name(research, "MGR.L", _declining_financials())
+    _fund_overrides(tmp_path / "fund_or_trust_overrides.json")
+    library = tmp_path / "library"
+    screen = library / "markets" / "ftse_smallcap" / "screen"
+    screen.mkdir(parents=True)
+    (screen / "latest_signals.csv").write_text(
+        "ticker,name,sector,signal\nTRST.L,Small Ord,Investment Trust,buy\n", encoding="utf-8"
+    )
+    _write_name(screen / "research", "TRST.L", _healthy())
+
+    payload = refresh_operating_decline_gate(
+        latest_path=latest,
+        research_root=research,
+        store_path=store,
+        library_root=library,
+        as_of=AS_OF,
+    )
+    names = payload["names"]
+    assert names["FUND.L"]["verdict"] == "insufficient_data"
+    assert names["FUND.L"]["company_rules_verdict"] == "declining"
+    assert names["TRST.L"]["verdict"] == "insufficient_data"
+    assert names["TRST.L"]["fund_or_trust"]["basis"] == "sector_label"
+    assert names["MGR.L"]["verdict"] == "declining"
+    assert "fund_or_trust" not in names["MGR.L"]
+    assert payload["summary"]["fund_or_trust"] == 2
+    assert payload["summary"]["buy_tier_fund_or_trust"] == 1
+
+    findings = ops_findings_from_operating_decline_gate(payload)
+    refreshed = next(f for f in findings if f["title"] == FINDING_TITLE)
+    assert "fund/trust 1" in refreshed["summary"]
+    gap = next(f for f in findings if f["title"] == COVERAGE_GAP_TITLE)
+    # NODATA.L is a data gap; FUND.L is not counted against coverage.
+    assert "3/4 FTSE buy-tier operating companies" in gap["summary"]
+
+
+def test_fund_rule_does_not_change_coverage_when_only_funds_lack_verdicts(tmp_path):
+    latest, research, store = _build_fixture(tmp_path)
+    (research / "NODATA.L" / "sources" / "financials_annual.json").write_text(
+        json.dumps(_healthy()), encoding="utf-8"
+    )
+    _fund_overrides(tmp_path / "fund_or_trust_overrides.json")
+    data = json.loads(latest.read_text(encoding="utf-8"))
+    data["reports"].append({"ticker": "FUND.L", "name": "F", "signal": "buy", "sector": "FS"})
+    latest.write_text(json.dumps(data), encoding="utf-8")
+    _write_name(research, "FUND.L", _healthy())
+    payload = refresh_operating_decline_gate(
+        latest_path=latest,
+        research_root=research,
+        store_path=store,
+        library_root=None,
+        as_of=AS_OF,
+    )
+    titles = [f["title"] for f in ops_findings_from_operating_decline_gate(payload)]
+    assert COVERAGE_GAP_TITLE not in titles
+
+
+def test_committed_fund_overrides_are_reviewed_and_disjoint():
+    from value_investor.fund_or_trust import classify_fund_or_trust, load_overrides
+
+    path = Path(__file__).resolve().parents[1] / "docs" / "data" / "fund_or_trust_overrides.json"
+    overrides = load_overrides(path)
+    funds, operating = overrides["fund_or_trust"], overrides["operating"]
+    assert {"GCP.L", "INPP.L", "3IN.L", "III.L"} <= set(funds)
+    assert {"JUP.L", "ABDN.L", "ICG.L", "ASHM.L", "MNG.L"} <= set(operating)
+    assert not set(funds) & set(operating)
+    assert all(entry.get("why") for entry in [*funds.values(), *operating.values()])
+    assert classify_fund_or_trust("GCP.L", {"name": "GCP"}, overrides)["basis"] == "override"
+    assert classify_fund_or_trust("JUP.L", {"name": "Jupiter Fund"}, overrides) is None

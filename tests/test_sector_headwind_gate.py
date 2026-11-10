@@ -1081,3 +1081,76 @@ def test_non_graduated_market_adds_no_regional_members(tmp_path: Path):
         for row in payload["summary"]["by_market"]["ftse350"]["buy_tier_insufficient_data"]
         if row["sector"] == "Niche"
     }
+
+
+def _fund_row() -> dict:
+    return {
+        "verdict": "insufficient_data",
+        "fund_or_trust": {"basis": "override", "detail": "listed closed-end fund"},
+    }
+
+
+def test_funds_leave_decline_breadth_and_its_coverage_base():
+    members = _members(8, sector="Financial Services")
+    names = {row["ticker"]: _fund_row() for row in members[4:]}
+    names.update({row["ticker"]: {"verdict": "clear"} for row in members[1:4]})
+    names[members[0]["ticker"]] = {"verdict": "declining"}
+
+    result = assess_sector(
+        members,
+        charts=_charts(members),
+        decline_verdicts={"names": names},
+        as_of="2025-09-30",
+    )
+
+    metrics = result["metrics"]
+    # Without the exclusion 4 of 8 would be covered (50%, under the 60% line).
+    assert metrics["fund_or_trust_member_count"] == 4
+    assert metrics["operating_decline_member_count"] == 4
+    assert metrics["operating_decline_coverage_share"] == 1.0
+    assert metrics["earnings_component"] == "operating_decline_store"
+    assert metrics["operating_declining_share"] == 0.25
+    assert metrics["price_member_count"] == 8
+    assert result["verdict"] == "sound"
+
+
+def test_library_funds_do_not_count_through_earnings_growth_fallback():
+    members = _members(6, sector="Financial Services")
+    for member in members:
+        member["earnings_growth"] = 0.05
+    names = {row["ticker"]: {"verdict": "clear"} for row in members[1:4]}
+    names[members[0]["ticker"]] = {"verdict": "declining"}
+    for member in members[4:]:
+        member["earnings_growth"] = -0.9
+        names[member["ticker"]] = _fund_row()
+
+    result = assess_sector(
+        members,
+        charts=_charts(members),
+        decline_verdicts={"names": names},
+        as_of="2025-09-30",
+        earnings_growth_fallback=True,
+    )
+
+    metrics = result["metrics"]
+    # Counting the two funds' earnings_growth would make it 3 of 6 (50%), a headwind.
+    assert metrics["earnings_member_count"] == 4
+    assert metrics["earnings_declining_count"] == 1
+    assert metrics["earnings_breadth_sources"] == {"decline_store": 4, "screen_earnings_growth": 0}
+    assert result["verdict"] == "sound"
+
+
+def test_sector_of_only_funds_has_no_earnings_breadth():
+    members = _members(4, sector="Investment Trust")
+    names = {row["ticker"]: _fund_row() for row in members}
+
+    result = assess_sector(
+        members,
+        charts=_charts(members),
+        decline_verdicts={"names": names},
+        as_of="2025-09-30",
+    )
+
+    assert result["metrics"]["operating_decline_coverage_share"] == 0.0
+    assert result["metrics"]["earnings_component"] == "unavailable"
+    assert result["verdict"] == "insufficient_data"
