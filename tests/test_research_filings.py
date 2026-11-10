@@ -5670,6 +5670,39 @@ def test_eng_20261101_03_refetch_ir_presentation_sources_hik_interim_deck(
     assert saved["dividend_policy"][0].get("interim_dividend_cents") == 36.0
 
 
+def test_eng_20261110_03_gap_fill_ir_wrapper_delegates_presentation_pipeline(
+    monkeypatch, tmp_path: Path
+):
+    """eng-20261110-03: gap_fill_sources IR wrapper forwards sources_dir to presentation refetch."""
+    from value_investor.research.gap_fill_sources import refetch_ir_allowlist_filing_bodies
+
+    captured: dict[str, object] = {}
+
+    def _fake_presentation(filings_dir, ticker, **kwargs):
+        captured["ticker"] = ticker
+        captured["sources_dir"] = kwargs.get("sources_dir")
+        return {
+            "fetched": 0,
+            "note": "refetch_ir_presentation_sources",
+            "ir_presentation_metrics": {"bridge_count": 0, "mandatory": True},
+        }
+
+    monkeypatch.setattr(
+        "value_investor.research.gap_fill_sources.refetch_ir_presentation_sources",
+        _fake_presentation,
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "MEGP.L",
+        company_name="ME Group International plc",
+        sources_dir=tmp_path,
+    )
+    assert captured["ticker"] == "MEGP.L"
+    assert captured["sources_dir"] == tmp_path
+
+
 def test_fetch_document_bytes_skips_partial_download(monkeypatch):
     from value_investor.research.companies_house import MIME_PDF, MIME_XHTML, fetch_document_bytes
 
