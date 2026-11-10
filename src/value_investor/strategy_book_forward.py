@@ -24,6 +24,7 @@ from datetime import UTC, date, datetime, time, timedelta
 from pathlib import Path
 from typing import Any
 
+from value_investor.gate_store_history import GateHistory
 from value_investor.price_charts import chart_last_close_date
 from value_investor.storage import read_json, write_json
 from value_investor.strategy_book_memo_job import MEMO_NOT_READY_MAX_SHARE, TITLE_BEHIND
@@ -43,7 +44,7 @@ from value_investor.strategy_book_observe import (
     walk_book,
 )
 from value_investor.strategy_book_prices import latest_completed_session
-from value_investor.strategy_book_replay import _chart_file, _gate_for, _read_chart
+from value_investor.strategy_book_replay import _chart_file, _read_chart
 from value_investor.strategy_book_rules import (
     CLOSES_STATE_NAME,
     COLUMN_PRIMARY,
@@ -552,8 +553,8 @@ def _load_forward_specs(
     log_rows: list[dict[str, Any]],
 ) -> dict[str, Any]:
     markets = universe_markets(paths.market_status)
-    decline = _read_obj(paths.decline)
-    sector = _read_obj(paths.sector)
+    gate_history = GateHistory.load(paths.decline, paths.sector)
+    gate_history.index_facts(since=start)
     specs: list[NameSpec] = []
     blocked: Counter[str] = Counter()
     errors: list[str] = []
@@ -585,8 +586,7 @@ def _load_forward_specs(
                             ticker=ticker,
                             outcome="no_session_on_or_after_start",
                             screens=screens.get(ticker) or [],
-                            decline=decline,
-                            sector=sector,
+                            gate_history=gate_history,
                             scored=completed,
                         )
                     )
@@ -601,8 +601,7 @@ def _load_forward_specs(
                             ticker=ticker,
                             outcome="no_chart",
                             screens=screens.get(ticker) or [],
-                            decline=decline,
-                            sector=sector,
+                            gate_history=gate_history,
                             scored=completed,
                         )
                     )
@@ -617,8 +616,7 @@ def _load_forward_specs(
                             ticker=ticker,
                             outcome="no_session_on_or_after_start",
                             screens=screens.get(ticker) or [],
-                            decline=decline,
-                            sector=sector,
+                            gate_history=gate_history,
                             scored=completed,
                         )
                     )
@@ -630,8 +628,7 @@ def _load_forward_specs(
                     ticker=ticker,
                     scored=completed,
                     screens=screens.get(ticker) or [],
-                    decline=decline,
-                    sector=sector,
+                    gate_history=gate_history,
                     chart_path=chart_path,
                     commit=commit,
                     observed_at=now,
@@ -645,8 +642,7 @@ def _load_forward_specs(
                         ticker=ticker,
                         outcome="f9",
                         screens=screens.get(ticker) or [],
-                        decline=decline,
-                        sector=sector,
+                        gate_history=gate_history,
                         scored=completed,
                     )
                 )
@@ -873,8 +869,7 @@ def _session_verdict(
     ticker: str,
     scored: date,
     screens: list[ScreenFact],
-    decline: dict[str, Any],
-    sector: dict[str, Any],
+    gate_history: GateHistory,
     chart_path: Path | None,
     commit: str | None,
     observed_at: datetime,
@@ -920,11 +915,11 @@ def _session_verdict(
                     by_signal_job=False,
                 )
             )
-    gates = _gate_for(decline, sector, market, ticker)
+    gates = gate_history.facts_for(market, ticker)
     decline_verdict, sector_verdict, gate_as_of = _gate_log_fields(gates, scored)
     files = _hash_files(
         paths.root,
-        [path for path in (chart_path, paths.decline, paths.sector) if path is not None],
+        [path for path in (chart_path, *gate_history.paths_in_force(scored)) if path is not None],
     )
     if latest is not None and latest.path:
         files.update(_hash_files(paths.root, [Path(latest.path)]))
@@ -1000,8 +995,7 @@ def _unloaded(
     ticker: str,
     outcome: str,
     screens: list[ScreenFact],
-    decline: dict[str, Any],
-    sector: dict[str, Any],
+    gate_history: GateHistory,
     scored: date,
 ) -> dict[str, Any]:
     """A current buy-tier name that never became a spec, with the reason already counted."""
@@ -1010,7 +1004,7 @@ def _unloaded(
         "ticker": ticker,
         "outcome": outcome,
         "screens": list(screens),
-        "gates": _gate_for(decline, sector, market, ticker),
+        "gates": gate_history.facts_for(market, ticker),
         "scored": scored,
     }
 
@@ -1026,18 +1020,17 @@ def _screen_fact_before(screens: list[ScreenFact], session: date) -> ScreenFact 
 def _gate_log_fields(gates: list[Any], session: date) -> tuple[str | None, str | None, str | None]:
     """Decline, sector, and gate date, with the gate log's in-force rule.
 
-    The first gate fact is the one the log records. Decline and sector are
-    null unless ``as_of`` is strictly before ``session``. The date stays.
+    The log records the latest fact dated strictly before ``session``. With
+    none in force, decline and sector are null and the date is the earliest
+    fact's, which is on or after the session.
     """
-    gate = gates[0] if gates else None
-    if gate is None:
+    if not gates:
         return None, None, None
-    in_force = gate.as_of < session
-    return (
-        gate.decline if in_force else None,
-        gate.sector if in_force else None,
-        gate.as_of.isoformat(),
-    )
+    in_force = [gate for gate in gates if gate.as_of < session]
+    if not in_force:
+        return None, None, min(gate.as_of for gate in gates).isoformat()
+    gate = max(in_force, key=lambda item: item.as_of)
+    return gate.decline, gate.sector, gate.as_of.isoformat()
 
 
 def _signalled_kind(events: list[dict[str, Any]], session: date | None) -> str:

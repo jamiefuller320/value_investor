@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-10T09:58:51+00:00",
+  "updated_at": "2026-11-10T10:05:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -17157,6 +17157,29 @@
             "path": "next_widen_step.id",
             "op": "==",
             "value": "accumulate_quiet_nights"
+          }
+        ]
+      }
+    },
+    {
+      "id": "L699",
+      "category": "later",
+      "section": "ops",
+      "title": "Gate history retention before the forward book outgrows 400 versions",
+      "summary": "docs/data/gate_history keeps the newest 400 dated copies per gate (about 80 KB a day gzipped). The forward book rebuilds from its start date each run, so once versions older than the start are pruned an early entry would lose its gate. Before then either compact to a delta format, keep every version on or after the forward start date, or have the rebuild read past decisions from the gate log.",
+      "revisit_when": "2027-09-01, or when docs/data/gate_history/operating_decline holds 350 versions, whichever is first",
+      "tags": [
+        "strategy-book",
+        "gates",
+        "retention"
+      ],
+      "status": "open",
+      "source": "gate-store dating fix (cursor/gate-store-dating-fix-567c)",
+      "added_at": "2026-11-10T09:04:08+00:00",
+      "trigger": {
+        "all": [
+          {
+            "on_or_after": "2027-09-01"
           }
         ]
       }
