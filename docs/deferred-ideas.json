@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-10T08:00:16+00:00",
+  "updated_at": "2026-11-10T09:58:51+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -17119,6 +17119,47 @@
       "status": "open",
       "source": "Owner question 2026-11-10 on rate of change",
       "added_at": "2026-11-10T01:54:33+00:00"
+    },
+    {
+      "id": "N261",
+      "category": "not_now",
+      "section": "universe",
+      "title": "Cold-store archive pack stage-3 widen (16/64)",
+      "summary": "After stage-2 (8/32) lands, raise quiet-window archive caps to documented stage 3 (max_units=16, max_http_fetches=64) only after 5 quiet isolation_ok apply nights at stage-2 caps with no shared 429/runner collision. Keep tickers/bodies at 2/1; never auto-widen; N180/N181 stay parked.",
+      "revisit_when": "5 quiet apply_complete nights at stage-2 caps (8/32) with capacity_isolation.isolation_ok=true and no shared 429/runner collision vs euro maintenance or spare sprints; then human/eng raise workflow+code defaults to 16/64",
+      "tags": [
+        "cold-store",
+        "archive",
+        "l499",
+        "caps",
+        "stage-3",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-6112d118-7403-5843-8fe7-65510ff22fb0",
+      "added_at": "2026-11-10T09:58:51+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/universe_filing_archive_status.json",
+            "path": "current_caps.max_units",
+            "op": ">=",
+            "value": 8
+          },
+          {
+            "file": "docs/data/universe_filing_archive_status.json",
+            "path": "capacity_isolation.isolation_ok",
+            "op": "==",
+            "value": true
+          },
+          {
+            "file": "docs/data/universe_filing_archive_status.json",
+            "path": "next_widen_step.id",
+            "op": "==",
+            "value": "accumulate_quiet_nights"
+          }
+        ]
+      }
     }
   ],
   "fragments": [
