@@ -3957,6 +3957,73 @@ def test_normalize_companies_house_index_rows_maps_document_metadata_url():
     assert rows[0]["ch_document_id"] == "abc123DocId"
 
 
+def test_normalize_companies_house_index_rows_canonicalizes_content_url():
+    """eng-20261110-02: indexed /content URLs must normalize before document-api refetch."""
+    from value_investor.research.filings import normalize_companies_house_index_rows
+
+    doc_id = "abc123DocId"
+    meta = f"https://document-api.company-information.service.gov.uk/document/{doc_id}"
+    content = f"{meta}/content"
+    rows = normalize_companies_house_index_rows(
+        [
+            {
+                "id": "ch_content",
+                "headline": "Companies House accounts",
+                "url": content,
+                "has_body": False,
+            }
+        ]
+    )
+    assert rows[0]["source"] == "companies_house"
+    assert rows[0]["document_metadata_url"] == meta
+    assert rows[0]["url"] == meta
+    assert rows[0]["ch_document_id"] == doc_id
+
+
+def test_refetch_companies_house_filing_bodies_content_document_api_url(tmp_path, monkeypatch):
+    """eng-20261110-02: refetch uses metadata endpoint when index stores /content URLs."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    doc_id = "eng2026111002Doc"
+    meta = f"https://document-api.company-information.service.gov.uk/document/{doc_id}"
+    content = f"{meta}/content"
+    row_id = f"ch_00006400_{doc_id[:8]}"
+    index = {
+        "filings": [
+            {
+                "id": row_id,
+                "source": "companies_house",
+                "headline": "Companies House accounts — group",
+                "url": content,
+                "document_metadata_url": content,
+                "period": "annual",
+                "has_body": False,
+                "priority": 140,
+            }
+        ],
+        "summary": {"total": 1, "with_body": 0},
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    pdf_body = "A" * 220 + " statutory accounts pension borrowings covenant going concern"
+    seen_meta: list[str] = []
+
+    def fake_body(row):
+        seen_meta.append(str(row.get("document_metadata_url") or row.get("url") or ""))
+        return pdf_body if row.get("id") == row_id else None
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        fake_body,
+    )
+    result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=3)
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    assert seen_meta == [meta]
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["document_metadata_url"] == meta
+    assert (filings_dir / "bodies" / f"{row_id}.txt").exists()
+
+
 def test_merge_filings_keeps_companies_house_row_alongside_same_day_rns():
     ch_url = "https://document-api.company-information.service.gov.uk/document/ch1"
     merged = merge_filings(

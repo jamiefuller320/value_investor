@@ -16,8 +16,10 @@ from value_investor.research.companies_house import (
     _splice_ch_deepen_note_sections,
     _StripAuthOnRedirect,
     ch_document_id_from_metadata_url,
+    ch_document_metadata_url,
     fetch_accounts_filing_rows,
     fetch_companies_house_filing_body,
+    fetch_document_bytes,
     fetch_filings_companies_house,
     load_company_number_map,
     register_enhanced_ch_body_fetch,
@@ -77,6 +79,49 @@ def test_ch_document_id_from_metadata_url():
     )
     assert ch_document_id_from_metadata_url(url) == "7iLf3HQWfOUlSiKOvCISIf9zIePMlIhubeQAUqF0Ivg"
     assert ch_document_id_from_metadata_url("https://example.com/doc") is None
+
+
+def test_ch_document_metadata_url_strips_content_suffix():
+    """eng-20261110-02: content-hop URLs in filings_index must resolve to metadata JSON endpoint."""
+    doc_id = "7iLf3HQWfOUlSiKOvCISIf9zIePMlIhubeQAUqF0Ivg"
+    meta = f"https://document-api.company-information.service.gov.uk/document/{doc_id}"
+    content = f"{meta}/content"
+    assert ch_document_metadata_url(content) == meta
+    assert ch_document_metadata_url(f"/document/{doc_id}/content") == meta
+    assert ch_document_id_from_metadata_url(content) == doc_id
+
+
+def test_fetch_document_bytes_rejects_corrupt_pdf_and_falls_back_to_ixbrl(monkeypatch):
+    """eng-20261110-02: garbled PDF hop must fall through to iXBRL for CH accounts."""
+    meta = {
+        "links": {"document": "/document/eng02/content"},
+        "resources": {
+            MIME_PDF: {"content_length": 50_000},
+            MIME_XHTML: {"content_length": 0},
+        },
+    }
+    calls: list[str] = []
+
+    def fake_get(url, *, api_key, accept="application/json", timeout=60.0, retries=2):
+        if url.endswith("/document/eng02"):
+            return json.dumps(meta).encode("utf-8")
+        calls.append(accept)
+        if accept == MIME_PDF:
+            return b"<html>error</html>" + (b"x" * 400)
+        return b"<html>pension borrowings covenant going concern cash flow " + (b"y" * 300)
+
+    monkeypatch.setattr("value_investor.research.companies_house._ch_get", fake_get)
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.time.sleep", lambda *_a, **_k: None
+    )
+    fetched = fetch_document_bytes(
+        "https://document-api.company-information.service.gov.uk/document/eng02/content",
+        api_key="test-key",
+    )
+    assert fetched is not None
+    assert fetched[1] == MIME_XHTML
+    assert MIME_PDF in calls
+    assert MIME_XHTML in calls
 
 
 def test_fetch_accounts_filing_rows_sets_ch_document_id(monkeypatch):

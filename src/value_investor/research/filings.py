@@ -5629,7 +5629,10 @@ def normalize_companies_house_index_rows(
     filings: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
     """Map CH document-api URLs and ids onto ``filings_index`` rows for refetch."""
-    from value_investor.research.companies_house import ch_document_id_from_metadata_url
+    from value_investor.research.companies_house import (
+        ch_document_id_from_metadata_url,
+        ch_document_metadata_url,
+    )
 
     normalized: list[dict[str, Any]] = []
     for row in filings:
@@ -5637,11 +5640,12 @@ def normalize_companies_house_index_rows(
         if not _is_ch_filing_row(item):
             normalized.append(item)
             continue
-        meta_url = str(item.get("document_metadata_url") or item.get("url") or "").strip()
-        if _is_ch_document_url(meta_url):
+        meta_url = ch_document_metadata_url(
+            str(item.get("document_metadata_url") or item.get("url") or "").strip()
+        )
+        if meta_url and _is_ch_document_url(meta_url):
             item["document_metadata_url"] = meta_url
-            if not str(item.get("url") or "").startswith("http"):
-                item["url"] = meta_url
+            item["url"] = meta_url
             doc_id = ch_document_id_from_metadata_url(meta_url)
             if doc_id:
                 item["ch_document_id"] = doc_id
@@ -5697,8 +5701,11 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
     url = _sanitize_http_url(url)
     url = _resolve_ir_allowlist_fetch_url(url)
     if _is_ch_document_url(url):
+        from value_investor.research.companies_house import ch_document_metadata_url
+
+        meta_url = ch_document_metadata_url(url) or url
         return _fetch_companies_house_body(
-            {"url": url, "document_metadata_url": url, "source": "companies_house"}
+            {"url": meta_url, "document_metadata_url": meta_url, "source": "companies_house"}
         )
     url = standardise_investegate_lse_fetch_url(url) or url
     if "news.google.com" in url:
