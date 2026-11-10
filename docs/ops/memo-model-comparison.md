@@ -13,7 +13,7 @@
 | Incumbent | `composer-2.5` (hard-coded in the memo job; also `policy.json` `research_model`) | 0.40 (registration section 11) |
 | Challenger | `grok-4.6`, the strongest `grok-*` with a rate in `agent_model_policy.MODEL_API_RATES` | 1.04 (0.40 scaled by list rates, `model_ab.estimate_model_memo_usd`) |
 
-**Runtime check (2026-11-10).** `Cursor.models.list` with the `CURSOR_API_KEY_V2` key listed `composer-2.5`, `grok-4.5`, `grok-4.6` and a newer `grok-4.7`. `grok-4.7` has no rate in `agent_model_policy`, so it is not the challenger here (queued as L700). The legacy `CURSOR_API_KEY` in the agent VM was rejected ("Invalid User API Key"). The workflow uses `CURSOR_API_KEY_V2` first, as memo-backfill does. Each generation run re-lists the models and fails closed, with no model call, if either id is missing. The ids it saw are stored in `status.json` → `runtime_models`.
+**Runtime check (2026-11-10).** `Cursor.models.list` with the `CURSOR_API_KEY_V2` key listed `composer-2.5`, `grok-4.5`, `grok-4.6` and a newer `grok-4.7`. `grok-4.7` has no rate in `agent_model_policy`, so it is not the challenger here (queued as L701). The legacy `CURSOR_API_KEY` in the agent VM was rejected ("Invalid User API Key"). The workflow uses `CURSOR_API_KEY_V2` first, as memo-backfill does. Each generation run re-lists the models and fails closed, with no model call, if either id is missing. The ids it saw are stored in `status.json` → `runtime_models`.
 
 ## Names (rule v1, frozen 2026-11-10)
 
@@ -155,7 +155,7 @@ Then set `preferred` to `A`, `B` or `tie`: the memo you would rather the book ac
 The other outcomes:
 
 - **keep**: at least 10 pairs are complete, and either the owner prefers the incumbent at least as often, or the challenger has more hallucination flags.
-- **inconclusive_keep**: anything else. `composer-2.5` stays and the larger rerun (L701) becomes due.
+- **inconclusive_keep**: anything else. `composer-2.5` stays and the larger rerun (L702) becomes due.
 
 **If the outcome is switch**, the owner approves the change. It is then logged as an `operational_switches` row on `docs/data/strategy_book_registration.json`, the same way `spend_enabled` was:
 

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-10T11:18:39+00:00",
+  "updated_at": "2026-11-10T10:05:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -17216,6 +17216,39 @@
     {
       "id": "L700",
       "category": "later",
+      "section": "ops",
+      "title": "Shared chart writers store partial intraday bars",
+      "summary": "email-report/dashboard ensure_price_charts writes the current session's live Yahoo bar (e.g. HK 2026-11-10 bars written 02:10 UTC mid-session). The strategy-book forward loader now clips to each market's completed session and the close refresh trims, but other chart consumers (N200, paper, dashboards) still read partial bars as closes.",
+      "revisit_when": "After strategy book forward_live goes true and its first 2 weeks of marks are clean, or when another observe instrument is found reading a partial bar",
+      "tags": [
+        "charts",
+        "yahoo",
+        "strategy-book",
+        "partial-bar"
+      ],
+      "status": "open",
+      "source": "forward-refresh-reliability go-live review 2026-11-10",
+      "added_at": "2026-11-10T09:11:30+00:00"
+    },
+    {
+      "id": "N263",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Quote fallback for unpublished European daily bars",
+      "summary": "Yahoo drops the just-completed London/continental daily bar overnight until about the next session. Instead of relying on the 17:45 UTC slot, the close refresh could fill the missing session from the quote's regularMarketPrice/time. That changes the registered adjusted-close source, so it needs an owner change marker.",
+      "revisit_when": "If Strategy book closes short of session fires for a European market on 3+ weekdays in a month after the 17:45 slot is live",
+      "tags": [
+        "yahoo",
+        "strategy-book",
+        "closes"
+      ],
+      "status": "open",
+      "source": "forward-refresh-reliability go-live review 2026-11-10",
+      "added_at": "2026-11-10T09:11:30+00:00"
+    },
+    {
+      "id": "L701",
+      "category": "later",
       "section": "research",
       "title": "Memo model comparison: add grok-4.7 as a challenger",
       "summary": "The Cursor runtime lists grok-4.7 (and claude/gpt/gemini frontier models) for our key on 2026-11-10, but agent_model_policy has no rate for it, so the comparison uses grok-4.6 as the strongest configured Grok. Adding a grok-4.7 rate would make strongest_configured_grok pick it for a second comparison.",
@@ -17240,7 +17273,7 @@
       }
     },
     {
-      "id": "L701",
+      "id": "L702",
       "category": "later",
       "section": "research",
       "title": "Larger memo model comparison if the 12-name result is inconclusive",
