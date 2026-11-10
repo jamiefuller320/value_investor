@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-09T08:47:03.615418+00:00
+Track: `buy_tier_level` · updated 2026-11-10T08:46:49.091407+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **6** / 39 (15% count, 14% NAV)
+- Losers: **6** / 38 (16% count, 14% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
@@ -63,14 +63,7 @@ Track: `buy_tier_level` · updated 2026-11-09T08:47:03.615418+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 41%
-
-### OMV.VI — intact / hold_tolerate (-2.5%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 57%
+- conviction 47%
 
 ### AED.BR — intact / hold_tolerate (-2.2%)
 - still buy
@@ -105,7 +98,7 @@ Track: `buy_tier_level` · updated 2026-11-09T08:47:03.615418+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 41%
+- conviction 46%
 
 ### SKF-B.ST — intact / hold_tolerate (-1.1%)
 - still buy
@@ -127,6 +120,12 @@ Track: `buy_tier_level` · updated 2026-11-09T08:47:03.615418+00:00
 - conviction 28% below intact floor
 - still buy
 - data_quality 1.00
+
+### DQ7A.IR — weakening / watch_review (+0.0%)
+- research verdict caution
+- conviction 21% below intact floor
+- still buy
+- cheapness family still passes
 
 ### DG.PA — intact / hold_tolerate (+0.1%)
 - still strong_buy
@@ -260,7 +259,7 @@ Track: `buy_tier_level` · updated 2026-11-09T08:47:03.615418+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 77%
+- conviction 87%
 
 ### ESSITY-B.ST — intact / hold_tolerate (+10.9%)
 - still buy
@@ -268,13 +267,6 @@ Track: `buy_tier_level` · updated 2026-11-09T08:47:03.615418+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 55%
-
-### SAN.PA — intact / hold_tolerate (+13.2%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 53%
 
 ### SGO.PA — intact / hold_tolerate (+14.4%)
 - still strong_buy

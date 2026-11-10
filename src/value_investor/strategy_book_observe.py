@@ -67,6 +67,7 @@ from value_investor.strategy_book_rules import (
     ARCHIVE_BUY_TIER_ONLY,
     ARCHIVE_FULL_STRATEGY,
     BASKET_MIN_NAMES,
+    BENCH_COLUMNS,
     BENCH_MIN_COUNTED,
     BENCH_SLOTS,
     BENCH_STANDARD_ERRORS,
@@ -103,7 +104,6 @@ from value_investor.strategy_book_rules import (
     FAIL_TO_LAUNCH_INDEX,
     FLOOR_AT_OR_ABOVE_LAST,
     INFLUENCES_LIVE,
-    INITIAL_BENCH,
     INTERIM_WEEKS,
     LAUNCH_RETURN,
     LOOKAHEAD_CURRENT_GATES,
@@ -133,6 +133,7 @@ from value_investor.strategy_book_rules import (
     THICKNESS_MIN_COUNTED,
     THICKNESS_MIN_SPAN_SESSIONS,
     TIME_CAP_INDEX,
+    TREND_NOT_FALLING_DIRECTIONS,
     VALUE_SET_SIGNALS,
     UnknownMarketClose,
     floor_for_checkpoint,
@@ -1472,7 +1473,9 @@ def _channels(name: _Name, session: date) -> dict[str, Any]:
     return out
 
 
-def _bench_flags(name: _Name, session: date, snapshot: dict[str, Any]) -> dict[str, bool]:
+def _bench_flags(
+    name: _Name, session: date, snapshot: dict[str, Any], channels: dict[str, Any]
+) -> dict[str, bool]:
     _download, _count, closes = name.prices.tail(session, DEEP_DIP_LOOKBACK + 1)
     deep = False
     if len(closes) > DEEP_DIP_LOOKBACK and closes[-1 - DEEP_DIP_LOOKBACK]:
@@ -1484,6 +1487,7 @@ def _bench_flags(name: _Name, session: date, snapshot: dict[str, Any]) -> dict[s
         "deep_dip": deep,
         "revenue_growing": change is not None and change > 0,
         "fcf_agrees": str(adjusted or "") in VALUE_SET_SIGNALS,
+        "trend_not_falling": channels.get("ch126_direction") in TREND_NOT_FALLING_DIRECTIONS,
     }
 
 
@@ -2341,7 +2345,9 @@ def _open_position_record(
         entry_first_seen=entry_px,
         snapshot=snapshot,
         channels=channels,
-        bench=_bench_flags(name, signal_session, snapshot) if column == COLUMN_PRIMARY else {},
+        bench=_bench_flags(name, signal_session, snapshot, channels)
+        if column == COLUMN_PRIMARY
+        else {},
         t212=options.t212_label
         if options.t212_label is not None
         else t212_listed(spec.listing, fill_session),
@@ -3551,7 +3557,7 @@ def _bench_report(episodes: list[dict[str, Any]]) -> dict[str, Any]:
     counted_primary = [episode for episode in primary if not episode.get("provenance_missing")]
     first_half, second_half = period_halves(counted_primary)
     report: dict[str, Any] = {}
-    for column in INITIAL_BENCH:
+    for column in BENCH_COLUMNS:
         kept = [episode for episode in primary if (episode.get("bench") or {}).get(column)]
         kept_counted = [episode for episode in kept if not episode.get("provenance_missing")]
         dropped_missing = [episode for episode in kept if episode.get("provenance_missing")]
@@ -4252,7 +4258,7 @@ def add_bench_column(
     version_review: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Add a bench column. After scores exist, only a logged version review may."""
-    columns = list(store.get("bench_columns") or list(INITIAL_BENCH))
+    columns = list(store.get("bench_columns") or list(BENCH_COLUMNS))
     if column_id in columns:
         store["bench_columns"] = columns
         return store
@@ -4275,7 +4281,7 @@ def add_bench_column(
 
 def filter_kept(episodes: list[dict[str, Any]], column: str) -> list[dict[str, Any]]:
     """Filter challengers keep book entries. They do not open new ones."""
-    if column not in INITIAL_BENCH and column not in {
+    if column not in BENCH_COLUMNS and column not in {
         *(episode.get("column") for episode in episodes)
     }:
         return [

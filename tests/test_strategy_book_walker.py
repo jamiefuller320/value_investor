@@ -46,6 +46,7 @@ from value_investor.strategy_book_rules import (
     ARCHIVE_BUY_TIER_ONLY,
     ARCHIVE_FULL_STRATEGY,
     BASKET_MIN_NAMES,
+    BENCH_COLUMNS,
     BENCH_MIN_COUNTED,
     BENCH_SLOTS,
     BENCH_STANDARD_ERRORS,
@@ -77,6 +78,7 @@ from value_investor.strategy_book_rules import (
     MAX_FILL_GAP_CALENDAR_DAYS,
     RECOVERY_DROP,
     REGISTRATION_ID,
+    REVIEW_BENCH,
     RSI_LEVEL,
     SLOT_BOOK_RANDOM_SEED,
     SLOT_COUNT,
@@ -569,6 +571,36 @@ def test_filter_challenger_keeps_book_entries_only() -> None:
     assert all(row["column"] == COLUMN_PRIMARY for row in kept)
     assert not any(row["column"] == "fcf_agrees" for row in result["episodes"])
     assert _one(result)["bench"]["fcf_agrees"] is False
+
+
+def test_trend_not_falling_drops_entries_in_a_falling_channel() -> None:
+    tail = _decline() + [100.0] + [90.0] * 12 + [100.0] * 10
+    rising = _one(_walk(_spec([40.0 + i * 0.25 for i in range(150)] + tail, signal_index=164)))
+    falling = _one(_walk(_spec([200.0 - i * 0.75 for i in range(150)] + tail, signal_index=164)))
+    short = _one(_walk(_spec(tail)))
+    assert rising["channels"]["ch126_direction"] == "rising"
+    assert rising["bench"]["trend_not_falling"] is True
+    assert falling["channels"]["ch126_direction"] == "falling"
+    assert falling["bench"]["trend_not_falling"] is False
+    assert short["channels"]["ch126_status"] == "insufficient_history"
+    assert short["bench"]["trend_not_falling"] is False
+
+
+def test_review_bench_columns_match_their_registration_seal() -> None:
+    root = Path(__file__).resolve().parents[1]
+    registration = json.loads(
+        (root / "docs/data/strategy_book_registration.json").read_text(encoding="utf-8")
+    )
+    seals = {row["column"]: row for row in registration.get("bench_seals") or []}
+    assert set(seals) == set(REVIEW_BENCH)
+    assert len(BENCH_COLUMNS) <= BENCH_SLOTS
+    for column, seal in seals.items():
+        assert hashlib.sha256(seal["rule"].encode()).hexdigest() == seal["rule_sha256"]
+        assert seal["rule"].startswith(f"{column} ")
+        review = (root / seal["review_doc"]).read_text(encoding="utf-8")
+        assert f"> {seal['rule']}" in review
+    board = build_boards([])["bench"]
+    assert set(board) == set(BENCH_COLUMNS)
 
 
 def test_bench_column_after_scores_needs_a_version_review() -> None:
