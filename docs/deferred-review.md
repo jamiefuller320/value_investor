@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-10T01:10:04+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-10T01:22:31+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -422,6 +422,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | L691 | **Strategy book: which signals to take when all 20 slots are full** | In the US rehearsal 70% of primary signals were skipped for want of a slot, and the exit lab showed the capacity-bound 20-slot book, not per-trade exit timing, limits returns. A filter or ranking challenger that chooses among same-day signals when slots are scarce (e.g. by selection-board features) could lift the book without changing the exit. Bench candidate, sealed only at a version review. | First strategy-book version review (thickness gate) with the forward selection board and slot-book skip counts |
 | L692 | **Strategy book: slot-count and stake-size twin (capital path)** | The 20-slot, 5%-stake book skipped 70% of US signals. Slot count changes utilisation and diversification, not per-trade edge, and decides whether long-hold exits pay (exit lab L690). Test 10/20/30/40 slots as a capital-path twin read beside the forward book's skip counts; not a v0 change (fixed-stake v0 rule). | Strategy-book version review once the forward book shows whether slots bind (slot-book skip share over 26 weeks) |
 | L693 | **Strategy book: queue-aware sell urgency (swap a stalled holding for a waiting signal)** | When all slots are full and fresh signals wait, sell the weakest holding (e.g. oldest unlaunched trade below entry) to admit a ranked new signal; when the queue is empty, let trades run. A book-level rule, so it is a capital-view twin, not a paired bench column. Needs a ranking of incoming vs held (L691) and must clear round-trip costs. Strategy-book sibling of L442. | After L691 has a ranking that beats random on forward selection-board data |
+| L695 | **Strategy book: selectivity dial that tightens entry criteria as the universe grows** | With a larger graduated-market pool, the book could require stricter selection (e.g. top fraction by a forward-validated ranking from L691/L694, or several lenses agreeing) while holding candidate volume near slot capacity. Selectivity only amplifies criteria with real forward skill; tested as a filter challenger, not tuned on historical marks. | A forward ranking or lens shows positive matched-excess skill on the selection board, and the multi-market book skips signals for want of slots |
 
 ### Universe & data
 
