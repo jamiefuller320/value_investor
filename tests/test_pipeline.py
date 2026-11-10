@@ -1072,6 +1072,51 @@ def test_enrich_sector_cyclical_registry_healthcare_hook_lists_eligibility():
     assert healthcare["overlay_applied"] is True
 
 
+def test_primary_fcf_harmonization_before_sector_cyclical_registry():
+    from value_investor.scoring.fcf_basis_overlay import (
+        enrich_signals_with_primary_fcf_for_overlay_registry,
+    )
+    from value_investor.scoring.sector_cyclical_overlay_registry import (
+        HOOK_HEALTHCARE_NEGATIVE_FCF_LOW_PIOTROSKI,
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "name": "Pharma Co",
+                "sector": "Healthcare",
+                "signal": "strong_buy",
+                "free_cashflow": 200.0,
+                "free_cashflow_screen_ttm": -40.0,
+                "healthcare_overlay": True,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "model_id": "piotroski_f",
+                "passed": False,
+                "score": 3 / 9,
+                "reasons": "['F-Score=3/9']",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+    harmonized = enrich_signals_with_primary_fcf_for_overlay_registry(signals)
+    assert harmonized.iloc[0]["free_cashflow_screen_ttm"] == pytest.approx(-40.0)
+
+    enriched = enrich_signals_with_sector_cyclical_overlay_registry(harmonized, model_results)
+    healthcare = next(
+        h
+        for h in enriched.iloc[0]["sector_cyclical_overlay_registry"]["hooks"]
+        if h["id"] == HOOK_HEALTHCARE_NEGATIVE_FCF_LOW_PIOTROSKI
+    )
+    assert healthcare["triggered"] is True
+
+
 def test_enrich_signals_with_healthcare_overlay_caps_adjusted_signal():
     signals = pd.DataFrame(
         [

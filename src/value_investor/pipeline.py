@@ -58,6 +58,7 @@ from value_investor.scoring.fcf_basis_overlay import (
     enrich_signals_with_dividend_sustainability_overlay,
     enrich_signals_with_fcf_basis_overlay,
     enrich_signals_with_media_cyclical_thin_fcf_overlay,
+    enrich_signals_with_primary_fcf_for_overlay_registry,
     enrich_signals_with_run_history_fcf_action_notes,
     enrich_signals_with_statutory_fcf_moat_leverage_overlay,
     honour_fcf_action_notes_on_signals,
@@ -569,6 +570,10 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out = enrich_signals_with_quality_family_avoid_gate(
         signals_out,
         result.model_results,
+    )
+    signals_out = enrich_signals_with_primary_fcf_for_overlay_registry(
+        signals_out,
+        output_dir=output_dir,
     )
     signals_out = enrich_signals_with_sector_cyclical_overlay_registry(
         signals_out,

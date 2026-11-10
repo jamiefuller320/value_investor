@@ -5664,6 +5664,52 @@ def test_guard_screening_export_jsg_style_fcf_research_and_models(tmp_path: Path
     assert guarded["signal"] == "strong_buy"
 
 
+def test_guard_screening_snapshot_export_refreshes_sector_cyclical_registry_on_fcf_row():
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+    from value_investor.scoring.sector_cyclical_overlay_registry import (
+        HOOK_HEALTHCARE_NEGATIVE_FCF_LOW_PIOTROSKI,
+    )
+
+    snapshot = {
+        "ticker": "PHAR.L",
+        "name": "Pharma Co",
+        "sector": "Healthcare",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5,
+        "free_cashflow": -25.0,
+        "healthcare_overlay": True,
+        "sector_cyclical_overlay_registry": {
+            "registry_version": 1,
+            "hooks": [],
+            "active_hook_ids": [],
+        },
+    }
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "model_id": "piotroski_f",
+                "passed": False,
+                "score": 3 / 9,
+                "reasons": "['F-Score=3/9']",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    guarded = guard_screening_snapshot_export(snapshot, model_results=model_results)
+    registry = guarded["sector_cyclical_overlay_registry"]
+
+    assert registry["registry_version"] == 1
+    assert HOOK_HEALTHCARE_NEGATIVE_FCF_LOW_PIOTROSKI in registry["active_hook_ids"]
+    healthcare = next(
+        h for h in registry["hooks"] if h["id"] == HOOK_HEALTHCARE_NEGATIVE_FCF_LOW_PIOTROSKI
+    )
+    assert healthcare["triggered"] is True
+    assert "healthcare_negative_fcf_low_piotroski" in guarded["sector_cyclical_overlay_hooks"]
+
+
 def test_guard_screening_snapshot_export_applies_media_cyclical_thin_fcf_overlay():
     from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
 

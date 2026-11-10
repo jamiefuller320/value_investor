@@ -19,6 +19,7 @@ from value_investor.scoring.fcf import (
     reconcile_fcf_for_ticker,
     screen_ttm_from_row,
     statutory_fcf_moat_leverage_overlay_triggered,
+    surface_primary_fcf_on_overlay_record,
 )
 
 FCF_YIELD_DEPENDENT_MODEL_IDS = ("fcf_yield", "composite_value", "quality_value")
@@ -303,6 +304,38 @@ def apply_fcf_basis_overlay_to_signal(
         _more_conservative_signal(base_adjusted, capped_signal),
         cap_conviction_for_fcf_basis_overlay(base_conviction),
     )
+
+
+def enrich_signals_with_primary_fcf_for_overlay_registry(
+    signals: pd.DataFrame,
+    *,
+    output_dir: Path | None = None,
+) -> pd.DataFrame:
+    """Stamp reconciled primary FCF on signal rows before sector/cyclical registry export."""
+    if signals.empty:
+        return signals
+
+    out = signals.copy()
+    records: list[dict[str, Any]] = []
+    for _, row in out.iterrows():
+        ticker = str(row["ticker"])
+        screen_ttm = screen_ttm_from_row(row)
+        fcf_bundle = reconcile_fcf_for_ticker(
+            ticker,
+            screen_ttm=screen_ttm,
+            output_dir=output_dir,
+        )
+        harmonized = surface_primary_fcf_on_overlay_record(
+            row.to_dict(),
+            row=row,
+            fcf_bundle=fcf_bundle,
+        )
+        screen = _float_or_none(fcf_bundle.get("screen_ttm")) or screen_ttm
+        if screen is not None:
+            harmonized["free_cashflow_screen_ttm"] = screen
+        records.append(harmonized)
+
+    return pd.DataFrame(records, index=out.index)
 
 
 def enrich_signals_with_fcf_basis_overlay(
