@@ -596,6 +596,14 @@
           "doc_anchor": "go-live"
         },
         {
+          "id": "adhoc-memo-model-comparison-blind-review",
+          "title": "Blind-review the memo model comparison",
+          "summary": "When ops shows 'Memo model comparison ready for owner review', read docs/data/memo_model_comparison/review.md (12 names, memos labelled A/B). Copy ratings_template.json to ratings.json and rate each memo 1-5 on evidence, thesis break and verdict justified, plus a preferred memo (A, B or tie). Commit ratings.json to main without opening blind_key.json, results.json or the status.json cost fields, then run gh workflow run memo-model-comparison.yml -f action=decide. A switch under the pre-declared rule needs owner approval, an operational_switches row on the registration and its own memo-model PR; otherwise composer-2.5 stays.",
+          "automated": false,
+          "doc_path": "docs/ops/memo-model-comparison.md",
+          "doc_anchor": "owner-blind-review"
+        },
+        {
           "id": "adhoc-strategy-phase-gate",
           "title": "Sign strategy reorientation phase gates",
           "summary": "At the end of each phase of the strategy reorientation plan, review the evidence the supervising agent presents and sign, adjust once (logged), or reject. Phase 1: check operating-decline and sector-headwind verdicts on 10 FTSE buy-tier names (5 flagged, 5 clear) against cited evidence. Phase 2: sign the strategy-book registration (docs/ops/strategy-book-registration.md) before scoring, confirming or adjusting once the step 3.2 live proof numbers (docs/ops/strategy-reorientation-plan.md) that the seal copies, then the sample-thickness gate before it becomes the primary learning track. Later phases: new proof standard, demo-to-live execution steps, small live capital. Gates bind books only after sign-off; nothing auto-promotes.",
