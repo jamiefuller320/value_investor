@@ -290,11 +290,32 @@ def _filing_id(company_number: str, transaction_id: str) -> str:
     return safe[:120]
 
 
+def ch_document_metadata_url(url: str | None) -> str | None:
+    """Canonical document-api metadata URL (not the ``/content`` download hop)."""
+    if not url:
+        return None
+    raw = str(url).strip()
+    if not raw:
+        return None
+    if raw.startswith("/"):
+        raw = CH_DOCUMENT_API_BASE + raw
+    if "document-api.company-information.service.gov.uk" not in raw:
+        return raw
+    path = urllib.parse.urlparse(raw).path.strip("/")
+    parts = [part for part in path.split("/") if part]
+    if len(parts) >= 2 and parts[0] == "document":
+        doc_id = parts[1].strip()
+        if doc_id:
+            return f"{CH_DOCUMENT_API_BASE}/document/{doc_id}"
+    return raw
+
+
 def ch_document_id_from_metadata_url(url: str | None) -> str | None:
     """Extract the document-api id segment from a Companies House metadata URL."""
-    if not url or "document-api.company-information.service.gov.uk" not in url:
+    canonical = ch_document_metadata_url(url)
+    if not canonical or "document-api.company-information.service.gov.uk" not in canonical:
         return None
-    path = urllib.parse.urlparse(str(url)).path.strip("/")
+    path = urllib.parse.urlparse(str(canonical)).path.strip("/")
     parts = [part for part in path.split("/") if part]
     if len(parts) >= 2 and parts[0] == "document":
         doc_id = parts[1].strip()
@@ -304,6 +325,7 @@ def ch_document_id_from_metadata_url(url: str | None) -> str | None:
 
 # Reject downloads that stop well short of the declared content_length (truncated HTTP body).
 _PARTIAL_DOWNLOAD_MIN_RATIO = 0.9
+_DOCUMENT_DOWNLOAD_RETRIES = 3
 
 
 def fetch_accounts_filing_rows(
@@ -375,9 +397,7 @@ def fetch_document_metadata(
     api_key: str,
 ) -> dict[str, Any] | None:
     """Fetch Companies House document metadata JSON."""
-    meta_url = document_metadata_url
-    if meta_url.startswith("/"):
-        meta_url = CH_DOCUMENT_API_BASE + meta_url
+    meta_url = ch_document_metadata_url(document_metadata_url) or document_metadata_url
     try:
         meta_raw = _ch_get(meta_url, api_key=api_key)
         return json.loads(meta_raw.decode("utf-8"))
@@ -455,8 +475,16 @@ def fetch_document_bytes(
                 api_key=api_key,
                 accept=accept,
                 timeout=DOCUMENT_DOWNLOAD_TIMEOUT_S,
+                retries=_DOCUMENT_DOWNLOAD_RETRIES,
             )
             expected = int((resources.get(accept) or {}).get("content_length") or 0)
+            if accept == MIME_PDF and len(raw) > 128 and raw[:4] != b"%PDF":
+                logger.info(
+                    "CH PDF download for %s returned non-PDF payload (%s bytes)",
+                    document_metadata_url,
+                    len(raw),
+                )
+                continue
             if (
                 512 < expected <= MAX_DOCUMENT_BYTES
                 and len(raw) < expected * _PARTIAL_DOWNLOAD_MIN_RATIO
@@ -825,7 +853,9 @@ def fetch_companies_house_filing_body(row: dict[str, Any]) -> str | None:
     key = companies_house_api_key()
     if not key:
         return None
-    meta_url = str(row.get("document_metadata_url") or row.get("url") or "")
+    meta_url = ch_document_metadata_url(
+        str(row.get("document_metadata_url") or row.get("url") or "")
+    )
     if not meta_url:
         return None
     try:
