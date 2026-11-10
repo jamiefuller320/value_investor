@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import re
+import time
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -529,7 +530,10 @@ def _run_agent_prompt(
     job: str = "research_agent",
     ticker: str | None = None,
     pool: str | None = None,
+    capture: dict[str, Any] | None = None,
 ) -> tuple[str, str | None]:
+    """Send one prompt. ``capture``, when given, receives the sent prompt, raw text,
+    wall-clock seconds and the recorded usage row (tokens, cost)."""
     options = AgentOptions(
         api_key=api_key,
         model=model,
@@ -549,13 +553,16 @@ def _run_agent_prompt(
         as_of_date=as_of_date,
     )
     result = None
+    started = time.monotonic()
+    if capture is not None:
+        capture["prompt"] = effective_prompt
     try:
         result = agent.send(effective_prompt).wait()
     except CursorAgentError as err:
         raise RuntimeError(f"Agent run failed: {err.message}") from err
     finally:
         run_id = getattr(result, "id", None) if result is not None else None
-        record_agent_usage(
+        usage_row = record_agent_usage(
             agent,
             job=job,
             model=model,
@@ -563,6 +570,9 @@ def _run_agent_prompt(
             ticker=ticker,
             pool=pool,
         )
+        if capture is not None:
+            capture["latency_seconds"] = round(time.monotonic() - started, 3)
+            capture["usage"] = usage_row
         try:
             agent.close()
         except CursorAgentError:
@@ -571,7 +581,10 @@ def _run_agent_prompt(
     if result is None or result.result is None:
         raise RuntimeError("Agent returned empty research output")
 
-    return result.result.strip(), agent.agent_id
+    text = result.result.strip()
+    if capture is not None:
+        capture["raw_text"] = text
+    return text, agent.agent_id
 
 
 def run_initial_research_agent(
@@ -584,8 +597,15 @@ def run_initial_research_agent(
     structured: bool = True,
     job: str = "research_memo",
     pool: str | None = None,
+    as_of_date: str | None = None,
+    prompt_appendix: str | None = None,
+    capture: dict[str, Any] | None = None,
 ) -> tuple[ResearchDocument, str | None]:
-    """Create a research document. Default Phase B: structured verdict only."""
+    """Create a research document. Default Phase B: structured verdict only.
+
+    ``prompt_appendix`` is added after the production prompt (before the
+    point-in-time rule); ``as_of_date`` pins that rule's date. Both default off.
+    """
     if structured:
         prompt = _structured_verdict_prompt(
             ticker=report.ticker,
@@ -602,6 +622,13 @@ def run_initial_research_agent(
             screen_signal=report.signal,
         )
         mode = "initial"
+    if prompt_appendix:
+        prompt = f"{prompt.rstrip()}\n\n{prompt_appendix.strip()}\n"
+    optional: dict[str, Any] = {}
+    if as_of_date is not None:
+        optional["as_of_date"] = as_of_date
+    if capture is not None:
+        optional["capture"] = capture
     text, agent_id = _run_agent_prompt(
         prompt=prompt,
         api_key=api_key,
@@ -610,6 +637,7 @@ def run_initial_research_agent(
         job=job,
         ticker=report.ticker,
         pool=pool,
+        **optional,
     )
     sections = parse_research_sections(text)
     verdict_fields = parse_research_verdict(sections.get("research_verdict", ""))

@@ -596,6 +596,14 @@
           "doc_anchor": "go-live"
         },
         {
+          "id": "adhoc-memo-model-comparison-blind-review",
+          "title": "Rate the memo model comparison calibration sample",
+          "summary": "Rule v2 (owner, 2026-11-10): an LLM judge (gpt-5.6-luna) scores every pair blind in both orders; you rate only a calibration sample of at least 4 names, so the judge can be checked against you. When ops shows 'Memo model comparison ready for owner calibration', read docs/data/memo_model_comparison/review.md (sample only, memos labelled A/B). Copy ratings_template.json to ratings.json and rate each memo 1-5 on evidence, thesis break and verdict justified, plus a preferred memo (A, B or tie). Commit ratings.json to main without opening blind_key.json, results.json, judge_results.json, calibration.json, judgements/, judge_status.json or the status.json cost fields, then run gh workflow run memo-model-comparison.yml -f action=decide. Your picks decide whether the judge is trusted, and govern any pair where the two verdicts differ on blocking entry. A switch needs owner approval, an operational_switches row on the registration and its own memo-model PR; otherwise composer-2.5 stays.",
+          "automated": false,
+          "doc_path": "docs/ops/memo-model-comparison.md",
+          "doc_anchor": "owner-calibration-review"
+        },
+        {
           "id": "adhoc-strategy-phase-gate",
           "title": "Sign strategy reorientation phase gates",
           "summary": "At the end of each phase of the strategy reorientation plan, review the evidence the supervising agent presents and sign, adjust once (logged), or reject. Phase 1: check operating-decline and sector-headwind verdicts on 10 FTSE buy-tier names (5 flagged, 5 clear) against cited evidence. Phase 2: sign the strategy-book registration (docs/ops/strategy-book-registration.md) before scoring, confirming or adjusting once the step 3.2 live proof numbers (docs/ops/strategy-reorientation-plan.md) that the seal copies, then the sample-thickness gate before it becomes the primary learning track. Later phases: new proof standard, demo-to-live execution steps, small live capital. Gates bind books only after sign-off; nothing auto-promotes.",
