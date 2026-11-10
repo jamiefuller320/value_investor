@@ -102,6 +102,24 @@
     "code_commit": "a1a1ab892243c2257f8254dbf1a4a094200346de",
     "note": "From here, a bug fix is a logged change marker on this registration_id; a threshold or primary-rule change is a new registration_id (section 10)."
   },
+  "change_markers": [
+    {
+      "marker_id": "owner-strategy-book-v0-partial-bar-clip-v1",
+      "at": "2026-11-10T10:09:00Z",
+      "kind": "bug_fix",
+      "rule_change": false,
+      "approved_by": "owner",
+      "approved_at": "2026-11-10",
+      "owner_quote": "Yes - log the partial-bar clipping",
+      "sealed_text": "Section 11, Daily close refresh: 'It passes closes_through set to that market's latest completed session.' Summary: 'The refresh rebuilds every chart whose last close is behind the latest completed session (closes_through).'",
+      "what_was_wrong": "Shared chart files can end on a partial intraday bar for a session that has not closed: the dashboard chart writer stores Yahoo's live bar (Hong Kong charts were rebuilt with a 2026-11-10 bar at 02:10 UTC, mid-session), and a refresh run during a later session downloaded that session's live bar too. The forward loader passed every chart bar to the walker, whose scoring date is the UTC calendar day, so a partial bar could be walked as a completed close (signal, fill or exit on an intraday price).",
+      "fix": "The close refresh drops fetched bars dated after the market's closes_through before writing a chart (ensure_price_charts last_session), and the forward loader keeps only chart bars on or before that market's latest completed session (strategy_book_forward._through_completed). Chart files written by other jobs are unchanged; only what the walk reads is clipped.",
+      "no_lookahead": "Removes a lookahead: no bar from a session that has not closed reaches the walk. Completed sessions are read exactly as before.",
+      "unchanged": "No threshold, signal, entry, exit, gate, F9 or eligibility rule changed. Price basis stays Yahoo adjusted closes from ensure_price_charts. The replay first score store (strategy_book_replay.json) is not re-run.",
+      "pr": 1350,
+      "doc": "docs/ops/strategy-book-observe.md#close-refresh"
+    }
+  ],
   "bench_seals": [
     {
       "column": "trend_not_falling",

@@ -24,6 +24,11 @@ created both scheduled runs 3.5–6 hours late (`createdAt` 01:03 UTC Saturday
 for the Friday slot, 03:43 UTC Tuesday for the Monday slot), so it is not
 the primary.
 
+The 17:45 slot was approved by the owner on 2026-11-10 ("A second 17:45 run is fine").
+The partial-bar clip and refresh trim below are logged as change marker
+`owner-strategy-book-v0-partial-bar-clip-v1` in `docs/data/strategy_book_registration.json`
+(bug fix, no rule change; owner: "Yes - log the partial-bar clipping").
+
 The 17:45 slot exists for London and continental Europe. Yahoo's daily
 history has those bars intraday and for some hours after the close, then
 drops the just-completed bar overnight until about the next session. Chart
