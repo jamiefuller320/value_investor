@@ -1,10 +1,10 @@
 # Strategy book bench-seal review (proposed)
 
-**Status: PROPOSED 2026-11-07. Owner decision; nothing is sealed until the owner signs.**  
+**Status: CLOSED 2026-11-10 — nothing sealed.** The exit lab ran on 2026-11-09 and no variant met the choice rule ([outcome](#outcome-2026-11-09)). The fourth bench slot stays free.  
 **Book:** `owner-strategy-book-v0` ([registration](strategy-book-registration.md))  
 **Deferred idea:** N259 (exit challenger scored on capital-days return, trend-led exits, no fixed time cap)  
 **Lab:** `ftse-strategy-book-rehearsal exit-lab` ([runbook](strategy-book-us-rehearsal-runbook.md#6b-exit-lab-exploratory-before-deletion))  
-**Human checklist:** `adhoc-strategy-bench-seal-review` in [`human-tasks-checklist.md`](human-tasks-checklist.md#ad-hoc-when-triggered)
+**Human checklist:** `adhoc-strategy-bench-seal-review` (removed 2026-11-10 when the review closed)
 
 ## What this review is
 
@@ -70,3 +70,29 @@ The next package wires the picked rule into the forward walker as a bench exit c
 | Owner signs or declines | Before `forward_live` is set, so the challenger scores from the first forward entry |
 
 If the Phase 1 gate review would set `forward_live` first, the owner can hold `forward_live` for the few days the seal takes, or seal later with a note that the challenger scores only from its seal date.
+
+## Outcome (2026-11-09)
+
+The lab ran on the owner's laptop on 2026-11-09 (`docs/data/strategy_book_exit_lab.json`, `computed_at` 2026-11-09T22:32Z). Its primary reproduced the committed development block: 3,802 mature episodes, the same fair-cost median.
+
+**Choice rule: no eligible variant, so nothing is sealed.** Every variant's median matched excess was below the primary's (−0.11%). `lab_sma50_newlow252` also failed on first-half capital-days return.
+
+What the lab showed (development signals 2000–2012; exploratory):
+
+| Column | Capital-days return | 20-slot book a year (random-order median) | Max drawdown | Paired mean vs primary (t) | Median held sessions | Turns per slot-year |
+|---|---|---|---|---|---|---|
+| `primary` | 9.8% | 11.2% (11.8%) | −39% | — | 56 | 4.8 |
+| `lab_ladder_newlow252` | 12.2% | 9.0% (9.6%) | −33% | +1.1pp (4.1) | 41 | 3.9 |
+| `lab_trail15_deadline63` | 12.2% | 9.5% (10.0%) | −36% | +2.1pp (6.0) | 64 | 2.9 |
+| `lab_trail15_newlow252` | 13.9% | 9.6% (10.1%) | −33% | +4.0pp (7.1) | 55 | 2.3 |
+| `lab_trail25_newlow252` | 13.5% | 7.3% (8.4%) | −32% | +5.6pp (7.7) | 64 | 1.8 |
+| `lab_sma50_newlow252` | 10.6% | 10.5% (10.4%) | −35% | +0.4pp (1.1) | 41 | 4.4 |
+| `lab_low55_newlow252` | 11.9% | 9.6% (10.7%) | −37% | +1.9pp (5.0) | 56 | 3.1 |
+| `lab_trail15_newlow252_b5` | 13.4% | 10.4% (11.3%) | −30% | +4.9pp (8.7) | 75 | 1.9 |
+| `lab_trail15_none` | 13.0% | 10.9% (11.0%) | −29% | +4.9pp (8.6) | 80 | 1.9 |
+
+- **Per trade, trend-led exits did better.** Every variant beat the primary's mean return on the same entries in both halves, and most had a higher capital-days return. The gain came from letting winners run: means rose while medians fell, and only 15–40% of entries did better than under the primary.
+- **The 20-slot book did not improve.** No variant beat the primary's 20-slot book. Longer holds took 585–1,111 trades against the primary's 1,139, and every variant trailed on the random-order median. With 70% of signals already skipped for want of a slot, the fastest recycler kept the capacity-bound book ahead, even though each trade earned less.
+- **Drawdowns were shallower.** Trailing variants had a 20-slot maximum drawdown of −29% to −33%, against the primary's −39%.
+
+The primary's ladder already gives about 4.8 attempts per slot-year. What limits the book in this history is which signals it takes when all 20 slots are full, not how long each trade is held. That is queued for the version review (deferred store).
