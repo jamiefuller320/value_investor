@@ -23,9 +23,11 @@ from value_investor.universe_filing_archive_pack_run import (
     format_bottleneck_review_summary,
     run_universe_filing_archive_pack,
 )
-from value_investor.universe_filing_archive_writer import (
-    DEFAULT_APPLY_MAX_UNITS,
-    DEFAULT_MAX_HTTP_FETCHES,
+from value_investor.universe_filing_archive_stage import (
+    DEFAULT_STAGE,
+    MAX_DOCUMENTED_STAGE,
+    QUIET_NIGHTS_REQUIRED,
+    caps_for_stage,
 )
 
 
@@ -37,12 +39,16 @@ def main(argv: list[str] | None = None) -> int:
             "on focus pressure. head_needs_fat_slot does not suspend."
         )
     )
+    floor = caps_for_stage(DEFAULT_STAGE)
     parser.add_argument(
         "--apply",
         action="store_true",
         help=(
-            "Thin quiet cold-store writers (archive budgets, tiny max_units "
-            f"default {DEFAULT_APPLY_MAX_UNITS}; not a fourth equal sprint)"
+            "Thin quiet cold-store writers (archive budgets; caps from committed "
+            f"stage ladder, floor stage {DEFAULT_STAGE}="
+            f"{floor['max_units']}/{floor['max_http_fetches']}; "
+            f"auto-widen ≤ stage {MAX_DOCUMENTED_STAGE} after "
+            f"{QUIET_NIGHTS_REQUIRED} clean nights; not a fourth equal sprint)"
         ),
     )
     parser.add_argument(
@@ -66,15 +72,15 @@ def main(argv: list[str] | None = None) -> int:
         type=int,
         default=None,
         help=(
-            "Cap on week×market coverage units "
-            f"(apply default {DEFAULT_APPLY_MAX_UNITS} when omitted)"
+            "Optional override for week×market coverage units "
+            "(omit to use committed stage ladder)"
         ),
     )
     parser.add_argument(
         "--max-http-fetches",
         type=int,
-        default=DEFAULT_MAX_HTTP_FETCHES,
-        help=f"Hard archive-lane HTTP fetch cap (default {DEFAULT_MAX_HTTP_FETCHES})",
+        default=None,
+        help="Optional override for archive-lane HTTP fetch cap (omit = stage ladder)",
     )
     parser.add_argument(
         "--dispatch-path",
@@ -119,7 +125,7 @@ def main(argv: list[str] | None = None) -> int:
         allow_outside_quiet_for_pilot=bool(args.allow_outside_quiet),
         lookback_weeks=int(args.lookback_weeks),
         max_units=args.max_units,
-        max_http_fetches=int(args.max_http_fetches),
+        max_http_fetches=args.max_http_fetches,
         dispatch_path=Path(args.dispatch_path),
         market_status_path=Path(args.market_status_path),
         policy_path=Path(args.policy_path),

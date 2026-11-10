@@ -2,9 +2,10 @@ name: Universe filing archive pack
 
 # Quiet-window cold archive lane (L499). Week-first then iterative-backward pack
 # under archive_lane_gate. Preemptible, max concurrency 1, NOT a fourth equal
-# sprint stream. Thin --apply writers use archive budgets + stage-2 max_units.
-# head_needs_fat_slot does not suspend this lane. Cold blobs stay on the runner;
-# only pack_run + bottleneck review are committed.
+# sprint stream. Thin --apply writers use archive budgets + committed stage
+# ladder caps (auto-widen up to documented stage 3). head_needs_fat_slot does
+# not suspend this lane. Cold blobs stay on the runner; only pack_run +
+# bottleneck review + status panel are committed.
 # See docs/ops/universe-filing-archive-pack.md
 on:
   schedule:
@@ -23,17 +24,17 @@ on:
         type: string
         default: "12"
       max_units:
-        description: "Cap on week×market units (stage-2 default 8)"
+        description: "Optional max_units override (blank = committed stage ladder)"
         type: string
-        default: "8"
+        default: ""
       apply:
         description: "Thin quiet cold-store writers (archive budgets; tiny caps)"
         type: boolean
         default: true
       max_http_fetches:
-        description: "Hard archive-lane HTTP fetch cap (stage-2 default 32)"
+        description: "Optional HTTP fetch cap override (blank = committed stage ladder)"
         type: string
-        default: "32"
+        default: ""
 
 permissions:
   contents: write
@@ -64,9 +65,9 @@ jobs:
           ALLOW_OUTSIDE_QUIET: ${{ github.event.inputs.allow_outside_quiet || 'false' }}
           APPLY_INPUT: ${{ github.event.inputs.apply }}
           LOOKBACK_WEEKS: ${{ github.event.inputs.lookback_weeks || '12' }}
-          # Schedule has no inputs — fallbacks must match stage-2 (8/32), not 4/16.
-          MAX_UNITS: ${{ github.event.inputs.max_units || '8' }}
-          MAX_HTTP_FETCHES: ${{ github.event.inputs.max_http_fetches || '32' }}
+          # Schedule / blank dispatch → resolve caps from committed stage ladder.
+          MAX_UNITS: ${{ github.event.inputs.max_units || '' }}
+          MAX_HTTP_FETCHES: ${{ github.event.inputs.max_http_fetches || '' }}
         run: |
           set -euo pipefail
           # Schedule always applies; workflow_dispatch honors apply input (default true).
@@ -75,14 +76,20 @@ jobs:
           else
             APPLY=false
           fi
-          ARGS=(--lookback-weeks "${LOOKBACK_WEEKS}" --max-units "${MAX_UNITS}" --max-http-fetches "${MAX_HTTP_FETCHES}")
+          ARGS=(--lookback-weeks "${LOOKBACK_WEEKS}")
+          if [ -n "${MAX_UNITS}" ]; then
+            ARGS+=(--max-units "${MAX_UNITS}")
+          fi
+          if [ -n "${MAX_HTTP_FETCHES}" ]; then
+            ARGS+=(--max-http-fetches "${MAX_HTTP_FETCHES}")
+          fi
           if [ "${ALLOW_OUTSIDE_QUIET}" = "true" ]; then
             ARGS+=(--allow-outside-quiet)
           fi
           if [ "${APPLY}" = "true" ]; then
             ARGS+=(--apply)
           fi
-          # Exit 0 on suspend/quiet_only; writes pack_run + bottleneck review.
+          # Exit 0 on suspend/quiet_only; writes pack_run + bottleneck review + status.
           ftse-universe-archive-pack "${ARGS[@]}"
           python3 - <<'PY'
           import json
@@ -90,8 +97,10 @@ jobs:
           from pathlib import Path
           run = json.loads(Path("docs/data/universe_filing_archive_pack_run.json").read_text())
           review = json.loads(Path("docs/data/universe_filing_archive_bottleneck_review.json").read_text())
+          status = json.loads(Path("docs/data/universe_filing_archive_status.json").read_text())
           outcome = run.get("outcome") or ""
           isolation = run.get("capacity_isolation") or {}
+          ladder = status.get("stage_ladder") or {}
           print(f"outcome={outcome}")
           print(f"pack_order={run.get('pack_order')}")
           print(f"dry_run={run.get('dry_run')}")
@@ -101,6 +110,7 @@ jobs:
           print(f"objects_written={run.get('objects_written')}")
           print(f"isolation_ok={isolation.get('isolation_ok')}")
           print(f"http_fetches={isolation.get('http_fetches')}")
+          print(f"stage={ladder.get('current_stage')} streak={ladder.get('quiet_isolation_ok_streak')}")
           print(f"bottlenecks={len(review.get('bottlenecks') or [])}")
           out = Path(os.environ["GITHUB_OUTPUT"])
           with out.open("a", encoding="utf-8") as fh:

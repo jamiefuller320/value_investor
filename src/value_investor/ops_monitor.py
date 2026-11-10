@@ -1729,6 +1729,55 @@ def check_universe_filing_archive_pack_bottleneck(
     ]
 
 
+def check_universe_filing_archive_auto_widen(
+    *,
+    status_path: Path | None = None,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Info when quiet-night auto-widen recently promoted a documented stage.
+
+    Observe-only (``auto_fixable=False``) — does not eng-spray or invent stages
+    past the hard ceiling. Reads ``universe_filing_archive_status.json``.
+    """
+    from value_investor.universe_filing_archive_stage import (
+        FINDING_TITLE_AUTO_WIDEN,
+        ops_finding_from_stage_ladder,
+    )
+    from value_investor.universe_filing_archive_status import DEFAULT_STATUS_PATH
+
+    path = Path(status_path) if status_path is not None else DEFAULT_STATUS_PATH
+    if not path.exists():
+        return []
+    try:
+        raw = read_json(path)
+        payload = raw if isinstance(raw, dict) else {}
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="ingest",
+                title="Cold-store archive pack status unreadable",
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    finding = ops_finding_from_stage_ladder(
+        payload.get("stage_ladder") if isinstance(payload.get("stage_ladder"), dict) else {},
+        now=now,
+    )
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "ingest"),
+            title=str(finding.get("title") or FINDING_TITLE_AUTO_WIDEN),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_ingest_occupancy_mismatch(
     *,
     dispatch_path: Path | None = None,
@@ -4928,6 +4977,7 @@ def collect_ops_findings(
     findings.extend(check_p1_first_run_pin(latest_path=latest_path))
     findings.extend(check_universe_filing_archive_miss_rate())
     findings.extend(check_universe_filing_archive_pack_bottleneck())
+    findings.extend(check_universe_filing_archive_auto_widen())
     findings.extend(check_ingest_occupancy_mismatch())
     findings.extend(check_shard_nav_fx_warp())
     findings.extend(check_combined_tagged_learning())
