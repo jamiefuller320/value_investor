@@ -451,8 +451,39 @@
     },
     "estimated_total_usd": 17.28,
     "pool": "weekly_ops",
-    "strategy_book_reserve_usd": 22.0
+    "strategy_book_reserve_usd": 22.0,
+    "judge_cap_usd": 28.0,
+    "judge_estimated_usd_per_call": 0.94,
+    "judge_estimated_total_usd": 22.56,
+    "comparison_cap_usd": 50.0,
+    "comparison_estimated_total_usd": 39.84
   },
   "observe_only": true,
-  "influences_live": false
+  "influences_live": false,
+  "decision_rule_version": "v2",
+  "amendment": {
+    "rule": "v2",
+    "amended_on": "2026-11-10",
+    "owner_quote": "yes please",
+    "owner_decision": "Add an LLM judge from a third model family that scores every pair blind in both orders; the owner rates only a calibration sample.",
+    "before_any_results": true,
+    "generation_state_at_amendment": "never run: no status.json, memos, results.json or review.md existed",
+    "selection_unchanged": true,
+    "doc": "docs/ops/memo-model-comparison.md#amendment-rule-v2-2026-11-10"
+  },
+  "judge": {
+    "model": "gpt-5.6-luna",
+    "family": "openai",
+    "orders": [
+      "AB",
+      "BA"
+    ],
+    "rubric": [
+      "evidence",
+      "thesis_break",
+      "verdict_justified"
+    ],
+    "max_attempts": 2,
+    "calls": 24
+  }
 }

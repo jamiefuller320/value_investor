@@ -2,9 +2,10 @@ name: Memo model comparison
 
 # Observe-only side-by-side memo comparison (owner, 2026-11-10):
 # composer-2.5 against the strongest configured Grok on the frozen names in
-# docs/data/memo_model_comparison/manifest.json. One-off: the weekday slot runs
-# `generate --if-due`, which does nothing once the store is ready for review or
-# the comparison's own cap is reached. Writes only the comparison store, the
+# docs/data/memo_model_comparison/manifest.json, scored by a third-family judge
+# (rule v2). One-off: the weekday slot runs `generate --if-due` then
+# `judge --if-due`; each does nothing once its stage is done or capped, and
+# both refuse a manifest without rule v2. Writes only the comparison store, the
 # weekly_ops ledger and agent-usage shards; never the research store or the
 # strategy book. ops-monitor reads the store daily (check_memo_model_comparison).
 # Runbook: docs/ops/memo-model-comparison.md
@@ -14,10 +15,11 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        description: "generate (missing memos) | decide (after owner ratings)"
+        description: "generate (missing memos, then judge) | judge (judge only) | decide (after owner calibration ratings)"
         type: choice
         options:
           - generate
+          - judge
           - decide
         default: generate
 
@@ -56,11 +58,18 @@ jobs:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
         run: |
           set -euo pipefail
-          if [ "${ACTION}" = "decide" ]; then
-            ftse-memo-model-comparison --repo-root . decide --apply
-          else
-            ftse-memo-model-comparison --repo-root . generate --apply --if-due
-          fi
+          case "${ACTION}" in
+            decide)
+              ftse-memo-model-comparison --repo-root . decide --apply
+              ;;
+            judge)
+              ftse-memo-model-comparison --repo-root . judge --apply --if-due
+              ;;
+            *)
+              ftse-memo-model-comparison --repo-root . generate --apply --if-due
+              ftse-memo-model-comparison --repo-root . judge --apply --if-due
+              ;;
+          esac
 
       - name: Commit comparison artifacts
         if: always()

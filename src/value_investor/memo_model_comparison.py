@@ -8,6 +8,10 @@ date. Everything is written under ``docs/data/memo_model_comparison/``. Nothing
 here writes the research store, the memo log, the strategy book or any
 decision path, and the strategy-book memo job is not imported for its runner.
 
+Rule v2 (owner, 2026-11-10, amended before any memo existed): a judge from a
+third model family scores every pair blind in both orders, and the owner rates
+only a calibration sample. Generation refuses a manifest without rule v2.
+
 Runbook and the pre-declared decision rule: docs/ops/memo-model-comparison.md.
 """
 
@@ -15,6 +19,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import re
 import shutil
 from collections.abc import Callable
@@ -55,14 +60,57 @@ BUDGET_CAP_USD = 22.0
 STRATEGY_BOOK_RESERVE_USD = 14.0 + 8.0
 
 TITLE_AWAITING = "Memo model comparison awaiting generation"
-TITLE_READY = "Memo model comparison ready for owner review"
-TITLE_STALE = "Memo model comparison owner review stale"
+TITLE_AWAITING_JUDGE = "Memo model comparison awaiting judge"
+TITLE_READY = "Memo model comparison ready for owner calibration"
+TITLE_STALE = "Memo model comparison owner calibration stale"
 TITLE_DECIDED = "Memo model comparison decided"
 TITLE_FAILED = "Memo model comparison failed"
 
 STATE_SELECTED = "selected"
 STATE_INCOMPLETE = "incomplete"
-STATE_READY = "ready_for_review"
+STATE_GENERATED = "awaiting_judge"
+JUDGE_STATE_INCOMPLETE = "incomplete"
+JUDGE_STATE_DONE = "ready_for_calibration"
+
+# --- rule v2 amendment (owner, 2026-11-10) ----------------------------------
+
+DECISION_RULE_VERSION = "v2"
+AMENDED_ON = "2026-11-10"
+OWNER_QUOTE = "yes please"
+AMENDMENT_DOC = "docs/ops/memo-model-comparison.md#amendment-rule-v2-2026-11-10"
+
+# Strongest third-family model that both answered the CURSOR_API_KEY_V2 model
+# list on 2026-11-10 and has a rate in agent_model_policy.MODEL_API_RATES.
+JUDGE_MODEL = "gpt-5.6-luna"
+JUDGE_ORDERS = ("AB", "BA")
+JUDGE_MAX_ATTEMPTS = 2
+# 12 pairs x 2 orders x $0.94 = $22.56 estimated, capped here.
+JUDGE_BUDGET_CAP_USD = 28.0
+JUDGE_QUOTES_PER_SCORE = 1
+BARRED_JUDGE_FAMILIES = frozenset({"cursor", "xai"})
+
+CALIBRATION_MIN_SAMPLE = 4
+CALIBRATION_AGREE_FRACTION = 0.75
+
+_FAMILY_PREFIXES = (
+    ("composer", "cursor"),
+    ("default", "cursor"),
+    ("cursor", "cursor"),
+    ("grok", "xai"),
+    ("gpt", "openai"),
+    ("o1", "openai"),
+    ("o3", "openai"),
+    ("o4", "openai"),
+    ("claude", "anthropic"),
+    ("gemini", "google"),
+    ("kimi", "moonshot"),
+    ("glm", "zhipu"),
+    ("deepseek", "deepseek"),
+)
+_REDACT_RE = re.compile(
+    r"\b(?:composer|cursor|grok|xai|x\.ai|gpt|openai|claude|anthropic|gemini)[\w.-]*",
+    re.IGNORECASE,
+)
 
 RUBRIC = {
     "evidence": "Evidence grounding: claims are tied to the filings and nothing looks invented.",
@@ -134,6 +182,47 @@ def estimated_memo_usd(model_id: str) -> float:
 
 def estimated_total_usd(names: int, models: tuple[str, str]) -> float:
     return round(names * sum(estimated_memo_usd(model) for model in models), 2)
+
+
+def estimated_judge_usd(names: int, judge: str = JUDGE_MODEL) -> float:
+    """One judge call per order per pair, each priced like one memo on that model."""
+    return round(names * len(JUDGE_ORDERS) * estimated_memo_usd(judge), 2)
+
+
+def model_family(model_id: str) -> str:
+    text = model_id.strip().lower()
+    for prefix, family in _FAMILY_PREFIXES:
+        if text.startswith(prefix):
+            return family
+    return "unknown"
+
+
+def check_judge_model(
+    judge: str,
+    models: dict[str, str],
+    *,
+    rates: dict[str, Any] | None = None,
+    available: list[str] | None = None,
+) -> None:
+    """Raise unless ``judge`` is a third family with a rate (and, if given, available)."""
+    family = model_family(judge)
+    compared = {model_family(m) for m in models.values()}
+    if family == "unknown":
+        raise ValueError(f"judge {judge} has no known model family")
+    if family in BARRED_JUDGE_FAMILIES or family in compared:
+        raise ValueError(
+            f"judge {judge} is family {family}; it must differ from "
+            f"{sorted(compared | BARRED_JUDGE_FAMILIES)}"
+        )
+    if judge not in (rates if rates is not None else MODEL_API_RATES):
+        raise ValueError(f"judge {judge} has no rate in agent_model_policy.MODEL_API_RATES")
+    if available is not None and judge not in available:
+        raise ValueError(f"judge {judge} not available to this key")
+
+
+def calibration_need(sample: int) -> int:
+    """Owner-judge agreements required on a calibration sample of ``sample`` pairs."""
+    return math.ceil(CALIBRATION_AGREE_FRACTION * sample)
 
 
 def _slug(market: str, ticker: str) -> str:
@@ -358,6 +447,65 @@ def select_names(repo_root: Path, *, before: date, now: datetime | None = None) 
     }
 
 
+def amend_rule_v2(manifest: dict[str, Any], *, store: Path) -> dict[str, Any]:
+    """Add the rule v2 judge amendment. Refuses once any generation output exists."""
+    existing = [
+        name
+        for name in ("status.json", "results.json", "memos", "review.md")
+        if (store / name).exists()
+    ]
+    if existing:
+        raise ValueError(f"generation output exists ({', '.join(existing)}); cannot amend")
+    if manifest.get("decision_rule_version") == DECISION_RULE_VERSION:
+        return manifest
+    check_judge_model(JUDGE_MODEL, manifest["models"])
+    names = len(manifest["names"])
+    per_call = estimated_memo_usd(JUDGE_MODEL)
+    judge_total = estimated_judge_usd(names)
+    budget = dict(manifest.get("budget") or {})
+    budget.update(
+        {
+            "judge_cap_usd": JUDGE_BUDGET_CAP_USD,
+            "judge_estimated_usd_per_call": per_call,
+            "judge_estimated_total_usd": judge_total,
+            "comparison_cap_usd": round(
+                float(budget.get("cap_usd") or 0) + JUDGE_BUDGET_CAP_USD, 2
+            ),
+            "comparison_estimated_total_usd": round(
+                float(budget.get("estimated_total_usd") or 0) + judge_total, 2
+            ),
+        }
+    )
+    return {
+        **manifest,
+        "decision_rule_version": DECISION_RULE_VERSION,
+        "amendment": {
+            "rule": DECISION_RULE_VERSION,
+            "amended_on": AMENDED_ON,
+            "owner_quote": OWNER_QUOTE,
+            "owner_decision": (
+                "Add an LLM judge from a third model family that scores every pair blind in "
+                "both orders; the owner rates only a calibration sample."
+            ),
+            "before_any_results": True,
+            "generation_state_at_amendment": (
+                "never run: no status.json, memos, results.json or review.md existed"
+            ),
+            "selection_unchanged": True,
+            "doc": AMENDMENT_DOC,
+        },
+        "judge": {
+            "model": JUDGE_MODEL,
+            "family": model_family(JUDGE_MODEL),
+            "orders": list(JUDGE_ORDERS),
+            "rubric": list(RUBRIC),
+            "max_attempts": JUDGE_MAX_ATTEMPTS,
+            "calls": names * len(JUDGE_ORDERS),
+        },
+        "budget": budget,
+    }
+
+
 # --- inputs ----------------------------------------------------------------
 
 
@@ -370,6 +518,10 @@ def snapshot_sources(source: Path, dest: Path) -> dict[str, Any]:
         shutil.copytree(source, dest)
     else:
         dest.mkdir(parents=True)
+    return snapshot_digest(dest)
+
+
+def snapshot_digest(dest: Path) -> dict[str, Any]:
     digest = hashlib.sha256()
     files = 0
     bodies = 0
@@ -653,6 +805,12 @@ def run_generation(
     status["errors"] = []
     status.pop("budget_stop", None)
     models = (manifest["models"]["incumbent"], manifest["models"]["challenger"])
+    if manifest.get("decision_rule_version") != DECISION_RULE_VERSION:
+        status["errors"].append(
+            f"manifest decision rule {manifest.get('decision_rule_version') or 'v1'} is not "
+            f"{DECISION_RULE_VERSION}; generation refuses until the judge amendment is recorded"
+        )
+        return _persist_status(store, status)
 
     try:
         available = (list_models or (lambda: runtime_models(api_key or "")))()
@@ -793,13 +951,9 @@ def run_generation(
     if finished and complete:
         results = build_results(root, manifest, status, key)
         write_json(store / "results.json", results, compact=False)
-        (store / "review.md").write_text(render_review(root, manifest, complete), encoding="utf-8")
-        write_json(
-            store / "ratings_template.json", ratings_template(manifest, complete), compact=False
-        )
-        if status.get("state") != STATE_READY:
-            status["ready_at"] = moment.isoformat()
-        status["state"] = STATE_READY
+        if status.get("state") != STATE_GENERATED:
+            status["generation_done_at"] = moment.isoformat()
+        status["state"] = STATE_GENERATED
     else:
         status["state"] = STATE_INCOMPLETE if status["pairs"] else STATE_SELECTED
     return _persist_status(store, status)
@@ -981,14 +1135,18 @@ def _memo_block(memo: dict[str, Any]) -> list[str]:
 
 
 def render_review(root: Path, manifest: dict[str, Any], complete: list[str]) -> str:
-    """Blind side-by-side doc. Model names, cost and timing are left out."""
+    """Blind side-by-side doc for the calibration sample. Model names, cost, timing,
+    the judge's scores and the reason a name was sampled are left out."""
     lines = [
-        "# Memo model comparison — blind owner review",
+        "# Memo model comparison — owner calibration sample (blind)",
         "",
-        f"Comparison `{manifest['comparison_id']}`. Each name has two memos, **A** and **B**, written "
-        "by two different models from the same frozen filing bodies, the same prompt and the "
-        "same as-of date. Which model wrote which is in `blind_key.json`; do not open it, "
-        "`results.json` or the `memos/` cost fields until every name is rated.",
+        f"Comparison `{manifest['comparison_id']}`, rule {DECISION_RULE_VERSION}. An LLM judge "
+        f"has scored every pair; you rate only these {len(complete)} names so the judge can be "
+        "checked against you. Each name has two memos, **A** and **B**, written by two "
+        "different models from the same frozen filing bodies, the same prompt and the same "
+        "as-of date. Do not open `blind_key.json`, `results.json`, `judge_results.json`, "
+        "`calibration.json`, `judgements/` or the `status.json` cost fields until every name "
+        "here is rated.",
         "",
         "Rate each memo 1 (poor) to 5 (excellent) on:",
         "",
@@ -1045,6 +1203,515 @@ def ratings_progress(ratings: dict[str, Any] | None) -> tuple[int, int]:
     return done, len(names)
 
 
+# --- judge (rule v2) -------------------------------------------------------
+
+JudgeRunner = Callable[..., str]
+
+_JUDGE_SCHEMA = """{
+  "scores": {
+    "A": {
+      "evidence": {"score": 1-5, "reason": "...", "quotes": [{"source": "memo" or "<path under the sources folder>", "quote": "<verbatim>"}]},
+      "thesis_break": {"score": 1-5, "reason": "...", "quotes": [...]},
+      "verdict_justified": {"score": 1-5, "reason": "...", "quotes": [...]}
+    },
+    "B": {same three keys}
+  },
+  "preferred": "A" | "B" | "tie",
+  "preference_reason": "...",
+  "claims_checked": [{"memo": "A" | "B", "claim": "...", "path": "...", "supported": true | false}]
+}"""
+
+
+def redact_model_names(text: str) -> tuple[str, int]:
+    return _REDACT_RE.subn("[model]", text)
+
+
+def judge_prompt(
+    entry: dict[str, Any],
+    memos: dict[str, dict[str, Any]],
+    *,
+    sources_dir: Path,
+    as_of: str,
+) -> str:
+    """Blind judge prompt. ``memos`` maps the judge-facing label (A, B) to a memo."""
+    rubric = "\n".join(f"- {key}: {text}" for key, text in RUBRIC.items())
+    blocks = []
+    for label in ("A", "B"):
+        text, _hits = redact_model_names(str(memos[label].get("raw_text") or ""))
+        blocks.append(f"=== MEMO {label} ===\n{text.strip()}\n=== END MEMO {label} ===")
+    return f"""You are judging two investment research memos, A and B, on {entry["name"]} \
+({entry["ticker"]}, {entry["market"]}). Both were written as of {as_of} from the same source \
+files, which are in this folder: {sources_dir}
+Open the files the memos cite and check their quotes and numbers against them. Use only those \
+files; do not use knowledge from outside them or from after {as_of}.
+
+The memo's verdict decides whether a value strategy may buy the name: pass, sell, avoid or \
+exit blocks the entry; any other verdict allows it.
+
+Rate each memo from 1 (poor) to 5 (excellent) on:
+{rubric}
+
+Then set preferred to A, B or tie: the memo you would rather the strategy act on. For every \
+score give a reason and at least {JUDGE_QUOTES_PER_SCORE} verbatim quote that supports it. A \
+quote's source is "memo" when it quotes that memo, or the file's path relative to the sources \
+folder when it quotes a source file. List in claims_checked the memo claims you checked \
+against a file.
+
+Reply with one JSON object and nothing else, in this shape:
+{_JUDGE_SCHEMA}
+
+{blocks[0]}
+
+{blocks[1]}
+"""
+
+
+def parse_judge_output(raw: str) -> tuple[dict[str, Any] | None, list[str]]:
+    """First JSON object in ``raw`` and the reasons it fails the schema (empty when valid)."""
+    text = raw.strip()
+    fence = re.search(r"```(?:json)?\s*(\{.*\})\s*```", text, re.DOTALL)
+    if fence:
+        text = fence.group(1)
+    start = text.find("{")
+    if start < 0:
+        return None, ["no JSON object"]
+    try:
+        payload, _end = json.JSONDecoder().raw_decode(text[start:])
+    except ValueError as exc:
+        return None, [f"invalid JSON: {exc}"]
+    if not isinstance(payload, dict):
+        return None, ["top level is not an object"]
+    problems: list[str] = []
+    if payload.get("preferred") not in {"A", "B", "tie"}:
+        problems.append("preferred must be A, B or tie")
+    scores = payload.get("scores") if isinstance(payload.get("scores"), dict) else {}
+    for label in ("A", "B"):
+        memo = scores.get(label) if isinstance(scores.get(label), dict) else {}
+        for key in RUBRIC:
+            row = memo.get(key) if isinstance(memo.get(key), dict) else {}
+            score = row.get("score")
+            if not (isinstance(score, int) and not isinstance(score, bool) and 1 <= score <= 5):
+                problems.append(f"{label}.{key}.score must be an integer 1-5")
+            if not str(row.get("reason") or "").strip():
+                problems.append(f"{label}.{key}.reason missing")
+            quotes = row.get("quotes") if isinstance(row.get("quotes"), list) else []
+            usable = [
+                q for q in quotes if isinstance(q, dict) and str(q.get("quote") or "").strip()
+            ]
+            if len(usable) < JUDGE_QUOTES_PER_SCORE:
+                problems.append(f"{label}.{key}.quotes needs {JUDGE_QUOTES_PER_SCORE}+")
+    return payload, problems
+
+
+def check_judge_quotes(
+    payload: dict[str, Any], memos: dict[str, dict[str, Any]], *, sources_dir: Path
+) -> dict[str, Any]:
+    """Whether each quote the judge cites appears in the memo or the source file it names."""
+    cache: dict[Path, str] = {}
+    rows: list[dict[str, Any]] = []
+    for label in ("A", "B"):
+        memo_text = _normalise(str(memos[label].get("raw_text") or ""))
+        for key in RUBRIC:
+            for quote in ((payload["scores"][label][key] or {}).get("quotes")) or []:
+                if not isinstance(quote, dict):
+                    continue
+                source = str(quote.get("source") or "memo").strip()
+                needle = _normalise(str(quote.get("quote") or ""))
+                if source.lower() == "memo":
+                    found, resolves = needle in memo_text, True
+                else:
+                    path = _resolve(sources_dir, source)
+                    resolves = path is not None
+                    found = bool(path and needle in _normalise(_file_text(path, cache)))
+                rows.append(
+                    {
+                        "label": label,
+                        "key": key,
+                        "source": source,
+                        "resolves": resolves,
+                        "found": found,
+                    }
+                )
+    found = sum(1 for row in rows if row["found"])
+    return {
+        "quotes": len(rows),
+        "found": found,
+        "found_rate": round(found / len(rows), 3) if rows else 0.0,
+        "rows": rows,
+    }
+
+
+def default_judge_runner(
+    *, prompt: str, model: str, api_key: str, cwd: str, as_of_date: str, capture: dict[str, Any]
+) -> str:
+    from value_investor.research.agent import _run_agent_prompt
+
+    text, _agent_id = _run_agent_prompt(
+        prompt=prompt,
+        api_key=api_key,
+        model=model,
+        cwd=cwd,
+        as_of_date=as_of_date,
+        job="memo_model_judge",
+        pool=SPEND_POOL_WEEKLY_OPS,
+        capture=capture,
+    )
+    return text
+
+
+def _order_memos(order: str, memos: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    """Judge-facing label -> stored memo. ``AB`` shows stored A first; ``BA`` shows B first."""
+    return {"A": memos[order[0]], "B": memos[order[1]]}
+
+
+def _to_stored(order: str, judge_label: str) -> str:
+    if judge_label == "tie":
+        return "tie"
+    return order[0] if judge_label == "A" else order[1]
+
+
+def _judgement(root: Path, slug: str, order: str) -> dict[str, Any]:
+    return load_json(store_dir(root) / "judgements" / slug / f"{order}.json") or {}
+
+
+def summarise_pair(root: Path, slug: str) -> dict[str, Any] | None:
+    """Both orders mapped back to stored labels; ``None`` unless both orders are valid."""
+    rows = {order: _judgement(root, slug, order) for order in JUDGE_ORDERS}
+    if not all(row.get("ok") for row in rows.values()):
+        return None
+    picks = {order: _to_stored(order, rows[order]["parsed"]["preferred"]) for order in JUDGE_ORDERS}
+    consistent = len(set(picks.values())) == 1
+    scores: dict[str, dict[str, float]] = {}
+    for stored in ("A", "B"):
+        per_key: dict[str, float] = {}
+        for key in RUBRIC:
+            values = []
+            for order in JUDGE_ORDERS:
+                judge_label = "A" if order[0] == stored else "B"
+                values.append(int(rows[order]["parsed"]["scores"][judge_label][key]["score"]))
+            per_key[key] = round(mean(values), 2)
+        scores[stored] = {**per_key, "total": round(sum(per_key.values()), 2)}
+    return {
+        "slug": slug,
+        "picks_by_order": picks,
+        "order_consistent": consistent,
+        "preferred": picks[JUDGE_ORDERS[0]] if consistent else "tie",
+        "scores": scores,
+        "judge_quote_found_rate": {
+            order: rows[order].get("quote_check", {}).get("found_rate") for order in JUDGE_ORDERS
+        },
+    }
+
+
+def mechanical_direction(memo_a: dict[str, Any], memo_b: dict[str, Any]) -> str:
+    """Label the automated checks favour: fewer hallucination flags, then higher quote resolution."""
+    ca, cb = memo_a.get("checks") or {}, memo_b.get("checks") or {}
+    fa, fb = (
+        int(ca.get("hallucination_flag_total") or 0),
+        int(cb.get("hallucination_flag_total") or 0),
+    )
+    if fa != fb:
+        return "A" if fa < fb else "B"
+    ra, rb = (
+        float(ca.get("quote_resolution_rate") or 0),
+        float(cb.get("quote_resolution_rate") or 0),
+    )
+    if ra != rb:
+        return "A" if ra > rb else "B"
+    return "tie"
+
+
+def book_effect_disagrees(memo_a: dict[str, Any], memo_b: dict[str, Any]) -> bool:
+    effects = {memo_a.get("book_effect"), memo_b.get("book_effect")}
+    return "blocks" in effects and len(effects) == 2
+
+
+def _topup_rank(comparison_id: str, slug: str) -> str:
+    return hashlib.sha256(f"{comparison_id}|{slug}|calibration".encode()).hexdigest()
+
+
+CALIBRATION_RULE = (
+    "Every judged pair where (a) the judge's order-consistent preference is A or B and the "
+    "mechanical direction (fewer hallucination flags, then higher quote resolution rate) is "
+    "the other label, or (b) one memo's verdict blocks the entry and the other's does not. "
+    f"If fewer than {CALIBRATION_MIN_SAMPLE}, top up from the remaining judged pairs: those "
+    "with a non-tie judge preference first, then the rest, each in ascending "
+    "sha256('<comparison_id>|<slug>|calibration') order."
+)
+
+
+def select_calibration(
+    comparison_id: str, pairs: list[dict[str, Any]], memos: dict[str, dict[str, dict[str, Any]]]
+) -> list[dict[str, Any]]:
+    """Owner calibration sample under ``CALIBRATION_RULE``, in manifest order of ``pairs``."""
+    sample: dict[str, list[str]] = {}
+    for pair in pairs:
+        slug = pair["slug"]
+        a, b = memos[slug]["A"], memos[slug]["B"]
+        reasons = []
+        direction = mechanical_direction(a, b)
+        if pair["preferred"] in {"A", "B"} and direction in {"A", "B"}:
+            if pair["preferred"] != direction:
+                reasons.append("judge_vs_mechanical")
+        if book_effect_disagrees(a, b):
+            reasons.append("book_effect_disagreement")
+        if reasons:
+            sample[slug] = reasons
+    rest = sorted(
+        (p for p in pairs if p["slug"] not in sample),
+        key=lambda p: (
+            0 if p["preferred"] in {"A", "B"} else 1,
+            _topup_rank(comparison_id, p["slug"]),
+        ),
+    )
+    for pair in rest[: max(0, CALIBRATION_MIN_SAMPLE - len(sample))]:
+        sample[pair["slug"]] = ["top_up"]
+    return [
+        {
+            "slug": p["slug"],
+            "reasons": sample[p["slug"]],
+            "mechanical_direction": mechanical_direction(
+                memos[p["slug"]]["A"], memos[p["slug"]]["B"]
+            ),
+            "book_effect_disagreement": book_effect_disagrees(
+                memos[p["slug"]]["A"], memos[p["slug"]]["B"]
+            ),
+        }
+        for p in pairs
+        if p["slug"] in sample
+    ]
+
+
+def _initial_judge_status(manifest: dict[str, Any], moment: datetime) -> dict[str, Any]:
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "comparison_id": manifest["comparison_id"],
+        "decision_rule_version": DECISION_RULE_VERSION,
+        "judge_model": (manifest.get("judge") or {}).get("model", JUDGE_MODEL),
+        "state": JUDGE_STATE_INCOMPLETE,
+        "pairs": {},
+        "spend": {"estimated_usd": 0.0, "calls": 0, "cap_usd": JUDGE_BUDGET_CAP_USD},
+        "errors": [],
+        "started_at": moment.isoformat(),
+        "observe_only": True,
+        "influences_live": False,
+    }
+
+
+def run_judge(
+    repo_root: Path,
+    *,
+    now: datetime | None = None,
+    api_key: str | None = None,
+    runner: JudgeRunner | None = None,
+    list_models: Callable[[], list[str]] | None = None,
+    budget_status: Callable[[], dict[str, Any]] | None = None,
+    record_spend: Callable[[float], Any] | None = None,
+) -> dict[str, Any]:
+    """Judge every generated pair in both orders; idempotent on rerun."""
+    root = Path(repo_root)
+    store = store_dir(root)
+    manifest = load_json(store / "manifest.json")
+    status = load_json(store / "status.json")
+    moment = now or datetime.now(UTC)
+    if manifest is None:
+        raise FileNotFoundError(f"{store / 'manifest.json'} missing; run select first")
+    judge_status = load_json(store / "judge_status.json") or _initial_judge_status(manifest, moment)
+    judge_status["last_run_at"] = moment.isoformat()
+    judge_status["errors"] = []
+    judge_status.pop("budget_stop", None)
+    judge_model = (manifest.get("judge") or {}).get("model")
+
+    if manifest.get("decision_rule_version") != DECISION_RULE_VERSION or not judge_model:
+        judge_status["errors"].append(
+            f"manifest is not rule {DECISION_RULE_VERSION}; judge refuses"
+        )
+        return _persist(store, "judge_status.json", judge_status)
+    if status is None or status.get("state") != STATE_GENERATED:
+        judge_status["errors"].append("generation not finished; nothing to judge")
+        return _persist(store, "judge_status.json", judge_status)
+    try:
+        available = (list_models or (lambda: runtime_models(api_key or "")))()
+        check_judge_model(judge_model, manifest["models"], available=available)
+    except Exception as exc:  # noqa: BLE001 — fail closed, no model call
+        judge_status["errors"].append(f"judge model check failed: {exc}")
+        return _persist(store, "judge_status.json", judge_status)
+    judge_status["runtime_check"] = {
+        "checked_at": moment.isoformat(),
+        "judge_model": judge_model,
+        "judge_family": model_family(judge_model),
+        "available": True,
+    }
+
+    call = runner or default_judge_runner
+    budget = budget_status or (
+        lambda: weekly_ops_budget_status(estimated_memo_usd=INCUMBENT_MEMO_USD)
+    )
+    spend = record_spend or (
+        lambda amount: record_estimated_spend(amount, pool=SPEND_POOL_WEEKLY_OPS)
+    )
+    as_of = str(status.get("as_of") or moment.date().isoformat())
+    estimate = estimated_memo_usd(judge_model)
+    budget_stop: dict[str, str] | None = None
+    order = [e["slug"] for e in manifest["names"]]
+    by_slug = {e["slug"]: e for e in manifest["names"]}
+    generated = [s for s in order if _pair_done((status.get("pairs") or {}).get(s) or {})]
+
+    for slug in generated:
+        if budget_stop:
+            break
+        jp = judge_status["pairs"].setdefault(slug, {"orders": {}, "attempts": {}})
+        todo = [
+            o
+            for o in JUDGE_ORDERS
+            if not jp["orders"].get(o, {}).get("ok")
+            and int(jp["attempts"].get(o) or 0) < JUDGE_MAX_ATTEMPTS
+        ]
+        if not todo:
+            continue
+        snap_dir = work_dir(root) / slug / "sources"
+        expected = ((status["pairs"][slug]).get("inputs") or {}).get("sha256")
+        inputs = snapshot_digest(snap_dir) if snap_dir.is_dir() else None
+        if inputs is None or inputs["sha256"] != expected:
+            inputs = snapshot_sources(_sources_for(by_slug[slug], root), snap_dir)
+        if inputs["sha256"] != expected:
+            jp["input_mismatch"] = inputs["sha256"]
+            judge_status["errors"].append(
+                f"{slug}: sources changed since generation; judge refuses this pair"
+            )
+            continue
+        memos = {label: _memo(root, slug, label) for label in ("A", "B")}
+        for o in todo:
+            spent = float(judge_status["spend"]["estimated_usd"])
+            if spent + estimate > JUDGE_BUDGET_CAP_USD:
+                budget_stop = {
+                    "kind": "cap",
+                    "detail": f"judge cap ${JUDGE_BUDGET_CAP_USD:.2f} reached at ${spent:.2f}",
+                }
+                break
+            remaining = float((budget() or {}).get("remaining_weekly_ops_usd") or 0.0)
+            if remaining - estimate < STRATEGY_BOOK_RESERVE_USD:
+                budget_stop = {
+                    "kind": "weekly_headroom",
+                    "detail": (
+                        f"weekly_ops headroom ${remaining:.2f} would fall below the "
+                        f"${STRATEGY_BOOK_RESERVE_USD:.2f} strategy-book reserve"
+                    ),
+                }
+                break
+            shown = _order_memos(o, memos)
+            prompt = judge_prompt(by_slug[slug], shown, sources_dir=snap_dir.resolve(), as_of=as_of)
+            jp["attempts"][o] = int(jp["attempts"].get(o) or 0) + 1
+            capture: dict[str, Any] = {}
+            record: dict[str, Any] = {
+                "slug": slug,
+                "order": o,
+                "shown_as": {"A": o[0], "B": o[1]},
+                "judge_model": judge_model,
+                "as_of": as_of,
+                "inputs": inputs,
+                "at": moment.isoformat(),
+                "attempt": jp["attempts"][o],
+            }
+            try:
+                raw = str(
+                    call(
+                        prompt=prompt,
+                        model=judge_model,
+                        api_key=api_key or "",
+                        cwd=str(snap_dir.parent.resolve()),
+                        as_of_date=as_of,
+                        capture=capture,
+                    )
+                    or ""
+                )
+            except Exception as exc:  # noqa: BLE001 — logged; a later run may retry once
+                record.update({"ok": False, "error": str(exc)[:500]})
+                judge_status["errors"].append(f"{slug} {o}: {str(exc)[:200]}")
+            else:
+                parsed, problems = parse_judge_output(raw)
+                record.update({"raw_text": raw, "parsed": parsed, "problems": problems})
+                if parsed is not None and not problems:
+                    record["ok"] = True
+                    record["quote_check"] = check_judge_quotes(parsed, shown, sources_dir=snap_dir)
+                else:
+                    record["ok"] = False
+                    judge_status["errors"].append(
+                        f"{slug} {o}: invalid judge output ({'; '.join(problems[:3])})"
+                    )
+            record["prompt_sha256"] = hashlib.sha256(
+                str(capture.get("prompt") or prompt).encode("utf-8")
+            ).hexdigest()
+            spend(estimate)
+            judge_status["spend"]["estimated_usd"] = round(spent + estimate, 2)
+            judge_status["spend"]["calls"] = int(judge_status["spend"]["calls"]) + 1
+            jp.setdefault("cost", {})[o] = _memo_cost(capture, estimate)
+            write_json(store / "judgements" / slug / f"{o}.json", record, compact=False)
+            jp["orders"][o] = {"ok": bool(record.get("ok")), "at": moment.isoformat()}
+
+    if budget_stop:
+        judge_status["errors"].append(f"stopped: {budget_stop['detail']}")
+        judge_status["budget_stop"] = budget_stop
+    jpairs = judge_status["pairs"]
+
+    def settled(slug: str) -> bool:
+        row = jpairs.get(slug) or {}
+        if row.get("input_mismatch"):
+            return True
+        return all(
+            row.get("orders", {}).get(o, {}).get("ok")
+            or int(row.get("attempts", {}).get(o) or 0) >= JUDGE_MAX_ATTEMPTS
+            for o in JUDGE_ORDERS
+        )
+
+    summaries = [s for s in (summarise_pair(root, slug) for slug in generated) if s]
+    judge_status["judged_pairs"] = len(summaries)
+    if generated and all(settled(slug) for slug in generated) and summaries:
+        memos_by_slug = {
+            s["slug"]: {label: _memo(root, s["slug"], label) for label in ("A", "B")}
+            for s in summaries
+        }
+        sample = select_calibration(manifest["comparison_id"], summaries, memos_by_slug)
+        judge_results = {
+            "schema_version": SCHEMA_VERSION,
+            "comparison_id": manifest["comparison_id"],
+            "decision_rule_version": DECISION_RULE_VERSION,
+            "judge_model": judge_model,
+            "generated_at": moment.isoformat(),
+            "pairs": summaries,
+            "order_consistent": sum(1 for s in summaries if s["order_consistent"]),
+            "observe_only": True,
+            "influences_live": False,
+        }
+        calibration = {
+            "schema_version": SCHEMA_VERSION,
+            "comparison_id": manifest["comparison_id"],
+            "rule": CALIBRATION_RULE,
+            "min_sample": CALIBRATION_MIN_SAMPLE,
+            "sample": sample,
+            "need_agree": calibration_need(len(sample)),
+            "agree_fraction": CALIBRATION_AGREE_FRACTION,
+        }
+        write_json(store / "judge_results.json", judge_results, compact=False)
+        write_json(store / "calibration.json", calibration, compact=False)
+        slugs = [row["slug"] for row in sample]
+        (store / "review.md").write_text(render_review(root, manifest, slugs), encoding="utf-8")
+        write_json(
+            store / "ratings_template.json", ratings_template(manifest, slugs), compact=False
+        )
+        if judge_status.get("state") != JUDGE_STATE_DONE:
+            judge_status["ready_at"] = moment.isoformat()
+        judge_status["state"] = JUDGE_STATE_DONE
+    else:
+        judge_status["state"] = JUDGE_STATE_INCOMPLETE
+    return _persist(store, "judge_status.json", judge_status)
+
+
+def _persist(store: Path, name: str, payload: dict[str, Any]) -> dict[str, Any]:
+    write_json(store / name, payload, compact=False)
+    return payload
+
+
 # --- decision rule ---------------------------------------------------------
 
 MIN_COMPLETE_PAIRS = 10
@@ -1055,58 +1722,111 @@ WEEKLY_MEMO_HIGH = 35
 STRATEGY_BOOK_MEMO_RAISE_USD = 40.0
 
 
+def _side(labels: dict[str, str], pick: str | None, challenger: str) -> str:
+    if pick not in {"A", "B"}:
+        return "tie"
+    return "challenger" if labels.get(pick) == challenger else "incumbent"
+
+
+def _label_of(labels: dict[str, str], model: str) -> str:
+    return next(label for label, mid in labels.items() if mid == model)
+
+
 def decide(
     manifest: dict[str, Any],
     results: dict[str, Any],
+    judge_results: dict[str, Any],
+    calibration: dict[str, Any],
     ratings: dict[str, Any],
     key: dict[str, Any],
 ) -> dict[str, Any]:
-    """Apply the pre-declared rule. Reports only; nothing is switched."""
+    """Apply pre-declared rule v2. Reports only; nothing is switched."""
     incumbent = manifest["models"]["incumbent"]
     challenger = manifest["models"]["challenger"]
-    prefs = {"challenger": 0, "incumbent": 0, "tie": 0}
-    gains: list[float] = []
-    disagreements = {"challenger": 0, "incumbent": 0, "tie": 0}
-    effect_disagree = {
-        row["slug"] for row in results.get("names") or [] if not row["book_effect_agree"]
-    }
-    for slug, row in (ratings.get("names") or {}).items():
+    generated = {row["slug"] for row in results.get("names") or []}
+    judged = {p["slug"]: p for p in judge_results.get("pairs") or [] if p["slug"] in generated}
+    sample = {row["slug"]: row for row in calibration.get("sample") or []}
+    owner = ratings.get("names") or {}
+
+    cal_rows: list[dict[str, Any]] = []
+    owner_prefs = {"challenger": 0, "incumbent": 0, "tie": 0}
+    owner_gains: list[float] = []
+    for slug, srow in sample.items():
+        orow = owner.get(slug) or {}
+        opick = orow.get("preferred")
+        jpick = (judged.get(slug) or {}).get("preferred")
         labels = key["names"].get(slug) or {}
-        side = {labels.get("A"): "A", labels.get("B"): "B"}
-        pick = row.get("preferred")
-        winner = (
-            "tie"
-            if pick == "tie"
-            else ("challenger" if labels.get(pick) == challenger else "incumbent")
+        cal_rows.append(
+            {
+                "slug": slug,
+                "reasons": srow.get("reasons"),
+                "owner": opick,
+                "judge": jpick,
+                "agree": opick in {"A", "B", "tie"} and opick == jpick,
+            }
         )
-        prefs[winner] += 1
-        if slug in effect_disagree:
-            disagreements[winner] += 1
-        totals = {
-            model: sum(int(row.get(side[model], {}).get(k) or 0) for k in RUBRIC)
-            for model in (incumbent, challenger)
-        }
-        gains.append(totals[challenger] - totals[incumbent])
+        if opick in {"A", "B", "tie"} and labels:
+            owner_prefs[_side(labels, opick, challenger)] += 1
+            totals = {
+                model: sum(
+                    int((orow.get(_label_of(labels, model)) or {}).get(k) or 0) for k in RUBRIC
+                )
+                for model in (incumbent, challenger)
+            }
+            owner_gains.append(totals[challenger] - totals[incumbent])
+    agree = sum(1 for row in cal_rows if row["agree"])
+    rated = sum(1 for row in cal_rows if row["owner"] in {"A", "B", "tie"})
+    need = calibration_need(len(sample))
+    judge_trusted = bool(
+        len(sample) >= CALIBRATION_MIN_SAMPLE and rated == len(sample) and agree >= need
+    )
+
+    prefs = {"challenger": 0, "incumbent": 0, "tie": 0}
+    effect = {"challenger": 0, "incumbent": 0, "tie": 0}
+    gains: list[float] = []
+    governed_by_owner: list[str] = []
+    for slug, pair in judged.items():
+        labels = key["names"][slug]
+        pick = pair["preferred"]
+        srow = sample.get(slug) or {}
+        opick = (owner.get(slug) or {}).get("preferred")
+        if srow.get("book_effect_disagreement") and opick in {"A", "B"}:
+            pick = opick
+            governed_by_owner.append(slug)
+        side = _side(labels, pick, challenger)
+        prefs[side] += 1
+        if srow.get("book_effect_disagreement"):
+            effect[side] += 1
+        scores = pair["scores"]
+        gains.append(
+            float(scores[_label_of(labels, challenger)]["total"])
+            - float(scores[_label_of(labels, incumbent)]["total"])
+        )
+
     agg = results.get("by_model") or {}
     inc, chal = agg.get(incumbent) or {}, agg.get(challenger) or {}
     per_memo = chal.get("charged_usd_per_memo") or estimated_memo_usd(challenger)
     weekly = round(per_memo * WEEKLY_MEMO_HIGH, 2)
-    complete = len(results.get("names") or [])
+    complete = len(judged)
     checks = {
         "complete_pairs": {
             "value": complete,
-            "need": f">= {MIN_COMPLETE_PAIRS}",
+            "need": f">= {MIN_COMPLETE_PAIRS} pairs with both memos and both judge orders",
             "ok": complete >= MIN_COMPLETE_PAIRS,
         },
-        "owner_prefers_challenger": {
+        "judge_prefers_challenger": {
             "value": prefs,
-            "need": f"challenger >= {MIN_CHALLENGER_PREFERRED} and incumbent <= {MAX_INCUMBENT_PREFERRED}",
+            "need": (
+                f"order-consistent judge preference: challenger >= {MIN_CHALLENGER_PREFERRED} "
+                f"and incumbent <= {MAX_INCUMBENT_PREFERRED} (owner's non-tie pick governs "
+                "book-effect disagreements)"
+            ),
             "ok": prefs["challenger"] >= MIN_CHALLENGER_PREFERRED
             and prefs["incumbent"] <= MAX_INCUMBENT_PREFERRED,
         },
-        "rubric_gain": {
+        "judge_rubric_gain": {
             "value": round(mean(gains), 2) if gains else None,
-            "need": f"mean challenger minus incumbent total (of 15) >= {MIN_RUBRIC_GAIN}",
+            "need": f"mean judge challenger minus incumbent total (of 15) >= {MIN_RUBRIC_GAIN}",
             "ok": bool(gains) and mean(gains) >= MIN_RUBRIC_GAIN,
         },
         "citations_not_worse": {
@@ -1128,35 +1848,91 @@ def decide(
             <= int(inc.get("hallucination_flag_total") or 0),
         },
         "book_effect_disagreements": {
-            "value": disagreements,
-            "need": "where the two verdicts differ on blocking entry, owner prefers challenger at least as often",
-            "ok": disagreements["challenger"] >= disagreements["incumbent"],
+            "value": effect,
+            "need": "where one verdict blocks entry and the other does not, challenger preferred at least as often",
+            "ok": effect["challenger"] >= effect["incumbent"],
         },
         "weekly_cost_fits": {
             "value": {"per_memo_usd": per_memo, "weekly_high_usd": weekly},
             "need": f"{WEEKLY_MEMO_HIGH} memos a week <= ${STRATEGY_BOOK_MEMO_RAISE_USD:.0f} strategy_book_memo_raise",
             "ok": weekly <= STRATEGY_BOOK_MEMO_RAISE_USD,
         },
+        "judge_calibration": {
+            "value": {"sample": len(sample), "rated": rated, "agree": agree},
+            "need": (
+                f"owner agrees with the judge's preference on >= {need} of {len(sample)} "
+                f"(ceil({CALIBRATION_AGREE_FRACTION} x sample)), sample >= {CALIBRATION_MIN_SAMPLE}"
+            ),
+            "ok": judge_trusted,
+        },
     }
-    if all(row["ok"] for row in checks.values()):
-        outcome = "switch"
-    elif complete >= MIN_COMPLETE_PAIRS and (
-        prefs["incumbent"] >= prefs["challenger"] or not checks["hallucination_not_worse"]["ok"]
-    ):
-        outcome = "keep"
+    mechanical_ok = all(
+        checks[name]["ok"]
+        for name in (
+            "complete_pairs",
+            "citations_not_worse",
+            "hallucination_not_worse",
+            "weekly_cost_fits",
+            "book_effect_disagreements",
+        )
+    )
+    owner_gain = round(mean(owner_gains), 2) if owner_gains else None
+    overwhelming = bool(
+        owner_prefs["incumbent"] == 0
+        and owner_prefs["challenger"] >= need
+        and owner_gain is not None
+        and owner_gain >= MIN_RUBRIC_GAIN
+    )
+    if judge_trusted:
+        governing = "judge"
+        if all(row["ok"] for row in checks.values()):
+            outcome = "switch"
+        elif complete >= MIN_COMPLETE_PAIRS and (
+            prefs["incumbent"] >= prefs["challenger"] or not checks["hallucination_not_worse"]["ok"]
+        ):
+            outcome = "keep"
+        else:
+            outcome = "inconclusive_keep"
     else:
-        outcome = "inconclusive_keep"
+        governing = "owner_sample"
+        if overwhelming and mechanical_ok:
+            outcome = "switch"
+        elif complete >= MIN_COMPLETE_PAIRS and (
+            owner_prefs["incumbent"] >= owner_prefs["challenger"]
+            or not checks["hallucination_not_worse"]["ok"]
+        ):
+            outcome = "keep"
+        else:
+            outcome = "inconclusive_keep"
     return {
         "comparison_id": manifest["comparison_id"],
+        "decision_rule_version": DECISION_RULE_VERSION,
         "outcome": outcome,
+        "governing": governing,
+        "judge_trusted": judge_trusted,
+        "judge_model": judge_results.get("judge_model"),
         "checks": checks,
+        "calibration": {
+            "sample": len(sample),
+            "rated": rated,
+            "agree": agree,
+            "need": need,
+            "rows": cal_rows,
+            "owner_governed_book_effect": governed_by_owner,
+        },
+        "owner_sample": {
+            "preferences": owner_prefs,
+            "mean_rubric_gain": owner_gain,
+            "overwhelming_challenger": overwhelming,
+        },
         "incumbent": incumbent,
         "challenger": challenger,
         "note": (
             "switch: owner approves, then the memo model change is logged as an "
             "operational_switches row on docs/data/strategy_book_registration.json "
             "(not a rule change) and the memo runner's model is changed in its own PR. "
-            "keep / inconclusive_keep: composer-2.5 stays; nothing changes."
+            "keep / inconclusive_keep: composer-2.5 stays; nothing changes. judge_trusted "
+            "records whether this judge passed owner calibration for reuse in later comparisons."
         ),
         "observe_only": True,
         "influences_live": False,
@@ -1176,24 +1952,65 @@ def _finding(severity: str, title: str, summary: str) -> dict[str, Any]:
     }
 
 
+def decide_from_store(store: Path) -> dict[str, Any]:
+    """``decide`` on the committed store files; raises if any input is missing."""
+    names = ("manifest", "results", "judge_results", "calibration", "ratings", "blind_key")
+    loaded = {name: load_json(store / f"{name}.json") for name in names}
+    missing = [f"{name}.json" for name, payload in loaded.items() if not payload]
+    if missing:
+        raise FileNotFoundError(f"need {', '.join(missing)}")
+    return decide(
+        loaded["manifest"],
+        loaded["results"],
+        loaded["judge_results"],
+        loaded["calibration"],
+        loaded["ratings"],
+        loaded["blind_key"],
+    )
+
+
+def _age_days(raw: Any, moment: datetime) -> int:
+    try:
+        when = datetime.fromisoformat(str(raw or "").replace("Z", "+00:00"))
+    except ValueError:
+        return 0
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=UTC)
+    return (moment - when).days
+
+
 def findings(repo_root: Path, now: datetime | None = None) -> list[dict[str, Any]]:
-    """Read-only lifecycle findings. Never auto-fixable; no rememo or ingest."""
+    """Read-only lifecycle findings. Never auto-fixable; no rememo or ingest.
+
+    Stages: awaiting generation, awaiting judge, ready for owner calibration, stale, decided.
+    """
     moment = now or datetime.now(UTC)
     store = store_dir(Path(repo_root))
     manifest = load_json(store / "manifest.json")
     if manifest is None:
         return [_finding("warn", TITLE_FAILED, f"{STORE_REL}/manifest.json missing or unreadable.")]
+    if manifest.get("decision_rule_version") != DECISION_RULE_VERSION:
+        return [
+            _finding(
+                "warn",
+                TITLE_FAILED,
+                f"manifest is not rule {DECISION_RULE_VERSION} (judge amendment); generation "
+                "and judge refuse until it is recorded.",
+            )
+        ]
     status = load_json(store / "status.json")
     names = len(manifest.get("names") or [])
-    est = (manifest.get("budget") or {}).get("estimated_total_usd")
+    budget = manifest.get("budget") or {}
     dispatch = "gh workflow run memo-model-comparison.yml -f action=generate"
     if status is None:
         return [
             _finding(
                 "info",
                 TITLE_AWAITING,
-                f"{names} names selected ({RULE_VERSION}); estimated ${est} of a "
-                f"${BUDGET_CAP_USD:.2f} cap. Runs on the next scheduled slot or `{dispatch}`.",
+                f"{names} names selected (selection {RULE_VERSION}, decision rule "
+                f"{DECISION_RULE_VERSION}); estimated ${budget.get('comparison_estimated_total_usd')} "
+                f"of a ${budget.get('comparison_cap_usd')} cap (memos and judge). Runs on the next "
+                f"scheduled slot or `{dispatch}`.",
             )
         ]
     out: list[dict[str, Any]] = []
@@ -1202,11 +2019,11 @@ def findings(repo_root: Path, now: datetime | None = None) -> list[dict[str, Any
             _finding(
                 "warn",
                 TITLE_FAILED,
-                f"State {status.get('state')}; {status.get('complete_pairs', 0)}/{names} pairs. "
+                f"Generation {status.get('state')}; {status.get('complete_pairs', 0)}/{names} pairs. "
                 + "; ".join(str(e) for e in status["errors"][:4]),
             )
         )
-    if status.get("state") != STATE_READY:
+    if status.get("state") != STATE_GENERATED:
         if not out:
             out.append(
                 _finding(
@@ -1217,38 +2034,54 @@ def findings(repo_root: Path, now: datetime | None = None) -> list[dict[str, Any
                 )
             )
         return out
+    judge = load_json(store / "judge_status.json")
+    if judge and judge.get("errors"):
+        out.append(
+            _finding(
+                "warn",
+                TITLE_FAILED,
+                f"Judge {judge.get('state')}; {judge.get('judged_pairs', 0)} pairs judged. "
+                + "; ".join(str(e) for e in judge["errors"][:4]),
+            )
+        )
+    if judge is None or judge.get("state") != JUDGE_STATE_DONE:
+        if not out:
+            out.append(
+                _finding(
+                    "info",
+                    TITLE_AWAITING_JUDGE,
+                    f"{status.get('complete_pairs', 0)}/{names} pairs generated; judge "
+                    f"{(manifest.get('judge') or {}).get('model')} has judged "
+                    f"{(judge or {}).get('judged_pairs', 0)} in both orders. "
+                    "`gh workflow run memo-model-comparison.yml -f action=judge`.",
+                )
+            )
+        return out
     ratings = load_json(store / "ratings.json")
     done, total = ratings_progress(ratings or load_json(store / "ratings_template.json"))
-    if total and done == total:
-        results = load_json(store / "results.json") or {}
-        key = load_json(store / "blind_key.json") or {"names": {}}
-        verdict = decide(manifest, results, ratings or {}, key)
+    if ratings and total and done == total:
+        verdict = decide_from_store(store)
         failed = [name for name, row in verdict["checks"].items() if not row["ok"]]
         out.append(
             _finding(
                 "info",
                 TITLE_DECIDED,
                 f"Outcome {verdict['outcome']} ({verdict['incumbent']} vs {verdict['challenger']}); "
-                f"failed checks: {', '.join(failed) or 'none'}. A switch needs owner approval and an "
-                "operational_switches row on the registration. Observe-only.",
+                f"judge_trusted {str(verdict['judge_trusted']).lower()}, governed by "
+                f"{verdict['governing']}; failed checks: {', '.join(failed) or 'none'}. A switch "
+                "needs owner approval and an operational_switches row on the registration. "
+                "Observe-only.",
             )
         )
         return out
-    ready_raw = str(status.get("ready_at") or status.get("generated_at") or "")
-    try:
-        ready = datetime.fromisoformat(ready_raw.replace("Z", "+00:00"))
-    except ValueError:
-        ready = moment
-    if ready.tzinfo is None:
-        ready = ready.replace(tzinfo=UTC)
-    age = (moment - ready).days
+    age = _age_days(judge.get("ready_at"), moment)
     severity, title = ("warn", TITLE_STALE) if age > REVIEW_STALE_DAYS else ("info", TITLE_READY)
     out.append(
         _finding(
             severity,
             title,
-            f"{done}/{total} names rated; ready {age} days. Read {STORE_REL}/review.md, copy "
-            "ratings_template.json to ratings.json and fill it (human task "
+            f"{done}/{total} calibration names rated; ready {age} days. Read {STORE_REL}/review.md, "
+            "copy ratings_template.json to ratings.json and fill it (human task "
             "adhoc-memo-model-comparison-blind-review). Observe-only.",
         )
     )
@@ -1268,29 +2101,54 @@ def due_for_generation(repo_root: Path) -> bool:
     status = load_json(store / "status.json")
     if status is None:
         return True
-    if status.get("state") == STATE_READY:
+    if status.get("state") == STATE_GENERATED:
         return False
     stop = status.get("budget_stop") or {}
     return stop.get("kind") != "cap"
 
 
+def due_for_judge(repo_root: Path) -> bool:
+    """True once generation is done while some judge order has attempts left and no cap stop."""
+    store = store_dir(Path(repo_root))
+    status = load_json(store / "status.json")
+    if status is None or status.get("state") != STATE_GENERATED:
+        return False
+    judge = load_json(store / "judge_status.json")
+    if judge is None:
+        return True
+    if judge.get("state") == JUDGE_STATE_DONE:
+        return False
+    return (judge.get("budget_stop") or {}).get("kind") != "cap"
+
+
 __all__ = [
     "BUDGET_CAP_USD",
+    "CALIBRATION_RULE",
     "CHALLENGER_MODEL",
     "COMPARISON_APPENDIX",
+    "DECISION_RULE_VERSION",
     "INCUMBENT_MODEL",
+    "JUDGE_BUDGET_CAP_USD",
+    "JUDGE_MODEL",
     "SELECTION_RULE",
     "TITLE_AWAITING",
+    "TITLE_AWAITING_JUDGE",
     "TITLE_DECIDED",
     "TITLE_FAILED",
     "TITLE_READY",
     "TITLE_STALE",
+    "amend_rule_v2",
     "book_effect",
+    "check_judge_model",
     "decide",
+    "decide_from_store",
     "due_for_generation",
+    "due_for_judge",
     "findings",
     "run_generation",
+    "run_judge",
     "score_memo",
+    "select_calibration",
     "select_names",
     "strongest_configured_grok",
 ]

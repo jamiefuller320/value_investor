@@ -1,8 +1,9 @@
-"""Memo model comparison: selection, frozen inputs, scoring, blind review, decision, ops."""
+"""Memo model comparison: selection, frozen inputs, scoring, judge, calibration, decision, ops."""
 
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
@@ -77,7 +78,7 @@ def _sources(tmp_path: Path) -> Path:
     return src
 
 
-def _manifest(names: int = 2) -> dict[str, Any]:
+def _manifest(names: int = 2, *, amend: bool = True, tmp: Path | None = None) -> dict[str, Any]:
     entries = []
     for idx in range(names):
         ticker = f"T{idx}"
@@ -98,13 +99,16 @@ def _manifest(names: int = 2) -> dict[str, Any]:
                 "filings_with_body": 1,
             }
         )
-    return {
+    manifest = {
         "schema_version": 1,
         "comparison_id": "test-comparison",
         "names": entries,
         "models": {"incumbent": mmc.INCUMBENT_MODEL, "challenger": mmc.CHALLENGER_MODEL},
         "budget": {"estimated_total_usd": 2.88, "cap_usd": mmc.BUDGET_CAP_USD},
     }
+    if amend:
+        manifest = mmc.amend_rule_v2(manifest, store=tmp or Path("/nonexistent-store"))
+    return manifest
 
 
 class FakeRunner:
@@ -143,18 +147,27 @@ class FakeRunner:
         )
 
 
-@pytest.fixture
-def repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+def _make_repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, names: int) -> Path:
     root = tmp_path / "repo"
     store = mmc.store_dir(root)
     store.mkdir(parents=True)
-    (store / "manifest.json").write_text(json.dumps(_manifest()), encoding="utf-8")
+    (store / "manifest.json").write_text(json.dumps(_manifest(names)), encoding="utf-8")
     sources = _sources(tmp_path)
     monkeypatch.setattr(mmc, "_sources_for", lambda entry, _root: sources)
     monkeypatch.setattr(
         mmc, "_report_for", lambda entry, _root: SimpleNamespace(ticker=entry["ticker"])
     )
     return root
+
+
+@pytest.fixture
+def repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    return _make_repo(tmp_path, monkeypatch, 2)
+
+
+@pytest.fixture
+def repo6(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    return _make_repo(tmp_path, monkeypatch, 6)
 
 
 def _generate(
@@ -251,7 +264,7 @@ def test_generation_writes_only_the_comparison_store_and_blinds(repo: Path) -> N
     spent: list[float] = []
     status = _generate(repo, runner, spent=spent)
     store = mmc.store_dir(repo)
-    assert status["state"] == mmc.STATE_READY
+    assert status["state"] == mmc.STATE_GENERATED
     assert status["complete_pairs"] == 2
     assert len(runner.calls) == 4
     assert sorted(spent) == [0.40, 0.40, 1.04, 1.04]
@@ -266,18 +279,18 @@ def test_generation_writes_only_the_comparison_store_and_blinds(repo: Path) -> N
     assert sorted(p.name for p in (repo / "docs" / "data").iterdir()) == ["memo_model_comparison"]
     key = json.loads((store / "blind_key.json").read_text())
     assert set(key["names"]) == {"sp500__T0", "sp500__T1"}
-    review = (store / "review.md").read_text()
     memo_a = (store / "memos" / "sp500__T0" / "A.json").read_text()
-    for text in (review, memo_a):
-        assert mmc.INCUMBENT_MODEL not in text and mmc.CHALLENGER_MODEL not in text
-        assert "charged" not in text and "latency" not in text
-    assert "### Memo A" in review and "### Memo B" in review
+    assert mmc.INCUMBENT_MODEL not in memo_a and mmc.CHALLENGER_MODEL not in memo_a
+    assert "charged" not in memo_a and "latency" not in memo_a
+    # Under rule v2 the owner review is written by the judge step, not generation.
+    assert not (store / "review.md").exists()
+    assert not (store / "ratings_template.json").exists()
+    assert mmc.due_for_judge(repo) is True
     results = json.loads((store / "results.json").read_text())
     assert results["verdict_agreement"] == {"agree": 0, "of": 2, "share": 0.0}
     assert results["book_effect_agreement"]["agree"] == 0
     assert results["by_model"][mmc.CHALLENGER_MODEL]["blocks"] == 2
     assert results["by_model"][mmc.CHALLENGER_MODEL]["charged_usd_per_memo"] == 0.5
-    assert (store / "ratings_template.json").is_file()
     assert not (store / "ratings.json").exists()
     assert mmc.due_for_generation(repo) is False
     # Rerun is a no-op once ready.
@@ -332,72 +345,8 @@ def test_changed_inputs_regenerate_both_memos(repo: Path, tmp_path: Path) -> Non
     runner.fail = set()
     status = _generate(repo, runner)
     assert len(runner.calls) - before == 4
-    assert status["state"] == mmc.STATE_READY
+    assert status["state"] == mmc.STATE_GENERATED
     assert status["pairs"]["sp500__T0"]["superseded"]
-
-
-def _ratings(repo: Path, prefer: str, score: dict[str, int]) -> dict[str, Any]:
-    store = mmc.store_dir(repo)
-    key = json.loads((store / "blind_key.json").read_text())
-    ratings = json.loads((store / "ratings_template.json").read_text())
-    for slug, row in ratings["names"].items():
-        labels = key["names"][slug]
-        pick = next(label for label, model in labels.items() if model == prefer)
-        row["preferred"] = pick
-        for label, model in labels.items():
-            row[label] = {k: score[model] for k in mmc.RUBRIC}
-    (store / "ratings.json").write_text(json.dumps(ratings), encoding="utf-8")
-    return ratings
-
-
-def test_decision_rule_switch_and_keep(repo: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    _generate(repo, FakeRunner())
-    store = mmc.store_dir(repo)
-    manifest = json.loads((store / "manifest.json").read_text())
-    results = json.loads((store / "results.json").read_text())
-    key = json.loads((store / "blind_key.json").read_text())
-    monkeypatch.setattr(mmc, "MIN_COMPLETE_PAIRS", 2)
-    monkeypatch.setattr(mmc, "MIN_CHALLENGER_PREFERRED", 2)
-    win = _ratings(repo, mmc.CHALLENGER_MODEL, {mmc.CHALLENGER_MODEL: 5, mmc.INCUMBENT_MODEL: 3})
-    verdict = mmc.decide(manifest, results, win, key)
-    assert verdict["outcome"] == "switch", verdict["checks"]
-    assert verdict["checks"]["weekly_cost_fits"]["value"]["weekly_high_usd"] == 17.5
-    lose = _ratings(repo, mmc.INCUMBENT_MODEL, {mmc.CHALLENGER_MODEL: 3, mmc.INCUMBENT_MODEL: 4})
-    assert mmc.decide(manifest, results, lose, key)["outcome"] == "keep"
-    assert verdict["influences_live"] is False
-
-
-def test_findings_lifecycle(repo: Path) -> None:
-    assert [f["title"] for f in mmc.findings(repo, NOW)] == [mmc.TITLE_AWAITING]
-    _generate(repo, FakeRunner())
-    ready = mmc.findings(repo, NOW)
-    assert [f["title"] for f in ready] == [mmc.TITLE_READY]
-    assert "0/2 names rated" in ready[0]["summary"]
-    stale = mmc.findings(repo, NOW + timedelta(days=mmc.REVIEW_STALE_DAYS + 1))
-    assert stale[0]["title"] == mmc.TITLE_STALE and stale[0]["severity"] == "warn"
-    _ratings(repo, mmc.CHALLENGER_MODEL, {mmc.CHALLENGER_MODEL: 5, mmc.INCUMBENT_MODEL: 3})
-    decided = mmc.findings(repo, NOW)
-    assert decided[0]["title"] == mmc.TITLE_DECIDED
-    assert all(f["auto_fixable"] is False for f in decided + ready + stale)
-
-
-def test_ops_monitor_check_wraps_findings(repo: Path) -> None:
-    rows = check_memo_model_comparison(repo_root=repo, now=NOW)
-    assert [r.title for r in rows] == [mmc.TITLE_AWAITING]
-    assert rows[0].auto_fixable is False and rows[0].category == "research"
-    missing = check_memo_model_comparison(repo_root=repo / "nowhere", now=NOW)
-    assert missing[0].title == mmc.TITLE_FAILED
-
-
-def test_cli_decide_refuses_incomplete_ratings(repo: Path) -> None:
-    from value_investor.memo_model_comparison_cli import main
-
-    _generate(repo, FakeRunner())
-    assert main(["--repo-root", str(repo), "decide"]) == 1
-    _ratings(repo, mmc.CHALLENGER_MODEL, {mmc.CHALLENGER_MODEL: 5, mmc.INCUMBENT_MODEL: 3})
-    assert main(["--repo-root", str(repo), "decide", "--apply"]) == 0
-    assert (mmc.store_dir(repo) / "decision.json").is_file()
-    assert main(["--repo-root", str(repo), "select", "--apply"]) == 1  # manifest is frozen
 
 
 @patch("value_investor.research.agent._run_agent_prompt")
@@ -459,6 +408,19 @@ def test_run_agent_prompt_fills_capture(tmp_path: Path, monkeypatch: pytest.Monk
 
 def test_committed_manifest_matches_rule() -> None:
     manifest = json.loads(Path("docs/data/memo_model_comparison/manifest.json").read_text())
+    assert manifest["decision_rule_version"] == "v2"
+    assert manifest["amendment"]["owner_quote"] == "yes please"
+    assert manifest["amendment"]["before_any_results"] is True
+    assert manifest["judge"]["model"] == mmc.JUDGE_MODEL
+    mmc.check_judge_model(manifest["judge"]["model"], manifest["models"])
+    budget = manifest["budget"]
+    assert budget["judge_estimated_total_usd"] == mmc.estimated_judge_usd(12) == 22.56
+    assert budget["judge_estimated_total_usd"] <= budget["judge_cap_usd"]
+    assert budget["comparison_estimated_total_usd"] <= budget["comparison_cap_usd"]
+
+
+def test_committed_manifest_selection_unchanged() -> None:
+    manifest = json.loads(Path("docs/data/memo_model_comparison/manifest.json").read_text())
     names = manifest["names"]
     assert len(names) == 12
     assert len({n["slug"] for n in names}) == 12
@@ -473,6 +435,7 @@ def test_committed_manifest_matches_rule() -> None:
 def test_workflow_and_email_exclusion() -> None:
     wf = Path(".github/workflows/memo-model-comparison.yml").read_text()
     assert "generate --apply --if-due" in wf and "decide --apply" in wf
+    assert "judge --apply --if-due" in wf and "- judge" in wf
     assert "docs/data/memo_model_comparison/ratings.json" in wf
     assert "strategy_book_memo" not in wf
     email = Path(".github/workflows/email-report.yml").read_text()
@@ -525,3 +488,426 @@ def test_commit_script_directory_exclude(tmp_path: Path) -> None:
     assert json.loads((check / "docs/data/memo_model_comparison/ratings.json").read_text()) == {
         "owner": "fresh"
     }
+
+
+# --- rule v2: judge, calibration, decision ---------------------------------
+
+GOOD_MARK = "12.3p per share"
+
+
+def _shown(prompt: str, label: str) -> str:
+    return prompt.split(f"=== MEMO {label} ===", 1)[1].split(f"=== END MEMO {label} ===", 1)[0]
+
+
+class FakeJudge:
+    """Prefers the memo whose quote is in the filing (``good``), or a fixed position."""
+
+    def __init__(self, mode: str = "good", fail: bool = False) -> None:
+        self.mode = mode
+        self.fail = fail
+        self.calls: list[dict[str, Any]] = []
+
+    def __call__(self, **kw: Any) -> str:
+        self.calls.append(kw)
+        kw["capture"].update(
+            {"prompt": kw["prompt"], "latency_seconds": 3.0, "usage": {"charged_cents": 20.0}}
+        )
+        if self.fail:
+            return "I cannot answer in JSON."
+        good = {label: GOOD_MARK in _shown(kw["prompt"], label) for label in ("A", "B")}
+        if self.mode == "position":
+            pick = "A"
+        elif self.mode == "bad":
+            pick = "A" if not good["A"] else "B"
+        else:
+            pick = "A" if good["A"] else "B"
+        other = "B" if pick == "A" else "A"
+
+        def block(score: int) -> dict[str, Any]:
+            row = {
+                "score": score,
+                "reason": "Quotes checked against the annual filing.",
+                "quotes": [
+                    {"source": "filings/bodies/annual.txt", "quote": "Net debt was £410m"},
+                    {"source": "memo", "quote": "Filings support the buy case."},
+                ],
+            }
+            return {key: dict(row) for key in mmc.RUBRIC}
+
+        payload = {
+            "scores": {pick: block(5), other: block(3)},
+            "preferred": pick,
+            "preference_reason": "Better grounded.",
+            "claims_checked": [],
+        }
+        return "```json\n" + json.dumps(payload) + "\n```"
+
+
+def _judge(
+    root: Path,
+    judge: FakeJudge,
+    *,
+    remaining: float = 100.0,
+    spent: list[float] | None = None,
+    models: list[str] | None = None,
+    now: datetime = NOW,
+) -> dict[str, Any]:
+    ledger = spent if spent is not None else []
+    return mmc.run_judge(
+        root,
+        now=now,
+        api_key="k",
+        runner=judge,
+        list_models=lambda: models if models is not None else [mmc.JUDGE_MODEL, "grok-4.7"],
+        budget_status=lambda: {"remaining_weekly_ops_usd": remaining},
+        record_spend=ledger.append,
+    )
+
+
+def _owner(repo: Path, prefer: str | None, score: dict[str, int]) -> dict[str, Any]:
+    """Fill ratings_template.json: ``prefer`` is a model id, or None for tie."""
+    store = mmc.store_dir(repo)
+    key = json.loads((store / "blind_key.json").read_text())
+    ratings = json.loads((store / "ratings_template.json").read_text())
+    for slug, row in ratings["names"].items():
+        labels = key["names"][slug]
+        row["preferred"] = (
+            "tie" if prefer is None else next(lb for lb, m in labels.items() if m == prefer)
+        )
+        for label, model in labels.items():
+            row[label] = {k: score[model] for k in mmc.RUBRIC}
+    (store / "ratings.json").write_text(json.dumps(ratings), encoding="utf-8")
+    return ratings
+
+
+def _small_rule(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(mmc, "MIN_COMPLETE_PAIRS", 6)
+    monkeypatch.setattr(mmc, "MIN_CHALLENGER_PREFERRED", 5)
+    monkeypatch.setattr(mmc, "MAX_INCUMBENT_PREFERRED", 1)
+
+
+def test_v1_manifest_refuses_generation_and_judge(repo: Path) -> None:
+    store = mmc.store_dir(repo)
+    (store / "manifest.json").write_text(json.dumps(_manifest(amend=False)), encoding="utf-8")
+    runner = FakeRunner()
+    status = _generate(repo, runner)
+    assert runner.calls == []
+    assert "generation refuses" in status["errors"][0]
+    judge = FakeJudge()
+    assert "judge refuses" in _judge(repo, judge)["errors"][0]
+    assert judge.calls == []
+    assert [f["title"] for f in mmc.findings(repo, NOW)] == [mmc.TITLE_FAILED]
+
+
+def test_amend_refuses_once_generation_output_exists(repo: Path) -> None:
+    store = mmc.store_dir(repo)
+    base = _manifest(amend=False)
+    _generate(repo, FakeRunner())
+    with pytest.raises(ValueError, match="cannot amend"):
+        mmc.amend_rule_v2(base, store=store)
+    from value_investor.memo_model_comparison_cli import main
+
+    assert main(["--repo-root", str(repo), "amend", "--apply"]) == 1
+
+
+def test_judge_must_be_third_family_with_rate() -> None:
+    models = {"incumbent": "composer-2.5", "challenger": "grok-4.6"}
+    mmc.check_judge_model("gpt-5.6-luna", models, available=["gpt-5.6-luna"])
+    mmc.check_judge_model("claude-haiku-4-5", models)
+    assert mmc.model_family(mmc.JUDGE_MODEL) == "openai"
+    for barred in ("composer-2", "default", "grok-4.7", "grok-4.5"):
+        with pytest.raises(ValueError, match="family"):
+            mmc.check_judge_model(barred, models)
+    with pytest.raises(ValueError, match="no known model family"):
+        mmc.check_judge_model("muse-spark-1.3", models)
+    with pytest.raises(ValueError, match="no rate"):
+        mmc.check_judge_model("claude-opus-5-5", models)
+    with pytest.raises(ValueError, match="not available"):
+        mmc.check_judge_model("gpt-5.6-luna", models, available=["grok-4.6"])
+    # A judge sharing a family with either compared model is refused.
+    with pytest.raises(ValueError, match="family"):
+        mmc.check_judge_model("gpt-5.4-mini", {"incumbent": "gpt-5-mini", "challenger": "grok-4.6"})
+
+
+def test_judge_unavailable_fails_closed(repo: Path) -> None:
+    _generate(repo, FakeRunner())
+    judge = FakeJudge()
+    status = _judge(repo, judge, models=["composer-2.5", "grok-4.6"])
+    assert judge.calls == []
+    assert "judge model check failed" in status["errors"][0]
+    assert [f["title"] for f in mmc.findings(repo, NOW)] == [mmc.TITLE_FAILED]
+
+
+def test_judge_waits_for_generation(repo: Path) -> None:
+    judge = FakeJudge()
+    assert mmc.due_for_judge(repo) is False
+    assert "generation not finished" in _judge(repo, judge)["errors"][0]
+    assert judge.calls == []
+
+
+def test_judge_runs_both_orders_blind_and_persists_evidence(repo: Path) -> None:
+    _generate(repo, FakeRunner())
+    judge = FakeJudge()
+    spent: list[float] = []
+    status = _judge(repo, judge, spent=spent)
+    store = mmc.store_dir(repo)
+    assert status["state"] == mmc.JUDGE_STATE_DONE
+    assert len(judge.calls) == 4
+    assert spent == [mmc.estimated_memo_usd(mmc.JUDGE_MODEL)] * 4
+    assert status["spend"]["estimated_usd"] == pytest.approx(4 * 0.94)
+    for call in judge.calls:
+        prompt = call["prompt"]
+        assert call["model"] == mmc.JUDGE_MODEL
+        assert mmc.INCUMBENT_MODEL not in prompt and mmc.CHALLENGER_MODEL not in prompt
+        assert "charged" not in prompt and "$" not in prompt
+        assert call["cwd"].endswith("sources") is False
+        assert str(Path(call["cwd"]) / "sources") in prompt
+    # Each order shows the stored memos in swapped positions.
+    t0 = [c["prompt"] for c in judge.calls if "(T0," in c["prompt"]]
+    assert _shown(t0[0], "A") == _shown(t0[1], "B")
+    record = json.loads((store / "judgements" / "sp500__T0" / "BA.json").read_text())
+    assert record["ok"] is True and record["shown_as"] == {"A": "B", "B": "A"}
+    assert record["raw_text"] and len(record["prompt_sha256"]) == 64
+    for label in ("A", "B"):
+        for key in mmc.RUBRIC:
+            row = record["parsed"]["scores"][label][key]
+            assert row["reason"] and row["quotes"]
+    assert record["quote_check"]["found"] == record["quote_check"]["quotes"] == 12
+    results = json.loads((store / "judge_results.json").read_text())
+    key = json.loads((store / "blind_key.json").read_text())
+    for pair in results["pairs"]:
+        assert pair["order_consistent"] is True
+        assert key["names"][pair["slug"]][pair["preferred"]] == mmc.CHALLENGER_MODEL
+    assert mmc.due_for_judge(repo) is False
+    _judge(repo, judge)
+    assert len(judge.calls) == 4
+
+
+def test_position_bias_counts_as_tie(repo: Path) -> None:
+    _generate(repo, FakeRunner())
+    _judge(repo, FakeJudge(mode="position"))
+    results = json.loads((mmc.store_dir(repo) / "judge_results.json").read_text())
+    assert [p["preferred"] for p in results["pairs"]] == ["tie", "tie"]
+    assert all(not p["order_consistent"] for p in results["pairs"])
+    assert all(p["picks_by_order"]["AB"] != p["picks_by_order"]["BA"] for p in results["pairs"])
+    # Averaged over both orders each memo scores (5 + 3) / 2 per key.
+    assert results["pairs"][0]["scores"]["A"]["total"] == 12.0
+
+
+def test_model_names_redacted_from_memo_text() -> None:
+    text, hits = mmc.redact_model_names("As Grok-4.6 I think; Composer agrees; GPT too.")
+    assert hits == 3 and "rok" not in text and "omposer" not in text
+
+
+def test_invalid_judge_output_retries_once_then_exhausts(repo: Path) -> None:
+    _generate(repo, FakeRunner())
+    judge = FakeJudge(fail=True)
+    first = _judge(repo, judge)
+    assert first["state"] == mmc.JUDGE_STATE_INCOMPLETE
+    assert any("invalid judge output" in e for e in first["errors"])
+    record = json.loads((mmc.store_dir(repo) / "judgements" / "sp500__T0" / "AB.json").read_text())
+    assert record["ok"] is False and record["raw_text"] == "I cannot answer in JSON."
+    _judge(repo, judge)
+    calls = len(judge.calls)
+    assert calls == 8
+    _judge(repo, judge)
+    assert len(judge.calls) == calls
+    assert not (mmc.store_dir(repo) / "review.md").exists()
+
+
+def test_parse_judge_output_schema() -> None:
+    payload, problems = mmc.parse_judge_output('{"preferred": "C", "scores": {}}')
+    assert payload is not None and "preferred must be A, B or tie" in problems
+    assert any("A.evidence.quotes" in p for p in problems)
+    assert mmc.parse_judge_output("nothing")[1] == ["no JSON object"]
+
+
+def test_judge_budget_guards(repo: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _generate(repo, FakeRunner())
+    judge = FakeJudge()
+    status = _judge(repo, judge, remaining=mmc.STRATEGY_BOOK_RESERVE_USD + 0.5)
+    assert judge.calls == []
+    assert status["budget_stop"]["kind"] == "weekly_headroom"
+    assert mmc.due_for_judge(repo) is True
+    monkeypatch.setattr(mmc, "JUDGE_BUDGET_CAP_USD", 1.0)
+    status = _judge(repo, judge)
+    assert len(judge.calls) == 1
+    assert status["budget_stop"]["kind"] == "cap"
+    assert mmc.due_for_judge(repo) is False
+
+
+def test_judge_refuses_changed_sources(repo: Path, tmp_path: Path) -> None:
+    _generate(repo, FakeRunner())
+    (tmp_path / "src_sources" / "filings" / "bodies" / "late.txt").write_text("x", encoding="utf-8")
+    shutil.rmtree(mmc.work_dir(repo))
+    judge = FakeJudge()
+    status = _judge(repo, judge)
+    assert judge.calls == []
+    assert any("sources changed since generation" in e for e in status["errors"])
+
+
+def test_calibration_sample_selection_rule() -> None:
+    def memo(flags: int, rate: float, effect: str = "allows") -> dict[str, Any]:
+        return {
+            "checks": {"hallucination_flag_total": flags, "quote_resolution_rate": rate},
+            "book_effect": effect,
+        }
+
+    pairs = [{"slug": f"s{i}", "preferred": pref} for i, pref in enumerate("AABtBtA")]
+    for pair in pairs:
+        pair["preferred"] = "tie" if pair["preferred"] == "t" else pair["preferred"]
+    memos = {
+        "s0": {"A": memo(0, 1.0), "B": memo(2, 1.0)},  # judge A, mechanical A: agree
+        "s1": {"A": memo(3, 1.0), "B": memo(1, 1.0)},  # judge A, mechanical B: disagree
+        "s2": {"A": memo(0, 0.5), "B": memo(0, 0.9)},  # judge B, mechanical B (rate tiebreak)
+        "s3": {"A": memo(0, 1.0), "B": memo(0, 1.0, "blocks")},  # book-effect disagreement
+        "s4": {"A": memo(0, 0.9), "B": memo(0, 0.5)},  # judge B, mechanical A: disagree
+        "s5": {"A": memo(1, 1.0), "B": memo(0, 1.0)},  # judge tie: never a mechanical disagreement
+        "s6": {"A": memo(0, 1.0), "B": memo(0, 1.0)},  # judge A, mechanical tie
+    }
+    sample = mmc.select_calibration("cid", pairs, memos)
+    reasons = {row["slug"]: row["reasons"] for row in sample}
+    assert reasons["s1"] == ["judge_vs_mechanical"]
+    assert reasons["s3"] == ["book_effect_disagreement"]
+    assert reasons["s4"] == ["judge_vs_mechanical"]
+    assert len(sample) == mmc.CALIBRATION_MIN_SAMPLE
+    topped = [slug for slug, why in reasons.items() if why == ["top_up"]]
+    assert len(topped) == 1 and topped[0] in {"s0", "s2", "s6"}  # non-tie judge pick first
+    expected = min(("s0", "s2", "s6"), key=lambda s: mmc._topup_rank("cid", s))
+    assert topped == [expected]
+    assert [row["slug"] for row in sample] == sorted(reasons, key=lambda s: int(s[1:]))
+    assert mmc.select_calibration("cid", pairs, memos) == sample
+    assert [mmc.calibration_need(n) for n in (4, 5, 6, 8, 12)] == [3, 4, 5, 6, 9]
+
+
+def test_calibration_takes_every_book_effect_disagreement(repo6: Path) -> None:
+    _generate(repo6, FakeRunner(verdicts={mmc.CHALLENGER_MODEL: "pass"}))
+    _judge(repo6, FakeJudge())
+    store = mmc.store_dir(repo6)
+    cal = json.loads((store / "calibration.json").read_text())
+    assert len(cal["sample"]) == 6
+    assert all("book_effect_disagreement" in row["reasons"] for row in cal["sample"])
+    review = (store / "review.md").read_text()
+    assert review.count("### Memo A") == 6
+    for word in (mmc.JUDGE_MODEL, mmc.INCUMBENT_MODEL, mmc.CHALLENGER_MODEL, "judge_vs", "top_up"):
+        assert word not in review
+
+
+def test_review_covers_only_the_sample(repo6: Path) -> None:
+    _generate(repo6, FakeRunner())
+    _judge(repo6, FakeJudge())
+    store = mmc.store_dir(repo6)
+    cal = json.loads((store / "calibration.json").read_text())
+    assert [row["reasons"] for row in cal["sample"]] == [["top_up"]] * 4
+    template = json.loads((store / "ratings_template.json").read_text())
+    assert sorted(template["names"]) == sorted(row["slug"] for row in cal["sample"])
+    assert (store / "review.md").read_text().count("### Memo B") == 4
+    assert cal["need_agree"] == 3
+
+
+def test_decision_v2_trusted_judge_switches(repo6: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _small_rule(monkeypatch)
+    _generate(repo6, FakeRunner())
+    _judge(repo6, FakeJudge())
+    _owner(repo6, mmc.CHALLENGER_MODEL, {mmc.CHALLENGER_MODEL: 5, mmc.INCUMBENT_MODEL: 3})
+    verdict = mmc.decide_from_store(mmc.store_dir(repo6))
+    assert verdict["judge_trusted"] is True and verdict["governing"] == "judge"
+    assert verdict["outcome"] == "switch", verdict["checks"]
+    assert verdict["checks"]["judge_prefers_challenger"]["value"]["challenger"] == 6
+    assert verdict["checks"]["judge_rubric_gain"]["value"] == 6.0
+    assert verdict["calibration"] == {**verdict["calibration"], "sample": 4, "agree": 4, "need": 3}
+    assert verdict["influences_live"] is False
+
+
+def test_decision_v2_failed_calibration_owner_decides(
+    repo6: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _small_rule(monkeypatch)
+    _generate(repo6, FakeRunner())
+    _judge(repo6, FakeJudge())
+    _owner(repo6, mmc.INCUMBENT_MODEL, {mmc.CHALLENGER_MODEL: 3, mmc.INCUMBENT_MODEL: 4})
+    verdict = mmc.decide_from_store(mmc.store_dir(repo6))
+    assert verdict["judge_trusted"] is False and verdict["governing"] == "owner_sample"
+    assert verdict["outcome"] == "keep"
+    assert verdict["checks"]["judge_calibration"]["ok"] is False
+
+
+def test_decision_v2_untrusted_judge_overwhelming_owner_switches(
+    repo6: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _small_rule(monkeypatch)
+    _generate(repo6, FakeRunner())
+    _judge(repo6, FakeJudge(mode="position"))
+    _owner(repo6, mmc.CHALLENGER_MODEL, {mmc.CHALLENGER_MODEL: 5, mmc.INCUMBENT_MODEL: 3})
+    verdict = mmc.decide_from_store(mmc.store_dir(repo6))
+    assert verdict["judge_trusted"] is False
+    assert verdict["owner_sample"]["overwhelming_challenger"] is True
+    assert verdict["outcome"] == "switch"
+    # Owner ties on the sample: not overwhelming, and fewer than 10 pairs is never keep.
+    _owner(repo6, None, {mmc.CHALLENGER_MODEL: 4, mmc.INCUMBENT_MODEL: 4})
+    verdict = mmc.decide_from_store(mmc.store_dir(repo6))
+    assert verdict["owner_sample"]["overwhelming_challenger"] is False
+    assert verdict["outcome"] in {"keep", "inconclusive_keep"}
+
+
+def test_decision_v2_owner_governs_book_effect_disagreements(
+    repo6: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _small_rule(monkeypatch)
+    _generate(repo6, FakeRunner(verdicts={mmc.CHALLENGER_MODEL: "pass"}))
+    _judge(repo6, FakeJudge())
+    _owner(repo6, mmc.INCUMBENT_MODEL, {mmc.CHALLENGER_MODEL: 3, mmc.INCUMBENT_MODEL: 4})
+    verdict = mmc.decide_from_store(mmc.store_dir(repo6))
+    assert len(verdict["calibration"]["owner_governed_book_effect"]) == 6
+    assert verdict["checks"]["judge_prefers_challenger"]["value"]["incumbent"] == 6
+    assert verdict["checks"]["book_effect_disagreements"]["ok"] is False
+    assert verdict["outcome"] == "keep" and verdict["judge_trusted"] is False
+
+
+def test_decision_v2_needs_ten_pairs_by_default(repo6: Path) -> None:
+    _generate(repo6, FakeRunner())
+    _judge(repo6, FakeJudge())
+    _owner(repo6, mmc.CHALLENGER_MODEL, {mmc.CHALLENGER_MODEL: 5, mmc.INCUMBENT_MODEL: 3})
+    verdict = mmc.decide_from_store(mmc.store_dir(repo6))
+    assert verdict["checks"]["complete_pairs"]["ok"] is False
+    assert verdict["outcome"] == "inconclusive_keep"
+
+
+def test_findings_lifecycle(repo: Path) -> None:
+    assert [f["title"] for f in mmc.findings(repo, NOW)] == [mmc.TITLE_AWAITING]
+    _generate(repo, FakeRunner())
+    assert [f["title"] for f in mmc.findings(repo, NOW)] == [mmc.TITLE_AWAITING_JUDGE]
+    _judge(repo, FakeJudge())
+    ready = mmc.findings(repo, NOW)
+    assert [f["title"] for f in ready] == [mmc.TITLE_READY]
+    assert "0/2 calibration names rated" in ready[0]["summary"]
+    stale = mmc.findings(repo, NOW + timedelta(days=mmc.REVIEW_STALE_DAYS + 1))
+    assert stale[0]["title"] == mmc.TITLE_STALE and stale[0]["severity"] == "warn"
+    _owner(repo, mmc.CHALLENGER_MODEL, {mmc.CHALLENGER_MODEL: 5, mmc.INCUMBENT_MODEL: 3})
+    decided = mmc.findings(repo, NOW)
+    assert decided[0]["title"] == mmc.TITLE_DECIDED
+    assert "judge_trusted false" in decided[0]["summary"]  # sample of 2 is below the minimum
+    assert all(f["auto_fixable"] is False for f in decided + ready + stale)
+
+
+def test_ops_monitor_check_wraps_findings(repo: Path) -> None:
+    rows = check_memo_model_comparison(repo_root=repo, now=NOW)
+    assert [r.title for r in rows] == [mmc.TITLE_AWAITING]
+    assert rows[0].auto_fixable is False and rows[0].category == "research"
+    missing = check_memo_model_comparison(repo_root=repo / "nowhere", now=NOW)
+    assert missing[0].title == mmc.TITLE_FAILED
+
+
+def test_cli_judge_and_decide(repo: Path) -> None:
+    from value_investor.memo_model_comparison_cli import main
+
+    assert main(["--repo-root", str(repo), "judge", "--if-due"]) == 0
+    _generate(repo, FakeRunner())
+    _judge(repo, FakeJudge())
+    assert main(["--repo-root", str(repo), "judge", "--apply", "--if-due"]) == 0
+    assert main(["--repo-root", str(repo), "decide"]) == 1
+    _owner(repo, mmc.CHALLENGER_MODEL, {mmc.CHALLENGER_MODEL: 5, mmc.INCUMBENT_MODEL: 3})
+    assert main(["--repo-root", str(repo), "decide", "--apply"]) == 0
+    decision = json.loads((mmc.store_dir(repo) / "decision.json").read_text())
+    assert decision["decision_rule_version"] == "v2" and "judge_trusted" in decision
+    assert main(["--repo-root", str(repo), "select", "--apply"]) == 1  # manifest is frozen
