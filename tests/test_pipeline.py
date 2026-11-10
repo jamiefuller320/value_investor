@@ -968,6 +968,17 @@ def _consumer_defensive_universe_with_plantation() -> pd.DataFrame:
     )
 
 
+def test_resolve_scoring_sector_tolerates_nan_sector_and_name():
+    """Library screen rows may carry float NaN for missing sector/name — must not raise."""
+    import math
+
+    assert resolve_scoring_sector("XYZ.L", float("nan"), float("nan")) is None
+    assert resolve_scoring_sector("XYZ.L", None, math.nan) is None
+    assert resolve_scoring_sector("AEP.L", float("nan"), "AEP Plantations Plc") == (
+        AGRICULTURE_COMMODITIES_SECTOR
+    )
+
+
 def test_resolve_scoring_sector_remaps_aep_and_plantation_names():
     assert resolve_scoring_sector("AEP.L", "Consumer Defensive", "AEP Plantations Plc") == (
         AGRICULTURE_COMMODITIES_SECTOR
@@ -998,6 +1009,13 @@ def test_apply_sector_overrides_changes_sector_composite_score():
 
     assert aep_before > 0.7
     assert aep_after < aep_before
+
+
+def test_build_sector_cyclical_overlay_registry_tolerates_nan_sector_name():
+    row = pd.Series({"ticker": "MISS.L", "name": float("nan"), "sector": float("nan")})
+    registry = build_sector_cyclical_overlay_registry(row)
+    assert registry["registry_version"] == 1
+    assert isinstance(registry["active_hook_ids"], list)
 
 
 def test_build_sector_cyclical_overlay_registry_flags_plantation_peer_group():

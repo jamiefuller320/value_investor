@@ -23,6 +23,21 @@ PLANTATION_NAME_FRAGMENTS = (
 )
 
 
+def _scoring_field_text(value: object | None) -> str:
+    """Coerce pandas/NaN-safe text from screen rows (sector/name may be float)."""
+    if value is None:
+        return ""
+    try:
+        if pd.isna(value):
+            return ""
+    except (TypeError, ValueError):
+        pass
+    text = str(value).strip()
+    if not text or text.lower() == "nan":
+        return ""
+    return text
+
+
 def resolve_scoring_sector(
     ticker: str | None,
     sector: str | None,
@@ -34,9 +49,9 @@ def resolve_scoring_sector(
         if override:
             return override
 
-    sector_norm = (sector or "").strip()
+    sector_norm = _scoring_field_text(sector)
     if sector_norm in MISCLASSIFIED_DEFENSIVE_SECTORS:
-        name_l = (name or "").lower()
+        name_l = _scoring_field_text(name).lower()
         if any(fragment in name_l for fragment in PLANTATION_NAME_FRAGMENTS):
             return AGRICULTURE_COMMODITIES_SECTOR
 
