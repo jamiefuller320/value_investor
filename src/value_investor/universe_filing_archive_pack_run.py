@@ -41,12 +41,9 @@ from value_investor.universe_filing_archive_pack_order import (
     build_week_first_pack_plan,
     summarize_plan_by_week,
 )
+from value_investor.universe_filing_archive_stage import resolve_apply_caps
 from value_investor.universe_filing_archive_writer import (
-    DEFAULT_APPLY_MAX_UNITS,
     DEFAULT_LIBRARY_ROOT,
-    DEFAULT_MAX_BODIES_PER_TICKER,
-    DEFAULT_MAX_HTTP_FETCHES,
-    DEFAULT_MAX_TICKERS_PER_UNIT,
     assemble_archive_pack_units,
 )
 
@@ -553,6 +550,9 @@ def _finalize_and_persist(
     persist: bool,
     assemble: dict[str, Any] | None = None,
     max_units: int | None = None,
+    max_http_fetches: int | None = None,
+    resolved_caps: dict[str, Any] | None = None,
+    status_path: Path | None = None,
 ) -> dict[str, Any]:
     write_timer = _StageTimer("write_artifacts")
     write_timer.start()
@@ -563,6 +563,12 @@ def _finalize_and_persist(
         else {}
     )
     unit_rows = capped_unit_results(assemble)
+    resolved = resolved_caps if isinstance(resolved_caps, dict) else {}
+    status_file = (
+        Path(status_path)
+        if status_path is not None
+        else Path(pack_run_path).parent / "universe_filing_archive_status.json"
+    )
     pack_run = {
         "schema_version": SCHEMA_VERSION,
         "generated_at": clock.isoformat(),
@@ -584,6 +590,9 @@ def _finalize_and_persist(
         "plan_unit_count": int(plan.get("unit_count") or 0),
         "lookback_weeks": int(plan.get("lookback_weeks") or lookback_weeks),
         "max_units": max_units,
+        "max_http_fetches": max_http_fetches,
+        "stage": resolved.get("stage"),
+        "caps_from_stage_ladder": bool(resolved.get("from_stage_ladder")),
         "fourth_equal_sprint_stream": False,
         "preemptible": True,
         "units_attempted": int(assemble.get("units_attempted") or 0),
@@ -598,7 +607,7 @@ def _finalize_and_persist(
         "week_summary": summarize_plan_by_week(plan)[:4] if plan.get("units") else [],
         "note": (
             "Week-first archive pack pass under archive_lane_gate. "
-            "Apply uses thin quiet cold-store writers (archive budgets, tiny caps); "
+            "Apply uses thin quiet cold-store writers (archive budgets, stage ladder caps); "
             "not a fourth equal sprint; bottleneck never eng-sprays (N180/N181)."
             if not dry_run
             else (
@@ -664,7 +673,7 @@ def _finalize_and_persist(
                 bottleneck=review,
                 pack_run_path=Path(pack_run_path),
                 bottleneck_path=Path(bottleneck_path),
-                status_path=Path(pack_run_path).parent / "universe_filing_archive_status.json",
+                status_path=status_file,
                 now=clock,
             )
         except Exception:  # noqa: BLE001 — status panel must not fail the lane
@@ -693,11 +702,12 @@ def run_universe_filing_archive_pack(
     policy_path: Path = DEFAULT_POLICY_PATH,
     pack_run_path: Path = DEFAULT_PACK_RUN_PATH,
     bottleneck_path: Path = DEFAULT_BOTTLENECK_PATH,
+    status_path: Path | None = None,
     cold_root: Path = DEFAULT_COLD_ROOT,
     library_root: Path = DEFAULT_LIBRARY_ROOT,
-    max_tickers_per_unit: int = DEFAULT_MAX_TICKERS_PER_UNIT,
-    max_bodies_per_ticker: int = DEFAULT_MAX_BODIES_PER_TICKER,
-    max_http_fetches: int = DEFAULT_MAX_HTTP_FETCHES,
+    max_tickers_per_unit: int | None = None,
+    max_bodies_per_ticker: int | None = None,
+    max_http_fetches: int | None = None,
     persist: bool = True,
     force_allow_for_test: bool = False,
     discover_fn: Any | None = None,
@@ -708,8 +718,8 @@ def run_universe_filing_archive_pack(
     Always fail-open for cron: suspend / quiet_only outcomes still exit success
     at the CLI layer and still write the bottleneck review.
 
-    When ``dry_run=False``, runs the thin quiet writer pilot with archive-only
-    budgets and tiny caps (default ``max_units`` = ``DEFAULT_APPLY_MAX_UNITS``).
+    When ``dry_run=False``, runs thin quiet writers with archive-only budgets.
+    Caps resolve from the committed stage ladder unless explicitly overridden.
     """
     clock = now or _now()
     if clock.tzinfo is None:
@@ -717,9 +727,28 @@ def run_universe_filing_archive_pack(
     else:
         clock = clock.astimezone(UTC)
 
-    effective_max_units = max_units
-    if not dry_run and effective_max_units is None:
-        effective_max_units = DEFAULT_APPLY_MAX_UNITS
+    resolved_status_path = (
+        Path(status_path)
+        if status_path is not None
+        else Path(pack_run_path).parent / "universe_filing_archive_status.json"
+    )
+    resolved_caps = resolve_apply_caps(
+        max_units=max_units,
+        max_http_fetches=max_http_fetches,
+        status_path=resolved_status_path,
+    )
+    effective_max_units = int(resolved_caps["max_units"])
+    effective_max_http_fetches = int(resolved_caps["max_http_fetches"])
+    effective_max_tickers = (
+        int(max_tickers_per_unit)
+        if max_tickers_per_unit is not None
+        else int(resolved_caps["max_tickers_per_unit"])
+    )
+    effective_max_bodies = (
+        int(max_bodies_per_ticker)
+        if max_bodies_per_ticker is not None
+        else int(resolved_caps["max_bodies_per_ticker"])
+    )
 
     run_id = f"uap-{clock.strftime('%Y%m%dT%H%M%SZ')}-{uuid.uuid4().hex[:8]}"
     stages: list[dict[str, Any]] = []
@@ -791,6 +820,9 @@ def run_universe_filing_archive_pack(
             bottleneck_path=Path(bottleneck_path),
             persist=persist,
             max_units=effective_max_units,
+            max_http_fetches=effective_max_http_fetches,
+            resolved_caps=resolved_caps,
+            status_path=resolved_status_path,
         )
 
     roster_timer = _StageTimer("roster")
@@ -864,9 +896,9 @@ def run_universe_filing_archive_pack(
                 plan,
                 cold_root=Path(cold_root),
                 library_root=Path(library_root),
-                max_tickers_per_unit=int(max_tickers_per_unit),
-                max_bodies_per_ticker=int(max_bodies_per_ticker),
-                max_http_fetches=int(max_http_fetches),
+                max_tickers_per_unit=effective_max_tickers,
+                max_bodies_per_ticker=effective_max_bodies,
+                max_http_fetches=effective_max_http_fetches,
                 discover_fn=discover_fn,
                 body_fetch_fn=body_fetch_fn,
             )
@@ -916,6 +948,9 @@ def run_universe_filing_archive_pack(
         persist=persist,
         assemble=assemble,
         max_units=effective_max_units,
+        max_http_fetches=effective_max_http_fetches,
+        resolved_caps=resolved_caps,
+        status_path=resolved_status_path,
     )
 
 

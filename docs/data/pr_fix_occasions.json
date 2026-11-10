@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-10T10:45:08.621536+00:00",
-  "occasion_count": 353,
+  "updated_at": "2026-11-10T11:10:21.400997+00:00",
+  "occasion_count": 358,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -6422,6 +6422,97 @@
       "failed_check_names": [],
       "notes": "Resolve by git merge origin/main; ftse-defer rebase-ids renumbered this branch's L699 -> L700 and N262 -> N263 (main's L699 gate-history retention and N262 memo use tracking kept)",
       "details": {}
+    },
+    {
+      "id": "prf-20261110-008",
+      "recorded_at": "2026-11-10T10:26:40.246243+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "validate check failed",
+      "pr_number": 1352,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "validate"
+      ],
+      "notes": null,
+      "details": {}
+    },
+    {
+      "id": "prf-20261110-009",
+      "recorded_at": "2026-11-10T10:30:25.484328+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "validate failed again after main merge",
+      "pr_number": 1352,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "validate"
+      ],
+      "notes": "post-rebase push d52569648a",
+      "details": {}
+    },
+    {
+      "id": "prf-20261110-010",
+      "recorded_at": "2026-11-10T10:33:35.906466+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "validate still failing after ruff import fix",
+      "pr_number": 1352,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "validate"
+      ],
+      "notes": "head f1e4e023ac",
+      "details": {}
+    },
+    {
+      "id": "prf-20261110-011",
+      "recorded_at": "2026-11-10T10:45:33.129464+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "PR mergeable=CONFLICTING against main at merge time",
+      "pr_number": 1352,
+      "branch": "cursor/cold-store-auto-widen-17d1",
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": "dirty",
+      "failed_check_names": [],
+      "notes": "CI was green on ceec074a2f",
+      "details": {}
+    },
+    {
+      "id": "prf-20261110-012",
+      "recorded_at": "2026-11-10T11:10:21.400997+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "merge_conflict: ops_monitor collect_ops_findings (_guarded_check wrap on main) and fix-occasion ID collision after #1350 merged",
+      "pr_number": 1352,
+      "branch": "cursor/cold-store-auto-widen-17d1",
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": "CONFLICTING",
+      "failed_check_names": [],
+      "notes": "Took main's _guarded_check block and added check_universe_filing_archive_auto_widen guarded; re-IDed branch occasions prf-20261110-005..008 -> 008..011 (main's 005 kept; avoids #1348's 006/007); deferred store auto-merged, N261 done, check-ids OK",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -6459,6 +6550,21 @@
         ]
       },
       {
+        "failure_reason": "validate check failed",
+        "count": 6,
+        "sources": {
+          "human_request": 6
+        },
+        "recent_prs": [
+          831,
+          873,
+          893,
+          1056,
+          1267,
+          1352
+        ]
+      },
+      {
         "failure_reason": "merge_conflict:dirty",
         "count": 6,
         "sources": {
@@ -6483,20 +6589,6 @@
           765,
           828,
           830
-        ]
-      },
-      {
-        "failure_reason": "validate check failed",
-        "count": 5,
-        "sources": {
-          "human_request": 5
-        },
-        "recent_prs": [
-          831,
-          873,
-          893,
-          1056,
-          1267
         ]
       },
       {
@@ -6664,11 +6756,11 @@
     "by_kind": [
       {
         "kind": "ci_check",
-        "count": 186
+        "count": 189
       },
       {
         "kind": "merge_conflict",
-        "count": 166
+        "count": 168
       },
       {
         "kind": "ci_and_merge",
@@ -6678,7 +6770,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 347
+        "count": 352
       },
       {
         "source": "traffic_controller",

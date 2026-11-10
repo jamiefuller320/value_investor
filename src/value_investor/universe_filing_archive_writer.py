@@ -39,9 +39,10 @@ from value_investor.universe_filing_archive_isolation import (
 
 SCHEMA_VERSION = 1
 
-# Hard caps for quiet-window apply — stage-2 moderate quiet (was stage-1 4/16;
-# pilot 2/8). Tickers/bodies stay at pilot; raise units/HTTP only after
-# isolation_ok streaks (never auto-widen; N180/N181).
+# Fallback floor when stage ladder status is missing — stage-2 moderate quiet
+# (was stage-1 4/16; pilot 2/8). Live cron resolves caps from committed
+# ``stage_ladder`` (auto-widen up to documented stage 3). Tickers/bodies stay
+# frozen; N180/N181 still parked (no fourth sprint / eng-spray).
 DEFAULT_APPLY_MAX_UNITS = 8
 DEFAULT_MAX_TICKERS_PER_UNIT = 2
 DEFAULT_MAX_BODIES_PER_TICKER = 1
