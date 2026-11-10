@@ -101,5 +101,20 @@
     "run_at": "2026-11-06T06:00:00Z",
     "code_commit": "a1a1ab892243c2257f8254dbf1a4a094200346de",
     "note": "From here, a bug fix is a logged change marker on this registration_id; a threshold or primary-rule change is a new registration_id (section 10)."
-  }
+  },
+  "bench_seals": [
+    {
+      "column": "trend_not_falling",
+      "kind": "filter_challenger",
+      "review": "bench-fill-2026-11-10",
+      "review_doc": "docs/ops/strategy-book-bench-fill-review.md",
+      "sealed_at": "2026-11-10T08:00:00Z",
+      "before_forward_scores": true,
+      "rule": "trend_not_falling is a filter challenger. It keeps a primary entry when the entry's 6-month channel direction (ch126_direction, channel_v0, computed at the signal session from closes on or before that session) is rising or sideways. An entry whose direction is falling, or that has no 6-month channel, is not kept. It opens no episode and is scored under the section 8 bench rules: 48 counted mature episodes, a mean difference above 2.5 standard errors, the same sign in both halves, and a capital-days return not below the primary's.",
+      "rule_sha256": "f264887897639323da9c79415ae91970ac97dc7fc5ad6def9304e45f45dbd2a0",
+      "code": "strategy_book_rules.REVIEW_BENCH / strategy_book_observe._bench_flags",
+      "evidence": "US rehearsal, descriptive: falling-channel entries had a lower fair-cost median in both windows (L689). Not a US rehearsal test.",
+      "owner_note": "Lets seal it now."
+    }
+  ]
 }
