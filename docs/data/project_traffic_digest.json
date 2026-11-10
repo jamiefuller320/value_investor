@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-10T21:15:38.787410+00:00",
+  "generated_at": "2026-11-10T22:29:13.629940+00:00",
   "role": "end_of_day_project_traffic",
   "trajectory": "on_track",
   "pause_active": false,
@@ -80,7 +80,7 @@
         "probe": "queue_health.overall must be set by refresh_queue_health_ui"
       },
       {
-        "claim": "Ops monitor overall=warn at 2026-11-10T10:07:40.188733+00:00",
+        "claim": "Ops monitor overall=warn at 2026-11-10T21:07:41.269922+00:00",
         "source": "docs/data/ops_status.json",
         "grounded": true,
         "probe": "ops_status.run_at required for same-day claims"
@@ -439,159 +439,7 @@
     "status": "scoped_auto_merge",
     "note": "Traffic controller does not merge. Scoped auto-merge may merge ci_fix, ingest_narrow / scoring_narrow (independent deterministic verify), and parked_hunter PRs. EOD lists today's merges for monitoring."
   },
-  "ops_email_handoff": {
-    "schema_version": 1,
-    "generated_at": "2026-11-10T21:15:38.787410+00:00",
-    "email_subject": "FTSE Ops Monitor — WARN",
-    "email_text": "FTSE Ops Monitor — 2026-11-10T21:07:41.269922+00:00\nOverall: WARN\n\nNEEDS INVESTIGATION\n----------------------------------------\n[WARN] New buy-tier not yet usable\n  1 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across euro_depth: euro_depth/UCB.BR (no_key_bodies, 405.13h since flip). Blocking: no_key_bodies=1.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Price-only excess misstates track performance\n  Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_matched30_fair: published -1.5% vs total-return +0.0% (lifetime, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Longer holds beat live exit buffer in replay\n  Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: buy_tier_matched30_fair: exit_confirm_screens 10 vs live 2 +2.4% over 16 passes (46 vs 76 trades; realised median hold 5.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Sector headwind gate coverage gap\n  Buy-tier sectors lack enough point-in-time gate data: Agriculture/Commodities. Library markets whose buy-tier sectors are mostly insufficient_data: aex (5/7), atx (4/5), bel20 (2/3), cac40 (5/8), iseq20 (3/3), omxs30 (5/6), psi20 (1/1). Fail closed; observe-only; no automated ingest, book, signal, or knob action.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Two-lot retention beats full exit in replay\n  buy_tier_level: core_kept beats full exit by +1.1% over 43 passes (2026-09-07 to 2026-11-10; core value £905.29, rank exits 25 vs full exit). Observe-only. Do not edit buy_tier_level. See docs/ops/two-lot-replay.md.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] SEC filed FCF diverges from Yahoo basis on US buy-tier\n  13 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (14 of 236 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); GM (sp500) FY2025 SEC 17,564M vs Yahoo 1,771M (90%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier\n  58 US buy-tier memo name(s) where feeding SEC companyfacts into reconcile_fcf filing_aligned would change policy FCF/basis or mismatch flags vs the live Yahoo path (69 of 249 compared overall): FANG (nasdaq100) Yahoo filing_aligned/-703M → SEC filing_aligned/2,820M; WIT (us_adr_asia) Yahoo filing_aligned/133,713M → SEC filing_aligned/1,810M; UMC (us_adr_asia) Yahoo filing_aligned/49,131M → SEC filing_aligned/163M; GM (sp500) Yahoo filing_aligned/1,771M → SEC filing_aligned/17,564M; BIDU (us_adr_asia) Yahoo filing_aligned/-16,430M → SEC filing_aligned/-2,157M. Observe twin sec-filing-aligned-twin-v0 (influences_live=false); live scoring still reads Yahoo. See docs/ops/sec-companyfacts.md.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Chart highs and lows incomplete\n  1158 of 1294 charts (89%) store daily highs and lows. Channel columns (N254) use closes in place of missing highs/lows and label them hl_basis=closes. Charts gain highs/lows on their next rebuild (publish schema refresh or the strategy-book close refresh).\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Strategy-book US rehearsal: licensed data deletion due\n  Licensed Sharadar files were first used 2026-11-07T11:48:55+00:00; delete them and every derived file by 2026-12-07 (27 days), then run `ftse-strategy-book-rehearsal confirm-deleted`.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Deferred idea triggers met\n  2 open deferred idea(s) have met their structured trigger: L616 (2026-11-08), L625 (2026-11-10). Pick up, retarget, or close each with ftse-defer (docs/ops/deferred-triggers.md).\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Deferred idea triggers unreadable\n  2 structured trigger(s) cannot be evaluated: N143: tracks[track_id=ai_judgment_matched30_fair].statistics.verdict not in docs/data/assessment_scoreboard.json; N18: tracks[track_id=ai_judgment_matched30_fair].statistics.verdict not in docs/data/assessment_scoreboard.json. Fix with ftse-defer set-trigger.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Parked engineering tasks need manual review\n  2 parked task(s): eng-20261104-01, eng-20261103-09\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\nENGINEERING MERGES TODAY (independent verify monitor)\n----------------------------------------\n  • [human/human] PR #1345 eng-20261110-09: Workflow fix: library ingest maintenance failure\n  • [ingest_narrow/verified] PR #1344 eng-20261110-08: Buy-tier body-lag sweep job: prioritize BGEO.L, IAG.L, IGG.L, INCH.L from this run’s `filing_coverage.indexed_without_body` with success metrics and alert on ze\n  • [scoring_narrow/verified] PR #1343 eng-20261110-07: contractor: Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio [4/4]\n  • [ingest_narrow/verified] PR #1342 eng-20261110-03: Allowlisted company IR results-presentation PDF fetch (pattern in `gap_fill_source_map` / high-priority HIK.L, MEGP.L samples)\n  • [scoring_narrow/verified] PR #1341 eng-20261110-06: healthcare: Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio [3/4]\n  • [human/human] PR #1340 eng-20261110-02: Harden Companies House filed-accounts PDF download + text/OCR pipeline using existing `document-api` URLs in `filings_index.json`\n  • [scoring_narrow/verified] PR #1339 eng-20261110-05: fcf: Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio [2/4]\n  • [human/human] PR #1338 eng-20261110-01: Ship unified Investegate/LSE direct fetch for indexed RNS items (replace Google News redirect URLs, PDF/HTML body persist to `filings/bodies/`)\n  • [scoring_narrow/verified] PR #1337 eng-20261110-04: Sector and cyclical overlay registry (e.g [1/4]\n  • [human/human] PR #1334 eng-20261109-01: Hunt fetchable IR source for parked asx200 leftover IMD.AX\n\nWORKFLOW FRESHNESS\n----------------------------------------\n  [OK] FTSE Ingest Loop: last success 2026-11-10T20:21:03+00:00, age 0.9h (not scheduled today)\n  [OK] Automation Orchestrator: last success 2026-11-10T18:44:06+00:00, age 2.5h\n  [OK] FTSE Engineering Queue: last success 2026-11-10T21:07:58+00:00, age 0.1h\n  [OK] Dashboard bridge worker: last success 2026-11-10T21:10:38+00:00, age 0.0h\n  [OK] CI main nightly: last success 2026-11-10T15:41:33+00:00, age 5.5h\n  [OK] Modelling analysis review: last success 2026-11-08T15:24:55+00:00, age 53.8h (not scheduled today)\n  [OK] FTSE Library Ladder: last success 2026-11-09T06:52:00+00:00, age 38.3h (not scheduled today)\n  [OK] Library model review: last success 2026-11-08T08:24:43+00:00, age 60.8h (not scheduled today)\n  [OK] Email report: last success 2026-11-10T00:51:34+00:00, age 20.3h (not scheduled today)\n  [OK] FTSE Data Backup: last success 2026-11-08T17:58:45+00:00, age 51.2h (not scheduled today)\n  [OK] FTSE Paper Automation: last success 2026-11-10T13:43:32+00:00, age 7.5h\n  [OK] FTSE Ops Monitor: last success 2026-11-10T20:27:23+00:00, age 0.8h\n",
-    "email_html": "<!DOCTYPE html>\n<html><body style=\"font-family:Arial,sans-serif;color:#222;max-width:720px\">\n  <h2>FTSE Ops Monitor</h2>\n  <p style=\"color:#666\">2026-11-10T21:07:41.269922+00:00</p>\n  <p><strong>Overall:</strong> WARN</p>\n  \n  <h3>Needs investigation</h3><ul><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> New buy-tier not yet usable<br><span style='color:#555'>1 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across euro_depth: euro_depth/UCB.BR (no_key_bodies, 405.13h since flip). Blocking: no_key_bodies=1.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Price-only excess misstates track performance<br><span style='color:#555'>Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_matched30_fair: published -1.5% vs total-return +0.0% (lifetime, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Longer holds beat live exit buffer in replay<br><span style='color:#555'>Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: buy_tier_matched30_fair: exit_confirm_screens 10 vs live 2 +2.4% over 16 passes (46 vs 76 trades; realised median hold 5.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Sector headwind gate coverage gap<br><span style='color:#555'>Buy-tier sectors lack enough point-in-time gate data: Agriculture/Commodities. Library markets whose buy-tier sectors are mostly insufficient_data: aex (5/7), atx (4/5), bel20 (2/3), cac40 (5/8), iseq20 (3/3), omxs30 (5/6), psi20 (1/1). Fail closed; observe-only; no automated ingest, book, signal, or knob action.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Two-lot retention beats full exit in replay<br><span style='color:#555'>buy_tier_level: core_kept beats full exit by +1.1% over 43 passes (2026-09-07 to 2026-11-10; core value £905.29, rank exits 25 vs full exit). Observe-only. Do not edit buy_tier_level. See docs/ops/two-lot-replay.md.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> SEC filed FCF diverges from Yahoo basis on US buy-tier<br><span style='color:#555'>13 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (14 of 236 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); GM (sp500) FY2025 SEC 17,564M vs Yahoo 1,771M (90%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier<br><span style='color:#555'>58 US buy-tier memo name(s) where feeding SEC companyfacts into reconcile_fcf filing_aligned would change policy FCF/basis or mismatch flags vs the live Yahoo path (69 of 249 compared overall): FANG (nasdaq100) Yahoo filing_aligned/-703M → SEC filing_aligned/2,820M; WIT (us_adr_asia) Yahoo filing_aligned/133,713M → SEC filing_aligned/1,810M; UMC (us_adr_asia) Yahoo filing_aligned/49,131M → SEC filing_aligned/163M; GM (sp500) Yahoo filing_aligned/1,771M → SEC filing_aligned/17,564M; BIDU (us_adr_asia) Yahoo filing_aligned/-16,430M → SEC filing_aligned/-2,157M. Observe twin sec-filing-aligned-twin-v0 (influences_live=false); live scoring still reads Yahoo. See docs/ops/sec-companyfacts.md.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Chart highs and lows incomplete<br><span style='color:#555'>1158 of 1294 charts (89%) store daily highs and lows. Channel columns (N254) use closes in place of missing highs/lows and label them hl_basis=closes. Charts gain highs/lows on their next rebuild (publish schema refresh or the strategy-book close refresh).</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Strategy-book US rehearsal: licensed data deletion due<br><span style='color:#555'>Licensed Sharadar files were first used 2026-11-07T11:48:55+00:00; delete them and every derived file by 2026-12-07 (27 days), then run `ftse-strategy-book-rehearsal confirm-deleted`.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Deferred idea triggers met<br><span style='color:#555'>2 open deferred idea(s) have met their structured trigger: L616 (2026-11-08), L625 (2026-11-10). Pick up, retarget, or close each with ftse-defer (docs/ops/deferred-triggers.md).</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Deferred idea triggers unreadable<br><span style='color:#555'>2 structured trigger(s) cannot be evaluated: N143: tracks[track_id=ai_judgment_matched30_fair].statistics.verdict not in docs/data/assessment_scoreboard.json; N18: tracks[track_id=ai_judgment_matched30_fair].statistics.verdict not in docs/data/assessment_scoreboard.json. Fix with ftse-defer set-trigger.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Parked engineering tasks need manual review<br><span style='color:#555'>2 parked task(s): eng-20261104-01, eng-20261103-09</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li></ul>\n  \n  \n  <h3>Engineering merges today (independent verify monitor)</h3><ul><li><code>human/human</code> PR #1345 — eng-20261110-09: Workflow fix: library ingest maintenance failure</li><li><code>ingest_narrow/verified</code> PR #1344 — eng-20261110-08: Buy-tier body-lag sweep job: prioritize BGEO.L, IAG.L, IGG.L, INCH.L from this run’s `filing_coverage.indexed_without_body` with success metrics and alert on ze</li><li><code>scoring_narrow/verified</code> PR #1343 — eng-20261110-07: contractor: Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio [4/4]</li><li><code>ingest_narrow/verified</code> PR #1342 — eng-20261110-03: Allowlisted company IR results-presentation PDF fetch (pattern in `gap_fill_source_map` / high-priority HIK.L, MEGP.L samples)</li><li><code>scoring_narrow/verified</code> PR #1341 — eng-20261110-06: healthcare: Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio [3/4]</li><li><code>human/human</code> PR #1340 — eng-20261110-02: Harden Companies House filed-accounts PDF download + text/OCR pipeline using existing `document-api` URLs in `filings_index.json`</li><li><code>scoring_narrow/verified</code> PR #1339 — eng-20261110-05: fcf: Agriculture/Commodities for plantation issuers, UK contractor backlog/margin hooks, healthcare negative-FCF + low Pio [2/4]</li><li><code>human/human</code> PR #1338 — eng-20261110-01: Ship unified Investegate/LSE direct fetch for indexed RNS items (replace Google News redirect URLs, PDF/HTML body persist to `filings/bodies/`)</li><li><code>scoring_narrow/verified</code> PR #1337 — eng-20261110-04: Sector and cyclical overlay registry (e.g [1/4]</li><li><code>human/human</code> PR #1334 — eng-20261109-01: Hunt fetchable IR source for parked asx200 leftover IMD.AX</li></ul>\n  <h3>Workflow freshness</h3><table style='border-collapse:collapse;width:100%;font-size:13px;margin-top:8px'><thead><tr style='background:#f0f0f0;text-align:left'><th style='padding:6px 8px;border:1px solid #ddd'>Status</th><th style='padding:6px 8px;border:1px solid #ddd'>Workflow</th><th style='padding:6px 8px;border:1px solid #ddd'>Last success</th><th style='padding:6px 8px;border:1px solid #ddd'>Age</th><th style='padding:6px 8px;border:1px solid #ddd'>Limit</th><th style='padding:6px 8px;border:1px solid #ddd'>Notes</th></tr></thead><tbody><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>FTSE Ingest Loop</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-11-10T20:21:03+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>0.9h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>Automation Orchestrator</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-11-10T18:44:06+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>2.5h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Engineering Queue</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-11-10T21:07:58+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>0.1h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>26h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>Dashboard bridge worker</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-11-10T21:10:38+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>0.0h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>1h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>CI main nightly</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-11-10T15:41:33+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>5.5h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>Modelling analysis review</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-11-08T15:24:55+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>53.8h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>FTSE Library Ladder</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-11-09T06:52:00+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>38.3h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>Library model review</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-11-08T08:24:43+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>60.8h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>Email report</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-11-10T00:51:34+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>20.3h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>FTSE Data Backup</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-11-08T17:58:45+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>51.2h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Paper Automation</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-11-10T13:43:32+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>7.5h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Ops Monitor</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-11-10T20:27:23+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>0.8h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr></tbody></table>\n  \n</body></html>",
-    "drafted_task_ids": [],
-    "items": [
-      {
-        "severity": "warn",
-        "category": "ingest",
-        "title": "New buy-tier not yet usable",
-        "summary": "1 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across euro_depth: euro_depth/UCB.BR (no_key_bodies, 405.13h since flip). Blocking: no_key_bodies=1.",
-        "planned_rectification": "human_triage",
-        "rectification_detail": "Surface in PM digest for human / eng follow-up",
-        "auto_attempted": false,
-        "auto_resolved": false,
-        "status": "open"
-      },
-      {
-        "severity": "warn",
-        "category": "paper",
-        "title": "Price-only excess misstates track performance",
-        "summary": "Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_matched30_fair: published -1.5% vs total-return +0.0% (lifetime, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.",
-        "planned_rectification": "human_triage",
-        "rectification_detail": "Surface in PM digest for human / eng follow-up",
-        "auto_attempted": false,
-        "auto_resolved": false,
-        "status": "open"
-      },
-      {
-        "severity": "warn",
-        "category": "paper",
-        "title": "Longer holds beat live exit buffer in replay",
-        "summary": "Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: buy_tier_matched30_fair: exit_confirm_screens 10 vs live 2 +2.4% over 16 passes (46 vs 76 trades; realised median hold 5.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.",
-        "planned_rectification": "human_triage",
-        "rectification_detail": "Surface in PM digest for human / eng follow-up",
-        "auto_attempted": false,
-        "auto_resolved": false,
-        "status": "open"
-      },
-      {
-        "severity": "warn",
-        "category": "research",
-        "title": "Sector headwind gate coverage gap",
-        "summary": "Buy-tier sectors lack enough point-in-time gate data: Agriculture/Commodities. Library markets whose buy-tier sectors are mostly insufficient_data: aex (5/7), atx (4/5), bel20 (2/3), cac40 (5/8), iseq20 (3/3), omxs30 (5/6), psi20 (1/1). Fail closed; observe-only; no automated ingest, book, signal, or knob action.",
-        "planned_rectification": "human_triage",
-        "rectification_detail": "Surface in PM digest for human / eng follow-up",
-        "auto_attempted": false,
-        "auto_resolved": false,
-        "status": "open"
-      },
-      {
-        "severity": "warn",
-        "category": "paper",
-        "title": "Two-lot retention beats full exit in replay",
-        "summary": "buy_tier_level: core_kept beats full exit by +1.1% over 43 passes (2026-09-07 to 2026-11-10; core value £905.29, rank exits 25 vs full exit). Observe-only. Do not edit buy_tier_level. See docs/ops/two-lot-replay.md.",
-        "planned_rectification": "human_triage",
-        "rectification_detail": "Surface in PM digest for human / eng follow-up",
-        "auto_attempted": false,
-        "auto_resolved": false,
-        "status": "open"
-      },
-      {
-        "severity": "warn",
-        "category": "research",
-        "title": "SEC filed FCF diverges from Yahoo basis on US buy-tier",
-        "summary": "13 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (14 of 236 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); GM (sp500) FY2025 SEC 17,564M vs Yahoo 1,771M (90%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.",
-        "planned_rectification": "human_triage",
-        "rectification_detail": "Surface in PM digest for human / eng follow-up",
-        "auto_attempted": false,
-        "auto_resolved": false,
-        "status": "open"
-      },
-      {
-        "severity": "warn",
-        "category": "research",
-        "title": "SEC filing_aligned twin would change reconcile_fcf policy on US buy-tier",
-        "summary": "58 US buy-tier memo name(s) where feeding SEC companyfacts into reconcile_fcf filing_aligned would change policy FCF/basis or mismatch flags vs the live Yahoo path (69 of 249 compared overall): FANG (nasdaq100) Yahoo filing_aligned/-703M → SEC filing_aligned/2,820M; WIT (us_adr_asia) Yahoo filing_aligned/133,713M → SEC filing_aligned/1,810M; UMC (us_adr_asia) Yahoo filing_aligned/49,131M → SEC filing_aligned/163M; GM (sp500) Yahoo filing_aligned/1,771M → SEC filing_aligned/17,564M; BIDU (us_adr_asia) Yahoo filing_aligned/-16,430M → SEC filing_aligned/-2,157M. Observe twin sec-filing-aligned-twin-v0 (influences_live=false); live scoring still reads Yahoo. See docs/ops/sec-companyfacts.md.",
-        "planned_rectification": "human_triage",
-        "rectification_detail": "Surface in PM digest for human / eng follow-up",
-        "auto_attempted": false,
-        "auto_resolved": false,
-        "status": "open"
-      },
-      {
-        "severity": "warn",
-        "category": "research",
-        "title": "Chart highs and lows incomplete",
-        "summary": "1158 of 1294 charts (89%) store daily highs and lows. Channel columns (N254) use closes in place of missing highs/lows and label them hl_basis=closes. Charts gain highs/lows on their next rebuild (publish schema refresh or the strategy-book close refresh).",
-        "planned_rectification": "human_triage",
-        "rectification_detail": "Surface in PM digest for human / eng follow-up",
-        "auto_attempted": false,
-        "auto_resolved": false,
-        "status": "open"
-      },
-      {
-        "severity": "warn",
-        "category": "backtest",
-        "title": "Strategy-book US rehearsal: licensed data deletion due",
-        "summary": "Licensed Sharadar files were first used 2026-11-07T11:48:55+00:00; delete them and every derived file by 2026-12-07 (27 days), then run `ftse-strategy-book-rehearsal confirm-deleted`.",
-        "planned_rectification": "human_triage",
-        "rectification_detail": "Surface in PM digest for human / eng follow-up",
-        "auto_attempted": false,
-        "auto_resolved": false,
-        "status": "open"
-      },
-      {
-        "severity": "warn",
-        "category": "observe",
-        "title": "Deferred idea triggers met",
-        "summary": "2 open deferred idea(s) have met their structured trigger: L616 (2026-11-08), L625 (2026-11-10). Pick up, retarget, or close each with ftse-defer (docs/ops/deferred-triggers.md).",
-        "planned_rectification": "human_triage",
-        "rectification_detail": "Surface in PM digest for human / eng follow-up",
-        "auto_attempted": false,
-        "auto_resolved": false,
-        "status": "open"
-      },
-      {
-        "severity": "warn",
-        "category": "observe",
-        "title": "Deferred idea triggers unreadable",
-        "summary": "2 structured trigger(s) cannot be evaluated: N143: tracks[track_id=ai_judgment_matched30_fair].statistics.verdict not in docs/data/assessment_scoreboard.json; N18: tracks[track_id=ai_judgment_matched30_fair].statistics.verdict not in docs/data/assessment_scoreboard.json. Fix with ftse-defer set-trigger.",
-        "planned_rectification": "human_triage",
-        "rectification_detail": "Surface in PM digest for human / eng follow-up",
-        "auto_attempted": false,
-        "auto_resolved": false,
-        "status": "open"
-      },
-      {
-        "severity": "warn",
-        "category": "engineering",
-        "title": "Parked engineering tasks need manual review",
-        "summary": "2 parked task(s): eng-20261104-01, eng-20261103-09",
-        "planned_rectification": "human_triage",
-        "rectification_detail": "Surface in PM digest for human / eng follow-up",
-        "auto_attempted": false,
-        "auto_resolved": false,
-        "status": "open"
-      }
-    ],
-    "actions": [
-      {
-        "kind": "ops_email_handoff",
-        "detail": "handed 12 ops email finding(s) to PM (open=12, resolved=0)",
-        "pr_number": null,
-        "branch": null,
-        "applied": true
-      }
-    ],
-    "open_count": 12,
-    "resolved_count": 0
-  },
+  "ops_email_handoff": null,
   "sources": {
     "progress_report": "docs/data/progress_report.json",
     "project_progress": "docs/data/project_progress.json",
