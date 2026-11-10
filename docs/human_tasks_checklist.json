@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-06",
+  "updated_at": "2026-11-10",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -341,6 +341,14 @@
           "automated": false,
           "doc_path": "docs/ops/project-traffic.md",
           "doc_anchor": "pr-fix-occasion-log"
+        },
+        {
+          "id": "monthly-strategy-book-memo-spend-review",
+          "title": "Review strategy-book memo spend vs use (every 4 weeks)",
+          "summary": "Every 4 weeks from the 2026-11-10 switch-on (first review 2026-12-08; the date is in operational_switches on docs/data/strategy_book_registration.json): read the ops-monitor finding 'Strategy book memo spend this week' and the weekly requested / budget-skip / spend counts in docs/data/strategy_book_memo_job.json against budget.strategy_book_memo_raise ($40 a week, 100 memos). Decide keep, lower, or raise the raise; if memos go unused, economise. Whether a memo fed an entry decision is not tracked yet, so judge use from signals filled vs memo_not_ready once forward_live is on. Set the next review date when you log the decision. Do not turn spend into rememo of thin memos without new filing bodies (N138 stays).",
+          "automated": false,
+          "doc_path": "docs/ops/strategy-book-memo-job.md",
+          "doc_anchor": "spend-review"
         }
       ]
     },
@@ -581,8 +589,8 @@
         },
         {
           "id": "adhoc-strategy-book-memo-spend",
-          "title": "Flip strategy-book forward go-live and memo spend after the Phase 1 gate review",
-          "summary": "After the Phase 1 gate review, set forward_live true on docs/data/strategy_book_registration.json and set spend_enabled true only if weekly_ops should pay for signal-day and review-date memos. Phase 1 governs go-live, not the signature. Until forward_live is true the forward job dry-runs and writes no scored store. Until spend_enabled is true the memo job logs dry_run at $0.40 and calls no model. Neither job flips its own flag.",
+          "title": "Flip strategy-book forward go-live after the Phase 1 gate review",
+          "summary": "After the Phase 1 gate review, set forward_live true on docs/data/strategy_book_registration.json. Phase 1 governs go-live, not the signature. Until forward_live is true the forward job dry-runs and writes no scored store. Memo spend is already on: the owner set spend_enabled true on 2026-11-10 (logged in operational_switches), independent of forward_live; its review is monthly-strategy-book-memo-spend-review. Neither job flips its own flag.",
           "automated": false,
           "doc_path": "docs/ops/strategy-book-observe.md",
           "doc_anchor": "go-live"

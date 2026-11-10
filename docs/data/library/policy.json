@@ -371,7 +371,7 @@
     "estimated_spend_usd_this_week": 28.8,
     "week_id": "2026-W46",
     "cycle_id": "2026-11-d8",
-    "weekly_ops_cap_usd": 100.5,
+    "weekly_ops_cap_usd": 124.5,
     "weekly_ops_plan_credit_share_cap": 0.15,
     "token_usage_weekly_warning_raw_usd": null,
     "enforce_weekly_ops_cap": true,
@@ -379,8 +379,8 @@
     "note": "Cursor Ultra $200 included pool is surplus-math metadata. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder). Ad-hoc depth passes use ladder.spend_since_checkpoint_usd. Rememo daily cap stays at 3.",
     "cycle_surplus_provisional": {
       "status": "provisional",
-      "previous_weekly_ops_cap_usd": 96.0,
-      "applied_weekly_ops_cap_usd": 100.5,
+      "previous_weekly_ops_cap_usd": 120.0,
+      "applied_weekly_ops_cap_usd": 124.5,
       "weekly_bump_usd": 4.5,
       "applied_at": "2026-09-07T18:53:45.382262+00:00",
       "source_cycle_id": "2026-09-d8",
@@ -398,12 +398,20 @@
       "replaced_prior_provisional": true
     },
     "strategy_book_memo_raise": {
-      "weekly_usd": 16.0,
-      "memos_covered": 40,
+      "weekly_usd": 40.0,
+      "memos_covered": 100,
       "estimated_memo_usd": 0.4,
       "approved_by": "owner",
-      "approved_at": "2026-11-05",
-      "note": "Signal-day and review-date memos for the strategy book (registration section 11). Added to the base cap so a cycle-surplus revert keeps it."
+      "approved_at": "2026-11-10",
+      "note": "Signal-day and review-date memos for the strategy book (registration section 11). Added to the base cap so a cycle-surplus revert keeps it. Owner 2026-11-10: resource generously at switch-on, review spend against use every 4 weeks (human task monthly-strategy-book-memo-spend-review), economise later if demand proves excessive.",
+      "sizing": "Upper bound with every gate passing: 29-44 distinct buy-tier names a week hit the entry rule with a missing or stale memo (ISO weeks 43-45 of 2026), $12-18 at $0.40. 100 memos is about 2.3 times the top of that, leaving room for review-date memos once episodes launch.",
+      "history": [
+        {
+          "approved_at": "2026-11-05",
+          "weekly_usd": 16.0,
+          "memos_covered": 40
+        }
+      ]
     }
   },
   "model_review": {

@@ -113,11 +113,11 @@ and `adjusted_signal` come from the CSV.
 - `price_rule` — true when the registered short-term low (RSI below 35 and a 10-session close low) fires on that session, false when it does not, null when there is no chart.
 - `outcome` — the signal event kind when the name signalled (`filled`, `pending_fill`, `late_signal`, `memo_not_ready`, `memo_blocked`, and the other signal kinds). Otherwise the blocked reason the tally already records (`no_chart`, `not_buy_tier`, `gate`, `f9`, `price`, and the rest). A declining or headwind name is `gate`; the verdict is `decline` or `sector`. A miss of the short-term low is `price`. `learning_pool_excluded` means the signals CSV lists the name and the history snapshot omits it because it is in that market's learning-pool exclusion, so it is not in the book's universe. `not_in_book_screen` means the signals CSV lists the name and the snapshot omits it for any other reason, so it is not in the book's universe.
 
-The seal on the signature branch does not yet carry `forward_live`. The reader
-defaults it to false. After the Phase 1 gate review, set `forward_live` true
-and set `spend_enabled` true only if `weekly_ops` should pay for signal-day
-memos. The human task is `adhoc-strategy-book-memo-spend`. Neither job flips
-its own flag.
+The reader defaults `forward_live` to false. After the Phase 1 gate review, set
+`forward_live` true. The human task is `adhoc-strategy-book-memo-spend`.
+`spend_enabled` is already true: the owner switched memo spend on on 2026-11-10,
+before go-live ([memo job spend gate](strategy-book-memo-job.md#spend-gate)).
+Neither job flips its own flag.
 
 When both the signature and `forward_live` are true, `--apply` writes
 `docs/data/strategy_book_observe.json` and appends
