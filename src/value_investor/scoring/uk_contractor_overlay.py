@@ -540,3 +540,175 @@ def uk_contractor_cash_conversion_overlay_triggered(
     if not quality_family_passed(passed_families):
         return False
     return revenue_fcf_warning
+
+
+_SIGNAL_RANK = {
+    "strong_buy": 4,
+    "buy": 3,
+    "hold": 2,
+    "avoid": 1,
+    "insufficient_data": 0,
+}
+
+
+def _more_conservative_signal(current: str, candidate: str) -> str:
+    current_rank = _SIGNAL_RANK.get(current, 0)
+    candidate_rank = _SIGNAL_RANK.get(candidate, 0)
+    return current if current_rank <= candidate_rank else candidate
+
+
+def uk_contractor_cyclical_overlay_should_apply(
+    *,
+    uk_contractor: bool,
+    passed_families: str | None,
+    ch_backlog_margin_cyclical_detected: bool,
+    public_capex_detected: bool,
+    revenue_fcf_warning: bool,
+) -> bool:
+    """True when UK contractor backlog/margin or public-capex cyclical hooks fire."""
+    if uk_contractor_ch_backlog_margin_cyclical_overlay_triggered(
+        uk_contractor=uk_contractor,
+        ch_backlog_margin_cyclical_detected=ch_backlog_margin_cyclical_detected,
+        passed_families=passed_families,
+    ):
+        return True
+    return uk_contractor_cyclical_overlay_triggered(
+        uk_contractor=uk_contractor,
+        public_capex_detected=public_capex_detected,
+        passed_families=passed_families,
+        revenue_fcf_warning=revenue_fcf_warning,
+    )
+
+
+def resolve_uk_contractor_overlay_inputs(
+    snapshot: dict[str, Any],
+    *,
+    output_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Derive UK contractor overlay flags from a screening snapshot row."""
+    detected = enrich_signals_with_uk_contractor_detection(
+        pd.DataFrame([snapshot]),
+        output_dir=output_dir,
+    )
+    row = detected.iloc[0]
+    return {
+        "uk_contractor": bool(row.get("uk_contractor")),
+        "public_capex_exposure_detected": bool(row.get("public_capex_exposure_detected")),
+        "filing_mix_notes_confirmed": bool(row.get("filing_mix_notes_confirmed")),
+        "uk_contractor_revenue_fcf_warning": bool(row.get("uk_contractor_revenue_fcf_warning")),
+        "uk_contractor_ch_backlog_margin_cyclical_detected": bool(
+            row.get("uk_contractor_ch_backlog_margin_cyclical_detected")
+        ),
+        "cyclical_exposure_detected": bool(row.get("cyclical_exposure_detected")),
+    }
+
+
+def apply_uk_contractor_cyclical_export_enforcement(
+    *,
+    signal: str,
+    adjusted_signal: str,
+    cyclical_exposure_overlay: bool = False,
+    uk_contractor: bool = False,
+    passed_families: str | None = None,
+    ch_backlog_margin_cyclical_detected: bool = False,
+    public_capex_detected: bool = False,
+    revenue_fcf_warning: bool = False,
+) -> tuple[bool, str]:
+    """Re-apply UK contractor cyclical caps on export/snapshot paths."""
+    from value_investor.scoring.cyclical_exposure_overlay import (
+        cap_signal_for_cyclical_exposure_overlay,
+    )
+
+    if cyclical_exposure_overlay:
+        capped = cap_signal_for_cyclical_exposure_overlay(signal)
+        return True, _more_conservative_signal(adjusted_signal, capped)
+    if not uk_contractor_cyclical_overlay_should_apply(
+        uk_contractor=uk_contractor,
+        passed_families=passed_families,
+        ch_backlog_margin_cyclical_detected=ch_backlog_margin_cyclical_detected,
+        public_capex_detected=public_capex_detected,
+        revenue_fcf_warning=revenue_fcf_warning,
+    ):
+        return False, adjusted_signal
+    capped = cap_signal_for_cyclical_exposure_overlay(signal)
+    return True, _more_conservative_signal(adjusted_signal, capped)
+
+
+def apply_uk_contractor_cash_conversion_export_enforcement(
+    *,
+    signal: str,
+    adjusted_signal: str,
+    cash_conversion_overlay: bool = False,
+    uk_contractor: bool = False,
+    passed_families: str | None = None,
+    revenue_fcf_warning: bool = False,
+) -> tuple[bool, str]:
+    """Re-apply UK contractor cash-conversion caps on export/snapshot paths."""
+    from value_investor.scoring.cash_conversion_overlay import (
+        cap_signal_for_cash_conversion_overlay,
+    )
+
+    if cash_conversion_overlay:
+        capped = cap_signal_for_cash_conversion_overlay(signal)
+        return True, _more_conservative_signal(adjusted_signal, capped)
+    if not uk_contractor_cash_conversion_overlay_triggered(
+        uk_contractor=uk_contractor,
+        passed_families=passed_families,
+        revenue_fcf_warning=revenue_fcf_warning,
+    ):
+        return False, adjusted_signal
+    capped = cap_signal_for_cash_conversion_overlay(signal)
+    return True, _more_conservative_signal(adjusted_signal, capped)
+
+
+def enforce_uk_contractor_overlays_in_snapshot(
+    snapshot: dict[str, Any],
+    *,
+    output_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Backfill UK contractor flags and cap adjusted_signal on screening export."""
+    updated = dict(snapshot)
+    screen_signal = str(updated.get("signal") or "hold")
+    adjusted = str(updated.get("adjusted_signal") or screen_signal)
+    passed_families = updated.get("passed_families")
+
+    flags = resolve_uk_contractor_overlay_inputs(updated, output_dir=output_dir)
+    updated.update(flags)
+
+    cyclical_overlay_flag = bool(updated.get("cyclical_exposure_overlay"))
+    cyclical_applies, cyclical_adjusted = apply_uk_contractor_cyclical_export_enforcement(
+        signal=screen_signal,
+        adjusted_signal=adjusted,
+        cyclical_exposure_overlay=cyclical_overlay_flag,
+        uk_contractor=bool(flags["uk_contractor"]),
+        passed_families=passed_families,
+        ch_backlog_margin_cyclical_detected=bool(
+            flags["uk_contractor_ch_backlog_margin_cyclical_detected"]
+        ),
+        public_capex_detected=bool(flags["public_capex_exposure_detected"]),
+        revenue_fcf_warning=bool(flags["uk_contractor_revenue_fcf_warning"]),
+    )
+    if cyclical_applies:
+        updated["cyclical_exposure_overlay"] = True
+        updated["adjusted_signal"] = cyclical_adjusted
+        adjusted = cyclical_adjusted
+    elif cyclical_adjusted != adjusted:
+        updated["adjusted_signal"] = cyclical_adjusted
+        adjusted = cyclical_adjusted
+
+    cash_overlay_flag = bool(updated.get("cash_conversion_overlay"))
+    cash_applies, cash_adjusted = apply_uk_contractor_cash_conversion_export_enforcement(
+        signal=screen_signal,
+        adjusted_signal=adjusted,
+        cash_conversion_overlay=cash_overlay_flag,
+        uk_contractor=bool(flags["uk_contractor"]),
+        passed_families=passed_families,
+        revenue_fcf_warning=bool(flags["uk_contractor_revenue_fcf_warning"]),
+    )
+    if cash_applies:
+        updated["cash_conversion_overlay"] = True
+        updated["adjusted_signal"] = cash_adjusted
+    elif cash_adjusted != adjusted:
+        updated["adjusted_signal"] = cash_adjusted
+
+    return updated

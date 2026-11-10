@@ -1131,6 +1131,70 @@ def test_apply_healthcare_export_enforcement_caps_stale_strong_buy():
     assert adjusted == "buy"
 
 
+def test_apply_uk_contractor_cyclical_export_enforcement_caps_stale_strong_buy():
+    """eng-20261110-07: snapshot export re-caps UK contractor cyclical overlays."""
+    from value_investor.scoring.uk_contractor_overlay import (
+        apply_uk_contractor_cyclical_export_enforcement,
+    )
+
+    overlay, adjusted = apply_uk_contractor_cyclical_export_enforcement(
+        signal="strong_buy",
+        adjusted_signal="strong_buy",
+        uk_contractor=True,
+        passed_families="cheapness,quality,dividend,garp,risk",
+        ch_backlog_margin_cyclical_detected=True,
+        public_capex_detected=False,
+        revenue_fcf_warning=False,
+    )
+    assert overlay is True
+    assert adjusted == "buy"
+
+
+def test_enforce_fcf_basis_in_snapshot_applies_uk_contractor_cyclical_overlay():
+    """eng-20261110-07: stale export without cyclical flag gets UK contractor cap."""
+    snapshot = {
+        "ticker": "COST.L",
+        "name": "Costain Group PLC",
+        "sector": "Industrials",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.44,
+        "passed_families": "cheapness,quality,dividend,garp,risk",
+        "uk_contractor": True,
+        "public_capex_exposure_detected": True,
+        "filing_mix_notes_confirmed": False,
+        "revenue_growth_filing_pct": -0.16,
+        "free_cashflow": 63.1e6,
+        "free_cashflow_prev": 40.0e6,
+        "cyclical_exposure_overlay": False,
+        "cash_conversion_overlay": False,
+    }
+    enforced = enforce_fcf_basis_in_snapshot(snapshot)
+    assert enforced["uk_contractor_revenue_fcf_warning"] is True
+    assert enforced["cyclical_exposure_overlay"] is True
+    assert enforced["cash_conversion_overlay"] is True
+    assert enforced["adjusted_signal"] == "buy"
+    assert enforced["conviction_score"] == pytest.approx(0.44)
+
+
+def test_enforce_fcf_basis_in_snapshot_applies_uk_contractor_ch_backlog_overlay():
+    """eng-20261110-07: MGNS-style CH backlog/margin cyclical hook on export."""
+    snapshot = {
+        "ticker": "MGNS.L",
+        "name": "Morgan Sindall Group PLC",
+        "sector": "Industrials",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "passed_families": "cheapness,quality,dividend,garp,risk",
+        "uk_contractor": True,
+        "uk_contractor_ch_backlog_margin_cyclical_detected": True,
+        "cyclical_exposure_overlay": False,
+    }
+    enforced = enforce_fcf_basis_in_snapshot(snapshot)
+    assert enforced["cyclical_exposure_overlay"] is True
+    assert enforced["adjusted_signal"] == "buy"
+
+
 def test_enrich_signals_with_healthcare_overlay_caps_adjusted_signal():
     signals = pd.DataFrame(
         [

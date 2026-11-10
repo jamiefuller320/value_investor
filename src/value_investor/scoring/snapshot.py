@@ -397,6 +397,12 @@ def enforce_fcf_basis_in_snapshot(
     elif pe_adjusted != str(updated.get("adjusted_signal") or merged_adjusted):
         updated["adjusted_signal"] = pe_adjusted
 
+    from value_investor.scoring.uk_contractor_overlay import (
+        enforce_uk_contractor_overlays_in_snapshot,
+    )
+
+    updated = enforce_uk_contractor_overlays_in_snapshot(updated, output_dir=output_dir)
+
     return enforce_sector_cyclical_overlay_registry_in_snapshot(
         updated,
         model_results=model_results,
