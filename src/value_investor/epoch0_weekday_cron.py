@@ -198,11 +198,16 @@ def ensure_epoch0_weekday_crons(
     api_key: str | None = None,
     gh_pat: str | None = None,
     dry_run: bool = False,
+    jobs: list[dict[str, Any]] | None = None,
+    update_existing: bool = True,
 ) -> dict[str, Any]:
     """Upsert epoch-0 weekday cron-job.org slots for the given keys/markets/policy.
 
     Soft-skips when ``CRONJOB_API_KEY`` or ``WORKFLOW_DISPATCH_PAT`` is unset
-    (unless ``dry_run``).
+    (unless ``dry_run``). ``update_existing=False`` only creates missing slots,
+    for callers that run after every ingest run (cron-job.org allows 100 API
+    requests a day by default); schedule changes reach existing slots through
+    ``import-ingest-crons.yml``. ``jobs`` reuses a caller's ``GET /jobs``.
     """
     if keys is None:
         if markets is not None:
@@ -263,12 +268,18 @@ def ensure_epoch0_weekday_crons(
             "unmapped_markets": unmapped,
         }
 
-    existing = {job.get("title"): job for job in _list_jobs(api_key)}
+    listed = jobs if jobs is not None else _list_jobs(api_key)
+    existing = {job.get("title"): job for job in listed}
     results: list[dict[str, Any]] = []
     for key in wanted:
-        payload = _job_payload(key, gh_pat=gh_pat)
         title = EPOCH0_WEEKDAY_SLOTS[key]["title"]
         current = existing.get(title)
+        if current and current.get("jobId") and not update_existing:
+            results.append(
+                {"action": "present", "key": key, "title": title, "jobId": current["jobId"]}
+            )
+            continue
+        payload = _job_payload(key, gh_pat=gh_pat)
         if current and current.get("jobId"):
             _cronjob_request(
                 "PATCH",
@@ -310,8 +321,12 @@ def ensure_epoch0_weekday_crons_for_policy(
     policy: dict[str, Any],
     *,
     dry_run: bool = False,
+    jobs: list[dict[str, Any]] | None = None,
+    update_existing: bool = True,
 ) -> dict[str, Any]:
-    return ensure_epoch0_weekday_crons(policy=policy, dry_run=dry_run)
+    return ensure_epoch0_weekday_crons(
+        policy=policy, dry_run=dry_run, jobs=jobs, update_existing=update_existing
+    )
 
 
 __all__ = [

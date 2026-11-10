@@ -46,6 +46,8 @@ cron-job.org often returns a **bare 429** (empty body, no `Retry-After`) under a
 
 **Rule:** if you see HTTP 429 from cron-job.org — **stop**. Cool off for hours (or overnight). One shot afterward. Do **not** re-dispatch `import-ingest-crons.yml`, parallel-retry `import_cron_jobs.py`, or stack sibling agents against the API.
 
+**Daily quota:** cron-job.org allows **100 API requests per day** by default ([REST API limits](https://docs.cron-job.org/rest-api.html)). Until 2026-11-10 the `--sync-cron` step after every library-maintenance, euro-ingest and sprint-2 run made one `GET /jobs` plus nine euro-toggle PATCHes and another `GET /jobs` plus a PATCH per epoch-0 slot, whether or not anything changed. That is about 15 requests a run, so the quota was gone early each day and `import-ingest-crons.yml` (which adds the strategy-book forward slots) kept hitting 429. Now `refresh_euro_ingest_dispatch` lists jobs once, `sync_euro_ingest_cron_jobs` PATCHes only jobs whose `enabled` differs, and the epoch-0 step only creates missing slots (`update_existing=False`). Schedule changes still reach existing slots through `import-ingest-crons.yml`, which runs when those modules change. If the list call fails, the epoch-0 step skips that run rather than listing again.
+
 `import_cron_jobs.py` now aborts after at most **two** consecutive 429s (exit code **3**) with an operator cool-off message. `import-ingest-crons.yml` surfaces that as a workflow error and does not loop.
 
 `process-pending` is safe to double-fire (empty queue → no-op). Ops-monitor flags the workflow stale if no successful run within **1 hour** on any day (`MONITORED_WORKFLOWS.dashboard_bridge`).

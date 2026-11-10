@@ -5,6 +5,8 @@ from __future__ import annotations
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+
 from value_investor.epoch0_weekday_cron import (
     EPOCH0_WEEKDAY_SLOTS,
     cron_keys_for_market,
@@ -129,6 +131,7 @@ def test_refresh_dispatch_sync_cron_ensures_epoch0(tmp_path: Path):
             "value_investor.library_ingest_dispatch.evaluate_euro_ingest_dispatch",
             return_value={"mode": "sprint", "cron_morning": True},
         ),
+        patch("value_investor.euro_ingest_cron_sync.list_cron_jobs", return_value=[]),
         patch(
             "value_investor.euro_ingest_cron_sync.sync_euro_ingest_cron_jobs",
             return_value={"results": []},
@@ -149,6 +152,87 @@ def test_refresh_dispatch_sync_cron_ensures_epoch0(tmp_path: Path):
     assert evaluation["epoch0_cron_sync"]["keys"] == ["library-epoch0-weekday-us-edt"]
     epoch0.assert_called_once()
     assert dispatch_path.is_file()
+
+
+def test_refresh_dispatch_does_not_relist_after_list_failure(tmp_path: Path):
+    from value_investor.library_ingest_dispatch import refresh_euro_ingest_dispatch
+    from value_investor.storage import write_json
+
+    policy_path = tmp_path / "policy.json"
+    write_json(policy_path, {"ladder": {"admitted_learning_markets": ["sp500"]}}, compact=False)
+    (tmp_path / "library").mkdir()
+    with (
+        patch(
+            "value_investor.library_ingest_dispatch.evaluate_euro_ingest_dispatch",
+            return_value={"mode": "sprint", "cron_morning": True},
+        ),
+        patch(
+            "value_investor.euro_ingest_cron_sync.list_cron_jobs",
+            side_effect=RuntimeError("GET /jobs failed (429): "),
+        ),
+        patch(
+            "value_investor.epoch0_weekday_cron.ensure_epoch0_weekday_crons_for_policy"
+        ) as epoch0,
+        patch("value_investor.market_status.write_market_status", return_value="status.json"),
+    ):
+        evaluation = refresh_euro_ingest_dispatch(
+            sync_cron=True,
+            reconcile_parallel=False,
+            policy_path=policy_path,
+            library_root=tmp_path / "library",
+            dispatch_path=tmp_path / "dispatch.json",
+        )
+    epoch0.assert_not_called()
+    assert "429" in evaluation["cron_sync"]["error"]
+    assert "unavailable" in evaluation["epoch0_cron_sync"]["error"]
+
+
+def test_ensure_without_update_existing_only_creates_missing(monkeypatch):
+    from value_investor import epoch0_weekday_cron as module
+
+    monkeypatch.setenv("CRONJOB_API_KEY", "key")
+    monkeypatch.setenv("WORKFLOW_DISPATCH_PAT", "github_pat_x")
+    keys = list(module.EPOCH0_WEEKDAY_SLOTS)[:2]
+    present = module.EPOCH0_WEEKDAY_SLOTS[keys[0]]["title"]
+    calls: list[tuple[str, str]] = []
+
+    def fake_request(method, path, **_kwargs):
+        calls.append((method, path))
+        return {"jobId": 9}
+
+    monkeypatch.setattr(module, "_cronjob_request", fake_request)
+    monkeypatch.setattr(module, "_list_jobs", lambda _key: pytest.fail("listed again"))
+    result = module.ensure_epoch0_weekday_crons(
+        keys=keys, jobs=[{"title": present, "jobId": 1}], update_existing=False
+    )
+    assert calls == [("PUT", "/jobs")]
+    assert [row["action"] for row in result["results"]] == ["present", "created"]
+
+
+def test_euro_sync_patches_only_changed_jobs(monkeypatch):
+    from value_investor import euro_ingest_cron_sync as module
+    from value_investor.euro_depth_ingest_dispatch import EURO_INGEST_CRON_TITLES
+
+    evaluation = {"mode": "sprint"}
+    desired = {name: name == "morning" for name in EURO_INGEST_CRON_TITLES}
+    monkeypatch.setattr(module, "cron_enabled_for_dispatch", lambda _evaluation: desired)
+    jobs = [
+        {"title": title, "jobId": index, "enabled": desired[name] if name != "evening" else True}
+        for index, (name, title) in enumerate(EURO_INGEST_CRON_TITLES.items())
+    ]
+    calls: list[tuple[str, str]] = []
+
+    def fake_request(method, path, **_kwargs):
+        calls.append((method, path))
+        return {}
+
+    monkeypatch.setattr(module, "_cronjob_request", fake_request)
+    result = module.sync_euro_ingest_cron_jobs(evaluation, api_key="key", jobs=jobs)
+    evening_id = next(
+        job["jobId"] for job in jobs if job["title"] == EURO_INGEST_CRON_TITLES["evening"]
+    )
+    assert calls == [("PATCH", f"/jobs/{evening_id}")]
+    assert sum(row.get("action") == "unchanged" for row in result["results"]) == len(jobs) - 1
 
 
 def test_epoch0_weekday_workflow_uses_artifact_commit_retry() -> None:

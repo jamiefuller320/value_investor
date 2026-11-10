@@ -668,18 +668,30 @@ def refresh_euro_ingest_dispatch(
     )
     write_euro_ingest_dispatch(evaluation, path=dispatch_path)
     if sync_cron:
+        # One GET /jobs shared by both syncs; neither PATCHes an unchanged job.
+        jobs: list[dict[str, Any]] | None = None
+        listed = False
         try:
-            from value_investor.euro_ingest_cron_sync import sync_euro_ingest_cron_jobs
+            from value_investor.euro_ingest_cron_sync import (
+                list_cron_jobs,
+                sync_euro_ingest_cron_jobs,
+            )
 
-            evaluation["cron_sync"] = sync_euro_ingest_cron_jobs(evaluation)
+            jobs = list_cron_jobs()
+            listed = True
+            evaluation["cron_sync"] = sync_euro_ingest_cron_jobs(evaluation, jobs=jobs)
         except Exception as exc:  # noqa: BLE001
             logger.warning("Euro ingest cron sync failed: %s", exc)
             evaluation["cron_sync"] = {"error": str(exc)}
         try:
             from value_investor.epoch0_weekday_cron import ensure_epoch0_weekday_crons_for_policy
 
+            if not listed:
+                raise RuntimeError("cron-job.org job list unavailable; not retrying this run")
             policy = load_policy(policy_path)
-            evaluation["epoch0_cron_sync"] = ensure_epoch0_weekday_crons_for_policy(policy)
+            evaluation["epoch0_cron_sync"] = ensure_epoch0_weekday_crons_for_policy(
+                policy, jobs=jobs, update_existing=False
+            )
         except Exception as exc:  # noqa: BLE001
             logger.warning("Epoch-0 weekday cron ensure failed: %s", exc)
             evaluation["epoch0_cron_sync"] = {"error": str(exc)}
