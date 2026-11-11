@@ -120,8 +120,14 @@ units ever diverge, the order is wrong in a way this job will not silently
 
 Trading 212 accepts fractional quantity (their limit-order example is `0.1`).
 We send the floored fraction so the cash outlay stays at or under the stake.
-A zero after flooring is `quantity_below_minimum`. If the practice API rejects
-the fraction, the order is `rejected` and is not resized in that run (queued
+A zero after flooring is `quantity_below_minimum`. Trading 212 limits the
+decimals per instrument and answers too many with
+`/api-errors/quantity-precision-mismatch` ("invalid quantity precision 3" for
+4imprint on 2026-11-11). The mirror floors to that many decimals and sends
+once more in the same run. The row keeps `quantity_requested`,
+`precision_retried` and `precision_detail`. A row rejected for precision before
+this retry existed is sent once more while its fill window is open. Any
+other rejection is final for that reference (whole-share resizing is queued
 as "Resize a rejected strategy-book demo order to whole shares"). A dashboard
 strip for the measured slippage is queued as "Show strategy-book demo slippage
 on the observe dashboard". The assumed half-spread is not replaced. The
@@ -143,10 +149,11 @@ live quote and we do not invent one.
 | Broker result | Ledger |
 |---|---|
 | `PARTIALLY_FILLED` | One fill per history `fill.id`. Remainder stays working until the fill session closes, then `DELETE /api/v0/equity/orders/{id}` cancels it. Slippage uses the filled quantity only. |
-| `REJECTED`, or HTTP 400 | `rejected`. The same client reference is not sent again. |
+| `REJECTED`, or HTTP 400 | `rejected`. The same client reference is not sent again, except one floored resend after a quantity-precision rejection. |
 | `CANCELLED`, or our post-close cancel | `cancelled`. No fill is invented. A partial keeps the shares already filled. An exit remainder is then flattened by a market catch-up on the next run. |
 | HTTP 401 / 403 | Stop the run. The row is `auth_blocked` and may be tried on a later run (the order was not accepted). |
-| Network error, HTTP 408 or 429 | `submit_unknown`. Not sent again. The next run adopts a pending order only when ticker, side, limit and quantity match exactly one row. |
+| HTTP 429 | The request was refused before it ran. The transport waits for `x-ratelimit-reset` (5 s when absent, at most 30 s) and retries up to 3 times. Still refused: `rate_limited`, plan `would_place` with reason `rate_limited`, sent again on the next run. |
+| Network error, HTTP 408 or 5xx | `submit_unknown`, with the error text in `detail`. See the unknown-result rule below. |
 | Position disappears with no sell and no corporate-action quantity | `delisting` event. Quantity is not zeroed and no cash value is invented, so reconciliation stays a mismatch until a real event explains it. |
 
 History fill types other than `TRADE` (`STOCK_SPLIT`, `SPIN_OFF`, and the
@@ -178,9 +185,24 @@ and currency.
 Client references are local. The beta limit endpoint is **not idempotent**:
 the same POST can create two orders. The mirror writes `submitting` to the
 ledger **before** the POST. A later run will not POST that reference again.
-If the POST's result is unknown, the row becomes `submit_unknown` and the
-next run adopts a pending order only when exactly one pending order matches
-the ticker, side, limit and quantity. The lock holds only after this
+If the POST's result is unknown, the row becomes `submit_unknown`. The next
+run settles it only when both `GET /api/v0/equity/orders` and the order
+history read cleanly:
+
+- exactly one pending order matching ticker, side, limit and quantity is
+  adopted (`placed`);
+- otherwise exactly one later fill matching ticker, side and quantity is
+  adopted (`filled`);
+- otherwise, if no history row for that ticker and side is newer than the
+  send, the row becomes `not_placed` (the original error moves to
+  `unknown_detail`) and the reference is sent again while its fill window is
+  open;
+- any other history row for that ticker and side leaves it `submit_unknown`.
+
+Calls are paced per endpoint at the published limits plus 0.25 s: 5 s for
+the account summary and the pending-order list, 2 s for limit orders, 1.2 s
+for market orders, 3 s for each history list, and 1 s for positions and
+cancels. The lock holds only after this
 workflow commits the ledger. The mirror step exits 0 once a `submitting` row
 exists so that commit still runs. It exits 1 only when the resolved host is
 not the demo host, and that check happens before any POST.
