@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-11T08:09:00+00:00",
+  "updated_at": "2026-11-11T09:28:06+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -17425,6 +17425,22 @@
           }
         ]
       }
+    },
+    {
+      "id": "N265",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Strategy book gate-log re-hash: verify earlier runs in CI (shallow checkout)",
+      "summary": "strategy-book-forward.yml checks out depth 1, so the daily provenance re-hash can only resolve rows whose run commit is in the clone; earlier runs' rows stay pending_commit and are never verified in CI. Per-episode provenance_missing is decided in-run and is unaffected. Options: verify only the previous run's rows with a bounded deepen, or a weekly full-history job.",
+      "revisit_when": "Before the Phase 2 thickness gate review, or if a gate-log tamper concern arises",
+      "tags": [
+        "strategy-book",
+        "provenance",
+        "ci"
+      ],
+      "status": "open",
+      "source": "go-live first run 2026-11-11",
+      "added_at": "2026-11-11T09:28:06+00:00"
     }
   ],
   "fragments": [

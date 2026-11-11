@@ -271,6 +271,22 @@
       "effect": "Same simulation with the fix: both names fill all five columns at the 2026-11-11 close and stay open on the 2026-11-12 and 2026-11-13 runs.",
       "unchanged": "No threshold, learning question, entry rule, exit rule or primary rule changed. No forward score store or gate log exists yet, so no history is rewritten. The replay first score store is not re-run.",
       "doc": "docs/ops/strategy-book-observe.md#gate-log-and-provenance"
+    },
+    {
+      "marker_id": "owner-strategy-book-v0-provenance-commit-fix-v1",
+      "at": "2026-11-11T09:45:00Z",
+      "kind": "bug_fix",
+      "rule_change": false,
+      "approved_by": "owner",
+      "approved_at": "2026-11-11",
+      "owner_quote": "1360 merged and manual run complete",
+      "new_registration_id": false,
+      "logged_on_registration_id": "owner-strategy-book-v0",
+      "sealed_text": "Section 9, input provenance (fourth amendment): 'The run commits the logs in the same commit as every input file they hash ... A daily check re-hashes the files at each logged record's commit and reports any mismatch.'",
+      "what_was_wrong": "The re-hash read each input at data_commit, the commit the run started from. The run refreshes closes before the walker reads them, so the first live run (2026-11-11 09:04 UTC) reported 52 provenance mismatches, all Asian charts it had just refreshed, and ops-monitor would raise 'Strategy book observe failed' after every run that refreshes a chart. At the run's own commit (01b2422806) all 1,644 logged hashes match.",
+      "fix": "The re-hash resolves each row to the first commit after data_commit that touches the gate log (the run's own commit; the forward workflow is the log's single writer) and reads the inputs there. Uncommitted rows, or rows whose commit is not in the clone, are pending_commit.",
+      "unchanged": "No threshold or rule changed. Per-episode provenance_missing (which decides thickness counting) is computed in the run from the bytes it read and was not affected: 0 of 16 episodes flagged. The gate log is not rewritten. The next run rewrites the status count.",
+      "doc": "docs/ops/strategy-book-observe.md#gate-log-and-provenance"
     }
   ],
   "bench_seals": [

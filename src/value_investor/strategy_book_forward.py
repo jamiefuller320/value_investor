@@ -120,6 +120,7 @@ TITLE_T212 = "Strategy book Trading 212 catalogue stale"
 TITLE_PENDING = "Strategy book forward go-live pending"
 
 BlobReader = Callable[[str, str], bytes | None]
+CommitResolver = Callable[[str], str | None]
 
 
 def latest_forward_slot(now: datetime) -> datetime:
@@ -183,6 +184,7 @@ def run_forward_job(
     persist: bool | None = None,
     data_commit: str | None = None,
     blob_reader: BlobReader | None = None,
+    log_commit_resolver: CommitResolver | None = None,
 ) -> dict[str, Any]:
     """Walk from the seal start date. Write scores only when the book is live.
 
@@ -303,6 +305,7 @@ def run_forward_job(
     mismatches, pending = _provenance(
         log_rows,
         reader=blob_reader or (lambda commit_id, rel: git_blob_at(paths.root, commit_id, rel)),
+        resolver=log_commit_resolver or (lambda start: git_log_commit(paths.root, start)),
     )
     summary["provenance_mismatches"] = len(mismatches)
     summary["provenance_pending"] = pending
@@ -321,13 +324,43 @@ def run_forward_job(
     return public
 
 
-def git_blob_at(repo: Path, commit: str, relpath: str) -> bytes | None:
-    """Bytes of ``relpath`` at ``commit``, or None when that commit lacks it.
+def git_log_commit(repo: Path, data_commit: str) -> str | None:
+    """The commit that first holds the log rows of a run that started at ``data_commit``.
 
-    A missing blob is ``pending_commit`` (the starting commit does not hold
-    files this run wrote). It is not a mismatch. This does not search for the
-    later commit that first contains the log line.
+    The forward workflow is the gate log's single writer and commits the log
+    with every input it hashed, so this is the first later commit that touches
+    the log. None while the run is uncommitted or when ``data_commit`` is not
+    in this clone (a shallow checkout): those rows are ``pending_commit``.
     """
+    if not data_commit:
+        return None
+    try:
+        found = subprocess.run(
+            [
+                "git",
+                "log",
+                "--reverse",
+                "--format=%H",
+                f"{data_commit}..HEAD",
+                "--",
+                f"docs/data/{GATE_LOG_NAME}",
+            ],
+            cwd=repo,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if found.returncode != 0:
+        return None
+    lines = found.stdout.split()
+    return lines[0] if lines else None
+
+
+def git_blob_at(repo: Path, commit: str, relpath: str) -> bytes | None:
+    """Bytes of ``relpath`` at ``commit``, or None when that commit lacks it."""
     if not commit or not relpath:
         return None
     spec = f"{commit}:{relpath}"
@@ -1474,12 +1507,22 @@ def _episode_rows(
 
 
 def _provenance(
-    rows: list[dict[str, Any]], *, reader: BlobReader
+    rows: list[dict[str, Any]], *, reader: BlobReader, resolver: CommitResolver
 ) -> tuple[list[dict[str, str]], int]:
+    """Re-hash each logged input at the commit holding its log row (section 9, fourth amendment).
+
+    ``data_commit`` is only where the run started; the run refreshes closes
+    and gate stores before it reads them, so those bytes first appear in the
+    run's own commit.
+    """
     bad: list[dict[str, str]] = []
     pending = 0
+    resolved: dict[str, str | None] = {}
     for row in rows:
-        commit = str(row.get("data_commit") or "")
+        start = str(row.get("data_commit") or "")
+        if start not in resolved:
+            resolved[start] = resolver(start) if start else None
+        commit = resolved[start] or ""
         for item in row.get("inputs") or []:
             if not isinstance(item, dict):
                 continue

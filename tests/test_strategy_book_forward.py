@@ -5,6 +5,7 @@ from __future__ import annotations
 import gzip
 import hashlib
 import json
+import subprocess
 from datetime import UTC, date, datetime, time, timedelta
 from pathlib import Path
 
@@ -22,7 +23,10 @@ from value_investor.strategy_book_forward import (
     TITLE_T212,
     TITLE_THICKNESS,
     _load_forward_specs,
+    _provenance,
     counts_view,
+    git_blob_at,
+    git_log_commit,
     run_forward_job,
 )
 from value_investor.strategy_book_forward_cli import main as forward_main
@@ -269,9 +273,64 @@ def test_provenance_mismatch_does_not_rewrite_the_log(tmp_path: Path) -> None:
         apply=True,
         data_commit="abc",
         blob_reader=reader,
+        log_commit_resolver=lambda start: start,
     )
     assert summary["provenance_mismatches"] == 1
     assert log.read_bytes() == before
+
+
+def _git(repo: Path, *args: str) -> str:
+    done = subprocess.run(["git", *args], cwd=repo, capture_output=True, text=True, check=True)
+    return done.stdout.strip()
+
+
+def test_provenance_rehashes_at_the_runs_own_commit(tmp_path: Path) -> None:
+    """A close refreshed by the run is not in its starting commit, only in its own."""
+    repo = _repo(tmp_path)
+    data = repo / "docs" / "data"
+    _git(repo, "init", "-q")
+    _git(repo, "config", "user.email", "t@example.com")
+    _git(repo, "config", "user.name", "t")
+    chart = data / "charts" / "AAA.json"
+    _chart(chart, ["2026-11-10"], [10.0])
+    _git(repo, "add", "-A")
+    _git(repo, "commit", "-q", "-m", "start")
+    start = _git(repo, "rev-parse", "HEAD")
+
+    _chart(chart, ["2026-11-10", "2026-11-11"], [10.0, 11.0])
+    row = {
+        "kind": "session",
+        "market": "ftse350",
+        "ticker": "AAA",
+        "as_of": "2026-11-11",
+        "inputs": [
+            {
+                "path": "docs/data/charts/AAA.json",
+                "sha256": hashlib.sha256(chart.read_bytes()).hexdigest(),
+            }
+        ],
+        "data_commit": start,
+        "observed_at": "2026-11-11T17:50:00+00:00",
+    }
+    log = data / "strategy_book_gate_log.jsonl"
+    log.write_text(json.dumps(row) + "\n", encoding="utf-8")
+
+    def check() -> tuple[int, int]:
+        bad, pending = _provenance(
+            [row],
+            reader=lambda commit, rel: git_blob_at(repo, commit, rel),
+            resolver=lambda first: git_log_commit(repo, first),
+        )
+        return len(bad), pending
+
+    assert check() == (0, 1)
+    _git(repo, "add", "-A")
+    _git(repo, "commit", "-q", "-m", "forward run")
+    assert check() == (0, 0)
+
+    chart.write_text("tampered", encoding="utf-8")
+    _git(repo, "commit", "-q", "-am", "later rewrite")
+    assert check() == (0, 0)
 
 
 def _go_live(data: Path) -> None:
