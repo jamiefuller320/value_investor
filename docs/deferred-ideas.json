@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-11T18:18:16+00:00",
+  "updated_at": "2026-11-11T19:43:58+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -16324,7 +16324,9 @@
       ],
       "status": "open",
       "source": "Autonomy readiness review 2026-11-03 (cloud agent)",
-      "added_at": "2026-11-03T16:34:21+00:00"
+      "added_at": "2026-11-03T16:34:21+00:00",
+      "updated_at": "2026-11-11T19:43:58+00:00",
+      "status_note": "Observe-only fair-value range is in docs/data/strategy_book_fair_value.json. Memos still forbid price targets and were not edited, so this stays open for the supervisor."
     },
     {
       "id": "L663",
@@ -17667,6 +17669,53 @@
       "added_at": "2026-11-11T18:12:19+00:00",
       "updated_at": "2026-11-11T18:18:16+00:00",
       "status_note": "Shipped: the GBP demo account now sends non-sterling primary entries with Trading 212 FX conversion; conversion fee and rate recorded apart from slippage; FX rejections warn (owner asked to fix now, 2026-11-11)."
+    },
+    {
+      "id": "N269",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Fair-value range as a strategy-book exit",
+      "summary": "Step 4.1 records a margin of safety and whether prices reached the range. Using that range as a live exit or recovery target would change the sealed book and belongs at a version review.",
+      "revisit_when": "A strategy-book version review after the primary fair-value scoring verdict is scored, which needs at least 12 mature or closed episodes in every margin bucket.",
+      "tags": [
+        "strategy-book",
+        "fair-value",
+        "version-review"
+      ],
+      "status": "open",
+      "source": "plan step 4.1 fair-value range",
+      "added_at": "2026-11-11T19:43:58+00:00"
+    },
+    {
+      "id": "L715",
+      "category": "later",
+      "section": "research",
+      "title": "Dated statement currency for fair-value gaps",
+      "summary": "IG.MI and GL9.IR have annual statements but no snapshot, SEC or screen-note currency, so the fair-value range fails closed. A dated currency on those sources would let the range price them.",
+      "revisit_when": "When the screening snapshot or SEC facts for IG.MI and GL9.IR carry a currency dated on or before the signal session.",
+      "tags": [
+        "strategy-book",
+        "fair-value",
+        "currency"
+      ],
+      "status": "open",
+      "source": "plan step 4.1 fair-value range",
+      "added_at": "2026-11-11T19:43:58+00:00"
+    },
+    {
+      "id": "N270",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Fair-value average not pulled down by one loss year",
+      "summary": "v0 averages up to five annual EPS figures, including losses. One loss year can put the range far below a later price. Changing that rule is a version-review choice, not a fit to the current episodes.",
+      "revisit_when": "A strategy-book version review of the v0 fair-value constants.",
+      "tags": [
+        "strategy-book",
+        "fair-value"
+      ],
+      "status": "open",
+      "source": "plan step 4.1 fair-value range",
+      "added_at": "2026-11-11T19:43:58+00:00"
     }
   ],
   "fragments": [
