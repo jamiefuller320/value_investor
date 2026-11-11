@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-10T21:12:25.507106+00:00",
+  "generated_at": "2026-11-11T02:36:34.754772+00:00",
   "observe_only": true,
   "open_ideas": 668,
   "with_trigger": 32,
@@ -30,6 +30,34 @@
           },
           "state": "met",
           "actual": 83
+        }
+      ]
+    },
+    {
+      "id": "N220",
+      "title": "Archive pack incomplete-unit retry / leftover queue",
+      "status": "open",
+      "first_met_at": "2026-11-11T02:36:34.754772+00:00",
+      "conditions": [
+        {
+          "condition": {
+            "file": "docs/data/universe_filing_archive_pack_run.json",
+            "path": "unit_status_counts.no_bodies",
+            "op": ">=",
+            "value": 2
+          },
+          "state": "met",
+          "actual": 2
+        },
+        {
+          "condition": {
+            "file": "docs/data/universe_filing_archive_status.json",
+            "path": "capacity_isolation.isolation_ok",
+            "op": "==",
+            "value": true
+          },
+          "state": "met",
+          "actual": true
         }
       ]
     },
@@ -109,7 +137,6 @@
     "N210",
     "N213",
     "N215",
-    "N220",
     "N223",
     "N227",
     "L658",
