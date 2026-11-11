@@ -72,14 +72,101 @@ REASON_CLOSE_MISSING = "signal_close_missing"
 REASON_CURRENCY = "reporting_currency_unstated"
 REASON_CURRENCY_DISAGREE = "currency_sources_disagree"
 REASON_FX = "fx_rate_missing"
+REASON_IMPLAUSIBLE = "implausible_multiple"
+# Trailing P/E outside this band is a unit or currency error, not a valuation view.
+IMPLAUSIBLE_PE_MIN = 2.0
+IMPLAUSIBLE_PE_MAX = 200.0
 
 SHARE_LABELS = ("Diluted Average Shares", "Basic Average Shares")
-_FILING_CURRENCY = {
+# A bare "$" is the screen-note default and is also CAD or AUD. It is not evidence.
+_NOTE_CURRENCY = {
     "£": "GBP",
-    "$": "USD",
     "€": "EUR",
 }
-_FILING_CURRENCY_RE = re.compile(r"filing(?: \(primary\))? ([£$€])")
+_NOTE_CURRENCY_RE = re.compile(r"filing(?: \(primary\))? ([£€])")
+_STATEMENT_FILING_RE = re.compile(
+    r"(annual results|interim results|half-year results|half year results|"
+    r"full[- ]year results|preliminary results|final results|"
+    r"quarterly results|\d(?:st|nd|rd|th) quarter results|"
+    r"10-k|10-q|accounts-with-accounts|annual report)",
+    re.IGNORECASE,
+)
+_ISO_UNIT_RE = re.compile(
+    r"\b(GEL|CAD|AUD|CHF|SEK|HKD|SGD|ZAR|NOK|DKK|JPY|PLN|USD|EUR|GBP)\s*"
+    r"(?:m|mn|million|millions|\d)",
+    re.IGNORECASE,
+)
+# A sentence that names the reporting currency beats a stray symbol in the same filing.
+_REPORTING_SENTENCE: tuple[tuple[re.Pattern[str], str], ...] = (
+    (
+        re.compile(
+            r"\breports in (?:US|U\.S\.|United States) dollars\b",
+            re.IGNORECASE,
+        ),
+        "USD",
+    ),
+    (
+        re.compile(
+            r"\b(?:financial statements|accounts) (?:are )?(?:presented |expressed |denominated )"
+            r"?in (?:US|U\.S\.|United States) dollars\b",
+            re.IGNORECASE,
+        ),
+        "USD",
+    ),
+    (re.compile(r"\breports in Canadian dollars\b", re.IGNORECASE), "CAD"),
+    (
+        re.compile(
+            r"\b(?:financial statements|accounts) (?:are )?(?:presented |expressed )?"
+            r"in Canadian dollars\b",
+            re.IGNORECASE,
+        ),
+        "CAD",
+    ),
+    (re.compile(r"\bare in Canadian dollars\b", re.IGNORECASE), "CAD"),
+    (re.compile(r"\breports in (?:pounds )?sterling\b", re.IGNORECASE), "GBP"),
+    (
+        re.compile(
+            r"\b(?:financial statements|accounts) (?:are )?(?:presented |expressed )?"
+            r"in (?:pounds )?sterling\b",
+            re.IGNORECASE,
+        ),
+        "GBP",
+    ),
+    (re.compile(r"\breports in euros?\b", re.IGNORECASE), "EUR"),
+    (
+        re.compile(
+            r"\b(?:financial statements|accounts) (?:are )?(?:presented |expressed )?in euros?\b",
+            re.IGNORECASE,
+        ),
+        "EUR",
+    ),
+    (re.compile(r"\breports in GEL\b|\breporting currency(?: is)? GEL\b", re.IGNORECASE), "GEL"),
+)
+_UNIT_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
+    (re.compile(r"US\$\s*(?:m\b|mn\b|million|millions|\d)", re.IGNORECASE), "USD"),
+    (re.compile(r"\bU\.S\.\$\s*(?:m\b|mn\b|million|millions|\d)", re.IGNORECASE), "USD"),
+    (
+        re.compile(
+            r"\b(?:in millions of|are in|presented in|expressed in)\s+U\.S\. dollars\b",
+            re.IGNORECASE,
+        ),
+        "USD",
+    ),
+    (
+        re.compile(
+            r"\b(?:in millions of|are in|presented in|expressed in)\s+Canadian dollars\b",
+            re.IGNORECASE,
+        ),
+        "CAD",
+    ),
+    (re.compile(r"\bC\$\s*(?:m\b|mn\b|million|millions|\d)", re.IGNORECASE), "CAD"),
+    (re.compile(r"\bA\$\s*(?:m\b|mn\b|million|millions|\d)", re.IGNORECASE), "AUD"),
+    (re.compile(r"£\s*(?:m\b|mn\b|million|millions|\d)", re.IGNORECASE), "GBP"),
+    (re.compile(r"€\s*(?:m\b|mn\b|million|millions|\d)", re.IGNORECASE), "EUR"),
+)
+_STATEMENT_CURRENCY_KEYS = ("financialCurrency", "reporting_currency")
+_FILING_BODY_CAP = 300_000
+_FILING_BODY_READS = 6
 _BUCKETS = (
     ("below_0", "margin < 0"),
     ("zero_to_0.33", "0 <= margin <= 0.33"),
@@ -113,6 +200,13 @@ CONSTANTS: dict[str, Any] = {
         "Statement amounts are in major currency units, then multiplied by 100 "
         "after conversion into pounds."
     ),
+    "implausible_trailing_pe": {
+        "min": IMPLAUSIBLE_PE_MIN,
+        "max": IMPLAUSIBLE_PE_MAX,
+        "formula": ("signal close in major units / latest EPS, both in the statement currency"),
+        "purpose": "unit or currency error guard, not a valuation view",
+        "skipped_when": "latest EPS is missing or not positive",
+    },
     "bucket_min_n": BUCKET_MIN_N,
     "buckets": [{"id": name, "rule": rule} for name, rule in _BUCKETS],
     "scoring_population": (
@@ -347,6 +441,45 @@ def _fx_to_major(
         },
         "",
     )
+
+
+def _implied_trailing_pe(
+    entry_price: float,
+    *,
+    latest_eps: float | None,
+    price_unit: str,
+    major: str,
+    statement_currency: str,
+    fx: FxHistory | None,
+    session: date,
+) -> dict[str, Any]:
+    """Close in major units over latest EPS, both in the statement currency.
+
+    A non-positive latest EPS skips the guard. The band is a unit check.
+    """
+    if latest_eps is None or latest_eps <= 0:
+        return {"status": "skipped"}
+    close_major = entry_price / PENCE_PER_POUND if price_unit == "GBX" else entry_price
+    rate, _, why = _fx_to_major(fx, statement_currency, major, session)
+    if rate is None or rate == 0:
+        return {"status": "fx_missing", "detail": why or "FX rate missing."}
+    close_statement = close_major / rate
+    pe = close_statement / latest_eps
+    implausible = pe < IMPLAUSIBLE_PE_MIN or pe > IMPLAUSIBLE_PE_MAX
+    detail = (
+        f"Implied trailing P/E {pe:.2f} is outside {IMPLAUSIBLE_PE_MIN:g} to "
+        f"{IMPLAUSIBLE_PE_MAX:g} "
+        f"(close {close_statement:.4f} {statement_currency} / latest EPS {latest_eps:.4f} "
+        f"{statement_currency}). This is a unit and currency guard, not a valuation view."
+    )
+    return {
+        "status": "computed",
+        "pe": _round(pe, 4),
+        "close": _round(close_statement, 4),
+        "eps": _round(latest_eps, 6),
+        "implausible": implausible,
+        "detail": detail,
+    }
 
 
 def _to_price_units(
@@ -634,6 +767,26 @@ def evaluate_statements(
             f"No positive chart close on the signal session {signal_session.isoformat()}.",
         )
 
+    latest_eps = eps_years[-1][1] if eps_years else None
+    implied = _implied_trailing_pe(
+        entry_price,
+        latest_eps=latest_eps,
+        price_unit=price_unit,
+        major=major_currency,
+        statement_currency=statement_currency,
+        fx=fx,
+        session=signal_session,
+    )
+    if implied["status"] == "fx_missing":
+        return fail(REASON_FX, implied["detail"])
+    if implied["status"] == "computed":
+        base["inputs"]["implied_trailing_pe"] = implied["pe"]
+        base["inputs"]["implied_trailing_pe_close"] = implied["close"]
+        base["inputs"]["implied_trailing_pe_eps"] = implied["eps"]
+        base["inputs"]["implied_trailing_pe_currency"] = statement_currency
+        if implied["implausible"]:
+            return fail(REASON_IMPLAUSIBLE, implied["detail"])
+
     per_share, fx_meta, fx_why = _to_price_units(
         statement_per_share,
         statement_currency=statement_currency,
@@ -789,16 +942,49 @@ def _sources_dir(repo: Path, market: str, ticker: str) -> Path:
     return research_root_for(repo_paths(repo), market) / ticker / "sources"
 
 
-def _currency_from_snapshot(payload: dict[str, Any] | None) -> str | None:
-    if not isinstance(payload, dict):
+def _iso_currency(raw: Any) -> str | None:
+    if not isinstance(raw, str):
         return None
-    block = payload.get("fcf")
-    if not isinstance(block, dict):
+    code = raw.strip().upper()
+    if re.fullmatch(r"[A-Z]{3}", code) is None:
         return None
-    raw = block.get("currency")
-    if not isinstance(raw, str) or not raw.strip():
+    return code
+
+
+def _named_statement_currencies(payload: Any) -> set[str]:
+    """``financialCurrency`` and ``reporting_currency`` only. Never ``fcf.currency``."""
+    found: set[str] = set()
+
+    def walk(obj: Any) -> None:
+        if isinstance(obj, dict):
+            for key in _STATEMENT_CURRENCY_KEYS:
+                code = _iso_currency(obj.get(key))
+                if code:
+                    found.add(code)
+            for value in obj.values():
+                walk(value)
+        elif isinstance(obj, list):
+            for item in obj:
+                walk(item)
+
+    walk(payload)
+    return found
+
+
+def _currency_from_named_payload(
+    payload: dict[str, Any] | None,
+    *,
+    source: str,
+    path: str | None,
+    state: str,
+) -> tuple[str, dict[str, Any]] | None:
+    if state not in {"file", "git_as_of", "file_undated"}:
         return None
-    return raw.strip().upper()
+    codes = _named_statement_currencies(payload)
+    if len(codes) != 1:
+        return None
+    code = next(iter(codes))
+    return code, {"source": source, "path": path, "state": state}
 
 
 def _currency_from_sec(
@@ -835,10 +1021,146 @@ def _currency_from_sec(
 
 
 def _note_currency(note: str) -> str | None:
-    match = _FILING_CURRENCY_RE.search(note or "")
+    """£ is GBP and € is EUR. A bare $ is not a statement currency."""
+    match = _NOTE_CURRENCY_RE.search(note or "")
     if match is None:
         return None
-    return _FILING_CURRENCY.get(match.group(1))
+    return _NOTE_CURRENCY.get(match.group(1))
+
+
+def currencies_in_statement_text(text: str) -> set[str]:
+    """Explicit presentation units in filing text. A bare $ is ignored.
+
+    When the filing states its reporting currency in a sentence, that sentence
+    is the unit. A stray symbol in the same filing is not a second currency.
+    """
+    stated: set[str] = set()
+    for pattern, code in _REPORTING_SENTENCE:
+        if pattern.search(text):
+            stated.add(code)
+    if stated:
+        return stated
+    found: set[str] = set()
+    for pattern, code in _UNIT_PATTERNS:
+        if pattern.search(text):
+            found.add(code)
+    for match in _ISO_UNIT_RE.finditer(text):
+        found.add(match.group(1).upper())
+    return found
+
+
+def _statement_filing(item: dict[str, Any]) -> bool:
+    headline = str(item.get("headline") or "")
+    return _STATEMENT_FILING_RE.search(headline) is not None
+
+
+def _read_capped(path: Path) -> str | None:
+    try:
+        with path.open(encoding="utf-8", errors="replace") as handle:
+            return handle.read(_FILING_BODY_CAP)
+    except OSError:
+        return None
+
+
+def currency_from_filings(
+    repo: Path,
+    sources: Path,
+    session: date,
+) -> tuple[str | None, dict[str, Any] | None]:
+    """Newest point-in-time statement filing that states exactly one unit.
+
+    A filing that states more than one unit is ambiguous, so the scan stops
+    and this source is absent. Undated filings are skipped.
+    """
+    index_path = sources / "filings" / "filings_index.json"
+    if not index_path.is_file():
+        return None, None
+    try:
+        index = _read_json(index_path)
+    except (OSError, ValueError, TypeError):
+        return None, None
+    if not isinstance(index, dict):
+        return None, None
+    filings = index.get("filings")
+    if not isinstance(filings, list):
+        return None, None
+    dated: list[tuple[date, dict[str, Any]]] = []
+    for item in filings:
+        if not isinstance(item, dict) or not item.get("has_body"):
+            continue
+        if not _statement_filing(item):
+            continue
+        published = _to_date(item.get("published_at"))
+        if published is None or published > session:
+            continue
+        body_raw = str(item.get("body_path") or "")
+        if not body_raw or body_raw.startswith("/") or ".." in Path(body_raw).parts:
+            continue
+        dated.append((published, item))
+    dated.sort(key=lambda pair: pair[0], reverse=True)
+    reads = 0
+    for published, item in dated:
+        if reads >= _FILING_BODY_READS:
+            break
+        body_path = Path(repo) / str(item.get("body_path"))
+        if not body_path.is_file():
+            continue
+        text = _read_capped(body_path)
+        reads += 1
+        if not text:
+            continue
+        codes = currencies_in_statement_text(text)
+        if not codes:
+            continue
+        if len(codes) != 1:
+            return None, None
+        code = next(iter(codes))
+        return code, {
+            "source": "filing_body_unit",
+            "path": str(item.get("body_path")),
+            "published_at": published.isoformat(),
+            "headline": str(item.get("headline") or "")[:160],
+        }
+    return None, None
+
+
+def _snapshot_named_currency(
+    repo: Path,
+    sources: Path,
+    session: date,
+) -> tuple[str, dict[str, Any]] | None:
+    """A snapshot file whose name is on or before the session, and only if it
+    carries ``financialCurrency`` or ``reporting_currency``.
+    """
+    folder = sources / "snapshots"
+    if not folder.is_dir():
+        return None
+    chosen: tuple[date, Path] | None = None
+    for path in folder.iterdir():
+        match = re.match(r"(\d{4})(\d{2})(\d{2})T", path.name)
+        if match is None or not path.is_file():
+            continue
+        try:
+            day = date(int(match.group(1)), int(match.group(2)), int(match.group(3)))
+        except ValueError:
+            continue
+        if day > session:
+            continue
+        if chosen is None or day >= chosen[0]:
+            chosen = (day, path)
+    if chosen is None:
+        return None
+    day, path = chosen
+    try:
+        payload = _read_json(path)
+    except (OSError, ValueError, TypeError):
+        return None
+    return _currency_from_named_payload(
+        payload if isinstance(payload, dict) else None,
+        source="snapshot.financialCurrency",
+        path=_rel(repo, path),
+        state="file",
+    )
 
 
 def _load_run(path: Path, cache: dict[str, Any]) -> dict[str, Any] | None:
@@ -901,31 +1223,20 @@ def _currency_from_screen(
 
 def resolve_statement_currency(
     *,
-    snapshot: dict[str, Any] | None,
-    snapshot_state: str,
-    snapshot_path: str | None,
+    session: date,
     sec: dict[str, Any] | None,
     sec_state: str,
     sec_path: str | None,
-    session: date,
     screen_currency: str | None,
     screen_detail: dict[str, Any] | None,
+    explicit: list[tuple[str, dict[str, Any]]] | None = None,
 ) -> tuple[str | None, dict[str, Any]]:
-    """Explicit currencies only. Disagreeing sources fail closed."""
-    found: list[tuple[str, dict[str, Any]]] = []
-    if snapshot_state in {"file", "git_as_of"}:
-        code = _currency_from_snapshot(snapshot)
-        if code:
-            found.append(
-                (
-                    code,
-                    {
-                        "source": "screening_snapshot.fcf.currency",
-                        "path": snapshot_path,
-                        "state": snapshot_state,
-                    },
-                )
-            )
+    """Explicit currencies only. Disagreeing sources fail closed.
+
+    ``screening_snapshot.fcf.currency`` is not an input. It is the ticker-suffix
+    default unless a bridge overwrote it, and the snapshot does not say which.
+    """
+    found: list[tuple[str, dict[str, Any]]] = list(explicit or [])
     if sec_state in {"file", "git_as_of", "file_undated"}:
         code, filed = _currency_from_sec(sec, session)
         if code:
@@ -940,7 +1251,7 @@ def resolve_statement_currency(
                     },
                 )
             )
-    if screen_currency and screen_detail:
+    if screen_currency in {"GBP", "EUR"} and screen_detail:
         found.append((screen_currency, screen_detail))
     codes = {code for code, _meta in found}
     if len(codes) > 1:
@@ -959,8 +1270,9 @@ def resolve_statement_currency(
     return None, {
         "reason": REASON_CURRENCY,
         "detail": (
-            "No statement currency on the screening snapshot, the SEC facts, "
-            "or the point-in-time screen note."
+            "No point-in-time statement currency. "
+            "screening_snapshot.fcf.currency is a ticker-suffix default and is not used. "
+            "A bare $ on the screen note is not used."
         ),
         "sources": [],
     }
@@ -1040,6 +1352,51 @@ def build_episode_row(
     }
 
 
+def _explicit_currency_sources(
+    repo: Path,
+    sources: Path,
+    session: date,
+    financials: dict[str, Any] | None,
+    financials_path: str | None,
+    financials_state: str,
+) -> list[tuple[str, dict[str, Any]]]:
+    """Statement-currency evidence. Snapshot ``fcf.currency`` is not read."""
+    found: list[tuple[str, dict[str, Any]]] = []
+    named = _currency_from_named_payload(
+        financials,
+        source="financials_annual.financialCurrency",
+        path=financials_path,
+        state=financials_state,
+    )
+    if named:
+        found.append(named)
+    for filename, source_name in (
+        ("reporting_currency.json", "reporting_currency.json"),
+        ("price_quote.json", "price_quote.financialCurrency"),
+        ("ordinary_shares.json", "ordinary_shares.financialCurrency"),
+    ):
+        path = sources / filename
+        payload, state = load_json_known_on(repo, path, session, date_field="fetched_at")
+        if payload is None and state in {"missing", "undated", "committed_after_signal"}:
+            payload, state = load_json_known_on(repo, path, session, date_field=None)
+        item = _currency_from_named_payload(
+            payload,
+            source=source_name,
+            path=None if not path.is_file() else _rel(repo, path),
+            state=state,
+        )
+        if item:
+            found.append(item)
+    if session != date.min:
+        filing_code, filing_detail = currency_from_filings(repo, sources, session)
+        if filing_code and filing_detail:
+            found.append((filing_code, filing_detail))
+        snapshot_named = _snapshot_named_currency(repo, sources, session)
+        if snapshot_named:
+            found.append(snapshot_named)
+    return found
+
+
 def _load_name_files(
     repo: Path,
     market: str,
@@ -1050,7 +1407,6 @@ def _load_name_files(
 ) -> dict[str, Any]:
     sources = _sources_dir(repo, market or FTSE_MARKET, ticker)
     financials_path = sources / "financials_annual.json"
-    snapshot_path = sources / "screening_snapshot.json"
     sec_path = sources / "sec_companyfacts.json"
     session = signal or date.min
     financials, financials_state = load_json_known_on(
@@ -1062,21 +1418,26 @@ def _load_name_files(
         pass
     elif financials_state == "file_undated":
         financials_state = "file"
-    snapshot, snapshot_state = load_json_known_on(repo, snapshot_path, session, date_field=None)
     sec, sec_state = load_json_known_on(repo, sec_path, session, date_field="fetched_at")
     screen_currency, screen_detail = (None, None)
     if signal is not None:
         screen_currency, screen_detail = _currency_from_screen(repo, episode, signal, run_cache)
+    explicit = _explicit_currency_sources(
+        repo,
+        sources,
+        session,
+        financials if financials_state in {"file", "git_as_of", "file_undated"} else None,
+        None if financials is None else _rel(repo, financials_path),
+        financials_state,
+    )
     currency, detail = resolve_statement_currency(
-        snapshot=snapshot,
-        snapshot_state=snapshot_state,
-        snapshot_path=None if not snapshot_path.is_file() else _rel(repo, snapshot_path),
+        session=session,
         sec=sec,
         sec_state=sec_state,
         sec_path=None if not sec_path.is_file() else _rel(repo, sec_path),
-        session=session,
         screen_currency=screen_currency,
         screen_detail=screen_detail,
+        explicit=explicit,
     )
     sessions, closes, chart_path = _chart_series(repo, ticker)
     state = financials_state

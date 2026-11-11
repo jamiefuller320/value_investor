@@ -22,6 +22,7 @@ from value_investor.strategy_book_fair_value import (
     REASON_FINANCIALS_MISSING,
     REASON_FINANCIALS_UNDATED,
     REASON_FX,
+    REASON_IMPLAUSIBLE,
     REASON_NON_POSITIVE,
     REASON_SIGNAL_SESSION,
     TITLE_INFO,
@@ -30,8 +31,11 @@ from value_investor.strategy_book_fair_value import (
     TITLE_UNREADABLE,
     FxHistory,
     _bucket_id,
+    _note_currency,
     build_fair_value_store,
     closes_in_window,
+    currencies_in_statement_text,
+    currency_from_filings,
     evaluate_statements,
     findings_for_store,
     load_json_known_on,
@@ -211,6 +215,24 @@ def test_each_insufficient_data_reason():
     )
     assert no_fx["reason"] == REASON_FX
 
+    too_low = _evaluate(
+        financials=_statements([(2022, 1.0), (2023, 1.0), (2024, 1.0)]),
+        entry_price=150.0,
+    )
+    assert too_low["reason"] == REASON_IMPLAUSIBLE
+    assert too_low["verdict"] == "insufficient_data"
+    assert too_low["range"] is None
+    assert "1.50" in too_low["reason_detail"]
+    assert too_low["inputs"]["implied_trailing_pe"] == pytest.approx(1.5)
+
+    too_high = _evaluate(
+        financials=_statements([(2022, 1.0), (2023, 1.0), (2024, 1.0)]),
+        entry_price=25000.0,
+    )
+    assert too_high["reason"] == REASON_IMPLAUSIBLE
+    assert too_high["inputs"]["implied_trailing_pe"] == pytest.approx(250.0)
+    assert "250.00" in too_high["reason_detail"]
+
     no_session = _evaluate(signal_session=None)
     assert no_session["reason"] == REASON_SIGNAL_SESSION
 
@@ -250,13 +272,13 @@ def test_fcf_per_share_fills_the_gap_when_eps_years_are_short():
 
 def test_currency_sources_must_agree():
     code, detail = resolve_statement_currency(
-        snapshot={"fcf": {"currency": "USD"}},
-        snapshot_state="file",
-        snapshot_path="snap.json",
-        sec=None,
-        sec_state="missing",
-        sec_path=None,
         session=SIGNAL,
+        sec={
+            "fetched_at": "2026-11-01",
+            "annual": [{"first_filed": "2026-01-27", "currency": "USD"}],
+        },
+        sec_state="file",
+        sec_path="sec.json",
         screen_currency="GBP",
         screen_detail={"source": "screen_action_note", "path": "run.json", "as_of": "2026-11-10"},
     )
@@ -264,21 +286,159 @@ def test_currency_sources_must_agree():
     assert detail["reason"] == REASON_CURRENCY_DISAGREE
 
     code, detail = resolve_statement_currency(
-        snapshot={"fcf": {"currency": "usd"}},
-        snapshot_state="file",
-        snapshot_path="snap.json",
+        session=SIGNAL,
         sec={
             "fetched_at": "2026-11-01",
             "annual": [{"first_filed": "2026-01-27", "currency": "USD"}],
         },
         sec_state="file",
         sec_path="sec.json",
-        session=SIGNAL,
         screen_currency=None,
         screen_detail=None,
+        explicit=[("USD", {"source": "financials_annual.financialCurrency", "path": "fin.json"})],
     )
     assert code == "USD"
     assert len(detail["sources"]) == 2
+
+
+def test_snapshot_currency_and_bare_dollar_are_not_evidence(tmp_path: Path):
+    code, detail = resolve_statement_currency(
+        session=SIGNAL,
+        sec=None,
+        sec_state="missing",
+        sec_path=None,
+        screen_currency=None,
+        screen_detail=None,
+        explicit=[],
+    )
+    assert code is None
+    assert detail["reason"] == REASON_CURRENCY
+
+    assert _note_currency("filing $127M") is None
+    assert _note_currency("filing (primary) $88.4M") is None
+    assert _note_currency("") is None
+    assert _note_currency("Strong Buy — neutral timing | filing £25.2M") == "GBP"
+    assert _note_currency("filing €110.8M") == "EUR"
+    ignored, ignored_detail = resolve_statement_currency(
+        session=SIGNAL,
+        sec=None,
+        sec_state="missing",
+        sec_path=None,
+        screen_currency="USD",
+        screen_detail={"source": "screen_action_note", "path": "run.json"},
+    )
+    assert ignored is None
+    assert ignored_detail["reason"] == REASON_CURRENCY
+
+    sources = tmp_path / "docs" / "data" / "research" / "BGEO.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(_statements([(2022, 30.0), (2023, 30.0), (2024, 49.5)])),
+        encoding="utf-8",
+    )
+    (sources / "screening_snapshot.json").write_text(
+        json.dumps(
+            {
+                "fcf": {"currency": "GBP", "bridge_resolved": True},
+                "fcf_basis_registry": {"currency": "GBP"},
+            }
+        ),
+        encoding="utf-8",
+    )
+    charts = tmp_path / "docs" / "data" / "charts"
+    charts.mkdir(parents=True)
+    (charts / "BGEO.L.json").write_text(
+        json.dumps(
+            {
+                "ticker": "BGEO.L",
+                "currency": "GBP",
+                "dates": ["2026-11-10"],
+                "closes": [13480.0],
+            }
+        ),
+        encoding="utf-8",
+    )
+    observe = {
+        "registration_id": "owner-strategy-book-v0",
+        "data_commit": "abc",
+        "generated_at": "2026-11-11T00:00:00+00:00",
+        "episodes": [_episode("BGEO.L")],
+    }
+    data = tmp_path / "docs" / "data"
+    (data / "strategy_book_observe.json").write_text(json.dumps(observe), encoding="utf-8")
+    payload = build_fair_value_store(tmp_path, now=datetime(2026, 11, 11, tzinfo=UTC))
+    row = payload["episodes"][0]
+    assert row["reason"] == REASON_CURRENCY
+    assert row["verdict"] == "insufficient_data"
+    assert row["statement_currency"] is None
+
+
+def test_explicit_pound_source_still_builds_a_range():
+    code, detail = resolve_statement_currency(
+        session=SIGNAL,
+        sec=None,
+        sec_state="missing",
+        sec_path=None,
+        screen_currency="GBP",
+        screen_detail={"source": "screen_action_note", "path": "run.json", "as_of": "2026-11-10"},
+    )
+    assert code == "GBP"
+    assert detail["sources"][0]["source"] == "screen_action_note"
+    row = _evaluate(statement_currency=code, currency_detail=detail)
+    assert row["verdict"] == "range"
+    assert row["range"]["mid"] == pytest.approx(3000.0)
+    assert row["inputs"]["implied_trailing_pe"] == pytest.approx(5.0)
+
+
+def test_filing_body_unit_is_evidence_and_a_mixed_unit_is_not(tmp_path: Path):
+    assert currencies_in_statement_text("profit of GEL 49.5 million") == {"GEL"}
+    assert currencies_in_statement_text("filing $127M and US$m 74.6") == {"USD"}
+    assert "USD" not in currencies_in_statement_text("filing $127M")
+    assert currencies_in_statement_text("in millions of Canadian dollars") == {"CAD"}
+    # A stated reporting currency beats a stray sterling amount in the same filing.
+    stated = (
+        "The Group reports in US dollars, its primary trading currency. "
+        "Operating loss of £0.3m on the overdraft."
+    )
+    assert currencies_in_statement_text(stated) == {"USD"}
+
+    sources = tmp_path / "docs" / "data" / "research" / "CP.TO" / "sources"
+    body = sources / "filings" / "bodies"
+    body.mkdir(parents=True)
+    (body / "cad.txt").write_text(
+        "For the year ended (in millions of Canadian dollars) 3.98",
+        encoding="utf-8",
+    )
+    (body / "mixed.txt").write_text("profit of GEL 10 million and £12 million", encoding="utf-8")
+    index = {
+        "filings": [
+            {
+                "headline": "10-K: 10-K",
+                "published_at": "2026-02-26",
+                "has_body": True,
+                "period": "annual",
+                "body_path": "docs/data/research/CP.TO/sources/filings/bodies/cad.txt",
+            },
+            {
+                "headline": "3rd Quarter Results",
+                "published_at": "2026-11-04",
+                "has_body": True,
+                "period": "interim",
+                "body_path": "docs/data/research/CP.TO/sources/filings/bodies/mixed.txt",
+            },
+        ]
+    }
+    (sources / "filings" / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    code, detail = currency_from_filings(tmp_path, sources, SIGNAL)
+    assert code is None
+    assert detail is None
+
+    index["filings"][1]["published_at"] = "2026-11-12"
+    (sources / "filings" / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    code, detail = currency_from_filings(tmp_path, sources, SIGNAL)
+    assert code == "CAD"
+    assert detail is not None
+    assert detail["published_at"] == "2026-02-26"
 
 
 def test_closes_after_the_exit_do_not_count_as_recovery():
@@ -337,7 +497,9 @@ def test_bucket_scoring_reports_medians_when_every_bucket_has_enough():
 def _write_name(root: Path, ticker: str, financials: dict, closes: list[float], dates: list[str]):
     sources = root / "docs" / "data" / "research" / ticker / "sources"
     sources.mkdir(parents=True)
-    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    payload = dict(financials)
+    payload.setdefault("financialCurrency", "GBP")
+    (sources / "financials_annual.json").write_text(json.dumps(payload), encoding="utf-8")
     (sources / "screening_snapshot.json").write_text(
         json.dumps({"fcf": {"currency": "GBP"}}),
         encoding="utf-8",

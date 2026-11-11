@@ -57,6 +57,7 @@ returns. They are copied into the store under `constants`.
 | Bucket minimum | 12 mature or closed episodes with a range |
 | Margin buckets | below 0; 0 to 0.33 inclusive; above 0.33 |
 | London scale | 100 pence per pound |
+| Implausible trailing P/E | below 2 or above 200 |
 
 ## Point-in-time rule
 
@@ -67,14 +68,33 @@ Only figures dated on or before the signal session are used.
 - `financials_annual.json` is used only when `fetched_at` is on or before the
   signal session. A later `fetched_at` is replaced by the last git blob of
   that file on or before the session, when one exists.
-- Statement currency comes from an explicit source: `fcf.currency` on the
-  screening snapshot (the snapshot's git commit must be on or before the
-  session, because the snapshot has no `fetched_at`), or a SEC company-facts
-  row whose `first_filed` and file `fetched_at` are on or before the session,
-  or the filing-currency symbol in the screen action note of the history run
-  the episode already cites. If those sources disagree, or none of them
-  states a currency, the episode is `insufficient_data`. The pass does not
-  assume a currency from the ticker suffix.
+- Statement currency is taken only from a source that states it.
+  `screening_snapshot.fcf.currency` and `fcf.fcf_basis_registry.currency` are
+  the ticker-suffix default (`GBP` for `.L`, otherwise `USD`) unless a filing
+  bridge overwrote them, and the snapshot does not say which, so they are
+  not used. A bare `$` on the screen action note is the same kind of default
+  and is also ambiguous for Canadian and Australian reporters, so it is not
+  used. Accepted sources, all on or before the signal session:
+  - `financialCurrency` or `reporting_currency` on `financials_annual.json`,
+    `reporting_currency.json`, `price_quote.json`, `ordinary_shares.json`,
+    or a snapshot file whose name timestamp is on or before the session.
+    `quote_currency` is the price unit and is not a statement currency.
+  - a SEC company-facts row whose `first_filed` and file `fetched_at` are on
+    or before the session
+  - an explicit `£` (GBP) or `€` (EUR) in the filing-currency symbol of the
+    screen action note on the history run the episode already cites
+  - one explicit unit in a statement filing (annual or interim results,
+    10-K, 10-Q, or accounts) whose `published_at` is on or before the
+    session. A sentence that names the reporting currency (`reports in US
+    dollars`, `are in Canadian dollars`) is that unit, and a stray symbol
+    in the same filing is not a second currency. Otherwise the pass accepts
+    one presentation unit such as `US$m`, `GEL 49.5`, `£12 million`, or
+    `in millions of Canadian dollars`. A filing that states two units is
+    not evidence. A bare `$` in the filing is not a unit.
+    If none of these sources exists, or they disagree, the episode is
+    `insufficient_data` (`reporting_currency_unstated` or
+    `currency_sources_disagree`). The pass does not assume a currency from
+    the ticker suffix and does not hard-code one per name.
 - The entry price is the chart close dated on the signal session. Later bars
   are not the entry.
 - Recovery uses chart closes after the signal session and up to the exit
@@ -84,6 +104,20 @@ Only figures dated on or before the signal session are used.
 
 A missing or non-positive input is `insufficient_data` with a cited reason.
 The pass does not fill a gap with a guessed value.
+
+## Implausible multiple
+
+After the currency is known, the pass divides the signal close in major
+units by the latest EPS, with both figures in the statement currency
+(pence are divided by 100 first, then FX is applied when the statement
+currency is not the quote's major currency). If that trailing P/E is below
+2 or above 200, the episode is `insufficient_data` with reason
+`implausible_multiple`, and the detail cites the close, the latest EPS, the
+currency, and the ratio. The band is a v0 constant. It catches a unit or
+currency error. It is not a view on whether the shares are cheap. The guard
+is skipped when the latest EPS is missing or not positive, because a loss
+year has no trailing multiple. A plausible multiple does not prove the
+currency; a missing source still fails closed.
 
 ## Units
 
