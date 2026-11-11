@@ -438,7 +438,8 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://thenavigatorcompany.com/wp-content/uploads/2025/02/Navigator-l-Divulgacao_Resultados_2024.pdf",
     ],
     # euro_depth parked DQ7A.IR — eng-20260910-01: prior allowlist misattributed DCC plc PDF.
-    # eng-20260912-01: donegaligroup.com https TLS is reset from datacenter ingest; http serves PDFs.
+    # eng-20260912-01 / eng-20261111-01: donegaligroup.com https TLS is reset from datacenter ingest;
+    # http serves PDFs; stale unfetchable flags on live http rows must be cleared on refetch.
     "DQ7A.IR": [
         "http://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf",
         "http://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
@@ -5954,6 +5955,33 @@ def _migrate_ir_allowlist_row_url(
     return item, True
 
 
+def _ir_allowlist_unfetchable_may_retry(
+    row: dict[str, Any],
+    *,
+    allowlist_urls: set[str],
+    ticker: str,
+) -> bool:
+    """True when a prior fetch failure should be retried (URL still on the live allowlist)."""
+    if not row.get("unfetchable"):
+        return False
+    reason = str(row.get("unfetchable_reason") or "").strip()
+    if reason != "ir_allowlist_fetch_failed":
+        return False
+    url = str(row.get("url") or "").strip()
+    if not url:
+        return False
+    canon = _resolve_ir_allowlist_canonical(url, ticker)
+    fetch_url = _resolve_ir_allowlist_fetch_url(canon)
+    on_allowlist = any(candidate in allowlist_urls for candidate in {url, canon, fetch_url})
+    if not on_allowlist:
+        return False
+    # Canonical / scheme rewrites since the last failure (e.g. https→http Donegal IR PDFs).
+    if canon != url or fetch_url != url:
+        return True
+    host = urllib.parse.urlparse(canon).netloc.lower()
+    return host.endswith("donegaligroup.com")
+
+
 _IR_ALLOWLIST_PERIOD_DEDUPE_RANK = {
     "annual": 3,
     "interim": 2,
@@ -6960,6 +6988,26 @@ def refetch_ir_allowlist_filing_bodies(
                 stale_marked += 1
             refreshed.append(item)
         filings = refreshed
+
+    retry_cleared = 0
+    if allowlist_urls:
+        refreshed: list[dict[str, Any]] = []
+        for row in filings:
+            item = dict(row)
+            if _is_ir_allowlist_row(item) and _ir_allowlist_unfetchable_may_retry(
+                item,
+                allowlist_urls=allowlist_urls,
+                ticker=ticker,
+            ):
+                for key in ("unfetchable", "unfetchable_reason", "unfetchable_at"):
+                    item.pop(key, None)
+                retry_cleared += 1
+            refreshed.append(item)
+        filings = refreshed
+        if retry_cleared:
+            payload["filings"] = filings
+            payload["summary"] = summarize_filings(filings)
+            index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
     before = sum(1 for row in filings if row.get("has_body"))
     filings, shared_body_propagated = _propagate_bodies_across_shared_filing_ids(filings)
