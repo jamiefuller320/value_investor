@@ -63,7 +63,9 @@ jobs:
 
       # Practice-account mirror only. Missing demo secrets plan rows and exit 0.
       # Never uses the live catalogue key. See docs/ops/strategy-book-demo-mirror.md.
+      # A mirror failure must not stop the commit of the forward store and gate log.
       - name: Mirror primary orders on the Trading 212 demo account
+        continue-on-error: true
         env:
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
           TRADING212_DEMO_API_KEY: ${{ secrets.TRADING212_DEMO_API_KEY }}
