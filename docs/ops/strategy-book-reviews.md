@@ -81,10 +81,10 @@ They are imported, not retyped. `would_have_helped` is `yes`, `no`, or
 | Lever | How this book scores it |
 |---|---|
 | Stock choice | On a shadow, a loss beyond 2 points means the skip would have helped, and a gain means it would not. On any other column there is no skipped-name counterfactual, so the score is `insufficient_data`. The fair-cost return is still cited. |
-| Buy timing | Versus the other policy on the same name: a primary (or comparison) close against a `buy_on_signal` close, or a control close against a primary close. Only a counterfactual that had already exited on or before this exit is used. A later close is named under hindsight and is not a score. |
+| Buy timing | Nearest-entry counterfactual. A primary or comparison close is scored against the same-name `buy_on_signal` close whose fill is nearest this fill; a control close is scored against the nearest same-name primary. The fill must sit inside the section 3 entry window (`LOW_WINDOW_SESSIONS`, 10 sessions, counted as weekdays because this review has no price calendar). A tie takes the earlier entry. A close that had not exited yet is hindsight and is not a score. None in the window is `insufficient_data`. |
 | Buy strategy | The book is a single fixed stake. There is no scale-in counterfactual on the episode, so this lever stays `insufficient_data`. |
-| Sell timing | Versus a paired column on the same signal that had already closed, and versus the lab's same-calendar-day bias (`assess_same_day_round_trip`). A same-day exit is a weakness unless the exit is a thesis break with a reason cited in the decision log (`major_error_reverse`). |
-| Sell strategy | Whether a different registered exit family, already closed on this same entry, beat this return by more than 2 points. The same-day rule above also scores this lever, because that is what the lab's same-day policy lists. |
+| Sell timing | Median of paired alternatives on the same signal that had already closed. Every alternative's delta is cited, with `alternatives_n`, `alternatives_beating_n` and the median delta. `yes` only when that median beats this close by more than 2 points. The lab's same-day bias still applies (`assess_same_day_round_trip`): a same-day exit is a weakness unless it is a thesis break with a reason in the decision log. |
+| Sell strategy | Median of paired alternatives, n shown, on the same rule as sell timing. The same-day thesis-break exception is unchanged. |
 
 ## Judgment in the round
 

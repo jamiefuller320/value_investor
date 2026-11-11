@@ -451,3 +451,155 @@ def test_ops_monitor_fails_closed_when_the_store_cannot_be_read(tmp_path: Path) 
 def test_collect_ops_findings_calls_the_review_check() -> None:
     source = inspect.getsource(collect_ops_findings)
     assert "check_strategy_book_reviews" in source
+
+
+def _closed_named(
+    episode_id: str,
+    *,
+    column: str,
+    fill: str,
+    exit_at: str,
+    fair: float,
+    signal: str = "2026-01-05",
+    ticker: str = "ZZZ.L",
+) -> dict:
+    return _episode(
+        episode_id=episode_id,
+        ticker=ticker,
+        column=column,
+        signal_session=signal,
+        fill_session=fill,
+        exit_session=exit_at,
+        exit_reason="hold_63" if column == "buy_on_signal" else "floor_exit",
+        fair_cost_return=fair,
+        matched_excess=0.05,
+        recovery_label=False,
+        launched=True,
+        held_calendar_days=40,
+    )
+
+
+def test_buy_timing_ignores_a_better_control_outside_the_entry_window() -> None:
+    own = "ftse350:ZZZ.L:primary:2026-01-05"
+    far = "ftse350:ZZZ.L:buy_on_signal:2026-02-02"
+    payload = build_strategy_book_review_queue(
+        {
+            "registration_id": "owner-strategy-book-v0",
+            "episodes": [
+                _closed_named(
+                    own, column="primary", fill="2026-01-06", exit_at="2026-06-01", fair=0.0
+                ),
+                _closed_named(
+                    far,
+                    column="buy_on_signal",
+                    fill="2026-02-02",
+                    exit_at="2026-04-01",
+                    fair=0.25,
+                ),
+            ],
+        },
+        now=NOW,
+    )
+    timing = next(lever for lever in _by_id(payload)[own]["levers"] if lever["id"] == "buy_timing")
+    assert timing["would_have_helped"] == "insufficient_data"
+    assert timing["because"] == "no_overlapping_counterfactual_entry"
+    assert far in timing["outside_window"]
+    assert far not in " ".join(timing["cites"])
+
+
+def test_buy_timing_uses_the_nearest_fill_inside_the_window() -> None:
+    own = "ftse350:ZZZ.L:primary:2026-01-05"
+    near = "ftse350:ZZZ.L:buy_on_signal:2026-01-07"
+    further = "ftse350:ZZZ.L:buy_on_signal:2026-01-20"
+    outside = "ftse350:ZZZ.L:buy_on_signal:2026-02-02"
+    payload = build_strategy_book_review_queue(
+        {
+            "registration_id": "owner-strategy-book-v0",
+            "episodes": [
+                _closed_named(
+                    own, column="primary", fill="2026-01-06", exit_at="2026-06-01", fair=0.0
+                ),
+                _closed_named(
+                    near,
+                    column="buy_on_signal",
+                    fill="2026-01-07",
+                    exit_at="2026-04-01",
+                    fair=0.0,
+                ),
+                _closed_named(
+                    further,
+                    column="buy_on_signal",
+                    fill="2026-01-20",
+                    exit_at="2026-04-01",
+                    fair=0.25,
+                ),
+                _closed_named(
+                    outside,
+                    column="buy_on_signal",
+                    fill="2026-02-02",
+                    exit_at="2026-04-01",
+                    fair=0.5,
+                ),
+            ],
+        },
+        now=NOW,
+    )
+    timing = next(lever for lever in _by_id(payload)[own]["levers"] if lever["id"] == "buy_timing")
+    cites = " ".join(timing["cites"])
+    assert timing["would_have_helped"] == "no"
+    assert f"counterfactual_episode_id={near}" in cites
+    assert f"counterfactual_episode_id={further}" not in cites
+    assert further not in timing["outside_window"]
+    assert outside in timing["outside_window"]
+    assert "session_gap=1" in cites
+
+
+def test_sell_levers_follow_the_median_not_the_best_pair() -> None:
+    own = "ftse350:ZZZ.L:primary:2026-01-05"
+    draft = "ftse350:ZZZ.L:draft_v0_exit:2026-01-05"
+    ladder = "ftse350:ZZZ.L:ladder_no_deadline:2026-01-05"
+    leave = "ftse350:ZZZ.L:leave_tier:2026-01-05"
+    payload = build_strategy_book_review_queue(
+        {
+            "registration_id": "owner-strategy-book-v0",
+            "episodes": [
+                _closed_named(
+                    own, column="primary", fill="2026-01-06", exit_at="2026-06-01", fair=0.0
+                ),
+                _closed_named(
+                    draft,
+                    column="draft_v0_exit",
+                    fill="2026-01-06",
+                    exit_at="2026-03-01",
+                    fair=0.25,
+                ),
+                _closed_named(
+                    ladder,
+                    column="ladder_no_deadline",
+                    fill="2026-01-06",
+                    exit_at="2026-03-02",
+                    fair=-0.25,
+                ),
+                _closed_named(
+                    leave,
+                    column="leave_tier",
+                    fill="2026-01-06",
+                    exit_at="2026-03-03",
+                    fair=-0.125,
+                ),
+            ],
+        },
+        now=NOW,
+    )
+    row = _by_id(payload)[own]
+    for lever_id in ("sell_timing", "sell_strategy"):
+        lever = next(item for item in row["levers"] if item["id"] == lever_id)
+        cites = " ".join(lever["cites"])
+        assert lever["would_have_helped"] == "no"
+        assert lever["alternatives_n"] == 3
+        assert lever["alternatives_beating_n"] == 1
+        assert lever["median_delta"] == -0.125
+        assert f"alternative={draft}" in cites
+        assert f"alternative={ladder}" in cites
+        assert f"alternative={leave}" in cites
+        assert "median_delta=-0.125" in cites

@@ -20,7 +20,8 @@ from __future__ import annotations
 
 import argparse
 import json
-from datetime import UTC, date, datetime
+import statistics
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -65,6 +66,7 @@ from value_investor.strategy_book_rules import (
     EXIT_THESIS,
     EXIT_TIME_CAP,
     FAIL_TO_LAUNCH_INDEX,
+    LOW_WINDOW_SESSIONS,
     REGISTRATION_ID,
 )
 
@@ -440,10 +442,55 @@ def _closed_by(
     return usable, hindsight
 
 
-def _best(rows: list[dict[str, Any]]) -> dict[str, Any] | None:
-    if not rows:
-        return None
-    return max(rows, key=lambda row: _finite(row.get("fair_cost_return")) or 0.0)
+def _session_gap(left: date, right: date) -> int:
+    """Weekday steps from ``left`` to ``right``.
+
+    Section 3's entry window is ``LOW_WINDOW_SESSIONS`` chart sessions. The
+    review store has no per-name price calendar, so a session is a weekday.
+    """
+    if left == right:
+        return 0
+    step = 1 if right > left else -1
+    cursor = left
+    gap = 0
+    while cursor != right:
+        cursor += timedelta(days=step)
+        if cursor.weekday() < 5:
+            gap += 1
+    return gap
+
+
+def _nearest_fill(
+    episode: dict[str, Any],
+    pool: list[dict[str, Any]],
+    *,
+    window: int,
+) -> tuple[dict[str, Any] | None, list[str]]:
+    """One counterfactual: nearest fill inside the entry window.
+
+    A tie takes the earlier fill, then the episode id. Fills outside the
+    window are returned as ids and are not a score.
+    """
+    own = _day(episode.get("fill_session"))
+    outside: list[str] = []
+    ranked: list[tuple[int, date, str, dict[str, Any]]] = []
+    for row in pool:
+        eid = str(row.get("episode_id") or "")
+        fill = _day(row.get("fill_session"))
+        if own is None or fill is None:
+            if eid:
+                outside.append(eid)
+            continue
+        gap = _session_gap(own, fill)
+        if gap > window:
+            if eid:
+                outside.append(eid)
+            continue
+        ranked.append((gap, fill, eid, row))
+    if not ranked:
+        return None, outside
+    ranked.sort(key=lambda item: (item[0], item[1].isoformat(), item[2]))
+    return ranked[0][3], outside
 
 
 def _beats(challenger: float, incumbent: float) -> bool:
@@ -583,33 +630,47 @@ def _score_buy_timing(
             column=COLUMN_BUY_ON_SIGNAL,
         )
     lever["hindsight"] = hindsight
-    best = _best(pool)
-    if best is None:
-        lever["because"] = "no_point_in_time_buy_on_signal_or_primary_close"
-        lever["cites"] = [f"fair_cost_return={fair}"]
+    # Section 3: only a fill inside the 10-session entry window is a timing
+    # counterfactual. Nearest fill wins; a tie takes the earlier entry.
+    chosen, outside = _nearest_fill(episode, pool, window=LOW_WINDOW_SESSIONS)
+    lever["outside_window"] = outside
+    lever["entry_window_sessions"] = LOW_WINDOW_SESSIONS
+    if chosen is None:
+        lever["because"] = (
+            "no_overlapping_counterfactual_entry"
+            if pool
+            else "no_point_in_time_buy_on_signal_or_primary_close"
+        )
+        lever["cites"] = [
+            f"fair_cost_return={fair}",
+            f"entry_window_sessions={LOW_WINDOW_SESSIONS}",
+        ]
         return lever
-    other_fair = _finite(best.get("fair_cost_return"))
+    other_fair = _finite(chosen.get("fair_cost_return"))
     assert other_fair is not None
-    delta = fair - other_fair
+    own_fill = _day(episode.get("fill_session"))
+    other_fill = _day(chosen.get("fill_session"))
+    gap = 0 if own_fill is None or other_fill is None else _session_gap(own_fill, other_fill)
+    delta = other_fair - fair
     lever["value"] = _pct(delta)
     lever["status"] = "scored"
     lever["cites"] = [
         f"fair_cost_return={fair}",
-        f"counterfactual_episode_id={best.get('episode_id')}",
-        f"counterfactual_column={best.get('column')}",
-        f"counterfactual_exit_session={best.get('exit_session')}",
+        f"counterfactual_episode_id={chosen.get('episode_id')}",
+        f"counterfactual_column={chosen.get('column')}",
+        f"counterfactual_fill_session={chosen.get('fill_session')}",
+        f"counterfactual_exit_session={chosen.get('exit_session')}",
         f"counterfactual_fair_cost_return={other_fair}",
+        f"session_gap={gap}",
         f"delta_vs_counterfactual={delta}",
     ]
-    # For a timed entry, a higher control return means immediate-on-cue would
-    # have helped. For the control itself, a higher primary return means the
-    # timed rule would have helped.
+    # Positive delta: the nearest counterfactual returned more than this close.
     if _beats(other_fair, fair):
         lever["would_have_helped"] = "yes"
-        lever["because"] = "point_in_time_counterfactual_beat_this_close"
+        lever["because"] = "nearest_entry_counterfactual_beat_this_close"
     else:
         lever["would_have_helped"] = "no"
-        lever["because"] = "point_in_time_counterfactual_did_not_beat_this_close"
+        lever["because"] = "nearest_entry_counterfactual_did_not_beat_this_close"
     return lever
 
 
@@ -641,7 +702,6 @@ def _score_sell(
         strategy["because"] = "fair_cost_return_or_exit_reason_missing"
         return timing, strategy
     pool, hindsight = _closed_by(episode, others, exit_day=exit_day, paired=True)
-    best = _best(pool)
     same = bool(same_day.get("same_day_round_trip"))
     weakness = str(same_day.get("same_day_assessment") or "") == "likely_weakness"
     reverse = str(same_day.get("same_day_assessment") or "") == "major_error_reverse"
@@ -657,38 +717,47 @@ def _score_sell(
         f"registered_family_hit={exit_reason in family}",
         f"same_day_assessment={same_day.get('same_day_assessment')}",
     ]
-    if best is not None:
-        other_fair = _finite(best.get("fair_cost_return"))
-        assert other_fair is not None
-        other_reason = str(best.get("exit_reason") or "")
-        cite = [
-            f"counterfactual_episode_id={best.get('episode_id')}",
-            f"counterfactual_column={best.get('column')}",
-            f"counterfactual_exit_reason={other_reason}",
-            f"counterfactual_fair_cost_return={other_fair}",
-        ]
-        timing["cites"].extend(cite)
-        strategy["cites"].extend(cite)
-        better = _beats(other_fair, fair)
-        timing["value"] = _pct(fair - other_fair)
-        timing["status"] = "scored"
-        if better:
+    ordered = sorted(
+        pool,
+        key=lambda row: (str(row.get("column") or ""), str(row.get("episode_id") or "")),
+    )
+    deltas: list[float] = []
+    for row in ordered:
+        other_fair = _finite(row.get("fair_cost_return"))
+        if other_fair is None:
+            continue
+        delta = other_fair - fair
+        deltas.append(delta)
+        cite = (
+            f"alternative={row.get('episode_id')}:column={row.get('column')}:"
+            f"exit_reason={row.get('exit_reason')}:delta={delta}"
+        )
+        timing["cites"].append(cite)
+        strategy["cites"].append(cite)
+    if deltas:
+        median_delta = float(statistics.median(deltas))
+        beating = sum(1 for delta in deltas if delta > MATERIAL_RETURN)
+        for lever in (timing, strategy):
+            lever["alternatives_n"] = len(deltas)
+            lever["alternatives_beating_n"] = beating
+            lever["median_delta"] = median_delta
+            lever["value"] = _pct(median_delta)
+            lever["status"] = "scored"
+            lever["cites"].append(f"alternatives_n={len(deltas)}")
+            lever["cites"].append(f"alternatives_beating_n={beating}")
+            lever["cites"].append(f"median_delta={median_delta}")
+        # Yes only when the median alternative beats this close. One strong
+        # paired exit does not carry the label.
+        if median_delta > MATERIAL_RETURN:
             timing["would_have_helped"] = "yes"
-            timing["because"] = "paired_exit_closed_by_this_exit_beat_this_return"
+            timing["because"] = "median_paired_delta_beats_this_close"
+            strategy["would_have_helped"] = "yes"
+            strategy["because"] = "median_paired_delta_beats_this_close"
         else:
             timing["would_have_helped"] = "no"
-            timing["because"] = "paired_exit_did_not_beat_this_return"
-        strategy["value"] = _pct(fair - other_fair)
-        strategy["status"] = "scored"
-        if better and other_reason and other_reason != exit_reason:
-            strategy["would_have_helped"] = "yes"
-            strategy["because"] = "a_different_registered_exit_family_beat_this_close"
-        elif better:
+            timing["because"] = "median_paired_delta_does_not_beat_this_close"
             strategy["would_have_helped"] = "no"
-            strategy["because"] = "the_better_paired_close_used_the_same_exit_reason"
-        else:
-            strategy["would_have_helped"] = "no"
-            strategy["because"] = "no_different_exit_family_beat_this_close"
+            strategy["because"] = "median_paired_delta_does_not_beat_this_close"
     else:
         timing["because"] = "no_paired_close_on_or_before_this_exit"
         if exit_reason in family:
