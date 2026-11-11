@@ -994,9 +994,9 @@
   }
 
   function observeBanner(helpers, registration) {
-    if (registration && registration.forward_live === true) return "";
+    const live = !!(registration && registration.forward_live === true);
     return '<div class="bp-observe" role="status"><strong>Observe-only.</strong> '
-      + tip(helpers, "The forward book is not live.", "observe")
+      + tip(helpers, live ? "The forward book is live on paper." : "The forward book is not live.", "observe")
       + " These figures are for review and do not move capital.</div>";
   }
 

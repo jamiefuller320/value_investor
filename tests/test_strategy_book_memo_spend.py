@@ -63,15 +63,16 @@ def test_review_marked_due_on_the_date() -> None:
     assert "review due 2026-12-08" in finding["summary"]
 
 
-def test_committed_seal_has_spend_on_and_forward_live_off() -> None:
+def test_committed_seal_has_spend_on_and_forward_live_on() -> None:
     path = Path("docs/data/strategy_book_registration.json")
     assert spend_enabled(path) is True
-    assert forward_live(path) is False
+    assert forward_live(path) is True
     payload = json.loads(path.read_text(encoding="utf-8"))
-    switch = payload["operational_switches"][-1]
-    assert switch["switch"] == "spend_enabled"
-    assert switch["to"] is True
-    assert "unchanged" in switch["forward_live"]
+    switches = {row["switch"]: row for row in payload["operational_switches"]}
+    assert switches["spend_enabled"]["to"] is True
+    assert switches["forward_live"]["to"] is True
+    assert switches["forward_live"]["approved_by"] == "owner"
+    assert payload["forward_start"] == switches["forward_live"]["forward_start"]
 
 
 def test_committed_budget_covers_the_memo_raise() -> None:

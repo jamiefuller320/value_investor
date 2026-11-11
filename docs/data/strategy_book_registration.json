@@ -31,6 +31,23 @@
         "next_review_on": "2026-12-08",
         "human_task": "monthly-strategy-book-memo-spend-review"
       }
+    },
+    {
+      "at": "2026-11-11T08:45:00Z",
+      "switch": "forward_live",
+      "from": false,
+      "to": true,
+      "approved_by": "owner",
+      "owner_quote": [
+        "That's now merged. What do we need to do before going live?",
+        "1359 is merged. Decisions: 1 - agree with your recommendation, 2 - option 1 if no significant downside"
+      ],
+      "phase1_outcome": "Accept both gates, with one logged adjustment (funds and trusts insufficient_data, marker owner-strategy-book-v0-fund-insufficient-data-v1). Go-live readiness items 1-5, 8 and 10 resolved; item 9 guarded.",
+      "forward_start": "2026-11-10",
+      "forward_start_reason": "Option 1 of the go-live brief: start on the last completed session at go-live, so the 2026-11-10 FTSE signals (FOUR.L, MEGP.L) are first seen by the live job this morning, before their 2026-11-11 fill close. The late_signal rule decides; nothing is back-filled. A pre-merge preview at 08:40 UTC showed 2 pending_fill, 0 late_signal, 0 errors, every market scored at 2026-11-10.",
+      "first_live_run": "Manual workflow_dispatch of strategy-book-forward.yml (dry_run false) after merge and before the 16:30 UTC London close; then the 17:45 and 21:30 UTC weekday crons.",
+      "influences_live": false,
+      "doc": "docs/ops/phase1-gate-review-pack.md#go-live-readiness"
     }
   ],
   "phase1_gate_scope": "forward_book_go_live_only",
@@ -56,9 +73,14 @@
       "decided_at": "2026-11-10",
       "owner_words": "Lets align the forward start and live dates.",
       "rule": "forward_start will equal the go-live date. The go-live edit sets forward_live true and forward_start to the go-live date (YYYY-MM-DD) in the same commit, so the first live walk starts on the go-live session and does not re-walk 2026-11-05 onward as late signals.",
-      "set_now": false,
+      "set_now": true,
       "code": "strategy_book_rules.forward_start_date reads forward_start first, then start_date, observe_start, then the signed_at date.",
-      "doc": "docs/ops/strategy-book-observe.md#go-live"
+      "doc": "docs/ops/strategy-book-observe.md#go-live",
+      "set_at": "2026-11-11",
+      "amended": {
+        "owner_words": "1359 is merged. Decisions: 1 - agree with your recommendation, 2 - option 1 if no significant downside",
+        "reading": "forward_start is the last completed session at go-live (2026-11-10), one day before the go-live commit, so the go-live session's signals are scored live. Earlier sessions (2026-11-05 to 2026-11-09) are not walked."
+      }
     },
     "doc": "docs/ops/phase1-gate-review-pack.md#owner-decision-2026-11-10"
   },
@@ -139,10 +161,18 @@
       "reading": "A memo binds a fill only if finished before that market's regular cash close (local exchange time, DST-aware), not UTC midnight. A market without a close entry opens nothing.",
       "code": "strategy_book_rules.MARKET_CLOSE_LOCAL / session_close",
       "source_pr": 1309
+    },
+    {
+      "topic": "memo_model_switch",
+      "reading": "Changing the model that writes signal-day and review memos (for example composer-2.5 to grok-4.6 after the memo model comparison) is an operational_switches row on this registration_id, not a rule change and not a new registration_id. Section 11 seals the memo rule and 'the existing research runner', not a model.",
+      "decided_by": "owner",
+      "decided_at": "2026-11-11",
+      "owner_quote": "1359 is merged. Decisions: 1 - agree with your recommendation, 2 - option 1 if no significant downside",
+      "doc": "docs/ops/memo-model-comparison.md"
     }
   ],
   "clarifications_note": "Readings of signed text used by the walker, merged by the owner in #1309 on 2026-11-06. Not rule changes; a different reading would be a logged adjustment before the first score store.",
-  "forward_live": false,
+  "forward_live": true,
   "first_score_store": {
     "path": "docs/data/strategy_book_replay.json",
     "detail": "docs/data/strategy_book_replay_episodes.json.gz",
@@ -257,5 +287,6 @@
       "evidence": "US rehearsal, descriptive: falling-channel entries had a lower fair-cost median in both windows (L689). Not a US rehearsal test.",
       "owner_note": "Lets seal it now."
     }
-  ]
+  ],
+  "forward_start": "2026-11-10"
 }
