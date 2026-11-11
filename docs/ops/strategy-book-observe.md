@@ -3,6 +3,10 @@
 Observe-only forward book. No live screen, knob, paper book, strand A, N200, or
 `decision-review --apply`. No model calls.
 
+Primary orders are copied, observe-only, onto a Trading 212 practice account
+by [strategy-book-demo-mirror.md](strategy-book-demo-mirror.md). That ledger
+does not feed this book.
+
 Registration: [strategy-book-registration.md](strategy-book-registration.md)
 sections 9(b), 11 and 12. Ops row: [ops-monitor.md](ops-monitor.md).
 
@@ -261,6 +265,7 @@ without firing the same title twice for one missed run.
 - `docs/data/strategy_book_gate_log.jsonl`
 - `docs/data/strategy_book_closes.json`
 - `docs/data/strategy_book_forward_status.json`
+- `docs/data/strategy_book_demo_ledger.json` (practice-account mirror; see [strategy-book-demo-mirror.md](strategy-book-demo-mirror.md))
 
 One writer each. They are not on the ops-monitor optional or owned lists.
 `docs/data/charts` is owned here so a close refresh is committed, and email-report

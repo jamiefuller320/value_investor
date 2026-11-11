@@ -567,7 +567,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-11-11T08:02:48.298150+00:00",
+  "updated_at": "2026-11-11T10:42:42.452066+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -579,8 +579,12 @@
     "omxs30",
     "psi20"
   ],
-  "ingest_parallel_sprint": [],
-  "ingest_parallel_sprint_2": [],
+  "ingest_parallel_sprint": [
+    "asx200"
+  ],
+  "ingest_parallel_sprint_2": [
+    "dax"
+  ],
   "ladder": {
     "enabled": true,
     "layers": [
@@ -847,26 +851,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-10-30T07:58:40.198223+00:00",
-        "parallel_stream": 1,
-        "from_market": "aex",
-        "to_market": "asx200",
-        "stream_markets_after": [
-          "asx200"
-        ],
-        "ingest_parity_recorded": true
-      },
-      {
-        "at": "2026-10-30T14:35:07.036854+00:00",
-        "parallel_stream": 1,
-        "from_market": "asx200",
-        "to_market": "nasdaq100",
-        "stream_markets_after": [
-          "nasdaq100"
-        ],
-        "ingest_parity_recorded": true
-      },
       {
         "at": "2026-10-30T15:03:59.880635+00:00",
         "parallel_stream": 1,
@@ -1452,6 +1436,50 @@
         "to_market": null,
         "stream_markets_after": [],
         "ingest_parity_recorded": false
+      },
+      {
+        "reseeded": true,
+        "market_queue_appended": false,
+        "at": "2026-11-11T10:35:17.228882+00:00",
+        "parallel_stream": 1,
+        "from_market": null,
+        "to_market": "asx200",
+        "stream_markets_after": [
+          "asx200"
+        ],
+        "ingest_parity_recorded": false,
+        "screen_refresh": {
+          "refreshed": true,
+          "market_id": "asx200",
+          "forced": true,
+          "prior_screen_at": "2026-11-11T07:45:34.761954+00:00",
+          "prior_age_days": 0,
+          "run_at": "2026-11-11T10:35:17.228898+00:00",
+          "shortlist_count": 35,
+          "ticker_count": 196
+        }
+      },
+      {
+        "reseeded": true,
+        "market_queue_appended": false,
+        "at": "2026-11-11T10:42:41.691427+00:00",
+        "parallel_stream": 2,
+        "from_market": null,
+        "to_market": "dax",
+        "stream_markets_after": [
+          "dax"
+        ],
+        "ingest_parity_recorded": false,
+        "screen_refresh": {
+          "refreshed": true,
+          "market_id": "dax",
+          "forced": true,
+          "prior_screen_at": "2026-11-09T21:13:45.375840+00:00",
+          "prior_age_days": 2,
+          "run_at": "2026-11-11T10:42:41.691445+00:00",
+          "shortlist_count": 10,
+          "ticker_count": 40
+        }
       }
     ]
   },
