@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-11T15:21:17+00:00",
+  "updated_at": "2026-11-11T15:25:12+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -17584,7 +17584,7 @@
         "strategy-book",
         "memo"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "memo-free forward shadow",
       "added_at": "2026-11-11T15:21:17+00:00",
       "trigger": {
@@ -17593,7 +17593,9 @@
             "on_or_after": "2026-12-08"
           }
         ]
-      }
+      },
+      "updated_at": "2026-11-11T15:25:12+00:00",
+      "status_note": "Premise wrong: the signal-day memo job already wrote CRM (accumulate) and FIS (caution) memos at 07:48 UTC on 2026-11-11. They showed as memo_recent failures because the forward job read the memo bind at the signal close instead of the fill close (sealed section 2); fixed separately."
     },
     {
       "id": "L713",
