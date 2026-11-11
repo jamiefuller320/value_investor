@@ -15561,7 +15561,6 @@ def test_refetch_ir_allowlist_migrates_dq7a_ir_https_donegal_url(tmp_path: Path,
         "DQ7A.IR",
         max_bodies=5,
         allowlist_path=allowlist_path,
-        skip_unfetchable=False,
     )
     assert result["fetched"] == 1
     saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
@@ -15569,6 +15568,57 @@ def test_refetch_ir_allowlist_migrates_dq7a_ir_https_donegal_url(tmp_path: Path,
     assert row["url"] == live
     assert row.get("unfetchable") is not True
     assert row["has_body"] is True
+
+
+def test_refetch_ir_allowlist_retries_dq7a_ir_http_unfetchable_donegal(tmp_path: Path, monkeypatch):
+    """eng-20261111-01: live http donegaligroup.com rows retry after prior ir_allowlist_fetch_failed."""
+    allowlist_path = tmp_path / "ir_urls.json"
+    allowlist_path.write_text(
+        json.dumps({"urls": {"DQ7A.IR": list(_BUILTIN_IR_URLS["DQ7A.IR"])}}),
+        encoding="utf-8",
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    filings: list[dict] = []
+    for url in _BUILTIN_IR_URLS["DQ7A.IR"]:
+        digest = __import__("hashlib").sha256(url.encode("utf-8")).hexdigest()[:16]
+        filings.append(
+            {
+                "id": f"ir_{digest}",
+                "source": "ir_allowlist",
+                "headline": f"IR allowlist document — {url.rsplit('/', 1)[-1]}",
+                "url": url,
+                "period": "annual",
+                "has_body": False,
+                "unfetchable": True,
+                "unfetchable_reason": "ir_allowlist_fetch_failed",
+            }
+        )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": filings}),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(row, *, ticker, company_name="", investegate_cache=None):
+        slug = str(row.get("url") or "").rsplit("/", 1)[-1]
+        return f"Donegal Investment Group plc {slug} consolidated financial statements " * 20, "pdf"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "DQ7A.IR",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["attempted"] == 2
+    assert result["fetched"] >= 1
+    assert result["skipped_unfetchable"] == 0
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert all(row.get("has_body") for row in saved["filings"])
+    assert all(row.get("unfetchable") is not True for row in saved["filings"])
 
 
 def test_fetch_filings_ir_allowlist_euro_depth_eg7_ir_builtins(tmp_path: Path):
