@@ -1,0 +1,381 @@
+{
+  "registration_id": "owner-strategy-book-v0",
+  "influences_live": false,
+  "opens_live_capital": false,
+  "owner_may_consider_step": "5.5",
+  "owner_note": "Meeting every bar lets the owner consider step 5.5. It does not open live capital by itself.",
+  "step": "3.2",
+  "status": "built_awaiting_owner_signoff",
+  "generated_at": "2026-11-11T15:32:01.424598+00:00",
+  "seal_ok": true,
+  "sealed_section_sha256": "4e99e9ad1b741a6fc8816575f1fcf6a9ac717c5693ad0244b9e46f9c7a207349",
+  "sealed_section_sha256_expected": "4e99e9ad1b741a6fc8816575f1fcf6a9ac717c5693ad0244b9e46f9c7a207349",
+  "seal_problems": [],
+  "seal_bars": [
+    {
+      "requirement": "Uncertainty",
+      "bar": "The 90% interval of the median matched excess, from 10,000 resamples of whole ISO entry weeks, lies wholly above zero"
+    },
+    {
+      "requirement": "Tail loss",
+      "bar": "The 5th-percentile fair-cost episode return is no worse than \u221220%"
+    },
+    {
+      "requirement": "Drawdown",
+      "bar": "The sterling reference slot book's largest peak-to-trough fall is no more than 1.5 times that of the matched buy-tier basket in sterling over the same dates"
+    },
+    {
+      "requirement": "Market spread",
+      "bar": "The median matched excess stays above zero with the market holding the most mature episodes removed (no `single_market_dependence` flag)"
+    },
+    {
+      "requirement": "Regime spread",
+      "bar": "The median matched excess is at or above zero in both regime halves (above and below the 200-session average), each with at least 12 counted mature episodes; `regime_unknown` episodes sit out"
+    },
+    {
+      "requirement": "Sterling slot book",
+      "bar": "The 20-slot reference slot book, in sterling after fair costs and FX, has a positive total return and beats the matched basket in sterling over the same dates"
+    },
+    {
+      "requirement": "Tradable subset",
+      "bar": "The median matched excess on `t212_listed` episodes is above zero"
+    }
+  ],
+  "all_bars_met": false,
+  "verdict": "insufficient_data",
+  "methods": {
+    "population": "Counted mature primary episodes. provenance_missing is excluded. pending_fill is excluded. The thickness gate's per-week cap is not applied.",
+    "bootstrap": "Block bootstrap of whole ISO entry weeks, 10000 resamples, random.Random seed 20261105 (the signature date; the seal does not name a seed). Each resample draws as many weeks as the counted set has, with replacement, and keeps every matched excess in a drawn week. The 90% interval is the linear 5th and 95th percentiles of those medians. The bar passes only when the lower end is above zero.",
+    "fx": "Each rate's date is the marker as_of, not the snapshot file name and not a live spot. The converter uses the latest as_of on or before the episode date. fetch_fx_rates is not called.",
+    "same_dates": "The reference slot book and the matched basket are both strategy_book_observe._slot_book on the same counted episodes, the same fill sessions and the same exit sessions. The slot book earns each episode's fair_cost_return after conversion into sterling. The basket earns that episode's basket_gross (equal-weight buy-tier price return from fill to exit) converted with the same two rates. Net asset value is marked on the union of those fill and exit dates. Total return is end net asset value minus 1, from a start of 1.0 in cash. The peak-to-trough fall is the absolute value of max_drawdown (nav/peak - 1 on those event dates, with each open position marked at its full holding return from the fill). The reference order is fill date then ticker. The 15 random orders inside _slot_book are not part of either bar.",
+    "archive": "archive_replay_report_only is the buy-tier-only arm of the committed archive replay. It is survivorship-biased and is not the proof."
+  },
+  "fx": {
+    "source": "docs/data/library/macro/YYYY-MM-DD.json",
+    "point_in_time": "Each rate's date is the marker as_of, not the snapshot file name and not a live spot. The converter uses the latest as_of on or before the episode date. fetch_fx_rates is not called.",
+    "usd_per_unit_markers": {
+      "GBP": "uk.gbp_usd",
+      "EUR": "euro.eur_usd",
+      "AUD": "au.aud_usd",
+      "CAD": "ca.cad_usd"
+    },
+    "sterling_per_unit": "usd_per_currency / usd_per_gbp; USD is 1 / usd_per_gbp",
+    "spans": {
+      "GBP": {
+        "first_as_of": "2026-07-17",
+        "last_as_of": "2026-11-09",
+        "points": 64
+      },
+      "EUR": {
+        "first_as_of": "2026-07-17",
+        "last_as_of": "2026-11-09",
+        "points": 54
+      },
+      "AUD": {
+        "first_as_of": "2026-07-18",
+        "last_as_of": "2026-11-09",
+        "points": 68
+      },
+      "CAD": {
+        "first_as_of": "2026-07-18",
+        "last_as_of": "2026-11-09",
+        "points": 68
+      }
+    },
+    "files_read": 68,
+    "unreadable_files": 0,
+    "no_daily_series": [
+      "CHF",
+      "SEK",
+      "HKD",
+      "SGD"
+    ]
+  },
+  "forward": {
+    "label": "forward",
+    "survivorship_biased": false,
+    "not_proof": false,
+    "influences_live": false,
+    "opens_live_capital": false,
+    "owner_note": "Meeting every bar lets the owner consider step 5.5. It does not open live capital by itself.",
+    "n": 0,
+    "provenance_missing_excluded": 0,
+    "pending_fill_excluded": 0,
+    "verdict": "insufficient_data",
+    "all_bars_met": false,
+    "bars_passed": 0,
+    "bars": {
+      "uncertainty": {
+        "verdict": "insufficient_data",
+        "n": 0,
+        "statistic": null,
+        "threshold": {
+          "interval": 0.9,
+          "draws": 10000,
+          "rule": "lower end of the 90% interval > 0"
+        },
+        "reasons": [
+          "no counted episode has a matched excess and an entry week"
+        ],
+        "seal_bar": "The 90% interval of the median matched excess, from 10,000 resamples of whole ISO entry weeks, lies wholly above zero"
+      },
+      "tail_loss": {
+        "verdict": "insufficient_data",
+        "n": 0,
+        "statistic": null,
+        "threshold": {
+          "percentile": 5.0,
+          "floor": -0.2,
+          "rule": "percentile >= -0.20"
+        },
+        "reasons": [
+          "no counted episode has a fair-cost return"
+        ],
+        "seal_bar": "The 5th-percentile fair-cost episode return is no worse than \u221220%"
+      },
+      "drawdown": {
+        "verdict": "insufficient_data",
+        "n": 0,
+        "statistic": null,
+        "threshold": {
+          "multiple": 1.5,
+          "slots": 20,
+          "rule": "slot peak-to-trough fall <= 1.5 times the matched basket fall"
+        },
+        "reasons": [
+          "no counted episodes"
+        ],
+        "seal_bar": "The sterling reference slot book's largest peak-to-trough fall is no more than 1.5 times that of the matched buy-tier basket in sterling over the same dates"
+      },
+      "market_spread": {
+        "verdict": "insufficient_data",
+        "n": 0,
+        "statistic": null,
+        "threshold": {
+          "rule": "median matched excess > 0 after the largest market is removed"
+        },
+        "reasons": [
+          "no counted episodes"
+        ],
+        "seal_bar": "The median matched excess stays above zero with the market holding the most mature episodes removed (no `single_market_dependence` flag)"
+      },
+      "regime_spread": {
+        "verdict": "insufficient_data",
+        "n": 0,
+        "statistic": {
+          "above": {
+            "n": 0,
+            "median_matched_excess": null
+          },
+          "below": {
+            "n": 0,
+            "median_matched_excess": null
+          },
+          "regime_unknown_sitting_out": 0
+        },
+        "threshold": {
+          "min_n": 12,
+          "rule": "median matched excess >= 0 in both above and below, each with n >= 12"
+        },
+        "reasons": [
+          "0 counted episodes sit out (regime_unknown or no matched excess)",
+          "need at least 12 counted mature episodes in each regime half; short: above, below"
+        ],
+        "seal_bar": "The median matched excess is at or above zero in both regime halves (above and below the 200-session average), each with at least 12 counted mature episodes; `regime_unknown` episodes sit out"
+      },
+      "sterling_slot_book": {
+        "verdict": "insufficient_data",
+        "n": 0,
+        "statistic": null,
+        "threshold": {
+          "slots": 20,
+          "rule": "sterling total return > 0 and greater than the matched basket"
+        },
+        "reasons": [
+          "no counted episodes"
+        ],
+        "seal_bar": "The 20-slot reference slot book, in sterling after fair costs and FX, has a positive total return and beats the matched basket in sterling over the same dates"
+      },
+      "tradable_subset": {
+        "verdict": "insufficient_data",
+        "n": 0,
+        "statistic": null,
+        "threshold": {
+          "rule": "median matched excess > 0 on t212_listed episodes"
+        },
+        "reasons": [
+          "0 counted episodes are not t212_listed and sit out of this bar",
+          "no counted t212_listed episode has a matched excess"
+        ],
+        "seal_bar": "The median matched excess on `t212_listed` episodes is above zero"
+      }
+    },
+    "scoring_date": "2026-11-11",
+    "source": {
+      "path": "docs/data/strategy_book_observe.json",
+      "present": true,
+      "generated_at": "2026-11-11T14:30:36.627430+00:00",
+      "scoring_date": "2026-11-11",
+      "data_commit": "164672cc6fdaf86f55b4ad218739c4687b081c92",
+      "registration_id": "owner-strategy-book-v0"
+    }
+  },
+  "archive_replay_report_only": {
+    "label": "archive_replay_report_only",
+    "survivorship_biased": true,
+    "not_proof": true,
+    "influences_live": false,
+    "opens_live_capital": false,
+    "owner_note": "Meeting every bar lets the owner consider step 5.5. It does not open live capital by itself.",
+    "n": 30,
+    "provenance_missing_excluded": 0,
+    "pending_fill_excluded": 0,
+    "verdict": "not_met",
+    "all_bars_met": false,
+    "bars_passed": 3,
+    "bars": {
+      "uncertainty": {
+        "verdict": "fail",
+        "n": 30,
+        "statistic": {
+          "median_matched_excess": 0.01057421925960847,
+          "interval_low": -0.002609561300790847,
+          "interval_high": 0.019002353140546557,
+          "entry_weeks": 3,
+          "draws": 10000,
+          "seed": 20261105
+        },
+        "threshold": {
+          "interval": 0.9,
+          "draws": 10000,
+          "rule": "lower end of the 90% interval > 0"
+        },
+        "reasons": [
+          "the 90% interval is not wholly above zero"
+        ],
+        "seal_bar": "The 90% interval of the median matched excess, from 10,000 resamples of whole ISO entry weeks, lies wholly above zero"
+      },
+      "tail_loss": {
+        "verdict": "pass",
+        "n": 30,
+        "statistic": {
+          "fair_cost_percentile_5": -0.1877502431544731
+        },
+        "threshold": {
+          "percentile": 5.0,
+          "floor": -0.2,
+          "rule": "percentile >= -0.20"
+        },
+        "reasons": [],
+        "seal_bar": "The 5th-percentile fair-cost episode return is no worse than \u221220%"
+      },
+      "drawdown": {
+        "verdict": "fail",
+        "n": 30,
+        "statistic": {
+          "event_dates_start": "2026-07-21",
+          "event_dates_end": "2026-10-30",
+          "slot_trades_taken": 20,
+          "basket_trades_taken": 20,
+          "same_dates": "The reference slot book and the matched basket are both strategy_book_observe._slot_book on the same counted episodes, the same fill sessions and the same exit sessions. The slot book earns each episode's fair_cost_return after conversion into sterling. The basket earns that episode's basket_gross (equal-weight buy-tier price return from fill to exit) converted with the same two rates. Net asset value is marked on the union of those fill and exit dates. Total return is end net asset value minus 1, from a start of 1.0 in cash. The peak-to-trough fall is the absolute value of max_drawdown (nav/peak - 1 on those event dates, with each open position marked at its full holding return from the fill). The reference order is fill date then ticker. The 15 random orders inside _slot_book are not part of either bar.",
+          "whole_screen_fallback_baskets": 4,
+          "slot_fall": 0.004550250519966492,
+          "basket_fall": 0.001148150995862518,
+          "fall_ratio": 3.963111591039676
+        },
+        "threshold": {
+          "multiple": 1.5,
+          "slots": 20,
+          "rule": "slot peak-to-trough fall <= 1.5 times the matched basket fall"
+        },
+        "reasons": [
+          "the sterling slot book's peak-to-trough fall is more than 1.5 times the basket's"
+        ],
+        "seal_bar": "The sterling reference slot book's largest peak-to-trough fall is no more than 1.5 times that of the matched buy-tier basket in sterling over the same dates"
+      },
+      "market_spread": {
+        "verdict": "pass",
+        "n": 21,
+        "statistic": {
+          "removed_market": "sp500",
+          "removed_n": 9,
+          "median_matched_excess": 0.019461720384452506
+        },
+        "threshold": {
+          "rule": "median matched excess > 0 after the largest market is removed"
+        },
+        "reasons": [
+          "removed sp500 (9 counted episodes); a tie goes to the later market name, as in _single_market_dependence"
+        ],
+        "seal_bar": "The median matched excess stays above zero with the market holding the most mature episodes removed (no `single_market_dependence` flag)"
+      },
+      "regime_spread": {
+        "verdict": "insufficient_data",
+        "n": 30,
+        "statistic": {
+          "above": {
+            "n": 22,
+            "median_matched_excess": 0.01057421925960847
+          },
+          "below": {
+            "n": 8,
+            "median_matched_excess": 0.006163889999629746
+          },
+          "regime_unknown_sitting_out": 0
+        },
+        "threshold": {
+          "min_n": 12,
+          "rule": "median matched excess >= 0 in both above and below, each with n >= 12"
+        },
+        "reasons": [
+          "0 counted episodes sit out (regime_unknown or no matched excess)",
+          "need at least 12 counted mature episodes in each regime half; short: below"
+        ],
+        "seal_bar": "The median matched excess is at or above zero in both regime halves (above and below the 200-session average), each with at least 12 counted mature episodes; `regime_unknown` episodes sit out"
+      },
+      "sterling_slot_book": {
+        "verdict": "pass",
+        "n": 30,
+        "statistic": {
+          "event_dates_start": "2026-07-21",
+          "event_dates_end": "2026-10-30",
+          "slot_trades_taken": 20,
+          "basket_trades_taken": 20,
+          "same_dates": "The reference slot book and the matched basket are both strategy_book_observe._slot_book on the same counted episodes, the same fill sessions and the same exit sessions. The slot book earns each episode's fair_cost_return after conversion into sterling. The basket earns that episode's basket_gross (equal-weight buy-tier price return from fill to exit) converted with the same two rates. Net asset value is marked on the union of those fill and exit dates. Total return is end net asset value minus 1, from a start of 1.0 in cash. The peak-to-trough fall is the absolute value of max_drawdown (nav/peak - 1 on those event dates, with each open position marked at its full holding return from the fill). The reference order is fill date then ticker. The 15 random orders inside _slot_book are not part of either bar.",
+          "whole_screen_fallback_baskets": 4,
+          "slot_total_return": 0.05062915985738492,
+          "basket_total_return": 0.04957761117225745
+        },
+        "threshold": {
+          "slots": 20,
+          "rule": "sterling total return > 0 and greater than the matched basket"
+        },
+        "reasons": [],
+        "seal_bar": "The 20-slot reference slot book, in sterling after fair costs and FX, has a positive total return and beats the matched basket in sterling over the same dates"
+      },
+      "tradable_subset": {
+        "verdict": "insufficient_data",
+        "n": 0,
+        "statistic": null,
+        "threshold": {
+          "rule": "median matched excess > 0 on t212_listed episodes"
+        },
+        "reasons": [
+          "30 counted episodes are not t212_listed and sit out of this bar",
+          "no counted t212_listed episode has a matched excess"
+        ],
+        "seal_bar": "The median matched excess on `t212_listed` episodes is above zero"
+      }
+    },
+    "scoring_date": "2026-10-30",
+    "source": {
+      "path": "docs/data/strategy_book_replay_episodes.json.gz",
+      "arm": "archive_buy_tier_only",
+      "present": true,
+      "survivorship_biased": true,
+      "not_proof": true,
+      "scoring_date": "2026-10-30",
+      "registration_id": "owner-strategy-book-v0"
+    }
+  }
+}
