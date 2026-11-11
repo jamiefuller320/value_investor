@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-10T13:40:57.192114+00:00",
+  "run_at": "2026-11-11T10:42:19.345948+00:00",
   "market_id": "dax",
   "targets": [
     "VOW3.DE"
@@ -85,7 +85,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-10T13:40:10.172818+00:00",
+    "snapshot_at": "2026-11-11T10:41:25.909123+00:00",
     "market_id": "dax",
     "buy_tier_count": 10,
     "unmeasured_buy_tier": 0,
@@ -125,7 +125,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-10T13:40:53.582297+00:00",
+    "snapshot_at": "2026-11-11T10:42:10.043006+00:00",
     "market_id": "dax",
     "buy_tier_count": 10,
     "unmeasured_buy_tier": 0,
@@ -154,15 +154,16 @@
       "DTE.DE",
       "DTG.DE",
       "HEN3.DE",
-      "HNR1.DE",
+      "HNR1.DE"
+    ],
+    "parked_count": 5,
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
       "MUV2.DE"
     ],
-    "parked_count": 6,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
@@ -173,7 +174,7 @@
   "discovery_scan": {
     "scanned": 10,
     "hits": 9,
-    "new_rows_total": 0,
+    "new_rows_total": 1,
     "curiosity_total": 10,
     "errors": 0,
     "prioritization_weights": {
@@ -197,14 +198,10 @@
   },
   "maintenance_mode": true,
   "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "dax"
-  },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "dax",
-    "assessed_at": "2026-11-10T13:40:10.629907+00:00",
+    "assessed_at": "2026-11-11T10:41:26.723262+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -233,9 +230,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 42.57765237199999,
+  "used_seconds": 42.49758250299999,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3557.422347628,
+  "leftover_seconds": 3557.502417497,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -243,8 +240,8 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "dax",
-    "updated_at": "2026-11-10T13:40:53.592034+00:00",
-    "exhausted": true,
+    "updated_at": "2026-11-11T10:42:10.060993+00:00",
+    "exhausted": false,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
@@ -297,18 +294,6 @@
         "source_surface": "euro_filings+ir_allowlist_direct"
       },
       {
-        "ticker": "MUV2.DE",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-10-26T21:41:38.348508+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings+ir_allowlist_direct"
-      },
-      {
         "ticker": "HEN3.DE",
         "reason": "awaiting_periodic_report",
         "revisit_when": "Next statutory annual or interim report is issued and indexed",
@@ -333,47 +318,32 @@
       "HNR1.DE",
       "MUV2.DE"
     ],
-    "unparked_leftover": [],
+    "unparked_leftover": [
+      "MUV2.DE"
+    ],
     "surface_released": [],
     "path": "docs/data/library/markets/dax/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "dax",
-    "ingest_exhausted_markets": [
-      "aex",
-      "aim",
-      "asx200",
-      "atx",
-      "bel20",
-      "cac40",
-      "dax",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_mib",
-      "ftse_smallcap",
-      "hang_seng",
-      "ibex35",
-      "iseq20",
-      "nasdaq100",
-      "omxs30",
-      "psi20",
-      "smi",
-      "sp500",
-      "sti",
-      "tsx60",
-      "us_adr_asia"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "not_exhausted",
+    "market_id": "dax"
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 64,
-    "candidate_count": 53,
+    "candidate_count": 60,
     "skipped_resolved_tickers": [
+      "ACKB.BR",
+      "APAM.AS",
+      "BAS.DE",
+      "DQ7A.IR",
+      "ESSITY-B.ST",
+      "EVN.VI",
+      "IFX.DE",
+      "UCB.BR",
+      "WIE.VI",
       "LMT",
       "APTV",
       "BXP",
@@ -394,7 +364,6 @@
       "DTE.DE",
       "DTG.DE",
       "HNR1.DE",
-      "MUV2.DE",
       "HEN3.DE",
       "PST.MI",
       "APAM.AS",
