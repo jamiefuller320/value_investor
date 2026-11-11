@@ -7,6 +7,10 @@ Primary orders are copied, observe-only, onto a Trading 212 practice account
 by [strategy-book-demo-mirror.md](strategy-book-demo-mirror.md). That ledger
 does not feed this book.
 
+The seven step 3.2 proof bars are scored, observe-only, by
+[strategy-book-proof.md](strategy-book-proof.md). That board does not feed
+this book. Meeting every bar lets the owner consider step 5.5 and opens nothing.
+
 Registration: [strategy-book-registration.md](strategy-book-registration.md)
 sections 9(b), 11 and 12. Ops row: [ops-monitor.md](ops-monitor.md).
 
@@ -266,6 +270,7 @@ without firing the same title twice for one missed run.
 - `docs/data/strategy_book_closes.json`
 - `docs/data/strategy_book_forward_status.json`
 - `docs/data/strategy_book_demo_ledger.json` (practice-account mirror; see [strategy-book-demo-mirror.md](strategy-book-demo-mirror.md))
+- `docs/data/strategy_book_proof_board.json` (step 3.2 proof bars; see [strategy-book-proof.md](strategy-book-proof.md))
 
 One writer each. They are not on the ops-monitor optional or owned lists.
 `docs/data/charts` is owned here so a close refresh is committed, and email-report

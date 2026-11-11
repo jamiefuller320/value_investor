@@ -87,6 +87,20 @@ jobs:
           fi
           ftse-strategy-book-demo "${args[@]}"
 
+      # Observe-only step 3.2 proof board. A failure here must not block the
+      # forward commit. See docs/ops/strategy-book-proof.md.
+      - name: Refresh the strategy book proof board
+        continue-on-error: true
+        env:
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          set -euo pipefail
+          if [ "${DRY_RUN}" = "true" ]; then
+            ftse-strategy-book-proof --repo-root . --no-write
+          else
+            ftse-strategy-book-proof --repo-root .
+          fi
+
       # This workflow is the single writer for the strategy-book JSON stores.
       # Email-report excludes them. Charts stay shared with publish.
       - name: Commit strategy-book forward artifacts
@@ -101,5 +115,6 @@ jobs:
             docs/data/strategy_book_closes.json
             docs/data/strategy_book_forward_status.json
             docs/data/strategy_book_demo_ledger.json
+            docs/data/strategy_book_proof_board.json
             docs/data/charts
         run: bash scripts/gha_commit_artifacts.sh

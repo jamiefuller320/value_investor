@@ -2855,6 +2855,45 @@ def check_strategy_book_demo_mirror(
     ]
 
 
+def check_strategy_book_proof(
+    *,
+    repo_root: Path | None = None,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Read the step 3.2 proof board. Does not rescore or edit the book.
+
+    Observe-only (``auto_fixable=False``). The forward job writes the store.
+    See docs/ops/strategy-book-proof.md. Meeting every bar only lets the owner
+    consider step 5.5; it opens nothing.
+    """
+    from value_investor.strategy_book_proof import findings_for_store
+
+    root = Path(repo_root) if repo_root is not None else Path()
+    moment = now or datetime.now(UTC)
+    try:
+        rows = findings_for_store(root, now=moment)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title="Strategy book proof board unreadable",
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "Strategy book proof board"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+        for finding in rows
+    ]
+
+
 def check_strategy_book_reviews(
     *,
     repo_root: Path | None = None,
@@ -5186,6 +5225,7 @@ def collect_ops_findings(
     findings.extend(_guarded_check(check_strategy_book_observe))
     findings.extend(_guarded_check(check_strategy_book_reviews))
     findings.extend(_guarded_check(check_strategy_book_demo_mirror))
+    findings.extend(_guarded_check(check_strategy_book_proof))
     findings.extend(_guarded_check(check_n200_tech_timing_observe))
     findings.extend(_guarded_check(check_n201_value_mom_observe))
     findings.extend(_guarded_check(check_n210_ai_judgment_observe))

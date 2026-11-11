@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-11T10:46:07+00:00",
+  "updated_at": "2026-11-11T15:22:38+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9261,7 +9261,7 @@
       "section": "not_now",
       "title": "Capital at risk / live broker automation (stage 6)",
       "summary": "Do not connect live capital or broker APIs until stages 2\u20135 are proven in paper with cost-aware review.",
-      "revisit_when": "Manual packs trusted, decision-review learning working, and multi-market paper track proven",
+      "revisit_when": "When docs/data/strategy_book_proof_board.json has forward.all_bars_met true, the owner may consider plan step 5.5. That verdict opens nothing by itself. Live broker automation still needs the owner sign-off of the proof board and the step 5.4 kill switch.",
       "tags": [
         "automation",
         "broker",
@@ -9269,7 +9269,18 @@
       ],
       "status": "open",
       "source": "project-objective-roadmap",
-      "added_at": "2026-07-16T04:03:10+00:00"
+      "added_at": "2026-07-16T04:03:10+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/strategy_book_proof_board.json",
+            "path": "forward.all_bars_met",
+            "op": "truthy"
+          }
+        ]
+      },
+      "updated_at": "2026-11-11T15:22:38+00:00",
+      "status_note": "Step 3.2 machinery built 2026-11-11, awaiting owner sign-off. Revisit trigger now points at strategy_book_proof_board.json forward.all_bars_met. A true verdict lets the owner consider step 5.5 and opens nothing."
     },
     {
       "id": "N130",
@@ -9463,7 +9474,7 @@
       "section": "not_now",
       "title": "Live Trading 212 API integration",
       "summary": "Do not wire live order placement yet. T212 API is beta (non-idempotent orders); project is still at stage 2 manual packs. Prefer demo/paper path first when broker work starts.",
-      "revisit_when": "Stages 2\u20135 exit criteria met and human override workflow defined (see N13)",
+      "revisit_when": "When docs/data/strategy_book_proof_board.json has forward.all_bars_met true, the owner may consider plan step 5.5. That verdict does not connect a live Trading 212 account. Read-only sync (plan step 5.2) still needs its own owner decision.",
       "tags": [
         "broker",
         "trading212",
@@ -9473,7 +9484,18 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-02ed5f6e-7ba3-4509-afd8-6970de06b6bc",
-      "added_at": "2026-07-22T05:31:07+00:00"
+      "added_at": "2026-07-22T05:31:07+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/strategy_book_proof_board.json",
+            "path": "forward.all_bars_met",
+            "op": "truthy"
+          }
+        ]
+      },
+      "updated_at": "2026-11-11T15:22:38+00:00",
+      "status_note": "Step 3.2 machinery built 2026-11-11, awaiting owner sign-off. Revisit trigger now points at strategy_book_proof_board.json forward.all_bars_met. A true verdict lets the owner consider step 5.5 and does not connect a live account."
     },
     {
       "id": "N140",
@@ -17557,6 +17579,22 @@
       "status": "open",
       "source": "plan step 2.4 strategy-book reviews",
       "added_at": "2026-11-11T10:33:59+00:00"
+    },
+    {
+      "id": "L713",
+      "category": "later",
+      "section": "ops",
+      "title": "Daily FX history for CHF, SEK, HKD and SGD",
+      "summary": "The step 3.2 sterling bars use dated macro snapshots, which price GBP, EUR, AUD and CAD against USD. A counted strategy-book episode in CHF, SEK, HKD or SGD is insufficient_data rather than a guessed rate.",
+      "revisit_when": "When a counted mature strategy-book episode is denominated in CHF, SEK, HKD or SGD, or when those currencies gain a committed daily FX series.",
+      "tags": [
+        "strategy-book",
+        "fx",
+        "proof"
+      ],
+      "status": "open",
+      "source": "strategy book proof board",
+      "added_at": "2026-11-11T15:22:38+00:00"
     }
   ],
   "fragments": [
