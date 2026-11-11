@@ -102,6 +102,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | so-what --apply | Gap-closure workflow that turns analysis themes into pinned ingest or promotion actions when appropriate. | [`ops/so-what-gap-closure.md`](ops/so-what-gap-closure.md) |
 | sprint_ingest_complete | Ingest head finished: raw parity on filing counts or thin and IWB leftovers parked with a usable set remaining. | [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md) |
 | strategy book | The cold-start observe book that runs the owner's seven-part strategy (`owner-strategy-book-v0` and later versions). | [`ops/strategy-book-registration.md`](ops/strategy-book-registration.md) |
+| strategy-book review | Observe-only read of each closed strategy-book episode: what happened, which cause the outcome points to, and which of the five levers would have helped. Evidence for the version review. It does not change the book. | [`ops/strategy-book-reviews.md`](ops/strategy-book-reviews.md) |
 | strand A | The main FTSE paper-trading path: the buy-tier-level book and the matched assessment books. No real money is invested. | [`ops/primary-learning-track.md`](ops/primary-learning-track.md) |
 | strong_buy | Strongest screen buy signal within the value set alongside ordinary `buy`. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | thesis break | The reason for owning a name has failed: operating decline, a sector headwind, a screen `avoid` signal, or a research `pass`. Ends any strategy-book position. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |

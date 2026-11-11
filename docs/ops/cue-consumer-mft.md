@@ -32,7 +32,7 @@ declared incomparable.
 |------------------|--------------|
 | Lab paper book (buy on the weekly cue, hold 63 trading days or exit on an identity break) | Keeps running unchanged on the FTSE screen as an outside reference. No new knob epochs. |
 | Same policy as a control | The strategy book carries it as its **buy-on-signal control** on the strategy book's own universe ([registration section 8](strategy-book-registration.md#8-scoring)). That is where "does timing add anything?" is answered. |
-| Post-sale reviews, judgment-in-the-round trail, five-lever scoring | Move onto strategy-book closes in plan step 2.4. |
+| Post-sale reviews, judgment-in-the-round trail, five-lever scoring | On strategy-book closes ([strategy-book-reviews.md](strategy-book-reviews.md)). Built, awaiting the first close. The lab's own queue is unchanged. |
 | Mid-flight tunes and hardened-ruleset proposals | Become inputs to the strategy book's version review. They do not spawn sealed children. |
 | Sealed-child spawn, novelty distance, cull (N223, N226, N227) | Not built while the single-track section holds. |
 

@@ -2815,6 +2815,59 @@ def check_strategy_book_observe(
     ]
 
 
+def check_strategy_book_reviews(
+    *,
+    repo_root: Path | None = None,
+    data_dir: Path | None = None,
+    now: datetime | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Refresh strategy-book close reviews. Does not walk or change the book.
+
+    Writes ``docs/data/strategy_book_review_queue.json``. Observe-only
+    (``auto_fixable=False``). No model spend. See docs/ops/strategy-book-reviews.md.
+    """
+    from value_investor.strategy_book_reviews import (
+        STORE_FAILED_TITLE,
+        ops_findings_from_strategy_book_reviews,
+        refresh_strategy_book_reviews,
+    )
+
+    if data_dir is not None:
+        root = Path(data_dir)
+    elif repo_root is not None:
+        root = Path(repo_root) / "docs" / "data"
+    else:
+        root = Path("docs/data")
+    moment = now or datetime.now(UTC)
+    try:
+        payload = refresh_strategy_book_reviews(
+            data_dir=root,
+            now=moment,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or STORE_FAILED_TITLE),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+        for finding in ops_findings_from_strategy_book_reviews(payload)
+    ]
+
+
 def check_n206_plain_ey_observe(
     *,
     output_dir: Path | None = None,
@@ -5091,6 +5144,7 @@ def collect_ops_findings(
     findings.extend(_guarded_check(check_strategy_book_memo_job))
     findings.extend(_guarded_check(check_memo_model_comparison))
     findings.extend(_guarded_check(check_strategy_book_observe))
+    findings.extend(_guarded_check(check_strategy_book_reviews))
     findings.extend(_guarded_check(check_n200_tech_timing_observe))
     findings.extend(_guarded_check(check_n201_value_mom_observe))
     findings.extend(_guarded_check(check_n210_ai_judgment_observe))
