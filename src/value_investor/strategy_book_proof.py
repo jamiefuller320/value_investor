@@ -582,8 +582,13 @@ def _prepare_sterling(
     counted: list[dict[str, Any]],
     fx: FxHistory,
     scoring: date | None,
-) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[str]]:
-    """Slot-book rows in sterling, or reasons the bar cannot be scored."""
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[str], int]:
+    """Slot-book rows in sterling, or reasons the bar cannot be scored.
+
+    The matched basket is the registration's (section 8): the entry run's raw
+    buy tier, or the whole screen when that tier has fewer than 5 names. The
+    last value counts the whole-screen fallbacks.
+    """
     slot_rows: list[dict[str, Any]] = []
     basket_rows: list[dict[str, Any]] = []
     problems: list[str] = []
@@ -617,7 +622,7 @@ def _prepare_sterling(
         if gross is None:
             missing_basket += 1
         basket_converted: float | None = None
-        if gross is not None and not basket.get("fallback") and basket.get("source") == "buy_tier":
+        if gross is not None:
             basket_converted, basket_reason = sterling_return(gross, currency, filled, exited, fx)
             if basket_converted is None:
                 fx_gaps[basket_reason or reason] += 1
@@ -633,18 +638,18 @@ def _prepare_sterling(
         )
     for reason, count in sorted(fx_gaps.items()):
         problems.append(f"{count} counted episodes: {reason}")
-    if fallback:
-        problems.append(
-            f"{fallback} counted episodes used the whole-screen fallback "
-            "(basket.fallback), not the buy-tier basket the bar names"
-        )
     if missing_basket:
         problems.append(f"{missing_basket} counted episodes have no basket_gross")
     if problems:
-        return [], [], problems
+        return [], [], problems, fallback
     if len(basket_rows) != len(slot_rows):
-        return [], [], ["matched buy-tier basket in sterling is missing for a counted episode"]
-    return slot_rows, basket_rows, []
+        return (
+            [],
+            [],
+            ["matched buy-tier basket in sterling is missing for a counted episode"],
+            fallback,
+        )
+    return slot_rows, basket_rows, [], fallback
 
 
 def evaluate_population(
@@ -1015,7 +1020,7 @@ def _sterling_bars(
                 bar_text=sterling_text,
             ),
         )
-    slot_rows, basket_rows, problems = _prepare_sterling(counted, fx, scoring)
+    slot_rows, basket_rows, problems, fallbacks = _prepare_sterling(counted, fx, scoring)
     if problems:
         return (
             _bar(
@@ -1051,6 +1056,7 @@ def _sterling_bars(
         "slot_trades_taken": slot.get("trades_taken"),
         "basket_trades_taken": basket.get("trades_taken"),
         "same_dates": SAME_DATES,
+        "whole_screen_fallback_baskets": fallbacks,
     }
     drawdown_reasons: list[str] = []
     sterling_reasons: list[str] = []

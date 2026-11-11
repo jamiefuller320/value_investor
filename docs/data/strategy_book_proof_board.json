@@ -6,7 +6,7 @@
   "owner_note": "Meeting every bar lets the owner consider step 5.5. It does not open live capital by itself.",
   "step": "3.2",
   "status": "built_awaiting_owner_signoff",
-  "generated_at": "2026-11-11T15:22:09.516102+00:00",
+  "generated_at": "2026-11-11T15:32:01.424598+00:00",
   "seal_ok": true,
   "sealed_section_sha256": "4e99e9ad1b741a6fc8816575f1fcf6a9ac717c5693ad0244b9e46f9c7a207349",
   "sealed_section_sha256_expected": "4e99e9ad1b741a6fc8816575f1fcf6a9ac717c5693ad0244b9e46f9c7a207349",
@@ -232,7 +232,7 @@
     "pending_fill_excluded": 0,
     "verdict": "not_met",
     "all_bars_met": false,
-    "bars_passed": 2,
+    "bars_passed": 3,
     "bars": {
       "uncertainty": {
         "verdict": "fail",
@@ -270,16 +270,26 @@
         "seal_bar": "The 5th-percentile fair-cost episode return is no worse than \u221220%"
       },
       "drawdown": {
-        "verdict": "insufficient_data",
+        "verdict": "fail",
         "n": 30,
-        "statistic": null,
+        "statistic": {
+          "event_dates_start": "2026-07-21",
+          "event_dates_end": "2026-10-30",
+          "slot_trades_taken": 20,
+          "basket_trades_taken": 20,
+          "same_dates": "The reference slot book and the matched basket are both strategy_book_observe._slot_book on the same counted episodes, the same fill sessions and the same exit sessions. The slot book earns each episode's fair_cost_return after conversion into sterling. The basket earns that episode's basket_gross (equal-weight buy-tier price return from fill to exit) converted with the same two rates. Net asset value is marked on the union of those fill and exit dates. Total return is end net asset value minus 1, from a start of 1.0 in cash. The peak-to-trough fall is the absolute value of max_drawdown (nav/peak - 1 on those event dates, with each open position marked at its full holding return from the fill). The reference order is fill date then ticker. The 15 random orders inside _slot_book are not part of either bar.",
+          "whole_screen_fallback_baskets": 4,
+          "slot_fall": 0.004550250519966492,
+          "basket_fall": 0.001148150995862518,
+          "fall_ratio": 3.963111591039676
+        },
         "threshold": {
           "multiple": 1.5,
           "slots": 20,
           "rule": "slot peak-to-trough fall <= 1.5 times the matched basket fall"
         },
         "reasons": [
-          "4 counted episodes used the whole-screen fallback (basket.fallback), not the buy-tier basket the bar names"
+          "the sterling slot book's peak-to-trough fall is more than 1.5 times the basket's"
         ],
         "seal_bar": "The sterling reference slot book's largest peak-to-trough fall is no more than 1.5 times that of the matched buy-tier basket in sterling over the same dates"
       },
@@ -324,16 +334,23 @@
         "seal_bar": "The median matched excess is at or above zero in both regime halves (above and below the 200-session average), each with at least 12 counted mature episodes; `regime_unknown` episodes sit out"
       },
       "sterling_slot_book": {
-        "verdict": "insufficient_data",
+        "verdict": "pass",
         "n": 30,
-        "statistic": null,
+        "statistic": {
+          "event_dates_start": "2026-07-21",
+          "event_dates_end": "2026-10-30",
+          "slot_trades_taken": 20,
+          "basket_trades_taken": 20,
+          "same_dates": "The reference slot book and the matched basket are both strategy_book_observe._slot_book on the same counted episodes, the same fill sessions and the same exit sessions. The slot book earns each episode's fair_cost_return after conversion into sterling. The basket earns that episode's basket_gross (equal-weight buy-tier price return from fill to exit) converted with the same two rates. Net asset value is marked on the union of those fill and exit dates. Total return is end net asset value minus 1, from a start of 1.0 in cash. The peak-to-trough fall is the absolute value of max_drawdown (nav/peak - 1 on those event dates, with each open position marked at its full holding return from the fill). The reference order is fill date then ticker. The 15 random orders inside _slot_book are not part of either bar.",
+          "whole_screen_fallback_baskets": 4,
+          "slot_total_return": 0.05062915985738492,
+          "basket_total_return": 0.04957761117225745
+        },
         "threshold": {
           "slots": 20,
           "rule": "sterling total return > 0 and greater than the matched basket"
         },
-        "reasons": [
-          "4 counted episodes used the whole-screen fallback (basket.fallback), not the buy-tier basket the bar names"
-        ],
+        "reasons": [],
         "seal_bar": "The 20-slot reference slot book, in sterling after fair costs and FX, has a positive total return and beats the matched basket in sterling over the same dates"
       },
       "tradable_subset": {

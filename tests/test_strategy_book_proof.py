@@ -360,11 +360,12 @@ def test_missing_fx_makes_sterling_bars_insufficient_data() -> None:
         assert board["bars"][key]["statistic"] is None
 
 
-def test_fallback_basket_is_not_treated_as_the_buy_tier_basket() -> None:
+def test_whole_screen_fallback_is_the_sealed_matched_basket() -> None:
     rows = [_episode("A", fallback=True, source="whole_screen")]
     board = _board(rows)
-    assert board["bars"]["drawdown"]["verdict"] == "insufficient_data"
-    assert any("fallback" in reason for reason in board["bars"]["drawdown"]["reasons"])
+    for key in ("drawdown", "sterling_slot_book"):
+        assert board["bars"][key]["verdict"] in {"pass", "fail"}
+        assert board["bars"][key]["statistic"] is not None
 
 
 def test_archive_pass_does_not_set_the_forward_verdict(tmp_path: Path) -> None:

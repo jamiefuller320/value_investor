@@ -81,8 +81,10 @@ size of `max_drawdown` (nav divided by its peak, minus 1, on those event
 dates). An open position is marked at its full holding return from the fill,
 which is how `_slot_book` already works.
 
-A whole-screen fallback basket (`basket.fallback`) is not the buy-tier basket
-the bar names. Those two bars are then `insufficient_data`.
+The matched basket is the registration's matched-excess basket: the entry
+run's raw buy tier, equal weight, or the whole screen when that tier has fewer
+than 5 names (section 8). Fallback episodes count, as they do for matched
+excess; `whole_screen_fallback_baskets` reports how many.
 
 Sterling for a local return is `(1 + local return) × (sterling per unit on
 the exit date ÷ sterling per unit on the fill date) − 1`. An open episode
