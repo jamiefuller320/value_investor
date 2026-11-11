@@ -131,6 +131,12 @@ seal as `phase1_gate_decision.forward_start_alignment`). Without it the walk
 would start on the `signed_at` date and replay the sessions before go-live as
 late signals ([forward job](#forward-job)).
 
+**Live since 2026-11-11 (owner).** The go-live commit set `forward_live: true`
+and `forward_start: "2026-11-10"`, the last completed session at go-live, so
+the 2026-11-10 signals were first seen by a manual live run that morning,
+before their fill close (`operational_switches`, `forward_live` row). The book
+stays observe-only (`influences_live` false).
+
 Phase 1 governs go-live only. While `forward_live` is false the job still runs
 on the current sessions, writes `docs/data/strategy_book_forward_status.json`
 (counts, phase span, mature count, freshness), and writes no observe store and
@@ -158,8 +164,9 @@ and `adjusted_signal` come from the CSV.
 - `price_rule` — true when the registered short-term low (RSI below 35 and a 10-session close low) fires on that session, false when it does not, null when there is no chart.
 - `outcome` — the signal event kind when the name signalled (`filled`, `pending_fill`, `late_signal`, `memo_not_ready`, `memo_blocked`, and the other signal kinds). Otherwise the blocked reason the tally already records (`no_chart`, `not_buy_tier`, `gate`, `f9`, `price`, and the rest). A declining or headwind name is `gate`; the verdict is `decline` or `sector`. A miss of the short-term low is `price`. `learning_pool_excluded` means the signals CSV lists the name and the history snapshot omits it because it is in that market's learning-pool exclusion, so it is not in the book's universe. `not_in_book_screen` means the signals CSV lists the name and the snapshot omits it for any other reason, so it is not in the book's universe.
 
-The reader defaults `forward_live` to false. After the Phase 1 gate review, set
-`forward_live` true. The human task is `adhoc-strategy-book-memo-spend`.
+The reader defaults `forward_live` to false. The owner set it true on
+2026-11-11 after the Phase 1 gate review (human task
+`adhoc-strategy-book-memo-spend`).
 `spend_enabled` is already true: the owner switched memo spend on on 2026-11-10,
 before go-live ([memo job spend gate](strategy-book-memo-job.md#spend-gate)).
 Neither job flips its own flag.
