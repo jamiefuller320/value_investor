@@ -144,11 +144,16 @@ All four are `auto_fixable: false`. Nothing is re-memoed or ingested from this f
 
 ## Owner sign-off
 
-Human task `adhoc-strategy-book-proof-signoff`. Read the forward block of
-`docs/data/strategy_book_proof_board.json`. Sign, or say what still fails.
-Signing does not open live capital. Step 5.5 stays a separate owner decision.
+**Signed off by the owner on 2026-11-11** ("Happy to sign off 3.2"). The
+sign-off accepts this board as the scoring of the sealed step 3.2 bars. It
+does not say any bar is met: the forward block had no counted episodes that
+day. Signing does not open live capital.
+
+Step 5.5 stays a separate owner decision, human task
+`adhoc-strategy-book-step-5-5-decision`, read from the forward block of
+`docs/data/strategy_book_proof_board.json`.
 N13 (live broker automation) and N14 (live Trading 212) revisit when
 `forward.all_bars_met` is true. That flag only means the owner may consider
 step 5.5.
 
-Plan status: built, awaiting this sign-off. Step 3.2 is not done.
+Plan status: step 3.2 done (signed 2026-11-11).

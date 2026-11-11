@@ -1,0 +1,62 @@
+name: EODHD coverage check
+
+# Observe-only trial for plan step 3.3. Owner dispatches after a one-month EODHD subscription.
+# See docs/ops/eodhd-coverage-check.md
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ftse-eodhd-coverage-check
+  cancel-in-progress: false
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: bash scripts/gha_pip_install.sh -e .
+
+      - name: Check EODHD token
+        id: secrets
+        env:
+          EODHD_API_TOKEN: ${{ secrets.EODHD_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${EODHD_API_TOKEN:-}" ]; then
+            echo "Soft-skip: EODHD_API_TOKEN missing — coverage check not run; nothing committed."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Run coverage check
+        if: steps.secrets.outputs.ready == 'true'
+        env:
+          EODHD_API_TOKEN: ${{ secrets.EODHD_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          ftse-eodhd-coverage --out docs/data/eodhd_coverage_check.json
+
+      - name: Sync main before commit
+        if: steps.secrets.outputs.ready == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin main
+
+      - name: Commit coverage report
+        if: steps.secrets.outputs.ready == 'true'
+        env:
+          GHA_COMMIT_OWNED: docs/data/eodhd_coverage_check.json
+          COMMIT_MESSAGE: "chore: EODHD coverage check report [skip ci]"
+          GHA_COMMIT_LABEL: "EODHD coverage check"
+        run: bash scripts/gha_commit_artifacts.sh

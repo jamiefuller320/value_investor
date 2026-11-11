@@ -636,6 +636,13 @@
           "doc_anchor": "8-scoring"
         },
         {
+          "id": "adhoc-eodhd-coverage-trial",
+          "title": "Run the one-month EODHD coverage trial for step 3.3",
+          "summary": "Subscribe to EODHD ALL-IN-ONE for one month, add GitHub secret EODHD_API_TOKEN, dispatch eodhd-coverage-check.yml, read the verdict in docs/data/eodhd_coverage_check.json, then cancel the subscription and remove the secret if the check fails or you are not proceeding to a UK/Europe replay.",
+          "automated": false,
+          "doc_path": "docs/ops/eodhd-coverage-check.md"
+        },
+        {
           "id": "adhoc-strategy-us-pit-rehearsal",
           "title": "Download the Sharadar bundle before 2026-11-09, run the strategy-book US rehearsal, and confirm deletion",
           "summary": "Plan step 2.5. Access already held ends 2026-11-09. Before that date, bulk-download every sharadar.com direct Bundle table (years=full) to ~/sharadar: fundamentals, stocks, tickers, actions, sp500, daily, metrics, events, descriptions, funds, insiders, holdings, holdings_ticker, holdings_investor. Key in a local environment variable only. Personal-use licence. After the download, and inside the 30-day deletion window if access has already ended: build both screen panels and the hsr-v2 and hsr-mid-v2 baseline signal caches without revealing those holdouts, run development, review it, reveal the rehearsal confirmation once, then the delisting sensitivity. Commit aggregate stores only. Do not reveal hsr-v2, hsr-mid-v2, hrs-v2, or hms-v2. Delete raw and derived files within 30 days of 2026-11-09 (by 2026-12-09 if that is the cancel date), then ftse-historical-replay confirm-deleted, and stamp the rehearsal store with ftse-strategy-book-rehearsal confirm-deleted. Copy-paste commands for each step (develop, review, reveal, delete, confirm) are in the runbook; the rules stay in registration section 8. Scoring waits on the strategy-book signature; the download does not.",
@@ -668,9 +675,9 @@
           "doc_anchor": "7-owner-decisions"
         },
         {
-          "id": "adhoc-strategy-book-proof-signoff",
-          "title": "Sign off the strategy book proof board",
-          "summary": "Read the forward block of docs/data/strategy_book_proof_board.json (docs/ops/strategy-book-proof.md). The seven step 3.2 bars are observe-only. all_bars_met lets you consider plan step 5.5 (small live capital). It does not open live capital, change the book, or replace this sign-off. The archive replay block in the same file is survivorship-biased and is not the proof. Sign, or say which bar still fails. N13 and N14 revisit when forward.all_bars_met is true; that flag is not itself a live-broker decision.",
+          "id": "adhoc-strategy-book-step-5-5-decision",
+          "title": "Decide on step 5.5 when every proof bar is met",
+          "summary": "The proof board was signed off on 2026-11-11 (step 3.2 done). When forward.all_bars_met in docs/data/strategy_book_proof_board.json turns true (N13 and N14 revisit triggers fire), read the forward block and decide whether to start plan step 5.5 (small live capital), after steps 5.2 to 5.4. The flag does not open live capital, change the book, or make the decision. The archive replay block in the same file is survivorship-biased and is not the proof.",
           "automated": false,
           "doc_path": "docs/ops/strategy-book-proof.md",
           "doc_anchor": "owner-sign-off"
