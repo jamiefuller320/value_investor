@@ -90,6 +90,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | PIT | Point-in-time constituent and fundamentals snapshots with dated history for unbiased backtests. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | point-in-time history | Historical records stamped as known on each date so later data cannot leak into past decisions. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | raw_buy_tier | Buy-tier membership from the screen without timing or overlay filters applied. | [`ops/n200-tech-timing-observe.md`](ops/n200-tech-timing-observe.md) |
+| raw-price ledger | Strategy-book demo record of broker fills at raw prices, dividends as cash on the pay date, and splits or other corporate actions as events, kept apart from the book's adjusted-close scores. | [`ops/strategy-book-demo-mirror.md`](ops/strategy-book-demo-mirror.md) |
 | readiness gate | Explicit thickness or volume bar that must clear before promoting an experiment to adoption truth. | [`AGENTS.md`](../AGENTS.md) |
 | recovery hold | Strategy rule: a position bought too early is held for recovery, not sold on a price drop, until it launches, reaches the fail-to-launch wait, or the thesis breaks. In the strategy book the label marks an 8% drop before launch. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | rememo | Scheduled refresh of existing research memos under caps, distinct from first-time research on new names. | [`ops/structured-verdict-slim.md`](ops/structured-verdict-slim.md) |
@@ -102,6 +103,7 @@ This page explains internal codes and jargon used in [`AGENTS.md`](../AGENTS.md)
 | so-what --apply | Gap-closure workflow that turns analysis themes into pinned ingest or promotion actions when appropriate. | [`ops/so-what-gap-closure.md`](ops/so-what-gap-closure.md) |
 | sprint_ingest_complete | Ingest head finished: raw parity on filing counts or thin and IWB leftovers parked with a usable set remaining. | [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md) |
 | strategy book | The cold-start observe book that runs the owner's seven-part strategy (`owner-strategy-book-v0` and later versions). | [`ops/strategy-book-registration.md`](ops/strategy-book-registration.md) |
+| strategy book demo mirror | Observe-only copy of the strategy book's primary orders onto a Trading 212 practice account, so measured slippage can be compared with the book's assumed close fills. | [`ops/strategy-book-demo-mirror.md`](ops/strategy-book-demo-mirror.md) |
 | strand A | The main FTSE paper-trading path: the buy-tier-level book and the matched assessment books. No real money is invested. | [`ops/primary-learning-track.md`](ops/primary-learning-track.md) |
 | strong_buy | Strongest screen buy signal within the value set alongside ordinary `buy`. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
 | thesis break | The reason for owning a name has failed: operating decline, a sector headwind, a screen `avoid` signal, or a research `pass`. Ends any strategy-book position. | [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) |
