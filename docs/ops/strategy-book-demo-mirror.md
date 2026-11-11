@@ -82,19 +82,23 @@ live through the next session, including the close.
 The expected fill session is the next weekday after the signal. The order must
 be placed while `now` is still at or before that session's registered cash
 close (`session_close` in `strategy_book_rules`). After that close the mirror
-cancels any remainder. The book does not fill a later bar, so neither do we.
+cancels any remainder. An entry that missed the session is not chased: the
+book does not fill a later bar. An exit that missed the session is chased,
+because the demo account has to get flat. See [Exit catch-up](#exit-catch-up).
 
 **Trade-off.** The limit can fill at the open or at any print through the
 session, not only at the close. A gap the wrong way (buy: close above the
 signal close) never fills, while the book still assumes a fill at that close.
 Both results are the measurement: fill time, fill price, and misses. A job
 that sends the order a few minutes before the cash close would track the
-close more tightly. That is queued (L707), not built: this step's trigger is
-the existing forward workflow.
+close more tightly. That is queued ("Send strategy-book demo limits shortly
+before the fill-session close"), not built: this step's trigger is the
+existing forward workflow.
 
 **Holiday.** The next weekday is not an exchange holiday calendar. A bank
 holiday can be treated as the fill session and the remainder cancelled that
-evening. That case is queued (L708).
+evening. That case is queued ("Use an exchange holiday calendar for the
+strategy-book demo fill window").
 
 ## Quantity and currency
 
@@ -118,8 +122,11 @@ Trading 212 accepts fractional quantity (their limit-order example is `0.1`).
 We send the floored fraction so the cash outlay stays at or under the stake.
 A zero after flooring is `quantity_below_minimum`. If the practice API rejects
 the fraction, the order is `rejected` and is not resized in that run (queued
-as L710). A dashboard strip for the measured slippage is queued as L709. The
-assumed half-spread is not replaced; L535 stays open.
+as "Resize a rejected strategy-book demo order to whole shares"). A dashboard
+strip for the measured slippage is queued as "Show strategy-book demo slippage
+on the observe dashboard". The assumed half-spread is not replaced. The
+deferred idea "Mirror paper fills onto T212 demo account for measured
+execution" stays open.
 
 The account-summary currency is checked only when a demo key is present and
 placement is on. The API documents that orders execute only in the account's
@@ -137,7 +144,7 @@ live quote and we do not invent one.
 |---|---|
 | `PARTIALLY_FILLED` | One fill per history `fill.id`. Remainder stays working until the fill session closes, then `DELETE /api/v0/equity/orders/{id}` cancels it. Slippage uses the filled quantity only. |
 | `REJECTED`, or HTTP 400 | `rejected`. The same client reference is not sent again. |
-| `CANCELLED`, or our post-close cancel | `cancelled`. No fill is invented. A partial keeps the shares already filled. |
+| `CANCELLED`, or our post-close cancel | `cancelled`. No fill is invented. A partial keeps the shares already filled. An exit remainder is then flattened by a market catch-up on the next run. |
 | HTTP 401 / 403 | Stop the run. The row is `auth_blocked` and may be tried on a later run (the order was not accepted). |
 | Network error, HTTP 408 or 429 | `submit_unknown`. Not sent again. The next run adopts a pending order only when ticker, side, limit and quantity match exactly one row. |
 | Position disappears with no sell and no corporate-action quantity | `delisting` event. Quantity is not zeroed and no cash value is invented, so reconciliation stays a mismatch until a real event explains it. |
@@ -197,7 +204,50 @@ For a fill whose episode is already `open` or `closed`:
 
 Until the book has recorded the fill close, slippage is `insufficient_data`.
 Nothing here writes the half-spread back into the book. That replacement is
-the rest of step 5.1's "done when" (L535) and waits on measured fills.
+the rest of step 5.1's "done when" and waits on measured fills.
+
+On-time exit slippage and catch-up exit slippage are stored and reported
+separately. Both use the book's `exit_fill` (the adjusted close). The
+slippage finding states the on-time exit count and the catch-up count.
+
+## Exit catch-up
+
+The demo account has to track the book's holdings. An entry that does not
+fill is cancelled and left alone: the book never fills that name on a later
+bar, so a later buy would be a position the book does not have. An exit is
+the opposite. Once the book has sold, demo shares that are still held are a
+position the book does not have. Leaving them makes every later
+reconciliation fail, and the gap never closes.
+
+When an exit limit is cancelled, rejected, or only partly filled after its
+fill session, and the ledger still holds shares for that episode, the **next**
+run sends a market sell for the remaining shares. The same run that cancels
+the limit does not also send the market order. The client reference is
+`sbdemo:{episode_id}:exit_catchup`. It uses the same submitting checkpoint as
+a limit, it counts toward the 20-order cap, and catch-up sells are sent
+before limit exits, which are sent before entries.
+
+The same market sell is sent when the book episode is already `closed` and
+the mirror never had an exit order (the signal was gone by planning time).
+That row's reason is `missed_exit_order`. A cancelled or partial limit uses
+reason `unfilled_exit`.
+
+The order is `POST /api/v0/equity/orders/market` with a negative quantity.
+`extendedHours` is left unset. There is no limit price and no `timeValidity`.
+The published API queues a market order placed while the market is closed
+until the next open. A 400 does not create an order.
+
+`sessions_late` is the number of weekdays after the book's exit session, up
+to the day the catch-up is sent. The same evening is 0. The fill is tagged
+`timing: catchup` and its slippage is against `exit_fill`, not mixed into
+the on-time exit median.
+
+A rejected catch-up, or one whose result is unknown, is retried on the next
+run. Before an unknown result is retried, a single matching pending order or
+a single later sell fill is adopted so a queued or filled sell is not sent
+twice. After 5 attempts the row is `stuck` and is not sent again. Ops-monitor
+warns **Strategy book demo position stuck**. That finding does not place,
+cancel, or repair anything.
 
 ## Reconciliation
 

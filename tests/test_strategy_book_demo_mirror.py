@@ -12,6 +12,7 @@ from pathlib import Path
 import pytest
 
 from value_investor.strategy_book_demo_mirror import (
+    CATCHUP_ATTEMPT_LIMIT,
     DEMO_KEY_ENV,
     DEMO_SECRET_ENV,
     ORDER_CAP,
@@ -19,6 +20,7 @@ from value_investor.strategy_book_demo_mirror import (
     TITLE_NOT_CONFIGURED,
     TITLE_ORDERS_PLACED,
     TITLE_SLIPPAGE,
+    TITLE_STUCK,
     DemoMirrorSafetyError,
     DemoOrderRejected,
     DemoTransportError,
@@ -53,6 +55,9 @@ class FakeTransport:
     def __init__(self, base: str = DEMO_BASE) -> None:
         self.base = base
         self.calls = 0
+        self.market_calls = 0
+        self.market_orders: list[dict] = []
+        self.market_fail: Exception | None = None
         self.placed: list[dict] = []
         self.cancelled: list = []
         self.pending: list[dict] = []
@@ -104,6 +109,23 @@ class FakeTransport:
             "limitPrice": body["limitPrice"],
             "side": side,
             "filledQuantity": 0,
+        }
+
+    def place_market(self, body: dict) -> dict:
+        self.market_calls += 1
+        if self.on_place is not None:
+            self.on_place(body)
+        if self.market_fail is not None:
+            raise self.market_fail
+        self.market_orders.append(body)
+        return {
+            "id": 77,
+            "status": "FILLED",
+            "type": "MARKET",
+            "ticker": body["ticker"],
+            "quantity": body["quantity"],
+            "side": "SELL",
+            "filledQuantity": abs(float(body["quantity"])),
         }
 
 
@@ -630,6 +652,7 @@ def test_strategy_book_demo_cancels_unfilled_order_after_the_close(tmp_path: Pat
     assert fake.cancelled == [11]
     assert cancelled["orders"][0]["status"] == "cancelled"
     assert fake.calls == 1
+    assert fake.market_calls == 0
 
 
 def test_strategy_book_demo_reconciliation_mismatch_and_delisting() -> None:
@@ -886,3 +909,283 @@ def test_strategy_book_demo_ingest_matches_statement() -> None:
     fill = next(event for event in events if event["type"] == "fill")
     assert fill["slippage"]["status"] == "measured"
     assert fill["slippage"]["slippage_pct"] == pytest.approx(0.0)
+
+
+EPISODE = "ftse350:FOUR.L:primary:2026-11-10"
+CATCH_NOW = datetime(2026, 11, 12, 18, 0, tzinfo=UTC)
+ENV = {DEMO_KEY_ENV: "k", DEMO_SECRET_ENV: "s"}
+
+
+def _buy_fill(quantity: float, fill_id: int = 1) -> dict:
+    return {
+        "event_id": f"fill:{fill_id}",
+        "type": "fill",
+        "episode_id": EPISODE,
+        "t212_ticker": "FOURl_EQ",
+        "side": "BUY",
+        "quantity": quantity,
+        "price": 4066.0,
+        "currency": "GBX",
+        "fill_id": fill_id,
+    }
+
+
+def _exit_order(status: str, **extra: object) -> dict:
+    row = {
+        "client_order_ref": f"sbdemo:{EPISODE}:exit",
+        "episode_id": EPISODE,
+        "leg": "exit",
+        "order_type": "LIMIT",
+        "status": status,
+        "side": "SELL",
+        "quantity": 2.5,
+        "limit_price": 4066.0,
+        "limit_currency": "GBX",
+        "t212_ticker": "FOURl_EQ",
+        "ticker": "FOUR.L",
+        "market": "ftse350",
+        "column": "primary",
+        "fill_session": "2026-11-11",
+        "broker_order_id": 11,
+        "half_spread": 0.00025,
+        "influences_live": False,
+    }
+    row.update(extra)
+    return row
+
+
+def _closed_episode() -> dict:
+    return {
+        "episode_id": EPISODE,
+        "market": "ftse350",
+        "ticker": "FOUR.L",
+        "column": "primary",
+        "status": "closed",
+        "signal_session": SIGNAL,
+        "exit_session": "2026-11-11",
+        "exit_fill": 4100.0,
+        "pending_exit": False,
+        "t212_listed": True,
+        "currency": "GBP",
+    }
+
+
+def _seed_held(root: Path, orders: list[dict], ledger: list[dict]) -> None:
+    _overlay(root, [_hit("FOUR.L")])
+    _chart(root, "FOUR.L")
+    _observe(root, [], [_closed_episode()])
+    _write(
+        root / "docs/data/strategy_book_demo_ledger.json",
+        {"orders": orders, "plans": [], "fills": [], "ledger": ledger},
+    )
+
+
+def test_strategy_book_demo_unfilled_exit_catches_up_on_the_next_run(tmp_path: Path) -> None:
+    _seed_held(tmp_path, [_exit_order("placed")], [_buy_fill(2.5)])
+    fake = FakeTransport()
+    fake.pending = [
+        {"id": 11, "ticker": "FOURl_EQ", "side": "SELL", "quantity": -2.5, "limitPrice": 4066}
+    ]
+    cancelled = run_mirror(
+        repo_root=tmp_path,
+        now=CATCH_NOW,
+        apply=True,
+        place=True,
+        transport=fake,
+        env=ENV,
+        min_interval_s=0,
+    )
+    assert fake.market_calls == 0
+    assert cancelled["orders"][0]["status"] == "cancelled"
+    fake.history = [
+        {
+            "order": {
+                "id": 77,
+                "ticker": "FOURl_EQ",
+                "side": "SELL",
+                "status": "FILLED",
+                "currency": "GBX",
+            },
+            "fill": {
+                "id": 90,
+                "price": 4200.0,
+                "quantity": 2.5,
+                "filledAt": "2026-11-12T16:35:00Z",
+                "type": "TRADE",
+                "walletImpact": {"netValue": 105.0, "currency": "GBP"},
+            },
+        }
+    ]
+    caught = run_mirror(
+        repo_root=tmp_path,
+        now=CATCH_NOW,
+        apply=True,
+        place=True,
+        transport=fake,
+        env=ENV,
+        min_interval_s=0,
+    )
+    assert fake.market_calls == 1
+    assert fake.market_orders == [{"ticker": "FOURl_EQ", "quantity": -2.5}]
+    plan = next(row for row in caught["plans"] if row["leg"] == "exit_catchup")
+    assert plan["client_order_ref"] == f"sbdemo:{EPISODE}:exit_catchup"
+    assert plan["reason"] == "unfilled_exit"
+    assert plan["sessions_late"] == 1
+    assert plan["order_type"] == "MARKET"
+    fill = next(row for row in caught["ledger"] if row.get("timing") == "catchup")
+    assert fill["slippage"]["status"] == "measured"
+    assert fill["slippage"]["slippage_pct"] == pytest.approx(1 - 4200.0 / 4100.0)
+    assert fill["sessions_late"] == 1
+    assert caught["slippage"]["catchup_count"] == 1
+    assert caught["slippage"]["on_time_count"] == 0
+    again = run_mirror(
+        repo_root=tmp_path,
+        now=CATCH_NOW,
+        apply=True,
+        place=True,
+        transport=fake,
+        env=ENV,
+        min_interval_s=0,
+    )
+    assert fake.market_calls == 1
+    assert again["orders_sent"] == 0
+
+
+def test_strategy_book_demo_partial_exit_catches_up_the_remainder_only(tmp_path: Path) -> None:
+    sell = _buy_fill(1.0, fill_id=2)
+    sell["side"] = "SELL"
+    sell["event_id"] = "fill:2"
+    _seed_held(
+        tmp_path,
+        [_exit_order("partial", remainder_cancelled=False)],
+        [_buy_fill(2.5), sell],
+    )
+    fake = FakeTransport()
+    fake.pending = [{"id": 11}]
+    run_mirror(
+        repo_root=tmp_path,
+        now=CATCH_NOW,
+        apply=True,
+        place=True,
+        transport=fake,
+        env=ENV,
+        min_interval_s=0,
+    )
+    assert fake.market_calls == 0
+    assert fake.cancelled == [11]
+    caught = run_mirror(
+        repo_root=tmp_path,
+        now=CATCH_NOW,
+        apply=True,
+        place=True,
+        transport=fake,
+        env=ENV,
+        min_interval_s=0,
+    )
+    assert fake.market_orders == [{"ticker": "FOURl_EQ", "quantity": -1.5}]
+    plan = next(row for row in caught["plans"] if row["leg"] == "exit_catchup")
+    assert plan["reason"] == "unfilled_exit"
+    assert plan["quantity"] == 1.5
+
+
+def test_strategy_book_demo_closed_episode_without_exit_order_catches_up(tmp_path: Path) -> None:
+    _seed_held(tmp_path, [], [_buy_fill(2.0)])
+    fake = FakeTransport()
+    store = run_mirror(
+        repo_root=tmp_path,
+        now=CATCH_NOW,
+        apply=True,
+        place=True,
+        transport=fake,
+        env=ENV,
+        min_interval_s=0,
+    )
+    assert fake.market_orders == [{"ticker": "FOURl_EQ", "quantity": -2.0}]
+    plan = next(row for row in store["plans"] if row["leg"] == "exit_catchup")
+    assert plan["reason"] == "missed_exit_order"
+    assert plan["sessions_late"] == 1
+    assert fake.calls == 0
+
+
+def test_strategy_book_demo_catchup_stuck_after_five_rejections(tmp_path: Path) -> None:
+    from value_investor.ops_monitor import check_strategy_book_demo_mirror
+
+    _seed_held(tmp_path, [], [_buy_fill(2.0)])
+    fake = FakeTransport()
+    fake.market_fail = DemoOrderRejected(400, "market closed")
+    store = {}
+    for _ in range(CATCHUP_ATTEMPT_LIMIT):
+        store = run_mirror(
+            repo_root=tmp_path,
+            now=CATCH_NOW,
+            apply=True,
+            place=True,
+            transport=fake,
+            env=ENV,
+            min_interval_s=0,
+        )
+    assert fake.market_calls == CATCHUP_ATTEMPT_LIMIT
+    order = next(row for row in store["orders"] if row["leg"] == "exit_catchup")
+    assert order["status"] == "rejected"
+    assert order["attempt_count"] == CATCHUP_ATTEMPT_LIMIT
+    titles = {row["title"]: row for row in findings_from_ledger(store)}
+    assert titles[TITLE_STUCK]["severity"] == "warn"
+    assert titles[TITLE_STUCK]["auto_fixable"] is False
+    checked = check_strategy_book_demo_mirror(repo_root=tmp_path)
+    stuck = next(row for row in checked if row.title == TITLE_STUCK)
+    assert stuck.severity == "warn"
+    assert stuck.auto_fixable is False
+    run_mirror(
+        repo_root=tmp_path,
+        now=CATCH_NOW,
+        apply=True,
+        place=True,
+        transport=fake,
+        env=ENV,
+        min_interval_s=0,
+    )
+    assert fake.market_calls == CATCHUP_ATTEMPT_LIMIT
+
+
+def test_strategy_book_demo_catchup_unknown_adopts_a_fill_instead_of_resending(
+    tmp_path: Path,
+) -> None:
+    _seed_held(tmp_path, [], [_buy_fill(2.0)])
+    fake = FakeTransport()
+    fake.market_fail = DemoTransportError("timeout")
+    run_mirror(
+        repo_root=tmp_path,
+        now=CATCH_NOW,
+        apply=True,
+        place=True,
+        transport=fake,
+        env=ENV,
+        min_interval_s=0,
+    )
+    assert fake.market_calls == 1
+    fake.market_fail = None
+    fake.history = [
+        {
+            "order": {"id": 77, "ticker": "FOURl_EQ", "side": "SELL", "status": "FILLED"},
+            "fill": {
+                "id": 91,
+                "price": 4100.0,
+                "quantity": 2.0,
+                "filledAt": "2026-11-12T18:05:00Z",
+                "type": "TRADE",
+            },
+        }
+    ]
+    second = run_mirror(
+        repo_root=tmp_path,
+        now=CATCH_NOW,
+        apply=True,
+        place=True,
+        transport=fake,
+        env=ENV,
+        min_interval_s=0,
+    )
+    assert fake.market_calls == 1
+    adopted = next(row for row in second["orders"] if row["leg"] == "exit_catchup")
+    assert adopted["status"] == "filled"
+    assert adopted["broker_order_id"] == 77
