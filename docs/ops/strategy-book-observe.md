@@ -203,11 +203,17 @@ open an entry. Without this, the store dated today's binds after every earlier
 signal, and a fill vanished on the next run (change marker
 `owner-strategy-book-v0-forward-history-fix-v1`).
 
-The daily re-hash compares each stored digest to the blob at `data_commit`
-(`git show`). If that commit does not contain the path, the row is
-`pending_commit`, not a mismatch: the starting commit does not hold files this
-run wrote, which is the fourth-amendment case. The check does not rewrite the
-log, and it does not compare a later HEAD to yesterday's hash. Ops-monitor
+The daily re-hash compares each stored digest to the blob in the commit that
+holds the row: the first commit after `data_commit` that touches the gate log,
+which is the run's own commit (this workflow is the log's single writer).
+`data_commit` itself is only where the run started; the close refresh rewrites
+charts before the walker reads them, so comparing there reported every
+refreshed chart as a mismatch (52 on the first live run, 2026-11-11). A row
+whose run is not committed yet, or whose commit is not in the clone (the
+workflow's shallow checkout), is `pending_commit`, not a mismatch. Per-episode
+`provenance_missing` is decided inside the run from the bytes it read, and is
+not affected. The check does not rewrite the log, and it does not compare a
+later HEAD to yesterday's hash. Ops-monitor
 reads `provenance_mismatches` on the status. It does not run `git show`.
 
 What this check does not do: re-hash the blob in the commit that first
