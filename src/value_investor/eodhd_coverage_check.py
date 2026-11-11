@@ -23,7 +23,6 @@ from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-from value_investor.constituents import fetch_ftse350_constituents
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT, market_dir
 from value_investor.storage import read_json
 
@@ -49,6 +48,7 @@ CHECK_B_SHARES_HISTORY_PCT = 0.80
 CHECK_D_MARKET_CAP_COMPUTABLE_PCT = 0.80
 
 FTSE_ACTIVE_SAMPLE_SIZE = 30
+FTSE350_SAMPLE_SOURCE = "t212_coverage/by_market/ftse350.json"
 EURO_ACTIVE_SAMPLE_SIZE = 10
 EURO_MARKETS = ("dax", "cac40")
 MEMBERSHIP_DATES = ("2014-06-30", "2017-06-30", "2020-06-30", "2023-06-30")
@@ -75,6 +75,7 @@ PASS_BARS = {
     "check_d_market_cap_computable_pct": CHECK_D_MARKET_CAP_COMPUTABLE_PCT,
 }
 
+# known_end is the approximate failure or takeover date; prices only need to reach it.
 KNOWN_FAILURE_CASES: tuple[dict[str, Any], ...] = (
     {"key": "carillion", "name": "Carillion", "exchange": "LSE", "known_end": "2018-01-15"},
     {
@@ -132,6 +133,13 @@ def redact_token(text: str, token: str | None) -> str:
 
 def _norm_name(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", (value or "").lower()).strip()
+
+
+def _name_matches(target: str, candidate: str) -> bool:
+    """Every word of the target name is a whole word of the candidate name."""
+    wanted = set(_norm_name(target).split())
+    have = set(_norm_name(candidate).split())
+    return bool(wanted) and bool(have) and wanted <= have
 
 
 def _parse_date(value: Any) -> date | None:
@@ -274,37 +282,24 @@ def yahoo_to_eodhd_symbol(ticker: str, exchange: str) -> str:
 
 
 def resolve_known_failure(client: EodhdClient, case: dict[str, Any]) -> dict[str, Any]:
-    """Resolve a survivorship name via search then delisted list (not ticker reuse)."""
+    """Resolve a survivorship name by name, delisted list first (a ticker code may be reused)."""
     exchange = str(case["exchange"])
-    target = _norm_name(str(case["name"]))
-    resolved_code = "absent"
-    resolved_symbol = "absent"
-    match_source = "absent"
-
-    for row in client.search(str(case["name"]), exchange=exchange):
-        if not isinstance(row, dict):
-            continue
-        name = _norm_name(str(row.get("Name") or row.get("name") or ""))
-        code = str(row.get("Code") or row.get("code") or "").strip()
-        if code and (target in name or name in target):
-            resolved_code = code
-            resolved_symbol = f"{code}.{exchange}"
-            match_source = "search"
-            break
-
-    if resolved_code == "absent":
-        for row in client.exchange_symbol_list(exchange, delisted=True):
+    target = str(case["name"])
+    matches: list[tuple[str, str]] = []
+    for row in client.exchange_symbol_list(exchange, delisted=True):
+        if isinstance(row, dict) and _name_matches(target, str(row.get("Name") or "")):
+            code = str(row.get("Code") or "").strip()
+            if code:
+                matches.append((code, "delisted_list"))
+    if not matches:
+        for row in client.search(target, exchange=exchange):
             if not isinstance(row, dict):
                 continue
-            name = _norm_name(str(row.get("Name") or ""))
-            if target in name or name in target:
-                code = str(row.get("Code") or "").strip()
-                if code:
-                    resolved_code = code
-                    resolved_symbol = f"{code}.{exchange}"
-                    match_source = "delisted_list"
-                    break
-
+            name = str(row.get("Name") or row.get("name") or "")
+            code = str(row.get("Code") or row.get("code") or "").strip()
+            if code and _name_matches(target, name):
+                matches.append((code, "search"))
+    resolved_code, match_source = matches[0] if matches else ("absent", "absent")
     return {
         "key": case["key"],
         "name": case["name"],
@@ -312,8 +307,9 @@ def resolve_known_failure(client: EodhdClient, case: dict[str, Any]) -> dict[str
         "known_end": case["known_end"],
         "found": resolved_code != "absent",
         "resolved_code": resolved_code,
-        "resolved_symbol": resolved_symbol,
+        "resolved_symbol": f"{resolved_code}.{exchange}" if matches else "absent",
         "match_source": match_source,
+        "match_count": len(matches),
     }
 
 
@@ -391,11 +387,6 @@ def _fundamentals_summary(fundamentals: dict[str, Any] | None) -> dict[str, Any]
     shares_hist = shares.get("annual") or shares.get("quarterly")
     shares_history_present = bool(shares_hist)
 
-    earn = (fundamentals or {}).get("Earnings") or {}
-    history = earn.get("History")
-    if isinstance(history, dict) and history:
-        shares_history_present = shares_history_present or True
-
     depth_from_2013 = bool(years_available) and min(years_available) <= FUNDAMENTALS_YEAR_FROM
 
     return {
@@ -414,8 +405,18 @@ def _prices_to_known_end(eod_last: Any, known_end: str) -> bool:
     end = _parse_date(known_end)
     if not last or not end:
         return False
-    gap = _trading_days_between(last, end)
-    return gap <= TRADING_DAYS_TOLERANCE
+    if last >= end:
+        return True
+    return _trading_days_between(last, end) <= TRADING_DAYS_TOLERANCE
+
+
+def _spread(rows: list[dict[str, str]], count: int) -> list[dict[str, str]]:
+    """Evenly spaced picks across the ticker-sorted list, so the sample is not one letter."""
+    ordered = sorted(rows, key=lambda row: row["ticker"])
+    if len(ordered) <= count:
+        return ordered
+    step = len(ordered) / count
+    return [ordered[int(index * step)] for index in range(count)]
 
 
 def _load_library_constituents(
@@ -426,30 +427,33 @@ def _load_library_constituents(
     out: list[dict[str, str]] = []
     if not isinstance(rows, list):
         return out
-    for row in sorted(rows, key=lambda r: str(r.get("ticker") or "")):
+    for row in rows:
         if not isinstance(row, dict):
             continue
         ticker = str(row.get("ticker") or "").strip()
-        name = str(row.get("name") or ticker).strip()
         if ticker:
+            name = str(row.get("name") or ticker).strip()
             out.append({"ticker": ticker, "name": name, "market": market_id})
-        if len(out) >= limit:
-            break
-    return out
+    return _spread(out, limit)
+
+
+def _load_ftse350_tickers(library_root: Path, *, limit: int) -> list[dict[str, str]]:
+    path = library_root / FTSE350_SAMPLE_SOURCE
+    payload = read_json(path) if path.exists() else {}
+    rows = payload.get("rows") if isinstance(payload, dict) else None
+    out: list[dict[str, str]] = []
+    for row in rows if isinstance(rows, list) else []:
+        ticker = str((row or {}).get("ticker") or "").strip() if isinstance(row, dict) else ""
+        if ticker.endswith(".L"):
+            out.append({"ticker": ticker, "name": ticker, "market": "ftse350"})
+    return _spread(out, limit)
 
 
 def active_sample_names(library_root: Path = DEFAULT_LIBRARY_ROOT) -> list[dict[str, str]]:
-    frame = fetch_ftse350_constituents()
-    ftse: list[dict[str, str]] = []
-    for _, row in frame.sort_values("ticker").head(FTSE_ACTIVE_SAMPLE_SIZE).iterrows():
-        ftse.append(
-            {
-                "ticker": str(row["ticker"]),
-                "name": str(row.get("name") or row["ticker"]),
-                "market": "ftse350",
-                "exchange": "LSE",
-            }
-        )
+    ftse = [
+        {**row, "exchange": "LSE"}
+        for row in _load_ftse350_tickers(library_root, limit=FTSE_ACTIVE_SAMPLE_SIZE)
+    ]
     euro: list[dict[str, str]] = []
     per_market = EURO_ACTIVE_SAMPLE_SIZE // len(EURO_MARKETS)
     exchange_by_market = {"dax": "XETRA", "cac40": "PA"}
@@ -672,7 +676,7 @@ def run_eodhd_coverage_check(
     b_pass = depth_ok and dated_ok and currency_ok and shares_ok and eod_ok
     check_b: dict[str, Any] = {
         "sample_sources": {
-            "ftse350": "value_investor.constituents.fetch_ftse350_constituents",
+            "ftse350": "docs/data/library/" + FTSE350_SAMPLE_SOURCE + " (evenly spaced by ticker)",
             "euro": "docs/data/library/markets/{dax,cac40}/constituents/latest.json",
         },
         "sample_size": len(active_rows),

@@ -45,8 +45,9 @@ directory deleted when the run ends).
 See module constants in `src/value_investor/eodhd_coverage_check.py` and the
 `pass_bars` block in the report.
 
-- **Check A — Survivorship (11 names):** at least **8** found with daily prices within
-  10 trading days of the known end, and fundamentals depth from **2013** on at least **7**.
+- **Check A — Survivorship (11 names):** at least **8** found (delisted list first, then search, whole-word
+  name match) with daily prices running to no earlier than 10 trading days before the event
+  date (later prices are fine; the event dates are approximate failure/takeover dates), and fundamentals depth from **2013** on at least **7**.
 - **Check B — Active sample (30 FTSE 350 + 10 euro):** fundamentals depth from 2013 on
   ≥**80%**; annual periods with filing/report dates ≥**70%** (share across 2013–2025);
   currency code on ≥**95%**; shares-outstanding history on ≥**80%**; EOD from 2013 on ≥
@@ -73,6 +74,7 @@ See module constants in `src/value_investor/eodhd_coverage_check.py` and the
 
 Sample sources:
 
-- FTSE 350: `value_investor.constituents.fetch_ftse350_constituents` (first 30 by ticker).
+- FTSE 350: committed `docs/data/library/t212_coverage/by_market/ftse350.json`, 30 names
+  evenly spaced through the ticker-sorted list (no live fetch, not one letter of the alphabet).
 - Euro: `docs/data/library/markets/dax/constituents/latest.json` and `…/cac40/…` (five
-  names each, sorted by ticker).
+  names each, evenly spaced by ticker).

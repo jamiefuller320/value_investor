@@ -98,6 +98,11 @@ def test_redact_token_in_errors() -> None:
     assert "***" in msg
 
 
+@pytest.fixture(autouse=True)
+def _no_throttle(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(ecc, "MIN_INTERVAL_SEC", 0.0)
+
+
 @pytest.fixture
 def library_root(tmp_path: Path) -> Path:
     for market, tickers in (
@@ -174,6 +179,38 @@ def test_resolution_prefers_name_match_over_reused_code() -> None:
     assert row["match_source"] == "delisted_list"
 
 
+def _ftse_rows(frame: pd.DataFrame) -> list[dict[str, str]]:
+    return [{"ticker": str(t), "name": str(t), "market": "ftse350"} for t in frame["ticker"]]
+
+
+def test_name_match_needs_whole_words() -> None:
+    assert ecc._name_matches("Sky", "Sky PLC")
+    assert not ecc._name_matches("Sky", "SkyePharma PLC")
+    assert not ecc._name_matches("Sky", "")
+    assert ecc._name_matches("Thomas Cook Group", "Thomas Cook Group plc")
+
+
+def test_prices_after_the_event_still_reach_it() -> None:
+    assert ecc._prices_to_known_end("2018-11-07", "2018-09-26")
+    assert ecc._prices_to_known_end("2018-09-20", "2018-09-26")
+    assert not ecc._prices_to_known_end("2018-06-01", "2018-09-26")
+
+
+def test_earnings_history_is_not_a_shares_history() -> None:
+    summary = ecc._fundamentals_summary({"Earnings": {"History": {"2020-12-31": {}}}})
+    assert summary["shares_outstanding_history_present"] is False
+
+
+def test_ftse_sample_is_spread_across_the_committed_list(tmp_path: Path) -> None:
+    rows = [{"ticker": f"{chr(65 + i // 4)}{i}.L"} for i in range(100)]
+    path = tmp_path / ecc.FTSE350_SAMPLE_SOURCE
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({"rows": rows}), encoding="utf-8")
+    picked = ecc._load_ftse350_tickers(tmp_path, limit=30)
+    assert len(picked) == 30
+    assert len({row["ticker"][0] for row in picked}) > 15
+
+
 def test_missing_fields_become_absent() -> None:
     summary = ecc._fundamentals_summary({"General": {}, "Financials": {}})
     assert summary["currency_code"] == "absent"
@@ -184,7 +221,7 @@ def test_call_budget_stops_with_partial_reason(library_root: Path) -> None:
     routes = _passing_routes()
     client = EodhdClient("tok", max_calls=5, opener=_mock_opener(routes))
     ftse = pd.DataFrame({"ticker": ["AAA.L"], "name": ["A"]})
-    with patch.object(ecc, "fetch_ftse350_constituents", return_value=ftse):
+    with patch.object(ecc, "_load_ftse350_tickers", return_value=_ftse_rows(ftse)):
         payload = run_eodhd_coverage_check(client, library_root=library_root)
     assert client.budget_exhausted is True
     assert payload["verdict"] in {"partial", "fail"}
@@ -195,7 +232,7 @@ def test_report_has_no_prices_or_financial_values(tmp_path: Path, library_root: 
     routes = _passing_routes()
     client = EodhdClient("tok", max_calls=5000, opener=_mock_opener(routes))
     ftse = pd.DataFrame({"ticker": [f"T{i:02d}.L" for i in range(30)], "name": ["n"] * 30})
-    with patch.object(ecc, "fetch_ftse350_constituents", return_value=ftse):
+    with patch.object(ecc, "_load_ftse350_tickers", return_value=_ftse_rows(ftse)):
         payload = run_eodhd_coverage_check(client, library_root=library_root)
     out = tmp_path / "report.json"
     write_report(payload, out)
@@ -269,7 +306,7 @@ def test_full_run_verdict_pass_with_mocks(library_root: Path) -> None:
     routes = _passing_routes()
     client = EodhdClient("tok", max_calls=8000, opener=_mock_opener(routes))
     ftse = pd.DataFrame({"ticker": [f"T{i:02d}.L" for i in range(30)], "name": ["n"] * 30})
-    with patch.object(ecc, "fetch_ftse350_constituents", return_value=ftse):
+    with patch.object(ecc, "_load_ftse350_tickers", return_value=_ftse_rows(ftse)):
         payload = run_eodhd_coverage_check(client, library_root=library_root)
     assert (
         payload["checks"]["a_survivorship"]["found_with_prices_to_end_count"]
