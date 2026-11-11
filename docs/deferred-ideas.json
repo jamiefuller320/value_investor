@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-11T09:28:06+00:00",
+  "updated_at": "2026-11-11T10:46:07+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -17441,6 +17441,92 @@
       "status": "open",
       "source": "go-live first run 2026-11-11",
       "added_at": "2026-11-11T09:28:06+00:00"
+    },
+    {
+      "id": "L707",
+      "category": "later",
+      "section": "ops",
+      "title": "Send strategy-book demo limits shortly before the fill-session close",
+      "summary": "The demo mirror places a GTC limit at the signal close on the evening of the signal, so it can fill at the next open. A send a few minutes before the cash close would track the book's close fill more tightly. Revisit once measured fills show whether the open-versus-close gap is large.",
+      "revisit_when": "When strategy_book_demo_ledger.json slippage.measured_count is at least 20.",
+      "tags": [
+        "strategy-book",
+        "t212",
+        "demo",
+        "slippage"
+      ],
+      "status": "open",
+      "source": "plan step 5.1 strategy-book demo mirror",
+      "added_at": "2026-11-11T10:46:07+00:00",
+      "trigger": {
+        "any": [
+          {
+            "file": "docs/data/strategy_book_demo_ledger.json",
+            "path": "slippage.measured_count",
+            "op": ">=",
+            "value": 20
+          }
+        ]
+      }
+    },
+    {
+      "id": "L708",
+      "category": "later",
+      "section": "ops",
+      "title": "Use an exchange holiday calendar for the strategy-book demo fill window",
+      "summary": "The demo mirror treats the next weekday as the fill session. A bank holiday can be treated as that session and the unfilled remainder cancelled that evening, while the book waits for the next real session.",
+      "revisit_when": "When a primary fill session is an exchange holiday and the demo remainder is cancelled that evening with no fill.",
+      "tags": [
+        "strategy-book",
+        "t212",
+        "demo"
+      ],
+      "status": "open",
+      "source": "plan step 5.1 strategy-book demo mirror",
+      "added_at": "2026-11-11T10:46:07+00:00"
+    },
+    {
+      "id": "L709",
+      "category": "later",
+      "section": "ops",
+      "title": "Show strategy-book demo slippage on the observe dashboard",
+      "summary": "Once the practice account has measured fills, a small dashboard strip can show median slippage versus the book's adjusted close. The strip must not feed the book or replace the assumed half-spread.",
+      "revisit_when": "When strategy_book_demo_ledger.json slippage.measured_count is at least 1.",
+      "tags": [
+        "strategy-book",
+        "t212",
+        "demo",
+        "dashboard"
+      ],
+      "status": "open",
+      "source": "plan step 5.1 strategy-book demo mirror",
+      "added_at": "2026-11-11T10:46:07+00:00",
+      "trigger": {
+        "any": [
+          {
+            "file": "docs/data/strategy_book_demo_ledger.json",
+            "path": "slippage.measured_count",
+            "op": ">=",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "L710",
+      "category": "later",
+      "section": "ops",
+      "title": "Resize a rejected strategy-book demo order to whole shares",
+      "summary": "The demo mirror sends a fractional quantity floored to 4 decimal places and does not resize a rejection in the same run. If the practice API rejects that fraction, a later pass can retry a whole-share quantity under the same 100-unit stake.",
+      "revisit_when": "When a demo order is rejected because the quantity is not an accepted share increment.",
+      "tags": [
+        "strategy-book",
+        "t212",
+        "demo"
+      ],
+      "status": "open",
+      "source": "plan step 5.1 strategy-book demo mirror",
+      "added_at": "2026-11-11T10:46:07+00:00"
     }
   ],
   "fragments": [

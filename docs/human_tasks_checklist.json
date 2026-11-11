@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-10",
+  "updated_at": "2026-11-11",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -618,6 +618,14 @@
           "automated": false,
           "doc_path": "docs/ops/strategy-reorientation-plan.md",
           "doc_anchor": "phase-1--filters-and-foundations-observe-only"
+        },
+        {
+          "id": "adhoc-t212-demo-mirror-secrets",
+          "title": "Create a Trading 212 practice-account API key and add the demo secrets",
+          "summary": "Create an API key on a Trading 212 PRACTICE account (not the live catalogue key) with orders and portfolio scopes, and add GitHub Actions secrets TRADING212_DEMO_API_KEY and TRADING212_DEMO_API_SECRET. The strategy-book forward job then places primary limit orders on the demo host only. Until the secrets exist the job plans rows and sends nothing.",
+          "automated": false,
+          "doc_path": "docs/ops/strategy-book-demo-mirror.md",
+          "doc_anchor": "owner-setup"
         },
         {
           "id": "adhoc-strategy-version-review",

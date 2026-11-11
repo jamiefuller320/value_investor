@@ -1,0 +1,273 @@
+# Strategy book demo mirror
+
+Observe-only copy of the strategy book's **primary** orders onto a Trading 212
+**practice** account, plus a raw-price ledger. Plan step 5.1. Learning
+question: when those orders are real limit orders, how do the fills (price,
+time, fill rate, partials, rejections) differ from the book's assumed close
+fills and assumed spread, and does the raw-price ledger reconcile to the demo
+statement?
+
+The book keeps scoring on adjusted closes. This ledger does not feed the book,
+its scores, the registration, or any knob. `influences_live` is false.
+
+Registration (read, not edited): [strategy-book-registration.md](strategy-book-registration.md)
+sections 3 (entry and fill), 4 (exit), 6 (limits), 7 (costs) and 8 (scoring).
+Plan: [strategy-reorientation-plan.md](strategy-reorientation-plan.md) step 5.1
+and principle 6 (execution starts early). Phase 3 step 3.2 uses these fills as
+the paper implementation check. Ops row: [ops-monitor.md](ops-monitor.md).
+
+## What is mirrored
+
+Each run reads `docs/data/strategy_book_observe.json` and writes
+`docs/data/strategy_book_demo_ledger.json`.
+
+A row is a candidate when it is one of:
+
+- an observe **event** with `kind` `pending_fill` (the forward walker records
+  the signal here; the episode does not exist until the next close fills it)
+- an episode whose `status` is `pending_fill`, if a later walker writes one
+- an **open** episode with `pending_exit` set (exit signalled, sale not filled)
+
+Only the **primary** column is sent. Comparison, control, bench and shadow
+columns are stored as `not_mirrored` / `not_primary`.
+
+A primary row is sent only when all of the following are true. Anything else
+is `not_mirrored` or `insufficient_data`, and no price or quantity is invented:
+
+| Gate | Reason |
+|---|---|
+| Book `t212_listed` is false, or the overlay is not a `catalogue_hit` | `not_listed` |
+| Book `t212_listed` is `unknown`, or the overlay `updated_at` is missing or older than 35 days on the signal date | `t212_unknown` |
+| Catalogue hit but no Trading 212 ticker | `unmapped_instrument` |
+| Signal-session chart close missing | `insufficient_data` (`no_signal_close` or `no_chart`) |
+| Chart has not reached the signal session | `stale_quote` |
+| A primary episode with this signal is already `open` or `closed` | `already_open` (no backfill) |
+| Planning time is after that fill session's registered cash close | `missed_fill_session` |
+| Stake currency and instrument currency have no rule below | `currency_mismatch` |
+| Practice-account currency (known only when a key is present) is not the instrument currency and not the GBP/GBX pair | `account_currency` |
+| Exit, but the ledger holds no shares from our entry fill | `no_demo_position` |
+| Instrument no longer in the catalogue, or a held name vanishes from positions with no sell and no corporate-action quantity | `delisted` (event only; no invented cash) |
+
+The overlay is `docs/data/library/t212_coverage/by_market/{market}.json`, the
+same catalogue hit the book uses. The mirror does not call the live catalogue
+key.
+
+Already-open primary episodes are not backfilled. The mirror starts from
+signals that are still pending. A `would_place` row that is still unsent when
+its fill session closes becomes `missed_fill_session` on the next run.
+
+## Order timing
+
+The book signals on a session close and assumes a fill at the **next**
+session's close (`fill_session`). The forward job runs at 17:45 UTC (after
+London and the continent) and 21:30 UTC (after New York and Toronto), which is
+**after** the signal session and **before** the next session's close.
+
+The public API has limit, market, stop and stop-limit orders. It has no
+closing-auction order. A market order sent at 17:45 would rest until the next
+open and fill at the open, not the close.
+
+**Order we send:** limit, `timeValidity` `GOOD_TILL_CANCEL`, price = the
+signal session's chart close, in the instrument's Trading 212 currency.
+
+- Buy (entry): positive quantity. Fills at the limit or lower.
+- Sell (exit): negative quantity. Limit is the exit-signal session's close.
+  Fills at the limit or higher.
+- `extendedHours` is left unset, so the order is regular hours only.
+
+`DAY` is not used. A DAY order expires at midnight in the exchange zone. Placed
+after the London close, it can die before the next session opens. GTC stays
+live through the next session, including the close.
+
+The expected fill session is the next weekday after the signal. The order must
+be placed while `now` is still at or before that session's registered cash
+close (`session_close` in `strategy_book_rules`). After that close the mirror
+cancels any remainder. The book does not fill a later bar, so neither do we.
+
+**Trade-off.** The limit can fill at the open or at any print through the
+session, not only at the close. A gap the wrong way (buy: close above the
+signal close) never fills, while the book still assumes a fill at that close.
+Both results are the measurement: fill time, fill price, and misses. A job
+that sends the order a few minutes before the cash close would track the
+close more tightly. That is queued (L707), not built: this step's trigger is
+the existing forward workflow.
+
+**Holiday.** The next weekday is not an exchange holiday calendar. A bank
+holiday can be treated as the fill session and the remainder cancelled that
+evening. That case is queued (L708).
+
+## Quantity and currency
+
+Stake is the book's fixed 100 units of the market's listing currency
+(`STAKE_UNITS`, `costs_for_market`). Episode percent does not use the stake.
+The broker order does.
+
+| Stake currency | Instrument currency | Shares |
+|---|---|---|
+| same (USD/USD, EUR/EUR, GBP/GBP) | | `stake / limit`, floored to 4 decimal places |
+| GBP | GBX | `stake × 100 / limit`, floored to 4 decimal places |
+
+London chart files are labelled `GBP`, but the stored closes are pence, the
+same unit as Trading 212 `GBX` (4imprint around 4066, ME Group around 103).
+The limit is that chart number. It is not divided or multiplied by 100. A
+100× unit guess would either never trade or buy about 100× too much. If the
+units ever diverge, the order is wrong in a way this job will not silently
+"fix".
+
+Trading 212 accepts fractional quantity (their limit-order example is `0.1`).
+We send the floored fraction so the cash outlay stays at or under the stake.
+A zero after flooring is `quantity_below_minimum`. If the practice API rejects
+the fraction, the order is `rejected` and is not resized in that run (queued
+as L710). A dashboard strip for the measured slippage is queued as L709. The
+assumed half-spread is not replaced; L535 stays open.
+
+The account-summary currency is checked only when a demo key is present and
+placement is on. The API documents that orders execute only in the account's
+main currency. A GBP practice account is allowed to trade GBX names, because
+that is how Trading 212 quotes London shares. Any other pair is
+`account_currency` and is not sent.
+
+## Stale quote, delisting, partial, rejection, cancel
+
+There is no pre-trade quote endpoint on the metadata API. "Stale quote" means
+the chart does not yet contain the signal session's close. We do not fetch a
+live quote and we do not invent one.
+
+| Broker result | Ledger |
+|---|---|
+| `PARTIALLY_FILLED` | One fill per history `fill.id`. Remainder stays working until the fill session closes, then `DELETE /api/v0/equity/orders/{id}` cancels it. Slippage uses the filled quantity only. |
+| `REJECTED`, or HTTP 400 | `rejected`. The same client reference is not sent again. |
+| `CANCELLED`, or our post-close cancel | `cancelled`. No fill is invented. A partial keeps the shares already filled. |
+| HTTP 401 / 403 | Stop the run. The row is `auth_blocked` and may be tried on a later run (the order was not accepted). |
+| Network error, HTTP 408 or 429 | `submit_unknown`. Not sent again. The next run adopts a pending order only when ticker, side, limit and quantity match exactly one row. |
+| Position disappears with no sell and no corporate-action quantity | `delisting` event. Quantity is not zeroed and no cash value is invented, so reconciliation stays a mismatch until a real event explains it. |
+
+History fill types other than `TRADE` (`STOCK_SPLIT`, `SPIN_OFF`, and the
+other types on `GET /api/v0/equity/history/orders`) are corporate-action
+events. `STOCK_SPLIT` is stored as `split`.
+
+## Raw-price ledger
+
+One store, `docs/data/strategy_book_demo_ledger.json`. `schema_version` 1.
+`influences_live` false. `base_url` is `https://demo.trading212.com`.
+
+| Array | Contents |
+|---|---|
+| `plans` | One row per candidate this run. Includes `observe_data_commit`, `planned_at`, action, reason, limit, quantity, side, currencies, `client_order_ref`. |
+| `orders` | Broker order rows. Keyed by `client_order_ref` = `sbdemo:{episode_id}:{entry\|exit}`. |
+| `fills` | Trade fills with raw price, quantity, time, wallet impact, taxes, and slippage versus the book's adjusted close. |
+| `ledger` | Raw-price events: `fill`, `dividend`, `split`, `corporate_action`, `transaction`, `delisting`. |
+| `reconciliation` | `match`, `mismatch`, `insufficient_data`, or `skipped`. |
+
+Dividend events use `GET /api/v0/equity/history/dividends`: cash `amount` in
+the account currency, `paidOn` as the pay date, `grossAmountPerShare` in the
+instrument currency. No pay date or reference means the cash is not invented;
+reconciliation is `insufficient_data`.
+
+Transactions (`WITHDRAW`, `DEPOSIT`, `FEE`, `TRANSFER`, and the other types on
+`GET /api/v0/equity/history/transactions`) are copied with the broker amount
+and currency.
+
+Client references are local. The beta limit endpoint is **not idempotent**:
+the same POST can create two orders. The mirror writes `submitting` to the
+ledger **before** the POST. A later run will not POST that reference again.
+If the POST's result is unknown, the row becomes `submit_unknown` and the
+next run adopts a pending order only when exactly one pending order matches
+the ticker, side, limit and quantity. The lock holds only after this
+workflow commits the ledger. The mirror step exits 0 once a `submitting` row
+exists so that commit still runs. It exits 1 only when the resolved host is
+not the demo host, and that check happens before any POST.
+
+Hard cap: **20** new orders per run (`ORDER_CAP`). Exits are sent before
+entries. The rest are `capped` and are not sent. The cap is not configurable
+upward.
+
+## Slippage
+
+For a fill whose episode is already `open` or `closed`:
+
+- Entry assumed price: `return_entry_fill`, else `entry_fill_first_seen`
+  (the book's adjusted close).
+- Exit assumed price: `exit_fill` once the episode is closed.
+- Buy slippage percent: `raw_fill / book_close − 1` (positive means we paid more).
+- Sell slippage percent: `1 − raw_fill / book_close` (positive means we sold for less).
+- `vs_half_spread` is that percent minus the market's assumed half-spread
+  (`costs_for_market`, 0.025% on FTSE 350). Stamp and FX stay in the fill's
+  tax lines; they are not folded into this percent.
+
+Until the book has recorded the fill close, slippage is `insufficient_data`.
+Nothing here writes the half-spread back into the book. That replacement is
+the rest of step 5.1's "done when" (L535) and waits on measured fills.
+
+## Reconciliation
+
+When placement runs, the job reads positions, pending orders, historical
+orders, dividends and transactions.
+
+- Share quantity by instrument: ledger fills (buy plus, sell minus) plus
+  split / corporate-action quantities, versus `GET /api/v0/equity/positions`.
+- Each history fill id, dividend reference and transaction reference on our
+  names must appear in the ledger with the same quantity, price or cash.
+- Cash by currency: sum of ledger wallet nets, dividend amounts and
+  transaction amounts, versus the same figures on the statement.
+
+`match` means no difference. `mismatch` is the ops warn. Dry-run (no demo
+key) stores `skipped` and does not call the API. Missing broker fields are
+`insufficient_data`, not a guessed match.
+
+## Safety
+
+- Order HTTP goes to `https://demo.trading212.com` only. Any other host,
+  including `https://live.trading212.com`, raises before a socket is opened.
+  Redirects are refused.
+- Credentials are read only from `TRADING212_DEMO_API_KEY` and
+  `TRADING212_DEMO_API_SECRET`. The catalogue key
+  (`TRADING212_API_KEY` / `TRADING212_API_SECRET`, live) is not read.
+- The catalogue client (`t212_client.py`) is unchanged and still does not
+  place orders.
+- No key, or `--place` without `--apply`: plan rows with action `would_place`.
+  Nothing is sent. Placement without `--apply` is refused so a send cannot
+  happen before the `submitting` row is on disk.
+- No model calls.
+
+## Automation
+
+`strategy-book-forward.yml` runs `ftse-strategy-book-demo` after the forward
+walk. With both demo secrets and a real (not workflow dry-run) walk, it passes
+`--apply --place`. With either secret missing, it plans only and exits 0.
+The ledger is on that workflow's `GHA_COMMIT_OWNED` list and on email-report's
+exclude list, so this workflow is the only writer.
+
+Ops-monitor `check_strategy_book_demo_mirror` reads the ledger and does not
+place orders. All four findings are `auto_fixable` false:
+
+| Title | Severity | When |
+|---|---|---|
+| Strategy book demo mirror not configured | info | Ledger missing, or the last run had no demo credentials |
+| Strategy book demo orders placed | info | The last run sent at least one order |
+| Strategy book demo reconciliation mismatch | warn | Reconciliation status is `mismatch`, or the ledger is unreadable |
+| Strategy book demo slippage | info | At least one fill has measured slippage |
+
+## Owner setup
+
+Create an API key on a Trading 212 **practice** account (not the live
+catalogue key) with orders and portfolio scopes. Add GitHub Actions secrets
+`TRADING212_DEMO_API_KEY` and `TRADING212_DEMO_API_SECRET`. Human task
+`adhoc-t212-demo-mirror-secrets`.
+
+CLI, for a drill-down only:
+
+```bash
+ftse-strategy-book-demo --repo-root .
+ftse-strategy-book-demo --repo-root . --apply --place
+```
+
+## Owner decisions still open
+
+- Confirm the practice account's currency. The current book is London-first;
+  GBX orders assume a GBP practice account.
+- Confirm the limit unit on the first two names: chart closes 4066 (FOUR.L)
+  and 103.4 (MEGP.L) are sent as GBX because that is the pence scale in the
+  chart file and on the overlay.
+- The cap of 20 and the next-weekday fill window are safety choices. A
+  holiday calendar and a pre-close send are queued behind this step.

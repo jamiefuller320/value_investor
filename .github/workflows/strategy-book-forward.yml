@@ -61,6 +61,30 @@ jobs:
             ftse-strategy-book-forward --repo-root . --apply
           fi
 
+      # Practice-account mirror only. Missing demo secrets plan rows and exit 0.
+      # Never uses the live catalogue key. See docs/ops/strategy-book-demo-mirror.md.
+      - name: Mirror primary orders on the Trading 212 demo account
+        env:
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          TRADING212_DEMO_API_KEY: ${{ secrets.TRADING212_DEMO_API_KEY }}
+          TRADING212_DEMO_API_SECRET: ${{ secrets.TRADING212_DEMO_API_SECRET }}
+        run: |
+          set -euo pipefail
+          args=(--repo-root .)
+          if [ "${DRY_RUN}" != "true" ]; then
+            args+=(--apply)
+          fi
+          if [ -n "${TRADING212_DEMO_API_KEY:-}" ] && [ -n "${TRADING212_DEMO_API_SECRET:-}" ]; then
+            if [ "${DRY_RUN}" = "true" ]; then
+              echo "Workflow dry run — demo placement skipped"
+            else
+              args+=(--place)
+            fi
+          else
+            echo "Demo secrets absent — plan only, no orders"
+          fi
+          ftse-strategy-book-demo "${args[@]}"
+
       # This workflow is the single writer for the strategy-book JSON stores.
       # Email-report excludes them. Charts stay shared with publish.
       - name: Commit strategy-book forward artifacts
@@ -74,5 +98,6 @@ jobs:
             docs/data/strategy_book_gate_log.jsonl
             docs/data/strategy_book_closes.json
             docs/data/strategy_book_forward_status.json
+            docs/data/strategy_book_demo_ledger.json
             docs/data/charts
         run: bash scripts/gha_commit_artifacts.sh

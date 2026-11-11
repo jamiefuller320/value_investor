@@ -2815,6 +2815,46 @@ def check_strategy_book_observe(
     ]
 
 
+def check_strategy_book_demo_mirror(
+    *,
+    repo_root: Path | None = None,
+) -> list[OpsFinding]:
+    """Read the demo-mirror ledger. Does not place orders or call Trading 212.
+
+    Observe-only (``auto_fixable=False``). The forward job owns placement.
+    See docs/ops/strategy-book-demo-mirror.md.
+    """
+    from value_investor.strategy_book_demo_mirror import (
+        TITLE_MISMATCH,
+        findings_from_ledger,
+        load_ledger,
+    )
+
+    root = Path(repo_root) if repo_root is not None else Path()
+    try:
+        ledger = load_ledger(root)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=TITLE_MISMATCH,
+                summary=f"Demo ledger unreadable: {exc}",
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or TITLE_MISMATCH),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+        for finding in findings_from_ledger(ledger)
+    ]
+
+
 def check_n206_plain_ey_observe(
     *,
     output_dir: Path | None = None,
@@ -5091,6 +5131,7 @@ def collect_ops_findings(
     findings.extend(_guarded_check(check_strategy_book_memo_job))
     findings.extend(_guarded_check(check_memo_model_comparison))
     findings.extend(_guarded_check(check_strategy_book_observe))
+    findings.extend(_guarded_check(check_strategy_book_demo_mirror))
     findings.extend(_guarded_check(check_n200_tech_timing_observe))
     findings.extend(_guarded_check(check_n201_value_mom_observe))
     findings.extend(_guarded_check(check_n210_ai_judgment_observe))
