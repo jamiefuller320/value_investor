@@ -115,6 +115,20 @@ jobs:
             ftse-strategy-book-proof --repo-root .
           fi
 
+      # Observe-only step 4.1 fair-value range. A failure here must not block
+      # the forward commit. See docs/ops/strategy-book-fair-value.md.
+      - name: Refresh the strategy book fair-value range
+        continue-on-error: true
+        env:
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          set -euo pipefail
+          if [ "${DRY_RUN}" = "true" ]; then
+            ftse-strategy-book-fair-value --repo-root . --no-write
+          else
+            ftse-strategy-book-fair-value --repo-root .
+          fi
+
       # This workflow is the single writer for the strategy-book JSON stores.
       # Email-report excludes them. Charts stay shared with publish.
       - name: Commit strategy-book forward artifacts
@@ -130,6 +144,7 @@ jobs:
             docs/data/strategy_book_forward_status.json
             docs/data/strategy_book_demo_ledger.json
             docs/data/strategy_book_proof_board.json
+            docs/data/strategy_book_fair_value.json
             docs/data/strategy_book_memo_free_shadow.json
             docs/data/charts
         run: bash scripts/gha_commit_artifacts.sh

@@ -224,6 +224,8 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     assert "timeout-minutes: 90" in forward
     assert "docs/data/strategy_book_observe.json" in forward
     assert "docs/data/strategy_book_proof_board.json" in forward
+    assert "docs/data/strategy_book_fair_value.json" in forward
+    assert "ftse-strategy-book-fair-value" in forward
     assert "ftse-strategy-book-proof" in forward
     proof_at = forward.index("ftse-strategy-book-proof")
     assert "continue-on-error: true" in forward[max(0, proof_at - 400) : proof_at]
@@ -232,6 +234,7 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     exclude = email.split("GHA_COMMIT_EXCLUDE:", 1)[1].split("run:", 1)[0]
     assert "docs/data/charts" not in exclude
     assert "docs/data/strategy_book_proof_board.json" in exclude
+    assert "docs/data/strategy_book_fair_value.json" in exclude
     assert "docs/data/strategy_book_us_rehearsal.json" in exclude
     assert "docs/data/strategy_book_exit_lab.json" in exclude
     assert "docs/data/paper_automation/markets/**/buy_tier_level/**" in epoch0
