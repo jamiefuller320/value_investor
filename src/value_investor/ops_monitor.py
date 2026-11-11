@@ -2815,6 +2815,47 @@ def check_strategy_book_observe(
     ]
 
 
+def check_strategy_book_memo_free_shadow(
+    *,
+    repo_root: Path | None = None,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Read the memo-free shadow store. Does not walk or write the book.
+
+    Observe-only (``auto_fixable=False``). Info when the store is fresh.
+    Warns only when it is missing, stale or unreadable. See
+    docs/ops/strategy-book-memo-free-shadow.md.
+    """
+    from value_investor.strategy_book_memo_free_shadow import (
+        TITLE_UNREADABLE,
+        check_findings,
+    )
+
+    moment = now or datetime.now(UTC)
+    try:
+        rows = check_findings(repo_root=repo_root, now=moment)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=TITLE_UNREADABLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or TITLE_UNREADABLE),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+        for finding in rows
+    ]
+
+
 def check_strategy_book_demo_mirror(
     *,
     repo_root: Path | None = None,
@@ -5186,6 +5227,7 @@ def collect_ops_findings(
     findings.extend(_guarded_check(check_strategy_book_observe))
     findings.extend(_guarded_check(check_strategy_book_reviews))
     findings.extend(_guarded_check(check_strategy_book_demo_mirror))
+    findings.extend(_guarded_check(check_strategy_book_memo_free_shadow))
     findings.extend(_guarded_check(check_n200_tech_timing_observe))
     findings.extend(_guarded_check(check_n201_value_mom_observe))
     findings.extend(_guarded_check(check_n210_ai_judgment_observe))
