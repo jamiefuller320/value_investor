@@ -2935,6 +2935,50 @@ def check_strategy_book_proof(
     ]
 
 
+def check_eodhd_coverage(
+    *,
+    repo_root: Path | None = None,
+) -> list[OpsFinding]:
+    """Read the step 3.3 EODHD coverage report. Does not call the API.
+
+    Observe-only (``auto_fixable=False``). Owner workflow writes the store.
+    See docs/ops/eodhd-coverage-check.md.
+    """
+    from value_investor.eodhd_coverage_check import (
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        load_report,
+        ops_findings_from_eodhd_coverage,
+    )
+
+    root = Path(repo_root) if repo_root is not None else Path()
+    path = root / DEFAULT_STORE_PATH
+    if not path.is_file():
+        return []
+    try:
+        payload = load_report(path)
+    except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "EODHD coverage check"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+        for finding in ops_findings_from_eodhd_coverage(payload, path=path)
+    ]
+
+
 def check_strategy_book_reviews(
     *,
     repo_root: Path | None = None,
@@ -5267,6 +5311,7 @@ def collect_ops_findings(
     findings.extend(_guarded_check(check_strategy_book_reviews))
     findings.extend(_guarded_check(check_strategy_book_demo_mirror))
     findings.extend(_guarded_check(check_strategy_book_proof))
+    findings.extend(_guarded_check(check_eodhd_coverage))
     findings.extend(_guarded_check(check_strategy_book_memo_free_shadow))
     findings.extend(_guarded_check(check_n200_tech_timing_observe))
     findings.extend(_guarded_check(check_n201_value_mom_observe))
