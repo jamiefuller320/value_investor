@@ -1,6 +1,6 @@
 # Memo-free forward shadow
 
-Owner, 2026-11-11. Report-only strategy-book component. It does not open
+Owner, 2026-11-10. Report-only strategy-book component. It does not open
 episodes on the sealed book (`owner-strategy-book-v0`), it does not change
 that book's store, and it does not count toward the thickness gate or the
 bench. `influences_live` is false. A rule change to the book still needs a
