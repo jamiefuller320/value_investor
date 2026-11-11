@@ -97,6 +97,24 @@ _HISTORY_DIVIDENDS = "/api/v0/equity/history/dividends"
 _HISTORY_TRANSACTIONS = "/api/v0/equity/history/transactions"
 _ACCOUNT_SUMMARY = "/api/v0/equity/account/summary"
 
+# Published per-account limits (docs.trading212.com/api). A 429 is refused before it runs.
+_ENDPOINT_GAP_S = {
+    ("GET", _ACCOUNT_SUMMARY): 5.0,
+    ("GET", _ORDERS_PATH): 5.0,
+    ("GET", _POSITIONS_PATH): 1.0,
+    ("GET", _HISTORY_ORDERS): 3.0,
+    ("GET", _HISTORY_DIVIDENDS): 3.0,
+    ("GET", _HISTORY_TRANSACTIONS): 3.0,
+    ("POST", _LIMIT_PATH): 2.0,
+    ("POST", _MARKET_PATH): 1.2,
+}
+PACE_MARGIN_S = 0.25
+RATE_LIMIT_RETRIES = 3
+RATE_LIMIT_DEFAULT_WAIT_S = 5.0
+RATE_LIMIT_MAX_WAIT_S = 30.0
+QTY_PRECISION_ERROR = "quantity-precision-mismatch"
+_PRECISION_RE = re.compile(r"precision\s+(\d+)")
+
 
 class DemoMirrorSafetyError(RuntimeError):
     """Placement refused before an order request. The live host is never used."""
@@ -116,7 +134,11 @@ class DemoAuthError(DemoMirrorSafetyError):
 
 
 class DemoTransportError(RuntimeError):
-    """Network, timeout, or rate limit. The order may or may not exist."""
+    """Network, timeout, or server error. The order may or may not exist."""
+
+
+class DemoRateLimited(DemoTransportError):
+    """429 after retries. The host refused the request, so no order was created."""
 
 
 class _RefuseRedirect(HTTPRedirectHandler):
@@ -345,15 +367,23 @@ def _resend_blocked(order: Mapping[str, Any]) -> bool:
     """True when this reference must not be posted again.
 
     A market exit catch-up that was rejected, or whose submit result is unknown,
-    is retried until ``CATCHUP_ATTEMPT_LIMIT`` attempts.
+    is retried until ``CATCHUP_ATTEMPT_LIMIT`` attempts. Any other leg rejected
+    for quantity precision gets one more send, floored to the allowed decimals.
     """
     status = str(order.get("status") or "")
-    if str(order.get("leg") or "") == CATCHUP_LEG and status in {"rejected", "submit_unknown"}:
+    catchup = str(order.get("leg") or "") == CATCHUP_LEG
+    if catchup and status in {"rejected", "submit_unknown", "rate_limited"}:
         try:
             attempts = int(order.get("attempt_count") or 0)
         except (TypeError, ValueError):
             attempts = 0
         return attempts >= CATCHUP_ATTEMPT_LIMIT
+    if (
+        status == "rejected"
+        and not order.get("precision_retried")
+        and precision_quantity(order.get("quantity"), order.get("detail")) is not None
+    ):
+        return False
     return status in _NO_RETRY
 
 
@@ -1030,13 +1060,10 @@ def merge_prior_plans(
         if not ref:
             continue
         order = orders.get(ref) or {}
-        if str(order.get("leg") or "") == CATCHUP_LEG or ref.endswith(":exit_catchup"):
+        if order or ref.endswith(":exit_catchup"):
             sent = _resend_blocked(order)
         else:
-            sent = (
-                str(order.get("status") or "") in _NO_RETRY
-                or str(old.get("action") or "") in _NO_RETRY
-            )
+            sent = str(old.get("action") or "") in _NO_RETRY
         current = by_ref.get(ref)
         if current is not None:
             if sent and current.get("action") == "would_place":
@@ -1744,6 +1771,44 @@ def _redact(text: str, secrets: tuple[str, ...]) -> str:
     return out[:300]
 
 
+def _reset_wait(headers: Any) -> float | None:
+    """Seconds until ``x-ratelimit-reset`` (a Unix timestamp), when the header is present."""
+    if headers is None:
+        return None
+    try:
+        reset = float(headers.get("x-ratelimit-reset"))
+    except (TypeError, ValueError):
+        return None
+    return reset - time.time()
+
+
+def _rate_limit_wait(wait: float | None) -> float:
+    if wait is None or not math.isfinite(wait):
+        return RATE_LIMIT_DEFAULT_WAIT_S
+    return min(max(wait, 1.0), RATE_LIMIT_MAX_WAIT_S)
+
+
+def precision_quantity(quantity: Any, detail: Any) -> float | None:
+    """Quantity floored to the decimals a precision rejection allows, or None.
+
+    Trading 212 answers ``/api-errors/quantity-precision-mismatch`` with
+    ``invalid quantity precision N``. N is read as the allowed decimals; the
+    retry happens only when flooring to N changes the quantity and leaves it positive.
+    """
+    text = str(detail or "")
+    if QTY_PRECISION_ERROR not in text:
+        return None
+    match = _PRECISION_RE.search(text)
+    number = _positive(quantity)
+    if match is None or number is None:
+        return None
+    current = Decimal(str(number))
+    floored = current.quantize(Decimal(1).scaleb(-int(match.group(1))), rounding=ROUND_DOWN)
+    if floored <= 0 or floored == current:
+        return None
+    return float(floored)
+
+
 class DemoTransport:
     """HTTP transport that can only talk to the demo host."""
 
@@ -1755,26 +1820,36 @@ class DemoTransport:
         opener: Any = None,
         min_interval_s: float = 2.0,
         timeout: float = 60.0,
+        sleep: Any = None,
     ) -> None:
         self.base = demo_base_url(base)
         self._env = env
         self._opener = opener
         self.min_interval_s = float(min_interval_s)
         self.timeout = timeout
-        self._last_mutation = 0.0
+        self._sleep = sleep or time.sleep
+        self._last_call: dict[tuple[str, str], float] = {}
         self._secrets: tuple[str, ...] = ()
         creds = demo_credentials(env)
         if creds:
             self._secrets = creds
 
-    def _pace(self) -> None:
-        if self.min_interval_s <= 0 or not self._last_mutation:
-            self._last_mutation = time.monotonic()
+    def _pace(self, method: str, path: str, *, mutate: bool) -> None:
+        """Space calls per endpoint. ``min_interval_s <= 0`` turns pacing off (tests)."""
+        if self.min_interval_s <= 0:
             return
-        elapsed = time.monotonic() - self._last_mutation
-        if elapsed < self.min_interval_s:
-            time.sleep(self.min_interval_s - elapsed)
-        self._last_mutation = time.monotonic()
+        bare = path.split("?", 1)[0]
+        key = (method, bare if (method, bare) in _ENDPOINT_GAP_S else method)
+        gap = _ENDPOINT_GAP_S.get((method, bare), 1.0)
+        if mutate:
+            gap = max(gap, self.min_interval_s)
+        gap += PACE_MARGIN_S
+        last = self._last_call.get(key)
+        if last is not None:
+            elapsed = time.monotonic() - last
+            if elapsed < gap:
+                self._sleep(gap - elapsed)
+        self._last_call[key] = time.monotonic()
 
     def _request(self, method: str, path: str, body: dict[str, Any] | None, *, mutate: bool) -> Any:
         self.base = demo_base_url(self.base)
@@ -1787,8 +1862,6 @@ class DemoTransport:
         if creds is None:
             raise DemoMirrorSafetyError("demo credentials missing")
         self._secrets = creds
-        if mutate:
-            self._pace()
         data = None if body is None else json.dumps(body).encode("utf-8")
         token = base64.b64encode(f"{creds[0]}:{creds[1]}".encode()).decode("ascii")
         req = Request(
@@ -1802,27 +1875,34 @@ class DemoTransport:
             },
             method=method,
         )
-        status, raw = self._send(req)
+        status, raw, wait = 0, "", None
+        for attempt in range(RATE_LIMIT_RETRIES + 1):
+            self._pace(method, path, mutate=mutate)
+            status, raw, wait = self._send(req)
+            if status != 429 or attempt == RATE_LIMIT_RETRIES:
+                break
+            self._sleep(_rate_limit_wait(wait))
         return self._parse(status, raw, method)
 
-    def _send(self, req: Request) -> tuple[int, str]:
+    def _send(self, req: Request) -> tuple[int, str, float | None]:
         if self._opener is not None:
-            status, raw = self._opener(req)
-            return int(status), str(raw)
+            result = self._opener(req)
+            wait = result[2] if len(result) > 2 else None
+            return int(result[0]), str(result[1]), wait
         opener = build_opener(
             _RefuseRedirect,
             HTTPSHandler(context=ssl.create_default_context()),
         )
         try:
             with opener.open(req, timeout=self.timeout) as resp:
-                return int(resp.status), resp.read().decode("utf-8")
+                return int(resp.status), resp.read().decode("utf-8"), None
         except HTTPError as exc:
             detail = ""
             try:
                 detail = exc.read().decode("utf-8", errors="replace")
             except Exception:
                 detail = str(exc)
-            return int(exc.code), detail
+            return int(exc.code), detail, _reset_wait(exc.headers)
         except URLError as exc:
             raise DemoTransportError(f"network error: {exc}") from exc
 
@@ -1832,7 +1912,9 @@ class DemoTransport:
             raise DemoAuthError(f"Trading 212 demo auth failed ({status}): {detail}")
         if status == 400 and method != "GET":
             raise DemoOrderRejected(status, detail)
-        if status in {408, 429} or status >= 400:
+        if status == 429:
+            raise DemoRateLimited(f"HTTP 429: {detail}")
+        if status == 408 or status >= 400:
             raise DemoTransportError(f"HTTP {status}: {detail}")
         if not raw.strip():
             return None
@@ -2007,9 +2089,10 @@ def _adopt_pending(record: dict[str, Any], pending: list[dict[str, Any]]) -> boo
 
 
 def _adopt_history_fill(record: dict[str, Any], history: list[dict[str, Any]]) -> bool:
-    """Link a catch-up whose POST result was unknown to exactly one later sell fill."""
+    """Link an order whose POST result was unknown to exactly one later same-side fill."""
     submitted = str(record.get("submitted_at") or "")
     want = abs(float(record.get("quantity") or 0))
+    want_side = str(record.get("side") or "SELL").upper()
     matches = []
     for raw in history:
         if not isinstance(raw, dict):
@@ -2019,7 +2102,7 @@ def _adopt_history_fill(record: dict[str, Any], history: list[dict[str, Any]]) -
             continue
         if str(item.get("ticker") or "") != str(record.get("t212_ticker") or ""):
             continue
-        if str(item.get("side") or "").upper() != "SELL":
+        if str(item.get("side") or "").upper() != want_side:
             continue
         quantity = _positive(item.get("quantity"))
         if quantity is None or abs(quantity - want) > 1e-4:
@@ -2034,6 +2117,120 @@ def _adopt_history_fill(record: dict[str, Any], history: list[dict[str, Any]]) -
     record["broker_status"] = "FILLED"
     record["status"] = "filled"
     return True
+
+
+def _instant(value: Any) -> datetime | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    try:
+        return _aware(datetime.fromisoformat(text.replace("Z", "+00:00")))
+    except ValueError:
+        return None
+
+
+def _history_mentions(record: Mapping[str, Any], history: list[dict[str, Any]]) -> bool:
+    """True when any history row for this ticker and side is not clearly older than the send."""
+    submitted = _instant(record.get("submitted_at"))
+    ticker = str(record.get("t212_ticker") or "")
+    side = str(record.get("side") or "").upper()
+    for raw in history:
+        if not isinstance(raw, dict):
+            continue
+        order = raw.get("order") if isinstance(raw.get("order"), dict) else {}
+        fill = raw.get("fill") if isinstance(raw.get("fill"), dict) else {}
+        instrument = order.get("instrument") if isinstance(order.get("instrument"), dict) else {}
+        row_ticker = raw.get("ticker") or order.get("ticker") or instrument.get("ticker")
+        row_side = raw.get("side") or order.get("side")
+        if str(row_ticker or "") != ticker or str(row_side or "").upper() != side:
+            continue
+        stamps = [
+            _instant(value)
+            for value in (
+                raw.get("filled_at"),
+                order.get("createdAt"),
+                fill.get("filledAt"),
+            )
+        ]
+        known = [stamp for stamp in stamps if stamp is not None]
+        if submitted is None or not known or max(known) >= submitted:
+            return True
+    return False
+
+
+def _settle_unknown(
+    record: dict[str, Any],
+    *,
+    pending: list[dict[str, Any]],
+    history: list[dict[str, Any]],
+) -> bool:
+    """Resolve a non-catch-up ``submit_unknown`` once pending and history both read cleanly.
+
+    Adopts a matching pending order or fill. With no trace of the order anywhere,
+    marks it ``not_placed`` so the reference may be sent again. An ambiguous history
+    row leaves it ``submit_unknown``.
+    """
+    if _adopt_pending(record, pending) or _adopt_history_fill(record, history):
+        return True
+    if _history_mentions(record, history):
+        return False
+    record["status"] = "not_placed"
+    record["unknown_detail"] = record.get("detail")
+    record["detail"] = "not pending and not in order history after an unknown submit"
+    return True
+
+
+def _settle_unknowns(
+    plans: list[dict[str, Any]],
+    orders: dict[str, dict[str, Any]],
+    pending: list[dict[str, Any]],
+    history: list[dict[str, Any]],
+    now: datetime,
+    checkpoint: Any,
+) -> None:
+    """Settle unknown non-catch-up sends, and reopen a ``not_placed`` one while its window is open."""
+    plans_by_ref = {str(plan.get("client_order_ref") or ""): plan for plan in plans}
+    for ref, record in orders.items():
+        if str(record.get("leg") or "") == CATCHUP_LEG:
+            continue
+        if str(record.get("status") or "") != "submit_unknown" or record.get("broker_order_id"):
+            continue
+        if not _settle_unknown(record, pending=pending, history=history):
+            continue
+        plan = plans_by_ref.get(ref)
+        if (
+            record["status"] == "not_placed"
+            and plan is not None
+            and plan.get("action") in {"already_working", "submit_unknown"}
+            and window_open(str(plan.get("market") or ""), plan.get("fill_session"), now) is True
+        ):
+            plan["action"] = "would_place"
+            plan["reason"] = None
+            plan["broker_order_id"] = None
+        checkpoint()
+
+
+def _submit(
+    transport: Any, plan: dict[str, Any], record: dict[str, Any], *, market: bool
+) -> dict[str, Any]:
+    """POST the order. A quantity-precision rejection is retried once, floored."""
+
+    def post() -> dict[str, Any]:
+        body = _order_body(plan)
+        return transport.place_market(body) if market else transport.place_limit(body)
+
+    try:
+        return post()
+    except DemoOrderRejected as exc:
+        smaller = precision_quantity(plan.get("quantity"), exc.detail)
+        if smaller is None:
+            raise
+        record["precision_retried"] = True
+        record["quantity_requested"] = plan.get("quantity")
+        record["precision_detail"] = exc.detail
+        plan["quantity"] = smaller
+        record["quantity"] = smaller
+        return post()
 
 
 def _execute(
@@ -2064,11 +2261,13 @@ def _execute(
                 plan["action"] = "insufficient_data"
                 plan["reason"] = "account_currency_missing"
         return {"incomplete": True, "gaps": ["account currency missing"], "positions": None}, 0
+    pending_ok = True
     try:
         pending = list(transport.pending_orders())
     except (DemoAuthError, DemoTransportError, OSError) as exc:
         errors.append(f"pending orders unavailable: {type(exc).__name__}")
         pending = []
+        pending_ok = False
     for record in orders.values():
         if record.get("broker_order_id"):
             continue
@@ -2081,15 +2280,22 @@ def _execute(
             checkpoint()
     history_rows: list[dict[str, Any]] = []
     history_ok = True
-    if any(
+    unknown_catchup = any(
         str(row.get("leg") or "") == CATCHUP_LEG
         and str(row.get("status") or "") == "submit_unknown"
         for row in orders.values()
-    ):
+    )
+    unknown_other = pending_ok and any(
+        str(row.get("leg") or "") != CATCHUP_LEG
+        and str(row.get("status") or "") == "submit_unknown"
+        and not row.get("broker_order_id")
+        for row in orders.values()
+    )
+    if unknown_catchup or unknown_other:
         try:
             history_rows = list(transport.history_orders())
         except (DemoAuthError, DemoTransportError, DemoMirrorSafetyError, OSError) as exc:
-            errors.append(f"history unavailable for catch-up adopt: {type(exc).__name__}")
+            errors.append(f"history unavailable for unknown-submit adopt: {type(exc).__name__}")
             history_ok = False
         else:
             for record in orders.values():
@@ -2101,6 +2307,8 @@ def _execute(
                     continue
                 if _adopt_history_fill(record, history_rows):
                     checkpoint()
+            if unknown_other:
+                _settle_unknowns(plans, orders, pending, history_rows, now, checkpoint)
     attempts = 0
     accepted = 0
     ordered = [plan for plan in plans if plan.get("action") == "would_place"]
@@ -2132,7 +2340,7 @@ def _execute(
         retrying = (
             prior is not None
             and str(prior.get("leg") or "") == CATCHUP_LEG
-            and str(prior.get("status") or "") in {"rejected", "submit_unknown"}
+            and str(prior.get("status") or "") in {"rejected", "submit_unknown", "rate_limited"}
         )
         if retrying and str(prior.get("status") or "") == "submit_unknown" and not history_ok:
             plan["action"] = "submit_unknown"
@@ -2174,8 +2382,7 @@ def _execute(
         checkpoint()
         attempts += 1
         try:
-            body = _order_body(plan)
-            response = transport.place_market(body) if market else transport.place_limit(body)
+            response = _submit(transport, plan, record, market=market)
         except DemoOrderRejected as exc:
             record["status"] = "rejected"
             record["broker_status"] = exc.status
@@ -2200,9 +2407,19 @@ def _execute(
             plan["action"] = "submit_unknown"
             checkpoint()
             raise
+        except DemoRateLimited as exc:
+            record["status"] = "rate_limited"
+            record["detail"] = str(exc)[:300]
+            if market and record.get("attempt_count") is not None:
+                record["attempt_count"] = max(0, int(record.get("attempt_count") or 0) - 1)
+            plan["action"] = "would_place"
+            plan["reason"] = "rate_limited"
+            errors.append("demo rate limit held; order not sent this run")
+            checkpoint()
+            continue
         except (DemoTransportError, OSError) as exc:
             record["status"] = "submit_unknown"
-            record["detail"] = type(exc).__name__
+            record["detail"] = f"{type(exc).__name__}: {exc}"[:300]
             plan["action"] = "submit_unknown"
             checkpoint()
             continue

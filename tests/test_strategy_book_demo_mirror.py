@@ -23,6 +23,8 @@ from value_investor.strategy_book_demo_mirror import (
     TITLE_STUCK,
     DemoMirrorSafetyError,
     DemoOrderRejected,
+    DemoRateLimited,
+    DemoTransport,
     DemoTransportError,
     _RefuseRedirect,
     apply_order_cap,
@@ -482,32 +484,246 @@ def test_strategy_book_demo_rejection_is_not_retried(tmp_path: Path) -> None:
     assert fake.calls == 2
 
 
-def test_strategy_book_demo_submit_unknown_is_not_retried(tmp_path: Path) -> None:
+def _run(root: Path, fake: object, now: datetime = NOW) -> dict:
+    return run_mirror(
+        repo_root=root,
+        now=now,
+        apply=True,
+        place=True,
+        transport=fake,
+        env={DEMO_KEY_ENV: "k", DEMO_SECRET_ENV: "s"},
+        min_interval_s=0,
+    )
+
+
+def test_strategy_book_demo_submit_unknown_is_resent_only_without_any_trace(
+    tmp_path: Path,
+) -> None:
+    _world(tmp_path)
+    _seed_exit_shares(tmp_path)
+    fake = FakeTransport()
+    fake.fail = DemoTransportError("HTTP 502: bad gateway")
+    store = _run(tmp_path, fake)
+    assert {row["status"] for row in store["orders"]} == {"submit_unknown"}
+    assert {row["detail"] for row in store["orders"]} == {
+        "DemoTransportError: HTTP 502: bad gateway"
+    }
+    fake.fail = None
+
+    def pending_down() -> list[dict]:
+        raise DemoTransportError("HTTP 429: slow down")
+
+    fake.pending_orders = pending_down  # type: ignore[method-assign]
+    _run(tmp_path, fake)
+    assert fake.calls == 2
+
+    del fake.pending_orders
+    fake.history = [{"order": {"ticker": "PHTMl_EQ", "side": "SELL", "status": "CANCELLED"}}]
+    store = _run(tmp_path, fake)
+    assert fake.calls == 3
+    orders = {row["t212_ticker"]: row for row in store["orders"]}
+    assert orders["FOURl_EQ"]["status"] == "placed"
+    assert orders["FOURl_EQ"]["quantity"] == 2.4594
+    assert orders["PHTMl_EQ"]["status"] == "submit_unknown"
+    assert fake.placed[-1]["ticker"] == "FOURl_EQ"
+
+
+def test_strategy_book_demo_submit_unknown_adopts_a_pending_order(tmp_path: Path) -> None:
     _world(tmp_path)
     _seed_exit_shares(tmp_path)
     fake = FakeTransport()
     fake.fail = DemoTransportError("timeout")
-    env = {DEMO_KEY_ENV: "k", DEMO_SECRET_ENV: "s"}
-    store = run_mirror(
-        repo_root=tmp_path,
-        now=NOW,
-        apply=True,
-        place=True,
-        transport=fake,
-        env=env,
-        min_interval_s=0,
-    )
-    assert {row["status"] for row in store["orders"]} == {"submit_unknown"}
-    run_mirror(
-        repo_root=tmp_path,
-        now=NOW,
-        apply=True,
-        place=True,
-        transport=fake,
-        env=env,
-        min_interval_s=0,
-    )
+    _run(tmp_path, fake)
+    fake.fail = None
+    fake.pending = [
+        {
+            "id": 501,
+            "ticker": "FOURl_EQ",
+            "side": "BUY",
+            "quantity": 2.4594,
+            "limitPrice": 4066.0,
+            "status": "NEW",
+        }
+    ]
+    fake.history = [
+        {
+            "order": {"ticker": "PHTMl_EQ", "side": "SELL", "id": 502},
+            "fill": {"id": 9, "quantity": 2.5, "price": 104.0, "filledAt": "2026-11-11T11:00:00Z"},
+        }
+    ]
+    store = _run(tmp_path, fake)
     assert fake.calls == 2
+    orders = {row["t212_ticker"]: row for row in store["orders"]}
+    assert orders["FOURl_EQ"]["status"] == "placed"
+    assert orders["FOURl_EQ"]["broker_order_id"] == 501
+    assert orders["PHTMl_EQ"]["status"] == "filled"
+    assert orders["PHTMl_EQ"]["broker_order_id"] == 502
+
+
+def _precision_gate(allowed: int):
+    def on_place(body: dict) -> None:
+        text = repr(abs(float(body["quantity"])))
+        decimals = len(text.split(".", 1)[1]) if "." in text else 0
+        if decimals > allowed:
+            raise DemoOrderRejected(
+                400,
+                json.dumps(
+                    {
+                        "type": "/api-errors/quantity-precision-mismatch",
+                        "title": "Error while placing the order",
+                        "status": 400,
+                        "detail": f"invalid quantity precision {allowed}",
+                    }
+                ),
+            )
+
+    return on_place
+
+
+def test_strategy_book_demo_precision_rejection_retries_once_floored(tmp_path: Path) -> None:
+    _world(tmp_path)
+    _seed_exit_shares(tmp_path)
+    fake = FakeTransport()
+    fake.on_place = _precision_gate(3)
+    store = _run(tmp_path, fake)
+    orders = {row["t212_ticker"]: row for row in store["orders"]}
+    four = orders["FOURl_EQ"]
+    assert four["status"] == "placed"
+    assert four["quantity"] == 2.459
+    assert four["quantity_requested"] == 2.4594
+    assert four["precision_retried"] is True
+    assert [row["quantity"] for row in fake.placed if row["ticker"] == "FOURl_EQ"] == [2.459]
+    assert _by_ticker(store["plans"])["FOUR.L"]["quantity"] == 2.459
+    assert orders["PHTMl_EQ"]["status"] == "placed"
+
+    fake.on_place = _precision_gate(0)
+    tight = tmp_path / "tight"
+    _world(tight)
+    store = _run(tight, fake)
+    four = {row["t212_ticker"]: row for row in store["orders"]}["FOURl_EQ"]
+    assert four["status"] == "rejected"
+    assert four["precision_retried"] is True
+    calls = fake.calls
+    _run(tight, fake)
+    assert fake.calls == calls
+
+
+def test_strategy_book_demo_precision_rejected_before_the_fix_is_resent(tmp_path: Path) -> None:
+    _world(tmp_path)
+    detail = json.dumps(
+        {
+            "type": "/api-errors/quantity-precision-mismatch",
+            "status": 400,
+            "detail": "invalid quantity precision 3",
+        }
+    )
+    ref = "sbdemo:ftse350:FOUR.L:primary:2026-11-10:entry"
+    _write(
+        tmp_path / "docs/data/strategy_book_demo_ledger.json",
+        {
+            "orders": [
+                {
+                    "client_order_ref": ref,
+                    "episode_id": "ftse350:FOUR.L:primary:2026-11-10",
+                    "leg": "entry",
+                    "order_type": "LIMIT",
+                    "market": "ftse350",
+                    "ticker": "FOUR.L",
+                    "t212_ticker": "FOURl_EQ",
+                    "side": "BUY",
+                    "quantity": 2.4594,
+                    "limit_price": 4066.0,
+                    "fill_session": "2026-11-11",
+                    "status": "rejected",
+                    "broker_status": 400,
+                    "detail": detail,
+                }
+            ],
+            "plans": [
+                {
+                    "client_order_ref": ref,
+                    "ticker": "FOUR.L",
+                    "action": "rejected",
+                    "reason": "rejected",
+                    "market": "ftse350",
+                    "fill_session": "2026-11-11",
+                }
+            ],
+            "fills": [],
+            "ledger": [],
+        },
+    )
+    fake = FakeTransport()
+    fake.on_place = _precision_gate(3)
+    store = _run(tmp_path, fake)
+    four = {row["t212_ticker"]: row for row in store["orders"]}["FOURl_EQ"]
+    assert four["status"] == "placed"
+    assert four["quantity"] == 2.459
+    assert _by_ticker(store["plans"])["FOUR.L"]["action"] == "placed"
+
+
+def test_strategy_book_demo_rate_limited_send_is_retried_next_run(tmp_path: Path) -> None:
+    _world(tmp_path)
+    _seed_exit_shares(tmp_path)
+    fake = FakeTransport()
+    fake.fail = DemoRateLimited("HTTP 429: too many requests")
+    store = _run(tmp_path, fake)
+    assert {row["status"] for row in store["orders"]} == {"rate_limited"}
+    plans = _by_ticker(store["plans"])
+    assert plans["FOUR.L"]["action"] == "would_place"
+    assert plans["FOUR.L"]["reason"] == "rate_limited"
+    fake.fail = None
+    store = _run(tmp_path, fake)
+    assert {row["status"] for row in store["orders"]} == {"placed"}
+    assert len(fake.placed) == 2
+
+
+def _transport(responses: list, sleeps: list[float], min_interval_s: float = 0) -> DemoTransport:
+    queue = list(responses)
+    seen: list[str] = []
+
+    def opener(req: object) -> tuple:
+        seen.append(f"{req.get_method()} {req.full_url}")  # type: ignore[attr-defined]
+        return queue.pop(0)
+
+    transport = DemoTransport(
+        env={DEMO_KEY_ENV: "k", DEMO_SECRET_ENV: "s"},
+        opener=opener,
+        min_interval_s=min_interval_s,
+        sleep=sleeps.append,
+    )
+    transport.seen = seen  # type: ignore[attr-defined]
+    return transport
+
+
+def test_strategy_book_demo_transport_waits_out_429_then_gives_up() -> None:
+    sleeps: list[float] = []
+    transport = _transport([(429, "{}", 3.0), (429, "{}", None), (200, "[]")], sleeps)
+    assert transport.pending_orders() == []
+    assert sleeps == [3.0, 5.0]
+
+    sleeps.clear()
+    transport = _transport([(429, "{}", 120.0)] * 4, sleeps)
+    with pytest.raises(DemoRateLimited):
+        transport.place_limit({"ticker": "FOURl_EQ", "quantity": 1.0, "limitPrice": 1.0})
+    assert sleeps == [30.0, 30.0, 30.0]
+    assert len(transport.seen) == 4  # type: ignore[attr-defined]
+
+
+def test_strategy_book_demo_transport_paces_each_endpoint() -> None:
+    sleeps: list[float] = []
+    transport = _transport(
+        [(200, '{"currency": "GBP"}'), (200, "[]"), (200, "[]"), (200, "[]")],
+        sleeps,
+        min_interval_s=2.0,
+    )
+    transport.account_summary()
+    transport.pending_orders()
+    assert sleeps == []
+    transport.pending_orders()
+    assert len(sleeps) == 1 and 5.0 < sleeps[0] <= 5.25
+    transport.positions()
+    assert len(sleeps) == 1
 
 
 def test_strategy_book_demo_partial_fill_dividend_split_and_cancel(tmp_path: Path) -> None:
