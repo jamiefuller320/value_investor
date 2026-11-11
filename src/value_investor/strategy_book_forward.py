@@ -573,6 +573,7 @@ def _load_forward_specs(
     log_rows: list[dict[str, Any]],
 ) -> dict[str, Any]:
     markets = universe_markets(paths.market_status)
+    memo_rows = _read_log(paths.memo_log)
     gate_history = GateHistory.load(paths.decline, paths.sector)
     gate_history.index_facts(since=start)
     specs: list[NameSpec] = []
@@ -688,8 +689,14 @@ def _load_forward_specs(
                     lows=lows,
                     screens=list(screens.get(ticker) or []),
                     gates=row["gates"],
-                    memos=row["memos"],
-                    f9=[row["f9"]] if row["f9"] is not None else [],
+                    memos=_merged_memos(
+                        row["memos"],
+                        _logged_memos(log_rows, memo_rows, market=market, ticker=ticker),
+                    ),
+                    f9=_logged_f9(
+                        log_rows, market=market, ticker=ticker, start=start, completed=completed
+                    )
+                    + ([row["f9"]] if row["f9"] is not None else []),
                     signal_seen_at=seen,
                     graduated=True,
                     library=market != "ftse350",
@@ -973,6 +980,8 @@ def _session_verdict(
         "signal": None if latest is None else latest.signal,
         "research_verdict": None if latest is None else latest.research_verdict,
         "f9": "pass" if not gaps else gaps,
+        "memo_at": memos[0].finished_at.isoformat() if memos else None,
+        "memo_verdict": memos[0].verdict if memos else None,
         "inputs": inputs,
         "data_commit": commit,
         "observed_at": observed_at.isoformat(),
@@ -1025,6 +1034,93 @@ def _logged_seen(
         if parsed is not None:
             return parsed
     return None
+
+
+_F9_BINDS = ("key_filing_bodies", "fcf_basis_bound", "overlay_bound", "memo_recent")
+
+
+def _logged_f9(
+    rows: list[dict[str, Any]], *, market: str, ticker: str, start: date, completed: date
+) -> list[F9Fact]:
+    """F9 facts as each earlier session was logged.
+
+    The store is rebuilt every run, so an earlier session must keep the binds
+    the job saw that day; today's stores are dated today and are not in force
+    on an earlier session. A session the log never covered has no fact.
+    """
+    facts: dict[date, F9Fact] = {}
+    for row in rows:
+        if row.get("kind") != "session":
+            continue
+        if row.get("market") != market or row.get("ticker") != ticker:
+            continue
+        day = _day(row.get("as_of"))
+        if day is None or day < start or day >= completed or day in facts:
+            continue
+        verdict = row.get("f9")
+        if verdict == "pass":
+            gaps: set[str] = set()
+        elif isinstance(verdict, list):
+            gaps = {str(item) for item in verdict}
+        else:
+            continue
+        facts[day] = F9Fact(
+            as_of=day,
+            **{name: name not in gaps for name in _F9_BINDS},
+        )
+    return [facts[day] for day in sorted(facts)]
+
+
+def _logged_memos(
+    log_rows: list[dict[str, Any]],
+    memo_rows: list[dict[str, Any]],
+    *,
+    market: str,
+    ticker: str,
+) -> list[MemoFact]:
+    """Memos already seen on earlier runs, so a later rememo cannot hide them."""
+    found: list[MemoFact] = []
+    for row in log_rows:
+        if row.get("kind") != "session":
+            continue
+        if row.get("market") != market or row.get("ticker") != ticker:
+            continue
+        parsed = _parse_dt(row.get("memo_at"))
+        if parsed is not None:
+            found.append(MemoFact(finished_at=parsed, verdict=_text(row.get("memo_verdict"))))
+    for row in memo_rows:
+        if row.get("market") != market or row.get("ticker") != ticker:
+            continue
+        if row.get("action") != "requested":
+            continue
+        parsed = _parse_dt(row.get("memo_finished_at"))
+        if parsed is not None:
+            found.append(
+                MemoFact(
+                    finished_at=parsed,
+                    verdict=_text(row.get("verdict")),
+                    by_signal_job=row.get("kind") == "signal_day",
+                )
+            )
+    return found
+
+
+def _merged_memos(current: list[MemoFact], logged: list[MemoFact]) -> list[MemoFact]:
+    merged: dict[datetime, MemoFact] = {}
+    for memo in [*current, *logged]:
+        key = _aware(memo.finished_at)
+        prior = merged.get(key)
+        if prior is None:
+            merged[key] = memo
+        elif memo.by_signal_job and not prior.by_signal_job:
+            merged[key] = MemoFact(
+                finished_at=prior.finished_at,
+                verdict=prior.verdict or memo.verdict,
+                rationale=prior.rationale or memo.rationale,
+                by_signal_job=True,
+                path=prior.path or memo.path,
+            )
+    return [merged[key] for key in sorted(merged)]
 
 
 def _unloaded(

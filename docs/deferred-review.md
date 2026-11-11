@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-10T12:02:13+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-11T08:09:00+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -290,6 +290,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | N260 | **Prevent research snapshot sync from writing under docs/data** | apply_research_overlay snapshot hooks derive output_dir from committed memo paths (docs/data), so refresh_dashboard_bundle rewrites screening_snapshot.json under the committed store and trips the docs write guard whenever overlay reconcile runs with pipeline imported. | Next CI docs-write-guard failure from overlay reconcile, or when touching pipeline snapshot hooks / overlay_refresh |
 | N262 | **Strategy-book memo use tracking (memo fed an entry decision vs unused)** | Tag each requested strategy-book memo in strategy_book_memo_log.jsonl with what it fed: a fill, memo_blocked, memo_not_ready (finished after the close), or nothing (signal never reached a decision). Add used/unused counts to the 'Strategy book memo spend this week' finding so the 4-week spend-vs-use review (monthly-strategy-book-memo-spend-review) can economise on evidence. Another agent (forward shadow / memo throughput work on strategy_book_memo_job.py) may build this first; check before starting. | forward_live is true on the strategy-book seal (memos can then feed decisions), or the first spend-vs-use review on 2026-12-08, whichever comes first _(machine-checked)_ |
 | N263 | **Quote fallback for unpublished European daily bars** | Yahoo drops the just-completed London/continental daily bar overnight until about the next session. Instead of relying on the 17:45 UTC slot, the close refresh could fill the missing session from the quote's regularMarketPrice/time. That changes the registered adjusted-close source, so it needs an owner change marker. | If Strategy book closes short of session fires for a European market on 3+ weekdays in a month after the 17:45 slot is live |
+| N264 | **Strategy book forward walk: freeze early sessions before input retention thins them** | The forward observe store is rebuilt from forward_start every run. Library screen history thins to monthly after 400 days, gate history keeps 400 versions, and charts hold 2y, so from about 13 months after go-live a rebuild can change early sessions' screen and gate facts and later lose their closes. Freeze closed episodes (or pin retention for walked dates) before that. | 2027-09-01, about 10 months after go-live and before the 400-day screen retention reaches the start date _(machine-checked)_ |
 
 ---
 

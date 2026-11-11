@@ -274,6 +274,85 @@ def test_provenance_mismatch_does_not_rewrite_the_log(tmp_path: Path) -> None:
     assert log.read_bytes() == before
 
 
+def _go_live(data: Path) -> None:
+    path = data / "strategy_book_registration.json"
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    payload["forward_live"] = True
+    payload["forward_start"] = "2026-11-05"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+
+def _extend_chart(path: Path, days: list[str], closes: list[float]) -> None:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    payload["dates"] += days
+    payload["closes"] += closes
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+
+def _primary_episodes(data: Path, ticker: str) -> list[dict]:
+    store = json.loads((data / "strategy_book_observe.json").read_text(encoding="utf-8"))
+    return [
+        row
+        for row in store.get("episodes") or []
+        if row.get("ticker") == ticker and row.get("column") == COLUMN_PRIMARY
+    ]
+
+
+def test_filled_primary_episode_survives_later_runs_and_a_rememo(tmp_path: Path) -> None:
+    repo = _candidate_tree(tmp_path)
+    data = repo / "docs" / "data"
+    _go_live(data)
+    chart = data / "charts" / "SIGNAL.json"
+
+    first = run_forward_job(repo_root=repo, now=NOW, apply=True, data_commit="abc")
+    assert first["pending_fill"] == 1
+    row = next(
+        json.loads(line)
+        for line in (data / "strategy_book_gate_log.jsonl").read_text().splitlines()
+        if json.loads(line).get("ticker") == "SIGNAL"
+    )
+    assert row["f9"] == "pass"
+    assert row["memo_at"] == "2026-11-05T08:00:00+00:00"
+    assert row["memo_verdict"] == "hold"
+
+    _extend_chart(chart, ["2026-11-06"], [80.5])
+    fill = run_forward_job(
+        repo_root=repo, now=datetime(2026, 11, 6, 22, tzinfo=UTC), apply=True, data_commit="abc"
+    )
+    assert fill["filled"] == 1
+    assert [row["status"] for row in _primary_episodes(data, "SIGNAL")] == ["open"]
+
+    # Today's stores are dated after the signal session, and a newer memo
+    # replaces the one on disk. Neither may undo the logged fill.
+    _write(
+        data / "research" / "SIGNAL" / "research.json",
+        {
+            "created_at": "2026-11-05T08:00:00+00:00",
+            "updated_at": "2026-11-09T08:00:00+00:00",
+            "research_verdict": "hold",
+        },
+    )
+    _extend_chart(chart, ["2026-11-09"], [81.0])
+    later = run_forward_job(
+        repo_root=repo, now=datetime(2026, 11, 9, 22, tzinfo=UTC), apply=True, data_commit="abc"
+    )
+    assert later["filled"] == 1
+    episodes = _primary_episodes(data, "SIGNAL")
+    assert [(row["status"], row["fill_session"]) for row in episodes] == [("open", "2026-11-06")]
+
+
+def test_unlogged_earlier_session_has_no_f9_fact(tmp_path: Path) -> None:
+    repo = _candidate_tree(tmp_path)
+    data = repo / "docs" / "data"
+    _go_live(data)
+    _extend_chart(data / "charts" / "SIGNAL.json", ["2026-11-06"], [80.5])
+    summary = run_forward_job(
+        repo_root=repo, now=datetime(2026, 11, 6, 22, tzinfo=UTC), apply=True, data_commit="abc"
+    )
+    assert summary["filled"] == 0
+    assert not _primary_episodes(data, "SIGNAL")
+
+
 def test_forward_cli_prints_counts_only(tmp_path: Path, capsys) -> None:
     repo = _live_tree(tmp_path, live=False)
     assert forward_main(["--repo-root", str(repo), "--as-of", AS_OF]) == 0

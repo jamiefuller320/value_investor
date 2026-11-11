@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-10T12:02:13+00:00",
+  "updated_at": "2026-11-11T08:09:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -17399,6 +17399,29 @@
             "file": "docs/data/strategy_book_forward_status.json",
             "path": "thickness_ready",
             "op": "truthy"
+          }
+        ]
+      }
+    },
+    {
+      "id": "N264",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Strategy book forward walk: freeze early sessions before input retention thins them",
+      "summary": "The forward observe store is rebuilt from forward_start every run. Library screen history thins to monthly after 400 days, gate history keeps 400 versions, and charts hold 2y, so from about 13 months after go-live a rebuild can change early sessions' screen and gate facts and later lose their closes. Freeze closed episodes (or pin retention for walked dates) before that.",
+      "revisit_when": "2027-09-01, about 10 months after go-live and before the 400-day screen retention reaches the start date",
+      "tags": [
+        "strategy-book",
+        "forward",
+        "retention"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-567c go-live readiness check 2026-11-11",
+      "added_at": "2026-11-11T08:09:00+00:00",
+      "trigger": {
+        "all": [
+          {
+            "on_or_after": "2027-09-01"
           }
         ]
       }

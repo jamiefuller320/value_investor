@@ -223,6 +223,24 @@
       "effect": "Memo-job dry run with spend off (sessions due on 2026-11-10): signals blocked only by the memo rose from 1 to 5 of 17, and key_filing_bodies now passes on all 17. The rest fail the sector gate, the library FCF snapshot dating (screen_fcf_after_session) or the decline gate.",
       "unchanged": "No threshold, learning question, entry rule, exit rule or primary rule changed. forward_live stays false. The replay first score store (strategy_book_replay.json) is not re-run.",
       "doc": "docs/ops/ingest-scan-then-target.md#filings-index-dating"
+    },
+    {
+      "marker_id": "owner-strategy-book-v0-forward-history-fix-v1",
+      "at": "2026-11-11T09:00:00Z",
+      "kind": "bug_fix",
+      "rule_change": false,
+      "approved_by": "owner",
+      "approved_at": "2026-11-11",
+      "owner_quote": "Is there anything else that needs to be done beforehand? Are we overlooking anything that might be difficult to fix once live?",
+      "new_registration_id": false,
+      "logged_on_registration_id": "owner-strategy-book-v0",
+      "sealed_text": "Section 8, entry snapshot: facts 'read from files dated on or before that session.' Section 9: the job 'appends the verdicts it actually used (ticker, as_of, decline verdict, sector verdict, signal, research verdict, F9 pass or gap list) ... Without an append-only log, a later rebuild cannot show why a name was eligible.' Section 2: memo before the fill close. Section 10: 'A bug fix that makes the code match this text | A logged change marker on the same registration_id'.",
+      "what_was_wrong": "The forward job rebuilds the observe store from the start date on every run, but gave each name one F9-B fact dated at the latest completed session and one memo fact from the memo now on disk. An F9-B fact is in force only on or after its date, so every earlier signal session failed F9-B on the next run. In a scratch simulation of go-live on the 2026-11-10 signals, FOUR.L and MEGP.L opened only the ungated buy_on_signal column at the 2026-11-11 fill close, never the primary, and both episodes were gone on the 2026-11-12 run. A rememo after a fill would likewise have turned the fill into memo_not_ready.",
+      "fix": "Earlier sessions read F9-B from the gate log's session rows (the f9 pass or gap list logged that day) and memos from memo_at / memo_verdict, now added to each session row, plus requested rows in strategy_book_memo_log.jsonl. Today's stores are used only for the session being scored. A session the log never covered has no F9-B fact.",
+      "no_lookahead": "Every fact comes from a row written on or before the run that first scored that session, and memo facts still count only when finished before the fill close. An unlogged session fails closed.",
+      "effect": "Same simulation with the fix: both names fill all five columns at the 2026-11-11 close and stay open on the 2026-11-12 and 2026-11-13 runs.",
+      "unchanged": "No threshold, learning question, entry rule, exit rule or primary rule changed. No forward score store or gate log exists yet, so no history is rewritten. The replay first score store is not re-run.",
+      "doc": "docs/ops/strategy-book-observe.md#gate-log-and-provenance"
     }
   ],
   "bench_seals": [
