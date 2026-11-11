@@ -1,15 +1,91 @@
 {
-  "run_at": "2026-11-10T10:36:17.259393+00:00",
+  "run_at": "2026-11-11T07:39:56.882021+00:00",
   "market_id": "aim",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "RWS.L"
+  ],
+  "target_details": [
+    {
+      "ticker": "RWS.L",
+      "priority_score": 23.6451,
+      "filings_total": 54,
+      "filings_with_body": 53,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "RWS.L",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 54,
+        "filings_with_body": 53,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 56,
+        "filings_with_body": 56,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "uk_rns",
+      "filings_summary": {
+        "total": 56,
+        "annual": 4,
+        "interim": 2,
+        "trading_update": 3,
+        "other": 47,
+        "with_body": 56,
+        "period_coverage": {
+          "annual": {
+            "total": 4,
+            "with_body": 4
+          },
+          "interim": {
+            "total": 2,
+            "with_body": 2
+          },
+          "trading_update": {
+            "total": 3,
+            "with_body": 3
+          },
+          "other": {
+            "total": 31,
+            "with_body": 31
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 56,
+        "with_body_after": 56,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "RWS.L"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-10T10:36:04.378249+00:00",
+    "snapshot_at": "2026-11-11T07:38:59.303787+00:00",
     "market_id": "aim",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
@@ -47,7 +123,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-10T10:36:11.412210+00:00",
+    "snapshot_at": "2026-11-11T07:39:49.259298+00:00",
     "market_id": "aim",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
@@ -92,8 +168,8 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 17,
-    "hits": 5,
-    "new_rows_total": 0,
+    "hits": 6,
+    "new_rows_total": 1,
     "curiosity_total": 5,
     "errors": 0,
     "prioritization_weights": {
@@ -121,7 +197,7 @@
   },
   "critical_path": {
     "market_id": "aim",
-    "assessed_at": "2026-11-10T10:36:05.626918+00:00",
+    "assessed_at": "2026-11-11T07:39:01.186122+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -165,9 +241,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 4.441792319000001,
+  "used_seconds": 46.145868527999994,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3595.558207681,
+  "leftover_seconds": 3553.854131472,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -175,9 +251,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "aim",
-    "updated_at": "2026-11-10T10:36:11.415765+00:00",
+    "updated_at": "2026-11-11T07:39:49.264171+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 10,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -220,7 +296,7 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [
       "CAML.L",
       "DOTD.L",
@@ -265,11 +341,19 @@
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 64,
-    "candidate_count": 53,
+    "candidate_count": 61,
     "skipped_resolved_tickers": [
+      "ACKB.BR",
+      "APAM.AS",
+      "BAS.DE",
+      "DQ7A.IR",
+      "ESSITY-B.ST",
+      "EVN.VI",
+      "IFX.DE",
+      "UCB.BR",
+      "WIE.VI",
       "LMT",
       "APTV",
-      "BXP",
       "DFS.L",
       "MER.L",
       "TPT.L",
