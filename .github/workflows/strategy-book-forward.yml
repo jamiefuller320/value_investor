@@ -61,6 +61,20 @@ jobs:
             ftse-strategy-book-forward --repo-root . --apply
           fi
 
+      # Report-only. A shadow failure must not stop the forward commit.
+      # See docs/ops/strategy-book-memo-free-shadow.md.
+      - name: Memo-free forward shadow
+        continue-on-error: true
+        env:
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          set -euo pipefail
+          if [ "${DRY_RUN}" = "true" ]; then
+            ftse-strategy-book-memo-free-shadow --repo-root .
+          else
+            ftse-strategy-book-memo-free-shadow --repo-root . --apply
+          fi
+
       # Practice-account mirror only. Missing demo secrets plan rows and exit 0.
       # Never uses the live catalogue key. See docs/ops/strategy-book-demo-mirror.md.
       # A mirror failure must not stop the commit of the forward store and gate log.
@@ -101,5 +115,6 @@ jobs:
             docs/data/strategy_book_closes.json
             docs/data/strategy_book_forward_status.json
             docs/data/strategy_book_demo_ledger.json
+            docs/data/strategy_book_memo_free_shadow.json
             docs/data/charts
         run: bash scripts/gha_commit_artifacts.sh

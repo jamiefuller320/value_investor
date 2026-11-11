@@ -1,0 +1,675 @@
+{
+  "instrument": "strategy_book_memo_free_shadow",
+  "registration_id": "owner-strategy-book-v0",
+  "influences_live": false,
+  "component": "owner-approved strategy-book component",
+  "generated_at": "2026-11-11T15:17:55.540491+00:00",
+  "start_date": "2026-11-10",
+  "scoring_date": "2026-11-11",
+  "data_commit": "bb6e1192b126053409043d09c598edcce35fc2cc",
+  "design": {
+    "hard_filters": [
+      "primary_entry_price",
+      "operating_decline_clear",
+      "sector_headwind_sound",
+      "research_not_failed",
+      "one_open_per_name",
+      "cooldown",
+      "late_signal"
+    ],
+    "relaxed_binds": [
+      "key_filing_bodies",
+      "fcf_basis_bound",
+      "overlay_bound",
+      "memo_recent"
+    ],
+    "relaxed_memo_verdict": true,
+    "stake_units": 100,
+    "exit": "primary",
+    "influences_live": false,
+    "counts_toward_thickness_gate": false,
+    "counts_toward_bench": false,
+    "why": "The owner's strategy names a cheap price, no operating decline and no sector-wide trouble. The four F9-B binds (filing bodies, free-cash-flow basis, overlay, memo freshness) and the memo verdict are input-quality checks, not those filters. This shadow drops them as hard filters and keeps them as labels, so the count is the strategy the owner named."
+  },
+  "markets_covered": [
+    "ftse350",
+    "aex",
+    "aim",
+    "atx",
+    "bel20",
+    "cac40",
+    "dax",
+    "euro_stoxx50",
+    "ftse_mib",
+    "ftse_smallcap",
+    "hang_seng",
+    "ibex35",
+    "iseq20",
+    "nasdaq100",
+    "omxs30",
+    "psi20",
+    "sp500",
+    "asx200",
+    "tsx60",
+    "smi",
+    "sti",
+    "us_adr_asia"
+  ],
+  "errors": [],
+  "episodes": [],
+  "pending": [
+    {
+      "market": "ftse350",
+      "ticker": "FOUR.L",
+      "signal_session": "2026-11-10",
+      "status": "pending_fill",
+      "failed_binds": [],
+      "memo_verdict_checked": false
+    },
+    {
+      "market": "ftse350",
+      "ticker": "MEGP.L",
+      "signal_session": "2026-11-10",
+      "status": "pending_fill",
+      "failed_binds": [],
+      "memo_verdict_checked": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "CRM",
+      "signal_session": "2026-11-10",
+      "status": "pending_fill",
+      "failed_binds": [
+        "memo_recent"
+      ],
+      "memo_verdict_checked": false
+    },
+    {
+      "market": "sp500",
+      "ticker": "FIS",
+      "signal_session": "2026-11-10",
+      "status": "pending_fill",
+      "failed_binds": [
+        "memo_recent"
+      ],
+      "memo_verdict_checked": false
+    }
+  ],
+  "boards": {
+    "counted": 0,
+    "open": 0,
+    "mature": 0,
+    "median_fair_cost_return": null,
+    "median_matched_excess": null,
+    "launch_share": null,
+    "capital_days_return": null,
+    "by_market": {},
+    "by_failed_bind": {},
+    "by_failed_bind_set": {},
+    "early_outcomes": {
+      "min_n": 8,
+      "outcome": "fair-cost return at 63 sessions after the fill, or the realized exit if sooner",
+      "status": "insufficient_data",
+      "by_s10_return_bucket": {
+        "under_minus_5pct": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "minus_5_to_0": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "zero_to_plus_5": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "plus_5_to_plus_10": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "plus_10_or_more": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        }
+      },
+      "by_s20_return_bucket": {
+        "under_minus_5pct": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "minus_5_to_0": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "zero_to_plus_5": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "plus_5_to_plus_10": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "plus_10_or_more": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        }
+      },
+      "launched_by_s20": {
+        "launched": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "not_launched": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        }
+      }
+    }
+  },
+  "book_early_marks": {
+    "source": "strategy_book_observe.json",
+    "counted": 16,
+    "episodes": [
+      {
+        "episode_id": "aim:CAM.L:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "aim",
+        "ticker": "CAM.L",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0065,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "ftse_mib:IG.MI:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "ftse_mib",
+        "ticker": "IG.MI",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "iseq20:GL9.IR:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "iseq20",
+        "ticker": "GL9.IR",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "nasdaq100:AMAT:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "nasdaq100",
+        "ticker": "AMAT",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "nasdaq100:MCHP:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "nasdaq100",
+        "ticker": "MCHP",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "nasdaq100:STX:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "nasdaq100",
+        "ticker": "STX",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "nasdaq100:TER:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "nasdaq100",
+        "ticker": "TER",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "sp500:AMCR:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "sp500",
+        "ticker": "AMCR",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "sp500:EXPD:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "sp500",
+        "ticker": "EXPD",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "sp500:FIX:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "sp500",
+        "ticker": "FIX",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "sp500:GEV:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "sp500",
+        "ticker": "GEV",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "sp500:IR:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "sp500",
+        "ticker": "IR",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "sp500:NOC:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "sp500",
+        "ticker": "NOC",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "sp500:SYY:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "sp500",
+        "ticker": "SYY",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "sp500:YUM:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "sp500",
+        "ticker": "YUM",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      },
+      {
+        "episode_id": "tsx60:CP.TO:buy_on_signal:2026-11-09",
+        "column": "buy_on_signal",
+        "market": "tsx60",
+        "ticker": "CP.TO",
+        "status": "open",
+        "fill_session": "2026-11-10",
+        "exit_session": null,
+        "mature": false,
+        "launched": false,
+        "fair_cost_return": -0.0035,
+        "early_marks": {
+          "s10": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 10
+          },
+          "s20": {
+            "available": false,
+            "reason": "not_yet",
+            "sessions_after_fill": 20
+          }
+        },
+        "outcome_63": null,
+        "outcome_63_basis": "not_yet"
+      }
+    ],
+    "outcome_board": {
+      "min_n": 8,
+      "outcome": "fair-cost return at 63 sessions after the fill, or the realized exit if sooner",
+      "status": "insufficient_data",
+      "by_s10_return_bucket": {
+        "under_minus_5pct": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "minus_5_to_0": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "zero_to_plus_5": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "plus_5_to_plus_10": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "plus_10_or_more": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        }
+      },
+      "by_s20_return_bucket": {
+        "under_minus_5pct": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "minus_5_to_0": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "zero_to_plus_5": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "plus_5_to_plus_10": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "plus_10_or_more": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        }
+      },
+      "launched_by_s20": {
+        "launched": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        },
+        "not_launched": {
+          "n": 0,
+          "median_outcome_63": null,
+          "status": "insufficient_data"
+        }
+      }
+    },
+    "status": "ok"
+  }
+}
