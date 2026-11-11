@@ -1,25 +1,41 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-10T08:46:49.091407+00:00
+Track: `buy_tier_level` · updated 2026-11-11T08:46:59.853828+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **6** / 38 (16% count, 14% NAV)
+- Losers: **6** / 38 (16% count, 16% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
 
-### MELE.BR — intact / watch_review (-19.8%)
-- deep drawdown (-19.8%) — re-check facts; thesis still intact
-- price drawdown alone does not invalidate value thesis
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
+### ESSITY-B.ST — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
-### UMI.BR — intact / watch_review (-17.6%)
-- deep drawdown (-17.6%) — re-check facts; thesis still intact
+### EVN.VI — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### APAM.AS — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### WIE.VI — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### ACKB.BR — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### BAS.DE — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### IFX.DE — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### DQ7A.IR — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### MELE.BR — intact / watch_review (-16.4%)
+- deep drawdown (-16.4%) — re-check facts; thesis still intact
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
@@ -33,6 +49,14 @@ Track: `buy_tier_level` · updated 2026-11-10T08:46:49.091407+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 66%
+
+### UMI.BR — intact / hold_tolerate (-12.7%)
+- price drawdown alone does not invalidate value thesis
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 90%
 
 ### VOE.VI — intact / hold_tolerate (-9.9%)
 - price drawdown alone does not invalidate value thesis
@@ -57,13 +81,6 @@ Track: `buy_tier_level` · updated 2026-11-10T08:46:49.091407+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 64%
-
-### APAM.AS — intact / hold_tolerate (-4.3%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 47%
 
 ### AED.BR — intact / hold_tolerate (-2.2%)
 - still buy
@@ -114,37 +131,12 @@ Track: `buy_tier_level` · updated 2026-11-10T08:46:49.091407+00:00
 - data_quality 1.00
 - conviction 51%
 
-### IFX.DE — weakening / watch_review (+0.0%)
-- research verdict caution
-- cheapness family no longer passes
-- conviction 28% below intact floor
-- still buy
-- data_quality 1.00
-
-### DQ7A.IR — weakening / watch_review (+0.0%)
-- research verdict caution
-- conviction 21% below intact floor
-- still buy
-- cheapness family still passes
-
 ### DG.PA — intact / hold_tolerate (+0.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 90%
-
-### ACKB.BR — intact / hold_tolerate (+1.4%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 62%
-
-### BAS.DE — weakening / watch_review (+1.5%)
-- research verdict caution
-- still buy
-- cheapness family still passes
 
 ### TTE.PA — intact / hold_tolerate (+1.7%)
 - still buy
@@ -180,13 +172,6 @@ Track: `buy_tier_level` · updated 2026-11-10T08:46:49.091407+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 50%
-
-### EVN.VI — intact / hold_tolerate (+4.6%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 65%
 
 ### ERIC-B.ST — intact / hold_tolerate (+4.7%)
 - still strong_buy
@@ -242,11 +227,6 @@ Track: `buy_tier_level` · updated 2026-11-10T08:46:49.091407+00:00
 - data_quality 1.00
 - conviction 72%
 
-### WIE.VI — weakening / watch_review (+7.9%)
-- research verdict caution
-- still buy
-- cheapness family still passes
-
 ### SKA-B.ST — intact / hold_tolerate (+9.0%)
 - still buy
 - research accumulate
@@ -260,13 +240,6 @@ Track: `buy_tier_level` · updated 2026-11-10T08:46:49.091407+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 87%
-
-### ESSITY-B.ST — intact / hold_tolerate (+10.9%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 55%
 
 ### SGO.PA — intact / hold_tolerate (+14.4%)
 - still strong_buy
