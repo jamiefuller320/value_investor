@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-11-11T19:49:28.352119+00:00`
+Generated: `2026-11-11T23:38:24.910480+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -36,7 +36,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `human`/human PR #1358 `eng-20261111-01` — Close library ingest gaps for euro_depth / DQ7A.IR (chain 1/3: 0/0 improved, run igc-20260911-02)
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 366
+- Occasion count: 368
 - `PR mergeable=CONFLICTING against main` — 7×
 - `validate failed` — 7×
 - `validate check failed` — 6×
