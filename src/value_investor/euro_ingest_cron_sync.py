@@ -53,6 +53,12 @@ def _list_jobs(api_key: str) -> list[dict[str, Any]]:
     return list(payload.get("jobs") or [])
 
 
+def list_cron_jobs(api_key: str | None = None) -> list[dict[str, Any]] | None:
+    """One ``GET /jobs`` for callers that share it; None without an API key."""
+    key = (api_key or os.environ.get("CRONJOB_API_KEY") or "").strip()
+    return _list_jobs(key) if key else None
+
+
 def _set_job_enabled(
     job: dict[str, Any],
     *,
@@ -77,7 +83,14 @@ def sync_euro_ingest_cron_jobs(
     *,
     api_key: str | None = None,
     dry_run: bool = False,
+    jobs: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
+    """Toggle the euro ingest crons to the dispatch evaluation.
+
+    cron-job.org allows 100 API requests a day by default and this runs after
+    every ingest run, so it PATCHes only jobs whose ``enabled`` differs and
+    reuses ``jobs`` (one ``GET /jobs``) when the caller already listed them.
+    """
     api_key = (api_key or os.environ.get("CRONJOB_API_KEY") or "").strip()
     if evaluation is None:
         evaluation = load_euro_ingest_dispatch() or evaluate_euro_ingest_dispatch()
@@ -103,12 +116,23 @@ def sync_euro_ingest_cron_jobs(
     if not api_key:
         return {"skipped": True, "reason": "CRONJOB_API_KEY not set", "desired": desired}
 
-    jobs_by_title = {job.get("title"): job for job in _list_jobs(api_key)}
+    listed = jobs if jobs is not None else _list_jobs(api_key)
+    jobs_by_title = {job.get("title"): job for job in listed}
     results: list[dict[str, Any]] = []
     for title, enabled in title_map.items():
         job = jobs_by_title.get(title)
         if not job:
             results.append({"title": title, "skipped": True, "reason": "job not registered"})
+            continue
+        if "enabled" in job and bool(job.get("enabled")) == bool(enabled):
+            results.append(
+                {
+                    "title": title,
+                    "jobId": job.get("jobId"),
+                    "enabled": bool(enabled),
+                    "action": "unchanged",
+                }
+            )
             continue
         results.append(_set_job_enabled(job, enabled=enabled, api_key=api_key))
     return {
@@ -118,4 +142,4 @@ def sync_euro_ingest_cron_jobs(
     }
 
 
-__all__ = ["sync_euro_ingest_cron_jobs"]
+__all__ = ["list_cron_jobs", "sync_euro_ingest_cron_jobs"]
