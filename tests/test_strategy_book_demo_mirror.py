@@ -16,6 +16,7 @@ from value_investor.strategy_book_demo_mirror import (
     DEMO_KEY_ENV,
     DEMO_SECRET_ENV,
     ORDER_CAP,
+    TITLE_FX_REJECTED,
     TITLE_MISMATCH,
     TITLE_NOT_CONFIGURED,
     TITLE_ORDERS_PLACED,
@@ -27,6 +28,7 @@ from value_investor.strategy_book_demo_mirror import (
     DemoTransport,
     DemoTransportError,
     _RefuseRedirect,
+    account_accepts,
     apply_order_cap,
     attach_exit_quantities,
     build_plans,
@@ -34,6 +36,8 @@ from value_investor.strategy_book_demo_mirror import (
     demo_base_url,
     demo_credentials,
     findings_from_ledger,
+    fx_conversion,
+    fx_fee,
     ingest_statement,
     main,
     note_delistings,
@@ -937,9 +941,9 @@ def test_strategy_book_demo_account_currency_and_place_without_apply(tmp_path: P
     _overlay(tmp_path, [_hit("FOUR.L")])
     _chart(tmp_path, "FOUR.L")
     _observe(tmp_path, [_pending("FOUR.L")])
-    fake = FakeTransport()
-    fake.summary = {"currency": "USD", "id": 1}
     env = {DEMO_KEY_ENV: "k", DEMO_SECRET_ENV: "s"}
+    fake = FakeTransport()
+    fake.summary = {"currency": "", "id": 1}
     blocked = run_mirror(
         repo_root=tmp_path,
         now=NOW,
@@ -950,7 +954,7 @@ def test_strategy_book_demo_account_currency_and_place_without_apply(tmp_path: P
         min_interval_s=0,
     )
     assert fake.calls == 0
-    assert blocked["plans"][0]["reason"] == "account_currency"
+    assert blocked["plans"][0]["reason"] == "account_currency_missing"
 
     refused = run_mirror(
         repo_root=tmp_path,
@@ -963,6 +967,149 @@ def test_strategy_book_demo_account_currency_and_place_without_apply(tmp_path: P
     )
     assert refused["placement"] == "skipped_place_requires_apply"
     assert refused["orders"] == []
+
+
+def test_strategy_book_demo_currency_rules() -> None:
+    assert account_accepts("GBP", "GBX")
+    assert account_accepts("GBP", "USD")
+    assert not account_accepts("GBP", "")
+    assert not account_accepts("", "USD")
+    assert not fx_conversion("GBP", "GBX")
+    assert not fx_conversion("GBP", "GBP")
+    assert fx_conversion("GBP", "USD")
+    assert fx_conversion("GBP", "EUR")
+    assert fx_fee([{"name": "STAMP_DUTY", "quantity": 0.2}]) is None
+    assert fx_fee(
+        [
+            {"name": "CURRENCY_CONVERSION_FEE", "quantity": -0.12},
+            {"name": "STAMP_DUTY", "quantity": 0.2},
+        ]
+    ) == pytest.approx(0.12)
+
+
+def _us_world(root: Path) -> None:
+    _write(
+        root / "docs/data/library/t212_coverage/by_market/sp500.json",
+        {"rows": [_hit("CRM", "CRM_US_EQ", "USD")]},
+    )
+    _write(
+        root / "docs/data/charts/CRM.json",
+        {
+            "ticker": "CRM",
+            "currency": "USD",
+            "as_of": "2026-11-10T22:00:00+00:00",
+            "dates": ["2026-11-09", SIGNAL],
+            "closes": [250.0, 255.0],
+        },
+    )
+    pending = _pending("CRM")
+    pending.update({"market": "sp500", "currency": "USD"})
+    _observe(root, [pending])
+
+
+def test_strategy_book_demo_gbp_account_sends_a_us_entry_and_records_the_fx_fee(
+    tmp_path: Path,
+) -> None:
+    _us_world(tmp_path)
+    fake = FakeTransport()
+    env = {DEMO_KEY_ENV: "k", DEMO_SECRET_ENV: "s"}
+    store = run_mirror(
+        repo_root=tmp_path,
+        now=NOW,
+        apply=True,
+        place=True,
+        transport=fake,
+        env=env,
+        min_interval_s=0,
+    )
+    assert fake.calls == 1
+    assert fake.placed[0]["ticker"] == "CRM_US_EQ"
+    assert fake.placed[0]["limitPrice"] == 255.0
+    plan = store["plans"][0]
+    assert plan["action"] == "placed"
+    assert plan["fx_conversion"] is True
+    assert plan["account_currency"] == "GBP"
+    order = store["orders"][0]
+    assert order["fx_conversion"] is True
+    assert order["limit_currency"] == "USD"
+
+    fake.history = [
+        {
+            "order": {
+                "id": 11,
+                "ticker": "CRM_US_EQ",
+                "side": "BUY",
+                "status": "FILLED",
+                "currency": "USD",
+            },
+            "fill": {
+                "id": 90,
+                "price": 255.0,
+                "quantity": 0.3921,
+                "filledAt": "2026-11-11T15:00:00Z",
+                "type": "TRADE",
+                "walletImpact": {
+                    "netValue": -78.12,
+                    "currency": "GBP",
+                    "fxRate": 0.78,
+                    "taxes": [
+                        {"name": "CURRENCY_CONVERSION_FEE", "quantity": 0.12, "currency": "GBP"}
+                    ],
+                },
+            },
+        }
+    ]
+    fake.position_rows = [{"ticker": "CRM_US_EQ", "quantity": 0.3921}]
+    again = run_mirror(
+        repo_root=tmp_path,
+        now=NOW,
+        apply=True,
+        place=True,
+        transport=fake,
+        env=env,
+        min_interval_s=0,
+    )
+    fill = again["fills"][0]
+    assert fill["fx_conversion"] is True
+    assert fill["fx_rate"] == 0.78
+    assert fill["fx_fee"] == pytest.approx(0.12)
+    assert fill["fx_fee_pct"] == pytest.approx(0.12 / 78.12)
+    assert fill["currency"] == "USD" and fill["cash_currency"] == "GBP"
+    assert again["slippage"]["fx_fee_count"] == 1
+    assert again["summary"]["fx_fee_median_pct"] == pytest.approx(0.12 / 78.12)
+    assert again["reconciliation"]["status"] == "match"
+
+
+def test_strategy_book_demo_fx_rejection_is_final_and_warns(tmp_path: Path) -> None:
+    _us_world(tmp_path)
+    fake = FakeTransport()
+    fake.fail = DemoOrderRejected(400, "/api-errors/instrument-currency not supported")
+    env = {DEMO_KEY_ENV: "k", DEMO_SECRET_ENV: "s"}
+    store = run_mirror(
+        repo_root=tmp_path,
+        now=NOW,
+        apply=True,
+        place=True,
+        transport=fake,
+        env=env,
+        min_interval_s=0,
+    )
+    assert store["orders"][0]["status"] == "rejected"
+    rows = [row for row in findings_from_ledger(store) if row["title"] == TITLE_FX_REJECTED]
+    assert len(rows) == 1
+    assert rows[0]["severity"] == "warn" and rows[0]["auto_fixable"] is False
+    assert "CRM" in rows[0]["summary"]
+    fake.fail = None
+    run_mirror(
+        repo_root=tmp_path,
+        now=NOW,
+        apply=True,
+        place=True,
+        transport=fake,
+        env=env,
+        min_interval_s=0,
+    )
+    assert fake.calls == 1
 
 
 def test_strategy_book_demo_does_not_backfill_an_open_primary(tmp_path: Path) -> None:

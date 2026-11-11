@@ -44,7 +44,7 @@ is `not_mirrored` or `insufficient_data`, and no price or quantity is invented:
 | A primary episode with this signal is already `open` or `closed` | `already_open` (no backfill) |
 | Planning time is after that fill session's registered cash close | `missed_fill_session` |
 | Stake currency and instrument currency have no rule below | `currency_mismatch` |
-| Practice-account currency (known only when a key is present) is not the instrument currency and not the GBP/GBX pair | `account_currency` |
+| Practice-account currency (known only when a key is present) is missing | `account_currency_missing` (`insufficient_data`) |
 | Exit, but the ledger holds no shares from our entry fill | `no_demo_position` |
 | Instrument no longer in the catalogue, or a held name vanishes from positions with no sell and no corporate-action quantity | `delisted` (event only; no invented cash) |
 
@@ -136,9 +136,23 @@ execution" stays open.
 
 The account-summary currency is checked only when a demo key is present and
 placement is on. The API documents that orders execute only in the account's
-main currency. A GBP practice account is allowed to trade GBX names, because
-that is how Trading 212 quotes London shares. Any other pair is
-`account_currency` and is not sent.
+primary currency and that multi-currency wallets are not supported: the cash
+side of every order is the account currency, and Trading 212 converts a
+foreign-currency instrument at its own rate. So a GBP practice account sends
+US and euro primary entries too (owner, 2026-11-11). Before that, only GBX
+names were sent, and US entries such as CRM and FIS had no measured
+execution. The order is still sized and priced in the instrument currency
+(100 USD of a US name at the signal close in dollars), so price slippage is in
+the instrument currency. The plan and order rows carry `fx_conversion` and
+`account_currency`. GBP to GBX is not a conversion.
+
+The fill keeps `fx_rate` (`walletImpact.fxRate`), `fx_fee` (the
+`CURRENCY_CONVERSION` rows of `walletImpact.taxes`) and `fx_fee_pct` (fee over
+the absolute cash impact). The conversion fee is reported apart from price
+slippage (`fx_fee_count`, `fx_fee_median_pct`) and does not replace the book's
+assumed half-spread. If Trading 212 rejects a converted order, the rejection
+is final for that reference like any other, and ops-monitor warns
+**Strategy book demo FX order rejected** with the broker's detail.
 
 ## Stale quote, delisting, partial, rejection, cancel
 
@@ -169,7 +183,7 @@ One store, `docs/data/strategy_book_demo_ledger.json`. `schema_version` 1.
 |---|---|
 | `plans` | One row per candidate this run. Includes `observe_data_commit`, `planned_at`, action, reason, limit, quantity, side, currencies, `client_order_ref`. |
 | `orders` | Broker order rows. Keyed by `client_order_ref` = `sbdemo:{episode_id}:{entry\|exit}`. |
-| `fills` | Trade fills with raw price, quantity, time, wallet impact, taxes, and slippage versus the book's adjusted close. |
+| `fills` | Trade fills with raw price, quantity, time, wallet impact, taxes, FX rate and conversion fee for converted fills, and slippage versus the book's adjusted close. |
 | `ledger` | Raw-price events: `fill`, `dividend`, `split`, `corporate_action`, `transaction`, `delisting`. |
 | `reconciliation` | `match`, `mismatch`, `insufficient_data`, or `skipped`. |
 
@@ -311,14 +325,16 @@ The ledger is on that workflow's `GHA_COMMIT_OWNED` list and on email-report's
 exclude list, so this workflow is the only writer.
 
 Ops-monitor `check_strategy_book_demo_mirror` reads the ledger and does not
-place orders. All four findings are `auto_fixable` false:
+place orders. All findings are `auto_fixable` false:
 
 | Title | Severity | When |
 |---|---|---|
 | Strategy book demo mirror not configured | info | Ledger missing, or the last run had no demo credentials |
 | Strategy book demo orders placed | info | The last run sent at least one order |
 | Strategy book demo reconciliation mismatch | warn | Reconciliation status is `mismatch`, or the ledger is unreadable |
-| Strategy book demo slippage | info | At least one fill has measured slippage |
+| Strategy book demo slippage | info | At least one fill has measured slippage; also reports the median FX conversion fee |
+| Strategy book demo position stuck | warn | A market exit catch-up is still held after 5 attempts |
+| Strategy book demo FX order rejected | warn | Trading 212 rejected an order that converts from the account currency |
 
 ## Owner setup
 
