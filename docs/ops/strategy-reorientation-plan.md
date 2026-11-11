@@ -96,6 +96,19 @@ as versions of one book rather than as a new instrument each month.
      board) learns faster than "which timing rule is better".
    A slow read is expected, not a failure.
 
+**Memo-free forward shadow (owner, 2026-11-10).** Rule 5 allows a new observe
+instrument when it is a strategy-book component. The owner approved this one
+because most entry-rule hits were stopping on input-quality binds, above all
+missing filing bodies and missing recent memos, and the memo job only asks
+for a memo after every other check has passed. The shadow scores the sealed
+primary entry and primary exit on the same costs, fills, 100-unit stake, one
+open name and cooldown. It drops the four F9-B binds (filing bodies, free-cash-flow
+basis, overlay, memo freshness) and the memo verdict as hard filters, and it
+keeps the operating-decline and sector-headwind gates. Each episode records
+which binds it would have failed. It never opens a book episode and it does
+not count toward the thickness gate or the bench. Runbook:
+[strategy-book-memo-free-shadow.md](strategy-book-memo-free-shadow.md).
+
 Owner decisions under this section (version reviews, the instrument freeze)
 are in the [human tasks checklist](human-tasks-checklist.md#ad-hoc-when-triggered).
 
@@ -278,4 +291,5 @@ merge clashes manageable.
 | 2.3 forward reliability | Go-live review fixes ([PR #1350](https://github.com/jamiefuller320/value_investor/pull/1350)): session-based weekend skip, partial-bar clip, ops-monitor crash guard. **Owner, 2026-11-10: "A second 17:45 run is fine"** (extra 17:45 UTC weekday forward slot, cron-job.org primary). Partial-bar clip logged as change marker `owner-strategy-book-v0-partial-bar-clip-v1` (bug fix, no rule change; owner: "Yes - log the partial-bar clipping") | #1350 | Supervisor |
 | 2.4 | Built, awaiting first close. Daily review queue, judgment-in-the-round trail and five-lever scores on strategy-book closes (`docs/data/strategy_book_review_queue.json`, [strategy-book-reviews.md](strategy-book-reviews.md)). The forward book has no closed episode yet, so the queue is empty and the info finding reports zero closes. Reviews do not tune the book | this PR | Grok 4.7 |
 | 3.2 | Built, awaiting owner sign-off. Observe-only proof board (`docs/data/strategy_book_proof_board.json`, [strategy-book-proof.md](strategy-book-proof.md)) scores the seven sealed bars on forward episodes. Meeting every bar lets the owner consider step 5.5 and opens nothing. N13 and N14 revisit triggers point at that board's forward verdict. Not signed, so this step is not done | this PR | Grok 4.7 |
+| Memo-free shadow | Owner-approved 2026-11-10 as a strategy-book component. Report-only forward shadow: the four F9-B binds and the memo verdict are labels, the decline and sector gates stay hard filters, early marks at 10 and 20 sessions sit in the shadow store. Not a thickness-gate or bench input. | this PR | Grok 4.7 |
 | 5.1 | Built, dry-run until the demo key. Primary pending entries and exits are planned as GTC limits at the signal close on the Trading 212 demo host only; an exit the limit does not fill is flattened on the next run by a market catch-up. The raw-price ledger is `strategy_book_demo_ledger.json`. Placement waits on practice-account secrets. Assumed spread is not replaced yet (no measured fills) | `cursor/strategy-book-demo-mirror-567c` | Grok 4.7 |

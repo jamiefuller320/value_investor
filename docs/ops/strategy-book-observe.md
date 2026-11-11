@@ -211,6 +211,15 @@ open an entry. Without this, the store dated today's binds after every earlier
 signal, and a fill vanished on the next run (change marker
 `owner-strategy-book-v0-forward-history-fix-v1`).
 
+The `memo_recent` entry in a row's `f9` list is judged at the signal close and
+is a label only. The memo bind decides once, at the fill (registration
+section 2): the latest memo finished before the fill session's close, under
+21 days old, with a verdict that is not failed; otherwise `memo_not_ready` or
+`memo_blocked`. A signal-day memo written overnight therefore counts. Until
+2026-11-11 the walk also demanded a fresh memo at the signal close, which
+blocked every signal-day memo (change marker
+`owner-strategy-book-v0-memo-at-fill-fix-v1`).
+
 The daily re-hash compares each stored digest to the blob in the commit that
 holds the row: the first commit after `data_commit` that touches the gate log,
 which is the run's own commit (this workflow is the log's single writer).
@@ -227,6 +236,13 @@ reads `provenance_mismatches` on the status. It does not run `git show`.
 What this check does not do: re-hash the blob in the commit that first
 contains the log line. That needs the commit created after the log is pushed.
 Until then a same-day file stays `pending_commit`.
+
+## Memo-free shadow
+
+A separate report sits beside this book. It scores the same primary entry and
+primary exit without the memo bind, and it records early marks at 10 and 20
+sessions. It does not write this store and it does not count here. See
+[strategy-book-memo-free-shadow.md](strategy-book-memo-free-shadow.md).
 
 ## Reviews
 
@@ -271,6 +287,7 @@ without firing the same title twice for one missed run.
 - `docs/data/strategy_book_forward_status.json`
 - `docs/data/strategy_book_demo_ledger.json` (practice-account mirror; see [strategy-book-demo-mirror.md](strategy-book-demo-mirror.md))
 - `docs/data/strategy_book_proof_board.json` (step 3.2 proof bars; see [strategy-book-proof.md](strategy-book-proof.md))
+- `docs/data/strategy_book_memo_free_shadow.json` (memo-free shadow; see [strategy-book-memo-free-shadow.md](strategy-book-memo-free-shadow.md))
 
 One writer each. They are not on the ops-monitor optional or owned lists.
 `docs/data/charts` is owned here so a close refresh is committed, and email-report

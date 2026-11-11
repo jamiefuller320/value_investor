@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-10T15:20:12.015369+00:00
+Track: `buy_tier_level` · updated 2026-11-11T15:20:03.822271+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **3** / 12 (25% count, 27% NAV)
+- Losers: **3** / 11 (27% count, 28% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
@@ -36,11 +36,6 @@ Track: `buy_tier_level` · updated 2026-11-10T15:20:12.015369+00:00
 - still buy
 - cheapness family still passes
 
-### PPL.TO — weakening / watch_review (+0.0%)
-- left buy tier (hold)
-- research accumulate
-- cheapness family still passes
-
 ### ABX.TO — intact / hold_tolerate (+0.6%)
 - still buy
 - research accumulate
@@ -48,7 +43,7 @@ Track: `buy_tier_level` · updated 2026-11-10T15:20:12.015369+00:00
 - data_quality 1.00
 - conviction 55%
 
-### WSP.TO — intact / hold_tolerate (+1.3%)
+### WSP.TO — intact / hold_tolerate (+1.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
@@ -75,14 +70,14 @@ Track: `buy_tier_level` · updated 2026-11-10T15:20:12.015369+00:00
 - data_quality 1.00
 - conviction 86%
 
-### MRU.TO — intact / hold_tolerate (+9.3%)
+### MRU.TO — intact / hold_tolerate (+7.6%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 42%
 
-### SAP.TO — weakening / watch_review (+9.9%)
+### SAP.TO — weakening / watch_review (+7.7%)
 - research verdict caution
 - still buy
 - cheapness family still passes
