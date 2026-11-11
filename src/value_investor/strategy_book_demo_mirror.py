@@ -87,6 +87,7 @@ TITLE_ORDERS_PLACED = "Strategy book demo orders placed"
 TITLE_MISMATCH = "Strategy book demo reconciliation mismatch"
 TITLE_SLIPPAGE = "Strategy book demo slippage"
 TITLE_STUCK = "Strategy book demo position stuck"
+TITLE_FX_REJECTED = "Strategy book demo FX order rejected"
 
 _LIMIT_PATH = "/api/v0/equity/orders/limit"
 _MARKET_PATH = "/api/v0/equity/orders/market"
@@ -230,6 +231,13 @@ def _positive(value: Any) -> float | None:
     return number
 
 
+def _number(value: Any) -> bool:
+    try:
+        return math.isfinite(float(value))
+    except (TypeError, ValueError):
+        return False
+
+
 def _chart_filename(ticker: str) -> str:
     """Same slug as ``price_charts.chart_filename``."""
     return re.sub(r"[^A-Za-z0-9._-]+", "_", ticker) + ".json"
@@ -297,18 +305,43 @@ def floor_shares(value: float) -> float | None:
     return float(qty)
 
 
-def account_accepts(account_currency: str, instrument_currency: str) -> bool:
-    """True when the practice account can trade this instrument currency.
+def _currency_code(value: Any) -> str:
+    code = str(value or "").upper()
+    return code if len(code) == 3 and code.isalpha() else ""
 
-    A GBP account may trade GBX names (London pence quotes). No FX rate is applied.
+
+def account_accepts(account_currency: str, instrument_currency: str) -> bool:
+    """True when the practice account can send an order for this instrument currency.
+
+    Trading 212 settles every API order in the account's primary currency, converting
+    a foreign-currency instrument at its own rate, so any known currency code is sent.
+    A broker rejection is recorded, not retried.
     """
-    account = str(account_currency or "").upper()
-    instrument = str(instrument_currency or "").upper()
-    if not account or not instrument:
+    return bool(_currency_code(account_currency) and _currency_code(instrument_currency))
+
+
+def fx_conversion(account_currency: str, instrument_currency: str) -> bool:
+    """True when the fill converts from the account currency (GBP to GBX is not a conversion)."""
+    account = _currency_code(account_currency)
+    instrument = _currency_code(instrument_currency)
+    if not account or not instrument or account == instrument:
         return False
-    if account == instrument:
-        return True
-    return account == "GBP" and instrument == "GBX"
+    return not (account == "GBP" and instrument == "GBX")
+
+
+def fx_fee(taxes: Any) -> float | None:
+    """Total currency-conversion fee from a fill's ``walletImpact.taxes``, or None when absent."""
+    total = None
+    for row in taxes if isinstance(taxes, list) else []:
+        if not isinstance(row, dict) or "CURRENCY_CONVERSION" not in str(row.get("name") or ""):
+            continue
+        try:
+            amount = abs(float(row.get("quantity")))
+        except (TypeError, ValueError):
+            continue
+        if math.isfinite(amount):
+            total = (total or 0.0) + amount
+    return total
 
 
 def compute_slippage(
@@ -1145,6 +1178,7 @@ def normalize_history_item(item: Mapping[str, Any]) -> dict[str, Any] | None:
         "fill_type": fill.get("type") or "TRADE",
         "wallet_net": wallet.get("netValue"),
         "wallet_currency": wallet.get("currency"),
+        "fx_rate": wallet.get("fxRate"),
         "taxes": [row for row in taxes if isinstance(row, dict)],
         "currency": order.get("currency") or instrument.get("currency"),
     }
@@ -1248,6 +1282,15 @@ def ingest_statement(
                 half_spread=(order or {}).get("half_spread"),
             )
             timing = "catchup" if leg == CATCHUP_LEG else "on_time"
+            converted = bool((order or {}).get("fx_conversion")) or fx_conversion(
+                str(item.get("wallet_currency") or ""), str(item.get("currency") or "")
+            )
+            fee = fx_fee(item.get("taxes"))
+            cash = (
+                _positive(abs(float(item["wallet_net"])))
+                if _number(item.get("wallet_net"))
+                else None
+            )
             event = {
                 "event_id": event_id,
                 "type": "fill",
@@ -1264,6 +1307,10 @@ def ingest_statement(
                 "cash": item.get("wallet_net"),
                 "cash_currency": item.get("wallet_currency"),
                 "taxes": item.get("taxes") or [],
+                "fx_conversion": converted,
+                "fx_rate": item.get("fx_rate") if converted else None,
+                "fx_fee": fee if converted else None,
+                "fx_fee_pct": (fee / cash) if converted and fee is not None and cash else None,
                 "slippage": slippage,
                 "leg": leg,
                 "timing": timing,
@@ -1588,8 +1635,15 @@ def slippage_summary(fills: list[dict[str, Any]]) -> dict[str, Any]:
 
     on_time = _bucket("on_time")
     catchup = _bucket("catchup")
+    fx_pcts = [
+        float(row["fx_fee_pct"])
+        for row in fills
+        if isinstance(row, dict) and row.get("fx_conversion") and _number(row.get("fx_fee_pct"))
+    ]
     return {
         "measured_count": len(measured),
+        "fx_fee_count": len(fx_pcts),
+        "fx_fee_median_pct": _median_pct(fx_pcts),
         "median_pct": _median_pct(_pcts(measured)),
         "on_time_count": len(on_time),
         "on_time_median_pct": _median_pct(_pcts(on_time)),
@@ -1640,6 +1694,8 @@ def summarize(payload: Mapping[str, Any]) -> dict[str, Any]:
         "reconciliation": (payload.get("reconciliation") or {}).get("status"),
         "slippage_measured": slip["measured_count"],
         "slippage_median_pct": slip["median_pct"],
+        "fx_fee_count": slip["fx_fee_count"],
+        "fx_fee_median_pct": slip["fx_fee_median_pct"],
         "names": names,
         "errors": list(payload.get("errors") or []),
     }
@@ -1730,6 +1786,9 @@ def findings_from_ledger(ledger: Mapping[str, Any] | None) -> list[dict[str, Any
                     f"median {_pct_text(slip['catchup_median_pct'])}. "
                     "Catch-up slippage is versus the book's exit close, "
                     "kept apart from on-time exits. "
+                    f"FX-converted fills with a conversion fee: {slip['fx_fee_count']}, "
+                    f"median fee {_pct_text(slip['fx_fee_median_pct'])} of cash, "
+                    "not counted as price slippage. "
                     "The assumed half-spread is not replaced. "
                     "See docs/ops/strategy-book-demo-mirror.md."
                 ),
@@ -1745,6 +1804,30 @@ def findings_from_ledger(ledger: Mapping[str, Any] | None) -> list[dict[str, Any
         and str(row.get("status") or "") in {"rejected", "submit_unknown"}
         and int(row.get("attempt_count") or 0) >= CATCHUP_ATTEMPT_LIMIT
     ]
+    fx_rejected = [
+        row
+        for row in order_rows
+        if isinstance(row, dict)
+        and row.get("fx_conversion")
+        and str(row.get("status") or "") == "rejected"
+    ]
+    if fx_rejected:
+        names = ", ".join(str(row.get("ticker") or "") for row in fx_rejected)
+        detail = str(fx_rejected[-1].get("detail") or "")[:160]
+        rows.append(
+            {
+                "severity": "warn",
+                "category": "research",
+                "title": TITLE_FX_REJECTED,
+                "summary": (
+                    f"The demo account rejected {len(fx_rejected)} order(s) that convert from "
+                    f"the account currency ({names}). Last detail: {detail or 'none'}. "
+                    "A rejected reference is not resent. "
+                    "See docs/ops/strategy-book-demo-mirror.md."
+                ),
+                "auto_fixable": False,
+            }
+        )
     if stuck:
         names = ", ".join(str(row.get("ticker") or row.get("episode_id") or "") for row in stuck)
         rows.append(
@@ -2323,6 +2406,9 @@ def _execute(
             plan["reason"] = "account_currency"
             plan["account_currency"] = account_ccy
             continue
+        converted = fx_conversion(account_ccy, str(plan.get("instrument_currency") or ""))
+        plan["fx_conversion"] = converted
+        plan["account_currency"] = account_ccy
         ref = str(plan["client_order_ref"])
         prior = orders.get(ref)
         if prior and _resend_blocked(prior):
@@ -2371,6 +2457,8 @@ def _execute(
                 "time_validity": None if market else TIME_VALIDITY,
                 "fill_session": plan.get("fill_session"),
                 "half_spread": plan.get("half_spread"),
+                "fx_conversion": converted,
+                "account_currency": account_ccy,
                 "sessions_late": plan.get("sessions_late"),
                 "catchup_reason": plan.get("reason") if plan.get("leg") == CATCHUP_LEG else None,
                 "attempt_count": 1 if market else None,
