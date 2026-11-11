@@ -1,0 +1,274 @@
+{
+  "slug": "sp500__ADM",
+  "order": "AB",
+  "shown_as": {
+    "A": "A",
+    "B": "B"
+  },
+  "judge_model": "gpt-5.6-luna",
+  "as_of": "2026-11-11",
+  "inputs": {
+    "sha256": "320324be8953f6193b6750192004d87e1178e0e9d71fda8d47e8b7d883af4572",
+    "files": 65,
+    "filing_bodies": 51
+  },
+  "at": "2026-11-11T18:45:23.036998+00:00",
+  "attempt": 1,
+  "raw_text": "{\"scores\":{\"A\":{\"evidence\":{\"score\":4,\"reason\":\"Most cited figures and quotations reconcile to the supplied filings and snapshots. It misses the January 2026 resolution of both investigations, but does not materially misstate its core cash-flow evidence.\",\"quotes\":[{\"source\":\"filings/bodies/e7d8dfc9423bb122.txt\",\"quote\":\"Net cash provided by operating activities 1,788 5,765\"},{\"source\":\"sec_companyfacts.json\",\"quote\":\"\\\"free_cashflow\\\":4204000000.0\"}]},\"thesis_break\":{\"score\":4,\"reason\":\"It provides several concrete do-not-own conditions, including dividend coverage, additional enforcement or restatement, and deteriorating cash flow. Some conditions remain broadly worded rather than threshold-based.\",\"quotes\":[{\"source\":\"memo\",\"quote\":\"Two consecutive fiscal years with filing-derived FCF (OCF minus PP&E capex) below cash dividends paid on the same statutory basis.\"},{\"source\":\"memo\",\"quote\":\"New SEC/DOJ enforcement or material restatement tied to intersegment or segment reporting beyond the January 2026 settlement disclosed in sources.\"}]},\"verdict_justified\":{\"score\":4,\"reason\":\"Caution with medium risk and 0.60 confidence fits the tension between strong FY2025 cash flow and much weaker nine-month and TTM figures. The memo does not fully explain why caution still permits entry under the stated strategy rule.\",\"quotes\":[{\"source\":\"memo\",\"quote\":\"Verdict: caution\"},{\"source\":\"filings/bodies/adb01c0e0ac93bc6.txt\",\"quote\":\"Cash flows provided by operating activities of $5.5 billion, with cash flows from operations before working capital 1,3 of $2.7 billion\"}]}},\"B\":{\"evidence\":{\"score\":3,\"reason\":\"Its TTM reconciliation is detailed and numerically correct, but it makes a material status error by saying later investigation resolution is absent even though the supplied January 2026 8-K says both investigations ended.\",\"quotes\":[{\"source\":\"filings/bodies/bd132b50323c9cfb.txt\",\"quote\":\"These outcomes end the investigations of the Company by the SEC and DOJ.\"},{\"source\":\"memo\",\"quote\":\"later resolution is not in the supplied 2025–26 extracts.\"}]},\"thesis_break\":{\"score\":4,\"reason\":\"The memo gives more decision-useful break conditions than A, including a quantified FCF/dividend test, additional restatement or penalties, biofuel-policy reversal, and loss of investment-grade access. Some triggers are conditional or vague.\",\"quotes\":[{\"source\":\"memo\",\"quote\":\"A full-year period in which statutory FCF (OCF − PP&E capex) stays below 1.0× dividends paid and the Board cuts or suspends the dividend.\"},{\"source\":\"filings/bodies/19af0fa0680ee358.txt\",\"quote\":\"As of December 31, 2025, the three major credit rating agencies maintained the Company’s credit ratings at investment grade levels with a negative outlook.\"}]},\"verdict_justified\":{\"score\":4,\"reason\":\"The caution verdict and 0.62 confidence are broadly supported by the 0.3× TTM dividend cover, working-capital volatility, and policy sensitivity. The unresolved-investigation discussion weakens confidence in the governance portion of the conclusion.\",\"quotes\":[{\"source\":\"memo\",\"quote\":\"TTM FCF to Sep-2026 is ~$0.35bn vs ~$1.0bn dividends (0.3×)\"},{\"source\":\"filings/bodies/e7d8dfc9423bb122.txt\",\"quote\":\"Cash dividends ( 764 ) ( 743 )\"}]}}},\"preferred\":\"B\",\"preference_reason\":\"B is more useful for action because it reconciles the TTM cash-flow run rate and states sharper break conditions. Its investigation-status error should be corrected before relying on the memo.\",\"claims_checked\":[{\"memo\":\"A\",\"claim\":\"FY2025 operating cash flow was $5.452bn and PP&E capex was $1.248bn, producing $4.204bn FCF.\",\"path\":\"sec_companyfacts.json\",\"supported\":true},{\"memo\":\"A\",\"claim\":\"Nine-month 2026 operating cash flow was $1.788bn versus $5.765bn in the prior-year period.\",\"path\":\"filings/bodies/e7d8dfc9423bb122.txt\",\"supported\":true},{\"memo\":\"A\",\"claim\":\"ADM increased its dividend and had 53 consecutive years of dividend growth.\",\"path\":\"filings/bodies/adb01c0e0ac93bc6.txt\",\"supported\":true},{\"memo\":\"A\",\"claim\":\"The January 2026 SEC settlement involved a $40m civil penalty.\",\"path\":\"filings/bodies/bd132b50323c9cfb.txt\",\"supported\":true},{\"memo\":\"B\",\"claim\":\"The screening snapshot is a buy with zero families passed, zero models, data quality 0.0, and null adjusted signal.\",\"path\":\"screening_snapshot.json\",\"supported\":true},{\"memo\":\"B\",\"claim\":\"TTM FCF is $346m, calculated from FY2025 and nine-month 2026 cash-flow figures.\",\"path\":\"screening_snapshot.json\",\"supported\":true},{\"memo\":\"B\",\"claim\":\"Nine-month 2026 FCF was $1.015bn and covered the $764m dividend by about 1.3x.\",\"path\":\"filings/bodies/e7d8dfc9423bb122.txt\",\"supported\":true},{\"memo\":\"B\",\"claim\":\"The supplied 2025–26 extracts do not show later resolution of the SEC and DOJ investigations.\",\"path\":\"filings/bodies/bd132b50323c9cfb.txt\",\"supported\":false},{\"memo\":\"B\",\"claim\":\"Third-quarter recovery was driven by a constructive biofuels environment.\",\"path\":\"filings/bodies/8945993cd70e77f4.txt\",\"supported\":true},{\"memo\":\"B\",\"claim\":\"FY2025 cash flow was boosted by a $2.8bn working-capital change.\",\"path\":\"filings/bodies/adb01c0e0ac93bc6.txt\",\"supported\":true},{\"memo\":\"B\",\"claim\":\"ADM retained investment-grade ratings with a negative outlook at December 31, 2025.\",\"path\":\"filings/bodies/19af0fa0680ee358.txt\",\"supported\":true}]}",
+  "parsed": {
+    "scores": {
+      "A": {
+        "evidence": {
+          "score": 4,
+          "reason": "Most cited figures and quotations reconcile to the supplied filings and snapshots. It misses the January 2026 resolution of both investigations, but does not materially misstate its core cash-flow evidence.",
+          "quotes": [
+            {
+              "source": "filings/bodies/e7d8dfc9423bb122.txt",
+              "quote": "Net cash provided by operating activities 1,788 5,765"
+            },
+            {
+              "source": "sec_companyfacts.json",
+              "quote": "\"free_cashflow\":4204000000.0"
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 4,
+          "reason": "It provides several concrete do-not-own conditions, including dividend coverage, additional enforcement or restatement, and deteriorating cash flow. Some conditions remain broadly worded rather than threshold-based.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "Two consecutive fiscal years with filing-derived FCF (OCF minus PP&E capex) below cash dividends paid on the same statutory basis."
+            },
+            {
+              "source": "memo",
+              "quote": "New SEC/DOJ enforcement or material restatement tied to intersegment or segment reporting beyond the January 2026 settlement disclosed in sources."
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 4,
+          "reason": "Caution with medium risk and 0.60 confidence fits the tension between strong FY2025 cash flow and much weaker nine-month and TTM figures. The memo does not fully explain why caution still permits entry under the stated strategy rule.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "Verdict: caution"
+            },
+            {
+              "source": "filings/bodies/adb01c0e0ac93bc6.txt",
+              "quote": "Cash flows provided by operating activities of $5.5 billion, with cash flows from operations before working capital 1,3 of $2.7 billion"
+            }
+          ]
+        }
+      },
+      "B": {
+        "evidence": {
+          "score": 3,
+          "reason": "Its TTM reconciliation is detailed and numerically correct, but it makes a material status error by saying later investigation resolution is absent even though the supplied January 2026 8-K says both investigations ended.",
+          "quotes": [
+            {
+              "source": "filings/bodies/bd132b50323c9cfb.txt",
+              "quote": "These outcomes end the investigations of the Company by the SEC and DOJ."
+            },
+            {
+              "source": "memo",
+              "quote": "later resolution is not in the supplied 2025–26 extracts."
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 4,
+          "reason": "The memo gives more decision-useful break conditions than A, including a quantified FCF/dividend test, additional restatement or penalties, biofuel-policy reversal, and loss of investment-grade access. Some triggers are conditional or vague.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "A full-year period in which statutory FCF (OCF − PP&E capex) stays below 1.0× dividends paid and the Board cuts or suspends the dividend."
+            },
+            {
+              "source": "filings/bodies/19af0fa0680ee358.txt",
+              "quote": "As of December 31, 2025, the three major credit rating agencies maintained the Company’s credit ratings at investment grade levels with a negative outlook."
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 4,
+          "reason": "The caution verdict and 0.62 confidence are broadly supported by the 0.3× TTM dividend cover, working-capital volatility, and policy sensitivity. The unresolved-investigation discussion weakens confidence in the governance portion of the conclusion.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "TTM FCF to Sep-2026 is ~$0.35bn vs ~$1.0bn dividends (0.3×)"
+            },
+            {
+              "source": "filings/bodies/e7d8dfc9423bb122.txt",
+              "quote": "Cash dividends ( 764 ) ( 743 )"
+            }
+          ]
+        }
+      }
+    },
+    "preferred": "B",
+    "preference_reason": "B is more useful for action because it reconciles the TTM cash-flow run rate and states sharper break conditions. Its investigation-status error should be corrected before relying on the memo.",
+    "claims_checked": [
+      {
+        "memo": "A",
+        "claim": "FY2025 operating cash flow was $5.452bn and PP&E capex was $1.248bn, producing $4.204bn FCF.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "Nine-month 2026 operating cash flow was $1.788bn versus $5.765bn in the prior-year period.",
+        "path": "filings/bodies/e7d8dfc9423bb122.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "ADM increased its dividend and had 53 consecutive years of dividend growth.",
+        "path": "filings/bodies/adb01c0e0ac93bc6.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "The January 2026 SEC settlement involved a $40m civil penalty.",
+        "path": "filings/bodies/bd132b50323c9cfb.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "The screening snapshot is a buy with zero families passed, zero models, data quality 0.0, and null adjusted signal.",
+        "path": "screening_snapshot.json",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "TTM FCF is $346m, calculated from FY2025 and nine-month 2026 cash-flow figures.",
+        "path": "screening_snapshot.json",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "Nine-month 2026 FCF was $1.015bn and covered the $764m dividend by about 1.3x.",
+        "path": "filings/bodies/e7d8dfc9423bb122.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "The supplied 2025–26 extracts do not show later resolution of the SEC and DOJ investigations.",
+        "path": "filings/bodies/bd132b50323c9cfb.txt",
+        "supported": false
+      },
+      {
+        "memo": "B",
+        "claim": "Third-quarter recovery was driven by a constructive biofuels environment.",
+        "path": "filings/bodies/8945993cd70e77f4.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "FY2025 cash flow was boosted by a $2.8bn working-capital change.",
+        "path": "filings/bodies/adb01c0e0ac93bc6.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "ADM retained investment-grade ratings with a negative outlook at December 31, 2025.",
+        "path": "filings/bodies/19af0fa0680ee358.txt",
+        "supported": true
+      }
+    ]
+  },
+  "problems": [],
+  "ok": true,
+  "quote_check": {
+    "quotes": 12,
+    "found": 12,
+    "found_rate": 1.0,
+    "rows": [
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "filings/bodies/e7d8dfc9423bb122.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "sec_companyfacts.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "thesis_break",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "thesis_break",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "filings/bodies/adb01c0e0ac93bc6.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "filings/bodies/bd132b50323c9cfb.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "thesis_break",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "thesis_break",
+        "source": "filings/bodies/19af0fa0680ee358.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "filings/bodies/e7d8dfc9423bb122.txt",
+        "resolves": true,
+        "found": true
+      }
+    ]
+  },
+  "prompt_sha256": "93400b28091027fb055d7f6efdb8d44fe0a66806331f5450caf485902476eb48"
+}

@@ -1,0 +1,318 @@
+{
+  "slug": "sp500__SNDK",
+  "order": "BA",
+  "shown_as": {
+    "A": "B",
+    "B": "A"
+  },
+  "judge_model": "gpt-5.6-luna",
+  "as_of": "2026-11-11",
+  "inputs": {
+    "sha256": "5b1425e66a483de97990eadd0ac4ca3b03ed5738950a6508db05f5de1b6c9c7e",
+    "files": 35,
+    "filing_bodies": 22
+  },
+  "at": "2026-11-11T18:45:23.036998+00:00",
+  "attempt": 1,
+  "raw_text": "{\n  \"scores\": {\n    \"A\": {\n      \"evidence\": {\n        \"score\": 4,\n        \"reason\": \"Most claims and figures are traceable to the cited filings and snapshots, but the customer-concentration citation omits the filing's material negation that no FY2026 customer exceeded 10% of revenue.\",\n        \"quotes\": [\n          {\n            \"source\": \"sec_companyfacts.json\",\n            \"quote\": \"\\\"operating_cashflow\\\":{\\\"value\\\":11671000000.0\"\n          },\n          {\n            \"source\": \"sec_companyfacts.json\",\n            \"quote\": \"\\\"free_cashflow\\\":11494000000.0\"\n          },\n          {\n            \"source\": \"filings/bodies/123a23a80ce2b531.txt\",\n            \"quote\": \"For 2026, 2025 and 2024, no customer accounted for more than 10% of our net revenue.\"\n          }\n        ]\n      },\n      \"thesis_break\": {\n        \"score\": 4,\n        \"reason\": \"It identifies concrete ownership breakers involving negative cash flow, customer loss, covenant breach, refinancing failure, and impairment or restatement, though some triggers are broad and the FY2026 customer-loss trigger is not grounded in an existing FY2026 concentration.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"FY2026 10-K or XBRL shows negative operating cash flow or FCF again\"\n          },\n          {\n            \"source\": \"filings/bodies/f8854f1dddbdc4f5.txt\",\n            \"quote\": \"prohibits the Company from exceeding a maximum Leverage Ratio\"\n          }\n        ]\n      },\n      \"verdict_justified\": {\n        \"score\": 3,\n        \"reason\": \"Caution is directionally supported by cyclicality, valuation, failed yield screens, and the screen-versus-filing FCF discrepancy, but the memo does not fully explain why these concerns justify caution rather than the strategy's permitted entry.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"FY2026 statutory OCF/FCF ($11.7bn/$11.5bn) back quality screens, but NAND cyclicality, rich P/B (14.5), failed FCF-yield gate, and screen FCF ($7.7bn) vs filing mismatch limit conviction on a new buy.\"\n          },\n          {\n            \"source\": \"snapshots/20260916T071544Z.json\",\n            \"quote\": \"\\\"P/B\\\":\\\"14.5\\\"\"\n          },\n          {\n            \"source\": \"snapshots/20260916T071544Z.json\",\n            \"quote\": \"\\\"FCF yield 3.4% below 5%\\\"\"\n          }\n        ]\n      }\n    },\n    \"B\": {\n      \"evidence\": {\n        \"score\": 4,\n        \"reason\": \"It uses stronger and more current evidence, including the Q1 FY2027 filing and multi-year cash-flow history, but it overstates lack of control over Flash Ventures and incorrectly says the current snapshot lacks adjusted_signal.\",\n        \"quotes\": [\n          {\n            \"source\": \"filings/bodies/748208a9e41a745a.txt\",\n            \"quote\": \"For the three months ended October 2, 2026, two separate customers accounted for more than 10% of the Company's net revenue, amounting to 12 % each.\"\n          },\n          {\n            \"source\": \"sec_companyfacts.json\",\n            \"quote\": \"\\\"free_cashflow\\\":-120000000.0\"\n          },\n          {\n            \"source\": \"filings/bodies/123a23a80ce2b531.txt\",\n            \"quote\": \"Seasonality can also be impacted by cyclicality in the industry and macroeconomic conditions.\"\n          }\n        ]\n      },\n      \"thesis_break\": {\n        \"score\": 5,\n        \"reason\": \"The break conditions are specific, measurable, and directly tied to the business model: renewed negative FCF, Flash Ventures disruption or expiry, customer loss or ASP collapse, and recurring impairment.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"A NAND down-cycle that returns statutory OCF−CapEx negative, as in FY2023 (−$932m), FY2024 (−$475m) and FY2025 (−$120m)\"\n          },\n          {\n            \"source\": \"filings/bodies/123a23a80ce2b531.txt\",\n            \"quote\": \"In 2025, we incurred $75 million in charges as a result of underutilization of our manufacturing capacity and $24 million in charges to write down our inventory.\"\n          }\n        ]\n      },\n      \"verdict_justified\": {\n        \"score\": 4,\n        \"reason\": \"Caution and the higher confidence are well supported by the sharp rebound from three prior negative-FCF years, current customer concentration, explicit cyclicality risks, and strong interim cash generation that may be peak-cycle; the confidence is somewhat high because peak-cycle status is an analytical inference rather than a directly reported fact.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"FY2026 statutory OCF−CapEx of $11.49bn is peak-cycle NAND cash after three cash-negative years\"\n          },\n          {\n            \"source\": \"filings/bodies/748208a9e41a745a.txt\",\n            \"quote\": \"Net cash provided by operating activities 6,363 488\"\n          },\n          {\n            \"source\": \"filings/bodies/123a23a80ce2b531.txt\",\n            \"quote\": \"Competitive conditions, including declining average selling prices, volatile demand, technological change, industry consolidation, lengthy product qualifications, and supply constraints\"\n          }\n        ]\n      }\n    }\n  },\n  \"preferred\": \"B\",\n  \"preference_reason\": \"B is preferable because it checks the latest interim filing, identifies the newly disclosed 12% customers, quantifies the three prior negative-FCF years, and states more operationally specific thesis breaks. Its adjusted_signal statement is incorrect, but that error does not undermine the main conclusion.\",\n  \"claims_checked\": [\n    {\n      \"memo\": \"A\",\n      \"claim\": \"FY2026 operating cash flow was $11.671 billion and FCF was $11.494 billion.\",\n      \"path\": \"sec_companyfacts.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"FY2025 FCF was negative $120 million.\",\n      \"path\": \"sec_companyfacts.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"The September 2026 screen used FCF of approximately $7.721 billion and showed a 3.4% FCF yield below the 5% gate.\",\n      \"path\": \"snapshots/20260916T071544Z.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"The FY2026 filing disclosed customer concentration above 10% of revenue.\",\n      \"path\": \"filings/bodies/123a23a80ce2b531.txt\",\n      \"supported\": false\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"The revolving facility had $1.5 billion of commitments and a maximum Leverage Ratio covenant.\",\n      \"path\": \"filings/bodies/f8854f1dddbdc4f5.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"FY2023, FY2024, and FY2025 FCF were negative $932 million, $475 million, and $120 million.\",\n      \"path\": \"sec_companyfacts.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"Q1 FY2027 had two customers each representing 12% of net revenue.\",\n      \"path\": \"filings/bodies/748208a9e41a745a.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"Q1 FY2027 revenue was $11.031 billion and operating cash flow was $6.363 billion.\",\n      \"path\": \"filings/bodies/748208a9e41a745a.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"Flash Ventures supply materially limits the company's ability to respond to demand and supply changes.\",\n      \"path\": \"filings/bodies/123a23a80ce2b531.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"The current snapshot has no adjusted_signal.\",\n      \"path\": \"screening_snapshot.json\",\n      \"supported\": false\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"The FY2025 filing reported $75 million of underutilization charges and $24 million of inventory write-downs.\",\n      \"path\": \"filings/bodies/123a23a80ce2b531.txt\",\n      \"supported\": true\n    }\n  ]\n}",
+  "parsed": {
+    "scores": {
+      "A": {
+        "evidence": {
+          "score": 4,
+          "reason": "Most claims and figures are traceable to the cited filings and snapshots, but the customer-concentration citation omits the filing's material negation that no FY2026 customer exceeded 10% of revenue.",
+          "quotes": [
+            {
+              "source": "sec_companyfacts.json",
+              "quote": "\"operating_cashflow\":{\"value\":11671000000.0"
+            },
+            {
+              "source": "sec_companyfacts.json",
+              "quote": "\"free_cashflow\":11494000000.0"
+            },
+            {
+              "source": "filings/bodies/123a23a80ce2b531.txt",
+              "quote": "For 2026, 2025 and 2024, no customer accounted for more than 10% of our net revenue."
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 4,
+          "reason": "It identifies concrete ownership breakers involving negative cash flow, customer loss, covenant breach, refinancing failure, and impairment or restatement, though some triggers are broad and the FY2026 customer-loss trigger is not grounded in an existing FY2026 concentration.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "FY2026 10-K or XBRL shows negative operating cash flow or FCF again"
+            },
+            {
+              "source": "filings/bodies/f8854f1dddbdc4f5.txt",
+              "quote": "prohibits the Company from exceeding a maximum Leverage Ratio"
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 3,
+          "reason": "Caution is directionally supported by cyclicality, valuation, failed yield screens, and the screen-versus-filing FCF discrepancy, but the memo does not fully explain why these concerns justify caution rather than the strategy's permitted entry.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "FY2026 statutory OCF/FCF ($11.7bn/$11.5bn) back quality screens, but NAND cyclicality, rich P/B (14.5), failed FCF-yield gate, and screen FCF ($7.7bn) vs filing mismatch limit conviction on a new buy."
+            },
+            {
+              "source": "snapshots/20260916T071544Z.json",
+              "quote": "\"P/B\":\"14.5\""
+            },
+            {
+              "source": "snapshots/20260916T071544Z.json",
+              "quote": "\"FCF yield 3.4% below 5%\""
+            }
+          ]
+        }
+      },
+      "B": {
+        "evidence": {
+          "score": 4,
+          "reason": "It uses stronger and more current evidence, including the Q1 FY2027 filing and multi-year cash-flow history, but it overstates lack of control over Flash Ventures and incorrectly says the current snapshot lacks adjusted_signal.",
+          "quotes": [
+            {
+              "source": "filings/bodies/748208a9e41a745a.txt",
+              "quote": "For the three months ended October 2, 2026, two separate customers accounted for more than 10% of the Company's net revenue, amounting to 12 % each."
+            },
+            {
+              "source": "sec_companyfacts.json",
+              "quote": "\"free_cashflow\":-120000000.0"
+            },
+            {
+              "source": "filings/bodies/123a23a80ce2b531.txt",
+              "quote": "Seasonality can also be impacted by cyclicality in the industry and macroeconomic conditions."
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 5,
+          "reason": "The break conditions are specific, measurable, and directly tied to the business model: renewed negative FCF, Flash Ventures disruption or expiry, customer loss or ASP collapse, and recurring impairment.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "A NAND down-cycle that returns statutory OCF−CapEx negative, as in FY2023 (−$932m), FY2024 (−$475m) and FY2025 (−$120m)"
+            },
+            {
+              "source": "filings/bodies/123a23a80ce2b531.txt",
+              "quote": "In 2025, we incurred $75 million in charges as a result of underutilization of our manufacturing capacity and $24 million in charges to write down our inventory."
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 4,
+          "reason": "Caution and the higher confidence are well supported by the sharp rebound from three prior negative-FCF years, current customer concentration, explicit cyclicality risks, and strong interim cash generation that may be peak-cycle; the confidence is somewhat high because peak-cycle status is an analytical inference rather than a directly reported fact.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "FY2026 statutory OCF−CapEx of $11.49bn is peak-cycle NAND cash after three cash-negative years"
+            },
+            {
+              "source": "filings/bodies/748208a9e41a745a.txt",
+              "quote": "Net cash provided by operating activities 6,363 488"
+            },
+            {
+              "source": "filings/bodies/123a23a80ce2b531.txt",
+              "quote": "Competitive conditions, including declining average selling prices, volatile demand, technological change, industry consolidation, lengthy product qualifications, and supply constraints"
+            }
+          ]
+        }
+      }
+    },
+    "preferred": "B",
+    "preference_reason": "B is preferable because it checks the latest interim filing, identifies the newly disclosed 12% customers, quantifies the three prior negative-FCF years, and states more operationally specific thesis breaks. Its adjusted_signal statement is incorrect, but that error does not undermine the main conclusion.",
+    "claims_checked": [
+      {
+        "memo": "A",
+        "claim": "FY2026 operating cash flow was $11.671 billion and FCF was $11.494 billion.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "FY2025 FCF was negative $120 million.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "The September 2026 screen used FCF of approximately $7.721 billion and showed a 3.4% FCF yield below the 5% gate.",
+        "path": "snapshots/20260916T071544Z.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "The FY2026 filing disclosed customer concentration above 10% of revenue.",
+        "path": "filings/bodies/123a23a80ce2b531.txt",
+        "supported": false
+      },
+      {
+        "memo": "A",
+        "claim": "The revolving facility had $1.5 billion of commitments and a maximum Leverage Ratio covenant.",
+        "path": "filings/bodies/f8854f1dddbdc4f5.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "FY2023, FY2024, and FY2025 FCF were negative $932 million, $475 million, and $120 million.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "Q1 FY2027 had two customers each representing 12% of net revenue.",
+        "path": "filings/bodies/748208a9e41a745a.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "Q1 FY2027 revenue was $11.031 billion and operating cash flow was $6.363 billion.",
+        "path": "filings/bodies/748208a9e41a745a.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "Flash Ventures supply materially limits the company's ability to respond to demand and supply changes.",
+        "path": "filings/bodies/123a23a80ce2b531.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "The current snapshot has no adjusted_signal.",
+        "path": "screening_snapshot.json",
+        "supported": false
+      },
+      {
+        "memo": "B",
+        "claim": "The FY2025 filing reported $75 million of underutilization charges and $24 million of inventory write-downs.",
+        "path": "filings/bodies/123a23a80ce2b531.txt",
+        "supported": true
+      }
+    ]
+  },
+  "problems": [],
+  "ok": true,
+  "quote_check": {
+    "quotes": 16,
+    "found": 15,
+    "found_rate": 0.938,
+    "rows": [
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "sec_companyfacts.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "sec_companyfacts.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "filings/bodies/123a23a80ce2b531.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "thesis_break",
+        "source": "memo",
+        "resolves": true,
+        "found": false
+      },
+      {
+        "label": "A",
+        "key": "thesis_break",
+        "source": "filings/bodies/f8854f1dddbdc4f5.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "snapshots/20260916T071544Z.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "snapshots/20260916T071544Z.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "filings/bodies/748208a9e41a745a.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "sec_companyfacts.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "filings/bodies/123a23a80ce2b531.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "thesis_break",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "thesis_break",
+        "source": "filings/bodies/123a23a80ce2b531.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "filings/bodies/748208a9e41a745a.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "filings/bodies/123a23a80ce2b531.txt",
+        "resolves": true,
+        "found": true
+      }
+    ]
+  },
+  "prompt_sha256": "91c937aae2eafcb905e54e30da5ded71e96af1280693721ef7e07a077a13fa7d"
+}

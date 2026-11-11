@@ -1,0 +1,274 @@
+{
+  "slug": "nasdaq100__FANG",
+  "order": "BA",
+  "shown_as": {
+    "A": "B",
+    "B": "A"
+  },
+  "judge_model": "gpt-5.6-luna",
+  "as_of": "2026-11-11",
+  "inputs": {
+    "sha256": "6bd4051f62062907125afbab43df021a77cf29241413a610b7944ad3bc6529fe",
+    "files": 38,
+    "filing_bodies": 23
+  },
+  "at": "2026-11-11T18:45:23.036998+00:00",
+  "attempt": 1,
+  "raw_text": "{\n  \"scores\": {\n    \"A\": {\n      \"evidence\": {\n        \"score\": 4,\n        \"reason\": \"Most key figures and filing quotations are accurate and well grounded, but some screen-derived figures and comparisons are not fully traceable to the cited source entries.\",\n        \"quotes\": [\n          {\n            \"source\": \"sec_companyfacts.json\",\n            \"quote\": \"\\\"free_cashflow\\\":2820000000.0\"\n          },\n          {\n            \"source\": \"screening_snapshot.json\",\n            \"quote\": \"\\\"free_cashflow\\\":-703000000.0\"\n          }\n        ]\n      },\n      \"thesis_break\": {\n        \"score\": 5,\n        \"reason\": \"It gives several concrete, operational do-not-own triggers with measurable conditions involving FCF coverage, impairments, dividends, and refinancing.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"Filed annual OCF minus oil-and-gas PP&E capex covering cash dividends below 1.0× for a second year after FY2024, while the base dividend is still paid or raised.\"\n          },\n          {\n            \"source\": \"filings/bodies/6da99cf3c8b75d6a.txt\",\n            \"quote\": \"If the future trailing 12 -month commodity prices decline as compared to the commodity prices used in prior quarters, the Company may have material write downs in subsequent quarters.\"\n          }\n        ]\n      },\n      \"verdict_justified\": {\n        \"score\": 4,\n        \"reason\": \"Caution is consistent with the documented accounting divergence, impairment risk, leverage, and liquidity weakness, although the memo does not fully quantify how those risks translate into the stated confidence.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"Overlay tensions still open: FCF definition, earnings-growth artefact, unflagged E&P cyclicality, and weak liquidity\"\n          },\n          {\n            \"source\": \"filings/bodies/6da99cf3c8b75d6a.txt\",\n            \"quote\": \"Total current assets 3,147 1,915\"\n          }\n        ]\n      }\n    },\n    \"B\": {\n      \"evidence\": {\n        \"score\": 5,\n        \"reason\": \"The cited filing quotations and numerical values are consistently supported by the supplied SEC, screening, and interim filing files, with appropriate acknowledgment of Yahoo-versus-statutory divergence.\",\n        \"quotes\": [\n          {\n            \"source\": \"filings/bodies/6da99cf3c8b75d6a.txt\",\n            \"quote\": \"No ceiling test impairment was recorded for the three months ended September 30, 2026.\"\n          },\n          {\n            \"source\": \"sec_companyfacts.json\",\n            \"quote\": \"\\\"operating_cashflow\\\":{\\\"value\\\":8758000000.0\"\n          }\n        ]\n      },\n      \"thesis_break\": {\n        \"score\": 4,\n        \"reason\": \"The memo identifies relevant break conditions, but some are less measurable than A's, especially the concepts of impairments that occur routinely and debt increases that materially limit operations.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"Quarterly SEC ceiling-test or property impairments at a scale that routinely absorbs operating cash flow\"\n          },\n          {\n            \"source\": \"filings/bodies/6da99cf3c8b75d6a.txt\",\n            \"quote\": \"It is possible that circumstances requiring additional impairment testing will occur in future interim periods, which could result in potentially material impairment charges being recorded.\"\n          }\n        ]\n      },\n      \"verdict_justified\": {\n        \"score\": 4,\n        \"reason\": \"Accumulate is supported by FY2025 statutory FCF coverage and the dividend increase, but the confidence is somewhat aggressive given the FY2024 FCF deficit, 2026 impairment, leverage risks, and unresolved FCF definition discrepancy.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"FY2025 XBRL shows strong OCF and FCF above dividends\"\n          },\n          {\n            \"source\": \"filings/bodies/e026418c5b6907bc.txt\",\n            \"quote\": \"The Company’s effective income tax rates were 17.4 %, 17.8 % and 21.5 % for the years ended December 31, 2025, 2024 and 2023, respectively.\"\n          }\n        ]\n      }\n    }\n  },\n  \"preferred\": \"A\",\n  \"preference_reason\": \"A is preferable because it identifies more specific thesis-break conditions and more fully exposes liquidity, accounting-definition, earnings-growth, impairment, and refinancing risks before allowing entry.\",\n  \"claims_checked\": [\n    {\n      \"memo\": \"A\",\n      \"claim\": \"FY2025 statutory OCF minus oil-and-gas capex FCF was $2.820 billion.\",\n      \"path\": \"sec_companyfacts.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"FY2024 statutory FCF was negative $2.507 billion.\",\n      \"path\": \"sec_companyfacts.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"Yahoo FY2025 FCF was negative $703 million and TTM FCF was $3.682 billion.\",\n      \"path\": \"screening_snapshot.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"Nine-month 2026 OCF was $8.016 billion, oil-and-gas additions were $2.955 billion, and dividends were $918 million.\",\n      \"path\": \"filings/bodies/6da99cf3c8b75d6a.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"Nine-month 2026 included a $1.4 billion impairment.\",\n      \"path\": \"filings/bodies/6da99cf3c8b75d6a.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"September 30, 2026 current assets were $3.147 billion versus current liabilities of $5.739 billion.\",\n      \"path\": \"filings/bodies/6da99cf3c8b75d6a.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"The board increased the annual base dividend to $4.20 per share.\",\n      \"path\": \"filings/bodies/e026418c5b6907bc.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"No ceiling-test impairment was recorded in Q3 2026, while nine-month 2026 included a $1.4 billion impairment.\",\n      \"path\": \"filings/bodies/6da99cf3c8b75d6a.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"FY2025 statutory FCF was $2.820 billion versus dividends paid of $1.156 billion.\",\n      \"path\": \"sec_companyfacts.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"Yahoo FY2025 FCF was negative $703 million.\",\n      \"path\": \"screening_snapshot.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"The filing identifies substantial indebtedness, restrictions on financial flexibility, and uncertainty over dividends and repurchases as risks.\",\n      \"path\": \"filings/bodies/6da99cf3c8b75d6a.txt\",\n      \"supported\": true\n    }\n  ]\n}",
+  "parsed": {
+    "scores": {
+      "A": {
+        "evidence": {
+          "score": 4,
+          "reason": "Most key figures and filing quotations are accurate and well grounded, but some screen-derived figures and comparisons are not fully traceable to the cited source entries.",
+          "quotes": [
+            {
+              "source": "sec_companyfacts.json",
+              "quote": "\"free_cashflow\":2820000000.0"
+            },
+            {
+              "source": "screening_snapshot.json",
+              "quote": "\"free_cashflow\":-703000000.0"
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 5,
+          "reason": "It gives several concrete, operational do-not-own triggers with measurable conditions involving FCF coverage, impairments, dividends, and refinancing.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "Filed annual OCF minus oil-and-gas PP&E capex covering cash dividends below 1.0× for a second year after FY2024, while the base dividend is still paid or raised."
+            },
+            {
+              "source": "filings/bodies/6da99cf3c8b75d6a.txt",
+              "quote": "If the future trailing 12 -month commodity prices decline as compared to the commodity prices used in prior quarters, the Company may have material write downs in subsequent quarters."
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 4,
+          "reason": "Caution is consistent with the documented accounting divergence, impairment risk, leverage, and liquidity weakness, although the memo does not fully quantify how those risks translate into the stated confidence.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "Overlay tensions still open: FCF definition, earnings-growth artefact, unflagged E&P cyclicality, and weak liquidity"
+            },
+            {
+              "source": "filings/bodies/6da99cf3c8b75d6a.txt",
+              "quote": "Total current assets 3,147 1,915"
+            }
+          ]
+        }
+      },
+      "B": {
+        "evidence": {
+          "score": 5,
+          "reason": "The cited filing quotations and numerical values are consistently supported by the supplied SEC, screening, and interim filing files, with appropriate acknowledgment of Yahoo-versus-statutory divergence.",
+          "quotes": [
+            {
+              "source": "filings/bodies/6da99cf3c8b75d6a.txt",
+              "quote": "No ceiling test impairment was recorded for the three months ended September 30, 2026."
+            },
+            {
+              "source": "sec_companyfacts.json",
+              "quote": "\"operating_cashflow\":{\"value\":8758000000.0"
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 4,
+          "reason": "The memo identifies relevant break conditions, but some are less measurable than A's, especially the concepts of impairments that occur routinely and debt increases that materially limit operations.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "Quarterly SEC ceiling-test or property impairments at a scale that routinely absorbs operating cash flow"
+            },
+            {
+              "source": "filings/bodies/6da99cf3c8b75d6a.txt",
+              "quote": "It is possible that circumstances requiring additional impairment testing will occur in future interim periods, which could result in potentially material impairment charges being recorded."
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 4,
+          "reason": "Accumulate is supported by FY2025 statutory FCF coverage and the dividend increase, but the confidence is somewhat aggressive given the FY2024 FCF deficit, 2026 impairment, leverage risks, and unresolved FCF definition discrepancy.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "FY2025 XBRL shows strong OCF and FCF above dividends"
+            },
+            {
+              "source": "filings/bodies/e026418c5b6907bc.txt",
+              "quote": "The Company’s effective income tax rates were 17.4 %, 17.8 % and 21.5 % for the years ended December 31, 2025, 2024 and 2023, respectively."
+            }
+          ]
+        }
+      }
+    },
+    "preferred": "A",
+    "preference_reason": "A is preferable because it identifies more specific thesis-break conditions and more fully exposes liquidity, accounting-definition, earnings-growth, impairment, and refinancing risks before allowing entry.",
+    "claims_checked": [
+      {
+        "memo": "A",
+        "claim": "FY2025 statutory OCF minus oil-and-gas capex FCF was $2.820 billion.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "FY2024 statutory FCF was negative $2.507 billion.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "Yahoo FY2025 FCF was negative $703 million and TTM FCF was $3.682 billion.",
+        "path": "screening_snapshot.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "Nine-month 2026 OCF was $8.016 billion, oil-and-gas additions were $2.955 billion, and dividends were $918 million.",
+        "path": "filings/bodies/6da99cf3c8b75d6a.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "Nine-month 2026 included a $1.4 billion impairment.",
+        "path": "filings/bodies/6da99cf3c8b75d6a.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "September 30, 2026 current assets were $3.147 billion versus current liabilities of $5.739 billion.",
+        "path": "filings/bodies/6da99cf3c8b75d6a.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "The board increased the annual base dividend to $4.20 per share.",
+        "path": "filings/bodies/e026418c5b6907bc.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "No ceiling-test impairment was recorded in Q3 2026, while nine-month 2026 included a $1.4 billion impairment.",
+        "path": "filings/bodies/6da99cf3c8b75d6a.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "FY2025 statutory FCF was $2.820 billion versus dividends paid of $1.156 billion.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "Yahoo FY2025 FCF was negative $703 million.",
+        "path": "screening_snapshot.json",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "The filing identifies substantial indebtedness, restrictions on financial flexibility, and uncertainty over dividends and repurchases as risks.",
+        "path": "filings/bodies/6da99cf3c8b75d6a.txt",
+        "supported": true
+      }
+    ]
+  },
+  "problems": [],
+  "ok": true,
+  "quote_check": {
+    "quotes": 12,
+    "found": 12,
+    "found_rate": 1.0,
+    "rows": [
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "sec_companyfacts.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "screening_snapshot.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "thesis_break",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "thesis_break",
+        "source": "filings/bodies/6da99cf3c8b75d6a.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "filings/bodies/6da99cf3c8b75d6a.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "filings/bodies/6da99cf3c8b75d6a.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "sec_companyfacts.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "thesis_break",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "thesis_break",
+        "source": "filings/bodies/6da99cf3c8b75d6a.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "filings/bodies/e026418c5b6907bc.txt",
+        "resolves": true,
+        "found": true
+      }
+    ]
+  },
+  "prompt_sha256": "081fc5909db7f7e3e7e9dbaf8519364036e2889651fcc4c2a6e62400132e1d0f"
+}

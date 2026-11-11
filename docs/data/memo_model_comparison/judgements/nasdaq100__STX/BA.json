@@ -1,0 +1,240 @@
+{
+  "slug": "nasdaq100__STX",
+  "order": "BA",
+  "shown_as": {
+    "A": "B",
+    "B": "A"
+  },
+  "judge_model": "gpt-5.6-luna",
+  "as_of": "2026-11-11",
+  "inputs": {
+    "sha256": "279ee7a94451e687715a87de234ef70196dfeb48534eff907b8b127efae52e3d",
+    "files": 86,
+    "filing_bodies": 69
+  },
+  "at": "2026-11-11T18:45:23.036998+00:00",
+  "attempt": 1,
+  "raw_text": "{\n  \"scores\": {\n    \"A\": {\n      \"evidence\": {\n        \"score\": 5,\n        \"reason\": \"Broad, specific, and well-cited evidence; the memo correctly distinguishes filed FY2026 figures from Yahoo TTM data and accurately calculates FCF coverage.\",\n        \"quotes\": [\n          {\n            \"source\": \"sec_companyfacts.json\",\n            \"quote\": \"\\\"free_cashflow\\\":3105000000.0\"\n          },\n          {\n            \"source\": \"filings/bodies/550fe7f57dd99afc.txt\",\n            \"quote\": \"Our operating cash flow was $1.7 billion\"\n          }\n        ]\n      },\n      \"thesis_break\": {\n        \"score\": 5,\n        \"reason\": \"It identifies concrete financial, customer, technology, and regulatory conditions that would make STX a do-not-own name.\",\n        \"quotes\": [\n          {\n            \"source\": \"filings/bodies/0e21ebab31a84200.txt\",\n            \"quote\": \"If our transitions to more advanced technologies, including the transition to HDDs utilizing HAMR technology, require development, qualification or production cycles that are longer than anticipated\"\n          }\n        ]\n      },\n      \"verdict_justified\": {\n        \"score\": 4,\n        \"reason\": \"Accumulate is consistent with strong filed cash generation and balanced risk discussion, but conviction is limited because the screen is empty and no valuation evidence is presented.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"The snapshot buy is a raw signal (`models_passed` 0, `families_passed` 0, `data_quality_score` 0.0, empty `key_metrics`\"\n          },\n          {\n            \"source\": \"sec_companyfacts.json\",\n            \"quote\": \"\\\"dividends_paid\\\":{\\\"value\\\":634000000.0\"\n          }\n        ]\n      }\n    },\n    \"B\": {\n      \"evidence\": {\n        \"score\": 4,\n        \"reason\": \"The main financial and risk claims are supported, but some citations are truncated fragments and the evidence presentation is less precise than A's.\",\n        \"quotes\": [\n          {\n            \"source\": \"sec_companyfacts.json\",\n            \"quote\": \"\\\"operating_cashflow\\\":{\\\"value\\\":3674000000.0\"\n          },\n          {\n            \"source\": \"filings/bodies/0e21ebab31a84200.txt\",\n            \"quote\": \"In fiscal year 2026, one customer accounted for approximately 14% of our consolidated revenue.\"\n          }\n        ]\n      },\n      \"thesis_break\": {\n        \"score\": 4,\n        \"reason\": \"The break conditions are concrete and relevant, especially around FCF, customer concentration, debt covenants, dividends, and export controls, though they are less detailed than A's and include an unsupported reference to prior guidance.\",\n        \"quotes\": [\n          {\n            \"source\": \"filings/bodies/550fe7f57dd99afc.txt\",\n            \"quote\": \"As of October 2, 2026, we were in compliance with all of the covenants under our debt agreements.\"\n          }\n        ]\n      },\n      \"verdict_justified\": {\n        \"score\": 3,\n        \"reason\": \"Accumulate is broadly compatible with the evidence, but the 0.72 confidence is somewhat high given the absence of valuation support, the empty screen, and the memo's relatively limited positive evidence.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"Verdict: accumulate\"\n          },\n          {\n            \"source\": \"screening_snapshot.json\",\n            \"quote\": \"\\\"models_passed\\\":0,\\\"model_count\\\":0,\\\"families_passed\\\":0\"\n          }\n        ]\n      }\n    }\n  },\n  \"preferred\": \"A\",\n  \"preference_reason\": \"A is more useful for action because it provides stronger source-grounded evidence, explicitly separates filed and TTM cash flows, and gives more specific thesis-break conditions while acknowledging the limitations of the empty screen.\",\n  \"claims_checked\": [\n    {\n      \"memo\": \"A\",\n      \"claim\": \"FY2026 operating cash flow was $3.674 billion, capital expenditure was $569 million, and FCF was $3.105 billion.\",\n      \"path\": \"sec_companyfacts.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"FY2026 dividends paid were $634 million, implying approximately 4.9x FCF coverage.\",\n      \"path\": \"sec_companyfacts.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"Q1 FY2027 operating cash flow was $1.690 billion and FCF was approximately $1.479 billion.\",\n      \"path\": \"filings/bodies/550fe7f57dd99afc.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"One customer represented approximately 14% of FY2026 revenue.\",\n      \"path\": \"filings/bodies/0e21ebab31a84200.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"FY2023-24 utilization charges demonstrated a prior FCF collapse.\",\n      \"path\": \"filings/bodies/0e21ebab31a84200.txt\",\n      \"supported\": false\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"FY2026 filed OCF and FCF match the screen.\",\n      \"path\": \"sec_companyfacts.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"STX has leverage and debt-covenant risk.\",\n      \"path\": \"filings/bodies/550fe7f57dd99afc.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"BIS settlement payments remain an export-control risk.\",\n      \"path\": \"filings/bodies/550fe7f57dd99afc.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"A dividend suspension or cut would occur despite prior guidance.\",\n      \"path\": \"filings/bodies/550fe7f57dd99afc.txt\",\n      \"supported\": false\n    }\n  ]\n}",
+  "parsed": {
+    "scores": {
+      "A": {
+        "evidence": {
+          "score": 5,
+          "reason": "Broad, specific, and well-cited evidence; the memo correctly distinguishes filed FY2026 figures from Yahoo TTM data and accurately calculates FCF coverage.",
+          "quotes": [
+            {
+              "source": "sec_companyfacts.json",
+              "quote": "\"free_cashflow\":3105000000.0"
+            },
+            {
+              "source": "filings/bodies/550fe7f57dd99afc.txt",
+              "quote": "Our operating cash flow was $1.7 billion"
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 5,
+          "reason": "It identifies concrete financial, customer, technology, and regulatory conditions that would make STX a do-not-own name.",
+          "quotes": [
+            {
+              "source": "filings/bodies/0e21ebab31a84200.txt",
+              "quote": "If our transitions to more advanced technologies, including the transition to HDDs utilizing HAMR technology, require development, qualification or production cycles that are longer than anticipated"
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 4,
+          "reason": "Accumulate is consistent with strong filed cash generation and balanced risk discussion, but conviction is limited because the screen is empty and no valuation evidence is presented.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "The snapshot buy is a raw signal (`models_passed` 0, `families_passed` 0, `data_quality_score` 0.0, empty `key_metrics`"
+            },
+            {
+              "source": "sec_companyfacts.json",
+              "quote": "\"dividends_paid\":{\"value\":634000000.0"
+            }
+          ]
+        }
+      },
+      "B": {
+        "evidence": {
+          "score": 4,
+          "reason": "The main financial and risk claims are supported, but some citations are truncated fragments and the evidence presentation is less precise than A's.",
+          "quotes": [
+            {
+              "source": "sec_companyfacts.json",
+              "quote": "\"operating_cashflow\":{\"value\":3674000000.0"
+            },
+            {
+              "source": "filings/bodies/0e21ebab31a84200.txt",
+              "quote": "In fiscal year 2026, one customer accounted for approximately 14% of our consolidated revenue."
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 4,
+          "reason": "The break conditions are concrete and relevant, especially around FCF, customer concentration, debt covenants, dividends, and export controls, though they are less detailed than A's and include an unsupported reference to prior guidance.",
+          "quotes": [
+            {
+              "source": "filings/bodies/550fe7f57dd99afc.txt",
+              "quote": "As of October 2, 2026, we were in compliance with all of the covenants under our debt agreements."
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 3,
+          "reason": "Accumulate is broadly compatible with the evidence, but the 0.72 confidence is somewhat high given the absence of valuation support, the empty screen, and the memo's relatively limited positive evidence.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "Verdict: accumulate"
+            },
+            {
+              "source": "screening_snapshot.json",
+              "quote": "\"models_passed\":0,\"model_count\":0,\"families_passed\":0"
+            }
+          ]
+        }
+      }
+    },
+    "preferred": "A",
+    "preference_reason": "A is more useful for action because it provides stronger source-grounded evidence, explicitly separates filed and TTM cash flows, and gives more specific thesis-break conditions while acknowledging the limitations of the empty screen.",
+    "claims_checked": [
+      {
+        "memo": "A",
+        "claim": "FY2026 operating cash flow was $3.674 billion, capital expenditure was $569 million, and FCF was $3.105 billion.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "FY2026 dividends paid were $634 million, implying approximately 4.9x FCF coverage.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "Q1 FY2027 operating cash flow was $1.690 billion and FCF was approximately $1.479 billion.",
+        "path": "filings/bodies/550fe7f57dd99afc.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "One customer represented approximately 14% of FY2026 revenue.",
+        "path": "filings/bodies/0e21ebab31a84200.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "FY2023-24 utilization charges demonstrated a prior FCF collapse.",
+        "path": "filings/bodies/0e21ebab31a84200.txt",
+        "supported": false
+      },
+      {
+        "memo": "B",
+        "claim": "FY2026 filed OCF and FCF match the screen.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "STX has leverage and debt-covenant risk.",
+        "path": "filings/bodies/550fe7f57dd99afc.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "BIS settlement payments remain an export-control risk.",
+        "path": "filings/bodies/550fe7f57dd99afc.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "A dividend suspension or cut would occur despite prior guidance.",
+        "path": "filings/bodies/550fe7f57dd99afc.txt",
+        "supported": false
+      }
+    ]
+  },
+  "problems": [],
+  "ok": true,
+  "quote_check": {
+    "quotes": 10,
+    "found": 9,
+    "found_rate": 0.9,
+    "rows": [
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "sec_companyfacts.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "filings/bodies/550fe7f57dd99afc.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "thesis_break",
+        "source": "filings/bodies/0e21ebab31a84200.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "sec_companyfacts.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "sec_companyfacts.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "filings/bodies/0e21ebab31a84200.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "thesis_break",
+        "source": "filings/bodies/550fe7f57dd99afc.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "screening_snapshot.json",
+        "resolves": true,
+        "found": false
+      }
+    ]
+  },
+  "prompt_sha256": "42a06524e3f9d4e4b74e3bafbbcd709e5149ea1a82f0874e968625ffaf109fe2"
+}

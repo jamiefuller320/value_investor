@@ -1,0 +1,146 @@
+{
+  "label": "B",
+  "slug": "nasdaq100__FANG",
+  "as_of": "2026-11-11",
+  "inputs": {
+    "sha256": "6bd4051f62062907125afbab43df021a77cf29241413a610b7944ad3bc6529fe",
+    "files": 38,
+    "filing_bodies": 23
+  },
+  "ok": true,
+  "verdict": "caution",
+  "risk": "medium",
+  "confidence": 0.66,
+  "rationale": "Research weakens the strong-buy: screen FCF yield and 179% growth are not filing-aligned (FY2025 SEC FCF $2.82bn vs Yahoo −$703m; EPS $5.73 vs $15.53), though 9M 2026 cash covers the raised dividend.",
+  "risk_tags": [
+    "cyclical",
+    "leverage",
+    "liquidity",
+    "accounting",
+    "governance",
+    "regulatory"
+  ],
+  "book_effect": "allows",
+  "raw_text": "RESEARCH VERDICT\n\nVerdict: caution\nRisk: medium\nConfidence: 0.66\nRationale: Research weakens the strong-buy: screen FCF yield and 179% growth are not filing-aligned (FY2025 SEC FCF $2.82bn vs Yahoo −$703m; EPS $5.73 vs $15.53), though 9M 2026 cash covers the raised dividend.\nRiskTags: cyclical, leverage, liquidity, accounting, governance, regulatory\n\nThe August snapshot (`snapshots/20260816T122826Z.json`) is a strong buy (7/22 models; families cheapness, dividend, GARP, risk) with `adjusted_signal` also strong_buy, so no overlay downgrade is already in the screen. The later `screening_snapshot.json` is thinner (signal buy) and shows Yahoo annual FCF −$703m versus TTM FCF $3.682bn. Screen TTM FCF $5.036bn (yield 8.9%) is not filing-aligned with SEC XBRL FY2025 OCF−PP&E FCF $2.82bn. Dividend Growth passed; FY2025 statutory cover is about 2.4× (not a cover break) and there is no interim cut—the base rose from $1.00 to $1.05 then $1.10 a share—but FY2024 SEC FCF −$2.507bn did not cover $1.578bn of dividends, and Yahoo FY2025 FCF is negative. GARP/Lynch/Neff rest on 179.5% earnings growth that does not appear in Yahoo annual EPS ($5.73 in 2025 versus $15.53 in 2024). Overlay tensions still open: FCF definition, earnings-growth artefact, unflagged E&P cyclicality, and weak liquidity (Financial Health failed; Q3 2026 current assets $3,147m versus current liabilities $5,739m).\n\nCOMPARISON EVIDENCE\n\nEVIDENCE\n- [filings/bodies/e026418c5b6907bc.txt] \"On February 19, 2026, the board of directors of the Company approved an increase in the Company’s annual base dividend to $ 4.20 per share of common stock\" — Base dividend raised, not cut, which supports the dividend-family pass on the August snapshot.\n- [filings/bodies/6da99cf3c8b75d6a.txt] \"2026 First quarter $ 1.05 $ 298 Second quarter 1.10 311 Third quarter 1.10 309 Total $ 3.25 $ 918\" — Nine-month 2026 common dividends $918m, up from $3.00 to $3.25 per share versus 2025.\n- [filings/bodies/6da99cf3c8b75d6a.txt] \"Net cash provided by (used in) operating activities 8,016 6,415 Cash flows from investing activities: Additions to oil and natural gas properties ( 2,955 ) ( 2,580 )\" — 9M 2026 OCF $8,016m less O&G additions $2,955m covers the $918m dividend (acquisitions are extra).\n- [filings/bodies/6da99cf3c8b75d6a.txt] \"However, the Company recorded an impairment of approximately $ 1.4 billion during the nine months ended September 30, 2026\" — Q1 2026 ceiling-test charge sits inside 9M 2026 even though Q3 2026 itself had none.\n- [filings/bodies/6da99cf3c8b75d6a.txt] \"If the future trailing 12 -month commodity prices decline as compared to the commodity prices used in prior quarters, the Company may have material write downs in subsequent quarters.\" — Full-cost ceiling remains a live earnings and book-value risk; the cyclical overlay did not fire.\n- [filings/bodies/e026418c5b6907bc.txt] \"Depreciation, depletion, amortization and accretion ( 4,943 ) ( 2,781 ) ( 1,684 ) Impairment ( 3,652 ) — —\" — FY2025 oil-and-gas results already include a $3,652m impairment (none in 2024 or 2023).\n- [filings/bodies/e026418c5b6907bc.txt] \"Debt $ 14,489 $ 14,497 $ 12,975 $ 12,564\" — Year-end 2025 carrying debt $14,489m, up from $12,975m in 2024; leverage remains a screen tension.\n- [filings/bodies/6da99cf3c8b75d6a.txt] \"our substantial indebtedness and restrictions to our operating and financial flexibility\" — Interim risk factors still flag leverage, capital-return uncertainty and Endeavor-equityholder influence.\n\nNUMBERS\n- operating_cashflow | 8758000000.0 | FY2025 (period_end 2025-12-31, 10-K filed 2026-02-25) | [sec_companyfacts.json]\n- capital_expenditure (PaymentsToAcquireOilAndGasProperty) | 5938000000.0 | FY2025 (period_end 2025-12-31) | [sec_companyfacts.json]\n- free_cashflow (OCF − PP&E capex) | 2820000000.0 | FY2025 (period_end 2025-12-31) | [sec_companyfacts.json]\n- dividends_paid | 1156000000.0 | FY2025 (period_end 2025-12-31) | [sec_companyfacts.json]\n- free_cashflow | -2507000000.0 | FY2024 (period_end 2024-12-31) | [sec_companyfacts.json]\n- free_cashflow | -703000000.0 | Yahoo FY2025 (not filing-aligned; TTM FCF 3682000000.0) | [screening_snapshot.json]\n\nTHESIS BREAKS\n- Filed annual OCF minus oil-and-gas PP&E capex covering cash dividends below 1.0× for a second year after FY2024, while the base dividend is still paid or raised.\n- A further full-cost ceiling-test impairment, as the Q3 2026 10-Q warns may occur if trailing 12-month commodity prices fall, that wipes out the 9M 2026 cash surplus over dividends.\n- A cut or suspension of the $1.10 quarterly base (or a retreat from the $4.20 annual base declared in February 2026).\n- Inability to refinance or repay the $1,548m of current maturities of debt shown at 30 September 2026 without shrinking drilling or shareholder returns.",
+  "checks": {
+    "evidence_count": 8,
+    "evidence_filing_body": 8,
+    "quotes_found": 8,
+    "quote_resolution_rate": 1.0,
+    "numbers_count": 6,
+    "numbers_found": 6,
+    "thesis_breaks": [
+      "Filed annual OCF minus oil-and-gas PP&E capex covering cash dividends below 1.0× for a second year after FY2024, while the base dividend is still paid or raised.",
+      "A further full-cost ceiling-test impairment, as the Q3 2026 10-Q warns may occur if trailing 12-month commodity prices fall, that wipes out the 9M 2026 cash surplus over dividends.",
+      "A cut or suspension of the $1.10 quarterly base (or a retreat from the $4.20 annual base declared in February 2026).",
+      "Inability to refinance or repay the $1,548m of current maturities of debt shown at 30 September 2026 without shrinking drilling or shareholder returns."
+    ],
+    "hallucination_flags": {
+      "unparsed_evidence": 0,
+      "unresolved_path": 0,
+      "quote_not_found": 0,
+      "number_not_found": 0,
+      "uncheckable_number": 0
+    },
+    "hallucination_flag_total": 0,
+    "future_year_mentions": [],
+    "chars": 4796,
+    "words": 683,
+    "evidence": [
+      {
+        "path": "filings/bodies/e026418c5b6907bc.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/6da99cf3c8b75d6a.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/6da99cf3c8b75d6a.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/6da99cf3c8b75d6a.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/6da99cf3c8b75d6a.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/e026418c5b6907bc.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/e026418c5b6907bc.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/6da99cf3c8b75d6a.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      }
+    ],
+    "numbers": [
+      {
+        "metric": "operating_cashflow",
+        "value": "8758000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "capital_expenditure (PaymentsToAcquireOilAndGasProperty)",
+        "value": "5938000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "free_cashflow (OCF − PP&E capex)",
+        "value": "2820000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "dividends_paid",
+        "value": "1156000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "free_cashflow",
+        "value": "2507000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "free_cashflow",
+        "value": "703000000.0",
+        "checkable": true,
+        "found": true
+      }
+    ]
+  }
+}

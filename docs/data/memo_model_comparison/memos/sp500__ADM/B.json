@@ -1,0 +1,145 @@
+{
+  "label": "B",
+  "slug": "sp500__ADM",
+  "as_of": "2026-11-11",
+  "inputs": {
+    "sha256": "320324be8953f6193b6750192004d87e1178e0e9d71fda8d47e8b7d883af4572",
+    "files": 65,
+    "filing_bodies": 51
+  },
+  "ok": true,
+  "verdict": "caution",
+  "risk": "medium",
+  "confidence": 0.62,
+  "rationale": "Research weakens the buy: FY2025 FCF of $4.2bn (4.3× cover) was working-capital boosted; TTM FCF to Sep-2026 is ~$0.35bn vs ~$1.0bn dividends (0.3×), with the rebound biofuel-cyclical.",
+  "risk_tags": [
+    "cyclical",
+    "regulatory",
+    "governance",
+    "litigation",
+    "accounting"
+  ],
+  "book_effect": "allows",
+  "raw_text": "RESEARCH VERDICT\n\nVerdict: caution  \nRisk: medium  \nConfidence: 0.62  \nRationale: Research weakens the buy: FY2025 FCF of $4.2bn (4.3× cover) was working-capital boosted; TTM FCF to Sep-2026 is ~$0.35bn vs ~$1.0bn dividends (0.3×), with the rebound biofuel-cyclical.  \nRiskTags: cyclical, regulatory, governance, litigation, accounting\n\nScreen reconciliation (does not replace the buy signal): `screening_snapshot.json` is a buy with `families_passed` 0, empty models, `data_quality_score` 0.0, and all dividend-family overlays false (`interim_dividend_cut_flagged` false). `adjusted_signal` is null, so no overlay haircut is recorded. Screen `cashflow_metrics` FCF of $4,204m matches FY2025 SEC XBRL, not the later run-rate: filing-reconcilable TTM FCF to 30 Sep 2026 is $346m (Yahoo TTM in the snapshot), versus TTM dividends of about $1,008m (FY2025 $987m plus nine-month 2026 $764m less nine-month 2025 $743m), or 0.3× cover. Nine-month 2026 statutory FCF ($1,788m OCF less $773m PP&E capex) still covers the $764m dividend at about 1.3×, so the hole is the TTM/WC swing rather than an interim cut. Investegate Admiral Group items in the filings index are the wrong issuer and were not used.\n\nEVIDENCE\n- [filings/bodies/adb01c0e0ac93bc6.txt] \"Cash flows provided by operating activities of $5.5 billion, with cash flows from operations before working capital 1,3 of $2.7 billion\" — FY2025 OCF that the screen uses was inflated by a ~$2.8bn working-capital inflow.\n- [filings/bodies/e7d8dfc9423bb122.txt] \"Net cash provided by operating activities 1,788 5,765\" — Nine-month 2026 OCF of $1,788m versus $5,765m a year earlier; combining with FY2025 XBRL gives TTM OCF of $1,475m.\n- [filings/bodies/e7d8dfc9423bb122.txt] \"Capital expenditures ( 773 ) ( 892 )\" — Nine-month 2026 PP&E capex; with FY2025 capex of $1,248m this reconciles to TTM capex of $1,129m and TTM FCF of $346m, below 1.0× the dividend.\n- [filings/bodies/e7d8dfc9423bb122.txt] \"Cash dividends ( 764 ) ( 743 )\" — Dividend was maintained (and, per the FY2025 8-K, increased); cover is the issue, not a cut. Screen dividend-family overlays correctly did not pass.\n- [filings/bodies/8945993cd70e77f4.txt] \"These results were driven by a constructive biofuels environment combined with our extensive North American footprint\" — 2026 earnings recovery is concentrated in a policy-sensitive crush/ethanol cycle, not yet matched by TTM cash.\n- [filings/bodies/cd76d14192943d59.txt] \"the Company has restated its Consolidated Financial Statements as of December 31, 2023 and 2022 and for the years ended December 31, 2023, 2022 and 2021\" — Nutrition intersegment accounting restatement remains a governance/accounting overhang; 2025 10-K Item 3/Note 20 status is unknown in the truncated extracts.\n- [filings/bodies/22b360c0cfe57148.txt] \"The Company cannot predict when the SEC and DOJ investigations will be completed, nor can it predict the results of these investigations with any reasonable degree of certainty.\" — As of the FY2024 10-K, SEC/DOJ Nutrition investigations were open; later resolution is not in the supplied 2025–26 extracts.\n- [filings/bodies/19af0fa0680ee358.txt] \"As of December 31, 2025, the three major credit rating agencies maintained the Company’s credit ratings at investment grade levels with a negative outlook.\" — Liquidity is supported by unused lines, but ratings remain on negative outlook.\n\nNUMBERS\n- operating_cashflow | 5452000000.0 | FY2025 (period_end 2025-12-31, 10-K filed 2026-02-17) | [sec_companyfacts.json]\n- free_cashflow | 4204000000.0 | FY2025 (OCF − PP&E capex) | [sec_companyfacts.json]\n- dividends_paid | 987000000.0 | FY2025 | [sec_companyfacts.json]\n- Net cash provided by operating activities | 1,788 | Nine months ended 30 Sep 2026 | [filings/bodies/e7d8dfc9423bb122.txt]\n- Capital expenditures | ( 773 ) | Nine months ended 30 Sep 2026 | [filings/bodies/e7d8dfc9423bb122.txt]\n- Cash dividends | ( 764 ) | Nine months ended 30 Sep 2026 | [filings/bodies/e7d8dfc9423bb122.txt]\n\nTHESIS BREAKS\n- A full-year period in which statutory FCF (OCF − PP&E capex) stays below 1.0× dividends paid and the Board cuts or suspends the dividend.\n- An SEC/DOJ resolution or further restatement that imposes a material fine, additional control failure, or restatement of 2025–26 results.\n- A reversal of U.S. biofuel policy (including Section 45Z / RVO) that collapses crush and ethanol margins after the 2026 guidance raises.\n- Loss of investment-grade ratings sufficient to shut the commercial-paper market, given working-capital intensity and the negative outlook already disclosed.",
+  "checks": {
+    "evidence_count": 8,
+    "evidence_filing_body": 8,
+    "quotes_found": 8,
+    "quote_resolution_rate": 1.0,
+    "numbers_count": 6,
+    "numbers_found": 6,
+    "thesis_breaks": [
+      "A full-year period in which statutory FCF (OCF − PP&E capex) stays below 1.0× dividends paid and the Board cuts or suspends the dividend.",
+      "An SEC/DOJ resolution or further restatement that imposes a material fine, additional control failure, or restatement of 2025–26 results.",
+      "A reversal of U.S. biofuel policy (including Section 45Z / RVO) that collapses crush and ethanol margins after the 2026 guidance raises.",
+      "Loss of investment-grade ratings sufficient to shut the commercial-paper market, given working-capital intensity and the negative outlook already disclosed."
+    ],
+    "hallucination_flags": {
+      "unparsed_evidence": 0,
+      "unresolved_path": 0,
+      "quote_not_found": 0,
+      "number_not_found": 0,
+      "uncheckable_number": 0
+    },
+    "hallucination_flag_total": 0,
+    "future_year_mentions": [],
+    "chars": 4583,
+    "words": 654,
+    "evidence": [
+      {
+        "path": "filings/bodies/adb01c0e0ac93bc6.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/e7d8dfc9423bb122.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/e7d8dfc9423bb122.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/e7d8dfc9423bb122.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/8945993cd70e77f4.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/cd76d14192943d59.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/22b360c0cfe57148.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/19af0fa0680ee358.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      }
+    ],
+    "numbers": [
+      {
+        "metric": "operating_cashflow",
+        "value": "5452000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "free_cashflow",
+        "value": "4204000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "dividends_paid",
+        "value": "987000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "Net cash provided by operating activities",
+        "value": "1788",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "Capital expenditures",
+        "value": "773",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "Cash dividends",
+        "value": "764",
+        "checkable": true,
+        "found": true
+      }
+    ]
+  }
+}

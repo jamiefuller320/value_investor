@@ -1,0 +1,202 @@
+{
+  "slug": "sp500__ADM",
+  "order": "BA",
+  "shown_as": {
+    "A": "B",
+    "B": "A"
+  },
+  "judge_model": "gpt-5.6-luna",
+  "as_of": "2026-11-11",
+  "inputs": {
+    "sha256": "320324be8953f6193b6750192004d87e1178e0e9d71fda8d47e8b7d883af4572",
+    "files": 65,
+    "filing_bodies": 51
+  },
+  "at": "2026-11-11T18:45:23.036998+00:00",
+  "attempt": 1,
+  "raw_text": "{\n  \"scores\": {\n    \"A\": {\n      \"evidence\": {\n        \"score\": 3,\n        \"reason\": \"Most cash-flow calculations and filing quotes reconcile, but the memo incorrectly treats the SEC/DOJ investigations as unresolved despite the supplied January 2026 8-K documenting their resolution.\",\n        \"quotes\": [\n          {\n            \"source\": \"filings/bodies/e7d8dfc9423bb122.txt\",\n            \"quote\": \"Net cash provided by operating activities 1,788 5,765\"\n          }\n        ]\n      },\n      \"thesis_break\": {\n        \"score\": 4,\n        \"reason\": \"It gives concrete ownership-breaking conditions tied to cash coverage, regulatory outcomes, biofuel policy, and credit access, although some conditions are narrow or partly redundant.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"A full-year period in which statutory FCF (OCF − PP&E capex) stays below 1.0× dividends paid and the Board cuts or suspends the dividend.\"\n          }\n        ]\n      },\n      \"verdict_justified\": {\n        \"score\": 3,\n        \"reason\": \"Caution is broadly consistent with weak TTM cash flow and cyclical exposure, but the memo's confidence is weakened by its outdated investigation framing and it does not clearly explain why caution still permits entry.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"TTM FCF to Sep-2026 is ~$0.35bn vs ~$1.0bn dividends (0.3×)\"\n          }\n        ]\n      }\n    },\n    \"B\": {\n      \"evidence\": {\n        \"score\": 4,\n        \"reason\": \"The key annual, interim, TTM, dividend, regulatory, and cyclical claims are supported by supplied files, and it correctly identifies the SEC settlement as resolved.\",\n        \"quotes\": [\n          {\n            \"source\": \"filings/bodies/bd132b50323c9cfb.txt\",\n            \"quote\": \"These outcomes end the investigations of the Company by the SEC and DOJ.\"\n          }\n        ]\n      },\n      \"thesis_break\": {\n        \"score\": 3,\n        \"reason\": \"It identifies several plausible do-not-own conditions, but they are more generic and less operationally precise than A's, especially the EPS and net-debt conditions.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"Two consecutive fiscal years with filing-derived FCF (OCF minus PP&E capex) below cash dividends paid on the same statutory basis.\"\n          }\n        ]\n      },\n      \"verdict_justified\": {\n        \"score\": 4,\n        \"reason\": \"Caution and medium confidence fit the mixed evidence: strong FY2025 cash generation, materially weaker nine-month 2026 operating cash flow, and a reported TTM FCF of $346 million, without overstating unresolved investigations.\",\n        \"quotes\": [\n          {\n            \"source\": \"screening_snapshot.json\",\n            \"quote\": \"\\\"free_cashflow_ttm\\\":346000000.0\"\n          }\n        ]\n      }\n    }\n  },\n  \"preferred\": \"B\",\n  \"preference_reason\": \"B is more reliable for action because it preserves the important cash-flow deterioration while correctly incorporating the supplied evidence that the SEC and DOJ investigations were resolved. A provides more detailed thesis-break conditions but contains a material outdated characterization of the investigations.\",\n  \"claims_checked\": [\n    {\n      \"memo\": \"A\",\n      \"claim\": \"FY2025 operating cash flow was $5.452 billion and free cash flow was $4.204 billion.\",\n      \"path\": \"sec_companyfacts.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"Nine-month 2026 operating cash flow was $1.788 billion and PP&E capex was $773 million.\",\n      \"path\": \"filings/bodies/e7d8dfc9423bb122.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"TTM FCF to September 2026 was $346 million.\",\n      \"path\": \"screening_snapshot.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"The SEC/DOJ Nutrition investigations remained open and later resolution was not in the supplied extracts.\",\n      \"path\": \"filings/bodies/bd132b50323c9cfb.txt\",\n      \"supported\": false\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"The 2026 recovery was driven by a constructive biofuels environment.\",\n      \"path\": \"filings/bodies/8945993cd70e77f4.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"FY2025 OCF and FCF were approximately $5.45 billion and $4.20 billion.\",\n      \"path\": \"sec_companyfacts.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"Nine-month 2026 OCF was $1.788 billion versus $5.765 billion in the prior-year period.\",\n      \"path\": \"filings/bodies/e7d8dfc9423bb122.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"The SEC matter was resolved with a $40 million civil penalty and the DOJ investigation ended.\",\n      \"path\": \"filings/bodies/bd132b50323c9cfb.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"ADM's credit ratings remained investment grade with a negative outlook as of December 31, 2025.\",\n      \"path\": \"filings/bodies/19af0fa0680ee358.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"The 2026 outlook remained exposed to macroeconomic, geopolitical, policy, and trade factors.\",\n      \"path\": \"filings/bodies/8945993cd70e77f4.txt\",\n      \"supported\": true\n    }\n  ]\n}",
+  "parsed": {
+    "scores": {
+      "A": {
+        "evidence": {
+          "score": 3,
+          "reason": "Most cash-flow calculations and filing quotes reconcile, but the memo incorrectly treats the SEC/DOJ investigations as unresolved despite the supplied January 2026 8-K documenting their resolution.",
+          "quotes": [
+            {
+              "source": "filings/bodies/e7d8dfc9423bb122.txt",
+              "quote": "Net cash provided by operating activities 1,788 5,765"
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 4,
+          "reason": "It gives concrete ownership-breaking conditions tied to cash coverage, regulatory outcomes, biofuel policy, and credit access, although some conditions are narrow or partly redundant.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "A full-year period in which statutory FCF (OCF − PP&E capex) stays below 1.0× dividends paid and the Board cuts or suspends the dividend."
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 3,
+          "reason": "Caution is broadly consistent with weak TTM cash flow and cyclical exposure, but the memo's confidence is weakened by its outdated investigation framing and it does not clearly explain why caution still permits entry.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "TTM FCF to Sep-2026 is ~$0.35bn vs ~$1.0bn dividends (0.3×)"
+            }
+          ]
+        }
+      },
+      "B": {
+        "evidence": {
+          "score": 4,
+          "reason": "The key annual, interim, TTM, dividend, regulatory, and cyclical claims are supported by supplied files, and it correctly identifies the SEC settlement as resolved.",
+          "quotes": [
+            {
+              "source": "filings/bodies/bd132b50323c9cfb.txt",
+              "quote": "These outcomes end the investigations of the Company by the SEC and DOJ."
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 3,
+          "reason": "It identifies several plausible do-not-own conditions, but they are more generic and less operationally precise than A's, especially the EPS and net-debt conditions.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "Two consecutive fiscal years with filing-derived FCF (OCF minus PP&E capex) below cash dividends paid on the same statutory basis."
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 4,
+          "reason": "Caution and medium confidence fit the mixed evidence: strong FY2025 cash generation, materially weaker nine-month 2026 operating cash flow, and a reported TTM FCF of $346 million, without overstating unresolved investigations.",
+          "quotes": [
+            {
+              "source": "screening_snapshot.json",
+              "quote": "\"free_cashflow_ttm\":346000000.0"
+            }
+          ]
+        }
+      }
+    },
+    "preferred": "B",
+    "preference_reason": "B is more reliable for action because it preserves the important cash-flow deterioration while correctly incorporating the supplied evidence that the SEC and DOJ investigations were resolved. A provides more detailed thesis-break conditions but contains a material outdated characterization of the investigations.",
+    "claims_checked": [
+      {
+        "memo": "A",
+        "claim": "FY2025 operating cash flow was $5.452 billion and free cash flow was $4.204 billion.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "Nine-month 2026 operating cash flow was $1.788 billion and PP&E capex was $773 million.",
+        "path": "filings/bodies/e7d8dfc9423bb122.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "TTM FCF to September 2026 was $346 million.",
+        "path": "screening_snapshot.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "The SEC/DOJ Nutrition investigations remained open and later resolution was not in the supplied extracts.",
+        "path": "filings/bodies/bd132b50323c9cfb.txt",
+        "supported": false
+      },
+      {
+        "memo": "A",
+        "claim": "The 2026 recovery was driven by a constructive biofuels environment.",
+        "path": "filings/bodies/8945993cd70e77f4.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "FY2025 OCF and FCF were approximately $5.45 billion and $4.20 billion.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "Nine-month 2026 OCF was $1.788 billion versus $5.765 billion in the prior-year period.",
+        "path": "filings/bodies/e7d8dfc9423bb122.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "The SEC matter was resolved with a $40 million civil penalty and the DOJ investigation ended.",
+        "path": "filings/bodies/bd132b50323c9cfb.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "ADM's credit ratings remained investment grade with a negative outlook as of December 31, 2025.",
+        "path": "filings/bodies/19af0fa0680ee358.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "The 2026 outlook remained exposed to macroeconomic, geopolitical, policy, and trade factors.",
+        "path": "filings/bodies/8945993cd70e77f4.txt",
+        "supported": true
+      }
+    ]
+  },
+  "problems": [],
+  "ok": true,
+  "quote_check": {
+    "quotes": 6,
+    "found": 6,
+    "found_rate": 1.0,
+    "rows": [
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "filings/bodies/e7d8dfc9423bb122.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "thesis_break",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "filings/bodies/bd132b50323c9cfb.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "thesis_break",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "screening_snapshot.json",
+        "resolves": true,
+        "found": true
+      }
+    ]
+  },
+  "prompt_sha256": "8ec99d318a0805795d39c56ea0b8d4dbd5808162dc5fe20fe7495666e54a0ff5"
+}

@@ -1,0 +1,130 @@
+{
+  "label": "A",
+  "slug": "nasdaq100__STX",
+  "as_of": "2026-11-11",
+  "inputs": {
+    "sha256": "279ee7a94451e687715a87de234ef70196dfeb48534eff907b8b127efae52e3d",
+    "files": 86,
+    "filing_bodies": 69
+  },
+  "ok": true,
+  "verdict": "accumulate",
+  "risk": "medium",
+  "confidence": 0.72,
+  "rationale": "FY2026 filed OCF $3.67bn and FCF $3.11bn match the screen and cover dividends (~$634m); cyclical HDD demand, leverage, customer concentration and export/BIS risk temper conviction vs a blind buy.",
+  "risk_tags": [
+    "cyclical",
+    "customer_concentration",
+    "leverage",
+    "regulatory",
+    "competitive"
+  ],
+  "book_effect": "allows",
+  "raw_text": "## RESEARCH VERDICT\n\nVerdict: accumulate  \nRisk: medium  \nConfidence: 0.72  \nRationale: FY2026 filed OCF $3.67bn and FCF $3.11bn match the screen and cover dividends (~$634m); cyclical HDD demand, leverage, customer concentration and export/BIS risk temper conviction vs a blind buy.  \nRiskTags: cyclical, customer_concentration, leverage, regulatory, competitive\n\n## COMPARISON EVIDENCE\n\n### EVIDENCE\n\n- [filings/bodies/0e21ebab31a84200.txt] \"In fiscal year 2026, one customer accounted for approximately 14% of our consolidated revenue.\" — material customer concentration risk  \n- [filings/bodies/0e21ebab31a84200.txt] \"• We may not be able to generate sufficient cash flows from operations and our investments to meet our liquidity requirements, including servicing our indebtedness and continuing to declare our quarte\" — dividend and debt hinge on cash generation  \n- [filings/bodies/0e21ebab31a84200.txt] \"product transitions and periodic fluctuations in supply and demand.\" — industry cyclicality and pricing volatility  \n- [filings/bodies/0e21ebab31a84200.txt] \"expectations regarding our ability to service debt, comply with debt covenants and continue to generate free cash flow\" — management flags debt covenant and FCF linkage  \n- [filings/bodies/0e21ebab31a84200.txt] \"settlement agreement with the U.S. Department of Commerce’s Bureau of Industry and Security (“BIS”); the impact of macro\" — export-control / regulatory overhang  \n- [sec_companyfacts.json] — FY2026 XBRL cash-flow facts align with screen `operating_cashflow` and `free_cashflow` (not Yahoo TTM)\n\n### NUMBERS\n\n- Operating cash flow | 3674000000.0 USD | FY ended 2026-07-03 (10-K filed 2026-08-04) | [sec_companyfacts.json]  \n- PP&E capital expenditure | 569000000.0 USD | FY ended 2026-07-03 | [sec_companyfacts.json]  \n- Free cash flow (OCF − capex) | 3105000000.0 USD | FY ended 2026-07-03 | [sec_companyfacts.json]  \n- Dividends paid (common) | 634000000.0 USD | FY ended 2026-07-03 | [sec_companyfacts.json]  \n- Screen free cash flow | 3105000000.0 | snapshot (Yahoo-sourced FY) | [screening_snapshot.json]  \n- TTM free cash flow (Yahoo) | 4157000000.0 | quarterly TTM to 2026-09-30 | [screening_snapshot.json] — above filed FY2026; period basis differs\n\n### THESIS BREAKS\n\n- Filed annual FCF falling below cash dividends for two consecutive fiscal years without a disclosed, sustainable funding plan  \n- Disclosure that a single customer above ~14% of revenue materially reduced or ended purchases, with no offsetting volume elsewhere  \n- Public statement of debt covenant breach, inability to service indebtedness, or suspension/cut of the quarterly dividend despite prior guidance  \n- Failure to meet BIS settlement payment timing or a material new U.S./China export restriction on products or rare-earth supply called out in filings",
+  "checks": {
+    "evidence_count": 6,
+    "evidence_filing_body": 5,
+    "quotes_found": 5,
+    "quote_resolution_rate": 0.833,
+    "numbers_count": 6,
+    "numbers_found": 6,
+    "thesis_breaks": [
+      "Filed annual FCF falling below cash dividends for two consecutive fiscal years without a disclosed, sustainable funding plan",
+      "Disclosure that a single customer above ~14% of revenue materially reduced or ended purchases, with no offsetting volume elsewhere",
+      "Public statement of debt covenant breach, inability to service indebtedness, or suspension/cut of the quarterly dividend despite prior guidance",
+      "Failure to meet BIS settlement payment timing or a material new U.S./China export restriction on products or rare-earth supply called out in filings"
+    ],
+    "hallucination_flags": {
+      "unparsed_evidence": 1,
+      "unresolved_path": 0,
+      "quote_not_found": 0,
+      "number_not_found": 0,
+      "uncheckable_number": 0
+    },
+    "hallucination_flag_total": 0,
+    "future_year_mentions": [],
+    "chars": 2820,
+    "words": 379,
+    "evidence": [
+      {
+        "path": "filings/bodies/0e21ebab31a84200.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/0e21ebab31a84200.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/0e21ebab31a84200.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/0e21ebab31a84200.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/0e21ebab31a84200.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "line": "- [sec_companyfacts.json] — FY2026 XBRL cash-flow facts align with screen `operating_cashflow` and `free_cashflow` (not Yahoo TTM)",
+        "parsed": false,
+        "resolves": false,
+        "quote_found": false
+      }
+    ],
+    "numbers": [
+      {
+        "metric": "Operating cash flow",
+        "value": "3674000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "PP&E capital expenditure",
+        "value": "569000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "Free cash flow (OCF − capex)",
+        "value": "3105000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "Dividends paid (common)",
+        "value": "634000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "Screen free cash flow",
+        "value": "3105000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "TTM free cash flow (Yahoo)",
+        "value": "4157000000.0",
+        "checkable": true,
+        "found": true
+      }
+    ]
+  }
+}

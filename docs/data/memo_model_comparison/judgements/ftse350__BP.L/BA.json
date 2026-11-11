@@ -1,0 +1,224 @@
+{
+  "slug": "ftse350__BP.L",
+  "order": "BA",
+  "shown_as": {
+    "A": "B",
+    "B": "A"
+  },
+  "judge_model": "gpt-5.6-luna",
+  "as_of": "2026-11-11",
+  "inputs": {
+    "sha256": "329cce727ec908eb08ec88bc0b230d07286f46ead9ebd6c78e386c60d38b4b0d",
+    "files": 105,
+    "filing_bodies": 30
+  },
+  "at": "2026-11-11T18:45:23.036998+00:00",
+  "attempt": 1,
+  "raw_text": "{\n  \"scores\": {\n    \"A\": {\n      \"evidence\": {\n        \"score\": 4,\n        \"reason\": \"Most quantitative and event claims are supported, but the memo sometimes blurs filing USD figures with the snapshot's GBP-labelled fallback FCF and gives less precise sourcing for derived conclusions.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"FCF filing-aligned £11,272m vs screen TTM £17,024m\"\n          },\n          {\n            \"source\": \"filings/bodies/ch_00102498_MzUyMjUzNDU3OWFkaXF6a2N4.txt\",\n            \"quote\": \"$0.1bn\\n\\nprofit for the year attributable\\nto bp shareholders\"\n          }\n        ]\n      },\n      \"thesis_break\": {\n        \"score\": 4,\n        \"reason\": \"It identifies several concrete do-not-own triggers covering statutory losses, dividend coverage, failed divestments, governance disruption and impairments, though some thresholds remain vague.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"Confirmed statutory FY loss or material dividend cut with FCF/dividend cover sustained below 1.0× on filing cash flows.\"\n          }\n        ]\n      },\n      \"verdict_justified\": {\n        \"score\": 3,\n        \"reason\": \"The evidence supports caution or hold, but 'accumulate' is harder to reconcile with the stated rationale that the snapshot is hold and the full buy case is weakened.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"The snapshot is **Hold** (not buy)\"\n          }\n        ]\n      }\n    },\n    \"B\": {\n      \"evidence\": {\n        \"score\": 5,\n        \"reason\": \"Claims are carefully tied to the supplied files, distinguish statutory from underlying measures, identify forward-looking guidance as such, and preserve the USD/GBP and FCF-definition distinctions.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"the tension is the inverse of a cover break: dividend models failed because FY2025 filing basic EPS fell ~85% and the FCF basis is unresolved, not because cover is below 1.0×.\"\n          },\n          {\n            \"source\": \"filings/bodies/9e846a677d72f46e.txt\",\n            \"quote\": \"The third quarter results are expected to include post-tax adjusting items relating to impairments in the range of $3.0 to 4.5 billion.\"\n          }\n        ]\n      },\n      \"thesis_break\": {\n        \"score\": 4,\n        \"reason\": \"The break conditions are specific and actionable, especially the dividend/coverage threshold, failed Castrol completion, governance event and net-debt target, although the governance trigger is somewhat open-ended.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"A dividend cut versus the 2Q26 8.66 cents rate, or filing FCF (operating cash flow less total capital expenditure) covering dividends below 1.0×.\"\n          }\n        ]\n      },\n      \"verdict_justified\": {\n        \"score\": 5,\n        \"reason\": \"Caution with high risk is consistent with the documented statutory earnings collapse, unresolved FCF basis, leverage, governance event and pending impairment guidance, while confidence is moderate rather than overstated.\",\n        \"quotes\": [\n          {\n            \"source\": \"memo\",\n            \"quote\": \"Verdict: caution\\nRisk: high\\nConfidence: 0.64\"\n          }\n        ]\n      }\n    }\n  },\n  \"preferred\": \"B\",\n  \"preference_reason\": \"Memo B is more precise about source definitions, distinguishes actual results from forward-looking guidance, and gives a verdict better aligned with the risks and evidence.\",\n  \"claims_checked\": [\n    {\n      \"memo\": \"A\",\n      \"claim\": \"FY2025 filing-aligned FCF is £11,272m and screen TTM FCF is £17,024m.\",\n      \"path\": \"screening_snapshot.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"Statutory basic EPS growth was approximately -85%.\",\n      \"path\": \"screening_snapshot.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"FY2025 underlying RC profit was $7.5 billion and net debt was $22.2 billion.\",\n      \"path\": \"filings/bodies/ch_00102498_MzUyMjUzNDU3OWFkaXF6a2N4.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"Albert Manifold was removed as chair and director immediately.\",\n      \"path\": \"filings/bodies/df6a1cd88bf86224.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"Post-tax impairment guidance was $3.0-$4.5 billion.\",\n      \"path\": \"filings/bodies/9e846a677d72f46e.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"FY2025 statutory profit attributable to shareholders was $0.1 billion.\",\n      \"path\": \"filings/bodies/ch_00102498_MzUyMjUzNDU3OWFkaXF6a2N4.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"Operating cash flow less total capital expenditure fell 10% in 2025 versus 2024.\",\n      \"path\": \"filings/bodies/ch_00102498_MzUyMjUzNDU3OWFkaXF6a2N4.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"The 2Q26 dividend increased 4% to 8.66 cents.\",\n      \"path\": \"filings/bodies/acc5f13b25ec0afb.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"Castrol proceeds are expected to be approximately $6 billion and completion was pending at 30 June 2026.\",\n      \"path\": \"filings/bodies/68220e3a16d9d65c.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"3Q26 impairment guidance was $3.0-$4.5 billion.\",\n      \"path\": \"filings/bodies/9e846a677d72f46e.txt\",\n      \"supported\": true\n    }\n  ]\n}",
+  "parsed": {
+    "scores": {
+      "A": {
+        "evidence": {
+          "score": 4,
+          "reason": "Most quantitative and event claims are supported, but the memo sometimes blurs filing USD figures with the snapshot's GBP-labelled fallback FCF and gives less precise sourcing for derived conclusions.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "FCF filing-aligned £11,272m vs screen TTM £17,024m"
+            },
+            {
+              "source": "filings/bodies/ch_00102498_MzUyMjUzNDU3OWFkaXF6a2N4.txt",
+              "quote": "$0.1bn\n\nprofit for the year attributable\nto bp shareholders"
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 4,
+          "reason": "It identifies several concrete do-not-own triggers covering statutory losses, dividend coverage, failed divestments, governance disruption and impairments, though some thresholds remain vague.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "Confirmed statutory FY loss or material dividend cut with FCF/dividend cover sustained below 1.0× on filing cash flows."
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 3,
+          "reason": "The evidence supports caution or hold, but 'accumulate' is harder to reconcile with the stated rationale that the snapshot is hold and the full buy case is weakened.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "The snapshot is **Hold** (not buy)"
+            }
+          ]
+        }
+      },
+      "B": {
+        "evidence": {
+          "score": 5,
+          "reason": "Claims are carefully tied to the supplied files, distinguish statutory from underlying measures, identify forward-looking guidance as such, and preserve the USD/GBP and FCF-definition distinctions.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "the tension is the inverse of a cover break: dividend models failed because FY2025 filing basic EPS fell ~85% and the FCF basis is unresolved, not because cover is below 1.0×."
+            },
+            {
+              "source": "filings/bodies/9e846a677d72f46e.txt",
+              "quote": "The third quarter results are expected to include post-tax adjusting items relating to impairments in the range of $3.0 to 4.5 billion."
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 4,
+          "reason": "The break conditions are specific and actionable, especially the dividend/coverage threshold, failed Castrol completion, governance event and net-debt target, although the governance trigger is somewhat open-ended.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "A dividend cut versus the 2Q26 8.66 cents rate, or filing FCF (operating cash flow less total capital expenditure) covering dividends below 1.0×."
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 5,
+          "reason": "Caution with high risk is consistent with the documented statutory earnings collapse, unresolved FCF basis, leverage, governance event and pending impairment guidance, while confidence is moderate rather than overstated.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "Verdict: caution\nRisk: high\nConfidence: 0.64"
+            }
+          ]
+        }
+      }
+    },
+    "preferred": "B",
+    "preference_reason": "Memo B is more precise about source definitions, distinguishes actual results from forward-looking guidance, and gives a verdict better aligned with the risks and evidence.",
+    "claims_checked": [
+      {
+        "memo": "A",
+        "claim": "FY2025 filing-aligned FCF is £11,272m and screen TTM FCF is £17,024m.",
+        "path": "screening_snapshot.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "Statutory basic EPS growth was approximately -85%.",
+        "path": "screening_snapshot.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "FY2025 underlying RC profit was $7.5 billion and net debt was $22.2 billion.",
+        "path": "filings/bodies/ch_00102498_MzUyMjUzNDU3OWFkaXF6a2N4.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "Albert Manifold was removed as chair and director immediately.",
+        "path": "filings/bodies/df6a1cd88bf86224.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "Post-tax impairment guidance was $3.0-$4.5 billion.",
+        "path": "filings/bodies/9e846a677d72f46e.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "FY2025 statutory profit attributable to shareholders was $0.1 billion.",
+        "path": "filings/bodies/ch_00102498_MzUyMjUzNDU3OWFkaXF6a2N4.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "Operating cash flow less total capital expenditure fell 10% in 2025 versus 2024.",
+        "path": "filings/bodies/ch_00102498_MzUyMjUzNDU3OWFkaXF6a2N4.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "The 2Q26 dividend increased 4% to 8.66 cents.",
+        "path": "filings/bodies/acc5f13b25ec0afb.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "Castrol proceeds are expected to be approximately $6 billion and completion was pending at 30 June 2026.",
+        "path": "filings/bodies/68220e3a16d9d65c.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "3Q26 impairment guidance was $3.0-$4.5 billion.",
+        "path": "filings/bodies/9e846a677d72f46e.txt",
+        "supported": true
+      }
+    ]
+  },
+  "problems": [],
+  "ok": true,
+  "quote_check": {
+    "quotes": 8,
+    "found": 7,
+    "found_rate": 0.875,
+    "rows": [
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "memo",
+        "resolves": true,
+        "found": false
+      },
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "filings/bodies/ch_00102498_MzUyMjUzNDU3OWFkaXF6a2N4.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "thesis_break",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "filings/bodies/9e846a677d72f46e.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "thesis_break",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      }
+    ]
+  },
+  "prompt_sha256": "a9f5b775f92de40d243630ae5830155ce8290f8461dfce35d2be7d7d3955cf4f"
+}

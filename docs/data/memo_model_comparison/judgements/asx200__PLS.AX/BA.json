@@ -1,0 +1,286 @@
+{
+  "slug": "asx200__PLS.AX",
+  "order": "BA",
+  "shown_as": {
+    "A": "B",
+    "B": "A"
+  },
+  "judge_model": "gpt-5.6-luna",
+  "as_of": "2026-11-11",
+  "inputs": {
+    "sha256": "2961c3f2abc5dfd6224420f28a0cca3b36c3b3d32212c34a20d307375db41f0c",
+    "files": 35,
+    "filing_bodies": 23
+  },
+  "at": "2026-11-11T18:45:23.036998+00:00",
+  "attempt": 1,
+  "raw_text": "{\n  \"scores\": {\n    \"A\": {\n      \"evidence\": {\n        \"score\": 5,\n        \"reason\": \"Claims are extensively tied to the supplied filings and snapshot, with clear separation between filing-supported figures and unverified Yahoo data.\",\n        \"quotes\": [\n          {\n            \"source\": \"snapshots/20261030T074031Z.json\",\n            \"quote\": \"\\\"ttm_cashflow_suppressed\\\":true,\\\"ttm_cashflow_suppressed_reason\\\":\\\"quarterly_cashflow_empty\\\"\"\n          },\n          {\n            \"source\": \"filings/bodies/b830a4c9aebe5908.txt\",\n            \"quote\": \"Cash margin from operations $M 1,357 192 608\"\n          }\n        ]\n      },\n      \"thesis_break\": {\n        \"score\": 4,\n        \"reason\": \"The break conditions are concrete and relevant, though the first compares realised prices across currencies and the P2000 downside condition is hypothetical rather than directly evidenced.\",\n        \"quotes\": [\n          {\n            \"source\": \"filings/bodies/b830a4c9aebe5908.txt\",\n            \"quote\": \"Unit operating cost (FOB)5 $/t 569 627 (9)\"\n          },\n          {\n            \"source\": \"filings/bodies/ea1b43c0732c2a00.txt\",\n            \"quote\": \"The P2000 FS supports investment of approximately A$1.9 billion (B) in P2000\"\n          }\n        ]\n      },\n      \"verdict_justified\": {\n        \"score\": 4,\n        \"reason\": \"Caution and high risk are supported by the sharp FY25-to-FY26 cyclicality, committed investment, and unverified screen cash flow; confidence of 0.70 is somewhat high given the unresolved data limitations.\",\n        \"quotes\": [\n          {\n            \"source\": \"filings/bodies/928ce56ce0b52368.txt\",\n            \"quote\": \"Cash margin from operations less mine development costs and sustaining capex was $28M.\"\n          },\n          {\n            \"source\": \"filings/bodies/ea1b43c0732c2a00.txt\",\n            \"quote\": \"While the long-term outlook remains supportive, lithium markets are expected to remain cyclical\"\n          }\n        ]\n      }\n    },\n    \"B\": {\n      \"evidence\": {\n        \"score\": 3,\n        \"reason\": \"Most operating, cash-flow and debt claims are supported, but the memo incorrectly says dividend-oriented models passed; the supplied snapshot shows both High Dividend Yield and Dividend Growth failed.\",\n        \"quotes\": [\n          {\n            \"source\": \"snapshots/20261030T074031Z.json\",\n            \"quote\": \"\\\"failed_models\\\":[\\\"Graham Defensive\\\",\\\"Graham Net-Net\\\",\\\"Schloss Low P/B\\\",\\\"Deep Value\\\",\\\"Earnings Yield\\\",\\\"Low P/E + High Yield\\\",\\\"Lynch PEG\\\",\\\"Neff PEGY\\\",\\\"Buffett Quality\\\",\\\"High Dividend Yield\\\",\\\"Dividend Growth\\\"\"\n          },\n          {\n            \"source\": \"filings/bodies/c09f130d76138950.txt\",\n            \"quote\": \"Post September Quarter end, PLS successfully closed its US$700M 8.00% Senior Unsecured Notes due 20321.\"\n          }\n        ]\n      },\n      \"thesis_break\": {\n        \"score\": 3,\n        \"reason\": \"The memo identifies several useful do-not-own conditions, but its statement that FY25 produced negative underlying EBITDA is false: FY25 underlying EBITDA was positive, and the price-versus-cost condition lacks currency and cost-basis precision.\",\n        \"quotes\": [\n          {\n            \"source\": \"filings/bodies/928ce56ce0b52368.txt\",\n            \"quote\": \"Underlying EBITDA4 $M 97 574 (83)\"\n          },\n          {\n            \"source\": \"filings/bodies/928ce56ce0b52368.txt\",\n            \"quote\": \"Statutory (loss)/profit after tax $M (196) 257 (176)\"\n          }\n        ]\n      },\n      \"verdict_justified\": {\n        \"score\": 4,\n        \"reason\": \"The caution verdict and lower 0.58 confidence fit the documented cyclicality, weak FY25 post-capex cash generation and unverified TTM FCF, despite the dividend-model error.\",\n        \"quotes\": [\n          {\n            \"source\": \"filings/bodies/928ce56ce0b52368.txt\",\n            \"quote\": \"Cash margin from operations less mine development costs and sustaining capex was $28M.\"\n          },\n          {\n            \"source\": \"filings/bodies/c09f130d76138950.txt\",\n            \"quote\": \"Realised price US$/t 1,8091 2,1072 (14)\"\n          }\n        ]\n      }\n    }\n  },\n  \"preferred\": \"A\",\n  \"preference_reason\": \"A is more accurate and more transparent about which figures are filing-supported versus unverified screen data. B contains a material contradiction about dividend-model passes and incorrectly describes FY25 underlying EBITDA as negative.\",\n  \"claims_checked\": [\n    {\n      \"memo\": \"A\",\n      \"claim\": \"The screen TTM FCF of 800,153,600 is unverified because quarterly Yahoo cash flow is empty.\",\n      \"path\": \"snapshots/20261030T074031Z.json\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"FY26 revenue was $1,934M and cash margin from operations was $1,357M.\",\n      \"path\": \"filings/bodies/b830a4c9aebe5908.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"The FY26 final dividend was approximately $161M and about 22% of adjusted free cash flow.\",\n      \"path\": \"filings/bodies/b830a4c9aebe5908.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"No interim dividend was declared in H1 FY26.\",\n      \"path\": \"filings/bodies/c664bba741782680.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"P2000 project capital was approximately A$1.9B.\",\n      \"path\": \"filings/bodies/ea1b43c0732c2a00.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"FY27 capex guidance was A$1,130–1,195M.\",\n      \"path\": \"filings/bodies/c09f130d76138950.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"A\",\n      \"claim\": \"The September quarter revenue was $563M and 24% lower.\",\n      \"path\": \"filings/bodies/c09f130d76138950.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"FY25 cash margin after mine development and sustaining capex was $28M.\",\n      \"path\": \"filings/bodies/928ce56ce0b52368.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"Dividend-oriented models passed despite the resumed FY26 payout.\",\n      \"path\": \"snapshots/20261030T074031Z.json\",\n      \"supported\": false\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"The FY26 final dividend was 5 cents per share and approximately $161M.\",\n      \"path\": \"filings/bodies/b830a4c9aebe5908.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"The September quarter realised price fell 14% quarter over quarter.\",\n      \"path\": \"filings/bodies/c09f130d76138950.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"PLS issued US$700M of senior unsecured notes after the September quarter.\",\n      \"path\": \"filings/bodies/c09f130d76138950.txt\",\n      \"supported\": true\n    },\n    {\n      \"memo\": \"B\",\n      \"claim\": \"FY25 had negative underlying EBITDA.\",\n      \"path\": \"filings/bodies/928ce56ce0b52368.txt\",\n      \"supported\": false\n    }\n  ]\n}",
+  "parsed": {
+    "scores": {
+      "A": {
+        "evidence": {
+          "score": 5,
+          "reason": "Claims are extensively tied to the supplied filings and snapshot, with clear separation between filing-supported figures and unverified Yahoo data.",
+          "quotes": [
+            {
+              "source": "snapshots/20261030T074031Z.json",
+              "quote": "\"ttm_cashflow_suppressed\":true,\"ttm_cashflow_suppressed_reason\":\"quarterly_cashflow_empty\""
+            },
+            {
+              "source": "filings/bodies/b830a4c9aebe5908.txt",
+              "quote": "Cash margin from operations $M 1,357 192 608"
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 4,
+          "reason": "The break conditions are concrete and relevant, though the first compares realised prices across currencies and the P2000 downside condition is hypothetical rather than directly evidenced.",
+          "quotes": [
+            {
+              "source": "filings/bodies/b830a4c9aebe5908.txt",
+              "quote": "Unit operating cost (FOB)5 $/t 569 627 (9)"
+            },
+            {
+              "source": "filings/bodies/ea1b43c0732c2a00.txt",
+              "quote": "The P2000 FS supports investment of approximately A$1.9 billion (B) in P2000"
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 4,
+          "reason": "Caution and high risk are supported by the sharp FY25-to-FY26 cyclicality, committed investment, and unverified screen cash flow; confidence of 0.70 is somewhat high given the unresolved data limitations.",
+          "quotes": [
+            {
+              "source": "filings/bodies/928ce56ce0b52368.txt",
+              "quote": "Cash margin from operations less mine development costs and sustaining capex was $28M."
+            },
+            {
+              "source": "filings/bodies/ea1b43c0732c2a00.txt",
+              "quote": "While the long-term outlook remains supportive, lithium markets are expected to remain cyclical"
+            }
+          ]
+        }
+      },
+      "B": {
+        "evidence": {
+          "score": 3,
+          "reason": "Most operating, cash-flow and debt claims are supported, but the memo incorrectly says dividend-oriented models passed; the supplied snapshot shows both High Dividend Yield and Dividend Growth failed.",
+          "quotes": [
+            {
+              "source": "snapshots/20261030T074031Z.json",
+              "quote": "\"failed_models\":[\"Graham Defensive\",\"Graham Net-Net\",\"Schloss Low P/B\",\"Deep Value\",\"Earnings Yield\",\"Low P/E + High Yield\",\"Lynch PEG\",\"Neff PEGY\",\"Buffett Quality\",\"High Dividend Yield\",\"Dividend Growth\""
+            },
+            {
+              "source": "filings/bodies/c09f130d76138950.txt",
+              "quote": "Post September Quarter end, PLS successfully closed its US$700M 8.00% Senior Unsecured Notes due 20321."
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 3,
+          "reason": "The memo identifies several useful do-not-own conditions, but its statement that FY25 produced negative underlying EBITDA is false: FY25 underlying EBITDA was positive, and the price-versus-cost condition lacks currency and cost-basis precision.",
+          "quotes": [
+            {
+              "source": "filings/bodies/928ce56ce0b52368.txt",
+              "quote": "Underlying EBITDA4 $M 97 574 (83)"
+            },
+            {
+              "source": "filings/bodies/928ce56ce0b52368.txt",
+              "quote": "Statutory (loss)/profit after tax $M (196) 257 (176)"
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 4,
+          "reason": "The caution verdict and lower 0.58 confidence fit the documented cyclicality, weak FY25 post-capex cash generation and unverified TTM FCF, despite the dividend-model error.",
+          "quotes": [
+            {
+              "source": "filings/bodies/928ce56ce0b52368.txt",
+              "quote": "Cash margin from operations less mine development costs and sustaining capex was $28M."
+            },
+            {
+              "source": "filings/bodies/c09f130d76138950.txt",
+              "quote": "Realised price US$/t 1,8091 2,1072 (14)"
+            }
+          ]
+        }
+      }
+    },
+    "preferred": "A",
+    "preference_reason": "A is more accurate and more transparent about which figures are filing-supported versus unverified screen data. B contains a material contradiction about dividend-model passes and incorrectly describes FY25 underlying EBITDA as negative.",
+    "claims_checked": [
+      {
+        "memo": "A",
+        "claim": "The screen TTM FCF of 800,153,600 is unverified because quarterly Yahoo cash flow is empty.",
+        "path": "snapshots/20261030T074031Z.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "FY26 revenue was $1,934M and cash margin from operations was $1,357M.",
+        "path": "filings/bodies/b830a4c9aebe5908.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "The FY26 final dividend was approximately $161M and about 22% of adjusted free cash flow.",
+        "path": "filings/bodies/b830a4c9aebe5908.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "No interim dividend was declared in H1 FY26.",
+        "path": "filings/bodies/c664bba741782680.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "P2000 project capital was approximately A$1.9B.",
+        "path": "filings/bodies/ea1b43c0732c2a00.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "FY27 capex guidance was A$1,130–1,195M.",
+        "path": "filings/bodies/c09f130d76138950.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "The September quarter revenue was $563M and 24% lower.",
+        "path": "filings/bodies/c09f130d76138950.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "FY25 cash margin after mine development and sustaining capex was $28M.",
+        "path": "filings/bodies/928ce56ce0b52368.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "Dividend-oriented models passed despite the resumed FY26 payout.",
+        "path": "snapshots/20261030T074031Z.json",
+        "supported": false
+      },
+      {
+        "memo": "B",
+        "claim": "The FY26 final dividend was 5 cents per share and approximately $161M.",
+        "path": "filings/bodies/b830a4c9aebe5908.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "The September quarter realised price fell 14% quarter over quarter.",
+        "path": "filings/bodies/c09f130d76138950.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "PLS issued US$700M of senior unsecured notes after the September quarter.",
+        "path": "filings/bodies/c09f130d76138950.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "FY25 had negative underlying EBITDA.",
+        "path": "filings/bodies/928ce56ce0b52368.txt",
+        "supported": false
+      }
+    ]
+  },
+  "problems": [],
+  "ok": true,
+  "quote_check": {
+    "quotes": 12,
+    "found": 10,
+    "found_rate": 0.833,
+    "rows": [
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "snapshots/20261030T074031Z.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "filings/bodies/b830a4c9aebe5908.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "thesis_break",
+        "source": "filings/bodies/b830a4c9aebe5908.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "thesis_break",
+        "source": "filings/bodies/ea1b43c0732c2a00.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "filings/bodies/928ce56ce0b52368.txt",
+        "resolves": true,
+        "found": false
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "filings/bodies/ea1b43c0732c2a00.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "snapshots/20261030T074031Z.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "filings/bodies/c09f130d76138950.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "thesis_break",
+        "source": "filings/bodies/928ce56ce0b52368.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "thesis_break",
+        "source": "filings/bodies/928ce56ce0b52368.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "filings/bodies/928ce56ce0b52368.txt",
+        "resolves": true,
+        "found": false
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "filings/bodies/c09f130d76138950.txt",
+        "resolves": true,
+        "found": true
+      }
+    ]
+  },
+  "prompt_sha256": "8fe9674ac8dc0a05e119cb8cd5396d54235b0d684ef2c0e3dce1aef0f75f28f8"
+}

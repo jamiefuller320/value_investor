@@ -1,0 +1,143 @@
+{
+  "label": "B",
+  "slug": "sp500__SNDK",
+  "as_of": "2026-11-11",
+  "inputs": {
+    "sha256": "5b1425e66a483de97990eadd0ac4ca3b03ed5738950a6508db05f5de1b6c9c7e",
+    "files": 35,
+    "filing_bodies": 22
+  },
+  "ok": true,
+  "verdict": "caution",
+  "risk": "high",
+  "confidence": 0.58,
+  "rationale": "FY2026 statutory OCF/FCF ($11.7bn/$11.5bn) back quality screens, but NAND cyclicality, rich P/B (14.5), failed FCF-yield gate, and screen FCF ($7.7bn) vs filing mismatch limit conviction on a new buy.",
+  "risk_tags": [
+    "cyclical",
+    "competitive",
+    "customer_concentration",
+    "leverage"
+  ],
+  "book_effect": "allows",
+  "raw_text": "## RESEARCH VERDICT\n\nVerdict: caution  \nRisk: high  \nConfidence: 0.58  \nRationale: FY2026 statutory OCF/FCF ($11.7bn/$11.5bn) back quality screens, but NAND cyclicality, rich P/B (14.5), failed FCF-yield gate, and screen FCF ($7.7bn) vs filing mismatch limit conviction on a new buy.  \nRiskTags: cyclical, competitive, customer_concentration, leverage  \n\n## COMPARISON EVIDENCE\n\n### EVIDENCE\n\n- [filings/bodies/123a23a80ce2b531.txt] \"Prior to February 21, 2025, we were wholly owned by Western Digital Corporation (“WDC”). As of February 21, 2025, we separated from WDC\" — recent spin-off governance and standalone risk context  \n- [filings/bodies/123a23a80ce2b531.txt] \"declining average selling prices, volatile demand, technological change, industry consolidation, lengthy product qualifications, and supply constraints\" — core cyclical/competitive industry risks  \n- [filings/bodies/123a23a80ce2b531.txt] \"customer accounted for more than 10% of our net revenue.\" — customer concentration disclosure  \n- [filings/bodies/f8854f1dddbdc4f5.txt] \"aggregate principal amount of $1,500.0 million in revolving commitments\" — revolving credit facility scale  \n- [filings/bodies/f8854f1dddbdc4f5.txt] \"prohibits the Company from exceeding a maximum Leverage Ratio (as defined in the Loan Agreement)\" — leverage covenant constraint  \n- [filings/bodies/123a23a80ce2b531.txt] \"Sandisk, a Delaware corporation, is the parent company of our NAND flash data storage business.\" — business scope (NAND-only)  \n- [snapshots/20260916T071544Z.json] \"FCF Yield\\\",\\\"earnings yield 4.8% below 8%\\\",\\\"FCF yield 3.4% below 5%\" — screen cheapness family gaps vs filing-level cash generation (via summary/failures)  \n\n**Screen vs filings (reconciliation):** `snapshots/20260916T071544Z.json` shows statutory **operating cash flow $11.671bn** (aligned with `sec_companyfacts.json` FY2026) but policy **FCF $7.721bn** (`fcf.canonical` / `key_metrics.FCF`); **SEC XBRL FCF is $11.494bn** (OCF − PP&E capex). FCF-yield and headline FCF therefore sit on a **lower screen TTM ($7.72bn, Sep-2026 policy)** than **filing FY2026 ($11.49bn, period ended 2026-07-03)**. Dividend-family models fail (`no dividend` / `yield too low`); no dividend facts in `sec_companyfacts.json`. `adjusted_signal` remains **buy**, same as raw—no overlay downgrade; **dividend** and **garp** families still failed per snapshot.\n\n### NUMBERS\n\n- Operating cash flow | 11671000000.0 | FY2026 (period_end 2026-07-03) | [sec_companyfacts.json]  \n- Capital expenditure (PP&E) | 177000000.0 | FY2026 (period_end 2026-07-03) | [sec_companyfacts.json]  \n- Free cash flow (OCF − capex) | 11494000000.0 | FY2026 (period_end 2026-07-03) | [sec_companyfacts.json]  \n- Free cash flow (prior year) | -120000000.0 | FY2025 (period_end 2025-06-27) | [sec_companyfacts.json]  \n- Screen policy FCF | 7720875008.0 | screen TTM (snapshot 2026-09-16) | [snapshots/20260916T071544Z.json]  \n- Total revenue | 20248000000.0 | FY2026 | [financials_annual.json] *(Yahoo fallback; no matching revenue line in supplied filing bodies)*  \n\n### THESIS BREAKS\n\n- FY2026 10-K or XBRL shows **negative** operating cash flow or FCF again, as in FY2024–FY2025 (`sec_companyfacts.json`).  \n- Filing discloses loss of a **>10% net-revenue customer** or a material ASP/margin collapse in NAND, consistent with cited risk-factor language.  \n- **Leverage Ratio** covenant breach or inability to refinance the **$1,500.0 million** revolving facility on disclosed terms (`filings/bodies/f8854f1dddbdc4f5.txt`).  \n- Material **goodwill/intangible impairment** or restatement tied to post–Western Digital separation reporting (`filings/bodies/123a23a80ce2b531.txt` separation narrative).",
+  "checks": {
+    "evidence_count": 8,
+    "evidence_filing_body": 6,
+    "quotes_found": 5,
+    "quote_resolution_rate": 0.625,
+    "numbers_count": 6,
+    "numbers_found": 6,
+    "thesis_breaks": [
+      "FY2026 10-K or XBRL shows **negative** operating cash flow or FCF again, as in FY2024–FY2025 (`sec_companyfacts.json`).",
+      "Filing discloses loss of a **>10% net-revenue customer** or a material ASP/margin collapse in NAND, consistent with cited risk-factor language.",
+      "Leverage Ratio** covenant breach or inability to refinance the **$1,500.0 million** revolving facility on disclosed terms (`filings/bodies/f8854f1dddbdc4f5.txt`).",
+      "Material **goodwill/intangible impairment** or restatement tied to post–Western Digital separation reporting (`filings/bodies/123a23a80ce2b531.txt` separation narrative)."
+    ],
+    "hallucination_flags": {
+      "unparsed_evidence": 1,
+      "unresolved_path": 0,
+      "quote_not_found": 2,
+      "number_not_found": 0,
+      "uncheckable_number": 0
+    },
+    "hallucination_flag_total": 2,
+    "future_year_mentions": [],
+    "chars": 3689,
+    "words": 445,
+    "evidence": [
+      {
+        "path": "filings/bodies/123a23a80ce2b531.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/123a23a80ce2b531.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/123a23a80ce2b531.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/f8854f1dddbdc4f5.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/f8854f1dddbdc4f5.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": true
+      },
+      {
+        "path": "filings/bodies/123a23a80ce2b531.txt",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": true,
+        "quote_found": false
+      },
+      {
+        "path": "snapshots/20260916T071544Z.json",
+        "parsed": true,
+        "resolves": true,
+        "filing_body": false,
+        "quote_found": false
+      },
+      {
+        "line": "**Screen vs filings (reconciliation):** `snapshots/20260916T071544Z.json` shows statutory **operating cash flow $11.671bn** (aligned with `sec_companyfacts.json` FY2026) but policy **FCF $7.721bn** (`fcf.canonical` / `key_metrics.FCF`); **SEC XBRL FCF is $11.494bn** (OCF − PP&E capex). FCF-yield and headline FCF therefore sit on a **lower screen TTM ($7.72bn, Sep-2026 policy)** than **filing FY2026 ($11.49bn, period ended 2026-07-03)**. Dividend-family models fail (`no dividend` / `yield too low`); no dividend facts in `sec_companyfacts.json`. `adjusted_signal` remains **buy**, same as raw—no overlay downgrade; **dividend** and **garp** families still failed per snapshot.",
+        "parsed": false,
+        "resolves": false,
+        "quote_found": false
+      }
+    ],
+    "numbers": [
+      {
+        "metric": "Operating cash flow",
+        "value": "11671000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "Capital expenditure (PP&E)",
+        "value": "177000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "Free cash flow (OCF − capex)",
+        "value": "11494000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "Free cash flow (prior year)",
+        "value": "120000000.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "Screen policy FCF",
+        "value": "7720875008.0",
+        "checkable": true,
+        "found": true
+      },
+      {
+        "metric": "Total revenue",
+        "value": "20248000000.0",
+        "checkable": true,
+        "found": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,280 @@
+{
+  "slug": "nasdaq100__STX",
+  "order": "AB",
+  "shown_as": {
+    "A": "A",
+    "B": "B"
+  },
+  "judge_model": "gpt-5.6-luna",
+  "as_of": "2026-11-11",
+  "inputs": {
+    "sha256": "279ee7a94451e687715a87de234ef70196dfeb48534eff907b8b127efae52e3d",
+    "files": 86,
+    "filing_bodies": 69
+  },
+  "at": "2026-11-11T18:45:23.036998+00:00",
+  "attempt": 1,
+  "raw_text": "{\"scores\":{\"A\":{\"evidence\":{\"score\":4,\"reason\":\"Most financial figures and risk claims reconcile to the supplied SEC data and filings, though one BIS quote is truncated and weakly evidentiary.\",\"quotes\":[{\"source\":\"sec_companyfacts.json\",\"quote\":\"free_cashflow\\\":3105000000.0\"},{\"source\":\"filings/bodies/0e21ebab31a84200.txt\",\"quote\":\"In fiscal year 2026, one customer accounted for approximately 14% of our consolidated revenue.\"}]},\"thesis_break\":{\"score\":4,\"reason\":\"It identifies concrete ownership-breaking conditions involving cash coverage, customer loss, covenant failure, dividends and export controls, but the two-year FCF condition could delay action.\",\"quotes\":[{\"source\":\"memo\",\"quote\":\"Filed annual FCF falling below cash dividends for two consecutive fiscal years without a disclosed, sustainable funding plan\"},{\"source\":\"memo\",\"quote\":\"Disclosure that a single customer above ~14% of revenue materially reduced or ended purchases, with no offsetting volume elsewhere\"}]},\"verdict_justified\":{\"score\":4,\"reason\":\"Accumulate is consistent with strong FY2026 cash generation and dividend coverage while acknowledging substantial cyclical, leverage, concentration and regulatory risks; the relatively high confidence is less supported because the screen has no model evidence or valuation analysis.\",\"quotes\":[{\"source\":\"memo\",\"quote\":\"FY2026 filed OCF $3.67bn and FCF $3.11bn match the screen and cover dividends (~$634m)\"},{\"source\":\"screening_snapshot.json\",\"quote\":\"\\\"models_passed\\\":0,\\\"model_count\\\":0,\\\"data_quality_score\\\":0.0\"}]}},\"B\":{\"evidence\":{\"score\":5,\"reason\":\"It cross-checks annual and quarterly cash flows, dividends, customer concentration, cyclicality, competition, prior underutilization and regulatory exposure against the supplied files, while distinguishing SEC FY2026 figures from Yahoo TTM data.\",\"quotes\":[{\"source\":\"filings/bodies/550fe7f57dd99afc.txt\",\"quote\":\"Net cash provided by operating activities 1,690 532\"},{\"source\":\"filings/bodies/550fe7f57dd99afc.txt\",\"quote\":\"During the September 2026 quarter, we shipped 220 exabytes of HDD storage capacity. We generated revenue of approximately $4.2 billion with a gross margin of 57.3% and net income of $1.8 billion.\"}]},\"thesis_break\":{\"score\":5,\"reason\":\"The break conditions are specific, observable and materially linked to ownership: sub-1.0x cash coverage, major customer loss, technology failure or substitution, and export-control disruption.\",\"quotes\":[{\"source\":\"memo\",\"quote\":\"A full fiscal year in which statutory OCF−PP&E capex falls below dividends paid (cover under 1.0×)\"},{\"source\":\"filings/bodies/0e21ebab31a84200.txt\",\"quote\":\"If our transitions to more advanced technologies, including the transition to HDDs utilizing HAMR technology, require development, qualification or production cycles that are longer than anticipated or if we otherwise fail to implement new HDD technologies successfully, we may lose sales and market share\"}]},\"verdict_justified\":{\"score\":5,\"reason\":\"Accumulate is well matched to the evidence: strong current annual and quarterly cash generation supports entry, while the empty/zero-quality screen, cyclicality and explicit downside triggers justify medium risk and 0.68 confidence.\",\"quotes\":[{\"source\":\"memo\",\"quote\":\"Research confirms the buy on FY2026 statutory FCF of $3.1bn (4.9× dividend cover) and strong Q1 FY2027 cash generation\"},{\"source\":\"screening_snapshot.json\",\"quote\":\"\\\"signal\\\":\\\"buy\\\",\\\"models_passed\\\":0,\\\"model_count\\\":0,\\\"data_quality_score\\\":0.0\"}]}}},\"preferred\":\"B\",\"preference_reason\":\"B is preferable because it provides more complete source reconciliation, uses the latest quarter, distinguishes reporting bases, and states more actionable thesis-break conditions. Both memos reach the same entry-permitting verdict.\",\"claims_checked\":[{\"memo\":\"A\",\"claim\":\"FY2026 operating cash flow was $3.674bn, FCF was $3.105bn and dividends were about $634m.\",\"path\":\"sec_companyfacts.json\",\"supported\":true},{\"memo\":\"A\",\"claim\":\"One customer represented approximately 14% of FY2026 revenue.\",\"path\":\"filings/bodies/0e21ebab31a84200.txt\",\"supported\":true},{\"memo\":\"A\",\"claim\":\"The filings link liquidity, debt service, covenants and dividends to cash generation.\",\"path\":\"filings/bodies/0e21ebab31a84200.txt\",\"supported\":true},{\"memo\":\"A\",\"claim\":\"BIS settlement and export controls are relevant risks.\",\"path\":\"filings/bodies/550fe7f57dd99afc.txt\",\"supported\":true},{\"memo\":\"B\",\"claim\":\"The screen is a raw buy with zero models passed, zero data-quality score and null adjusted signal.\",\"path\":\"screening_snapshot.json\",\"supported\":true},{\"memo\":\"B\",\"claim\":\"FY2026 FCF was approximately 4.9 times dividends.\",\"path\":\"sec_companyfacts.json\",\"supported\":true},{\"memo\":\"B\",\"claim\":\"Q1 FY2027 operating cash flow was $1.690bn, capex was $211m and dividends were $168m.\",\"path\":\"filings/bodies/550fe7f57dd99afc.txt\",\"supported\":true},{\"memo\":\"B\",\"claim\":\"The October 27, 2026 quarterly dividend was declared at $0.76 per share.\",\"path\":\"filings/bodies/550fe7f57dd99afc.txt\",\"supported\":true},{\"memo\":\"B\",\"claim\":\"FY2025 FCF coverage was approximately 1.36 times.\",\"path\":\"sec_companyfacts.json\",\"supported\":true},{\"memo\":\"B\",\"claim\":\"FY2023 and FY2024 had factory underutilization charges caused by demand reductions.\",\"path\":\"filings/bodies/0e21ebab31a84200.txt\",\"supported\":true},{\"memo\":\"B\",\"claim\":\"HAMR qualification failure and SSD substitution are credible thesis-break risks.\",\"path\":\"filings/bodies/0e21ebab31a84200.txt\",\"supported\":true},{\"memo\":\"B\",\"claim\":\"The BIS settlement totals $300m and is being paid quarterly.\",\"path\":\"filings/bodies/550fe7f57dd99afc.txt\",\"supported\":true}]}",
+  "parsed": {
+    "scores": {
+      "A": {
+        "evidence": {
+          "score": 4,
+          "reason": "Most financial figures and risk claims reconcile to the supplied SEC data and filings, though one BIS quote is truncated and weakly evidentiary.",
+          "quotes": [
+            {
+              "source": "sec_companyfacts.json",
+              "quote": "free_cashflow\":3105000000.0"
+            },
+            {
+              "source": "filings/bodies/0e21ebab31a84200.txt",
+              "quote": "In fiscal year 2026, one customer accounted for approximately 14% of our consolidated revenue."
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 4,
+          "reason": "It identifies concrete ownership-breaking conditions involving cash coverage, customer loss, covenant failure, dividends and export controls, but the two-year FCF condition could delay action.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "Filed annual FCF falling below cash dividends for two consecutive fiscal years without a disclosed, sustainable funding plan"
+            },
+            {
+              "source": "memo",
+              "quote": "Disclosure that a single customer above ~14% of revenue materially reduced or ended purchases, with no offsetting volume elsewhere"
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 4,
+          "reason": "Accumulate is consistent with strong FY2026 cash generation and dividend coverage while acknowledging substantial cyclical, leverage, concentration and regulatory risks; the relatively high confidence is less supported because the screen has no model evidence or valuation analysis.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "FY2026 filed OCF $3.67bn and FCF $3.11bn match the screen and cover dividends (~$634m)"
+            },
+            {
+              "source": "screening_snapshot.json",
+              "quote": "\"models_passed\":0,\"model_count\":0,\"data_quality_score\":0.0"
+            }
+          ]
+        }
+      },
+      "B": {
+        "evidence": {
+          "score": 5,
+          "reason": "It cross-checks annual and quarterly cash flows, dividends, customer concentration, cyclicality, competition, prior underutilization and regulatory exposure against the supplied files, while distinguishing SEC FY2026 figures from Yahoo TTM data.",
+          "quotes": [
+            {
+              "source": "filings/bodies/550fe7f57dd99afc.txt",
+              "quote": "Net cash provided by operating activities 1,690 532"
+            },
+            {
+              "source": "filings/bodies/550fe7f57dd99afc.txt",
+              "quote": "During the September 2026 quarter, we shipped 220 exabytes of HDD storage capacity. We generated revenue of approximately $4.2 billion with a gross margin of 57.3% and net income of $1.8 billion."
+            }
+          ]
+        },
+        "thesis_break": {
+          "score": 5,
+          "reason": "The break conditions are specific, observable and materially linked to ownership: sub-1.0x cash coverage, major customer loss, technology failure or substitution, and export-control disruption.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "A full fiscal year in which statutory OCF−PP&E capex falls below dividends paid (cover under 1.0×)"
+            },
+            {
+              "source": "filings/bodies/0e21ebab31a84200.txt",
+              "quote": "If our transitions to more advanced technologies, including the transition to HDDs utilizing HAMR technology, require development, qualification or production cycles that are longer than anticipated or if we otherwise fail to implement new HDD technologies successfully, we may lose sales and market share"
+            }
+          ]
+        },
+        "verdict_justified": {
+          "score": 5,
+          "reason": "Accumulate is well matched to the evidence: strong current annual and quarterly cash generation supports entry, while the empty/zero-quality screen, cyclicality and explicit downside triggers justify medium risk and 0.68 confidence.",
+          "quotes": [
+            {
+              "source": "memo",
+              "quote": "Research confirms the buy on FY2026 statutory FCF of $3.1bn (4.9× dividend cover) and strong Q1 FY2027 cash generation"
+            },
+            {
+              "source": "screening_snapshot.json",
+              "quote": "\"signal\":\"buy\",\"models_passed\":0,\"model_count\":0,\"data_quality_score\":0.0"
+            }
+          ]
+        }
+      }
+    },
+    "preferred": "B",
+    "preference_reason": "B is preferable because it provides more complete source reconciliation, uses the latest quarter, distinguishes reporting bases, and states more actionable thesis-break conditions. Both memos reach the same entry-permitting verdict.",
+    "claims_checked": [
+      {
+        "memo": "A",
+        "claim": "FY2026 operating cash flow was $3.674bn, FCF was $3.105bn and dividends were about $634m.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "One customer represented approximately 14% of FY2026 revenue.",
+        "path": "filings/bodies/0e21ebab31a84200.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "The filings link liquidity, debt service, covenants and dividends to cash generation.",
+        "path": "filings/bodies/0e21ebab31a84200.txt",
+        "supported": true
+      },
+      {
+        "memo": "A",
+        "claim": "BIS settlement and export controls are relevant risks.",
+        "path": "filings/bodies/550fe7f57dd99afc.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "The screen is a raw buy with zero models passed, zero data-quality score and null adjusted signal.",
+        "path": "screening_snapshot.json",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "FY2026 FCF was approximately 4.9 times dividends.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "Q1 FY2027 operating cash flow was $1.690bn, capex was $211m and dividends were $168m.",
+        "path": "filings/bodies/550fe7f57dd99afc.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "The October 27, 2026 quarterly dividend was declared at $0.76 per share.",
+        "path": "filings/bodies/550fe7f57dd99afc.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "FY2025 FCF coverage was approximately 1.36 times.",
+        "path": "sec_companyfacts.json",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "FY2023 and FY2024 had factory underutilization charges caused by demand reductions.",
+        "path": "filings/bodies/0e21ebab31a84200.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "HAMR qualification failure and SSD substitution are credible thesis-break risks.",
+        "path": "filings/bodies/0e21ebab31a84200.txt",
+        "supported": true
+      },
+      {
+        "memo": "B",
+        "claim": "The BIS settlement totals $300m and is being paid quarterly.",
+        "path": "filings/bodies/550fe7f57dd99afc.txt",
+        "supported": true
+      }
+    ]
+  },
+  "problems": [],
+  "ok": true,
+  "quote_check": {
+    "quotes": 12,
+    "found": 10,
+    "found_rate": 0.833,
+    "rows": [
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "sec_companyfacts.json",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "evidence",
+        "source": "filings/bodies/0e21ebab31a84200.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "thesis_break",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "thesis_break",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "A",
+        "key": "verdict_justified",
+        "source": "screening_snapshot.json",
+        "resolves": true,
+        "found": false
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "filings/bodies/550fe7f57dd99afc.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "evidence",
+        "source": "filings/bodies/550fe7f57dd99afc.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "thesis_break",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "thesis_break",
+        "source": "filings/bodies/0e21ebab31a84200.txt",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "memo",
+        "resolves": true,
+        "found": true
+      },
+      {
+        "label": "B",
+        "key": "verdict_justified",
+        "source": "screening_snapshot.json",
+        "resolves": true,
+        "found": false
+      }
+    ]
+  },
+  "prompt_sha256": "72fe53efb71913a9f51c297daba35a31bbccbe506b37df947d0e189985480f94"
+}
