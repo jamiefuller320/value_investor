@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-10T14:17:27.431151+00:00
+Track: `buy_tier_level` · updated 2026-11-11T14:17:30.082093+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **2** / 15 (13% count, 13% NAV)
+- Losers: **2** / 14 (14% count, 14% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
@@ -83,11 +83,6 @@ Track: `buy_tier_level` · updated 2026-11-10T14:17:27.431151+00:00
 ### 1113.HK — weakening / watch_review (+10.1%)
 - research verdict neutral
 - still buy
-- cheapness family still passes
-
-### 1099.HK — weakening / watch_review (+14.3%)
-- research verdict neutral
-- still strong_buy
 - cheapness family still passes
 
 ### 2313.HK — weakening / watch_review (+18.9%)
