@@ -675,9 +675,9 @@
           "doc_anchor": "7-owner-decisions"
         },
         {
-          "id": "adhoc-strategy-book-proof-signoff",
-          "title": "Sign off the strategy book proof board",
-          "summary": "Read the forward block of docs/data/strategy_book_proof_board.json (docs/ops/strategy-book-proof.md). The seven step 3.2 bars are observe-only. all_bars_met lets you consider plan step 5.5 (small live capital). It does not open live capital, change the book, or replace this sign-off. The archive replay block in the same file is survivorship-biased and is not the proof. Sign, or say which bar still fails. N13 and N14 revisit when forward.all_bars_met is true; that flag is not itself a live-broker decision.",
+          "id": "adhoc-strategy-book-step-5-5-decision",
+          "title": "Decide on step 5.5 when every proof bar is met",
+          "summary": "The proof board was signed off on 2026-11-11 (step 3.2 done). When forward.all_bars_met in docs/data/strategy_book_proof_board.json turns true (N13 and N14 revisit triggers fire), read the forward block and decide whether to start plan step 5.5 (small live capital), after steps 5.2 to 5.4. The flag does not open live capital, change the book, or make the decision. The archive replay block in the same file is survivorship-biased and is not the proof.",
           "automated": false,
           "doc_path": "docs/ops/strategy-book-proof.md",
           "doc_anchor": "owner-sign-off"
