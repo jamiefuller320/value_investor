@@ -186,6 +186,16 @@ plus entry, exit, and review rows for that session. Each row has `inputs`
 only). A same-day rerun does not append again once `gate_logged_through`
 covers that session.
 
+The observe store is rebuilt from the start date on every run, so an earlier
+session reads its F9-B binds and memo from this log, not from today's stores.
+Each session row carries `f9` (pass or gap list), `memo_at` and `memo_verdict`
+as the job saw them that day; signal-day memos also come from
+`strategy_book_memo_log.jsonl`. Today's stores are used only for the session
+being scored. A session the log never covered has no F9-B fact and cannot
+open an entry. Without this, the store dated today's binds after every earlier
+signal, and a fill vanished on the next run (change marker
+`owner-strategy-book-v0-forward-history-fix-v1`).
+
 The daily re-hash compares each stored digest to the blob at `data_commit`
 (`git show`). If that commit does not contain the path, the row is
 `pending_commit`, not a mismatch: the starting commit does not hold files this

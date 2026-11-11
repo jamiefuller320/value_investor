@@ -469,6 +469,7 @@ file did not yet exist.
 | 7 | Seal signed | `signed: true`, `signed_at` 2026-11-05 (`registration_signed` passes) | Already true |
 | 8 | Start date | No `forward_start` on the seal, so the walk starts on the `signed_at` date, **2026-11-05**. On its first live run the book re-walks 2026-11-05 to go-live. Sessions it never logged get `signal_seen_at` equal to that run's time, so any signal from those days is `late_signal` and is never filled. That can trip the "Strategy book late signals" warning (above 10%). | **Decided (owner, 2026-11-10): "Lets align the forward start and live dates."** The go-live edit sets `forward_start` to the go-live date in the same commit as `forward_live: true`, so the first live walk starts on the go-live session. Recorded on the seal as `phase1_gate_decision.forward_start_alignment`. |
 | 9 | Ops-monitor 07:45 failure on 2026-11-10 (gap 2) | Open | Advised, so that the go-live findings are current |
+| 10 | **Earlier sessions lose their F9-B fact on the next run** (found 2026-11-11) | **Blocker.** The store is rebuilt every run, but each name had one F9-B fact dated at the latest session, so an earlier signal failed F9-B on the next run: the primary column never filled, and fills vanished a day later. | Yes. Fixed by reading earlier sessions' F9-B and memos from the gate log (change marker `owner-strategy-book-v0-forward-history-fix-v1`). |
 
 ### What `forward_live` checks in code
 
