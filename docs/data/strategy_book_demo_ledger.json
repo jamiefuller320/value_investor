@@ -3,14 +3,14 @@
   "instrument": "strategy-book-demo-mirror-v0",
   "influences_live": false,
   "registration_id": "owner-strategy-book-v0",
-  "generated_at": "2026-11-11T10:59:11.686553+00:00",
-  "demo_credentials_present": false,
-  "placement": "dry_run",
+  "generated_at": "2026-11-11T13:16:20.012247+00:00",
+  "demo_credentials_present": true,
+  "placement": "live_demo",
   "base_url": "https://demo.trading212.com",
   "order_cap": 20,
-  "observe_data_commit": "61e60602783a54f07fcc43adb4ccdcf706d172a8",
-  "observe_generated_at": "2026-11-11T09:04:15.436842+00:00",
-  "planned_at": "2026-11-11T10:59:11.686553+00:00",
+  "observe_data_commit": "db96e37e6eb49563959b433d158c68a397ded661",
+  "observe_generated_at": "2026-11-11T13:16:11.323720+00:00",
+  "planned_at": "2026-11-11T13:16:20.012247+00:00",
   "plans": [
     {
       "client_order_ref": "sbdemo:ftse350:CKN.L:decline_rejected_shadow:2026-11-10:entry",
@@ -39,8 +39,8 @@
       "chart_currency_label": null,
       "chart_as_of": null,
       "price_basis": null,
-      "observe_data_commit": "61e60602783a54f07fcc43adb4ccdcf706d172a8",
-      "planned_at": "2026-11-11T10:59:11.686553+00:00",
+      "observe_data_commit": "db96e37e6eb49563959b433d158c68a397ded661",
+      "planned_at": "2026-11-11T13:16:20.012247+00:00",
       "broker_order_id": null,
       "influences_live": false
     },
@@ -48,8 +48,8 @@
       "client_order_ref": "sbdemo:ftse350:FOUR.L:primary:2026-11-10:entry",
       "episode_id": "ftse350:FOUR.L:primary:2026-11-10",
       "leg": "entry",
-      "action": "would_place",
-      "reason": null,
+      "action": "rejected",
+      "reason": "rejected",
       "column": "primary",
       "market": "ftse350",
       "ticker": "FOUR.L",
@@ -71,16 +71,17 @@
       "chart_currency_label": "GBP",
       "chart_as_of": "2026-11-10T19:43:31.376143+00:00",
       "price_basis": "signal_session_chart_close_as_instrument_currency",
-      "observe_data_commit": "61e60602783a54f07fcc43adb4ccdcf706d172a8",
-      "planned_at": "2026-11-11T10:59:11.686553+00:00",
+      "observe_data_commit": "db96e37e6eb49563959b433d158c68a397ded661",
+      "planned_at": "2026-11-11T13:16:20.012247+00:00",
       "broker_order_id": null,
-      "influences_live": false
+      "influences_live": false,
+      "broker_status": 400
     },
     {
       "client_order_ref": "sbdemo:ftse350:MEGP.L:primary:2026-11-10:entry",
       "episode_id": "ftse350:MEGP.L:primary:2026-11-10",
       "leg": "entry",
-      "action": "would_place",
+      "action": "submit_unknown",
       "reason": null,
       "column": "primary",
       "market": "ftse350",
@@ -103,10 +104,11 @@
       "chart_currency_label": "GBP",
       "chart_as_of": "2026-11-10T19:43:31.376143+00:00",
       "price_basis": "signal_session_chart_close_as_instrument_currency",
-      "observe_data_commit": "61e60602783a54f07fcc43adb4ccdcf706d172a8",
-      "planned_at": "2026-11-11T10:59:11.686553+00:00",
+      "observe_data_commit": "db96e37e6eb49563959b433d158c68a397ded661",
+      "planned_at": "2026-11-11T13:16:20.012247+00:00",
       "broker_order_id": null,
-      "influences_live": false
+      "influences_live": false,
+      "broker_status": null
     },
     {
       "client_order_ref": "sbdemo:sp500:ADM:decline_rejected_shadow:2026-11-10:entry",
@@ -135,53 +137,107 @@
       "chart_currency_label": null,
       "chart_as_of": null,
       "price_basis": null,
-      "observe_data_commit": "61e60602783a54f07fcc43adb4ccdcf706d172a8",
-      "planned_at": "2026-11-11T10:59:11.686553+00:00",
+      "observe_data_commit": "db96e37e6eb49563959b433d158c68a397ded661",
+      "planned_at": "2026-11-11T13:16:20.012247+00:00",
       "broker_order_id": null,
       "influences_live": false
     }
   ],
-  "orders": [],
+  "orders": [
+    {
+      "client_order_ref": "sbdemo:ftse350:FOUR.L:primary:2026-11-10:entry",
+      "episode_id": "ftse350:FOUR.L:primary:2026-11-10",
+      "leg": "entry",
+      "order_type": "LIMIT",
+      "market": "ftse350",
+      "ticker": "FOUR.L",
+      "t212_ticker": "FOURl_EQ",
+      "side": "BUY",
+      "quantity": 2.4594,
+      "limit_price": 4066.0,
+      "limit_currency": "GBX",
+      "time_validity": "GOOD_TILL_CANCEL",
+      "fill_session": "2026-11-11",
+      "half_spread": 0.00025,
+      "sessions_late": null,
+      "catchup_reason": null,
+      "attempt_count": null,
+      "status": "rejected",
+      "submitted_at": "2026-11-11T13:16:20.012247+00:00",
+      "influences_live": false,
+      "broker_status": 400,
+      "detail": "{\"type\":\"/api-errors/quantity-precision-mismatch\",\"title\":\"Error while placing the order\",\"status\":400,\"detail\":\"invalid quantity precision 3\",\"traceId\":\"f0ea7e0dae6423265af043f0a10ca8ca\"}"
+    },
+    {
+      "client_order_ref": "sbdemo:ftse350:MEGP.L:primary:2026-11-10:entry",
+      "episode_id": "ftse350:MEGP.L:primary:2026-11-10",
+      "leg": "entry",
+      "order_type": "LIMIT",
+      "market": "ftse350",
+      "ticker": "MEGP.L",
+      "t212_ticker": "PHTMl_EQ",
+      "side": "BUY",
+      "quantity": 96.7117,
+      "limit_price": 103.4,
+      "limit_currency": "GBX",
+      "time_validity": "GOOD_TILL_CANCEL",
+      "fill_session": "2026-11-11",
+      "half_spread": 0.00025,
+      "sessions_late": null,
+      "catchup_reason": null,
+      "attempt_count": null,
+      "status": "submit_unknown",
+      "submitted_at": "2026-11-11T13:16:20.012247+00:00",
+      "influences_live": false,
+      "detail": "DemoTransportError"
+    }
+  ],
   "fills": [],
-  "ledger": [],
+  "ledger": [
+    {
+      "event_id": "transaction:01a1ca2e-3b27-76db-b131-46f629b95bdd",
+      "type": "transaction",
+      "reference": "01a1ca2e-3b27-76db-b131-46f629b95bdd",
+      "transaction_type": "DEPOSIT",
+      "cash": 5000.0,
+      "currency": "GBP",
+      "date_time": "2026-11-11T10:36:29.850Z",
+      "influences_live": false
+    }
+  ],
   "reconciliation": {
-    "status": "skipped",
-    "reason": "not_configured",
-    "diffs": []
+    "status": "insufficient_data",
+    "diffs": [],
+    "gaps": []
   },
   "orders_sent": 0,
-  "errors": [],
-  "slippage": {
-    "measured_count": 0,
-    "median_pct": null,
-    "on_time_count": 0,
-    "on_time_median_pct": null,
-    "catchup_count": 0,
-    "catchup_median_pct": null
-  },
+  "errors": [
+    "pending unavailable: DemoTransportError"
+  ],
   "summary": {
     "influences_live": false,
-    "demo_credentials_present": false,
-    "placement": "dry_run",
-    "observe_data_commit": "61e60602783a54f07fcc43adb4ccdcf706d172a8",
-    "planned_at": "2026-11-11T10:59:11.686553+00:00",
+    "demo_credentials_present": true,
+    "placement": "live_demo",
+    "observe_data_commit": "db96e37e6eb49563959b433d158c68a397ded661",
+    "planned_at": "2026-11-11T13:16:20.012247+00:00",
     "order_cap": 20,
     "orders_sent": 0,
-    "would_place": 2,
+    "would_place": 0,
     "placed": 0,
     "not_mirrored": 2,
     "capped": 0,
     "insufficient_data": 0,
-    "rejected": 0,
+    "rejected": 1,
     "partial": 0,
     "cancelled": 0,
     "already_working": 0,
-    "submit_unknown": 0,
+    "submit_unknown": 1,
     "actions": {
       "not_mirrored": 2,
-      "would_place": 2
+      "rejected": 1,
+      "submit_unknown": 1
     },
-    "reconciliation": "skipped",
+    "reconciliation": "insufficient_data",
     "slippage_measured": 0,
     "slippage_median_pct": null,
     "names": [
@@ -202,8 +258,8 @@
         "ticker": "FOUR.L",
         "column": "primary",
         "leg": "entry",
-        "action": "would_place",
-        "reason": null,
+        "action": "rejected",
+        "reason": "rejected",
         "side": "BUY",
         "quantity": 2.4594,
         "limit_price": 4066.0,
@@ -215,7 +271,7 @@
         "ticker": "MEGP.L",
         "column": "primary",
         "leg": "entry",
-        "action": "would_place",
+        "action": "submit_unknown",
         "reason": null,
         "side": "BUY",
         "quantity": 96.7117,
@@ -238,6 +294,16 @@
         "t212_ticker": null
       }
     ],
-    "errors": []
+    "errors": [
+      "pending unavailable: DemoTransportError"
+    ]
+  },
+  "slippage": {
+    "measured_count": 0,
+    "median_pct": null,
+    "on_time_count": 0,
+    "on_time_median_pct": null,
+    "catchup_count": 0,
+    "catchup_median_pct": null
   }
 }
