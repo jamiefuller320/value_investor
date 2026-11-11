@@ -224,6 +224,14 @@ What this check does not do: re-hash the blob in the commit that first
 contains the log line. That needs the commit created after the log is pushed.
 Until then a same-day file stays `pending_commit`.
 
+## Reviews
+
+Closed episodes are not reviewed inside this walker. The daily ops-monitor
+check reads this store and the gate log and writes
+`docs/data/strategy_book_review_queue.json`. See
+[strategy-book-reviews.md](strategy-book-reviews.md). The walker does not
+write that queue, and a review never changes the book.
+
 ## Findings
 
 All `auto_fixable` false. Stable titles:
