@@ -635,6 +635,30 @@ def test_memo_bind_late_signal_and_a_failed_verdict() -> None:
     assert _kind(late, "late_signal")
 
 
+def test_stale_memo_at_the_signal_close_waits_for_the_signal_day_memo() -> None:
+    import dataclasses
+
+    closes = _decline() + [100.0, 104.0]
+
+    def stale_at_signal(spec: NameSpec) -> NameSpec:
+        rows = [dataclasses.replace(row, memo_recent=False) for row in spec.f9 or []]
+        return dataclasses.replace(spec, f9=rows)
+
+    ready = _walk(stale_at_signal(_spec(closes, memo_hours=12)))
+    assert _one(ready)["memo_verdict"] == "hold"
+
+    after_fill = _walk(stale_at_signal(_spec(closes, memo_hours=30)))
+    assert _primary(after_fill) == []
+    assert _kind(after_fill, "memo_not_ready")
+
+    no_filing = stale_at_signal(_spec(closes, memo_hours=12))
+    no_filing = dataclasses.replace(
+        no_filing,
+        f9=[dataclasses.replace(row, key_filing_bodies=False) for row in no_filing.f9 or []],
+    )
+    assert _primary(_walk(no_filing)) == []
+
+
 def test_matched_excess_and_the_five_name_fallback() -> None:
     path = [100.0] + [100.0] * 8 + [110.4] + [112.0] * 10 + [116.0] + [112.0] * 5 + [109.8, 109.5]
     base = _decline() + path

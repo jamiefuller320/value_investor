@@ -287,6 +287,22 @@
       "fix": "The re-hash resolves each row to the first commit after data_commit that touches the gate log (the run's own commit; the forward workflow is the log's single writer) and reads the inputs there. Uncommitted rows, or rows whose commit is not in the clone, are pending_commit.",
       "unchanged": "No threshold or rule changed. Per-episode provenance_missing (which decides thickness counting) is computed in the run from the bytes it read and was not affected: 0 of 16 episodes flagged. The gate log is not rewritten. The next run rewrites the status count.",
       "doc": "docs/ops/strategy-book-observe.md#gate-log-and-provenance"
+    },
+    {
+      "marker_id": "owner-strategy-book-v0-memo-at-fill-fix-v1",
+      "at": "2026-11-11T16:00:00Z",
+      "kind": "bug_fix",
+      "rule_change": false,
+      "approved_by": "owner (pending: merging this change approves it)",
+      "approved_at": null,
+      "owner_quote": null,
+      "new_registration_id": false,
+      "logged_on_registration_id": "owner-strategy-book-v0",
+      "sealed_text": "Section 2, signal-day memo: 'The memo bind and the research-verdict block are read at the fill, not at the signal close. ... A memo finished after the signal close counts.'",
+      "what_was_wrong": "The forward walk also required memo_recent on the signal session's F9-B fact, judged at the signal close (WalkOptions.f9_require_memo was True). A name whose memo the signal-day memo job refreshed overnight could never fill: on 2026-11-11 the job refreshed CRM (accumulate) and FIS (caution) at 07:48 UTC, before their 2026-11-11 fill close, and both stayed blocked as f9 ['memo_recent']. The walker's own fill-time memo rule (memo_not_ready / memo_blocked) was already correct.",
+      "fix": "f9_require_memo defaults to False, so the signal session needs only the filing, cash-flow and overlay binds, and the memo bind is read once, at the fill, as sealed. Archive and rehearsal walks already set it False.",
+      "unchanged": "No threshold or rule changed. The gate log is not rewritten; its f9 field still lists memo_recent as judged at the signal close, and that entry is now ignored for the decision. Dry run on the committed data at 2026-11-11 15:40 UTC: pending entries 2 -> 4 (FOUR.L, MEGP.L, plus CRM and FIS on the 2026-11-11 US close); f9 blocks 141 -> 2; no provenance mismatch.",
+      "doc": "docs/ops/strategy-book-observe.md"
     }
   ],
   "bench_seals": [
