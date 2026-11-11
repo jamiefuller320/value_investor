@@ -207,6 +207,15 @@ open an entry. Without this, the store dated today's binds after every earlier
 signal, and a fill vanished on the next run (change marker
 `owner-strategy-book-v0-forward-history-fix-v1`).
 
+The `memo_recent` entry in a row's `f9` list is judged at the signal close and
+is a label only. The memo bind decides once, at the fill (registration
+section 2): the latest memo finished before the fill session's close, under
+21 days old, with a verdict that is not failed; otherwise `memo_not_ready` or
+`memo_blocked`. A signal-day memo written overnight therefore counts. Until
+2026-11-11 the walk also demanded a fresh memo at the signal close, which
+blocked every signal-day memo (change marker
+`owner-strategy-book-v0-memo-at-fill-fix-v1`).
+
 The daily re-hash compares each stored digest to the blob in the commit that
 holds the row: the first commit after `data_commit` that touches the gate log,
 which is the run's own commit (this workflow is the log's single writer).

@@ -478,8 +478,9 @@ class WalkOptions:
     alternative: bool = False
     drop_last_bar: bool = False
     include_controls: bool = True
-    # Section 2: the memo bind is a forward rule. Archive walks do not require it.
-    f9_require_memo: bool = True
+    # Section 2 reads the memo bind at the fill (``apply_memo``), never at the
+    # signal close, so a signal-day memo written overnight can meet it.
+    f9_require_memo: bool = False
     scoring_date: date | None = None
     decision_date: date | None = None
     data_commit: str | None = None
