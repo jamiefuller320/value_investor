@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-10T16:38:34.253031+00:00",
+  "run_at": "2026-11-11T15:40:07.396849+00:00",
   "market_id": "hang_seng",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-10T16:35:30.894774+00:00",
+    "snapshot_at": "2026-11-11T15:37:00.648385+00:00",
     "market_id": "hang_seng",
     "buy_tier_count": 24,
     "unmeasured_buy_tier": 0,
@@ -67,7 +67,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-11-10T16:38:29.159665+00:00",
+    "snapshot_at": "2026-11-11T15:40:03.022053+00:00",
     "market_id": "hang_seng",
     "buy_tier_count": 24,
     "unmeasured_buy_tier": 0,
@@ -132,8 +132,8 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 24,
-    "hits": 3,
-    "new_rows_total": 0,
+    "hits": 4,
+    "new_rows_total": 1,
     "curiosity_total": 3,
     "errors": 0,
     "prioritization_weights": {
@@ -167,7 +167,7 @@
   },
   "critical_path": {
     "market_id": "hang_seng",
-    "assessed_at": "2026-11-10T16:35:32.193087+00:00",
+    "assessed_at": "2026-11-11T15:37:01.474980+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -255,9 +255,9 @@
       "thin_need_bodies": 1
     }
   },
-  "used_seconds": 175.674359718,
+  "used_seconds": 180.66426882499997,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3424.3256402819998,
+  "leftover_seconds": 3419.335731175,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -265,9 +265,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "hang_seng",
-    "updated_at": "2026-11-10T16:38:29.166338+00:00",
+    "updated_at": "2026-11-11T15:40:03.025757+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 17,
+    "complete_zero_improve_runs": 18,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -319,18 +319,6 @@
         "source_surface": "asia_filings+hkex_direct"
       },
       {
-        "ticker": "2331.HK",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-10-31T10:37:58.903556+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 26,
-        "filings_with_body": 19,
-        "indexed_without_body": 1,
-        "thin": false,
-        "source_surface": "asia_filings+hkex_direct"
-      },
-      {
         "ticker": "0883.HK",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
@@ -367,12 +355,24 @@
         "source_surface": "asia_filings+hkex_direct"
       },
       {
+        "ticker": "2331.HK",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-11-11T15:40:03.025757+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 27,
+        "filings_with_body": 19,
+        "indexed_without_body": 1,
+        "thin": false,
+        "source_surface": "asia_filings+hkex_direct"
+      },
+      {
         "ticker": "9961.HK",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-11-08T13:37:35.362048+00:00",
+        "parked_at": "2026-11-11T15:40:03.025757+00:00",
         "park_via": "market_wide_zero_improve",
-        "filings_total": 27,
+        "filings_total": 28,
         "filings_with_body": 18,
         "indexed_without_body": 2,
         "thin": false,
@@ -433,8 +433,17 @@
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 64,
-    "candidate_count": 53,
+    "candidate_count": 61,
     "skipped_resolved_tickers": [
+      "ACKB.BR",
+      "APAM.AS",
+      "BAS.DE",
+      "DQ7A.IR",
+      "ESSITY-B.ST",
+      "EVN.VI",
+      "IFX.DE",
+      "UCB.BR",
+      "WIE.VI",
       "LMT",
       "APTV",
       "BXP",
@@ -455,15 +464,14 @@
       "DTE.DE",
       "DTG.DE",
       "HNR1.DE",
-      "MUV2.DE",
       "HEN3.DE",
       "PST.MI",
       "APAM.AS",
       "0285.HK",
       "0857.HK",
       "0288.HK",
-      "2331.HK",
       "0883.HK",
+      "2331.HK",
       "EVN.VI",
       "WIE.VI"
     ],
