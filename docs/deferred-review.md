@@ -1,6 +1,6 @@
 # Queued & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-11T15:25:12+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-11-11T18:12:19+00:00`).
 
 Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 → P2 → higher-priority work) and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md` and [`docs/ops/priority-queue-wording.md`](ops/priority-queue-wording.md)). `drop` is for rejected / indefinite no only — not capacity wait. Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -293,6 +293,7 @@ Agents **queue** wanted-but-not-now ideas with `ftse-defer add …` (behind P1 �
 | N264 | **Strategy book forward walk: freeze early sessions before input retention thins them** | The forward observe store is rebuilt from forward_start every run. Library screen history thins to monthly after 400 days, gate history keeps 400 versions, and charts hold 2y, so from about 13 months after go-live a rebuild can change early sessions' screen and gate facts and later lose their closes. Freeze closed episodes (or pin retention for walked dates) before that. | 2027-09-01, about 10 months after go-live and before the 400-day screen retention reaches the start date _(machine-checked)_ |
 | N265 | **Strategy book gate-log re-hash: verify earlier runs in CI (shallow checkout)** | strategy-book-forward.yml checks out depth 1, so the daily provenance re-hash can only resolve rows whose run commit is in the clone; earlier runs' rows stay pending_commit and are never verified in CI. Per-episode provenance_missing is decided in-run and is unaffected. Options: verify only the previous run's rows with a bounded deepen, or a weekly full-history job. | Before the Phase 2 thickness gate review, or if a gate-log tamper concern arises |
 | N266 | **Promote memo-free shadow only at a version review** | The memo-free forward shadow is report-only. Moving its rule (drop the four F9-B binds, keep decline and sector gates) into the sealed book needs a new registration_id at a version review, after the shadow has a thick set of mature episodes and a read of fair-cost return and matched excess. | The shadow store shows at least 48 mature episodes and a strategy-book version review is open |
+| N268 | **Mirror non-sterling primary entries on the demo account** | The demo mirror sends only GBP/GBX names because the practice account is GBP (reason account_currency), so US and euro primary entries such as CRM and FIS on 2026-11-11 get no measured slippage or FX-conversion cost. A twin rule could convert at Trading 212's FX and record the conversion fee separately. | When at least 10 measured GBX demo fills exist, or when non-sterling names are the majority of primary entries over four weeks, or at the step 5.5 decision |
 
 ---
 
