@@ -1,15 +1,80 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-11-10T10:20:08.690574-05:00",
+    "local_time": "2026-11-11T10:20:00.690328-05:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-11-10T09:30:00-05:00",
-    "settle_at": "2026-11-10T10:00:00-05:00",
+    "market_open_at": "2026-11-11T09:30:00-05:00",
+    "settle_at": "2026-11-11T10:00:00-05:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "570ad595-21b1-4a32-8b25-16a3baf2d9ee",
+      "fund_id": "890533a6-4030-4ba7-8b6b-724e6b69d77f",
+      "acted_at": "2026-11-11T10:20:00.690328-05:00",
+      "ticker": "BDX",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 0.04503,
+      "price": 211.88,
+      "gross": 9.54,
+      "cost": 0.02,
+      "net_cash": 9.52,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Becton, Dickinson and Company",
+      "avg_cost_at_exit": 184.74,
+      "position_closed": true
+    },
+    {
+      "id": "d1360c06-e5ec-49c8-85c0-87d510d21327",
+      "fund_id": "890533a6-4030-4ba7-8b6b-724e6b69d77f",
+      "acted_at": "2026-11-11T10:20:00.690328-05:00",
+      "ticker": "ACN",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 0.033566,
+      "price": 260.5,
+      "gross": 8.74,
+      "cost": 0.02,
+      "net_cash": 8.73,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Accenture plc",
+      "avg_cost_at_exit": 249.37,
+      "position_closed": true
+    },
+    {
+      "id": "e8bfb8a8-7be1-49c9-9de1-dd75257c6bbd",
+      "fund_id": "890533a6-4030-4ba7-8b6b-724e6b69d77f",
+      "acted_at": "2026-11-11T10:20:00.690328-05:00",
+      "ticker": "ROP",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.017659,
+      "price": 476.6,
+      "gross": 8.42,
+      "cost": 0.01,
+      "net_cash": -8.43,
+      "note": "Automated buy",
+      "name": "Roper Technologies, Inc."
+    },
+    {
+      "id": "ad5afb00-92a7-4f27-9284-069e63fe5cb0",
+      "fund_id": "890533a6-4030-4ba7-8b6b-724e6b69d77f",
+      "acted_at": "2026-11-11T10:20:00.690328-05:00",
+      "ticker": "GEHC",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.102165,
+      "price": 82.38,
+      "gross": 8.42,
+      "cost": 0.01,
+      "net_cash": -8.43,
+      "note": "Automated buy",
+      "name": "GE HealthCare Technologies Inc."
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +88,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1011.76,
-    "cash": 24.26,
+    "nav": 1011.7,
+    "cash": 25.65,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -38,13 +103,6 @@
     "min_rebalance_notional_gbp": 10.0,
     "target_sleeve_value": 8.43,
     "targets": [
-      {
-        "ticker": "FIS",
-        "name": "Fidelity National Information Services, Inc.",
-        "signal": "strong_buy",
-        "conviction_score": 0.9533,
-        "price": 28.73
-      },
       {
         "ticker": "CMCSA",
         "name": "Comcast Corporation",
@@ -72,13 +130,6 @@
         "signal": "strong_buy",
         "conviction_score": 0.8512000000000001,
         "price": 44.63
-      },
-      {
-        "ticker": "SWK",
-        "name": "Stanley Black & Decker, Inc.",
-        "signal": "strong_buy",
-        "conviction_score": 0.8259000000000001,
-        "price": 114.85
       },
       {
         "ticker": "CRM",
@@ -144,6 +195,20 @@
         "price": 27.1
       },
       {
+        "ticker": "FIS",
+        "name": "Fidelity National Information Services, Inc.",
+        "signal": "strong_buy",
+        "conviction_score": 0.767805,
+        "price": 28.73
+      },
+      {
+        "ticker": "GEHC",
+        "name": "GE HealthCare Technologies Inc.",
+        "signal": "strong_buy",
+        "conviction_score": 0.7634000000000001,
+        "price": 82.38
+      },
+      {
         "ticker": "VZ",
         "name": "Verizon Communications Inc.",
         "signal": "strong_buy",
@@ -193,13 +258,6 @@
         "price": 244.97
       },
       {
-        "ticker": "CAH",
-        "name": "Cardinal Health, Inc.",
-        "signal": "strong_buy",
-        "conviction_score": 0.7253000000000001,
-        "price": 271.72
-      },
-      {
         "ticker": "UDR",
         "name": "UDR, Inc.",
         "signal": "buy",
@@ -219,13 +277,6 @@
         "signal": "buy",
         "conviction_score": 0.7040000000000001,
         "price": 66.64
-      },
-      {
-        "ticker": "KIM",
-        "name": "Kimco Realty Corporation",
-        "signal": "buy",
-        "conviction_score": 0.7017,
-        "price": 25.52
       },
       {
         "ticker": "STZ",
@@ -289,6 +340,20 @@
         "signal": "strong_buy",
         "conviction_score": 0.6729,
         "price": 84.6
+      },
+      {
+        "ticker": "LDOS",
+        "name": "Leidos Holdings, Inc.",
+        "signal": "strong_buy",
+        "conviction_score": 0.6723,
+        "price": 132.68
+      },
+      {
+        "ticker": "CPT",
+        "name": "Camden Property Trust",
+        "signal": "buy",
+        "conviction_score": 0.6699,
+        "price": 99.44
       },
       {
         "ticker": "ZBH",
@@ -445,13 +510,6 @@
         "price": 79.4
       },
       {
-        "ticker": "CPT",
-        "name": "Camden Property Trust",
-        "signal": "buy",
-        "conviction_score": 0.5924,
-        "price": 99.44
-      },
-      {
         "ticker": "CMI",
         "name": "Cummins Inc.",
         "signal": "buy",
@@ -471,6 +529,13 @@
         "signal": "buy",
         "conviction_score": 0.5845,
         "price": 259.89
+      },
+      {
+        "ticker": "HST",
+        "name": "Host Hotels & Resorts, Inc.",
+        "signal": "buy",
+        "conviction_score": 0.5803,
+        "price": 24.62
       },
       {
         "ticker": "UNH",
@@ -494,11 +559,25 @@
         "price": 190.4
       },
       {
+        "ticker": "MCK",
+        "name": "McKesson Corporation",
+        "signal": "strong_buy",
+        "conviction_score": 0.5632,
+        "price": 1060.84
+      },
+      {
         "ticker": "FSLR",
         "name": "First Solar, Inc.",
         "signal": "buy",
         "conviction_score": 0.5630000000000001,
         "price": 201.14
+      },
+      {
+        "ticker": "TRV",
+        "name": "The Travelers Companies, Inc.",
+        "signal": "buy",
+        "conviction_score": 0.5605,
+        "price": 395.2
       },
       {
         "ticker": "DECK",
@@ -795,13 +874,6 @@
         "price": 354.06
       },
       {
-        "ticker": "GDDY",
-        "name": "GoDaddy Inc.",
-        "signal": "strong_buy",
-        "conviction_score": 0.44389999999999996,
-        "price": 114.38
-      },
-      {
         "ticker": "ACGL",
         "name": "Arch Capital Group Ltd.",
         "signal": "buy",
@@ -870,107 +942,40 @@
         "signal": "buy",
         "conviction_score": 0.37790999999999997,
         "price": 76.86
-      },
-      {
-        "ticker": "FDX",
-        "name": "FedEx Corporation",
-        "signal": "buy",
-        "conviction_score": 0.3663,
-        "price": 308.14
       }
     ],
     "anticipated_exits": [
       {
         "action": "sell",
-        "ticker": "TRV",
-        "name": "The Travelers Companies, Inc.",
+        "ticker": "CAH",
+        "name": "Cardinal Health, Inc.",
         "reason": "No longer in the top conviction target set",
-        "shares": 0.022523,
-        "price": 395.2,
-        "value": 8.9
+        "shares": 0.033655,
+        "price": 271.72,
+        "value": 9.14
       },
       {
         "action": "sell",
-        "ticker": "BDX",
-        "name": "Becton, Dickinson and Company",
+        "ticker": "GDDY",
+        "name": "GoDaddy Inc.",
         "reason": "No longer in the top conviction target set",
-        "shares": 0.04503,
-        "price": 211.88,
-        "value": 9.54
+        "shares": 0.077389,
+        "price": 114.38,
+        "value": 8.85
       },
       {
         "action": "sell",
-        "ticker": "MCK",
-        "name": "McKesson Corporation",
+        "ticker": "FDX",
+        "name": "FedEx Corporation",
         "reason": "No longer in the top conviction target set",
-        "shares": 0.008176,
-        "price": 1060.84,
-        "value": 8.67
-      },
-      {
-        "action": "sell",
-        "ticker": "ACN",
-        "name": "Accenture plc",
-        "reason": "No longer in the top conviction target set",
-        "shares": 0.033566,
-        "price": 260.5,
-        "value": 8.74
-      },
-      {
-        "action": "sell",
-        "ticker": "HST",
-        "name": "Host Hotels & Resorts, Inc.",
-        "reason": "No longer in the top conviction target set",
-        "shares": 0.335329,
-        "price": 24.62,
-        "value": 8.26
-      },
-      {
-        "action": "sell",
-        "ticker": "LDOS",
-        "name": "Leidos Holdings, Inc.",
-        "reason": "No longer in the top conviction target set",
-        "shares": 0.059336,
-        "price": 132.68,
-        "value": 7.87
+        "shares": 0.027325,
+        "price": 308.14,
+        "value": 8.42
       }
     ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [
-      {
-        "action": "buy",
-        "ticker": "SWK",
-        "name": "Stanley Black & Decker, Inc.",
-        "reason": "New sleeve",
-        "value": 8.43,
-        "price": 114.85,
-        "target_value": 8.43,
-        "conviction_score": 0.8259000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "buy",
-        "ticker": "ROP",
-        "name": "Roper Technologies, Inc.",
-        "reason": "New sleeve",
-        "value": 8.43,
-        "price": 476.6,
-        "target_value": 8.43,
-        "conviction_score": 0.8084,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "buy",
-        "ticker": "KIM",
-        "name": "Kimco Realty Corporation",
-        "reason": "New sleeve",
-        "value": 8.43,
-        "price": 25.52,
-        "target_value": 8.43,
-        "conviction_score": 0.7017,
-        "signal": "buy"
-      },
       {
         "action": "buy",
         "ticker": "CPT",
@@ -979,7 +984,7 @@
         "value": 8.43,
         "price": 99.44,
         "target_value": 8.43,
-        "conviction_score": 0.5924,
+        "conviction_score": 0.6699,
         "signal": "buy"
       },
       {
@@ -1006,16 +1011,6 @@
       }
     ],
     "anticipated_holds": [
-      {
-        "action": "hold",
-        "ticker": "FIS",
-        "name": "Fidelity National Information Services, Inc.",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 5.71,
-        "target_value": 8.43,
-        "conviction_score": 0.9533,
-        "signal": "strong_buy"
-      },
       {
         "action": "hold",
         "ticker": "CMCSA",
@@ -1068,6 +1063,16 @@
       },
       {
         "action": "hold",
+        "ticker": "ROP",
+        "name": "Roper Technologies, Inc.",
+        "reason": "Already near equal-weight target",
+        "value": 8.42,
+        "target_value": 8.43,
+        "conviction_score": 0.8084,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
         "ticker": "CF",
         "name": "CF Industries Holdings, Inc.",
         "reason": "Top-up below min trade size (\u00a310)",
@@ -1095,6 +1100,26 @@
         "target_value": 8.43,
         "conviction_score": 0.7755000000000001,
         "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "FIS",
+        "name": "Fidelity National Information Services, Inc.",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 5.71,
+        "target_value": 8.43,
+        "conviction_score": 0.767805,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "GEHC",
+        "name": "GE HealthCare Technologies Inc.",
+        "reason": "Already near equal-weight target",
+        "value": 8.42,
+        "target_value": 8.43,
+        "conviction_score": 0.7634000000000001,
+        "signal": "strong_buy"
       },
       {
         "action": "hold",
@@ -1214,6 +1239,16 @@
         "value": 7.19,
         "target_value": 8.43,
         "conviction_score": 0.6729,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "LDOS",
+        "name": "Leidos Holdings, Inc.",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 7.87,
+        "target_value": 8.43,
+        "conviction_score": 0.6723,
         "signal": "strong_buy"
       },
       {
@@ -1384,6 +1419,16 @@
         "value": 8.35,
         "target_value": 8.43,
         "conviction_score": 0.5845,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "HST",
+        "name": "Host Hotels & Resorts, Inc.",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 8.26,
+        "target_value": 8.43,
+        "conviction_score": 0.5803,
         "signal": "buy"
       },
       {
@@ -1795,20 +1840,17 @@
         "target_value": 8.43,
         "conviction_score": 0.37790999999999997,
         "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "FDX",
-        "name": "FedEx Corporation",
-        "reason": "Already near equal-weight target",
-        "value": 8.42,
-        "target_value": 8.43,
-        "conviction_score": 0.3663,
-        "signal": "buy"
       }
     ],
     "skipped": [],
     "waitlisted": [
+      {
+        "ticker": "SWK",
+        "name": "Stanley Black & Decker, Inc.",
+        "signal": "strong_buy",
+        "conviction_score": 0.8259000000000001,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      },
       {
         "ticker": "ACN",
         "name": "Accenture plc",
@@ -1817,17 +1859,17 @@
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       },
       {
-        "ticker": "GEHC",
-        "name": "GE HealthCare Technologies Inc.",
+        "ticker": "CAH",
+        "name": "Cardinal Health, Inc.",
         "signal": "strong_buy",
-        "conviction_score": 0.7634000000000001,
+        "conviction_score": 0.7253000000000001,
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       },
       {
-        "ticker": "LDOS",
-        "name": "Leidos Holdings, Inc.",
-        "signal": "strong_buy",
-        "conviction_score": 0.6723,
+        "ticker": "KIM",
+        "name": "Kimco Realty Corporation",
+        "signal": "buy",
+        "conviction_score": 0.7017,
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       },
       {
@@ -1838,35 +1880,21 @@
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       },
       {
-        "ticker": "HST",
-        "name": "Host Hotels & Resorts, Inc.",
-        "signal": "buy",
-        "conviction_score": 0.5803,
-        "reason": "timing_signal=wait \u2014 skipped until timing improves"
-      },
-      {
-        "ticker": "MCK",
-        "name": "McKesson Corporation",
-        "signal": "strong_buy",
-        "conviction_score": 0.5632,
-        "reason": "timing_signal=wait \u2014 skipped until timing improves"
-      },
-      {
-        "ticker": "TRV",
-        "name": "The Travelers Companies, Inc.",
-        "signal": "buy",
-        "conviction_score": 0.5605,
-        "reason": "timing_signal=wait \u2014 skipped until timing improves"
-      },
-      {
         "ticker": "TSN",
         "name": "Tyson Foods, Inc.",
         "signal": "buy",
         "conviction_score": 0.4773,
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      },
+      {
+        "ticker": "GDDY",
+        "name": "GoDaddy Inc.",
+        "signal": "strong_buy",
+        "conviction_score": 0.44389999999999996,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 120 equal-weight sleeve(s); sell 6 name(s) that left the set; deploy cash into 6 buy(s); leave 80 near-target holding(s)."
+    "summary": "Next rebalance would target 120 equal-weight sleeve(s); sell 3 name(s) that left the set; deploy cash into 3 buy(s); leave 83 near-target holding(s)."
   },
   "alerts": [
     {
@@ -2050,7 +2078,7 @@
       "name": "Fidelity National Information Services, Inc.",
       "source": "paper",
       "severity": "watch",
-      "message": "Underwater \u2014 re-check hypothesis: deep drawdown (-31.4%) \u2014 re-check facts; thesis still intact; price drawdown alone does not invalidate value thesis",
+      "message": "Underwater \u2014 re-check hypothesis: research verdict caution; still strong_buy",
       "mark": 28.73,
       "stop_loss": null,
       "take_profit": null,
@@ -2115,12 +2143,12 @@
       "ticker": "TRV",
       "name": "The Travelers Companies, Inc.",
       "source": "paper",
-      "severity": "watch",
-      "message": "Technical timing is wait \u2014 avoid adding size",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
       "mark": 395.2,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "wait"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "DVA",
@@ -2324,12 +2352,12 @@
       "ticker": "CAH",
       "name": "Cardinal Health, Inc.",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
       "mark": 271.72,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "wait"
     },
     {
       "ticker": "SBAC",
@@ -2341,17 +2369,6 @@
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
-    },
-    {
-      "ticker": "BDX",
-      "name": "Becton, Dickinson and Company",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Technical timing is wait \u2014 avoid adding size",
-      "mark": 211.88,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "wait"
     },
     {
       "ticker": "DPZ",
@@ -2538,7 +2555,7 @@
       "mark": 704.55,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "INVH",
@@ -2588,12 +2605,12 @@
       "ticker": "GDDY",
       "name": "GoDaddy Inc.",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
       "mark": 114.38,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "wait"
     },
     {
       "ticker": "L",
@@ -2643,12 +2660,12 @@
       "ticker": "MCK",
       "name": "McKesson Corporation",
       "source": "paper",
-      "severity": "watch",
-      "message": "Technical timing is wait \u2014 avoid adding size",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
       "mark": 1060.84,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "wait"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "DECK",
@@ -2726,17 +2743,6 @@
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
-    },
-    {
-      "ticker": "ACN",
-      "name": "Accenture plc",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Technical timing is wait \u2014 avoid adding size",
-      "mark": 260.5,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "wait"
     },
     {
       "ticker": "STZ",
@@ -2901,7 +2907,7 @@
       "mark": 101.98,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "IBM",
@@ -2929,34 +2935,23 @@
       "ticker": "HST",
       "name": "Host Hotels & Resorts, Inc.",
       "source": "paper",
-      "severity": "watch",
-      "message": "Technical timing is wait \u2014 avoid adding size",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
       "mark": 24.62,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "wait"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "LDOS",
       "name": "Leidos Holdings, Inc.",
       "source": "paper",
-      "severity": "watch",
-      "message": "Technical timing is wait \u2014 avoid adding size",
+      "severity": "info",
+      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
       "mark": 132.68,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "wait"
-    },
-    {
-      "ticker": "LDOS",
-      "name": "Leidos Holdings, Inc.",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Underwater \u2014 re-check hypothesis: timing=wait while underwater; still strong_buy",
-      "mark": 132.68,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "wait"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "CVX",
@@ -3088,7 +3083,7 @@
       "mark": 42.75,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "EXPD",
@@ -3199,6 +3194,28 @@
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
+    },
+    {
+      "ticker": "ROP",
+      "name": "Roper Technologies, Inc.",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 476.6,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "GEHC",
+      "name": "GE HealthCare Technologies Inc.",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 82.38,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
     }
   ],
   "fund": {
@@ -3216,7 +3233,7 @@
       "id": "890533a6-4030-4ba7-8b6b-724e6b69d77f",
       "created_at": "2026-09-07T10:31:56.426930+00:00"
     },
-    "cash": 24.26,
+    "cash": 25.65,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -3693,17 +3710,6 @@
         "take_profit": null,
         "opened_at": "2026-09-07T06:31:56.426803-04:00"
       },
-      "BDX": {
-        "ticker": "BDX",
-        "shares": 0.04503,
-        "avg_cost": 184.74,
-        "name": "Becton, Dickinson and Company",
-        "sector": "Healthcare",
-        "currency": "USD",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-09-07T06:31:56.426803-04:00"
-      },
       "DPZ": {
         "ticker": "DPZ",
         "shares": 0.02439,
@@ -4077,17 +4083,6 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-10-27T10:19:43.004082-04:00"
-      },
-      "ACN": {
-        "ticker": "ACN",
-        "shares": 0.033566,
-        "avg_cost": 249.37,
-        "name": "Accenture plc",
-        "sector": "Technology",
-        "currency": "USD",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-10-28T10:18:56.206300-04:00"
       },
       "STZ": {
         "ticker": "STZ",
@@ -4539,6 +4534,28 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-11-08T01:57:32.746219-05:00"
+      },
+      "ROP": {
+        "ticker": "ROP",
+        "shares": 0.017659,
+        "avg_cost": 476.6,
+        "name": "Roper Technologies, Inc.",
+        "sector": "Technology",
+        "currency": "USD",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-11-11T10:20:00.690328-05:00"
+      },
+      "GEHC": {
+        "ticker": "GEHC",
+        "shares": 0.102165,
+        "avg_cost": 82.38,
+        "name": "GE HealthCare Technologies Inc.",
+        "sector": "Healthcare",
+        "currency": "USD",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-11-11T10:20:00.690328-05:00"
       }
     },
     "trades": [
@@ -11013,6 +11030,70 @@
         "net_cash": -8.43,
         "note": "Automated buy",
         "name": "Sysco Corporation"
+      },
+      {
+        "id": "570ad595-21b1-4a32-8b25-16a3baf2d9ee",
+        "fund_id": "890533a6-4030-4ba7-8b6b-724e6b69d77f",
+        "acted_at": "2026-11-11T10:20:00.690328-05:00",
+        "ticker": "BDX",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.04503,
+        "price": 211.88,
+        "gross": 9.54,
+        "cost": 0.02,
+        "net_cash": 9.52,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Becton, Dickinson and Company",
+        "avg_cost_at_exit": 184.74,
+        "position_closed": true
+      },
+      {
+        "id": "d1360c06-e5ec-49c8-85c0-87d510d21327",
+        "fund_id": "890533a6-4030-4ba7-8b6b-724e6b69d77f",
+        "acted_at": "2026-11-11T10:20:00.690328-05:00",
+        "ticker": "ACN",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.033566,
+        "price": 260.5,
+        "gross": 8.74,
+        "cost": 0.02,
+        "net_cash": 8.73,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Accenture plc",
+        "avg_cost_at_exit": 249.37,
+        "position_closed": true
+      },
+      {
+        "id": "e8bfb8a8-7be1-49c9-9de1-dd75257c6bbd",
+        "fund_id": "890533a6-4030-4ba7-8b6b-724e6b69d77f",
+        "acted_at": "2026-11-11T10:20:00.690328-05:00",
+        "ticker": "ROP",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.017659,
+        "price": 476.6,
+        "gross": 8.42,
+        "cost": 0.01,
+        "net_cash": -8.43,
+        "note": "Automated buy",
+        "name": "Roper Technologies, Inc."
+      },
+      {
+        "id": "ad5afb00-92a7-4f27-9284-069e63fe5cb0",
+        "fund_id": "890533a6-4030-4ba7-8b6b-724e6b69d77f",
+        "acted_at": "2026-11-11T10:20:00.690328-05:00",
+        "ticker": "GEHC",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.102165,
+        "price": 82.38,
+        "gross": 8.42,
+        "cost": 0.01,
+        "net_cash": -8.43,
+        "note": "Automated buy",
+        "name": "GE HealthCare Technologies Inc."
       }
     ],
     "equity_curve": [
@@ -11991,31 +12072,48 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-11-11T10:20:00.690328-05:00",
+        "portfolio_value": 767.88,
+        "cash": 25.65,
+        "contributed_capital": 1000.0,
+        "positions": 120,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "USD": 0.75273
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-11-10T10:20:08.690574-05:00",
+    "last_mark_at": "2026-11-11T10:20:00.690328-05:00",
     "rebalance_state": {
       "exit_streak": {
-        "TRV": 1,
-        "BDX": 1,
-        "MCK": 1,
-        "ACN": 1,
-        "HST": 1,
-        "LDOS": 1
+        "CAH": 1,
+        "GDDY": 1,
+        "FDX": 1
       },
-      "reentry_cooldown": {}
+      "reentry_cooldown": {
+        "BDX": 1,
+        "ACN": 1
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (4 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "sp500",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-10T15:20:09.026812+00:00",
+    "generated_at": "2026-11-11T15:20:01.011670+00:00",
     "observe_only": true,
-    "open_count": 146,
+    "open_count": 148,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -12050,7 +12148,7 @@
       }
     },
     "first_episode": {
-      "open_count": 110,
+      "open_count": 111,
       "closed_count": 0,
       "by_exit_kind": {
         "grace": {
@@ -12086,13 +12184,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 5
+    "ingested_this_pass": 2,
+    "checkpoints_added_this_pass": 2
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-10T15:20:09.036639+00:00",
+    "generated_at": "2026-11-11T15:20:01.021397+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -12146,9 +12244,9 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 142,
+      "hold_closed_count": 144,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 233,
+      "hold_with_data_quality_count": 234,
       "gaps": [
         "swap_rotation closed rotations=0 (target >=10)"
       ],
@@ -12156,26 +12254,26 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 95,
-        "recovered_to_breakeven": 69,
+        "count": 94,
+        "recovered_to_breakeven": 68,
         "close_reasons": {
-          "open": 95
+          "open": 94
         }
       },
       "closed": {
-        "count": 142,
-        "recovered_to_breakeven": 108,
+        "count": 144,
+        "recovered_to_breakeven": 110,
         "close_reasons": {
-          "sold_while_recovered": 108,
+          "sold_while_recovered": 110,
           "sold_while_underwater": 34
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 42,
+        "count": 43,
         "verdicts": {
-          "open": 42
+          "open": 43
         }
       },
       "closed": {
@@ -12184,12 +12282,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 0
+      "hold_episodes": 1,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 1,
-      "swap_rotations": 3
+      "hold_episodes": 4,
+      "swap_rotations": 2
     }
   },
   "hypothesis_integrity": {
@@ -12197,8 +12295,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-11-10T15:20:09.053590+00:00",
-    "as_of": "2026-11-10T10:20:08.690574-05:00",
+    "updated_at": "2026-11-11T15:20:01.037838+00:00",
+    "as_of": "2026-11-11T10:20:00.690328-05:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -12222,7 +12320,7 @@
       "holding_count": 120,
       "loser_count": 28,
       "loser_share": 0.2333,
-      "loser_nav_share": 0.202,
+      "loser_nav_share": 0.2023,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
@@ -12292,7 +12390,7 @@
       {
         "ticker": "FIS",
         "name": "Fidelity National Information Services, Inc.",
-        "thesis_status": "intact",
+        "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": true,
         "deep_underwater": true,
@@ -12301,7 +12399,7 @@
         "avg_cost": 41.89,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.9533,
+        "conviction_score": 0.7678,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -12311,23 +12409,21 @@
           "risk"
         ],
         "failed_families": [],
-        "research_verdict": "accumulate",
+        "research_verdict": "caution",
         "reasons": [
-          "deep drawdown (-31.4%) \u2014 re-check facts; thesis still intact",
-          "price drawdown alone does not invalidate value thesis",
+          "research verdict caution",
           "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00"
+          "cheapness family still passes"
         ],
         "intact_reasons": [
           "still strong_buy",
-          "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 95%"
+          "conviction 77%"
         ],
-        "weaken_reasons": [],
+        "weaken_reasons": [
+          "research verdict caution"
+        ],
         "broken_reasons": []
       },
       {
@@ -13197,15 +13293,15 @@
       {
         "ticker": "LDOS",
         "name": "Leidos Holdings, Inc.",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
         "unrealized_pct": -0.072,
         "mark": 132.68,
         "avg_cost": 142.98,
         "signal": "strong_buy",
-        "timing_signal": "wait",
+        "timing_signal": "neutral",
         "conviction_score": 0.6723,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -13219,9 +13315,12 @@
         ],
         "research_verdict": "accumulate",
         "reasons": [
-          "timing=wait while underwater",
+          "price drawdown alone does not invalidate value thesis",
           "still strong_buy",
-          "research accumulate"
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 67%"
         ],
         "intact_reasons": [
           "still strong_buy",
@@ -13230,9 +13329,7 @@
           "data_quality 1.00",
           "conviction 67%"
         ],
-        "weaken_reasons": [
-          "timing=wait while underwater"
-        ],
+        "weaken_reasons": [],
         "broken_reasons": []
       },
       {
@@ -13613,7 +13710,7 @@
         "mark": 24.62,
         "avg_cost": 25.3,
         "signal": "buy",
-        "timing_signal": "wait",
+        "timing_signal": "neutral",
         "conviction_score": 0.5803,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -14585,7 +14682,7 @@
         "mark": 42.75,
         "avg_cost": 42.75,
         "signal": "buy",
-        "timing_signal": "neutral",
+        "timing_signal": "accumulate",
         "conviction_score": 0.3962,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -15022,6 +15119,86 @@
         "broken_reasons": []
       },
       {
+        "ticker": "ROP",
+        "name": "Roper Technologies, Inc.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 476.6,
+        "avg_cost": 476.6,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.8084,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 81%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 81%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "GEHC",
+        "name": "GE HealthCare Technologies Inc.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 82.38,
+        "avg_cost": 82.38,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.7634,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 76%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 76%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "PCAR",
         "name": "PACCAR Inc",
         "thesis_status": "weakening",
@@ -15032,7 +15209,7 @@
         "mark": 101.98,
         "avg_cost": 101.91,
         "signal": "buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.4619,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -15792,46 +15969,6 @@
         "broken_reasons": []
       },
       {
-        "ticker": "ACN",
-        "name": "Accenture plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0446,
-        "mark": 260.5,
-        "avg_cost": 249.37,
-        "signal": "strong_buy",
-        "timing_signal": "wait",
-        "conviction_score": 0.7921,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 79%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 79%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "ZTS",
         "name": "Zoetis Inc.",
         "thesis_status": "intact",
@@ -15923,7 +16060,7 @@
         "mark": 704.55,
         "avg_cost": 667.58,
         "signal": "buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.5138,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -16086,7 +16223,7 @@
         "mark": 1060.84,
         "avg_cost": 998.64,
         "signal": "strong_buy",
-        "timing_signal": "wait",
+        "timing_signal": "neutral",
         "conviction_score": 0.5632,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -16290,7 +16427,7 @@
         "mark": 395.2,
         "avg_cost": 369.35,
         "signal": "buy",
-        "timing_signal": "wait",
+        "timing_signal": "neutral",
         "conviction_score": 0.5605,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -16656,7 +16793,7 @@
         "mark": 271.72,
         "avg_cost": 247.18,
         "signal": "strong_buy",
-        "timing_signal": "neutral",
+        "timing_signal": "wait",
         "conviction_score": 0.7253,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -16859,7 +16996,7 @@
         "mark": 114.38,
         "avg_cost": 103.36,
         "signal": "strong_buy",
-        "timing_signal": "neutral",
+        "timing_signal": "wait",
         "conviction_score": 0.4439,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -17013,46 +17150,6 @@
         "broken_reasons": []
       },
       {
-        "ticker": "BDX",
-        "name": "Becton, Dickinson and Company",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.1469,
-        "mark": 211.88,
-        "avg_cost": 184.74,
-        "signal": "buy",
-        "timing_signal": "wait",
-        "conviction_score": 0.6125,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 61%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 61%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "ZBH",
         "name": "Zimmer Biomet Holdings, Inc.",
         "thesis_status": "intact",
@@ -17141,27 +17238,27 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-10T15:20:09.074749+00:00",
+    "generated_at": "2026-11-11T15:20:01.058933+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 142,
+      "closed_total": 144,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 95,
+      "open_with_thesis": 94,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 114,
-          "recovery_rate": 0.7193,
-          "sold_underwater_rate": 0.2807,
-          "mean_peak_unrealized_pct": 0.0421,
-          "mean_trough_unrealized_pct": -0.0478,
+          "closed_count": 116,
+          "recovery_rate": 0.7241,
+          "sold_underwater_rate": 0.2759,
+          "mean_peak_unrealized_pct": 0.0432,
+          "mean_trough_unrealized_pct": -0.0476,
           "outcome_labels": {
-            "recovered": 82,
+            "recovered": 84,
             "sold_underwater": 32
           }
         },
@@ -17202,7 +17299,7 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 142,
+      "hold_closed_with_thesis": 144,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
         "swap sell legs with thesis=0 (target >=5)"
@@ -17216,15 +17313,15 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-11-10T15:20:09.116893+00:00",
-    "open_count": 46,
-    "closed_count": 100,
+    "generated_at": "2026-11-11T15:20:01.100004+00:00",
+    "open_count": 47,
+    "closed_count": 101,
     "scored_count": 51,
-    "scored_count_all": 100,
-    "recommit_scored_count": 49,
+    "scored_count_all": 101,
+    "recommit_scored_count": 50,
     "entry_kind_counts": {
       "first_entry": 51,
-      "recommit": 49
+      "recommit": 50
     },
     "any_de_risk_count": 30,
     "winning_cadence_counts": {
@@ -17275,17 +17372,17 @@
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
       "first_entry_scored": 51,
-      "recommit_scored": 49
+      "recommit_scored": 50
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 2,
     "marked_this_pass": 46,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-10T10:20:08.690574-05:00",
+    "generated_at": "2026-11-11T10:20:00.690328-05:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -17334,15 +17431,15 @@
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
       "opened": 0,
-      "closed": 1,
-      "tagged_on_book": 0,
-      "tagged_off_book": 0
+      "closed": 0,
+      "tagged_on_book": 2,
+      "tagged_off_book": 2
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-11-10T10:20:08.690574-05:00",
+    "generated_at": "2026-11-11T10:20:00.690328-05:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -17350,36 +17447,442 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 4,
+    "card_count": 4,
     "verdict_counts": {
-      "agree": 0,
-      "veto": 0,
+      "agree": 2,
+      "veto": 2,
       "abstain": 0
     },
-    "by_algo_action": {},
+    "by_algo_action": {
+      "sell": {
+        "agree": 0,
+        "veto": 2,
+        "abstain": 0
+      },
+      "buy": {
+        "agree": 2,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
     "disagree_vs_heuristic_count": 0,
-    "cards": [],
+    "cards": [
+      {
+        "ticker": "BDX",
+        "name": "Becton, Dickinson and Company",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "veto",
+        "reasons": [
+          "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 54
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 54
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.6125
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-11T10:20:00.690328-05:00",
+        "proposal_id": "buy_tier_level:BDX:sell:2026-11-11T10:20:00.690328-05:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "ACN",
+        "name": "Accenture plc",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "veto",
+        "reasons": [
+          "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 12
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 12
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.7921
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-11T10:20:00.690328-05:00",
+        "proposal_id": "buy_tier_level:ACN:sell:2026-11-11T10:20:00.690328-05:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "ROP",
+        "name": "Roper Technologies, Inc.",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Buy into buyish target set \u2014 agree with algo selection."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 9
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 9
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.8084
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-11T10:20:00.690328-05:00",
+        "proposal_id": "buy_tier_level:ROP:buy:2026-11-11T10:20:00.690328-05:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "GEHC",
+        "name": "GE HealthCare Technologies Inc.",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Buy into buyish target set \u2014 agree with algo selection."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 17
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 17
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.7634000000000001
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-11-11T10:20:00.690328-05:00",
+        "proposal_id": "buy_tier_level:GEHC:buy:2026-11-11T10:20:00.690328-05:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-11-10T10:20:08.690574-05:00",
+      "generated_at": "2026-11-11T10:20:00.690328-05:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 4,
       "verdict_counts": {
-        "agree": 0,
-        "veto": 0,
+        "agree": 2,
+        "veto": 2,
         "abstain": 0
       },
-      "by_algo_action": {},
-      "veto_sell_count": 0,
-      "veto_sell_tickers": [],
+      "by_algo_action": {
+        "sell": {
+          "agree": 0,
+          "veto": 2,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 2,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "veto_sell_count": 2,
+      "veto_sell_tickers": [
+        "BDX",
+        "ACN"
+      ],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -17393,7 +17896,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-11-10T15:20:09.151895+00:00",
+  "generated_at": "2026-11-11T15:20:01.133370+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

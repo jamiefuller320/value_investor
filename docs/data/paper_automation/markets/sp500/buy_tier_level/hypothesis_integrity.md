@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-10T15:20:09.053590+00:00
+Track: `buy_tier_level` · updated 2026-11-11T15:20:01.037838+00:00
 
 ## Portfolio loser feedback
 
@@ -18,13 +18,10 @@ Track: `buy_tier_level` · updated 2026-11-10T15:20:09.053590+00:00
 - cheapness family still passes
 - data_quality 1.00
 
-### FIS — intact / watch_review (-31.4%)
-- deep drawdown (-31.4%) — re-check facts; thesis still intact
-- price drawdown alone does not invalidate value thesis
+### FIS — weakening / watch_review (-31.4%)
+- research verdict caution
 - still strong_buy
-- research accumulate
 - cheapness family still passes
-- data_quality 1.00
 
 ### DELL — intact / watch_review (-30.6%)
 - deep drawdown (-30.6%) — re-check facts; thesis still intact
@@ -188,10 +185,13 @@ Track: `buy_tier_level` · updated 2026-11-10T15:20:09.053590+00:00
 - data_quality 1.00
 - conviction 89%
 
-### LDOS — weakening / watch_review (-7.2%)
-- timing=wait while underwater
+### LDOS — intact / hold_tolerate (-7.2%)
+- price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 67%
 
 ### MKC — intact / hold_tolerate (-7.1%)
 - price drawdown alone does not invalidate value thesis
@@ -484,6 +484,20 @@ Track: `buy_tier_level` · updated 2026-11-10T15:20:09.053590+00:00
 - still buy
 - cheapness family still passes
 
+### ROP — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 81%
+
+### GEHC — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 76%
+
 ### PCAR — weakening / watch_review (+0.1%)
 - research verdict neutral
 - still buy
@@ -610,13 +624,6 @@ Track: `buy_tier_level` · updated 2026-11-10T15:20:09.053590+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 63%
-
-### ACN — intact / hold_tolerate (+4.5%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 79%
 
 ### ZTS — intact / hold_tolerate (+4.7%)
 - still buy
@@ -816,13 +823,6 @@ Track: `buy_tier_level` · updated 2026-11-10T15:20:09.053590+00:00
 - cheapness family still passes
 - data_quality 0.90
 - conviction 47%
-
-### BDX — intact / hold_tolerate (+14.7%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 61%
 
 ### ZBH — intact / hold_tolerate (+19.6%)
 - still buy
