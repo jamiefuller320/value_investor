@@ -1,38 +1,14 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-11-11T08:46:59.853828+00:00
+Track: `buy_tier_level` · updated 2026-11-12T08:46:53.035201+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **6** / 38 (16% count, 16% NAV)
+- Losers: **5** / 30 (17% count, 16% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
-
-### ESSITY-B.ST — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### EVN.VI — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### APAM.AS — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### WIE.VI — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### ACKB.BR — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### BAS.DE — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### IFX.DE — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### DQ7A.IR — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
 
 ### MELE.BR — intact / watch_review (-16.4%)
 - deep drawdown (-16.4%) — re-check facts; thesis still intact
@@ -74,8 +50,7 @@ Track: `buy_tier_level` · updated 2026-11-11T08:46:59.853828+00:00
 - data_quality 1.00
 - conviction 65%
 
-### SHELL.AS — intact / hold_tolerate (-8.1%)
-- price drawdown alone does not invalidate value thesis
+### SHELL.AS — intact / hold_tolerate (-4.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
@@ -117,7 +92,7 @@ Track: `buy_tier_level` · updated 2026-11-11T08:46:59.853828+00:00
 - data_quality 1.00
 - conviction 46%
 
-### SKF-B.ST — intact / hold_tolerate (-1.1%)
+### SKF-B.ST — intact / hold_tolerate (-0.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
