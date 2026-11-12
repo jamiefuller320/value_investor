@@ -2935,6 +2935,46 @@ def check_strategy_book_proof(
     ]
 
 
+def check_strategy_book_fair_value(
+    *,
+    repo_root: Path | None = None,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Read the step 4.1 fair-value store. Does not recompute or edit the book.
+
+    Observe-only (``auto_fixable=False``). The forward job writes the store.
+    See docs/ops/strategy-book-fair-value.md. Info while the file is readable
+    and ``generated_at`` is within 5 days. Warns when it is missing, unreadable,
+    or older than 5 days.
+    """
+    from value_investor.strategy_book_fair_value import findings_for_store
+
+    root = Path(repo_root) if repo_root is not None else Path()
+    moment = now or datetime.now(UTC)
+    try:
+        rows = findings_for_store(root, now=moment)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title="Strategy book fair value unreadable",
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "Strategy book fair value"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+        for finding in rows
+    ]
+
+
 def check_eodhd_coverage(
     *,
     repo_root: Path | None = None,
@@ -5311,6 +5351,7 @@ def collect_ops_findings(
     findings.extend(_guarded_check(check_strategy_book_reviews))
     findings.extend(_guarded_check(check_strategy_book_demo_mirror))
     findings.extend(_guarded_check(check_strategy_book_proof))
+    findings.extend(_guarded_check(check_strategy_book_fair_value))
     findings.extend(_guarded_check(check_eodhd_coverage))
     findings.extend(_guarded_check(check_strategy_book_memo_free_shadow))
     findings.extend(_guarded_check(check_n200_tech_timing_observe))

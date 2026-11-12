@@ -287,6 +287,7 @@ without firing the same title twice for one missed run.
 - `docs/data/strategy_book_forward_status.json`
 - `docs/data/strategy_book_demo_ledger.json` (practice-account mirror; see [strategy-book-demo-mirror.md](strategy-book-demo-mirror.md))
 - `docs/data/strategy_book_proof_board.json` (step 3.2 proof bars; see [strategy-book-proof.md](strategy-book-proof.md))
+- `docs/data/strategy_book_fair_value.json` (step 4.1 fair-value range; see [strategy-book-fair-value.md](strategy-book-fair-value.md))
 - `docs/data/strategy_book_memo_free_shadow.json` (memo-free shadow; see [strategy-book-memo-free-shadow.md](strategy-book-memo-free-shadow.md))
 
 One writer each. They are not on the ops-monitor optional or owned lists.
