@@ -24,6 +24,7 @@ from typing import Any
 from value_investor.ch_failed_name_statements import (
     FAILED_UK_NAMES,
     FIELD_NAMES,
+    StatementPage,
     _empty_field,
     _trim_number,
     apply_value_gate,
@@ -31,6 +32,7 @@ from value_investor.ch_failed_name_statements import (
     is_financial_name,
     leaver_year_coverage,
     list_aa_filings,
+    merge_ocr_readings,
     parse_statement_pages,
     plausibility_flags,
     summarise_leaver_coverage,
@@ -498,6 +500,19 @@ def extract_filing(
         filing_date=meta["filing_date"],
         transaction_id=meta["transaction_id"],
     )
+    alt_pages = [
+        StatementPage(page=page.page, text=page.alt_text, method="ocr_embedded")
+        for page in pages
+        if page.alt_text.strip()
+    ]
+    if alt_pages:
+        alt_parsed = parse_statement_pages(
+            alt_pages,
+            fiscal_year_end=meta["made_up_date"],
+            filing_date=meta["filing_date"],
+            transaction_id=meta["transaction_id"],
+        )
+        parsed = merge_ocr_readings(parsed, alt_parsed)
     parsed["description"] = meta.get("description")
     parsed["pdf_pages"] = meta.get("pdf_pages")
     return parsed

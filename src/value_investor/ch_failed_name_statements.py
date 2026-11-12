@@ -381,6 +381,7 @@ class StatementPage:
     page: int
     text: str
     method: str = "fixture"
+    alt_text: str = ""
 
 
 @dataclass
@@ -2071,6 +2072,46 @@ def apply_value_gate(filings: list[dict[str, Any]], *, financial: bool = False) 
     return {"total": sum(counts.values()), "by_check": counts}
 
 
+def merge_ocr_readings(primary: dict[str, Any], secondary: dict[str, Any]) -> dict[str, Any]:
+    """Fill gaps from a second reading. Keep the longer digit string when one truncates the other.
+
+    Readings that disagree and neither is a truncated form of the other are
+    dropped. Nothing is invented.
+    """
+
+    def digits(value: object) -> str:
+        return re.sub(r"\D", "", str(value or ""))
+
+    def take(block_a: dict[str, Any] | None, block_b: dict[str, Any] | None) -> None:
+        if not isinstance(block_a, dict) or not isinstance(block_b, dict):
+            return
+        for name in _GATED_FIELDS:
+            left = block_a.get(name)
+            right = block_b.get(name)
+            if not isinstance(left, dict) or not isinstance(right, dict):
+                continue
+            av, bv = left.get("value"), right.get("value")
+            if av in (None, "") and bv not in (None, ""):
+                block_a[name] = right
+            elif av not in (None, "") and bv not in (None, "") and str(av) != str(bv):
+                da, db = digits(av), digits(bv)
+                if da and db and da != db and (da.endswith(db) or db.endswith(da)):
+                    block_a[name] = left if len(da) >= len(db) else right
+                else:
+                    block_a[name] = _empty_field(
+                        "rendered page and fax image disagree; value left absent"
+                    )
+
+    take(primary.get("fields"), secondary.get("fields"))
+    comp_a = primary.get("comparative") or {}
+    comp_b = secondary.get("comparative") or {}
+    if comp_a and comp_b and comp_a.get("fiscal_year") == comp_b.get("fiscal_year"):
+        take(comp_a.get("fields"), comp_b.get("fields"))
+    elif not comp_a and comp_b:
+        primary["comparative"] = comp_b
+    return primary
+
+
 def _comparable(value: Decimal, scale: str | None, unit: str | None) -> Decimal:
     number = _to_absolute(value, scale)
     if unit == "pence":
@@ -2616,20 +2657,38 @@ def extract_statement_pages(
         for index in ordered:
             page_path = page_cache / f"p{index + 1}.json"
             cached = _load_json(page_path)
+            alt_lines: list[str] = []
             if isinstance(cached, dict) and isinstance(cached.get("lines"), list):
                 text = "\n".join(str(line) for line in cached["lines"])
                 method = str(cached.get("method") or "ocr")
+                if isinstance(cached.get("alt_lines"), list):
+                    alt_lines = [str(line) for line in cached["alt_lines"]]
             else:
                 image = _page_image(doc, index, zoom=statement_zoom, prefer_embedded=False)
                 lines = _ocr_image_lines(image, header_only=False)
                 text = "\n".join(lines)
                 method = "ocr"
-                page_path.write_text(
-                    json.dumps({"method": method, "lines": lines}),
-                    encoding="utf-8",
-                )
+                cached = {"method": method, "lines": lines}
+                page_path.write_text(json.dumps(cached), encoding="utf-8")
                 logger.info("ocr %s page %s (%s lines)", transaction_id, index + 1, len(lines))
-            pages.append(StatementPage(page=index + 1, text=text, method=method))
+            if statement_zoom != zoom and not alt_lines and isinstance(cached, dict):
+                rendered = _page_image(doc, index, zoom=statement_zoom, prefer_embedded=False)
+                fax = _page_image(doc, index, zoom=statement_zoom, prefer_embedded=True)
+                if fax.size != rendered.size:
+                    alt_lines = _ocr_image_lines(fax, header_only=False)
+                    cached["alt_lines"] = alt_lines
+                    page_path.write_text(json.dumps(cached), encoding="utf-8")
+                    logger.info(
+                        "ocr fax %s page %s (%s lines)", transaction_id, index + 1, len(alt_lines)
+                    )
+            pages.append(
+                StatementPage(
+                    page=index + 1,
+                    text=text,
+                    method=method,
+                    alt_text="\n".join(alt_lines),
+                )
+            )
         return pages
     finally:
         doc.close()

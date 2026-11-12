@@ -13,6 +13,7 @@ from value_investor.ch_failed_name_statements import (
     _token_text,
     apply_value_gate,
     combined_check_a,
+    merge_ocr_readings,
     ops_findings_from_ch_failed_name_statements,
     parse_amount,
     parse_statement_pages,
@@ -831,6 +832,41 @@ def test_value_gate_nulls_the_four_bad_citations_and_keeps_a_match() -> None:
     assert kept["fields"]["basic_eps"]["value"] == before
     assert kept["fields"]["revenue"]["value"] == "3332.6"
     assert kept["fields"]["capital_expenditure"]["value"] == "-28.1"
+
+
+def test_merge_keeps_the_longer_parenthesis_and_fills_a_gap() -> None:
+    # Rendered page read (310.1) and missed revenue. The fax read (10.1) and revenue.
+    primary = {
+        "fields": {
+            "profit_attributable_to_owners": {"value": "-310.1"},
+            "revenue": {"value": None},
+        },
+        "comparative": None,
+    }
+    secondary = {
+        "fields": {
+            "profit_attributable_to_owners": {"value": "-10.1"},
+            "revenue": {"value": "25864.8", "scale": "millions"},
+        },
+        "comparative": None,
+    }
+    merged = merge_ocr_readings(primary, secondary)
+    assert merged["fields"]["profit_attributable_to_owners"]["value"] == "-310.1"
+    assert merged["fields"]["revenue"]["value"] == "25864.8"
+    disagree = {
+        "fields": {
+            "revenue": {"value": "20903"},
+            "profit_attributable_to_owners": {"value": None},
+        }
+    }
+    other = {
+        "fields": {
+            "revenue": {"value": "21956.7"},
+            "profit_attributable_to_owners": {"value": None},
+        }
+    }
+    merged = merge_ocr_readings(disagree, other)
+    assert merged["fields"]["revenue"]["value"] is None
 
 
 def test_extraction_order_is_failure_then_other_then_takeover() -> None:
