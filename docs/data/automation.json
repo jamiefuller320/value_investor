@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-12T09:11:41.653697+00:00",
+  "generated_at": "2026-11-12T13:18:30.487142+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -222,7 +222,7 @@
         "near_limit": false,
         "budget_flag": "enforced",
         "remaining_weekly_ops_usd": 110.9,
-        "budget_note": "Estimated weekly_ops reached the 15% plan-credit pseudo limit ($3.00) \u2014 warning only, not a hard cap.",
+        "budget_note": "Estimated weekly_ops reached the 15% plan-credit pseudo limit ($3.00) — warning only, not a hard cap.",
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
@@ -280,7 +280,7 @@
         "name": "FTSE Library Ladder",
         "cron_weekly": "17 6 * * 0",
         "cron_daily_surplus": "30 5 * * *",
-        "cadence": "Dispatched by orchestrator \u2014 Sunday quiet bundle + catch-up + surplus-day gate",
+        "cadence": "Dispatched by orchestrator — Sunday quiet bundle + catch-up + surplus-day gate",
         "workflow": "library-grow.yml"
       },
       "model_review": {
@@ -309,13 +309,13 @@
       "dashboard_bridge": {
         "name": "Dashboard bridge worker",
         "cron": "*/10 * * * 1-5",
-        "cadence": "Weekday every 10m UTC \u2014 **primary: cron-job.org** (import_cron_jobs.py --job dashboard-bridge). GitHub schedule */10 is backup only and often drifts hours. Polls Supabase dashboard_commands and repository_dispatches target workflows. docs/ops/dashboard-bridge.md.",
+        "cadence": "Weekday every 10m UTC — **primary: cron-job.org** (import_cron_jobs.py --job dashboard-bridge). GitHub schedule */10 is backup only and often drifts hours. Polls Supabase dashboard_commands and repository_dispatches target workflows. docs/ops/dashboard-bridge.md.",
         "workflow": "dashboard-bridge.yml"
       },
       "ingest_loop": {
         "name": "FTSE Ingest Loop",
         "cron": "5 7,10 * * 1-5; 5 20,23 * * 6",
-        "cadence": "Mon\u2013Fri 07:05 + 10:05 UTC deepen; Saturday 20:05 + 23:05 UTC pre-Sunday deepen (drain cap 6) so Sunday email-report can send without OCR burn. External cron: docs/ops/orchestrator-cron.md; design: docs/ops/ingest-scan-then-target.md#saturday-pre-sunday-deepen.",
+        "cadence": "Mon–Fri 07:05 + 10:05 UTC deepen; Saturday 20:05 + 23:05 UTC pre-Sunday deepen (drain cap 6) so Sunday email-report can send without OCR burn. External cron: docs/ops/orchestrator-cron.md; design: docs/ops/ingest-scan-then-target.md#saturday-pre-sunday-deepen.",
         "workflow": "ingest-loop.yml"
       },
       "universe_filing_archive_pack": {
@@ -379,24 +379,24 @@
         "at": "2026-11-12T06:53:31.052063+00:00",
         "kind": "ladder_run",
         "title": "Library ladder run (focus euro_depth)",
-        "detail": "shortlist=42 research created=4 updated=0 spend\u22481.6"
+        "detail": "shortlist=42 research created=4 updated=0 spend≈1.6"
       },
       {
         "at": "2026-09-20T06:54:20.282932+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 \u2192 composer-2.5",
+        "title": "Research model: composer-2.5 → composer-2.5",
         "detail": "pool=first_party"
       },
       {
         "at": "2026-09-01T09:52:07.968538+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 \u2192 composer-2.5",
+        "title": "Research model: composer-2.5 → composer-2.5",
         "detail": "pool=first_party"
       },
       {
         "at": "2026-08-19T08:26:14.657687+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 \u2192 composer-2.5",
+        "title": "Research model: composer-2.5 → composer-2.5",
         "detail": "pool=first_party"
       },
       {
@@ -414,7 +414,7 @@
       {
         "at": "2026-08-14T15:46:47.564038+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: omxs30 \u2192 iseq20",
+        "title": "Focus advanced: omxs30 → iseq20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -426,13 +426,13 @@
       {
         "at": "2026-08-02T12:34:15.511558+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 \u2192 composer-2.5",
+        "title": "Research model: composer-2.5 → composer-2.5",
         "detail": "pool=first_party"
       },
       {
         "at": "2026-08-02T12:33:10.531346+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: smi \u2192 omxs30",
+        "title": "Focus advanced: smi → omxs30",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -444,7 +444,7 @@
       {
         "at": "2026-07-26T18:19:32.036441+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: psi20 \u2192 smi",
+        "title": "Focus advanced: psi20 → smi",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -456,7 +456,7 @@
       {
         "at": "2026-07-26T05:41:29.750591+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: atx \u2192 psi20",
+        "title": "Focus advanced: atx → psi20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -468,7 +468,7 @@
       {
         "at": "2026-07-25T06:02:07.067074+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: us_adr_asia \u2192 atx",
+        "title": "Focus advanced: us_adr_asia → atx",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -492,7 +492,7 @@
       {
         "at": "2026-07-18T18:33:47.281863+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: sti \u2192 us_adr_asia",
+        "title": "Focus advanced: sti → us_adr_asia",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -504,7 +504,7 @@
       {
         "at": "2026-07-18T18:33:47.280727+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: hang_seng \u2192 sti",
+        "title": "Focus advanced: hang_seng → sti",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -516,7 +516,7 @@
       {
         "at": "2026-07-18T18:33:47.279140+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: bel20 \u2192 hang_seng",
+        "title": "Focus advanced: bel20 → hang_seng",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -528,7 +528,7 @@
       {
         "at": "2026-07-18T18:33:47.278138+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: aex \u2192 bel20",
+        "title": "Focus advanced: aex → bel20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -540,7 +540,7 @@
       {
         "at": "2026-07-18T18:33:47.277118+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ftse_mib \u2192 aex",
+        "title": "Focus advanced: ftse_mib → aex",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -552,7 +552,7 @@
       {
         "at": "2026-07-18T18:33:47.275978+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ibex35 \u2192 ftse_mib",
+        "title": "Focus advanced: ibex35 → ftse_mib",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -564,7 +564,7 @@
       {
         "at": "2026-07-18T18:33:47.274723+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: aim \u2192 ibex35",
+        "title": "Focus advanced: aim → ibex35",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -576,7 +576,7 @@
       {
         "at": "2026-07-18T18:04:30.214468+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: tsx60 \u2192 aim",
+        "title": "Focus advanced: tsx60 → aim",
         "detail": "Opened AIM / Euronext / HK-SG / ADR Asia slices on the offline ladder"
       },
       {
@@ -624,32 +624,32 @@
       {
         "at": "2026-07-18T13:49:17.502997+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: cac40 \u2192 tsx60",
+        "title": "Focus advanced: cac40 → tsx60",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.501764+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: dax \u2192 cac40",
+        "title": "Focus advanced: dax → cac40",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.500540+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: nasdaq100 \u2192 dax",
+        "title": "Focus advanced: nasdaq100 → dax",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.498573+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ftse_smallcap \u2192 nasdaq100",
+        "title": "Focus advanced: ftse_smallcap → nasdaq100",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-17T04:51:50.477798+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=\u2014"
+        "detail": "market=—"
       },
       {
         "at": "2026-07-17T04:51:50.477265+00:00",
@@ -691,12 +691,12 @@
         "at": "2026-07-17T04:28:29.172645+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=\u2014"
+        "detail": "market=—"
       },
       {
         "at": "2026-07-17T04:28:29.172198+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: euro_stoxx50 \u2192 asx200",
+        "title": "Focus advanced: euro_stoxx50 → asx200",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -733,12 +733,12 @@
         "at": "2026-07-17T04:23:00.290382+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=\u2014"
+        "detail": "market=—"
       },
       {
         "at": "2026-07-17T04:23:00.289731+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: sp500 \u2192 euro_stoxx50",
+        "title": "Focus advanced: sp500 → euro_stoxx50",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -750,7 +750,7 @@
       {
         "at": "2026-07-16T14:09:40.872338+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 \u2192 composer-2.5",
+        "title": "Research model: composer-2.5 → composer-2.5",
         "detail": "pool=first_party"
       }
     ],
@@ -1201,7 +1201,7 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-11-12T02:37:53.634373+00:00",
-    "queue_ui_updated_at": "2026-11-12T09:11:41.298959+00:00",
+    "queue_ui_updated_at": "2026-11-12T13:18:30.050022+00:00",
     "task_count": 271,
     "status": {
       "open_count": 0,
@@ -1265,7 +1265,7 @@
     "schema_version": 1,
     "generated_at": "2026-11-12T09:12:39.897459+00:00",
     "observe_only": true,
-    "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs \u22652 equity marks and \u22651 post-apply trade before epoch-scoped excess is used for knob proposals \u2014 no auto-apply from this panel.",
+    "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment_matched30_fair",
     "tracks": {
       "ai_judgment_matched30_fair": {
@@ -1306,7 +1306,7 @@
       },
       "buy_tier_level_dca": {
         "track_id": "buy_tier_level_dca",
-        "track_label": "Buy-tier level DCA realism (\u00a3500/mo, Suite B costs, cold-start capital epoch)",
+        "track_label": "Buy-tier level DCA realism (£500/mo, Suite B costs, cold-start capital epoch)",
         "is_primary_learning_track": false,
         "applied": false,
         "epoch_started_at": null,
@@ -1352,7 +1352,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-11-12T09:11:41.653697+00:00",
+    "generated_at": "2026-11-12T13:18:30.487142+00:00",
     "overall": "idle",
     "headline": "Queue and hunter idle.",
     "merge_lane": {
@@ -1385,13 +1385,13 @@
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 2,
-      "evaluated_at": "2026-11-12T09:11:40.575998+00:00"
+      "evaluated_at": "2026-11-12T13:18:29.033910+00:00"
     },
     "traffic_control": {
       "pause_active": false,
       "stuck_pr_count": 0,
       "pause_reasons": [],
-      "evaluated_at": "2026-11-12T02:36:31.006447+00:00"
+      "evaluated_at": "2026-11-12T12:33:03.033213+00:00"
     },
     "ops_monitor": {
       "run_at": "2026-11-12T07:47:07.386850+00:00",
@@ -1409,8 +1409,8 @@
         "merged_auto": 0,
         "merged_manual": 0,
         "verified": 0,
-        "fix_interventions": 1,
-        "fix_ci_check": 0,
+        "fix_interventions": 2,
+        "fix_ci_check": 1,
         "fix_merge_conflict": 1,
         "fix_ci_and_merge": 0
       },
@@ -1575,8 +1575,8 @@
           "merged_auto": 0,
           "merged_manual": 0,
           "verified": 0,
-          "fix_interventions": 1,
-          "fix_ci_check": 0,
+          "fix_interventions": 2,
+          "fix_ci_check": 1,
           "fix_merge_conflict": 1,
           "fix_ci_and_merge": 0
         }
@@ -1599,7 +1599,7 @@
     "library_stall_parks": [],
     "observe_utilization": {
       "schema_version": 1,
-      "generated_at": "2026-11-12T09:11:41.596653+00:00",
+      "generated_at": "2026-11-12T13:18:30.411838+00:00",
       "observe_only": true,
       "headline": "Observe utilization quiet (P1 path looks green-enough).",
       "surface_freshness": "fresh",
@@ -1706,9 +1706,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 1.4h ago.",
+            "detail": "Last refresh 5.5h ago.",
             "as_of": "2026-11-12T07:47:09.931750+00:00",
-            "age_hours": 1.41,
+            "age_hours": 5.52,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -1748,9 +1748,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 1.4h ago.",
+            "detail": "Last refresh 5.5h ago.",
             "as_of": "2026-11-12T07:47:47.805043+00:00",
-            "age_hours": 1.4,
+            "age_hours": 5.51,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -1922,9 +1922,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 1.4h ago.",
+            "detail": "Last refresh 5.5h ago.",
             "as_of": "2026-11-12T07:47:48.544591+00:00",
-            "age_hours": 1.4,
+            "age_hours": 5.51,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -1958,9 +1958,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 1.4h ago.",
+            "detail": "Last refresh 5.5h ago.",
             "as_of": "2026-11-12T07:47:48.773114+00:00",
-            "age_hours": 1.4,
+            "age_hours": 5.51,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -1994,9 +1994,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 1.4h ago.",
+            "detail": "Last refresh 5.5h ago.",
             "as_of": "2026-11-12T07:47:48.777377+00:00",
-            "age_hours": 1.4,
+            "age_hours": 5.51,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2069,9 +2069,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 1.4h ago.",
+            "detail": "Last refresh 5.5h ago.",
             "as_of": "2026-11-12T07:48:11.651935+00:00",
-            "age_hours": 1.39,
+            "age_hours": 5.51,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2110,9 +2110,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 1.4h ago.",
+            "detail": "Last refresh 5.5h ago.",
             "as_of": "2026-11-12T07:48:12.000741+00:00",
-            "age_hours": 1.39,
+            "age_hours": 5.51,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2215,9 +2215,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 1.4h ago.",
+            "detail": "Last refresh 5.5h ago.",
             "as_of": "2026-11-12T07:48:11.651935+00:00",
-            "age_hours": 1.39,
+            "age_hours": 5.51,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3329,7 +3329,7 @@
           }
         },
         {
-          "at": "2026-11-12T09:11:41.596653+00:00",
+          "at": "2026-11-12T13:18:30.411838+00:00",
           "buy_tier_flip_lag": {
             "primary_value": 0,
             "warn_active": false,
@@ -3375,7 +3375,7 @@
     },
     "lifecycle_maturity_trajectory": {
       "schema_version": 1,
-      "generated_at": "2026-11-12T09:11:41.604720+00:00",
+      "generated_at": "2026-11-12T13:18:30.423061+00:00",
       "observe_only": true,
       "instrument_id": "lifecycle_maturity_trajectory",
       "separation": {
@@ -3487,10 +3487,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3590,10 +3590,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3693,10 +3693,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3796,10 +3796,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3899,10 +3899,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4002,10 +4002,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4105,10 +4105,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4208,10 +4208,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4311,10 +4311,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4414,10 +4414,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4517,10 +4517,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4620,10 +4620,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4723,10 +4723,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4826,10 +4826,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4929,10 +4929,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -5032,10 +5032,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -5135,10 +5135,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -5238,10 +5238,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -5341,10 +5341,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -5444,10 +5444,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -5547,10 +5547,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -5650,10 +5650,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -5753,10 +5753,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 6.6h ago.",
+            "detail": "Board last refresh 10.7h ago.",
             "as_of": "2026-11-12T02:35:29.224058+00:00",
-            "store_as_of": "2026-11-12T09:11:41.604720+00:00",
-            "age_hours": 6.6,
+            "store_as_of": "2026-11-12T13:18:30.423061+00:00",
+            "age_hours": 10.72,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -11446,7 +11446,7 @@
           }
         },
         {
-          "at": "2026-11-12T09:11:41.604720+00:00",
+          "at": "2026-11-12T13:18:30.423061+00:00",
           "ftse350": {
             "primary_value": 41.27,
             "early_share": 0.4127,
@@ -11659,7 +11659,7 @@
     },
     "n200_pipeline_health": {
       "schema_version": 2,
-      "generated_at": "2026-11-12T09:11:41.615338+00:00",
+      "generated_at": "2026-11-12T13:18:30.438270+00:00",
       "observe_only": true,
       "influences_live": false,
       "not_alpha_signal": true,
@@ -11716,9 +11716,9 @@
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
-        "detail": "Last refresh 1.4h ago.",
+        "detail": "Last refresh 5.5h ago.",
         "as_of": "2026-11-12T07:48:33.899588+00:00",
-        "age_hours": 1.39,
+        "age_hours": 5.5,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -11727,13 +11727,13 @@
         "ops_check_ok": true,
         "ops_finding_present": true,
         "ops_run_at": "2026-11-12T07:47:07.386850+00:00",
-        "detail": "Observe refresh path looks alive. Ops finding: N200 tech-timing observe refreshed Last refresh 1.4h ago. Entry lever win; exit lever lose (fair costs; independent of path P&L)."
+        "detail": "Observe refresh path looks alive. Ops finding: N200 tech-timing observe refreshed Last refresh 5.5h ago. Entry lever win; exit lever lose (fair costs; independent of path P&L)."
       },
       "ops_doc": "docs/ops/n200-tech-timing-observe.md"
     },
     "n201_pipeline_health": {
       "schema_version": 1,
-      "generated_at": "2026-11-12T09:11:41.615840+00:00",
+      "generated_at": "2026-11-12T13:18:30.439027+00:00",
       "observe_only": true,
       "influences_live": false,
       "not_alpha_signal": true,
@@ -11782,9 +11782,9 @@
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
-        "detail": "Last refresh 1.4h ago.",
+        "detail": "Last refresh 5.5h ago.",
         "as_of": "2026-11-12T07:50:48.204633+00:00",
-        "age_hours": 1.35,
+        "age_hours": 5.46,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -11793,13 +11793,13 @@
         "ops_check_ok": true,
         "ops_finding_present": true,
         "ops_run_at": "2026-11-12T07:47:07.386850+00:00",
-        "detail": "Ops finding: N201 value-mom observe refreshed Last refresh 1.4h ago."
+        "detail": "Ops finding: N201 value-mom observe refreshed Last refresh 5.5h ago."
       },
       "ops_doc": "docs/ops/n201-value-mom-observe.md"
     },
     "n210_pipeline_health": {
       "schema_version": 1,
-      "generated_at": "2026-11-12T09:11:41.616513+00:00",
+      "generated_at": "2026-11-12T13:18:30.440078+00:00",
       "observe_only": true,
       "influences_live": false,
       "not_alpha_signal": true,
@@ -11863,9 +11863,9 @@
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
-        "detail": "Last refresh 1.4h ago.",
+        "detail": "Last refresh 5.5h ago.",
         "as_of": "2026-11-12T07:50:48.552658+00:00",
-        "age_hours": 1.35,
+        "age_hours": 5.46,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -11874,13 +11874,13 @@
         "ops_check_ok": true,
         "ops_finding_present": true,
         "ops_run_at": "2026-11-12T07:47:07.386850+00:00",
-        "detail": "Ops finding: N210 AI-judgment observe refreshed Last refresh 1.4h ago."
+        "detail": "Ops finding: N210 AI-judgment observe refreshed Last refresh 5.5h ago."
       },
       "ops_doc": "docs/ops/n210-ai-judgment-observe.md"
     },
     "n206_pipeline_health": {
       "schema_version": 1,
-      "generated_at": "2026-11-12T09:11:41.616716+00:00",
+      "generated_at": "2026-11-12T13:18:30.440413+00:00",
       "observe_only": true,
       "influences_live": false,
       "not_alpha_signal": true,
@@ -11932,9 +11932,9 @@
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
-        "detail": "Last refresh 1.3h ago.",
+        "detail": "Last refresh 5.5h ago.",
         "as_of": "2026-11-12T07:51:07.991589+00:00",
-        "age_hours": 1.34,
+        "age_hours": 5.46,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -11943,13 +11943,13 @@
         "ops_check_ok": true,
         "ops_finding_present": true,
         "ops_run_at": "2026-11-12T07:47:07.386850+00:00",
-        "detail": "Ops finding: N206 plain-EY observe refreshed Last refresh 1.3h ago."
+        "detail": "Ops finding: N206 plain-EY observe refreshed Last refresh 5.5h ago."
       },
       "ops_doc": "docs/ops/n206-plain-ey-observe.md"
     },
     "ingest_occupancy": {
       "schema_version": 1,
-      "generated_at": "2026-11-12T09:11:41.670374+00:00",
+      "generated_at": "2026-11-12T13:18:30.509377+00:00",
       "focus_market": "euro_depth",
       "dispatch_mode": "exhausted",
       "should_run_sprint_ingest": false,
@@ -11959,7 +11959,7 @@
       "mismatch": false,
       "cold_store_gate_at": "2026-11-12T02:49:13.821861+00:00",
       "cold_store_focus_pressure_reasons": [],
-      "dispatch_evaluated_at": "2026-11-12T07:45:00.811863+00:00",
+      "dispatch_evaluated_at": "2026-11-12T10:46:36.475787+00:00",
       "spare_should_run_parallel_ingest": true,
       "eng_open_count": 0,
       "auto_fixable": false,
