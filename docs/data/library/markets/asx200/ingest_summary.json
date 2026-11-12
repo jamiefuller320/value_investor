@@ -1,15 +1,89 @@
 {
-  "run_at": "2026-11-12T10:44:43.946740+00:00",
+  "run_at": "2026-11-12T22:33:30.715396+00:00",
   "market_id": "asx200",
-  "targets": [],
-  "target_details": [],
-  "results": [],
+  "targets": [
+    "IMD.AX"
+  ],
+  "target_details": [
+    {
+      "ticker": "IMD.AX",
+      "priority_score": 14.8028,
+      "filings_total": 12,
+      "filings_with_body": 11,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "IMD.AX",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 12,
+        "filings_with_body": 11,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 12,
+        "filings_with_body": 11,
+        "indexed_without_body": 1
+      },
+      "improved": false,
+      "regime": "asx_announcements",
+      "filings_summary": {
+        "total": 12,
+        "annual": 2,
+        "interim": 2,
+        "trading_update": 0,
+        "other": 8,
+        "with_body": 11,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 2,
+            "with_body": 1
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 8,
+            "with_body": 8
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 11,
+        "with_body_after": 11,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 1,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 2,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
   "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-11-12T10:44:28.964610+00:00",
+    "snapshot_at": "2026-11-12T22:31:50.995366+00:00",
     "market_id": "asx200",
     "buy_tier_count": 32,
     "unmeasured_buy_tier": 0,
@@ -25,11 +99,11 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
-      "ALK.AX",
+      "IMD.AX",
       "SMR.AX"
     ],
     "indexed_without_body_by_ticker": {
-      "ALK.AX": 1,
+      "IMD.AX": 1,
       "SMR.AX": 1
     },
     "parked_tickers": [
@@ -39,12 +113,14 @@
     "parked_count": 2,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body_tickers": [
+      "IMD.AX"
+    ],
+    "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-11-12T10:44:35.673803+00:00",
+    "snapshot_at": "2026-11-12T22:32:07.917665+00:00",
     "market_id": "asx200",
     "buy_tier_count": 32,
     "unmeasured_buy_tier": 0,
@@ -60,15 +136,15 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
-      "ALK.AX",
+      "IMD.AX",
       "SMR.AX"
     ],
     "indexed_without_body_by_ticker": {
-      "ALK.AX": 1,
+      "IMD.AX": 1,
       "SMR.AX": 1
     },
     "parked_tickers": [
-      "ALK.AX",
+      "IMD.AX",
       "SMR.AX"
     ],
     "parked_count": 2,
@@ -81,28 +157,57 @@
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "asx200"
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "asx200",
+    "to_market": "dax",
+    "stream_markets_after": [
+      "dax"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "asx200",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "IMD.AX",
+        "SMR.AX"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "dax",
+      "forced": true,
+      "prior_screen_at": "2026-11-12T06:53:31.052063+00:00",
+      "prior_age_days": 0,
+      "run_at": "2026-11-12T22:33:23.948065+00:00",
+      "shortlist_count": 11,
+      "ticker_count": 40
+    },
+    "at": "2026-11-12T22:32:21.075162+00:00",
+    "ingest_parity_recorded": false
   },
   "critical_path": {
     "market_id": "asx200",
-    "assessed_at": "2026-11-12T10:44:32.305320+00:00",
+    "assessed_at": "2026-11-12T22:31:53.781581+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
       {
-        "ticker": "ALK.AX",
+        "ticker": "IMD.AX",
         "indexed_without_body": 1,
-        "filings_total": 82,
-        "filings_with_body": 81
+        "filings_total": 12,
+        "filings_with_body": 11
       },
       {
         "ticker": "SMR.AX",
@@ -116,11 +221,11 @@
     "primary_blocker": "indexed_without_body",
     "force_discovery_scan": false,
     "auto_pin_tickers": [
-      "ALK.AX",
+      "IMD.AX",
       "SMR.AX"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (2 tickers, top: ALK.AX(1), SMR.AX(1))"
+      "Prefer indexed-without-body body refetch (2 tickers, top: IMD.AX(1), SMR.AX(1))"
     ],
     "gap_counts": {
       "unmeasured": 0,
@@ -131,21 +236,19 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 0.0013469369999938863,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2099.998653063,
+  "used_seconds": 11.34961612699999,
+  "budget_seconds": 87.5,
+  "leftover_seconds": 76.15038387300001,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "IMD.AX"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "asx200",
-    "updated_at": "2026-11-12T10:44:35.678976+00:00",
+    "updated_at": "2026-11-12T22:32:07.922533+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 3,
+    "complete_zero_improve_runs": 4,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -161,13 +264,13 @@
         "source_surface": "asx_announcements"
       },
       {
-        "ticker": "ALK.AX",
+        "ticker": "IMD.AX",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-11-11T13:50:17.853001+00:00",
-        "park_via": "straggler_soft_park",
-        "filings_total": 82,
-        "filings_with_body": 81,
+        "parked_at": "2026-11-12T22:32:07.922533+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 12,
+        "filings_with_body": 11,
         "indexed_without_body": 1,
         "thin": false,
         "source_surface": "asx_announcements"
@@ -178,7 +281,7 @@
     "straggler_zero_runs": 2,
     "had_complete_targets": true,
     "leftover_tickers": [
-      "ALK.AX",
+      "IMD.AX",
       "SMR.AX"
     ],
     "unparked_leftover": [],
@@ -219,20 +322,19 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 64,
-    "candidate_count": 60,
+    "tried_count": 65,
+    "candidate_count": 57,
     "skipped_resolved_tickers": [
       "ACKB.BR",
       "APAM.AS",
       "BAS.DE",
       "DQ7A.IR",
-      "ESSITY-B.ST",
       "EVN.VI",
-      "IFX.DE",
       "UCB.BR",
       "WIE.VI",
       "LMT",
       "APTV",
+      "BXP",
       "DFS.L",
       "MER.L",
       "TPT.L",
@@ -244,13 +346,11 @@
       "NTR.TO",
       "MFC.TO",
       "BAS.DE",
-      "IFX.DE",
       "PDD",
       "BAS.DE",
       "DTE.DE",
       "DTG.DE",
       "HNR1.DE",
-      "HEN3.DE",
       "PST.MI",
       "APAM.AS",
       "0285.HK",
