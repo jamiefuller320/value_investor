@@ -388,6 +388,8 @@ class StatementPage:
 class _PageParse:
     candidates: dict[str, list[Candidate]] = field(default_factory=dict)
     capex: list[Candidate] = field(default_factory=list)
+    # A purchase line was seen but its amount does not stand on its own.
+    capex_incomplete: bool = False
     rejected: dict[str, str] = field(default_factory=dict)
     currency: str | None = None
     scale: str | None = None
@@ -803,6 +805,19 @@ def _parse_page_body(
             if started:
                 break
         label, cells, status = _split_amount_row(line, len(years), scale)
+        if (
+            scale == "millions"
+            and parsed.current_idx is not None
+            and parsed.current_idx < len(cells)
+            and cells[parsed.current_idx].kind == "ok"
+            and cells[parsed.current_idx].value is not None
+            and row_decimal_conflict(Decimal(cells[parsed.current_idx].value), _prepare_line(line))
+        ):
+            # ``64.7`` beside ``785`` and ``1,005``, or ``(41)`` beside ``(1.2)``.
+            cells[parsed.current_idx] = AmountCell(
+                "unresolved", None, cells[parsed.current_idx].unit
+            )
+            status = "unresolved"
         if status == "column count" and label:
             for field_name, _priority, _money in _label_fields(label):
                 parsed.rejected.setdefault(
@@ -832,6 +847,10 @@ def _parse_page_body(
             and cells[parsed.current_idx].kind == "ok"
         )
         if not current_ok:
+            if label and "cash" in kinds and (_is_capex_ppe(label) or _is_capex_intangible(label)):
+                # Do not publish property, plant and equipment alone when the
+                # intangibles line was on the page and could not be read.
+                parsed.capex_incomplete = True
             if status == "unresolved":
                 for field_name, _priority, _money in _label_fields(label):
                     parsed.rejected.setdefault(field_name, "decimal place not recovered")
@@ -1262,12 +1281,17 @@ def parse_statement_pages(
             currency=currency,
         )
 
-    fields["capital_expenditure"] = _capex_field(
-        (cash_parsed.capex if cash_parsed else []),
-        transaction_id=transaction_id,
-        scale=scale,
-        currency=currency,
-    )
+    if cash_parsed and cash_parsed.capex_incomplete:
+        fields["capital_expenditure"] = _empty_field(
+            "a purchase line was read but its amount did not agree with the row"
+        )
+    else:
+        fields["capital_expenditure"] = _capex_field(
+            (cash_parsed.capex if cash_parsed else []),
+            transaction_id=transaction_id,
+            scale=scale,
+            currency=currency,
+        )
     div_cands = pool(income_parsed, *note_parsed, name="dividends_per_share")
     fields["dividends_per_share"] = _dividend_field(div_cands, rejected, transaction_id)
 
@@ -1837,6 +1861,82 @@ GATE_EPS_DECIMAL = "eps_decimal"
 GATE_EPS_EARNINGS = "eps_versus_earnings"
 GATE_OPERATING_PROFIT = "operating_profit_above_revenue"
 GATE_SCALE_JUMP = "scale_jump"
+GATE_ROW_DECIMAL = "row_decimal"
+_ROW_AMOUNT_RE = re.compile(r"[(\[{]?-?\d[\d,]*(?:\.\d+)?[)\]}]?")
+
+
+def _valid_thousands(head: str) -> bool:
+    groups = head.split(",")
+    return (
+        len(groups) >= 2
+        and groups[0].isdigit()
+        and 1 <= len(groups[0]) <= 3
+        and all(len(group) == 3 and group.isdigit() for group in groups[1:])
+    )
+
+
+def _classify_row_amounts(line: str) -> list[tuple[Decimal, str]]:
+    """Amounts on a citation line as (absolute value, decimal|integer|invalid)."""
+    text = line.replace("{", "(").replace("}", ")").replace("[", "(").replace("]", ")")
+    found: list[tuple[Decimal, str]] = []
+    for match in _ROW_AMOUNT_RE.finditer(text):
+        token = match.group().strip("()[]{}")
+        if token.startswith("-"):
+            token = token[1:]
+        if not token or not token[0].isdigit():
+            continue
+        if "." in token:
+            head, _, frac = token.partition(".")
+            if not frac.isdigit() or ("," in head and not _valid_thousands(head)):
+                kind = "invalid"
+            else:
+                kind = "decimal"
+        elif "," in token:
+            kind = "integer" if _valid_thousands(token) else "invalid"
+        else:
+            kind = "integer"
+        bare = token.replace(",", "")
+        try:
+            found.append((abs(Decimal(bare)), kind))
+        except InvalidOperation:
+            continue
+    return found
+
+
+def row_decimal_conflict(value: Decimal, line: str) -> bool:
+    """True when the decimal on this value disagrees with the other amounts on its line.
+
+    ``64.7`` beside ``785 1,005 1,093 1,058`` is the digits of 647 with a point
+    inserted. ``(41)`` beside ``(1.2)`` is ``(4.1)`` with the point dropped.
+    Neither is rewritten; the caller leaves the value absent.
+    """
+    amounts = _classify_row_amounts(line)
+    magnitude = abs(value)
+    integral = value == value.to_integral_value()
+    if integral and Decimal("10") <= magnitude <= Decimal("99"):
+        for sibling, kind in amounts:
+            if kind != "decimal" or not (Decimal("0") < sibling < Decimal("100")):
+                continue
+            repaired = magnitude / Decimal("10")
+            if magnitude / sibling > Decimal("5") and max(repaired, sibling) / min(
+                repaired, sibling
+            ) <= Decimal("5"):
+                return True
+        return False
+    if integral:
+        return False
+    integers = [item for item, kind in amounts if kind == "integer" and item >= Decimal("100")]
+    if len(integers) < 2 or max(integers) / min(integers) > Decimal("5"):
+        return False
+    median = sorted(integers)[len(integers) // 2]
+    if median <= 0 or magnitude <= 0:
+        return False
+    if max(median, magnitude) / min(median, magnitude) <= Decimal("5"):
+        return False
+    stripped = Decimal(re.sub(r"\D", "", format(magnitude, "f")))
+    if stripped <= 0:
+        return False
+    return max(median, stripped) / min(median, stripped) <= Decimal("5")
 
 
 def is_financial_name(name: str) -> bool:
@@ -1949,6 +2049,13 @@ def apply_value_gate(filings: list[dict[str, Any]], *, financial: bool = False) 
                     break
             if not components_ok:
                 _null_value(row, GATE_DIGIT_COUNT, counts)
+                continue
+            if row.get("scale") == "millions" and any(
+                row_decimal_conflict(Decimal(str(component.get("value"))), line)
+                for component in row.get("components") or []
+                if component.get("value") not in (None, "")
+            ):
+                _null_value(row, GATE_ROW_DECIMAL, counts)
             continue
         try:
             value = Decimal(str(row.get("value")))
@@ -1961,6 +2068,13 @@ def apply_value_gate(filings: list[dict[str, Any]], *, financial: bool = False) 
             continue
         if not sign_ok:
             _null_value(row, GATE_SIGN, counts)
+            continue
+        if (
+            row.get("scale") == "millions"
+            and name not in {"basic_eps", "weighted_average_basic_shares", "dividends_per_share"}
+            and row_decimal_conflict(value, _citation_line(row))
+        ):
+            _null_value(row, GATE_ROW_DECIMAL, counts)
             continue
         if (
             name == "basic_eps"

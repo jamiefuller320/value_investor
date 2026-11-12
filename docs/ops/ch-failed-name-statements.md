@@ -261,6 +261,7 @@ seven hand-verified filings are not gated. Each other name records
 | `eps_versus_earnings` | EPS is more than 15% away from profit attributable divided by weighted shares, as pence and as pounds when the unit is blank. |
 | `operating_profit_above_revenue` | For a non-financial name, the absolute operating profit exceeds revenue. |
 | `scale_jump` | Adjacent years differ by more than 5x after scale, and the citation does not mention an exceptional item, disposal, impairment, restatement or demerger. A missing scale next to a stated scale, with the same raw magnitude, nulls the blank scale. The two columns of one printed line are not treated as a jump. |
+| `row_decimal` | On a millions row, a one-decimal value sits more than 5x away from two or more integer columns while the same digits without the point sit with those columns (`64.7` beside `785`, `1,005`). Or a two-digit integer sits beside a decimal sibling that only agrees once a point is put back (`(41)` beside `(1.2)`). The value is left null. A purchase total is left null when one of its lines fails, so property, plant and equipment is not stored as the whole of capital expenditure. |
 
 Revenue is taken only from a line whose label is revenue, turnover or sales.
 An adjustment, tax, excise or duty line is not revenue. Profit attributable is

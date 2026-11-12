@@ -736,6 +736,86 @@ def test_profit_is_not_taken_from_comprehensive_income() -> None:
     assert both["fields"]["profit_attributable_to_owners"]["value"] == "100.2"
 
 
+def test_false_decimal_and_lost_intangible_decimal_are_left_absent() -> None:
+    # Indivior 2020. The highlight row is 647, not 64.7. The other columns are integers.
+    indivior = _income(
+        """
+        Consolidated income statement
+        Historical financial information
+        For the year ended 31 December 2020
+        2020 2019 2018 2017 2016
+        $m $m $m $m $m
+        Revenue from continuing operations 64.7 785 1,005 1,093 1,058
+        """,
+        end="2020-12-31",
+    )
+    assert indivior["fields"]["revenue"]["value"] is None
+    # A millions revenue whose comparative only lost its comma-decimal stays.
+    essar_revenue = _income(
+        """
+        Consolidated income statement
+        For the year ended 31 March 2014
+        2014 2013
+        $ million $ million
+        Revenue 4 25,864.8 27,2577
+        """,
+        end="2014-03-31",
+    )
+    assert essar_revenue["fields"]["revenue"]["value"] == "25864.8"
+    # Essar 2012 cash flow. PPE is (2,128.9). Intangibles are (4.1), read as (41) beside (1.2).
+    essar_capex = _income(
+        """
+        Consolidated statement of cash flows
+        15 months ended 31 March 2012
+        2012 2010
+        $ million $ million
+        Purchase of property, plant and equipment (2,128 9) (2,496 5)
+        Purchase of intangible assets (41) (1.2)
+        """,
+        end="2012-03-31",
+    )
+    assert essar_capex["fields"]["capital_expenditure"]["value"] is None
+    stored = [
+        {
+            "fiscal_year": 2020,
+            "fields": {
+                "revenue": {
+                    "value": "64.7",
+                    "scale": "millions",
+                    "citation": {
+                        "line": "Revenue from continuing operations 64.7 785 1,005 1,093 1,058"
+                    },
+                }
+            },
+        },
+        {
+            "fiscal_year": 2012,
+            "fields": {
+                "capital_expenditure": {
+                    "value": "-2169.9",
+                    "scale": "millions",
+                    "components": [
+                        {"label": "Purchase of property, plant and equipment", "value": "-2128.9"},
+                        {"label": "Purchase of intangible assets", "value": "-41"},
+                    ],
+                    "citation": {
+                        "line": (
+                            "Purchase of property, plant and equipment (2,128 9} (2,496 5) | "
+                            "Purchase of intangible assets (41) (1.2)"
+                        )
+                    },
+                }
+            },
+        },
+    ]
+    counts = apply_value_gate(stored, financial=False)
+    assert stored[0]["fields"]["revenue"]["value"] is None
+    assert stored[0]["fields"]["revenue"]["absent_reason"] == "row_decimal"
+    assert stored[1]["fields"]["capital_expenditure"]["value"] is None
+    assert stored[1]["fields"]["capital_expenditure"]["absent_reason"] == "row_decimal"
+    assert counts["by_check"]["row_decimal"] == 2
+
+
 def test_value_gate_nulls_the_four_bad_citations_and_keeps_a_match() -> None:
     def field(value: str, line: str, **extra: object) -> dict:
         row = {
