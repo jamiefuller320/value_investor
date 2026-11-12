@@ -495,10 +495,11 @@ def _shares_on_or_before(fundamentals: dict[str, Any] | None, as_of: date) -> bo
         block = shares.get(bucket)
         if not isinstance(block, dict):
             continue
-        for key, row in block.items():
+        for row in block.values():
             if not isinstance(row, dict):
                 continue
-            d = _parse_date(row.get("date") or key)
+            # EODHD puts a bare year ("2023") or quarter ("2023-Q4") in "date".
+            d = _parse_date(row.get("dateFormatted") or row.get("date"))
             if d and d <= as_of and row.get("shares") is not None:
                 candidates.append(d)
     return bool(candidates)
