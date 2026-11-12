@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-11-12T02:37:53.634373+00:00",
+  "compiled_at": "2026-11-12T19:38:45.034826+00:00",
   "run_at": null,
-  "task_count": 271,
+  "task_count": 272,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -4053,6 +4053,50 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/674",
       "pr_number": 674,
       "merged_at": "2026-09-16T16:11:25.884730+00:00"
+    },
+    {
+      "id": "eng-20261112-02",
+      "area": "scoring",
+      "title": "Workflow fix: library ingest sprint 2 failure",
+      "summary": "GitHub workflow library-ingest-sprint-2.yml failed on main. Investigate the failed run log and fix the workflow or underlying code within allowed_paths. Run: https://github.com/jamiefuller320/value_investor/actions/runs/43284295893",
+      "priority": "high",
+      "priority_score": 90.0,
+      "source": "workflow_failure",
+      "evidence": {
+        "workflow": "library-ingest-sprint-2.yml",
+        "run_id": "43284295893",
+        "run_url": "https://github.com/jamiefuller320/value_investor/actions/runs/43284295893",
+        "signature": null
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        ".github/workflows/library-ingest-sprint-2.yml",
+        "src/value_investor/scoring/",
+        "src/value_investor/summary.py",
+        "src/value_investor/library_screen.py",
+        "src/value_investor/library_ingest_dispatch.py",
+        "src/value_investor/library_ingest_escalation.py",
+        "src/value_investor/library_ingest_loop.py",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py",
+        "tests/test_workflow_failure_tasks.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "parked",
+      "parked_reason": "engineering-agent cannot push .github/workflows changes without WORKFLOW_DISPATCH_PAT Workflows permission — parked for manual fix or PAT update",
+      "parked_at": "2026-11-12T17:40:52.447674+00:00",
+      "parked_policy": "workflow_permission"
     },
     {
       "id": "eng-20261110-09",
@@ -17622,8 +17666,8 @@
     "resumed_at": "2026-11-04T17:32:59.305864+00:00"
   },
   "queue_clearing": {
-    "attention_parked_count": 2,
-    "evaluated_at": "2026-11-12T16:19:41.622039+00:00",
+    "attention_parked_count": 3,
+    "evaluated_at": "2026-11-12T20:19:03.471741+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {

@@ -2,9 +2,9 @@
   "schema_version": 1,
   "influences_live": false,
   "registration_id": "owner-strategy-book-v0",
-  "generated_at": "2026-11-11T19:53:59.588890+00:00",
-  "observe_data_commit": "a141f75cb5481db6d418b32989c3e435fe4de84f",
-  "observe_generated_at": "2026-11-11T17:48:15.728212+00:00",
+  "generated_at": "2026-11-12T17:48:25.744996+00:00",
+  "observe_data_commit": "ecfea0189e5a1c8792f5e807a421387aaf10801e",
+  "observe_generated_at": "2026-11-12T17:48:07.906568+00:00",
   "observe_store": "docs/data/strategy_book_observe.json",
   "observe_error": null,
   "constants": {
@@ -77,26 +77,26 @@
     "spans": {
       "GBP": {
         "first_as_of": "2026-07-17",
-        "last_as_of": "2026-11-09",
-        "points": 64
+        "last_as_of": "2026-11-12",
+        "points": 65
       },
       "EUR": {
         "first_as_of": "2026-07-17",
-        "last_as_of": "2026-11-09",
-        "points": 54
+        "last_as_of": "2026-11-12",
+        "points": 55
       },
       "AUD": {
         "first_as_of": "2026-07-18",
-        "last_as_of": "2026-11-09",
-        "points": 68
+        "last_as_of": "2026-11-12",
+        "points": 69
       },
       "CAD": {
         "first_as_of": "2026-07-18",
-        "last_as_of": "2026-11-09",
-        "points": 68
+        "last_as_of": "2026-11-12",
+        "points": 69
       }
     },
-    "files_read": 68,
+    "files_read": 69,
     "unreadable_files": 0,
     "no_daily_series": [
       "CHF",
@@ -106,24 +106,24 @@
     ]
   },
   "coverage": {
-    "episodes": 77,
-    "with_range": 65,
-    "insufficient_data": 12,
+    "episodes": 92,
+    "with_range": 76,
+    "insufficient_data": 16,
     "reasons": {
-      "currency_sources_disagree": 2,
+      "currency_sources_disagree": 3,
       "implausible_multiple": 1,
-      "reporting_currency_unstated": 9
+      "reporting_currency_unstated": 12
     },
-    "primary_episodes": 2,
-    "primary_with_range": 2,
+    "primary_episodes": 4,
+    "primary_with_range": 4,
     "primary_insufficient_data": 0,
-    "primary_margin_median": 0.248337
+    "primary_margin_median": 0.214744
   },
   "scoring": {
     "primary": {
       "population": "mature or closed episodes with a range",
       "n": 0,
-      "n_with_range": 2,
+      "n_with_range": 4,
       "verdict": "insufficient_data",
       "minimum_n": 12,
       "buckets": [
@@ -169,7 +169,7 @@
       "buy_on_signal": {
         "population": "mature or closed episodes with a range",
         "n": 0,
-        "n_with_range": 56,
+        "n_with_range": 59,
         "verdict": "insufficient_data",
         "minimum_n": 12,
         "buckets": [
@@ -213,7 +213,7 @@
       },
       "decline_rejected_shadow": {
         "population": "mature or closed episodes with a range",
-        "n": 0,
+        "n": 1,
         "n_with_range": 1,
         "verdict": "insufficient_data",
         "minimum_n": 12,
@@ -221,7 +221,7 @@
           {
             "id": "below_0",
             "rule": "margin < 0",
-            "n": 0,
+            "n": 1,
             "verdict": "insufficient_data",
             "median_fair_cost_return": null,
             "median_matched_excess": null,
@@ -248,9 +248,9 @@
         ],
         "recovery": {
           "verdict": "insufficient_data",
-          "n_closed_with_range": 0,
+          "n_closed_with_range": 1,
           "minimum_n": 12,
-          "reached_mid": 0,
+          "reached_mid": 1,
           "reached_low_only": 0,
           "not_reached": 0,
           "no_closes_in_window": 0
@@ -259,7 +259,7 @@
       "draft_v0_exit": {
         "population": "mature or closed episodes with a range",
         "n": 0,
-        "n_with_range": 2,
+        "n_with_range": 4,
         "verdict": "insufficient_data",
         "minimum_n": 12,
         "buckets": [
@@ -304,7 +304,7 @@
       "ladder_no_deadline": {
         "population": "mature or closed episodes with a range",
         "n": 0,
-        "n_with_range": 2,
+        "n_with_range": 4,
         "verdict": "insufficient_data",
         "minimum_n": 12,
         "buckets": [
@@ -349,7 +349,7 @@
       "leave_tier": {
         "population": "mature or closed episodes with a range",
         "n": 0,
-        "n_with_range": 2,
+        "n_with_range": 4,
         "verdict": "insufficient_data",
         "minimum_n": 12,
         "buckets": [
@@ -394,7 +394,7 @@
       "primary": {
         "population": "mature or closed episodes with a range",
         "n": 0,
-        "n_with_range": 2,
+        "n_with_range": 4,
         "verdict": "insufficient_data",
         "minimum_n": 12,
         "buckets": [
@@ -440,6 +440,237 @@
   },
   "episodes": [
     {
+      "episode_id": "sp500:CRM:primary:2026-11-10",
+      "market": "sp500",
+      "ticker": "CRM",
+      "column": "primary",
+      "status": "open",
+      "signal_session": "2026-11-10",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.0,
+      "verdict": "range",
+      "reason": null,
+      "reason_detail": "",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 213.48,
+      "entry_reference_unit": "USD",
+      "price_unit": "USD",
+      "major_currency": "USD",
+      "statement_currency": "USD",
+      "currency": {
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "sec_companyfacts.annual.currency",
+            "path": "docs/data/library/markets/sp500/screen/research/CRM/sources/sec_companyfacts.json",
+            "state": "file",
+            "first_filed": "2026-03-02",
+            "currency": "USD"
+          }
+        ]
+      },
+      "method": "normalised_earnings",
+      "inputs": {
+        "financials_path": "docs/data/library/markets/sp500/screen/research/CRM/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-10-20",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2023,
+            "eps": 0.21,
+            "fcf": 6313000000.0,
+            "shares": 997000000.0,
+            "fcf_per_share": 6.331996
+          },
+          {
+            "year": 2024,
+            "eps": 4.2,
+            "fcf": 9498000000.0,
+            "shares": 984000000.0,
+            "fcf_per_share": 9.652439
+          },
+          {
+            "year": 2025,
+            "eps": 6.36,
+            "fcf": 12434000000.0,
+            "shares": 974000000.0,
+            "fcf_per_share": 12.765914
+          },
+          {
+            "year": 2026,
+            "eps": 7.8,
+            "fcf": 14402000000.0,
+            "shares": 956000000.0,
+            "fcf_per_share": 15.064854
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 4.6425,
+        "latest_per_share": 7.8,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 27.3692,
+        "implied_trailing_pe_close": 213.48,
+        "implied_trailing_pe_eps": 7.8,
+        "implied_trailing_pe_currency": "USD",
+        "fx": null,
+        "normalised_per_share_price_units": 4.6425,
+        "chart_path": "docs/data/charts/CRM.json"
+      },
+      "range": {
+        "low": 46.425,
+        "mid": 69.6375,
+        "high": 92.85,
+        "unit": "USD"
+      },
+      "margin_of_safety": -2.06559,
+      "reverse_dcf": {
+        "status": "computed",
+        "growth": 0,
+        "discounts": {
+          "value_low": 0.1,
+          "value_mid": 0.08,
+          "value_high": 0.06
+        },
+        "latest_per_share": 7.8,
+        "low": 78.0,
+        "mid": 97.5,
+        "high": 130.0,
+        "cross_check": "outside_band",
+        "implied_earnings_yield": 0.021747
+      },
+      "fcf_per_share_cross_check": {
+        "method": "fcf_per_share",
+        "normalised_per_share": 10.953801,
+        "range": {
+          "low": 109.538,
+          "mid": 164.307,
+          "high": 219.076
+        },
+        "cross_check": "outside_band"
+      },
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      },
+      "entry_vs_range": "above_high"
+    },
+    {
+      "episode_id": "sp500:FIS:primary:2026-11-10",
+      "market": "sp500",
+      "ticker": "FIS",
+      "column": "primary",
+      "status": "open",
+      "signal_session": "2026-11-10",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.0,
+      "verdict": "range",
+      "reason": null,
+      "reason_detail": "",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 28.31,
+      "entry_reference_unit": "USD",
+      "price_unit": "USD",
+      "major_currency": "USD",
+      "statement_currency": "USD",
+      "currency": {
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "sec_companyfacts.annual.currency",
+            "path": "docs/data/library/markets/sp500/screen/research/FIS/sources/sec_companyfacts.json",
+            "state": "file",
+            "first_filed": "2026-02-24",
+            "currency": "USD"
+          }
+        ]
+      },
+      "method": "fcf_per_share",
+      "inputs": {
+        "financials_path": "docs/data/library/markets/sp500/screen/research/FIS/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-11-05",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2022,
+            "eps": -27.68,
+            "fcf": 626000000.0,
+            "shares": 604000000.0,
+            "fcf_per_share": 1.036424
+          },
+          {
+            "year": 2023,
+            "eps": -11.26,
+            "fcf": 3555000000.0,
+            "shares": 591000000.0,
+            "fcf_per_share": 6.015228
+          },
+          {
+            "year": 2024,
+            "eps": 2.61,
+            "fcf": 1254000000.0,
+            "shares": 555000000.0,
+            "fcf_per_share": 2.259459
+          },
+          {
+            "year": 2025,
+            "eps": 0.73,
+            "fcf": 1827000000.0,
+            "shares": 525000000.0,
+            "fcf_per_share": 3.48
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 3.197778,
+        "latest_per_share": 3.48,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 38.7808,
+        "implied_trailing_pe_close": 28.31,
+        "implied_trailing_pe_eps": 0.73,
+        "implied_trailing_pe_currency": "USD",
+        "fx": null,
+        "normalised_per_share_price_units": 3.197778,
+        "chart_path": "docs/data/charts/FIS.json"
+      },
+      "range": {
+        "low": 31.9778,
+        "mid": 47.9667,
+        "high": 63.9556,
+        "unit": "USD"
+      },
+      "margin_of_safety": 0.409799,
+      "reverse_dcf": {
+        "status": "computed",
+        "growth": 0,
+        "discounts": {
+          "value_low": 0.1,
+          "value_mid": 0.08,
+          "value_high": 0.06
+        },
+        "latest_per_share": 3.48,
+        "low": 34.8,
+        "mid": 43.5,
+        "high": 58.0,
+        "cross_check": "inside_band",
+        "implied_earnings_yield": 0.112956
+      },
+      "fcf_per_share_cross_check": null,
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      },
+      "entry_vs_range": "below_low"
+    },
+    {
       "episode_id": "ftse350:FOUR.L:primary:2026-11-10",
       "market": "ftse350",
       "ticker": "FOUR.L",
@@ -448,8 +679,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.015171179883945837,
+      "matched_excess": -0.007603963889217996,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -572,8 +803,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.0035544747081712137,
+      "matched_excess": 0.004012741286556626,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -698,8 +929,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.013278738115816865,
+      "matched_excess": -0.005711522121089024,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -817,8 +1048,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.005588709677419261,
+      "matched_excess": 0.0131559256721471,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -1069,8 +1300,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.05703203768823989,
+      "matched_excess": 0.035487513858011965,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -1189,8 +1420,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.02120303164416898,
+      "matched_excess": -0.026884013924801674,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -1309,8 +1540,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.029568767908309476,
+      "matched_excess": -0.022001551913581635,
       "verdict": "insufficient_data",
       "reason": "currency_sources_disagree",
       "reason_detail": "Statement currency sources disagree: filing_body_unit=GBP, screen_action_note=EUR",
@@ -1368,8 +1599,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.0011889632107023364,
+      "matched_excess": 0.008756179205430176,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -1494,8 +1725,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.011595457159286945,
+      "matched_excess": -0.004028241164559104,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -1539,8 +1770,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.0011030814380044763,
+      "matched_excess": 0.008670297432732316,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -1584,8 +1815,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.005174157303370845,
+      "matched_excess": 0.012741373298098685,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -1703,8 +1934,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.015652284263959423,
+      "matched_excess": -0.008085068269231582,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -1829,8 +2060,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -1.5539305301566107e-05,
+      "matched_excess": 0.007551676689426273,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -1940,6 +2171,126 @@
       "entry_vs_range": "between_low_and_mid"
     },
     {
+      "episode_id": "asx200:BWP.AX:buy_on_signal:2026-11-11",
+      "market": "asx200",
+      "ticker": "BWP.AX",
+      "column": "buy_on_signal",
+      "status": "open",
+      "signal_session": "2026-11-11",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.0,
+      "verdict": "range",
+      "reason": null,
+      "reason_detail": "",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 3.69,
+      "entry_reference_unit": "AUD",
+      "price_unit": "AUD",
+      "major_currency": "AUD",
+      "statement_currency": "AUD",
+      "currency": {
+        "currency": "AUD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/asx200/screen/research/BWP.AX/sources/filings/bodies/c7cbae584f58fc65.txt",
+            "published_at": "2026-02-13",
+            "headline": "2026 Half-year results - BWP Trust",
+            "currency": "AUD"
+          }
+        ]
+      },
+      "method": "normalised_earnings",
+      "inputs": {
+        "financials_path": "docs/data/library/markets/asx200/screen/research/BWP.AX/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-11-06",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2023,
+            "eps": 0.05691,
+            "fcf": 119752000.0,
+            "shares": 644522985.0,
+            "fcf_per_share": 0.185799
+          },
+          {
+            "year": 2024,
+            "eps": 0.271994,
+            "fcf": 128763000.0,
+            "shares": 662504440.0,
+            "fcf_per_share": 0.194358
+          },
+          {
+            "year": 2025,
+            "eps": 0.370965,
+            "fcf": 119781000.0,
+            "shares": 715887282.0,
+            "fcf_per_share": 0.167318
+          },
+          {
+            "year": 2026,
+            "eps": 0.5593,
+            "fcf": 134498000.0,
+            "shares": 730194235.0,
+            "fcf_per_share": 0.184195
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 0.314792,
+        "latest_per_share": 0.5593,
+        "normalised_unit": "AUD",
+        "implied_trailing_pe": 6.5975,
+        "implied_trailing_pe_close": 3.69,
+        "implied_trailing_pe_eps": 0.5593,
+        "implied_trailing_pe_currency": "AUD",
+        "fx": null,
+        "normalised_per_share_price_units": 0.314792,
+        "chart_path": "docs/data/charts/BWP.AX.json"
+      },
+      "range": {
+        "low": 3.1479,
+        "mid": 4.7219,
+        "high": 6.2958,
+        "unit": "AUD"
+      },
+      "margin_of_safety": 0.218535,
+      "reverse_dcf": {
+        "status": "computed",
+        "growth": 0,
+        "discounts": {
+          "value_low": 0.1,
+          "value_mid": 0.08,
+          "value_high": 0.06
+        },
+        "latest_per_share": 0.5593,
+        "low": 5.593,
+        "mid": 6.9912,
+        "high": 9.3217,
+        "cross_check": "outside_band",
+        "implied_earnings_yield": 0.08531
+      },
+      "fcf_per_share_cross_check": {
+        "method": "fcf_per_share",
+        "normalised_per_share": 0.182918,
+        "range": {
+          "low": 1.8292,
+          "mid": 2.7438,
+          "high": 3.6584
+        },
+        "cross_check": "outside_band"
+      },
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      },
+      "entry_vs_range": "between_low_and_mid"
+    },
+    {
       "episode_id": "ftse350:BYIT.L:buy_on_signal:2026-11-10",
       "market": "ftse350",
       "ticker": "BYIT.L",
@@ -1948,8 +2299,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.005305943268797912,
+      "matched_excess": 0.012873159263525752,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -2075,7 +2426,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": 0.012367924528301882,
-      "matched_excess": 0.013972145011278438,
+      "matched_excess": 0.013972464827405488,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -2111,6 +2462,51 @@
       }
     },
     {
+      "episode_id": "asx200:CDA.AX:buy_on_signal:2026-11-11",
+      "market": "asx200",
+      "ticker": "CDA.AX",
+      "column": "buy_on_signal",
+      "status": "open",
+      "signal_session": "2026-11-11",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.0,
+      "verdict": "insufficient_data",
+      "reason": "reporting_currency_unstated",
+      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 57.9,
+      "entry_reference_unit": "AUD",
+      "price_unit": "AUD",
+      "major_currency": "AUD",
+      "statement_currency": null,
+      "currency": {
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
+      },
+      "method": null,
+      "inputs": {
+        "financials_path": "docs/data/library/markets/asx200/screen/research/CDA.AX/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-11-06",
+        "eps_label": null,
+        "years": [],
+        "chart_path": "docs/data/charts/CDA.AX.json"
+      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      }
+    },
+    {
       "episode_id": "tsx60:CP.TO:buy_on_signal:2026-11-09",
       "market": "tsx60",
       "ticker": "CP.TO",
@@ -2119,8 +2515,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.001162355241389804,
+      "matched_excess": -0.004590629199212402,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -2239,8 +2635,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.004242519137091232,
+      "matched_excess": 0.011809735131819071,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -2350,8 +2746,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.0053024691358024055,
+      "matched_excess": 0.012869685130530245,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -2476,8 +2872,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.01104631170271769,
+      "matched_excess": -0.0034790957079898492,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -2602,8 +2998,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.0002089947089946541,
+      "matched_excess": 0.007358221285733185,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -2728,8 +3124,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.025042734816850765,
+      "matched_excess": 0.01936175253621807,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -2848,8 +3244,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.004338896952104483,
+      "matched_excess": 0.003228319042623356,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -2974,8 +3370,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.04686485130161949,
+      "matched_excess": 0.041183869020986794,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -3094,8 +3490,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.015171179883945837,
+      "matched_excess": -0.007603963889217996,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -3218,8 +3614,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.035273719730051604,
+      "matched_excess": -0.027706503735323768,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -3343,7 +3739,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "matched_excess": 0.0020672159947278386,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -3387,8 +3783,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.01055199237177568,
+      "matched_excess": 0.004871010091142981,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -3514,8 +3910,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.020949438202247202,
+      "matched_excess": -0.013382222207519362,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -3640,8 +4036,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.008007716049382602,
+      "matched_excess": -0.0004405000546547637,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -3766,8 +4162,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0024873417721519822,
-      "matched_excess": 0.004719277554983581,
+      "fair_cost_return": 0.004094936708860578,
+      "matched_excess": 0.004240245871750684,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -3811,13 +4207,13 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.04557096946973765,
+      "matched_excess": -0.03800375347500981,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
       "entry_reference": "signal_session_close",
-      "entry_reference_price": 2338.0,
+      "entry_reference_price": 2337.77,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
@@ -3880,8 +4276,8 @@
         "normalised_per_share": 1.28025,
         "latest_per_share": 4.251,
         "normalised_unit": "GBP",
-        "implied_trailing_pe": 5.4999,
-        "implied_trailing_pe_close": 23.38,
+        "implied_trailing_pe": 5.4993,
+        "implied_trailing_pe_close": 23.3777,
         "implied_trailing_pe_eps": 4.251,
         "implied_trailing_pe_currency": "GBP",
         "fx": null,
@@ -3894,7 +4290,7 @@
         "high": 2560.5,
         "unit": "GBX"
       },
-      "margin_of_safety": -0.217471,
+      "margin_of_safety": -0.217351,
       "reverse_dcf": {
         "status": "computed",
         "growth": 0,
@@ -3908,7 +4304,7 @@
         "mid": 5313.75,
         "high": 7085.0,
         "cross_check": "outside_band",
-        "implied_earnings_yield": 0.054758
+        "implied_earnings_yield": 0.054764
       },
       "fcf_per_share_cross_check": {
         "method": "fcf_per_share",
@@ -3937,13 +4333,13 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.002009950551984001,
+      "matched_excess": 0.00957716654671184,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
       "entry_reference": "signal_session_close",
-      "entry_reference_price": 1917.0,
+      "entry_reference_price": 1916.83,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
@@ -3982,8 +4378,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.00048802395209574423,
+      "matched_excess": 0.008055239946823584,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -4101,8 +4497,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.00185036496350371,
+      "matched_excess": 0.005716851031224129,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -4225,8 +4621,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.01945856052344602,
+      "matched_excess": -0.011891344528718178,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -4270,8 +4666,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.006778688524590234,
-      "matched_excess": -0.0016769207604913072,
+      "fair_cost_return": 0.011800546448087316,
+      "matched_excess": 0.01382233708936704,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -4316,7 +4712,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "matched_excess": 0.0020672159947278386,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -4435,8 +4831,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.0038425605536332496,
+      "matched_excess": 0.011409776548361089,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -4561,8 +4957,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.012584556254367548,
+      "matched_excess": -0.018265538535000247,
       "verdict": "insufficient_data",
       "reason": "currency_sources_disagree",
       "reason_detail": "Statement currency sources disagree: filing_body_unit=EUR, sec_companyfacts.annual.currency=USD",
@@ -4621,8 +5017,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.006136927851047307,
+      "matched_excess": 0.013704143845775146,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -4732,6 +5128,51 @@
       "entry_vs_range": "below_low"
     },
     {
+      "episode_id": "asx200:JBH.AX:buy_on_signal:2026-11-11",
+      "market": "asx200",
+      "ticker": "JBH.AX",
+      "column": "buy_on_signal",
+      "status": "open",
+      "signal_session": "2026-11-11",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.0,
+      "verdict": "insufficient_data",
+      "reason": "reporting_currency_unstated",
+      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 77.29,
+      "entry_reference_unit": "AUD",
+      "price_unit": "AUD",
+      "major_currency": "AUD",
+      "statement_currency": null,
+      "currency": {
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
+      },
+      "method": null,
+      "inputs": {
+        "financials_path": "docs/data/library/markets/asx200/screen/research/JBH.AX/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-10-30",
+        "eps_label": null,
+        "years": [],
+        "chart_path": "docs/data/charts/JBH.AX.json"
+      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      }
+    },
+    {
       "episode_id": "ftse350:JD.L:buy_on_signal:2026-11-10",
       "market": "ftse350",
       "ticker": "JD.L",
@@ -4740,8 +5181,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.004021022607225862,
+      "matched_excess": 0.0035461933875019776,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -4859,8 +5300,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.014560955518945592,
+      "matched_excess": -0.006993739524217751,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -4966,8 +5407,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.0027862957937584932,
+      "matched_excess": 0.004780920200969346,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -5092,8 +5533,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.006575268817204212,
+      "matched_excess": 0.0009919471775236273,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -5218,8 +5659,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.01701631477927062,
+      "matched_excess": -0.009449098784542781,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -5338,8 +5779,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.0007456418383517359,
+      "matched_excess": 0.006821574156376103,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -5464,8 +5905,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.026335902536051725,
+      "matched_excess": 0.004791378705823801,
       "verdict": "insufficient_data",
       "reason": "implausible_multiple",
       "reason_detail": "Implied trailing P/E 279.55 is outside 2 to 200 (close 61.5000 USD / latest EPS 0.2200 USD). This is a unit and currency guard, not a valuation view.",
@@ -5560,8 +6001,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.0035544747081712137,
+      "matched_excess": 0.004012741286556626,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -5686,8 +6127,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.010571428571428513,
+      "matched_excess": 0.018138644566156353,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -5812,8 +6253,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.006336913634371004,
+      "matched_excess": 0.013904129629098844,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -5938,8 +6379,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.002119047619047636,
+      "matched_excess": 0.009686263613775475,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -6049,6 +6490,51 @@
       "entry_vs_range": "between_low_and_mid"
     },
     {
+      "episode_id": "asx200:NEM.AX:buy_on_signal:2026-11-11",
+      "market": "asx200",
+      "ticker": "NEM.AX",
+      "column": "buy_on_signal",
+      "status": "open",
+      "signal_session": "2026-11-11",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.0,
+      "verdict": "insufficient_data",
+      "reason": "reporting_currency_unstated",
+      "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 176.65,
+      "entry_reference_unit": "AUD",
+      "price_unit": "AUD",
+      "major_currency": "AUD",
+      "statement_currency": null,
+      "currency": {
+        "reason": "reporting_currency_unstated",
+        "detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
+        "sources": []
+      },
+      "method": null,
+      "inputs": {
+        "financials_path": "docs/data/library/markets/asx200/screen/research/NEM.AX/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-11-04",
+        "eps_label": null,
+        "years": [],
+        "chart_path": "docs/data/charts/NEM.AX.json"
+      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      }
+    },
+    {
       "episode_id": "sp500:NOC:buy_on_signal:2026-11-09",
       "market": "sp500",
       "ticker": "NOC",
@@ -6057,8 +6543,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.0007835529793479045,
+      "matched_excess": -0.004897429301284794,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -6177,8 +6663,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.010166666666666598,
+      "matched_excess": -0.0025994506719387582,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -6280,6 +6766,126 @@
       "entry_vs_range": "between_low_and_mid"
     },
     {
+      "episode_id": "asx200:NWS.AX:buy_on_signal:2026-11-11",
+      "market": "asx200",
+      "ticker": "NWS.AX",
+      "column": "buy_on_signal",
+      "status": "open",
+      "signal_session": "2026-11-11",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.0,
+      "verdict": "range",
+      "reason": null,
+      "reason_detail": "",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 43.5,
+      "entry_reference_unit": "AUD",
+      "price_unit": "AUD",
+      "major_currency": "AUD",
+      "statement_currency": "AUD",
+      "currency": {
+        "currency": "AUD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/asx200/screen/research/NWS.AX/sources/filings/bodies/1925a006b5410171.txt",
+            "published_at": "2026-11-05",
+            "headline": "SEC Form 10-Q",
+            "currency": "AUD"
+          }
+        ]
+      },
+      "method": "normalised_earnings",
+      "inputs": {
+        "financials_path": "docs/data/library/markets/asx200/screen/research/NWS.AX/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-11-06",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2023,
+            "eps": 0.26,
+            "fcf": 430000000.0,
+            "shares": 578800000.0,
+            "fcf_per_share": 0.742916
+          },
+          {
+            "year": 2024,
+            "eps": 0.46,
+            "fcf": 540000000.0,
+            "shares": 574000000.0,
+            "fcf_per_share": 0.940767
+          },
+          {
+            "year": 2025,
+            "eps": 2.07,
+            "fcf": 571000000.0,
+            "shares": 569900000.0,
+            "fcf_per_share": 1.00193
+          },
+          {
+            "year": 2026,
+            "eps": 1.03,
+            "fcf": 811000000.0,
+            "shares": 558400000.0,
+            "fcf_per_share": 1.452364
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 0.955,
+        "latest_per_share": 1.03,
+        "normalised_unit": "AUD",
+        "implied_trailing_pe": 42.233,
+        "implied_trailing_pe_close": 43.5,
+        "implied_trailing_pe_eps": 1.03,
+        "implied_trailing_pe_currency": "AUD",
+        "fx": null,
+        "normalised_per_share_price_units": 0.955,
+        "chart_path": "docs/data/charts/NWS.AX.json"
+      },
+      "range": {
+        "low": 9.55,
+        "mid": 14.325,
+        "high": 19.1,
+        "unit": "AUD"
+      },
+      "margin_of_safety": -2.036649,
+      "reverse_dcf": {
+        "status": "computed",
+        "growth": 0,
+        "discounts": {
+          "value_low": 0.1,
+          "value_mid": 0.08,
+          "value_high": 0.06
+        },
+        "latest_per_share": 1.03,
+        "low": 10.3,
+        "mid": 12.875,
+        "high": 17.1667,
+        "cross_check": "inside_band",
+        "implied_earnings_yield": 0.021954
+      },
+      "fcf_per_share_cross_check": {
+        "method": "fcf_per_share",
+        "normalised_per_share": 1.034494,
+        "range": {
+          "low": 10.3449,
+          "mid": 15.5174,
+          "high": 20.6899
+        },
+        "cross_check": "inside_band"
+      },
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      },
+      "entry_vs_range": "above_high"
+    },
+    {
       "episode_id": "ftse350:OSB.L:buy_on_signal:2026-11-10",
       "market": "ftse350",
       "ticker": "OSB.L",
@@ -6288,8 +6894,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.006473709834469317,
+      "matched_excess": 0.0010935061602585223,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -6408,8 +7014,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.038214412024756776,
+      "matched_excess": -0.03064719603002894,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -6523,8 +7129,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.041953201970443325,
+      "matched_excess": -0.03438598597571549,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -6641,6 +7247,130 @@
       "entry_vs_range": "between_mid_and_high"
     },
     {
+      "episode_id": "asx200:PLS.AX:buy_on_signal:2026-11-11",
+      "market": "asx200",
+      "ticker": "PLS.AX",
+      "column": "buy_on_signal",
+      "status": "open",
+      "signal_session": "2026-11-11",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.0,
+      "verdict": "range",
+      "reason": null,
+      "reason_detail": "",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 3.1,
+      "entry_reference_unit": "AUD",
+      "price_unit": "AUD",
+      "major_currency": "AUD",
+      "statement_currency": "USD",
+      "currency": {
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/asx200/screen/research/PLS.AX/sources/filings/bodies/b830a4c9aebe5908.txt",
+            "published_at": "2026-08-24",
+            "headline": "PLS:ASX Announcement - FY26 Full Year Results - 24 Aug 2026 - Market Index",
+            "currency": "USD"
+          }
+        ]
+      },
+      "method": "normalised_earnings",
+      "inputs": {
+        "financials_path": "docs/data/library/markets/asx200/screen/research/PLS.AX/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-11-09",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2023,
+            "eps": 0.7893,
+            "fcf": 3071153000.0,
+            "shares": 3029437476.0,
+            "fcf_per_share": 1.01377
+          },
+          {
+            "year": 2024,
+            "eps": 0.0845,
+            "fcf": -1250225000.0,
+            "shares": 3040035503.0,
+            "fcf_per_share": -0.411253
+          },
+          {
+            "year": 2025,
+            "eps": -0.0633,
+            "fcf": -508130000.0,
+            "shares": 3094022000.0,
+            "fcf_per_share": -0.16423
+          },
+          {
+            "year": 2026,
+            "eps": 0.1614,
+            "fcf": 1020354000.0,
+            "shares": 3257503098.0,
+            "fcf_per_share": 0.313232
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 0.242975,
+        "latest_per_share": 0.1614,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 13.2259,
+        "implied_trailing_pe_close": 2.1347,
+        "implied_trailing_pe_eps": 0.1614,
+        "implied_trailing_pe_currency": "USD",
+        "fx": {
+          "pair": "AUD per USD",
+          "rate": 1.452222,
+          "as_of_rule": "latest macro marker on or before the signal session"
+        },
+        "normalised_per_share_price_units": 0.352854,
+        "chart_path": "docs/data/charts/PLS.AX.json"
+      },
+      "range": {
+        "low": 3.5285,
+        "mid": 5.2928,
+        "high": 7.0571,
+        "unit": "AUD"
+      },
+      "margin_of_safety": 0.414299,
+      "reverse_dcf": {
+        "status": "computed",
+        "growth": 0,
+        "discounts": {
+          "value_low": 0.1,
+          "value_mid": 0.08,
+          "value_high": 0.06
+        },
+        "latest_per_share": 0.234389,
+        "low": 2.3439,
+        "mid": 2.9299,
+        "high": 3.9065,
+        "cross_check": "outside_band",
+        "implied_earnings_yield": 0.113824
+      },
+      "fcf_per_share_cross_check": {
+        "method": "fcf_per_share",
+        "normalised_per_share": 0.272843,
+        "range": {
+          "low": 2.7284,
+          "mid": 4.0926,
+          "high": 5.4569
+        },
+        "cross_check": "inside_band"
+      },
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      },
+      "entry_vs_range": "below_low"
+    },
+    {
       "episode_id": "ftse350:RIO.L:buy_on_signal:2026-11-10",
       "market": "ftse350",
       "ticker": "RIO.L",
@@ -6649,8 +7379,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.014897024275646039,
+      "matched_excess": -0.007329808280918199,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -6768,8 +7498,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.0030238769013088375,
+      "matched_excess": 0.004543339093419002,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -6887,8 +7617,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.02895415778251603,
+      "matched_excess": -0.02138694178778819,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -7004,13 +7734,13 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.020060304641053964,
+      "matched_excess": 0.027627520635781805,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
       "entry_reference": "signal_session_close",
-      "entry_reference_price": 1592.0,
+      "entry_reference_price": 1591.79,
       "entry_reference_unit": "GBX",
       "price_unit": "GBX",
       "major_currency": "GBP",
@@ -7067,8 +7797,8 @@
         "normalised_per_share": 0.615,
         "latest_per_share": 0.753,
         "normalised_unit": "GBP",
-        "implied_trailing_pe": 21.1421,
-        "implied_trailing_pe_close": 15.92,
+        "implied_trailing_pe": 21.1393,
+        "implied_trailing_pe_close": 15.9179,
         "implied_trailing_pe_eps": 0.753,
         "implied_trailing_pe_currency": "GBP",
         "fx": null,
@@ -7081,7 +7811,7 @@
         "high": 1230.0,
         "unit": "GBX"
       },
-      "margin_of_safety": -0.725745,
+      "margin_of_safety": -0.725518,
       "reverse_dcf": {
         "status": "computed",
         "growth": 0,
@@ -7095,7 +7825,7 @@
         "mid": 941.25,
         "high": 1255.0,
         "cross_check": "inside_band",
-        "implied_earnings_yield": 0.038631
+        "implied_earnings_yield": 0.038636
       },
       "fcf_per_share_cross_check": {
         "method": "fcf_per_share",
@@ -7124,8 +7854,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.04121280276816603,
+      "matched_excess": 0.04878001876289387,
       "verdict": "insufficient_data",
       "reason": "reporting_currency_unstated",
       "reason_detail": "No point-in-time statement currency. screening_snapshot.fcf.currency is a ticker-suffix default and is not used. A bare $ on the screen note is not used.",
@@ -7169,8 +7899,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.00705411255411265,
+      "matched_excess": 0.01462132854884049,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -7288,8 +8018,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.09637640046250145,
+      "matched_excess": 0.07483187663227353,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -7408,8 +8138,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.012388316372536397,
+      "matched_excess": -0.018069298653169096,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -7528,8 +8258,8 @@
       "signal_session": "2026-11-09",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.07954808475957603,
+      "matched_excess": 0.05800356092934811,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -7648,8 +8378,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.012107369758576788,
+      "matched_excess": -0.0045401537638489475,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -7767,8 +8497,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": 0.0019866310160428545,
+      "matched_excess": 0.009553847010770694,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -7887,8 +8617,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.07604673721340388,
+      "matched_excess": -0.06847952121867604,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -8007,7 +8737,7 @@
       "exit_session": null,
       "mature": false,
       "fair_cost_return": -0.0035,
-      "matched_excess": 0.0,
+      "matched_excess": -0.009180982280632698,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -8125,16 +8855,76 @@
       "entry_vs_range": "above_high"
     },
     {
-      "episode_id": "ftse350:CKN.L:decline_rejected_shadow:2026-11-10",
-      "market": "ftse350",
-      "ticker": "CKN.L",
+      "episode_id": "sp500:ADM:decline_rejected_shadow:2026-11-10",
+      "market": "sp500",
+      "ticker": "ADM",
       "column": "decline_rejected_shadow",
       "status": "open",
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
+      "fair_cost_return": -0.0035,
       "matched_excess": 0.0,
+      "verdict": "insufficient_data",
+      "reason": "currency_sources_disagree",
+      "reason_detail": "Statement currency sources disagree: filing_body_unit=EUR, sec_companyfacts.annual.currency=USD",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 69.3,
+      "entry_reference_unit": "USD",
+      "price_unit": "USD",
+      "major_currency": "USD",
+      "statement_currency": null,
+      "currency": {
+        "reason": "currency_sources_disagree",
+        "detail": "Statement currency sources disagree: filing_body_unit=EUR, sec_companyfacts.annual.currency=USD",
+        "sources": [
+          {
+            "source": "filing_body_unit",
+            "path": "docs/data/library/markets/sp500/screen/research/ADM/sources/filings/bodies/e7d8dfc9423bb122.txt",
+            "published_at": "2026-11-03",
+            "headline": "10-Q: 10-Q",
+            "currency": "EUR"
+          },
+          {
+            "source": "sec_companyfacts.annual.currency",
+            "path": "docs/data/library/markets/sp500/screen/research/ADM/sources/sec_companyfacts.json",
+            "state": "file",
+            "first_filed": "2026-02-17",
+            "currency": "USD"
+          }
+        ]
+      },
+      "method": null,
+      "inputs": {
+        "financials_path": "docs/data/library/markets/sp500/screen/research/ADM/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-11-09",
+        "eps_label": null,
+        "years": [],
+        "chart_path": "docs/data/charts/ADM.json"
+      },
+      "range": null,
+      "margin_of_safety": null,
+      "reverse_dcf": null,
+      "fcf_per_share_cross_check": null,
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      }
+    },
+    {
+      "episode_id": "ftse350:CKN.L:decline_rejected_shadow:2026-11-10",
+      "market": "ftse350",
+      "ticker": "CKN.L",
+      "column": "decline_rejected_shadow",
+      "status": "closed",
+      "signal_session": "2026-11-10",
+      "exit_session": "2026-11-12",
+      "mature": false,
+      "fair_cost_return": 0.007141673931996555,
+      "matched_excess": 0.014708889926724394,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -8236,12 +9026,243 @@
         "cross_check": "outside_band"
       },
       "recovery": {
+        "label": "reached_mid",
+        "reached_low": true,
+        "reached_mid": true,
+        "closes_used": 2
+      },
+      "entry_vs_range": "between_mid_and_high"
+    },
+    {
+      "episode_id": "sp500:CRM:draft_v0_exit:2026-11-10",
+      "market": "sp500",
+      "ticker": "CRM",
+      "column": "draft_v0_exit",
+      "status": "open",
+      "signal_session": "2026-11-10",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.0,
+      "verdict": "range",
+      "reason": null,
+      "reason_detail": "",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 213.48,
+      "entry_reference_unit": "USD",
+      "price_unit": "USD",
+      "major_currency": "USD",
+      "statement_currency": "USD",
+      "currency": {
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "sec_companyfacts.annual.currency",
+            "path": "docs/data/library/markets/sp500/screen/research/CRM/sources/sec_companyfacts.json",
+            "state": "file",
+            "first_filed": "2026-03-02",
+            "currency": "USD"
+          }
+        ]
+      },
+      "method": "normalised_earnings",
+      "inputs": {
+        "financials_path": "docs/data/library/markets/sp500/screen/research/CRM/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-10-20",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2023,
+            "eps": 0.21,
+            "fcf": 6313000000.0,
+            "shares": 997000000.0,
+            "fcf_per_share": 6.331996
+          },
+          {
+            "year": 2024,
+            "eps": 4.2,
+            "fcf": 9498000000.0,
+            "shares": 984000000.0,
+            "fcf_per_share": 9.652439
+          },
+          {
+            "year": 2025,
+            "eps": 6.36,
+            "fcf": 12434000000.0,
+            "shares": 974000000.0,
+            "fcf_per_share": 12.765914
+          },
+          {
+            "year": 2026,
+            "eps": 7.8,
+            "fcf": 14402000000.0,
+            "shares": 956000000.0,
+            "fcf_per_share": 15.064854
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 4.6425,
+        "latest_per_share": 7.8,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 27.3692,
+        "implied_trailing_pe_close": 213.48,
+        "implied_trailing_pe_eps": 7.8,
+        "implied_trailing_pe_currency": "USD",
+        "fx": null,
+        "normalised_per_share_price_units": 4.6425,
+        "chart_path": "docs/data/charts/CRM.json"
+      },
+      "range": {
+        "low": 46.425,
+        "mid": 69.6375,
+        "high": 92.85,
+        "unit": "USD"
+      },
+      "margin_of_safety": -2.06559,
+      "reverse_dcf": {
+        "status": "computed",
+        "growth": 0,
+        "discounts": {
+          "value_low": 0.1,
+          "value_mid": 0.08,
+          "value_high": 0.06
+        },
+        "latest_per_share": 7.8,
+        "low": 78.0,
+        "mid": 97.5,
+        "high": 130.0,
+        "cross_check": "outside_band",
+        "implied_earnings_yield": 0.021747
+      },
+      "fcf_per_share_cross_check": {
+        "method": "fcf_per_share",
+        "normalised_per_share": 10.953801,
+        "range": {
+          "low": 109.538,
+          "mid": 164.307,
+          "high": 219.076
+        },
+        "cross_check": "outside_band"
+      },
+      "recovery": {
         "label": "not_closed",
         "reached_low": null,
         "reached_mid": null,
         "closes_used": 0
       },
-      "entry_vs_range": "between_mid_and_high"
+      "entry_vs_range": "above_high"
+    },
+    {
+      "episode_id": "sp500:FIS:draft_v0_exit:2026-11-10",
+      "market": "sp500",
+      "ticker": "FIS",
+      "column": "draft_v0_exit",
+      "status": "open",
+      "signal_session": "2026-11-10",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.0,
+      "verdict": "range",
+      "reason": null,
+      "reason_detail": "",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 28.31,
+      "entry_reference_unit": "USD",
+      "price_unit": "USD",
+      "major_currency": "USD",
+      "statement_currency": "USD",
+      "currency": {
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "sec_companyfacts.annual.currency",
+            "path": "docs/data/library/markets/sp500/screen/research/FIS/sources/sec_companyfacts.json",
+            "state": "file",
+            "first_filed": "2026-02-24",
+            "currency": "USD"
+          }
+        ]
+      },
+      "method": "fcf_per_share",
+      "inputs": {
+        "financials_path": "docs/data/library/markets/sp500/screen/research/FIS/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-11-05",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2022,
+            "eps": -27.68,
+            "fcf": 626000000.0,
+            "shares": 604000000.0,
+            "fcf_per_share": 1.036424
+          },
+          {
+            "year": 2023,
+            "eps": -11.26,
+            "fcf": 3555000000.0,
+            "shares": 591000000.0,
+            "fcf_per_share": 6.015228
+          },
+          {
+            "year": 2024,
+            "eps": 2.61,
+            "fcf": 1254000000.0,
+            "shares": 555000000.0,
+            "fcf_per_share": 2.259459
+          },
+          {
+            "year": 2025,
+            "eps": 0.73,
+            "fcf": 1827000000.0,
+            "shares": 525000000.0,
+            "fcf_per_share": 3.48
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 3.197778,
+        "latest_per_share": 3.48,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 38.7808,
+        "implied_trailing_pe_close": 28.31,
+        "implied_trailing_pe_eps": 0.73,
+        "implied_trailing_pe_currency": "USD",
+        "fx": null,
+        "normalised_per_share_price_units": 3.197778,
+        "chart_path": "docs/data/charts/FIS.json"
+      },
+      "range": {
+        "low": 31.9778,
+        "mid": 47.9667,
+        "high": 63.9556,
+        "unit": "USD"
+      },
+      "margin_of_safety": 0.409799,
+      "reverse_dcf": {
+        "status": "computed",
+        "growth": 0,
+        "discounts": {
+          "value_low": 0.1,
+          "value_mid": 0.08,
+          "value_high": 0.06
+        },
+        "latest_per_share": 3.48,
+        "low": 34.8,
+        "mid": 43.5,
+        "high": 58.0,
+        "cross_check": "inside_band",
+        "implied_earnings_yield": 0.112956
+      },
+      "fcf_per_share_cross_check": null,
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      },
+      "entry_vs_range": "below_low"
     },
     {
       "episode_id": "ftse350:FOUR.L:draft_v0_exit:2026-11-10",
@@ -8252,8 +9273,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.015171179883945837,
+      "matched_excess": -0.007603963889217996,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -8376,8 +9397,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.0035544747081712137,
+      "matched_excess": 0.004012741286556626,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -8494,6 +9515,237 @@
       "entry_vs_range": "below_low"
     },
     {
+      "episode_id": "sp500:CRM:ladder_no_deadline:2026-11-10",
+      "market": "sp500",
+      "ticker": "CRM",
+      "column": "ladder_no_deadline",
+      "status": "open",
+      "signal_session": "2026-11-10",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.0,
+      "verdict": "range",
+      "reason": null,
+      "reason_detail": "",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 213.48,
+      "entry_reference_unit": "USD",
+      "price_unit": "USD",
+      "major_currency": "USD",
+      "statement_currency": "USD",
+      "currency": {
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "sec_companyfacts.annual.currency",
+            "path": "docs/data/library/markets/sp500/screen/research/CRM/sources/sec_companyfacts.json",
+            "state": "file",
+            "first_filed": "2026-03-02",
+            "currency": "USD"
+          }
+        ]
+      },
+      "method": "normalised_earnings",
+      "inputs": {
+        "financials_path": "docs/data/library/markets/sp500/screen/research/CRM/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-10-20",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2023,
+            "eps": 0.21,
+            "fcf": 6313000000.0,
+            "shares": 997000000.0,
+            "fcf_per_share": 6.331996
+          },
+          {
+            "year": 2024,
+            "eps": 4.2,
+            "fcf": 9498000000.0,
+            "shares": 984000000.0,
+            "fcf_per_share": 9.652439
+          },
+          {
+            "year": 2025,
+            "eps": 6.36,
+            "fcf": 12434000000.0,
+            "shares": 974000000.0,
+            "fcf_per_share": 12.765914
+          },
+          {
+            "year": 2026,
+            "eps": 7.8,
+            "fcf": 14402000000.0,
+            "shares": 956000000.0,
+            "fcf_per_share": 15.064854
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 4.6425,
+        "latest_per_share": 7.8,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 27.3692,
+        "implied_trailing_pe_close": 213.48,
+        "implied_trailing_pe_eps": 7.8,
+        "implied_trailing_pe_currency": "USD",
+        "fx": null,
+        "normalised_per_share_price_units": 4.6425,
+        "chart_path": "docs/data/charts/CRM.json"
+      },
+      "range": {
+        "low": 46.425,
+        "mid": 69.6375,
+        "high": 92.85,
+        "unit": "USD"
+      },
+      "margin_of_safety": -2.06559,
+      "reverse_dcf": {
+        "status": "computed",
+        "growth": 0,
+        "discounts": {
+          "value_low": 0.1,
+          "value_mid": 0.08,
+          "value_high": 0.06
+        },
+        "latest_per_share": 7.8,
+        "low": 78.0,
+        "mid": 97.5,
+        "high": 130.0,
+        "cross_check": "outside_band",
+        "implied_earnings_yield": 0.021747
+      },
+      "fcf_per_share_cross_check": {
+        "method": "fcf_per_share",
+        "normalised_per_share": 10.953801,
+        "range": {
+          "low": 109.538,
+          "mid": 164.307,
+          "high": 219.076
+        },
+        "cross_check": "outside_band"
+      },
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      },
+      "entry_vs_range": "above_high"
+    },
+    {
+      "episode_id": "sp500:FIS:ladder_no_deadline:2026-11-10",
+      "market": "sp500",
+      "ticker": "FIS",
+      "column": "ladder_no_deadline",
+      "status": "open",
+      "signal_session": "2026-11-10",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.0,
+      "verdict": "range",
+      "reason": null,
+      "reason_detail": "",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 28.31,
+      "entry_reference_unit": "USD",
+      "price_unit": "USD",
+      "major_currency": "USD",
+      "statement_currency": "USD",
+      "currency": {
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "sec_companyfacts.annual.currency",
+            "path": "docs/data/library/markets/sp500/screen/research/FIS/sources/sec_companyfacts.json",
+            "state": "file",
+            "first_filed": "2026-02-24",
+            "currency": "USD"
+          }
+        ]
+      },
+      "method": "fcf_per_share",
+      "inputs": {
+        "financials_path": "docs/data/library/markets/sp500/screen/research/FIS/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-11-05",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2022,
+            "eps": -27.68,
+            "fcf": 626000000.0,
+            "shares": 604000000.0,
+            "fcf_per_share": 1.036424
+          },
+          {
+            "year": 2023,
+            "eps": -11.26,
+            "fcf": 3555000000.0,
+            "shares": 591000000.0,
+            "fcf_per_share": 6.015228
+          },
+          {
+            "year": 2024,
+            "eps": 2.61,
+            "fcf": 1254000000.0,
+            "shares": 555000000.0,
+            "fcf_per_share": 2.259459
+          },
+          {
+            "year": 2025,
+            "eps": 0.73,
+            "fcf": 1827000000.0,
+            "shares": 525000000.0,
+            "fcf_per_share": 3.48
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 3.197778,
+        "latest_per_share": 3.48,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 38.7808,
+        "implied_trailing_pe_close": 28.31,
+        "implied_trailing_pe_eps": 0.73,
+        "implied_trailing_pe_currency": "USD",
+        "fx": null,
+        "normalised_per_share_price_units": 3.197778,
+        "chart_path": "docs/data/charts/FIS.json"
+      },
+      "range": {
+        "low": 31.9778,
+        "mid": 47.9667,
+        "high": 63.9556,
+        "unit": "USD"
+      },
+      "margin_of_safety": 0.409799,
+      "reverse_dcf": {
+        "status": "computed",
+        "growth": 0,
+        "discounts": {
+          "value_low": 0.1,
+          "value_mid": 0.08,
+          "value_high": 0.06
+        },
+        "latest_per_share": 3.48,
+        "low": 34.8,
+        "mid": 43.5,
+        "high": 58.0,
+        "cross_check": "inside_band",
+        "implied_earnings_yield": 0.112956
+      },
+      "fcf_per_share_cross_check": null,
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      },
+      "entry_vs_range": "below_low"
+    },
+    {
       "episode_id": "ftse350:FOUR.L:ladder_no_deadline:2026-11-10",
       "market": "ftse350",
       "ticker": "FOUR.L",
@@ -8502,8 +9754,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.015171179883945837,
+      "matched_excess": -0.007603963889217996,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -8626,8 +9878,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.0035544747081712137,
+      "matched_excess": 0.004012741286556626,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -8744,6 +9996,237 @@
       "entry_vs_range": "below_low"
     },
     {
+      "episode_id": "sp500:CRM:leave_tier:2026-11-10",
+      "market": "sp500",
+      "ticker": "CRM",
+      "column": "leave_tier",
+      "status": "open",
+      "signal_session": "2026-11-10",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.0,
+      "verdict": "range",
+      "reason": null,
+      "reason_detail": "",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 213.48,
+      "entry_reference_unit": "USD",
+      "price_unit": "USD",
+      "major_currency": "USD",
+      "statement_currency": "USD",
+      "currency": {
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "sec_companyfacts.annual.currency",
+            "path": "docs/data/library/markets/sp500/screen/research/CRM/sources/sec_companyfacts.json",
+            "state": "file",
+            "first_filed": "2026-03-02",
+            "currency": "USD"
+          }
+        ]
+      },
+      "method": "normalised_earnings",
+      "inputs": {
+        "financials_path": "docs/data/library/markets/sp500/screen/research/CRM/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-10-20",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2023,
+            "eps": 0.21,
+            "fcf": 6313000000.0,
+            "shares": 997000000.0,
+            "fcf_per_share": 6.331996
+          },
+          {
+            "year": 2024,
+            "eps": 4.2,
+            "fcf": 9498000000.0,
+            "shares": 984000000.0,
+            "fcf_per_share": 9.652439
+          },
+          {
+            "year": 2025,
+            "eps": 6.36,
+            "fcf": 12434000000.0,
+            "shares": 974000000.0,
+            "fcf_per_share": 12.765914
+          },
+          {
+            "year": 2026,
+            "eps": 7.8,
+            "fcf": 14402000000.0,
+            "shares": 956000000.0,
+            "fcf_per_share": 15.064854
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 4.6425,
+        "latest_per_share": 7.8,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 27.3692,
+        "implied_trailing_pe_close": 213.48,
+        "implied_trailing_pe_eps": 7.8,
+        "implied_trailing_pe_currency": "USD",
+        "fx": null,
+        "normalised_per_share_price_units": 4.6425,
+        "chart_path": "docs/data/charts/CRM.json"
+      },
+      "range": {
+        "low": 46.425,
+        "mid": 69.6375,
+        "high": 92.85,
+        "unit": "USD"
+      },
+      "margin_of_safety": -2.06559,
+      "reverse_dcf": {
+        "status": "computed",
+        "growth": 0,
+        "discounts": {
+          "value_low": 0.1,
+          "value_mid": 0.08,
+          "value_high": 0.06
+        },
+        "latest_per_share": 7.8,
+        "low": 78.0,
+        "mid": 97.5,
+        "high": 130.0,
+        "cross_check": "outside_band",
+        "implied_earnings_yield": 0.021747
+      },
+      "fcf_per_share_cross_check": {
+        "method": "fcf_per_share",
+        "normalised_per_share": 10.953801,
+        "range": {
+          "low": 109.538,
+          "mid": 164.307,
+          "high": 219.076
+        },
+        "cross_check": "outside_band"
+      },
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      },
+      "entry_vs_range": "above_high"
+    },
+    {
+      "episode_id": "sp500:FIS:leave_tier:2026-11-10",
+      "market": "sp500",
+      "ticker": "FIS",
+      "column": "leave_tier",
+      "status": "open",
+      "signal_session": "2026-11-10",
+      "exit_session": null,
+      "mature": false,
+      "fair_cost_return": -0.0035,
+      "matched_excess": 0.0,
+      "verdict": "range",
+      "reason": null,
+      "reason_detail": "",
+      "entry_reference": "signal_session_close",
+      "entry_reference_price": 28.31,
+      "entry_reference_unit": "USD",
+      "price_unit": "USD",
+      "major_currency": "USD",
+      "statement_currency": "USD",
+      "currency": {
+        "currency": "USD",
+        "sources": [
+          {
+            "source": "sec_companyfacts.annual.currency",
+            "path": "docs/data/library/markets/sp500/screen/research/FIS/sources/sec_companyfacts.json",
+            "state": "file",
+            "first_filed": "2026-02-24",
+            "currency": "USD"
+          }
+        ]
+      },
+      "method": "fcf_per_share",
+      "inputs": {
+        "financials_path": "docs/data/library/markets/sp500/screen/research/FIS/sources/financials_annual.json",
+        "financials_state": "file",
+        "fetched_at": "2026-11-05",
+        "eps_label": "Diluted EPS",
+        "years": [
+          {
+            "year": 2022,
+            "eps": -27.68,
+            "fcf": 626000000.0,
+            "shares": 604000000.0,
+            "fcf_per_share": 1.036424
+          },
+          {
+            "year": 2023,
+            "eps": -11.26,
+            "fcf": 3555000000.0,
+            "shares": 591000000.0,
+            "fcf_per_share": 6.015228
+          },
+          {
+            "year": 2024,
+            "eps": 2.61,
+            "fcf": 1254000000.0,
+            "shares": 555000000.0,
+            "fcf_per_share": 2.259459
+          },
+          {
+            "year": 2025,
+            "eps": 0.73,
+            "fcf": 1827000000.0,
+            "shares": 525000000.0,
+            "fcf_per_share": 3.48
+          }
+        ],
+        "share_label": "Diluted Average Shares",
+        "normalised_per_share": 3.197778,
+        "latest_per_share": 3.48,
+        "normalised_unit": "USD",
+        "implied_trailing_pe": 38.7808,
+        "implied_trailing_pe_close": 28.31,
+        "implied_trailing_pe_eps": 0.73,
+        "implied_trailing_pe_currency": "USD",
+        "fx": null,
+        "normalised_per_share_price_units": 3.197778,
+        "chart_path": "docs/data/charts/FIS.json"
+      },
+      "range": {
+        "low": 31.9778,
+        "mid": 47.9667,
+        "high": 63.9556,
+        "unit": "USD"
+      },
+      "margin_of_safety": 0.409799,
+      "reverse_dcf": {
+        "status": "computed",
+        "growth": 0,
+        "discounts": {
+          "value_low": 0.1,
+          "value_mid": 0.08,
+          "value_high": 0.06
+        },
+        "latest_per_share": 3.48,
+        "low": 34.8,
+        "mid": 43.5,
+        "high": 58.0,
+        "cross_check": "inside_band",
+        "implied_earnings_yield": 0.112956
+      },
+      "fcf_per_share_cross_check": null,
+      "recovery": {
+        "label": "not_closed",
+        "reached_low": null,
+        "reached_mid": null,
+        "closes_used": 0
+      },
+      "entry_vs_range": "below_low"
+    },
+    {
       "episode_id": "ftse350:FOUR.L:leave_tier:2026-11-10",
       "market": "ftse350",
       "ticker": "FOUR.L",
@@ -8752,8 +10235,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.015171179883945837,
+      "matched_excess": -0.007603963889217996,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",
@@ -8876,8 +10359,8 @@
       "signal_session": "2026-11-10",
       "exit_session": null,
       "mature": false,
-      "fair_cost_return": -0.0055000000000000005,
-      "matched_excess": 0.0,
+      "fair_cost_return": -0.0035544747081712137,
+      "matched_excess": 0.004012741286556626,
       "verdict": "range",
       "reason": null,
       "reason_detail": "",

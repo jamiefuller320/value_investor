@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "comparison_id": "memo-model-comparison-2026-11",
+  "rule": "Every judged pair where (a) the judge's order-consistent preference is A or B and the mechanical direction (fewer hallucination flags, then higher quote resolution rate) is the other label, or (b) one memo's verdict blocks the entry and the other's does not. If fewer than 4, top up from the remaining judged pairs: those with a non-tie judge preference first, then the rest, each in ascending sha256('<comparison_id>|<slug>|calibration') order.",
+  "min_sample": 4,
+  "sample": [
+    {
+      "slug": "ftse350__SCT.L",
+      "reasons": [
+        "top_up"
+      ],
+      "mechanical_direction": "B",
+      "book_effect_disagreement": false
+    },
+    {
+      "slug": "ftse350__VLX.L",
+      "reasons": [
+        "top_up"
+      ],
+      "mechanical_direction": "tie",
+      "book_effect_disagreement": false
+    },
+    {
+      "slug": "ftse350__BP.L",
+      "reasons": [
+        "top_up"
+      ],
+      "mechanical_direction": "A",
+      "book_effect_disagreement": false
+    },
+    {
+      "slug": "nasdaq100__STX",
+      "reasons": [
+        "top_up"
+      ],
+      "mechanical_direction": "B",
+      "book_effect_disagreement": false
+    }
+  ],
+  "need_agree": 3,
+  "agree_fraction": 0.75
+}

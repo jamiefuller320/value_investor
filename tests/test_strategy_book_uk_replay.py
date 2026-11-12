@@ -512,12 +512,16 @@ def test_fetch_plan_matches_the_measured_lse_list() -> None:
     assert plan["weighted"] < REGISTRATION_CONSTANTS["DAILY_CALL_BUDGET_SOFT_CAP"]
 
 
-def test_committed_registration_stays_unsealed() -> None:
+def test_committed_registration_is_sealed_to_the_document() -> None:
     payload = json.loads((Path(uk.REPO_ROOT) / REGISTRATION_PATH).read_text(encoding="utf-8"))
-    assert payload["sealed"] is False
-    assert payload["document_sha256"] is None
+    assert payload["sealed"] is True
+    assert payload["registration_id"] == "strategy-book-uk-replay-v0"
+    assert payload["influences_live"] is False
+    assert payload["reveal_stamp"] is None
     assert payload["constants"]["DAILY_CALL_BUDGET_SOFT_CAP"] == 90000
     assert payload["constants"]["FAMILY_SIZE"] == 4
+    assert payload["constants"]["SUBSCRIPTION_END"] == "2026-12-10"
+    require_sealed(Path(uk.REPO_ROOT))
 
 
 def test_a_changed_document_breaks_the_seal(tmp_path: Path) -> None:
@@ -566,3 +570,13 @@ def test_plan_does_not_need_a_seal_and_a_missing_token_is_a_soft_skip(
     assert uk.main(["fetch"]) == 0
     monkeypatch.setenv("EODHD_API_TOKEN", "secret-token")
     assert uk.main(["fetch"]) == 2
+
+
+def test_workflow_keeps_the_cache_outside_the_checkout() -> None:
+    text = (Path(uk.REPO_ROOT) / ".github/workflows/strategy-book-uk-replay.yml").read_text(
+        encoding="utf-8"
+    )
+    for line in text.splitlines():
+        if "uk-replay-cache" in line and ("path:" in line or "_CACHE:" in line or "CACHE_" in line):
+            assert "${{ runner.temp }}/" in line, line
+    assert "--cache uk-replay-cache" not in text

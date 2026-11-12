@@ -2,7 +2,7 @@
 
 **Status: design only.** Plan step 3.3. The draft registration is
 [`strategy-book-uk-replay-registration-draft.md`](strategy-book-uk-replay-registration-draft.md).
-It is **not sealed**. `influences_live` is false. The dispatch-only runner that
+The registration was **sealed on 2026-11-12** (owner accepted the defaults, with the Companies House scope and last-call-day changes recorded in the registration). `influences_live` is false. The dispatch-only runner that
 follows this design is [`strategy-book-uk-replay-runbook.md`](strategy-book-uk-replay-runbook.md).
 It refuses every EODHD call until the owner seals the registration.
 
@@ -16,7 +16,7 @@ median matched excess **−0.10%** (96⅔% interval −0.55% to +0.23%), primary
 The paid EODHD ALL-IN-ONE month started **2026-11-12** (100,000 API calls a
 day; a fundamentals request weighs 10). The token is the GitHub Actions secret
 `EODHD_API_TOKEN`. It is not on this machine, and this design makes no EODHD
-call. Treat the month as ending **2026-12-12** unless the EODHD dashboard shows
+call. Treat the month as ending **2026-12-10** (sealed last call day) unless the EODHD dashboard shows
 an earlier end.
 
 L664 stays open until a reveal is committed. Scaling Companies House statements
@@ -504,10 +504,10 @@ reveal. A second reveal is exploratory and is not evidence.
 | 2026-11-25 | Development walk only. Commit the development block. Delete temp files. | |
 | 2026-11-26 to 2026-12-02 | Read the development block. No registered number changes. A bug fix is an amendment, and development is recomputed before any reveal. | |
 | 2026-12-03 | Fresh fetch if the cache has expired, then the single holdout reveal and the delisting sensitivity. | **Sign-off 2: reveal** |
-| 2026-12-04 to 2026-12-11 | Only a recomputation the reveal stamp already allowed. | |
-| 2026-12-12 | Last day calls are allowed. Delete temp files and the resume cache. Stamp `licensed_data.deleted_at`. | |
+| 2026-12-04 to 2026-12-09 | Only a recomputation the reveal stamp already allowed. | |
+| 2026-12-10 | Last day calls are allowed. Delete temp files and the resume cache. Stamp `licensed_data.deleted_at`. | |
 
-The human checklist item is `adhoc-strategy-uk-replay-seal`.
+The human checklist item is `adhoc-strategy-uk-replay-reveal`.
 
 ## 7. Out of scope
 
