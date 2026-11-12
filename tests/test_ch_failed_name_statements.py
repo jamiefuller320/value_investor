@@ -14,6 +14,7 @@ from value_investor.ch_failed_name_statements import (
     combined_check_a,
     ops_findings_from_ch_failed_name_statements,
     parse_statement_pages,
+    plausibility_flags,
     repair_glued_thousands,
     repair_spaced_decimals,
     statements_from_2013,
@@ -358,8 +359,207 @@ def test_ops_finding_info_warn_and_absent(tmp_path: Path) -> None:
     assert "bar 7" in info.summary
     direct = ops_findings_from_ch_failed_name_statements(payload)
     assert direct[0]["auto_fixable"] is False
+    assert "Leaver statements" not in info.summary
+    payload["leaver_coverage"] = {
+        "every_year": 4,
+        "ch_applicable": 10,
+        "with_any_statement": 6,
+    }
+    [with_leavers] = ops_findings_from_ch_failed_name_statements(payload)
+    assert "9 of 11" in with_leavers["summary"]
+    assert "4 of 10" in with_leavers["summary"]
 
     store.write_text("{not json", encoding="utf-8")
     [warn] = check_ch_failed_name_statements(repo_root=tmp_path)
     assert warn.severity == "warn"
     assert warn.auto_fixable is False
+
+
+_IXBRL = """
+<html><body>
+<xbrli:context id="cy">
+  <xbrli:period><xbrli:startDate>2016-01-01</xbrli:startDate><xbrli:endDate>2016-12-31</xbrli:endDate></xbrli:period>
+</xbrli:context>
+<xbrli:context id="py">
+  <xbrli:period><xbrli:startDate>2015-01-01</xbrli:startDate><xbrli:endDate>2015-12-31</xbrli:endDate></xbrli:period>
+</xbrli:context>
+<xbrli:context id="seg">
+  <xbrli:period><xbrli:startDate>2016-01-01</xbrli:startDate><xbrli:endDate>2016-12-31</xbrli:endDate></xbrli:period>
+  <xbrldi:explicitMember dimension="ifrs-full:SegmentsAxis">retail</xbrldi:explicitMember>
+</xbrli:context>
+<ix:nonFraction name="ifrs-full:Revenue" contextRef="seg" unitRef="iso4217:GBP" scale="6">9</ix:nonFraction>
+<ix:nonFraction name="ifrs-full:Revenue" contextRef="cy" unitRef="iso4217:GBP" scale="6">1,200</ix:nonFraction>
+<ix:nonFraction name="ifrs-full:Revenue" contextRef="py" unitRef="iso4217:GBP" scale="6">1,000</ix:nonFraction>
+<ix:nonFraction name="ifrs-full:OperatingProfitLoss" contextRef="cy" unitRef="iso4217:GBP" scale="6">150</ix:nonFraction>
+<ix:nonFraction name="ifrs-full:ProfitLossAttributableToOwnersOfParent" contextRef="cy" unitRef="iso4217:GBP" scale="6">80</ix:nonFraction>
+<ix:nonFraction name="ifrs-full:BasicEarningsLossPerShare" contextRef="cy" unitRef="iso4217:GBX" decimals="1">12.5</ix:nonFraction>
+<ix:nonFraction name="ifrs-full:WeightedAverageNumberOfOrdinarySharesOutstanding" contextRef="cy" unitRef="shares" scale="6">640</ix:nonFraction>
+<ix:nonFraction name="ifrs-full:CashFlowsFromUsedInOperatingActivities" contextRef="cy" unitRef="iso4217:GBP" scale="6">210</ix:nonFraction>
+<ix:nonFraction name="ifrs-full:PurchaseOfPropertyPlantAndEquipment" contextRef="cy" unitRef="iso4217:GBP" scale="6" sign="-">40</ix:nonFraction>
+<ix:nonFraction name="ifrs-full:PurchaseOfIntangibleAssets" contextRef="cy" unitRef="iso4217:GBP" scale="6">10</ix:nonFraction>
+<ix:nonFraction name="ifrs-full:DilutedEarningsLossPerShare" contextRef="cy" unitRef="iso4217:GBX">11</ix:nonFraction>
+</body></html>
+"""
+
+
+def test_ixbrl_prefers_undimensioned_group_figures() -> None:
+    from value_investor.ch_leaver_statements import parse_ixbrl_html
+
+    parsed = parse_ixbrl_html(
+        _IXBRL, made_up_date="2016-12-31", filing_date="2017-03-01", transaction_id="tx1"
+    )
+    assert parsed is not None
+    fields = parsed["fields"]
+    assert fields["revenue"]["value"] == "1200"
+    assert fields["revenue"]["scale"] == "millions"
+    assert fields["revenue"]["currency"] == "GBP"
+    assert fields["revenue"]["citation"]["page"] is None
+    assert fields["revenue"]["citation"]["transaction_id"] == "tx1"
+    assert "revenue" in fields["revenue"]["citation"]["line"]
+    assert fields["basic_eps"]["value"] == "12.5"
+    assert fields["basic_eps"]["unit"] == "pence"
+    assert fields["capital_expenditure"]["value"] == "50"
+    assert parsed["comparative"]["fiscal_year"] == 2015
+    assert parsed["comparative"]["fields"]["revenue"]["value"] == "1000"
+    assert parsed["methods"] == ["ixbrl"]
+
+
+def test_leaver_filing_window_skips_post_takeover_subsidiary_accounts() -> None:
+    from value_investor.ch_leaver_statements import filing_in_leaver_window
+
+    group = {
+        "made_up_date": "2018-12-31",
+        "description": "accounts-with-accounts-type-group",
+    }
+    subsidiary = {
+        "made_up_date": "2019-03-31",
+        "description": "accounts-with-accounts-type-full",
+    }
+    assert filing_in_leaver_window(group, "2018-04-24") is True
+    assert filing_in_leaver_window(subsidiary, "2018-04-24") is False
+    assert (
+        filing_in_leaver_window(
+            {"made_up_date": "2011-12-31", "description": "accounts-with-accounts-type-group"},
+            "2018-04-24",
+        )
+        is False
+    )
+
+
+def test_plausibility_flags_mark_and_do_not_drop() -> None:
+    filings = [
+        _filing(
+            2016,
+            basic_eps="10",
+            eps_unit="pence",
+            revenue="100",
+            operating_profit="5",
+            profit="64",
+            shares="640",
+        ),
+        _filing(
+            2017,
+            basic_eps="200",
+            eps_unit="pence",
+            revenue="4",
+            operating_profit="9",
+            profit="64",
+            shares="640",
+        ),
+    ]
+    flags = plausibility_flags(filings)
+    codes = {flag["code"] for flag in flags}
+    assert "eps_jump" in codes
+    assert "revenue_below_operating_profit" in codes
+    assert filings[1]["fields"]["basic_eps"]["value"] == "200"
+    consistent = _filing(
+        2016,
+        basic_eps="10",
+        eps_unit="pence",
+        revenue="100",
+        operating_profit="5",
+        profit="64",
+        shares="640",
+    )
+    # 64 million / 640 million shares = £0.10 = 10 pence.
+    assert plausibility_flags([consistent]) == []
+    slipped = _filing(
+        2016,
+        basic_eps="10",
+        eps_unit="pounds",
+        revenue="100",
+        operating_profit="5",
+        profit="64",
+        shares="640",
+    )
+    slip_codes = {flag["code"] for flag in plausibility_flags([slipped])}
+    assert "pence_pound_unit_slip" in slip_codes
+
+
+def _filing(
+    year: int,
+    *,
+    basic_eps: str,
+    eps_unit: str,
+    revenue: str,
+    operating_profit: str,
+    profit: str,
+    shares: str,
+) -> dict:
+    def money(value: str) -> dict:
+        return {"value": value, "scale": "millions", "currency": "GBP", "unit": None}
+
+    return {
+        "fiscal_year": year,
+        "fields": {
+            "basic_eps": {"value": basic_eps, "unit": eps_unit, "scale": None},
+            "revenue": money(revenue),
+            "operating_profit": money(operating_profit),
+            "profit_attributable_to_owners": money(profit),
+            "weighted_average_basic_shares": {"value": shares, "scale": "millions", "unit": None},
+        },
+        "comparative": None,
+    }
+
+
+def test_resume_skips_complete_names_and_keeps_not_applicable() -> None:
+    from value_investor.ch_leaver_statements import (
+        iter_pending,
+        name_is_complete,
+        placeholder_name,
+    )
+
+    records = [
+        {
+            "key": "done",
+            "name": "Done",
+            "leaving_date": "2018-01-01",
+            "leaving_year": 2018,
+            "expected_years": [2013, 2014],
+            "reason_class": "takeover",
+            "ch_applicable": True,
+            "company_number_status": "resolved",
+        },
+        {
+            "key": "later",
+            "name": "Later",
+            "leaving_date": "2019-01-01",
+            "leaving_year": 2019,
+            "expected_years": [2013],
+            "reason_class": "failure",
+            "ch_applicable": False,
+            "company_number_status": "not_applicable",
+            "company_number_reason": "incorporated in Jersey",
+        },
+    ]
+    done = {"done": {"key": "done", "extraction_status": "complete", "filings": []}}
+    pending = iter_pending(records, done)
+    assert [row["key"] for row in pending] == ["later"]
+    assert name_is_complete(done["done"]) is True
+    offshore = placeholder_name(
+        records[1], status="not_applicable", reason="incorporated in Jersey"
+    )
+    assert offshore["ch_applicable"] is False
+    assert offshore["filings"] == []
+    assert offshore["leaver_coverage"]["statements_every_year"] is False
+    assert name_is_complete(offshore) is True

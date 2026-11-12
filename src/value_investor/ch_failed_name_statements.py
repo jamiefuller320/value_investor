@@ -1485,6 +1485,315 @@ def combined_check_a(
     }
 
 
+QC_EPS_JUMP = "eps_jump"
+QC_EPS_EARNINGS = "eps_inconsistent_with_earnings"
+QC_REVENUE_PROFIT = "revenue_below_operating_profit"
+QC_UNIT_SLIP = "pence_pound_unit_slip"
+
+
+def _decimal_field(
+    fields: dict[str, Any] | None, name: str
+) -> tuple[Decimal, dict[str, Any]] | None:
+    row = (fields or {}).get(name) or {}
+    raw = row.get("value")
+    if raw in (None, ""):
+        return None
+    try:
+        return Decimal(str(raw)), row
+    except InvalidOperation:
+        return None
+
+
+def years_with_field(filings: list[dict[str, Any]], field_name: str) -> list[dict[str, Any]]:
+    """One row per fiscal year. A primary value wins over a comparative."""
+    primary: dict[int, dict[str, Any]] = {}
+    comparative: dict[int, dict[str, Any]] = {}
+    for filing in filings:
+        year = filing.get("fiscal_year")
+        if year is None:
+            continue
+        parsed = _decimal_field(filing.get("fields"), field_name)
+        if parsed is not None:
+            _value, row = parsed
+            primary[int(year)] = {
+                "year": int(year),
+                "source": "primary",
+                "value": row.get("value"),
+                "unit": row.get("unit"),
+                "scale": row.get("scale"),
+                "currency": row.get("currency"),
+            }
+        comp = filing.get("comparative") or {}
+        comp_year = comp.get("fiscal_year")
+        if comp_year is None:
+            continue
+        comp_parsed = _decimal_field(comp.get("fields"), field_name)
+        if comp_parsed is not None:
+            _value, row = comp_parsed
+            comparative[int(comp_year)] = {
+                "year": int(comp_year),
+                "source": "comparative",
+                "value": row.get("value"),
+                "unit": row.get("unit"),
+                "scale": row.get("scale"),
+                "currency": row.get("currency"),
+            }
+    rows = []
+    for year in sorted(set(primary) | set(comparative)):
+        rows.append(primary[year] if year in primary else comparative[year])
+    return rows
+
+
+def _to_absolute(value: Decimal, scale: str | None) -> Decimal:
+    if scale == "millions":
+        return value * Decimal("1000000")
+    if scale == "thousands":
+        return value * Decimal("1000")
+    return value
+
+
+def _share_count(value: Decimal, scale: str | None) -> Decimal:
+    if scale == "millions":
+        return value * Decimal("1000000")
+    if scale in (None, "") and abs(value) < Decimal("100000"):
+        return value * Decimal("1000000")
+    return value
+
+
+def _expected_eps(
+    profit: Decimal,
+    profit_scale: str | None,
+    shares: Decimal,
+    share_scale: str | None,
+    unit: str | None,
+) -> Decimal | None:
+    count = _share_count(shares, share_scale)
+    if count == 0:
+        return None
+    pounds = _to_absolute(profit, profit_scale) / count
+    if unit == "pence":
+        return pounds * Decimal("100")
+    return pounds
+
+
+def plausibility_flags(filings: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Flag suspicious figures. Values are kept; nothing is dropped.
+
+    Checks: EPS magnitude jumps above 10x between adjacent years; EPS more than
+    20% away from profit attributable divided by weighted shares when all three
+    exist; revenue below operating profit; pence/pound unit slips.
+    """
+    flags: list[dict[str, Any]] = []
+    eps_rows = [
+        row for row in years_with_field(filings, "basic_eps") if row.get("value") not in (None, "")
+    ]
+    for prev, curr in zip(eps_rows, eps_rows[1:], strict=False):
+        if int(curr["year"]) - int(prev["year"]) != 1:
+            continue
+        try:
+            left = abs(Decimal(str(prev["value"])))
+            right = abs(Decimal(str(curr["value"])))
+        except InvalidOperation:
+            continue
+        small = min(left, right)
+        large = max(left, right)
+        if large > Decimal("10") * max(small, Decimal("0.005")) and large >= Decimal("0.05"):
+            flags.append(
+                {
+                    "code": QC_EPS_JUMP,
+                    "years": [prev["year"], curr["year"]],
+                    "detail": f"basic EPS {prev['value']} then {curr['value']}",
+                }
+            )
+        if prev.get("unit") != curr.get("unit") and small > 0:
+            ratio = large / small
+            if Decimal("50") <= ratio <= Decimal("200"):
+                flags.append(
+                    {
+                        "code": QC_UNIT_SLIP,
+                        "years": [prev["year"], curr["year"]],
+                        "detail": (
+                            f"unit changed {prev.get('unit')} to {curr.get('unit')} "
+                            f"with a {ratio:.0f}x raw jump"
+                        ),
+                    }
+                )
+    by_year_filings: dict[int, dict[str, Any]] = {}
+    for filing in filings:
+        year = filing.get("fiscal_year")
+        if year is not None:
+            by_year_filings[int(year)] = filing
+    for row in eps_rows:
+        filing = by_year_filings.get(int(row["year"]))
+        fields = (filing or {}).get("fields") if row["source"] == "primary" else None
+        if row["source"] != "primary":
+            comp = (filing or {}).get("comparative") or {}
+            if comp.get("fiscal_year") == row["year"]:
+                fields = comp.get("fields")
+            else:
+                fields = None
+                for other in filings:
+                    comp = other.get("comparative") or {}
+                    if comp.get("fiscal_year") == row["year"]:
+                        fields = comp.get("fields")
+                        break
+        if not fields:
+            continue
+        profit = _decimal_field(fields, "profit_attributable_to_owners")
+        shares = _decimal_field(fields, "weighted_average_basic_shares")
+        eps = _decimal_field(fields, "basic_eps")
+        if not (profit and shares and eps):
+            continue
+        unit = eps[1].get("unit") or row.get("unit") or "pounds"
+        expected = _expected_eps(
+            profit[0], profit[1].get("scale"), shares[0], shares[1].get("scale"), unit
+        )
+        if expected is None:
+            continue
+        gap = abs(eps[0] - expected) / max(abs(expected), Decimal("0.01"))
+        if gap > Decimal("0.2"):
+            flags.append(
+                {
+                    "code": QC_EPS_EARNINGS,
+                    "years": [row["year"]],
+                    "detail": (
+                        f"basic EPS {eps[0]} vs profit/shares {expected.quantize(Decimal('0.01'))} "
+                        f"({unit})"
+                    ),
+                }
+            )
+            other_unit = "pounds" if unit == "pence" else "pence"
+            other = _expected_eps(
+                profit[0],
+                profit[1].get("scale"),
+                shares[0],
+                shares[1].get("scale"),
+                other_unit,
+            )
+            if other is not None:
+                other_gap = abs(eps[0] - other) / max(abs(other), Decimal("0.01"))
+                if other_gap <= Decimal("0.2"):
+                    flags.append(
+                        {
+                            "code": QC_UNIT_SLIP,
+                            "years": [row["year"]],
+                            "detail": f"EPS matches {other_unit}, stored unit is {unit}",
+                        }
+                    )
+        if unit == "pounds" and abs(eps[0]) >= Decimal("20"):
+            flags.append(
+                {
+                    "code": QC_UNIT_SLIP,
+                    "years": [row["year"]],
+                    "detail": f"EPS {eps[0]} stored as pounds",
+                }
+            )
+        if unit == "pence" and abs(eps[0]) >= Decimal("5000"):
+            flags.append(
+                {
+                    "code": QC_UNIT_SLIP,
+                    "years": [row["year"]],
+                    "detail": f"EPS {eps[0]} stored as pence",
+                }
+            )
+    for filing in filings:
+        year = filing.get("fiscal_year")
+        fields = filing.get("fields") or {}
+        revenue = _decimal_field(fields, "revenue")
+        operating = _decimal_field(fields, "operating_profit")
+        if not (revenue and operating and year is not None):
+            continue
+        revenue_abs = _to_absolute(revenue[0], revenue[1].get("scale"))
+        operating_abs = _to_absolute(operating[0], operating[1].get("scale"))
+        if revenue_abs < operating_abs:
+            flags.append(
+                {
+                    "code": QC_REVENUE_PROFIT,
+                    "years": [int(year)],
+                    "detail": f"revenue {revenue[0]} below operating profit {operating[0]}",
+                }
+            )
+    return flags
+
+
+def leaver_year_coverage(
+    filings: list[dict[str, Any]],
+    *,
+    first_year: int,
+    leaving_year: int,
+) -> dict[str, Any]:
+    """Years present, and whether every expected year has an EPS.
+
+    Expected years run from max(2012, first year in the FTSE 350 window) through
+    the leaving year. A missing year stays missing: nothing is carried forward.
+    """
+    start = max(2012, int(first_year))
+    expected = list(range(start, int(leaving_year) + 1))
+
+    def present(field_name: str) -> list[int]:
+        return [int(row["year"]) for row in years_with_field(filings, field_name)]
+
+    eps_years = present("basic_eps")
+    revenue_years = present("revenue")
+    cash_years = present("net_cash_from_operating_activities")
+    capex_years = present("capital_expenditure")
+    cash_and_capex = sorted(set(cash_years) & set(capex_years))
+    return {
+        "expected_years": expected,
+        "years_with_eps": eps_years,
+        "years_with_revenue": revenue_years,
+        "years_with_operating_cash_flow": cash_years,
+        "years_with_capex": capex_years,
+        "years_with_operating_cash_flow_and_capex": cash_and_capex,
+        "statements_every_year": bool(expected) and all(year in eps_years for year in expected),
+    }
+
+
+def summarise_leaver_coverage(name_rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Stable summary the replay bias counter can read."""
+    leavers = [row for row in name_rows if row.get("reason_class")]
+    summary: dict[str, Any] = {
+        "names": len(leavers),
+        "ch_applicable": 0,
+        "ch_not_applicable": 0,
+        "unresolved": 0,
+        "with_any_statement": 0,
+        "every_year": 0,
+        "by_reason_class": {},
+    }
+    for reason in ("takeover", "failure", "other"):
+        summary["by_reason_class"][reason] = {
+            "names": 0,
+            "ch_applicable": 0,
+            "with_any_statement": 0,
+            "every_year": 0,
+        }
+    for row in leavers:
+        reason = str(row.get("reason_class") or "other")
+        bucket = summary["by_reason_class"].setdefault(
+            reason,
+            {"names": 0, "ch_applicable": 0, "with_any_statement": 0, "every_year": 0},
+        )
+        bucket["names"] += 1
+        if row.get("ch_applicable") is False:
+            summary["ch_not_applicable"] += 1
+            continue
+        if row.get("company_number_status") == "unresolved" or row.get("ch_applicable") is not True:
+            summary["unresolved"] += 1
+            continue
+        summary["ch_applicable"] += 1
+        bucket["ch_applicable"] += 1
+        coverage = row.get("leaver_coverage") or {}
+        any_statement = bool(coverage.get("years_with_eps") or coverage.get("years_with_revenue"))
+        if any_statement:
+            summary["with_any_statement"] += 1
+            bucket["with_any_statement"] += 1
+        if coverage.get("statements_every_year") is True:
+            summary["every_year"] += 1
+            bucket["every_year"] += 1
+    return summary
+
+
 def ops_findings_from_ch_failed_name_statements(
     payload: dict[str, Any] | None,
 ) -> list[dict[str, Any]]:
@@ -1499,8 +1808,16 @@ def ops_findings_from_ch_failed_name_statements(
     generated = str(payload.get("generated_at") or "")[:10]
     summary = (
         f"Combined check A names with statements from 2013: {count} of {total} "
-        f"(bar {bar}). Generated {generated or 'unknown'}. Observe-only. See {RUNBOOK}."
+        f"(bar {bar}). Generated {generated or 'unknown'}."
     )
+    leaver = payload.get("leaver_coverage") or {}
+    if leaver:
+        summary += (
+            f" Leaver statements every expected year: {leaver.get('every_year')} of "
+            f"{leaver.get('ch_applicable')} Companies House-applicable leavers "
+            f"({leaver.get('with_any_statement')} with any statement year)."
+        )
+    summary += f" Observe-only. See {RUNBOOK}."
     return [
         {
             "severity": "info",
@@ -1629,7 +1946,7 @@ def _token_text(chars: list[_Char]) -> str:
     return "".join(out)
 
 
-def _page_image(doc: Any, index: int) -> Any:
+def _page_image(doc: Any, index: int, *, zoom: float = 2.2) -> Any:
     from PIL import Image
 
     page = doc[index]
@@ -1640,7 +1957,7 @@ def _page_image(doc: Any, index: int) -> Any:
         info = doc.extract_image(xref)
         image = Image.open(__import__("io").BytesIO(info["image"]))
         return image.convert("L")
-    matrix = __import__("pymupdf").Matrix(2.2, 2.2)
+    matrix = __import__("pymupdf").Matrix(zoom, zoom)
     pix = page.get_pixmap(matrix=matrix, alpha=False)
     if pix.n == 1:
         return Image.frombytes("L", (pix.width, pix.height), pix.samples)
@@ -1783,6 +2100,7 @@ def extract_statement_pages(
     *,
     transaction_id: str,
     cache_dir: Path,
+    zoom: float = 2.2,
 ) -> list[StatementPage]:
     """Text layer when present, otherwise OCR the statement and note pages."""
     import pymupdf
@@ -1813,7 +2131,8 @@ def extract_statement_pages(
                 )
             ]
         cache = _cache_dir(cache_dir, transaction_id)
-        header_path = cache_dir / "ocr-headers" / transaction_id / "headers.json"
+        header_label = "ocr-headers" if zoom == 2.2 else f"ocr-headers-z{zoom:.1f}"
+        header_path = cache_dir / header_label / transaction_id / "headers.json"
         header_path.parent.mkdir(parents=True, exist_ok=True)
         legacy_headers = cache_dir / "ocr-v1" / transaction_id / "headers.json"
         if not header_path.exists() and legacy_headers.exists():
@@ -1822,7 +2141,7 @@ def extract_statement_pages(
         if not isinstance(headers, list) or len(headers) != doc.page_count:
             headers = []
             for index in range(doc.page_count):
-                image = _page_image(doc, index)
+                image = _page_image(doc, index, zoom=zoom)
                 lines = _ocr_image_lines(image, header_only=True)
                 headers.append("\n".join(lines))
                 if (index + 1) % 25 == 0:
@@ -1849,7 +2168,7 @@ def extract_statement_pages(
                 text = "\n".join(str(line) for line in cached["lines"])
                 method = str(cached.get("method") or "ocr")
             else:
-                image = _page_image(doc, index)
+                image = _page_image(doc, index, zoom=zoom)
                 lines = _ocr_image_lines(image, header_only=False)
                 text = "\n".join(lines)
                 method = "ocr"
@@ -2070,12 +2389,52 @@ def main(argv: list[str] | None = None) -> int:
         default=Path("docs/data/eodhd_coverage_check.json"),
         help="EODHD coverage report used only for its booleans and years.",
     )
+    parser.add_argument(
+        "--leavers",
+        action="store_true",
+        help="Extract FTSE 350 delisting leavers as well as the seven verified names.",
+    )
+    parser.add_argument(
+        "--leaver-list",
+        type=Path,
+        default=Path("docs/data/ftse350_leavers_2013_2025.json"),
+    )
+    parser.add_argument(
+        "--allow-ocr",
+        action="store_true",
+        help="OCR image-only leaver filings. One Tesseract process, zoom 1.6.",
+    )
+    parser.add_argument(
+        "--limit", type=int, default=None, help="Stop after this many pending leavers."
+    )
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     api_key = companies_house_api_key()
     if not api_key:
         print("COMPANIES_HOUSE_API_KEY is not set", file=sys.stderr)
         return 2
+    if args.leavers:
+        from value_investor.ch_leaver_statements import run_leaver_extraction
+
+        payload = run_leaver_extraction(
+            leaver_path=args.leaver_list,
+            out_path=args.out,
+            api_key=api_key,
+            cache_dir=args.cache_dir,
+            allow_ocr=args.allow_ocr,
+            only=set(args.only) if args.only else None,
+            limit=args.limit,
+            eodhd_path=args.eodhd,
+        )
+        coverage = payload.get("leaver_coverage") or {}
+        logger.info(
+            "wrote %s leavers every_year=%s applicable=%s pending=%s",
+            args.out,
+            coverage.get("every_year"),
+            coverage.get("ch_applicable"),
+            (payload.get("leaver_cursor") or {}).get("pending_count"),
+        )
+        return 0
     payload = run_extraction(
         api_key=api_key,
         cache_dir=args.cache_dir,

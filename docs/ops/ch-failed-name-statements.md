@@ -160,3 +160,90 @@ daily ops-monitor read is the scheduled trigger.
 - warn **Companies House failed-name statements store unreadable** when the JSON cannot be read
 
 `auto_fixable=false`. The finding does not rememo, ingest, or edit a book.
+When the store has `leaver_coverage`, the same info summary adds how many
+Companies House-applicable FTSE 350 delisting leavers have an EPS in every
+expected year.
+
+## FTSE 350 delisting leavers
+
+The same store now also covers companies that left the FTSE 350 between
+2013-01-01 and 2025-09-30 because they delisted (takeover, failure, or a move
+of listing). The list is `docs/data/ftse350_leavers_2013_2025.json`, built from
+the FTSE Russell historic addition and deletion logs (October 2026 PDFs). A
+quarterly deletion with an empty note is a demotion or promotion: the company
+stayed listed, so it is not on this list. Carillion, Thomas Cook, Debenhams and
+Sirius Minerals left the index that way and stayed in the original seven.
+Patisserie Holdings was never in the FTSE 350 change log.
+
+The seven hand-verified names are not extracted again. Their filings stay as
+they were. GKN and Sky are also leavers; their coverage is computed from those
+filings. Every other leaver is resolved to a UK plc company number (current or
+previous name contains PLC, every token of the listed name matches, and an AA
+filing falls in 2012..the leaving year). A Jersey, Guernsey, Isle of Man or
+other overseas issuer is `ch_applicable=false`. Two equally close plc matches
+stay `unresolved`. Nothing is guessed.
+
+Extraction prefers iXBRL (`method=ixbrl`, citation is the tag name and the raw
+figure, page is null). If the filing has no iXBRL revenue or EPS, the PDF text
+layer is read with the same statement parser as the seven names. Image-only
+PDFs are OCR'd one page-set at a time (zoom 1.6). Three parallel Tesseract
+processes stalled on this host, so OCR stays at one process. Only fiscal years
+2012 through the leaving year are kept. A group filing whose period-end year is
+the leaving year is kept even when the period end is after the delisting day.
+A non-group filing made up after the delisting day is the post-takeover
+subsidiary and is skipped. A missing year is absent. PDFs stay in `/tmp/ch-pdfs`.
+
+The run is resumable. A name with `extraction_status` of `complete`,
+`preserved`, `not_applicable` or `unresolved` is skipped. `needs_ocr` is retried
+when `--allow-ocr` is set. The store is rewritten after each name.
+`leaver_cursor.pending_keys` lists what is left.
+
+```bash
+PYTHONPATH=$PWD/src python3 -m value_investor.ch_failed_name_statements \
+  --leavers \
+  --leaver-list docs/data/ftse350_leavers_2013_2025.json \
+  --out docs/data/ch_failed_name_statements.json \
+  --cache-dir /tmp/ch-pdfs
+```
+
+Add `--allow-ocr` for image-only filings. `--limit N` stops after N pending names.
+
+### Coverage fields
+
+These names are stable. The replay bias counter reads them from each leaver
+and from `leaver_coverage` on the store.
+
+Per name, `leaver_coverage`:
+
+| Field | Meaning |
+|-------|---------|
+| `expected_years` | From max(2012, first year in the FTSE 350 window) through the leaving year, inclusive. |
+| `years_with_eps` | Fiscal years with a basic EPS. A primary value wins over a comparative. |
+| `years_with_revenue` | Fiscal years with revenue. |
+| `years_with_operating_cash_flow` | Fiscal years with net cash from operating activities. |
+| `years_with_capex` | Fiscal years with capital expenditure. |
+| `years_with_operating_cash_flow_and_capex` | Years that have both. |
+| `statements_every_year` | True when every expected year has a basic EPS. A missing final year stays false. |
+
+`leaver_coverage` on the store counts leavers by `reason_class` (`takeover`,
+`failure`, `other`): `names`, `ch_applicable`, `with_any_statement` (any EPS or
+revenue year), and `every_year`. `ch_not_applicable` and `unresolved` are
+store-level counts. A name that moved listing (`other`) may still have EODHD
+statements; it is included because the listing move took it out of the FTSE 350.
+
+### Plausibility flags
+
+Flags are stored on the name as `plausibility_flags` and do not drop the value.
+
+| Code | Rule |
+|------|------|
+| `eps_jump` | Absolute basic EPS changes by more than 10x between adjacent years. |
+| `eps_inconsistent_with_earnings` | EPS differs by more than 20% from profit attributable divided by weighted shares, when all three exist. |
+| `revenue_below_operating_profit` | Revenue is below operating profit after scale. |
+| `pence_pound_unit_slip` | The EPS unit is pounds where the earnings identity fits pence (or the reverse), or the unit changes between years with a 50x–200x raw jump, or the stored EPS is at least 20 pounds or 5000 pence. |
+
+### Hand check of leaver years
+
+Seed `random.Random(20261112)` over `(key, year)` pairs that have a citation
+page. Ten draws, recorded below after the extraction run. The four Carillion
+and Patisserie rows above are a separate check and are not part of this draw.
