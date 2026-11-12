@@ -79,8 +79,12 @@ Verdict **fail**, 564 calls. Read per check:
 - **B, active sample:** pass (statements from 2013 on 85%, dated periods 99.8%, currency
   100%, shares history 97.5%). Misses are names listed after 2013.
 - **D:** the 0% was a parsing bug, not missing data. EODHD puts a bare year or quarter in
-  `outstandingShares[*].date`; the check now reads `dateFormatted`. Re-run to get the true D
-  share. The bars were not changed after seeing the results.
+  `outstandingShares[*].date`; the check now reads `dateFormatted`. The bars were not
+  changed after seeing the results.
+
+Re-run the same day after the fix: D passes (computable on 80%, 87.5%, 90% and 97.5% of
+the four dates, mean 89%). The verdict stays **fail** on check A alone. Companies House
+statements for the failed names: [ch-failed-name-statements.md](ch-failed-name-statements.md).
 
 ## Automation
 
@@ -88,6 +92,9 @@ Verdict **fail**, 564 calls. Read per check:
   secret → exit 0, no commit.
 - **Ops-monitor:** `check_eodhd_coverage` — info with verdict when the report exists; no
   finding when absent; warn if unreadable. `auto_fixable=false`. `influences_live=false`.
+- **Companies House follow-up** for the seven UK names with no EODHD statements:
+  [ch-failed-name-statements.md](ch-failed-name-statements.md). Observe-only. The
+  combined check A count is the EODHD depth flag or a Companies House EPS from 2013.
 
 Sample sources:
 
