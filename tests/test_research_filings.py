@@ -13751,6 +13751,24 @@ def test_parked_source_hunter_skip_lmt_sp500():
     assert fetch_filings_ir_allowlist("LMT") == []
 
 
+def test_parked_source_hunter_skip_nrg_sp500():
+    """eng-20261112-03: NRG leftover IWB is Item 7.01 LS Power sale 8-K, not missing 10-K/10-Q."""
+    assert "NRG" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["NRG"]
+    assert "7.01" in reason
+    assert "8-K" in reason
+    assert "LS Power" in reason
+    assert "substantiveness" in reason
+    assert "EX-99.1" in reason
+    assert "10-K/10-Q" in reason
+    assert "403" in reason
+    assert fetch_filings_ir_allowlist("NRG") == []
+    reg_fd_8k = (
+        "https://www.sec.gov/Archives/edgar/data/1013871/000110465926124147/tm2629302d1_8k.htm"
+    )
+    assert fetch_filing_body(reg_fd_8k) is None
+
+
 def test_parked_source_hunter_skip_tsn_sp500():
     """eng-20260907-08: TSN leftover IWB is Item 8.01 segment-recast 8-K, not missing 10-K/10-Q."""
     assert "TSN" in PARKED_SOURCE_HUNTER_SKIP

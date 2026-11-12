@@ -1219,6 +1219,13 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "Management's Discussion cross-reference and SEC complete-submission .txt is fetchable "
         "but not the indexed URL and 10-K/10-Q are already bodied."
     ),
+    "NRG": (
+        "sp500 leftover IWB: indexed-without-body row is Item 7.01 Regulation FD LS Power "
+        "asset-sale 8-K iXBRL primary below the substantiveness gate; EX-99.1 press release "
+        "fetches but is not the indexed URL and duplicates same-day Item 2.02 earnings 8-K "
+        "already bodied; investors.nrg.com IR is bot-gated (403); 10-K/10-Q are already "
+        "bodied via sec_edgar."
+    ),
     "TSN": (
         "Leftover indexed-without-body row is Item 8.01 segment-reporting recast 8-K iXBRL "
         "primary below the substantiveness gate; narrative extraction trims at a "
