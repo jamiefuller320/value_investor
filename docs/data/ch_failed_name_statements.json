@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-12T19:45:59+00:00",
+  "generated_at": "2026-11-12T22:15:09+00:00",
   "learning_question": "Can Companies House annual-report PDFs supply point-in-time annual statements for failed UK names that EODHD lacks, accurately enough to fill check A (at least 7 of 11 failed names with statements from 2013) when combined with EODHD?",
   "observe_only": true,
   "influences_live": false,
@@ -11838,31 +11838,31 @@
       "eps_years": [],
       "statements_from_2013": false,
       "fields_found": {
-        "revenue": 1,
-        "operating_profit": 1,
+        "revenue": 0,
+        "operating_profit": 0,
         "profit_attributable_to_owners": 0,
         "basic_eps": 0,
         "weighted_average_basic_shares": 0,
         "net_cash_from_operating_activities": 0,
         "capital_expenditure": 0,
         "dividends_per_share": 0,
-        "reporting_currency": 1,
+        "reporting_currency": 0,
         "fiscal_year_end": 2
       },
       "fields_absent": {
-        "revenue": 1,
-        "operating_profit": 1,
+        "revenue": 2,
+        "operating_profit": 2,
         "profit_attributable_to_owners": 2,
         "basic_eps": 2,
         "weighted_average_basic_shares": 2,
         "net_cash_from_operating_activities": 2,
         "capital_expenditure": 2,
         "dividends_per_share": 2,
-        "reporting_currency": 1,
+        "reporting_currency": 2,
         "fiscal_year_end": 0
       },
       "extraction_methods": {
-        "ocr": 14
+        "ocr": 6
       },
       "filings": [
         {
@@ -11989,11 +11989,6 @@
               ]
             },
             {
-              "page": 31,
-              "method": "ocr",
-              "kinds": []
-            },
-            {
               "page": 32,
               "method": "ocr",
               "kinds": [
@@ -12002,19 +11997,6 @@
             },
             {
               "page": 33,
-              "method": "ocr",
-              "kinds": []
-            },
-            {
-              "page": 89,
-              "method": "ocr",
-              "kinds": [
-                "eps_note",
-                "income"
-              ]
-            },
-            {
-              "page": 90,
               "method": "ocr",
               "kinds": []
             }
@@ -12030,30 +12012,22 @@
           "source": "primary",
           "fields": {
             "revenue": {
-              "value": "1322.5",
-              "scale": "millions",
-              "currency": "GBP",
+              "value": null,
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzEwMjk1MDUzMGFkaXF6a2N4",
-                "page": 18,
-                "line": "Revenue from continuing operations 4 1,322.5 1,192.6"
-              }
+              "absent_reason": "revenue not found on the statement",
+              "citation": null
             },
             "operating_profit": {
-              "value": "158.6",
-              "scale": "millions",
-              "currency": "GBP",
+              "value": null,
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzEwMjk1MDUzMGFkaXF6a2N4",
-                "page": 18,
-                "line": "Operating profit from continuing operations 4 158.6 62.7"
-              }
+              "absent_reason": "operating profit not found on the statement",
+              "citation": null
             },
             "profit_attributable_to_owners": {
               "value": null,
@@ -12110,17 +12084,13 @@
               "citation": null
             },
             "reporting_currency": {
-              "value": "GBP",
-              "scale": "millions",
-              "currency": "GBP",
+              "value": null,
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzEwMjk1MDUzMGFkaXF6a2N4",
-                "page": 18,
-                "line": "Notes £m £m"
-              }
+              "absent_reason": "currency unit (£m, £'000, $m, €m) not found on the statement header",
+              "citation": null
             },
             "fiscal_year_end": {
               "value": "2013-12-31",
@@ -12131,50 +12101,18 @@
               "absent_reason": null,
               "citation": {
                 "transaction_id": "MzEwMjk1MDUzMGFkaXF6a2N4",
-                "page": 18,
-                "line": "For the year ended 31 December 2013"
-              }
-            }
-          },
-          "comparative": {
-            "source": "comparative",
-            "fiscal_year": 2012,
-            "fiscal_year_end": "2012-12-31",
-            "filing_date": "2014-07-02",
-            "transaction_id": "MzEwMjk1MDUzMGFkaXF6a2N4",
-            "fields": {
-              "revenue": {
-                "value": "1192.6",
-                "scale": "millions",
-                "currency": "GBP",
-                "unit": null,
-                "source": "comparative",
-                "absent_reason": null,
-                "citation": {
-                  "transaction_id": "MzEwMjk1MDUzMGFkaXF6a2N4",
-                  "page": 18,
-                  "line": "Revenue from continuing operations 4 1,322.5 1,192.6"
-                }
+                "page": null,
+                "line": "Companies House filing-history made_up_date"
               },
-              "operating_profit": {
-                "value": "62.7",
-                "scale": "millions",
-                "currency": "GBP",
-                "unit": null,
-                "source": "comparative",
-                "absent_reason": null,
-                "citation": {
-                  "transaction_id": "MzEwMjk1MDUzMGFkaXF6a2N4",
-                  "page": 18,
-                  "line": "Operating profit from continuing operations 4 158.6 62.7"
-                }
-              }
+              "note": "not printed as a parsed date on the statement page; Companies House made_up_date used"
             }
           },
+          "comparative": null,
           "methods": [
             "ocr"
           ],
           "warnings": [
+            "no income-statement heading found",
             "no cash-flow heading found"
           ],
           "pages": [
@@ -12187,37 +12125,6 @@
               "page": 3,
               "method": "ocr",
               "kinds": []
-            },
-            {
-              "page": 18,
-              "method": "ocr",
-              "kinds": [
-                "income"
-              ]
-            },
-            {
-              "page": 19,
-              "method": "ocr",
-              "kinds": [
-                "income_maybe"
-              ]
-            },
-            {
-              "page": 20,
-              "method": "ocr",
-              "kinds": []
-            },
-            {
-              "page": 79,
-              "method": "ocr",
-              "kinds": [
-                "income"
-              ]
-            },
-            {
-              "page": 80,
-              "method": "ocr",
-              "kinds": []
             }
           ],
           "description": "accounts-with-accounts-type-group",
@@ -12225,6 +12132,10 @@
         }
       ],
       "extraction_status": "complete",
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      },
       "reason_class": "takeover",
       "leaving_date": "2013-03-27",
       "epic": null,
@@ -12235,10 +12146,7 @@
           2013
         ],
         "years_with_eps": [],
-        "years_with_revenue": [
-          2012,
-          2013
-        ],
+        "years_with_revenue": [],
         "years_with_operating_cash_flow": [],
         "years_with_capex": [],
         "years_with_operating_cash_flow_and_capex": [],
@@ -12280,7 +12188,7 @@
         "fiscal_year_end": 0
       },
       "extraction_methods": {
-        "ocr": 16
+        "ocr": 8
       },
       "filings": [
         {
@@ -12405,11 +12313,6 @@
               ]
             },
             {
-              "page": 99,
-              "method": "ocr",
-              "kinds": []
-            },
-            {
               "page": 100,
               "method": "ocr",
               "kinds": [
@@ -12418,18 +12321,6 @@
             },
             {
               "page": 101,
-              "method": "ocr",
-              "kinds": []
-            },
-            {
-              "page": 133,
-              "method": "ocr",
-              "kinds": [
-                "eps_note"
-              ]
-            },
-            {
-              "page": 134,
               "method": "ocr",
               "kinds": []
             }
@@ -12559,25 +12450,6 @@
               "kinds": []
             },
             {
-              "page": 35,
-              "method": "ocr",
-              "kinds": [
-                "income"
-              ]
-            },
-            {
-              "page": 36,
-              "method": "ocr",
-              "kinds": [
-                "income_maybe"
-              ]
-            },
-            {
-              "page": 37,
-              "method": "ocr",
-              "kinds": []
-            },
-            {
               "page": 38,
               "method": "ocr",
               "kinds": [
@@ -12588,18 +12460,6 @@
               "page": 39,
               "method": "ocr",
               "kinds": []
-            },
-            {
-              "page": 105,
-              "method": "ocr",
-              "kinds": [
-                "dividend_note"
-              ]
-            },
-            {
-              "page": 106,
-              "method": "ocr",
-              "kinds": []
             }
           ],
           "description": "accounts-with-accounts-type-group",
@@ -12607,6 +12467,10 @@
         }
       ],
       "extraction_status": "complete",
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      },
       "reason_class": "takeover",
       "leaving_date": "2013-10-30",
       "epic": "ENRC",
@@ -12635,31 +12499,31 @@
       "eps_years": [],
       "statements_from_2013": false,
       "fields_found": {
-        "revenue": 2,
-        "operating_profit": 1,
-        "profit_attributable_to_owners": 1,
-        "basic_eps": 1,
+        "revenue": 0,
+        "operating_profit": 0,
+        "profit_attributable_to_owners": 0,
+        "basic_eps": 0,
         "weighted_average_basic_shares": 0,
-        "net_cash_from_operating_activities": 1,
+        "net_cash_from_operating_activities": 2,
         "capital_expenditure": 2,
         "dividends_per_share": 0,
-        "reporting_currency": 2,
+        "reporting_currency": 1,
         "fiscal_year_end": 3
       },
       "fields_absent": {
-        "revenue": 1,
-        "operating_profit": 2,
-        "profit_attributable_to_owners": 2,
-        "basic_eps": 2,
+        "revenue": 3,
+        "operating_profit": 3,
+        "profit_attributable_to_owners": 3,
+        "basic_eps": 3,
         "weighted_average_basic_shares": 3,
-        "net_cash_from_operating_activities": 2,
+        "net_cash_from_operating_activities": 1,
         "capital_expenditure": 1,
         "dividends_per_share": 3,
-        "reporting_currency": 1,
+        "reporting_currency": 2,
         "fiscal_year_end": 0
       },
       "extraction_methods": {
-        "ocr": 25
+        "ocr": 13
       },
       "filings": [
         {
@@ -12670,17 +12534,13 @@
           "source": "primary",
           "fields": {
             "revenue": {
-              "value": "2539",
+              "value": null,
               "scale": null,
               "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzA2MDI1MTQxMWFkaXF6a2N4",
-                "page": 83,
-                "line": "Revenue 4,5 2,539 2,486"
-              }
+              "absent_reason": "revenue not found on the statement",
+              "citation": null
             },
             "operating_profit": {
               "value": null,
@@ -12701,17 +12561,13 @@
               "citation": null
             },
             "basic_eps": {
-              "value": "-0.7",
+              "value": null,
               "scale": null,
               "currency": null,
-              "unit": "pence",
+              "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzA2MDI1MTQxMWFkaXF6a2N4",
-                "page": 83,
-                "line": "Loss per share (basic) 12 {0 7}p {0 9)p"
-              }
+              "absent_reason": "basic earnings per share not found on the statement",
+              "citation": null
             },
             "weighted_average_basic_shares": {
               "value": null,
@@ -12796,32 +12652,6 @@
             "filing_date": "2012-07-04",
             "transaction_id": "MzA2MDI1MTQxMWFkaXF6a2N4",
             "fields": {
-              "revenue": {
-                "value": "2486",
-                "scale": null,
-                "currency": null,
-                "unit": null,
-                "source": "comparative",
-                "absent_reason": null,
-                "citation": {
-                  "transaction_id": "MzA2MDI1MTQxMWFkaXF6a2N4",
-                  "page": 83,
-                  "line": "Revenue 4,5 2,539 2,486"
-                }
-              },
-              "basic_eps": {
-                "value": "-0.9",
-                "scale": null,
-                "currency": null,
-                "unit": "pence",
-                "source": "comparative",
-                "absent_reason": null,
-                "citation": {
-                  "transaction_id": "MzA2MDI1MTQxMWFkaXF6a2N4",
-                  "page": 83,
-                  "line": "Loss per share (basic) 12 {0 7}p {0 9)p"
-                }
-              },
               "net_cash_from_operating_activities": {
                 "value": "139",
                 "scale": null,
@@ -12855,25 +12685,6 @@
               "kinds": []
             },
             {
-              "page": 83,
-              "method": "ocr",
-              "kinds": [
-                "income"
-              ]
-            },
-            {
-              "page": 84,
-              "method": "ocr",
-              "kinds": [
-                "income_maybe"
-              ]
-            },
-            {
-              "page": 85,
-              "method": "ocr",
-              "kinds": []
-            },
-            {
               "page": 88,
               "method": "ocr",
               "kinds": [
@@ -12897,30 +12708,22 @@
           "source": "primary",
           "fields": {
             "revenue": {
-              "value": "1792",
-              "scale": "millions",
-              "currency": "GBP",
+              "value": null,
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzA4MDAyMzgxN2FkaXF6a2N4",
-                "page": 81,
-                "line": "Revenue 45 1,792 1,764 1"
-              }
+              "absent_reason": "revenue not found on the statement",
+              "citation": null
             },
             "operating_profit": {
-              "value": "43",
-              "scale": "millions",
-              "currency": "GBP",
+              "value": null,
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzA4MDAyMzgxN2FkaXF6a2N4",
-                "page": 81,
-                "line": "Operating profit 43 60"
-              }
+              "absent_reason": "operating profit not found on the statement",
+              "citation": null
             },
             "profit_attributable_to_owners": {
               "value": null,
@@ -12937,7 +12740,7 @@
               "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": "column count does not match the year header",
+              "absent_reason": "basic earnings per share not found on the statement",
               "citation": null
             },
             "weighted_average_basic_shares": {
@@ -12946,7 +12749,7 @@
               "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": "decimal place not recovered",
+              "absent_reason": "weighted average number of shares not found in the earnings-per-share note",
               "citation": null
             },
             "net_cash_from_operating_activities": {
@@ -12955,17 +12758,34 @@
               "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": "net cash from operating activities not found on the cash flow statement",
-              "citation": null
+              "absent_reason": "scale_jump",
+              "citation": {
+                "transaction_id": "MzA4MDAyMzgxN2FkaXF6a2N4",
+                "page": 86,
+                "line": "Net cash flows from operating activities: 179 65"
+              },
+              "nulled_from": "179"
             },
             "capital_expenditure": {
-              "value": null,
+              "value": "-35",
               "scale": null,
               "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": "purchase of property, plant and equipment not found on the cash flow",
-              "citation": null
+              "absent_reason": null,
+              "citation": {
+                "transaction_id": "MzA4MDAyMzgxN2FkaXF6a2N4",
+                "page": 86,
+                "line": "Purchase of property, plant and equipment 4 {35) (38)"
+              },
+              "components": [
+                {
+                  "label": "Purchase of property, plant and equipment",
+                  "value": "-35",
+                  "page": 86
+                }
+              ],
+              "note": "intangible purchases not shown on the cash flow; value is property, plant and equipment only"
             },
             "dividends_per_share": {
               "value": null,
@@ -12977,17 +12797,13 @@
               "citation": null
             },
             "reporting_currency": {
-              "value": "GBP",
-              "scale": "millions",
-              "currency": "GBP",
+              "value": null,
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzA4MDAyMzgxN2FkaXF6a2N4",
-                "page": 79,
-                "line": "For the year ended 31 March Notes £m £m I"
-              }
+              "absent_reason": "currency unit (£m, £'000, $m, €m) not found on the statement header",
+              "citation": null
             },
             "fiscal_year_end": {
               "value": "2013-03-31",
@@ -13011,30 +12827,17 @@
             "filing_date": "2013-06-19",
             "transaction_id": "MzA4MDAyMzgxN2FkaXF6a2N4",
             "fields": {
-              "revenue": {
-                "value": "1764.1",
-                "scale": "millions",
-                "currency": "GBP",
+              "net_cash_from_operating_activities": {
+                "value": "65",
+                "scale": null,
+                "currency": null,
                 "unit": null,
                 "source": "comparative",
                 "absent_reason": null,
                 "citation": {
                   "transaction_id": "MzA4MDAyMzgxN2FkaXF6a2N4",
-                  "page": 81,
-                  "line": "Revenue 45 1,792 1,764 1"
-                }
-              },
-              "operating_profit": {
-                "value": "60",
-                "scale": "millions",
-                "currency": "GBP",
-                "unit": null,
-                "source": "comparative",
-                "absent_reason": null,
-                "citation": {
-                  "transaction_id": "MzA4MDAyMzgxN2FkaXF6a2N4",
-                  "page": 81,
-                  "line": "Operating profit 43 60"
+                  "page": 86,
+                  "line": "Net cash flows from operating activities: 179 65"
                 }
               }
             }
@@ -13057,25 +12860,6 @@
               "kinds": []
             },
             {
-              "page": 81,
-              "method": "ocr",
-              "kinds": [
-                "income"
-              ]
-            },
-            {
-              "page": 82,
-              "method": "ocr",
-              "kinds": [
-                "income_maybe"
-              ]
-            },
-            {
-              "page": 83,
-              "method": "ocr",
-              "kinds": []
-            },
-            {
               "page": 86,
               "method": "ocr",
               "kinds": [
@@ -13093,23 +12877,6 @@
               "kinds": [
                 "eps_note"
               ]
-            },
-            {
-              "page": 104,
-              "method": "ocr",
-              "kinds": []
-            },
-            {
-              "page": 116,
-              "method": "ocr",
-              "kinds": [
-                "income"
-              ]
-            },
-            {
-              "page": 117,
-              "method": "ocr",
-              "kinds": []
             }
           ],
           "description": "accounts-with-accounts-type-group",
@@ -13141,17 +12908,13 @@
               "citation": null
             },
             "profit_attributable_to_owners": {
-              "value": "2464",
-              "scale": "millions",
-              "currency": "GBP",
+              "value": null,
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzEwNjM3NDc0NGFkaXF6a2N4",
-                "page": 17,
-                "line": "Equity holders of the parent 2,464 53"
-              }
+              "absent_reason": "profit attributable to owners not found on the statement",
+              "citation": null
             },
             "basic_eps": {
               "value": null,
@@ -13177,29 +12940,17 @@
               "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": "net cash from operating activities not found on the cash flow statement",
+              "absent_reason": "decimal place not recovered",
               "citation": null
             },
             "capital_expenditure": {
-              "value": "-23",
-              "scale": "millions",
-              "currency": "GBP",
+              "value": null,
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzEwNjM3NDc0NGFkaXF6a2N4",
-                "page": 20,
-                "line": "Purchase of property, plant and equipment (23) (35)"
-              },
-              "components": [
-                {
-                  "label": "Purchase of property, plant and equipment",
-                  "value": "-23",
-                  "page": 20
-                }
-              ],
-              "note": "intangible purchases not shown on the cash flow; value is property, plant and equipment only"
+              "absent_reason": "rendered page and fax image disagree; value left absent",
+              "citation": null
             },
             "dividends_per_share": {
               "value": null,
@@ -13219,8 +12970,8 @@
               "absent_reason": null,
               "citation": {
                 "transaction_id": "MzEwNjM3NDc0NGFkaXF6a2N4",
-                "page": 14,
-                "line": "For the year ended 31 March ‘ Notes £m £m"
+                "page": null,
+                "line": "For the year ended 31 March Notes £m én"
               }
             },
             "fiscal_year_end": {
@@ -13238,28 +12989,7 @@
               "note": "not printed as a parsed date on the statement page; Companies House made_up_date used"
             }
           },
-          "comparative": {
-            "source": "comparative",
-            "fiscal_year": 2013,
-            "fiscal_year_end": null,
-            "filing_date": "2014-09-01",
-            "transaction_id": "MzEwNjM3NDc0NGFkaXF6a2N4",
-            "fields": {
-              "profit_attributable_to_owners": {
-                "value": "53",
-                "scale": "millions",
-                "currency": "GBP",
-                "unit": null,
-                "source": "comparative",
-                "absent_reason": null,
-                "citation": {
-                  "transaction_id": "MzEwNjM3NDc0NGFkaXF6a2N4",
-                  "page": 17,
-                  "line": "Equity holders of the parent 2,464 53"
-                }
-              }
-            }
-          },
+          "comparative": null,
           "methods": [
             "ocr"
           ],
@@ -13275,25 +13005,6 @@
             },
             {
               "page": 15,
-              "method": "ocr",
-              "kinds": []
-            },
-            {
-              "page": 16,
-              "method": "ocr",
-              "kinds": [
-                "income"
-              ]
-            },
-            {
-              "page": 17,
-              "method": "ocr",
-              "kinds": [
-                "income"
-              ]
-            },
-            {
-              "page": 18,
               "method": "ocr",
               "kinds": []
             },
@@ -13315,6 +13026,12 @@
         }
       ],
       "extraction_status": "complete",
+      "values_nulled": {
+        "total": 1,
+        "by_check": {
+          "scale_jump": 1
+        }
+      },
       "reason_class": "takeover",
       "leaving_date": "2014-01-16",
       "epic": "ISYS",
@@ -13325,22 +13042,15 @@
           2013,
           2014
         ],
-        "years_with_eps": [
-          2011,
-          2012
-        ],
-        "years_with_revenue": [
-          2011,
-          2012,
-          2013
-        ],
+        "years_with_eps": [],
+        "years_with_revenue": [],
         "years_with_operating_cash_flow": [
           2011,
           2012
         ],
         "years_with_capex": [
           2012,
-          2014
+          2013
         ],
         "years_with_operating_cash_flow_and_capex": [
           2012
@@ -13411,7 +13121,7 @@
         "fiscal_year_end": 0
       },
       "extraction_methods": {
-        "ocr": 20
+        "ocr": 12
       },
       "filings": [
         {
@@ -13537,11 +13247,6 @@
               "kinds": []
             },
             {
-              "page": 46,
-              "method": "ocr",
-              "kinds": []
-            },
-            {
               "page": 48,
               "method": "ocr",
               "kinds": []
@@ -13557,11 +13262,6 @@
               "kinds": [
                 "eps_note"
               ]
-            },
-            {
-              "page": 66,
-              "method": "ocr",
-              "kinds": []
             }
           ],
           "description": "accounts-with-accounts-type-group",
@@ -13691,11 +13391,6 @@
               "kinds": []
             },
             {
-              "page": 61,
-              "method": "ocr",
-              "kinds": []
-            },
-            {
               "page": 63,
               "method": "ocr",
               "kinds": []
@@ -13711,11 +13406,6 @@
               "kinds": [
                 "eps_note"
               ]
-            },
-            {
-              "page": 84,
-              "method": "ocr",
-              "kinds": []
             }
           ],
           "description": "accounts-with-accounts-type-group",
@@ -13829,6 +13519,7 @@
             "ocr"
           ],
           "warnings": [
+            "no income-statement heading found",
             "no cash-flow heading found"
           ],
           "pages": [
@@ -13841,32 +13532,6 @@
               "page": 25,
               "method": "ocr",
               "kinds": []
-            },
-            {
-              "page": 75,
-              "method": "ocr",
-              "kinds": [
-                "income"
-              ]
-            },
-            {
-              "page": 76,
-              "method": "ocr",
-              "kinds": [
-                "income"
-              ]
-            },
-            {
-              "page": 95,
-              "method": "ocr",
-              "kinds": [
-                "income"
-              ]
-            },
-            {
-              "page": 96,
-              "method": "ocr",
-              "kinds": []
             }
           ],
           "description": "accounts-with-accounts-type-group",
@@ -13874,6 +13539,10 @@
         }
       ],
       "extraction_status": "complete",
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      },
       "reason_class": "takeover",
       "leaving_date": "2014-05-09",
       "epic": "FCAM",
@@ -13923,27 +13592,27 @@
       ],
       "statements_from_2013": true,
       "fields_found": {
-        "revenue": 2,
+        "revenue": 1,
         "operating_profit": 0,
-        "profit_attributable_to_owners": 2,
-        "basic_eps": 2,
+        "profit_attributable_to_owners": 1,
+        "basic_eps": 1,
         "weighted_average_basic_shares": 0,
         "net_cash_from_operating_activities": 2,
-        "capital_expenditure": 2,
+        "capital_expenditure": 1,
         "dividends_per_share": 0,
-        "reporting_currency": 2,
+        "reporting_currency": 1,
         "fiscal_year_end": 3
       },
       "fields_absent": {
-        "revenue": 1,
+        "revenue": 2,
         "operating_profit": 3,
-        "profit_attributable_to_owners": 1,
-        "basic_eps": 1,
+        "profit_attributable_to_owners": 2,
+        "basic_eps": 2,
         "weighted_average_basic_shares": 3,
         "net_cash_from_operating_activities": 1,
-        "capital_expenditure": 1,
+        "capital_expenditure": 2,
         "dividends_per_share": 3,
-        "reporting_currency": 1,
+        "reporting_currency": 2,
         "fiscal_year_end": 0
       },
       "extraction_methods": {
@@ -13958,17 +13627,13 @@
           "source": "primary",
           "fields": {
             "revenue": {
-              "value": "20903",
-              "scale": "millions",
-              "currency": "USD",
+              "value": null,
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzA2Mzk0NTg5OWFkaXF6a2N4",
-                "page": 76,
-                "line": "Revenue 20,9030 10,0056"
-              }
+              "absent_reason": "column count does not match the year header",
+              "citation": null
             },
             "operating_profit": {
               "value": null,
@@ -13980,30 +13645,22 @@
               "citation": null
             },
             "profit_attributable_to_owners": {
-              "value": "-1051.5",
-              "scale": "millions",
-              "currency": "USD",
-              "unit": null,
-              "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzA2Mzk0NTg5OWFkaXF6a2N4",
-                "page": 76,
-                "line": "Owners of the Company (1,051 5) 251.2"
-              }
-            },
-            "basic_eps": {
-              "value": "-53",
+              "value": null,
               "scale": null,
               "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzA2Mzk0NTg5OWFkaXF6a2N4",
-                "page": 76,
-                "line": "Earnings per share (US cents per share} — basic W (53 0) 174 |"
-              }
+              "absent_reason": "profit attributable to owners not found on the statement",
+              "citation": null
+            },
+            "basic_eps": {
+              "value": null,
+              "scale": null,
+              "currency": null,
+              "unit": null,
+              "source": "primary",
+              "absent_reason": "basic earnings per share not found on the statement",
+              "citation": null
             },
             "weighted_average_basic_shares": {
               "value": null,
@@ -14062,17 +13719,13 @@
               "citation": null
             },
             "reporting_currency": {
-              "value": "USD",
-              "scale": "millions",
-              "currency": "USD",
+              "value": null,
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzA2Mzk0NTg5OWFkaXF6a2N4",
-                "page": null,
-                "line": "$million $milion"
-              }
+              "absent_reason": "currency unit (£m, £'000, $m, €m) not found on the statement header",
+              "citation": null
             },
             "fiscal_year_end": {
               "value": "2012-03-31",
@@ -14096,45 +13749,6 @@
             "filing_date": "2012-09-11",
             "transaction_id": "MzA2Mzk0NTg5OWFkaXF6a2N4",
             "fields": {
-              "revenue": {
-                "value": "10005.6",
-                "scale": "millions",
-                "currency": "USD",
-                "unit": null,
-                "source": "comparative",
-                "absent_reason": null,
-                "citation": {
-                  "transaction_id": "MzA2Mzk0NTg5OWFkaXF6a2N4",
-                  "page": 76,
-                  "line": "Revenue 20,9030 10,0056"
-                }
-              },
-              "profit_attributable_to_owners": {
-                "value": "251.2",
-                "scale": "millions",
-                "currency": "USD",
-                "unit": null,
-                "source": "comparative",
-                "absent_reason": null,
-                "citation": {
-                  "transaction_id": "MzA2Mzk0NTg5OWFkaXF6a2N4",
-                  "page": 76,
-                  "line": "Owners of the Company (1,051 5) 251.2"
-                }
-              },
-              "basic_eps": {
-                "value": "174",
-                "scale": null,
-                "currency": null,
-                "unit": null,
-                "source": "comparative",
-                "absent_reason": null,
-                "citation": {
-                  "transaction_id": "MzA2Mzk0NTg5OWFkaXF6a2N4",
-                  "page": 76,
-                  "line": "Earnings per share (US cents per share} — basic W (53 0) 174 |"
-                }
-              },
               "net_cash_from_operating_activities": {
                 "value": "-261.8",
                 "scale": "millions",
@@ -14326,7 +13940,7 @@
               "citation": null
             },
             "profit_attributable_to_owners": {
-              "value": "-10.1",
+              "value": "-310.1",
               "scale": "millions",
               "currency": "USD",
               "unit": null,
@@ -14335,7 +13949,7 @@
               "citation": {
                 "transaction_id": "MzEwOTIyMjMyNGFkaXF6a2N4",
                 "page": 3,
-                "line": "Owners of the Company (10.1) (162 8)"
+                "line": "Owners of the Company (310.1) (162 8)"
               }
             },
             "basic_eps": {
@@ -14374,25 +13988,13 @@
               }
             },
             "capital_expenditure": {
-              "value": "-550.1",
-              "scale": "millions",
-              "currency": "USD",
+              "value": null,
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzEwOTIyMjMyNGFkaXF6a2N4",
-                "page": 8,
-                "line": "Purchase of property, plant and equipment (550.1) (642 3)"
-              },
-              "components": [
-                {
-                  "label": "Purchase of property, plant and equipment",
-                  "value": "-550.1",
-                  "page": 8
-                }
-              ],
-              "note": "intangible purchases not shown on the cash flow; value is property, plant and equipment only"
+              "absent_reason": "rendered page and fax image disagree; value left absent",
+              "citation": null
             },
             "dividends_per_share": {
               "value": null,
@@ -14413,7 +14015,7 @@
               "citation": {
                 "transaction_id": "MzEwOTIyMjMyNGFkaXF6a2N4",
                 "page": 3,
-                "line": "Note $ million $ million"
+                "line": "Note $ milhon $ million"
               }
             },
             "fiscal_year_end": {
@@ -14438,19 +14040,6 @@
             "filing_date": "2014-10-10",
             "transaction_id": "MzEwOTIyMjMyNGFkaXF6a2N4",
             "fields": {
-              "revenue": {
-                "value": "27257.7",
-                "scale": "millions",
-                "currency": "USD",
-                "unit": null,
-                "source": "comparative",
-                "absent_reason": null,
-                "citation": {
-                  "transaction_id": "MzEwOTIyMjMyNGFkaXF6a2N4",
-                  "page": 3,
-                  "line": "Revenue 4 25,864.8 27,2577"
-                }
-              },
               "profit_attributable_to_owners": {
                 "value": "-162.8",
                 "scale": "millions",
@@ -14461,7 +14050,7 @@
                 "citation": {
                   "transaction_id": "MzEwOTIyMjMyNGFkaXF6a2N4",
                   "page": 3,
-                  "line": "Owners of the Company (10.1) (162 8)"
+                  "line": "Owners of the Company (310.1) (162 8)"
                 }
               },
               "basic_eps": {
@@ -14478,17 +14067,18 @@
                 }
               },
               "net_cash_from_operating_activities": {
-                "value": "-146.3",
+                "value": null,
                 "scale": "millions",
                 "currency": "USD",
                 "unit": null,
                 "source": "comparative",
-                "absent_reason": null,
+                "absent_reason": "scale_jump",
                 "citation": {
                   "transaction_id": "MzEwOTIyMjMyNGFkaXF6a2N4",
                   "page": 8,
                   "line": "Net cash generated from/(used in) operating activities 1,824.9 (146 3)"
-                }
+                },
+                "nulled_from": "-146.3"
               }
             }
           },
@@ -14527,6 +14117,10 @@
         }
       ],
       "extraction_status": "complete",
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      },
       "reason_class": "takeover",
       "leaving_date": "2014-05-15",
       "epic": "ESSR",
@@ -14538,30 +14132,22 @@
           2014
         ],
         "years_with_eps": [
-          2010,
-          2012,
           2013,
           2014
         ],
         "years_with_revenue": [
-          2010,
-          2012,
-          2013,
           2014
         ],
         "years_with_operating_cash_flow": [
           2010,
           2012,
-          2013,
           2014
         ],
         "years_with_capex": [
-          2012,
-          2014
+          2012
         ],
         "years_with_operating_cash_flow_and_capex": [
-          2012,
-          2014
+          2012
         ],
         "statements_every_year": true
       },
@@ -15071,6 +14657,10 @@
         }
       ],
       "extraction_status": "complete",
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      },
       "reason_class": "takeover",
       "leaving_date": "2014-08-07",
       "epic": "DXNS",
@@ -15141,25 +14731,25 @@
       "fields_found": {
         "revenue": 2,
         "operating_profit": 2,
-        "profit_attributable_to_owners": 2,
+        "profit_attributable_to_owners": 3,
         "basic_eps": 1,
         "weighted_average_basic_shares": 0,
         "net_cash_from_operating_activities": 0,
         "capital_expenditure": 2,
         "dividends_per_share": 0,
-        "reporting_currency": 2,
+        "reporting_currency": 3,
         "fiscal_year_end": 3
       },
       "fields_absent": {
         "revenue": 1,
         "operating_profit": 1,
-        "profit_attributable_to_owners": 1,
+        "profit_attributable_to_owners": 0,
         "basic_eps": 2,
         "weighted_average_basic_shares": 3,
         "net_cash_from_operating_activities": 3,
         "capital_expenditure": 1,
         "dividends_per_share": 3,
-        "reporting_currency": 1,
+        "reporting_currency": 0,
         "fiscal_year_end": 0
       },
       "extraction_methods": {
@@ -15179,7 +14769,7 @@
               "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": "revenue not found on the statement",
+              "absent_reason": "column count does not match the year header",
               "citation": null
             },
             "operating_profit": {
@@ -15188,17 +14778,21 @@
               "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": "operating profit not found on the statement",
+              "absent_reason": "column count does not match the year header",
               "citation": null
             },
             "profit_attributable_to_owners": {
-              "value": null,
-              "scale": null,
-              "currency": null,
+              "value": "12840",
+              "scale": "thousands",
+              "currency": "GBP",
               "unit": null,
               "source": "primary",
-              "absent_reason": "profit attributable to owners not found on the statement",
-              "citation": null
+              "absent_reason": null,
+              "citation": {
+                "transaction_id": "MzA4MTU4NDkzNmFkaXF6a2N4",
+                "page": 71,
+                "line": "Equity holders of the parent 12,840 3129"
+              }
             },
             "basic_eps": {
               "value": null,
@@ -15206,7 +14800,7 @@
               "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": "basic earnings per share not found on the statement",
+              "absent_reason": "EPS decimal not recovered",
               "citation": null
             },
             "weighted_average_basic_shares": {
@@ -15215,7 +14809,7 @@
               "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": "weighted average number of shares not found in the earnings-per-share note",
+              "absent_reason": "column count does not match the year header",
               "citation": null
             },
             "net_cash_from_operating_activities": {
@@ -15246,13 +14840,17 @@
               "citation": null
             },
             "reporting_currency": {
-              "value": null,
-              "scale": null,
-              "currency": null,
+              "value": "GBP",
+              "scale": "thousands",
+              "currency": "GBP",
               "unit": null,
               "source": "primary",
-              "absent_reason": "currency unit (£m, £'000, $m, €m) not found on the statement header",
-              "citation": null
+              "absent_reason": null,
+              "citation": {
+                "transaction_id": "MzA4MTU4NDkzNmFkaXF6a2N4",
+                "page": 71,
+                "line": "Notes £'000 £000"
+              }
             },
             "fiscal_year_end": {
               "value": "2012-12-31",
@@ -15263,13 +14861,33 @@
               "absent_reason": null,
               "citation": {
                 "transaction_id": "MzA4MTU4NDkzNmFkaXF6a2N4",
-                "page": null,
-                "line": "Companies House filing-history made_up_date"
-              },
-              "note": "not printed as a parsed date on the statement page; Companies House made_up_date used"
+                "page": 71,
+                "line": "Year ended 31 December 2012 g"
+              }
             }
           },
-          "comparative": null,
+          "comparative": {
+            "source": "comparative",
+            "fiscal_year": 2011,
+            "fiscal_year_end": null,
+            "filing_date": "2013-07-16",
+            "transaction_id": "MzA4MTU4NDkzNmFkaXF6a2N4",
+            "fields": {
+              "profit_attributable_to_owners": {
+                "value": "3129",
+                "scale": "thousands",
+                "currency": "GBP",
+                "unit": null,
+                "source": "comparative",
+                "absent_reason": null,
+                "citation": {
+                  "transaction_id": "MzA4MTU4NDkzNmFkaXF6a2N4",
+                  "page": 71,
+                  "line": "Equity holders of the parent 12,840 3129"
+                }
+              }
+            }
+          },
           "methods": [
             "ocr"
           ],
@@ -15285,9 +14903,7 @@
             {
               "page": 72,
               "method": "ocr",
-              "kinds": [
-                "income_maybe"
-              ]
+              "kinds": []
             },
             {
               "page": 75,
@@ -15322,7 +14938,7 @@
               "citation": {
                 "transaction_id": "MzEwMjk2MzYwN2FkaXF6a2N4",
                 "page": 86,
-                "line": "Revenue 1,2,3 208,135 151,607"
+                "line": "Revenue 12,3 208,135 151,607"
               }
             },
             "operating_profit": {
@@ -15383,7 +14999,7 @@
               "citation": null
             },
             "capital_expenditure": {
-              "value": "-82",
+              "value": "10082",
               "scale": "thousands",
               "currency": "GBP",
               "unit": null,
@@ -15392,12 +15008,12 @@
               "citation": {
                 "transaction_id": "MzEwMjk2MzYwN2FkaXF6a2N4",
                 "page": 90,
-                "line": "Purchase of intangible assets (0,082) (5,283)"
+                "line": "Purchase of intangible assets 10,082) (8,283)"
               },
               "components": [
                 {
                   "label": "Purchase of intangible assets",
-                  "value": "-82",
+                  "value": "10082",
                   "page": 90
                 }
               ],
@@ -15422,7 +15038,7 @@
               "citation": {
                 "transaction_id": "MzEwMjk2MzYwN2FkaXF6a2N4",
                 "page": 86,
-                "line": "Notes £000 £'000"
+                "line": "Notes £7000 £000"
               }
             },
             "fiscal_year_end": {
@@ -15456,7 +15072,7 @@
                 "citation": {
                   "transaction_id": "MzEwMjk2MzYwN2FkaXF6a2N4",
                   "page": 86,
-                  "line": "Revenue 1,2,3 208,135 151,607"
+                  "line": "Revenue 12,3 208,135 151,607"
                 }
               },
               "operating_profit": {
@@ -15469,7 +15085,7 @@
                 "citation": {
                   "transaction_id": "MzEwMjk2MzYwN2FkaXF6a2N4",
                   "page": 86,
-                  "line": "Group operating profit* 3,4 11,551 19,514"
+                  "line": "Group operating profit* 34 1,551 19,514"
                 }
               },
               "profit_attributable_to_owners": {
@@ -15483,19 +15099,6 @@
                   "transaction_id": "MzEwMjk2MzYwN2FkaXF6a2N4",
                   "page": 86,
                   "line": "Owners of the Parent 4,035 12,840"
-                }
-              },
-              "basic_eps": {
-                "value": "5.5",
-                "scale": null,
-                "currency": null,
-                "unit": "pence",
-                "source": "comparative",
-                "absent_reason": null,
-                "citation": {
-                  "transaction_id": "MzEwMjk2MzYwN2FkaXF6a2N4",
-                  "page": 86,
-                  "line": "Statutory (pence) ‘ 1 1.6 5.5"
                 }
               }
             }
@@ -15529,9 +15132,7 @@
             {
               "page": 91,
               "method": "ocr",
-              "kinds": [
-                "income_maybe"
-              ]
+              "kinds": []
             }
           ],
           "description": "accounts-with-accounts-type-group",
@@ -15571,17 +15172,18 @@
               }
             },
             "profit_attributable_to_owners": {
-              "value": "412",
+              "value": null,
               "scale": "thousands",
               "currency": "GBP",
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
+              "absent_reason": "scale_jump",
               "citation": {
                 "transaction_id": "MzEyNjAwODM2OGFkaXF6a2N4",
                 "page": 15,
                 "line": "Owners of the Parent 412 4,035"
-              }
+              },
+              "nulled_from": "412"
             },
             "basic_eps": {
               "value": null,
@@ -15650,7 +15252,7 @@
               "citation": {
                 "transaction_id": "MzEyNjAwODM2OGFkaXF6a2N4",
                 "page": 15,
-                "line": "Notes £7000 £000"
+                "line": "Notes £000 £000"
               }
             },
             "fiscal_year_end": {
@@ -15752,6 +15354,12 @@
         }
       ],
       "extraction_status": "complete",
+      "values_nulled": {
+        "total": 1,
+        "by_check": {
+          "scale_jump": 1
+        }
+      },
       "reason_class": "takeover",
       "leaving_date": "2014-11-13",
       "epic": null,
@@ -15763,7 +15371,6 @@
           2014
         ],
         "years_with_eps": [
-          2012,
           2013
         ],
         "years_with_revenue": [
@@ -15794,7 +15401,7 @@
         "revenue": 1,
         "operating_profit": 1,
         "profit_attributable_to_owners": 1,
-        "basic_eps": 1,
+        "basic_eps": 0,
         "weighted_average_basic_shares": 0,
         "net_cash_from_operating_activities": 0,
         "capital_expenditure": 1,
@@ -15806,7 +15413,7 @@
         "revenue": 2,
         "operating_profit": 2,
         "profit_attributable_to_owners": 2,
-        "basic_eps": 2,
+        "basic_eps": 3,
         "weighted_average_basic_shares": 3,
         "net_cash_from_operating_activities": 3,
         "capital_expenditure": 2,
@@ -15815,7 +15422,7 @@
         "fiscal_year_end": 0
       },
       "extraction_methods": {
-        "ocr": 4
+        "ocr": 6
       },
       "filings": [
         {
@@ -15827,8 +15434,8 @@
           "fields": {
             "revenue": {
               "value": "14460",
-              "scale": "millions",
-              "currency": "GBP",
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
               "absent_reason": null,
@@ -15840,8 +15447,8 @@
             },
             "operating_profit": {
               "value": "301",
-              "scale": "millions",
-              "currency": "GBP",
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
               "absent_reason": null,
@@ -15853,8 +15460,8 @@
             },
             "profit_attributable_to_owners": {
               "value": "138",
-              "scale": "millions",
-              "currency": "GBP",
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
               "absent_reason": null,
@@ -15865,17 +15472,13 @@
               }
             },
             "basic_eps": {
-              "value": "125",
+              "value": null,
               "scale": null,
               "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzA3MTQ3NTI1NGFkaXF6a2N4",
-                "page": 82,
-                "line": "Basic earnings per share 32 125 77"
-              }
+              "absent_reason": "basic earnings per share not found on the statement",
+              "citation": null
             },
             "weighted_average_basic_shares": {
               "value": null,
@@ -15926,17 +15529,13 @@
               "citation": null
             },
             "reporting_currency": {
-              "value": "GBP",
-              "scale": "millions",
-              "currency": "GBP",
+              "value": null,
+              "scale": null,
+              "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
-              "citation": {
-                "transaction_id": "MzA3MTQ3NTI1NGFkaXF6a2N4",
-                "page": null,
-                "line": "Note £m Em"
-              }
+              "absent_reason": "currency unit (£m, £'000, $m, €m) not found on the statement header",
+              "citation": null
             },
             "fiscal_year_end": {
               "value": "2012-09-30",
@@ -15961,8 +15560,8 @@
             "fields": {
               "revenue": {
                 "value": "14687",
-                "scale": "millions",
-                "currency": "GBP",
+                "scale": null,
+                "currency": null,
                 "unit": null,
                 "source": "comparative",
                 "absent_reason": null,
@@ -15974,8 +15573,8 @@
               },
               "operating_profit": {
                 "value": "255",
-                "scale": "millions",
-                "currency": "GBP",
+                "scale": null,
+                "currency": null,
                 "unit": null,
                 "source": "comparative",
                 "absent_reason": null,
@@ -15987,19 +15586,6 @@
               },
               "profit_attributable_to_owners": {
                 "value": "85",
-                "scale": "millions",
-                "currency": "GBP",
-                "unit": null,
-                "source": "comparative",
-                "absent_reason": null,
-                "citation": {
-                  "transaction_id": "MzA3MTQ3NTI1NGFkaXF6a2N4",
-                  "page": 82,
-                  "line": "Equity holders of the parent 138 85"
-                }
-              },
-              "basic_eps": {
-                "value": "77",
                 "scale": null,
                 "currency": null,
                 "unit": null,
@@ -16008,7 +15594,7 @@
                 "citation": {
                   "transaction_id": "MzA3MTQ3NTI1NGFkaXF6a2N4",
                   "page": 82,
-                  "line": "Basic earnings per share 32 125 77"
+                  "line": "Equity holders of the parent 138 85"
                 }
               }
             }
@@ -16241,13 +15827,17 @@
               "citation": null
             },
             "reporting_currency": {
-              "value": null,
-              "scale": null,
-              "currency": null,
+              "value": "GBP",
+              "scale": "millions",
+              "currency": "GBP",
               "unit": null,
               "source": "primary",
-              "absent_reason": "currency unit (£m, £'000, $m, €m) not found on the statement header",
-              "citation": null
+              "absent_reason": null,
+              "citation": {
+                "transaction_id": "MzExNTM3NTUwMWFkaXF6a2N4",
+                "page": 155,
+                "line": "£m £m £m ém mn fm"
+              }
             },
             "fiscal_year_end": {
               "value": "2014-09-30",
@@ -16265,17 +15855,35 @@
             }
           },
           "comparative": null,
-          "methods": [],
+          "methods": [
+            "ocr"
+          ],
           "warnings": [
-            "no income-statement heading found",
             "no cash-flow heading found"
           ],
-          "pages": [],
+          "pages": [
+            {
+              "page": 155,
+              "method": "ocr",
+              "kinds": [
+                "income"
+              ]
+            },
+            {
+              "page": 156,
+              "method": "ocr",
+              "kinds": []
+            }
+          ],
           "description": "accounts-with-accounts-type-group",
           "pdf_pages": 189
         }
       ],
       "extraction_status": "complete",
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      },
       "reason_class": "takeover",
       "leaving_date": "2014-12-17",
       "epic": "TT",
@@ -16286,10 +15894,7 @@
           2013,
           2014
         ],
-        "years_with_eps": [
-          2011,
-          2012
-        ],
+        "years_with_eps": [],
         "years_with_revenue": [
           2011,
           2012
@@ -16315,25 +15920,25 @@
       "fields_found": {
         "revenue": 2,
         "operating_profit": 0,
-        "profit_attributable_to_owners": 0,
+        "profit_attributable_to_owners": 1,
         "basic_eps": 0,
         "weighted_average_basic_shares": 0,
         "net_cash_from_operating_activities": 0,
         "capital_expenditure": 0,
         "dividends_per_share": 0,
-        "reporting_currency": 2,
+        "reporting_currency": 3,
         "fiscal_year_end": 4
       },
       "fields_absent": {
         "revenue": 2,
         "operating_profit": 4,
-        "profit_attributable_to_owners": 4,
+        "profit_attributable_to_owners": 3,
         "basic_eps": 4,
         "weighted_average_basic_shares": 4,
         "net_cash_from_operating_activities": 4,
         "capital_expenditure": 4,
         "dividends_per_share": 4,
-        "reporting_currency": 2,
+        "reporting_currency": 1,
         "fiscal_year_end": 0
       },
       "extraction_methods": {
@@ -16370,13 +15975,17 @@
               "citation": null
             },
             "profit_attributable_to_owners": {
-              "value": null,
-              "scale": null,
-              "currency": null,
+              "value": "-42",
+              "scale": "millions",
+              "currency": "GBP",
               "unit": null,
               "source": "primary",
-              "absent_reason": "profit attributable to owners not found on the statement",
-              "citation": null
+              "absent_reason": null,
+              "citation": {
+                "transaction_id": "MzA3NjAyNTM2OGFkaXF6a2N4",
+                "page": 49,
+                "line": "Equity holders of the Company 0 (42) (21)"
+              }
             },
             "basic_eps": {
               "value": null,
@@ -16457,8 +16066,8 @@
             "filing_date": "2013-04-10",
             "transaction_id": "MzA3NjAyNTM2OGFkaXF6a2N4",
             "fields": {
-              "revenue": {
-                "value": "4103",
+              "profit_attributable_to_owners": {
+                "value": "-21",
                 "scale": "millions",
                 "currency": "GBP",
                 "unit": null,
@@ -16467,7 +16076,7 @@
                 "citation": {
                   "transaction_id": "MzA3NjAyNTM2OGFkaXF6a2N4",
                   "page": 49,
-                  "line": "Total revenue 11,129 4,103"
+                  "line": "Equity holders of the Company 0 (42) (21)"
                 }
               }
             }
@@ -16515,17 +16124,18 @@
           "source": "primary",
           "fields": {
             "revenue": {
-              "value": "10988",
+              "value": null,
               "scale": null,
               "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": null,
+              "absent_reason": "scale_jump",
               "citation": {
                 "transaction_id": "MzA5ODA4OTE4OGFkaXF6a2N4",
                 "page": 37,
                 "line": "Total revenue 10,988 11,097"
-              }
+              },
+              "nulled_from": "10988"
             },
             "operating_profit": {
               "value": null,
@@ -16569,7 +16179,7 @@
               "currency": null,
               "unit": null,
               "source": "primary",
-              "absent_reason": "net cash from operating activities not found on the cash flow statement",
+              "absent_reason": "decimal place not recovered",
               "citation": null
             },
             "capital_expenditure": {
@@ -16591,13 +16201,17 @@
               "citation": null
             },
             "reporting_currency": {
-              "value": null,
-              "scale": null,
-              "currency": null,
+              "value": "GBP",
+              "scale": "millions",
+              "currency": "GBP",
               "unit": null,
               "source": "primary",
-              "absent_reason": "currency unit (£m, £'000, $m, €m) not found on the statement header",
-              "citation": null
+              "absent_reason": null,
+              "citation": {
+                "transaction_id": "MzA5ODA4OTE4OGFkaXF6a2N4",
+                "page": 37,
+                "line": "Notes £m ém"
+              }
             },
             "fiscal_year_end": {
               "value": "2013-12-31",
@@ -16608,10 +16222,9 @@
               "absent_reason": null,
               "citation": {
                 "transaction_id": "MzA5ODA4OTE4OGFkaXF6a2N4",
-                "page": null,
-                "line": "Companies House filing-history made_up_date"
-              },
-              "note": "not printed as a parsed date on the statement page; Companies House made_up_date used"
+                "page": 37,
+                "line": "For the year ended 31 December 2013. ‘"
+              }
             }
           },
           "comparative": {
@@ -16899,7 +16512,7 @@
               "citation": {
                 "transaction_id": "MzE0ODYwODYzMGFkaXF6a2N4",
                 "page": 23,
-                "line": "; £m £m"
+                "line": "£m £m"
               }
             },
             "fiscal_year_end": {
@@ -16912,7 +16525,7 @@
               "citation": {
                 "transaction_id": "MzE0ODYwODYzMGFkaXF6a2N4",
                 "page": 23,
-                "line": "For the year ended 31 December 2015 . 2014"
+                "line": "For the year ended 31 December 2015 2014"
               }
             }
           },
@@ -16954,6 +16567,12 @@
         }
       ],
       "extraction_status": "complete",
+      "values_nulled": {
+        "total": 1,
+        "by_check": {
+          "scale_jump": 1
+        }
+      },
       "reason_class": "takeover",
       "leaving_date": "2015-04-13",
       "epic": "FLG",
@@ -16967,9 +16586,7 @@
         ],
         "years_with_eps": [],
         "years_with_revenue": [
-          2011,
-          2012,
-          2013
+          2012
         ],
         "years_with_operating_cash_flow": [],
         "years_with_capex": [],
@@ -17285,6 +16902,10 @@
         }
       ],
       "extraction_status": "complete",
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      },
       "reason_class": "takeover",
       "leaving_date": "2015-05-29",
       "epic": null,
@@ -17680,7 +17301,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "spirit_pub",
@@ -18485,7 +18110,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "tsb_banking_group",
@@ -18755,7 +18384,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "csr",
@@ -19347,7 +18980,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "colt_group",
@@ -19861,7 +19498,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "alent",
@@ -20239,7 +19880,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "hellermanntyton_group",
@@ -20617,7 +20262,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "pace",
@@ -20995,7 +20644,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "telecity_group",
@@ -21481,7 +21134,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "bwin_party_digital_entertainment",
@@ -22104,7 +21761,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "betfair_group",
@@ -22911,7 +22572,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "bg_group",
@@ -23397,7 +23062,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "cable_wireless_communications",
@@ -23990,7 +23659,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "rexam",
@@ -24476,7 +24149,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "darty",
@@ -25066,7 +24743,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "home_retail_group",
@@ -25659,7 +25340,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "arm_holdings",
@@ -26145,7 +25830,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "sabmiller",
@@ -26738,7 +26427,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "premier_farnell",
@@ -27328,7 +27021,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "henderson_group",
@@ -27922,7 +27619,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "atkins_ws",
@@ -28730,7 +28431,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "shawbrook_group",
@@ -29641,7 +29346,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "aberdeen_asset_management",
@@ -30342,7 +30051,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "berendsen",
@@ -30936,7 +30649,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "amec_foster_wheeler",
@@ -31530,7 +31247,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "kennedy_wilson_europe_real_estate",
@@ -31936,7 +31657,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "paysafe_group",
@@ -32557,7 +32282,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "booker_group",
@@ -33366,7 +33095,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "aldermore",
@@ -34068,7 +33801,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "ladbrokes_coral_group",
@@ -34770,7 +34507,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "fenner",
@@ -35467,7 +35208,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "ubm",
@@ -36410,7 +36155,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "old_mutual",
@@ -37326,7 +37075,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "zpg",
@@ -38028,7 +37781,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "fidessa_group",
@@ -38730,7 +38487,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "vedanta_resources",
@@ -39646,7 +39407,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "john_laing_infrastructure_fund",
@@ -40485,7 +40250,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "esure_group",
@@ -42792,7 +42561,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "shire",
@@ -43666,7 +43439,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "dairy_crest_group",
@@ -44582,7 +44359,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "rpc",
@@ -45606,7 +45387,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "btg",
@@ -46523,7 +46308,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "acacia_mining",
@@ -47328,7 +47117,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "millennium_copthorne_hotels",
@@ -48245,7 +48038,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "charter_court_financial_services",
@@ -49269,7 +49066,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "greene_king",
@@ -50186,7 +49987,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "merlin_entertainments",
@@ -51210,7 +51015,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "bca_marketplace",
@@ -51802,7 +51611,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "inmarsat",
@@ -53147,7 +52960,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "entertainment_one",
@@ -54099,7 +53916,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "just_eat",
@@ -55123,7 +54944,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "sophos_group",
@@ -55825,7 +55650,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "ei_group",
@@ -56738,7 +56567,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "nmc_health",
@@ -58405,7 +58238,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "daejan_holdings",
@@ -59430,7 +59267,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "finablr",
@@ -59593,7 +59434,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "sdl",
@@ -60611,7 +60456,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "hastings_group_holdings",
@@ -61206,7 +61055,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "perpetual_income_growth_investment_trust",
@@ -62338,7 +62191,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "calisen",
@@ -62608,7 +62465,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "talktalk_telecom_group",
@@ -63741,7 +63602,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "alternative_credit_investments",
@@ -65088,7 +64953,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "william_hill",
@@ -66220,7 +66089,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "g4s",
@@ -67246,7 +67119,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "kaz_minerals",
@@ -68376,7 +68253,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "rsa_insurance_group",
@@ -69509,7 +69390,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "signature_aviation",
@@ -70749,7 +70634,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "st_modwen_properties",
@@ -71882,7 +71771,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "udg_healthcare",
@@ -72943,7 +72836,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "just_eat_takeaway_com",
@@ -74311,7 +74208,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "john_laing_group",
@@ -75442,7 +75343,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "gamesys_group",
@@ -76033,7 +75938,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "morrison",
@@ -77273,7 +77182,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "gcp_student_living",
@@ -78293,7 +78206,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "bhp_group",
@@ -79641,7 +79558,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "ferguson",
@@ -80909,7 +80830,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "vivo_energy",
@@ -81610,7 +81535,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "ultra_electronics_holdings",
@@ -82744,7 +82673,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "sanne_group",
@@ -84226,7 +84159,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "meggitt",
@@ -85360,7 +85297,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "brewin_dolphin_holdings",
@@ -87136,7 +87077,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "countryside_partnerships",
@@ -87949,7 +87894,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "euromoney_institutional_investor",
@@ -89297,7 +89246,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "contourglobal",
@@ -90105,7 +90058,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "homeserve",
@@ -91561,7 +91518,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "aveva_group",
@@ -93017,7 +92978,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "rps_group",
@@ -93959,7 +93924,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "micro_focus",
@@ -95238,7 +95207,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "mediclinic_international",
@@ -97015,7 +96988,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "crh",
@@ -98402,7 +98379,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "lxi_reit",
@@ -99746,7 +99727,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "wincanton",
@@ -101299,7 +101284,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "uk_commercial_property_reit",
@@ -102761,7 +102750,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "smurfit_kappa_group",
@@ -104167,7 +104160,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "redrow",
@@ -105624,7 +105621,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "network_international_holdings",
@@ -106219,7 +106220,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "virgin_money_uk",
@@ -108318,7 +108323,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "darktrace",
@@ -108804,7 +108813,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "ascential",
@@ -109937,7 +109950,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "witan_inv_tst",
@@ -111287,7 +111304,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "balanced_commercial_property_trust",
@@ -112277,7 +112298,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "britvic",
@@ -113842,7 +113867,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "smith_ds",
@@ -115407,7 +115436,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "asia_dragon_trust",
@@ -116855,7 +116888,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "hargreaves_lansdown",
@@ -119490,7 +119527,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "ti_fluid_systems",
@@ -120623,7 +120664,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "international_distribution_services",
@@ -121974,7 +122019,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "bbgi_global_infrastructure",
@@ -123567,7 +123616,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "urban_logistics_reit",
@@ -125444,7 +125497,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "direct_line_insurance_group",
@@ -126902,7 +126959,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "assura",
@@ -128786,7 +128847,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "warehouse_reit",
@@ -130018,7 +130083,11 @@
         "years_with_operating_cash_flow_and_capex": [],
         "statements_every_year": false
       },
-      "plausibility_flags": []
+      "plausibility_flags": [],
+      "values_nulled": {
+        "total": 0,
+        "by_check": {}
+      }
     },
     {
       "key": "apax_global_alpha",
@@ -130093,13 +130162,13 @@
     "ch_applicable": 124,
     "ch_not_applicable": 16,
     "unresolved": 15,
-    "with_any_statement": 8,
+    "with_any_statement": 6,
     "every_year": 1,
     "by_reason_class": {
       "takeover": {
         "names": 143,
         "ch_applicable": 117,
-        "with_any_statement": 8,
+        "with_any_statement": 6,
         "every_year": 1
       },
       "failure": {
@@ -130119,7 +130188,16 @@
   "leaver_cursor": {
     "ocr_workers": 1,
     "ocr_zoom": 1.6,
+    "page_zoom": 2.2,
+    "order": "failure, other, takeover by leaving date",
     "pending_keys": [
+      "nmc_health",
+      "finablr",
+      "perpetual_income_growth_investment_trust",
+      "asia_dragon_trust",
+      "old_mutual",
+      "bhp_group",
+      "indivior",
       "domino_printing_sciences",
       "spirit_pub",
       "tsb_banking_group",
@@ -130152,7 +130230,6 @@
       "ladbrokes_coral_group",
       "fenner",
       "laird",
-      "old_mutual",
       "zpg",
       "fidessa_group",
       "vedanta_resources",
@@ -130173,12 +130250,9 @@
       "just_eat",
       "sophos_group",
       "ei_group",
-      "nmc_health",
       "daejan_holdings",
-      "finablr",
       "sdl",
       "hastings_group_holdings",
-      "perpetual_income_growth_investment_trust",
       "calisen",
       "talktalk_telecom_group",
       "alternative_credit_investments",
@@ -130194,7 +130268,6 @@
       "gamesys_group",
       "morrison",
       "gcp_student_living",
-      "bhp_group",
       "clipper_logistics",
       "vivo_energy",
       "ultra_electronics_holdings",
@@ -130212,7 +130285,6 @@
       "dechra_pharmaceuticals",
       "lxi_reit",
       "wincanton",
-      "indivior",
       "tyman",
       "redrow",
       "network_international_holdings",
@@ -130223,7 +130295,6 @@
       "tritax_eurobox_gbp",
       "britvic",
       "smith_ds",
-      "asia_dragon_trust",
       "hargreaves_lansdown",
       "ti_fluid_systems",
       "international_distribution_services",
