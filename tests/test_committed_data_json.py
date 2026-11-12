@@ -48,3 +48,50 @@ def test_main_returns_zero_for_valid_policy_json():
 
 def test_main_returns_zero_for_engineering_tasks_with_pytest_banner():
     assert main(["docs/data/engineering_tasks.json"]) == 0
+
+
+def _git_repo(tmp_path: Path) -> Path:
+    import subprocess
+
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    data = tmp_path / "docs" / "data"
+    data.mkdir(parents=True)
+    (data / "a.json").write_text('{"a": 1}\n', encoding="utf-8")
+    subprocess.run(["git", "-C", str(tmp_path), "add", "."], check=True)
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(tmp_path),
+            "-c",
+            "user.name=t",
+            "-c",
+            "user.email=t@t",
+            "commit",
+            "-qm",
+            "init",
+        ],
+        check=True,
+    )
+    return tmp_path
+
+
+def test_main_changed_flags_stash_markers(tmp_path: Path, monkeypatch):
+    repo = _git_repo(tmp_path)
+    monkeypatch.chdir(repo)
+    (repo / "docs/data/a.json").write_text(
+        '<<<<<<< Updated upstream\n{"a": 2}\n=======\n{"a": 1}\n>>>>>>> Stashed changes\n',
+        encoding="utf-8",
+    )
+    (repo / "docs/data/log.jsonl").write_text(
+        '{"x": 1}\n>>>>>>> Stashed changes\n', encoding="utf-8"
+    )
+    assert main(["--changed"]) == 1
+
+
+def test_main_changed_passes_clean_edits(tmp_path: Path, monkeypatch):
+    repo = _git_repo(tmp_path)
+    monkeypatch.chdir(repo)
+    (repo / "docs/data/a.json").write_text('{"a": 2}\n', encoding="utf-8")
+    (repo / "docs/data/new.json").write_text("[]\n", encoding="utf-8")
+    assert main(["--changed"]) == 0

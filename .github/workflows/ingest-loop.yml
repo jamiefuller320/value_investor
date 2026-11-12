@@ -616,7 +616,9 @@ jobs:
 
       - name: Sync main before Wednesday anchor log commit
         if: steps.wed_anchor.outputs.should_dispatch == 'true'
-        run: git pull --rebase --autostash origin main
+        run: |
+          git pull --rebase --autostash origin main
+          python3 scripts/check_committed_data_json.py --changed
 
       - name: Commit Wednesday anchor log
         if: steps.wed_anchor.outputs.should_dispatch == 'true'
