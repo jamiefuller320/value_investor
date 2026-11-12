@@ -15114,6 +15114,37 @@ def test_parked_source_hunter_ppl_to_tsx60_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_tsx60_aem_to_builtins(tmp_path: Path):
+    """Regression: AEM.TO parked IWB — SEC FY2025 annual MD&A + Q2 2026 interim MD&A HTML."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("AEM.TO", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("aem-20251231xex99d3.htm" in url for url in urls)
+    assert any("tm2619289d3_ex99-1.htm" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") >= 1
+    assert sum(1 for row in rows if row["period"] == "interim") >= 1
+    assert {row["period"] for row in rows} <= {"annual", "interim", "other"}
+    assert len(fetch_filings_ir_allowlist("AEM", path=allowlist_path)) == 2
+
+
+def test_parked_source_hunter_aem_to_tsx60_has_fetchable_ir():
+    """eng-20261112-04: AEM.TO has live-fetchable Agnico Eagle SEC statutory HTML."""
+    assert "AEM.TO" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("AEM.TO")
+    assert len(rows) == 2
+    urls = [row["url"] for row in rows]
+    assert all("sec.gov" in url for url in urls)
+    annual_url = next(url for url in urls if "aem-20251231xex99d3.htm" in url)
+    body = _live_fetch_filing_body(annual_url)
+    if not body:
+        pytest.skip("SEC.gov body fetch unavailable (rate-limit / network) — retry later")
+    assert len(body) >= 50000
+
+
 def test_parked_source_hunter_skip_tri_to_tsx60():
     """eng-20260914-01: TRI.TO leftover IWB is SEC 6-K cover HTML, not missing 40-F/interim."""
     assert "TRI.TO" in PARKED_SOURCE_HUNTER_SKIP
