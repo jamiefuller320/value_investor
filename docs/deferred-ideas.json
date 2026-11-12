@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-12T08:47:16+00:00",
+  "updated_at": "2026-11-12T09:50:06+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -17739,6 +17739,117 @@
       "status": "open",
       "source": "ch-failed-name-statements",
       "added_at": "2026-11-12T08:47:16+00:00"
+    },
+    {
+      "id": "L717",
+      "category": "later",
+      "section": "universe",
+      "title": "Official historical index membership for the UK/Europe replay",
+      "summary": "The step 3.3 replay ranks an approximate FTSE 350, DAX, and CAC by EODHD close times shares because no point-in-time constituent file is licensed. A later registration can replace lse_operating_cap_rank_1_350 (and the XETRA and Paris ranks) with official membership, including delisted names. That swap is a new registration_id after the first development score.",
+      "revisit_when": "A licensed point-in-time constituent history for the FTSE 350, DAX, or CAC 40 is on hand, including names that left the index.",
+      "tags": [
+        "uk-replay",
+        "step-3.3",
+        "universe"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fafaaea9-e764-5b19-8abe-ce6888dd936a",
+      "added_at": "2026-11-12T09:50:06+00:00"
+    },
+    {
+      "id": "L718",
+      "category": "later",
+      "section": "universe",
+      "title": "Point-in-time sector labels for the UK/Europe replay",
+      "summary": "The UK replay applies EODHD General.Sector from the download on every historical date. That is look-ahead, the same limitation as the US rehearsal's tickers.sector. A historical sector feed would let sector_label_basis move off eodhd_general_current.",
+      "revisit_when": "A point-in-time sector history for LSE, XETRA, or Paris listings is licensed.",
+      "tags": [
+        "uk-replay",
+        "step-3.3",
+        "sector"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fafaaea9-e764-5b19-8abe-ce6888dd936a",
+      "added_at": "2026-11-12T09:50:06+00:00"
+    },
+    {
+      "id": "L719",
+      "category": "later",
+      "section": "ops",
+      "title": "Dated Trading 212 catalogue for the UK replay tradable bar",
+      "summary": "The step 3.2 tradable-subset bar needs t212_listed as of the signal date. The UK replay leaves that label not_applicable so today's catalogue is not painted backward.",
+      "revisit_when": "A dated Trading 212 catalogue history exists that can be read as of each signal session.",
+      "tags": [
+        "uk-replay",
+        "step-3.3",
+        "t212"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fafaaea9-e764-5b19-8abe-ce6888dd936a",
+      "added_at": "2026-11-12T09:50:06+00:00"
+    },
+    {
+      "id": "N271",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Dividend-cut soft check on the UK replay",
+      "summary": "The UK replay fetches EODHD dividend history for the screen's dividend yield and does not fire the decline gate's dividend-cut check. A DPS cut rule would be a new threshold and a new registration_id, taken up at a version review rather than inside strategy-book-uk-replay-v0.",
+      "revisit_when": "The next strategy-book version review (at the thickness gate, then at most every 26 weeks) asks for a dividend-cut soft check.",
+      "tags": [
+        "uk-replay",
+        "strategy-version-review",
+        "step-3.3"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fafaaea9-e764-5b19-8abe-ce6888dd936a",
+      "added_at": "2026-11-12T09:50:06+00:00"
+    },
+    {
+      "id": "L720",
+      "category": "later",
+      "section": "learning",
+      "title": "Profit-warning headlines for the UK replay",
+      "summary": "The decline gate's profit-warning and impairment checks need a filings headline index. EODHD does not provide one, so those checks do not fire on the UK replay, matching the US rehearsal.",
+      "revisit_when": "A point-in-time headline source for UK and European filings is licensed.",
+      "tags": [
+        "uk-replay",
+        "step-3.3",
+        "decline-gate"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fafaaea9-e764-5b19-8abe-ce6888dd936a",
+      "added_at": "2026-11-12T09:50:06+00:00"
+    },
+    {
+      "id": "N272",
+      "category": "not_now",
+      "section": "universe",
+      "title": "UK replay markets beyond LSE, XETRA and Paris",
+      "summary": "Step 3.3 scores an approximate FTSE 350 and, when the fetch finishes, approximate DAX and CAC ranks. Other European exchanges stay out of this registration so the paid month is spent on the three lists.",
+      "revisit_when": "The UK replay reveal is committed and a version review asks for another European exchange.",
+      "tags": [
+        "uk-replay",
+        "step-3.3",
+        "universe"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fafaaea9-e764-5b19-8abe-ce6888dd936a",
+      "added_at": "2026-11-12T09:50:06+00:00"
+    },
+    {
+      "id": "L721",
+      "category": "later",
+      "section": "learning",
+      "title": "Pre-2013 UK point-in-time tape",
+      "summary": "EODHD annual statements are deep from 2013, so the UK replay's development window starts in 2013 and cannot speak to 2008. A survivorship-free tape with statements before 2013 would be a new registration, not an extension of strategy-book-uk-replay-v0.",
+      "revisit_when": "A survivorship-free source with dated annual statements before 2013 is licensed for LSE names, including delisted companies.",
+      "tags": [
+        "uk-replay",
+        "step-3.3"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fafaaea9-e764-5b19-8abe-ce6888dd936a",
+      "added_at": "2026-11-12T09:50:06+00:00"
     }
   ],
   "fragments": [

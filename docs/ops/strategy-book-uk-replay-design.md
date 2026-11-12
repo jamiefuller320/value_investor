@@ -510,16 +510,17 @@ Left out of this registration, and queued behind P1/P2 except where noted:
 
 | Item | Where it sits |
 |---|---|
-| The runner, the Actions workflow, the aggregate store, and the ops-monitor finding | The next package after the seal, inside this paid month. Dispatch-only, same shape as the coverage check. Not a daily cron. Not queued. |
+| The runner, the Actions workflow, the aggregate store, and the ops-monitor finding | The next package after the seal, inside this paid month. Dispatch-only, same shape as the coverage check. Not a daily cron. Not queued. L664 stays open until a reveal is committed. |
 | Editing the plan status row for step 3.3 | The owner updates the plan. |
 | Editing the signed parent registration | Frozen. |
-| Official FTSE 350, DAX, and CAC constituent histories | Queued. Cap rank is the sealed proxy. |
-| Point-in-time sector labels | Queued. The current `General.Sector` is used on every date. |
-| A dated Trading 212 catalogue, so the tradable-subset bar could be scored | Queued. |
-| A dividend-cut rule and a profit-warning headline scan | Queued. Neither check fires. |
+| Official FTSE 350, DAX, and CAC constituent histories | Queued as L717. Cap rank is the proxy this draft seals. |
+| Point-in-time sector labels | Queued as L718. The current `General.Sector` is used on every date. |
+| A dated Trading 212 catalogue, so the tradable-subset bar could be scored | Queued as L719. |
+| A dividend-cut rule | Queued as N271. The check does not fire. Dividend history is used for yield only. |
+| A profit-warning headline scan | Queued as L720. The check does not fire. |
 | Companies House for every leaver | Already queued as L716. This replay reads the seven-name store only. |
-| Exchanges beyond LSE, XETRA, and PA | Queued. |
-| A tape before 2013, including a 2008 window | Queued. EODHD depth from 2013 is the reason the window starts there. |
+| Exchanges beyond LSE, XETRA, and PA | Queued as N272. |
+| A tape before 2013, including a 2008 window | Queued as L721. EODHD depth from 2013 is the reason the window starts there. |
 | LLM memo verdicts on the entry, the exit, or the review | Out of the method. |
 | Passing the thickness gate, step 3.2 as a live-capital decision, or step 5.5 | Out of this instrument. |
 | Revealing hsr-v2 or any other Sharadar holdout | Forbidden. |
