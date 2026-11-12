@@ -240,5 +240,34 @@
     "ADJUSTED_SIGNAL": "absent",
     "T212_LISTED": "not_applicable",
     "LATE_SIGNAL": "not_applicable"
-  }
+  },
+  "change_markers": [
+    {
+      "marker_id": "strategy-book-uk-replay-v0-fetch-date-v1",
+      "at": "2026-11-12T18:38:30Z",
+      "kind": "schedule",
+      "rule_change": false,
+      "approved_by": "jamiefuller320 (dispatched the fetch 2026-11-12)",
+      "new_registration_id": false,
+      "logged_on_registration_id": "strategy-book-uk-replay-v0",
+      "sealed_text": "Section 8 timetable: 'By 2026-11-18 | Owner seal.' then '2026-11-19 | LSE fetch.'",
+      "what_changed": "The seal landed 2026-11-12, so the owner dispatched the LSE fetch the same day instead of waiting for 2026-11-19.",
+      "unchanged": "No constant, window, scoring rule or call budget changed. The fetch scores nothing and does not open the holdout; development and the reveal stamp keep their order, and the last call day stays 2026-12-10.",
+      "doc": "docs/ops/strategy-book-uk-replay-runbook.md"
+    },
+    {
+      "marker_id": "strategy-book-uk-replay-v0-cache-path-fix-v1",
+      "at": "2026-11-12T18:45:00Z",
+      "kind": "bug_fix",
+      "rule_change": false,
+      "approved_by": "owner (pending: merging this change approves it)",
+      "new_registration_id": false,
+      "logged_on_registration_id": "strategy-book-uk-replay-v0",
+      "sealed_text": "Licensed EODHD files never sit inside the repository; the Actions cache is stored encrypted.",
+      "what_was_wrong": "The workflow passed --cache uk-replay-cache, a folder inside the checkout, so the runner's outside-repo guard refused and the first fetch (run 43281946828, 2026-11-12) exited with code 2 before any EODHD call.",
+      "fix": "The workflow keeps the decrypted cache and the encrypted tarball under the runner temp dir, outside the checkout. The runner guard is unchanged.",
+      "unchanged": "No EODHD call was made by the failed run and nothing was committed. No rule or constant changed.",
+      "doc": ".github/workflows/strategy-book-uk-replay.yml"
+    }
+  ]
 }
