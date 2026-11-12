@@ -244,6 +244,36 @@ Flags are stored on the name as `plausibility_flags` and do not drop the value.
 
 ### Hand check of leaver years
 
-Seed `random.Random(20261112)` over `(key, year)` pairs that have a citation
-page. Ten draws, recorded below after the extraction run. The four Carillion
-and Patisserie rows above are a separate check and are not part of this draw.
+Seed `random.Random(20261112)` over `(key, year, field)` rows that have a
+citation page, drawn from names whose extraction had finished. Ten draws.
+The Carillion and Patisserie rows above are a separate check.
+
+| Name | Year | Field | PDF page | PDF | Stored | Result |
+|------|------|-------|----------|-----|--------|--------|
+| Essar Energy | 2012 | Basic EPS | 76 | (53.0) US cents | -53 | Match on the statutory loss. Unit not stored. |
+| Perform Group | 2013 | Profit attributable | 86 | 4,035 £'000 | 4035 thousands | Match |
+| TUI Travel | 2012 | Profit attributable | 82 | 138 £m | 138 millions | Match |
+| Essar Energy | 2014 | Profit attributable | 3 | (310.1) $m | -10.1 millions | Miss. OCR read (310.1) as (10.1). |
+| Essar Energy | 2012 | Revenue | 76 | 21,956.7 $m | 20903 millions | Miss. The stored line is the sales-tax adjustment 20,903.0, not revenue. |
+| Invensys | 2012 | Operating cash flow | 88 | 27 £m | 27 | Match. Cash generated from operations (76) was not used. |
+| Perform Group | 2014 | Revenue | 15 | 249,998 £'000 | 249998 thousands | Match |
+| TUI Travel | 2012 | Basic EPS | 82 | 12.5p | 125 | Miss. The decimal point was dropped. |
+| Invensys | 2014 | Profit attributable | 17 | 2,464 is total comprehensive income attributable to equity holders, not profit for the year | 2464 millions | Miss. The line is on the statement of comprehensive income. |
+| Invensys | 2012 | Revenue | 83 | 2,539 £m | 2539 | Match |
+
+Six of the ten stored values match the cited line. The four misses are a dropped decimal, a neighbouring adjustment row, a misread parenthesis, and the comprehensive-income attribution. Values were not dropped. Automatic plausibility flags on the nine newly finished names were 0 across 64 filled fields: the decimal drop had no unit, so the pence/pound check did not fire.
+
+### Coverage so far
+
+The leaver list has 155 names: 143 takeover, 4 failure, 8 other. Companies House resolution: 124 UK plcs, 16 not applicable (overseas issuer), 15 unresolved. No number was guessed. GKN is 04191106 and Sky is 02247735, the same numbers as the hand-verified filings.
+
+The no-OCR pass found no iXBRL on these annual-report filings (the document is `application/pdf` only) and no text layer. Image OCR is resumable. `leaver_cursor.pending_keys` is the rest. One Tesseract process at zoom 1.6 scans at most the first 100 pages and the last 40 for the income statement, then OCRs that page, the cash-flow page, and one EPS note. A full header scan of three parallel Tesseract processes stalled; this host uses one. At the observed pace the remaining image filings are several hours of OCR. Names already finished keep `extraction_status=complete` and are skipped on the next run:
+
+```bash
+PYTHONPATH=$PWD/src python3 -m value_investor.ch_failed_name_statements \
+  --leavers --allow-ocr \
+  --out docs/data/ch_failed_name_statements.json \
+  --cache-dir /tmp/ch-pdfs
+```
+
+`statements_every_year` is true only when every expected year has a basic EPS. A missing year stays missing. The store field `leaver_coverage` is the summary by `reason_class`. Re-read it after the OCR run; the committed store is a partial cursor, not a finished coverage rate.

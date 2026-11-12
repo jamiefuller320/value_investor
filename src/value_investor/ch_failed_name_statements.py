@@ -2095,6 +2095,30 @@ def _load_json(path: Path) -> Any | None:
         return None
 
 
+def _fast_statement_pages(headers: list[str]) -> list[int]:
+    """Income, cash flow, and one EPS note. Not every page that mentions them."""
+    chosen: list[int] = []
+    seen_income = seen_cash = seen_eps = False
+    income_at = None
+    for index, header in enumerate(headers):
+        kinds = _heading_kinds(str(header))
+        if "income" in kinds and not seen_income:
+            chosen.extend([index, index + 1])
+            seen_income = True
+            income_at = index
+        elif "cash" in kinds and not seen_cash:
+            chosen.extend([index, index + 1])
+            seen_cash = True
+        elif "eps_note" in kinds and seen_income and not seen_eps:
+            chosen.append(index)
+            seen_eps = True
+        if seen_income and seen_cash and seen_eps:
+            break
+        if seen_income and seen_cash and income_at is not None and index > income_at + 25:
+            break
+    return chosen
+
+
 def extract_statement_pages(
     pdf_path: Path,
     *,
@@ -2138,21 +2162,72 @@ def extract_statement_pages(
         if not header_path.exists() and legacy_headers.exists():
             header_path.write_text(legacy_headers.read_text(encoding="utf-8"), encoding="utf-8")
         headers = _load_json(header_path)
-        if not isinstance(headers, list) or len(headers) != doc.page_count:
-            headers = []
-            for index in range(doc.page_count):
+        fast = zoom != 2.2
+        if fast and isinstance(headers, list) and len(headers) == doc.page_count:
+            chosen = _fast_statement_pages(headers)
+        elif fast:
+            chosen = []
+            seen_income = seen_cash = seen_eps = False
+            income_at = None
+            scanned: list[str] = []
+            limit = min(doc.page_count, 100)
+            for index in range(limit):
                 image = _page_image(doc, index, zoom=zoom)
-                lines = _ocr_image_lines(image, header_only=True)
-                headers.append("\n".join(lines))
-                if (index + 1) % 25 == 0:
-                    logger.info("headers %s %s/%s", transaction_id, index + 1, doc.page_count)
-            header_path.write_text(json.dumps(headers), encoding="utf-8")
-        chosen: list[int] = []
-        for index, header in enumerate(headers):
-            if _heading_kinds(str(header)):
-                chosen.append(index)
-                if index + 1 < doc.page_count:
-                    chosen.append(index + 1)
+                header = "\n".join(_ocr_image_lines(image, header_only=True))
+                scanned.append(header)
+                kinds = _heading_kinds(header)
+                if "income" in kinds and not seen_income:
+                    chosen.extend([index, index + 1])
+                    seen_income = True
+                    income_at = index
+                elif "cash" in kinds and not seen_cash:
+                    chosen.extend([index, index + 1])
+                    seen_cash = True
+                elif "eps_note" in kinds and seen_income and not seen_eps:
+                    chosen.append(index)
+                    seen_eps = True
+                if seen_income and seen_cash and seen_eps:
+                    break
+                if seen_income and seen_cash and income_at is not None and index > income_at + 25:
+                    break
+            if not seen_income and doc.page_count > limit:
+                for index in range(max(limit, doc.page_count - 40), doc.page_count):
+                    image = _page_image(doc, index, zoom=zoom)
+                    header = "\n".join(_ocr_image_lines(image, header_only=True))
+                    kinds = _heading_kinds(header)
+                    if "income" in kinds and not seen_income:
+                        chosen.extend([index, index + 1])
+                        seen_income = True
+                    elif "cash" in kinds and not seen_cash:
+                        chosen.extend([index, index + 1])
+                        seen_cash = True
+                    elif "eps_note" in kinds and seen_income and not seen_eps:
+                        chosen.append(index)
+                        seen_eps = True
+                    if seen_income and seen_cash and seen_eps:
+                        break
+            logger.info(
+                "headers %s fast %s/%s",
+                transaction_id,
+                len(scanned),
+                doc.page_count,
+            )
+        else:
+            if not isinstance(headers, list) or len(headers) != doc.page_count:
+                headers = []
+                for index in range(doc.page_count):
+                    image = _page_image(doc, index, zoom=zoom)
+                    lines = _ocr_image_lines(image, header_only=True)
+                    headers.append("\n".join(lines))
+                    if (index + 1) % 25 == 0:
+                        logger.info("headers %s %s/%s", transaction_id, index + 1, doc.page_count)
+                header_path.write_text(json.dumps(headers), encoding="utf-8")
+            chosen = []
+            for index, header in enumerate(headers):
+                if _heading_kinds(str(header)):
+                    chosen.append(index)
+                    if index + 1 < doc.page_count:
+                        chosen.append(index + 1)
         # Keep order, drop duplicates.
         seen: set[int] = set()
         ordered = []

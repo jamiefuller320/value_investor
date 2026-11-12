@@ -111,6 +111,8 @@ def filing_in_leaver_window(meta: dict[str, Any], leaving_date: str) -> bool:
     if int(made[:4]) > leaving_year:
         return False
     description = str(meta.get("description") or "")
+    if any(word in description for word in ("interim", "initial", "dormant", "micro")):
+        return False
     is_group = "group" in description
     if not is_group and made > leaving_date:
         return False

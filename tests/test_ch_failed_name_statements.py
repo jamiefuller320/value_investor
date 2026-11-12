@@ -436,6 +436,13 @@ def test_leaver_filing_window_skips_post_takeover_subsidiary_accounts() -> None:
         "description": "accounts-with-accounts-type-full",
     }
     assert filing_in_leaver_window(group, "2018-04-24") is True
+    assert (
+        filing_in_leaver_window(
+            {"made_up_date": "2018-06-30", "description": "accounts-with-accounts-type-interim"},
+            "2018-04-24",
+        )
+        is False
+    )
     assert filing_in_leaver_window(subsidiary, "2018-04-24") is False
     assert (
         filing_in_leaver_window(
