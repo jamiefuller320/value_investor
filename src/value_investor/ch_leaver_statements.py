@@ -11,6 +11,7 @@ after each name so a stopped run can resume.
 
 from __future__ import annotations
 
+import copy
 import io
 import json
 import logging
@@ -25,7 +26,9 @@ from value_investor.ch_failed_name_statements import (
     FIELD_NAMES,
     _empty_field,
     _trim_number,
+    apply_value_gate,
     extract_statement_pages,
+    is_financial_name,
     leaver_year_coverage,
     list_aa_filings,
     parse_statement_pages,
@@ -52,6 +55,9 @@ PRESERVED_KEYS = {row["key"] for row in FAILED_UK_NAMES}
 # use one process and a slightly smaller header render.
 LEAVER_OCR_WORKERS = 1
 LEAVER_OCR_ZOOM = 1.6
+# Statement pages (not the header scan) are rendered larger. Zoom 1.6 read
+# (310.1) as (10.1). Headers stay at 1.6 so the scan remains one process.
+LEAVER_PAGE_ZOOM = 2.2
 
 _CONTEXT_RE = re.compile(
     r"<(?:[\w.-]+:)?context\b([^>]*)>(.*?)</(?:[\w.-]+:)?context>",
@@ -476,7 +482,11 @@ def extract_filing(
     if not has_text:
         # One Tesseract at a time. The zoom stays local to this call.
         pages = extract_statement_pages(
-            pdf, transaction_id=meta["transaction_id"], cache_dir=cache_dir, zoom=LEAVER_OCR_ZOOM
+            pdf,
+            transaction_id=meta["transaction_id"],
+            cache_dir=cache_dir,
+            zoom=LEAVER_OCR_ZOOM,
+            page_zoom=LEAVER_PAGE_ZOOM,
         )
     else:
         pages = extract_statement_pages(
@@ -517,18 +527,57 @@ def _coverage_for(record: dict[str, Any], filings: list[dict[str, Any]]) -> dict
     return leaver_year_coverage(filings, first_year=first, leaving_year=leaving)
 
 
+def extraction_rank(record: dict[str, Any]) -> tuple[int, str, str]:
+    """Failures first, then applicable listing-moves, then takeovers by leaving date.
+
+    Failures are the names a survivorship check is most likely to miss.
+    """
+    reason = record.get("reason_class")
+    applicable = record.get("ch_applicable") is True
+    if reason == "failure":
+        group = 0
+    elif reason == "other" and applicable:
+        group = 1
+    elif reason == "takeover":
+        group = 2
+    else:
+        group = 3
+    return (group, str(record.get("leaving_date") or "9999-99-99"), str(record.get("key") or ""))
+
+
 def annotate_name(row: dict[str, Any], record: dict[str, Any] | None) -> dict[str, Any]:
-    """Add coverage and QC beside the filings. Filings themselves are not rewritten."""
-    filings = list(row.get("filings") or [])
+    """Add coverage and the value gate. The seven hand-verified filings are not gated."""
     annotated = dict(row)
+    filings = list(row.get("filings") or [])
+    preserved = row.get("extraction_status") == "preserved" or str(row.get("key") or "") in (
+        PRESERVED_KEYS
+    )
+    if not preserved and filings:
+        filings = copy.deepcopy(filings)
+        for filing in filings:
+            pages = []
+            for page in filing.get("pages") or []:
+                if not isinstance(page, dict):
+                    continue
+                pages.append(
+                    {
+                        "page": page.get("page"),
+                        "method": page.get("method"),
+                        "kinds": page.get("kinds"),
+                    }
+                )
+            filing["pages"] = pages
+        counts = apply_value_gate(filings, financial=is_financial_name(str(row.get("name") or "")))
+        annotated["filings"] = filings
+        annotated["values_nulled"] = counts
     if record:
         annotated["reason_class"] = record.get("reason_class")
         annotated["leaving_date"] = record.get("leaving_date")
         annotated["epic"] = record.get("epic")
         annotated["ch_applicable"] = record.get("ch_applicable")
         annotated["company_number_status"] = record.get("company_number_status")
-        annotated["leaver_coverage"] = _coverage_for(record, filings)
-    annotated["plausibility_flags"] = plausibility_flags(filings)
+        annotated["leaver_coverage"] = _coverage_for(record, annotated.get("filings") or filings)
+    annotated["plausibility_flags"] = plausibility_flags(annotated.get("filings") or filings)
     return annotated
 
 
@@ -560,9 +609,21 @@ def name_is_complete(row: dict[str, Any] | None) -> bool:
 
 
 def iter_pending(
-    records: list[dict[str, Any]], done: dict[str, dict[str, Any]]
+    records: list[dict[str, Any]],
+    done: dict[str, dict[str, Any]],
+    *,
+    refresh: set[str] | None = None,
 ) -> list[dict[str, Any]]:
-    return [record for record in records if not name_is_complete(done.get(record["key"]))]
+    refresh = refresh or set()
+    pending = []
+    for record in records:
+        key = str(record.get("key") or "")
+        row = done.get(key)
+        if row and row.get("extraction_status") == "preserved":
+            continue
+        if key in refresh or not name_is_complete(row):
+            pending.append(record)
+    return sorted(pending, key=extraction_rank)
 
 
 def extract_leaver_name(
@@ -679,6 +740,8 @@ def assemble_store(
     payload["leaver_cursor"] = {
         "ocr_workers": LEAVER_OCR_WORKERS,
         "ocr_zoom": LEAVER_OCR_ZOOM,
+        "page_zoom": LEAVER_PAGE_ZOOM,
+        "order": "failure, other, takeover by leaving date",
         "pending_keys": [record["key"] for record in pending],
         "pending_count": len(pending),
     }
@@ -695,6 +758,7 @@ def run_leaver_extraction(
     only: set[str] | None = None,
     limit: int | None = None,
     eodhd_path: Path | None = None,
+    refresh: set[str] | None = None,
 ) -> dict[str, Any]:
     """Extract leaver statements, resuming from ``out_path`` when names are already complete."""
     from value_investor.ch_failed_name_statements import (
@@ -722,12 +786,19 @@ def run_leaver_extraction(
             done[key]["extraction_status"] = "preserved"
     eodhd_payload = load_eodhd_report(eodhd_path or Path("docs/data/eodhd_coverage_check.json"))
     cache_dir.mkdir(parents=True, exist_ok=True)
-    pending = iter_pending(records, done)
+    for key, row in list(done.items()):
+        if key in PRESERVED_KEYS or row.get("extraction_status") == "preserved":
+            continue
+        gated = annotate_name(row, records_by_key.get(key))
+        gated["extraction_status"] = row.get("extraction_status")
+        done[key] = gated
+    pending = iter_pending(records, done, refresh=refresh)
     if only:
         pending = [record for record in pending if record["key"] in only]
     if limit is not None:
         pending = pending[:limit]
     logger.info("leaver extraction pending %s (ocr=%s)", len(pending), allow_ocr)
+    write_store(assemble_store(done, records, eodhd_payload=eodhd_payload), out_path)
     for index, record in enumerate(pending, start=1):
         logger.info("leaver %s/%s %s", index, len(pending), record["key"])
         try:

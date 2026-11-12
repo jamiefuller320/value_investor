@@ -186,8 +186,12 @@ stay `unresolved`. Nothing is guessed.
 Extraction prefers iXBRL (`method=ixbrl`, citation is the tag name and the raw
 figure, page is null). If the filing has no iXBRL revenue or EPS, the PDF text
 layer is read with the same statement parser as the seven names. Image-only
-PDFs are OCR'd one page-set at a time (zoom 1.6). Three parallel Tesseract
-processes stalled on this host, so OCR stays at one process. Only fiscal years
+PDFs are OCR'd one page-set at a time. Header scans use zoom 1.6. The
+statement pages themselves use zoom 2.2, because zoom 1.6 dropped digits inside
+parentheses. Three parallel Tesseract processes stalled on this host, so OCR
+stays at one process. Names are read in this order: failures, then applicable
+listing-moves (`other`), then takeovers by leaving date. Failures are first
+because a survivorship check is most exposed to them. Only fiscal years
 2012 through the leaving year are kept. A group filing whose period-end year is
 the leaving year is kept even when the period end is after the delisting day.
 A non-group filing made up after the delisting day is the post-takeover
@@ -242,6 +246,27 @@ Flags are stored on the name as `plausibility_flags` and do not drop the value.
 | `revenue_below_operating_profit` | Revenue is below operating profit after scale. |
 | `pence_pound_unit_slip` | The EPS unit is pounds where the earnings identity fits pence (or the reverse), or the unit changes between years with a 50x–200x raw jump, or the stored EPS is at least 20 pounds or 5000 pence. |
 
+### Value gate
+
+`plausibility_flags` only mark a row. A second gate, `apply_value_gate`, sets the
+stored value to null when a check fails. It does not write a replacement. The
+seven hand-verified filings are not gated. Each other name records
+`values_nulled.by_check`.
+
+| Check | What is nulled |
+|-------|----------------|
+| `digit_count` | The citation line has no token with the same digits as the stored value. A glued `20,9030` is not read as 20,903.0. |
+| `sign` | The value's sign disagrees with the parenthesis or minus on that token. |
+| `eps_decimal` | Basic EPS is an integer of 10 or more and the citation token has no decimal point. `125` is not kept in place of `12.5`. |
+| `eps_versus_earnings` | EPS is more than 15% away from profit attributable divided by weighted shares, as pence and as pounds when the unit is blank. |
+| `operating_profit_above_revenue` | For a non-financial name, the absolute operating profit exceeds revenue. |
+| `scale_jump` | Adjacent years differ by more than 5x after scale, and the citation does not mention an exceptional item, disposal, impairment, restatement or demerger. A missing scale next to a stated scale, with the same raw magnitude, nulls the blank scale. The two columns of one printed line are not treated as a jump. |
+
+Revenue is taken only from a line whose label is revenue, turnover or sales.
+An adjustment, tax, excise or duty line is not revenue. Profit attributable is
+taken from the income statement. A statement of comprehensive income is ignored
+for that field.
+
 ### Hand check of leaver years
 
 Seed `random.Random(20261112)` over `(key, year, field)` rows that have a
@@ -267,7 +292,7 @@ Six of the ten stored values match the cited line. The four misses are a dropped
 
 The leaver list has 155 names: 143 takeover, 4 failure, 8 other. Companies House resolution: 124 UK plcs, 16 not applicable (overseas issuer), 15 unresolved. No number was guessed. GKN is 04191106 and Sky is 02247735, the same numbers as the hand-verified filings.
 
-The no-OCR pass found no iXBRL on these annual-report filings (the document is `application/pdf` only) and no text layer. Image OCR is resumable. `leaver_cursor.pending_keys` is the rest. One Tesseract process at zoom 1.6 scans at most the first 100 pages and the last 40 for the income statement, then OCRs that page, the cash-flow page, and one EPS note. A full header scan of three parallel Tesseract processes stalled; this host uses one. At the observed pace the remaining image filings are several hours of OCR. Names already finished keep `extraction_status=complete` and are skipped on the next run:
+The no-OCR pass found no iXBRL on these annual-report filings (the document is `application/pdf` only) and no text layer. Image OCR is resumable. `leaver_cursor.pending_keys` is the rest, in failure / other / takeover order. One Tesseract process scans headers at zoom 1.6 (at most the first 100 pages and the last 40) and OCRs the income page, the cash-flow page and one EPS note at zoom 2.2. A name already finished is skipped unless `--refresh --only <key>` is set. Re-running the six stored names that were not in the first hand check, plus the four names that hand check failed, uses that flag:
 
 ```bash
 PYTHONPATH=$PWD/src python3 -m value_investor.ch_failed_name_statements \

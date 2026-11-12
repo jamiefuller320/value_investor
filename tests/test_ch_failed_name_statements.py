@@ -11,8 +11,10 @@ from value_investor.ch_failed_name_statements import (
     _Char,
     _insert_decimal_from_boxes,
     _token_text,
+    apply_value_gate,
     combined_check_a,
     ops_findings_from_ch_failed_name_statements,
+    parse_amount,
     parse_statement_pages,
     plausibility_flags,
     repair_glued_thousands,
@@ -570,3 +572,312 @@ def test_resume_skips_complete_names_and_keeps_not_applicable() -> None:
     assert offshore["filings"] == []
     assert offshore["leaver_coverage"]["statements_every_year"] is False
     assert name_is_complete(offshore) is True
+
+
+def _income(text: str, *, end: str = "2012-03-31") -> dict:
+    return parse_statement_pages(
+        [StatementPage(page=1, text=text)],
+        fiscal_year_end=end,
+        filing_date="2012-06-30",
+        transaction_id="tx",
+    )
+
+
+def test_revenue_label_is_the_revenue_line_not_a_tax_adjustment() -> None:
+    # Essar Energy 2012. The sales-tax adjustment is 20,903.0; revenue is 21,956.7.
+    both = _income(
+        """
+        Consolidated income statement
+        15 months ended 31 March 2012
+        2012 2010
+        $ million $ million
+        Revenue 21,956.7 10,005.6
+        Adjustment for loss of sales tax benefit 8a 20,903.0 9,200.1
+        """
+    )
+    assert both["fields"]["revenue"]["value"] == "21956.7"
+    adjustment_only = _income(
+        """
+        Consolidated income statement
+        15 months ended 31 March 2012
+        2012 2010
+        $ million $ million
+        Adjustment for loss of sales tax benefit 8a 20,903.0 9,200.1
+        """
+    )
+    assert adjustment_only["fields"]["revenue"]["value"] is None
+    # The OCR line glued an extra digit. It is not repaired into 20,903.0.
+    ocr = _income(
+        """
+        Consolidated income statement
+        15 months ended 31 March 2012
+        2012 2010
+        $ million $ million
+        Revenue 20,9030 10,0056
+        """
+    )
+    assert ocr["fields"]["revenue"]["value"] is None
+    assert repair_glued_thousands("20,9030") == "20,9030"
+    assert repair_glued_thousands("3,3326") == "3,332.6"
+
+
+def test_parenthesised_negative_keeps_every_digit() -> None:
+    # Essar Energy 2014 income statement: Owners of the Company (310.1).
+    assert parse_amount("(310.1)", scale="millions") == ("ok", "-310.1", None)
+    assert parse_amount("(1,051.5)", scale="millions") == ("ok", "-1051.5", None)
+    kind, value, _unit = parse_amount("3(10.1)", scale="millions")
+    assert kind in {"unresolved", "no"}
+    assert value is None
+    assert repair_spaced_decimals("(3 10.1)") == "(310.1)"
+    parsed = _income(
+        """
+        Consolidated income statement
+        Year ended 31 March 2014
+        2014 2013
+        $ million $ million
+        Attributable to
+        Owners of the Company (310.1) (162.8)
+        """,
+        end="2014-03-31",
+    )
+    assert parsed["fields"]["profit_attributable_to_owners"]["value"] == "-310.1"
+    split = _income(
+        """
+        Consolidated income statement
+        Year ended 31 March 2014
+        2014 2013
+        $ million $ million
+        Attributable to
+        Owners of the Company (3 10.1) (162 8)
+        """,
+        end="2014-03-31",
+    )
+    assert split["fields"]["profit_attributable_to_owners"]["value"] == "-310.1"
+
+
+def test_eps_keeps_its_decimal_from_the_tui_line() -> None:
+    # TUI Travel 2012 OCR: 'Basic earnings per share 32 125 77'. The PDF is 12.5p.
+    lost = _income(
+        """
+        Consolidated income statement
+        Year ended 30 September 2012
+        2012 2011
+        £m £m
+        Basic earnings per share 32 125 77
+        """,
+        end="2012-09-30",
+    )
+    assert lost["fields"]["basic_eps"]["value"] is None
+    assert "decimal" in (lost["fields"]["basic_eps"]["absent_reason"] or "").lower()
+    kept = _income(
+        """
+        Consolidated income statement
+        Year ended 30 September 2012
+        2012 2011
+        £m £m
+        Basic earnings per share 32 12.5 7.7
+        """,
+        end="2012-09-30",
+    )
+    assert kept["fields"]["basic_eps"]["value"] == "12.5"
+    # Profit and the share count disagree with a 10x EPS, so the EPS is dropped.
+    disagree = _income(
+        """
+        Consolidated income statement
+        Year ended 30 September 2012
+        2012 2011
+        £m £m
+        Attributable to
+        Equity holders of the parent 138.0 85.0
+        Basic earnings per share 12.5 7.7
+        Weighted average number of shares (millions)
+        Basic 100.0 90.0
+        """,
+        end="2012-09-30",
+    )
+    # 138m / 100m shares = 1.38 pounds, not 12.5 pence and not 12.5 pounds.
+    assert disagree["fields"]["basic_eps"]["value"] is None
+
+
+def test_profit_is_not_taken_from_comprehensive_income() -> None:
+    # Invensys 2014 OCR. 2,464 is attributable comprehensive income, not profit.
+    oci = _income(
+        """
+        Consolidated statement of comprehensive income
+        For the year ended 31 March 2014
+        2014 2013
+        £m £m
+        Profit for the year 2,806 118
+        Total comprehensive income for the year 2,462 54
+        Attributable to:
+        Equity holders of the parent 2,464 53
+        """,
+        end="2014-03-31",
+    )
+    assert oci["fields"]["profit_attributable_to_owners"]["value"] is None
+    both = _income(
+        """
+        Consolidated income statement
+        For the year ended 31 March 2014
+        2014 2013
+        £m £m
+        Profit attributable to
+        Equity holders of the parent 100.2 80.0
+        Consolidated statement of comprehensive income
+        For the year ended 31 March 2014
+        2014 2013
+        £m £m
+        Attributable to:
+        Equity holders of the parent 2,464 53
+        """,
+        end="2014-03-31",
+    )
+    assert both["fields"]["profit_attributable_to_owners"]["value"] == "100.2"
+
+
+def test_value_gate_nulls_the_four_bad_citations_and_keeps_a_match() -> None:
+    def field(value: str, line: str, **extra: object) -> dict:
+        row = {
+            "value": value,
+            "scale": extra.get("scale"),
+            "unit": extra.get("unit"),
+            "currency": "GBP",
+            "citation": {"line": line, "page": 1, "transaction_id": "tx"},
+        }
+        return row
+
+    filings = [
+        {
+            "fiscal_year": 2012,
+            "fields": {
+                "revenue": field("20903", "Revenue 20,9030 10,0056", scale="millions"),
+                "basic_eps": field("125", "Basic earnings per share 32 125 77"),
+                "profit_attributable_to_owners": field(
+                    "138", "Equity holders of the parent 138 85", scale="millions"
+                ),
+            },
+            "comparative": None,
+        },
+        {
+            "fiscal_year": 2013,
+            "fields": {
+                "revenue": field("14460", "Revenue 3 14,460 14,687", scale="millions"),
+                "basic_eps": field("12.5", "Basic earnings per share 12.5 7.7", unit="pence"),
+                "profit_attributable_to_owners": field(
+                    "100", "Owners of the Company 100 80", scale="millions"
+                ),
+                "weighted_average_basic_shares": field(
+                    "430.2", "Basic 430.2 429.1", scale="millions"
+                ),
+                "operating_profit": field("20000", "Operating profit 20,000 301", scale="millions"),
+            },
+            "comparative": None,
+        },
+    ]
+    # 2013 EPS 12.5 pence vs profit 100m / 430.2m shares is about 23 pence.
+    counts = apply_value_gate(filings, financial=False)
+    assert filings[0]["fields"]["revenue"]["value"] is None
+    assert filings[0]["fields"]["revenue"]["absent_reason"] == "digit_count"
+    assert filings[0]["fields"]["basic_eps"]["value"] is None
+    assert filings[0]["fields"]["basic_eps"]["absent_reason"] == "eps_decimal"
+    assert filings[1]["fields"]["revenue"]["value"] == "14460"
+    assert filings[1]["fields"]["basic_eps"]["value"] is None
+    assert filings[1]["fields"]["basic_eps"]["absent_reason"] == "eps_versus_earnings"
+    assert filings[1]["fields"]["profit_attributable_to_owners"]["value"] == "100"
+    assert filings[1]["fields"]["operating_profit"]["value"] is None
+    assert (
+        filings[1]["fields"]["operating_profit"]["absent_reason"]
+        == "operating_profit_above_revenue"
+    )
+    assert counts["total"] >= 4
+    # A sign that disagrees with the parenthesis is nulled, not flipped.
+    signed = [
+        {
+            "fiscal_year": 2014,
+            "fields": {
+                "profit_attributable_to_owners": field(
+                    "310.1", "Owners of the Company (310.1) (162.8)", scale="millions"
+                )
+            },
+            "comparative": None,
+        }
+    ]
+    apply_value_gate(signed, financial=False)
+    assert signed[0]["fields"]["profit_attributable_to_owners"]["value"] is None
+    assert signed[0]["fields"]["profit_attributable_to_owners"]["absent_reason"] == "sign"
+    # Adjacent years more than 5x apart are nulled when the line does not explain it.
+    jumped = [
+        {
+            "fiscal_year": 2012,
+            "fields": {"basic_eps": field("7.7", "Basic earnings per share 7.7 6.1", unit="pence")},
+            "comparative": None,
+        },
+        {
+            "fiscal_year": 2013,
+            "fields": {
+                "basic_eps": field("80.0", "Basic earnings per share 80.0 7.7", unit="pence")
+            },
+            "comparative": None,
+        },
+    ]
+    apply_value_gate(jumped, financial=False)
+    assert jumped[0]["fields"]["basic_eps"]["value"] == "7.7"
+    assert jumped[1]["fields"]["basic_eps"]["value"] is None
+    assert jumped[1]["fields"]["basic_eps"]["absent_reason"] == "scale_jump"
+    # The hand-verified fixture still passes the gate.
+    kept = _parse()
+    before = kept["fields"]["basic_eps"]["value"]
+    apply_value_gate([kept], financial=False)
+    assert kept["fields"]["basic_eps"]["value"] == before
+    assert kept["fields"]["revenue"]["value"] == "3332.6"
+    assert kept["fields"]["capital_expenditure"]["value"] == "-28.1"
+
+
+def test_extraction_order_is_failure_then_other_then_takeover() -> None:
+    from value_investor.ch_leaver_statements import extraction_rank, iter_pending
+
+    records = [
+        {
+            "key": "late_takeover",
+            "reason_class": "takeover",
+            "leaving_date": "2020-01-01",
+            "ch_applicable": True,
+        },
+        {
+            "key": "early_takeover",
+            "reason_class": "takeover",
+            "leaving_date": "2014-01-01",
+            "ch_applicable": True,
+        },
+        {
+            "key": "listing_move",
+            "reason_class": "other",
+            "leaving_date": "2019-01-01",
+            "ch_applicable": True,
+        },
+        {
+            "key": "failed",
+            "reason_class": "failure",
+            "leaving_date": "2021-01-01",
+            "ch_applicable": True,
+        },
+        {
+            "key": "offshore",
+            "reason_class": "other",
+            "leaving_date": "2015-01-01",
+            "ch_applicable": False,
+        },
+    ]
+    pending = iter_pending(records, {})
+    assert [row["key"] for row in pending] == [
+        "failed",
+        "listing_move",
+        "early_takeover",
+        "late_takeover",
+        "offshore",
+    ]
+    assert extraction_rank(records[3]) < extraction_rank(records[2])
+    again = iter_pending(
+        records, {"early_takeover": {"extraction_status": "complete"}}, refresh={"early_takeover"}
+    )
+    assert "early_takeover" in [row["key"] for row in again]
