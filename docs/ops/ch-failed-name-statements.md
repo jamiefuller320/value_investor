@@ -85,6 +85,16 @@ Combined check A is **8 of 11** (bar 7). EODHD already had statements from 2013
 for Aggreko, Wm Morrison and Wirecard. Companies House adds Carillion, Patisserie
 Holdings, Sirius Minerals, GKN and Sky. Thomas Cook, Debenhams and Intu do not.
 
+The bar counts a name when its first EPS year is 2013 or earlier, the same test
+applied to EODHD. Depth to the event is thinner: Carillion (2013–2016) and
+Patisserie (2013–2017) run to their last filed year, Sirius misses 2016, and GKN
+and Sky stop at 2014 (later AA filings on those numbers are not the listed group,
+or the EPS line was not read). On the EODHD side Aggreko (2013–2020) and
+Morrison (2013–2021) run to the event and Wirecard stops at 2018. Counting only
+names with statements every year to the event gives **4 of 11** (Carillion,
+Patisserie, Aggreko, Morrison). A replay must treat missing years as missing
+statements (the name fails closed at the gates), not carry the last year forward.
+
 Every selected page was OCR. These annual reports are image-only scans; none had
 a text layer. Dividends per share are absent throughout: the dividend note is a
 multi-column £ and pence table, and no single total line was read.
