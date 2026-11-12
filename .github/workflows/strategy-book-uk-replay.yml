@@ -1,0 +1,113 @@
+name: Strategy book UK replay
+
+# Plan step 3.3. Dispatch only. The runner refuses EODHD until the registration
+# seal is committed. See docs/ops/strategy-book-uk-replay-runbook.md
+on:
+  workflow_dispatch:
+    inputs:
+      phase:
+        description: fetch, development, or reveal
+        required: true
+        type: choice
+        options:
+          - fetch
+          - development
+          - reveal
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ftse-strategy-book-uk-replay
+  cancel-in-progress: false
+
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: bash scripts/gha_pip_install.sh -e .
+
+      - name: Check EODHD token
+        id: secrets
+        env:
+          EODHD_API_TOKEN: ${{ secrets.EODHD_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${EODHD_API_TOKEN:-}" ]; then
+            echo "Soft-skip: EODHD_API_TOKEN missing — UK replay not run; nothing committed."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Restore encrypted resume cache
+        if: steps.secrets.outputs.ready == 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: uk-replay-cache.tar.enc
+          key: strategy-book-uk-replay-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            strategy-book-uk-replay-
+
+      # Licensed EODHD data: the cache is readable by fork-PR workflows in a public
+      # repo, so it is only ever stored encrypted with a secret forks never receive.
+      - name: Decrypt resume cache
+        if: steps.secrets.outputs.ready == 'true'
+        env:
+          EODHD_API_TOKEN: ${{ secrets.EODHD_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p uk-replay-cache
+          if [ -f uk-replay-cache.tar.enc ]; then
+            openssl enc -d -aes-256-cbc -pbkdf2 -pass env:EODHD_API_TOKEN \
+              -in uk-replay-cache.tar.enc | tar -xzf - -C uk-replay-cache
+            rm -f uk-replay-cache.tar.enc
+          fi
+
+      - name: Run UK replay
+        if: steps.secrets.outputs.ready == 'true'
+        env:
+          EODHD_API_TOKEN: ${{ secrets.EODHD_API_TOKEN }}
+          UK_REPLAY_CACHE: uk-replay-cache
+          PHASE: ${{ inputs.phase }}
+        run: |
+          set -euo pipefail
+          phase="$PHASE"
+          if [ "$phase" = "development" ]; then
+            phase=develop
+          fi
+          ftse-strategy-book-uk-replay "$phase" --cache uk-replay-cache
+
+      - name: Encrypt resume cache
+        if: always() && steps.secrets.outputs.ready == 'true'
+        env:
+          EODHD_API_TOKEN: ${{ secrets.EODHD_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p uk-replay-cache
+          tar -czf - -C uk-replay-cache . | openssl enc -aes-256-cbc -pbkdf2 -salt \
+            -pass env:EODHD_API_TOKEN -out uk-replay-cache.tar.enc
+          rm -rf uk-replay-cache
+
+      - name: Save encrypted resume cache
+        if: always() && steps.secrets.outputs.ready == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: uk-replay-cache.tar.enc
+          key: strategy-book-uk-replay-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Commit aggregate store
+        if: steps.secrets.outputs.ready == 'true'
+        env:
+          GHA_COMMIT_OWNED: docs/data/strategy_book_uk_replay.json
+          COMMIT_MESSAGE: "chore: strategy-book UK replay aggregates [skip ci]"
+          GHA_COMMIT_LABEL: "strategy-book UK replay"
+        run: bash scripts/gha_commit_artifacts.sh

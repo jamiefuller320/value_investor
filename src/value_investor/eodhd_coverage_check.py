@@ -194,19 +194,23 @@ class EodhdClient:
         *,
         max_calls: int = DEFAULT_MAX_CALLS,
         opener: Callable[..., Any] | None = None,
+        min_interval: float | None = None,
     ) -> None:
         self.token = token
         self.max_calls = max_calls
         self.calls_used = 0
+        self.http_requests = 0
         self.budget_exhausted = False
+        self.last_headers: dict[str, str] = {}
+        self._min_interval = MIN_INTERVAL_SEC if min_interval is None else min_interval
         self._last_request_at = 0.0
         self._opener = opener or urllib.request.urlopen
         self._delisted_cache: dict[str, list[dict[str, Any]]] = {}
 
     def _pace(self) -> None:
         elapsed = time.monotonic() - self._last_request_at
-        if elapsed < MIN_INTERVAL_SEC:
-            time.sleep(MIN_INTERVAL_SEC - elapsed)
+        if elapsed < self._min_interval:
+            time.sleep(self._min_interval - elapsed)
 
     def _count(self, weight: int = 1) -> bool:
         if self.calls_used + weight > self.max_calls:
@@ -228,7 +232,13 @@ class EodhdClient:
             try:
                 with self._opener(url, timeout=REQUEST_TIMEOUT_SEC) as resp:
                     raw = resp.read().decode("utf-8")
+                    header_items = getattr(getattr(resp, "headers", None), "items", None)
+                    if header_items is not None:
+                        self.last_headers = {
+                            str(key).lower(): str(value) for key, value in header_items()
+                        }
                 self._last_request_at = time.monotonic()
+                self.http_requests += 1
                 return json.loads(raw)
             except urllib.error.HTTPError as exc:
                 last_exc = exc
@@ -274,6 +284,14 @@ class EodhdClient:
     def fundamentals(self, symbol: str) -> dict[str, Any] | None:
         payload = self.get_json(f"fundamentals/{symbol}", weight=FUNDAMENTALS_CALL_WEIGHT)
         return payload if isinstance(payload, dict) else None
+
+    def dividends(self, symbol: str) -> list[dict[str, Any]]:
+        rows = self.get_json(f"div/{symbol}")
+        return rows if isinstance(rows, list) else []
+
+    def splits(self, symbol: str) -> list[dict[str, Any]]:
+        rows = self.get_json(f"splits/{symbol}")
+        return rows if isinstance(rows, list) else []
 
 
 def yahoo_to_eodhd_symbol(ticker: str, exchange: str) -> str:

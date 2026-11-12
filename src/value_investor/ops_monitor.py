@@ -3019,6 +3019,34 @@ def check_eodhd_coverage(
     ]
 
 
+def check_strategy_book_uk_replay(
+    *,
+    repo_root: Path | None = None,
+) -> list[OpsFinding]:
+    """Observe-only UK/Europe strategy-book replay. Does not call EODHD.
+
+    No finding when ``docs/data/strategy_book_uk_replay.json`` is absent. Info
+    names the phase and verdict when the file reads. Warn only when it does not.
+    ``auto_fixable=False``. See docs/ops/strategy-book-uk-replay-runbook.md.
+    """
+    from value_investor.strategy_book_uk_replay import REPO_ROOT, TITLE_FAILED, findings
+
+    try:
+        rows = findings(Path(repo_root) if repo_root is not None else REPO_ROOT)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        rows = [{"severity": "warn", "title": TITLE_FAILED, "summary": str(exc)}]
+    return [
+        OpsFinding(
+            severity=str(row["severity"]),
+            category="backtest",
+            title=str(row["title"]),
+            summary=str(row["summary"]),
+            auto_fixable=False,
+        )
+        for row in rows
+    ]
+
+
 def check_ch_failed_name_statements(
     *,
     repo_root: Path | None = None,
@@ -5397,6 +5425,7 @@ def collect_ops_findings(
     findings.extend(_guarded_check(check_strategy_book_proof))
     findings.extend(_guarded_check(check_strategy_book_fair_value))
     findings.extend(_guarded_check(check_eodhd_coverage))
+    findings.extend(_guarded_check(check_strategy_book_uk_replay))
     findings.extend(_guarded_check(check_ch_failed_name_statements))
     findings.extend(_guarded_check(check_strategy_book_memo_free_shadow))
     findings.extend(_guarded_check(check_n200_tech_timing_observe))
