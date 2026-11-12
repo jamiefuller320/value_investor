@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+from datetime import date
 from pathlib import Path
 from typing import Any
 from unittest.mock import patch
@@ -48,8 +49,8 @@ def _mock_opener(
         **_annual_fundamentals(2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017),
         "outstandingShares": {
             "annual": {
-                "2010-12-31": {"date": "2010-12-31", "shares": 100},
-                "2020-12-31": {"date": "2020-12-31", "shares": 100},
+                "0": {"date": "2010", "dateFormatted": "2010-12-31", "shares": 100},
+                "1": {"date": "2020", "dateFormatted": "2020-12-31", "shares": 100},
             }
         },
     }
@@ -209,6 +210,21 @@ def test_ftse_sample_is_spread_across_the_committed_list(tmp_path: Path) -> None
     picked = ecc._load_ftse350_tickers(tmp_path, limit=30)
     assert len(picked) == 30
     assert len({row["ticker"][0] for row in picked}) > 15
+
+
+def test_shares_dates_read_from_date_formatted() -> None:
+    fundamentals = {
+        "outstandingShares": {
+            "annual": {"0": {"date": "2016", "dateFormatted": "2016-12-31", "shares": 10}},
+            "quarterly": {"0": {"date": "2016-Q4", "dateFormatted": "2016-12-31", "shares": 10}},
+        }
+    }
+    assert ecc._shares_on_or_before(fundamentals, date(2017, 6, 30))
+    assert not ecc._shares_on_or_before(fundamentals, date(2014, 6, 30))
+    assert not ecc._shares_on_or_before(
+        {"outstandingShares": {"annual": {"0": {"date": "2016", "shares": 10}}}},
+        date(2017, 6, 30),
+    )
 
 
 def test_missing_fields_become_absent() -> None:
