@@ -15570,6 +15570,47 @@ def test_refetch_ir_allowlist_migrates_dq7a_ir_https_donegal_url(tmp_path: Path,
     assert row["has_body"] is True
 
 
+def test_refetch_ir_allowlist_dq7a_ir_repairs_stale_https_row_id(tmp_path: Path):
+    """eng-20261112-01: http Donegal URL with https-era row id refetches both FY2025 bodies."""
+    import hashlib
+
+    live_urls = list(_BUILTIN_IR_URLS["DQ7A.IR"])
+    filings: list[dict] = []
+    for url in live_urls:
+        https_url = url.replace("http://", "https://", 1)
+        stale_id = hashlib.sha256(https_url.encode("utf-8")).hexdigest()[:16]
+        filings.append(
+            {
+                "id": f"ir_{stale_id}",
+                "source": "ir_allowlist",
+                "headline": f"IR allowlist document — {url.rsplit('/', 1)[-1]}",
+                "url": url,
+                "period": "annual",
+                "has_body": False,
+                "unfetchable": True,
+                "unfetchable_reason": "ir_allowlist_fetch_failed",
+            }
+        )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "bodies").mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": filings}),
+        encoding="utf-8",
+    )
+    result = refetch_ir_allowlist_filing_bodies(filings_dir, "DQ7A.IR", max_bodies=5)
+    assert result["attempted"] >= 2
+    assert result["fetched"] >= 2
+    assert result["failed"] == 0
+    assert result["skipped_unfetchable"] == 0
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert all(row.get("has_body") for row in saved["filings"])
+    for row in saved["filings"]:
+        url = str(row.get("url") or "")
+        expected_id = f"ir_{hashlib.sha256(url.encode('utf-8')).hexdigest()[:16]}"
+        assert row["id"] == expected_id
+
+
 def test_refetch_ir_allowlist_retries_dq7a_ir_http_unfetchable_donegal(tmp_path: Path, monkeypatch):
     """eng-20261111-01: live http donegaligroup.com rows retry after prior ir_allowlist_fetch_failed."""
     allowlist_path = tmp_path / "ir_urls.json"

@@ -438,8 +438,9 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://thenavigatorcompany.com/wp-content/uploads/2025/02/Navigator-l-Divulgacao_Resultados_2024.pdf",
     ],
     # euro_depth parked DQ7A.IR — eng-20260910-01: prior allowlist misattributed DCC plc PDF.
-    # eng-20260912-01 / eng-20261111-01: donegaligroup.com https TLS is reset from datacenter ingest;
-    # http serves PDFs; stale unfetchable flags on live http rows must be cleared on refetch.
+    # eng-20260912-01 / eng-20261111-01 / eng-20261112-01: donegaligroup.com https TLS is reset
+    # from datacenter ingest; http serves PDFs; stale unfetchable flags and https-era row ids
+    # must be repaired before IR body validation can accept PDF text.
     "DQ7A.IR": [
         "http://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf",
         "http://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
@@ -2714,6 +2715,46 @@ def _propagate_bodies_across_shared_filing_ids(
         updated.append(item)
     updated, url_propagated = _propagate_bodies_across_shared_document_urls(updated)
     return updated, propagated + url_propagated
+
+
+def _sync_ir_allowlist_row_id(row: dict[str, Any]) -> tuple[dict[str, Any], bool]:
+    """Rewrite ``id`` when an indexed IR URL no longer matches its digest (https→http, canonical)."""
+    item = dict(row)
+    if not _is_ir_allowlist_row(item):
+        return item, False
+    url = str(item.get("url") or "").strip()
+    if not url:
+        return item, False
+    url_digest = hashlib.sha256(url.encode("utf-8")).hexdigest()[:16]
+    expected_id = f"ir_{url_digest}"
+    if str(item.get("id") or "") == expected_id:
+        return item, False
+    item["id"] = expected_id
+    for key in (
+        "has_body",
+        "body_path",
+        "body_content_hash",
+        "body_fetch_parser",
+        "unfetchable",
+        "unfetchable_reason",
+        "unfetchable_at",
+    ):
+        item.pop(key, None)
+    return item, True
+
+
+def _reconcile_ir_allowlist_row_ids(
+    filings: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], int]:
+    """Align IR allowlist row ids with their current URLs before body fetch validation."""
+    repaired = 0
+    updated: list[dict[str, Any]] = []
+    for row in filings:
+        item, changed = _sync_ir_allowlist_row_id(row)
+        if changed:
+            repaired += 1
+        updated.append(item)
+    return updated, repaired
 
 
 def _reconcile_ir_allowlist_row_metadata(
@@ -6965,7 +7006,8 @@ def refetch_ir_allowlist_filing_bodies(
 
     filings = list(payload.get("filings") or [])
     filings, ir_url_deduped = _dedupe_ir_allowlist_rows_by_url(filings)
-    if ir_url_deduped:
+    filings, ir_id_repaired = _reconcile_ir_allowlist_row_ids(filings)
+    if ir_url_deduped or ir_id_repaired:
         payload["filings"] = filings
         payload["summary"] = summarize_filings(filings)
         index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
