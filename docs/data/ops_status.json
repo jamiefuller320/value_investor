@@ -1,12 +1,12 @@
 {
-  "run_at": "2026-11-12T02:32:21.106619+00:00",
+  "run_at": "2026-11-12T07:47:07.386850+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "info",
       "category": "budget",
       "title": "Agent token usage (measuring)",
-      "summary": "Week 2026-W46: raw $0.0000, charged $0.0000, tokens 0 (in 0 / out 0 / cache_read 0 / cache_write 0). Top jobs: research_memo $0.0000 (40 runs), memo_model_comparison $0.0000 (24 runs), memo_model_judge $0.0000 (23 runs). Research memo raw median n/a / p90 n/a vs ledger estimate $0.40 (0 of 40 runs with cost). Estimated-USD ledger this week $30.00. Measuring mode (token_usage_weekly_warning_raw_usd is null).",
+      "summary": "Week 2026-W46: raw $0.0000, charged $0.0000, tokens 0 (in 0 / out 0 / cache_read 0 / cache_write 0). Top jobs: research_memo $0.0000 (40 runs), memo_model_comparison $0.0000 (24 runs), memo_model_judge $0.0000 (23 runs). Research memo raw median n/a / p90 n/a vs ledger estimate $0.40 (0 of 40 runs with cost). Estimated-USD ledger this week $31.20. Measuring mode (token_usage_weekly_warning_raw_usd is null).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -15,7 +15,7 @@
       "severity": "info",
       "category": "budget",
       "title": "Agent token usage coverage gap",
-      "summary": "Week 2026-W46: 124 of 124 rows (100%) have usage_error or are still cost-pending after 48h (usage_error 124, pending after 48h 56). Coverage gap only — the estimated-USD cap is unchanged.",
+      "summary": "Week 2026-W46: 125 of 125 rows (100%) have usage_error or are still cost-pending after 48h (usage_error 125, pending after 48h 70). Coverage gap only — the estimated-USD cap is unchanged.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -60,7 +60,7 @@
       "severity": "info",
       "category": "research",
       "title": "Post-sale review queue (observe)",
-      "summary": "Active uncommented post-sale reviews: 149; actioned history=138; candidates sealed+control=478. Accept/Comment/Duplicate observe-only (influences_live=false).",
+      "summary": "Active uncommented post-sale reviews: 149; actioned history=138; candidates sealed+control=480. Accept/Comment/Duplicate observe-only (influences_live=false).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -186,7 +186,7 @@
       "severity": "info",
       "category": "research",
       "title": "Strategy book memo job refreshed",
-      "summary": "Spend on. Signals 15, all-but-memo 5, memo needed 1, dry-run requests 0. First tickers: none. ftse350 signals 7 all_but_memo 4 memo_needed 0; aex signals 0 all_but_memo 0 memo_needed 0; aim signals 6 all_but_memo 1 memo_needed 1; atx signals 0 all_but_memo 0 memo_needed 0; bel20 signals 0 all_but_memo 0 memo_needed 0; cac40 signals 0 all_but_memo 0 memo_needed 0; dax signals 0 all_but_memo 0 memo_needed 0; euro_stoxx50 signals 0 all_but_memo 0 memo_needed 0 Observe-only; no rememo or ingest from this finding.",
+      "summary": "Spend on. Signals 10, all-but-memo 0, memo needed 0, dry-run requests 0. First tickers: none. sp500 signals 7 all_but_memo 0 memo_needed 0; nasdaq100 signals 2 all_but_memo 0 memo_needed 0; tsx60 signals 1 all_but_memo 0 memo_needed 0 Observe-only; no rememo or ingest from this finding.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -241,6 +241,15 @@
       "category": "research",
       "title": "Strategy book proof board",
       "summary": "Forward: 0 of 7 bars pass, n=0 counted mature episodes, verdict insufficient_data. Meeting every bar lets the owner consider step 5.5. It does not open live capital by itself.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "EODHD coverage check",
+      "summary": "EODHD coverage check verdict fail (generated 2026-11-12). Calls used 564/3000. See docs/ops/eodhd-coverage-check.md. Check A: only 3 of 11 names have fundamentals depth from 2013 (need 7).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -366,7 +375,7 @@
       "severity": "info",
       "category": "research",
       "title": "Trading 212 catalogue fresh",
-      "summary": "Catalogue age 2.53 days (fetched 2026-11-09T13:45:23.337923+00:00; limit 14d). Weekly refresh via t212-catalogue-refresh.yml. See docs/ops/t212-catalogue-refresh.md.",
+      "summary": "Catalogue age 2.75 days (fetched 2026-11-09T13:45:23.337923+00:00; limit 14d). Weekly refresh via t212-catalogue-refresh.yml. See docs/ops/t212-catalogue-refresh.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -456,11 +465,11 @@
   "auto_fixes": [
     {
       "action": "market_eng_gap_burndown",
-      "detail": "gap_closure_compile for euro_depth → eng-20261112-01"
+      "detail": "gap_closure_compile for euro_depth → eng-20261112-02"
     }
   ],
   "drafted_task_ids": [
-    "eng-20261112-01"
+    "eng-20261112-02"
   ],
   "workflow_checks": [
     {
@@ -469,22 +478,22 @@
       "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-11-12T02:20:43+00:00",
-      "last_success_run_id": 43140744480,
-      "age_hours": 0.2,
+      "last_success_at": "2026-11-12T07:20:15+00:00",
+      "last_success_run_id": 43174505074,
+      "age_hours": 0.5,
       "stale": false,
-      "recent_failures_24h": 4,
+      "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     },
     {
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "past_email_ready": false,
+      "past_email_ready": true,
       "max_age_hours": 28,
       "last_success_at": "2026-11-11T18:47:58+00:00",
       "last_success_run_id": 43081164251,
-      "age_hours": 7.8,
+      "age_hours": 13.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -495,9 +504,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 26,
-      "last_success_at": "2026-11-12T02:15:34+00:00",
-      "last_success_run_id": 43140137551,
-      "age_hours": 0.3,
+      "last_success_at": "2026-11-12T07:15:35+00:00",
+      "last_success_run_id": 43173933525,
+      "age_hours": 0.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -508,9 +517,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-11-12T02:30:54+00:00",
-      "last_success_run_id": 43141941551,
-      "age_hours": 0.1,
+      "last_success_at": "2026-11-12T07:40:35+00:00",
+      "last_success_run_id": 43177010345,
+      "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 1,
       "unresolved_failures_12h": 0
@@ -521,9 +530,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-11T15:29:07+00:00",
-      "last_success_run_id": 43048808448,
-      "age_hours": 11.1,
+      "last_success_at": "2026-11-12T07:31:00+00:00",
+      "last_success_run_id": 43175827071,
+      "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -536,7 +545,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-08T15:24:55+00:00",
       "last_success_run_id": 42494688914,
-      "age_hours": 83.2,
+      "age_hours": 88.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -549,7 +558,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-09T06:52:00+00:00",
       "last_success_run_id": 42575692247,
-      "age_hours": 67.7,
+      "age_hours": 73.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -562,7 +571,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-08T08:24:43+00:00",
       "last_success_run_id": 42462822729,
-      "age_hours": 90.2,
+      "age_hours": 95.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -575,7 +584,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-10T00:51:34+00:00",
       "last_success_run_id": 42731496776,
-      "age_hours": 49.7,
+      "age_hours": 55.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -588,7 +597,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-11-08T17:58:45+00:00",
       "last_success_run_id": 42507623200,
-      "age_hours": 80.6,
+      "age_hours": 85.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -601,7 +610,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-11-11T12:55:47+00:00",
       "last_success_run_id": 43024578848,
-      "age_hours": 13.7,
+      "age_hours": 18.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -612,9 +621,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-11-11T20:10:20+00:00",
-      "last_success_run_id": 43093976692,
-      "age_hours": 6.4,
+      "last_success_at": "2026-11-12T02:30:38+00:00",
+      "last_success_run_id": 43141909206,
+      "age_hours": 5.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
