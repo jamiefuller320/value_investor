@@ -512,12 +512,16 @@ def test_fetch_plan_matches_the_measured_lse_list() -> None:
     assert plan["weighted"] < REGISTRATION_CONSTANTS["DAILY_CALL_BUDGET_SOFT_CAP"]
 
 
-def test_committed_registration_stays_unsealed() -> None:
+def test_committed_registration_is_sealed_to_the_document() -> None:
     payload = json.loads((Path(uk.REPO_ROOT) / REGISTRATION_PATH).read_text(encoding="utf-8"))
-    assert payload["sealed"] is False
-    assert payload["document_sha256"] is None
+    assert payload["sealed"] is True
+    assert payload["registration_id"] == "strategy-book-uk-replay-v0"
+    assert payload["influences_live"] is False
+    assert payload["reveal_stamp"] is None
     assert payload["constants"]["DAILY_CALL_BUDGET_SOFT_CAP"] == 90000
     assert payload["constants"]["FAMILY_SIZE"] == 4
+    assert payload["constants"]["SUBSCRIPTION_END"] == "2026-12-10"
+    require_sealed(Path(uk.REPO_ROOT))
 
 
 def test_a_changed_document_breaks_the_seal(tmp_path: Path) -> None:

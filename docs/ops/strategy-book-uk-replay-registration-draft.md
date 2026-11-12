@@ -1,16 +1,21 @@
 # Strategy book UK/Europe point-in-time replay registration
 
-**Status: DRAFT. Not sealed. No development score exists. The owner has not signed.**  
-**registration_id:** `strategy-book-uk-replay-v0` (proposed; unused until the seal)  
+**Status: SEALED 2026-11-12. The owner accepted every section 12 default ("Happy to accept the defaults for the seal"), with the two changes the owner approved the same day and listed under Owner sign-off. No development score exists.**  
+**registration_id:** `strategy-book-uk-replay-v0`  
 **Parent:** `owner-strategy-book-v0` in [`strategy-book-registration.md`](strategy-book-registration.md), signed 2026-11-05  
 **Plan step:** 3.3 in [`strategy-reorientation-plan.md`](strategy-reorientation-plan.md)  
 **Design:** [`strategy-book-uk-replay-design.md`](strategy-book-uk-replay-design.md)  
-**Human checklist:** `adhoc-strategy-uk-replay-seal` in [`human-tasks-checklist.md`](human-tasks-checklist.md#ad-hoc-when-triggered)  
-**Seal file:** none in this draft. A later seal would be `docs/data/strategy_book_uk_replay_registration.json`. This draft does not write it.
+**Human checklist:** `adhoc-strategy-uk-replay-reveal` in [`human-tasks-checklist.md`](human-tasks-checklist.md#ad-hoc-when-triggered)  
+**Seal file:** `docs/data/strategy_book_uk_replay_registration.json` (sha256 of this file, owner stamp). The file keeps its `-draft` name because the runner reads that path.
 
 ## Owner sign-off
 
-Two stamps. Neither stamp is in this file yet.
+Two stamps. The registration seal is given (2026-11-12); the reveal stamp is not.
+
+Changes from the proposed text, approved by the owner on 2026-11-12 before any replay call:
+
+- **Companies House scope (question 5).** The owner approved extending Companies House statements to FTSE 350 leavers 2013–2025 (L716) for this replay. The fallback reads every name in `docs/data/ch_failed_name_statements.json` as committed at the commit the development run records, not only the seven probe names. A name is used only when its Companies House record names the same listed company as the EODHD symbol (EPIC and leaving date consistent); otherwise it is not matched. The store is frozen from the development run to the reveal.
+- **Last call day.** The subscription began on or before 2026-11-12. The last call day is **2026-12-10**, two days inside one calendar month.
 
 1. **Registration seal.** Sign this draft, or change a proposed number once, before any replay call to EODHD. Target **2026-11-18**. The coverage check already run (564 calls on 2026-11-12) is not a replay call.
 2. **Reveal.** After the development block is committed, authorise the single holdout write. Target **2026-12-03**. The review changes no registered number. A bug fix is an amendment under section 9, and development is recomputed before the reveal.
@@ -163,7 +168,7 @@ A comparative column inside a visible statement may fill a year with no primary 
 
 EPS pair rule: both years share `eps_basis` (`vendor_eps`, `net_income_over_shares`, or `companies_house_basic`), or the check is not evaluable. Count `eps_basis_mismatch`.
 
-**Companies House fallback.** Read `docs/data/ch_failed_name_statements.json` for the seven names it holds. Use a year only when EODHD has no annual income row for that fiscal year. One source for the whole year. Availability is the Companies House filing date, plus the 2-day lag. Mapping: revenue → `total_revenue`; statutory operating profit → operating income; profit attributable to owners → `net_income`; basic EPS → EPS with basis `companies_house_basic`; weighted-average basic shares → shares; net cash from operating activities → `operating_cashflow`; capital expenditure is a positive purchase, so FCF = operating cash flow − purchase. A negative purchase leaves FCF null. Balance-sheet fields stay null. Dividends per share stay absent.
+**Companies House fallback.** Read `docs/data/ch_failed_name_statements.json` for every name it holds at the development commit (see Owner sign-off). Use a year only when EODHD has no annual income row for that fiscal year. One source for the whole year. Availability is the Companies House filing date, plus the 2-day lag. Mapping: revenue → `total_revenue`; statutory operating profit → operating income; profit attributable to owners → `net_income`; basic EPS → EPS with basis `companies_house_basic`; weighted-average basic shares → shares; net cash from operating activities → `operating_cashflow`; capital expenditure is a positive purchase, so FCF = operating cash flow − purchase. A negative purchase leaves FCF null. Balance-sheet fields stay null. Dividends per share stay absent.
 
 Probe facts already measured, and pre-registered so the reveal does not rediscover them: EODHD statements from 2013 on 3 of 11; with Companies House, 8 of 11 have a 2013 first year; 4 of 11 have a statement every year to the event (Carillion, Patisserie Holdings, Aggreko, Morrison). Patisserie's 2013 EPS is a comparative in the report filed 2015-03-18.
 
@@ -391,7 +396,7 @@ Forbidden in the committed file: ticker (other than the 11 probe keys), name, a 
 
 ## 8. Call budget and timetable
 
-Personal subscription, ALL-IN-ONE, started 2026-11-12. Treat the end as **2026-12-12** unless the dashboard shows earlier (`SUBSCRIPTION_START` 2026-11-12, `SUBSCRIPTION_END` 2026-12-12). Token: GitHub secret `EODHD_API_TOKEN`. The token is not committed, logged, or pasted into a command line that lands in the repo.
+Personal subscription, ALL-IN-ONE, started 2026-11-12. The last call day is **2026-12-10** (`SUBSCRIPTION_START` 2026-11-12, `SUBSCRIPTION_END` 2026-12-10), earlier if the dashboard shows an earlier end. Token: GitHub secret `EODHD_API_TOKEN`. The token is not committed, logged, or pasted into a command line that lands in the repo.
 
 | Constant | Value | Status |
 |---|---|---|
@@ -422,8 +427,8 @@ The development job and the reveal job each fetch. Temp files die with the job. 
 | 2026-11-25 | Development walk. Commit the development block. |
 | 2026-11-26 through 2026-12-02 | Owner reads development. |
 | 2026-12-03 | Owner reveal stamp, then one holdout write and the delisting sensitivity. The job fetches again. |
-| 2026-12-04 through 2026-12-11 | Only an amendment the owner already allowed. |
-| 2026-12-12 | Last call day. Delete temp files and the cursor cache. Stamp `deleted_at`. |
+| 2026-12-04 through 2026-12-09 | Only an amendment the owner already allowed. |
+| 2026-12-10 | Last call day. Delete temp files and the cursor cache. Stamp `deleted_at`. |
 
 The implementation that runs this table is a later package. It is dispatch-only, writes the aggregate store, and adds an ops-monitor finding with `auto_fixable` false. It is not a daily cron.
 
@@ -444,9 +449,9 @@ The implementation that runs this table is a later package. It is dispatch-only,
 
 ## 10. Dependencies
 
-The parent is already signed. Scoring waits on this draft's own seal, not on another signature. The download waits on the seal too: unlike the US month, the subscription here runs to 2026-12-12 and the fetch is repeatable inside the month, so there is no reason to fetch before the rules are frozen.
+The parent is already signed. Scoring waits on this draft's own seal, not on another signature. The download waits on the seal too: unlike the US month, the subscription here runs to 2026-12-10 and the fetch is repeatable inside the month, so there is no reason to fetch before the rules are frozen.
 
-The later runner calls the strategy-book walker and the registered rules. It does not re-implement the entry, the ladder, the comparison exits, the shadows, or the bench. Companies House values come from the committed seven-name store. This replay does not call Companies House.
+The later runner calls the strategy-book walker and the registered rules. It does not re-implement the entry, the ladder, the comparison exits, the shadows, or the bench. Companies House values come from the committed store, frozen at the development commit. This replay does not call Companies House.
 
 ## 11. Where EODHD does not have what the rules read
 
@@ -477,7 +482,7 @@ Each default is what this draft seals if the owner signs it unchanged. A change 
 2. **Trusts.** Default: drop funds and investment trusts before the rank. REITs stay. No live override file.
 3. **Cap gaps.** Default: a month with no computable cap leaves the rank. No carry-forward of last month's cap.
 4. **Statement lag.** Default: filing date when present; otherwise 180 days annual and 90 days quarterly; then 2 days. Stale at 456 days.
-5. **Companies House.** Default: the seven-name store only, whole year, only when EODHD has no income row for that year. Missing years fail closed.
+5. **Companies House.** Sealed: every name in the store at the development commit (owner change, 2026-11-12), whole year, only when EODHD has no income row for that year and the record matches the same listed company. Missing years fail closed.
 6. **Sector sound.** Default: `price_only` may say sound when decline coverage fails. Decline breadth fires when coverage is met and the share declining is at least 50%.
 7. **Dividend cut and headlines.** Default: those checks do not fire. Dividend history fills `dividend_yield` only.
 8. **F9-B and `fcf_agrees`.** Default: `f9_unverified`, research `absent`, `fcf_agrees` omitted.
@@ -591,7 +596,7 @@ Proposed unless the status says otherwise.
 | `EURGBP` sanity band | 0.70 to 0.95 | Proposed |
 | `USDGBP` sanity band | 0.65 to 0.90 | Proposed |
 | `SUBSCRIPTION_START` | 2026-11-12 | Owner |
-| `SUBSCRIPTION_END` | 2026-12-12 | Proposed, one calendar month |
+| `SUBSCRIPTION_END` | 2026-12-10 | Sealed (owner change: two days inside the month) |
 | `SEAL_TARGET` | 2026-11-18 | Proposed |
 | `EUROPE_FETCH_DEADLINE` | 2026-11-24 | Proposed |
 | `DEVELOPMENT_COMMIT` | 2026-11-25 | Proposed |
