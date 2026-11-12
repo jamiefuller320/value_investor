@@ -3,7 +3,7 @@
   "comparison_id": "memo-model-comparison-2026-11",
   "decision_rule_version": "v2",
   "judge_model": "gpt-5.6-luna",
-  "state": "incomplete",
+  "state": "ready_for_calibration",
   "pairs": {
     "ftse350__SCT.L": {
       "orders": {
@@ -42,17 +42,17 @@
     "ftse350__VLX.L": {
       "orders": {
         "AB": {
-          "ok": false,
-          "at": "2026-11-11T18:45:23.036998+00:00"
+          "ok": true,
+          "at": "2026-11-12T18:37:12.391740+00:00"
         },
         "BA": {
-          "ok": false,
-          "at": "2026-11-11T18:45:23.036998+00:00"
+          "ok": true,
+          "at": "2026-11-12T18:37:12.391740+00:00"
         }
       },
       "attempts": {
-        "AB": 1,
-        "BA": 1
+        "AB": 2,
+        "BA": 2
       },
       "cost": {
         "AB": {
@@ -61,7 +61,7 @@
           "input_tokens": null,
           "output_tokens": null,
           "total_tokens": null,
-          "latency_seconds": 29.318
+          "latency_seconds": 41.961
         },
         "BA": {
           "estimated_usd": 0.94,
@@ -69,7 +69,7 @@
           "input_tokens": null,
           "output_tokens": null,
           "total_tokens": null,
-          "latency_seconds": 50.118
+          "latency_seconds": 35.684
         }
       }
     },
@@ -77,7 +77,7 @@
       "orders": {
         "AB": {
           "ok": false,
-          "at": "2026-11-11T18:45:23.036998+00:00"
+          "at": "2026-11-12T18:37:12.391740+00:00"
         },
         "BA": {
           "ok": true,
@@ -85,7 +85,7 @@
         }
       },
       "attempts": {
-        "AB": 1,
+        "AB": 2,
         "BA": 1
       },
       "cost": {
@@ -95,7 +95,7 @@
           "input_tokens": null,
           "output_tokens": null,
           "total_tokens": null,
-          "latency_seconds": 32.636
+          "latency_seconds": 29.427
         },
         "BA": {
           "estimated_usd": 0.94,
@@ -110,8 +110,8 @@
     "ftse350__BP.L": {
       "orders": {
         "AB": {
-          "ok": false,
-          "at": "2026-11-11T18:45:23.036998+00:00"
+          "ok": true,
+          "at": "2026-11-12T18:37:12.391740+00:00"
         },
         "BA": {
           "ok": true,
@@ -119,7 +119,7 @@
         }
       },
       "attempts": {
-        "AB": 1,
+        "AB": 2,
         "BA": 1
       },
       "cost": {
@@ -129,7 +129,7 @@
           "input_tokens": null,
           "output_tokens": null,
           "total_tokens": null,
-          "latency_seconds": 37.197
+          "latency_seconds": 35.815
         },
         "BA": {
           "estimated_usd": 0.94,
@@ -173,7 +173,8 @@
           "total_tokens": null,
           "latency_seconds": 36.737
         }
-      }
+      },
+      "input_mismatch": "72c200f770ebbcefacc10a39b1f119ab57f591794ca3bca13fbf3791db2ac996"
     },
     "sp500__SNDK": {
       "orders": {
@@ -207,7 +208,8 @@
           "total_tokens": null,
           "latency_seconds": 36.677
         }
-      }
+      },
+      "input_mismatch": "6641c4a6771dfc37a4a7f55d53db7ddf08c6b61ea7e17fd38edbba589b156be4"
     },
     "sp500__ADM": {
       "orders": {
@@ -275,7 +277,8 @@
           "total_tokens": null,
           "latency_seconds": 31.18
         }
-      }
+      },
+      "input_mismatch": "e88899bc5a76a3e8ff80c102b655ea9ecb8414f6436556a3b9243bb121065aee"
     },
     "asx200__AAI.AX": {
       "orders": {
@@ -309,7 +312,8 @@
           "total_tokens": null,
           "latency_seconds": 33.284
         }
-      }
+      },
+      "input_mismatch": "1605d6fbdd482db84c073490fed7bd9762e8b01d985eca4cc38a35d63c953f72"
     },
     "asx200__WDS.AX": {
       "orders": {
@@ -343,7 +347,8 @@
           "total_tokens": null,
           "latency_seconds": 27.86
         }
-      }
+      },
+      "input_mismatch": "91e9fa5cb05dcfafc809421484db5a2cb0808c6328da34009839a13717af8c77"
     },
     "nasdaq100__STX": {
       "orders": {
@@ -383,7 +388,7 @@
       "orders": {
         "AB": {
           "ok": false,
-          "at": "2026-11-11T18:45:23.036998+00:00"
+          "at": "2026-11-12T18:37:12.391740+00:00"
         },
         "BA": {
           "ok": true,
@@ -391,7 +396,7 @@
         }
       },
       "attempts": {
-        "AB": 1,
+        "AB": 2,
         "BA": 1
       },
       "cost": {
@@ -401,7 +406,7 @@
           "input_tokens": null,
           "output_tokens": null,
           "total_tokens": null,
-          "latency_seconds": null
+          "latency_seconds": 33.299
         },
         "BA": {
           "estimated_usd": 0.94,
@@ -415,32 +420,29 @@
     }
   },
   "spend": {
-    "estimated_usd": 22.56,
-    "calls": 24,
+    "estimated_usd": 27.26,
+    "calls": 29,
     "cap_usd": 28.0
   },
   "errors": [
-    "ftse350__VLX.L AB: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 5424 (char 5423))",
-    "ftse350__VLX.L BA: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 5311 (char 5310))",
-    "ftse350__KLR.L AB: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 4702 (char 4701))",
-    "ftse350__BP.L AB: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 5186 (char 5185))",
-    "sp500__FIS AB: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 5577 (char 5576))",
-    "sp500__FIS BA: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 6216 (char 6215))",
-    "sp500__SNDK AB: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 4660 (char 4659))",
-    "asx200__PLS.AX AB: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 4916 (char 4915))",
-    "asx200__AAI.AX BA: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 5921 (char 5920))",
-    "asx200__WDS.AX AB: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 4476 (char 4475))",
-    "nasdaq100__FANG AB: internal: [unavailable] Server at capacity"
+    "ftse350__KLR.L AB: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 1505 (char 1504))",
+    "sp500__FIS: sources changed since generation; judge refuses this pair",
+    "sp500__SNDK: sources changed since generation; judge refuses this pair",
+    "asx200__PLS.AX: sources changed since generation; judge refuses this pair",
+    "asx200__AAI.AX: sources changed since generation; judge refuses this pair",
+    "asx200__WDS.AX: sources changed since generation; judge refuses this pair",
+    "nasdaq100__FANG AB: invalid judge output (invalid JSON: Expecting ',' delimiter: line 1 column 4920 (char 4919))"
   ],
   "started_at": "2026-11-11T18:45:23.036998+00:00",
   "observe_only": true,
   "influences_live": false,
-  "last_run_at": "2026-11-11T18:45:23.036998+00:00",
+  "last_run_at": "2026-11-12T18:37:12.391740+00:00",
   "runtime_check": {
-    "checked_at": "2026-11-11T18:45:23.036998+00:00",
+    "checked_at": "2026-11-12T18:37:12.391740+00:00",
     "judge_model": "gpt-5.6-luna",
     "judge_family": "openai",
     "available": true
   },
-  "judged_pairs": 3
+  "judged_pairs": 5,
+  "ready_at": "2026-11-12T18:37:12.391740+00:00"
 }
